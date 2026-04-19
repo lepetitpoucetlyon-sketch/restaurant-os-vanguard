@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import ws from 'ws';

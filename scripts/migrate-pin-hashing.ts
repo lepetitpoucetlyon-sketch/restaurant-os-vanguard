@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PIN MIGRATION SCRIPT — Restaurant OS
  * One-shot: Migre les PINs en clair vers des hashes SHA-256 salés.

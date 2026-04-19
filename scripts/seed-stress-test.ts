@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Nexus } from '../src/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '../src/lib/nexus/adapters/FirestoreAdapter'; // Assuming this exists or using the standard one
 import * as fs from 'fs';

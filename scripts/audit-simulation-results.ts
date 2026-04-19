@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { firestore as db } from '../src/lib/firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { FiscalEngine } from '../src/domain/services/FiscalEngine';

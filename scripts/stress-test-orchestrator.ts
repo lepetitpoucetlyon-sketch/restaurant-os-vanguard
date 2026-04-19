@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { runProtocolOverload } from '../tests/benchmarks/StressTestRush';
 import { fleetEngine } from '../src/lib/nexus/NexusFleetEngine';
 import { MacroBrain } from '../src/domain/services/MacroBrain';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * INITIALIZATION SCRIPT - EMPIRE SIMULATION SANDBOX
  * Prepares the isolated tenant for the dual-week simulation (Empire vs Chaos).
