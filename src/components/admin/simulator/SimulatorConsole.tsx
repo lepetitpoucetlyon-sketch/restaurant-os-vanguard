@@ -8,7 +8,7 @@ import { simulator } from '@/lib/simulator/TemporalSimulator';
 import { simulationMetricsAtom, isSimulationRunningAtom } from '@/store/simulatorAtoms';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/button';
-import { SimulationProfile, NexusStaffingOracle } from '@/domain/services/SimulationService';
+import { SimulationProfile } from '@/domain/services/SimulationService';
 import { ProposalPanel } from "@/components/admin/ProposalPanel";
 import { NexusStaffingOracle as StaffingOracle } from '@/domain/services/NexusStaffingOracle';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -50,7 +50,7 @@ export function SimulatorConsole() {
             
             // Real-time Resonance: Trigger an immediate analysis if running
             if (isRunning) {
-                await NexusStaffingOracle.analyzeStaffingGaps(new Date().toISOString().split('T')[0]);
+                await StaffingOracle.analyzeStaffingGaps(new Date().toISOString().split('T')[0]);
             }
         } catch (e) {
             console.error("Staff Ratio update failed", e);

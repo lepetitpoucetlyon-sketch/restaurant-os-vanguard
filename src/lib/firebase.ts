@@ -77,6 +77,13 @@ export function setServerSideTenantOverride(tenantId: string | null) {
     Nexus.tenantOverride = tenantId;
 }
 
+export async function initializeTenantFirebase(config?: FirebaseOptions) {
+    if (config) {
+        return initializeApp(config, "TENANT_OVERRIDE");
+    }
+    return firebaseApp;
+}
+
 // DEPRECATED WRAPPERS (Maintain for legacy compat during final cleanup)
 export function getTenantPath(relativePath: string, tenantIdOverride?: string): string {
     return Nexus.getTenantPath(relativePath, tenantIdOverride);

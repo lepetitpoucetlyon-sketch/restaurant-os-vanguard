@@ -81,16 +81,34 @@ export const defaultSettings: GlobalSettings = {
         staffToCoversRatio: 0.15
     },
     reservationSettings: {
-        enabled: true,
-        maxAdvanceDays: 30,
         minAdvanceHours: 2,
-        requireDeposit: false
+        maxAdvanceDays: 30,
+        defaultDuration: 90,
+        overbookingAllowed: false,
+        autoConfirm: true,
+        requireDeposit: false,
+        emailReminderHours: 24,
+        noShowDelayMinutes: 20,
+        confirmationMessage: "Votre réservation est confirmée.",
+        reminderMessage: "Rappel de votre réservation demain.",
+        cancellationMessage: "Annulation confirmée.",
+        cancellationPolicy: "Annulation gratuite jusqu'à 2h avant.",
+        terms: "En réservant, vous acceptez nos CGU."
     },
     reservationConfig: {
-        enabled: true,
-        maxAdvanceDays: 30,
         minAdvanceHours: 2,
-        requireDeposit: false
+        maxAdvanceDays: 30,
+        defaultDuration: 90,
+        overbookingAllowed: false,
+        autoConfirm: true,
+        requireDeposit: false,
+        emailReminderHours: 24,
+        noShowDelayMinutes: 20,
+        confirmationMessage: "Votre réservation est confirmée.",
+        reminderMessage: "Rappel de votre réservation demain.",
+        cancellationMessage: "Annulation confirmée.",
+        cancellationPolicy: "Annulation gratuite jusqu'à 2h avant.",
+        terms: "En réservant, vous acceptez nos CGU."
     },
     clients: [],
     loyaltyPrograms: [],
@@ -98,69 +116,149 @@ export const defaultSettings: GlobalSettings = {
         currency: "EUR",
         priceFormat: "with_cents",
         displayMode: "ttc",
-        isTrainingMode: false,
+        roundingRule: "none",
+        serviceMode: "table",
+        buttonSize: "medium",
+        showImages: true,
+        theme: "light",
+        notificationSound: true,
         autoPrintReceipt: true,
+        receiptCopies: 1,
         tipsEnabled: true,
-        receiptCopies: 1
+        tipSuggestions: [5, 10, 15]
     },
     pos: {
         currency: "EUR",
         priceFormat: "with_cents",
         displayMode: "ttc",
-        isTrainingMode: false,
+        roundingRule: "none",
+        serviceMode: "table",
+        buttonSize: "medium",
+        showImages: true,
+        theme: "light",
+        notificationSound: true,
         autoPrintReceipt: true,
+        receiptCopies: 1,
         tipsEnabled: true,
-        receiptCopies: 1
+        tipSuggestions: [5, 10, 15]
     },
     paymentMethods: [
-        { id: "cash", label: "Espèces", enabled: true, type: "cash" },
-        { id: "card", label: "CB", enabled: true, type: "card" }
+        { id: "cash", name: "Espèces", enabled: true, type: "cash", order: 1 },
+        { id: "card", name: "CB", enabled: true, type: "card", order: 2 }
     ],
     receiptTemplate: {
-        header: "Merci de votre visite",
-        footer: "À bientôt !",
-        showLogo: true,
-        showVat: true
+        logo: "",
+        restaurantName: "Restaurant OS Elite",
+        address: "123 Avenue de l'Innovation, 75001 Paris",
+        siret: "",
+        vatNumber: "",
+        welcomeMessage: "Merci de votre visite",
+        thankYouMessage: "À bientôt !",
+        footer: "Nexus Restaurant OS",
+        showDetailedTax: true,
+        format: "80mm"
     },
     receipt: {
-        header: "Merci de votre visite",
-        footer: "À bientôt !",
-        showLogo: true,
-        showVat: true
+        logo: "",
+        restaurantName: "Restaurant OS Elite",
+        address: "123 Avenue de l'Innovation, 75001 Paris",
+        siret: "",
+        vatNumber: "",
+        welcomeMessage: "Merci de votre visite",
+        thankYouMessage: "À bientôt !",
+        footer: "Nexus Restaurant OS",
+        showDetailedTax: true,
+        format: "80mm"
     },
     accounting: {
         fiscalYearStart: "01-01",
         accountingMethod: "accrual",
-        vatIdNumber: ""
+        vatIdNumber: "",
+        defaultPaymentTerms: 30,
+        vatRates: [
+            { rate: 20, name: "TVA 20%", category: "standard" },
+            { rate: 10, name: "TVA 10%", category: "intermediate" },
+            { rate: 5.5, name: "TVA 5.5%", category: "reduced" }
+        ],
+        invoicePrefix: "FACT-",
+        invoiceNextNumber: 1,
+        bankName: "",
+        iban: "",
+        bic: "",
+        exportFormat: "pdf",
+        complexityMode: "EXPERT",
+        electronicInvoicingEnabled: false,
+        siren: "",
+        pdpEndpoint: "",
+        facturXProfile: "basic"
     },
     haccp: {
         tempCheckFrequencyHours: 4,
+        tempAlertDelay: 30,
+        tempCriticalDelay: 60,
+        autoTempRecording: false,
+        sensorIntegration: false,
+        tempLogRetentionDays: 365,
+        digitalChecklist: true,
+        photoRequired: false,
+        signatureRequired: true,
+        supervisorValidation: false,
+        correctiveActionRequired: true,
+        alertOnNonConformity: true,
+        alertSupervisor: true,
+        alertEmail: "haccp@nexus-restaurant.os",
+        alertSMS: false,
+        alertPhone: "",
+        escalationDelay: 120,
         lotTrackingEnabled: true,
-        supplierTrackingEnabled: true
+        supplierTrackingEnabled: true,
+        productionDateRequired: true,
+        expiryDateRequired: true,
+        allergenTracking: true,
+        autoGenerateReports: true,
+        reportFrequency: "daily",
+        pdfExport: true,
+        cloudBackup: true,
+        retentionYears: 5,
+        trainingReminders: true,
+        trainingFrequencyMonths: 12,
+        certificationTracking: true,
+        internalAuditFrequency: "monthly",
+        externalAuditReminder: true,
+        auditScoreTarget: 95,
+        nonConformityTracking: true,
+        temperatureZones: []
     },
     controlPoints: [],
     nonConformities: [],
     clickCollect: {
         enabled: false,
-        minPrepTime: 20
+        minPrepTime: 20,
+        slotsPerHour: 4,
+        maxOrdersPerSlot: 5
     },
     deliveryZones: [],
     alerts: [],
     notifications: {
         globalSound: true,
-        doNotDisturb: false
+        doNotDisturb: false,
+        dndStartTime: "23:00",
+        dndEndTime: "07:00"
     },
     reportSchedules: [],
     roles: [],
     session: {
-        timeoutMinutes: 60
+        autoLogoutMinutes: 60,
+        requireMFA: false,
+        maxConcurrentSessions: 1,
+        logRetentionDays: 90
     },
     security: {
         require2FA: false,
-        sessionTimeout: 60,
-        twoFactorFrequency: "every_login",
+        twoFactorFrequency: "always",
         allowEmailRescue: true,
         allowMultiplePhones: false,
+        sessionTimeout: 60,
         logRetention: 90,
         allowSupportAccess: true
     },
@@ -169,9 +267,11 @@ export const defaultSettings: GlobalSettings = {
         secondaryColor: "#111111",
         backgroundColor: "#000000",
         textColor: "#FFFFFF",
+        mode: "light",
         fontPrimary: "Inter",
         fontHeadings: "Outfit",
-        mode: "light",
+        borderRadius: "medium",
+        buttonStyle: "flat",
         animationsEnabled: true
     },
     goals: {
@@ -180,11 +280,17 @@ export const defaultSettings: GlobalSettings = {
     },
     integrations: [],
     integrationsConfig: {
-        nexusSyncEnabled: true
+        stripePublicKey: "",
+        stripeSecretKey: "",
+        stripeWebhookSecret: "",
+        webhooks: []
     },
     nexusConfig: {
         aiName: "NEXUS",
-        assistantTone: "professional",
-        features: ["voice", "vision", "automation"]
+        voiceId: "aoede",
+        personality: "expert",
+        macros: [],
+        historyEnabled: true,
+        autoLanguage: true
     }
 };
