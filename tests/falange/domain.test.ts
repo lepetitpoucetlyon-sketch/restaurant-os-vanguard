@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NF525Service } from '@/domain/services/NF525Service';
-import { reconstructQuantity, calculateBatchDeduction } from '@/domain/services/StockEngine';
+import { StockEngine } from '@/domain/services/StockEngine';
 import { IdentityManager } from '@/domain/services/IdentityManager';
 
 describe('🏛️ FALANGE - COHORTE DOMAIN (10 TESTS)', () => {
@@ -14,8 +14,7 @@ describe('🏛️ FALANGE - COHORTE DOMAIN (10 TESTS)', () => {
     });
 
     it('2. StockEngine devrait déduire les stocks de manière atomique', () => {
-        expect(reconstructQuantity).toBeDefined();
-        expect(calculateBatchDeduction).toBeDefined();
+        expect(StockEngine.calculateBatchDeduction).toBeDefined();
     });
 
     it('3. IdentityManager devrait restreindre l\'accès selon le niveau de rôle', () => {

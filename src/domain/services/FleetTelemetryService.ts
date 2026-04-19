@@ -118,12 +118,26 @@ export class FleetTelemetryService {
    * @method getGlobalMetrics
    * @description Agrège les données pour le dashboard MCC sans saturer la RAM.
    */
-  public async getGlobalMetrics(): Promise<{ totalNodes: number; empireHealth: number }> {
-    const sites = await this.discoverRealFleet();
+  public async getGlobalMetrics(sites?: any[]): Promise<{ totalNodes: number; empireHealth: number }> {
+    const nodes = sites || (await this.discoverRealFleet());
     return {
-      totalNodes: sites.length,
+      totalNodes: nodes.length,
       empireHealth: 96 // Score de résilience calculé
     };
+  }
+
+  /**
+   * @static Static Wrapper for Fleet Discovery (Compatibility)
+   */
+  public static async discoverRealFleet(): Promise<any[]> {
+    return this.getInstance().discoverRealFleet();
+  }
+
+  /**
+   * @static Static Wrapper for Global Metrics (Compatibility)
+   */
+  public static async getGlobalMetrics(sites?: any[]): Promise<{ totalNodes: number; empireHealth: number }> {
+    return this.getInstance().getGlobalMetrics(sites);
   }
 }
 

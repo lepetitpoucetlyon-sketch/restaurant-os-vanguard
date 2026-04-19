@@ -91,7 +91,7 @@ describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
      */
     it('7. La factory createNexusNode devrait permettre un nettoyage Garbage Collector', () => {
         // En JS, on vérifie juste que l'atome est redéfinissable
-        const atom = createNexusNode();
+        const atom = createNexusNode('gc-test');
         expect(atom).toBeDefined();
     });
 

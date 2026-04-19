@@ -182,7 +182,7 @@ export default function QualityControlPage() {
                                                     "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest",
                                                     del.status === 'delivered' ? "bg-success text-white" : selectedDeliveryId === del.id ? "bg-white/20 text-white" : "bg-bg-tertiary text-text-muted"
                                                 )}>
-                                                    {del.deliveryDate ? new Date(del.deliveryDate).toLocaleTimeString([], {hour: '2h', minute:'2h'}) : 'Attendue'}
+                                                    {del.deliveryDate ? new Date(del.deliveryDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Attendue'}
                                                 </span>
                                             </div>
 

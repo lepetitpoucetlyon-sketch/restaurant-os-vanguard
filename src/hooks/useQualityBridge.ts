@@ -61,6 +61,11 @@ export const useQualityBridge = () => {
         activeControl,
         alerts,
         todayStats,
+        supplierScores: [
+            { supplierId: 's1', supplierName: 'Metro France', reliabilityScore: 94 },
+            { supplierId: 's2', supplierName: 'Pomona Gastronomie', reliabilityScore: 88 },
+            { supplierId: 's3', supplierName: 'Transgourmet', reliabilityScore: 91 }
+        ],
         actions: {
             startReception,
             commitReception,

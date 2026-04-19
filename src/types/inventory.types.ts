@@ -205,16 +205,7 @@ export interface SupplierOrder {
     deliveryDate?: string;
 }
 
-export interface TemperatureLog {
-    id: string;
-    locationId: string;
-    locationName: string;
-    value: number;
-    unit: '°C';
-    timestamp: string;
-    recordedBy: string;
-    isAnomalous: boolean;
-}
+// TemperatureLog moved to haccp.types.ts
 
 export interface InventoryContextType {
     stock: StockItem[];

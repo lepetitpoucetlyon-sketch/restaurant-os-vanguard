@@ -36,8 +36,8 @@ import { useToast } from "@/components/ui/Toast";
 import { FiscalAuditView } from "@/components/accounting/FiscalAuditView";
 
 export default function AccountingConsolePage() {
-    const { openDocumentation } = useUI();
-    const { viewMode, toggleViewMode, journalEntries, metrics, legacyMetrics } = useAccounting();
+    const { sidebarOpen } = useUI();
+    const { journalEntries, metrics, legacyMetrics } = useAccounting();
     const { showToast } = useToast();
     const [activeTab, setActiveTab] = useState<'pilotage' | 'flux' | 'pertes' | 'registres' | 'syntheses' | 'audit'>('pilotage');
     const [selectedYear, setSelectedYear] = useState(2025);
@@ -75,25 +75,8 @@ export default function AccountingConsolePage() {
                     {/* RIGHT: MODE TOGGLE, YEAR CONTROL & EXPORT */}
                     <div className="flex items-center gap-6">
                         {/* Mode Toggle Switch */}
-                        <div className="flex bg-bg-secondary p-1 rounded-full border border-border shadow-inner">
-                            <button
-                                onClick={toggleViewMode}
-                                className={cn(
-                                    "px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
-                                    viewMode === 'simple' ? "bg-accent text-white shadow-lg" : "text-text-muted hover:text-text-primary"
-                                )}
-                            >
-                                Simple
-                            </button>
-                            <button
-                                onClick={toggleViewMode}
-                                className={cn(
-                                    "px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
-                                    viewMode === 'expert' ? "bg-black text-white shadow-lg" : "text-text-muted hover:text-text-primary"
-                                )}
-                            >
-                                Expert
-                            </button>
+                        <div className="flex bg-white dark:bg-black/20 p-2.5 rounded-full border border-black/5 dark:border-white/5 shadow-sm">
+                            <ShieldCheck className="w-5 h-5 text-accent" strokeWidth={1} />
                         </div>
 
                         <div className="flex bg-white dark:bg-black/20 p-1.5 rounded-2xl border border-black/5 dark:border-white/10 shadow-sm">

@@ -8,9 +8,9 @@ import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useRecipes } from "@/engines/ops/NexusOpsProvider";
 
 // Components
-import { KDSHeader } from "@/components/KDSHeader";
-import { KDSTicket } from "@/components/KDSTicket";
-import { KDSEmptyState } from "@/components/KDSEmptyState";
+import { KDSHeader } from "./components/KDSHeader";
+import { KDSTicket } from "./components/KDSTicket";
+import { KDSEmptyState } from "./components/KDSEmptyState";
 
 // UI Components (Modals)
 import { ModificationAlertsPanel } from "@/components/kds/ModificationAlerts";

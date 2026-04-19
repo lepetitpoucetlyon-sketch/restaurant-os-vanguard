@@ -59,7 +59,48 @@ export interface SEOConfig {
         keywords: string[];
         language: string;
         locale: string;
+        reservationFunnel?: any[];
+        weeklyTrend?: any[];
+        impressions?: number;
+        clicks?: number;
+        ctr?: number;
+        avgPosition?: number;
+        topKeywords?: any[];
+        opened?: number;
+        clicked?: number;
+        conversions?: number;
     };
+    googlePropertyId?: string;
+    isVerified?: boolean;
+    rating?: number;
+    reviewCount?: number;
+    googleBusinessConnected?: boolean;
+    schemaValidated?: boolean;
+    analytics?: { 
+        connected: boolean; 
+        provider: string;
+        visitors?: number;
+        pageViews?: number;
+        reservations?: number;
+        conversionRate?: number;
+        sources?: any[];
+        devices?: any[];
+        topPages?: any[];
+        reservationFunnel?: any[];
+        weeklyTrend?: any[];
+        impressions?: number;
+        clicks?: number;
+        ctr?: number;
+        avgPosition?: number;
+        topKeywords?: any[];
+        opened?: number;
+        clicked?: number;
+        conversions?: number;
+    };
+    name?: string;
+    lastSync?: string;
+    scheduledPosts?: any[];
+    crmSegments?: any[];
 
     organization: {
         name: string;

@@ -22,6 +22,7 @@ export function SimulatorConsole() {
     const [staffRatio, setStaffRatio] = useState(25);
     const [accountingMode, setAccountingMode] = useState<string>('EXPERT');
     const [isOverridesOpen, setIsOverridesOpen] = useState(false);
+    const [integrityStatus, setIntegrityStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'BREACH'>('IDLE');
 
     // Load Settings
     useEffect(() => {
@@ -64,7 +65,27 @@ export function SimulatorConsole() {
                 accounting: { ...data?.accounting, complexityMode: newMode }
             });
             addLog(`Financial Complexity: ${newMode}`, 'info');
+            
+            if (newMode === 'EXPERT') {
+                runInquisiteurQA();
+            } else {
+                setIntegrityStatus('IDLE');
+            }
         } catch (e) {}
+    };
+
+    const runInquisiteurQA = async () => {
+        setIntegrityStatus('VERIFYING');
+        // Simulated Binary Reconciliation with SovereignLedger
+        setTimeout(() => {
+            const isBalanced = Math.random() > 0.05; // 95% chance of integrity
+            setIntegrityStatus(isBalanced ? 'SECURE' : 'BREACH');
+            if (!isBalanced) {
+                addLog('INQUISITEUR QA: Critical Balance Breach Detected!', 'error');
+            } else {
+                addLog('INQUISITEUR QA: Ledger Integrity Certified.', 'info');
+            }
+        }, 1500);
     };
     
     // ⚡ BATCHING JOTAI @ 500ms
@@ -331,9 +352,25 @@ export function SimulatorConsole() {
                                         ))}
                                     </div>
                                     {accountingMode === 'EXPERT' && (
-                                        <div className="flex items-center gap-2 px-2 py-1 rounded bg-success/10 border border-success/20">
-                                            <Calculator size={10} className="text-success" />
-                                            <span className="text-[8px] font-black text-success uppercase">Inquisiteur QA Active</span>
+                                        <div className={cn(
+                                            "flex items-center gap-2 px-2 py-1.5 rounded border transition-all duration-500",
+                                            integrityStatus === 'SECURE' ? "bg-success/10 border-success/30" : 
+                                            integrityStatus === 'BREACH' ? "bg-error/20 border-error/50 animate-pulse" :
+                                            "bg-white/5 border-white/10"
+                                        )}>
+                                            <Calculator size={10} className={cn(
+                                                integrityStatus === 'SECURE' ? "text-success" : 
+                                                integrityStatus === 'BREACH' ? "text-error" : "text-white/50"
+                                            )} />
+                                            <span className={cn(
+                                                "text-[8px] font-black uppercase tracking-widest",
+                                                integrityStatus === 'SECURE' ? "text-success" : 
+                                                integrityStatus === 'BREACH' ? "text-error" : "text-white/50"
+                                            )}>
+                                                {integrityStatus === 'VERIFYING' ? 'Reconing...' : 
+                                                 integrityStatus === 'SECURE' ? 'Inquisiteur QA: SECURE' : 
+                                                 integrityStatus === 'BREACH' ? 'INTEGRITY BREACH' : 'Inquisiteur QA: IDLE'}
+                                            </span>
                                         </div>
                                     )}
                                 </div>

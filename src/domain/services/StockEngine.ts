@@ -159,4 +159,40 @@ export class StockEngine {
 
         return { newItem, movement };
     }
+
+    /**
+     * Alias for Grade X Bridge compatibility.
+     */
+    static processReception(ingredient: Ingredient, data: any) {
+        return this.receiveStock(ingredient, data);
+    }
+
+    /**
+     * Identifies items below their safety threshold.
+     */
+    static calculateLowStock(allStock: StockItem[], ingredients: Ingredient[]): StockItem[] {
+        return allStock.filter(item => {
+            const ing = ingredients.find(i => i.id === item.ingredientId);
+            const threshold = ing?.minQuantity || 0;
+            return item.quantity < threshold;
+        });
+    }
+
+    /**
+     * Analyzes unit cost trends (Stochastic Logic).
+     */
+    static calculatePriceEvolution(ingredientId: string, movements: InventoryMovement[]): number {
+        const costMovements = movements
+            .filter(m => m.ingredientId === ingredientId && m.type === 'reception')
+            .sort((a, b) => new Date(a.performedAt).getTime() - new Date(b.performedAt).getTime());
+
+        if (costMovements.length < 2) return 0;
+        
+        // Simple % change between last and before-last
+        const first = (costMovements[0] as any).unitCostInCents || 0;
+        const last = (costMovements[costMovements.length - 1] as any).unitCostInCents || 0;
+        
+        if (first === 0) return 0;
+        return ((last - first) / first) * 100;
+    }
 }

@@ -7,6 +7,11 @@ import type { User, UserRole } from '@/types';
  */
 export const CORE_CATEGORIES = ['dashboard', 'account-settings', 'settings'] as const;
 
+export const ALL_CATEGORIES = [
+    'dashboard', 'account-settings', 'settings', 'operations', 
+    'hr', 'marketing', 'finance', 'inventory', 'quality'
+] as const;
+
 export type CategoryKey = string; // Generic string for dynamic injection
 export type RolePermissions = Record<UserRole | string, CategoryKey[]>;
 

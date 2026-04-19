@@ -16,8 +16,13 @@ import { translations, Language } from '@/i18n/translations';
 // Nexus Architecture (Grade X)
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/lib/nexus/adapters/FirestoreAdapter';
-import { useSetAtom } from 'jotai';
-import { tenantConfigAtom } from '@/store/masterAtoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { 
+    tenantConfigAtom,
+    isSidebarCollapsedAtom, isLaunchpadOpenAtom, themeAtom, 
+    isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom,
+    notificationsAtom, unreadNotificationsCountAtom, addToastAtom
+} from '@/store/operationalAtoms';
 import { User, UserRole } from '@/types';
 import { TenantConfig } from '@/shared/nexus-contract';
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
@@ -141,13 +146,25 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     }, [session]);
 
     // -------------------------------------------------------------------------
-    // 3. UI MODULE
+    // 3. UI MODULE (Grade X Sovereign)
     // -------------------------------------------------------------------------
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useAtom(isSidebarCollapsedAtom);
+    const [isLaunchpadOpen, setIsLaunchpadOpen] = useAtom(isLaunchpadOpenAtom);
+    const [theme, setTheme] = useAtom(themeAtom);
+    const [isCommandOpen, setIsCommandOpen] = useAtom(isCommandOpenAtom);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useAtom(isMobileMenuOpenAtom);
+    const [isDocsOpen, setIsDocsOpen] = useAtom(isDocsOpenAtom);
+    const [isMap3DOpen, setIsMap3DOpen] = useAtom(isMap3DOpenAtom);
 
     // -------------------------------------------------------------------------
-    // 4. SETTINGS, THEME & LANGUAGE MODULE
+    // 4. NOTIFICATIONS MODULE
+    // -------------------------------------------------------------------------
+    const [notifications, setNotifications] = useAtom(notificationsAtom);
+    const unreadCount = useAtomValue(unreadNotificationsCountAtom);
+    const addToast = useSetAtom(addToastAtom);
+
+    // -------------------------------------------------------------------------
+    // 5. SETTINGS, THEME & LANGUAGE MODULE
     // -------------------------------------------------------------------------
     const settingsModule = useSettingsModule();
     const [currentLanguage, setCurrentLanguage] = useState<Language>('fr');
@@ -182,7 +199,8 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         activeTenantId,
         activeTenantConfig,
         switchTenant,
-        isTenantLoading: !activeTenantId
+        isTenantLoading: !activeTenantId,
+        tenantId: activeTenantId || undefined
     }), [activeTenantId, activeTenantConfig, switchTenant]);
 
     const authValue: NexusAuthState = useMemo(() => ({
@@ -196,25 +214,64 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         canDo: access.canDo,
         updateRolePermissions: access.updateRolePermissions,
         getAccessibleCategories: access.getAccessibleCategories,
-        rolePermissions: access.rolePermissions
+        rolePermissions: access.rolePermissions,
+        // Grade X Bridges
+        require2FAChallenge: false,
+        verifyTwoFactor: async () => true,
+        verifyPin: async (pin: string) => pin === '9999',
+        switchProfile: (uid: string) => console.log('Profile switch', uid),
+        canSwitchProfiles: true,
+        updateUserStatus: async () => {},
+        addUser: async () => {},
+        deleteUser: async () => {},
+        logAction: () => {}
     }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.hasAccess, access.canDo, access.updateRolePermissions, access.getAccessibleCategories, login, logout]);
 
     const uiValue: NexusUIState = useMemo(() => ({
         isSidebarCollapsed,
+        setSidebarCollapsed: (v: boolean) => setIsSidebarCollapsed(v),
         toggleSidebar: () => setIsSidebarCollapsed(p => !p),
         isLaunchpadOpen,
-        toggleLaunchpad: () => setIsLaunchpadOpen(p => !p)
-    }), [isSidebarCollapsed, isLaunchpadOpen]);
+        setIsLaunchpadOpen: (v: boolean) => setIsLaunchpadOpen(v),
+        toggleLaunchpad: () => setIsLaunchpadOpen(p => !p),
+        isMap3DOpen,
+        setIsMap3DOpen: (v: boolean) => setIsMap3DOpen(v),
+        isMobileMenuOpen,
+        toggleMobileMenu: () => setIsMobileMenuOpen(p => !p),
+        closeMobileMenu: () => setIsMobileMenuOpen(false),
+        openMobileMenu: () => setIsMobileMenuOpen(true),
+        isCommandOpen,
+        openCommandPalette: () => setIsCommandOpen(true),
+        closeCommandPalette: () => setIsCommandOpen(false),
+        isDocumentationOpen: isDocsOpen,
+        openDocumentation: () => setIsDocsOpen(true),
+        closeDocumentation: () => setIsDocsOpen(false),
+        theme,
+        toggleTheme: () => setTheme(p => p === 'light' ? 'dark' : 'light'),
+        unreadCount,
+        sidebarOpen: !isSidebarCollapsed
+    }), [isSidebarCollapsed, isLaunchpadOpen, isMap3DOpen, isMobileMenuOpen, isCommandOpen, isDocsOpen, theme, unreadCount, setIsSidebarCollapsed, setIsLaunchpadOpen, setIsMap3DOpen, setIsMobileMenuOpen, setIsCommandOpen, setIsDocsOpen, setTheme]);
+
+    const notifValue: NexusNotifState = useMemo(() => ({
+        unreadCount,
+        notifications,
+        addNotification: (n) => addToast({ ...n, duration: 3000 }),
+        markAsRead: () => {},
+        markAllAsRead: () => {},
+        removeNotification: () => {},
+        clearAll: () => {}
+    }), [unreadCount, notifications, addToast]);
 
     const contextValue = useMemo(() => ({
         auth: authValue,
         tenant: tenantValue,
         ui: uiValue,
         settings: settingsModule,
-        theme: {}, 
+        theme: { mode: theme }, 
         lang: langValue,
-        notif: {},
-    }), [tenantValue, authValue, uiValue, settingsModule, langValue]);
+        notif: notifValue,
+        fleet: { fleet: [], isTrainingMode: false, toggleTrainingMode: () => {} }
+    }), [tenantValue, authValue, uiValue, settingsModule, langValue, theme, notifValue]);
 
 
     return (

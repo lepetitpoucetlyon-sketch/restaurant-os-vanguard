@@ -26,7 +26,7 @@ describe('NexusSyncService Multi-tenant Isolation', () => {
 
         // 3. Verify Isolation
         const count = await db.orders.count();
-        expect(count).toBe(0, 'Local cache must be empty after tenant switch');
+        expect(count).toBe(0);
     });
 
     it('should re-populate state atoms correctly after switch', async () => {

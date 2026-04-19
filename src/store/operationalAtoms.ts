@@ -18,14 +18,29 @@
  *   fleetAtoms.ts  ← Infrastructure multi-tenant
  */
 
-// 🏗️ FACTORY (Core)
-export { 
-    type NexusNode, 
-    createNexusNode, 
-    updateNexusNode, 
-    orphanNodesRegistry,
-    createProxyDomain 
-} from './nexusNodeFactory';
+// 🔑 AUTH & IDENTITY
+export {
+    currentUserAtom, isAuthenticatedAtom, userRoleAtom,
+    tenantConfigAtom, rolePermissionsAtom, userPermissionsAtom,
+    canDoAtom, updateRolePermissionsAtom
+} from './authAtoms';
+
+// 📊 ACCOUNTING & FINANCE
+export {
+    journalEntriesNodeAtom, journalEntriesAtom,
+    accountsNodeAtom, accountsAtom,
+    bankTransactionsNodeAtom, bankTransactionsAtom,
+    expenseClaimsNodeAtom, expenseClaimsAtom,
+    accountingViewModeAtom, isAccountingSyncingAtom, accountingLoadingAtom
+} from './accountingAtoms';
+
+// 🏛️ UI & PERSISTENCE
+export {
+    toastsAtom, addToastAtom,
+    isSidebarCollapsedAtom, isLaunchpadOpenAtom, themeAtom, isTrainingModeAtom,
+    notificationsAtom, unreadNotificationsCountAtom,
+    isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom
+} from './uiAtoms';
 
 // 🍽️ ORDERS DOMAIN
 export {

@@ -16,10 +16,10 @@ import { Button } from '@/components/ui/button';
 import { cn } from "@/lib/ui.foundations";
 
 // Tab Components
-import { OverviewTab } from '@/components/tabs/OverviewTab';
-import { PagesTab } from '@/components/tabs/PagesTab';
-import { AnalyticsTab } from '@/components/tabs/AnalyticsTab';
-import { SettingsTab } from '@/components/tabs/SettingsTab';
+import { OverviewTab } from './components/tabs/OverviewTab';
+import { PagesTab } from './components/tabs/PagesTab';
+import { AnalyticsTab } from './components/tabs/AnalyticsTab';
+import { SettingsTab } from './components/tabs/SettingsTab';
 
 export default function SEOPage() {
     const [activeTab, setActiveTab] = useState<'overview' | 'pages' | 'analytics' | 'settings'>('overview');

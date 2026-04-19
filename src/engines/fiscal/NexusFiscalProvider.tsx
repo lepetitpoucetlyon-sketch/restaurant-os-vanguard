@@ -9,7 +9,14 @@ import { ExpenseClaimSchema } from '@/domain/schemas/accounting';
 import { submitExpenseAction } from '@/app/actions/accounting';
 
 import { useAtomValue } from 'jotai';
-import { fiscalLedgerAtom, fiscalLoadingAtom } from '@/store/operationalAtoms';
+import { 
+    fiscalLedgerAtom, 
+    fiscalLoadingAtom,
+    accountsAtom,
+    bankTransactionsAtom,
+    expenseClaimsAtom,
+    isAccountingSyncingAtom
+} from '@/store/operationalAtoms';
 
 interface NexusFiscalState {
     accounting: {
@@ -54,6 +61,10 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     // 1. ATOMIC SYNC SUBSCRIPTION
     const ledgerEntries = useAtomValue(fiscalLedgerAtom);
     const isLoading = useAtomValue(fiscalLoadingAtom);
+    const accounts = useAtomValue(accountsAtom);
+    const bankTransactions = useAtomValue(bankTransactionsAtom);
+    const expenseClaims = useAtomValue(expenseClaimsAtom);
+    const isSyncing = useAtomValue(isAccountingSyncingAtom);
     
     // 2. COMPLIANCE & NF525
     const fiscalSeals = useMemo(() => 
@@ -78,7 +89,8 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         pendingPayables: 450000,    
         forecast30Days: financialMetrics.netProfitInCents * 1.2,
         netCashPosition: financialMetrics.netProfitInCents,
-        cashFlowTrend: []
+        cashFlowTrend: [],
+        forecast30DaysValue: financialMetrics.netProfitInCents * 1.2
     }), [financialMetrics]);
 
 
@@ -90,8 +102,8 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         try {
             const result = await submitExpenseAction(activeTenantId, {
                 ...expenseData,
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'System User'
+                userId: currentUser.uid || currentUser.id,
+                userName: currentUser.displayName || currentUser.name || 'System User'
             });
             return result.id;
         } catch (error) {
@@ -99,6 +111,11 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
             throw error;
         }
     }, [activeTenantId, currentUser]);
+
+    const syncBankAccounts = useCallback(async (token: string) => {
+        const { PowensService } = await import('@/domain/accounting/PowensService');
+        return PowensService.getAccounts(token);
+    }, []);
     
     const runFiscalAudit = useCallback(async () => {
         return await FiscalEngine.runAudit(fiscalSeals, 'default_instance');
@@ -119,13 +136,18 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         accounting: { 
             entries: ledgerEntries,
             journalEntries: ledgerEntries,
+            accounts,
+            bankTransactions,
+            expenseClaims,
             isLoading,
+            isSyncing,
             metrics: financialMetrics,
             legacyMetrics: {
                 cashOnHandInCents: financialMetrics.netProfitInCents
             },
             submitExpense,
-            recordPayrollSalary
+            recordPayrollSalary,
+            syncBankAccounts
         },
         compliance: { 
             seals: fiscalSeals, 
@@ -138,10 +160,10 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         finance: {
             treasury,
             alerts: [],
-            bankTransactions: []
+            bankTransactions
         },
         audit: { runFiscalAudit }
-    }), [ledgerEntries, isLoading, financialMetrics, treasury, fiscalSeals, runFiscalAudit, submitExpense]);
+    }), [ledgerEntries, accounts, bankTransactions, expenseClaims, isLoading, isSyncing, financialMetrics, treasury, fiscalSeals, runFiscalAudit, submitExpense, syncBankAccounts]);
 
 
     return (

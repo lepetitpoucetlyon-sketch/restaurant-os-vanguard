@@ -12,18 +12,6 @@ import { HACCPGauge } from './HACCPGauge';
 import { DeliveryItemRow } from './DeliveryItemRow';
 import { Button } from "@/components/ui/button";
 import { 
-  Truck, 
-  ShieldCheck, 
-  Camera, 
-  PenTool, 
-  CheckCircle2, 
-  ChevronRight, 
-  ChevronLeft,
-  Search,
-  AlertTriangle,
-  Loader2
-} from 'lucide-center'; // Note: Replaced with lucide-react if needed, but staying consistent
-import { 
     LucideIcon,
     Truck as TruckIcon,
     ShieldCheck as ShieldIcon,

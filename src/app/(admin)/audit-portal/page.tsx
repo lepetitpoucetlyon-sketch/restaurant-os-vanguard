@@ -6,7 +6,7 @@ import {
     Shield, 
     Sparkles,
     Zap,
-    AiIcon
+    Cpu as AiIcon
 } from 'lucide-react';
 import { AuditPortalController } from './AuditPortalController';
 import { motion } from 'framer-motion'; // Wait, motion is client-side. I'll need a wrapper or keep it in controller.

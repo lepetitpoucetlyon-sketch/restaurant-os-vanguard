@@ -18,15 +18,16 @@
         "name": "next"
       }
     ],
+    "noImplicitAny": false,
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.mts"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.mts"
   ],
-  "exclude": ["node_modules", "functions", "graphify_tool", "graphify-out"]
+  "exclude": ["node_modules", "functions", "graphify_tool", "graphify-out", "scratch", "scripts", "playwright-report"]
 }

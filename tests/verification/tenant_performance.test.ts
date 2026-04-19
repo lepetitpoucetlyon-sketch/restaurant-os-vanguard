@@ -1,5 +1,5 @@
-import { db } from '../../src/lib/offline/offline-store.ts';
-import { logger } from '../../src/lib/logger.ts';
+import { db } from '@/lib/offline/offline-store';
+import { logger } from '@/lib/logger';
 
 /**
  * 🛰️ Tenant Transition Benchmark - Restaurant OS

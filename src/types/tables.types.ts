@@ -44,3 +44,9 @@ export interface Table {
     lastService?: string;
     revenueTodayInCents?: number;
 }
+
+/**
+ * 🏛️ Lexical Suture (Grade IX)
+ * Fallback alias for legacy components using 'Area'.
+ */
+export type Area = Table;

@@ -60,6 +60,7 @@ export interface Order {
     };
     totalRevenue?: number; // computed alias
     data?: any; // legacy alias
+    updatedAt?: Date | string;
 }
 
 export interface OrdersContextType {

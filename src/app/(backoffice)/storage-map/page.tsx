@@ -69,8 +69,8 @@ export default function StorageMapPage() {
     const highlightedLocationIds = useMemo(() => {
         if (!selectedIngredientId) return new Set<string>();
         return new Set(stockItems
-            .filter(s => s.ingredientId === selectedIngredientId)
-            .map(s => s.storageLocationId)
+            .filter((s: any) => s.ingredientId === selectedIngredientId)
+            .map((s: any) => s.storageLocationId)
         );
     }, [selectedIngredientId, stockItems]);
 
@@ -122,8 +122,8 @@ export default function StorageMapPage() {
             const query = searchQuery.toLowerCase();
             locs = locs.filter(l =>
                 l.name.toLowerCase().includes(query) ||
-                stockItems.some(s => s.storageLocationId === l.id && s.ingredientName.toLowerCase().includes(query)) ||
-                preparations.some(p => p.storageLocationId === l.id && p.name.toLowerCase().includes(query))
+                stockItems.some((s: any) => s.storageLocationId === l.id && s.ingredientName.toLowerCase().includes(query)) ||
+                preparations.some((p: any) => p.storageLocationId === l.id && p.name.toLowerCase().includes(query))
             );
         }
         return locs;
@@ -138,8 +138,8 @@ export default function StorageMapPage() {
     const getLocationStats = (locationId: string) => {
         const stock = stockItems.filter(s => s.storageLocationId === locationId);
         const preps = preparations.filter(p => p.storageLocationId === locationId);
-        const expiring = expiringStock.filter(s => s.storageLocationId === locationId).length +
-            expiringPreps.filter(p => p.storageLocationId === locationId).length;
+        const expiring = expiringStock.filter((s: any) => s.storageLocationId === locationId).length +
+            expiringPreps.filter((p: any) => p.storageLocationId === locationId).length;
         return { stockCount: stock.length, prepCount: preps.length, expiringCount: expiring };
     };
 

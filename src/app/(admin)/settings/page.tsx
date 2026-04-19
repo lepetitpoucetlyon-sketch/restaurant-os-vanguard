@@ -30,7 +30,6 @@ import {
     POS_SCHEMA, 
     ACCOUNTING_SCHEMA, 
     HACCP_SCHEMA,
-    SERVICE_SCHEMA,
     THEME_SCHEMA,
     NOTIFICATIONS_SCHEMA,
     SECURITY_SCHEMA,
@@ -44,7 +43,7 @@ import {
 
 
 import {
-    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload
+    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot
 } from "lucide-react";
 
 // Settings categories

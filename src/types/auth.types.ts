@@ -22,4 +22,7 @@ export interface User {
     phones?: string[];
     rescueEmail?: string;
     twoFactorVerifiedAt?: string; // ISO timestamp of last successful SMS verification
+    email?: string;
+    uid?: string;
+    displayName?: string;
 }

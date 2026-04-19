@@ -38,22 +38,9 @@ export interface Reservation {
     isVip?: boolean;
     visitCount?: number;
     duration: number;
+    source?: 'phone' | 'website' | 'walk-in' | 'google' | 'thefork';
+    name?: string; // fallback alias
+    guests?: number; // alias for covers
 }
 
-export interface GroupEvent {
-    id: string;
-    title: string;
-    date: string;
-    startTime: string;
-    endTime: string;
-    covers: number;
-    contactName: string;
-    contactPhone: string;
-    contactEmail: string;
-    status: 'enquiry' | 'confirmed' | 'active' | 'completed' | 'cancelled';
-    budgetInCents?: number;
-    depositPaid?: boolean;
-    menuId?: string;
-    notes?: string;
-    updatedAt: string;
-}
+// GroupEvent moved to groups.types.ts

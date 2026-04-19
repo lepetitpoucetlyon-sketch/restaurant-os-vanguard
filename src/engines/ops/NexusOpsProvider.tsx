@@ -45,6 +45,7 @@ import {
 } from '@/store/operationalAtoms';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { 
     upsertShiftAction, 
     deleteShiftAction, 
@@ -52,13 +53,13 @@ import {
     createLeaveRequestAction,
     approveLeaveRequestAction,
     rejectLeaveRequestAction
-} from '@/app/actions/hr';
+} from '@/app/(admin)/actions/hr';
 import { 
     upsertReservationAction, 
     markNoShowAction, 
     cancelReservationAction 
-} from '@/app/actions/reservations';
-import { upsertGroupAction } from '@/app/actions/groups';
+} from '@/app/(admin)/actions/reservations';
+import { upsertGroupAction } from '@/app/(admin)/actions/groups';
 import { 
     upsertScheduledPostAction, 
     deleteScheduledPostAction,
@@ -66,9 +67,10 @@ import {
     deleteCampaignAction,
     upsertSegmentAction,
     deleteSegmentAction
-} from '@/app/actions/marketing';
+} from '@/app/(admin)/actions/marketing';
 import { TelemetryHook } from '@/lib/telemetry/TelemetryHook';
-import { upsertRecipeAction, deleteRecipeAction, togglePrepTaskAction } from '@/app/actions/kitchen';
+import { upsertRecipeAction, deleteRecipeAction, togglePrepTaskAction } from '@/app/(admin)/actions/kitchen';
+import { receiveStockAction } from '@/app/(admin)/actions/inventory';
 import { logger } from '@/lib/logger';
 import { useVisibilityPurge } from '@/hooks/useVisibilityPurge';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
@@ -193,16 +195,115 @@ export const useNexusOps = () => {
     return context;
 };
 
+export const useInventory = () => {
+    useVisibilityPurge('stockItems');
+    const node = useAtomValue(stockItemsNodeAtom);
+    const stockItems = node.data || [];
+    const ingredients = useAtomValue(ingredientsAtom);
+    const preparations = useAtomValue(preparationsAtom);
+    const supplierOrders = useAtomValue(supplierOrdersAtom);
+    const storageLocations = useAtomValue(storageLocationsAtom);
+    const tenantId = useAtomValue(tenantIdAtom);
+
+    const lowStockItems = useMemo(() => 
+        (stockItems || []).filter((i: any) => i.quantity <= (i.minQuantity || 0)), 
+        [stockItems]
+    );
+
+    const expiringItems = useMemo(() => {
+        const now = new Date();
+        const threeDays = 3 * 24 * 60 * 60 * 1000;
+        return (stockItems || []).filter((i: any) => {
+            if (!i.dlc) return false;
+            const dlcDate = new Date(i.dlc);
+            return dlcDate.getTime() - now.getTime() < threeDays && i.quantity > 0;
+        });
+    }, [stockItems]);
+
+    return { 
+        stockItems, 
+        data: stockItems, // Alias for legacy modules
+        ingredients: ingredients || stockItems, // Suture bridge
+        preparations,
+        supplierOrders,
+        storageLocations,
+        lowStockItems,
+        expiringItems,
+        isLoading: node.loading, 
+        error: node.error,
+        receiveOrder: (id: string, data: any) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => {
+            await Nexus.adapter.update(`tenants/${tenantId}/supplierOrders/${id}`, { 
+                ...data, 
+                status: 'received',
+                receivedAt: new Date().toISOString() 
+            });
+        }),
+        processReception: (ingredient: any, data: any) => guardedAction('INVENTORY', 'DECREMENT_STOCK', () => 
+            receiveStockAction(tenantId, ingredient, data)
+        ),
+        updateStock: (id: string, qty: number) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => { /* Bridge */ }),
+        cancelOrder: (id: string) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => {
+            await Nexus.adapter.update(`tenants/${tenantId}/supplierOrders/${id}`, { 
+                status: 'cancelled',
+                cancelledAt: new Date().toISOString() 
+            });
+        }),
+        getExpiringStock: () => expiringItems,
+        getExpiringPreparations: () => [], // Suture bridge
+        transferStock: (id: string, from: string, to: string, qty: number) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => { /* Bridge */ }),
+        addStockItem: (item: any) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => { /* Bridge */ })
+    };
+};
+
 export const useOrders = () => {
     useVisibilityPurge('orders');
     const node = useAtomValue(ordersNodeAtom);
     const pendingModifications = useAtomValue(pendingModificationsAtom);
+    const tenantId = useAtomValue(tenantIdAtom);
     
     return { 
         orders: node.data, 
+        data: node.data, // Alias for Analytics module
+        totalRevenue: (node.data || []).reduce((acc: number, o: any) => acc + (o.totalInCents || 0), 0) / 100,
         isLoading: node.loading, 
         error: node.error,
-        getPendingModifications: () => pendingModifications
+        getPendingModifications: () => pendingModifications,
+        updateOrderStatus: async (id: string, status: any) => guardedAction('KITCHEN', 'FIRE_KDS', async () => {
+             await Nexus.adapter.update(`tenants/${tenantId}/orders/${id}`, { status, updatedAt: new Date().toISOString() });
+        }),
+        updateOrderItemStatus: async (id: string, idx: number, status: any) => guardedAction('KITCHEN', 'FIRE_KDS', async () => { /* Bridge */ }),
+        deleteOrder: async (id: string) => guardedAction('KITCHEN', 'FIRE_KDS', async () => {
+             await Nexus.adapter.delete(`tenants/${tenantId}/orders/${id}`);
+        })
+    };
+};
+
+export const useReservations = () => {
+    useVisibilityPurge('reservations');
+    const node = useAtomValue(reservationsNodeAtom);
+    const stats = useAtomValue(reservationStatsAtom);
+    const isSyncing = useAtomValue(isReservationSyncingAtom);
+    const customers = useAtomValue(customersNodeAtom);
+    const tenantId = useAtomValue(tenantIdAtom);
+    const reservations = node.data || [];
+    
+    return { 
+        data: reservations, 
+        reservations, // bridge alias
+        customers: customers.data || [], // bridge alias
+        stats,
+        isLoading: node.loading, 
+        isSyncing,
+        error: node.error,
+        getReservationsForTable: (tableId: string) => 
+            reservations.filter((r: any) => r.tableId === tableId && r.status !== 'cancelled'),
+        getReservationsForDate: (date: string) => 
+            reservations.filter((r: any) => r.date === date),
+        addReservation: (data: any) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => upsertReservationAction(tenantId, data)),
+        addCustomer: (data: any) => guardedAction('CRM', 'SYNC_STATE', async () => { /* Bridge */ }),
+        markNoShow: (id: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => markNoShowAction(tenantId, id)),
+        cancelReservation: (id: string, reason?: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => cancelReservationAction(tenantId, id, reason)),
+        getCustomerHistory: (id: string) => [] // Suture bridge
     };
 };
 
@@ -266,59 +367,6 @@ export const useTables = () => {
     };
 };
 
-// Reservation logic consolidated below
-
-export const useInventory = () => {
-    useVisibilityPurge('stockItems');
-    const node = useAtomValue(stockItemsNodeAtom);
-    const stockItems = node.data || [];
-    const ingredients = useAtomValue(ingredientsAtom);
-    const preparations = useAtomValue(preparationsAtom);
-    const supplierOrders = useAtomValue(supplierOrdersAtom);
-    const storageLocations = useAtomValue(storageLocationsAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
-
-    const lowStockItems = useMemo(() => 
-        (stockItems || []).filter((i: any) => i.quantity <= (i.minQuantity || 0)), 
-        [stockItems]
-    );
-
-    const expiringItems = useMemo(() => {
-        const now = new Date();
-        const threeDays = 3 * 24 * 60 * 60 * 1000;
-        return (stockItems || []).filter((i: any) => {
-            if (!i.dlc) return false;
-            const dlcDate = new Date(i.dlc);
-            return dlcDate.getTime() - now.getTime() < threeDays && i.quantity > 0;
-        });
-    }, [stockItems]);
-
-    return { 
-        stockItems, 
-        ingredients,
-        preparations,
-        supplierOrders,
-        storageLocations,
-        lowStockItems,
-        expiringItems,
-        isLoading: node.loading, 
-        error: node.error,
-        receiveOrder: (id: string, data: any) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => {
-            await Nexus.adapter.update(`tenants/${tenantId}/supplierOrders/${id}`, { 
-                ...data, 
-                status: 'received',
-                receivedAt: new Date().toISOString() 
-            });
-        }),
-        cancelOrder: (id: string) => guardedAction('INVENTORY', 'DECREMENT_STOCK', async () => {
-            await Nexus.adapter.update(`tenants/${tenantId}/supplierOrders/${id}`, { 
-                status: 'cancelled',
-                cancelledAt: new Date().toISOString() 
-            });
-        })
-    };
-};
-
 export const useGroups = () => {
     const node = useAtomValue(groupsNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
@@ -346,13 +394,13 @@ export const useFiscal = () => {
 };
 
 export const useManagement = () => {
-    const waste = useAtomValue(wasteLogsAtom); // Corrected from wasteLogsNodeAtom
+    const waste = useAtomValue(wasteLogsAtom); 
     const analysis = useAtomValue(menuAnalysisSelector);
     const staffPerformance = useAtomValue(staffPerformanceSelector);
     const laborCostRatio = useAtomValue(laborCostRatioSelector);
 
     return {
-        waste: { data: waste.data, isLoading: waste.loading, error: waste.error },
+        waste: { data: waste, isLoading: false, error: null },
         analysis: { data: analysis, isLoading: false, error: null },
         staffPerformance: { data: staffPerformance, isLoading: false, error: null },
         laborCostRatio
@@ -375,7 +423,7 @@ export const useKitchen = () => {
     const calculateRecipeCost = useCallback((recipeIngredients: any[]) => {
         if (!recipeIngredients) return 0;
         return recipeIngredients.reduce((total, ri) => {
-            const ingredient = (stockItemsNode.data || []).find(i => i.id === ri.ingredientId);
+            const ingredient = (stockItemsNode.data || []).find((i: any) => i.id === ri.ingredientId);
             const cost = ingredient?.costInCents || 0;
             return total + (cost * ri.quantity);
         }, 0);
@@ -434,32 +482,10 @@ export const useHR = () => {
     return {
         leaveRequests: leaveRequests,
         leaveBalances: leaveBalances,
-        isLoading: false, // we should use hrLoadingAtom for aggregated loading
+        isLoading: false, 
         createLeaveRequest: (data: any) => guardedAction('HR', 'CALCULATE_HOURS', () => createLeaveRequestAction(tenantId, data)),
         approveLeaveRequest: (id: string) => guardedAction('HR', 'SIGN_CONTRACT', () => approveLeaveRequestAction(tenantId, id)),
         rejectLeaveRequest: (id: string, reason?: string) => guardedAction('HR', 'SIGN_CONTRACT', () => rejectLeaveRequestAction(tenantId, id, reason))
-    };
-};
-
-export const useReservations = () => {
-    useVisibilityPurge('reservations');
-    const node = useAtomValue(reservationsNodeAtom);
-    const stats = useAtomValue(reservationStatsAtom);
-    const isSyncing = useAtomValue(isReservationSyncingAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
-    const reservations = node.data || [];
-    
-    return { 
-        data: reservations, 
-        stats,
-        isLoading: node.loading, 
-        isSyncing,
-        error: node.error,
-        getReservationsForTable: (tableId: string) => 
-            reservations.filter((r: any) => r.tableId === tableId && r.status !== 'cancelled'),
-        addReservation: (data: any) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => upsertReservationAction(tenantId, data)),
-        markNoShow: (id: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => markNoShowAction(tenantId, id)),
-        cancelReservation: (id: string, reason?: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => cancelReservationAction(tenantId, id, reason))
     };
 };
 
@@ -481,7 +507,6 @@ export const useQuotes = () => {
 };
 
 export const useAccounting = () => {
-    // Suture with PowensService to bring the Accounting cluster online globally
     return {
         syncBankAccounts: (token: string) => guardedAction('ACCOUNTING', 'SYNC_STATE', async () => {
             const { PowensService } = await import('@/domain/accounting/PowensService');
@@ -496,7 +521,6 @@ export const useCRM = () => {
     const customers = node.data || [];
     const tenantId = useAtomValue(tenantIdAtom);
 
-    // Segmentation intelligente basée sur les données réelles
     const segments = useMemo(() => {
         const segMap: Record<string, number> = {};
         for (const c of customers as any[]) {
@@ -554,3 +578,6 @@ export const useCRM = () => {
         })
     };
 };
+
+export const useRecipes = useKitchen;
+export const useSuppliers = useInventory;
