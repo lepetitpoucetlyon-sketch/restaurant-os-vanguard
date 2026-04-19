@@ -1,22 +1,5 @@
-/**
- * ⚛️ OPERATIONAL ATOMS - BARREL FILE (Grade VI - Mesh Architecture)
- * 
- * Ce fichier est un "barrel" : il ré-exporte tous les atomes des domaines métier.
- * Tous les fichiers existants qui importent depuis '@/store/operationalAtoms'
- * continueront de fonctionner sans aucune modification.
- * 
- * Architecture maillée (post God-Node scission) :
- * 
- *   nexusNodeFactory.ts  ← Fondation (NexusNode, createNexusNode, updateNexusNode)
- *        ↓
- *   ┌────────────┬───────────────┬──────────────┬──────────────────┬──────────────┐
- *   │ orderAtoms │ inventoryAtoms│ staffAtoms   │ complianceAtoms  │ marketingAtoms│
- *   └────────────┴───────────────┴──────────────┴──────────────────┴──────────────┘
- *        ↓               ↓              ↓
- *   analyticsAtoms.ts  ← Selectors cross-domaine (Menu Engineering, Performance)
- *        ↓
- *   fleetAtoms.ts  ← Infrastructure multi-tenant
- */
+// 🔑 FOUNDATION TOOLS (Grade VI)
+export { createNexusNode, updateNexusNode, createProxyDomain, useNexusNode } from './nexusNodeFactory';
 
 // 🔑 AUTH & IDENTITY
 export {
@@ -36,7 +19,6 @@ export {
 
 // 🏛️ UI & PERSISTENCE
 export {
-    toastsAtom, addToastAtom,
     isSidebarCollapsedAtom, isLaunchpadOpenAtom, themeAtom, isTrainingModeAtom,
     notificationsAtom, unreadNotificationsCountAtom,
     isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom
@@ -110,7 +92,7 @@ export {
 // 🛰️ FLEET & MULTI-TENANCY
 export {
     tenantIdAtom, fleetSnapshotAtom,
-    fleetBloomFilterAtom, fleetClusterAtomFamily,
+    fleetBloomFilterAtom, activeTenantSlotsAtom,
     activeFleetTenantAtom, focusedTenantDetailsAtom,
     floorsAtom, zonesAtom, zonesLockedAtom, currentFloorIdAtom
 } from './fleetAtoms';

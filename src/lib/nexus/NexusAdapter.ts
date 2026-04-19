@@ -43,8 +43,10 @@ export interface INexusAdapter {
  * 🏛️ Nexus Singleton Manager
  */
 class NexusManager {
+    private _adapter: INexusAdapter | null = null;
     private _realAdapter: INexusAdapter | null = null;
     private _isSimulacraActive: boolean = false;
+    private _tenantOverride: string | null = null;
 
     set adapter(adapter: INexusAdapter) {
         this._adapter = adapter;

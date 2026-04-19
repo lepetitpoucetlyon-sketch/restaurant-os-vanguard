@@ -38,7 +38,8 @@ import {
     LEGAL_SCHEMA,
     STAFF_CONFIG_SCHEMA,
     RESERVATIONS_CONFIG_SCHEMA,
-    INVENTORY_SCHEMA
+    INVENTORY_SCHEMA,
+    SERVICE_SCHEMA
 } from "@/config/settings-schemas";
 
 

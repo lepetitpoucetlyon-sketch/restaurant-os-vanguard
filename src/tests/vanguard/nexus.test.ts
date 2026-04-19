@@ -6,8 +6,11 @@ import {
     updateNexusNode, 
     ordersNodeAtom, 
     tenantIdAtom,
-    fleetSnapshotAtom
-} from '../../store/operationalAtoms';
+    fleetSnapshotAtom,
+    isMarketingSyncingAtom,
+    isReservationSyncingAtom,
+    reservationStatsAtom
+} from '@/store/operationalAtoms';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 
 describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {

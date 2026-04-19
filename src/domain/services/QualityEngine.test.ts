@@ -1,19 +1,21 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QualityEngine } from './QualityEngine';
 import { QualityControl } from '@/domain/types/quality';
 import { updateNexusNode } from '@/store/operationalAtoms';
 
 // Mock dependencies
-jest.mock('@/store/operationalAtoms', () => ({
-  updateNexusNode: jest.fn(),
-  stockItemsAtom: { key: 'stockItems' },
-  deliveriesAtom: { key: 'deliveries' }
+vi.mock('@/store/operationalAtoms', () => ({
+  updateNexusNode: vi.fn((prev, updates) => ({ ...prev, ...updates, lastUpdated: Date.now() })),
+  stockItemsNodeAtom: { key: 'stockItems' },
+  deliveriesNodeAtom: { key: 'deliveries' },
+  qualityControlsNodeAtom: { key: 'qualityControls' }
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/axiom', () => ({
   logger: {
-    info: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn()
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn()
   }
 }));
 

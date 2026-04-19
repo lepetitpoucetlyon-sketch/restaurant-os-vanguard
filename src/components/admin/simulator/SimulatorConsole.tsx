@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { SimulationProfile, NexusStaffingOracle } from '@/domain/services/SimulationService';
 import { ProposalPanel } from "@/components/admin/ProposalPanel";
 import { NexusStaffingOracle as StaffingOracle } from '@/domain/services/NexusStaffingOracle';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { cn } from '@/lib/ui.foundations';
 
 export function SimulatorConsole() {
     const [metrics, setMetrics] = useAtom(simulationMetricsAtom);

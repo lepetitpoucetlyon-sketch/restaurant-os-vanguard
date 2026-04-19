@@ -30,6 +30,7 @@ export interface NexusAuthState {
     addUser?: (user: Partial<User>) => Promise<void>;
     deleteUser?: (userId: string) => Promise<void>;
     logAction?: (action: string, metadata?: any) => void;
+    [key: string]: any;
 }
 
 export interface NexusTenantState {
@@ -38,6 +39,7 @@ export interface NexusTenantState {
     switchTenant: (tenantId: string) => void;
     isTenantLoading: boolean;
     tenantId?: string; // Legacy alias
+    [key: string]: any;
 }
 
 export interface NexusUIState {
@@ -65,6 +67,7 @@ export interface NexusUIState {
     unreadCount: number;
     sidebarOpen?: boolean; 
     settings?: any; // Shortcut to settings module if needed
+    [key: string]: any;
 }
 
 export interface NexusSettingsState {
@@ -84,6 +87,7 @@ export interface NexusSettingsState {
     updateReservationSlots?: (data: any) => Promise<void>;
     updateSLM?: (data: any) => Promise<void>;
     updateList?: (data: any) => Promise<void>;
+    [key: string]: any;
 }
 
 export interface NexusFleetState {
@@ -110,6 +114,7 @@ export interface NexusNotifState {
     removeNotification: (id: string) => void;
     clearAll: () => void;
     notifications: any[];
+    [key: string]: any;
 }
 
 export interface NexusCoreState {

@@ -8,6 +8,7 @@ import { GlobalSettings } from '@/types/settings';
  */
 export const defaultSettings: GlobalSettings = {
     identity: {
+        id: "restaurant-os-elite-main",
         name: "Restaurant OS Elite",
         slogan: "Intelligence Gastronomique",
         cuisineType: "Modern Gastronomy",
@@ -19,6 +20,7 @@ export const defaultSettings: GlobalSettings = {
         address: "123 Avenue de l'Innovation",
         city: "Paris",
         postalCode: "75001",
+        country: "France",
         phoneMain: "+33 1 23 45 67 89",
         emailGeneral: "contact@nexus-restaurant.os",
         website: "https://nexus-restaurant.os"
@@ -31,14 +33,14 @@ export const defaultSettings: GlobalSettings = {
     },
     schedule: [],
     service: {
-        paxMin: 1,
-        paxMax: 10,
-        intervalMinutes: 15,
-        autoConfirm: true
+        avgMealDurationLunch: 90,
+        avgMealDurationDinner: 120,
+        lastArrivalBeforeClose: 30
     },
     reservationSlots: {
-        morning: { start: "12:00", end: "14:30" },
-        evening: { start: "19:00", end: "22:30" }
+        slotDuration: 30,
+        intervalBetweenSlots: 15,
+        maxCoversPerSlot: 10
     },
     closedPeriods: [],
     menuCategories: [],
@@ -54,13 +56,29 @@ export const defaultSettings: GlobalSettings = {
     positions: [],
     staffConfig: {
         maxHoursPerWeek: 35,
-        autoScheduling: true
+        maxOvertimePerWeek: 10,
+        minRestBetweenShiftsHours: 11,
+        nightShiftStart: "22:00",
+        nightShiftBonusPercent: 20,
+        sundayBonusPercent: 50,
+        holidayBonusPercent: 100,
+        paidBreaks: true,
+        autoScheduling: true,
+        contractTypes: ["cdi", "cdd", "extra"]
     },
     shiftTemplates: [],
     absences: [],
     planningConfig: {
-        startDay: 1,
-        autoValidation: false
+        weekStartDay: 1,
+        defaultView: "week",
+        minHoursBetweenShifts: 11,
+        maxHoursPerDay: 10,
+        maxHoursPerWeek: 48,
+        notifyOnPublish: true,
+        absenceRequestApproval: true,
+        swapRequestApproval: true,
+        overtimeEnabled: true,
+        staffToCoversRatio: 0.15
     },
     reservationSettings: {
         enabled: true,
@@ -120,6 +138,8 @@ export const defaultSettings: GlobalSettings = {
         lotTrackingEnabled: true,
         supplierTrackingEnabled: true
     },
+    controlPoints: [],
+    nonConformities: [],
     clickCollect: {
         enabled: false,
         minPrepTime: 20
@@ -137,17 +157,26 @@ export const defaultSettings: GlobalSettings = {
     },
     security: {
         require2FA: false,
-        sessionTimeout: 60
+        sessionTimeout: 60,
+        twoFactorFrequency: "every_login",
+        allowEmailRescue: true,
+        allowMultiplePhones: false,
+        logRetention: 90,
+        allowSupportAccess: true
     },
     theme: {
         primaryColor: "#C5A059",
         secondaryColor: "#111111",
+        backgroundColor: "#000000",
+        textColor: "#FFFFFF",
+        fontPrimary: "Inter",
+        fontHeadings: "Outfit",
         mode: "light",
         animationsEnabled: true
     },
     goals: {
         monthlyRevenue: 50000,
-        averageTicket: 45
+        avgTicket: 45
     },
     integrations: [],
     integrationsConfig: {

@@ -15,8 +15,8 @@ import {
   tenantIdAtom,
   reservationsNodeAtom,
   groupsNodeAtom,
-  leaveRequestsAtom,
-  leaveBalancesAtom,
+  leaveRequestsNodeAtom as leaveRequestsAtom,
+  leaveBalancesNodeAtom as leaveBalancesAtom,
   fleetSnapshotAtom,
   pendingModificationsAtom,
   miseEnPlaceTargetSelector,
@@ -24,14 +24,14 @@ import {
   categoriesNodeAtom,
   productsNodeAtom,
   fiscalLedgerNodeAtom,
-  wasteLogsAtom,
+  wasteLogsNodeAtom as wasteLogsAtom,
   menuAnalysisSelector,
   staffPerformanceSelector,
   laborCostRatioSelector,
-  ingredientsAtom,
-  preparationsAtom,
-  supplierOrdersAtom,
-  storageLocationsAtom,
+  ingredientsNodeAtom as ingredientsAtom,
+  preparationsNodeAtom as preparationsAtom,
+  supplierOrdersNodeAtom as supplierOrdersAtom,
+  storageLocationsNodeAtom as storageLocationsAtom,
   customersNodeAtom,
   floorsAtom,
   zonesAtom,
@@ -91,8 +91,8 @@ interface NexusNodeState { data: any[]; isLoading: boolean; error: string | null
 function guardedAction(
     moduleId: ModuleId, 
     power: PowerAction, 
-    action: () => void | Promise<void>
-): void | Promise<void> {
+    action: () => any | Promise<any>
+): any | Promise<any> {
     const result = genomeValidator.validatePower(moduleId, power);
     if (!result.allowed) {
         // Boîte Noire + UI Alert (fire-and-forget)
