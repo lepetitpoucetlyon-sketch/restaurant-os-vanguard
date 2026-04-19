@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTAURANT OS | NUCLEUS v14.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'neon-or': '#FACC15', 'neon-bleu': '#38BDF8', 'neon-violet': '#C084FC', 'neon-rouge': '#F87171', 'abyssal': '#010101' },
+                    fontFamily: { serif: ['Newsreader', 'serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root { --neon-or: #FACC15; --transition-luxe: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        body { background-color: #010101; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; }
+        .verre-architecte { background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        #bulleArchitecte h4 { margin: 0; color: #FFF; font-size: 14px; font-family: 'Newsreader', serif; font-style: italic; }
+        #ba-badge { font-size: 10px; padding: 2px 6px; border: 1px solid; border-radius: 4px; display: inline-block; margin-top: 5px; text-transform: uppercase; }
+        #ba-impacts { margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; font-size: 10px; color: rgba(255,255,255,0.6); }
+        .impact-item { margin-bottom: 4px; display: flex; align-items: flex-start; }
+        .impact-item i { margin-right: 5px; color: var(--neon-magenta); font-size: 8px; margin-top: 2px; }
+        
+        .noeud circle { fill: #000; stroke-width: 2px; cursor: pointer; transition: var(--transition-luxe); }
+        .noeud text { font-size: 11px; font-weight: 500; font-family: 'Newsreader', serif; pointer-events: none; transition: all 0.3s; fill: #FFFFFF !important; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        .noeud.flou { opacity: 0.05 !important; filter: blur(2px) grayscale(1); }
+        .noeud.cible-impact circle { stroke: var(--neon-magenta); stroke-width: 4px; filter: drop-shadow(0 0 15px var(--neon-magenta)); animation: pulse-impact 1.5s infinite; }
+        @keyframes pulse-impact { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .noeud.recherche-match circle { stroke: var(--neon-or); stroke-width: 4px; filter: drop-shadow(0 0 10px var(--neon-or)); }
+        
+        .lien-adn { fill: none; stroke-opacity: 0.4; stroke-width: 1.5px; transition: all 0.5s; }
+        .lien-adn.flou { stroke-opacity: 0.02 !important; }
+
+        .barre-recherche { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); width: 280px; transition: all 0.5s; }
+        .barre-recherche:focus-within { width: 400px; border-color: var(--neon-or); }
+
+        .btn-profil { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
+        .btn-profil:hover { background: rgba(255,255,255,0.08); border-color: var(--neon-or); transform: scale(1.1); }
+        .btn-profil i { width: 16px; height: 16px; stroke: currentColor; }
+        .btn-profil:not(:hover) i { color: rgba(255,255,255,0.4); }
+        
+        .marker-color { fill-opacity: 0.6; }
+        
+        /* PULSES MAGENTA (Incidences Systémiques) */
+        .lien-pulsant { fill: none; stroke-width: 2.5px; stroke-dasharray: 10, 15; opacity: 0; pointer-events: none; stroke: var(--neon-violet); filter: drop-shadow(0 0 8px var(--neon-violet)); }
+        .flux-omega { opacity: 0.85; animation: pulse-flow 6s linear infinite; }
+        @keyframes pulse-flow { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+
+        /* EFFET DE LUEUR AU SURVOL */
+        .noeud:hover circle { filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); stroke-width: 3px; }
+        .noeud text { transition: all 0.5s var(--transition-luxe); }
+        .noeud:hover text { font-size: 14px; fill: #FFF !important; text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+
+        .halo-fond { position: fixed; width: 100vw; height: 100vw; background: radial-gradient(circle, rgba(100, 100, 255, 0.03) 0%, transparent 70%); z-index: -1; filter: blur(150px); animation: halo-move 20s infinite alternate; }
+        @keyframes halo-move { from { transform: translate(-10%, -10%); } to { transform: translate(10%, 10%); } }
+    </style>
+</head>
+<body>
+
+    <div class="halo-fond" style="top: -50%; left: -50%;"></div>
+    <div class="halo-fond" style="bottom: -50%; right: -50%;"></div>
+
+    <!-- RECHERCHE SLIM -->
+    <div class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
+        <div class="barre-recherche flex items-center px-5 py-2 rounded-full gap-3 group">
+            <i data-lucide="search" class="w-4 h-4 text-zinc-600 group-focus-within:text-neon-or"></i>
+            <input type="text" id="inputRecherche" placeholder="Rechercher..." class="bg-transparent border-none outline-none text-white text-[11px] w-full placeholder:text-zinc-700">
+            <div id="compteurResultats" class="text-[8px] font-black text-neon-or opacity-0 transition-opacity">0</div>
+        </div>
+    </div>
+
+    <!-- UI ESTRATÉGIQUE (PONCTUELLE) -->
+    <div class="fixed inset-0 pointer-events-none z-10 p-10 flex flex-col justify-between">
+        <div class="pointer-events-auto">
+            <div class="inline-flex items-center gap-3 px-3 py-1.5 bg-black/40 border border-white/5 rounded-full text-zinc-600 text-[7px] font-black uppercase tracking-widest backdrop-blur-md mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-neon-or"></span> NUCLEUS V14.0
+            </div>
+            <h1 class="font-serif text-3xl font-bold italic text-white/80 tracking-tighter">L'Écosystème <span class="text-neon-or/60">Total</span></h1>
+        </div>
+
+        <div class="flex items-end justify-between">
+            <div class="verre-architecte px-4 py-2 rounded-full flex items-center gap-6 pointer-events-auto border-white/5">
+                <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span><span class="text-[7px] font-black text-zinc-500 uppercase">Act</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#C084FC]"></span><span class="text-[7px] font-black text-zinc-500 uppercase">Imp</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#FACC15]"></span><span class="text-[7px] font-black text-zinc-500 uppercase">Fin</span></div>
+                <button id="resetArchitecte" class="text-[7px] font-black text-neon-or uppercase tracking-tighter ml-2">Reset</button>
+            </div>
+
+            <div class="flex items-center gap-2 pointer-events-auto">
+                <button id="boutonAtlas" class="verre-architecte w-9 h-9 rounded-lg flex items-center justify-center text-neon-or hover:scale-110 transition-transform"><i data-lucide="scroll-text" class="w-4 h-4"></i></button>
+                <div class="flex gap-2">
+                    <button id="vPlus" class="verre-architecte w-9 h-9 rounded-lg flex items-center justify-center hover:text-neon-or"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
+                    <button id="vMoins" class="verre-architecte w-9 h-9 rounded-lg flex items-center justify-center hover:text-neon-or"><i data-lucide="minus" class="w-3.5 h-3.5"></i></button>
+                    <button id="vHome" class="verre-architecte w-9 h-9 rounded-lg flex items-center justify-center hover:text-neon-or"><i data-lucide="grid" class="w-3.5 h-3.5"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR PROFILS SLIM -->
+    <div id="panneauProfils" class="fixed left-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-50 bg-black/10 backdrop-blur-md p-2 rounded-xl border border-white/5 pointer-events-auto shadow-2xl">
+        <button class="btn-profil group" data-profil="manager" title="Directeur"><i data-lucide="shield-check" class="text-neon-or"></i></button>
+        <button class="btn-profil group" data-profil="serveur" title="Service"><i data-lucide="user" class="text-blue-400"></i></button>
+        <button class="btn-profil group" data-profil="chef" title="Cuisine"><i data-lucide="flame" class="text-rose-400"></i></button>
+        <button class="btn-profil group" data-profil="comptable" title="Finance"><i data-lucide="calculator" class="text-emerald-400"></i></button>
+        <div class="w-full h-px bg-white/5 my-0.5"></div>
+        <button id="resetFocus" class="btn-profil" title="Reset View"><i data-lucide="refresh-cw" class="text-zinc-600"></i></button>
+    </div>
+
+    <!-- SVG OMEGA (REACHABLE) -->
+    <svg id="canvasOmega" class="fixed inset-0 w-full h-full cursor-grab active:cursor-grabbing z-0 pointer-events-auto">
+        <defs>
+            <marker id="arrowhead" viewBox="0 -10 20 20" refX="30" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,-8L15,0L0,8" fill="currentColor" class="marker-color"></path>
+            </marker>
+        </defs>
+    </svg>
+
+    <!-- ATLAS SIDE PANEL -->
+    <div id="atlasOmega" class="fixed top-0 right-0 w-[600px] h-full verre-architecte z-[200] p-16 border-l border-white/5 transform translate-x-full transition-transform duration-700 overflow-y-auto pointer-events-auto">
+        <div class="flex justify-between items-center mb-16">
+            <h2 class="text-4xl font-serif italic font-bold text-white">L'Atlas</h2>
+            <button id="fermerAtlas" class="p-4 hover:bg-white/5 rounded-full"><i data-lucide="x" class="w-8 h-8"></i></button>
+        </div>
+        <div class="space-y-12 pb-24 text-zinc-400 text-sm font-light">
+            <p class="italic text-neon-or/80">L'Atlas est la source de vérité du Restaurant OS.</p>
+        </div>
+    </div>
+
+    <!-- BULLE D'INFO -->
+    <div id="bulleArchitecte" class="absolute pointer-events-none p-4 verre-architecte rounded-xl border border-white/10 hidden z-50 min-w-[200px]">
+        <h4 id="ba-titre">Nœud</h4>
+        <div id="ba-badge">Genre</div>
+        <div id="ba-impacts" class="hidden">
+            <div id="ba-impacts-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            nom: "Restaurant OS (Source de Vérité)",
+            genre: "racine",
+            chemins: [
+                {
+                    nom: "GOUVERNANCE & LÉGAL", genre: "domaine",
+                    chemins: [
+                        { nom: "Authentification (Context)", genre: "critique", description: "Cœur de la sécurité RBAC. Gère l'authentification, les sessions et les permissions granulaires par catégorie.", chemins: [
+                            { nom: "Vérifier Permissions", genre: "critique", description: "Vérifie les droits d'accès en temps réel pour chaque action utilisateur.", chemins: [
+                                { nom: "Vérification JWT Token", genre: "critique" },
+                                { nom: "Contrôle Scope RBAC", genre: "critique" }
+                            ]},
+                            { nom: "Attribuer Rôle", genre: "action", description: "Modification dynamique des privilèges d'un collaborateur.", chemins: [
+                                { nom: "Mise à jour Firestore Users", genre: "action" },
+                                { nom: "Log Audit Sûreté", genre: "critique" }
+                            ]},
+                            { nom: "Réinitialiser Mot de passe", genre: "action", description: "Procédure sécurisée de récupération de compte." }
+                        ], impactsDetail: ["SÉCURITÉ : Contrôle d'accès granulaire RBAC", "AUDIT : Traçabilité des modifications d'utilisateurs"] },
+                        { nom: "Registre Légal (Context)", genre: "critique", description: "Gestion centralisée des registres obligatoires et de la conformité ERP/PMR.", chemins: [
+                            { nom: "DUERP (Risques)", genre: "critique", description: "Document Unique d'Évaluation des Risques Professionnels mis à jour dynamiquement.", chemins: [
+                                { nom: "Calcul de Gravité (IA)", genre: "action" },
+                                { nom: "Génération PDF Archive", genre: "revenue" }
+                            ]},
+                            { nom: "Cerfa 13984 (Hygiène)", genre: "critique", description: "Déclaration réglementaire pour la manipulation de denrées animales." },
+                            { nom: "Registre PMR (Accessibilité)", genre: "critique", description: "Suivi de la conformité aux normes d'accessibilité handicapé." },
+                            { nom: "Vérif Extincteurs", genre: "critique", description: "Historique et alertes de maintenance du matériel incendie." }
+                        ], impactsDetail: ["LÉGAL : Conformité administrative aux normes ERP", "SÉCURITÉ : Prévention des risques professionnels"] }
+                    ]
+                },
+                {
+                    nom: "FINANCE & COMPTA", genre: "domaine",
+                    chemins: [
+                        { nom: "Comptabilité (Context)", genre: "critique", description: "Moteur comptable NF525. Gère le journal, le grand livre et la génération des états fiscaux.", chemins: [
+                            { nom: "Créer Écriture Manuelle", genre: "action", description: "Passage d'une écriture comptable manuelle dans le journal." },
+                            { nom: "Soumettre Note de Frais", genre: "action", contrecoup: ["Authentification (Context)"], description: "Soumission d'une dépense pour remboursement.", chemins: [
+                                { nom: "Capture de Ticket (OCR)", genre: "action" },
+                                { nom: "Ventilation TVA", genre: "revenue" }
+                            ], impactsDetail: ["FINANCE : Engagement d'une dette de remboursement", "FISCAL : Préparation de la récupération TVA"] },
+                            { nom: "Générer FEC (Cloud)", genre: "critique", description: "Export du Fichier des Écritures Comptables pour l'administration fiscale.", chemins: [
+                                { nom: "Archivage Immuable", genre: "critique" },
+                                { nom: "Signature Numérique", genre: "critique" }
+                            ], impactsDetail: ["LÉGAL : Génération du FEC conforme"] },
+                            { nom: "Bilan / Liasse Fiscale", genre: "revenue", description: "Production des états financiers de fin d'exercice." }
+                        ], impactsDetail: ["COMPTA : Tenue du Grand Livre certifié", "AUDIT : Certification NF525 Ready"] },
+                        { nom: "Finance (Context)", genre: "revenue", description: "Analyse de la performance financière et de la trésorerie en temps réel.", chemins: [
+                            { nom: "Analyse des Marges", genre: "revenue", description: "Calcul du coût matière (Food Cost) et des marges brutes par produit.", chemins: [
+                                { nom: "Variation Prix Fournisseur", genre: "critique" },
+                                { nom: "Ratio de Perte", genre: "revenue" }
+                            ]},
+                            { nom: "Suivi Trésorerie", genre: "revenue", description: "Visualisation des flux de liquidités et prévisions bancaires." }
+                        ]}
+                    ]
+                },
+                {
+                    nom: "VENTE & EXPÉRIENCE", genre: "domaine",
+                    chemins: [
+                        { nom: "Commandes (Context)", genre: "domaine", description: "Gestion du cycle de vie des commandes, de la saisie à l'encaissement.", chemins: [
+                            { nom: "Ajouter une Commande", genre: "action", contrecoup: ["Écrans Cuisine (KDS)"], description: "Flux de vente : création d'une commande et notification en cuisine.", chemins: [
+                                { nom: "Calcul TVA Temps Réel", genre: "revenue" },
+                                { nom: "Print Ticket (Thermique)", genre: "action" },
+                                { nom: "Envoi KDS Kitchen", genre: "critique" }
+                            ], impactsDetail: ["Cuisine : Envoi automatique sur les écrans KDS", "STOCKS : Réservation théorique des ingrédients"] },
+                            { nom: "Modifier Statut Commande", genre: "action", contrecoup: ["Finance (Context)", "Inventaire (Context)", "Authentification (Context)"], description: "Transition de statut (Nouvelle -> Payée). Déclenche les flux financiers et logistiques.", chemins: [
+                                { nom: "Déduction Stock Physique", genre: "critique" },
+                                { nom: "Mise à jour Stats CRM", genre: "revenue" }
+                            ], impactsDetail: [
+                                "FINANCE : Si 'Payée', ventilation immédiate de la TVA",
+                                "LOGISTIQUE : Si 'Payée', décrémentation réelle des stocks",
+                                "CRM : Mise à jour de la fidélité client"
+                            ]},
+                            { nom: "Partage de Note (Split)", genre: "action", description: "Algorithme de division des additions par personne ou par produit." }
+                        ]},
+                        { nom: "Tables & Salle (Context)", genre: "domaine", description: "Moteur de gestion des tables et de l'occupation physique de l'établissement.", chemins: [
+                            { nom: "Plan de Salle Interactif", genre: "action", description: "Visualisation spatiale des tables et de leur état en temps réel." },
+                            { nom: "Fusionner Tables", genre: "action", description: "Regroupement de plusieurs tables pour les groupes." },
+                            { nom: "Transférer Table", genre: "action", description: "Transfert d'une note d'une table à une autre." }
+                        ]},
+                        { nom: "Réservations (Context)", genre: "revenue", description: "Système de réservation omnicanale avec gestion des listes d'attente.", chemins: [
+                            { nom: "Confirmer Réservation", genre: "action", contrecoup: ["Recettes (Context)"], description: "Validation d'une table, synchronisant la mise en place cuisine.", chemins: [
+                                { nom: "Envoi SMS Confirmation", genre: "action" },
+                                { nom: "Génération Plan Occup.", genre: "revenue" }
+                            ], impactsDetail: ["CUISINE : Mise à jour des objectifs de production"] },
+                            { nom: "Vérifier Disponibilité", genre: "action", description: "Algorithme de disponibilité temps réel basé sur l'occupation future." }
+                        ]}
+                    ]
+                },
+                {
+                    nom: "CUISINE & SAVOIR", genre: "domaine",
+                    chemins: [
+                        { nom: "Recettes (Context)", genre: "domaine", description: "Gestion des fiches techniques et calcul automatique des coûts de revient.", chemins: [
+                            { nom: "Calculer Coût Matière", genre: "revenue", description: "Calcul dynamique du coût de revient basé sur les derniers achats.", chemins: [
+                                { nom: "Indexation Prix Marché", genre: "critique" },
+                                { nom: "Calcul de Gaspillage", genre: "revenue" }
+                            ]},
+                            { nom: "Nouvelle Tâche Préparation", genre: "action", description: "Gestion des tâches de mise en place en cuisine." },
+                            { nom: "Objectif Mise en Place (IA)", genre: "revenue", description: "Prédiction des volumes de production basés sur les réservations.", impactsDetail: ["OPÉRATION : Prévision des quantités de prod via IA"] }
+                        ]},
+                        { nom: "Écrans Cuisine (KDS)", genre: "action", description: "Interface de gestion des bons et des temps de production.", chemins: [
+                            { nom: "Poste Chaud (Grill)", genre: "action" },
+                            { nom: "Poste Froid", genre: "action" },
+                            { nom: "Alerte de Temps de Service", genre: "critique", description: "Alerte visuelle si le temps de préparation dépasse les seuils recommandés." }
+                        ]}
+                    ]
+                },
+                {
+                    nom: "LOGISTIQUE & ACHATS", genre: "domaine",
+                    chemins: [
+                        { nom: "Inventaire (Context)", genre: "domaine", description: "Gestion des stocks, mouvements, et relations fournisseurs.", chemins: [
+                            { nom: "Mouvements de Stock", genre: "action", description: "Historique complet des entrées/sorties et ajustements." },
+                            { nom: "Déduction Automatique Stock", genre: "action", description: "Sortie de stock basée sur la vente réelle des plats." },
+                            { nom: "Créer Commande Fournisseur", genre: "action", contrecoup: ["Finance (Context)"], description: "Génération de bons de commande basés sur les seuils d'alerte.", chemins: [
+                                { nom: "Optimisation Quantité (IA)", genre: "revenue" },
+                                { nom: "Envoi Mail Fournisseur", genre: "action" }
+                            ]},
+                            { nom: "Réception de Livraison", genre: "action", contrecoup: ["Finance (Context)", "Comptabilité (Context)"], description: "Validation physique des livraisons et mise à jour stock/factures.", chemins: [
+                                { nom: "Contrôle Qualité I/O", genre: "critique" },
+                                { nom: "Génération Bon Entrée", genre: "action" }
+                            ], impactsDetail: ["STOCKS : Incrémentation immédiate du stock physique"] }
+                        ]}
+                    ]
+                },
+                {
+                    nom: "RH & TALENTS", genre: "domaine",
+                    chemins: [
+                        { nom: "Planning (Context)", genre: "action", description: "Planification des shifts et respect de la législation sociale (Paies).", chemins: [
+                            { nom: "Édition du Planning", genre: "action", description: "Interface de gestion et publication des shifts hebdomadaires.", chemins: [
+                                { nom: "Contrôle Repos Légal (11h)", genre: "critique" },
+                                { nom: "Alerte Heures Sup", genre: "critique" }
+                            ]},
+                            { nom: "Échange de Shifts", genre: "action", description: "Module interactif de bourse aux shifts entre employés." },
+                            { nom: "Export Données Paie", genre: "revenue", contrecoup: ["Comptabilité (Context)"], description: "Transfert des variables de paie vers le moteur comptable." }
+                        ]},
+                        { nom: "Gestion des Congés", genre: "action", contrecoup: ["Planning (Context)", "Comptabilité (Context)"], description: "Traitement des demandes de congés avec impact direct sur planning et paie.", chemins: [
+                            { nom: "Calcul Provision CP", genre: "revenue" },
+                            { nom: "Validation Workflow RH", genre: "action" }
+                        ], impactsDetail: ["PLANNING : Mise à jour des disponibilités", "PAIE : Calcul des provisions congés"] }
+                    ]
+                },
+                {
+                    nom: "HACCP & CONFORMITÉ", genre: "domaine",
+                    chemins: [
+                        { nom: "Hygiène (Context)", genre: "critique", description: "Contrôles réglementaires et traçabilité pour la sécurité alimentaire.", chemins: [
+                            { nom: "Lecture Capteur (IOT)", genre: "critique", description: "Surveillance en continu (24h/24) des températures de stockage.", chemins: [
+                                { nom: "Simulation dérive (30s)", genre: "action" },
+                                { nom: "Log Température Compliant", genre: "critique" }
+                            ]},
+                            { nom: "Checklist Quotidienne", genre: "action", description: "Formulaires obligatoires d'ouverture, fermeture et hygiène." },
+                            { nom: "Registre des Déchets", genre: "critique", description: "Suivi des volumes de bio-déchets pour optimisation." },
+                            { nom: "Registre des Huiles", genre: "critique", description: "Passage aux huiles neuves et traçabilité du recyclage." }
+                        ], impactsDetail: ["HACCP : Score de conformité en temps réel", "LÉGAL : Archivage immuable des données sanitaires"] }
+                    ]
+                },
+                {
+                    nom: "MAINTENANCE & SÉCURITÉ", genre: "domaine",
+                    chemins: [
+                        { nom: "Audit Prestataires", genre: "critique", description: "Suivi des contrats et des interventions de maintenance tiers.", chemins: [
+                            { nom: "Maintenance Hotte/Extra", genre: "critique" },
+                            { nom: "Maintenance VMC (IOT)", genre: "critique" },
+                            { nom: "Traitement Dératisation", genre: "critique" }
+                        ]}
+                    ]
+                },
+                {
+                    nom: "IA & INTELLIGENCE", genre: "domaine",
+                    chemins: [
+                        { nom: "Intelligence (Context)", genre: "critique", description: "Moteur IA Oracle pour l'analyse prédictive et le pilotage stratégique.", chemins: [
+                            { nom: "Interroger Oracle", genre: "action", description: "Assistant vocal/textuel utilisant Gemini Pro pour les requêtes complexes.", chemins: [
+                                { nom: "Semantic Search (Vector)", genre: "revenue" },
+                                { nom: "Function Calling Engagement", genre: "action" }
+                            ]},
+                            { nom: "Analyses Prédictives", genre: "revenue", description: "Prédictions d'affluence et de chiffre d'affaires basées sur l'historique." }
+                        ]},
+                        { nom: "Tutoriel (Context)", genre: "action", chemins: [
+                            { nom: "Mode Tutoriel Immersif", genre: "action", description: "Accompagnement IA pour l'apprentissage du logiciel." }
+                        ]}
+                    ]
+                }
+            ]
+        };
+
+
+        const width = window.innerWidth, height = window.innerHeight;
+        const svg = d3.select("#canvasOmega");
+        const g = svg.append("g").attr("transform", d3.zoomIdentity.translate(width*0.1, height/2).scale(0.8));
+        const fluxLayer = g.append("g");
+
+        const zoom = d3.zoom().scaleExtent([0.1, 5]).on("zoom", e => g.attr("transform", e.transform));
+        svg.call(zoom);
+
+        const treeLayout = d3.tree().nodeSize([50, 400]);
+        const rootNode = d3.hierarchy(data, d => d.chemins);
+        let nodeCount = 0;
+
+        function refresh(sourceNode) {
+            const treeData = treeLayout(rootNode);
+            const nodes = treeData.descendants(), links = treeData.links();
+            nodes.forEach(d => d.y = d.depth * 400);
+
+            const link = g.selectAll('path.lien-adn').data(links, d => d.target.id || (d.target.id = ++nodeCount));
+            link.enter().insert('path', "g").attr("class", "lien-adn").attr('marker-end', 'url(#arrowhead)').merge(link)
+                .transition().duration(800)
+                .attr('d', d3.linkHorizontal().x(d=>d.y).y(d=>d.x))
+                .style("stroke", d => getColor(d.target.data.genre));
+
+            const node = g.selectAll('g.noeud').data(nodes, d => d.id || (d.id = ++nodeCount));
+            const nodeEnter = node.enter().append('g').attr('class', 'noeud')
+                .attr("transform", d => `translate(${sourceNode.y || 0},${sourceNode.x || 0})`)
+                .on('click', (e, d) => { if(d.children){ d._children = d.children; d.children = null; } else { d.children = d._children; d._children = null; } refresh(d); })
+                .on('mouseover', (e, d) => {
+                    const sources = nodes.filter(n => n.data.contrecoup && n.data.contrecoup.includes(d.data.nom)).map(n => n.data.nom);
+                    const impacts = d.data.contrecoup || [];
+
+                    // Highlight systemic impact links (Magenta)
+                    if(d.data.contrecoup) {
+                        d.data.contrecoup.forEach(t => { 
+                            const targetClass = t.replace(/\s+/g,'-').replace(/[()\/]/g, '');
+                            d3.selectAll(`.flux-to-${targetClass}`).classed("flux-omega", true); 
+                            d3.selectAll("g.noeud").filter(n => n.data.nom === t).classed("cible-impact", true);
+                        });
+                    }
+
+                    const b = d3.select("#bulleArchitecte").classed("hidden", false);
+                    b.style("left", (e.pageX+30)+"px").style("top", (e.pageY-30)+"px");
+                    
+                    // FIXED: Using direct selection to avoid previous variable scoping issues
+                    d3.select("#ba-titre").text(d.data.nom);
+                    d3.select("#ba-badge").text(d.data.genre.toUpperCase()).style("color", getColor(d.data.genre)).style("border-color", getColor(d.data.genre));
+                    
+                    const impactsHTML = `
+                        <div class="space-y-4">
+                            ${d.data.description ? `<div class="text-white/70 text-[10px] leading-relaxed italic border-b border-white/5 pb-2">"${d.data.description}"</div>` : ''}
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <h4 class="text-[9px] uppercase tracking-widest text-white/40 font-bold">Origines (Amont)</h4>
+                                    <div class="flex flex-wrap gap-1">
+                                        ${sources.length > 0 ? sources.map(s => `<span class="px-1.5 py-0.5 bg-white/5 border border-white/10 rounded-sm text-[8px] text-white/40">${s}</span>`).join('') : '<span class="text-[8px] text-white/20 italic">Aucune</span>'}
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <h4 class="text-[9px] uppercase tracking-widest text-neon-violet font-bold">Incidences (Aval)</h4>
+                                    <div class="flex flex-wrap gap-1">
+                                        ${impacts.length > 0 ? impacts.map(i => `<span class="px-1.5 py-0.5 bg-neon-violet/10 border border-neon-violet/30 rounded-sm text-[8px] text-neon-violet font-bold">${i}</span>`).join('') : '<span class="text-[8px] text-white/20 italic">Aucune</span>'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${d.data.impactsDetail ? `
+                                <div class="space-y-2 pt-2 border-t border-white/10">
+                                    <h4 class="text-[9px] uppercase tracking-widest text-neon-or font-bold">Conséquences v20.0</h4>
+                                    <ul class="text-[9px] space-y-1">
+                                        ${d.data.impactsDetail.map(i => `<li class="flex items-start gap-2"><span class="text-neon-or mt-1">◆</span><span class="text-white/90 font-light">${i}</span></li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+
+                            ${d.data.chemins ? `
+                                <div class="space-y-2 pt-2 border-t border-white/10">
+                                    <h4 class="text-[9px] uppercase tracking-widest text-blue-400 font-bold">Sous-processus Atomiques</h4>
+                                    <div class="flex flex-wrap gap-1">
+                                        ${d.data.chemins.map(c => `<span class="px-1.5 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded-sm text-[8px] text-blue-300 font-mono">${c.nom}</span>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            <div class="text-[8px] text-white/10 pt-1 text-right italic font-mono uppercase tracking-tighter">Omniscience Absolue v20.0</div>
+                        </div>
+                    `;
+                    
+                    d3.select("#ba-impacts").classed("hidden", false).select("#ba-impacts-list").html(impactsHTML);
+                })
+                .on('mouseout', () => { 
+                    d3.select("#bulleArchitecte").classed("hidden", true); 
+                    d3.selectAll(".lien-pulsant").classed("flux-omega", false); 
+                    d3.selectAll("g.noeud").classed("cible-impact", false);
+                });
+
+            nodeEnter.append('circle').attr('r', d => d.depth === 0 ? 14 : 6).style("stroke", d => getColor(d.data.genre)).style("fill", "#000");
+            nodeEnter.append('text').attr("dy", ".35em").attr("x", d => d.children || d._children ? -15 : 15).attr("text-anchor", d => d.children || d._children ? "end" : "start").text(d => d.data.nom).style("fill", "#FFF");
+
+            const nodeUpdate = nodeEnter.merge(node);
+            nodeUpdate.transition().duration(800).attr("transform", d => `translate(${d.y},${d.x})`);
+
+            fluxLayer.selectAll("*").remove();
+            nodes.forEach(d => {
+                if(d.data.contrecoup) d.data.contrecoup.forEach(t => {
+                    const targetNode = nodes.find(n => n.data.nom.includes(t));
+                    if(targetNode) {
+                        const targetClass = t.replace(/\s+/g,'-').replace(/[()\/]/g, '');
+                        fluxLayer.append("path")
+                            .attr("class", `lien-pulsant flux-to-${targetClass}`)
+                            .attr("d", d3.linkHorizontal()({ source: [d.y, d.x], target: [targetNode.y, targetNode.x] }))
+                            .style("stroke", getColor('repercussion'));
+                    }
+                });
+            });
+            node.exit().remove(); link.exit().remove();
+        }
+
+        function getColor(g) {
+            switch(g) { case 'action': return '#38BDF8'; case 'repercussion': return '#C084FC'; case 'revenue': return '#FACC15'; case 'critique': return '#F87171'; default: return '#FFF'; }
+        }
+
+        refresh(rootNode);
+        svg.call(zoom.transform, d3.zoomIdentity.translate(width*0.1, height/2).scale(0.8));
+
+        d3.select("#vPlus").on("click", () => svg.transition().duration(500).call(zoom.scaleBy, 1.5));
+        d3.select("#vMoins").on("click", () => svg.transition().duration(500).call(zoom.scaleBy, 0.7));
+        d3.select("#vHome").on("click", () => svg.transition().duration(800).call(zoom.transform, d3.zoomIdentity.translate(width*0.1, height/2).scale(0.8)));
+
+        const sidePanel = document.getElementById('atlasOmega');
+        document.getElementById('boutonAtlas').onclick = () => sidePanel.classList.remove('translate-x-full');
+        document.getElementById('fermerAtlas').onclick = () => sidePanel.classList.add('translate-x-full');
+
+        d3.select("#inputRecherche").on("input", function(e) {
+            const v = e.target.value.toLowerCase();
+            const c = d3.select("#compteurResultats");
+            if(v.length < 2) { d3.selectAll(".noeud, .lien-adn").classed("flou", false).classed("recherche-match", false); c.style("opacity",0); return; }
+            let mCount = 0;
+            d3.selectAll(".noeud").classed("recherche-match", d => { const r = d.data.nom.toLowerCase().includes(v); if(r) mCount++; return r; }).classed("flou", d => !d.data.nom.toLowerCase().includes(v));
+            d3.selectAll(".lien-adn").classed("flou", true);
+            c.text(mCount).style("opacity", 1);
+        });
+
+        const mapping = { manager: ["GOUVERNANCE", "NUCLEUS"], serveur: ["OPÉRATIONS"], chef: ["CUISINE", "LOGISTIQUE", "HACCP"], comptable: ["LOGISTIQUE", "GOUVERNANCE"] };
+        d3.selectAll(".btn-profil").on("click", function() {
+            const p = d3.select(this).attr("data-profil"), filterList = mapping[p];
+            d3.selectAll(".noeud").classed("flou", d => !filterList.some(x => d.data.nom.toUpperCase().includes(x))).classed("focus", d => filterList.some(x => d.data.nom.toUpperCase().includes(x)));
+            d3.selectAll(".lien-adn").classed("flou", d => !(filterList.some(x => d.target.data.nom.toUpperCase().includes(x)) && filterList.some(x => d.source.data.nom.toUpperCase().includes(x))));
+        });
+        d3.select("#resetFocus").on("click", () => d3.selectAll(".noeud, .lien-adn").classed("flou", false).classed("focus", false).classed("recherche-match", false));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

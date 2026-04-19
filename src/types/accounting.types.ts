@@ -1,0 +1,303 @@
+import { z } from 'zod';
+
+/**
+ * ACCOUNTING & FINANCE TYPES - Professional ERP
+ */
+
+export const FiscalSealSchema = z.object({
+  id: z.string(),
+  transactionId: z.string(),
+  previousHash: z.string(),
+  hash: z.string(),
+  timestamp: z.string().datetime(),
+  dataSnapshot: z.string(), // Stringified record of the transaction
+  signature: z.string() // Digital signature 
+});
+
+export type FiscalSeal = z.infer<typeof FiscalSealSchema>;
+
+// --- Account Types (PCG Classes 1-7) ---
+export type AccountClass = '1' | '2' | '3' | '4' | '5' | '6' | '7';
+export type AccountType = 'asset' | 'liability' | 'equity' | 'revenue' | 'expense';
+export type AccountSide = 'debit' | 'credit';
+export type TransactionType = 'income' | 'expense';
+export type TransactionCategory = 'sales' | 'purchases' | 'fixed' | 'payroll' | 'bank' | 'tax' | 'other';
+
+// --- Chart of Accounts (Plan Comptable Général) ---
+export interface Account {
+    id: string;
+    code: string;          // e.g., "512", "601"
+    name: string;
+    type: AccountType;
+    class: AccountClass;
+    parentCode?: string;   // For hierarchical display
+    isActive: boolean;
+    description?: string;
+}
+
+// --- Journal Entries (Écritures Comptables) ---
+export interface JournalLine {
+    accountId: string;
+    accountCode: string;
+    accountName: string;
+    description: string;
+    side: AccountSide;
+    amountInCents: number;
+}
+
+export interface JournalEntry {
+    id: string;
+    date: Date;
+    pieceNumber: string;   // Numéro de pièce
+    description: string;
+    lines: JournalLine[];
+    referenceId?: string;
+    referenceType?: 'order' | 'supplier_order' | 'expense' | 'payroll' | 'bank' | 'manual';
+    isSystemGenerated: boolean;
+    isValidated: boolean;
+    createdBy?: string;
+    validatedBy?: string;
+    validatedAt?: Date;
+    fiscalSealHash?: string; // NF525 Seal
+    sealedAt?: string;       // Date of sealing
+    metadata?: Record<string, any>;
+}
+
+// --- Ledger (Grand Livre) ---
+export interface LedgerAccount extends Account {
+    balanceInCents: number;
+    debitTotalInCents: number;
+    creditTotalInCents: number;
+    movements: LedgerMovement[];
+}
+
+export interface LedgerMovement {
+    date: Date;
+    pieceNumber: string;
+    description: string;
+    debitInCents: number;
+    creditInCents: number;
+    runningBalanceInCents: number;
+    journalEntryId: string;
+}
+
+// --- Fiscal Periods (Périodes Comptables) ---
+export type FiscalPeriodStatus = 'open' | 'closed' | 'locked';
+
+export interface FiscalPeriod {
+    id: string;
+    name: string;           // e.g., "Janvier 2026"
+    startDate: Date;
+    endDate: Date;
+    status: FiscalPeriodStatus;
+    closedAt?: Date;
+    closedBy?: string;
+}
+
+// --- Expense Claims (Notes de Frais) ---
+export interface ExpenseClaim {
+    id: string;
+    userId: string;
+    userName: string;
+    userRole: string; // e.g., 'commis', 'chef', 'admin'
+    date: Date;
+    amountInCents: number;
+    category: TransactionCategory;
+    description: string;
+    receiptUrl?: string; // Standardized Cloud Storage URL
+    receiptImage?: string; // Local preview or base64
+    status: 'pending' | 'approved' | 'rejected';
+    approvedBy?: string;
+    approvedAt?: Date;
+    journalEntryId?: string;
+    ocrData?: {
+        merchant?: string;
+        taxAmountInCents?: number;
+        confidence?: number;
+        isFacturXCertified?: boolean; // Phase 29
+        fiscalNetworkId?: string; // TXN ID from PDP/PPF
+    };
+}
+
+// --- Bank Reconciliation (Rapprochement Bancaire) ---
+export interface BankTransaction {
+    id: string;
+    date: Date;
+    label: string;
+    amountInCents: number;
+    amount?: number; // Legacy visibility
+    type: 'credit' | 'debit';
+    isReconciled: boolean;
+    reconciledWith?: string; // JournalEntry ID
+    reconciledAt?: Date;
+}
+
+export interface BankReconciliation {
+    id: string;
+    periodId: string;
+    bankBalanceInCents: number;
+    ledgerBalanceInCents: number;
+    differenceInCents: number;
+    status: 'pending' | 'balanced' | 'discrepancy';
+    createdAt: Date;
+}
+
+// --- Financial Metrics (Module Finance - Opérationnel) ---
+export interface TreasuryMetrics {
+    cashOnHandInCents: number;
+    bankBalanceInCents: number;
+    pendingReceivablesInCents: number;
+    pendingPayablesInCents: number;
+    netCashPositionInCents: number;
+    cashFlowTrend: { 
+        date: string; 
+        inflowInCents: number; 
+        outflowInCents: number;
+        inflow: number;  // UI compatibility
+        outflow: number; // UI compatibility
+    }[];
+    forecast30DaysInCents: number;
+    
+    // UI Aliases (DEPRECATED - Use ...InCents)
+    cashOnHand: number;
+    bankBalance: number;
+    pendingReceivables: number;
+    pendingPayables: number;
+    netCashPosition: number;
+    forecast30Days: number;
+}
+
+// --- Accounting Metrics (Module Comptabilité - Certifié) ---
+export interface AccountingMetrics {
+    totalRevenueInCents: number;
+    totalExpensesInCents: number;
+    grossMarginInCents: number;
+    grossMarginPercent: number;
+    foodCostPercent: number;
+    laborCostPercent: number;
+    operatingExpensesInCents: number;
+    ebitdaInCents: number;
+    netProfitInCents: number;
+}
+
+// --- Financial Reports ---
+export interface ProfitAndLossReport {
+    periodId: string;
+    periodName: string;
+    revenues: { accountCode: string; accountName: string; amountInCents: number }[];
+    expenses: { accountCode: string; accountName: string; amountInCents: number }[];
+    totalRevenueInCents: number;
+    totalExpensesInCents: number;
+    netResultInCents: number;
+    generatedAt: Date;
+}
+
+export interface BalanceSheetReport {
+    asOfDate: Date;
+    assets: { accountCode: string; accountName: string; amountInCents: number }[];
+    liabilities: { accountCode: string; accountName: string; amountInCents: number }[];
+    equity: { accountCode: string; accountName: string; amountInCents: number }[];
+    totalAssetsInCents: number;
+    totalLiabilitiesInCents: number;
+    totalEquityInCents: number;
+    isBalanced: boolean;
+    generatedAt: Date;
+}
+
+export interface TrialBalance {
+    periodId: string;
+    accounts: { code: string; name: string; debitInCents: number; creditInCents: number }[];
+    totalDebitInCents: number;
+    totalCreditInCents: number;
+    isBalanced: boolean;
+}
+
+// Legacy compatibility
+export interface FinancialMetrics {
+    totalRevenueInCents: number;
+    totalExpensesInCents: number;
+    grossMarginInCents: number;
+    foodCostInCents: number;
+    laborCostInCents: number;
+    opExInCents: number;
+    ebitdaInCents: number;
+    netProfitInCents: number;
+    cashOnHandInCents: number;
+}
+
+export interface Transaction {
+    id: string;
+    type: TransactionType;
+    category: TransactionCategory;
+    title: string;
+    amountInCents: number;
+    date: Date;
+    orderId?: string;
+    supplierOrderId?: string;
+    expenseClaimId?: string;
+}
+
+export interface AccountingContextType {
+    accounts: Account[];
+    journalEntries: JournalEntry[];
+    bankTransactions: BankTransaction[];
+    bankConnections: any[];
+    expenseClaims: ExpenseClaim[];
+    fiscalPeriods: FiscalPeriod[];
+    ledger: LedgerAccount[];
+    metrics: AccountingMetrics;
+    legacyMetrics: FinancialMetrics;
+    isLoading: boolean;
+    
+    // UI State
+    viewMode: 'simple' | 'expert';
+    toggleViewMode: () => void;
+    
+    // Actions
+    addJournalEntry: (entry: Omit<JournalEntry, 'id'>) => Promise<void>;
+    addManualJournalEntry: (entry: Omit<JournalEntry, 'id'>) => Promise<void>;
+    updateJournalEntry: (id: string, updates: Partial<JournalEntry>) => Promise<void>;
+    deleteJournalEntry: (id: string) => Promise<void>;
+    validateJournalEntry: (id: string) => Promise<void>;
+    
+    addAccount: (account: Omit<Account, 'id'>) => Promise<void>;
+    updateAccount: (id: string, updates: Partial<Account>) => Promise<void>;
+    
+    submitExpenseClaim: (claim: Omit<ExpenseClaim, 'id' | 'userId' | 'userName' | 'status' | 'date' | 'userRole'>, receiptBlob?: string) => Promise<void>;
+    approveExpenseClaim: (id: string) => Promise<void>;
+    rejectExpenseClaim: (id: string) => Promise<void>;
+    
+    reconcileTransaction: (bankTxId: string, journalEntryId: string) => Promise<void>;
+    linkBankConnection: (connectionData: any) => Promise<void>;
+    recordPayrollSalary: (userId: string, netAmount: number, socialCharges: number, month: string) => Promise<void>;
+    submitExpense: (claim: any) => Promise<void>;
+    
+    generatePandL: (periodId: string) => ProfitAndLossReport;
+    generateBalanceSheet: (date: Date) => BalanceSheetReport;
+    generateTrialBalance: (periodId: string) => TrialBalance;
+    
+    getLedger: (accountId: string) => LedgerAccount | null;
+    getLedgerForAccount: (id: string) => LedgerMovement[];
+    getAccountByCode: (code: string) => Account | undefined;
+    getMetrics: () => AccountingMetrics;
+    getCalculatedFinancialMetrics: () => FinancialMetrics;
+    
+    // Expert/AI
+    expert: {
+        queryExpert: (prompt: string, contextData?: any) => Promise<any>;
+        isConfigured: boolean;
+        isAuthorized: boolean;
+        role: string;
+        modelId: string;
+    };
+    agent: {
+        query: (prompt: string, context?: any) => Promise<any>;
+        isProcessing: boolean;
+    };
+
+    // Fiscal & Compliance (Industrial)
+    generateAnnualFEC: (year: number, siren?: string) => Promise<void>;
+    runFiscalAudit: () => Promise<any>;
+    certificates: any[];
+    saveCertification: (cert: any) => Promise<void>;
+}

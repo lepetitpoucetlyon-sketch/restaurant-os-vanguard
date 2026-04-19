@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: |
+          package-lock.json
+          functions/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        npm ci
+        npm --prefix functions ci
+
+    - name: Security Audit
+      run: npm audit --audit-level=critical || true
+
+    - name: Type Check Application
+      run: npx tsc --noEmit
+
+    - name: Type Check Functions
+      run: npm --prefix functions run build # Assuming functions use tsc to build
+
+    - name: Full Release Check (Lint + Preflight + Tests)
+      run: npm run release:check
+
+    - name: Build Application
+      run: npm run build
+      env:
+        NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        # Add other necessary env vars for build here

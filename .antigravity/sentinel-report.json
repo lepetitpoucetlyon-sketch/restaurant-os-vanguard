@@ -1,0 +1,291 @@
+{
+  "timestamp": "2026-04-12T09:22:22.530Z",
+  "status": "critical",
+  "metrics": {
+    "typeSafety": 85,
+    "testCoverage": 50,
+    "architectureHealth": -240,
+    "overallStability": -35,
+    "knowledgeSync": "synced"
+  },
+  "alerts": [
+    {
+      "type": "error",
+      "message": "TypeScript issues detected in current workspace."
+    },
+    {
+      "type": "warning",
+      "message": "Logic tests are failing or incomplete."
+    }
+  ],
+  "sessions": [],
+  "complexity": {
+    "godObjects": [
+      {
+        "path": "src/app/accounting/page.tsx",
+        "lines": 339,
+        "imports": 18,
+        "proposals": [
+          "Cluster #0: handleExportFEC() (1 units)"
+        ]
+      },
+      {
+        "path": "src/app/groups/page.tsx",
+        "lines": 646,
+        "imports": 10,
+        "proposals": [
+          "Cluster #0: formatPrice(), handleFacturXTransmission(), handleNewEvent() (3 units)"
+        ]
+      },
+      {
+        "path": "src/app/inventory/page.tsx",
+        "lines": 358,
+        "imports": 22,
+        "proposals": [
+          "Cluster #0: getDlcColor() (1 units)"
+        ]
+      },
+      {
+        "path": "src/app/kds/page.tsx",
+        "lines": 734,
+        "imports": 13,
+        "proposals": []
+      },
+      {
+        "path": "src/app/kitchen/page.tsx",
+        "lines": 292,
+        "imports": 22,
+        "proposals": []
+      },
+      {
+        "path": "src/app/landing/page.tsx",
+        "lines": 722,
+        "imports": 5,
+        "proposals": []
+      },
+      {
+        "path": "src/app/layout.tsx",
+        "lines": 152,
+        "imports": 37,
+        "proposals": [
+          "Cluster #4: layout.tsx, RootLayout() (2 units)"
+        ]
+      },
+      {
+        "path": "src/app/leaves/page.tsx",
+        "lines": 920,
+        "imports": 6,
+        "proposals": [
+          "Cluster #0: getDaysInMonth(), getAbsencesForDate() (2 units)"
+        ]
+      },
+      {
+        "path": "src/app/onboarding/page.tsx",
+        "lines": 871,
+        "imports": 10,
+        "proposals": [
+          "Cluster #0: getChecklist() (1 units)"
+        ]
+      },
+      {
+        "path": "src/app/page.tsx",
+        "lines": 449,
+        "imports": 18,
+        "proposals": [
+          "Cluster #0: format() (1 units)"
+        ]
+      },
+      {
+        "path": "src/app/pos/page.tsx",
+        "lines": 224,
+        "imports": 22,
+        "proposals": []
+      },
+      {
+        "path": "src/app/quotes/page.tsx",
+        "lines": 588,
+        "imports": 9,
+        "proposals": [
+          "Cluster #0: formatDate(), formatCurrency(), updateContext() (3 units)"
+        ]
+      },
+      {
+        "path": "src/app/reservations/page.tsx",
+        "lines": 803,
+        "imports": 18,
+        "proposals": [
+          "Cluster #0: handleClickOutside(), handlePrevMonth(), handleNextMonth()... (7 units)"
+        ]
+      },
+      {
+        "path": "src/app/seo/page.tsx",
+        "lines": 715,
+        "imports": 7,
+        "proposals": [
+          "Cluster #0: getColor(), getLabel(), getScoreColor()... (4 units)"
+        ]
+      },
+      {
+        "path": "src/app/settings/page.tsx",
+        "lines": 624,
+        "imports": 9,
+        "proposals": [
+          "Cluster #0: checkMobile() (1 units)"
+        ]
+      },
+      {
+        "path": "src/app/social-marketing/page.tsx",
+        "lines": 611,
+        "imports": 6,
+        "proposals": [
+          "Cluster #0: BackgroundDecor() (1 units)"
+        ]
+      },
+      {
+        "path": "src/app/staff/page.tsx",
+        "lines": 408,
+        "imports": 24,
+        "proposals": [
+          "Cluster #0: handleOpenModal(), handleGeneratePaySlip(), getHoursForDay()... (4 units)"
+        ]
+      },
+      {
+        "path": "src/app/storage-map/page.tsx",
+        "lines": 539,
+        "imports": 14,
+        "proposals": [
+          "Cluster #0: getLocationStats(), handleTransferStock(), handleTransferPreparation()... (5 units)"
+        ]
+      },
+      {
+        "path": "src/components/kitchen/RecipeEditorDialog.tsx",
+        "lines": 647,
+        "imports": 10,
+        "proposals": [
+          "Cluster #0: RecipeEditorDialog.tsx, getInitialRecipeForm(), handleClose()... (10 units)"
+        ]
+      },
+      {
+        "path": "src/components/layout/Header.tsx",
+        "lines": 220,
+        "imports": 17,
+        "proposals": [
+          "Cluster #4: Header.tsx, getPageKeyFromPath(), handleClickOutside() (3 units)"
+        ]
+      },
+      {
+        "path": "src/components/layout/Sidebar.tsx",
+        "lines": 512,
+        "imports": 18,
+        "proposals": [
+          "Cluster #4: Sidebar.tsx, handleButtonPressStart(), handleButtonPressEnd()... (5 units)"
+        ]
+      },
+      {
+        "path": "src/components/layout/VoiceAssistantOverlay.tsx",
+        "lines": 540,
+        "imports": 6,
+        "proposals": [
+          "Cluster #8: VoiceAssistantOverlay.tsx, escapeHtml(), sanitizeHref()... (12 units)"
+        ]
+      },
+      {
+        "path": "src/components/modals/ProductFormModal.tsx",
+        "lines": 541,
+        "imports": 11,
+        "proposals": [
+          "Cluster #0: ProductFormModal.tsx, toggleAllergen(), addIngredient()... (9 units)"
+        ]
+      },
+      {
+        "path": "src/components/settings/ContextualSettings.tsx",
+        "lines": 1046,
+        "imports": 8,
+        "proposals": [
+          "Cluster #4: ContextualSettings.tsx, ContextualSettingsProvider(), useContextualSettings()... (11 units)"
+        ]
+      },
+      {
+        "path": "src/components/settings/HACCPSettings.tsx",
+        "lines": 720,
+        "imports": 6,
+        "proposals": [
+          "Cluster #8: HACCPSettings.tsx, handleSave() (2 units)"
+        ]
+      },
+      {
+        "path": "src/components/settings/HoursSettings.tsx",
+        "lines": 541,
+        "imports": 7,
+        "proposals": [
+          "Cluster #8: HoursSettings.tsx, handleClickOutside() (2 units)"
+        ]
+      },
+      {
+        "path": "src/components/settings/SecuritySettings.tsx",
+        "lines": 598,
+        "imports": 6,
+        "proposals": [
+          "Cluster #8: SecuritySettings.tsx, handleSave(), togglePermission()... (7 units)"
+        ]
+      },
+      {
+        "path": "src/components/settings/TablesSettings.tsx",
+        "lines": 671,
+        "imports": 5,
+        "proposals": [
+          "Cluster #0: TablesSettings.tsx, handleSave(), handleAddZone()... (11 units)"
+        ]
+      },
+      {
+        "path": "src/context/AccountingContext.tsx",
+        "lines": 577,
+        "imports": 16,
+        "proposals": [
+          "Cluster #0: AccountingContext.tsx, AccountingProvider(), useAccounting() (3 units)"
+        ]
+      },
+      {
+        "path": "src/context/AuthContext.tsx",
+        "lines": 602,
+        "imports": 11,
+        "proposals": [
+          "Cluster #4: AuthContext.tsx, persistSession(), readPersistedSession()... (6 units)"
+        ]
+      },
+      {
+        "path": "src/context/SettingsContext.tsx",
+        "lines": 587,
+        "imports": 5,
+        "proposals": [
+          "Cluster #8: SettingsContext.tsx, SettingsProvider(), useSettings() (3 units)"
+        ]
+      },
+      {
+        "path": "src/lib/docs-data.ts",
+        "lines": 888,
+        "imports": 1,
+        "proposals": [
+          "Cluster #4: docs-data.ts (1 units)"
+        ]
+      },
+      {
+        "path": "src/lib/motion.ts",
+        "lines": 608,
+        "imports": 1,
+        "proposals": [
+          "Cluster #0: motion.ts, getReducedMotionVariants() (2 units)"
+        ]
+      },
+      {
+        "path": "src/types/settings.ts",
+        "lines": 888,
+        "imports": 0,
+        "proposals": [
+          "Cluster #8: settings.ts (1 units)"
+        ]
+      }
+    ],
+    "circularDeps": []
+  }
+}

@@ -1,0 +1,23 @@
+# Exclure les dossiers de build et de dépendances
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# Exclure les dossiers techniques non-code
+graphify-out/
+graphify_tool/
+public/blueprint/
+artifacts/
+
+# Exclure les fichiers de config Firebase/Stitch
+functions/
+.firebase/
+firebase.json
+.firebaserc
+
+# Exclure les fichiers de log et de cache
+*.log
+.DS_Store
+.env*

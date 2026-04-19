@@ -1,0 +1,118 @@
+"use client";
+
+import { useRegistre } from "@/context/RegistreContext";
+import { Accessibility, Calendar, Clock, CheckCircle2, AlertTriangle, Wrench, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/ui.foundations";;
+
+export function PMRSection() {
+    const { pmrDoc, pmrAmenagements } = useRegistre();
+
+    const stats = {
+        conforme: pmrAmenagements.filter(a => a.status === 'conforme').length,
+        en_cours: pmrAmenagements.filter(a => a.status === 'en_cours').length,
+        a_faire: pmrAmenagements.filter(a => a.status === 'a_faire').length,
+    };
+
+    return (
+        <div className="max-w-5xl mx-auto space-y-8">
+            {/* Header */}
+            <div className="bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-sky-500/5 -mr-24 -mt-24 rounded-full blur-3xl" />
+                <div className="relative z-10 flex items-start gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-sky-500/10 flex items-center justify-center border border-sky-500/10 shadow-sm">
+                        <Accessibility strokeWidth={1.5} className="w-8 h-8 text-sky-500" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Accessibilité PMR</h2>
+                        <p className="text-[10px] font-black text-sky-500 uppercase tracking-[0.3em] mt-1">Registre Public d'Accessibilité</p>
+                        <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{pmrDoc.description}</p>
+                        <div className="flex items-center gap-6 mt-4">
+                            <div className="flex items-center gap-2 text-text-muted">
+                                <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
+                                <span className="text-[10px] font-mono font-bold">MAJ : {pmrDoc.lastUpdated}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-text-muted">
+                                <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
+                                <span className="text-[10px] font-mono font-bold">Révision : {pmrDoc.nextReview}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6">
+                {[
+                    { label: 'Conforme', count: stats.conforme, icon: CheckCircle2, color: 'text-success', bg: 'bg-success/5 border-success/10' },
+                    { label: 'En cours', count: stats.en_cours, icon: Wrench, color: 'text-warning', bg: 'bg-warning/5 border-warning/10' },
+                    { label: 'À faire', count: stats.a_faire, icon: AlertTriangle, color: 'text-error', bg: 'bg-error/5 border-error/10' },
+                ].map((s) => (
+                    <div key={s.label} className={cn("p-6 rounded-2xl border", s.bg)}>
+                        <div className="flex items-center justify-between mb-3">
+                            <s.icon className={cn("w-6 h-6", s.color)} strokeWidth={1.5} />
+                            <span className={cn("text-3xl font-serif font-black", s.color)}>{s.count}</span>
+                        </div>
+                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-muted">{s.label}</p>
+                    </div>
+                ))}
+            </div>
+
+            {/* Aménagements */}
+            <div className="space-y-4">
+                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
+                    <MapPin strokeWidth={1.5} className="w-3.5 h-3.5" />
+                    Diagnostic par Zone
+                </h3>
+                <div className="space-y-4">
+                    {pmrAmenagements.map((am) => (
+                        <div key={am.id} className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-sm flex items-center justify-between hover:shadow-lg transition-all">
+                            <div className="flex items-center gap-5">
+                                <div className={cn(
+                                    "w-10 h-10 rounded-xl flex items-center justify-center border",
+                                    am.status === 'conforme' ? 'bg-success/10 text-success border-success/10' :
+                                    am.status === 'en_cours' ? 'bg-warning/10 text-warning border-warning/10' :
+                                    'bg-error/10 text-error border-error/10'
+                                )}>
+                                    {am.status === 'conforme' ? <CheckCircle2 strokeWidth={1.5} className="w-5 h-5" /> :
+                                     am.status === 'en_cours' ? <Wrench strokeWidth={1.5} className="w-5 h-5" /> :
+                                     <AlertTriangle strokeWidth={1.5} className="w-5 h-5" />}
+                                </div>
+                                <div>
+                                    <h4 className="font-serif font-bold text-text-primary">{am.zone}</h4>
+                                    <p className="text-[12px] text-text-muted mt-0.5">{am.description}</p>
+                                </div>
+                            </div>
+                            <div className="text-right shrink-0 ml-4">
+                                <span className={cn(
+                                    "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                    am.status === 'conforme' ? 'bg-success/10 text-success border-success/20' :
+                                    am.status === 'en_cours' ? 'bg-warning/10 text-warning border-warning/20' :
+                                    'bg-error/10 text-error border-error/20'
+                                )}>
+                                    {am.status === 'conforme' ? 'Conforme' : am.status === 'en_cours' ? 'En cours' : 'À faire'}
+                                </span>
+                                {am.deadline && (
+                                    <p className="text-[10px] font-mono text-text-muted mt-2">Échéance : {am.deadline}</p>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Info */}
+            {pmrDoc.notes && (
+                <div className="bg-sky-50 dark:bg-sky-500/5 rounded-2xl border border-sky-200 dark:border-sky-500/10 p-8">
+                    <div className="flex items-start gap-4">
+                        <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-sky-500 mt-0.5 shrink-0" />
+                        <div>
+                            <h4 className="font-serif font-bold text-sky-900 dark:text-sky-300 mb-2">Notes</h4>
+                            <p className="text-sm text-sky-800 dark:text-sky-200/80 leading-relaxed">{pmrDoc.notes}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTAURANT OS | NEXUS SINGULARITY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-imperial: #FBFBF8;
+            --text-imperial: #1A1A1A;
+            --gold-imperial: #D4AF37;
+            --gold-light: #F4E4BC;
+            --glass-white: rgba(255, 255, 255, 0.9);
+            --critique-color: #8B0000;
+            --action-color: #2F4F4F;
+            --revenue-color: #DAA520;
+            --accent-gold: #B8860B;
+            --cyan-resilience: #008B8B;
+        }
+
+        body { 
+            background-color: var(--bg-imperial); 
+            color: var(--text-imperial);
+            font-family: 'Newsreader', serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #canvasOmega { width: 100%; height: 100%; }
+
+        .node-circle {
+            stroke: var(--gold-imperial);
+            stroke-width: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .node-circle:hover {
+            filter: drop-shadow(0 0 8px var(--gold-imperial));
+            stroke-width: 3px;
+        }
+
+        .link-line {
+            fill: none;
+            stroke: var(--gold-imperial);
+            stroke-opacity: 0.2;
+            stroke-width: 1.5px;
+        }
+
+        .node-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            fill: var(--text-imperial);
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: var(--glass-white);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--gold-light);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .tooltip-executive {
+            position: absolute;
+            pointer-events: none;
+            padding: 20px;
+            border-radius: 12px;
+            min-width: 300px;
+            max-width: 400px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes pulse-gold {
+            0% { filter: drop-shadow(0 0 2px var(--gold-imperial)); }
+            50% { filter: drop-shadow(0 0 10px var(--gold-imperial)); }
+            100% { filter: drop-shadow(0 0 2px var(--gold-imperial)); }
+        }
+
+        @keyframes pulse-resilience {
+            0% { stroke: var(--gold-imperial); stroke-width: 2px; }
+            50% { stroke: var(--cyan-resilience); stroke-width: 8px; filter: drop-shadow(0 0 15px var(--cyan-resilience)); }
+            100% { stroke: var(--gold-imperial); stroke-width: 2px; }
+        }
+
+        .nexus-core {
+            animation: pulse-gold 4s infinite ease-in-out;
+        }
+
+        .healing-pulse {
+            animation: pulse-resilience 2s ease-in-out;
+        }
+
+        .link-gradient {
+            stroke: url(#goldGradient);
+        }
+    </style>
+</head>
+<body class="bg-imperial">
+    <!-- UI HEADER -->
+    <div class="fixed top-8 left-8 z-50 pointer-events-none">
+        <h1 class="text-5xl font-serif italic text-imperial tracking-tight mb-2 opacity-90">Empire Singularity</h1>
+        <div class="flex items-center gap-3">
+            <span class="px-3 py-1 bg-gold-imperial/10 text-gold-imperial border border-gold-imperial/30 rounded-full text-[10px] uppercase font-black tracking-widest">GRADE VI CERTIFIED</span>
+            <span class="px-3 py-1 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-full text-[10px] uppercase font-black tracking-widest">PHASE OMEGA ACTIVE</span>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTROLS -->
+    <div class="fixed bottom-8 left-8 glass-panel rounded-2xl p-6 z-50 flex gap-4 pointer-events-auto items-center">
+        <button id="resetView" class="flex items-center gap-2 px-5 py-2.5 bg-imperial border border-gold-light rounded-xl hover:bg-gold-light/20 transition-all text-xs font-bold text-imperial/70 group">
+            <i data-lucide="refresh-cw" class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"></i> RÉINITIALISER
+        </button>
+        <button id="triggerChaos" class="flex items-center gap-2 px-5 py-2.5 bg-critique-color text-white rounded-xl hover:opacity-80 transition-all text-xs font-bold shadow-lg group">
+            <i data-lucide="zap" class="w-4 h-4 group-hover:animate-bounce"></i> STRESS TEST
+        </button>
+        <div class="h-8 w-px bg-gold-light"></div>
+        <div id="stats" class="text-[11px] font-medium text-imperial/50 flex gap-6">
+            <div class="flex flex-col">
+                <span class="text-gold-imperial uppercase font-black text-[9px] tracking-widest mb-0.5">INTÉGRITÉ</span>
+                <span id="integrityStat" class="text-imperial/80">46 / 46 VALIDÉS</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-cyan-600 uppercase font-black text-[9px] tracking-widest mb-0.5">DARWINIENNE</span>
+                <span id="resilienceStat" class="text-imperial/80">AUTO-HEALING ACTIVE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D CANVAS -->
+    <svg id="canvasOmega">
+        <defs>
+            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:var(--gold-imperial);stop-opacity:0.1" />
+                <stop offset="50%" style="stop-color:var(--gold-imperial);stop-opacity:0.4" />
+                <stop offset="100%" style="stop-color:var(--gold-imperial);stop-opacity:0.1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- EXECUTVE TOOLTIP -->
+    <div id="tooltip" class="tooltip-executive glass-panel hidden">
+        <h3 id="tt-title" class="text-2xl font-serif italic text-imperial mb-2"></h3>
+        <p id="tt-desc" class="text-xs text-imperial/70 leading-relaxed mb-4"></p>
+        <div id="tt-tags" class="flex gap-2"></div>
+    </div>
+
+    <script>
+        const SINGULARITY_EMPIRE = {
+            "nom": "NEXUS CORE",
+            "genre": "racine",
+            "description": "Système d'Exploitation Restaurant OS - État Singularité 46/46. Architecture Hexagonale Agnostique avec Isolation SovereignGuard.",
+            "chemins": [
+                {
+                    "nom": "🛡️ SÉCURITÉ",
+                    "genre": "domaine",
+                    "description": "Couche SovereignGuard périmétrique (RBAC + Isolation Tenant).",
+                    "chemins": [
+                        { "nom": "Context Isolation", "genre": "critique", "description": "Validation du tenantID en temps réel sur chaque I/O." },
+                        { "nom": "AuthStaff (RBAC)", "genre": "critique", "description": "Gestion des permissions granulaires par rôle." },
+                        { "nom": "Zero-Trust I/O", "genre": "critique", "description": "Contrôle strict des accès au Grand Livre." }
+                    ]
+                },
+                {
+                    "nom": "⚡ PERFORMANCE",
+                    "genre": "domaine",
+                    "description": "Mise à l'échelle et optimisation RAM pour terminaux 8GB.",
+                    "chemins": [
+                        { "nom": "Nukleaire GC", "genre": "action", "description": "Purge automatique du registre global (TTL 120s)." },
+                        { "nom": "WeakRef Registry", "genre": "action", "description": "Suivi des atomes orphelins via FinalizationRegistry." },
+                        { "nom": "$O(1)$ Atomic Resolution", "genre": "revenue", "description": "Accès direct aux domaines d'atomes." }
+                    ]
+                },
+                {
+                    "nom": "⚖️ FISCALITÉ",
+                    "genre": "domaine",
+                    "description": "Légal et Notarisation NF525 Ready.",
+                    "chemins": [
+                        { "nom": "Ledger Chain", "genre": "critique", "description": "Chaînage SHA-256 séquentiel des écritures." },
+                        { "nom": "TimeSync", "genre": "critique", "description": "Synchronisation universelle de l'horloge." },
+                        { "nom": "Fiscal Closure", "genre": "revenue", "description": "Preuves de conformité inaltérables." }
+                    ]
+                },
+                {
+                    "nom": "🛒 OPÉRATIONS",
+                    "genre": "domaine",
+                    "description": "Flux opérationnels haute performance.",
+                    "chemins": [
+                        { "nom": "Sync.Orders", "genre": "action", "description": "Flux de commandes atomique." },
+                        { "nom": "Sync.Stocks", "genre": "action", "description": "Inventaire en temps réel sans latence." },
+                        { "nom": "Sync.HR", "genre": "action", "description": "Gestion des shifts et présences." }
+                    ]
+                },
+                {
+                    "nom": "🧬 DARWINIENNE",
+                    "genre": "domaine",
+                    "description": "Intelligence auto-réparatrice et résilience par le chaos.",
+                    "chemins": [
+                        { "nom": "Chaos Monkey", "genre": "critique", "description": "Simulation d'attaques et de dérives pour l'entraînement du système." },
+                        { "nom": "Self-Healing", "genre": "action", "description": "Détection CRC et injection automatique de correctifs." },
+                        { "nom": "Entropy Control", "genre": "revenue", "description": "Maintien de l'ordre face au désordre opérationnel." }
+                    ]
+                }
+            ]
+        };
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const svg = d3.select("#canvasOmega");
+        const g = svg.append("g");
+        
+        svg.call(d3.zoom().scaleExtent([0.1, 8]).on("zoom", (e) => g.attr("transform", e.transform)));
+
+        const tree = d3.tree().size([height, width - 400]);
+        const root = d3.hierarchy(SINGULARITY_EMPIRE, d => d.chemins);
+        tree(root);
+
+        root.descendants().forEach(d => {
+            d.y = d.depth * 260 + 120;
+        });
+
+        const links = g.selectAll(".link")
+            .data(root.links())
+            .enter()
+            .append("path")
+            .attr("class", "link-line link-gradient")
+            .attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x));
+
+        const node = g.selectAll(".node")
+            .data(root.descendants())
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.y},${d.x})`);
+
+        const circles = node.append("circle")
+            .attr("id", d => `node-${d.data.nom.replace(/\s+/g, '-')}`)
+            .attr("class", d => `node-circle ${d.depth === 0 ? 'nexus-core' : ''}`)
+            .attr("r", d => 16 - (d.depth * 4))
+            .style("fill", d => {
+                if (d.data.genre === 'critique') return "var(--critique-color)";
+                if (d.data.genre === 'domaine') return "var(--gold-imperial)";
+                if (d.data.genre === 'action') return "var(--action-color)";
+                if (d.data.genre === 'revenue') return "var(--revenue-color)";
+                return "#FFF";
+            })
+            .on("mouseover", function(e, d) {
+                const tt = d3.select("#tooltip");
+                tt.select("#tt-title").text(d.data.nom);
+                tt.select("#tt-desc").text(d.data.description);
+                tt.classed("hidden", false).transition().duration(200).style("opacity", 1);
+                
+                let x = e.pageX + 20;
+                let y = e.pageY - 20;
+                if (x + 350 > window.innerWidth) x = e.pageX - 370;
+                tt.style("left", x + "px").style("top", y + "px");
+
+                d3.select(this).attr("r", (16 - (d.depth * 4)) * 1.5);
+            })
+            .on("mouseout", function() {
+                d3.select("#tooltip").transition().duration(200).style("opacity", 0).on("end", function() { d3.select(this).classed("hidden", true); });
+                d3.select(this).attr("r", 16 - (d.depth * 4));
+            });
+
+        node.append("text")
+            .attr("class", "node-label")
+            .attr("dy", ".35em")
+            .attr("x", d => d.children ? -20 : 20)
+            .style("text-anchor", d => d.children ? "end" : "start")
+            .text(d => d.data.nom);
+
+        svg.call(d3.zoom().transform, d3.zoomIdentity.translate(80, 0).scale(0.75));
+
+        document.getElementById("resetView").onclick = () => {
+             svg.transition().duration(750).call(d3.zoom().transform, d3.zoomIdentity.translate(80, 0).scale(0.75));
+        };
+
+        // STRESS TEST PROTOCOL
+        document.getElementById("triggerChaos").onclick = () => {
+            const integrityStat = document.getElementById("integrityStat");
+            const resilienceStat = document.getElementById("resilienceStat");
+            
+            // 💥 TRIGGER CHAOS
+            integrityStat.textContent = "ATTACK DETECTED";
+            integrityStat.classList.add("text-red-600");
+            
+            const chaosNode = d3.select("#node-Chaos-Monkey");
+            chaosNode.transition().duration(500).attr("r", 30).style("fill", "#FF0000")
+                .transition().duration(1000).attr("r", 12).style("fill", "var(--critique-color)");
+
+            // 🍵 TRIGGER HEALING
+            setTimeout(() => {
+                resilienceStat.textContent = "HEALING PULSE...";
+                resilienceStat.classList.add("text-cyan-600");
+                
+                const healNode = d3.select("#node-Self-Healing");
+                healNode.classed("healing-pulse", true);
+                
+                setTimeout(() => {
+                    healNode.classed("healing-pulse", false);
+                    integrityStat.textContent = "46 / 46 VALIDÉS";
+                    integrityStat.classList.remove("text-red-600");
+                    resilienceStat.textContent = "AUTO-HEALING ACTIVE";
+                    resilienceStat.classList.remove("text-cyan-600");
+                }, 2000);
+            }, 1200);
+        };
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

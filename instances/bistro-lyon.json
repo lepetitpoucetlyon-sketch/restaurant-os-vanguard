@@ -1,0 +1,31 @@
+{
+  "app": {
+    "name": "Le Bistro de Lyon",
+    "tagline": "Tradition & Gastronomie",
+    "description": "Une institution lyonnaise au cœur de la ville",
+    "supportEmail": "contact@bistro-lyon.fr",
+    "supportPhone": "+33 4 72 00 00 00",
+    "defaultDomain": "bistro-lyon.restaurant-os.app"
+  },
+  "restaurant": {
+    "name": "Le Bistro de Lyon",
+    "slogan": "Le goût du vrai",
+    "cuisine": "Lyonnaise",
+    "category": "bistrot",
+    "headChef": "Jean Brasserie",
+    "owner": "Mohammed"
+  },
+  "theme": {
+    "primaryColor": "#0A2463",
+    "secondaryColor": "#D8DBE2"
+  },
+  "firebase": {
+    "projectId": "bistro-lyon-prod",
+    "appId": "1:000000000000:web:mock-id-lyon",
+    "apiKey": "mock-api-key-lyon",
+    "messagingSenderId": "000000000000"
+  },
+  "ai": {
+    "geminiApiKey": "PLACEHOLDER_LYON_GEMINI_KEY"
+  }
+}

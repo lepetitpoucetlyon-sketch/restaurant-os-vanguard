@@ -1,0 +1,83 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+/client-configs/
+/client-secrets/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# stitch exports & artifacts
+/exports-stitch/
+*.zip
+/stitch_registry.json
+
+# graphify
+graphify-out/
+src/graphify-out/cache/
+src/graphify-out/logs/
+
+# graphify workspace separation
+graphify_tool/
+.graphify_*
+.obsidian/
+
+# Firebase Functions build output
+functions/lib/
+functions/node_modules/
+# log and audit files
+*.log
+tsc_errors.txt
+tsc_errors_v3.txt
+tsc_errors_final.txt
+eslint.json
+eslint_full.txt
+eslint_full_compact.txt
+dev.log
+tsc_output.txt
+tsc_audit_completed.txt
+tsc_final_audit.txt
+tsc_final_verification.txt
+build_errors.log
+current_tsc_errors.log
+final_tsc_errors.log
+test_output.txt
+
+# Engine & Cloud state
+.kilo/
+.kilocode/

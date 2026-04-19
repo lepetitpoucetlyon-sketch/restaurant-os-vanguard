@@ -1,0 +1,26 @@
+# RESTAURANT-OS CORE : RÈGLES D'ANTIGRAVITY (VERSION MASTER - NEXUS-LOW-RES)
+
+## 1. PROTOCOLE D'ÉCONOMIE & SURVIE (8GB RAM OPTIMIZATION)
+- **EXCLUSIONS DRASTIQUES** : INTERDICTION ABSOLUE de scanner ou d'indexer : `.next/`, `node_modules/`, `dist/`, `.cache/`, `.firebase/`, `out/`, `graphify-out/`.
+- **FOCUS ACTIF** : L'analyse sémantique et l'indexation sont limitées aux fichiers ouverts et à leurs dépendances directes dans `src/`.
+- **CPU THROTTLING** : Priorité basse pour tous les processus Antigravity Helper (< 20% CPU cumulé).
+- **RAM GC** : Redémarrage automatique du Language Server si consommation > 1.2 Go.
+- **MODE ÉCO ACTIVE** : Détecté via `npm run dev`. Désactiver les prédictions multi-fichiers lourdes pendant la compilation.
+
+## 2. INTÉGRATION STACK & MCP
+- **Memory MCP** : À chaque création de service, mets à jour l'entité correspondante.
+- **StitchMCP** : Toute modification UI doit être validée par `stitch_registry.json`.
+- **Debouncing** : Attendre 2 secondes de silence avant toute analyse de fichier lourde.
+
+## 3. ARCHITECTURE SOUDÉE (DDD & KG)
+- Les services de `src/domain/services/` sont les UNIQUES sources de vérité.
+- Interdiction d'utiliser des données "Mocks".
+- Isolation des Tenants via `FleetCommander.ts`.
+
+## 4. CONFORMITÉ NF525 & IMMUABILITÉ
+- Le scellement dans `blockchain-ledger.ts` est sacro-saint. Logiciel de hachage immuable.
+
+## 5. MODE AUTONOME (HIGH TRUST - GRADE IX)
+- **AUTO-APPORVE SAFE** : Antigravity est autorisé à exécuter toutes les commandes de LECTURE (ls, grep, cat, status, build-dry-run) sans confirmation.
+- **SURVIE STRUCTURELLE** : Seul le Mode Planning reste bloquant pour les changements d'arborescence ou de logique coeur.
+- **DÉCISIONNEL** : En dehors du Mode Planning, Antigravity doit privilégier l'action à la demande d'autorisation pour les fix de lints, les commentaires et les optimisations mineures.

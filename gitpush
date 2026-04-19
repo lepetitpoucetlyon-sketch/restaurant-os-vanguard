@@ -1,0 +1,12 @@
+#!/bin/bash
+# 🛰️ ANTIGRAVITY GITPUSH WRAPPER
+# Goal: Simplified industrial synchronization.
+
+# Resolve the absolute path of the node binary from config
+NODE_BIN=$(grep '"node":' .antigravity/env.json | cut -d '"' -f 4)
+
+if [ -z "$NODE_BIN" ]; then
+    NODE_BIN="node"
+fi
+
+$NODE_BIN scripts/antigravity-push.js "$@"

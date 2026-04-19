@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Restaurant OS",
+    "tagline": "Premium Intelligence",
+    "description": "Plateforme d'exploitation complète pour le CHR moderne.",
+    "supportEmail": "contact@restaurant-os.app",
+    "supportPhone": "+33 1 23 45 67 89",
+    "defaultDomain": "restaurant-os-web.web.app"
+  },
+  "restaurant": {
+    "name": "Restaurant OS",
+    "slogan": "Premium Intelligence",
+    "cuisine": "Gastronomique",
+    "category": "OS",
+    "shortDescription": "L'excellence operationnelle au service du goût.",
+    "longDescription": "Une infrastructure logicielle de pointe pour une gestion fluide et intelligente.",
+    "headChef": "Chef Intelligence",
+    "owner": "Restaurant OS SAS",
+    "logo": ""
+  },
+  "firebase": {
+    "projectId": "kitchen-os-gastro",
+    "appId": "1:751200716315:web:14f411b2cf6a36a9795abe",
+    "storageBucket": "kitchen-os-gastro.firebasestorage.app",
+    "apiKey": "AIzaSyAValidLookingKey1234567890",
+    "authDomain": "kitchen-os-gastro.firebaseapp.com",
+    "messagingSenderId": "751200716315"
+  },
+  "ai": {
+    "geminiApiKey": "dummy-gemini-key"
+  },
+  "features": {
+    "enableProfileSwitcher": false
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "wisdom": [
+    {
+      "key": "ENVIRONMENT_BINARY_PATHS",
+      "value": {
+        "node": "/usr/local/bin/node",
+        "npm": "/usr/local/bin/npm",
+        "python": "/opt/homebrew/bin/python3.11",
+        "graphify": "/opt/homebrew/bin/graphify"
+      },
+      "context": "Identified on M1 Mac to avoid 127 Command Not Found errors in diagnostic scripts.",
+      "timestamp": "2026-04-12T02:27:00Z"
+    },
+    {
+      "key": "FISCAL_CORE_DETERMINISM",
+      "value": "Always use canonicalStringify for sealing transactions to ensure NF525 hash stability.",
+      "context": "Benchmarked in session 00243B.",
+      "timestamp": "2026-04-12T02:15:00Z"
+    },
+    {
+      "key": "SURGICAL_DECOMPOSITION",
+      "value": "Decomposed Staff God Object (793 -> 406 lines) into modular components (StaffList, StaffMemberForm, StaffAuditLog, StaffRecentActivity) using Knowledge Nexus clusters.",
+      "context": "Industrialization Phase: Extraction of Staff Module confirmed Cluster #1 as primary interaction logic.",
+      "timestamp": "2026-04-12T09:10:10.325Z"
+    }
+  ]
+}

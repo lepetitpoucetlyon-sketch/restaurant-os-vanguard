@@ -1,0 +1,82 @@
+{
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#F8F7F2",
+        "titleBar.activeForeground": "#1C1C1C",
+        "titleBar.border": "#E5E4DA",
+        "activityBar.activeBorder": "#C5A059",
+        "activityBar.foreground": "#1C1C1C",
+        "statusBar.background": "#F8F7F2",
+        "statusBar.foreground": "#1C1C1C",
+        "commandCenter.border": "#E5E4DA"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "cloudcode.project": "kitchen-os-gastro",
+    "cloudcode.verbose": false,
+    "cloudcode.showWelcomePage": false,
+    "google.cloud.project": "kitchen-os-gastro",
+    "google.gemini.projectId": "kitchen-os-gastro",
+    "cloudcode.packageManager": "npm",
+    "firebase.cli.path": "/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/node_modules/.bin/firebase",
+    "typescript.tsdk": "/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/node_modules/typescript/lib",
+    "editor.suggest.showIcons": true,
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "cloudcode.asDefaultProject": true,
+    "files.exclude": {
+        "**/.gemini": true,
+        "**/.git": true,
+        "**/.next": true,
+        "**/node_modules": true,
+        "**/.firebase": true,
+        "**/out": true,
+        "**/dist": true,
+        "**/.kilo": true,
+        "**/.kilocode": true,
+        "**/.agent": true,
+        "**/.agents": true,
+        "**/.antigravity": true,
+        "**/developer": true,
+        "**/exports-stitch": true,
+        "**/graphify-out": true,
+        "**/instances": true,
+        "**/playwright-report": true,
+        "**/scratch": true,
+        "**/scripts": true,
+        "**/templates": true,
+        "**/test-results": true,
+        "**/*.txt": true,
+        "**/*.js": { "when": "$(basename).ts" },
+        "**/eslint.json": true,
+        "**/stitch_registry.json": true,
+        "**/nexus-ledger.json": true,
+        "**/.DS_Store": true,
+        "**/AUDIT_*": true,
+        "**/PRESENTATION_*": true,
+        "**/SYSTEM_MANIFEST_*": true,
+        "**/RAPPORT_*": true,
+        "**/MANIFESTE_*": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/.firebase": true,
+        "**/out": true,
+        "**/dist": true
+    },
+    "files.watcherExclude": {
+        "**/.next/**": true,
+        "**/node_modules/**": true
+    }
+}

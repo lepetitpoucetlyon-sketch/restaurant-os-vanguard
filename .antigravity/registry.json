@@ -1,0 +1,13 @@
+{
+  "project": "Restaurant OS",
+  "lastUpdate": "2026-04-09T14:00:15Z",
+  "activeSessions": {
+    "a0761311-f029-4760-a877-e99981d74b1b": {
+      "status": "active",
+      "currentTask": "Industrialisation Phase 5: Flight Tower Implementation",
+      "lastHeartbeat": "2026-04-09T14:00:40Z"
+    }
+  },
+  "locks": {},
+  "completedPhases": [1, 2, 3, 4]
+}

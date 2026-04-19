@@ -1,0 +1,145 @@
+import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
+import { simulatorDb } from '@/lib/simulator/SimulatorDB';
+import { logger } from '@/lib/logger';
+import { IdGenerator } from '@/lib/utils/IdGenerator';
+
+const PRODUCTION_TENANT_ID = 'lepetitpoucet';
+
+/**
+ * 🌀 SimulacraAdapter - Restaurant OS (Grade X)
+ * The Copy-on-Write Isolation Layer.
+ * Reads from Real Adapter + Virtual Store. Writes ONLY to Virtual Store.
+ */
+export class SimulacraAdapter implements INexusAdapter {
+    constructor(
+        private realAdapter: INexusAdapter,
+        private forkId: string = 'default_sim',
+        activeTenantId?: string
+    ) {
+        // 🛡️ Sovereign Guard: Never allow simulation on production tenant
+        if (activeTenantId === PRODUCTION_TENANT_ID) {
+            const errorMsg = `[Simulacra Critical] Attempted to instantiate simulation bridge on Production Tenant (${PRODUCTION_TENANT_ID}). Blocked by SovereignGuard.`;
+            logger.error(errorMsg);
+            throw new Error(errorMsg);
+        }
+        
+        logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
+    }
+
+    async get(path: string): Promise<any | null> {
+        // 1. Check Virtual Store first
+        const virtual = await simulatorDb.virtualStore.get(path);
+        
+        if (virtual) {
+            if (virtual.isDeleted) return null;
+            return virtual.data;
+        }
+
+        // 2. Fallback to Real Adapter (Read-only source)
+        return this.realAdapter.get(path);
+    }
+
+    /**
+     * ⚠️ Query in Simulacra mode is complex. 
+     * For Grade X Alpha, we merge real results with virtual overrides.
+     */
+    async query(collectionPath: string, options?: INexusQueryOptions): Promise<any[]> {
+        const realResults = await this.realAdapter.query(collectionPath, options);
+        const virtualResults = await simulatorDb.virtualStore
+            .where('forkId').equals(this.forkId)
+            // This is a naive filter for path matching - in production we'd need a more robust approach
+            .filter(doc => doc.path.startsWith(collectionPath))
+            .toArray();
+
+        // Merge logic: Virtual data overrides or filters out real data
+        const merged = [...realResults];
+        
+        virtualResults.forEach(v => {
+            const index = merged.findIndex(m => m.id === v.data.id);
+            if (v.isDeleted) {
+                if (index !== -1) merged.splice(index, 1);
+            } else {
+                if (index !== -1) merged[index] = v.data;
+                else merged.push(v.data);
+            }
+        });
+
+        return merged;
+    }
+
+    onSnapshot(path: string, callback: (data: any) => void, options?: any): () => void {
+        logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X Alpha.");
+        
+        // Initial load
+        this.get(path).then(callback);
+        
+        // Polling simulation (every 2s)
+        const interval = setInterval(async () => {
+            const data = await this.get(path);
+            callback(data);
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }
+
+    batch(): INexusBatch {
+        const ops: Array<() => Promise<void>> = [];
+        return {
+            set: (path, data) => {
+                ops.push(() => this.set(path, data));
+            },
+            update: (path, data) => {
+                ops.push(() => this.update(path, data));
+            },
+            delete: (path) => {
+                ops.push(() => this.delete(path));
+            },
+            commit: async () => {
+                for (const op of ops) await op();
+            }
+        };
+    }
+
+    async set(path: string, data: any, options?: { merge?: boolean }): Promise<void> {
+        let finalData = data;
+        if (options?.merge) {
+            const existing = await this.get(path);
+            finalData = { ...existing, ...data };
+        }
+
+        await simulatorDb.virtualStore.put({
+            path,
+            data: finalData,
+            isDeleted: false,
+            forkId: this.forkId,
+            updatedAt: new Date().toISOString()
+        });
+    }
+
+    async update(path: string, data: any): Promise<void> {
+        const existing = await this.get(path);
+        const finalData = { ...existing, ...data };
+
+        await simulatorDb.virtualStore.put({
+            path,
+            data: finalData,
+            isDeleted: false,
+            forkId: this.forkId,
+            updatedAt: new Date().toISOString()
+        });
+    }
+
+    async delete(path: string): Promise<void> {
+        await simulatorDb.virtualStore.put({
+            path,
+            data: null,
+            isDeleted: true,
+            forkId: this.forkId,
+            updatedAt: new Date().toISOString()
+        });
+    }
+
+    generateId(collectionPath: string): string {
+        return IdGenerator.generateWithPrefix('sim');
+    }
+}

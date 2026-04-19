@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Maison Atlas",
+    "tagline": "Operations intelligentes pour la restauration",
+    "description": "Plateforme d'exploitation complete pour un restaurant independant.",
+    "supportEmail": "contact@maison-atlas.fr",
+    "supportPhone": "+33 1 00 00 00 00",
+    "defaultDomain": "maison-atlas.fr"
+  },
+  "restaurant": {
+    "name": "Maison Atlas",
+    "slogan": "Cuisine de saison et service precis",
+    "cuisine": "Francaise",
+    "category": "bistrot",
+    "shortDescription": "Bistrot contemporain au coeur de la ville.",
+    "longDescription": "Une cuisine de saison, une carte courte et une equipe pensee pour la fluidite du service.",
+    "headChef": "Chef Atlas",
+    "owner": "Maison Atlas SAS",
+    "logo": ""
+  },
+  "firebase": {
+    "projectId": "your-firebase-project-id",
+    "appId": "your-firebase-app-id",
+    "storageBucket": "your-firebase-storage-bucket",
+    "apiKey": "your-firebase-api-key",
+    "authDomain": "your-firebase-auth-domain",
+    "messagingSenderId": "your-firebase-messaging-sender-id"
+  },
+  "ai": {
+    "geminiApiKey": "your-gemini-api-key"
+  },
+  "features": {
+    "enableProfileSwitcher": false
+  }
+}

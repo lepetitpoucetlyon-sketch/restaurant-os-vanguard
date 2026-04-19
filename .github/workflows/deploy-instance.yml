@@ -1,0 +1,63 @@
+name: Deploy Private Instance
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      instance_name:
+        description: 'Nom de l instance (ex: le-petit-poucet)'
+        required: true
+        default: 'restaurant-os'
+      config_path:
+        description: 'Chemin vers le fichier de config JSON'
+        required: true
+        default: 'instances/restaurant-os.json'
+      environment:
+        description: 'Environnement de destination'
+        type: choice
+        options:
+        - production
+        - staging
+        required: true
+        default: 'production'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Generate Instance Environment
+      run: node scripts/generate-instance-env.js "${{ github.event.inputs.config_path || 'instances/restaurant-os.json' }}" .env.production
+
+    - name: Build Application
+      run: npm run build
+      env:
+        # Secret injected from GitHub Actions Secrets
+        NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        # Firebase secrets should ideally be in the JSON config or GitHub Secrets
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+    - name: Deploy to Firebase Hosting
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: "${{ secrets.GITHUB_TOKEN }}"
+        firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+        channelId: live
+        projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+        args: '--only hosting:restaurant-os-web'
+
+    - name: Run Smoke Tests
+      run: node scripts/smoke-test.js
