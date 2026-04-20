@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { GlobalSettings } from '@/types/settings';

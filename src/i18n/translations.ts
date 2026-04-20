@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 /**
  * translations.ts — Assembleur de Traductions par Domaine
  *

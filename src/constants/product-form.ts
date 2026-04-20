@@ -1,4 +1,3 @@
-// @ts-nocheck
 export const ALLERGENS = [
     { id: 'gluten', name: 'Gluten', icon: '🌾' },
     { id: 'lactose', name: 'Lactose', icon: '🥛' },

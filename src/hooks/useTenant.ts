@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useTenant as useNexusTenant } from '@/engines/core/NexusCoreProvider';

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { atom } from 'jotai';
 import { posCartTotalSelector } from "@/store/posAtoms";
 import { qualityGlobalMetricsSelector } from "@/store/qualityAtoms";

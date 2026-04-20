@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { EmpireInstance } from '@/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';

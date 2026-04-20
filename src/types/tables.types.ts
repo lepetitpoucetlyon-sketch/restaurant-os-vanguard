@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * TABLES & FLOOR PLAN TYPES
  */

@@ -152,7 +152,7 @@ export interface StaffingProposal {
 export interface LedgerEntry {
     id: string;
     date: string;
-    accountName: 'SALES' | 'PURCHASES' | 'LABOR' | 'TAX' | 'CASH' | 'EQUITY';
+    accountName: 'SALES' | 'PURCHASES' | 'LABOR' | 'PAYROLL' | 'TAX' | 'CASH' | 'EQUITY';
     type: 'DEBIT' | 'CREDIT';
     amountInCents: number;
     referenceId: string; // e.g. Order ID, PO ID, Salary ID

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { z } from 'zod';
 
 /**
@@ -62,6 +61,10 @@ export interface JournalEntry {
     fiscalSealHash?: string; // NF525 Seal
     sealedAt?: string;       // Date of sealing
     metadata?: Record<string, any>;
+    // Operation Aliases (Grade X)
+    type?: 'revenue' | 'expense' | 'tax' | 'bank' | 'payroll' | 'other';
+    amountInCents?: number;
+    amount?: number;
 }
 
 // --- Ledger (Grand Livre) ---

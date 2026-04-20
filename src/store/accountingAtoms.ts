@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createProxyDomain } from './nexusNodeFactory';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@/types';
 import { atom } from 'jotai';

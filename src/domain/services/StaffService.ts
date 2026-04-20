@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { Shift, LeaveRequest } from '@/types';
 import { ShiftProvision } from '@/types/domain.types';
 

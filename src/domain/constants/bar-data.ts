@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { WineRegion, Wine, Cocktail, BarOrderItem } from '@/types/bar';
 
 export const WINE_REGIONS: WineRegion[] = [

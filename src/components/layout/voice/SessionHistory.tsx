@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { History, Plus, MessageSquareText } from "lucide-react";

@@ -1,7 +1,6 @@
-// @ts-nocheck
-// @ts-nocheck
 import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/domain/schemas/hr";
 import { User } from '@/types';
+import { format, addDays, isSameDay } from 'date-fns';
 
 export class HumanResourcesService {
     /**

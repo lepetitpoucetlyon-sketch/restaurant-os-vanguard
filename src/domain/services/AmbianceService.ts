@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { logger } from '@/lib/axiom';
 
 export type RestaurantAmbiance = 'SERENITY' | 'RUSH_SPEED' | 'ELEGANCE_NIGHT';

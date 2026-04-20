@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { useAtom } from 'jotai';
 import { inventoryAtoms } from '@/store/inventoryAtoms';
 import { StockEngine } from '@/domain/services/StockEngine';

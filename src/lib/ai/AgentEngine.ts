@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { AgentDomain, AgentRole, AgentResponse, AgentInsight, AgentReasoningStep } from '@/domain/agency/types';
 import { generateSystemPrompt } from '@/config/prompts';
 

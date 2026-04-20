@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🛰️ IDService - Grade VI Resource Identification
  * Centralized service for generating deterministic or secure identifiers.

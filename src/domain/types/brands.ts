@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * @file brands.ts
  * @description Définition des types opaques (Branded Types) pour l'Empire.

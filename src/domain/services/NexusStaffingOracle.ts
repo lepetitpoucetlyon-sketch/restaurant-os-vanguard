@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { StaffingProposal, SharedKernel, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { logger } from '@/lib/logger';
 import { PromoCode, CustomerFeedback } from '@/types/marketing.types';
 

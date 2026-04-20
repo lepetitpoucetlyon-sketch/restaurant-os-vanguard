@@ -1,20 +1,7 @@
-// @ts-nocheck
-"use client";
-
 import { motion, Variants } from "framer-motion";
 import { Users } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { easing } from "@/lib/motion";
-
-const cinematicItem: Variants = {
-    hidden: { opacity: 0, scale: 0.98, y: 10 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        transition: { duration: 0.5, ease: easing.easeOutExpo },
-    },
-};
 
 interface TableData {
     id: string;
@@ -28,6 +15,11 @@ interface TableGridProps {
     tables: Record<string, TableData[]>;
     onTableClick: (table: TableData) => void;
 }
+
+const cinematicItem = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easing.cinematic } }
+};
 
 export function TableGrid({ tables, onTableClick }: TableGridProps) {
     return (

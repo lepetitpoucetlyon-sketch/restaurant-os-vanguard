@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * RESTAURANT OS - GRADE VI THEME TOKENS
  */

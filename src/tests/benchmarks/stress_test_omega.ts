@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { Slayer, LegacyOrder } from '@/domain/services/Slayer';
 import { logger } from '@/lib/logger';
 

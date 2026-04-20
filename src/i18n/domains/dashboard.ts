@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Dashboard translations
 export const dashboardTranslations = {
     fr: {

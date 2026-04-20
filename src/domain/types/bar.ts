@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type BarTab = 'cocktails' | 'wines' | 'sommelier' | 'stocks' | 'kds';
 
 export interface WineRegion {

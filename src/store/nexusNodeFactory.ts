@@ -1,11 +1,9 @@
-// @ts-nocheck
-// @ts-nocheck
 import { atom } from 'jotai';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import type { ModuleId } from '@/shared/genome.types';
 
 // --- 🧹 MEMORY PROTECTION (PHASE 4 - ZERO LEAK) ---
-export const orphanNodesRegistry = new Map<string, WeakRef<any>>();
+export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
 
 /**
  * Interface NexusNode - Grade VI Standard
@@ -17,27 +15,6 @@ export interface NexusNode<T> {
     error: string | null;
     lastUpdated: number;
     moduleId?: ModuleId;
-    // --- Grade X Survival Legalisation (Array Mimicry) ---
-    filter: (callback: (item: T, index: number, array: T[]) => any) => any;
-    find: (callback: (item: T, index: number, array: T[]) => any) => any;
-    map: (callback: (item: T, index: number, array: T[]) => any) => any;
-    forEach: (callback: (item: T, index: number, array: T[]) => void) => void;
-    reduce: (callback: (acc: any, item: T, index: number, array: T[]) => any, initial?: any) => any;
-    every: (callback: (item: T, index: number, array: T[]) => boolean) => boolean;
-    some: (callback: (item: T, index: number, array: T[]) => boolean) => boolean;
-    includes: (item: T) => boolean;
-    sort: (compareFn?: (a: T, b: T) => number) => any;
-    slice: (start?: number, end?: number) => T[];
-    join: (separator?: string) => string;
-    reverse: () => T[];
-    shift: () => T | undefined;
-    unshift: (...items: T[]) => number;
-    splice: (start: number, deleteCount?: number, ...items: T[]) => T[];
-    length: number;
-    pop: () => T | undefined;
-    push: (...items: T[]) => number;
-    concat: (...items: T[]) => any;
-    [key: string]: any;
 }
 
 /**
@@ -59,7 +36,7 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
         orphanNodesRegistry.set(id, new WeakRef(nodeAtom));
     }
 
-    GlobalRegistryService.register(id, nodeAtom as any);
+    GlobalRegistryService.register(id, nodeAtom);
     return nodeAtom;
 }
 
@@ -83,7 +60,6 @@ export function updateNexusNode<T>(
 /**
  * createProxyDomain
  * Crée un triplet (node, data selector, loading selector) pour un domaine métier.
- * Chaque domaine est ainsi isolé et ne peut pas contaminer les autres.
  */
 export function createProxyDomain<T>(id: string, initialData: T[] = [], moduleId?: ModuleId) {
     const node = createNexusNode<T>(id, initialData, true, moduleId);

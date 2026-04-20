@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🔐 Crypto Utils - Restaurant OS
  * Pure cryptographic functions for NF525 compliance and master signatures.

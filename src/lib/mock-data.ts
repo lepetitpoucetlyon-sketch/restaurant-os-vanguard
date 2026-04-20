@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 📦 Mock Data Ledger - Grade X
  * Infrastructure de données de secours purges et souveraines.

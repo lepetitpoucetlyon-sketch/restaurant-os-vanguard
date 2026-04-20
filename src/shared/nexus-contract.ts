@@ -24,6 +24,11 @@ export interface OrchestratorSignal {
   };
   businessLaws: Record<string, unknown>;
   expert?: Record<string, unknown>;
+  // --- Grade X OTA & Fleet Extensions ---
+  targetVersion?: string;
+  otaUrl?: string;
+  targetState?: 'stable' | 'beta' | 'bleeding-edge';
+  priceMultiplier?: number;
 }
 
 export interface TenantConfig {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { format, formatDistanceToNow, isToday, isTomorrow, isYesterday } from "date-fns";
 import { fr } from "date-fns/locale";
 

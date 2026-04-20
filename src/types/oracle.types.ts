@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { CategoryKey } from "@/domain/services/AccessPolicyManager";
 import  {FunctionDeclaration } from "@google/generative-ai";
 

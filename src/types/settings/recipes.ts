@@ -1,4 +1,3 @@
-// @ts-nocheck
 export interface RecipeSettings {
     id: string;
     name: string;

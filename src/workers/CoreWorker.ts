@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * ⚛️ CoreWorker - Restaurant OS (Singularity 5.4)
  * Offloads heavy computations to a background thread to maintain 60FPS UI.

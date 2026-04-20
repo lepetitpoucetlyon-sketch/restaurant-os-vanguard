@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 📜 IMMUNITY AUDIT LOGGER — Grade IX (Boîte Noire)
  * 

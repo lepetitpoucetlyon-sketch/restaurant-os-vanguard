@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import { useSettings as useNexusSettings } from '@/engines/core/NexusCoreProvider';
 export const useSettings = useNexusSettings;

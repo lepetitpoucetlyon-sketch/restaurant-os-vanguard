@@ -1,9 +1,10 @@
-// @ts-nocheck
-import { User, UserRole } from './auth.types';
+import { User, UserRole, UserStatus } from './auth.types';
 import { TenantConfig } from '@/shared/nexus-contract';
 import { GlobalSettings } from './settings';
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
 import { Language } from '@/i18n/translations';
+import { ThemeMode, AccentColor, UIDensity, BorderRadius } from '@/store/themeAtoms';
+import { EmpireInstance } from '@/domain/types/empire';
 
 /**
  * 🏛️ NEXUS CORE INTERFACES (GRADE X)
@@ -27,11 +28,10 @@ export interface NexusAuthState {
     verifyPin?: (pin: string) => Promise<boolean>;
     switchProfile?: (userId: string) => void;
     canSwitchProfiles?: boolean;
-    updateUserStatus?: (userId: string, status: any) => Promise<void>;
+    updateUserStatus?: (userId: string, status: string) => Promise<void>;
     addUser?: (user: Partial<User>) => Promise<void>;
     deleteUser?: (userId: string) => Promise<void>;
-    logAction?: (action: string, metadata?: any) => void;
-    [key: string]: any;
+    logAction?: (action: string, metadata?: Record<string, unknown>) => void;
 }
 
 export interface NexusTenantState {
@@ -40,7 +40,6 @@ export interface NexusTenantState {
     switchTenant: (tenantId: string) => void;
     isTenantLoading: boolean;
     tenantId?: string; // Legacy alias
-    [key: string]: any;
 }
 
 export interface NexusUIState {
@@ -67,8 +66,7 @@ export interface NexusUIState {
     toggleTheme: () => void;
     unreadCount: number;
     sidebarOpen?: boolean; 
-    settings?: any; // Shortcut to settings module if needed
-    [key: string]: any;
+    settings?: Record<string, unknown>; // Shortcut to settings module if needed
 }
 
 export interface NexusSettingsState {
@@ -77,24 +75,22 @@ export interface NexusSettingsState {
     isSaving: boolean;
     lastSaved: Date | null;
     updateSettings: (newSettings: GlobalSettings) => Promise<void>;
-    updateConfig?: (key: string, data: any) => Promise<void>;
-    updateIdentity?: (data: any) => Promise<void>;
-    updateGoals?: (data: any) => Promise<void>;
-    updateSchedule?: (data: any) => Promise<void>;
-    updateService?: (data: any) => Promise<void>;
-    addClosedPeriod?: (data: any) => Promise<void>;
+    updateConfig?: (key: string, data: Record<string, unknown>) => Promise<void>;
+    updateIdentity?: (data: Record<string, unknown>) => Promise<void>;
+    updateGoals?: (data: Record<string, unknown>) => Promise<void>;
+    updateSchedule?: (data: Record<string, unknown>) => Promise<void>;
+    updateService?: (data: Record<string, unknown>) => Promise<void>;
+    addClosedPeriod?: (data: Record<string, unknown>) => Promise<void>;
     deleteClosedPeriod?: (id: string) => Promise<void>;
-    updateReservationConfig?: (data: any) => Promise<void>;
-    updateReservationSlots?: (data: any) => Promise<void>;
-    updateSLM?: (data: any) => Promise<void>;
-    updateList?: (data: any) => Promise<void>;
-    [key: string]: any;
+    updateReservationConfig?: (data: Record<string, unknown>) => Promise<void>;
+    updateReservationSlots?: (data: Record<string, unknown>) => Promise<void>;
+    updateSLM?: (data: Record<string, unknown>) => Promise<void>;
+    updateList?: (data: Record<string, unknown>) => Promise<void>;
 }
 export interface NexusFleetState {
-    nodes: any[];
+    nodes: Record<string, unknown>[];
     health: string;
     triggerRebalancing?: () => Promise<void>;
-    [key: string]: any;
 }
 
 export interface NexusLangState {
@@ -112,8 +108,58 @@ export interface NexusNotifState {
     markAllAsRead: () => void;
     removeNotification: (id: string) => void;
     clearAll: () => void;
-    notifications: any[];
-    [key: string]: any;
+    notifications: Record<string, unknown>[];
+}
+
+export interface NexusTheme {
+    mode: ThemeMode | 'auto';
+    setMode: (mode: ThemeMode | 'auto') => void;
+    accentColor: AccentColor;
+    setAccentColor: (color: AccentColor) => void;
+    density: UIDensity;
+    setDensity: (density: UIDensity) => void;
+    borderRadius: BorderRadius;
+    setBorderRadius: (radius: BorderRadius) => void;
+    glassmorphism: number;
+    setGlassmorphism: (val: number) => void;
+    animations: boolean;
+    setAnimations: (val: boolean) => void;
+}
+
+export interface NexusFleetState {
+    instanceIds: string[];
+    instances: EmpireInstance[];
+    globalMetrics: Record<string, unknown> | null;
+    stats: {
+        totalRevenue: number;
+        averageHealth: number;
+        consolidated?: {
+            totalLaborCost?: number;
+            averageFoodCost?: number;
+        };
+    };
+    macroInsights: Record<string, unknown>[];
+    isLoading: boolean;
+    isSyncing: boolean;
+    isEmpireMode: boolean;
+    selectedInstanceId: string | null;
+    isUpdateAvailable: boolean;
+    updateInfo: {
+        version: string;
+        url: string;
+    } | null;
+    priceMultiplier: number;
+    refreshFleet: (isBackground?: boolean) => Promise<void>;
+    syncFleet: () => Promise<void>;
+    selectInstance: (id: string | null) => void;
+    registerInstance: (instance: Record<string, unknown>) => Promise<void>;
+    launchPreview: (key: string) => void;
+    broadcastConfiguration: (config: Record<string, unknown>) => Promise<void>;
+    complianceService: any;
+    haccpBridge: any;
+    fleet: Record<string, unknown> | null;
+    crm: Record<string, unknown>;
+    intelligence: Record<string, unknown>;
 }
 
 export interface NexusCoreState {
@@ -121,8 +167,8 @@ export interface NexusCoreState {
     tenant: NexusTenantState;
     ui: NexusUIState;
     settings: NexusSettingsState;
-    theme: any; 
+    theme: NexusTheme; 
     lang: NexusLangState;
     notif: NexusNotifState;
-    fleet: NexusFleetState; // Remove optionality
+    fleet: NexusFleetState;
 }

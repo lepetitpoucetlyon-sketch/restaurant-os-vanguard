@@ -1,6 +1,4 @@
-// @ts-nocheck
-// @ts-nocheck
-import { FleetTelemetryService } from './FleetTelemetryService';
+import { fleetTelemetry } from './FleetTelemetryService';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { logger } from '@/lib/logger';
 import { getTenantPath } from '@/lib/firebase';
@@ -45,13 +43,10 @@ export const HACCPTelemetryBridge = {
       const healthScore = Math.max(0, 100 - riskPoints);
 
       // 📡 Push to Telemetry Hub
-      await FleetTelemetryService.pushSiteTelemetry({
-        id: tenantId,
-        metrics: {
-          healthScore,
-          complianceScore: receptions.length > 0 ? 100 : 50, // Penalty for missing audits
-        } as any
-      });
+      await fleetTelemetry.pushSiteTelemetry(tenantId, {
+        healthScore,
+        complianceScore: receptions.length > 0 ? 100 : 50, // Penalty for missing audits
+      } as any);
 
       // 🚨 Trigger SOS if health is critical
       if (healthScore < 60 || criticalEvents > 2) {

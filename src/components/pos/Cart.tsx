@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 
 import { useMemo } from "react";
@@ -45,7 +43,8 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
     const { t } = useLanguage();
     const isMobile = useIsMobile();
     const splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
-    const { globalInflationRate } = useIntelligence();
+    const { data: config } = useIntelligence();
+    const globalInflationRate = (config as any)?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
 
     const { totalInCents, htInCents, tvaByRateInCents } = useMemo(() => {

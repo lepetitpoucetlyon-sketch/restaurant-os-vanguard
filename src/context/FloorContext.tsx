@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 export type { Table, Floor, Zone } from '@/types/tables.types';

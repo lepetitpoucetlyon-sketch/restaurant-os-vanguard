@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { atom } from 'jotai';
 import { Reservation, GroupEvent } from '@/types/reservations.types';
 import { createProxyDomain } from './nexusNodeFactory';

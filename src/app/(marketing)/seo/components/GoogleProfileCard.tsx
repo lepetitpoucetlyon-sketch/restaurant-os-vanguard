@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { MapPin, Star, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useAtomValue } from "jotai";

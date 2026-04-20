@@ -40,6 +40,7 @@ interface NexusGuardState {
         sensors: SensorReading[];
         temperatureHistory: TemperatureLog[];
         validateTaskWithVision: (data: any) => Promise<boolean>;
+        logWaste: (data: any) => Promise<void>;
     };
     maintenance: {
         logs: any[];
@@ -84,7 +85,8 @@ export const NexusGuardProvider: React.FC<{ children: ReactNode }> = ({ children
                     return false;
                 }
                 return true;
-            }
+            },
+            logWaste: async (data: any) => { console.log('[HACCP] Waste logged', data); }
         },
         maintenance: { logs: maintenanceTasks },
         health: { status: 'stable' },

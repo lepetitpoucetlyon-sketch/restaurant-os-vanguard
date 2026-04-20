@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { describe, it, expect, vi } from 'vitest';
 import { HumanResourcesService } from './HumanResources';
 import { ShiftEntry } from "@/domain/schemas/hr";
@@ -24,8 +22,8 @@ describe('HumanResourcesService (Grade VI Validation)', () => {
         it('should calculate duration between CLOCK_IN and CLOCK_OUT', () => {
             const dayDate = new Date('2026-04-16T00:00:00Z');
             const shifts: ShiftEntry[] = [
-                { id: '1', type: 'CLOCK_IN', timestamp: '2026-04-16T08:00:00Z', userId: 'staff1', role: 'SERVER' },
-                { id: '2', type: 'CLOCK_OUT', timestamp: '2026-04-16T17:00:00Z', userId: 'staff1', role: 'SERVER' }
+                { id: '1', type: 'CLOCK_IN', timestamp: '2026-04-16T08:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } },
+                { id: '2', type: 'CLOCK_OUT', timestamp: '2026-04-16T17:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } }
             ];
 
             const hours = HumanResourcesService.getHoursForDay(shifts, dayDate);
@@ -43,16 +41,16 @@ describe('HumanResourcesService (Grade VI Validation)', () => {
         it('should aggregate 7 days of work and calculate overtime', () => {
             const weekStart = new Date('2026-04-13T00:00:00Z');
             const shifts: ShiftEntry[] = [
-                { id: '1', type: 'CLOCK_IN', timestamp: '2026-04-13T08:00:00Z', userId: 'staff1', role: 'SERVER' },
-                { id: '2', type: 'CLOCK_OUT', timestamp: '2026-04-13T16:00:00Z', userId: 'staff1', role: 'SERVER' }, // 8h
-                { id: '3', type: 'CLOCK_IN', timestamp: '2026-04-14T08:00:00Z', userId: 'staff1', role: 'SERVER' },
-                { id: '4', type: 'CLOCK_OUT', timestamp: '2026-04-14T16:00:00Z', userId: 'staff1', role: 'SERVER' }, // 8h
-                { id: '5', type: 'CLOCK_IN', timestamp: '2026-04-15T08:00:00Z', userId: 'staff1', role: 'SERVER' },
-                { id: '6', type: 'CLOCK_OUT', timestamp: '2026-04-15T16:00:00Z', userId: 'staff1', role: 'SERVER' }, // 8h
-                { id: '7', type: 'CLOCK_IN', timestamp: '2026-04-16T08:00:00Z', userId: 'staff1', role: 'SERVER' },
-                { id: '8', type: 'CLOCK_OUT', timestamp: '2026-04-16T16:00:00Z', userId: 'staff1', role: 'SERVER' }, // 8h
-                { id: '9', type: 'CLOCK_IN', timestamp: '2026-04-17T08:00:00Z', userId: 'staff1', role: 'SERVER' },
-                { id: '10', type: 'CLOCK_OUT', timestamp: '2026-04-17T16:00:00Z', userId: 'staff1', role: 'SERVER' } // 8h
+                { id: '1', type: 'CLOCK_IN', timestamp: '2026-04-13T08:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } },
+                { id: '2', type: 'CLOCK_OUT', timestamp: '2026-04-13T16:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } }, // 8h
+                { id: '3', type: 'CLOCK_IN', timestamp: '2026-04-14T08:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } },
+                { id: '4', type: 'CLOCK_OUT', timestamp: '2026-04-14T16:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } }, // 8h
+                { id: '5', type: 'CLOCK_IN', timestamp: '2026-04-15T08:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } },
+                { id: '6', type: 'CLOCK_OUT', timestamp: '2026-04-15T16:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } }, // 8h
+                { id: '7', type: 'CLOCK_IN', timestamp: '2026-04-16T08:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } },
+                { id: '8', type: 'CLOCK_OUT', timestamp: '2026-04-16T16:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } }, // 8h
+                { id: '9', type: 'CLOCK_IN', timestamp: '2026-04-17T08:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } },
+                { id: '10', type: 'CLOCK_OUT', timestamp: '2026-04-17T16:00:00Z', userId: 'staff1', userName: 'Test User', location: { terminalId: 'T1' } } // 8h
             ]; // Total = 40h
 
             const stats = HumanResourcesService.calculateEmployeeStats(shifts, weekStart);

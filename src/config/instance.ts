@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { RestaurantIdentity } from '@/types/settings';
 
 export interface FirebaseInstanceConfig {

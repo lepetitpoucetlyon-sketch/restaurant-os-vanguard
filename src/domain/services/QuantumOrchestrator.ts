@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getTenantPath } from '@/lib/firebase';

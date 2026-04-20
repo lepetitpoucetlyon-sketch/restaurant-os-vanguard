@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { JournalEntry, JournalLine } from '@/types';
 
 /**

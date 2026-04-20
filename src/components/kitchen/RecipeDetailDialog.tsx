@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { X, Clock, AlertTriangle, ChefHat, CheckCircle2, Flame, Heart, Share2, Printer } from "lucide-react";

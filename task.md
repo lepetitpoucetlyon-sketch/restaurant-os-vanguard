@@ -10,8 +10,8 @@
 - [x] Appliquer les interfaces strictes (`TenantTheme`, `OrchestratorSignal`, `TenantConfig`)
 
 ## Phase 2: Purge du Barrel de Types [x]
-- [x] Nettoyer `src/types/index.ts` (suppression de la section SURVIVAL)
-- [x] Remplacer les types `any` par `unknown` pour `StockEvent`, `LegacyOrder`, `Product`
+- [x] `orderAtoms.ts` : Épuration des `any`.
+- [/] Recherche globale et remplacement des `any` résiduels par des interfaces.
 
 ## Phase 3: Alignement Ledger & Kernel [x]
 - [x] Retirer `@ts-nocheck` de `src/lib/shared-kernel.ts`

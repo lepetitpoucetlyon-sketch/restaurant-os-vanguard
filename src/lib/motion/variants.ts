@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { Variants } from "framer-motion";

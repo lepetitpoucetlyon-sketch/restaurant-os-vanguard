@@ -1,0 +1,113 @@
+src/components/haccp/WasteManagementHACCP.tsx(23,13): error TS2339: Property 'logWaste' does not exist on type '{ labels: HygieneLabel[]; criticalAlerts: SensorReading[]; getComplianceScore: () => number; checklists: HACCPChecklistItem[]; sensors: SensorReading[]; temperatureHistory: TemperatureLog[]; validateTaskWithVision: (data: any) => Promise<...>; }'.
+src/components/reservations/TableGrid.tsx(21,76): error TS2339: Property 'cinematic' does not exist on type '{ easeOutExpo: readonly [0.16, 1, 0.3, 1]; easeOutBack: readonly [0.34, 1.56, 0.64, 1]; easeInOutQuint: readonly [0.83, 0, 0.17, 1]; easeInExpo: readonly [0.7, 0, 0.84, 0]; easeOutQuart: readonly [0.25, 1, 0.5, 1]; spring: readonly [0.4, 0.5, 0.3, 1.4]; bounce: readonly [...]; }'.
+src/engines/core/NexusCoreProvider.tsx(272,11): error TS2322: Type '{ unreadCount: number; notifications: Notification[]; addNotification: (n: { title: string; message: string; type: "error" | "success" | "info" | "warning"; }) => void; markAsRead: () => void; markAllAsRead: () => void; removeNotification: () => void; clearAll: () => void; }' is not assignable to type 'NexusNotifState'.
+  Types of property 'notifications' are incompatible.
+    Type 'Notification[]' is not assignable to type 'Record<string, unknown>[]'.
+      Type 'Notification' is not assignable to type 'Record<string, unknown>'.
+        Index signature for type 'string' is missing in type 'Notification'.
+src/engines/ops/NexusOpsProvider.tsx(107,5): error TS2322: Type 'unknown' is not assignable to type 'Record<string, unknown> | Promise<unknown>'.
+src/engines/ops/NexusOpsProvider.tsx(201,45): error TS2304: Cannot find name 'StockItem'.
+src/engines/ops/NexusOpsProvider.tsx(258,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/engines/ops/NexusOpsProvider.tsx(258,48): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(callbackfn: (previousValue: Order, currentValue: Order, currentIndex: number, array: Order[]) => Order, initialValue: Order): Order', gave the following error.
+    Argument of type '(acc: number, o: Record<string, unknown>) => any' is not assignable to parameter of type '(previousValue: Order, currentValue: Order, currentIndex: number, array: Order[]) => Order'.
+      Types of parameters 'acc' and 'previousValue' are incompatible.
+        Type 'Order' is not assignable to type 'number'.
+  Overload 2 of 3, '(callbackfn: (previousValue: any, currentValue: Order, currentIndex: number, array: Order[]) => any, initialValue: any): any', gave the following error.
+    Argument of type '(acc: number, o: Record<string, unknown>) => any' is not assignable to parameter of type '(previousValue: any, currentValue: Order, currentIndex: number, array: Order[]) => any'.
+      Types of parameters 'o' and 'currentValue' are incompatible.
+        Type 'Order' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Order'.
+src/engines/ops/NexusOpsProvider.tsx(258,93): error TS2365: Operator '+' cannot be applied to types 'number' and 'unknown'.
+src/engines/ops/NexusOpsProvider.tsx(294,33): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: Reservation, index: number, array: Reservation[]) => value is Reservation, thisArg?: any): Reservation[]', gave the following error.
+    Argument of type '(r: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Reservation, index: number, array: Reservation[]) => value is Reservation'.
+      Types of parameters 'r' and 'value' are incompatible.
+        Type 'Reservation' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Reservation'.
+  Overload 2 of 2, '(predicate: (value: Reservation, index: number, array: Reservation[]) => unknown, thisArg?: any): Reservation[]', gave the following error.
+    Argument of type '(r: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Reservation, index: number, array: Reservation[]) => unknown'.
+      Types of parameters 'r' and 'value' are incompatible.
+        Type 'Reservation' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Reservation'.
+src/engines/ops/NexusOpsProvider.tsx(296,33): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: Reservation, index: number, array: Reservation[]) => value is Reservation, thisArg?: any): Reservation[]', gave the following error.
+    Argument of type '(r: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Reservation, index: number, array: Reservation[]) => value is Reservation'.
+      Types of parameters 'r' and 'value' are incompatible.
+        Type 'Reservation' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Reservation'.
+  Overload 2 of 2, '(predicate: (value: Reservation, index: number, array: Reservation[]) => unknown, thisArg?: any): Reservation[]', gave the following error.
+    Argument of type '(r: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Reservation, index: number, array: Reservation[]) => unknown'.
+      Types of parameters 'r' and 'value' are incompatible.
+        Type 'Reservation' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Reservation'.
+src/engines/ops/NexusOpsProvider.tsx(318,31): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: Table, index: number, array: Table[]) => value is Table, thisArg?: any): Table[]', gave the following error.
+    Argument of type '(t: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Table, index: number, array: Table[]) => value is Table'.
+      Types of parameters 't' and 'value' are incompatible.
+        Type 'Table' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Table'.
+  Overload 2 of 2, '(predicate: (value: Table, index: number, array: Table[]) => unknown, thisArg?: any): Table[]', gave the following error.
+    Argument of type '(t: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Table, index: number, array: Table[]) => unknown'.
+      Types of parameters 't' and 'value' are incompatible.
+        Type 'Table' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Table'.
+src/engines/ops/NexusOpsProvider.tsx(323,30): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: Zone, index: number, array: Zone[]) => value is Zone, thisArg?: any): Zone[]', gave the following error.
+    Argument of type '(z: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Zone, index: number, array: Zone[]) => value is Zone'.
+      Types of parameters 'z' and 'value' are incompatible.
+        Type 'Zone' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Zone'.
+  Overload 2 of 2, '(predicate: (value: Zone, index: number, array: Zone[]) => unknown, thisArg?: any): Zone[]', gave the following error.
+    Argument of type '(z: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: Zone, index: number, array: Zone[]) => unknown'.
+      Types of parameters 'z' and 'value' are incompatible.
+        Type 'Zone' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'Zone'.
+src/engines/ops/NexusOpsProvider.tsx(388,20): error TS2352: Conversion of type 'JournalEntry[]' to type 'Record<string, unknown>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'JournalEntry' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'JournalEntry'.
+src/engines/ops/NexusOpsProvider.tsx(434,65): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: StockItem, index: number, obj: StockItem[]) => value is StockItem, thisArg?: any): StockItem', gave the following error.
+    Argument of type '(i: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: StockItem, index: number, obj: StockItem[]) => value is StockItem'.
+      Types of parameters 'i' and 'value' are incompatible.
+        Type 'StockItem' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'StockItem'.
+  Overload 2 of 2, '(predicate: (value: StockItem, index: number, obj: StockItem[]) => unknown, thisArg?: any): StockItem', gave the following error.
+    Argument of type '(i: Record<string, unknown>) => boolean' is not assignable to parameter of type '(value: StockItem, index: number, obj: StockItem[]) => unknown'.
+      Types of parameters 'i' and 'value' are incompatible.
+        Type 'StockItem' is not assignable to type 'Record<string, unknown>'.
+          Index signature for type 'string' is missing in type 'StockItem'.
+src/engines/ops/NexusOpsProvider.tsx(436,36): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/engines/ops/NexusOpsProvider.tsx(542,25): error TS2352: Conversion of type 'Customer[]' to type 'Record<string, unknown>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Customer' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'Customer'.
+src/engines/ops/NexusOpsProvider.tsx(544,20): error TS2538: Type 'unknown' cannot be used as an index type.
+src/engines/ops/NexusOpsProvider.tsx(544,35): error TS2538: Type 'unknown' cannot be used as an index type.
+src/engines/ops/NexusOpsProvider.tsx(550,17): error TS2352: Conversion of type 'Customer[]' to type 'Record<string, unknown>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Customer' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'Customer'.
+src/engines/ops/NexusOpsProvider.tsx(555,17): error TS2352: Conversion of type 'Customer[]' to type 'Record<string, unknown>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Customer' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'Customer'.
+src/engines/ops/NexusOpsProvider.tsx(556,21): error TS2339: Property 'toLowerCase' does not exist on type 'unknown'.
+src/engines/ops/NexusOpsProvider.tsx(557,22): error TS2339: Property 'toLowerCase' does not exist on type 'unknown'.
+src/engines/ops/NexusOpsProvider.tsx(558,22): error TS2339: Property 'includes' does not exist on type 'unknown'.
+src/engines/ops/NexusOpsProvider.tsx(565,17): error TS2352: Conversion of type 'Customer[]' to type 'Record<string, unknown>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Customer' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'Customer'.
+src/engines/ops/NexusOpsProvider.tsx(567,29): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'string | number'.
+src/engines/ops/NexusOpsProvider.tsx(580,21): error TS2352: Conversion of type 'Customer[]' to type 'Record<string, unknown>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Customer' is not comparable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'Customer'.
+src/hooks/useQuality.ts(46,9): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useQuality.ts(155,13): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/lib/sync/Sync.Compliance.ts(57,100): error TS2304: Cannot find name 'JournalEntry'.
+src/lib/sync/Sync.Compliance.ts(179,13): error TS2739: Type '{ impressions: number; clicks: number; ctr: number; avgPosition: number; topKeywords: { keyword: string; clicks: number; position: number; }[]; }' is missing the following properties from type '{ connected: boolean; provider: string; visitors?: number; pageViews?: number; reservations?: number; conversionRate?: number; sources?: any[]; devices?: any[]; topPages?: any[]; reservationFunnel?: any[]; weeklyTrend?: any[]; ... 7 more ...; conversions?: number; }': connected, provider
+src/lib/sync/Sync.Compliance.ts(244,101): error TS2304: Cannot find name 'JournalEntry'.
+src/types/nexus.types.ts(1,26): error TS2305: Module '"./auth.types"' has no exported member 'UserStatus'.

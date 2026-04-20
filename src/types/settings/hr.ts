@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type ContractType = 'cdi' | 'cdd' | 'extra' | 'intern' | 'apprentice';
 export type Department = 'kitchen' | 'service' | 'bar' | 'admin';
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🔱 IdGenerator Service (Grade X - Singularity)
  * 

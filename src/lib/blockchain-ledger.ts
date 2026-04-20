@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AUDIT HASHER SERVICE — Restaurant OS
  * Système d'intégrité cryptographique par chaînage de hashes.

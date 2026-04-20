@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type ClientCategory = 'individual' | 'business' | 'vip' | 'press' | 'influencer';
 export type ClientSegment = 'new' | 'regular' | 'loyal' | 'lost';
 export type LoyaltyTier = 'bronze' | 'silver' | 'gold' | 'platinum';

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🏛️ DOMAIN TYPES - Restaurant OS
  * Specific business data structures for services.

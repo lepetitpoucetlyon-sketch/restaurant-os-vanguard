@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { useAtom, useSetAtom, useAtomValue } from 'jotai';
@@ -14,6 +12,7 @@ import { EmpireInstance } from '@/domain/types/empire';
 import { FleetInsight } from '@/domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 /**
  * 🛰️ NexusFleetState - Grade V (NEXUS-LOW-RES)
@@ -45,15 +44,15 @@ interface NexusFleetState {
     refreshFleet: (isBackground?: boolean) => Promise<void>;
     syncFleet: () => Promise<void>;
     selectInstance: (id: string | null) => void;
-    registerInstance: (instance: any) => Promise<void>;
+    registerInstance: (instance: Record<string, unknown>) => Promise<void>;
     launchPreview: (key: string) => void;
-    broadcastConfiguration: (config: any) => Promise<void>;
+    broadcastConfiguration: (config: Record<string, unknown>) => Promise<void>;
     complianceService: typeof FleetComplianceService;
     haccpBridge: typeof HACCPTelemetryBridge;
     // Legacy support proxies
-    fleet: any;
-    crm: any;
-    intelligence: any;
+    fleet: Record<string, unknown> | null;
+    crm: Record<string, unknown>;
+    intelligence: Record<string, unknown>;
 }
 
 const NexusFleetContext = createContext<NexusFleetState | undefined>(undefined);
@@ -63,7 +62,7 @@ const NexusFleetContext = createContext<NexusFleetState | undefined>(undefined);
  * Implements "Hybrid-Shadow" state and "Smart-Focus" polling.
  */
 export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [liveFleet, setLiveFleet] = useState<any[]>([]);
+    const [liveFleet, setLiveFleet] = useState<EmpireInstance[]>([]);
     const [globalMetrics, setGlobalMetrics] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
@@ -122,17 +121,21 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                     activeUsers: f.activeUsers || 0,
                     dailyRevenue: f.dailyRevenue || 0,
                     revenue24h: f.dailyRevenue || 0,
+                    aiUsageCost: 0,
                     healthScore: f.healthScore || 100,
                     complianceScore: f.complianceScore || 100,
-                    lowStockAlerts: f.lowStockAlerts || 0
+                    lowStockAlerts: f.lowStockAlerts || 0,
+                    expiringItemsCount: 0
                 },
                 branding: f.branding || { primaryColor: '#6366f1' },
+                featureFlags: {},
                 security: f.security || {
                     twoFactorEnabled: true,
                     nf525Certified: true,
+                    maintenanceAccessGranted: false,
                     supportAccessGranted: false
                 }
-            }));
+            } as EmpireInstance));
             
             setInstanceIds(mappedInstances); // Update global state
             setLiveFleet(mappedInstances);
@@ -156,7 +159,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const selectInstance = (id: string | null) => setSelectedInstanceId(id);
 
-    const registerInstance = async (instance: any) => {
+    const registerInstance = async (instance: Record<string, unknown>) => {
         console.log('[Fleet] Registering new instance:', instance);
         await refreshFleet(true);
     };
@@ -166,7 +169,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         window.open(`/preview/${key}`, '_blank');
     };
 
-    const broadcastConfiguration = async (config: any) => {
+    const broadcastConfiguration = async (config: Record<string, unknown>) => {
         console.log('[Fleet] Broadcasting global configuration:', config);
         // Simulate network delay
         await new Promise(r => setTimeout(r, 800));
@@ -174,7 +177,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         // Broadcasting to all nodes in the Empire
         try {
             for (const instance of liveFleet) {
-                const patch: any = {
+                const patch: Record<string, unknown> = {
                     updatedAt: new Date().toISOString()
                 };
 
@@ -232,10 +235,10 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         broadcastConfiguration,
         complianceService: FleetComplianceService,
         haccpBridge: HACCPTelemetryBridge,
-        fleet: null, 
-        crm: { customers: [] },
-        intelligence: { insights: macroInsights }
-    }), [liveFleet, globalMetrics, stats, macroInsights, isLoading, isEmpireMode, selectedInstanceId, isUpdateAvailable, updateInfo, priceMultiplier, refreshFleet, syncFleet]);
+        fleet: {} as any, 
+        crm: { customers: [] } as any,
+        intelligence: { insights: macroInsights } as any
+    }), [liveFleet, globalMetrics, stats, macroInsights, isLoading, isEmpireMode, selectedInstanceId, isUpdateAvailable, updateInfo, priceMultiplier, refreshFleet, syncFleet, broadcastConfiguration]);
 
 
     return (

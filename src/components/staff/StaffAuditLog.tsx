@@ -1,6 +1,3 @@
-// @ts-nocheck
-"use client";
-
 import { motion } from "framer-motion";
 import { Shield, User as UserIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -9,8 +6,17 @@ import { cinematicContainer } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui.foundations";
 
+export interface StaffAuditEntry {
+    id: string;
+    timestamp: string | Date;
+    userName?: string;
+    action: string;
+    metadata?: string;
+    status: 'success' | 'error' | 'warning';
+}
+
 interface StaffAuditLogProps {
-    logs: any[];
+    logs: StaffAuditEntry[];
 }
 
 export const StaffAuditLog = ({ logs }: StaffAuditLogProps) => {

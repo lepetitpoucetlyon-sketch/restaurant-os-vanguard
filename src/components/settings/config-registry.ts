@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { PageKey, PageSettingConfig } from "@/types/permissions.types";
 
 export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSettingConfig[] }> = {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * EMPIRE AUDIT & OBSERVABILITY ENGINE
  * Centralized logging for system integrity, fiscal compliance (NF525), and performance.

@@ -1,7 +1,8 @@
-// @ts-nocheck
 import { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Box, Snowflake, Droplets, ChefHat, Truck } from 'lucide-react';
+import { SupplierOrder } from './inventory.types';
+
 
 export interface CleaningTask {
     id: string;
@@ -159,6 +160,20 @@ export interface EquipmentAuditLog {
     user: string;
     createdAt: string; // ISO date string
 }
+
+export interface MaintenanceLog {
+    id: string;
+    equipmentId: string;
+    type: 'preventive' | 'curative';
+    description: string;
+    performedBy: string;
+    performedAt: string;
+    costInCents: number;
+    status: 'completed' | 'pending';
+}
+
+export type Delivery = SupplierOrder;
+
 
 // Old Types Restored to fix dependencies
 export interface SensorReading {

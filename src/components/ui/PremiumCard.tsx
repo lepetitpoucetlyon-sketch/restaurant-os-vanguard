@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { motion, HTMLMotionProps } from "framer-motion";

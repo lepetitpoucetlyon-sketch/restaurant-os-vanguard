@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { atom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
 import { 
@@ -8,20 +7,10 @@ import {
     ReceptionLog,
     OilLog,
     RegulatoryWasteLog,
-    SupplierOrder
+    SupplierOrder,
+    MaintenanceLog,
+    Delivery
 } from '@/types';
-
-// Additional internal types for Compliance
-export interface MaintenanceLog {
-    id: string;
-    equipmentId: string;
-    type: 'preventive' | 'curative';
-    description: string;
-    performedBy: string;
-    performedAt: string;
-    costInCents: number;
-    status: 'completed' | 'pending';
-}
 
 // --- 🛡️ COMPLIANCE DOMAIN (Fiscal NF525, Guard/HACCP, Maintenance, Livraisons) ---
 
@@ -40,9 +29,10 @@ const _maintenanceLogs = createProxyDomain<MaintenanceLog>('maintenanceLogs');
 export const maintenanceLogsNodeAtom = _maintenanceLogs.node;
 export const maintenanceLogsAtom = _maintenanceLogs.data;
 
-const _deliveries = createProxyDomain<SupplierOrder>('deliveries');
+const _deliveries = createProxyDomain<Delivery>('deliveries');
 export const deliveriesNodeAtom = _deliveries.node;
 export const deliveriesAtom = _deliveries.data;
+
 
 const _hygieneLogs = createProxyDomain<HygieneLog>('hygieneLogs');
 export const hygieneLogsNodeAtom = _hygieneLogs.node;

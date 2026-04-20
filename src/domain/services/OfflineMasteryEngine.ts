@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { logger } from '@/lib/logger';
 import { db } from "@/domain/offline/offline-store";
 import { Order } from '@/types';

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { ShieldCheck, ShieldAlert, ShieldX } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';

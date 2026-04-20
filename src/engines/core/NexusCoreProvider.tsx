@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode, useRef } from 'react';
 
 // Modules internes (logique extraite)
@@ -16,13 +18,18 @@ import { translations, Language } from '@/i18n/translations';
 // Nexus Architecture (Grade X)
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/lib/nexus/adapters/FirestoreAdapter';
+import { MonkeyChaosAgent } from '@/domain/agents/MonkeyChaosAgent';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { 
     tenantConfigAtom,
-    isSidebarCollapsedAtom, isLaunchpadOpenAtom, themeAtom, 
+    isSidebarCollapsedAtom, isLaunchpadOpenAtom, 
     isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom,
     notificationsAtom, unreadNotificationsCountAtom, addToastAtom
 } from '@/store/operationalAtoms';
+import { 
+    themeModeAtom, accentColorAtom, uiDensityAtom, 
+    borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
+} from '@/store/themeAtoms';
 import { User, UserRole } from '@/types';
 import { TenantConfig } from '@/shared/nexus-contract';
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
@@ -59,6 +66,18 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         } catch (e) {
             console.warn('[NexusCore] Adapter already registered or failed', e);
         }
+    }, []);
+
+    // 🐒 Monkey Chaos Agent (Grade X) - Injection de Résilience
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            (window as any).awakenTheMonkey = (key: string) => {
+                MonkeyChaosAgent.activate(key);
+            };
+        }
+        return () => {
+            MonkeyChaosAgent.deactivate();
+        };
     }, []);
 
     const switchTenant = useCallback((tenantId: string) => {
@@ -152,7 +171,13 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useAtom(isSidebarCollapsedAtom);
     const [isLaunchpadOpen, setIsLaunchpadOpen] = useAtom(isLaunchpadOpenAtom);
-    const [theme, setTheme] = useAtom(themeAtom);
+    const [themeMode, setThemeMode] = useAtom(themeModeAtom);
+    const [accentColor, setAccentColor] = useAtom(accentColorAtom);
+    const [uiDensity, setUiDensity] = useAtom(uiDensityAtom);
+    const [borderRadius, setBorderRadius] = useAtom(borderRadiusAtom);
+    const [glassmorphism, setGlassmorphism] = useAtom(glassmorphismAtom);
+    const [animationsEnabled, setAnimationsEnabled] = useAtom(animationsEnabledAtom);
+    
     const [isCommandOpen, setIsCommandOpen] = useAtom(isCommandOpenAtom);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useAtom(isMobileMenuOpenAtom);
     const [isDocsOpen, setIsDocsOpen] = useAtom(isDocsOpenAtom);
@@ -248,15 +273,15 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         isDocumentationOpen: isDocsOpen,
         openDocumentation: () => setIsDocsOpen(true),
         closeDocumentation: () => setIsDocsOpen(false),
-        theme,
-        toggleTheme: () => setTheme(p => p === 'light' ? 'dark' : 'light'),
+        theme: themeMode === 'auto' ? 'dark' : themeMode as 'light' | 'dark',
+        toggleTheme: () => setThemeMode(p => p === 'light' ? 'dark' : 'light'),
         unreadCount,
         sidebarOpen: !isSidebarCollapsed
-    }), [isSidebarCollapsed, isLaunchpadOpen, isMap3DOpen, isMobileMenuOpen, isCommandOpen, isDocsOpen, theme, unreadCount, setIsSidebarCollapsed, setIsLaunchpadOpen, setIsMap3DOpen, setIsMobileMenuOpen, setIsCommandOpen, setIsDocsOpen, setTheme]);
+    }), [isSidebarCollapsed, isLaunchpadOpen, isMap3DOpen, isMobileMenuOpen, isCommandOpen, isDocsOpen, themeMode, unreadCount, setIsSidebarCollapsed, setIsLaunchpadOpen, setIsMap3DOpen, setIsMobileMenuOpen, setIsCommandOpen, setIsDocsOpen, setThemeMode]);
 
     const notifValue: NexusNotifState = useMemo(() => ({
         unreadCount,
-        notifications,
+        notifications: notifications as any[],
         addNotification: (n) => addToast({ ...n, duration: 3000 } as any),
         markAsRead: () => {},
         markAllAsRead: () => {},
@@ -264,16 +289,31 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         clearAll: () => {}
     }), [unreadCount, notifications, addToast]);
 
-    const contextValue = useMemo(() => ({
+    const themeValue: NexusTheme = useMemo(() => ({
+        mode: themeMode,
+        setMode: setThemeMode,
+        accentColor,
+        setAccentColor,
+        density: uiDensity,
+        setDensity: setUiDensity,
+        borderRadius,
+        setBorderRadius,
+        glassmorphism,
+        setGlassmorphism,
+        animations: animationsEnabled,
+        setAnimations: setAnimationsEnabled
+    }), [themeMode, setThemeMode, accentColor, setAccentColor, uiDensity, setUiDensity, borderRadius, setBorderRadius, glassmorphism, setGlassmorphism, animationsEnabled, setAnimationsEnabled]);
+
+    const contextValue: NexusCoreState = useMemo(() => ({
         auth: authValue,
         tenant: tenantValue,
         ui: uiValue,
         settings: settingsModule,
-        theme: { mode: theme }, 
+        theme: themeValue, 
         lang: langValue,
         notif: notifValue,
-        fleet: { nodes: [], health: 'EXCELLENT', isTrainingMode: false, toggleTrainingMode: () => {} }
-    }), [tenantValue, authValue, uiValue, settingsModule, langValue, theme, notifValue]);
+        fleet: { nodes: [], health: 'EXCELLENT', isTrainingMode: false, toggleTrainingMode: () => {} } as any
+    }), [tenantValue, authValue, uiValue, settingsModule, langValue, themeValue, notifValue]);
 
 
     return (

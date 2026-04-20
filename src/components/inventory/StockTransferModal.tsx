@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 
 import { useAtom } from "jotai";
@@ -9,8 +7,8 @@ import {
     stockTransferIsSubmittingAtom, 
     stockTransferSuccessAtom 
 } from "@/store/inventoryAtoms";
-import { X, ArrowRight, MapPin, Check, Package, RefreshCw, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
+import { cn } from "@/lib/ui.foundations";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { StockItem, DEFAULT_STORAGE_LOCATIONS } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,7 +23,7 @@ interface StockTransferModalProps {
 }
 
 export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransferModalProps) {
-    const { stockItems, transferStock, storageLocations } = useInventory() as any;
+    const { stockItems, transferStock, storageLocations } = useInventory();
 
     const [selectedItem, setSelectedItem] = useAtom(stockTransferSelectedItemAtom);
     const [targetLocation, setTargetLocation] = useAtom(stockTransferTargetLocationAtom);

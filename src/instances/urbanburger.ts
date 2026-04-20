@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import type { TenantConfig } from '@/types';
 
 export const urbanburgerConfig: TenantConfig = {

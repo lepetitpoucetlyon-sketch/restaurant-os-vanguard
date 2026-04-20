@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { atom } from 'jotai';
 import { Order, Table, Reservation, GroupEvent, OrderItem, OrderItemModification } from '@/types';
 import { createProxyDomain } from './nexusNodeFactory';
@@ -21,7 +20,7 @@ export const pendingModificationsAtom = atom<OrderItemModification[]>([]);
 
 /** 📊 Orders Statistics (Atomic Scalpel) */
 export const orderStatsAtom = atom((get) => {
-    const orders = get(_orders.node).data;
+    const orders = get(ordersAtom);
     return {
         total: orders.length,
         revenue: orders.reduce((sum, o) => sum + (o.totalInCents || 0), 0),
@@ -31,10 +30,10 @@ export const orderStatsAtom = atom((get) => {
 
 /** 🪑 Available Tables Selector */
 export const availableTablesAtom = atom((get) => {
-    return get(_tables.node).data.filter((t: Table) => t.status === 'free');
+    return get(tablesAtom).filter((t: Table) => t.status === 'free');
 });
 
 /** 🕒 Pending Orders Selector (for KDS) */
 export const pendingOrdersAtom = atom((get) => {
-    return get(_orders.node).data.filter((o: Order) => o.status === 'new' || o.status === 'preparing');
+    return get(ordersAtom).filter((o: Order) => o.status === 'new' || o.status === 'preparing');
 });

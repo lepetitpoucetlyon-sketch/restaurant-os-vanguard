@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { execSync } from 'child_process';
 import path from 'path';

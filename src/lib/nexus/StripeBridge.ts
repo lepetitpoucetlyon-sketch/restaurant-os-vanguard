@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🛰️ STRIPE BRIDGE - Sovereign Economy Engine
  * Grade VIII - Pure Headless Billing.

@@ -1,4 +1,3 @@
-// @ts-nocheck
 export interface PerformanceGoals {
     dailyRevenue?: number;
     weeklyRevenue?: number;

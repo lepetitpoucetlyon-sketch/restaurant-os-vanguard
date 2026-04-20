@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { atom } from 'jotai';
 import { Product } from '@/types';
 

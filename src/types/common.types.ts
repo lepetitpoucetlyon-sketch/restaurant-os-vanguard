@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 /**
  * COMMON / SHARED TYPES
  */
@@ -62,7 +60,7 @@ export interface RecipeStep {
 
 export interface Product {
     id: string;
-    categoryId: string;
+    category: string;
     name: string;
     priceInCents: number;
     color: string;
@@ -85,6 +83,7 @@ export interface RecipeIngredient {
 
 export interface Recipe {
     id: string;
+    productId?: string;
     name: string;
     category: string;
     description?: string;

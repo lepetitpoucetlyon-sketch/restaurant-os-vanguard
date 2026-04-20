@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { JournalEntry, BankTransaction } from '@/types';
 import { logger } from '@/lib/axiom';
 

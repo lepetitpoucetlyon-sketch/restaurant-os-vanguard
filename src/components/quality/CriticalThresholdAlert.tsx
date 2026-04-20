@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { AlertCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';

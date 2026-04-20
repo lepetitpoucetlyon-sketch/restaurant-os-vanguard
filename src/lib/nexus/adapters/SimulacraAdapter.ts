@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
 import { simulatorDb } from '@/lib/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';

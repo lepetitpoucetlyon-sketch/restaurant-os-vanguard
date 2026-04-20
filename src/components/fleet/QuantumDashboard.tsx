@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { activeTenantSlotsAtom, fleetSnapshotAtom } from '@/store/fleetAtoms';

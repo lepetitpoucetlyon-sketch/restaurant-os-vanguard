@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🛰️ NexusTelemetryService - The OS Mirror
  * Responsible for sending real-time health pulses to the Suzerain (MCC).

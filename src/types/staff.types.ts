@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * STAFF & HR TYPES - Leave Management, Compliance
  */
@@ -218,6 +217,16 @@ export interface Shift {
     notes?: string;
     isOvertime?: boolean;
     breakDurationMinutes?: number;
+}
+
+export interface ShiftLog {
+    id: string;
+    shiftId: string;
+    userId: string;
+    timestamp: string;
+    type: 'clock_in' | 'clock_out' | 'break_start' | 'break_end' | 'note' | 'compliance_violation';
+    message: string;
+    metadata?: Record<string, unknown>;
 }
 
 // ============================================

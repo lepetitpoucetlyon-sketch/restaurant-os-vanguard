@@ -1,7 +1,6 @@
-// @ts-nocheck
 import { atom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
-import { User, Shift, LeaveRequest, LeaveBalance } from '@/types';
+import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
 
 // --- 👥 STAFF & HR DOMAIN (Personnel, Shifts, Congés) ---
 
@@ -17,7 +16,7 @@ const _activeShifts = createProxyDomain<Shift>('activeShifts');
 export const activeShiftsNodeAtom = _activeShifts.node;
 export const activeShiftsAtom = _activeShifts.data;
 
-const _shiftLogs = createProxyDomain<Record<string, unknown>>('shiftLogs');
+const _shiftLogs = createProxyDomain<ShiftLog>('shiftLogs');
 export const shiftLogsNodeAtom = _shiftLogs.node;
 export const shiftLogsAtom = _shiftLogs.data;
 

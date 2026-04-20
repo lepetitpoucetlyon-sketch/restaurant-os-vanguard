@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { X, Utensils, Scale, Clock, Thermometer, Users, CheckCircle2, AlertTriangle, FileText, RotateCcw } from "lucide-react";

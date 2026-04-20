@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 // Sections (Sutured for Grade X Stability)

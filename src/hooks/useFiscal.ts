@@ -1,12 +1,10 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 
 import { useAtomValue } from "jotai";
 import { fiscalLedgerNodeAtom } from "@/store/operationalAtoms";
 import { useCallback, useMemo } from "react";
 import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
-import { submitExpenseAction } from "@/app/actions/accounting";
+import { submitExpenseAction } from "@/app/(admin)/actions/accounting";
 import { FiscalEngine } from "@/domain/services/FiscalEngine";
 
 /**

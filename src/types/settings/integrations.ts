@@ -1,4 +1,3 @@
-// @ts-nocheck
 export interface IntegrationSettings {
     id: string;
     name: string;

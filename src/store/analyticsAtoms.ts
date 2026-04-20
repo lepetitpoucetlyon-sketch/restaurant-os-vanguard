@@ -1,11 +1,10 @@
-// @ts-nocheck
-// @ts-nocheck
 import { atom } from 'jotai';
 import { 
     ordersAtom, 
     productsAtom, 
     recipesAtom, 
-    staffMembersAtom 
+    staffMembersAtom,
+    stockItemsAtom
 } from './operationalAtoms';
 import { Order } from '@/types/orders.types';
 import { Product, Recipe } from '@/types/common.types';
@@ -29,6 +28,7 @@ export const menuAnalysisSelector = atom((get) => {
     const orders = get(ordersAtom);
     const products = get(productsAtom);
     const recipes = get(recipesAtom);
+    const stockItems = get(stockItemsAtom);
 
     if (!products.length) return [];
     
@@ -42,12 +42,12 @@ export const menuAnalysisSelector = atom((get) => {
 
     const analysis: MenuAnalysisItem[] = products.map(item => {
         const popularity = itemSales[item.id] || 0;
-        const recipe = recipes.find(r => r.id === item.id || r.productId === item.id);
+        const recipe = recipes.find(r => r.id === item.id);
         
         const foodCost = recipe?.ingredients?.reduce((sum: number, ri) => {
-            const ingredient = products.find(p => p.id === ri.id);
-            return sum + (ri.quantity * (ingredient?.priceInCents || 0));
-        }, 0) || item.priceInCents * 0.3; // Default 30% food cost fallback
+            const stockItem = stockItems.find(si => si.id === ri.id);
+            return sum + (ri.quantity * (stockItem?.unitCostInCents || 0));
+        }, 0) || item.priceInCents * 0.3; // Default 30% food cost fallback if no recipe
 
         return {
             productId: item.id,
@@ -91,7 +91,7 @@ export const staffPerformanceSelector = atom((get) => {
             const upsellOrders = serverOrders.filter(o =>
                 o.items.some(item => {
                     const product = products.find(p => p.id === item.productId);
-                    return product?.categoryId?.toLowerCase().includes('cocktail');
+                    return product?.category?.toLowerCase().includes('cocktail');
                 })
             ).length;
 
@@ -103,7 +103,7 @@ export const staffPerformanceSelector = atom((get) => {
                 orderCount: orderCount,
                 averageCheck: orderCount > 0 ? (totalSales / orderCount) / 100 : 0,
                 upsellRate: orderCount > 0 ? (upsellOrders / orderCount) * 100 : 0,
-                kudos: (user as any).kudos || 0
+                kudos: user.kudos || 0
             };
         });
 });

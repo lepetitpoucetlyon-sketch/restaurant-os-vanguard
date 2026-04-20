@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import React from 'react';
 import { useTenant as useNexusTenant } from '@/engines/core/NexusCoreProvider';

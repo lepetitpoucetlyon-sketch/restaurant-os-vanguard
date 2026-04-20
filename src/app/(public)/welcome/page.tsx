@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { motion, useScroll, useTransform, Variants } from "framer-motion";

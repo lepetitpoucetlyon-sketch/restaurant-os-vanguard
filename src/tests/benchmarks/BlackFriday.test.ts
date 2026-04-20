@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi } from 'vitest';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
 import { ordersNodeAtom } from '@/store/operationalAtoms';

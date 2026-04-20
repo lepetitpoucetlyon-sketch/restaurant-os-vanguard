@@ -1,20 +1,18 @@
-// @ts-nocheck
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ChefHat, Book, AlertTriangle, MessageSquare, CheckCircle2, Flame, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { OrderStatus } from "@/types";
+import { Order, OrderStatus, Recipe } from "@/types";
 import { ITEM_STATION_MAP } from "@/app/(ops)/kds/constants";
 
-
 interface KDSTicketProps {
-    ticket: any;
+    ticket: Order;
     gridColumns: number;
     rushMode: boolean;
     updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
-    setSelectedRecipe: (recipe: any) => void;
+    setSelectedRecipe: (recipe: Recipe) => void;
     setIsAuditOpen: (isOpen: boolean) => void;
     setAuditTicket: (ticket: any) => void;
-    recipes: any[];
+    recipes: Recipe[];
 }
 
 export function KDSTicket({
@@ -108,15 +106,15 @@ export function KDSTicket({
                 "flex-1 flex flex-col gap-6",
                 gridColumns >= 5 ? "p-4 md:p-5" : "p-5 md:p-7"
             )}>
-                {ticket.items.flatMap((item: any) => {
+                {ticket.items.flatMap((item) => {
                     if (((item.modifiers?.length ?? 0) > 0 || item.notes) && item.quantity > 1) {
                         return Array(item.quantity).fill(null).map(() => ({ ...item, quantity: 1 }));
                     }
                     return [item];
-                }).map((item: any, i: number) => {
+                }).map((item, i: number) => {
                     const itemStation = ITEM_STATION_MAP[item.name] || 'hot';
                     const product = recipes.find(p => p.name.includes(item.name) || item.name.includes(p.name));
-                    const imageUrl = product?.image || product?.standardImage;
+                    const imageUrl = product?.imageUrl || product?.standardImage;
 
 
                     const isDrink = itemStation === 'bar';
@@ -159,13 +157,13 @@ export function KDSTicket({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        const fullRecipe = product || {
+                                        const fullRecipe = (product || {
                                             name: item.name,
                                             imageUrl: imageUrl,
                                             description: "Recette standard",
                                             ingredients: [],
                                             steps: []
-                                        };
+                                        }) as unknown as Recipe;
                                         setSelectedRecipe(fullRecipe);
                                     }}
                                     className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all group-hover:scale-110 z-20 shadow-lg"
@@ -255,10 +253,10 @@ export function KDSTicket({
                                 <button
                                     className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all bg-emerald-500 text-white hover:bg-emerald-600 active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
                                     onClick={() => {
-                                        const itemWithStandard = ticket.items.find((item: any) => {
-                                            const r = recipes.find(rec => rec.name === item.name);
-                                            return r?.standardImage;
-                                        });
+                                    const itemWithStandard = ticket.items.find((item) => {
+                                        const r = recipes.find(rec => rec.name === item.name);
+                                        return r?.standardImage;
+                                    });
 
                                         if (itemWithStandard) {
                                             setAuditTicket({

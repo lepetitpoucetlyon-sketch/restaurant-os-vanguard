@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🛡️ GENOME VALIDATOR — Grade IX (Système Immunitaire)
  * 

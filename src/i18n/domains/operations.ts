@@ -1,4 +1,3 @@
-// @ts-nocheck
 // POS, Planning, Inventory, Reservations, CRM, Recruitment translations
 export const operationsTranslations = {
     fr: {

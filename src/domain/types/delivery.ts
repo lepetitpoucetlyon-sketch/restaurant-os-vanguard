@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🚚 Delivery Domain Types
  * Grade VI - Supply Chain Traceability

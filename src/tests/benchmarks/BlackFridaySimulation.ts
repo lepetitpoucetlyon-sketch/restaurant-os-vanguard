@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';

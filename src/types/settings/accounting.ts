@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { AccountingMode } from "@/lib/shared-kernel";
 
 export interface AccountingConfig {

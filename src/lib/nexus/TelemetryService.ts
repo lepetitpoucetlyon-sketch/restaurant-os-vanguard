@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
 import { fiscalLedgerAtom } from '@/store/complianceAtoms';

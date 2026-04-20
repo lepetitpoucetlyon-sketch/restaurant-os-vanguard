@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 /**
  * 🐉 SLAYER - Grade VI
  * Moteur d'ingestion souverain pour la migration de données legacy (Zelty, Lightspeed, SumUp).

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AUTH & USERS TYPES
  */
@@ -7,6 +6,7 @@ export type UserRole = 'server' | 'manager' | 'floor_manager' | 'kitchen_chef' |
 
 export interface User {
     id: string;
+    tenantId: string;
     name: string;
     pin?: string;
     pinHash?: string;
@@ -26,4 +26,7 @@ export interface User {
     email?: string;
     uid?: string;
     displayName?: string;
+    kudos?: number; // Reputation points
 }
+
+export type UserStatus = 'active' | 'inactive' | 'suspended' | 'on_leave';

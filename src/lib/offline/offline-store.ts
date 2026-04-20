@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Dexie, { Table } from 'dexie';
 import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal } from '@/types';
 import { TenantConfig } from '@/shared/nexus-contract';

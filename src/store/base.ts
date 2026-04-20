@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🧱 Nexus Base Store - Grade VI
  * Eradicates circular dependencies between Registry and Atoms.

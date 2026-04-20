@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SEO & REFERENCING TYPES
  */
@@ -48,6 +47,8 @@ export interface PageSEO {
     lastAnalyzed?: string;
     lastUpdated: string;
 }
+
+export type SEOProfile = SEOConfig;
 
 export interface SEOConfig {
     id: string;

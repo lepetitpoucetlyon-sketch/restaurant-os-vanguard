@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { lepetitpoucetConfig } from './lepetitpoucet';
 import { bistrolyonConfig } from './bistrolyon';
 import { urbanburgerConfig } from './urbanburger';

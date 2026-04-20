@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { Sparkles, Settings2, ShieldCheck } from "lucide-react";

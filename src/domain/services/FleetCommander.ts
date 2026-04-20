@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { logger } from '@/lib/axiom';
 import { EmpireInstance } from '@/domain/types/empire';
 

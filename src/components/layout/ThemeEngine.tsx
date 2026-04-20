@@ -1,9 +1,7 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from '@/store/tenantAtoms';
+import { tenantConfigAtom } from '@/store/operationalAtoms';
 
 /**
  * 🎨 ThemeEngine - Grade X Stub

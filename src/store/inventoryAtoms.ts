@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { atom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
+import { reservationStatsAtom } from './reservationAtoms';
 import { 
     StockItem, 
     Product, 
@@ -59,10 +59,10 @@ export const prepLoadingAtom = _prepTasks.loading;
 // Kitchen Prep Progress (Grade X Oracle Connection)
 export const miseEnPlaceTargetSelector = atom((get) => {
     const recipesData = get(recipesAtom);
-    const reservationStats = get(reservationStatsAtom as any); // Dynamic bridge
+    const reservationStats = get(reservationStatsAtom); 
     
     // AI Forecast Logic: Target = (Expected Covers / 2) + Buffer
-    const expectedCovers = reservationStats?.expectedCovers || 20;
+    const expectedCovers = reservationStats.todayCovers || 20;
     const aiTarget = Math.ceil(expectedCovers * 0.4); 
 
     return recipesData.reduce((acc: Record<string, { name: string; target: number }>, r) => {
@@ -88,7 +88,7 @@ export const calculateRecipeCostSelector = atom(null, (get, _set, recipeIngredie
 });
 
 // --- STOCK TRANSFER ATOMS (Grade X Legalisation) ---
-export const stockTransferSelectedItemAtom = atom<any>(null);
-export const stockTransferTargetLocationAtom = atom<string | null>(null);
+export const stockTransferSelectedItemAtom = atom<string>('');
+export const stockTransferTargetLocationAtom = atom<string>('');
 export const stockTransferIsSubmittingAtom = atom<boolean>(false);
 export const stockTransferSuccessAtom = atom<boolean>(false);

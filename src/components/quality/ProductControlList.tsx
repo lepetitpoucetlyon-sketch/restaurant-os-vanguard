@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import React from 'react';
 import { Package, Check, X, Thermometer, Info, Calendar } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';

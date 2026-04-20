@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * RESERVATIONS & CRM TYPES
  */

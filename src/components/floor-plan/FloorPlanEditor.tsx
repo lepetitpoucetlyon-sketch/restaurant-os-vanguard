@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { Stage, Layer, Rect, Circle, Text, Group } from "react-konva";

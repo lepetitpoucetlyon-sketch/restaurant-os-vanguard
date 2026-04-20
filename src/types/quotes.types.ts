@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * QUOTES (DEVIS) TYPES
  */

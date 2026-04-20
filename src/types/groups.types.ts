@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * GROUPS & EVENTS TYPES
  */

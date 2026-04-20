@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { DayOfWeek } from "@/types/settings";
 
 export const DAYS_CONFIG: { id: DayOfWeek; label: string; shortLabel: string }[] = [

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * MARKETING & REPUTATION TYPES
  */
@@ -46,4 +45,15 @@ export interface ReputationSummary {
     totalFeedbacks: number;
     sentimentScore: number; // 0-100
     topThemes: string[];
+}
+
+export interface SocialAccount {
+    id: string;
+    platform: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'tiktok' | 'google';
+    username: string;
+    connectedAt: string;
+    accessToken?: string;
+    refreshToken?: string;
+    expiresAt?: string;
+    isActive: boolean;
 }

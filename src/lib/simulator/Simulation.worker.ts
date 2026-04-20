@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🧵 Simulation Engine WebWorker (Grade X)
  * High-performance, off-thread Monte-Carlo simulation.

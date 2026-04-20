@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Dexie, { Table } from 'dexie';
 
 /**

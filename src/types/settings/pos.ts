@@ -1,4 +1,3 @@
-// @ts-nocheck
 export interface POSSettings {
     currency: string;
     priceFormat: 'with_cents' | 'rounded';

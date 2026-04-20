@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🛡️ InstanceGuard - Global Sovereignty Service (Grade VI)
  * Validates the current deployment host against authorized domains.

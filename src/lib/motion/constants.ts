@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { Transition } from "framer-motion";
@@ -11,6 +10,7 @@ export const easing = {
     easeOutQuart: [0.25, 1, 0.5, 1] as const,
     spring: [0.4, 0.5, 0.3, 1.4] as const,
     bounce: [0.68, -0.55, 0.265, 1.55] as const,
+    cinematic: [0.16, 1, 0.3, 1] as const,
 };
 
 export const duration = {

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 /**
  * INVENTORY TYPES - Complete Stock Management System
  */

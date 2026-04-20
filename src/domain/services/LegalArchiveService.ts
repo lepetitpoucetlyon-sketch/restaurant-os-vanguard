@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { FiscalEngine } from './FiscalEngine';
 import { NF525Service } from './NF525Service';
 

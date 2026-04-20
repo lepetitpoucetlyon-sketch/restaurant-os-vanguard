@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type NotificationChannel = 'push' | 'email' | 'sms' | 'whatsapp' | 'slack';
 
 export interface AlertRouting {

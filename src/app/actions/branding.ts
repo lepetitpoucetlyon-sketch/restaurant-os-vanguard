@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🎨 Branding Actions - Grade X
  * Industrialisation du démarchage et de la personnalisation d'instance.

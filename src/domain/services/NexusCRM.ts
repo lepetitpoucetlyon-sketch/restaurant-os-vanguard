@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 🛰️ NEXUS-CRM - Grade VI
  * Moteur de communication et fidélisation client.

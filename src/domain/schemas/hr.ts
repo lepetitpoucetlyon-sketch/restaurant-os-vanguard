@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { z } from 'zod';
 
 /**
@@ -55,3 +53,20 @@ export const PayrollPeriodSchema = z.object({
   netAmount: z.number(),
   chargesSociales: z.number()
 });
+
+export interface PayrollCalculation {
+  totalHours: number;
+  hourlyRate: number;
+  grossAmount: number;
+  netAmount: number;
+  chargesSociales: number;
+  period: string;
+}
+
+export interface ShiftStats {
+  totalHours: number;
+  overtime: number;
+  breakTime: number;
+  punctualityScore: number;
+  period: string;
+}

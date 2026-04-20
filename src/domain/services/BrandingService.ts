@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { ThemeSettings } from '@/types/settings';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '@/lib/axiom';

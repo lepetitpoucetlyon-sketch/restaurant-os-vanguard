@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PERMISSIONS TYPES - Granular Action-based Permissions
  * Defines all possible actions on each page and role-based access.

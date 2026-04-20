@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type TutorialItem = {
     title: string;
     description: string;

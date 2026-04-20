@@ -1,4 +1,3 @@
-// @ts-nocheck
 export interface ThemeSettings {
     primaryColor: string;
     secondaryColor: string;

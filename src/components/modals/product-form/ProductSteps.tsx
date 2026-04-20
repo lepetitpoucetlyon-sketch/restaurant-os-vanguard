@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { Clock, Plus, Trash2 } from "lucide-react";

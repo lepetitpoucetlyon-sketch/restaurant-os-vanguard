@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 
 import React from 'react';
@@ -14,34 +12,36 @@ import { cn } from '@/lib/ui.foundations';
 import { useIsMobile } from '@/hooks';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/button';
+import { Customer } from '@/types';
 
-const getFirstName = (c: any): string => c?.firstName || (c?.name ? c.name.split(' ')[0] : '') || '';
-const getLastName = (c: any): string => c?.lastName || (c?.name ? c.name.split(' ').slice(1).join(' ') : '') || '';
+const getFirstName = (c: Customer): string => c?.firstName || '';
+const getLastName = (c: Customer): string => c?.lastName || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s[0] : '?');
-const getVisitCount = (c: any): number => c?.visitCount ?? c?.totalVisits ?? 0;
-const getPhone = (c: any): string => c?.phone ?? '';
-const getEmail = (c: any): string => c?.email ?? '';
+const getVisitCount = (c: Customer): number => c?.visitCount ?? 0;
+const getPhone = (c: Customer): string => c?.phone ?? '';
+const getEmail = (c: Customer): string => c?.email ?? '';
 
 export function CRMDetailView() {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const [selectedCustomer, setSelectedCustomer] = useAtom(crmSelectedCustomerAtom);
+    const [selectedCustomerBase, setSelectedCustomer] = useAtom(crmSelectedCustomerAtom);
+    const selectedCustomer = selectedCustomerBase as any;
 
     if (!selectedCustomer) return null;
 
     const stats = [
         { value: getVisitCount(selectedCustomer), label: 'Sessions', icon: Users },
-        { value: `${((selectedCustomer as any).totalSpentInCents / 100 || 0).toFixed(0)}€`, label: 'Revenue', icon: DollarSign, gold: true },
-        { value: `${(((selectedCustomer as any).totalSpentInCents / 100 || 0) / (getVisitCount(selectedCustomer) || 1)).toFixed(0)}€`, label: 'Panier', icon: TrendingUp }
+        { value: `${(selectedCustomer.totalSpentInCents / 100 || 0).toFixed(0)}€`, label: 'Revenue', icon: DollarSign, gold: true },
+        { value: `${((selectedCustomer.totalSpentInCents / 100 || 0) / (getVisitCount(selectedCustomer) || 1)).toFixed(0)}€`, label: 'Panier', icon: TrendingUp }
     ];
 
     if (isMobile) {
         return (
             <BottomSheet
                 isOpen={true}
-                onClose={() => setSelectedCustomer(null)}
-                title={(selectedCustomer as any).name || `${getFirstName(selectedCustomer)} ${getLastName(selectedCustomer)}`}
-                subtitle={`Profil ${((selectedCustomer as any).segment || 'new').toUpperCase()} • ID: ${(selectedCustomer.id || '').slice(0, 8)}`}
+                onClose={() => (setSelectedCustomer as any)(null)}
+                title={selectedCustomer.lastName || `${getFirstName(selectedCustomer)} ${getLastName(selectedCustomer)}`}
+                subtitle={`Profil ${(selectedCustomer.id || '').toUpperCase()} • ID: ${(selectedCustomer.id || '').slice(0, 8)}`}
             >
                 <div className="space-y-10 py-6">
                     <div className="grid grid-cols-3 gap-3">
@@ -90,7 +90,7 @@ export function CRMDetailView() {
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent-gold/20 to-transparent pointer-events-none" />
                 
                 <button 
-                    onClick={() => setSelectedCustomer(null)} 
+                    onClick={() => (setSelectedCustomer as any)(null)} 
                     className="absolute top-6 right-6 w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-all z-20"
                 >
                     <X className="w-6 h-6" />
@@ -116,7 +116,7 @@ export function CRMDetailView() {
                     <div className="flex items-center gap-4">
                         <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                         <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/40">
-                            {((selectedCustomer as any).segment || 'VIP').toUpperCase()} • {(selectedCustomer.id || '').slice(0, 8)}
+                            VIP • {(selectedCustomer.id || '').slice(0, 8)}
                         </p>
                     </div>
                 </div>

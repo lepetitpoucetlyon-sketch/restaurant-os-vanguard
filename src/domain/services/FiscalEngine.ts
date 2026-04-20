@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { logger } from '@/lib/logger';
 import { FiscalSeal } from '@/types/accounting.types';
 export type { FiscalSeal };
@@ -74,5 +73,23 @@ export const FiscalEngine = {
           if (computedHash !== current.hash) return false;
       }
       return true;
+  },
+
+  /**
+   * 🛡️ Comprehensive Audit (Grade X)
+   */
+  async runAudit(seals: FiscalSeal[], instanceId: string = 'default'): Promise<{ 
+      success: boolean; 
+      integrity: boolean;
+      sealedCount: number;
+      timestamp: string;
+  }> {
+      const integrity = await this.verifyChain(seals);
+      return {
+          success: integrity,
+          integrity,
+          sealedCount: seals.length,
+          timestamp: new Date().toISOString()
+      };
   }
 };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Utensils, Table as TableIcon, Search, LayoutGrid, Zap, Bell } from "lucide-react";

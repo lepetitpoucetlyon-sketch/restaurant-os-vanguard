@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * ORDERS TYPES
  */
@@ -26,6 +25,7 @@ export interface OrderItemModification {
 export interface OrderItem {
     id: string;
     productId: string;
+    categoryId?: string;
     name: string;
     quantity: number;
     priceInCents: number;
@@ -60,7 +60,7 @@ export interface Order {
         maticTxId?: string;
     };
     totalRevenue?: number; // computed alias
-    data?: any; // legacy alias
+    data?: Record<string, unknown>; // legacy alias
     updatedAt?: Date | string;
 }
 
@@ -78,11 +78,11 @@ export interface OrdersContextType {
     totalRevenue: number;
     isLoading: boolean;
     agent?: {
-        query: (prompt: string, context?: any) => Promise<any>;
+        query: (prompt: string, context?: unknown) => Promise<unknown>;
         isProcessing: boolean;
     };
     expert?: {
-        queryExpert: (prompt: string, contextData?: any) => Promise<any>;
+        queryExpert: (prompt: string, contextData?: unknown) => Promise<unknown>;
         isConfigured: boolean;
         isAuthorized: boolean;
         role: string;

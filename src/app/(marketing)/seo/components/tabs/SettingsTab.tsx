@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link2, Search, BarChart3, MapPin } from 'lucide-react';

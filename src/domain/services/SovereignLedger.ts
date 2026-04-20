@@ -9,6 +9,18 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
  */
 export class SovereignLedger {
     
+    public static currentMode: string = 'EXPERT';
+
+    private static handleCorruptionDetected() {
+        logger.error('🚨 [Oracle] FATAL CORRUPTION DETECTED. Emergency LOCAL_LOCK activated.');
+        this.currentMode = 'LOCAL_LOCK';
+        // Notification immédiate à l'UI pour bloquer toute transaction asymétrique
+        // Note: Adaptation si broadcast n'existe pas nativement sur l'adapter
+        if (Nexus.adapter && (Nexus.adapter as any).broadcast) {
+            (Nexus.adapter as any).broadcast('SYSTEM_LOCKDOWN', { reason: 'Data Integrity Breach' });
+        }
+    }
+
     /**
      * Records a balanced economic movement between two accounts.
      * Principle: Every DEBIT must have a matching CREDIT.
@@ -19,65 +31,37 @@ export class SovereignLedger {
         amountInCents: number,
         referenceId: string,
         description: string,
-        _monkeyPatch?: { forceAsymmetry: boolean } // ChaosMonkey backdoor test
+        _monkeyPatch?: { forceAsymmetry: boolean }
     }): Promise<void> {
-        // 🧪 CHAOS MONKEY PROTECTION (Grade X)
+        if (this.currentMode === 'LOCAL_LOCK') throw new Error('SYSTEM_LOCKED');
+        
         if (params._monkeyPatch?.forceAsymmetry) {
-            logger.error('🚨 [SovereignLedger] SABOTAGE DETECTED: Asymmetric corruption attempt blocked.');
-            throw new Error('LEDGER_INVIOLABLE: Monkey Chaos sabotage rejected.');
+            this.handleCorruptionDetected();
+            throw new Error('LEDGER_INVIOLABLE: Sabotage rejected.');
         }
 
         const date = new Date().toISOString();
-        const scelledAt = new Date().toISOString();
-
-        // 1. Fetch Dynamic Complexity Mode
         let mode: AccountingMode = 'EXPERT';
         try {
             const settings = await Nexus.adapter.get<any>(Nexus.getTenantPath('settings/global'));
-            if (settings?.accounting?.complexityMode) {
-                mode = settings.accounting.complexityMode as AccountingMode;
-            }
-        } catch (e) {
-            logger.warn('[SovereignLedger] Cloud/AI Services Unreachable. Switching to LOCAL_LOCK mode (Graceful Degradation).');
-            mode = 'LOCAL_LOCK' as any; // Immutable local integrity only
-        }
+            mode = settings?.accounting?.complexityMode || 'EXPERT';
+        } catch { mode = 'LOCAL_LOCK' as any; }
 
-        // 2. Build Entries
-        const debitEntry: LedgerEntry = {
-            id: SharedKernel.generateId('LDR-DB'),
-            date,
-            accountName: params.debitAccount,
-            type: 'DEBIT',
-            amountInCents: params.amountInCents,
-            referenceId: params.referenceId,
-            description: params.description,
-            scelledAt
-        };
+        const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
+            id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
+            date, accountName: acc, type, amountInCents: params.amountInCents,
+            referenceId: params.referenceId, description: params.description, scelledAt: date
+        });
 
-        const creditEntry: LedgerEntry = {
-            id: SharedKernel.generateId('LDR-CR'),
-            date,
-            accountName: params.creditAccount,
-            type: 'CREDIT',
-            amountInCents: params.amountInCents,
-            referenceId: params.referenceId,
-            description: params.description,
-            scelledAt
-        };
+        const debit = buildEntry(params.debitAccount, 'DEBIT');
+        const credit = buildEntry(params.creditAccount, 'CREDIT');
 
-        // 3. Inquisiteur QA : Validation (Bloquant en mode EXPERT)
-        this.validateIntegrity(debitEntry, creditEntry, mode);
+        this.validateIntegrity(debit, credit, mode);
+        logger.info(`[SovereignLedger] [${mode}] Balanced: ${params.amountInCents/100}€ [${params.debitAccount}/${params.creditAccount}]`);
 
-        if (mode === 'EXPERT') {
-            logger.info(`[SovereignLedger] [EXPERT] Integrity Verified. Recording balanced movement: ${params.amountInCents / 100}€ [${params.debitAccount} / ${params.creditAccount}]`);
-        } else {
-            logger.info(`[SovereignLedger] [SIMPLE] Pulse: ${params.description}`);
-        }
-
-        // Atomic Persistance via Nexus
         await Promise.all([
-            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debitEntry.id}`), debitEntry),
-            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${creditEntry.id}`), creditEntry)
+            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debit.id}`), debit),
+            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${credit.id}`), credit)
         ]);
     }
 
@@ -127,12 +111,47 @@ export class SovereignLedger {
     }
 
     /**
+     * Records a payroll expense (Payroll / Cash Out)
+     */
+    static async recordPayroll(staffId: string, amountInCents: number): Promise<void> {
+        await this.recordTransfer({
+            debitAccount: 'PAYROLL',
+            creditAccount: 'CASH',
+            amountInCents,
+            referenceId: staffId,
+            description: `Versement salaire personnel #${staffId}`
+        });
+    }
+
+    /**
      * Returns the Real-Time EBITDA estimation based on ledger balances.
+     * EBITDA = Revenue - (COGS + Labor)
      */
     static async getRealTimeEBITDA(): Promise<number> {
-        // In production, this would be an aggregation query in Firestore/Supabase.
-        // For Grade X demo, we simulate the aggregation.
-        // EBITDA = Revenue - (COGS + Labor)
-        return 450000; // Mocked 4500€ profit baseline
+        try {
+            const entries = await Nexus.adapter.query<LedgerEntry>(Nexus.getTenantPath('ledger/entries'));
+            
+            if (!entries || entries.length === 0) return 0;
+
+            const revenue = entries
+                .filter(e => e.accountName === 'SALES' && e.type === 'CREDIT')
+                .reduce((sum, e) => sum + e.amountInCents, 0);
+
+            const cogs = entries
+                .filter(e => e.accountName === 'PURCHASES' && e.type === 'DEBIT')
+                .reduce((sum, e) => sum + e.amountInCents, 0);
+
+            const labor = entries
+                .filter(e => (e.accountName === 'PAYROLL' || e.description.toLowerCase().includes('salaire')) && e.type === 'DEBIT')
+                .reduce((sum, e) => sum + e.amountInCents, 0);
+
+            const ebitda = revenue - (cogs + labor);
+            
+            logger.info(`[SovereignLedger] EBITDA Calculated: ${ebitda / 100}€ (Rev: ${revenue/100}€, COGS: ${cogs/100}€, Labor: ${labor/100}€)`);
+            return ebitda;
+        } catch (e) {
+            logger.error('[SovereignLedger] EBITDA Calculation Failed. Falling back to safe 0.');
+            return 0;
+        }
     }
 }

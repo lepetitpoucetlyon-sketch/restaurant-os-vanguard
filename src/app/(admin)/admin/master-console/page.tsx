@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -52,8 +51,8 @@ export default function MasterConsolePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
-  const selectedInstance = instances.find(i => i.id === selectedInstanceId);
-  const filteredInstances = instances.filter(i => 
+  const selectedInstance = (instances as any[]).find(i => i.id === selectedInstanceId);
+  const filteredInstances = (instances as any[]).filter(i => 
     i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     i.id.toLowerCase().includes(searchQuery.toLowerCase())
   );

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';

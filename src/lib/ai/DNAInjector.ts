@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { getTenantConfig } from "@/instances";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from '@/lib/logger';

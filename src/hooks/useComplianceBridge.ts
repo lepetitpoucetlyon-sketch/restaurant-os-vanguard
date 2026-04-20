@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useAtom } from 'jotai';
 import { qualityAlertsAtom } from '@/store/qualityAtoms';
 import { logger } from '@/lib/logger';

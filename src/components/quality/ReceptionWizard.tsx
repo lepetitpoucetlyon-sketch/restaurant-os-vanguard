@@ -1,11 +1,8 @@
-// @ts-nocheck
 "use client";
 
 import React, { useState } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { 
-  qualityActiveControlAtom, 
-  qualityControlStepAtom, 
   qualityCurrentSessionStatsSelector,
   qualitySelectedDeliveryIdAtom 
 } from '@/store/qualityAtoms';
@@ -13,7 +10,6 @@ import { HACCPGauge } from './HACCPGauge';
 import { DeliveryItemRow } from './DeliveryItemRow';
 import { Button } from "@/components/ui/button";
 import { 
-    LucideIcon,
     Truck as TruckIcon,
     ShieldCheck as ShieldIcon,
     Camera as CameraIcon,
@@ -29,6 +25,7 @@ import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuality } from '@/hooks/useQuality';
 import { useRouter } from 'next/navigation';
+import { QualityControl } from '@/domain/types/quality';
 
 /**
  * 🛰️ ReceptionWizard - Orchestrator
@@ -36,21 +33,23 @@ import { useRouter } from 'next/navigation';
  */
 export function ReceptionWizard() {
   const router = useRouter();
-  const { submitControl, step, setStep } = useQuality();
-  const [session, setSession] = useAtom(qualityActiveControlAtom);
+  const { submitControl, step, setStep, activeControl, setActiveControl } = useQuality();
   const stats = useAtomValue(qualityCurrentSessionStatsSelector);
   const selectedId = useAtomValue(qualitySelectedDeliveryIdAtom);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const session = activeControl;
+  const setSession = setActiveControl;
 
   const nextStep = async () => {
       if (step === 3) {
           handleFinalSubmit();
       } else {
-          setStep((s) => Math.min(s + 1, 3) as any);
+          setStep((s) => Math.min(s + 1, 3) as 1 | 2 | 3);
       }
   };
 
-  const prevStep = () => setStep((s) => Math.max(s - 1, 1) as any);
+  const prevStep = () => setStep((s) => Math.max(s - 1, 1) as 1 | 2 | 3);
 
   const handleFinalSubmit = async () => {
       setIsSubmitting(true);
@@ -64,11 +63,12 @@ export function ReceptionWizard() {
       }
   };
 
-  const updateConditions = (updates: any) => {
-    setSession((prev) => ({
-      ...prev,
-      delivery_conditions: { ...prev.delivery_conditions, ...updates }
-    } as any));
+  const updateConditions = (updates: Partial<QualityControl['delivery_conditions']>) => {
+    if (!session) return;
+    setSession({
+      ...session,
+      delivery_conditions: { ...session.delivery_conditions, ...updates }
+    } as QualityControl);
   };
 
   return (
@@ -129,7 +129,7 @@ export function ReceptionWizard() {
                             {['clean', 'acceptable', 'dirty'].map((status) => (
                                 <button
                                     key={status}
-                                    onClick={() => updateConditions({ vehicle_cleanliness: status })}
+                                    onClick={() => updateConditions({ vehicle_cleanliness: status as any })}
                                     className={cn(
                                         "flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all",
                                         session.delivery_conditions?.vehicle_cleanliness === status 

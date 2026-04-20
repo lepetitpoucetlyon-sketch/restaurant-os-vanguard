@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
@@ -30,9 +28,9 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
             permissionsPath,
             async (data) => {
                 if (data) {
-                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions(data.permissions ?? data));
+                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions(data.permissions ?? data, DEFAULT_ROLE_PERMISSIONS));
                 } else {
-                    const seededPermissions = AccessPolicyManager.sanitizeRolePermissions(DEFAULT_ROLE_PERMISSIONS);
+                    const seededPermissions = AccessPolicyManager.sanitizeRolePermissions(DEFAULT_ROLE_PERMISSIONS, DEFAULT_ROLE_PERMISSIONS);
                     setRolePermissions(seededPermissions);
                 }
                 if (isActive) setIsPermissionsLoaded(true);
@@ -58,7 +56,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
         const nextPermissions = AccessPolicyManager.sanitizeRolePermissions({
             ...rolePermissions,
             [role]: categories,
-        });
+        }, DEFAULT_ROLE_PERMISSIONS);
 
         const tenantId = currentUser?.tenantId || 'default';
         const permissionsPath = `tenants/${tenantId}/${ROLE_PERMISSIONS_COLLECTION}/${ROLE_PERMISSIONS_DOC_ID}`;
@@ -76,7 +74,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
     }, [currentUser, rolePermissions]);
 
     const canDo = useCallback((action: string) => {
-        return AccessPolicyManager.canDo(currentUser, action);
+        return AccessPolicyManager.canDo(currentUser, action, {});
     }, [currentUser]);
 
     const getAccessibleCategories = useCallback(() => {

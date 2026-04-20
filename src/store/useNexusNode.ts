@@ -1,9 +1,8 @@
-// @ts-nocheck
-// @ts-nocheck
 "use client";
 
 import { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
+import type { PrimitiveAtom } from 'jotai';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import type { NexusNode } from './nexusNodeFactory';
 
@@ -12,7 +11,7 @@ import type { NexusNode } from './nexusNodeFactory';
  * Hook standard pour consommer un node tout en gérant son cycle de vie RAM.
  * Automatiquement enregistré dans le GlobalRegistryService.
  */
-export function useNexusNode<T>(domain: { id: string, node: NexusNode<T> }) {
+export function useNexusNode<T>(domain: { id: string, node: PrimitiveAtom<NexusNode<T>> }) {
     const store = useStore();
 
     useEffect(() => {
@@ -25,5 +24,5 @@ export function useNexusNode<T>(domain: { id: string, node: NexusNode<T> }) {
         };
     }, [domain.id, store]);
 
-    return useAtomValue(domain.node) as NexusNode<T>;
+    return useAtomValue(domain.node);
 }

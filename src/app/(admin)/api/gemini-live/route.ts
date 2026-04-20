@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { AGENT_TOOLS } from '@/domain/agent/tools';
 

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 /**
  * 🏛️ FINANCE CORE - Grade VI
  * Moteur souverain de calculs fiscaux et financiers.
@@ -117,7 +115,7 @@ export class FinanceCore {
         };
 
         // 2. SEAL THE REPORT
-        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport);
+        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as any);
         
         return zReport;
     }
@@ -134,9 +132,9 @@ export class FinanceCore {
         const seal = await QuantumCrypto.generateQuantumSeal(serialized, secret);
         return {
             hash: seal.hash,
-            previousHash: seal.previousHash || '0',
-            sequence: seal.sequence || 1,
-            signedPayload: seal.signature,
+            previousHash: '0',
+            sequence: 1,
+            signedPayload: seal.latticeSignature,
             algorithm: 'SLH-DSA-SHAKE-256'
         };
     }

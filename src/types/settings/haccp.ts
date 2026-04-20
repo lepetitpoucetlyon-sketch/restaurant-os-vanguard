@@ -1,4 +1,3 @@
-// @ts-nocheck
 export type ControlFrequency = 'daily' | 'weekly' | 'monthly';
 export type ControlCategory = 'temperature' | 'cleaning' | 'reception' | 'storage';
 

@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { useCallback } from 'react';
 import { useFleet } from '@/context/FleetContext';
 import { useGeminiAgent } from './useGeminiAgent';

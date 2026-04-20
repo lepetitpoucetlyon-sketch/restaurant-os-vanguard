@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { StockItem } from '@/types/inventory.types';
 import { Reservation } from '@/types/reservations.types';

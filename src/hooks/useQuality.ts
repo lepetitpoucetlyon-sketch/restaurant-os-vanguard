@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { useAtom, useAtomValue } from 'jotai';
 import { 
     qualityControlsAtom, 
@@ -12,12 +10,11 @@ import {
     productQualityConfigsAtom,
     supplierScoresAtom
 } from '@/store/qualityAtoms';
-import { deliveriesAtom } from '@/store/operationalAtoms';
+import { deliveriesAtom, tenantIdAtom } from '@/store/operationalAtoms';
 import { QualityEngine } from '@/domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@/domain/types/quality';
 import { Delivery } from '@/domain/types/delivery';
 import { logger } from '@/lib/logger';
-import { useSettings } from './useSettings';
 import { IDService } from '@/lib/services/IDService';
 
 /**
@@ -26,18 +23,18 @@ import { IDService } from '@/lib/services/IDService';
  */
 export const useQuality = () => {
     const [controls, setControls] = useAtom(qualityControlsAtom);
-    const [loading] = useAtom(qualityLoadingAtom);
+    const loading = useAtomValue(qualityLoadingAtom);
     const [activeControl, setActiveControl] = useAtom(qualityActiveControlAtom);
-    const [step, setStep] = useAtom(qualityControlStepAtom);
-    const [selectedDeliveryId, setSelectedDeliveryId] = useAtom(qualitySelectedDeliveryIdAtom);
+    const [step, setStep] = useAtom(qualityControlStepAtom) as [any, any];
+    const [selectedDeliveryId, setSelectedDeliveryId] = useAtom(qualitySelectedDeliveryIdAtom) as [any, any];
     
-    const [alerts] = useAtom(qualityAlertsAtom);
-    const [todayStats] = useAtom(todayReceptionStatsAtom);
-    const [productConfigs] = useAtom(productQualityConfigsAtom);
-    const [supplierScores] = useAtom(supplierScoresAtom);
+    const alerts = useAtomValue(qualityAlertsAtom);
+    const todayStats = useAtomValue(todayReceptionStatsAtom);
+    const productConfigs = useAtomValue(productQualityConfigsAtom);
+    const supplierScores = useAtomValue(supplierScoresAtom);
     const deliveries = useAtomValue(deliveriesAtom) as unknown as Delivery[];
     
-    const { tenantId } = useSettings();
+    const tenantId = useAtomValue(tenantIdAtom);
 
     /**
      * Starts a new reception control session for a specific delivery
@@ -62,7 +59,7 @@ export const useQuality = () => {
                 id: IDService.generateId('qci'),
                 product_id: item.productId,
                 product_name: item.productName,
-                product_category: 'other', // Default, should be resolved by config lookup
+                product_category: 'other',
                 quantity_ordered: item.quantity,
                 quantity_delivered: item.quantity,
                 quantity_accepted: item.quantity,
@@ -100,14 +97,14 @@ export const useQuality = () => {
             }
         };
         
-        setActiveControl(newControl);
+        setActiveControl(newControl as QualityControl);
     };
 
     /**
      * Updates an item in the active control
      */
     const updateControlItem = (item: QualityControlItem) => {
-        const existingItems = activeControl.items || [];
+        const existingItems = activeControl?.items || [];
         const index = existingItems.findIndex(i => i.id === item.id);
         
         let newItems;
@@ -121,7 +118,7 @@ export const useQuality = () => {
         setActiveControl({
             ...activeControl,
             items: newItems
-        });
+        } as QualityControl);
     };
 
     /**
@@ -154,7 +151,7 @@ export const useQuality = () => {
                     overall_status: 'pass',
                     supplier_score_impact: 0
                 }
-            });
+            } as QualityControl);
             setSelectedDeliveryId(null);
             setStep(1);
             

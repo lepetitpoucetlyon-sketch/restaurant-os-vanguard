@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { Layout } from 'lucide-react';
 import { DocCategory } from '@/types';
 

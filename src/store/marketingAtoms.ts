@@ -1,9 +1,8 @@
-// @ts-nocheck
-import { atom } from 'jotai';
+import { atom, type PrimitiveAtom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
 import { MarketingCampaign, CustomerFeedback } from '@/types/marketing.types';
 import { Quote } from '@/types/quotes.types';
-import { SEOConfig } from '@/types/seo.types';
+import { SEOProfile } from '@/types/seo.types';
 import { Customer } from '@/types/reservations.types';
 
 // --- 📢 INDUSTRIAL TYPES (V3 - Agnostic) ---
@@ -28,8 +27,10 @@ export interface ScheduledPost {
 
 // --- 📢 MARKETING & CRM DOMAIN (SEO, Campagnes, Réseaux sociaux, Clients) ---
 
-const _seoProfile = atom<SEOConfig | null>(null);
-export const seoProfileAtom = _seoProfile;
+
+export const seoProfileAtom: PrimitiveAtom<SEOProfile | null> = atom<SEOProfile | null>(null);
+
+
 
 const _marketingCampaigns = createProxyDomain<MarketingCampaign>('marketingCampaigns');
 export const marketingCampaignsNodeAtom = _marketingCampaigns.node;
