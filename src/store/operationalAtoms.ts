@@ -1,5 +1,7 @@
 // 🔑 FOUNDATION TOOLS (Grade VI)
 export { createNexusNode, updateNexusNode, createProxyDomain, useNexusNode } from './nexusNodeFactory';
+export { nexusPulseAtom, emitPulseAtom } from './pulseAtoms';
+export type { NexusPulse } from './pulseAtoms';
 
 // 🔑 AUTH & IDENTITY
 export {

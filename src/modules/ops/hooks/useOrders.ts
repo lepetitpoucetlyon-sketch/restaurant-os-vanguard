@@ -4,7 +4,7 @@ import { useAtomValue } from "jotai";
 import { useCallback } from "react";
 import { ordersNodeAtom, pendingModificationsAtom } from "@/store/operationalAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
-import { useNexusMutation } from "./useNexusMutation";
+import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
 
 /**
  * 📦 useOrders - Grade VI Atomic Bridge

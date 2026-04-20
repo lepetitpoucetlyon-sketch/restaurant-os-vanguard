@@ -11,38 +11,35 @@ export * from './auth.types';
 export * from '@/shared/nexus-contract';
 
 // Tables & Floor Plan
-export * from './tables.types';
+export * from '@/modules/ops/tables.types';
 
 // Orders
-export * from './orders.types';
-import { Order } from './orders.types';
+export * from '@/modules/ops/types';
 
 // Reservations & CRM
-export * from './reservations.types';
-export type { Customer, CRMGroup } from './reservations.types';
+export * from '@/modules/ops/reservations.types';
+export type { Customer, CRMGroup } from '@/modules/ops/reservations.types';
 
 // Inventory & Stock Management
-export * from './inventory.types';
+export * from '@/modules/inventory/types';
 
 // Accounting & Finance
-export * from './accounting.types';
-export type { JournalEntry, JournalLine } from './accounting.types';
+export * from '@/modules/finance/types';
 
 // Staff & HR (Leaves, Compliance)
-export * from './staff.types';
+export * from '@/modules/hr/types';
 
 // HACCP & Quality Control
-export * from './haccp.types';
-export type { MaintenanceLog, Delivery } from './haccp.types';
+export * from '@/modules/haccp/types';
 
 // Common / Shared Types (Products, Menu, Notifications, etc.)
 export * from './common.types';
 
 // Quotes (Devis)
-export * from './quotes.types';
+export * from '@/modules/marketing/quotes.types';
 
 // Groups & Events
-export * from './groups.types';
+export * from '@/modules/ops/groups.types';
 
 // Recruitment & HR Pipeline
 export * from './recruitment';
@@ -51,15 +48,13 @@ export * from './recruitment';
 export * from './oracle.types';
 
 // SEO & Referencing
-export * from './seo.types';
-export type { SEOProfile } from './seo.types';
+export * from '@/modules/marketing/seo.types';
 
 // Permissions & Roles
 export * from './permissions.types';
 
 // Marketing & Reputation
-export * from './marketing.types';
-export type { MarketingCampaign, SocialAccount } from './marketing.types';
+export * from '@/modules/marketing/types';
 
 // Doc Types
 export * from '@/lib/docs/types';

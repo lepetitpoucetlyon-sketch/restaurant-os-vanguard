@@ -23,6 +23,8 @@ import { cn } from "@/lib/ui.foundations";
 import { useUI } from "@/context/UIContext";
 import { useAccounting } from "@/engines/fiscal/NexusFiscalProvider";
 import { formatCurrency } from "@/lib/formatters";
+import { useAtomValue } from "jotai";
+import { performanceModeAtom } from "@/store/operationalAtoms";
 
 import { GeneralLedgerView } from "@/components/accounting/views/GeneralLedgerView";
 import { JournalEntriesView } from "@/components/accounting/views/JournalEntriesView";
@@ -39,6 +41,7 @@ export default function AccountingConsolePage() {
     const { sidebarOpen } = useUI();
     const { journalEntries, metrics, legacyMetrics } = useAccounting();
     const { showToast } = useToast();
+    const performanceMode = useAtomValue(performanceModeAtom);
     const [activeTab, setActiveTab] = useState<'pilotage' | 'flux' | 'pertes' | 'registres' | 'syntheses' | 'audit'>('pilotage');
     const [selectedYear, setSelectedYear] = useState(2025);
     const [showReconciliationHub, setShowReconciliationHub] = useState(false);
@@ -163,14 +166,14 @@ export default function AccountingConsolePage() {
             {/* CONTENT AREA */}
             <div className="flex-1 overflow-auto elegant-scrollbar p-10 pt-6">
                 <div className="max-w-[1600px] mx-auto">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode={performanceMode ? undefined : "wait"}>
                         {activeTab === 'pilotage' && (
                             <motion.div
                                 key={`${activeTab}-${viewMode}`}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.3 }}
+                                initial={performanceMode ? false : { opacity: 0, y: 10 }}
+                                animate={performanceMode ? false : { opacity: 1, y: 0 }}
+                                exit={performanceMode ? false : { opacity: 0, y: -10 }}
+                                transition={performanceMode ? { duration: 0 } : { duration: 0.3 }}
                             >
                                 {viewMode === 'simple' ? (
                                     <SimpleDashboardView />
@@ -219,7 +222,7 @@ export default function AccountingConsolePage() {
                                                 <div className="relative w-40 h-40 mb-8 flex items-center justify-center">
                                                     <svg className="w-full h-full -rotate-90">
                                                         <circle cx="80" cy="80" r="70" className="stroke-border/20" strokeWidth="8" fill="none" />
-                                                        <circle cx="80" cy="80" r="70" className={cn("transition-all duration-1000", metrics.netProfitInCents >= 0 ? "stroke-emerald-400" : "stroke-error")} strokeWidth="8" fill="none" strokeDasharray="440" strokeDashoffset={440 - (Math.min(Math.max((metrics.netProfitInCents / (metrics.totalRevenueInCents || 1)) * 100, 0), 100) * 4.4)} strokeLinecap="round" />
+                                                        <circle cx="80" cy="80" r="70" className={cn(performanceMode ? "" : "transition-all duration-1000", metrics.netProfitInCents >= 0 ? "stroke-emerald-400" : "stroke-error")} strokeWidth="8" fill="none" strokeDasharray="440" strokeDashoffset={440 - (Math.min(Math.max((metrics.netProfitInCents / (metrics.totalRevenueInCents || 1)) * 100, 0), 100) * 4.4)} strokeLinecap="round" />
                                                     </svg>
                                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                                                         <span className="text-4xl font-serif font-bold text-text-primary">

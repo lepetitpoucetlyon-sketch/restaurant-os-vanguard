@@ -1,13 +1,5 @@
-import { getDefaultStore } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { logger } from '@/lib/logger';
-import { db } from "@/lib/offline/offline-store";
-import { 
-    Order,
-    Table,
-    Reservation,
-    GroupEvent
-} from '@/types';
+import { Order, Table, Reservation, GroupEvent } from '@/types';
 import { 
     ordersNodeAtom, 
     tablesNodeAtom, 
@@ -15,18 +7,27 @@ import {
     groupsNodeAtom, 
     updateNexusNode 
 } from '@/store/operationalAtoms';
+import { logger } from '@/lib/logger';
+import { db } from "@/lib/offline/offline-store";
+import { getDefaultStore } from 'jotai';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;
 
-export const SyncOrders = {
+/**
+ * 🍱 Ops Sovereign Sync Service
+ * Handles real-time synchronization for Tables, Orders, and Reservations.
+ * Critical path for floor and kitchen operations.
+ */
+export const OpsSyncService = {
   private_listeners: {} as Record<string, () => void>,
 
   async init(tenantId: string, store: JotaiStore) {
     const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
-    logger.debug(`[Sync.Orders] Initializing for ${tenantId}...`);
-
+    
+    // Hydrate for zero-latency start in POS/KDS
     await this.hydrate(store);
 
+    // 1. ORDERS SYNC
     this.private_listeners.orders = Nexus.adapter.onSnapshot(
       path('orders'),
       async (data: Order[]) => {
@@ -36,12 +37,13 @@ export const SyncOrders = {
       {
         orderBy: { field: 'updatedAt', direction: 'desc' },
         onError: (error: Error) => {
-          logger.error('[Sync.Orders] Orders Sync Failed', error);
+          logger.error('[OpsSync] Orders Sync Failed', error);
           store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
 
+    // 2. TABLES SYNC
     this.private_listeners.tables = Nexus.adapter.onSnapshot(
       path('tables'),
       (data: Table[]) => {
@@ -49,12 +51,13 @@ export const SyncOrders = {
       },
       {
         onError: (error: Error) => {
-          logger.error('[Sync.Orders] Tables Sync Failed', error);
+          logger.error('[OpsSync] Tables Sync Failed', error);
           store.set(tablesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
 
+    // 3. RESERVATIONS SYNC
     this.private_listeners.reservations = Nexus.adapter.onSnapshot(
       path('reservations'),
       (data: Reservation[]) => {
@@ -62,12 +65,13 @@ export const SyncOrders = {
       },
       {
         onError: (error: Error) => {
-          logger.error('[Sync.Orders] Reservations Sync Failed', error);
+          logger.error('[OpsSync] Reservations Sync Failed', error);
           store.set(reservationsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
 
+    // 4. GROUPS SYNC
     this.private_listeners.groups = Nexus.adapter.onSnapshot(
       path('groups'),
       (data: GroupEvent[]) => {
@@ -75,7 +79,7 @@ export const SyncOrders = {
       },
       {
         onError: (error: Error) => {
-          logger.error('[Sync.Orders] Groups Sync Failed', error);
+          logger.error('[OpsSync] Groups Sync Failed', error);
           store.set(groupsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
@@ -89,15 +93,12 @@ export const SyncOrders = {
         store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: orders as Order[], loading: false }));
       }
     } catch (error) {
-      logger.error('[Sync.Orders] Local Hydration Failed', error);
+      logger.error('[OpsSync] Local Hydration Failed', error);
     }
   },
 
   stop() {
-    Object.values(this.private_listeners).forEach((unsub) => {
-      if (typeof unsub === 'function') unsub();
-    });
+    Object.values(this.private_listeners).forEach((unsub) => unsub());
     this.private_listeners = {};
   }
-
 };

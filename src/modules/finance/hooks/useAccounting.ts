@@ -12,9 +12,9 @@ import {
 import { 
     AccountingMetrics, 
     FinancialMetrics 
-} from '@/types/accounting.types';
+} from '../types/domain';
 import { useCallback, useMemo } from 'react';
-import { useNexusMutation } from "./useNexusMutation";
+import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
 
 /**
  * 📊 useAccounting - Grade VI Atomic Bridge

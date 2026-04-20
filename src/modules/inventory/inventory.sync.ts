@@ -1,30 +1,32 @@
-import { getDefaultStore } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { logger } from '@/lib/logger';
-import { db } from "@/lib/offline/offline-store";
-import { 
-    StockItem,
-    Category,
-    Recipe
-} from '@/types';
+import { StockItem, Category, Recipe } from '@/types';
 import { 
     stockItemsNodeAtom, 
     categoriesNodeAtom, 
     recipesNodeAtom, 
     updateNexusNode 
 } from '@/store/operationalAtoms';
+import { logger } from '@/lib/logger';
+import { db } from "@/lib/offline/offline-store";
+import { getDefaultStore } from 'jotai';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;
 
-export const SyncStocks = {
+/**
+ * 📦 Inventory Sovereign Sync Service
+ * Handles real-time synchronization for Stock Items, Categories, and Recipes.
+ * Ensures the warehouse and cost-control systems are reactive.
+ */
+export const InventorySyncService = {
   private_listeners: {} as Record<string, () => void>,
 
   async init(tenantId: string, store: JotaiStore) {
     const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
-    logger.debug(`[Sync.Stocks] Initializing for ${tenantId}...`);
-
+    
+    // Hydrate for zero-latency start in warehouse views
     await this.hydrate(store);
 
+    // 1. STOCK ITEMS SYNC
     this.private_listeners.stock = Nexus.adapter.onSnapshot(
       path('stockItems'),
       async (data: StockItem[]) => {
@@ -33,12 +35,13 @@ export const SyncStocks = {
       },
       {
         onError: (error: Error) => {
-          logger.error('[Sync.Stocks] Stock Sync Failed', error);
+          logger.error('[InventorySync] Stock Sync Failed', error);
           store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
 
+    // 2. CATEGORIES SYNC
     this.private_listeners.categories = Nexus.adapter.onSnapshot(
       path('categories'),
       (data: Category[]) => {
@@ -46,12 +49,13 @@ export const SyncStocks = {
       },
       {
         onError: (error: Error) => {
-          logger.error('[Sync.Stocks] Categories Sync Failed', error);
+          logger.error('[InventorySync] Categories Sync Failed', error);
           store.set(categoriesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
 
+    // 3. RECIPES SYNC
     this.private_listeners.recipes = Nexus.adapter.onSnapshot(
       path('recipes'),
       (data: Recipe[]) => {
@@ -59,7 +63,7 @@ export const SyncStocks = {
       },
       {
         onError: (error: Error) => {
-          logger.error('[Sync.Stocks] Recipes Sync Failed', error);
+          logger.error('[InventorySync] Recipes Sync Failed', error);
           store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
@@ -73,15 +77,12 @@ export const SyncStocks = {
         store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { data: stock as StockItem[], loading: false }));
       }
     } catch (error) {
-      logger.error('[Sync.Stocks] Local Hydration Failed', error);
+      logger.error('[InventorySync] Local Hydration Failed', error);
     }
   },
 
   stop() {
-    Object.values(this.private_listeners).forEach((unsub) => {
-      if (typeof unsub === 'function') unsub();
-    });
+    Object.values(this.private_listeners).forEach((unsub) => unsub());
     this.private_listeners = {};
   }
-
 };

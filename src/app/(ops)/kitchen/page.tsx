@@ -33,6 +33,8 @@ import { SuppliersTab } from "@/components/kitchen/tabs/SuppliersTab";
 import { AllergensTab } from "@/components/kitchen/tabs/AllergensTab";
 import { CookingTimesTab } from "@/components/kitchen/tabs/CookingTimesTab";
 import { IngredientsTab } from "@/components/kitchen/tabs/IngredientsTab";
+import { useAtomValue } from "jotai";
+import { performanceModeAtom } from "@/store/operationalAtoms";
 
 type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'waste' | 'suppliers' | 'allergens' | 'cooking-times';
 
@@ -45,6 +47,7 @@ export default function KitchenPage() {
     const management = useManagement();
     const inventory = useInventory();
     const { openDocumentation } = useUI();
+    const performanceMode = useAtomValue(performanceModeAtom);
 
     // Mapping legacy destructuring to NexusNode
     const { 
@@ -78,7 +81,7 @@ export default function KitchenPage() {
                     x: isSideNavOpen ? 8 : 4,
                     rotate: isSideNavOpen ? 0 : 180,
                 }}
-                transition={{
+                transition={performanceMode ? { duration: 0 } : {
                     type: "spring",
                     stiffness: 400,
                     damping: 40,
@@ -94,11 +97,14 @@ export default function KitchenPage() {
             <AnimatePresence initial={false}>
                 {isSideNavOpen && (
                     <motion.div
-                        initial={{ opacity: 0, x: -320 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -320 }}
-                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                        className="hidden md:flex w-[320px] bg-bg-secondary border-r border-border flex-col p-8 elegant-scrollbar overflow-hidden shrink-0"
+                        initial={performanceMode ? false : { opacity: 0, x: -320 }}
+                        animate={performanceMode ? false : { opacity: 1, x: 0 }}
+                        exit={performanceMode ? false : { opacity: 0, x: -320 }}
+                        transition={performanceMode ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        className={cn(
+                            "hidden md:flex w-[320px] bg-bg-secondary border-r border-border flex-col p-8 elegant-scrollbar overflow-hidden shrink-0",
+                            performanceMode ? "" : "backdrop-blur-xl"
+                        )}
                     >
                         <div className="mb-10 min-w-[260px]">
                             <div className="flex items-center gap-4">
@@ -172,9 +178,9 @@ export default function KitchenPage() {
                                         </div>
                                         {isActive && (
                                             <motion.div
-                                                layoutId="activeKitchenTab"
+                                                layoutId={performanceMode ? undefined : "activeKitchenTab"}
                                                 className="absolute inset-0 bg-bg-tertiary dark:bg-bg-tertiary/50 border border-border/50 rounded-xl shadow-sm z-0"
-                                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                                transition={performanceMode ? { duration: 0 } : { type: "spring", bounce: 0.2, duration: 0.6 }}
                                             />
                                         )}
                                     </motion.button>

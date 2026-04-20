@@ -14,7 +14,7 @@
     "fleet:list": "node scripts/fleet.js list",
     "fleet:switch": "node scripts/fleet.js switch",
     "release:check": "npx eslint . --quiet && npm run instance:preflight:sample && npx vitest run",
-    "dev": "next dev --webpack",
+    "dev": "NODE_OPTIONS='--max-old-space-size=1024' next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

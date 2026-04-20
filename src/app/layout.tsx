@@ -51,6 +51,7 @@ import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
 import { SovereignLockout } from "@/components/layout/SovereignLockout";
 import { ThemeEngine } from "@/components/layout/ThemeEngine";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
+import { NexusPulseOrchestrator } from "@/engines/NexusPulseOrchestrator";
 
 export default function RootLayout({
   children,
@@ -73,6 +74,7 @@ export default function RootLayout({
                       <NexusFleetProvider>
                         <ThemeEngine />
                         <PerformanceEngine />
+                        <NexusPulseOrchestrator />
                         <SovereignLockout />
                         <AuthGate>
                           <SaaSBillingGate>

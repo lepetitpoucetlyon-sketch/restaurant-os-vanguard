@@ -1,0 +1,13 @@
+.next/
+node_modules/
+dist/
+build/
+.kilo/
+*.log
+*.map
+public/images/
+public/fonts/
+tests/
+scripts/
+.git/
+.vercel/

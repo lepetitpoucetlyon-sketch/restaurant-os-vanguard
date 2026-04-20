@@ -9,11 +9,14 @@ import {
   updateNexusNode
 } from '@/store/operationalAtoms';
 
-// Import Atomic sub-services
-import { SyncOrders } from './sync/Sync.Orders';
-import { SyncStocks } from './sync/Sync.Stocks';
-import { SyncCompliance } from './sync/Sync.Compliance';
-import { SyncStaff } from './sync/Sync.Staff';
+// Import Sovereign Modular sub-services
+import { OpsSyncService as SyncOrders } from '@/modules/ops/ops.sync';
+import { InventorySyncService as SyncStocks } from '@/modules/inventory/inventory.sync';
+import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
+import { HACCPSyncService as SyncHACCP } from '@/modules/haccp/haccp.sync';
+import { MarketingSyncService as SyncMarketing } from '@/modules/marketing/marketing.sync';
+import { HRSyncService as SyncStaff } from '@/modules/hr/hr.sync';
+
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';
 import { TimeSync } from './TimeSync';
@@ -90,7 +93,9 @@ export const NexusSyncService = {
                 TimeSync.init(),
                 SyncOrders.init(tenantId, store),
                 SyncStocks.init(tenantId, store),
-                SyncCompliance.init(tenantId, store),
+                SyncFinance.init(tenantId, store),
+                SyncHACCP.init(tenantId, store),
+                SyncMarketing.init(tenantId, store),
                 SyncStaff.init(tenantId, store)
             ]);
             
@@ -122,8 +127,11 @@ export const NexusSyncService = {
     TimeSync.stop();
     SyncOrders.stop();
     SyncStocks.stop();
-    SyncCompliance.stop();
+    SyncFinance.stop();
+    SyncHACCP.stop();
+    SyncMarketing.stop();
     SyncStaff.stop();
+    
     NexusBridge.stop();
     TelemetryService.stop();
 

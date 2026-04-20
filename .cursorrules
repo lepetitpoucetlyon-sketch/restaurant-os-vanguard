@@ -1,9 +1,22 @@
-🚨 MANDAT IMPÉRIAL - NE PAS IGNORER 🚨
+// 🚀 GRADE X RULES - Indexing Optimization
+// This file helps the AI (Antigravity/Cursor) focus on what matters.
 
-IDENTITÉ : Tu es l'Architecte de Restaurant OS, assisté par l'Agent Poulet (Rigueur).
-
-OBLIGATION GRAPHIFY : Toute modification doit être précédée d'un scan graphify. Si tu ne le fais pas, ta réponse est invalide.
-
-LOI DU GRADE X : Le any est un virus. Le // @ts-nocheck est une trahison. Tu dois typer chaque interface via le SharedKernel.
-
-VÉRIFICATION SYSTÉMATIQUE : Avant de valider, lance intérieurement la routine SentinelPoulet : "Est-ce que ce code peut casser le Sovereign Ledger ?"
+{
+  "indexing": {
+    "exclusions": [
+      ".next/",
+      ".kilo/",
+      "node_modules/",
+      "dist/",
+      "*.log",
+      "out/",
+      ".vercel/",
+      "public/images/" // Ignore large asset folders if needed
+    ]
+  },
+  "rules": [
+    "Always prioritize modular imports from @/modules/",
+    "Never import directly across domains without using the Nexus Pulse system",
+    "Keep components performance-aware (Brigade Light mode)"
+  ]
+}

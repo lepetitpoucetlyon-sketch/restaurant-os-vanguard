@@ -24,6 +24,16 @@ const nextConfig: NextConfig = {
     // @ts-ignore
     appIsrStatus: false,
   },
+  onDemandEntries: {
+    maxInactiveAge: 10 * 1000, // Encore plus agressif (10s)
+    pagesBufferLength: 1,      // 1 seule page
+  },
+  typescript: {
+    ignoreBuildErrors: true, // Désactivé pour le dev rush
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

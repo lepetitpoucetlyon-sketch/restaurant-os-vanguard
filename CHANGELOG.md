@@ -1,5 +1,12 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.4.0] - 2026-04-21 - LA CONFÉDÉRATION SOUVERAINE 🏛️
+### 🧩 MODULARISATION (HÉGÉMONIES SOVERAINES)
+- **Migration Confédérée** : Liquidation totale de `src/components`, `src/hooks`, `src/lib` et `src/types` au profit de modules isolés : `Finance`, `HR`, `HACCP`, `Inventory`, `Marketing`, `Ops`.
+- **Souveraineté des Modules** : Chaque domaine possède désormais son propre cycle de vie, ses composants et sa logique de mutation (NexusMutation).
+- **Nexus Pulse Orchestrator** : Déploiement du moteur de réactivité centralisé pour la synchronisation inter-modules.
+- **Gouvernance & Manifeste** : Publication de `NEXUS_GOVERNANCE.md` et `NEXUS_MANIFEST.md` définissant les lois de l'Empire Modularisé.
+
 ## [1.3.1] - 2026-04-20 - LA SUTURE SOUVERAINE 🧵
 ### 💉 ARCHITECTURE (FORGE DE SOUVERAINETÉ)
 - **Suture des Hooks Primaires** : `useHACCP`, `useKitchen`, `useOrders`, `useReservations`, `useHumanResources`, and `useAccounting` sont désormais scellés via `useNexusMutation`.

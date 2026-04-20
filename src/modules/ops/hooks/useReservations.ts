@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useAtomValue } from "jotai";
 import { reservationsNodeAtom } from "@/store/operationalAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
-import { useNexusMutation } from "./useNexusMutation";
+import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
 
 /**
  * 📅 useReservations - Grade VI Atomic Bridge

@@ -28,7 +28,7 @@ export interface ScheduledPost {
 // --- 📢 MARKETING & CRM DOMAIN (SEO, Campagnes, Réseaux sociaux, Clients) ---
 
 
-export const seoProfileAtom: any = atom<any>(null);
+export const seoProfileAtom = atom<SEOProfile | null>(null);
 
 
 

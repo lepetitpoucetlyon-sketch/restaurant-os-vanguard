@@ -13,7 +13,7 @@ import {
     receptionLogsNodeAtom,
     maintenanceLogsNodeAtom
 } from '@/store/operationalAtoms';
-import { useNexusMutation } from '@/hooks/useNexusMutation';
+import { useNexusMutation } from '@/shared/hooks/useNexusMutation';
 import { 
     HygieneLog, 
     ReceptionLog, 

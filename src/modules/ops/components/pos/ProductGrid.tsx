@@ -7,12 +7,14 @@ import { Plus, Search } from "lucide-react";
 import { Product, Option } from "@/types";
 import { cn } from "@/lib/ui.foundations";
 import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from "@/store/posAtoms";
+import { performanceModeAtom } from "@/store/operationalAtoms";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useLanguage } from "@/context/LanguageContext";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { AlertTriangle, Clock } from "lucide-react";
 import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
+import { useAtomValue } from "jotai";
 
 // ==========================================
 // PERFORMANCE-OPTIMIZED SUB-COMPONENTS
@@ -28,29 +30,32 @@ interface ProductCardProps {
     t: (key: string) => string;
     onClick: (product: Product) => void;
     multiplier: number;
+    performanceMode: boolean;
 }
 
 /**
  * Memoized Product Card to prevent unnecessary re-renders of the entire grid.
  * Uses layout="position" for efficient GPU-accelerated transitions during filtering.
  */
-const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, disabledReason, t, onClick, multiplier }: ProductCardProps) => {
+const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, disabledReason, t, onClick, multiplier, performanceMode }: ProductCardProps) => {
     const finalPrice = (product.priceInCents * multiplier) / 100;
 
     return (
     <motion.div
-        layout="position"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ 
+        layout={performanceMode ? false : "position"}
+        initial={performanceMode ? false : { opacity: 0, y: 30 }}
+        animate={performanceMode ? false : { opacity: 1, y: 0 }}
+        transition={performanceMode ? { duration: 0 } : { 
             delay: idx * 0.02, 
             duration: 0.8, 
             ease: [0.16, 1, 0.3, 1] 
         }}
-        exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.4 } }}
+        exit={performanceMode ? { opacity: 0 } : { opacity: 0, scale: 0.9, transition: { duration: 0.4 } }}
         onClick={() => !isDisabled && onClick(product)}
         className={cn(
-            "group rounded-[42px] border border-border/40 overflow-hidden transition-all duration-700 backdrop-blur-xl relative flex flex-col h-full",
+            "group rounded-[42px] border border-border/40 overflow-hidden transition-all relative flex flex-col h-full",
+            performanceMode ? "duration-0" : "duration-700",
+            !performanceMode && "backdrop-blur-xl",
             isDisabled 
                 ? "bg-black/5 grayscale cursor-not-allowed border-red-500/20 shadow-none opacity-60" 
                 : "bg-white dark:bg-white/[0.02] cursor-pointer hover:border-accent-gold/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
@@ -165,6 +170,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
     const { t } = useLanguage();
     const inventory = useInventory();
     const { priceMultiplier } = useNexusFleet();
+    const performanceMode = useAtomValue(performanceModeAtom);
     const stockItems = inventory.data || [];
 
     // Read show_images setting from context (defaults to true)
@@ -213,7 +219,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
 
     const handleProductClick = useCallback((product: Product) => {
         if (product.optionGroups && product.optionGroups.length > 0) {
-            (setSelectedProduct as any)(product);
+            setSelectedProduct(product);
             setIsDialogOpen(true);
         } else {
             onAddToCart(product, 1, {});
@@ -260,6 +266,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                                     t={t}
                                     onClick={handleProductClick}
                                     multiplier={priceMultiplier}
+                                    performanceMode={performanceMode}
                                 />
                             ))
                         ) : (
