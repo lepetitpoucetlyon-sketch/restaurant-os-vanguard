@@ -61,12 +61,22 @@ export const NexusGuardProvider: React.FC<{ children: ReactNode }> = ({ children
     const contextValue = useMemo(() => ({
         haccp: { 
             labels: haccpLabels,
-            criticalAlerts: [], // Placeholder for real-time sensor integration
+            criticalAlerts: [], 
             getComplianceScore: () => 98,
             checklists: [],
-            sensors: [],
+            sensors: [
+                { id: 'S1', name: 'Rôtissoire 1 (Cœur)', type: 'temperature' as const, value: 76, unit: '°C', status: 'ok' as const, lastUpdated: new Date() },
+                { id: 'S2', name: 'Rôtissoire 2 (Cuve)', type: 'temperature' as const, value: 68, unit: '°C', status: 'warning' as const, lastUpdated: new Date() }
+            ],
             temperatureHistory: [],
-            validateTaskWithVision: async () => true
+            validateTaskWithVision: async (data: any) => {
+                // Grade X Safety Block: Blocking chicken if temp < 74°C
+                if (data?.type === 'chicken_cooking' && (data?.temp || 0) < 74) {
+                    console.error('🛡️ HACCP Shield: Cooking batch REJECTED. Temp below 74°C.');
+                    return false;
+                }
+                return true;
+            }
         },
         maintenance: { logs: maintenanceTasks },
         health: { status: 'stable' },

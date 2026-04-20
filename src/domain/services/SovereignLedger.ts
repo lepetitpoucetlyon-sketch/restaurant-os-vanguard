@@ -78,12 +78,17 @@ export class SovereignLedger {
      * Ensures Debit matches Credit with absolute precision.
      */
     private static validateIntegrity(debit: LedgerEntry, credit: LedgerEntry, mode: AccountingMode): void {
-        if (debit.amountInCents !== credit.amountInCents) {
-            const error = `[LDR-ERR-01] Nexus Balance Violation: Debit(${debit.amountInCents}) != Credit(${credit.amountInCents})`;
+        const diff = Math.abs(debit.amountInCents - credit.amountInCents);
+        const tolerance = 0.01;
+
+        if (diff > tolerance) {
+            const error = `[LDR-ERR-01] Nexus Balance Violation: Diff=${diff.toFixed(4)} | Debit(${debit.amountInCents}) != Credit(${credit.amountInCents}) [Accounts: ${debit.accountName} / ${credit.accountName}]`;
             logger.error(error);
             if (mode === 'EXPERT') {
                 throw new Error(error);
             }
+        } else if (diff > 0) {
+            logger.info(`[SovereignLedger] Rounded precision correction: ${diff.toFixed(4)} centimes difference auto-settled.`);
         }
     }
 

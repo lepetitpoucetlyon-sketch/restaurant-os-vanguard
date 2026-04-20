@@ -1,5 +1,3 @@
-// @ts-nocheck
-// @ts-nocheck
 import { z } from 'zod';
 
 /**
@@ -52,7 +50,7 @@ export const EmpireInstanceSchema = z.object({
   }),
 
   // Feature Flags (SaaS Control)
-  featureFlags: z.record(z.boolean()).default({}),
+  featureFlags: z.record(z.string(), z.boolean()).default({}),
 
   // Distributed Project Config (Master Registry)
   firebaseConfig: z.object({
@@ -73,8 +71,8 @@ export const EmpireInstanceSchema = z.object({
     // Privacy Shield: Support-on-Demand Access
     supportAccessGranted: z.boolean().default(false),
     supportAccessUntil: z.string().datetime().optional()
-  })
-});
+  }).passthrough()
+}).passthrough();
 
 export type EmpireInstance = z.infer<typeof EmpireInstanceSchema>;
 
@@ -88,7 +86,7 @@ export const ProvisioningDNA = z.object({
   initialPrimaryColor: z.string().default('#6366f1'),
   tier: ServiceTierSchema.default('standard'),
   copyBaseTemplates: z.boolean().default(true)
-});
+}).passthrough();
 
 export type ProvisioningDNA = z.infer<typeof ProvisioningDNA>;
 

@@ -245,3 +245,35 @@ export interface StaffPerformance {
     upsellRate: number; // % of orders with modifiers/drinks
     kudos: number;
 }
+
+// ============================================
+// GRADE X BLUEPRINTS
+// ============================================
+
+/** 
+ * 📄 PayrollCalculation - Blueprint Grade X 
+ * TODO: À lier au module de comptabilité sociale
+ */
+export interface PayrollCalculation {
+    id: string;
+    staffId: string;
+    period: { start: string; end: string };
+    grossAmountCents: number;
+    netAmountCents: number;
+    taxAmountCents: number;
+    status: 'draft' | 'validated' | 'paid';
+    metadata?: Record<string, unknown>;
+}
+
+/** 
+ * 📊 ShiftStats - Blueprint Grade X 
+ * TODO: À alimenter via le moteur d'analyse de performance
+ */
+export interface ShiftStats {
+    shiftId: string;
+    durationMinutes: number;
+    salesGeneratedCents: number;
+    laborCostCents: number;
+    efficiencyRatio: number; // ex: 0.85 pour 85%
+    coversServed: number;
+}

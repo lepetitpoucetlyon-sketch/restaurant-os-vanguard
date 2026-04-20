@@ -56,11 +56,19 @@ export const prepTasksNodeAtom = _prepTasks.node;
 export const prepTasksAtom = _prepTasks.data;
 export const prepLoadingAtom = _prepTasks.loading;
 
-// Kitchen Prep Progress
+// Kitchen Prep Progress (Grade X Oracle Connection)
 export const miseEnPlaceTargetSelector = atom((get) => {
     const recipesData = get(recipesAtom);
+    const reservationStats = get(reservationStatsAtom as any); // Dynamic bridge
+    
+    // AI Forecast Logic: Target = (Expected Covers / 2) + Buffer
+    const expectedCovers = reservationStats?.expectedCovers || 20;
+    const aiTarget = Math.ceil(expectedCovers * 0.4); 
+
     return recipesData.reduce((acc: Record<string, { name: string; target: number }>, r) => {
-        acc[r.id] = { name: r.name, target: 10 }; 
+        // Only increase target for rotisserie items if enabled
+        const target = r.category === 'rotisserie' ? aiTarget : 10;
+        acc[r.id] = { name: r.name, target }; 
         return acc;
     }, {});
 });

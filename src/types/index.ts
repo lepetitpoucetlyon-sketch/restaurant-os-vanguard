@@ -15,6 +15,7 @@ export * from './tables.types';
 
 // Orders
 export * from './orders.types';
+import { Order } from './orders.types';
 
 // Reservations & CRM
 export * from './reservations.types';
@@ -72,6 +73,5 @@ export interface Product {
     isAvailable: boolean;
 }
 
-export type LegacyOrder = unknown;
-export type PayrollCalculation = unknown;
-export type ShiftStats = unknown;
+export type LegacyOrder = Order;
+// Grade X Blueprints for Payroll & Shifts are now defined in staff.types.ts and exported via barrel.

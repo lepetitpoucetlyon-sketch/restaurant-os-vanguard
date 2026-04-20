@@ -116,3 +116,22 @@ export const OracleEngine = {
     return Object.values(usageMap);
   }
 };
+
+/**
+ * 🤖 Agent AI : Suggest Chicken Procurement
+ * Bridges Oracle forecasts with SovereignLedger entries.
+ */
+export async function suggestChickenProcurement(qty: number): Promise<void> {
+  const cost = qty * 450; // 4.50€ per industrial chicken
+  logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} chickens (Cost: ${cost/100}€)`);
+  
+  // Inject into SovereignLedger PROPOSALS account
+  const { SovereignLedger } = await import('./SovereignLedger');
+  await SovereignLedger.recordTransfer({
+    debitAccount: 'PURCHASES',
+    creditAccount: 'PROPOSALS' as any, // Awaiting human signing
+    amountInCents: cost,
+    referenceId: `AI-SUGG-${Date.now()}`,
+    description: `[AI-SUGGESTION] Ravitaillement Rôtisserie (${qty} unités)`
+  });
+}

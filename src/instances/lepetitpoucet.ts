@@ -1,27 +1,47 @@
-// @ts-nocheck
-// @ts-nocheck
-import type { TenantConfig } from '@/types';
+import type { TenantConfig } from '@/shared/nexus-contract';
 
-// En production, ces clés peuvent venir d'appels API ou de variables d'environnement gérées dynamiquement.
-// Pour l'Instance-as-a-Code, on les fige ici pour l'isolation totale.
+/**
+ * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X
+ * Instance-as-a-Code : Isolation Totale & Module Rôtisserie Activé.
+ */
 export const lepetitpoucetConfig: TenantConfig = {
     id: 'lepetitpoucet',
-    name: 'Le Petit Poucet (Lyon)',
-    billingStatus: 'active', // Permet de passer la SaaSBillingGate
-    features: {
+    capabilities: {
         haccpGuardEnabled: true,
         plateAuditEnabled: true,
         allowSupportAccess: true,
     },
+    customFeatures: {
+        rotisserie: true
+    },
+    theme: {
+        primaryColor: '#F59E0B', // Amber for rotisserie vibes
+        secondaryColor: '#78350F',
+        logoUrl: '/logos/lepetitpoucet.png',
+        borderRadius: '16px',
+        appearance: 'light'
+    },
+    status: {
+        maintenanceMode: false,
+        killSwitch: false,
+        licenceStatus: 'active',
+        layoutType: 'default',
+        updatedAt: new Date().toISOString(),
+        economy: {
+            basePrice: 149.00,
+            currency: 'EUR',
+            billingStatus: 'active'
+        },
+        businessLaws: {},
+        expert: {}
+    },
+    metadata: {
+        name: 'Le Petit Poucet (Lyon)',
+        version: '2.0.0 (Grade X)'
+    },
     firebase: {
         projectId: 'kitchen-os-lepetitpoucet',
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID_LEPETITPOUCET || '',
-        storageBucket: 'kitchen-os-lepetitpoucet.appspot.com',
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY_LEPETITPOUCET || '',
-        authDomain: 'kitchen-os-lepetitpoucet.firebaseapp.com',
-        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_LEPETITPOUCET || '',
-    },
-    ai: {
-        geminiApiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
     }
 };
