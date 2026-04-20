@@ -171,6 +171,11 @@ const MASTER_GENOME: GenomeRegistry = {
       powers: ['READ_ONLY'],
       linkedTo: [{ target: 'HR', reason: 'Pipeline Recrutement', isMandatory: false }]
     },
+    ONBOARDING: {
+      id: 'ONBOARDING', status: 'GREEN', sutureLevel: 90, logicLevel: 80,
+      powers: ['SIGN_CONTRACT', 'READ_ONLY'],
+      linkedTo: [{ target: 'HR', reason: 'Dossier Employé', isMandatory: true }]
+    },
 
     // ── INTELLIGENCE & CROISSANCE ──
     BI: {

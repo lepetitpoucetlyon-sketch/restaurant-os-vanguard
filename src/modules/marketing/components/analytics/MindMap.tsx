@@ -60,7 +60,7 @@ const NODES: Node[] = [
         metrics: [{ label: 'Statut', value: STOCK_ALERTS > 0 ? 'CRITIQUE' : 'NOMINAL' }, { label: 'Alertes LowStock', value: STOCK_ALERTS.toString() }]
     },
     {
-        id: 'reservations', label: 'Réservations', group: 'customer', size: 40, side: 'right',
+        id: 'reservations', label: 'Réservations', group: 'crm', size: 40, side: 'right',
         description: 'CRM et carnet de réservations intelligent.',
         metrics: [{ label: 'Couverts/j', value: '85' }]
     },

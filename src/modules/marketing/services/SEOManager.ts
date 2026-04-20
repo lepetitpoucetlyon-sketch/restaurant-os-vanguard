@@ -1,5 +1,5 @@
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom, fleetSnapshotAtom } from '@/store/operationalAtoms';
+import { tenantIdAtom, fleetSnapshotAtom } from '../store/marketingAtoms';
 
 /**
  * 🔍 SEOManager - Restaurant OS

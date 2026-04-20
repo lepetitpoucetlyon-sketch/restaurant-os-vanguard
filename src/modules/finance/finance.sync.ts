@@ -3,7 +3,7 @@ import { FiscalSeal, JournalEntry } from '@/types';
 import { 
     fiscalLedgerNodeAtom, 
     updateNexusNode 
-} from '@/store/operationalAtoms';
+} from '../store/accountingAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';

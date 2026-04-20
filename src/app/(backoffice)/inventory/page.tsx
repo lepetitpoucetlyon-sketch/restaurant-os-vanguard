@@ -6,7 +6,7 @@ import { formatCurrency } from "@/lib/formatters";;
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
-import { ExpertHub } from "@/components/agency/ExpertHub";
+import { ExpertHub } from "@/modules/marketing/components/agency/ExpertHub";
 import { SupplierOrder, SupplierOrderStatus } from "@/types";
 import { useToast } from "@/components/ui/Toast";
 import { useUI } from "@/context/UIContext";
@@ -21,7 +21,7 @@ import { useIntelligence } from "@/context/IntelligenceContext";
 import { InventoryService } from "@/lib/inventory-service";
 import { Zap, Sparkles, ScanText } from "lucide-react";
 import { VisionScanner } from "@/components/shared/VisionScanner";
-import { InvoiceReviewModal } from "@/components/inventory/InvoiceReviewModal";
+import { InvoiceReviewModal } from "@/modules/inventory/components/inventory/InvoiceReviewModal";
 
 const CATEGORY_LABELS: Record<string, string> = {
     produce: 'Fruits & Légumes',

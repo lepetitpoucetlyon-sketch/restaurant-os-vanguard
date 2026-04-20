@@ -50,7 +50,7 @@ const ACTION_ITEMS: CommandItem[] = [
     // Création Rapide
     { id: 'new-order', label: 'Nouvelle Commande', description: 'Créer un ticket POS', icon: Receipt, href: '/pos', category: 'actions', section: 'Création Rapide', shortcut: '⌘N' },
     { id: 'new-reservation', label: 'Nouvelle Réservation', description: 'Ajouter au carnet', icon: CalendarDays, href: '/reservations?new=true', category: 'actions', section: 'Création Rapide', shortcut: '⌘R' },
-    { id: 'new-client', label: 'Nouveau Client', description: 'Fiche CRM', icon: Users, href: '/crm?new=true', category: 'actions', section: 'Création Rapide' },
+    { id: 'new-client', label: 'Nouveau Client', description: 'Fiche Customer', icon: Users, href: '/customer?new=true', category: 'actions', section: 'Création Rapide' },
     { id: 'new-staff', label: 'Recrutement / Staff', description: 'Ajouter un collaborateur', icon: Users, href: '/staff?new=true', category: 'actions', section: 'Création Rapide' },
     { id: 'new-product', label: 'Référencer Produit', description: 'Ajout catalogue', icon: Package, href: '/inventory?action=add', category: 'actions', section: 'Création Rapide' },
 

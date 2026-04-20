@@ -84,7 +84,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
             noPadding
         >
             <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.15)] border border-border">
-                {/* Premium Concierge Header */}
+                {/* Premium Host Header */}
                 <div className="px-12 py-10 bg-bg-secondary text-text-primary relative overflow-hidden shrink-0 border-b border-border">
                     <div className="absolute inset-0 opacity-10 pointer-events-none">
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(212,175,55,0.1),transparent)]" />

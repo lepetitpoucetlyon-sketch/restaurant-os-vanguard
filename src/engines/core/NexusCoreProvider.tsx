@@ -322,7 +322,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         complianceService: {},
         haccpBridge: {},
         fleet: null,
-        crm: {},
+        customer: {},
         intelligence: {
             globalInflationRate: 0.0,
             predictSignatureChance: () => 0.5,

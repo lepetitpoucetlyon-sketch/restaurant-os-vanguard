@@ -13,7 +13,7 @@ import {
     quotesNodeAtom, 
     deliveriesNodeAtom,
     updateNexusNode 
-} from '@/store/operationalAtoms';
+} from '../store/marketingAtoms';
 import { logger } from '@/lib/logger';
 import { MarketingEngine } from "@/lib/marketing-engine";
 import { whiteLabelInstanceConfig } from '@/config/instance';

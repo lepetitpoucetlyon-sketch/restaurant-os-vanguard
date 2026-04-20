@@ -12,7 +12,7 @@ import TableChairs from "./TableChairs";
 import ZoneRenderer from "./ZoneRenderer";
 import EditPanel from "./EditPanel";
 import { TableInsightPanel } from "./TableInsightPanel";
-import { PaymentDialog } from "@/components/pos/PaymentDialog";
+import { PaymentDialog } from "@/modules/ops/components/pos/PaymentDialog";
 import { useFloorPlanControls } from "./useFloorPlanControls";
 
 interface FloorPlanEditorProps {

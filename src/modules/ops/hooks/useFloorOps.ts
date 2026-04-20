@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { tablesNodeAtom, tablesLoadingAtom } from '@/store/operationalAtoms';
+import { tablesNodeAtom, tablesLoadingAtom } from '../store/orderAtoms';
 import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { Table, TableStatus } from '@/types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

@@ -80,8 +80,8 @@ export interface Quote {
     establishmentId: string;
 
     // Client
-    customerId?: string;
-    customer: {
+    crmId?: string;
+    crm: {
         type: 'individual' | 'company';
         name: string;
         companyName?: string;

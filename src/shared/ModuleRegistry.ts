@@ -21,7 +21,7 @@ export const SOVEREIGN_MODULE_IDS: ReadonlySet<ModuleId> = new Set<ModuleId>([
   // Opérations
   'POS', 'FLOOR_PLAN', 'KDS', 'RESERVATIONS', 'OMNI_RES',
   // Relation Client
-  'CRM', 'QUOTES', 'GROUPS',
+  'Customer', 'QUOTES', 'GROUPS',
   // Production
   'KITCHEN', 'BAR', 'STORAGE_MAP',
   // Back-Office

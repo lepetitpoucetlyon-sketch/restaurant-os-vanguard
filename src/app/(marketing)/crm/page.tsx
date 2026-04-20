@@ -11,20 +11,20 @@ import { useIsMobile } from "@/hooks";
 import { SecurityPinModal } from "@/components/ui";
 
 // Atomic Components
-import { CRMSidebar } from "@/components/crm/CRMSidebar";
-import { CRMList } from "@/components/crm/CRMList";
-import { CRMDetailView } from "@/components/crm/CRMDetailView";
-import { CRMContactForm } from "@/components/crm/CRMContactForm";
+import { CRMSidebar } from "@/modules/marketing/components/crm/CRMSidebar";
+import { CRMList } from "@/modules/marketing/components/crm/CRMList";
+import { CRMDetailView } from "@/modules/marketing/components/crm/CRMDetailView";
+import { CRMContactForm } from "@/modules/marketing/components/crm/CRMContactForm";
 
 // State
 import { 
     crmSearchQueryAtom, 
     crmFilterSegmentAtom, 
-    crmNewCustomerModalAtom,
+    crmNewCRMModalAtom,
     crmSecurityModalAtom,
-    crmCustomerToDeleteAtom
+    crmCRMToDeleteAtom
 } from "@/store/crmAtoms";
-import { customersAtom, customersNodeAtom } from "@/store/operationalAtoms";
+import { crmsAtom, crmsNodeAtom } from "@/store/operationalAtoms";
 
 /**
  * 🏛️ CRM PAGE - ALPHA-7 STABILIZED
@@ -39,28 +39,28 @@ export default function CRMPage() {
     // Atomic UI States
     const [searchQuery, setSearchQuery] = useAtom(crmSearchQueryAtom);
     const [filterSegment, setFilterSegment] = useAtom(crmFilterSegmentAtom);
-    const [, setShowNewCustomer] = useAtom(crmNewCustomerModalAtom);
+    const [, setShowNewCRM] = useAtom(crmNewCRMModalAtom);
     const [showSecurityModal, setShowSecurityModal] = useAtom(crmSecurityModalAtom);
-    const [customerToDelete] = useAtom(crmCustomerToDeleteAtom);
+    const [crmToDelete] = useAtom(crmCRMToDeleteAtom);
     
     // Domain Data
-    const [customers, setCustomers] = useAtom(customersAtom);
-    const [, setCustomersNode] = useAtom(customersNodeAtom);
+    const [crms, setCRMs] = useAtom(crmsAtom);
+    const [, setCRMsNode] = useAtom(crmsNodeAtom);
 
     // Mock Intelligence Initialization (If data is empty)
     useEffect(() => {
-        if (customers.length === 0) {
-            const mockCustomers = [
+        if (crms.length === 0) {
+            const mockCRMs = [
                 { id: '1', firstName: 'Jean', lastName: 'Dupont', phone: '0612345678', email: 'jean@dupont.com', segment: 'vip', visitCount: 12, totalSpentInCents: 45000, createdAt: new Date().toISOString(), preferences: [], tags: [] },
                 { id: '2', firstName: 'Marie', lastName: 'Curie', phone: '0623456789', email: 'marie@science.fr', segment: 'regular', visitCount: 5, totalSpentInCents: 18000, createdAt: new Date().toISOString(), preferences: [], tags: [] },
                 { id: '3', firstName: 'Alpha', lastName: 'Techno', phone: '0634567890', email: 'alpha@enterprise.com', segment: 'new', visitCount: 1, totalSpentInCents: 4500, createdAt: new Date().toISOString(), preferences: [], tags: [] },
             ];
-            (setCustomers as any)(mockCustomers as any);
-            setCustomersNode(prev => ({ ...prev, loading: false }));
+            (setCRMs as any)(mockCRMs as any);
+            setCRMsNode(prev => ({ ...prev, loading: false }));
         }
-    }, [customers.length, setCustomers, setCustomersNode]);
+    }, [crms.length, setCRMs, setCRMsNode]);
 
-    const confirmDeleteCustomer = () => {
+    const confirmDeleteCRM = () => {
         // Implementation for deletion if security PIN is correct
         setShowSecurityModal(false);
     };
@@ -78,8 +78,8 @@ export default function CRMPage() {
                     {isMobile ? (
                         <div className="mb-8 space-y-6">
                             <div className="flex items-center justify-between">
-                                <PageHeaderWithDocs categoryId="crm" title={t('crm.concierge_title') || 'Conciergerie CRM'} className="text-4xl font-serif text-text-primary italic tracking-tight" />
-                                <button onClick={() => setShowNewCustomer(true)} className="w-12 h-12 rounded-full bg-text-primary text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+                                <PageHeaderWithDocs categoryId="crm" title={t('crm.host_title') || 'Host CRM'} className="text-4xl font-serif text-text-primary italic tracking-tight" />
+                                <button onClick={() => setShowNewCRM(true)} className="w-12 h-12 rounded-full bg-text-primary text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform">
                                     <Plus className="w-6 h-6" />
                                 </button>
                             </div>
@@ -105,7 +105,7 @@ export default function CRMPage() {
                             />
                             <div className="flex gap-4">
                                 <button 
-                                    onClick={() => setShowNewCustomer(true)} 
+                                    onClick={() => setShowNewCRM(true)} 
                                     className="h-14 bg-text-primary dark:bg-white hover:bg-black dark:hover:bg-neutral-100 rounded-2xl text-bg-secondary dark:text-bg-primary text-[10px] font-black uppercase tracking-[0.2em] px-10 shadow-2xl transition-all active:scale-95"
                                 >
                                     <Plus className="w-4 h-4 mr-3 inline-block" strokeWidth={3} />
@@ -127,7 +127,7 @@ export default function CRMPage() {
             <SecurityPinModal
                 isOpen={showSecurityModal}
                 onClose={() => setShowSecurityModal(false)}
-                onSuccess={confirmDeleteCustomer}
+                onSuccess={confirmDeleteCRM}
             />
         </div>
     );

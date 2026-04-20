@@ -4,7 +4,7 @@
  * Architecture décomposée :
  *   domains/common.ts     → nav, header, sidebar, settings, common, allergens
  *   domains/dashboard.ts  → dashboard (KPIs, chart, intelligence, CTA)
- *   domains/operations.ts → pos, planning, inventory, reservations, crm, recruitment
+ *   domains/operations.ts → pos, planning, inventory, reservations, customer, recruitment
  *
  * Chaque domaine exporte ses traductions pour toutes les langues (fr, en, ja, pt, es).
  * Ce fichier les fusionne en un objet unique consommé par LanguageContext.

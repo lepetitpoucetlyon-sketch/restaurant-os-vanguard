@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Table as CRMTable } from '@/types/tables.types'; // Suture Nexus
+import { Table as CustomerTable } from '@/types/tables.types'; // Suture Nexus
 import { GroupEventStatus } from '@/types/groups.types';
 
 // Extracted Components (Sutured for Grade X Stability)

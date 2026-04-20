@@ -142,7 +142,7 @@ export default function SimulatorPage() {
                                     </div>
 
                                     <p className="text-[9px] text-text-muted mt-6 italic opacity-70">
-                                        Impact global sur les marges POS et scores de signature CRM.
+                                        Impact global sur les marges POS et scores de signature Customer.
                                     </p>
                                 </div>
                             </div>

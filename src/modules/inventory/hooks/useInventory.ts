@@ -2,20 +2,21 @@
 
 import { useMemo, useCallback } from "react";
 import { useAtomValue } from "jotai";
-import { stockItemsNodeAtom } from "@/store/operationalAtoms";
+import { stockItemsNodeAtom } from "../store/inventoryAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
+import { StockItem } from "../types";
 
 /**
- * 🥫 useInventory - Grade VI Atomic Bridge
+ * 🥫 useInventory - Grade X Atomic Bridge
  * Centralisation de la gestion des stocks et de la chaîne d'approvisionnement.
  */
 export function useInventory() {
     useVisibilityPurge('stockItems');
     const node = useAtomValue(stockItemsNodeAtom);
-    const stockItems = node.data || [];
+    const stockItems = (node.data || []) as StockItem[];
 
     const lowStockItems = useMemo(() => 
-        (stockItems || []).filter((i: any) => i.quantity <= (i.minQuantity || 0)), 
+        stockItems.filter((i: StockItem) => i.quantity <= (i.minQuantity || 0)), 
         [stockItems]
     );
 

@@ -8,7 +8,7 @@ export {
     currentUserAtom, isAuthenticatedAtom, userRoleAtom,
     tenantConfigAtom, rolePermissionsAtom, userPermissionsAtom,
     canDoAtom, updateRolePermissionsAtom
-} from './authAtoms';
+} from '@/modules/auth/store/authAtoms';
 
 // 📊 ACCOUNTING & FINANCE
 export {
@@ -17,7 +17,7 @@ export {
     bankTransactionsNodeAtom, bankTransactionsAtom,
     expenseClaimsNodeAtom, expenseClaimsAtom,
     accountingViewModeAtom, isAccountingSyncingAtom, accountingLoadingAtom
-} from './accountingAtoms';
+} from '@/modules/finance/store/accountingAtoms';
 
 // 🏛️ UI & PERSISTENCE
 export {
@@ -33,14 +33,14 @@ export {
     tablesNodeAtom, tablesAtom, tablesLoadingAtom,
     activeCartAtom,
     availableTablesAtom, pendingOrdersAtom, pendingModificationsAtom
-} from './orderAtoms';
+} from '@/modules/ops/store/orderAtoms';
 
 // 📅 RESERVATIONS & EVENTS DOMAIN
 export {
     reservationsNodeAtom, reservationsAtom, reservationsLoadingAtom,
     groupsNodeAtom, groupsAtom, groupsLoadingAtom,
     reservationStatsAtom, isReservationSyncingAtom
-} from './reservationAtoms';
+} from '@/modules/ops/store/reservationAtoms';
 
 // 📦 INVENTORY & KITCHEN DOMAIN
 export {
@@ -54,7 +54,7 @@ export {
     storageLocationsNodeAtom, storageLocationsAtom,
     prepTasksNodeAtom, prepTasksAtom, prepLoadingAtom,
     miseEnPlaceTargetSelector, calculateRecipeCostSelector
-} from './inventoryAtoms';
+} from '@/modules/inventory/store/inventoryAtoms';
 
 // 👥 STAFF & HR DOMAIN
 export {
@@ -65,7 +65,7 @@ export {
     leaveRequestsNodeAtom, leaveRequestsAtom,
     leaveBalancesNodeAtom, leaveBalancesAtom,
     hrLoadingAtom
-} from './staffAtoms';
+} from '@/modules/hr/store/staffAtoms';
 
 // 🛡️ COMPLIANCE DOMAIN (Fiscal + Guard/HACCP)
 export {
@@ -78,9 +78,9 @@ export {
     oilLogsNodeAtom, oilLogsAtom,
     wasteLogsNodeAtom, wasteLogsAtom,
     guardLoadingAtom
-} from './complianceAtoms';
+} from '@/modules/haccp/store/complianceAtoms';
 
-// 📢 MARKETING & CRM DOMAIN
+// 📢 MARKETING & CUSTOMERS DOMAIN
 export {
     seoProfileAtom,
     marketingCampaignsNodeAtom, marketingCampaignsAtom,
@@ -88,9 +88,9 @@ export {
     scheduledPostsNodeAtom, scheduledPostsAtom,
     socialAccountsNodeAtom, socialAccountsAtom,
     quotesNodeAtom, quotesAtom, quotesLoadingAtom,
-    customersNodeAtom, customersAtom, customersLoadingAtom, selectedCustomerAtom,
+    crmsNodeAtom, crmsAtom, crmsLoadingAtom, selectedCRMAtom,
     seoLoadingAtom, isMarketingSyncingAtom
-} from './marketingAtoms';
+} from '@/modules/marketing/store/marketingAtoms';
 
 // 🛰️ FLEET & MULTI-TENANCY
 export {
@@ -105,4 +105,4 @@ export {
     menuAnalysisSelector,
     staffPerformanceSelector,
     laborCostRatioSelector
-} from './analyticsAtoms';
+} from '@/modules/marketing/store/analyticsAtoms';

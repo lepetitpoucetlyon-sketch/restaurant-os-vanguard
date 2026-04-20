@@ -10,7 +10,7 @@ import { db } from '@/lib/offline/offline-store';
 import { SyncManager } from '@/lib/offline/sync-manager';
 import { checkOnlineStatus } from '@/lib/offline/status';
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom } from '@/store/operationalAtoms';
+import { tenantIdAtom } from '../store/accountingAtoms';
 import { MasterBridge } from '@/lib/MasterBridge';
 
 export interface FiscalInstruction {

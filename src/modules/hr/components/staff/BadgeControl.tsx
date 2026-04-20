@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useAtomValue } from 'jotai';
-import { activeShiftsAtom, hrLoadingAtom } from '@/store/operationalAtoms';
+import { activeShiftsAtom, hrLoadingAtom } from '../store/hrAtoms';
 import { NexusPayrollEngine } from '@/domain/services/NexusPayrollEngine';
 import { ShiftEntry } from '@/domain/schemas/hr';
 import { Button } from '@/components/ui/button';

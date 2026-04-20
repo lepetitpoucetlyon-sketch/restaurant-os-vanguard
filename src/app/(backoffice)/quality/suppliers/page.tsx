@@ -1,5 +1,5 @@
 "use client";
-import { QualityModuleLayout } from "@/components/quality/QualityModuleLayout";
+import { QualityModuleLayout } from "@/modules/haccp/components/quality/QualityModuleLayout";
 import { useQualityBridge } from "@/hooks/useQualityBridge";
 
 export default function SupplierScoringPage() {

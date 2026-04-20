@@ -1,5 +1,5 @@
 /**
- * 🛰️ NEXUS-CRM - Grade VI
+ * 🛰️ NEXUS-Customer - Grade VI
  * Moteur de communication et fidélisation client.
  * Gère les points, les tags (VIP, Allégies) et les notifications.
  */
@@ -13,21 +13,21 @@ export interface ContactPayload {
     subject?: string;
 }
 
-export class NexusCRM {
+export class NexusCustomer {
     /**
      * Simulation d'envoi de notification (SMS/Email).
      * GRADE VI: Préparé pour intégration Twilio/SendGrid.
      */
     static async notify(clientId: string, payload: ContactPayload) {
-        logger.info(`[NexusCRM] QUEUEING NOTIFICATION for ${clientId}`, payload);
+        logger.info(`[NexusCustomer] QUEUEING NOTIFICATION for ${clientId}`, payload);
         
         // Simulation de latence réseau
         await new Promise(resolve => setTimeout(resolve, 100));
         
         // Industrial Log for Audit
-        logger.info(`[NexusCRM] SENT: ${payload.subject ? `[${payload.subject}] ` : ''}${payload.message.substring(0, 50)}...`);
+        logger.info(`[NexusCustomer] SENT: ${payload.subject ? `[${payload.subject}] ` : ''}${payload.message.substring(0, 50)}...`);
         
-        return { success: true, trackingId: `CRM-${Math.random().toString(36).substring(7)}` };
+        return { success: true, trackingId: `Customer-${Math.random().toString(36).substring(7)}` };
     }
 
     /**

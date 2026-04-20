@@ -12,7 +12,7 @@ export default function MigrationSettings() {
     const { showToast } = useToast();
     const { parseCSV, analyzeMenuWithAI, injectToDB, seedProduction, isMigrating, progress } = useDataMigration();
     
-    const [activeTab, setActiveTab] = useState<'menu' | 'staff' | 'crm' | 'seed'>('menu');
+    const [activeTab, setActiveTab] = useState<'menu' | 'staff' | 'customer' | 'seed'>('menu');
     const [rawMenuText, setRawMenuText] = useState("");
     const [parsedMenuData, setParsedMenuData] = useState<any>(null);
 
@@ -41,7 +41,7 @@ export default function MigrationSettings() {
     };
 
     // CSV UPLOAD HANDLER
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, entity: 'staff' | 'crm') => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, entity: 'staff' | 'customer') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -100,7 +100,7 @@ export default function MigrationSettings() {
                 {[
                     { id: 'menu', label: 'Scanner de Menu IA', icon: MenuIcon },
                     { id: 'staff', label: 'Import Équipe', icon: Users },
-                    { id: 'crm', label: 'Import Clients', icon: Database },
+                    { id: 'customer', label: 'Import Clients', icon: Database },
                     { id: 'seed', label: 'Ressusciter le Système', icon: Play }
                 ].map((tab) => (
                     <button
@@ -201,7 +201,7 @@ export default function MigrationSettings() {
             )}
 
             {/* TAB CONTENT: CSV UPLOADS */}
-            {(activeTab === 'staff' || activeTab === 'crm') && (
+            {(activeTab === 'staff' || activeTab === 'customer') && (
                 <div className="bg-bg-secondary rounded-2xl border border-border p-8 md:p-16 max-w-4xl mx-auto shadow-sm text-center border-dashed border-2">
                     <div className="w-24 h-24 bg-accent/5 rounded-full flex items-center justify-center mx-auto mb-8">
                         <Upload strokeWidth={1} className="w-10 h-10 text-accent" />

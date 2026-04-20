@@ -16,14 +16,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useHACCP, HygieneLog } from "@/modules/haccp";
-import { PlanNettoyage } from "@/components/haccp/PlanNettoyage";
-import { ReleveTemperatures } from "@/components/haccp/ReleveTemperatures";
-import { TracabiliteEtiquettes } from "@/components/haccp/TracabiliteEtiquettes";
-import { GestionAnomalies } from "@/components/haccp/GestionAnomalies";
-import { ReceptionMarchandises } from "@/components/haccp/ReceptionMarchandises";
-import { WasteManagementHACCP } from "@/components/haccp/WasteManagementHACCP";
-import { GestionHuiles } from "@/components/haccp/GestionHuiles";
-import { ExpertHub } from "@/components/agency/ExpertHub";
+import { PlanNettoyage } from "@/modules/haccp/components/haccp/PlanNettoyage";
+import { ReleveTemperatures } from "@/modules/haccp/components/haccp/ReleveTemperatures";
+import { TracabiliteEtiquettes } from "@/modules/haccp/components/haccp/TracabiliteEtiquettes";
+import { GestionAnomalies } from "@/modules/haccp/components/haccp/GestionAnomalies";
+import { ReceptionMarchandises } from "@/modules/haccp/components/haccp/ReceptionMarchandises";
+import { WasteManagementHACCP } from "@/modules/haccp/components/haccp/WasteManagementHACCP";
+import { GestionHuiles } from "@/modules/haccp/components/haccp/GestionHuiles";
+import { ExpertHub } from "@/modules/marketing/components/agency/ExpertHub";
 
 type MainTabType = 'vigilance' | 'tracabilite' | 'conformite';
 type SubTabType = 'nettoyage' | 'temperatures' | 'etiquettes' | 'reception' | 'huiles' | 'anomalies' | 'dechets';

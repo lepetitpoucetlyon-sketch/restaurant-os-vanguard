@@ -9,3 +9,4 @@ export * from './hooks/useStorage';
 export * from './hooks/useCategories';
 export * from './hooks/useStockBridge';
 export * from './types';
+export * from './store/inventoryAtoms';

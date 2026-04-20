@@ -10,7 +10,7 @@ import {
     productQualityConfigsAtom,
     supplierScoresAtom
 } from '@/store/qualityAtoms';
-import { deliveriesAtom, tenantIdAtom } from '@/store/operationalAtoms';
+import { deliveriesAtom, tenantIdAtom } from '../store/complianceAtoms';
 import { QualityEngine } from '@/domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@/domain/types/quality';
 import { Delivery } from '@/domain/types/delivery';

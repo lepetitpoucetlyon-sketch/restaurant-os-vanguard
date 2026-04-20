@@ -13,9 +13,9 @@ import { KDSTicket } from "./components/KDSTicket";
 import { KDSEmptyState } from "./components/KDSEmptyState";
 
 // UI Components (Modals)
-import { ModificationAlertsPanel } from "@/components/kds/ModificationAlerts";
-import { RecipeDetailDialog } from "@/components/kitchen/RecipeDetailDialog";
-import { PlateAuditWizard } from "@/components/kitchen/PlateAuditWizard";
+import { ModificationAlertsPanel } from "@/modules/ops/components/kds/ModificationAlerts";
+import { RecipeDetailDialog } from "@/modules/ops/components/kitchen/RecipeDetailDialog";
+import { PlateAuditWizard } from "@/modules/ops/components/kitchen/PlateAuditWizard";
 
 // Constants
 import { ITEM_STATION_MAP, KitchenStation } from "./constants";

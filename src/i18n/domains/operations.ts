@@ -1,4 +1,4 @@
-// POS, Planning, Inventory, Reservations, CRM, Recruitment translations
+// POS, Planning, Inventory, Reservations, Customer, Recruitment translations
 export const operationsTranslations = {
     fr: {
         planning: {
@@ -244,7 +244,7 @@ export const operationsTranslations = {
             list: { search_placeholder: "RECHERCHER UN CONVIVE...", registry: "REGISTRE", profiles: "PROFILS", services: "Services", value: "Valeur" },
             customer: { executive_intelligence: "Intelligence Exécutive", total_spent: "Total Dépensé", visits: "Nombre de Visites", last_visit: "Dernière Visite", contact: "Informations de Contact", preferences: "Préférences & Habitudes", close: "Fermer le Profil", new_table: "Affecter à une Table", add_success: "Profil Gastronomique Enregistré", reserve_success: "Affectation Table Confirmée" }
         },
-        crm: {
+        customer: {
             database_title: "Base de Données", brigade_title: "Brigade Opérative", clients_subtitle: "Clients", search_placeholder: "RECHERCHER UN PROFIL...", global_portfolio: "Portefeuille Global", lifetime_value: "Lifetime Value Total", all_clients: "Tous les clients", export_db: "EXPORTER DATABASE", new_profile: "NOUVEAU PROFIL", visits: "Visites", value: "Valeur", last_visit: "Dernière", contact_info: "Informations de Contact", personalized_exp: "Expérience Personnalisée", operational_comments: "Commentaires Opérationnels", ledger_title: "Grand Livre des Réservations", new_table: "Nouvelle Table", new_profile_title: "Nouveau Profil Client", secure_db: "Enregistrement dans la base de données sécurisée", full_name: "Nom Complet", phone: "Téléphone", email: "Adresse Email", birthday: "Anniversaire", segment: "Segment", operational_note: "Note Opérationnelle", abandon: "Abandonner", save_profile: "Enregistrer le Profil",
             segments: { vip: "VIP", regular: "Régulier", new: "Nouveau", lost: "À réactiver" }
         }
@@ -285,7 +285,7 @@ export const operationsTranslations = {
             list: { search_placeholder: "SEARCH A CONVIVE...", registry: "REGISTRY", profiles: "PROFILES", services: "Services", value: "Value" },
             customer: { executive_intelligence: "Executive Intelligence", total_spent: "Total Spent", visits: "Number of Visits", last_visit: "Last Visit", contact: "Contact Information", preferences: "Preferences & Habits", close: "Close Profile", new_table: "Assign to Table", add_success: "Gastronomic Profile Registered", reserve_success: "Table Assignment Confirmed" }
         },
-        crm: {
+        customer: {
             database_title: "Database", brigade_title: "Brigade", clients_subtitle: "Clients", search_placeholder: "SEARCH A PROFILE...", global_portfolio: "Global Portfolio", lifetime_value: "Total Lifetime Value", all_clients: "All Clients", export_db: "EXPORT DATABASE", new_profile: "NEW PROFILE", visits: "Visits", value: "Value", last_visit: "Last", contact_info: "Contact Information", personalized_exp: "Personalized Experience", operational_comments: "Operational Comments", ledger_title: "Reservation Ledger", new_table: "New Table", new_profile_title: "New Client Profile", secure_db: "Registration in secured database", full_name: "Full Name", phone: "Phone", email: "Email Address", birthday: "Birthday", segment: "Segment", operational_note: "Operational Note", abandon: "Abandon", save_profile: "Save Profile",
             segments: { vip: "VIP", regular: "Regular", new: "New", lost: "To Reactivate" }
         },

@@ -6,7 +6,7 @@ import {
     reservationsNodeAtom, 
     groupsNodeAtom, 
     updateNexusNode 
-} from '@/store/operationalAtoms';
+} from '../store/orderAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';

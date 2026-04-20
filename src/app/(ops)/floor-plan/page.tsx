@@ -15,7 +15,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useRouter } from "next/navigation";
 
 const FloorPlanEditor = dynamic(
-    () => import("@/components/floor-plan/FloorPlanEditor"),
+    () => import("@/modules/ops/components/floor-plan/FloorPlanEditor"),
     { ssr: false }
 ) as React.ComponentType<any>;
 

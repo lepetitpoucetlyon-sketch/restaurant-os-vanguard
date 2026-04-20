@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtom } from 'jotai';
-import { crmFormAtom, crmNewCustomerModalAtom } from '@/store/crmAtoms';
+import { crmFormAtom, crmNewCRMModalAtom } from '@/store/crmAtoms';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, MapPin, Tag, Plus, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
@@ -13,7 +13,7 @@ import { useIsMobile } from '@/hooks';
 export function CRMContactForm() {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const [showModal, setShowModal] = useAtom(crmNewCustomerModalAtom);
+    const [showModal, setShowModal] = useAtom(crmNewCRMModalAtom);
     const [formState, setFormState] = useAtom(crmFormAtom);
 
     const updateField = (field: keyof typeof formState, value: string) => {
@@ -21,7 +21,7 @@ export function CRMContactForm() {
     };
 
     const handleSave = () => {
-        // Logic to save customer will go here or in a hook
+        // Logic to save crm will go here or in a hook
         // For now, just close
         setShowModal(false);
     };

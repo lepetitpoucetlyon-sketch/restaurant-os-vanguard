@@ -149,8 +149,8 @@ export const DELIVERY_SCHEMA: ModuleSchema = {
     ]
 };
 
-export const CRM_SCHEMA: ModuleSchema = {
-    id: 'crm',
+export const Customer_SCHEMA: ModuleSchema = {
+    id: 'customer',
     title: 'Fidélisation Clients',
     fields: [
         { key: 'loyaltyEnabled', type: 'boolean', label: 'Programme Fidélité' },
@@ -215,7 +215,7 @@ export const SETTINGS_REGISTRY: ModuleSchema[] = [
     NOTIFICATIONS_SCHEMA,
     SECURITY_SCHEMA,
     DELIVERY_SCHEMA,
-    CRM_SCHEMA,
+    Customer_SCHEMA,
     LEGAL_SCHEMA,
     STAFF_CONFIG_SCHEMA,
     RESERVATIONS_CONFIG_SCHEMA,

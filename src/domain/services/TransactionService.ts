@@ -73,7 +73,7 @@ export class TransactionService {
                 batch.set(`${movPath}/${movId}`, { ...mov, id: movId });
             });
 
-            // 4. CRM & LOYALTY (Typed Customer Data)
+            // 4. Customer & LOYALTY (Typed Customer Data)
             if (order.customerId) {
                 const customerPath = `${getTenantPath('clients', tenantId)}/${order.customerId}`;
                 const customer = await Nexus.adapter.get(customerPath) as { loyaltyPoints?: number, totalRevenue?: number, totalVisits?: number } | null;

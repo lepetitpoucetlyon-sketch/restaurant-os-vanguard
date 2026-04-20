@@ -13,10 +13,10 @@ export const RESTAURANT_FULL_DNA: any = {
     'mod_floor_plan': true,
     'mod_kds': true,
     
-    // 3. Clients & Réservations (CRM)
+    // 3. Clients & Réservations (Customer)
     'mod_reservations': true,
     'mod_omnichannel': true,
-    'mod_crm': true,
+    'mod_customer': true,
     'mod_quotes': true,
     'mod_groups': true,
     'mod_pms': true,

@@ -18,7 +18,7 @@ export * from '@/modules/ops/types';
 
 // Reservations & CRM
 export * from '@/modules/ops/reservations.types';
-export type { Customer, CRMGroup } from '@/modules/ops/reservations.types';
+export type { CRM, CRMGroup } from '@/modules/ops/reservations.types';
 
 // Inventory & Stock Management
 export * from '@/modules/inventory/types';

@@ -7,3 +7,6 @@ export * from './hooks/useMarketing';
 export * from './marketing.sync';
 export * from './types';
 export * from './seo.types';
+export * from './store/marketingAtoms';
+export * from './store/crmAtoms';
+export * from './store/analyticsAtoms';

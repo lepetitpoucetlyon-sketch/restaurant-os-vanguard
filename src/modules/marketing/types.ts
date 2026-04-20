@@ -28,10 +28,10 @@ export interface MarketingCampaign {
     endsAt: string;
 }
 
-export interface CustomerFeedback {
+export interface CRMFeedback {
     id: string;
-    customerId: string;
-    customerName: string;
+    crmId: string;
+    crmName: string;
     rating: number; // 1-5
     comment: string;
     source: 'in-app' | 'google' | 'qr-code';

@@ -107,7 +107,7 @@ export function useNexusFleet() {
         complianceService: FleetComplianceService,
         haccpBridge: HACCPTelemetryBridge,
         fleet: null, 
-        crm: { customers: [] },
+        customer: { customers: [] },
         intelligence: { insights: macroInsights }
     };
 }

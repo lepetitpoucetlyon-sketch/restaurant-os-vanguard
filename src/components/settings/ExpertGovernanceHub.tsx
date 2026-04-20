@@ -42,7 +42,7 @@ const EXPERT_METADATA: Record<AgentDomain, { icon: any; color: string; descripti
     sales: { 
         icon: TrendingUp, 
         color: 'rose', 
-        description: 'Analyse prédictive des performances, CRM et stratégie tarifaire.' 
+        description: 'Analyse prédictive des performances, Customer et stratégie tarifaire.' 
     },
     fleet: {
         icon: Cpu,

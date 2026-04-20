@@ -28,10 +28,10 @@ import {
     closestCenter,
 } from "@dnd-kit/core";
 
-import { DraggableIngredient } from "@/components/storage-map/DraggableIngredient";
-import { DraggingIngredientOverlay } from "@/components/storage-map/DraggingIngredientOverlay";
-import { DroppableStorageCard } from "@/components/storage-map/DroppableStorageCard";
-import { StorageDetailBubble } from "@/components/storage-map/StorageDetailBubble";
+import { DraggableIngredient } from "@/modules/inventory/components/storage-map/DraggableIngredient";
+import { DraggingIngredientOverlay } from "@/modules/inventory/components/storage-map/DraggingIngredientOverlay";
+import { DroppableStorageCard } from "@/modules/inventory/components/storage-map/DroppableStorageCard";
+import { StorageDetailBubble } from "@/modules/inventory/components/storage-map/StorageDetailBubble";
 
 // ============================================
 // MAIN PAGE

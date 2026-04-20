@@ -356,7 +356,7 @@ export default function ProfileSettings() {
                                     </div>
                                 </div>
                                 <div className="group">
-                                    <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">Biometric Visual Source</label>
+                                    <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">Identity Avatar Relay</label>
                                     <div className="relative">
                                         <input
                                             type="url"
@@ -371,7 +371,7 @@ export default function ProfileSettings() {
                                                     : "bg-bg-tertiary/50 border-transparent text-text-muted"
                                             )}
                                         />
-                                        <Fingerprint className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+                                        <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                     </div>
                                 </div>
                             </div>
@@ -392,7 +392,7 @@ export default function ProfileSettings() {
                     <div>
                         <h5 className="font-serif font-bold text-accent-gold text-sm mb-1 uppercase tracking-wide">Security Directive</h5>
                         <p className="text-xs text-text-muted leading-relaxed font-medium">
-                            PIN sequences are cryptographically hashed. Unauthorized sharing constitutes a Class 3 protocol violation. Verify biometric visual source integrity before saving.
+                            PIN sequences are cryptographically hashed. Unauthorized sharing constitutes a Class 3 protocol violation. Verify all vectors before committing.
                         </p>
                     </div>
                 </motion.div>

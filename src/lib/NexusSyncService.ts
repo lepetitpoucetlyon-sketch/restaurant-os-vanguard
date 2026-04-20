@@ -27,6 +27,8 @@ import { Mutex } from './utils/Mutex';
 import { genomeValidator } from '@/domain/services/GenomeValidator';
 import { ImmunityAuditLogger } from './services/ImmunityAuditLogger';
 
+import { SelfHealingEngine } from '@/shared/services/SelfHealingEngine';
+
 const syncMutex = new Mutex();
 
 /**
@@ -35,6 +37,8 @@ const syncMutex = new Mutex();
  * Grade IX: Protected by GenomeValidator — no sync without valid DNA.
  */
 export const NexusSyncService = {
+  healing_interval: null as NodeJS.Timeout | null,
+
   /**
    * Initializes all operational listeners in parallel.
    * Target switch time: < 180ms.
@@ -54,6 +58,12 @@ export const NexusSyncService = {
         // --- OMPHALOS SUTURE (Mission 1 & 3) ---
         await NexusBridge.init(tenantId);
         TelemetryService.start(tenantId);
+
+        // --- SELF-HEALING ACTIVATION (Grade X+) ---
+        this.healing_interval = setInterval(() => {
+          // Audit critical state nodes
+          SelfHealingEngine.auditAndHeal(ordersNodeAtom, 'legacy_audit', `tenants/${tenantId}/orders`).catch(() => {});
+        }, 60000);
 
         // --- PRIVACY SHIELD GATE ---
         const { fleetSnapshotAtom } = await import('@/store/operationalAtoms');
@@ -124,6 +134,10 @@ export const NexusSyncService = {
    */
   async _stopAllInternal() {
     logger.info('[NexusSyncService] Orchestrating Global Stop...');
+    if (this.healing_interval) {
+        clearInterval(this.healing_interval);
+        this.healing_interval = null;
+    }
     TimeSync.stop();
     SyncOrders.stop();
     SyncStocks.stop();

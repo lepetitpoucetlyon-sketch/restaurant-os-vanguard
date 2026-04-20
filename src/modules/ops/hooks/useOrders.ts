@@ -2,12 +2,13 @@
 
 import { useAtomValue } from "jotai";
 import { useCallback } from "react";
-import { ordersNodeAtom, pendingModificationsAtom } from "@/store/operationalAtoms";
+import { ordersNodeAtom, pendingModificationsAtom } from "../store/orderAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
+import { Order, OrderStatus } from "../types";
 
 /**
- * 📦 useOrders - Grade VI Atomic Bridge
+ * 📦 useOrders - Grade X Atomic Bridge
  * Orchestration des commandes et du flux KDS.
  */
 export function useOrders() {
@@ -16,14 +17,14 @@ export function useOrders() {
     const pendingModifications = useAtomValue(pendingModificationsAtom);
     
     // --- 🔨 LA FORGE ---
-    const orderForge = useNexusMutation(ordersNodeAtom, 'orders', 'POS');
+    const orderForge = useNexusMutation<Order>(ordersNodeAtom, 'orders', 'POS');
     
-    const updateOrderStatus = useCallback(async (orderId: string, status: any) => {
+    const updateOrderStatus = useCallback(async (orderId: string, status: OrderStatus) => {
         return orderForge.mutate('UPDATE', orderId, { status });
     }, [orderForge]);
 
     const stats = {
-        totalRevenue: (node.data || []).reduce((acc: number, o: any) => acc + (o.totalInCents || 0), 0) / 100,
+        totalRevenue: (node.data || []).reduce((acc: number, o: Order) => acc + (o.totalInCents || 0), 0) / 100,
         expert: true
     };
 
@@ -37,7 +38,7 @@ export function useOrders() {
         expert: stats.expert,
         
         // --- Forge Actions ---
-        addOrder: async (order: any) => {
+        addOrder: async (order: Order) => {
             const orderId = order.id || `ord_${Date.now()}`;
             return orderForge.mutate('SET', orderId, order);
         },

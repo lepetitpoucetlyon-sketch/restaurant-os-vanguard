@@ -1,9 +1,9 @@
 import { atom, type PrimitiveAtom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
-import { MarketingCampaign, CustomerFeedback } from '@/types/marketing.types';
+import { MarketingCampaign, CRMFeedback } from '@/types/marketing.types';
 import { Quote } from '@/types/quotes.types';
 import { SEOProfile } from '@/types/seo.types';
-import { Customer } from '@/types/reservations.types';
+import { CRM } from '@/types/reservations.types';
 
 // --- 📢 INDUSTRIAL TYPES (V3 - Agnostic) ---
 export interface MarketingSegment {
@@ -55,12 +55,12 @@ export const scheduledPostsNodeAtom = _scheduledPosts.node;
 export const scheduledPostsAtom = _scheduledPosts.data;
 export const scheduledPostsLoadingAtom = _scheduledPosts.loading;
 
-// CRM - Use centralized customer type from reservations.types
-const _customers = createProxyDomain<Customer>('customers');
-export const customersNodeAtom = _customers.node;
-export const customersAtom = _customers.data;
-export const customersLoadingAtom = _customers.loading;
-export const selectedCustomerAtom = atom<Customer | null>(null);
+// CRM - Use centralized crm type from reservations.types
+const _crms = createProxyDomain<CRM>('crms');
+export const crmsNodeAtom = _crms.node;
+export const crmsAtom = _crms.data;
+export const crmsLoadingAtom = _crms.loading;
+export const selectedCRMAtom = atom<CRM | null>(null);
 
 // --- 🛰️ SYNC & TELEMETRY ---
 export const isMarketingSyncingAtom = atom(false);

@@ -34,7 +34,7 @@ import {
     NOTIFICATIONS_SCHEMA,
     SECURITY_SCHEMA,
     DELIVERY_SCHEMA,
-    CRM_SCHEMA,
+    Customer_SCHEMA,
     LEGAL_SCHEMA,
     STAFF_CONFIG_SCHEMA,
     RESERVATIONS_CONFIG_SCHEMA,
@@ -61,7 +61,7 @@ const SETTINGS_CATEGORIES = [
     { id: 'staff', label: 'Équipe & RH', icon: Users, color: '#EC4899' },
     { id: 'planning', label: 'Planning & Shifts', icon: CalendarDays, color: '#06B6D4' },
     { id: 'reservations', label: 'Réservations', icon: BookOpen, color: '#F97316' },
-    { id: 'crm', label: 'CRM Clients', icon: Heart, color: '#DC2626' },
+    { id: 'customer', label: 'Customer Clients', icon: Heart, color: '#DC2626' },
     { id: 'pos', label: 'Point de Vente', icon: CreditCard, color: '#C5A059' },
     { id: 'accounting', label: 'Comptabilité', icon: Receipt, color: '#6366F1' },
     { id: 'delivery', label: 'Livraison & Click-Collect', icon: Truck, color: '#14B8A6' },
@@ -157,7 +157,7 @@ export default function SettingsPage() {
                     <StandardSettingsEngine schema={STAFF_CONFIG_SCHEMA} />
                 </div>
             );
-            case 'crm': return <StandardSettingsEngine schema={CRM_SCHEMA} />;
+            case 'customer': return <StandardSettingsEngine schema={Customer_SCHEMA} />;
             case 'integrations': return <IntegrationSettings />;
             case 'reviews': return <ReviewsSettings />;
             case 'legal': return <StandardSettingsEngine schema={LEGAL_SCHEMA} />;

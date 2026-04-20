@@ -7,7 +7,7 @@ import {
     StockItem, 
     Preparation, 
     Order, 
-    Customer, 
+    CRM, 
     Zone, 
     Recipe,
     Ingredient,
@@ -46,7 +46,7 @@ import {
   preparationsNodeAtom as preparationsAtom,
   supplierOrdersNodeAtom as supplierOrdersAtom,
   storageLocationsNodeAtom as storageLocationsAtom,
-  customersNodeAtom,
+  crmsNodeAtom,
   floorsAtom,
   zonesAtom,
   zonesLockedAtom,
@@ -56,7 +56,7 @@ import {
   isMarketingSyncingAtom,
   isReservationSyncingAtom,
   reservationStatsAtom,
-  selectedCustomerAtom
+  selectedCRMAtom
 } from '@/store/operationalAtoms';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
@@ -312,14 +312,14 @@ export const useReservations = () => {
     const node = useAtomValue(reservationsNodeAtom);
     const stats = useAtomValue(reservationStatsAtom);
     const isSyncing = useAtomValue(isReservationSyncingAtom);
-    const customers = useAtomValue(customersNodeAtom);
+    const crms = useAtomValue(crmsNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
     const reservations = node.data || [];
     
     return { 
         data: reservations, 
         reservations, // bridge alias
-        customers: customers.data || [], // bridge alias
+        crms: crms.data || [], // bridge alias
         stats,
         isLoading: node.loading, 
         isSyncing,
@@ -329,10 +329,10 @@ export const useReservations = () => {
         getReservationsForDate: (date: string) => 
             reservations.filter((r: Reservation) => r.date === date),
         addReservation: (data: Record<string, unknown>) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => upsertReservationAction(tenantId, data)),
-        addCustomer: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => { /* Bridge */ }),
+        addCRM: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => { /* Bridge */ }),
         markNoShow: (id: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => markNoShowAction(tenantId, id)),
         cancelReservation: (id: string, reason?: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => cancelReservationAction(tenantId, id, reason)),
-        getCustomerHistory: (id: string) => [] // Suture bridge
+        getCRMHistory: (id: string) => [] // Suture bridge
     };
 };
 
@@ -582,58 +582,58 @@ export const useAccounting = () => {
 };
 
 export const useCRM = () => {
-    useVisibilityPurge('customers');
-    const node = useAtomValue(customersNodeAtom);
-    const customers = node.data || [];
+    useVisibilityPurge('crms');
+    const node = useAtomValue(crmsNodeAtom);
+    const crms = node.data || [];
     const tenantId = useAtomValue(tenantIdAtom);
 
     const segments = useMemo(() => {
         const segMap: Record<string, number> = {};
-        for (const c of customers as Customer[]) {
+        for (const c of crms as CRM[]) {
             const seg = c.segment || 'new';
             segMap[seg] = (segMap[seg] || 0) + 1;
         }
         return segMap;
-    }, [customers]);
+    }, [crms]);
 
-    const getCustomersBySegment = useCallback((segment: string) => {
-        return (customers as Customer[]).filter((c: Customer) => c.segment === segment);
-    }, [customers]);
+    const getCRMsBySegment = useCallback((segment: string) => {
+        return (crms as CRM[]).filter((c: CRM) => c.segment === segment);
+    }, [crms]);
 
-    const searchCustomers = useCallback((query: string) => {
+    const searchCRMs = useCallback((query: string) => {
         const q = query.toLowerCase();
-        return (customers as Customer[]).filter((c: Customer) => 
+        return (crms as CRM[]).filter((c: CRM) => 
             c.name?.toLowerCase().includes(q) || 
             c.email?.toLowerCase().includes(q) || 
             c.phone?.includes(q)
         );
-    }, [customers]);
+    }, [crms]);
 
-    const getInactiveCustomers = useCallback((daysSinceLastVisit: number = 30) => {
+    const getInactiveCRMs = useCallback((daysSinceLastVisit: number = 30) => {
         const threshold = new Date();
         threshold.setDate(threshold.getDate() - daysSinceLastVisit);
-        return (customers as Customer[]).filter((c: Customer) => {
+        return (crms as CRM[]).filter((c: CRM) => {
             if (!c.lastVisitDate) return true;
             return new Date(c.lastVisitDate) < threshold;
         });
-    }, [customers]);
+    }, [crms]);
 
-    const selectedCustomer = useAtomValue(selectedCustomerAtom);
+    const selectedCRM = useAtomValue(selectedCRMAtom);
 
     return {
-        customers,
+        crms,
         segments,
-        selectedCustomer,
+        selectedCRM,
         isLoading: node.loading,
         error: node.error,
-        getCustomersBySegment,
-        searchCustomers,
-        getInactiveCustomers,
-        getActiveCustomer: (id: string) => {
-            return (customers as Customer[]).find((c: Customer) => c.id === id) || null;
+        getCRMsBySegment,
+        searchCRMs,
+        getInactiveCRMs,
+        getActiveCRM: (id: string) => {
+            return (crms as CRM[]).find((c: CRM) => c.id === id) || null;
         },
-        upsertCustomer: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => {
-            const path = `tenants/${tenantId}/customers`;
+        upsertCRM: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => {
+            const path = `tenants/${tenantId}/crms`;
             const id = data.id || Nexus.adapter.generateId(path);
             await Nexus.adapter.set(`${path}/${id}`, { 
                 ...data, 
@@ -642,8 +642,8 @@ export const useCRM = () => {
                 createdAt: data.createdAt || new Date().toISOString()
             }, { merge: true });
         }),
-        deleteCustomer: (id: string) => guardedAction('CRM', 'SYNC_STATE', async () => {
-            await Nexus.adapter.delete(`tenants/${tenantId}/customers/${id}`);
+        deleteCRM: (id: string) => guardedAction('CRM', 'SYNC_STATE', async () => {
+            await Nexus.adapter.delete(`tenants/${tenantId}/crms/${id}`);
         })
     };
 };

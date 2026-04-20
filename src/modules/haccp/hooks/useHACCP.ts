@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { 
     hygieneLabelsAtom, 
@@ -12,14 +12,14 @@ import {
     hygieneLogsNodeAtom,
     receptionLogsNodeAtom,
     maintenanceLogsNodeAtom
-} from '@/store/operationalAtoms';
+} from '../store/complianceAtoms';
 import { useNexusMutation } from '@/shared/hooks/useNexusMutation';
 import { 
     HygieneLog, 
     ReceptionLog, 
     MaintenanceLog, 
     SensorReading 
-} from '../types/domain';
+} from '../types';
 
 /**
  * 🛡️ useHACCP - Domatized Grade X Sovereign Bridge
@@ -82,7 +82,11 @@ export function useHACCP() {
             ...hygieneLogs,
             ...receptionLogs,
             ...maintenanceLogs
-        ].filter((log: any) => log.status === 'critical' || log.critical_issue || log.integrityStatus === 'non-conforme');
+        ].filter((log: HygieneLog | ReceptionLog | MaintenanceLog) => 
+            log.status === 'critical' || 
+            (log as any).critical_issue || 
+            (log as any).integrityStatus === 'non-conforme'
+        );
     }, [hygieneLogs, receptionLogs, maintenanceLogs]);
 
     return {

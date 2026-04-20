@@ -4,7 +4,7 @@
 
 export type ReservationStatus = 'pending' | 'confirmed' | 'seated' | 'completed' | 'no-show' | 'cancelled';
 
-export interface Customer {
+export interface CRM {
     id: string;
     firstName: string;
     lastName: string;
@@ -26,8 +26,8 @@ export interface Customer {
 
 export interface Reservation {
     id: string;
-    customerId?: string;
-    customerName: string;
+    crmId?: string;
+    crmName: string;
     email?: string;
     phone: string;
     date: string;
@@ -52,5 +52,5 @@ export interface CRMGroup {
     id: string;
     name: string;
     description?: string;
-    customers: string[]; // Customer IDs
+    crms: string[]; // CRM IDs
 }

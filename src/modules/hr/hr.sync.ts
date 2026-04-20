@@ -7,7 +7,7 @@ import {
     leaveBalancesNodeAtom,
     staffMembersNodeAtom,
     updateNexusNode 
-} from '@/store/operationalAtoms';
+} from '../store/hrAtoms';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 

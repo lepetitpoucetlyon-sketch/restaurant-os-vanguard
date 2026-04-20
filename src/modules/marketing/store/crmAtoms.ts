@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { Customer } from '@/types';
+import { CRM } from '@/types';
 
 /**
  * ⚛️ CRM ATOMS - Grade VI Stability
@@ -11,12 +11,12 @@ export const crmSearchQueryAtom = atom('');
 export const crmFilterSegmentAtom = atom<string | null>(null);
 
 // 2. UI & Selection State
-export const crmSelectedCustomerAtom = atom<Customer | null>(null);
-export const crmNewCustomerModalAtom = atom(false);
+export const crmSelectedCRMAtom = atom<CRM | null>(null);
+export const crmNewCRMModalAtom = atom(false);
 export const crmSecurityModalAtom = atom(false);
-export const crmCustomerToDeleteAtom = atom<Customer | null>(null);
+export const crmCRMToDeleteAtom = atom<CRM | null>(null);
 
-// 3. New Customer Form State (Atomic Form)
+// 3. New CRM Form State (Atomic Form)
 export interface CRMFormState {
     name: string;
     phone: string;

@@ -5,7 +5,7 @@ import { floorPlan } from './floor-plan';
 import { pos } from './pos';
 import { kds } from './kds';
 import { kitchen } from './kitchen';
-import { crm } from './crm';
+import { customer } from './customer';
 import { intelligence } from './intelligence';
 import { inventory } from './inventory';
 import { haccp } from './haccp';
@@ -31,7 +31,7 @@ export const CATEGORY_DOCS: Record<string, DocCategory> = {
     pos,
     kds,
     kitchen,
-    crm,
+    customer,
     intelligence,
     inventory,
     haccp,

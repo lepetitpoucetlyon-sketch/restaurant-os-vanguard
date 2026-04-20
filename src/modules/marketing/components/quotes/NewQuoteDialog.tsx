@@ -49,9 +49,9 @@ function createQuoteLine(product?: Product): Partial<QuoteLine> {
 }
 
 export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
-    const [customerType, setCustomerType] = useState<'individual' | 'company'>('company');
-    const [customerName, setCustomerName] = useState('');
-    const [customerEmail, setCustomerEmail] = useState('');
+    const [crmType, setCRMType] = useState<'individual' | 'company'>('company');
+    const [crmName, setCRMName] = useState('');
+    const [crmEmail, setCRMEmail] = useState('');
     const [subject, setSubject] = useState('');
     const [lines, setLines] = useState<Partial<QuoteLine>[]>(() => [createQuoteLine()]);
     const [isSaving, setIsSaving] = useState(false);
@@ -64,9 +64,9 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     };
 
     const resetForm = () => {
-        setCustomerType('company');
-        setCustomerName('');
-        setCustomerEmail('');
+        setCRMType('company');
+        setCRMName('');
+        setCRMEmail('');
         setSubject('');
         setLines([createQuoteLine()]);
         setIsSaving(false);
@@ -116,10 +116,10 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
     const { data: inventoryProducts } = useInventory();
     const { createQuote } = useQuotes();
-    const { selectedCustomer } = useCRM();
+    const { selectedCRM } = useCRM();
     
     const handleSave = async () => {
-        if (!customerName || !customerEmail || lines.length === 0) {
+        if (!crmName || !crmEmail || lines.length === 0) {
             toast.error("Veuillez remplir les informations client et ajouter au moins une ligne.");
             return;
         }
@@ -127,9 +127,9 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
         setIsSaving(true);
         try {
             const quoteData = {
-                customerId: selectedCustomer?.id || 'ORPHAN', // CRM LINKAGE ESTABLISHED
-                customerName,
-                customerEmail,
+                crmId: selectedCRM?.id || 'ORPHAN', // CRM LINKAGE ESTABLISHED
+                crmName,
+                crmEmail,
                 subject,
                 items: lines.map(l => ({
                     id: l.id!,
@@ -188,7 +188,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                 {/* Main Content Area */}
                 <div className="flex-1 overflow-y-auto p-12 space-y-16 elegant-scrollbar relative z-10">
 
-                    {/* Customer Configuration */}
+                    {/* CRM Configuration */}
                     <section className="space-y-8">
                         <div className="flex items-center gap-4 px-2">
                             <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
@@ -203,20 +203,20 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                 <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Type d'entité</label>
                                 <div className="flex p-1.5 bg-bg-secondary rounded-[24px] border border-border shadow-inner">
                                     <button
-                                        onClick={() => setCustomerType('company')}
+                                        onClick={() => setCRMType('company')}
                                         className={cn(
                                             "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-[10px] font-black uppercase tracking-widest transition-all",
-                                            customerType === 'company' ? "bg-white dark:bg-white/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
+                                            crmType === 'company' ? "bg-white dark:bg-white/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
                                         )}
                                     >
                                         <Building2 className="w-4 h-4" />
                                         Entreprise
                                     </button>
                                     <button
-                                        onClick={() => setCustomerType('individual')}
+                                        onClick={() => setCRMType('individual')}
                                         className={cn(
                                             "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-[10px] font-black uppercase tracking-widest transition-all",
-                                            customerType === 'individual' ? "bg-white dark:bg-white/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
+                                            crmType === 'individual' ? "bg-white dark:bg-white/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
                                         )}
                                     >
                                         <User className="w-4 h-4" />
@@ -230,8 +230,8 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                 <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Dénomination</label>
                                 <input
                                     type="text"
-                                    value={customerName}
-                                    onChange={(e) => setCustomerName(e.target.value)}
+                                    value={crmName}
+                                    onChange={(e) => setCRMName(e.target.value)}
                                     placeholder="Ex: Société Example SAS"
                                     className="w-full h-14 px-8 bg-bg-secondary border border-border rounded-[24px] text-sm text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent-gold/50 shadow-inner"
                                 />
@@ -242,8 +242,8 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                 <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Coordination Email</label>
                                 <input
                                     type="email"
-                                    value={customerEmail}
-                                    onChange={(e) => setCustomerEmail(e.target.value)}
+                                    value={crmEmail}
+                                    onChange={(e) => setCRMEmail(e.target.value)}
                                     placeholder="contact@archive-exécutive.com"
                                     className="w-full h-14 px-8 bg-bg-secondary border border-border rounded-[24px] text-sm text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent-gold/50 shadow-inner"
                                 />

@@ -9,9 +9,9 @@ import { motion } from 'framer-motion';
 import { 
     crmSearchQueryAtom, 
     crmFilterSegmentAtom,
-    crmNewCustomerModalAtom
+    crmNewCRMModalAtom
 } from '@/store/crmAtoms';
-import { customersAtom } from '@/store/operationalAtoms';
+import { crmsAtom } from '../store/marketingAtoms';
 
 const SEGMENTS = {
     vip: { name: 'VIP', color: '#8B5CF6', icon: Star },
@@ -24,12 +24,12 @@ export function CRMSidebar() {
     const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useAtom(crmSearchQueryAtom);
     const [filterSegment, setFilterSegment] = useAtom(crmFilterSegmentAtom);
-    const [, setNewCustomerModalOpen] = useAtom(crmNewCustomerModalAtom);
-    const [customers] = useAtom(customersAtom);
+    const [, setNewCRMModalOpen] = useAtom(crmNewCRMModalAtom);
+    const [crms] = useAtom(crmsAtom);
 
     const getCount = (key: string | null) => {
-        if (!key) return customers.length;
-        return customers.filter((c: any) => c.segment === key).length;
+        if (!key) return crms.length;
+        return crms.filter((c: any) => c.segment === key).length;
     };
 
     return (
@@ -51,11 +51,11 @@ export function CRMSidebar() {
 
             <div className="space-y-4 flex-1">
                 <button
-                    onClick={() => (setNewCustomerModalOpen as any)(true)}
+                    onClick={() => (setNewCRMModalOpen as any)(true)}
                     className="w-full h-16 bg-accent-gold text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
                 >
                     <Plus className="w-4 h-4" />
-                    {t('crm.add_customer') || 'Ajouter Client'}
+                    {t('crm.add_crm') || 'Ajouter Client'}
                 </button>
 
                 <button

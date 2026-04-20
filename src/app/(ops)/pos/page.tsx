@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CategoryList } from "@/components/pos/CategoryList";
-import { ProductGrid } from "@/components/pos/ProductGrid";
-import { Cart } from "@/components/pos/Cart";
-import { TableSelector } from "@/components/pos/TableSelector";
-import { PaymentDialog } from "@/components/pos/PaymentDialog";
-import { SplitBillDialog } from "@/components/pos/SplitBillDialog";
+import { CategoryList } from "@/modules/ops/components/pos/CategoryList";
+import { ProductGrid } from "@/modules/ops/components/pos/ProductGrid";
+import { Cart } from "@/modules/ops/components/pos/Cart";
+import { TableSelector } from "@/modules/ops/components/pos/TableSelector";
+import { PaymentDialog } from "@/modules/ops/components/pos/PaymentDialog";
+import { SplitBillDialog } from "@/modules/ops/components/pos/SplitBillDialog";
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";

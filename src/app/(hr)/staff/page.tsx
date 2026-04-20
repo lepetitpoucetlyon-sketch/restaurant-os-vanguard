@@ -29,15 +29,15 @@ import { useToast } from "@/components/ui/Toast";
 import { generatePaySlip } from "@/lib/paySlipGenerator";
 import { OptimizationDialog } from "@/components/ui/OptimizationDialog";
 import { Modal } from "@/components/ui";
-import { RecruitmentDashboard } from "@/components/staff/RecruitmentDashboard";
+import { RecruitmentDashboard } from "@/modules/hr/components/staff/RecruitmentDashboard";
 
 // New Extracted Components
-import { StaffList } from "@/components/staff/StaffList";
-import { StaffMemberForm } from "@/components/staff/StaffMemberForm";
-import { StaffAuditLog } from "@/components/staff/StaffAuditLog";
-import { StaffRecentActivity } from "@/components/staff/StaffRecentActivity";
+import { StaffList } from "@/modules/hr/components/staff/StaffList";
+import { StaffMemberForm } from "@/modules/hr/components/staff/StaffMemberForm";
+import { StaffAuditLog } from "@/modules/hr/components/staff/StaffAuditLog";
+import { StaffRecentActivity } from "@/modules/hr/components/staff/StaffRecentActivity";
 import { useStaffAudit } from "@/hooks/useStaffAudit";
-import { BadgeControl } from "@/components/staff/BadgeControl";
+import { BadgeControl } from "@/modules/hr/components/staff/BadgeControl";
 import { activeShiftsAtom, shiftLogsAtom } from "@/store/operationalAtoms";
 import { useAtomValue } from "jotai";
 

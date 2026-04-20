@@ -41,10 +41,10 @@ import { ErrorBoundary } from "@/components/system/ErrorBoundary";
 
 // Gates & Orchestrators
 // ... (imports continue)
-import { AuthGate } from "@/components/auth/AuthGate";
-import { SaaSBillingGate } from "@/components/auth/SaaSBillingGate";
-import { ComplianceGate } from "@/components/auth/ComplianceGate";
-import { RoleGate } from "@/components/auth/RoleGate";
+import { AuthGate } from "@/modules/auth/components/AuthGate";
+import { SaaSBillingGate } from "@/modules/auth/components/SaaSBillingGate";
+import { ComplianceGate } from "@/modules/auth/components/ComplianceGate";
+import { RoleGate } from "@/modules/auth/components/RoleGate";
 import { AlertSync } from "@/components/system/AlertSync";
 import { ClientComponents } from "@/components/layout/ClientComponents";
 import { TrainingOverlay } from "@/components/layout/TrainingOverlay";

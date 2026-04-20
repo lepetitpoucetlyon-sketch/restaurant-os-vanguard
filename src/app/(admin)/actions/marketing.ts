@@ -37,7 +37,7 @@ export async function validatePromoCodeAction(tenantId: string, code: string) {
     return MarketingService.validatePromoCode(code);
 }
 
-// --- 📣 INDUSTRIAL MARKETING & CRM SEGMENTS (Grade IX) ---
+// --- 📣 INDUSTRIAL MARKETING & Customer SEGMENTS (Grade IX) ---
 
 export async function upsertScheduledPostAction(tenantId: string, data: any) {
     if (!tenantId) throw new Error("[Marketing] Tenant ID required.");
@@ -103,7 +103,7 @@ export async function deleteCampaignAction(tenantId: string, campaignId: string)
 export async function upsertSegmentAction(tenantId: string, data: any) {
     if (!tenantId) throw new Error("[Marketing] Tenant ID required.");
     try {
-        const collectionPath = `tenants/${tenantId}/crmSegments`;
+        const collectionPath = `tenants/${tenantId}/customerSegments`;
         const id = data.id || Nexus.adapter.generateId(collectionPath);
         const payload = {
             ...data, id,
@@ -122,7 +122,7 @@ export async function upsertSegmentAction(tenantId: string, data: any) {
 export async function deleteSegmentAction(tenantId: string, segmentId: string) {
     if (!tenantId || !segmentId) throw new Error("[Marketing] Missing credentials.");
     try {
-        await Nexus.adapter.delete(`tenants/${tenantId}/crmSegments/${segmentId}`);
+        await Nexus.adapter.delete(`tenants/${tenantId}/customerSegments/${segmentId}`);
         return { success: true };
     } catch (error) {
         logger.error(`[Marketing] Segment deletion failed`, error);

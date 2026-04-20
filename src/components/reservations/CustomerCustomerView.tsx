@@ -33,12 +33,12 @@ const getInitial = (s: string): string => (s && s.length > 0 ? s.charAt(0) : '?'
 const getVisitCount = (c: any): number => c?.visitCount ?? c?.totalVisits ?? 0;
 const getTotalSpent = (c: any): number => c?.totalSpent ?? 0;
 
-interface CustomerCRMViewProps {
+interface CustomerCustomerViewProps {
     customers: Customer[];
     onCustomerClick: (customer: Customer) => void;
 }
 
-export function CustomerCRMView({ customers, onCustomerClick }: CustomerCRMViewProps) {
+export function CustomerCustomerView({ customers, onCustomerClick }: CustomerCustomerViewProps) {
     return (
         <div className="flex-1 w-full bg-bg-primary p-12 pb-32">
             <div className="max-w-7xl mx-auto space-y-16">

@@ -26,16 +26,16 @@ import { formatCurrency } from "@/lib/formatters";
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/operationalAtoms";
 
-import { GeneralLedgerView } from "@/components/accounting/views/GeneralLedgerView";
-import { JournalEntriesView } from "@/components/accounting/views/JournalEntriesView";
-import { ProfitLossView } from "@/components/accounting/views/ProfitLossView";
-import { BalanceSheetView } from "@/components/accounting/views/BalanceSheetView";
-import { CashBankView } from "@/components/accounting/views/PlaceholderViews";
-import { ReconciliationHub } from "@/components/accounting/reconciliation/ReconciliationHub";
-import { SimpleDashboardView } from "@/components/accounting/views/SimpleDashboardView";
+import { GeneralLedgerView } from "@/modules/finance/components/accounting/views/GeneralLedgerView";
+import { JournalEntriesView } from "@/modules/finance/components/accounting/views/JournalEntriesView";
+import { ProfitLossView } from "@/modules/finance/components/accounting/views/ProfitLossView";
+import { BalanceSheetView } from "@/modules/finance/components/accounting/views/BalanceSheetView";
+import { CashBankView } from "@/modules/finance/components/accounting/views/PlaceholderViews";
+import { ReconciliationHub } from "@/modules/finance/components/accounting/reconciliation/ReconciliationHub";
+import { SimpleDashboardView } from "@/modules/finance/components/accounting/views/SimpleDashboardView";
 import { FECGenerator } from "@/lib/accounting/FECGenerator";
 import { useToast } from "@/components/ui/Toast";
-import { FiscalAuditView } from "@/components/accounting/FiscalAuditView";
+import { FiscalAuditView } from "@/modules/finance/components/accounting/FiscalAuditView";
 
 export default function AccountingConsolePage() {
     const { sidebarOpen } = useUI();

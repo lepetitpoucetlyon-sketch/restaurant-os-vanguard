@@ -36,7 +36,7 @@ export function MobileHeader() {
             'kds': 'kds',
             'inventory': 'inventory',
             'storage-map': 'storage_map',
-            'crm': 'crm',
+            'customer': 'customer',
             'staff': 'staff',
             'planning': 'planning',
             'leaves': 'leaves',

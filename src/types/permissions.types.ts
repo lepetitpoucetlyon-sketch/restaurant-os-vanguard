@@ -57,7 +57,7 @@ export type PageKey =
     | 'kds'
     | 'inventory'
     | 'storage_map'
-    | 'crm'
+    | 'customer'
     | 'staff'
     | 'planning'
     | 'leaves'
@@ -111,7 +111,7 @@ export type StorageMapAction =
     | 'view' | 'move_stock' | 'add_to_location' | 'create_location' | 'modify_location'
     | 'delete_location' | 'view_dlc_alerts' | 'discard_expired';
 
-export type CRMAction =
+export type CustomerAction =
     | 'view' | 'view_client' | 'create_client' | 'modify_client' | 'delete_client'
     | 'merge_duplicates' | 'add_note' | 'add_tag' | 'view_history_reservations'
     | 'view_history_orders' | 'view_ca_client' | 'export' | 'import' | 'send_email' | 'send_sms';

@@ -159,13 +159,13 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
             }
             else if (entity === 'crm') {
                 const crmData = data as any[];
-                for (const customer of crmData) {
-                    const id = Nexus.adapter.generateId('customers');
-                    batch.set(`customers/${id}`, {
-                        firstName: customer.prenom || customer.firstName || "Inconnu",
-                        lastName: customer.nom || customer.lastName || "",
-                        email: customer.email || "",
-                        phone: customer.phone || "",
+                for (const crm of crmData) {
+                    const id = Nexus.adapter.generateId('crms');
+                    batch.set(`crms/${id}`, {
+                        firstName: crm.prenom || crm.firstName || "Inconnu",
+                        lastName: crm.nom || crm.lastName || "",
+                        email: crm.email || "",
+                        phone: crm.phone || "",
                         status: 'active',
                         metrics: { totalVisits: 0, totalSpent: 0, noShows: 0 },
                         tags: [],

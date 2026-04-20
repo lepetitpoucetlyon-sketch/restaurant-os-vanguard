@@ -127,8 +127,8 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "fifo_enforcement", label: "Forcer FIFO", group: "logic", type: "toggle", roles: ["super_admin", "directeur"] },
         ],
     },
-    crm: {
-        title: "Paramètres CRM",
+    customer: {
+        title: "Paramètres Customer",
         settings: [
             { key: "default_view", label: "Vue par défaut", group: "style", type: "select", options: [{ value: "list", label: "Liste" }, { value: "cards", label: "Cartes" }, { value: "table", label: "Tableau" }], roles: ["super_admin", "directeur", "manager"] },
             { key: "required_phone", label: "Téléphone obligatoire", group: "logic", type: "toggle", roles: ["super_admin", "directeur"] },

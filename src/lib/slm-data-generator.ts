@@ -63,7 +63,7 @@ export class SLMDataGenerator {
     }
 
     /**
-     * Generates CRM & Reservation knowledge from Firestore
+     * Generates Customer & Reservation knowledge from Firestore
      */
     static async generateReservationPairs(): Promise<SLMTrainingPair[]> {
         const reservations = await Nexus.adapter.query('reservations');

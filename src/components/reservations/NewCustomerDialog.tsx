@@ -88,7 +88,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
             noPadding
         >
             <div className="flex flex-col h-[75vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.15)] border border-border">
-                {/* Premium CRM Header */}
+                {/* Premium Customer Header */}
                 <div className="px-12 py-10 bg-bg-secondary text-text-primary relative overflow-hidden shrink-0 border-b border-border">
                     <div className="absolute inset-0 opacity-10 pointer-events-none">
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(212,175,55,0.1),transparent)]" />
@@ -105,7 +105,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
-                                    <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Enregistrement CRM Certifié</span>
+                                    <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Enregistrement Customer Certifié</span>
                                     <div className="h-1 w-1 rounded-full bg-white/10" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />

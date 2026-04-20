@@ -15,7 +15,7 @@ const PATH_TO_CATEGORY: Record<string, string> = {
     '/omnichannel-reservations': 'reservations',
     '/quotes': 'reservations',
     '/pms': 'reservations',
-    '/crm': 'crm',
+    '/customer': 'customer',
     '/kitchen': 'kitchen',
     '/kds': 'kds',
     '/inventory': 'inventory',

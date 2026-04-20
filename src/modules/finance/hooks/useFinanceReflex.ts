@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
-import { nexusPulseAtom } from '@/store/operationalAtoms';
+import { nexusPulseAtom } from '../store/accountingAtoms';
 import { useAccounting } from './useAccounting';
 import { logger } from '@/lib/logger';
 

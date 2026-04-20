@@ -53,7 +53,7 @@ interface NexusFleetState {
     toggleTrainingMode: () => void;
     // Legacy support proxies
     fleet: Record<string, unknown> | null;
-    crm: Record<string, unknown>;
+    customer: Record<string, unknown>;
     intelligence: Record<string, unknown>;
     tutorial?: any;
 }
@@ -268,7 +268,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         complianceService: FleetComplianceService,
         haccpBridge: HACCPTelemetryBridge,
         fleet: {} as any, 
-        crm: { customers: [] } as any,
+        customer: { customers: [] } as any,
         intelligence: { 
             insights: macroInsights,
             globalInflationRate,

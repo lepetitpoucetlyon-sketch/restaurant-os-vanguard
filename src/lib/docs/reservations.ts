@@ -3,7 +3,7 @@ import { DocCategory } from '@/types';
 
 export const reservations: DocCategory = {
     title: 'Manifeste & Réservations',
-    description: 'Un système de conciergerie digitale conçu pour maximiser le taux d\'occupation et fluidifier l\'accueil. Il gère l\'intégralité du cycle de vie du convive, de la demande initiale à son départ, en optimisant chaque mètre carré de votre salle.',
+    description: 'Un système de hostrie digitale conçu pour maximiser le taux d\'occupation et fluidifier l\'accueil. Il gère l\'intégralité du cycle de vie du convive, de la demande initiale à son départ, en optimisant chaque mètre carré de votre salle.',
     icon: Calendar,
     color: '#1B4332',
     details: [
@@ -12,7 +12,7 @@ export const reservations: DocCategory = {
         { label: 'Cyclage des Convives', content: 'Suivi précis des statuts : Attendu, Arrivé, Installé, Mise à feu, Dessert, Addition demandée, Départ.' },
         { label: 'Liste d\'Attente Mobile', content: 'Gestion prioritaire des clients sans réservation avec estimation précise du temps d\'attente envoyée par SMS.' },
         { label: 'No-Show Protection', content: 'Système d\'empreinte bancaire sécurisée et relances automatiques multicanaux pour garantir votre taux de remplissage.' },
-        { label: 'Profil de Réservation', content: 'Chaque réservation est liée à un profil CRM riche incluant allergies, habitudes alimentaires et historique de dépenses.' }
+        { label: 'Profil de Réservation', content: 'Chaque réservation est liée à un profil Customer riche incluant allergies, habitudes alimentaires et historique de dépenses.' }
     ],
     fullTutorial: [
         {

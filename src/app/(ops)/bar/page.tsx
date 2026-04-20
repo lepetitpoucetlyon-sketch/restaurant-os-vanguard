@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@/components/ui/Toast";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
-import { RecipeDetailDialog } from "@/components/kitchen/RecipeDetailDialog";
+import { RecipeDetailDialog } from "@/modules/ops/components/kitchen/RecipeDetailDialog";
 import { PRODUCTS } from "@/lib/mock-data";
 
 // Domain & Constants

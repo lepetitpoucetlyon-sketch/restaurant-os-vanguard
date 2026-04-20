@@ -65,9 +65,9 @@ export type TutorialItem = {
         },
       ],
     },
-    crm: {
-      id: 'crm',
-      title: 'Guide : Clients (CRM)',
+    customer: {
+      id: 'customer',
+      title: 'Guide : Clients (Customer)',
       items: [
         {
           title: 'Fiche Client',

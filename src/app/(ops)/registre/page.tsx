@@ -19,14 +19,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useRegistre } from "@/context/RegistreContext";
-import { DUERPSection } from "@/components/registre/DUERPSection";
-import { IncendieSection } from "@/components/registre/IncendieSection";
-import { Cerfa13984Section } from "@/components/registre/Cerfa13984Section";
-import { PrestatairesSection } from "@/components/registre/PrestatairesSection";
-import { PMRSection } from "@/components/registre/PMRSection";
-import { SanitaryComplianceSection } from "@/components/registre/SanitaryComplianceSection";
+import { DUERPSection } from "@/modules/ops/components/registre/DUERPSection";
+import { IncendieSection } from "@/modules/ops/components/registre/IncendieSection";
+import { Cerfa13984Section } from "@/modules/ops/components/registre/Cerfa13984Section";
+import { PrestatairesSection } from "@/modules/ops/components/registre/PrestatairesSection";
+import { PMRSection } from "@/modules/ops/components/registre/PMRSection";
+import { SanitaryComplianceSection } from "@/modules/ops/components/registre/SanitaryComplianceSection";
 import { Modal } from "@/components/ui/Modal";
-import { InterventionLogSection } from "@/components/registre/InterventionLogSection";
+import { InterventionLogSection } from "@/modules/ops/components/registre/InterventionLogSection";
 
 type TabType = 'overview' | 'duerp' | 'incendie' | 'prestataires' | 'pmr' | 'conformite' | 'interventions';
 

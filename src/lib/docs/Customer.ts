@@ -1,9 +1,9 @@
 import { Heart } from 'lucide-react';
 import { DocCategory } from '@/types';
 
-export const crm: DocCategory = {
-    title: 'CRM Hôtelier & Intelligence Client',
-    description: 'Le cœur de votre stratégie de fidélisation. Le CRM stocke et analyse chaque interaction pour recréer une expérience ultra-personnalisée, transformant chaque convive en ambassadeur régulier de votre établissement.',
+export const customer: DocCategory = {
+    title: 'Customer Hôtelier & Intelligence Client',
+    description: 'Le cœur de votre stratégie de fidélisation. Le Customer stocke et analyse chaque interaction pour recréer une expérience ultra-personnalisée, transformant chaque convive en ambassadeur régulier de votre établissement.',
     icon: Heart,
     color: '#1c3c2d',
     details: [
@@ -20,7 +20,7 @@ export const crm: DocCategory = {
             icon: "🤝",
             content: "Chaque client a un profil riche pour un accueil personnalisé.",
             points: [
-                "Créer un client → [PATH:/crm] Bouton '+ Client' → Remplissez Nom, Prénom, Tél, Email → Onglet 'Préférences' pour allergies/table → Enregistrer.",
+                "Créer un client → [PATH:/customer] Bouton '+ Client' → Remplissez Nom, Prénom, Tél, Email → Onglet 'Préférences' pour allergies/table → Enregistrer.",
                 "Ajouter une note → Ouvrez la fiche client → Onglet 'Notes' → '+ Note' → Tapez votre commentaire → Enregistrer.",
                 "Consulter l'historique → Fiche client → Onglet 'Visites' → Liste des réservations passées avec montants dépensés."
             ]

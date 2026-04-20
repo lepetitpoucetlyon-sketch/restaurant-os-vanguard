@@ -154,7 +154,7 @@ export interface NexusFleetState {
     complianceService: any;
     haccpBridge: any;
     fleet: Record<string, unknown> | null;
-    crm: Record<string, unknown>;
+    customer: Record<string, unknown>;
     intelligence: {
         globalInflationRate: number;
         setGlobalInflationRate: (rate: number) => void;

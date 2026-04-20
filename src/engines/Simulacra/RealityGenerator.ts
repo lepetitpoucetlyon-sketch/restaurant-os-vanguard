@@ -1,5 +1,7 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
+import { SensorReading } from '@/modules/haccp/types';
+import { Order } from '@/modules/ops/types';
 
 /**
  * 🌀 RealityGenerator - The Vital Heart of the Simulacra
@@ -61,16 +63,23 @@ export class RealityGenerator {
     /**
      * Generates a burst of sales to simulate a busy "Rush Hour".
      */
-    static async generateSalesRush(callback: (order: any) => void, count: number = 20) {
+    static async generateSalesRush(callback: (order: Partial<Order>) => void, count: number = 20) {
         logger.info(`🔥 [SIMULACRA] COMMENCING SALES RUSH: ${count} orders incoming...`);
         for (let i = 0; i < count; i++) {
             const items = ['Burger', 'Frites', 'Soda', 'Salade'];
-            const order = {
+            const order: Partial<Order> = {
                 id: `sim_${uuidv4().substring(0, 8)}`,
-                items: [items[Math.floor(Math.random() * items.length)]],
-                total: Math.random() * 50 + 10,
-                timestamp: new Date().toISOString(),
-                staffId: 'staff_sim_01'
+                items: [{
+                    id: uuidv4(),
+                    productId: 'sim_prod',
+                    name: items[Math.floor(Math.random() * items.length)],
+                    quantity: 1,
+                    priceInCents: 1500,
+                    status: 'pending'
+                }],
+                totalInCents: 1500,
+                timestamp: new Date(),
+                tableNumber: String(Math.floor(Math.random() * 20) + 1)
             };
             
             // Random delay to simulate real customers

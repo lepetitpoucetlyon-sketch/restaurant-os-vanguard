@@ -9,12 +9,12 @@ import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { SocialAccountCard } from "@/components/marketing/SocialAccountCard";
-import { ScheduledPostItem } from "@/components/marketing/ScheduledPostItem";
-import { CampaignCard } from "@/components/marketing/CampaignCard";
-import { SegmentCard } from "@/components/marketing/SegmentCard";
-import { NewPostModal } from "@/components/marketing/NewPostModal";
-import { NewCampaignModal } from "@/components/marketing/NewCampaignModal";
+import { SocialAccountCard } from "@/modules/marketing/components/marketing/SocialAccountCard";
+import { ScheduledPostItem } from "@/modules/marketing/components/marketing/ScheduledPostItem";
+import { CampaignCard } from "@/modules/marketing/components/marketing/CampaignCard";
+import { SegmentCard } from "@/modules/marketing/components/marketing/SegmentCard";
+import { NewPostModal } from "@/modules/marketing/components/marketing/NewPostModal";
+import { NewCampaignModal } from "@/modules/marketing/components/marketing/NewCampaignModal";
 
 import { useMarketing } from "@/engines/ops/NexusOpsProvider";
 
@@ -62,8 +62,8 @@ export default function SocialMarketingPage() {
     // For now, if profile has posts, use them, otherwise empty
     const scheduledPosts = (profile as any)?.scheduledPosts || [];
 
-    // CRM segments derived from profile or local state
-    const crmSegments = (profile as any)?.crmSegments || [];
+    // Customer segments derived from profile or local state
+    const customerSegments = (profile as any)?.customerSegments || [];
 
     return (
         <div className="relative min-h-screen bg-bg-primary/50 text-text-primary p-6 md:p-10 font-sans overflow-hidden">
@@ -86,7 +86,7 @@ export default function SocialMarketingPage() {
                         {[
                             { id: 'social', label: 'Réseaux', icon: Instagram },
                             { id: 'campaigns', label: 'Campagnes', icon: Megaphone },
-                            { id: 'segments', label: 'CRM Segments', icon: Users },
+                            { id: 'segments', label: 'Customer Segments', icon: Users },
                         ].map((tab) => (
                             <button
                                 key={tab.id}
@@ -168,7 +168,7 @@ export default function SocialMarketingPage() {
 
                     {activeTab === 'segments' && (
                         <motion.div key="segments" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {crmSegments.map((s: any) => <SegmentCard key={s.id} segment={s} />)}
+                            {customerSegments.map((s: any) => <SegmentCard key={s.id} segment={s} />)}
                             <button onClick={() => showToast("Fonctionnalité à venir", "info")} className="group flex flex-col items-center justify-center gap-6 border-2 border-dashed border-text-muted/20 hover:border-text-primary/50 rounded-[2.5rem] p-8 transition-all min-h-[300px]">
                                 <div className="w-20 h-20 rounded-full bg-bg-tertiary flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Plus size={32} className="text-text-muted group-hover:text-text-primary" />

@@ -4,7 +4,7 @@ import {
     hygieneLabelsNodeAtom, 
     maintenanceLogsNodeAtom, 
     updateNexusNode 
-} from '@/store/operationalAtoms';
+} from '../store/complianceAtoms';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 

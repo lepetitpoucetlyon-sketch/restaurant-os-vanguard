@@ -22,7 +22,7 @@ export type ModuleId =
   // Back-Office (Stock & Conformité)
   | 'INVENTORY' | 'HACCP' | 'RECEPTION'
   // RH & Planning
-  | 'CLOCK_IN' | 'HR' | 'PLANNING' | 'LEAVE' | 'RECRUITMENT'
+  | 'CLOCK_IN' | 'HR' | 'PLANNING' | 'LEAVE' | 'RECRUITMENT' | 'ONBOARDING'
   // Intelligence & Croissance
   | 'BI' | 'GOOGLE_ANALYTICS' | 'MARKETING' | 'AI_REFERENCING' | 'SEO'
   // Gouvernance Financière

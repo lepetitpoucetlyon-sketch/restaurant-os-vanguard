@@ -18,7 +18,7 @@ import { SidebarProfile } from "./sidebar/SidebarProfile";
 // External Modals/Overlays
 import { AppLaunchpad } from "./AppLaunchpad";
 import { ProfileSwitcher } from "./ProfileSwitcher";
-import { ExpenseClaimDialog } from "@/components/accounting/ExpenseClaimDialog";
+import { ExpenseClaimDialog } from "@/modules/finance/components/accounting/ExpenseClaimDialog";
 import { Map3DOverlay } from "./Map3DOverlay";
 import { empireAudit } from "@/lib/audit";
 
@@ -87,7 +87,7 @@ export function Sidebar() {
                     'recruitment': features.hr,
                     'onboarding': features.hr,
                     'reservations': features.reservations,
-                    'crm': features.reservations,
+                    'customer': features.reservations,
                     'accounting': features.finance,
                     'finance': features.finance,
                     'analytics': features.marketing,

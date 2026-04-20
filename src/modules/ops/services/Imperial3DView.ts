@@ -7,11 +7,11 @@ import { logger } from './logger';
 export const Imperial3DView = {
   
   /**
-   * Initializes the 3D War Room dashboard.
+   * Initializes the 3D Command Center dashboard.
    * Logic: Evolution from 2D Tables to 3D Cluster Visualization.
    */
-  async initWarRoom(containerId: string) {
-    logger.info(`[3D-Eye] Initializing Imperial War Room in container: ${containerId}`);
+  async initCommandCenter(containerId: string) {
+    logger.info(`[3D-Eye] Initializing Imperial Command Center in container: ${containerId}`);
 
     if (typeof window === 'undefined') return;
 
