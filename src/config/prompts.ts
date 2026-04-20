@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AgentDomain, AgentRole } from '@/domain/agency/types';
 
 export const MASTER_DNA = `

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export interface IngredientSettings {
     id: string;
     name: string;

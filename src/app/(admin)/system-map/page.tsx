@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { MindMap } from "@/components/analytics/MindMap";

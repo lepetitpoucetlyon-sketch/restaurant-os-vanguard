@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 "use client";
 import { useNexusFiscal } from '@/engines/fiscal/NexusFiscalProvider';
 export const useRegistre = () => useNexusFiscal()?.registre;

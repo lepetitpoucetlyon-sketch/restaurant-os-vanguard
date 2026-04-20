@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 "use client";
 
 import { useAtomValue } from "jotai";

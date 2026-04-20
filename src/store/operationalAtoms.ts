@@ -21,7 +21,8 @@ export {
 export {
     isSidebarCollapsedAtom, isLaunchpadOpenAtom, themeAtom, isTrainingModeAtom,
     notificationsAtom, unreadNotificationsCountAtom,
-    isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom
+    isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom,
+    addToastAtom
 } from './uiAtoms';
 
 // 🍽️ ORDERS DOMAIN

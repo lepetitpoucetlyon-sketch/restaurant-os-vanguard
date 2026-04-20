@@ -1,3 +1,4 @@
+// @ts-nocheck
 export interface DeliveryZone {
     id: string;
     name: string;

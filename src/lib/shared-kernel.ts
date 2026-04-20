@@ -82,20 +82,20 @@ export const SharedKernel = {
         const sanitized = { ...rawData };
 
         schemaFields.forEach(field => {
-            const value = sanitized[field.id];
+            const value = (sanitized as Record<string, unknown>)[field.id as string];
             if (value === undefined || value === null) return;
 
             // Conversion automatique basée sur les unités du registre
             if (field.unit === 'cents' && typeof value === 'number') {
-                sanitized[field.id] = SharedKernel.eurosToCents(value);
+                (sanitized as Record<string, unknown>)[field.id as string] = SharedKernel.eurosToCents(value);
             } else if (field.unit === 'grams' && typeof value === 'number') {
-                sanitized[field.id] = SharedKernel.kilogramsToGrams(value);
+                (sanitized as Record<string, unknown>)[field.id as string] = SharedKernel.kilogramsToGrams(value);
             }
 
             // Gestion récursive pour les listes
             if (field.type === 'list' && Array.isArray(value) && field.subFields) {
-                sanitized[field.id] = value.map(item => 
-                    SharedKernel.sync(schemaKey, item, field.subFields)
+                (sanitized as Record<string, unknown>)[field.id as string] = value.map(item => 
+                    SharedKernel.sync(schemaKey, item as Record<string, unknown>, field.subFields as Record<string, unknown>[])
                 );
             }
         });

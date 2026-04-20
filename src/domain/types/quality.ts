@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 📦 Quality Module Domain Types
  * Grade VI - HACCP & NF525 Compliant

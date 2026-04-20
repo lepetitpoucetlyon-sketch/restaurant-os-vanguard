@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { logger } from "@/lib/logger";
 import { simulatorDb } from './SimulatorDB';

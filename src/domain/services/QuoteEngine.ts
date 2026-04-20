@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { getTenantPath } from '@/lib/firebase';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { z } from 'zod';

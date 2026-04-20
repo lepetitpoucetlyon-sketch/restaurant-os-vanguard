@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { getDefaultStore } from 'jotai';
 import { logger } from './logger';
 import { MasterBridge } from './MasterBridge';

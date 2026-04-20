@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { atom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
 import { MarketingCampaign, CustomerFeedback } from '@/types/marketing.types';

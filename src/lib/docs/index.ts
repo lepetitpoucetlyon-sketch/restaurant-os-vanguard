@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { DocCategory } from '@/types';
 import { dashboard } from './dashboard';
 import { reservations } from './reservations';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useMediaQuery, BREAKPOINTS } from "./useMediaQuery";

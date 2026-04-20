@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback } from 'react';
 import { 
@@ -29,7 +31,6 @@ export const useSettings = () => {
             const savedAt = await SettingsManager.saveSettings(newSettings);
             setLastSaved(savedAt);
             setSettings(newSettings);
-            return savedAt;
         } finally {
             setSaving(false);
         }

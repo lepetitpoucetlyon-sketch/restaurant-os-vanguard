@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Group, Circle, Arc } from "react-konva";

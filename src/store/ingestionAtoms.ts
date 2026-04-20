@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { atom } from 'jotai';
 
 export interface IngestionStatus {

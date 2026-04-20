@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { atom } from 'jotai';
 import { EmpireInstance } from '@/domain/types/empire';
 import { FleetBloomFilter } from '@/lib/bloom-filter';

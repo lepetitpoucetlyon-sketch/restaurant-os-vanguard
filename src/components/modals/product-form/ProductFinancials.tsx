@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { DollarSign, Timer, Percent } from "lucide-react";

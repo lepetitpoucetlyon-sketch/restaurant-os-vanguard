@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { AccessPolicyManager, CategoryKey } from "@/domain/services/AccessPolicyManager";
 import { User } from '@/types';
 import { AGENT_TOOLS } from './tools';

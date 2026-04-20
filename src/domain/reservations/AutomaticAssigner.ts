@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Reservation, Table } from '@/types';
 import { format, parse, addMinutes, isBefore, isAfter, areIntervalsOverlapping } from 'date-fns';
 

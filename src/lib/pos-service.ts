@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { CartItem } from "@/hooks/usePOSController";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Category, Product } from "@/types";

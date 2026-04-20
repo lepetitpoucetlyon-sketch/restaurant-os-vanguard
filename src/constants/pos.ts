@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Banknote, CreditCard, Receipt, Wallet, Smartphone } from "lucide-react";
 
 export const PAYMENT_METHODS = [

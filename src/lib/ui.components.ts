@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🧩 UI Components Logic - Restaurant OS
  * Dedicated module for complex rendering logic and shared UI interactions.

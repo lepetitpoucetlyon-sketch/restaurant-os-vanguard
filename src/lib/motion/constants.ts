@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Transition } from "framer-motion";

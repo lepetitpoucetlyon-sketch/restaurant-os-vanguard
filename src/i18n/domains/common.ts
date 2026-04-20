@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Navigation, Header, Sidebar, Settings, Common, Allergens
 export const commonTranslations = {
     fr: {

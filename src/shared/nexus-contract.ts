@@ -1,16 +1,7 @@
 /**
  * 🛰️ NEXUS SHARED GENOME - Universal SaaS Edition
- * Technical contract for Suzerain-Vassal real-time communication.
- * Grade VIII - Sovereign Purity.
+ * Version Grade X - Sovereign Alignment
  */
-
-/**
- * SystemCapabilities
- * Agnostic map of enabled modules or features.
- * Key: Capability ID (e.g., 'pos_v1', 'drone_nav_v2')
- * Value: Availability status
- */
-export type SystemCapabilities = Record<string, boolean>;
 
 export interface TenantTheme {
   primaryColor: string;
@@ -18,87 +9,45 @@ export interface TenantTheme {
   logoUrl: string;
   borderRadius: string;
   appearance: 'light' | 'dark';
-  typography?: string;
-}
-
-export interface EmpireEconomyPolicy {
-  basePrice: number;
-  discountMultiplier: number;
-  billingStatus: 'active' | 'past_due' | 'unpaid' | 'canceled' | 'trial';
-  currency: string;
 }
 
 export interface OrchestratorSignal {
   maintenanceMode: boolean;
   killSwitch: boolean;
-  active?: boolean;
   licenceStatus: 'active' | 'locked' | 'trial';
-  targetVersion?: string;
-  otaUrl?: string;
-  layoutType: 'default' | 'kiosk' | 'hud' | 'admin' | 'sidebar';
-  lastSignalId?: string;
+  layoutType: 'default' | 'kiosk' | 'hud' | 'admin' | 'sidebar' | 'topbar';
   updatedAt: string;
-  
-  economy: EmpireEconomyPolicy;
-
-  /**
-   * Business Metadata (Grade VIII - Dynamic Injection)
-   * Any business-specific laws (price multipliers, etc.) are injected here.
-   */
-  businessLaws: Record<string, any>;
+  economy: {
+    basePrice: number;
+    currency: string;
+    billingStatus: string;
+  };
+  businessLaws: Record<string, unknown>;
+  expert?: Record<string, unknown>;
 }
 
-/**
- * 🧬 TenantConfig
- * Source of truth for the connection between MCC and local instance.
- */
 export interface TenantConfig {
   id: string;
-  capabilities: SystemCapabilities;
+  capabilities: Record<string, boolean>;
   theme: TenantTheme;
   status: OrchestratorSignal;
-  telemetry?: TelemetryPulse;
   metadata: {
     name: string;
     version: string;
     ownerId?: string;
-    createdAt?: string;
+    [key: string]: unknown;
+  };
+  customFeatures?: Record<string, boolean>;
+  firebase?: {
+    apiKey: string;
+    projectId: string;
+    appId: string;
+    [key: string]: string;
   };
 }
 
-/**
- * 📊 TelemetryPulse
- * Data package sent from the Vassal (OS) to the Suzerain (MCC).
- */
-export interface TelemetryPulse {
-  version: string;
-  status: 'active' | 'error' | 'maintenance';
-  lastPulse: string | number | Date;
-  health: {
-    uptime: number;
-    battery: {
-      level: number;
-      charging: boolean;
-      supported: boolean;
-    };
-    network: {
-      online: boolean;
-      effectiveType?: string;
-    };
-  };
-  security: {
-    nf525Sealed: boolean;
-    lastSealHash?: string;
-    integrityGrade: string;
-  };
-}
-
-/**
- * Default Safety Configuration (Agnostic - Full Access)
- * Guards against the "Black Screen" effect if sync fails.
- */
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
-  capabilities: {}, // Start empty (pure shell)
+  capabilities: {},
   theme: {
     primaryColor: '#0F172A',
     secondaryColor: '#38BDF8',
@@ -114,11 +63,11 @@ export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
     updatedAt: new Date().toISOString(),
     economy: {
       basePrice: 49.00,
-      discountMultiplier: 1.0,
       billingStatus: 'active',
       currency: 'EUR'
     },
-    businessLaws: {}
+    businessLaws: {},
+    expert: {}
   },
   metadata: {
     name: 'Nexus Node',

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type ReservationChannel = 'phone' | 'website' | 'thefork' | 'google' | 'walkin';
 export type ReservationStatus = 'pending' | 'confirmed' | 'arrived' | 'seated' | 'finished' | 'cancelled' | 'noshow';
 

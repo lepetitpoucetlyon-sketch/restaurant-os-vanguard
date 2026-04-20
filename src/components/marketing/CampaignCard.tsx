@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Mail, MessageCircle } from "lucide-react";

@@ -1,4 +1,4 @@
-import { LedgerEntry, SharedKernel } from '@/lib/shared-kernel';
+import { LedgerEntry, SharedKernel, AccountingMode } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
@@ -26,9 +26,9 @@ export class SovereignLedger {
         // 1. Fetch Dynamic Complexity Mode
         let mode: AccountingMode = 'EXPERT';
         try {
-            const settings = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
+            const settings = await Nexus.adapter.get<any>(Nexus.getTenantPath('settings/global'));
             if (settings?.accounting?.complexityMode) {
-                mode = settings.accounting.complexityMode;
+                mode = settings.accounting.complexityMode as AccountingMode;
             }
         } catch (e) {
             logger.warn('[SovereignLedger] Settings unavailable, defaulting to EXPERT mode.');

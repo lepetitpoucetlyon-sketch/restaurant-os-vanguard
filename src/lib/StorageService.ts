@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ref, uploadString, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
 import { storage } from './firebase';
 

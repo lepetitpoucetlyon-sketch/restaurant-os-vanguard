@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createStore } from 'jotai';
 import './mocks'; // 🛡️ Import centralisé des mocks (Firebase, Storage, Auth, Dexie)

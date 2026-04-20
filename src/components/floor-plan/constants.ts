@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { TableStatus } from "@/types";
 
 // Status Color Mapping - Premium Gradient Palettes

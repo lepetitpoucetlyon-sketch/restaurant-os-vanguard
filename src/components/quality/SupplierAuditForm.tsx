@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { ClipboardCheck, Star, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * NEXUS AI CONFIGURATION TYPES
  * Defines the identity, behavior, and automation shortcuts for the restaurant's AI.

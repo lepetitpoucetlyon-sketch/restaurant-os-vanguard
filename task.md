@@ -5,17 +5,32 @@
 
 ---
 
-## Phase 1: Restauration Souveraine v2 (Blanche-Neige) [x]
-- [x] Align `NavItem.category` in `navigation.ts` with `CategoryKey`.
-- [x] Refactor `Sidebar.tsx` filtering logic to robustly map `CategoryKey` to `FeatureFlags`.
-- [x] Verify `NexusCoreProvider` and `tenantConfigAtom` synchronization.
+## Phase 1: Restauration du Cerveau [x]
+- [x] Retirer `// @ts-nocheck` de `src/shared/nexus-contract.ts`
+- [x] Appliquer les interfaces strictes (`TenantTheme`, `OrchestratorSignal`, `TenantConfig`)
 
-## Phase 2: Sovereign UI (Dynamic Branding) [x]
-- [x] Update `SidebarBranding.tsx` to use dynamic tenant logo and color.
-- [x] Implement `ThemeSuture.tsx` to inject branding CSS variables globally.
-- [x] Inject `primaryColor` into the main application shell.
+## Phase 2: Purge du Barrel de Types [x]
+- [x] Nettoyer `src/types/index.ts` (suppression de la section SURVIVAL)
+- [x] Remplacer les types `any` par `unknown` pour `StockEvent`, `LegacyOrder`, `Product`
 
-## Phase 3: Quantum Orchestrator (Phase 5) [x]
+## Phase 3: Alignement Ledger & Kernel [x]
+- [x] Retirer `@ts-nocheck` de `src/lib/shared-kernel.ts`
+- [x] Retirer `@ts-nocheck` de `src/domain/services/SovereignLedger.ts`
+- [x] Implémenter la validation `DEBIT == CREDIT` dans `SovereignLedger.recordTransfer`
+
+## Phase 4: Refonte des Providers [x]
+- [x] Assainir `src/engines/core/NexusCoreProvider.tsx` (Hook typing, generics)
+- [x] Assainir `src/engines/ops/NexusOpsProvider.tsx` (Jotai alignment, strict hooks)
+
+## Phase 5: Réparation UI [x]
+- [x] Restaurer le typage dans `src/components/kds/ModificationAlerts.tsx`
+- [x] Aligner les appels de fonctions sur les nouvelles signatures typées
+
+## Phase 6: Certification Finale (The Build) [x]
+- [x] Exécuter `npx tsc --noEmit`
+- [x] Liquider chirurgicalement les erreurs restantes (Score de Vérité : **0**)
+
+## Phase 7: Quantum Orchestrator [x]
 - [x] Add `priceMultiplier` law to `nexus-contract.ts` (`TenantConfig`).
 - [x] Update `QuantumOrchestrator.ts` to perform bulk pricing updates using the multiplier logic.
 - [x] Create `OTABanner.tsx` for non-intrusive sovereignty signaling.

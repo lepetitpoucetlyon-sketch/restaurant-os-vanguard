@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { FleetTelemetryService } from './FleetTelemetryService';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { logger } from '@/lib/logger';

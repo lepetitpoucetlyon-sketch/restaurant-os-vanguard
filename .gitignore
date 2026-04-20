@@ -81,3 +81,11 @@ test_output.txt
 # Engine & Cloud state
 .kilo/
 .kilocode/
+
+# 🛰️ ANTI-POLLUTION FILTERS (Grade X)
+*.tmp
+*.driveupload
+build_errors_v*.txt
+build_errors_brut.txt
+test-results/
+.DS_Store

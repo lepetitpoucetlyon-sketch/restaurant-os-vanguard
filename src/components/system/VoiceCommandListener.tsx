@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 // Composant Legacy désactivé suite à l'intégration de la ligne de commande et de l'assistant Oracle textuel + dictée.

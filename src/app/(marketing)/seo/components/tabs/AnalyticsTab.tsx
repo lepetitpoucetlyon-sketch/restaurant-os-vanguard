@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Eye, Zap, TrendingUp, BarChart3, Search } from 'lucide-react';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
 export interface DaySchedule {

@@ -20,15 +20,25 @@ import {
     guardLoadingAtom,
     updateNexusNode
 } from '@/store/operationalAtoms';
+import { 
+    HygieneLabel, 
+    HygieneLog, 
+    ReceptionLog, 
+    OilLog,
+    SensorReading,
+    HACCPChecklistItem,
+    TemperatureLog
+} from '@/types/haccp.types';
 
 interface NexusGuardState {
     haccp: {
-        labels: any[];
-        criticalAlerts: any[];
+        labels: HygieneLabel[];
+        criticalAlerts: SensorReading[];
         getComplianceScore: () => number;
-        checklists: any[];
-        sensors: any[];
-        temperatureHistory: any[];
+        checklists: HACCPChecklistItem[];
+        sensors: SensorReading[];
+        temperatureHistory: TemperatureLog[];
+        validateTaskWithVision: (data: any) => Promise<boolean>;
     };
     maintenance: {
         logs: any[];
@@ -55,7 +65,8 @@ export const NexusGuardProvider: React.FC<{ children: ReactNode }> = ({ children
             getComplianceScore: () => 98,
             checklists: [],
             sensors: [],
-            temperatureHistory: []
+            temperatureHistory: [],
+            validateTaskWithVision: async () => true
         },
         maintenance: { logs: maintenanceTasks },
         health: { status: 'stable' },
@@ -87,7 +98,7 @@ export const useHygieneLabels = () => ({ data: useAtomValue(hygieneLabelsAtom) }
 export const useCreateHygieneLabel = () => {
     const setNode = useSetAtom(hygieneLabelsNodeAtom);
     return {
-        mutateAsync: useCallback(async (data: any) => {
+        mutateAsync: useCallback(async (data: HygieneLabel) => {
             setNode(prev => updateNexusNode(prev, { data: [data, ...prev.data] }));
         }, [setNode])
     };
@@ -106,7 +117,7 @@ export const useHygieneLogs = () => ({ data: useAtomValue(hygieneLogsAtom) });
 export const useCreateHygieneLog = () => {
     const setNode = useSetAtom(hygieneLogsNodeAtom);
     return {
-        mutateAsync: useCallback(async (data: any) => {
+        mutateAsync: useCallback(async (data: HygieneLog) => {
             setNode(prev => updateNexusNode(prev, { data: [data, ...prev.data] }));
         }, [setNode])
     };
@@ -122,9 +133,9 @@ export const useDeleteHygieneLog = () => {
 export const useUpdateHygieneLog = () => {
     const setNode = useSetAtom(hygieneLogsNodeAtom);
     return {
-        mutateAsync: useCallback(async (id: string, updates: any) => {
+        mutateAsync: useCallback(async (id: string, updates: Partial<HygieneLog>) => {
             setNode(prev => updateNexusNode(prev, { 
-                data: prev.data.map((item: any) => item.id === id ? { ...item, ...updates } : item) 
+                data: prev.data.map((item: HygieneLog) => item.id === id ? { ...item, ...updates } : item) 
             }));
         }, [setNode])
     };

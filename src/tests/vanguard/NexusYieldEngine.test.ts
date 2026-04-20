@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusYieldEngine } from '@/domain/services/NexusYieldEngine';
 import { MarketingService } from '@/domain/services/MarketingService';

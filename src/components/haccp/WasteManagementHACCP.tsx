@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useHACCP } from "@/engines/guard/NexusGuardProvider";

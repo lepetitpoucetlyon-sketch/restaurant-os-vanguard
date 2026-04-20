@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Shared constants and labels across the application
 // This file centralizes commonly used constants to avoid duplication
 

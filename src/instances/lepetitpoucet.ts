@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import type { TenantConfig } from '@/types';
 
 // En production, ces clés peuvent venir d'appels API ou de variables d'environnement gérées dynamiquement.

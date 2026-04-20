@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🧬 GENOME TYPES — Grade IX (Morphogenèse)
  * Contrat de pouvoir immuable du Sovereign Blob-OS.

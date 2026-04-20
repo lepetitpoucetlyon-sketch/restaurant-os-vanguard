@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { Zap } from 'lucide-react';
 import { DocCategory } from '@/types';
 

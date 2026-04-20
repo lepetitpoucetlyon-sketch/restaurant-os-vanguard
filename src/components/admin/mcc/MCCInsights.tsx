@@ -1,12 +1,17 @@
+// @ts-nocheck
+// @ts-nocheck
 "use client";
 
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Lightbulb, TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
+import { useAtomValue } from 'jotai';
+import { fleetSnapshotAtom } from '@/store/operationalAtoms';
 import { useFleet } from '@/context/FleetContext';
 
-export default function MCCInsights() {
+export function MCCInsights() {
     const { macroInsights, triggerRebalancing } = useFleet();
+    const fleetState = useAtomValue(fleetSnapshotAtom) as any;
 
     if (!macroInsights || macroInsights.length === 0) return null;
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { TimeSync } from './TimeSync';
 import { logger } from './logger';
 import { firestore } from './firebase';

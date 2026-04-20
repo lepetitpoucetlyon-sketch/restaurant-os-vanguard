@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { logger } from '@/lib/logger';
 import { FiscalSeal } from '@/types/accounting.types';
 export type { FiscalSeal };

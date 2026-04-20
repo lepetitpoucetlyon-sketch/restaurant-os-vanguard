@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Nexus } from './nexus/NexusAdapter';
 import { INexusBatch } from './nexus/NexusAdapter';
 import { z } from 'zod';

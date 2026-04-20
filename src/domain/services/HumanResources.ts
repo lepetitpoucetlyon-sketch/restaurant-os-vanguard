@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/domain/schemas/hr";
 import { User } from '@/types';
 

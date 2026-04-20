@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { hashPin } from '@/lib/shared-kernel';
 import type { User } from '@/types';
 

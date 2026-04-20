@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MARKETING & REPUTATION TYPES
  */

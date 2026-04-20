@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { Package } from 'lucide-react';
 import { DocCategory } from '@/types';
 

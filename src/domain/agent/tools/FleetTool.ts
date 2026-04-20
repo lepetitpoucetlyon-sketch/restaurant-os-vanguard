@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ToolDefinition } from './FinanceTool';
 import { EmpireInstance } from '@/domain/types/empire';
 

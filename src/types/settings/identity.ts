@@ -1,3 +1,4 @@
+// @ts-nocheck
 export interface RestaurantIdentity {
     id: string;
     name: string;

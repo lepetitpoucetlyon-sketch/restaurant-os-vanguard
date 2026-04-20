@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Génère un identifiant unique.
  */

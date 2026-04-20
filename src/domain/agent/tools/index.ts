@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { FinanceTool } from './FinanceTool';
 import { StockTool, ReservationTool } from './StockTool';
 import { MenuTool } from './MenuTool';

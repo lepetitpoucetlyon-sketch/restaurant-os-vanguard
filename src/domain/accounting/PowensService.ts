@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { logger } from '@/lib/axiom';
 import { genomeValidator } from '@/domain/services/GenomeValidator';
 

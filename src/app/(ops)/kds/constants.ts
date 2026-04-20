@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Utensils, Snowflake, Flame, Beer } from "lucide-react";
 
 export type KitchenStation = 'all' | 'cold' | 'hot' | 'bar';

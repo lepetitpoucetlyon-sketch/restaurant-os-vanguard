@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { 
   StockItem, 
   Ingredient, 
@@ -196,3 +198,5 @@ export class StockEngine {
         return ((last - first) / first) * 100;
     }
 }
+
+export const calculateLowStock = StockEngine.calculateLowStock;

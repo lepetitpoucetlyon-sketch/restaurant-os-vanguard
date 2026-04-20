@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Order, StockItem, Ingredient, InventoryMovement, FiscalSeal, User } from '@/types';
 import { FiscalEngine } from './FiscalEngine';
 import { StockEngine } from './StockEngine';

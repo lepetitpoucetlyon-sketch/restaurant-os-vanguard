@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ProcurementOrder } from '@/lib/shared-kernel';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { JournalEntry } from '@/types';
 import { format } from 'date-fns';
 

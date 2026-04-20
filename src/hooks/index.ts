@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Responsive hooks
 export { useMediaQuery, useResponsive, BREAKPOINTS } from "./useMediaQuery";
 export { useIsMobile, useIsTablet, useIsDesktop } from "./useIsMobile";

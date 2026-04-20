@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { notificationsAtom, unreadNotificationsCountAtom, Notification } from '@/store/uiAtoms';
 

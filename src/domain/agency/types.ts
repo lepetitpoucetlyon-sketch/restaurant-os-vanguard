@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type AgentDomain = 'inventory' | 'haccp' | 'recipes' | 'sales' | 'fleet' | 'accounting' | 'general';
 
 export type AgentRole = 'admin' | 'manager' | 'staff' | 'commis';

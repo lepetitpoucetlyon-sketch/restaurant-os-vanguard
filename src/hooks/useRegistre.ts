@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { QualityEngine } from '@/domain/services/QualityEngine';

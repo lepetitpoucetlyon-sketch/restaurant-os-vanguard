@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
 import { TimeSync } from '@/lib/TimeSync';

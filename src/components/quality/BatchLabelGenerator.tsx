@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Tag, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';

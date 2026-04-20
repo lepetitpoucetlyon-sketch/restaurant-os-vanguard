@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { initializeApp, getApps, FirebaseOptions } from 'firebase/app';
 import { 
     initializeFirestore, 

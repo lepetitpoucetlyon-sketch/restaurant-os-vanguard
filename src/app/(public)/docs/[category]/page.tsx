@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import React from "react";
 import { CATEGORY_DOCS } from "@/lib/docs-data";

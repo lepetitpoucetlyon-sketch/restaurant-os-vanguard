@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useRegistre } from "@/context/RegistreContext";

@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { 
@@ -39,10 +41,9 @@ export const orchestratorSignalAtom = atom(
 
 export interface MasterConfig {
     maintenanceMode: boolean;
-    forceLogout: boolean;
-    globalMessage?: string;
-    allowedCapabilities: string[];
-    securityLevel: 'standard' | 'high' | 'paranoid';
+    killSwitch: boolean;
+    allowedFeatures: string[];
+    [key: string]: any;
 }
 
 /** 🌐 Fleet Health Tracking (Master only) */

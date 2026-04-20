@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { cn } from '@/lib/ui.foundations';
 import { motion } from 'framer-motion';

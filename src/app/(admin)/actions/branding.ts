@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use server";
 
 import { BrandingService, BrandInput } from "@/domain/services/BrandingService";

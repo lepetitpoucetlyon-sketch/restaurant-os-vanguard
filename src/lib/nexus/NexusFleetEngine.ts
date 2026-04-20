@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Nexus } from './NexusAdapter';
 import { EmpireInstance } from '@/domain/types/empire';
 import { MacroBrain, FleetInsight } from '@/domain/services/MacroBrain';

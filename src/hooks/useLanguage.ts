@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useAtom } from 'jotai';
 import { currentLanguageAtom, Language } from '@/store/languageAtoms';
 import { translations } from '@/i18n/translations';

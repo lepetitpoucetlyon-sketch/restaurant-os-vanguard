@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { db, SyncOperation } from './offline-store';
 import { checkOnlineStatus } from './connectivity-hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

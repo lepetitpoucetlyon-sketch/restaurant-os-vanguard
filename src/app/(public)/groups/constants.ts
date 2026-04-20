@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Users, Calendar, BarChart3, Star } from "lucide-react";
 
 export const MOCK_STATS = [

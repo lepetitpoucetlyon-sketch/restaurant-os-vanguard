@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Search } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { MarketingEngine } from "@/lib/marketing-engine";

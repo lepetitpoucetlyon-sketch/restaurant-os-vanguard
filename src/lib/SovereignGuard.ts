@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use server";
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';

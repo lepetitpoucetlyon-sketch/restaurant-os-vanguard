@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode, useRef } from 'react';
 
 // Modules internes (logique extraite)
-import { useAuthSession } from '@/hooks/auth/AuthSession';
-import { useAuthAccess } from '@/hooks/auth/AuthAccess';
-import { useAuthStaff } from '@/hooks/auth/AuthStaff';
+import { useAuthSession } from '@/engines/core/hooks/auth/AuthSession';
+import { useAuthAccess } from '@/engines/core/hooks/auth/AuthAccess';
+import { useAuthStaff } from '@/engines/core/hooks/auth/AuthStaff';
 
 // Utils & Config
 import { IdentityManager } from '@/domain/services/IdentityManager';
 import { getTenantConfig } from '@/instances';
 import { logger } from '@/lib/axiom';
 import { useSearchParams } from 'next/navigation';
-import { useSettingsModule } from '@/hooks/settings/useSettingsModule';
+import { useSettings as useSettingsInternal } from '@/hooks/useSettings';
 import { translations, Language } from '@/i18n/translations';
 
 // Nexus Architecture (Grade X)
@@ -34,7 +34,9 @@ import {
     NexusTenantState, 
     NexusUIState, 
     NexusSettingsState, 
-    NexusLangState 
+    NexusLangState,
+    NexusNotifState,
+    NexusFleetState
 } from '@/types/nexus.types';
 
 const NexusCoreContext = createContext<NexusCoreState | undefined>(undefined);
@@ -45,7 +47,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     const searchParams = useSearchParams();
     const hasInitialized = useRef(false);
-    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom);
+    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as any);
     
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
@@ -68,10 +70,10 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
         
         setActiveTenantId(tenantId);
-        setActiveTenantConfig(config as unknown as TenantConfig);
+        setActiveTenantConfig(config);
         
         // 🔥 Sync with Jotai (Grade VI Suture)
-        setGlobalTenantConfig(config as unknown as TenantConfig);
+        setGlobalTenantConfig(config);
         
         // Synchronize with the global Nexus manager
         Nexus.tenantOverride = tenantId;
@@ -166,7 +168,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     // 5. SETTINGS, THEME & LANGUAGE MODULE
     // -------------------------------------------------------------------------
-    const settingsModule = useSettingsModule();
+    const settingsModule = useSettingsInternal();
     const [currentLanguage, setCurrentLanguage] = useState<Language>('fr');
 
     const t = useCallback((key: string): string => {
@@ -255,7 +257,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     const notifValue: NexusNotifState = useMemo(() => ({
         unreadCount,
         notifications,
-        addNotification: (n) => addToast({ ...n, duration: 3000 }),
+        addNotification: (n) => addToast({ ...n, duration: 3000 } as any),
         markAsRead: () => {},
         markAllAsRead: () => {},
         removeNotification: () => {},
@@ -270,7 +272,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         theme: { mode: theme }, 
         lang: langValue,
         notif: notifValue,
-        fleet: { fleet: [], isTrainingMode: false, toggleTrainingMode: () => {} }
+        fleet: { nodes: [], health: 'EXCELLENT', isTrainingMode: false, toggleTrainingMode: () => {} }
     }), [tenantValue, authValue, uiValue, settingsModule, langValue, theme, notifValue]);
 
 

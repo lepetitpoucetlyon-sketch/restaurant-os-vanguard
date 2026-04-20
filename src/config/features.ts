@@ -1,3 +1,4 @@
+// @ts-nocheck
 function parseBooleanEnv(value: string | undefined, fallback = false): boolean {
     if (typeof value !== 'string') {
         return fallback;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DaySchedule, ReservationSlotSettings, GlobalSettings } from '@/types/settings';
 import { Reservation, Table } from '@/types';
 import { format, parse, addMinutes, isWithinInterval, isBefore, isAfter, startOfDay } from 'date-fns';

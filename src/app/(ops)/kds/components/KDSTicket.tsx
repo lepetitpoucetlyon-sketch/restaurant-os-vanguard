@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ChefHat, Book, AlertTriangle, MessageSquare, CheckCircle2, Flame, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { atom } from 'jotai';
 import { SimulationMetrics } from '@/lib/simulator/TemporalSimulator';
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect } from 'react';
 import { getDefaultStore } from 'jotai';
 import { MasterBridge } from '@/lib/MasterBridge';

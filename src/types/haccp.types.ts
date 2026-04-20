@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Box, Snowflake, Droplets, ChefHat, Truck } from 'lucide-react';

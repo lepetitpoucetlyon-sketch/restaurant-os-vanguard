@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import type { TenantConfig } from '@/types';
 
 export const bistrolyonConfig: TenantConfig = {

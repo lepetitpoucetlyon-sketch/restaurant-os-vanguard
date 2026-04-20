@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/axiom";

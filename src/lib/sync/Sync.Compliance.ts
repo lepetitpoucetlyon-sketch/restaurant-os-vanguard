@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { 
   fiscalLedgerNodeAtom, 

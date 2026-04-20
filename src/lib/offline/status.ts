@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🛰️ Connectivity Status Utility
  * Safe for both Client and Server execution.

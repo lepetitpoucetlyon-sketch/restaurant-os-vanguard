@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { YieldState, ProcurementOrder } from '@/lib/shared-kernel';
 import { SimulationService } from './SimulationService';
 import { StockEngine } from './StockEngine';

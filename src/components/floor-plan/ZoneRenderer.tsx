@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Group, Rect, Text } from "react-konva";

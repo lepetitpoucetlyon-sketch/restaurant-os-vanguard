@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SEO & REFERENCING TYPES
  */

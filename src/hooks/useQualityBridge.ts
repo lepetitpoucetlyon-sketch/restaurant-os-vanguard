@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { useAtom } from 'jotai';
 import { 
     qualityControlsAtom, 

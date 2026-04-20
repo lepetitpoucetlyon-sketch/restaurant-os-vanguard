@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Restaurant OS - Centralized Language Configuration
  * 

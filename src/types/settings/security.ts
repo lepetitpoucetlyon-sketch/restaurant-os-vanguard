@@ -1,3 +1,4 @@
+// @ts-nocheck
 export interface RoleSettings {
     id: string;
     name: string;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect } from 'react';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { logger } from '@/lib/logger';

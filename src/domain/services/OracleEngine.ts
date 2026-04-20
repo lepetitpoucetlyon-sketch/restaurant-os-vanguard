@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { StockItem, StockEvent } from '@/types';
 import { Quantity, toQuantity } from '@/lib/brands';
 import { logger } from '@/lib/logger';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BankTransaction } from '@/types';
 import { logger } from '@/lib/logger';
 

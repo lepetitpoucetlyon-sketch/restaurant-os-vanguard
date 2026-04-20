@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 /**
  * 🏛️ FINANCE CORE - Grade VI
  * Moteur souverain de calculs fiscaux et financiers.

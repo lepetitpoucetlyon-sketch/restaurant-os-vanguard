@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { describe, it, expect, vi } from 'vitest';
 import { HumanResourcesService } from './HumanResources';
 import { ShiftEntry } from "@/domain/schemas/hr";

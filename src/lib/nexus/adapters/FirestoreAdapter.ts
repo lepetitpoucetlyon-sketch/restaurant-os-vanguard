@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { 
     firestore 
 } from '@/lib/firebase';

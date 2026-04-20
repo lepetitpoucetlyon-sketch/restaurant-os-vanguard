@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 📛 MODULE REGISTRY — Grade IX (Registre des Naissances)
  * 

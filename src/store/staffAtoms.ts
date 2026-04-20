@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { atom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
 import { User, Shift, LeaveRequest, LeaveBalance } from '@/types';

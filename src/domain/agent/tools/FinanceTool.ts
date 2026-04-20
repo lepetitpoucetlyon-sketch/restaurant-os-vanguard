@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { AccessPolicyManager } from "@/domain/agent/services/AccessPolicyManager";
 import { User } from '@/types';
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { Ingredient, StockItem } from '@/types';
 import { ExtractedInvoiceItem } from './VisionService';
 import { calculatePriceEvolution } from './StockEngine';

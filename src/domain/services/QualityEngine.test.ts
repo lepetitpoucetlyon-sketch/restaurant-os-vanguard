@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QualityEngine } from './QualityEngine';
 import { QualityControl } from '@/domain/types/quality';

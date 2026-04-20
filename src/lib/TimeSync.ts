@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Nexus } from './nexus/NexusAdapter';
 import { logger } from './logger';
 

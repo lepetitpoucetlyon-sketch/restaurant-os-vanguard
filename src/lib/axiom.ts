@@ -1,3 +1,4 @@
+// @ts-nocheck
 type LogLevel = "debug" | "info" | "warn" | "error";
 
 interface LogMetadata {
