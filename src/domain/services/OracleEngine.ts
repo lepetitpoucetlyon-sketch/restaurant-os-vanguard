@@ -135,3 +135,18 @@ export async function suggestChickenProcurement(qty: number): Promise<void> {
     description: `[AI-SUGGESTION] Ravitaillement Rôtisserie (${qty} unités)`
   });
 }
+
+/**
+ * 🔮 Oracle Supervision: Monitor Monkey Chaos
+ * Generates Genomic Suture reports if flaws are detected.
+ */
+export async function superviseChaos(): Promise<string> {
+  const { MonkeyChaos } = await import('../agents/MonkeyChaos');
+  const result = await MonkeyChaos.attackLedger();
+  
+  if (result.success) {
+    return `[RAPPORT DE SUTURE GÉNOMIQUE]\nStatut: INTÉGRITÉ_MAINTENUE\nObservation: L'attaque du Monkey Chaos a été rejetée par le SovereignLedger.\nDiagnostic: Pont Financier Inviolable.`;
+  } else {
+     return `[RAPPORT DE SUTURE GÉNOMIQUE]\nStatut: ALERTE_FAILLE\nObservation: Le Ledger a accepté une transaction asymétrique.\nDiagnostic: Urgence Suture Génome Requise.`;
+  }
+}

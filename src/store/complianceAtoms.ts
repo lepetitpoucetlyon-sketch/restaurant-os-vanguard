@@ -70,3 +70,23 @@ export const guardLoadingAtom = atom((get) =>
     get(oilLogsNodeAtom).loading ||
     get(wasteLogsNodeAtom).loading
 );
+// ⚡ HARDWARE SIMULATION (Electrification)
+export interface SensorReading {
+    id: string;
+    name: string;
+    type: 'temperature' | 'vibration' | 'humidity';
+    value: number | null; // null simulates hardware cut
+    unit: string;
+    lastUpdated: string;
+}
+
+export const sensorsAtom = atom<Record<string, SensorReading>>({
+    'ROTISSERIE_CORE_TEMP': {
+        id: 'ROTISSERIE_CORE_TEMP',
+        name: 'Sonde Cœur Poulet',
+        type: 'temperature',
+        value: 75,
+        unit: '°C',
+        lastUpdated: new Date().toISOString()
+    }
+});

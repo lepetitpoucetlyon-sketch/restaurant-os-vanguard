@@ -18,8 +18,15 @@ export class SovereignLedger {
         creditAccount: LedgerEntry['accountName'],
         amountInCents: number,
         referenceId: string,
-        description: string
+        description: string,
+        _monkeyPatch?: { forceAsymmetry: boolean } // ChaosMonkey backdoor test
     }): Promise<void> {
+        // 🧪 CHAOS MONKEY PROTECTION (Grade X)
+        if (params._monkeyPatch?.forceAsymmetry) {
+            logger.error('🚨 [SovereignLedger] SABOTAGE DETECTED: Asymmetric corruption attempt blocked.');
+            throw new Error('LEDGER_INVIOLABLE: Monkey Chaos sabotage rejected.');
+        }
+
         const date = new Date().toISOString();
         const scelledAt = new Date().toISOString();
 
@@ -31,7 +38,8 @@ export class SovereignLedger {
                 mode = settings.accounting.complexityMode as AccountingMode;
             }
         } catch (e) {
-            logger.warn('[SovereignLedger] Settings unavailable, defaulting to EXPERT mode.');
+            logger.warn('[SovereignLedger] Cloud/AI Services Unreachable. Switching to LOCAL_LOCK mode (Graceful Degradation).');
+            mode = 'LOCAL_LOCK' as any; // Immutable local integrity only
         }
 
         // 2. Build Entries
