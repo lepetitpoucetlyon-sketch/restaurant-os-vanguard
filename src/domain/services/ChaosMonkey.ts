@@ -43,7 +43,7 @@ export const ChaosMonkey = {
     ];
     
     const choice = targets[Math.floor(Math.random() * targets.length)];
-    const node = store.get(choice.atom);
+    const node = store.get(choice.atom) as any;
 
     if (!node || !node.data || node.data.length === 0) return;
 

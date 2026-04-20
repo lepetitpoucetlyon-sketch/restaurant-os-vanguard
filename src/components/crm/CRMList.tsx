@@ -14,12 +14,12 @@ import { cn } from '@/lib/ui.foundations';
 import { Customer } from '@/types';
 
 // Helper functions (extracted from page.tsx logic)
-const getFirstName = (c: any): string => c?.firstName || (c?.name ? c.name.split(' ')[0] : '') || '';
-const getLastName = (c: any): string => c?.lastName || (c?.name ? c.name.split(' ').slice(1).join(' ') : '') || '';
+const getFirstName = (c: Customer): string => c?.firstName || (c?.name ? c.name.split(' ')[0] : '') || '';
+const getLastName = (c: Customer): string => c?.lastName || (c?.name ? c.name.split(' ').slice(1).join(' ') : '') || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s[0] : '?');
-const getVisitCount = (c: any): number => c?.visitCount ?? c?.totalVisits ?? 0;
-const getPhone = (c: any): string => c?.phone ?? '';
-const getEmail = (c: any): string => c?.email ?? '';
+const getVisitCount = (c: Customer): number => c?.visitCount ?? 0;
+const getPhone = (c: Customer): string => c?.phone ?? '';
+const getEmail = (c: Customer): string => c?.email ?? '';
 
 export function CRMList() {
     const { t } = useLanguage();
@@ -29,11 +29,11 @@ export function CRMList() {
     const [, setSelectedCustomer] = useAtom(crmSelectedCustomerAtom);
 
     const filteredCustomers = customers.filter(c => {
-        const cName = (c as any).name || `${getFirstName(c)} ${getLastName(c)}`;
+        const cName = c.name || `${getFirstName(c)} ${getLastName(c)}`;
         const cEmail = getEmail(c);
         const cPhone = getPhone(c);
         
-        if (filterSegment && (c as any).segment !== filterSegment) return false;
+        if (filterSegment && c.segment !== filterSegment) return false;
         
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
@@ -85,7 +85,7 @@ export function CRMList() {
                                 {getInitial(getFirstName(customer))}. {getLastName(customer)}
                             </h3>
                             <span className="inline-flex px-3 py-1 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest bg-bg-tertiary text-text-muted/60">
-                                {t(`crm.segments.${(customer as any).segment || 'new'}`) || (customer as any).segment || 'Nouveau'}
+                                {t(`crm.segments.${customer.segment || 'new'}`) || customer.segment || 'Nouveau'}
                             </span>
                         </div>
                     </div>

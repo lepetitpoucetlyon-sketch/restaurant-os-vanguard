@@ -152,6 +152,7 @@ export class StockEngine {
             type: 'reception',
             quantity: receivedData.quantity,
             unit: ingredient.unit,
+            unitCostInCents: receivedData.cost, // Now strictly typed
             reason: `Reception from Supplier / NanoID-Authenticated`,
             performedBy: 'System (Industrialized)',
             performedAt: timestamp.toISOString(),
@@ -163,7 +164,7 @@ export class StockEngine {
     /**
      * Alias for Grade X Bridge compatibility.
      */
-    static processReception(ingredient: Ingredient, data: any) {
+    static processReception(ingredient: Ingredient, data: { quantity: number; cost: number; manualDlc?: string; chefNotes?: string }) {
         return this.receiveStock(ingredient, data);
     }
 
@@ -189,8 +190,8 @@ export class StockEngine {
         if (costMovements.length < 2) return 0;
         
         // Simple % change between last and before-last
-        const first = (costMovements[0] as any).unitCostInCents || 0;
-        const last = (costMovements[costMovements.length - 1] as any).unitCostInCents || 0;
+        const first = costMovements[0].unitCostInCents || 0;
+        const last = costMovements[costMovements.length - 1].unitCostInCents || 0;
         
         if (first === 0) return 0;
         return ((last - first) / first) * 100;
@@ -198,3 +199,4 @@ export class StockEngine {
 }
 
 export const calculateLowStock = StockEngine.calculateLowStock;
+export const calculatePriceEvolution = StockEngine.calculatePriceEvolution;

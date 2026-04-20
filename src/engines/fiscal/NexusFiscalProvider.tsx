@@ -33,6 +33,11 @@ interface NexusFiscalState {
         };
         submitExpense: (claim: any) => Promise<void>;
         recordPayrollSalary: (userId: string, net: number, charges: number, month: string) => Promise<void>;
+        syncBankAccounts: (token: string) => Promise<any>;
+        accounts: any[];
+        bankTransactions: any[];
+        expenseClaims: any[];
+        isSyncing: boolean;
     };
     compliance: any;
     finance: {
@@ -50,6 +55,7 @@ interface NexusFiscalState {
         bankTransactions: any[];
     };
     audit: any;
+    registre: any;
 }
 
 const NexusFiscalContext = createContext<NexusFiscalState | undefined>(undefined);
@@ -132,7 +138,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         });
     }, [activeTenantId, submitExpense]);
 
-    const contextValue = useMemo(() => ({
+    const contextValue: any = useMemo(() => ({
         accounting: { 
             entries: ledgerEntries,
             journalEntries: ledgerEntries,
@@ -162,7 +168,12 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
             alerts: [],
             bankTransactions
         },
-        audit: { runFiscalAudit }
+        audit: { runAudit: runFiscalAudit },
+        registre: {
+            sales: [],
+            dailyReports: [],
+            isCertified: true
+        }
     }), [ledgerEntries, accounts, bankTransactions, expenseClaims, isLoading, isSyncing, financialMetrics, treasury, fiscalSeals, runFiscalAudit, submitExpense, syncBankAccounts]);
 
 

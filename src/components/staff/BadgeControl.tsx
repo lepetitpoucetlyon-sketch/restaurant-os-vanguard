@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useAtomValue } from 'jotai';
 import { activeShiftsAtom, hrLoadingAtom } from '@/store/operationalAtoms';
 import { NexusPayrollEngine } from '@/domain/services/NexusPayrollEngine';
+import { ShiftEntry } from '@/domain/schemas/hr';
 import { Button } from '@/components/ui/button';
 import { Clock, Shield, AlertTriangle, Fingerprint, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,7 +17,7 @@ import { useToast } from '@/components/ui/Toast';
  * The industrial gateway for employee state management.
  */
 export const BadgeControl: React.FC = () => {
-    const { user } = useAuth();
+    const { currentUser: user } = useAuth();
     const activeShifts = useAtomValue(activeShiftsAtom);
     const isLoading = useAtomValue(hrLoadingAtom);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -31,10 +32,10 @@ export const BadgeControl: React.FC = () => {
         setIsProcessing(true);
         try {
             if (isClockedIn) {
-                await NexusPayrollEngine.clockOut(user);
+                await NexusPayrollEngine.clockOut({ id: user.id, name: user.displayName || user.email || 'Inconnu' });
                 showToast("Fin de service validée et scellée", "success");
             } else {
-                await NexusPayrollEngine.clockIn(user);
+                await NexusPayrollEngine.clockIn({ id: user.id, name: user.displayName || user.email || 'Inconnu' });
                 showToast("Prise de service validée et scellée", "success");
             }
         } catch (error) {
@@ -123,12 +124,19 @@ export const BadgeControl: React.FC = () => {
                 </div>
             </div>
 
-            {isClockedIn && currentShift?.timestamp && (
+            {isClockedIn && currentShift && (
                 <div className="mt-6 pt-6 border-t border-border/50 grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                         <p className="text-[9px] font-black uppercase tracking-tighter text-text-muted">Début de Session</p>
                         <p className="text-xs font-mono font-bold text-text-primary">
-                            {new Date(currentShift.timestamp.toDate?.() || currentShift.timestamp).toLocaleTimeString('fr-FR')}
+                            {(() => {
+                                const ts = currentShift.timestamp;
+                                if (typeof ts === 'string') return new Date(ts).toLocaleTimeString('fr-FR');
+                                if (ts instanceof Date) return ts.toLocaleTimeString('fr-FR');
+                                // Handle Firestore Timestamp lookalike
+                                if (ts && typeof (ts as any).toDate === 'function') return (ts as any).toDate().toLocaleTimeString('fr-FR');
+                                return 'N/A';
+                            })()}
                         </p>
                     </div>
                     <div className="space-y-1 text-right">

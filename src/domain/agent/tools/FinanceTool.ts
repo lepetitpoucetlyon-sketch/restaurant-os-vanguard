@@ -1,4 +1,4 @@
-import { AccessPolicyManager } from "@/domain/agent/services/AccessPolicyManager";
+import { AccessPolicyManager } from "@/domain/services/AccessPolicyManager";
 import { User } from '@/types';
 
 export interface ToolDefinition {
@@ -6,7 +6,7 @@ export interface ToolDefinition {
     description: string;
     parameters: Record<string, any>;
     category: string; // RBAC Category
-    execute: (args: any, user: User) => Promise<any>;
+    execute: (args: any, user: User, context?: any) => Promise<any>;
 }
 
 export const FinanceTool: ToolDefinition = {

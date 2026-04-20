@@ -22,7 +22,7 @@ export {
     isSidebarCollapsedAtom, isLaunchpadOpenAtom, themeAtom, isTrainingModeAtom,
     notificationsAtom, unreadNotificationsCountAtom,
     isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom,
-    addToastAtom
+    addToastAtom, performanceModeAtom
 } from './uiAtoms';
 
 // 🍽️ ORDERS DOMAIN
@@ -86,7 +86,7 @@ export {
     scheduledPostsNodeAtom, scheduledPostsAtom,
     socialAccountsNodeAtom, socialAccountsAtom,
     quotesNodeAtom, quotesAtom, quotesLoadingAtom,
-    customersNodeAtom, customersAtom, customersLoadingAtom,
+    customersNodeAtom, customersAtom, customersLoadingAtom, selectedCustomerAtom,
     seoLoadingAtom, isMarketingSyncingAtom
 } from './marketingAtoms';
 

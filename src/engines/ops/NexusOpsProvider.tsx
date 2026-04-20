@@ -2,6 +2,20 @@
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { 
+    Table, 
+    Reservation, 
+    StockItem, 
+    Preparation, 
+    Order, 
+    Customer, 
+    Zone, 
+    Recipe,
+    Ingredient,
+    StorageLocation,
+    WasteLog,
+    FiscalSeal
+} from '@/types';
+import { 
   ordersNodeAtom,
   tablesNodeAtom,
   stockItemsNodeAtom,
@@ -41,7 +55,8 @@ import {
   scheduledPostsNodeAtom,
   isMarketingSyncingAtom,
   isReservationSyncingAtom,
-  reservationStatsAtom
+  reservationStatsAtom,
+  selectedCustomerAtom
 } from '@/store/operationalAtoms';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
@@ -111,6 +126,16 @@ function guardedAction(
 export interface NexusOpsState {
     switchTenant: (id: string) => Promise<void>;
     tenantId: string;
+    floorOps?: {
+        tables: Table[];
+        reservations: Reservation[];
+        areas: any[];
+        isLoading: boolean;
+        updateTableStatus: (id: string, status: Record<string, unknown>) => Promise<void>;
+        updateAreaStatus: (id: string, status: Record<string, unknown>) => Promise<void>;
+        addZone?: (data: Partial<Zone>) => Promise<void>;
+    };
+    planning?: any;
 }
 
 const NexusOpsContext = createContext<NexusOpsState | undefined>(undefined);
@@ -181,7 +206,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
     }), [switchTenant, tenantId, floorTables, reservations]);
 
     return (
-        <NexusOpsContext.Provider value={contextValue}>
+        <NexusOpsContext.Provider value={contextValue as any}>
             {children}
         </NexusOpsContext.Provider>
     );
@@ -198,7 +223,7 @@ export const useNexusOps = () => {
 export const useInventory = () => {
     useVisibilityPurge('stockItems');
     const node = useAtomValue(stockItemsNodeAtom);
-    const stockItems = (node.data || []) as any[];
+    const stockItems = (node.data || []) as StockItem[];
     const ingredientsNode = useAtomValue(ingredientsAtom);
     const preparationsNode = useAtomValue(preparationsAtom);
     const productionLogsNode = useAtomValue(wasteLogsAtom);
@@ -229,10 +254,16 @@ export const useInventory = () => {
         storageLocations: storageLocationsNode.data || [],
         isLoading: node.loading,
         error: node.error,
-        addStockItem: (item: any) => console.log("Stub Add Stock item", item),
-        addPreparation: async (prep: any) => console.log("Stub Prep", prep),
+        addStockItem: (item: Partial<StockItem>) => console.log("Stub Add Stock item", item),
+        addPreparation: async (prep: Partial<Preparation>) => console.log("Stub Prep", prep),
         transferStock: async (itemId: string, locationId: string) => {
             await Nexus.adapter.update(`tenants/${tenantId}/stockItems/${itemId}`, { 
+                storageLocationId: locationId,
+                updatedAt: new Date().toISOString() 
+            });
+        },
+        transferPreparation: async (prepId: string, locationId: string) => {
+            await Nexus.adapter.update(`tenants/${tenantId}/preparations/${prepId}`, { 
                 storageLocationId: locationId,
                 updatedAt: new Date().toISOString() 
             });
@@ -241,7 +272,7 @@ export const useInventory = () => {
         updateStock: async () => {},
         cancelOrder: async () => {},
         receiveOrder: async () => {},
-        consumeStock: async (id: string, qty: number) => console.log('Consume stock', id, qty),
+        consumeStock: async (id: string, qty: number, reason?: string) => console.log('Consume stock', id, qty, reason),
         supplierOrders: [],
         getExpiringStock: () => expiringItems,
         getExpiringPreparations: () => []
@@ -257,7 +288,7 @@ export const useOrders = () => {
     return { 
         orders: node.data || [], 
         data: node.data || [], // Alias for Analytics module
-        totalRevenue: (node.data || []).reduce((acc: number, o: any) => acc + (o.totalInCents || 0), 0) / 100,
+        totalRevenue: (node.data || []).reduce((acc: number, o: Order) => acc + (o.totalInCents || 0), 0) / 100,
         isLoading: node.loading, 
         error: node.error,
         getPendingModifications: () => pendingModifications,
@@ -265,11 +296,11 @@ export const useOrders = () => {
             console.log("Responding to modification", { orderId, itemId, approved, respondedBy, responseNote });
         },
         expert: { processCommand: async () => {} }, // Grade X stub for POS
-        updateOrderStatus: async (id: string, status: any) => guardedAction('KITCHEN', 'FIRE_KDS', async () => {
+        updateOrderStatus: async (id: string, status: string) => guardedAction('KITCHEN', 'FIRE_KDS', async () => {
              await Nexus.adapter.update(`tenants/${tenantId}/orders/${id}`, { status, updatedAt: new Date().toISOString() });
         }),
-        updateOrderItemStatus: async (id: string, idx: number, status: any) => guardedAction('KITCHEN', 'FIRE_KDS', async () => { /* Bridge */ }),
-        submitOrder: async (order: any) => console.log('Submit order', order),
+        updateOrderItemStatus: async (id: string, idx: number, status: string) => guardedAction('KITCHEN', 'FIRE_KDS', async () => { /* Bridge */ }),
+        submitOrder: async (order: Partial<Order>) => console.log('Submit order', order),
         deleteOrder: async (id: string) => guardedAction('KITCHEN', 'FIRE_KDS', async () => {
              await Nexus.adapter.delete(`tenants/${tenantId}/orders/${id}`);
         })
@@ -294,9 +325,9 @@ export const useReservations = () => {
         isSyncing,
         error: node.error,
         getReservationsForTable: (tableId: string) => 
-            reservations.filter((r: any) => r.tableId === tableId && r.status !== 'cancelled'),
+            reservations.filter((r: Reservation) => r.tableId === tableId && r.status !== 'cancelled'),
         getReservationsForDate: (date: string) => 
-            reservations.filter((r: any) => r.date === date),
+            reservations.filter((r: Reservation) => r.date === date),
         addReservation: (data: Record<string, unknown>) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => upsertReservationAction(tenantId, data)),
         addCustomer: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => { /* Bridge */ }),
         markNoShow: (id: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => markNoShowAction(tenantId, id)),
@@ -318,12 +349,12 @@ export const useTables = () => {
     const tenantId = useAtomValue(tenantIdAtom);
 
     const getTablesForFloor = useCallback((floorId: string) => 
-        (tables || []).filter((t: any) => t.floorId === floorId), 
+        (tables || []).filter((t: Table) => t.floorId === floorId), 
         [tables]
     );
 
     const getZonesForFloor = useCallback((floorId: string) => 
-        (zones || []).filter((z: any) => z.floorId === floorId), 
+        (zones || []).filter((z: Zone) => z.floorId === floorId), 
         [zones]
     );
 
@@ -357,8 +388,22 @@ export const useTables = () => {
             await Nexus.adapter.set(`${path}/${id}`, { ...floor, id });
         }),
         resetToTemplate: (template: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', () => Promise.resolve()),
+        addZone: (data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+            const path = `tenants/${tenantId}/zones`;
+            const id = Nexus.adapter.generateId(path);
+            await Nexus.adapter.set(`${path}/${id}`, { ...data, id });
+        }),
         updateZone: (id: string, data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             await Nexus.adapter.update(`tenants/${tenantId}/zones/${id}`, { ...data, updatedAt: new Date().toISOString() });
+        }),
+        deleteZone: (id: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+            await Nexus.adapter.delete(`tenants/${tenantId}/zones/${id}`);
+        }),
+        updateFloor: (id: string, data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+            await Nexus.adapter.update(`tenants/${tenantId}/floors/${id}`, { ...data, updatedAt: new Date().toISOString() });
+        }),
+        deleteFloor: (id: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+            await Nexus.adapter.delete(`tenants/${tenantId}/floors/${id}`);
         }),
         isLoading: node.loading, 
         error: node.error 
@@ -388,7 +433,7 @@ export const useProducts = () => {
 
 export const useFiscal = () => {
     const node = useAtomValue(fiscalLedgerNodeAtom);
-    return { data: (node.data || []) as any[], isLoading: node.loading, error: node.error };
+    return { data: (node.data || []) as FiscalSeal[], isLoading: node.loading, error: node.error };
 };
 
 export const useManagement = () => {
@@ -398,7 +443,7 @@ export const useManagement = () => {
     const laborCostRatio = useAtomValue(laborCostRatioSelector);
 
     return {
-        waste: { data: waste, isLoading: false, error: null },
+        waste: { data: waste.data || [], isLoading: waste.loading, error: waste.error },
         analysis: { data: analysis, isLoading: false, error: null },
         staffPerformance: { data: staffPerformance, isLoading: false, error: null },
         laborCostRatio
@@ -431,17 +476,18 @@ export const useKitchen = () => {
     const tenantId = useAtomValue(tenantIdAtom);
     const stockItemsNode = useAtomValue(stockItemsNodeAtom);
 
-    const calculateRecipeCost = useCallback((recipeIngredients: Record<string, unknown>[]) => {
+    const calculateRecipeCost = useCallback((recipeIngredients: { ingredientId: string, quantity: number }[]) => {
         if (!recipeIngredients) return 0;
         return recipeIngredients.reduce((total, ri) => {
-            const ingredient = (stockItemsNode.data || []).find((i: any) => i.id === ri.ingredientId);
-            const cost = (ingredient as any)?.costInCents || 0;
-            return total + (cost * (ri as any).quantity);
+            const ingredient = (stockItemsNode.data || []).find((i: StockItem) => i.id === ri.ingredientId);
+            const cost = ingredient?.costInCents || 0;
+            return total + (cost * ri.quantity);
         }, 0);
     }, [stockItemsNode.data]);
 
     return { 
         data: recipes.data || [], 
+        recipes: recipes.data || [],
         isLoading: recipes.loading, 
         error: recipes.error,
         prepTasks: prepTasks.data || [],
@@ -491,9 +537,9 @@ export const useHR = () => {
     const tenantId = useAtomValue(tenantIdAtom);
 
     return {
-        leaveRequests: leaveRequests,
-        leaveBalances: leaveBalances,
-        isLoading: false, 
+        leaveRequests: leaveRequests.data || [],
+        leaveBalances: leaveBalances.data || [],
+        isLoading: leaveRequests.loading || leaveBalances.loading, 
         createLeaveRequest: (data: Record<string, unknown>) => guardedAction('HR', 'CALCULATE_HOURS', () => createLeaveRequestAction(tenantId, data)),
         approveLeaveRequest: (id: string) => guardedAction('HR', 'SIGN_CONTRACT', () => approveLeaveRequestAction(tenantId, id)),
         rejectLeaveRequest: (id: string, reason?: string) => guardedAction('HR', 'SIGN_CONTRACT', () => rejectLeaveRequestAction(tenantId, id, reason))
@@ -511,6 +557,7 @@ export const useQuotes = () => {
     const node = useAtomValue(quotesNodeAtom);
     return { 
         data: node.data || [], 
+        quotes: node.data || [],
         isLoading: node.loading, 
         error: node.error,
         createQuote: (data: Record<string, unknown>) => guardedAction('QUOTES', 'CREATE_TRANSACTION', () => Promise.resolve(data))
@@ -542,7 +589,7 @@ export const useCRM = () => {
 
     const segments = useMemo(() => {
         const segMap: Record<string, number> = {};
-        for (const c of customers as any[]) {
+        for (const c of customers as Customer[]) {
             const seg = c.segment || 'new';
             segMap[seg] = (segMap[seg] || 0) + 1;
         }
@@ -550,12 +597,12 @@ export const useCRM = () => {
     }, [customers]);
 
     const getCustomersBySegment = useCallback((segment: string) => {
-        return (customers as any[]).filter((c: any) => c.segment === segment);
+        return (customers as Customer[]).filter((c: Customer) => c.segment === segment);
     }, [customers]);
 
     const searchCustomers = useCallback((query: string) => {
         const q = query.toLowerCase();
-        return (customers as any[]).filter((c: any) => 
+        return (customers as Customer[]).filter((c: Customer) => 
             c.name?.toLowerCase().includes(q) || 
             c.email?.toLowerCase().includes(q) || 
             c.phone?.includes(q)
@@ -565,22 +612,25 @@ export const useCRM = () => {
     const getInactiveCustomers = useCallback((daysSinceLastVisit: number = 30) => {
         const threshold = new Date();
         threshold.setDate(threshold.getDate() - daysSinceLastVisit);
-        return (customers as any[]).filter((c: any) => {
+        return (customers as Customer[]).filter((c: Customer) => {
             if (!c.lastVisitDate) return true;
             return new Date(c.lastVisitDate) < threshold;
         });
     }, [customers]);
 
+    const selectedCustomer = useAtomValue(selectedCustomerAtom);
+
     return {
         customers,
         segments,
+        selectedCustomer,
         isLoading: node.loading,
         error: node.error,
         getCustomersBySegment,
         searchCustomers,
         getInactiveCustomers,
         getActiveCustomer: (id: string) => {
-            return (customers as any[]).find((c: any) => c.id === id) || null;
+            return (customers as Customer[]).find((c: Customer) => c.id === id) || null;
         },
         upsertCustomer: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => {
             const path = `tenants/${tenantId}/customers`;

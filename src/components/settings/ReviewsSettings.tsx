@@ -19,7 +19,7 @@ import {
     PenTool
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { saveMarketingSettingsAction } from "@/app/actions/marketing";
+import { updateReviewStatus, replyToReview, deleteReview, saveMarketingSettingsAction } from '@/app/(admin)/actions/marketing';
 import { toast } from "sonner";
 
 interface ReviewSource {

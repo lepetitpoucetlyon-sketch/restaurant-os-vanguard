@@ -1,8 +1,9 @@
 import { getTenantPath } from '@/lib/firebase';
+import { Table } from 'dexie';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine, FiscalSeal } from '@/domain/services/FiscalEngine';
 import { StockEngine } from '@/domain/services/StockEngine';
-import { Order, StockItem, Recipe } from '@/types';
+import { Order, StockItem, Recipe, InventoryMovement, JournalEntry } from '@/types';
 import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
 import { SyncManager } from '@/lib/offline/sync-manager';
@@ -41,7 +42,9 @@ export class NF525Service {
             if (currentTenantId !== anchoredTenantId) {
                 logger.warn(`[NF525] CRITICAL_DRIFT_PREVENTED: Tenant shifted from ${anchoredTenantId} to ${currentTenantId} during signature.`);
                 MasterBridge.pushGlobalConfig({ 
-                    maintenanceMode: false, forceLogout: false, securityLevel: 'high', 
+                    maintenanceMode: false, 
+                    killSwitch: false, 
+                    securityLevel: 'high', 
                     globalMessage: `AUDIT: Drift detected for order ${orderId} on ${anchoredTenantId}`,
                     allowedFeatures: [] 
                 }).catch(() => {}); // Silent audit log
@@ -105,7 +108,7 @@ export class NF525Service {
             impact.push({ 
                 path: `${getTenantPath('inventoryMovements', tenantId)}/mov_${Math.random().toString(36).substring(2, 7)}`, 
                 method: 'SET', 
-                data: m as Record<string, unknown>
+                data: m as unknown as Record<string, unknown>
             });
         });
 
@@ -160,19 +163,22 @@ export class NF525Service {
                 const id = parts[parts.length - 1];
                 
                 // Type-safe table selection (Grade VI)
-                let table: Table<any> | null = null;
-                switch (coll) {
-                    case 'orders': table = db.orders; break;
-                    case 'stockItems': table = db.stockItems; break;
-                    case 'inventoryMovements': table = db.inventoryMovements; break;
-                    case 'journalEntries': table = db.journalEntries; break;
-                    case 'fiscalSeals': table = db.fiscalSeals; break;
-                }
-
-                if (table) {
-                    if (ins.method === 'SET') await table.put({ ...ins.data, id } as any);
-                    else if (ins.method === 'UPDATE') await table.update(id, ins.data);
-                    else if (ins.method === 'DELETE') await table.delete(id);
+                if (coll === 'orders') {
+                    if (ins.method === 'SET') await db.orders.put(ins.data as Order);
+                    else if (ins.method === 'UPDATE') await db.orders.update(id, ins.data as Partial<Order>);
+                    else if (ins.method === 'DELETE') await db.orders.delete(id);
+                } else if (coll === 'stockItems') {
+                    if (ins.method === 'SET') await db.stockItems.put(ins.data as StockItem);
+                    else if (ins.method === 'UPDATE') await db.stockItems.update(id, ins.data as Partial<StockItem>);
+                    else if (ins.method === 'DELETE') await db.stockItems.delete(id);
+                } else if (coll === 'inventoryMovements') {
+                    if (ins.method === 'SET') await db.inventoryMovements.put(ins.data as InventoryMovement);
+                    else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, ins.data as Partial<InventoryMovement>);
+                    else if (ins.method === 'DELETE') await db.inventoryMovements.delete(id);
+                } else if (coll === 'journalEntries') {
+                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as unknown as JournalEntry);
+                } else if (coll === 'fiscalSeals') {
+                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as unknown as FiscalSeal);
                 }
             }
         });
@@ -182,10 +188,10 @@ export class NF525Service {
             targetId: orderId, 
             payload: { instructions }, 
             priority: 1,
-            timestamp: new Date().toISOString(),
+            collection: 'orders',
             status: 'pending',
             attempts: 0,
-            collection: 'orders'
-        });
+            timestamp: new Date().toISOString()
+        }); // Suture Grade X Complete
     }
 }

@@ -14,6 +14,15 @@ export class MarketingService {
     private static dynamicFactors: Record<string, number> = {};
 
     /**
+     * Permanent Promo Registry (Grade X)
+     */
+    private static PROMO_REGISTRY: Record<string, any> = {
+        'BIENVENUE10': { discountPercent: 10, type: 'percent', label: 'Bienvenue' },
+        'NEXUS20': { discountPercent: 20, type: 'percent', label: 'Offre Nexus' },
+        'FREEDEL': { discountPercent: 0, type: 'free_delivery', label: 'Livraison Gratuite' }
+    };
+
+    /**
      * Injects a yield factor for a specific product.
      */
     static updateDynamicPricing(productId: string, factor: number) {

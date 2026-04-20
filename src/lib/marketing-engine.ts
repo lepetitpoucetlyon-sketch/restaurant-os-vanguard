@@ -137,7 +137,7 @@ export const MarketingEngine = {
 
         return [
             { keyword: name, clicks: 124, position: 1.2 },
-            { keyword: `Restaurant ${cuisine} ${identityDefaults.location?.city || ''}`, clicks: 85, position: 2.1 },
+            { keyword: `Restaurant ${cuisine} ${(identityDefaults as any).location?.city || ''}`, clicks: 85, position: 2.1 },
             { keyword: `Meilleur ${cuisine}`, clicks: 42, position: 4.5 },
             { keyword: 'Reservation table', clicks: 38, position: 3.8 },
             { keyword: cuisine, clicks: 27, position: 12.4 }

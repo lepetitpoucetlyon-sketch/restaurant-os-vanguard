@@ -8,7 +8,11 @@ import { fleetSnapshotAtom } from '@/store/operationalAtoms';
 import { useFleet } from '@/context/FleetContext';
 
 export function MCCInsights() {
-    const { macroInsights, triggerRebalancing } = useFleet();
+    const { macroInsights, refreshFleet } = useFleet();
+    const triggerRebalancing = (insight: any) => {
+        console.log('[Fleet] Triggering rebalancing for insight:', insight);
+        refreshFleet?.(true);
+    };
     const fleetState = useAtomValue(fleetSnapshotAtom) as any;
 
     if (!macroInsights || macroInsights.length === 0) return null;

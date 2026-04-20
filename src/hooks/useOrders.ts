@@ -1,9 +1,10 @@
 "use client";
 
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useCallback } from "react";
-import { ordersNodeAtom, pendingModificationsAtom, updateNexusNode } from "@/store/operationalAtoms";
+import { ordersNodeAtom, pendingModificationsAtom } from "@/store/operationalAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
+import { useNexusMutation } from "./useNexusMutation";
 
 /**
  * 📦 useOrders - Grade VI Atomic Bridge
@@ -12,17 +13,17 @@ import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 export function useOrders() {
     useVisibilityPurge('orders');
     const node = useAtomValue(ordersNodeAtom);
-    const setNode = useSetAtom(ordersNodeAtom);
     const pendingModifications = useAtomValue(pendingModificationsAtom);
     
-    const updateOrderStatus = useCallback(async (orderId: string, status: string) => {
-        setNode(prev => updateNexusNode(prev, (orders) => 
-            orders.map(o => o.id === orderId ? { ...o, status } : o)
-        ));
-    }, [setNode]);
+    // --- 🔨 LA FORGE ---
+    const orderForge = useNexusMutation(ordersNodeAtom, 'orders', 'POS');
+    
+    const updateOrderStatus = useCallback(async (orderId: string, status: any) => {
+        return orderForge.mutate('UPDATE', orderId, { status });
+    }, [orderForge]);
 
     const stats = {
-        totalRevenue: (node.data || []).reduce((acc, o) => acc + (o.totalInCents || 0), 0) / 100,
+        totalRevenue: (node.data || []).reduce((acc: number, o: any) => acc + (o.totalInCents || 0), 0) / 100,
         expert: true
     };
 
@@ -34,10 +35,14 @@ export function useOrders() {
         updateOrderStatus,
         totalRevenue: stats.totalRevenue,
         expert: stats.expert,
-        // Sync avec NexusOps legacy support
-        data: node.data || [],
+        
+        // --- Forge Actions ---
         addOrder: async (order: any) => {
-            setNode(prev => updateNexusNode(prev, (orders) => [order, ...orders]));
-        }
+            const orderId = order.id || `ord_${Date.now()}`;
+            return orderForge.mutate('SET', orderId, order);
+        },
+        
+        // Sync avec NexusOps legacy support
+        data: node.data || []
     };
 }

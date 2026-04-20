@@ -16,7 +16,7 @@ import { logger } from '@/lib/logger';
 export class BlockchainLedgerService {
     
     // 🔒 Sequential Lock Queue
-    private static sealQueue: Promise<any> = Promise.resolve();
+    private static sealQueue: Promise<void | FiscalSeal> = Promise.resolve();
     
     // 🧊 Local cache for high-speed chaining
     private static lastSealCache: FiscalSeal | undefined = undefined;
@@ -55,7 +55,7 @@ export class BlockchainLedgerService {
      * Scelle une écriture en la liant à la chaîne existante.
      * GARANTIE D'ATOMICITÉ: Utilise une file d'attente de promesses.
      */
-    static async sealWithChain(entryId: string, entryData: any, isTrainingMode: boolean = false): Promise<FiscalSeal> {
+    static async sealWithChain(entryId: string, entryData: Record<string, unknown>, isTrainingMode: boolean = false): Promise<FiscalSeal> {
         // We chain the next seal to the previous one to avoid concurrency forks
         this.sealQueue = this.sealQueue.then(async () => {
             const lastSeal = await this.getLastSeal();

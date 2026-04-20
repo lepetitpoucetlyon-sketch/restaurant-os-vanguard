@@ -84,7 +84,7 @@ export class DataDigester {
         })) : []
       };
 
-      logger.info('[DataDigester] Starting ingestion...', { source: sanitized.source, isLegacy: !!options.isLegacy });
+      logger.info('[DataDigester] Starting ingestion...', { source: (sanitized as any).source, isLegacy: !!options.isLegacy });
       const validatedOrder = ExternalOrderSchema.parse(sanitized);
       
       // Tag legacy data to prevent NF525 pollution in active ledger
@@ -100,7 +100,7 @@ export class DataDigester {
     } catch (error) {
       if (error instanceof z.ZodError) {
         logger.error('[DataDigester] Validation failed', { 
-            errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`) 
+            errors: error.issues.map(e => `${e.path.join('.')}: ${e.message}`) 
         });
       } else {
         logger.error('[DataDigester] Unexpected error during digestion', error);

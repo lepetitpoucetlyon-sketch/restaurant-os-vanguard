@@ -154,3 +154,17 @@ export const qualityCurrentSessionStatsSelector = atom((get) => {
         status: rejected > 0 || tempIssues > 0 ? 'fail' : 'pass'
     };
 });
+
+// Global Metrics Selector for Finance Suture
+export const qualityGlobalMetricsSelector = atom((get) => {
+    const scores = get(supplierScoresAtom);
+    const controls = get(qualityControlsAtom);
+    const avgRejection = scores.reduce((sum, s) => sum + s.rejectionRate, 0) / (scores.length || 1);
+    const avgCompliance = scores.reduce((sum, s) => sum + s.complianceRate, 0) / (scores.length || 1);
+    return {
+        monthlyRejectionRate: avgRejection,
+        complianceScore: avgCompliance,
+        totalControlsThisMonth: controls.length,
+        averageFreshness: 4.8 // Mock constant for Grade X UI
+    };
+});

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { db } from "@/domain/offline/offline-store";
+import { db } from "@/lib/offline/offline-store";
 import { Order } from '@/types';
 
 /**

@@ -15,6 +15,8 @@ import {
   ScanLine
 } from 'lucide-react';
 
+import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
+import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 import { receiveStockAction, searchIngredientsAction } from '@/app/actions/inventory';
 import { toast } from 'sonner';
@@ -38,7 +40,7 @@ export default function ReceptionDashboard() {
         const results: any[] = [];
         
         for (const word of keywords) {
-            const matches = await searchIngredientsAction(tenantId, word);
+            const matches = await searchIngredientsAction(word);
             if (matches.length > 0) {
                 const match = matches[0];
                 results.push({

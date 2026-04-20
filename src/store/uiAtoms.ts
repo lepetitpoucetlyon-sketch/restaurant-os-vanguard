@@ -35,10 +35,11 @@ export const isLaunchpadOpenAtom = atom(false);
 export const themeAtom = atomWithStorage<'light' | 'dark'>('nexus_theme', 'dark');
 export const isTrainingModeAtom = atomWithStorage('nexus_training_mode', false);
 
-import { Notification } from '@/types';
+import { Notification as AppNotification } from '@/types';
+export type { AppNotification as Notification };
 
 // 🔔 NOTIFICATIONS STATE
-export const notificationsAtom = atom<Notification[]>([]);
+export const notificationsAtom = atom<AppNotification[]>([]);
 export const unreadNotificationsCountAtom = atom((get) => get(notificationsAtom).filter(n => !n.read).length);
 
 // 🕹️ COMMAND PALETTE STATE
@@ -47,3 +48,4 @@ export const isCommandOpenAtom = atom(false);
 export const isMobileMenuOpenAtom = atom(false);
 export const isDocsOpenAtom = atom(false);
 export const isMap3DOpenAtom = atom(false);
+export const performanceModeAtom = atomWithStorage('nexus_performance_mode', false);

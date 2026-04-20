@@ -1,6 +1,6 @@
 "use client";
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
-import { Shift as DomainShift } from '@/types/hr.types';
+import { Shift as DomainShift } from '@/types/staff.types';
 
 export type Shift = DomainShift;
 

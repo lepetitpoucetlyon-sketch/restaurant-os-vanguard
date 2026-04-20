@@ -36,7 +36,7 @@ export const POSService = {
      */
     analyzeProfitability: (items: CartItem[]) => {
         return items.map(item => {
-            const cost = item.costInCents || 0;
+            const cost = (item as any).costInCents || 0;
             const margin = SharedKernel.calculateMargin(item.priceInCents, cost);
             if (margin < 60) return { name: item.name, alert: 'Low Margin' };
             return null;

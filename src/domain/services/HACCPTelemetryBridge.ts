@@ -43,7 +43,7 @@ export const HACCPTelemetryBridge = {
       const healthScore = Math.max(0, 100 - riskPoints);
 
       // 📡 Push to Telemetry Hub
-      await fleetTelemetry.pushSiteTelemetry(tenantId, {
+      await fleetTelemetry.pushSiteTelemetry(tenantId as any, {
         healthScore,
         complianceScore: receptions.length > 0 ? 100 : 50, // Penalty for missing audits
       } as any);

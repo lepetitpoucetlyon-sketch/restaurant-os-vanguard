@@ -7,7 +7,7 @@ import { logger } from './axiom';
 import * as Sentry from '@sentry/nextjs';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'haccp' | 'system';
+export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'haccp' | 'system' | 'orchestration' | 'fleet';
 
 export interface AuditEvent {
     module: AuditModule;

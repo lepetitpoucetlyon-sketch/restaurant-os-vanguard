@@ -49,12 +49,14 @@ export function ReleveTemperatures() {
 
         try {
             await createLog({
+                id: `temp_${Date.now()}`,
                 type: 'temperature',
                 item: recordingEq.id,
                 zone: recordingEq.zone,
                 value: tempValue.toString(),
                 status: isAlert ? 'alert' : 'ok',
-                user: 'Admin'
+                user: 'Admin',
+                createdAt: new Date().toISOString()
             });
             if (isAlert) {
                 addNotification({ type: 'error', title: 'Température Anormale', message: `Alerte de température sur ${recordingEq.label}.` });

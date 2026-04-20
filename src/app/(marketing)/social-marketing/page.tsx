@@ -60,10 +60,10 @@ export default function SocialMarketingPage() {
 
     // Scheduled posts would normally come from marketing state too, but let's assume they are handled via a common collection or subcollection
     // For now, if profile has posts, use them, otherwise empty
-    const scheduledPosts = profile?.scheduledPosts || [];
+    const scheduledPosts = (profile as any)?.scheduledPosts || [];
 
     // CRM segments derived from profile or local state
-    const crmSegments = profile?.crmSegments || [];
+    const crmSegments = (profile as any)?.crmSegments || [];
 
     return (
         <div className="relative min-h-screen bg-bg-primary/50 text-text-primary p-6 md:p-10 font-sans overflow-hidden">
@@ -135,9 +135,9 @@ export default function SocialMarketingPage() {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                                 {[
                                     { label: 'Campagnes', value: campaigns.length.toString(), icon: Send, color: 'text-text-primary' },
-                                    { label: "Taux d'ouverture", value: `${profile?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
-                                    { label: 'Taux de clic', value: `${profile?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
-                                    { label: 'Conversions', value: `${profile?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
+                                    { label: "Taux d'ouverture", value: `${(profile as any)?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
+                                    { label: 'Taux de clic', value: `${(profile as any)?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
+                                    { label: 'Conversions', value: `${(profile as any)?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
                                 ].map((stat, i) => (
                                     <div key={i} className="bg-white/40 dark:bg-neutral-900/40 backdrop-blur-xl border border-white/20 rounded-[2rem] p-6 group cursor-crosshair relative">
                                         <div className="absolute top-0 right-0 p-6 opacity-50 group-hover:opacity-100 transition-all">

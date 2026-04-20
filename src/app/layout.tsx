@@ -50,6 +50,7 @@ import { ClientComponents } from "@/components/layout/ClientComponents";
 import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
 import { SovereignLockout } from "@/components/layout/SovereignLockout";
 import { ThemeEngine } from "@/components/layout/ThemeEngine";
+import { PerformanceEngine } from "@/theme/PerformanceEngine";
 
 export default function RootLayout({
   children,
@@ -71,6 +72,7 @@ export default function RootLayout({
                     <NexusFiscalProvider>
                       <NexusFleetProvider>
                         <ThemeEngine />
+                        <PerformanceEngine />
                         <SovereignLockout />
                         <AuthGate>
                           <SaaSBillingGate>

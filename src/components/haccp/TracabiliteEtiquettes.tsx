@@ -60,7 +60,12 @@ export function TracabiliteEtiquettes() {
                 finalImageUrl = await StorageService.uploadBase64Image(formData.imageUrl, storagePath);
             }
 
-            await createLabel({ ...formData, imageUrl: finalImageUrl });
+            await createLabel({ 
+                ...formData, 
+                imageUrl: finalImageUrl, 
+                id: `label_${Date.now()}`,
+                createdAt: new Date().toISOString()
+            });
             addNotification({ type: 'success', title: 'Étiquette scannée', message: 'La traçabilité de ce produit a été enregistrée.' });
             setFormData({
                 productName: '',

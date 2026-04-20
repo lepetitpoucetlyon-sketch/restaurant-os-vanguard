@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Table as CRMTable } from '@/types/tables.types'; // Suture Nexus
+import { GroupEventStatus } from '@/types/groups.types';
 
 // Extracted Components (Sutured for Grade X Stability)
 const GroupStatCard = (props: any) => null;
@@ -27,8 +29,8 @@ export default function GroupsPage() {
 
     const stats = useMemo(() => [
         { label: "Total Groupes", value: groups.length.toString(), icon: Users, change: 0 },
-        { label: "Réservations", value: groups.filter(g => g.status === 'Confirmed').length.toString(), icon: Calendar, change: 0 },
-        { label: "CA Prévisionnel", value: `${(groups.reduce((acc, g) => acc + (parseFloat(g.budget?.replace(/[^0-9.]/g, '') || '0')), 0) / 1000).toFixed(1)}k€`, icon: BarChart3, change: 0 },
+        { label: "Réservations", value: groups.filter(g => g.status === 'confirmed').length.toString(), icon: Calendar, change: 0 },
+        { label: "CA Prévisionnel", value: `${(groups.reduce((acc, g) => acc + (g.budget || 0), 0) / 100).toFixed(1)}k€`, icon: BarChart3, change: 0 },
         { label: "Note Moyenne", value: "4.8", icon: Star, change: 0 }
     ], [groups]);
 

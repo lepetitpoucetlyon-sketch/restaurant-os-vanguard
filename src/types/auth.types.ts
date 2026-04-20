@@ -2,11 +2,11 @@
  * AUTH & USERS TYPES
  */
 
-export type UserRole = 'server' | 'manager' | 'floor_manager' | 'kitchen_chef' | 'kitchen_line' | 'bartender' | 'host' | 'cashier' | 'admin';
+export type UserRole = 'server' | 'manager' | 'floor_manager' | 'kitchen_chef' | 'kitchen_line' | 'bartender' | 'host' | 'cashier' | 'admin' | 'kds-view' | 'pos-standard' | 'guest-view' | 'kitchen';
 
 export interface User {
     id: string;
-    tenantId: string;
+    tenantId?: string;
     name: string;
     pin?: string;
     pinHash?: string;

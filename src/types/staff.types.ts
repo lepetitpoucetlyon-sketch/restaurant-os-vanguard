@@ -217,6 +217,7 @@ export interface Shift {
     notes?: string;
     isOvertime?: boolean;
     breakDurationMinutes?: number;
+    type?: string;
 }
 
 export interface ShiftLog {

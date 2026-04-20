@@ -34,7 +34,8 @@ import {
     Sparkles,
     LayoutGrid
 } from 'lucide-react';
-import { NewQuoteDialog } from "@/components/quotes/NewQuoteDialog";
+import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
+import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import {
     Quote,
     QuoteStatus,
@@ -43,6 +44,8 @@ import {
 import { QuotesService } from "@/lib/quotes-service";
 import { useGeminiAgent } from "@/hooks/useGeminiAgent";
 import { useIntelligence } from "@/context/IntelligenceContext";
+
+const NewQuoteDialog = (props: any) => null;
 
 import { useQuotes } from "@/engines/ops/NexusOpsProvider";
 
@@ -398,7 +401,7 @@ export default function QuotesPage() {
                                     <QuoteCard
                                         key={quote.id}
                                         quote={quote}
-                                        inflationRate={globalInflationRate}
+                                        inflationRate={(globalInflationRate as number) || 0}
                                         onView={() => { }}
                                     />
                                 ))

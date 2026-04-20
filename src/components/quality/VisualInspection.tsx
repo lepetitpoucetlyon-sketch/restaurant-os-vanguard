@@ -13,7 +13,7 @@ import { cn } from '@/lib/ui.foundations';
 import { useQuality } from '@/hooks/useQuality';
 
 export const VisualInspection: React.FC = () => {
-    const { activeControl, updateControl } = useQuality();
+    const { activeControl, setActiveControl: updateControl } = useQuality();
     const conditions = activeControl?.delivery_conditions;
 
     const criteria = [

@@ -71,10 +71,10 @@ export function SingularitySettings() {
                 </div>
                 <Button 
                     onClick={handleSave} 
-                    loading={saving}
                     className="bg-accent hover:bg-accent/90 text-white gap-2 px-6"
+                    disabled={saving}
                 >
-                    <Save size={16} />
+                    {saving ? <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" /> : <Save size={16} />}
                     Sauvegarder les Protocoles
                 </Button>
             </div>

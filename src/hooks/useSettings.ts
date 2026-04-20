@@ -21,7 +21,7 @@ export const useSettings = () => {
     
     const setSettings = useSetAtom(globalSettingsAtom);
     const setSaving = useSetAtom(settingsSavingAtom);
-    const setLastSaved = useSetAtom(settingsLastSavedAtom);
+    const setLastSaved = useSetAtom(settingsLastSavedAtom as any);
 
     const updateSettings = useCallback(async (newSettings: GlobalSettings) => {
         setSaving(true);
@@ -43,6 +43,10 @@ export const useSettings = () => {
         return updateSettings(newSettings);
     }, [settings, updateSettings]);
 
+    const updateList = useCallback(async (key: string, data: any) => {
+        return updateConfig(key as any, data);
+    }, [updateConfig]);
+    
     return {
         settings,
         isLoading,
@@ -50,6 +54,7 @@ export const useSettings = () => {
         lastSaved,
         updateSettings,
         updateConfig,
+        updateList,
         updateIdentity: (data: any) => updateConfig('identity', data)
     };
 };

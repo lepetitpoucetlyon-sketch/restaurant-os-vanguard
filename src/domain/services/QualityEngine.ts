@@ -102,7 +102,7 @@ export class QualityEngine {
     try {
         const tenantPath = getTenantPath(this.COLLECTION, tenantId);
         const snapshots = await Nexus.adapter.query<ReceptionData & { createdAt: string }>(tenantPath, {
-          where: [['type', '==', 'reception']],
+          where: [{ field: 'type', operator: '==', value: 'reception' }],
           orderBy: { field: 'createdAt', direction: 'desc' },
           limit: 3
         });
@@ -111,11 +111,12 @@ export class QualityEngine {
         
         if (recentFailures.length >= 3) {
             await MaintenanceAgent.submitSOS({
-                title: 'CRITICAL HACCP DRIFT',
+                tenantId,
+                userId: 'system_quality',
+                type: 'CRITICAL_BUG',
                 description: 'Three consecutive deliveries failed hygiene standards. Mandatory floor audit required.',
-                source: 'QualityEngine',
-                priority: 'high'
-            }, tenantId);
+                systemState: { currentRoute: '/quality', orderCount: 0, lastActions: ['THREAT_DETECTED'], inventoryStatus: 'nominal', offlineMode: false }
+            } as any);
         }
     } catch (err) {
         logger.error('[QualityEngine] Trend tracking failed:', (err as Error).message);

@@ -40,19 +40,19 @@ export class FECExporter {
                     'GEN', // Default General Journal
                     'Journal Général',
                     entry.pieceNumber,
-                    entry.date.split('T')[0].replace(/-/g, ''), // YYYYMMDD
+                    (entry.date instanceof Date ? entry.date.toISOString() : (entry.date as string)).split('T')[0].replace(/-/g, ''), // YYYYMMDD
                     line.accountCode || line.accountId,
                     line.accountName,
                     '', // CompteAuxNum
                     '', // CompteAuxLib
                     entry.pieceNumber,
-                    entry.date.split('T')[0].replace(/-/g, ''),
+                    (entry.date instanceof Date ? entry.date.toISOString() : (entry.date as string)).split('T')[0].replace(/-/g, ''),
                     line.description || entry.description,
                     debit,
                     credit,
                     '', // Lettrage
                     '', // Date Lettrage
-                    entry.date.split('T')[0].replace(/-/g, ''),
+                    (entry.date instanceof Date ? entry.date.toISOString() : (entry.date as string)).split('T')[0].replace(/-/g, ''),
                     '', // Montant devise
                     'EUR'
                 ].join('\t');

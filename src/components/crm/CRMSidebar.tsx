@@ -8,7 +8,8 @@ import { useLanguage } from '@/context/LanguageContext';
 import { motion } from 'framer-motion';
 import { 
     crmSearchQueryAtom, 
-    crmFilterSegmentAtom 
+    crmFilterSegmentAtom,
+    crmNewCustomerModalAtom
 } from '@/store/crmAtoms';
 import { customersAtom } from '@/store/operationalAtoms';
 
@@ -23,6 +24,7 @@ export function CRMSidebar() {
     const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useAtom(crmSearchQueryAtom);
     const [filterSegment, setFilterSegment] = useAtom(crmFilterSegmentAtom);
+    const [, setNewCustomerModalOpen] = useAtom(crmNewCustomerModalAtom);
     const [customers] = useAtom(customersAtom);
 
     const getCount = (key: string | null) => {
@@ -49,7 +51,15 @@ export function CRMSidebar() {
 
             <div className="space-y-4 flex-1">
                 <button
-                    onClick={() => setFilterSegment(null)}
+                    onClick={() => (setNewCustomerModalOpen as any)(true)}
+                    className="w-full h-16 bg-accent-gold text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
+                >
+                    <Plus className="w-4 h-4" />
+                    {t('crm.add_customer') || 'Ajouter Client'}
+                </button>
+
+                <button
+                    onClick={() => (setFilterSegment as any)(null)}
                     className={cn(
                         "w-full flex items-center justify-between px-8 py-5 rounded-[2rem] transition-all relative group",
                         !filterSegment ? "bg-accent-gold/10 text-accent-gold shadow-sm" : "text-text-muted hover:bg-bg-tertiary"
@@ -69,7 +79,7 @@ export function CRMSidebar() {
                     return (
                         <button
                             key={key}
-                            onClick={() => setFilterSegment(filterSegment === key ? null : key)}
+                            onClick={() => (setFilterSegment as any)(filterSegment === key ? null : key)}
                             className={cn(
                                 "w-full flex items-center justify-between px-8 py-5 rounded-[2rem] transition-all",
                                 filterSegment === key ? "text-text-primary bg-bg-tertiary shadow-sm" : "text-text-muted hover:bg-bg-tertiary"

@@ -1,4 +1,5 @@
 import { CryptoService } from './CryptoService';
+import { logger } from '@/lib/logger';
 
 /**
  * 🔒 ZKBenchmarkEngine - Restaurant OS (Darwin V5.5 Master Code)

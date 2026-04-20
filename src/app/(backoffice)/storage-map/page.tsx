@@ -15,8 +15,8 @@ import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { StorageLocation, StockItem, Preparation, Ingredient } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/components/ui/Toast";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore as db } from "@/lib/firebase";
+import { useAtomValue } from "jotai";
+import { performanceModeAtom } from "@/store/operationalAtoms";
 import {
     DndContext,
     DragOverlay,
@@ -45,9 +45,11 @@ export default function StorageMapPage() {
         getExpiringStock,
         getExpiringPreparations,
         transferStock,
+        transferPreparation,
         addStockItem
     } = useInventory();
     const { showToast } = useToast();
+    const performanceMode = useAtomValue(performanceModeAtom);
 
     const [selectedLocation, setSelectedLocation] = useState<StorageLocation | null>(null);
     const [filterZone, setFilterZone] = useState<string | null>(null);
@@ -155,8 +157,7 @@ export default function StorageMapPage() {
 
     const handleTransferPreparation = async (prepId: string, toLocationId: string) => {
         try {
-            const prepRef = doc(db, 'preparations', prepId);
-            await updateDoc(prepRef, { storageLocationId: toLocationId });
+            await transferPreparation(prepId, toLocationId);
             showToast('Préparation déplacée avec succès !', 'success');
         } catch (error) {
             showToast('Erreur lors du déplacement', 'error');
@@ -231,7 +232,7 @@ export default function StorageMapPage() {
                                 initial={{ x: -340, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ x: -340, opacity: 0 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                transition={performanceMode ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 30 }}
                                 className="fixed md:relative top-0 bottom-0 left-0 w-[85vw] md:w-[340px] bg-bg-secondary border-r border-border flex flex-col overflow-hidden shadow-2xl z-30 h-full"
                             >
                                 <div className="p-6 border-b border-border bg-bg-secondary space-y-4">
@@ -270,6 +271,7 @@ export default function StorageMapPage() {
                                                         initial={{ opacity: 0, scale: 0.8 }}
                                                         animate={{ opacity: 1, scale: 1 }}
                                                         exit={{ opacity: 0, scale: 0.8 }}
+                                                        transition={performanceMode ? { duration: 0 } : {}}
                                                         onClick={() => setIngredientSearch("")}
                                                         className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
                                                     >
@@ -320,6 +322,7 @@ export default function StorageMapPage() {
                                         <motion.div
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
+                                            transition={performanceMode ? { duration: 0 } : {}}
                                             className="py-20 text-center px-6"
                                         >
                                             <div className="w-20 h-20 bg-bg-tertiary rounded-[2.5rem] flex items-center justify-center mx-auto mb-6">

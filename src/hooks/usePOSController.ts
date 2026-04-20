@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/NexusOpsProvider";
 import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
-import { processPaymentAction } from "@/app/actions/transactions";
+import { processPaymentAction } from '@/app/(admin)/actions/transactions';
 
 import { useToast } from "@/components/ui/Toast";
 import { Table, Category, Product } from "@/types";

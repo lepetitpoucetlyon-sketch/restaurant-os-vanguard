@@ -1,6 +1,7 @@
 /**
  * INVENTORY TYPES - Complete Stock Management System
  */
+import { TemperatureLog } from './haccp.types';
 
 // Storage Location Types
 export type StorageType = 'fridge' | 'freezer' | 'dry_storage' | 'cellar' | 'counter' | 'other';
@@ -112,6 +113,8 @@ export interface StockItem {
     notes?: string;
     initialQuantity?: number;
     costInCents?: number; // legacy alias for unitCostInCents
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 // Preparation - Mise en place and prepared items
@@ -191,6 +194,7 @@ export interface InventoryMovement {
     reason: string;
     performedAt: string;
     performedBy: string;
+    unitCostInCents?: number; // Added for financial tracking
 }
 
 export interface SupplierOrder {

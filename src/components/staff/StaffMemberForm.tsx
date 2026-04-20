@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { User } from "@/types";
+import { User, UserRole } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Modal, PremiumSelect, SecurityPinModal } from "@/components/ui";
 import { useToast } from "@/components/ui/Toast";
@@ -35,13 +35,13 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
     // component when the target changes, avoiding setState-in-effect.
     const defaultFormData = React.useMemo(() => editingUser ? {
         name: editingUser.name,
-        role: editingUser.role as any,
+        role: editingUser.role,
         pin: '',
         avatar: editingUser.avatar || '',
         hourlyRate: editingUser.hourlyRate || 15,
     } : {
         name: '',
-        role: 'server' as any,
+        role: 'server' as UserRole,
         pin: '',
         avatar: '',
         hourlyRate: 15,
@@ -120,7 +120,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
                         <PremiumSelect
                             label="Rôle & Responsabilités"
                             value={formData.role}
-                            onChange={(val) => setFormData(p => ({ ...p, role: val as any }))}
+                            onChange={(val) => setFormData(p => ({ ...p, role: val as UserRole }))}
                             options={ROLES}
                         />
                     </div>

@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from './nexusNodeFactory';
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
+import { ShiftEntry } from '@/domain/schemas/hr';
 
 // --- 👥 STAFF & HR DOMAIN (Personnel, Shifts, Congés) ---
 
@@ -12,7 +13,7 @@ const _shifts = createProxyDomain<Shift>('shifts');
 export const shiftsNodeAtom = _shifts.node;
 export const shiftsAtom = _shifts.data;
 
-const _activeShifts = createProxyDomain<Shift>('activeShifts');
+const _activeShifts = createProxyDomain<ShiftEntry>('activeShifts');
 export const activeShiftsNodeAtom = _activeShifts.node;
 export const activeShiftsAtom = _activeShifts.data;
 
@@ -28,11 +29,11 @@ const _leaveBalances = createProxyDomain<LeaveBalance>('leaveBalances');
 export const leaveBalancesNodeAtom = _leaveBalances.node;
 export const leaveBalancesAtom = _leaveBalances.data;
 
-// --- 🧬 RECRUITMENT STATE (Moved from monolith) ---
+import { Candidate } from '@/types/recruitment';
 export const staffSearchQueryAtom = atom('');
 export const staffStatusFilterAtom = atom<'all' | 'new' | 'interview' | 'trial' | 'hired' | 'refused'>('all');
 export const staffCandidateModalOpenAtom = atom(false);
-export const staffEditingCandidateAtom = atom<User | null>(null);
+export const staffEditingCandidateAtom = atom<Candidate | null>(null);
 
 // 4. HR LOADING AGGREGATOR
 export const hrLoadingAtom = atom((get) => 

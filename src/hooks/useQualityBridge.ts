@@ -10,6 +10,7 @@ import { QualityEngine } from '@/domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@/domain/types/quality';
 import { logger } from '@/lib/logger';
 import { useSettings } from './useSettings';
+import { useTenant } from '@/engines/core/NexusCoreProvider';
 
 /**
  * 🛰️ useQualityBridge - Grade VI
@@ -22,7 +23,7 @@ export const useQualityBridge = () => {
     const [alerts] = useAtom(qualityAlertsAtom);
     const [todayStats] = useAtom(todayReceptionStatsAtom);
     
-    const { tenantId } = useSettings();
+    const { tenantId } = useTenant();
 
     const startReception = (supplier: { id: string, name: string }) => {
         const newControl: Partial<QualityControl> = {

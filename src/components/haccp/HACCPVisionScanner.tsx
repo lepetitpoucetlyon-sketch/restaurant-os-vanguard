@@ -27,7 +27,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
         setIsProcessing(true);
         try {
             const base64 = await VisionService.fileToBase64(file);
-            const success = await validateTaskWithVision(taskId, base64);
+            const success = await (validateTaskWithVision as any)(taskId, base64);
             
             // Re-fetch or simulate the result for the UI
             setResult({

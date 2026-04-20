@@ -1,6 +1,26 @@
 import { LedgerEntry, SharedKernel, AccountingMode } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { Nexus, INexusAdapter } from '@/lib/nexus/NexusAdapter';
+
+interface InquisiteurDiscrepancy {
+    referenceId: string;
+    difference: number;
+    debit: number;
+    credit: number;
+}
+
+interface GlobalSettings {
+    accounting?: {
+        complexityMode?: AccountingMode;
+    };
+}
+
+/**
+ * 📢 Nexus Extension for internal communications
+ */
+interface IBroadcastAdapter extends INexusAdapter {
+    broadcast: (event: string, payload: Record<string, unknown>) => void;
+}
 
 /**
  * ⚖️ SovereignLedger - Restaurant OS
@@ -16,8 +36,8 @@ export class SovereignLedger {
         this.currentMode = 'LOCAL_LOCK';
         // Notification immédiate à l'UI pour bloquer toute transaction asymétrique
         // Note: Adaptation si broadcast n'existe pas nativement sur l'adapter
-        if (Nexus.adapter && (Nexus.adapter as any).broadcast) {
-            (Nexus.adapter as any).broadcast('SYSTEM_LOCKDOWN', { reason: 'Data Integrity Breach' });
+        if (Nexus.adapter && 'broadcast' in Nexus.adapter) {
+            (Nexus.adapter as unknown as IBroadcastAdapter).broadcast('SYSTEM_LOCKDOWN', { reason: 'Data Integrity Breach' });
         }
     }
 
@@ -43,9 +63,11 @@ export class SovereignLedger {
         const date = new Date().toISOString();
         let mode: AccountingMode = 'EXPERT';
         try {
-            const settings = await Nexus.adapter.get<any>(Nexus.getTenantPath('settings/global'));
+            const settings = await Nexus.adapter.get<GlobalSettings>(Nexus.getTenantPath('settings/global'));
             mode = settings?.accounting?.complexityMode || 'EXPERT';
-        } catch { mode = 'LOCAL_LOCK' as any; }
+        } catch { 
+            mode = 'LOCAL_LOCK' as unknown as AccountingMode; 
+        }
 
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
             id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
@@ -153,5 +175,57 @@ export class SovereignLedger {
             logger.error('[SovereignLedger] EBITDA Calculation Failed. Falling back to safe 0.');
             return 0;
         }
+    }
+
+    /**
+     * ⚖️ Inquisiteur QA: Omniscient Ledger Audit
+     * Performs a full binary scan of all economic movements to detect asymmetry.
+     */
+    static async runInquisiteurQA(): Promise<{ secure: boolean; expected: number; actual: number; discrepancies: InquisiteurDiscrepancy[] }> {
+        logger.info('[SovereignLedger] 👁️ INQUISITEUR QA: Initiating Full Binary Reconciliation.');
+        const entries = await Nexus.adapter.query<LedgerEntry>(Nexus.getTenantPath('ledger/entries'));
+        
+        let totalDebit = 0;
+        let totalCredit = 0;
+        const discrepancies: InquisiteurDiscrepancy[] = [];
+
+        if (!entries || entries.length === 0) {
+            return { secure: true, expected: 0, actual: 0, discrepancies: [] };
+        }
+
+        // Group by Reference ID to ensure each transaction is balanced
+        const transactions = new Map<string, { debit: number, credit: number }>();
+        
+        entries.forEach(entry => {
+            if (entry.type === 'DEBIT') totalDebit += entry.amountInCents;
+            if (entry.type === 'CREDIT') totalCredit += entry.amountInCents;
+
+            if (entry.referenceId) {
+                const tx = transactions.get(entry.referenceId) || { debit: 0, credit: 0 };
+                if (entry.type === 'DEBIT') tx.debit += entry.amountInCents;
+                if (entry.type === 'CREDIT') tx.credit += entry.amountInCents;
+                transactions.set(entry.referenceId, tx);
+            }
+        });
+
+        // Detect specific transaction asymmetry
+        for (const [refId, tx] of transactions.entries()) {
+            const diff = Math.abs(tx.debit - tx.credit);
+            if (diff > 0.01) {
+                discrepancies.push({ referenceId: refId, difference: diff, debit: tx.debit, credit: tx.credit });
+            }
+        }
+
+        const globalDiff = Math.abs(totalDebit - totalCredit);
+        const isSecure = globalDiff <= 0.01 && discrepancies.length === 0;
+
+        if (!isSecure) {
+            logger.error(`[SovereignLedger] 🚨 INQUISITEUR QA FAILED: Asymmetry detected! Diff: ${globalDiff}`);
+            this.handleCorruptionDetected();
+        } else {
+            logger.info('[SovereignLedger] ✅ INQUISITEUR QA PASSED: Ledger Integrity 100% Certified.');
+        }
+
+        return { secure: isSecure, expected: totalDebit, actual: totalCredit, discrepancies };
     }
 }

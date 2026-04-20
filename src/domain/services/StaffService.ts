@@ -1,5 +1,6 @@
 import { Shift, LeaveRequest } from '@/types';
 import { ShiftProvision } from '@/types/domain.types';
+import { logger } from '@/lib/logger';
 
 /**
  * 🧑‍🍳 StaffService - Restaurant OS

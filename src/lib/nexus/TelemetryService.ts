@@ -53,7 +53,7 @@ export class TelemetryService {
       // 2. Gather NF525 Status
       const fiscalData = this.store.get(fiscalLedgerAtom);
       const isSealed = Array.isArray(fiscalData) && fiscalData.length > 0;
-      const lastHash = isSealed ? fiscalData[0].hash : undefined;
+      const lastHash = isSealed ? (fiscalData[0] as any).hash : undefined;
 
       // Type-safe connection check
       const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;

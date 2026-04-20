@@ -37,7 +37,7 @@ import { useMarketing } from "@/engines/ops/NexusOpsProvider";
 
 export default function AIReferencingPage() {
     const { showToast } = useToast();
-    const { profile, isLoading: isSeoLoading } = useMarketing();
+    const { profile, isLoading: isSeoLoading } = useMarketing() as any;
     const [activeTab, setActiveTab] = useState<'overview' | 'schema' | 'api' | 'prompts'>('overview');
 
     // 🎯 INDUSTRIAL SOUDURE: Dynamic Schema from Real Metadata

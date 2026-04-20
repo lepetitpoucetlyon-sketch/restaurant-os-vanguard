@@ -5,7 +5,7 @@ import { useAtomValue } from "jotai";
 import { seoProfileAtom, seoLoadingAtom } from "@/store/operationalAtoms";
 
 export function GoogleProfileCard() {
-    const profile = useAtomValue(seoProfileAtom);
+    const profile = useAtomValue(seoProfileAtom) as any;
     const isLoading = useAtomValue(seoLoadingAtom);
 
     if (isLoading) {

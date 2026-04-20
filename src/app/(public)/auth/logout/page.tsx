@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
+import { MCCInsights } from '@/components/admin/mcc/MCCInsights';
 import { ShieldAlert, RefreshCcw, Home } from 'lucide-react';
 
 /**
@@ -23,10 +23,10 @@ export default function LogoutPage() {
             const { MasterBridge } = await import('@/lib/MasterBridge');
             await MasterBridge.pushGlobalConfig({
                 maintenanceMode: false,
-                forceLogout: false,
+                killSwitch: false,
                 securityLevel: 'standard',
-                globalMessage: 'RESCUE_MODE_ACTIVATED: Manual override.',
-                allowedFeatures: ['pos', 'fiscal', 'inventory', 'hr']
+                globalMessage: 'Session terminée avec succès.',
+                allowedFeatures: []
             });
         } catch (e) {
             console.warn('[RESCUE] Master override failed, but session will be cleared locally.');

@@ -15,7 +15,7 @@ import {
     Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { useHACCP } from "@/engines/guard/NexusGuardProvider";
+import { useHACCP, HygieneLog } from "@/modules/haccp";
 import { PlanNettoyage } from "@/components/haccp/PlanNettoyage";
 import { ReleveTemperatures } from "@/components/haccp/ReleveTemperatures";
 import { TracabiliteEtiquettes } from "@/components/haccp/TracabiliteEtiquettes";

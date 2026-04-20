@@ -49,7 +49,7 @@ export const EdgeSyncService = {
     // 🔥 SYNC INJECTION: Directly update local atoms before Cloud confirmation
     const store = getDefaultStore();
     if (data.type === 'order') {
-        store.set(ordersNodeAtom, (prev: { data: Order[] }) => updateNexusNode(prev, { data: [...prev.data, data.payload as Order] }));
+        store.set(ordersNodeAtom, (prev: any) => updateNexusNode(prev, { data: [...prev.data, data.payload as Order] }));
     }
   }
 };

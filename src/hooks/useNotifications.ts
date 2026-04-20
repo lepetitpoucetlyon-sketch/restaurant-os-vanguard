@@ -1,5 +1,6 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { notificationsAtom, unreadNotificationsCountAtom, Notification } from '@/store/uiAtoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { notificationsAtom, unreadNotificationsCountAtom } from '@/store/uiAtoms';
+import type { Notification as AppNotification } from '@/store/uiAtoms';
 
 /**
  * 🔔 useNotifications - Grade VI
@@ -9,8 +10,8 @@ export function useNotifications() {
     const [notifications, setNotifications] = useAtom(notificationsAtom);
     const unreadCount = useAtomValue(unreadNotificationsCountAtom);
 
-    const addNotification = (notif: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
-        const newNotif: Notification = {
+    const addNotification = (notif: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
+        const newNotif: AppNotification = {
             ...notif,
             id: Math.random().toString(36).substring(2, 9),
             timestamp: new Date(),

@@ -28,7 +28,7 @@ export interface ScheduledPost {
 // --- 📢 MARKETING & CRM DOMAIN (SEO, Campagnes, Réseaux sociaux, Clients) ---
 
 
-export const seoProfileAtom: PrimitiveAtom<SEOProfile | null> = atom<SEOProfile | null>(null);
+export const seoProfileAtom: any = atom<any>(null);
 
 
 
@@ -60,6 +60,7 @@ const _customers = createProxyDomain<Customer>('customers');
 export const customersNodeAtom = _customers.node;
 export const customersAtom = _customers.data;
 export const customersLoadingAtom = _customers.loading;
+export const selectedCustomerAtom = atom<Customer | null>(null);
 
 // --- 🛰️ SYNC & TELEMETRY ---
 export const isMarketingSyncingAtom = atom(false);

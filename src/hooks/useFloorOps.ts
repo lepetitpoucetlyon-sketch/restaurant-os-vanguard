@@ -1,7 +1,8 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { tablesAtom, tablesLoadingAtom } from '@/store/operationalAtoms';
+import { tablesNodeAtom, tablesLoadingAtom } from '@/store/operationalAtoms';
+import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { Table, TableStatus } from '@/types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useCallback, useEffect } from 'react';
@@ -12,21 +13,22 @@ import { useCallback, useEffect } from 'react';
  * Replaces the legacy usePMS hotel-centric logic.
  */
 export function useFloorOps() {
-    const [tables, setTables] = useAtom(tablesAtom);
-    const [isLoading, setIsLoading] = useAtom(tablesLoadingAtom);
+    const [tablesNode, setTablesNode] = useAtom(tablesNodeAtom);
+    const tables = tablesNode.data;
+    const isLoading = tablesNode.loading;
 
     const refreshTables = useCallback(async () => {
-        setIsLoading(true);
+        setTablesNode(prev => updateNexusNode(prev, { loading: true }));
         try {
             // Nexus.adapter resolves the tenant path automatically in Grade IX
-            const data = await Nexus.adapter.get<Table[]>('tables');
+            const data = await Nexus.adapter.query<Table>('tables');
             if (data && Array.isArray(data)) {
-                setTables(data);
+                setTablesNode(prev => updateNexusNode(prev, { data, loading: false }));
             }
         } finally {
-            setIsLoading(false);
+            setTablesNode(prev => updateNexusNode(prev, { loading: false }));
         }
-    }, [setTables, setIsLoading]);
+    }, [setTablesNode]);
 
     const updateTableStatus = useCallback(
         async (tableId: string, status: TableStatus) => {
@@ -34,9 +36,11 @@ export function useFloorOps() {
             await Nexus.adapter.update(`tables/${tableId}`, { status, updatedAt: new Date().toISOString() });
 
             // Optimistic update
-            setTables((prev) => prev.map((t) => (t.id === tableId ? { ...t, status } : t)));
+            setTablesNode((prev) => updateNexusNode(prev, { 
+                data: prev.data.map((t) => (t.id === tableId ? { ...t, status } : t))
+            }));
         },
-        [setTables],
+        [setTablesNode],
     );
 
     useEffect(() => {

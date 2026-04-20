@@ -154,7 +154,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
             // On vérifie que SyncCompliance.init ne crash pas avec nos mocks
             const mockStore = { set: vi.fn(), get: vi.fn() };
             expect(async () => {
-                await SyncCompliance.init('tenant-test', mockStore);
+                await SyncCompliance.init('tenant-test', mockStore as any);
             }).not.toThrow();
         });
 

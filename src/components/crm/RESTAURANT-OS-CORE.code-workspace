@@ -1,0 +1,57 @@
+{
+	"folders": [
+		{
+			"name": "🏛️ RESTAURANT-OS-CORE",
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"activityBar.activeBorder": "#D4AF37",
+			"sideBar.background": "#0D0D0D"
+		},
+		"files.exclude": {
+			"**/.gemini": true,
+			"**/.git": true,
+			"**/.next": true,
+			"**/node_modules": true,
+			"**/.firebase": true,
+			"**/out": true,
+			"**/dist": true,
+			"**/.kilo": true,
+			"**/.kilocode": true,
+			"**/.agent": true,
+			"**/.agents": true,
+			"**/.antigravity": true,
+			"**/developer": true,
+			"**/exports-stitch": true,
+			"**/graphify-out": true,
+			"**/instances": true,
+			"**/playwright-report": true,
+			"**/scratch": true,
+			"**/scripts": true,
+			"**/templates": true,
+			"**/test-results": true,
+			"**/*.txt": true,
+			"**/*.js": {
+				"when": "$(basename).ts"
+			},
+			"**/eslint.json": true,
+			"**/stitch_registry.json": true,
+			"**/nexus-ledger.json": true,
+			"**/.DS_Store": true,
+			"**/AUDIT_*": true,
+			"**/PRESENTATION_*": true,
+			"**/SYSTEM_MANIFEST_*": true,
+			"**/RAPPORT_*": true,
+			"**/MANIFESTE_*": true,
+			"**/Finances": true,
+			"**/Factures": true,
+			"**/Desktop": true,
+			"**/Documents": true,
+			"**/Downloads": true,
+			"**/Pictures": true
+		},
+		"explorer.compactFolders": false
+	}
+}

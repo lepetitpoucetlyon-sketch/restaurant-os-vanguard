@@ -1,12 +1,8 @@
-import { initializeApp, getApps, FirebaseOptions } from 'firebase/app';
-import { 
-    initializeFirestore, 
-    getFirestore, 
-    persistentLocalCache, 
-    persistentMultipleTabManager 
-} from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+import { initializeApp, getApps, getApp, FirebaseOptions } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 // Imports for Nexus moved down to break circular dependencies
 

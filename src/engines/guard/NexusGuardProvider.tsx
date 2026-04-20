@@ -39,7 +39,7 @@ interface NexusGuardState {
         checklists: HACCPChecklistItem[];
         sensors: SensorReading[];
         temperatureHistory: TemperatureLog[];
-        validateTaskWithVision: (data: any) => Promise<boolean>;
+        validateTaskWithVision: (data: any, options?: any) => Promise<boolean>;
         logWaste: (data: any) => Promise<void>;
     };
     maintenance: {

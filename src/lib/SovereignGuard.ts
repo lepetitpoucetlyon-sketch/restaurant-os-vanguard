@@ -53,7 +53,7 @@ export const SovereignGuard = {
         securityLevel: 'critical',
         globalMessage: errorMsg,
         allowedFeatures: []
-      });
+      } as any);
     } catch (e) {}
 
     if (typeof window !== 'undefined') {

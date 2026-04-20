@@ -98,7 +98,7 @@ export default function InventoryPage() {
     const { globalInflationRate } = useIntelligence();
 
     const stockValuation = useMemo(() => InventoryService.calculateStockValuation(stockItems), [stockItems]);
-    const inflationImpact = useMemo(() => InventoryService.getReplacementCostImpact(stockValuation, globalInflationRate), [stockValuation, globalInflationRate]);
+    const inflationImpact = useMemo(() => InventoryService.getReplacementCostImpact(stockValuation, (globalInflationRate as number) || 0), [stockValuation, globalInflationRate]);
 
     // Dispatch AI Context
     useEffect(() => {
@@ -236,14 +236,14 @@ export default function InventoryPage() {
                         </div>
                     </div>
 
-                    {globalInflationRate > 0 && (
+                    {((globalInflationRate as number) || 0) > 0 && (
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="p-6 bg-error/5 rounded-[2rem] border border-error/20 backdrop-blur-xl"
                         >
                             <div className="flex justify-between items-center mb-2">
-                                <p className="text-[9px] font-black text-error uppercase tracking-[0.2em]">Surcoût Réappro (Inflation {globalInflationRate}%)</p>
+                                <p className="text-[9px] font-black text-error uppercase tracking-[0.2em]">Surcoût Réappro (Inflation {globalInflationRate as any}%)</p>
                                 <Zap className="w-4 h-4 text-error animate-pulse" />
                             </div>
                             <div className="text-3xl font-serif font-black italic text-error">

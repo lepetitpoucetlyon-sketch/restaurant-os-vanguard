@@ -2,9 +2,9 @@
 
 import { useCallback } from "react";
 import { useAtomValue } from "jotai";
-import { reservationsNodeAtom, tenantIdAtom } from "@/store/operationalAtoms";
-import { upsertReservationAction } from "@/app/actions/reservations";
+import { reservationsNodeAtom } from "@/store/operationalAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
+import { useNexusMutation } from "./useNexusMutation";
 
 /**
  * 📅 useReservations - Grade VI Atomic Bridge
@@ -13,8 +13,10 @@ import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 export function useReservations() {
     useVisibilityPurge('reservations');
     const node = useAtomValue(reservationsNodeAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
     const reservations = node.data || [];
+    
+    // --- 🔨 LA FORGE ---
+    const reservationForge = useNexusMutation(reservationsNodeAtom, 'reservations', 'RESERVATIONS');
     
     return { 
         data: reservations, 
@@ -25,6 +27,14 @@ export function useReservations() {
             reservations.filter((r: any) => r.tableId === tableId && r.status !== 'cancelled'),
             [reservations]
         ),
-        addReservation: (data: any) => upsertReservationAction(tenantId, data)
+        
+        // --- Forge Actions ---
+        addReservation: (data: any) => {
+            const id = data.id || `res_${Date.now()}`;
+            return reservationForge.mutate('SET', id, data);
+        },
+        updateReservation: (id: string, data: any) => reservationForge.mutate('UPDATE', id, data),
+        deleteReservation: (id: string) => reservationForge.mutate('DELETE', id, {}),
+        updateStatus: (id: string, status: string) => reservationForge.mutate('UPDATE', id, { status })
     };
 }

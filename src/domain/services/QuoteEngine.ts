@@ -10,7 +10,7 @@ export const QuoteSchema = z.object({
   items: z.array(z.object({
     id: z.string(),
     name: z.string(),
-    quantity: z.number().pos(),
+    quantity: z.number().positive(),
     price: z.number().nonnegative(),
   })).min(1),
   total: z.number().nonnegative(),

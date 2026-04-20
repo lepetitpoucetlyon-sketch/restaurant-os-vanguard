@@ -20,3 +20,4 @@ export const posCategoryFilterAtom = atom<string>("all");
 
 // Selector for Cart Count (Grade X Stub)
 export const posCartCountSelector = atom(0);
+export const posCartTotalSelector = atom(0); // Grade X Suture

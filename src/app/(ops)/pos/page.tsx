@@ -246,9 +246,9 @@ export default function POSPage() {
                 isOpen={isSplitOpen}
                 items={cartItems}
                 total={cartTotal}
-                guestCount={currentTable?.seats || 1}
+                coverCount={currentTable?.seats || 1}
                 onClose={() => setIsSplitOpen(false)}
-                onPaySplit={handlePaySplit}
+                onPaySplit={(amountInCents, guestIndex) => handlePaySplit(amountInCents, guestIndex)}
             />
         </div>
     );

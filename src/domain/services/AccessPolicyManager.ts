@@ -93,7 +93,13 @@ export const ROLE_LABELS: Record<UserRole, string> = {
     kitchen: "Chef de Cuisine",
     "kds-view": "Écran KDS",
     "pos-standard": "Serveur Junior",
-    "guest-view": "Convive (Table)"
+    "guest-view": "Convive (Table)",
+    floor_manager: "Chef de Rang",
+    kitchen_chef: "Chef de Cuisine (Métier)",
+    kitchen_line: "Commis / Partie",
+    bartender: "Barman / Mixologue",
+    host: "Hôte d'Accueil",
+    cashier: "Caisse"
 };
 
 export const CATEGORY_LABELS: Record<string, string> = {

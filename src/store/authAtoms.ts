@@ -6,22 +6,34 @@ import { User } from '@/types';
  * 🔒 AUTH & IDENTITY ATOMS - Grade VI
  */
 
-export const currentUserAtom = atomWithStorage<User | null>('nexus_user_session', null);
+export const currentUserAtomBase = atomWithStorage<User | null>('nexus_user_session', null);
+export const currentUserAtom = atom(
+    (get) => {
+        const user = get(currentUserAtomBase);
+        if (user && !user.tenantId) {
+            return { ...user, tenantId: 'evolution' }; // Default tenant for legacy sessions
+        }
+        return user;
+    },
+    (get, set, nextValue: User | null) => {
+        set(currentUserAtomBase, nextValue);
+    }
+);
 export const isAuthenticatedAtom = atom((get) => !!get(currentUserAtom));
-export const userRoleAtom = atom((get) => get(currentUserAtom)?.role || 'guest');
+export const userRoleAtom = atom((get) => get(currentUserAtom)?.role || 'client');
 
 // Multi-tenant isolation atom
 export const tenantConfigAtom = atom<any>(null);
 
 // Grade VI Permissions Strategy
-export type Role = 'admin' | 'manager' | 'staff' | 'guest';
+export type Role = 'admin' | 'manager' | 'staff' | 'client';
 
 // Persist role permissions locally (Grade VI Sovereignty)
 export const rolePermissionsAtom = atomWithStorage<Record<string, string[]>>('nexus_role_permissions', {
     admin: ['*'],
     manager: ['orders.view', 'orders.edit', 'inventory.view', 'inventory.edit', 'staff.view'],
     staff: ['orders.view', 'orders.edit', 'inventory.view'],
-    guest: []
+    client: []
 });
 
 export const userPermissionsAtom = atom((get) => {

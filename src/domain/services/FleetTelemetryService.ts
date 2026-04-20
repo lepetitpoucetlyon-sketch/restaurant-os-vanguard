@@ -5,7 +5,7 @@
  */
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TenantID, SiteTelemetry } from "@/types/brands";
+import { TenantID, SiteTelemetry } from '@/domain/types/brands';
 
 export class FleetTelemetryService {
   private static instance: FleetTelemetryService;

@@ -27,7 +27,7 @@ export function GestionAnomalies() {
 
     const handleResolve = async (id: string) => {
         try {
-            await updateLog({ id, updates: { status: 'done', notes: 'Résolu par l\'administrateur' } });
+            await updateLog(id, { status: 'done', notes: 'Résolu par l\'administrateur' });
             addNotification({ type: 'success', title: 'Anomalie résolue', message: 'L\'incident a été archivé dans le registre de conformité.' });
         } catch (e) {
             console.error(e);

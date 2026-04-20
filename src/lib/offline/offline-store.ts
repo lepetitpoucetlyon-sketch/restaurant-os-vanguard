@@ -38,6 +38,8 @@ export class RestaurantOfflineDB extends Dexie {
     config!: Table<TenantConfig>;
     /** Grade IX: Boîte Noire des rejets du GenomeValidator */
     immunityLogs!: Table<ImmunityLogEntry>;
+    /** Grade X: Suture des Recettes pour le calcul offline */
+    recipes!: Table<any>;
 
     constructor() {
         super('RestaurantOS_Offline');
@@ -50,7 +52,8 @@ export class RestaurantOfflineDB extends Dexie {
             journalEntries: 'id, date, pieceNumber, referenceId',
             fiscalSeals: 'id, transactionId, hash, timestamp',
             syncQueue: '++id, status, timestamp, collection, type',
-            config: 'id' // Primary key is tenantId
+            config: 'id', // Primary key is tenantId
+            recipes: 'id, name' // Grade X Suture
         });
 
         // Version 3 — Grade IX: Ajout Boîte Noire (migration additive uniquement)

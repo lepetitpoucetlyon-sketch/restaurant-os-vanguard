@@ -130,3 +130,24 @@ export async function deleteSegmentAction(tenantId: string, segmentId: string) {
     }
 }
 
+export async function updateReviewStatus(tenantId: string, reviewId: string, status: string) {
+    if (!tenantId || !reviewId) throw new Error("[Marketing] Missing IDs.");
+    try {
+        await Nexus.adapter.update(`tenants/${tenantId}/reviews/${reviewId}`, {
+            status,
+            updatedAt: new Date().toISOString()
+        });
+        return { success: true };
+    } catch (error) {
+        logger.error(`[Marketing] Review status update failed`, error);
+        throw error;
+    }
+}
+
+export async function replyToReview(reviewId: string, reply: string) {
+    console.log('Reply to review', reviewId, reply);
+}
+
+export async function deleteReview(reviewId: string) {
+    console.log('Delete review', reviewId);
+}

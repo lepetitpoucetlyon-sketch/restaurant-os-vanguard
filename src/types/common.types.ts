@@ -6,6 +6,8 @@
 // NOTIFICATIONS
 // ============================================
 
+import { Ingredient } from './inventory.types';
+
 export type NotificationType = 'info' | 'warning' | 'critical' | 'success';
 
 export interface Notification {

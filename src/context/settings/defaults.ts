@@ -156,6 +156,7 @@ export const defaultPlanningConfig: PlanningConfig = {
     absenceRequestApproval: true,
     swapRequestApproval: true,
     overtimeEnabled: false,
+    staffToCoversRatio: 0.1,
 };
 
 export const defaultRecipesConfig: RecipesConfig = {
@@ -190,6 +191,7 @@ export const defaultAccountingConfig: AccountingConfig = {
     iban: '',
     bic: '',
     exportFormat: 'pdf',
+    complexityMode: 'SIMPLE',
     electronicInvoicingEnabled: false,
     vatIdNumber: '',
     siren: '',

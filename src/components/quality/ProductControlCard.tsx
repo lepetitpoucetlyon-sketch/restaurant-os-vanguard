@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { QualityControlItem } from '@/domain/types/quality';
-import { Badge } from '@/components/ui/badge'; // Assumes existence of a shadcn-like Badge component
+import { StatusBadge as Badge } from "@/components/ui/StatusBadge";
 import { Calendar, Thermometer, CheckCircle2, AlertOctagon, Timer } from 'lucide-react';
 
 interface ProductControlCardProps {

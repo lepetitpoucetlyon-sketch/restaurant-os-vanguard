@@ -41,11 +41,13 @@ export function PlanNettoyage() {
                 await deleteLog(existingLog.id);
             } else {
                 await createLog({
+                    id: `log_${Date.now()}`,
                     type: 'cleaning',
                     item: task.label,
                     zone: zoneId,
                     status: 'done',
-                    user: 'Admin'
+                    user: 'Admin',
+                    createdAt: new Date().toISOString()
                 });
             }
         } catch (e) {
@@ -57,12 +59,14 @@ export function PlanNettoyage() {
         if (!reportingTask || !reportNote) return;
         try {
             await createLog({
+                id: `log_${Date.now()}_inc`,
                 type: 'incident',
                 item: reportingTask.task.label,
                 zone: reportingTask.zoneId,
                 status: 'alert',
                 notes: reportNote,
-                user: 'Admin'
+                user: 'Admin',
+                createdAt: new Date().toISOString()
             });
             addNotification({ type: 'warning', title: 'Incident consigné', message: 'L\'anomalie a été enregistrée avec succès.' });
         } catch (e) {

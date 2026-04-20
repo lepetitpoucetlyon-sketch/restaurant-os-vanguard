@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useFleet } from '@/context/FleetContext';
+import { useCallback, useMemo } from 'react';
+import { useNexusFleet as useFleet } from '@/hooks/useNexusFleet';
 import { useGeminiAgent } from './useGeminiAgent';
 import { MacroBrain, FleetInsight } from '@/domain/services/MacroBrain';
 import { logger } from '@/lib/axiom';
@@ -10,7 +10,7 @@ import { logger } from '@/lib/axiom';
  * Manages fleet-wide strategy and autonomous action execution.
  */
 export function useStrategicOracle() {
-    const { instances, setInstances } = useFleet();
+    const { instances, refreshFleet } = useFleet();
     const agent = useGeminiAgent();
 
     // 1. Analyze Fleet - Get strategic insights from MacroBrain

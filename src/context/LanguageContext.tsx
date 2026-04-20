@@ -5,6 +5,7 @@ const fallbackT = (key: string) => key;
 const fallbackLang = {
   t: fallbackT,
   currentLanguage: 'fr',
+  language: 'fr', // Heritage alias
   setLanguage: () => {},
   availableLanguages: ['fr']
 };

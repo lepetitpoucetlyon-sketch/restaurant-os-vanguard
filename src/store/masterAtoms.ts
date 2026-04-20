@@ -50,8 +50,8 @@ export const fleetHealthAtom = atom<Record<string, { status: string; lastPing: s
 /** 📜 Global Policies distributed via the Bridge */
 export const globalPolicyAtom = atom<MasterConfig>({
     maintenanceMode: false,
-    forceLogout: false,
-    allowedCapabilities: [], // Pure by default
+    killSwitch: false, // Force alignment
+    allowedFeatures: [], // Suture Grade X
     securityLevel: 'standard'
 });
 

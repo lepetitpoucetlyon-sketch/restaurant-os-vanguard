@@ -97,15 +97,15 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                             </div>
                             <div>
                                 <h2 className="text-3xl font-serif font-black tracking-tight flex items-center gap-3 italic">
-                                    Conciergerie <span className="text-accent not-italic">Premium</span>
+                                    Brigade <span className="text-accent not-italic">Premium</span>
                                     <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
-                                    <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Signature Guest Management</span>
+                                    <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Signature Client Management</span>
                                     <div className="h-1 w-1 rounded-full bg-accent/40" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
-                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">IA Hospitality Active</span>
+                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">IA Ops Active</span>
                                     </div>
                                 </div>
                             </div>
@@ -229,7 +229,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                             <ChevronLeft className="w-5 h-5 text-text-primary" />
                                         </button>
                                         <div>
-                                            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Hôte Référent</p>
+                                            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Client Référent</p>
                                             <p className="text-3xl font-serif italic text-text-primary">{selectedCustomer?.firstName} {selectedCustomer?.lastName}</p>
                                         </div>
                                     </motion.div>

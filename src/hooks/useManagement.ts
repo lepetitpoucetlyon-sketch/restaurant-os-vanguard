@@ -2,6 +2,7 @@
 
 import { useAtomValue } from "jotai";
 import { 
+    wasteLogsNodeAtom,
     wasteLogsAtom, 
     menuAnalysisSelector, 
     staffPerformanceSelector, 
@@ -13,16 +14,17 @@ import {
  * Aide à la décision stratégique et optimisation des marges opérationnelles.
  */
 export function useManagement() {
-    const waste = useAtomValue(wasteLogsAtom);
+    const wasteNode = useAtomValue(wasteLogsNodeAtom);
+    const waste = wasteNode.data;
     const analysis = useAtomValue(menuAnalysisSelector);
     const staffPerformance = useAtomValue(staffPerformanceSelector);
     const laborCostRatio = useAtomValue(laborCostRatioSelector);
 
     return {
         waste: { 
-            data: waste.data || [], 
-            isLoading: waste.loading, 
-            error: waste.error 
+            data: wasteNode.data || [], 
+            isLoading: wasteNode.loading, 
+            error: wasteNode.error 
         },
         analysis: { 
             data: analysis, 

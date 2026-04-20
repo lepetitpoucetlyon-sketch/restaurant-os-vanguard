@@ -65,6 +65,7 @@ export interface JournalEntry {
     type?: 'revenue' | 'expense' | 'tax' | 'bank' | 'payroll' | 'other';
     amountInCents?: number;
     amount?: number;
+    status?: 'draft' | 'validated' | 'closed';
 }
 
 // --- Ledger (Grand Livre) ---

@@ -34,16 +34,16 @@ import { User, UserRole } from '@/types';
 import { TenantConfig } from '@/shared/nexus-contract';
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
 import { GlobalSettings } from '@/types/settings';
-
-import { 
+import {
     NexusCoreState, 
     NexusAuthState, 
     NexusTenantState, 
-    NexusUIState, 
+    NexusUIState,
     NexusSettingsState, 
     NexusLangState,
     NexusNotifState,
-    NexusFleetState
+    NexusFleetState,
+    NexusTheme
 } from '@/types/nexus.types';
 
 const NexusCoreContext = createContext<NexusCoreState | undefined>(undefined);
@@ -211,9 +211,10 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         return typeof val === 'string' ? val : key;
     }, [currentLanguage]);
 
-    const langValue = useMemo(() => ({
+    const langValue: NexusLangState = useMemo(() => ({
         t,
         currentLanguage,
+        language: currentLanguage,
         setLanguage: (l: Language) => setCurrentLanguage(l),
         availableLanguages: Object.keys(translations)
     }), [t, currentLanguage]);
@@ -245,13 +246,15 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         // Grade X Bridges
         require2FAChallenge: false,
         verifyTwoFactor: async () => true,
-        verifyPin: async (pin: string) => pin === '9999',
+        verifyPin: async (pin: string, userId?: string) => {
+            console.log('Verify PIN', pin, userId);
+            return pin === '9999';
+        },
         switchProfile: (uid: string) => console.log('Profile switch', uid),
-        canSwitchProfiles: true,
-        updateUserStatus: async () => {},
-        addUser: async () => {},
-        deleteUser: async () => {},
-        logAction: () => {}
+        updateUserStatus: async (id: string, data: any) => console.log('Update user', id, data),
+        addUser: async (data: any) => console.log('Add user', data),
+        deleteUser: async (id: string) => console.log('Delete user', id),
+        logAction: (action: string, metadata?: any) => console.log('Log action', action, metadata)
     }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.hasAccess, access.canDo, access.updateRolePermissions, access.getAccessibleCategories, login, logout]);
 
     const uiValue: NexusUIState = useMemo(() => ({
@@ -304,7 +307,30 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         setAnimations: setAnimationsEnabled
     }), [themeMode, setThemeMode, accentColor, setAccentColor, uiDensity, setUiDensity, borderRadius, setBorderRadius, glassmorphism, setGlassmorphism, animationsEnabled, setAnimationsEnabled]);
 
-    const contextValue: NexusCoreState = useMemo(() => ({
+    const fleetValue = useMemo(() => ({
+        nodes: [],
+        health: 'EXCELLENT',
+        isTrainingMode: false,
+        toggleTrainingMode: () => {},
+        priceMultiplier: 1.0,
+        refreshFleet: async () => {},
+        syncFleet: async () => {},
+        selectInstance: () => {},
+        registerInstance: async () => {},
+        launchPreview: () => {},
+        broadcastConfiguration: async () => {},
+        complianceService: {},
+        haccpBridge: {},
+        fleet: null,
+        crm: {},
+        intelligence: {
+            globalInflationRate: 0.0,
+            predictSignatureChance: () => 0.5,
+            predictLaborCost: () => 0.0
+        }
+    }), []);
+
+    const contextValue: any = useMemo(() => ({
         auth: authValue,
         tenant: tenantValue,
         ui: uiValue,
@@ -312,12 +338,13 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         theme: themeValue, 
         lang: langValue,
         notif: notifValue,
-        fleet: { nodes: [], health: 'EXCELLENT', isTrainingMode: false, toggleTrainingMode: () => {} } as any
-    }), [tenantValue, authValue, uiValue, settingsModule, langValue, themeValue, notifValue]);
+        fleet: fleetValue,
+        tenantConfig: activeTenantConfig // Suture Grade X
+    }), [tenantValue, authValue, uiValue, settingsModule, langValue, themeValue, notifValue, fleetValue, activeTenantConfig]);
 
 
     return (
-        <NexusCoreContext.Provider value={contextValue}>
+        <NexusCoreContext.Provider value={contextValue as any}>
             {children}
         </NexusCoreContext.Provider>
     );

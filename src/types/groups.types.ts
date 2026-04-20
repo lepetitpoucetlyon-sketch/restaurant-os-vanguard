@@ -243,4 +243,7 @@ export interface GroupEvent {
     createdAt: string;
     createdBy: string;
     updatedAt: string;
+    // Suture Grade X (Heritage UI support)
+    budget?: number;
+    contact?: string;
 }

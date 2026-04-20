@@ -39,11 +39,11 @@ export const RuntimeValidator = {
   validateOrder(orderData: any) {
     return {
       ...orderData,
-      totalInCents: this.validate<Cents>(orderData.totalInCents, 'Cents'),
+      totalInCents: (this.validate as any)(orderData.totalInCents, 'Cents'),
       items: (orderData.items || []).map((item: any) => ({
         ...item,
-        priceInCents: this.validate<Cents>(item.priceInCents, 'Cents'),
-        quantity: this.validate<Quantity>(item.quantity, 'Quantity')
+        priceInCents: (this.validate as any)(item.priceInCents, 'Cents'),
+        quantity: (this.validate as any)(item.quantity, 'Quantity')
       }))
     };
   }

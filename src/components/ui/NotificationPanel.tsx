@@ -82,14 +82,14 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
     };
 
     // Group by Module
-    const groupedNotifications = notifications.reduce((acc, notification) => {
+    const groupedNotifications = notifications.reduce((acc: Record<string, any[]>, notification: any) => {
         const moduleName = notification.module || 'Système';
         if (!acc[moduleName]) {
             acc[moduleName] = [];
         }
         acc[moduleName].push(notification);
         return acc;
-    }, {} as Record<string, Notification[]>);
+    }, {});
 
     if (!isOpen) return null;
 
@@ -158,7 +158,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                             <NotificationCategory
                                 key={moduleName}
                                 title={moduleName}
-                                notifications={moduleNotifications}
+                                notifications={moduleNotifications as any[]}
                                 onRead={handleNotificationClick}
                                 onRemove={removeNotification}
                             />

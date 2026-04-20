@@ -21,6 +21,8 @@ import {
     CheckCircle2,
     TrendingUp
 } from 'lucide-react';
+import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
+import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import { useFloorOps as useOMS } from '@/context/FloorContext';
 import { cn } from "@/lib/ui.foundations";
 import { useTenant } from '@/context/AuthContext';
@@ -68,7 +70,7 @@ export default function OperationsPage() {
     const handleArrival = async (area: Area) => {
         if (!activeTenantId) return;
         try {
-            const promise = arrivalAreaAction(activeTenantId, area, { name: "Client Walk-in" });
+            const promise = arrivalAreaAction({ tenantId: activeTenantId, areaId: area.id, ...area });
             toast.promise(promise, {
                 loading: 'Suture Grade IX: Établissement du lien financier...',
                 success: 'Arrivée validée & Provision comptable générée.',

@@ -1,13 +1,6 @@
 {
     "workbench.colorCustomizations": {
-        "titleBar.activeBackground": "#F8F7F2",
-        "titleBar.activeForeground": "#1C1C1C",
-        "titleBar.border": "#E5E4DA",
-        "activityBar.activeBorder": "#C5A059",
-        "activityBar.foreground": "#1C1C1C",
-        "statusBar.background": "#F8F7F2",
-        "statusBar.foreground": "#1C1C1C",
-        "commandCenter.border": "#E5E4DA"
+        "activityBar.activeBorder": "#C5A059"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,

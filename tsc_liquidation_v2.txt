@@ -1,0 +1,320 @@
+src/app/(admin)/actions/reservations.ts(39,45): error TS2554: Expected 2 arguments, but got 3.
+src/app/(admin)/admin/inventory/reception/page.tsx(41,69): error TS2554: Expected 1 arguments, but got 2.
+src/app/(admin)/admin/mcc/page.tsx(31,8): error TS2613: Module '"/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/admin/mcc/MCCInsights"' has no default export. Did you mean to use 'import { MCCInsights } from "/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/admin/mcc/MCCInsights"' instead?
+src/app/(admin)/admin/prospecting/page.tsx(13,11): error TS2339: Property 'updateTheme' does not exist on type 'NexusSettingsState'.
+src/app/(backoffice)/finance/page.tsx(36,69): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/app/(backoffice)/finance/page.tsx(212,30): error TS2365: Operator '>' cannot be applied to types 'unknown' and 'number'.
+src/app/(backoffice)/inventory/page.tsx(101,101): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'number'.
+src/app/(backoffice)/inventory/page.tsx(239,22): error TS2365: Operator '>' cannot be applied to types 'unknown' and 'number'.
+src/app/(backoffice)/inventory/page.tsx(246,135): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+src/app/(backoffice)/quotes/page.tsx(401,41): error TS2322: Type 'unknown' is not assignable to type 'number'.
+src/app/(marketing)/reservations/page.tsx(66,16): error TS2304: Cannot find name 'transferStock'.
+src/app/(ops)/operations/page.tsx(71,63): error TS2554: Expected 1 arguments, but got 3.
+src/app/(ops)/pos/page.tsx(249,17): error TS2322: Type '{ isOpen: boolean; items: CartItem[]; total: number; guestCount: any; onClose: () => void; onPaySplit: (amountInCents: number, guestIndex: number) => void; }' is not assignable to type 'IntrinsicAttributes & SplitBillDialogProps'.
+  Property 'guestCount' does not exist on type 'IntrinsicAttributes & SplitBillDialogProps'.
+src/app/(public)/auth/logout/page.tsx(24,49): error TS2345: Argument of type '{ maintenanceMode: false; forceLogout: boolean; securityLevel: string; globalMessage: string; allowedFeatures: string[]; }' is not assignable to parameter of type 'MasterConfig'.
+  Property 'killSwitch' is missing in type '{ maintenanceMode: false; forceLogout: boolean; securityLevel: string; globalMessage: string; allowedFeatures: string[]; }' but required in type 'MasterConfig'.
+src/app/(public)/groups/page.tsx(12,10): error TS2305: Module '"@/types/reservations.types"' has no exported member 'Table'.
+src/app/(public)/simulator/page.tsx(41,19): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+src/app/(public)/simulator/page.tsx(93,127): error TS2339: Property 'revenue' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(99,106): error TS2339: Property 'foodCostPercent' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(100,75): error TS2339: Property 'foodCostPercent' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(105,106): error TS2339: Property 'laborCostPercent' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(106,75): error TS2339: Property 'laborCostPercent' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(116,121): error TS2339: Property 'primeCost' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(125,45): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+src/app/(public)/simulator/page.tsx(134,41): error TS2322: Type 'unknown' is not assignable to type 'string | number | readonly string[]'.
+src/app/(public)/simulator/page.tsx(135,58): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+src/app/(public)/simulator/page.tsx(170,40): error TS2339: Property 'length' does not exist on type 'unknown'.
+src/app/(public)/simulator/page.tsx(177,43): error TS2339: Property 'map' does not exist on type 'unknown'.
+src/components/admin/mcc/MCCInsights.tsx(11,28): error TS2339: Property 'triggerRebalancing' does not exist on type 'NexusFleetState'.
+src/components/admin/settings/SingularitySettings.tsx(74,21): error TS2322: Type '{ children: (string | Element)[]; onClick: () => Promise<void>; loading: boolean; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'loading' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/components/auth/AuthGate.tsx(33,45): error TS2339: Property 'security' does not exist on type 'TenantConfig'.
+src/components/auth/SaaSBillingGate.tsx(23,45): error TS2339: Property 'billingStatus' does not exist on type 'TenantConfig'.
+src/components/auth/SaaSBillingGate.tsx(46,117): error TS2339: Property 'name' does not exist on type 'TenantConfig'.
+src/components/crm/CRMList.tsx(69,36): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/components/crm/CRMSidebar.tsx(52,36): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/components/crm/CRMSidebar.tsx(72,44): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/components/haccp/GestionAnomalies.tsx(30,19): error TS2554: Expected 2 arguments, but got 1.
+src/components/haccp/HACCPVisionScanner.tsx(30,66): error TS2554: Expected 1 arguments, but got 2.
+src/components/haccp/PlanNettoyage.tsx(43,33): error TS2345: Argument of type '{ type: "cleaning"; item: string; zone: string; status: "done"; user: string; }' is not assignable to parameter of type 'HygieneLog'.
+  Type '{ type: "cleaning"; item: string; zone: string; status: "done"; user: string; }' is missing the following properties from type 'HygieneLog': id, createdAt
+src/components/haccp/PlanNettoyage.tsx(59,29): error TS2345: Argument of type '{ type: "incident"; item: string; zone: string; status: "alert"; notes: string; user: string; }' is not assignable to parameter of type 'HygieneLog'.
+  Type '{ type: "incident"; item: string; zone: string; status: "alert"; notes: string; user: string; }' is missing the following properties from type 'HygieneLog': id, createdAt
+src/components/haccp/ReleveTemperatures.tsx(51,29): error TS2345: Argument of type '{ type: "temperature"; item: string; zone: string; value: string; status: "ok" | "alert"; user: string; }' is not assignable to parameter of type 'HygieneLog'.
+  Type '{ type: "temperature"; item: string; zone: string; value: string; status: "ok" | "alert"; user: string; }' is missing the following properties from type 'HygieneLog': id, createdAt
+src/components/haccp/TracabiliteEtiquettes.tsx(63,31): error TS2345: Argument of type '{ imageUrl: string; productName: string; batchNumber: string; expirationDate: string; supplier: string; storageLocation: string; }' is not assignable to parameter of type 'HygieneLabel'.
+  Type '{ imageUrl: string; productName: string; batchNumber: string; expirationDate: string; supplier: string; storageLocation: string; }' is missing the following properties from type 'HygieneLabel': id, createdAt
+src/components/inventory/CreatePreparationModal.tsx(101,67): error TS2554: Expected 2 arguments, but got 3.
+src/components/layout/ProfileSwitcher.tsx(20,13): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+src/components/layout/SovereignLockout.tsx(17,54): error TS2367: This comparison appears to be unintentional because the types '"locked" | "active" | "trial"' and '"expired"' have no overlap.
+src/components/layout/SovereignLockout.tsx(22,9): error TS2367: This comparison appears to be unintentional because the types '"locked" | "active" | "trial"' and '"expired"' have no overlap.
+src/components/layout/TrainingOverlay.tsx(11,13): error TS2339: Property 'isTrainingMode' does not exist on type 'NexusFleetState'.
+src/components/layout/TrainingOverlay.tsx(11,29): error TS2339: Property 'toggleTrainingMode' does not exist on type 'NexusFleetState'.
+src/components/layout/VoiceAssistantOverlay.tsx(110,24): error TS2367: This comparison appears to be unintentional because the types '"system" | "user" | "assistant"' and '"model"' have no overlap.
+src/components/layout/VoiceAssistantOverlay.tsx(196,41): error TS2322: Type 'import("/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useGeminiAgent").Message[]' is not assignable to type 'Message[]'.
+  Property 'text' is missing in type 'import("/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useGeminiAgent").Message' but required in type 'Message'.
+src/components/pos/ProductGrid.tsx(180,67): error TS2551: Property 'categoryId' does not exist on type 'Product'. Did you mean 'category'?
+src/components/pos/ProductGrid.tsx(216,13): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/components/quality/ProductControlCard.tsx(5,23): error TS2307: Cannot find module '@/components/ui/badge' or its corresponding type declarations.
+src/components/quality/ProductControlList.tsx(58,38): error TS2339: Property 'status' does not exist on type 'QualityControlItem'.
+src/components/quality/ProductControlList.tsx(114,46): error TS2339: Property 'status' does not exist on type 'QualityControlItem'.
+src/components/quality/ProductControlList.tsx(141,26): error TS2304: Cannot find name 'PackageSearch'.
+src/components/quality/QualityDashboardHeader.tsx(19,22): error TS2339: Property 'totalControlsThisMonth' does not exist on type '{ monthlyRejectionRate: number; complianceScore: number; }'.
+src/components/quality/QualityDashboardHeader.tsx(40,25): error TS2339: Property 'averageFreshness' does not exist on type '{ monthlyRejectionRate: number; complianceScore: number; }'.
+src/components/quality/VisualInspection.tsx(16,28): error TS2339: Property 'updateControl' does not exist on type '{ controls: QualityControl[]; loading: boolean; activeControl: Partial<QualityControl>; alerts: QualityControl[]; todayStats: { ...; }; ... 9 more ...; setActiveControl: SetAtom<...>; }'.
+src/components/quotes/NewQuoteDialog.tsx(26,10): error TS2305: Module '"@/domain/types/empire"' has no exported member 'Product'.
+src/components/quotes/NewQuoteDialog.tsx(129,36): error TS2554: Expected 1 arguments, but got 0.
+src/components/settings/HoursSettings.tsx(65,49): error TS2345: Argument of type 'DaySchedule[]' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'DaySchedule[]'.
+src/components/settings/HoursSettings.tsx(66,47): error TS2345: Argument of type 'ServiceSettings' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'ServiceSettings'.
+src/components/settings/IntegrationSettings.tsx(56,54): error TS2345: Argument of type 'IntegrationsConfig' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'IntegrationsConfig'.
+src/components/settings/IntegrationSettings.tsx(57,46): error TS2554: Expected 1 arguments, but got 2.
+src/components/settings/NexusSettings.tsx(91,30): error TS2739: Type '{}' is missing the following properties from type 'NexusSphereProps': isActive, isProcessing
+src/components/settings/ProfileSettings.tsx(89,53): error TS2345: Argument of type '{ pin?: string; name: string; avatar: string; }' is not assignable to parameter of type 'string'.
+src/components/settings/ReservationSettings.tsx(37,39): error TS2345: Argument of type 'ReservationSettings' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'ReservationSettings'.
+src/components/settings/ReservationSettings.tsx(38,38): error TS2345: Argument of type 'ReservationSlotSettings' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'ReservationSlotSettings'.
+src/components/settings/ReviewsSettings.tsx(22,45): error TS2307: Cannot find module '@/app/actions/marketing' or its corresponding type declarations.
+src/components/settings/StaffSettings.tsx(71,47): error TS2345: Argument of type 'StaffConfig' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'StaffConfig'.
+src/components/settings/StaffSettings.tsx(72,43): error TS2554: Expected 1 arguments, but got 2.
+src/components/settings/TablesSettings.tsx(25,9): error TS2339: Property 'addZone' does not exist on type '{ tables: Table[]; floors: Floor[]; zones: Zone[]; isZonesLocked: boolean; toggleZonesLock: () => void; currentFloorId: string; setCurrentFloor: (id: string) => void; getTablesForFloor: (floorId: string) => Table[]; ... 9 more ...; error: string; }'.
+src/components/settings/TablesSettings.tsx(27,9): error TS2339: Property 'deleteZone' does not exist on type '{ tables: Table[]; floors: Floor[]; zones: Zone[]; isZonesLocked: boolean; toggleZonesLock: () => void; currentFloorId: string; setCurrentFloor: (id: string) => void; getTablesForFloor: (floorId: string) => Table[]; ... 9 more ...; error: string; }'.
+src/components/settings/TablesSettings.tsx(29,9): error TS2339: Property 'updateFloor' does not exist on type '{ tables: Table[]; floors: Floor[]; zones: Zone[]; isZonesLocked: boolean; toggleZonesLock: () => void; currentFloorId: string; setCurrentFloor: (id: string) => void; getTablesForFloor: (floorId: string) => Table[]; ... 9 more ...; error: string; }'.
+src/components/settings/TablesSettings.tsx(30,9): error TS2339: Property 'deleteFloor' does not exist on type '{ tables: Table[]; floors: Floor[]; zones: Zone[]; isZonesLocked: boolean; toggleZonesLock: () => void; currentFloorId: string; setCurrentFloor: (id: string) => void; getTablesForFloor: (floorId: string) => Table[]; ... 9 more ...; error: string; }'.
+src/components/staff/BadgeControl.tsx(19,13): error TS2339: Property 'user' does not exist on type 'NexusAuthState'.
+src/components/staff/BadgeControl.tsx(126,43): error TS2339: Property 'timestamp' does not exist on type 'Shift'.
+src/components/staff/BadgeControl.tsx(131,52): error TS2339: Property 'timestamp' does not exist on type 'Shift'.
+src/components/staff/BadgeControl.tsx(131,89): error TS2339: Property 'timestamp' does not exist on type 'Shift'.
+src/components/staff/BadgeControl.tsx(137,43): error TS2339: Property 'fiscalSeal' does not exist on type 'Shift'.
+src/components/staff/RecruitmentDashboard.tsx(57,9): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/components/staff/RecruitmentDashboard.tsx(274,21): error TS2740: Type 'User' is missing the following properties from type 'Candidate': firstName, lastName, phone, status, and 4 more.
+src/components/staff/StaffMemberForm.tsx(68,56): error TS2345: Argument of type '{ pin?: string; name: string; role: any; avatar: string; hourlyRate: number; }' is not assignable to parameter of type 'string'.
+src/components/system/AlertSync.tsx(27,55): error TS2339: Property 'includes' does not exist on type 'unknown'.
+src/components/system/AlertSync.tsx(40,17): error TS2353: Object literal may only specify known properties, and 'module' does not exist in type '{ title: string; message: string; type: "error" | "success" | "info" | "warning"; }'.
+src/components/system/AlertSync.tsx(81,17): error TS2353: Object literal may only specify known properties, and 'module' does not exist in type '{ title: string; message: string; type: "error" | "success" | "info" | "warning"; }'.
+src/components/ui/GlassCard.tsx(76,57): error TS2352: Conversion of type '{ id?: string; suppressHydrationWarning?: boolean; color?: string; lang?: string; style?: MotionStyle; role?: AriaRole; tabIndex?: number; values?: { [key: string]: MotionValue<number> | MotionValue<...>; }; ... 325 more ...; tw?: string; }' to type 'HTMLAttributes<HTMLDivElement>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'onDrag' are incompatible.
+    Type '(event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => void' is not comparable to type 'DragEventHandler<HTMLDivElement>'.
+      Target signature provides too few arguments. Expected 2 or more, but got 1.
+src/components/ui/NotificationPanel.tsx(87,18): error TS2538: Type 'unknown' cannot be used as an index type.
+src/components/ui/NotificationPanel.tsx(88,17): error TS2538: Type 'unknown' cannot be used as an index type.
+src/components/ui/NotificationPanel.tsx(90,13): error TS2538: Type 'unknown' cannot be used as an index type.
+src/components/ui/NotificationPanel.tsx(161,33): error TS2740: Type '{}' is missing the following properties from type 'Notification[]': length, pop, push, concat, and 35 more.
+src/components/ui/SecurityPinModal.tsx(59,55): error TS2554: Expected 1 arguments, but got 2.
+src/context/FloorContext.tsx(9,49): error TS2339: Property 'floorOps' does not exist on type 'NexusOpsState'.
+src/context/PlanningContext.tsx(3,38): error TS2307: Cannot find module '@/types/hr.types' or its corresponding type declarations.
+src/context/PlanningContext.tsx(7,49): error TS2339: Property 'planning' does not exist on type 'NexusOpsState'.
+src/context/RegistreContext.tsx(3,52): error TS2339: Property 'registre' does not exist on type 'NexusFiscalState'.
+src/context/settings/defaults.ts(149,14): error TS2741: Property 'staffToCoversRatio' is missing in type '{ weekStartDay: number; defaultView: "week"; minHoursBetweenShifts: number; maxHoursPerDay: number; maxHoursPerWeek: number; notifyOnPublish: true; absenceRequestApproval: true; swapRequestApproval: true; overtimeEnabled: false; }' but required in type 'PlanningConfig'.
+src/context/settings/defaults.ts(178,14): error TS2741: Property 'complexityMode' is missing in type '{ fiscalYearStart: string; accountingMethod: "accrual"; defaultPaymentTerms: number; vatRates: { rate: number; name: string; category: string; }[]; invoicePrefix: string; invoiceNextNumber: number; ... 8 more ...; facturXProfile: "minimum"; }' but required in type 'AccountingConfig'.
+src/context/TutorialContext.tsx(3,51): error TS2339: Property 'tutorial' does not exist on type 'NexusFleetState'.
+src/domain/accounting/FECExporter.ts(43,32): error TS2339: Property 'split' does not exist on type 'Date'.
+src/domain/accounting/FECExporter.ts(49,32): error TS2339: Property 'split' does not exist on type 'Date'.
+src/domain/accounting/FECExporter.ts(55,32): error TS2339: Property 'split' does not exist on type 'Date'.
+src/domain/agent/GeminiLiveService.ts(128,13): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'RolePermissions'.
+  Index signature for type 'string' is missing in type 'string[]'.
+src/domain/agent/GeminiLiveService.ts(142,71): error TS2554: Expected 2 arguments, but got 3.
+src/domain/agent/tools/FinanceTool.ts(1,37): error TS2307: Cannot find module '@/domain/agent/services/AccessPolicyManager' or its corresponding type declarations.
+src/domain/agent/tools/index.ts(7,14): error TS2322: Type '{ [FinanceTool.name]: ToolDefinition; [StockTool.name]: ToolDefinition; [ReservationTool.name]: ToolDefinition; [MenuTool.name]: { name: string; description: string; parameters: { type: string; properties: { productName: { ...; }; newPrice: { ...; }; newDescription: { ...; }; }; required: string[]; }; execute: (args...' is not assignable to type 'Record<string, ToolDefinition>'.
+  'string' index signatures are incompatible.
+    Type '{ name: string; description: string; parameters: { type: string; properties: { productName: { type: string; description: string; }; newPrice: { type: string; description: string; }; newDescription: { ...; }; }; required: string[]; }; execute: (args: { ...; }) => Promise<...>; } | ToolDefinition' is not assignable to type 'ToolDefinition'.
+      Property 'category' is missing in type '{ name: string; description: string; parameters: { type: string; properties: { productName: { type: string; description: string; }; newPrice: { type: string; description: string; }; newDescription: { type: string; description: string; }; }; required: string[]; }; execute: (args: { productName: string; newPrice?: num...' but required in type 'ToolDefinition'.
+src/domain/constants/bar-data.ts(1,58): error TS2307: Cannot find module '@/types/bar' or its corresponding type declarations.
+src/domain/schemas/hr.ts(39,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/domain/services/AccessPolicyManager.ts(93,5): error TS2353: Object literal may only specify known properties, and 'kitchen' does not exist in type 'Record<UserRole, string>'.
+src/domain/services/AccountingService.ts(59,13): error TS2353: Object literal may only specify known properties, and 'status' does not exist in type 'Partial<JournalEntry>'.
+src/domain/services/ChaosMonkey.ts(48,24): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/domain/services/ChaosMonkey.ts(48,37): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/domain/services/ChaosMonkey.ts(51,59): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/domain/services/ChaosMonkey.ts(54,58): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/domain/services/DataDigester.ts(87,79): error TS2339: Property 'source' does not exist on type '{ total: number; items: any[]; }'.
+src/domain/services/DataDigester.ts(103,27): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/domain/services/EdgeSyncService.ts(52,80): error TS2345: Argument of type '{ data: Order[]; }' is not assignable to parameter of type 'NexusNode<Order>'.
+  Type '{ data: Order[]; }' is missing the following properties from type 'NexusNode<Order>': loading, error, lastUpdated
+src/domain/services/FleetTelemetryService.ts(8,41): error TS2307: Cannot find module '@/types/brands' or its corresponding type declarations.
+src/domain/services/InventoryVisionService.ts(3,10): error TS2305: Module '"./StockEngine"' has no exported member 'calculatePriceEvolution'.
+src/domain/services/KitchenService.ts(17,16): error TS2352: Conversion of type '{ id: string; name: string; category: string; prepTime: number; cookTime: number; portions: number; difficulty: "easy" | "medium" | "hard"; ingredients: RecipeIngredient[]; ... 13 more ...; isActive?: boolean; }' to type 'Recipe' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'updatedAt' are incompatible.
+    Type 'string' is not comparable to type 'Date'.
+src/domain/services/LegalArchiveService.ts(14,58): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ id: string; transactionId: string; previousHash: string; hash: string; timestamp: string; dataSnapshot: string; signature: string; }[]'.
+  Type 'string' is not assignable to type '{ id: string; transactionId: string; previousHash: string; hash: string; timestamp: string; dataSnapshot: string; signature: string; }'.
+src/domain/services/LegalArchiveService.ts(15,29): error TS2339: Property 'sealEntry' does not exist on type 'typeof NF525Service'.
+src/domain/services/LegalArchiveService.ts(16,58): error TS2339: Property 'sealEntry' does not exist on type 'typeof NF525Service'.
+src/domain/services/LegalArchiveService.ts(17,35): error TS2339: Property 'verifyIntegrity' does not exist on type 'typeof NF525Service'.
+src/domain/services/LegalArchiveService.ts(18,40): error TS2339: Property 'verifyIntegrity' does not exist on type 'typeof NF525Service'.
+src/domain/services/MacroBrain.ts(1,32): error TS2307: Cannot find module '@/types/empire' or its corresponding type declarations.
+src/domain/services/MacroBrain.ts(120,13): error TS2322: Type '"orchestration"' is not assignable to type 'AuditModule'.
+src/domain/services/MarketingService.ts(36,28): error TS2339: Property 'PROMO_REGISTRY' does not exist on type 'typeof MarketingService'.
+src/domain/services/NexusPayrollEngine.ts(63,58): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+src/domain/services/NexusTelemetryService.ts(7,10): error TS2305: Module '"@/shared/nexus-contract"' has no exported member 'TelemetryPulse'.
+src/domain/services/OfflineMasteryEngine.ts(2,20): error TS2307: Cannot find module '@/domain/offline/offline-store' or its corresponding type declarations.
+src/domain/services/QualityEngine.test.ts(82,5): error TS2708: Cannot use namespace 'jest' as a value.
+src/domain/services/QualityEngine.test.ts(89,19): error TS2339: Property 'metadata' does not exist on type '{ id: string; currentStatus: string; }'.
+src/domain/services/QualityEngine.test.ts(109,19): error TS2339: Property 'summary' does not exist on type '{ id: string; currentStatus: string; }'.
+src/domain/services/QualityEngine.test.ts(116,19): error TS2339: Property 'metadata' does not exist on type '{ id: string; currentStatus: string; }'.
+src/domain/services/QualityEngine.ts(105,19): error TS2322: Type '[string, string, string]' is not assignable to type '{ field: string; operator: NexusQueryOperator; value: string | number | boolean | string[] | number[]; }'.
+src/domain/services/QualityEngine.ts(118,16): error TS2554: Expected 1 arguments, but got 2.
+src/domain/services/QuoteEngine.ts(13,26): error TS2339: Property 'pos' does not exist on type 'ZodNumber'.
+src/domain/services/ReservationService.ts(50,29): error TS2339: Property 'createdAt' does not exist on type 'Partial<Reservation>'.
+src/domain/services/Slayer.ts(9,15): error TS2305: Module '"./DataDigester"' has no exported member 'LegacyOrder'.
+src/domain/services/Slayer.ts(29,82): error TS2304: Cannot find name 'LegacyOrder'.
+src/domain/services/Slayer.ts(47,17): error TS2304: Cannot find name 'LegacyOrder'.
+src/domain/services/StaffService.ts(18,9): error TS2304: Cannot find name 'logger'.
+src/domain/services/StaffService.ts(66,13): error TS2304: Cannot find name 'logger'.
+src/domain/services/StockEngine.ts(143,13): error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type 'Partial<StockItem>'.
+src/domain/services/TreasuryEngine.ts(1,32): error TS2307: Cannot find module '@/types/empire' or its corresponding type declarations.
+src/domain/services/VoiceCommandService.ts(9,3): error TS1042: 'private' modifier cannot be used here.
+src/domain/services/VoiceCommandService.ts(9,24): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+src/domain/services/ZKBenchmarkEngine.ts(36,5): error TS2304: Cannot find name 'logger'.
+src/engines/core/NexusCoreProvider.tsx(308,11): error TS2740: Type '{ nodes: any[]; health: string; isTrainingMode: false; toggleTrainingMode: () => void; priceMultiplier: number; refreshFleet: () => Promise<void>; syncFleet: () => Promise<void>; ... 8 more ...; intelligence: { ...; }; }' is missing the following properties from type 'NexusFleetState': instanceIds, instances, globalMetrics, stats, and 7 more.
+src/engines/fiscal/NexusFiscalProvider.tsx(135,11): error TS2322: Type '{ accounting: { entries: JournalEntry[]; journalEntries: JournalEntry[]; accounts: Account[]; bankTransactions: BankTransaction[]; expenseClaims: ExpenseClaim[]; ... 6 more ...; syncBankAccounts: (token: string) => Promise<...>; }; compliance: { ...; }; finance: { ...; }; audit: { ...; }; }' is not assignable to type 'NexusFiscalState'.
+  The types returned by 'accounting.submitExpense(...)' are incompatible between these types.
+    Type 'Promise<string>' is not assignable to type 'Promise<void>'.
+      Type 'string' is not assignable to type 'void'.
+src/engines/fleet/NexusFleetProvider.tsx(279,37): error TS2322: Type '{ instanceIds: string[]; instances: { [x: string]: unknown; id: string; key: string; name: string; status: "error" | "provisioning" | "online" | "offline" | "maintenance" | "locked"; tier: "standard" | "premium" | "enterprise" | "empire-limitless"; ... 7 more ...; firebaseConfig?: { ...; }; }[]; ... 20 more ...; int...' is not assignable to type 'NexusFleetState'.
+  Types of property 'instanceIds' are incompatible.
+    Type 'string[]' is not assignable to type 'TenantID[]'.
+      Type 'string' is not assignable to type 'TenantID'.
+        Type 'string' is not assignable to type '{ __brand: "TenantID"; }'.
+src/hooks/useAccounting.ts(31,21): error TS2345: Argument of type '(prev: "bank" | "journal" | "accounts" | "expenses") => "expert" | "simple"' is not assignable to parameter of type 'SetStateAction<"bank" | "journal" | "accounts" | "expenses">'.
+  Type '(prev: "bank" | "journal" | "accounts" | "expenses") => "expert" | "simple"' is not assignable to type '(prev: "bank" | "journal" | "accounts" | "expenses") => "bank" | "journal" | "accounts" | "expenses"'.
+    Type '"expert" | "simple"' is not assignable to type '"bank" | "journal" | "accounts" | "expenses"'.
+      Type '"expert"' is not assignable to type '"bank" | "journal" | "accounts" | "expenses"'.
+src/hooks/useAccounting.ts(31,29): error TS2367: This comparison appears to be unintentional because the types '"bank" | "journal" | "accounts" | "expenses"' and '"simple"' have no overlap.
+src/hooks/useAccounting.ts(75,13): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useAccounting.ts(79,13): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useDataMigration.ts(94,30): error TS2304: Cannot find name 'useCallback'.
+src/hooks/useFloorOps.ts(19,9): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useFloorOps.ts(24,17): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useFloorOps.ts(27,13): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useFloorOps.ts(37,13): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useHACCP.ts(48,29): error TS2339: Property 'status' does not exist on type 'MaintenanceLog | HygieneLog | ReceptionLog'.
+  Property 'status' does not exist on type 'ReceptionLog'.
+src/hooks/useHACCP.ts(48,54): error TS2339: Property 'critical' does not exist on type 'MaintenanceLog | HygieneLog | ReceptionLog'.
+  Property 'critical' does not exist on type 'MaintenanceLog'.
+src/hooks/useHACCP.ts(61,29): error TS2339: Property 'status' does not exist on type 'MaintenanceLog | HygieneLog | ReceptionLog'.
+  Property 'status' does not exist on type 'ReceptionLog'.
+src/hooks/useHACCP.ts(61,58): error TS2339: Property 'critical_issue' does not exist on type 'MaintenanceLog | HygieneLog | ReceptionLog'.
+  Property 'critical_issue' does not exist on type 'MaintenanceLog'.
+src/hooks/useHumanResources.ts(43,9): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useHumanResources.ts(47,9): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useHumanResources.ts(56,9): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+src/hooks/useKitchen.ts(12,78): error TS2307: Cannot find module '@/app/actions/kitchen' or its corresponding type declarations.
+src/hooks/useManagement.ts(23,25): error TS2339: Property 'data' does not exist on type 'RegulatoryWasteLog[]'.
+src/hooks/useManagement.ts(24,30): error TS2339: Property 'loading' does not exist on type 'RegulatoryWasteLog[]'.
+src/hooks/useManagement.ts(25,26): error TS2339: Property 'error' does not exist on type 'RegulatoryWasteLog[]'.
+src/hooks/useNexusFleet.ts(33,19): error TS2322: Type '{ id: any; key: any; name: any; status: any; tier: any; version: any; createdAt: any; lastHeartbeat: any; metrics: { activeUsers: any; dailyRevenue: any; revenue24h: any; healthScore: any; complianceScore: any; lowStockAlerts: any; }; branding: any; security: any; }[]' is not assignable to type '{ [x: string]: unknown; id: string; key: string; name: string; status: "error" | "provisioning" | "online" | "offline" | "maintenance" | "locked"; tier: "standard" | "premium" | "enterprise" | "empire-limitless"; ... 7 more ...; firebaseConfig?: { ...; }; }[]'.
+  Property 'featureFlags' is missing in type '{ id: any; key: any; name: any; status: any; tier: any; version: any; createdAt: any; lastHeartbeat: any; metrics: { activeUsers: any; dailyRevenue: any; revenue24h: any; healthScore: any; complianceScore: any; lowStockAlerts: any; }; branding: any; security: any; }' but required in type '{ [x: string]: unknown; id: string; key: string; name: string; status: "error" | "provisioning" | "online" | "offline" | "maintenance" | "locked"; tier: "standard" | "premium" | "enterprise" | "empire-limitless"; ... 7 more ...; firebaseConfig?: { ...; }; }'.
+src/hooks/useNotifications.ts(2,59): error TS2459: Module '"@/store/uiAtoms"' declares 'Notification' locally, but it is not exported.
+src/hooks/useOrders.ts(19,47): error TS2560: Value of type '(orders: any) => any' has no properties in common with type 'Partial<Omit<NexusNode<Order>, "lastUpdated">>'. Did you mean to call it?
+src/hooks/useOrders.ts(40,51): error TS2559: Type '(orders: any) => any[]' has no properties in common with type 'Partial<Omit<NexusNode<Order>, "lastUpdated">>'.
+src/hooks/usePOSController.ts(6,38): error TS2307: Cannot find module '@/app/actions/transactions' or its corresponding type declarations.
+src/hooks/useQualityBridge.ts(25,13): error TS2339: Property 'tenantId' does not exist on type '{ settings: GlobalSettings; isLoading: boolean; isSaving: boolean; lastSaved: Date; updateSettings: (newSettings: GlobalSettings) => Promise<void>; updateConfig: (key: keyof GlobalSettings, data: any) => Promise<...>; updateIdentity: (data: any) => Promise<...>; }'.
+src/hooks/useRecruitment.ts(7,38): error TS2307: Cannot find module '@/app/actions/recruitment' or its corresponding type declarations.
+src/hooks/useReservations.ts(6,41): error TS2307: Cannot find module '@/app/actions/reservations' or its corresponding type declarations.
+src/hooks/useSettings.ts(24,37): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(atom: WritableAtom<Date, unknown[], unknown>, options?: Options): SetAtom<unknown[], unknown>', gave the following error.
+    Argument of type 'Atom<Date>' is not assignable to parameter of type 'WritableAtom<Date, unknown[], unknown>'.
+      Property 'write' is missing in type 'Atom<Date>' but required in type 'WritableAtom<Date, unknown[], unknown>'.
+  Overload 2 of 2, '(atom: WritableAtom<unknown, never[], unknown>, options?: Options): SetAtom<never[], unknown>', gave the following error.
+    Argument of type 'Atom<Date>' is not assignable to parameter of type 'WritableAtom<unknown, never[], unknown>'.
+      Property 'write' is missing in type 'Atom<Date>' but required in type 'WritableAtom<unknown, never[], unknown>'.
+src/hooks/useStockBridge.ts(2,10): error TS2305: Module '"@/store/inventoryAtoms"' has no exported member 'inventoryAtoms'.
+src/hooks/useStockBridge.ts(13,13): error TS2339: Property 'tenantId' does not exist on type '{ settings: GlobalSettings; isLoading: boolean; isSaving: boolean; lastSaved: Date; updateSettings: (newSettings: GlobalSettings) => Promise<void>; updateConfig: (key: keyof GlobalSettings, data: any) => Promise<...>; updateIdentity: (data: any) => Promise<...>; }'.
+src/hooks/useStockBridge.ts(18,75): error TS2554: Expected 2 arguments, but got 3.
+src/hooks/useStrategicOracle.ts(13,24): error TS2339: Property 'setInstances' does not exist on type 'NexusFleetState'.
+src/hooks/useStrategicOracle.ts(17,22): error TS2304: Cannot find name 'useMemo'.
+src/hooks/useTenantLifecycle.ts(17,40): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(atom: WritableAtom<string, unknown[], unknown>, options?: Options): SetAtom<unknown[], unknown>', gave the following error.
+    Argument of type 'Atom<string>' is not assignable to parameter of type 'WritableAtom<string, unknown[], unknown>'.
+      Property 'write' is missing in type 'Atom<string>' but required in type 'WritableAtom<string, unknown[], unknown>'.
+  Overload 2 of 2, '(atom: WritableAtom<unknown, never[], unknown>, options?: Options): SetAtom<never[], unknown>', gave the following error.
+    Argument of type 'Atom<string>' is not assignable to parameter of type 'WritableAtom<unknown, never[], unknown>'.
+      Property 'write' is missing in type 'Atom<string>' but required in type 'WritableAtom<unknown, never[], unknown>'.
+src/hooks/useTenantLifecycle.ts(30,76): error TS2322: Type '"active"' is not assignable to type '"error" | "provisioning" | "online" | "offline" | "maintenance" | "locked"'.
+src/i18n/translations.ts(24,41): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type '{}'.
+src/instances/bistrolyon.ts(1,15): error TS2305: Module '"@/types"' has no exported member 'TenantConfig'.
+src/instances/index.ts(4,10): error TS2305: Module '"@/types"' has no exported member 'TenantConfig'.
+src/instances/types.ts(3,15): error TS2305: Module '"@/shared/nexus-contract"' has no exported member 'TenantFirebaseConfig'.
+src/instances/urbanburger.ts(1,15): error TS2305: Module '"@/types"' has no exported member 'TenantConfig'.
+src/lib/docs/accounting.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/ai-referencing.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/analytics.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/bar.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/crm.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/dashboard.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/floor-plan.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/general.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/haccp.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/index.ts(1,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/intelligence.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/inventory.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/kds.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/kitchen.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/onboarding.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/planning.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/pos.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/reservations.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/seo.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/settings.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/social-marketing.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/docs/staff.ts(2,10): error TS2724: '"@/types"' has no exported member named 'DocCategory'. Did you mean 'Category'?
+src/lib/firebase.ts(77,5): error TS2304: Cannot find name 'Nexus'.
+src/lib/firebase.ts(89,12): error TS2304: Cannot find name 'Nexus'.
+src/lib/marketing-engine.ts(140,66): error TS2339: Property 'location' does not exist on type 'RestaurantIdentity'.
+src/lib/nexus/adapters/FirestoreAdapter.ts(79,50): error TS2345: Argument of type 'DocumentReference<DocumentData, DocumentData>' is not assignable to parameter of type 'DocumentReference<DocumentData, T>'.
+  The types returned by 'converter.toFirestore(...)' are incompatible between these types.
+    Type 'WithFieldValue<DocumentData>' is not assignable to type 'WithFieldValue<T>'.
+      Type 'DocumentData' is not assignable to type 'WithFieldValue<T>'.
+        Type 'DocumentData' is not assignable to type 'T extends Primitive ? T : T extends {} ? { [K in keyof T]: FieldValue | WithFieldValue<T[K]>; } : never'.
+src/lib/nexus/TelemetryService.ts(4,10): error TS2305: Module '"@/shared/nexus-contract"' has no exported member 'TelemetryPulse'.
+src/lib/nexus/TelemetryService.ts(56,49): error TS2339: Property 'hash' does not exist on type 'JournalEntry'.
+src/lib/pos-service.ts(39,31): error TS2339: Property 'costInCents' does not exist on type 'CartItem'.
+src/lib/RuntimeValidator.ts(42,21): error TS2347: Untyped function calls may not accept type arguments.
+src/lib/RuntimeValidator.ts(45,23): error TS2347: Untyped function calls may not accept type arguments.
+src/lib/RuntimeValidator.ts(46,19): error TS2347: Untyped function calls may not accept type arguments.
+src/lib/SelfHealingEngine.ts(26,37): error TS2345: Argument of type '{ maintenanceMode: false; forceLogout: boolean; securityLevel: string; globalMessage: string; allowedFeatures: undefined[]; }' is not assignable to parameter of type 'MasterConfig'.
+  Property 'killSwitch' is missing in type '{ maintenanceMode: false; forceLogout: boolean; securityLevel: string; globalMessage: string; allowedFeatures: undefined[]; }' but required in type 'MasterConfig'.
+src/lib/seo/SEOManager.ts(21,137): error TS2339: Property 'city' does not exist on type '{ [x: string]: unknown; id: string; key: string; name: string; status: "error" | "provisioning" | "online" | "offline" | "maintenance" | "locked"; tier: "standard" | "premium" | "enterprise" | "empire-limitless"; ... 7 more ...; firebaseConfig?: { ...; }; } | { ...; }'.
+  Property 'city' does not exist on type '{ name: string; }'.
+src/lib/simulator/TemporalSimulator.ts(6,29): error TS2724: '"@/domain/services/SimulationService"' has no exported member named 'SIMULATION_PROFILES'. Did you mean 'SimulationProfile'?
+src/lib/SovereignGuard.ts(50,43): error TS2345: Argument of type '{ maintenanceMode: true; forceLogout: boolean; securityLevel: string; globalMessage: string; allowedFeatures: undefined[]; }' is not assignable to parameter of type 'MasterConfig'.
+  Property 'killSwitch' is missing in type '{ maintenanceMode: true; forceLogout: boolean; securityLevel: string; globalMessage: string; allowedFeatures: undefined[]; }' but required in type 'MasterConfig'.
+src/shared/seeds/restaurant-full-dna.ts(61,5): error TS2353: Object literal may only specify known properties, and 'typography' does not exist in type 'TenantTheme'.
+src/shared/seeds/restaurant-full-dna.ts(78,7): error TS2353: Object literal may only specify known properties, and 'discountMultiplier' does not exist in type '{ basePrice: number; currency: string; billingStatus: string; }'.
+src/shared/seeds/restaurant-full-dna.ts(83,3): error TS2741: Property 'version' is missing in type '{ name: string; ownerId: string; createdAt: string; }' but required in type '{ [key: string]: unknown; name: string; version: string; ownerId?: string; }'.
+src/store/dashboardAtoms.ts(16,36): error TS2339: Property 'startsWith' does not exist on type 'string | Date'.
+  Property 'startsWith' does not exist on type 'Date'.
+src/store/dashboardAtoms.ts(30,43): error TS2367: This comparison appears to be unintentional because the types '"available" | "reserved" | "expired" | "low" | "quarantine" | "depleted"' and '"discarded"' have no overlap.
+src/store/dashboardAtoms.ts(46,53): error TS2367: This comparison appears to be unintentional because the types '"paid" | "draft" | "preparing" | "ready" | "delivered" | "cancelled"' and '"ordered"' have no overlap.
+src/store/marketingAtoms.ts(31,14): error TS2741: Property 'write' is missing in type 'Atom<SEOConfig>' but required in type 'WritableAtom<SEOConfig, [SetStateAction<SEOConfig>], void>'.
+src/store/tutorialAtoms.ts(34,13): error TS2345: Argument of type 'Atom<TutorialSection>' is not assignable to parameter of type 'WritableAtom<TutorialSection, [any], unknown>'.
+  Property 'write' is missing in type 'Atom<TutorialSection>' but required in type 'WritableAtom<TutorialSection, [any], unknown>'.
+src/store/tutorialAtoms.ts(44,13): error TS2345: Argument of type 'Atom<TutorialSection>' is not assignable to parameter of type 'WritableAtom<TutorialSection, [any], unknown>'.
+  Property 'write' is missing in type 'Atom<TutorialSection>' but required in type 'WritableAtom<TutorialSection, [any], unknown>'.
+src/tests/vanguard/chaos.test.ts(19,113): error TS2353: Object literal may only specify known properties, and 'lastUpdated' does not exist in type 'Partial<Omit<NexusNode<any>, "lastUpdated">>'.
+src/tests/vanguard/domain.test.ts(157,58): error TS2345: Argument of type '{ set: Mock<Procedure>; get: Mock<Procedure>; }' is not assignable to parameter of type 'Store'.
+  Property 'sub' is missing in type '{ set: Mock<Procedure>; get: Mock<Procedure>; }' but required in type 'Store'.

@@ -57,7 +57,7 @@ export const SyncStaff = {
     this.private_listeners.activeShifts = Nexus.adapter.onSnapshot(
       path('activeShifts'),
       (data: Shift[]) => {
-        store.set(activeShiftsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
+        store.set(activeShiftsNodeAtom, (prev) => updateNexusNode(prev, { data: data as any, loading: false }));
       },
       {
         onError: (error: Error) => {
@@ -97,7 +97,7 @@ export const SyncStaff = {
   },
 
   stop() {
-    Object.values(this.private_listeners).forEach((unsub: any) => {
+    Object.values(this.private_listeners).forEach((unsub) => {
       if (typeof unsub === 'function') unsub();
     });
     this.private_listeners = {};

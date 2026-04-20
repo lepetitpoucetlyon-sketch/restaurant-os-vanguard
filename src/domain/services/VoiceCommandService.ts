@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
  */
 export const VoiceCommandService = {
   
-  private isListening: boolean = false,
+  isListening: false,
 
   /**
    * Starts capturing voice intent.

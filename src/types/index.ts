@@ -8,6 +8,7 @@
 
 // Auth & Users
 export * from './auth.types';
+export * from '@/shared/nexus-contract';
 
 // Tables & Floor Plan
 export * from './tables.types';
@@ -59,6 +60,9 @@ export * from './permissions.types';
 // Marketing & Reputation
 export * from './marketing.types';
 export type { MarketingCampaign, SocialAccount } from './marketing.types';
+
+// Doc Types
+export * from '@/lib/docs/types';
 
 // Maintenance Support
 export * from './maintenance.types';

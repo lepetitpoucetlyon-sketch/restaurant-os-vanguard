@@ -29,7 +29,7 @@ export const SelfHealingEngine = {
         securityLevel: 'medium',
         globalMessage: `SILENT_HEALING: Corrected drift for atom at ${persistencePath || 'internal_node'}`,
         allowedFeatures: []
-      }).catch(() => {});
+      } as any).catch(() => {});
 
       // 💉 INJECTION (Silent Restore)
       if (persistencePath) {

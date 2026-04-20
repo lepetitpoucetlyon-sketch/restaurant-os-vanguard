@@ -49,10 +49,13 @@ interface NexusFleetState {
     broadcastConfiguration: (config: Record<string, unknown>) => Promise<void>;
     complianceService: typeof FleetComplianceService;
     haccpBridge: typeof HACCPTelemetryBridge;
+    isTrainingMode: boolean;
+    toggleTrainingMode: () => void;
     // Legacy support proxies
     fleet: Record<string, unknown> | null;
     crm: Record<string, unknown>;
     intelligence: Record<string, unknown>;
+    tutorial?: any;
 }
 
 const NexusFleetContext = createContext<NexusFleetState | undefined>(undefined);
@@ -68,6 +71,33 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
     const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
     const [updateInfo, setUpdateInfo] = useState<{ version: string; url: string } | null>(null);
+    
+    // --- INTELLIGENCE STATE (Grade X) ---
+    const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
+    const [scenarios, setScenarios] = useState<any[]>([]);
+    const [financialInsight, setFinancialInsight] = useState<any>({
+        revenue: 425000,
+        foodCostPercent: 28.5,
+        laborCostPercent: 32.1,
+        primeCost: 60.6
+    });
+
+    const runSimulation = useCallback(async (config: any) => {
+        console.log('[FleetIntelligence] Running simulation...', config);
+        await new Promise(r => setTimeout(r, 1500));
+        const newScenario = {
+            id: `sim_${Date.now()}`,
+            name: config.name,
+            description: config.description,
+            confidenceScore: 0.85 + Math.random() * 0.1,
+            projections: {
+                revenueImpact: 12500 * (config.inputs?.priceChange || 1),
+                laborCostImpact: -4500,
+                netProfitChange: 8000
+            }
+        };
+        setScenarios(prev => [newScenario, ...prev]);
+    }, []);
     
     const setInstanceIds = useSetAtom(fleetSnapshotAtom);
     const tenantConfig = useAtomValue(tenantConfigAtom);
@@ -227,6 +257,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         isUpdateAvailable,
         updateInfo,
         priceMultiplier,
+        isTrainingMode: false,
+        toggleTrainingMode: () => {},
         refreshFleet,
         syncFleet,
         selectInstance,
@@ -237,12 +269,25 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         haccpBridge: HACCPTelemetryBridge,
         fleet: {} as any, 
         crm: { customers: [] } as any,
-        intelligence: { insights: macroInsights } as any
-    }), [liveFleet, globalMetrics, stats, macroInsights, isLoading, isEmpireMode, selectedInstanceId, isUpdateAvailable, updateInfo, priceMultiplier, refreshFleet, syncFleet, broadcastConfiguration]);
+        intelligence: { 
+            insights: macroInsights,
+            globalInflationRate,
+            setGlobalInflationRate,
+            scenarios,
+            runSimulation,
+            financialInsight
+        },
+        tutorial: {
+            isActive: false,
+            step: 0,
+            start: () => {},
+            stop: () => {}
+        }
+    }), [liveFleet, globalMetrics, stats, macroInsights, isLoading, isEmpireMode, selectedInstanceId, isUpdateAvailable, updateInfo, priceMultiplier, refreshFleet, syncFleet, broadcastConfiguration, globalInflationRate, scenarios, runSimulation, financialInsight]);
 
 
     return (
-        <NexusFleetContext.Provider value={contextValue}>
+        <NexusFleetContext.Provider value={contextValue as any}>
             {children}
         </NexusFleetContext.Provider>
     );

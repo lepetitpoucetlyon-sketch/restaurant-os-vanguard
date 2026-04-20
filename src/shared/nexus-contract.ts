@@ -29,26 +29,63 @@ export interface OrchestratorSignal {
   otaUrl?: string;
   targetState?: 'stable' | 'beta' | 'bleeding-edge';
   priceMultiplier?: number;
+  lastSignalId?: string; // Suture Grade X
+}
+
+export interface TelemetryPulse {
+  version: string;
+  status: 'active' | 'maintenance' | 'critical';
+  lastPulse: any; // Allow serverTimestamp (any)
+  health: {
+    uptime: number;
+    battery: {
+      level: number;
+      charging: boolean;
+      supported: boolean;
+    };
+    network: {
+      online: boolean;
+      effectiveType: string;
+    };
+  };
+  security: {
+    nf525Sealed: boolean;
+    integrityGrade: string;
+    lastSealHash?: string;
+  };
+}
+
+export interface TenantFirebaseConfig {
+  apiKey: string;
+  projectId: string;
+  appId: string;
+  authDomain?: string;
+  storageBucket?: string;
+  messagingSenderId?: string;
+  measurementId?: string;
+  [key: string]: string | undefined;
 }
 
 export interface TenantConfig {
   id: string;
-  capabilities: Record<string, boolean>;
-  theme: TenantTheme;
-  status: OrchestratorSignal;
-  metadata: {
+  name?: string; // Heritage
+  tier?: string; // Heritage
+  billing?: any; // Heritage
+  marketplace?: any; // Heritage
+  ai?: any; // Heritage
+  branding?: any; // Heritage
+  capabilities?: Record<string, boolean>;
+  features?: Record<string, boolean>; // Heritage Alias
+  theme?: TenantTheme;
+  status?: OrchestratorSignal;
+  metadata?: {
     name: string;
     version: string;
     ownerId?: string;
     [key: string]: unknown;
   };
   customFeatures?: Record<string, boolean>;
-  firebase?: {
-    apiKey: string;
-    projectId: string;
-    appId: string;
-    [key: string]: string;
-  };
+  firebase?: TenantFirebaseConfig;
 }
 
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {

@@ -13,6 +13,10 @@ export const ROLE_LABELS: Record<UserRole, string> = {
     kitchen_line: 'Commis de Cuisine',
     host: 'Hôte d\'Accueil',
     cashier: 'Caissier',
+    'kds-view': 'Vision KDS',
+    'pos-standard': 'Point de Vente',
+    'guest-view': 'Vue Client',
+    kitchen: 'Brigade Cuisine'
 };
 
 export const ROLE_COLORS: Record<UserRole, string> = {
@@ -25,6 +29,10 @@ export const ROLE_COLORS: Record<UserRole, string> = {
     kitchen_line: '#06B6D4',
     host: '#6366F1',
     cashier: '#84CC16',
+    'kds-view': '#94A3B8',
+    'pos-standard': '#475569',
+    'guest-view': '#CBD5E1',
+    kitchen: '#F43F5E'
 };
 
 // Common status labels

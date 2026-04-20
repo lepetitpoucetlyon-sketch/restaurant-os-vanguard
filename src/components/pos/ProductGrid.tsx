@@ -177,7 +177,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
 
         return products.filter(p => {
             const matchesSearch = p.name.toLowerCase().includes(query);
-            const matchesCategory = categoryFilter === "all" || p.categoryId === categoryFilter;
+            const matchesCategory = categoryFilter === "all" || (p as any).category === categoryFilter || (p as any).categoryId === categoryFilter;
             return matchesSearch && matchesCategory;
         }).map(product => {
             // COMPLIANCE GUARD LOGIC
@@ -213,7 +213,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
 
     const handleProductClick = useCallback((product: Product) => {
         if (product.optionGroups && product.optionGroups.length > 0) {
-            setSelectedProduct(product);
+            (setSelectedProduct as any)(product);
             setIsDialogOpen(true);
         } else {
             onAddToCart(product, 1, {});

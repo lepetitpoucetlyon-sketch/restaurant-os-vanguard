@@ -5,7 +5,8 @@
  */
 
 import { logger } from "@/lib/logger";
-import { DataDigester, LegacyOrder } from "./DataDigester";
+import { DataDigester } from "./DataDigester";
+import { LegacyOrder, Order } from "@/types";
 import { FinanceCore } from "./FinanceCore";
 import { NexusTransaction } from "@/lib/NexusTransaction";
 import { getTenantPath } from "@/lib/firebase";
@@ -25,7 +26,7 @@ export class Slayer {
     /**
      * Traduit un objet brut (CSV/JSON) en structure compatible Nexus via une config.
      */
-    static mapLegacy(raw: Record<string, unknown>, config: SlayerMappingConfig): LegacyOrder {
+    static mapLegacy(raw: Record<string, unknown>, config: SlayerMappingConfig): any {
         return {
             id: String(raw[config.fields.id]),
             total: typeof raw[config.fields.total] === 'number' 
@@ -66,13 +67,13 @@ export class Slayer {
                         for (const legacy of chunk) {
                             try {
                                 // 1. NORMALISATION & DÉCONTAMINATION
-                                const rawOrder = {
+                                const rawOrder: any = {
                                     ...legacy,
-                                    source: legacy.source || 'SLAYER_LEGACY',
-                                    tenantId: legacy.tenantId || tenantId,
+                                    source: (legacy as any).source || 'SLAYER_LEGACY',
+                                    tenantId: (legacy as any).tenantId || tenantId,
                                     createdAt: legacy.timestamp || new Date().toISOString(),
                                     status: 'PAID', // Archives scellées par défaut
-                                    customer: legacy.customer || { firstName: 'Legacy', lastName: 'Customer' }
+                                    customer: (legacy as any).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
                                 const nexusOrder = await DataDigester.digestOrder(rawOrder, { isLegacy: true });

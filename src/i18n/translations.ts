@@ -21,7 +21,7 @@ function deepMerge(...objects: Record<string, unknown>[]): Record<string, unknow
         if (!obj) continue;
         for (const key of Object.keys(obj)) {
             if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-                result[key] = deepMerge(result[key] || {}, obj[key]);
+                result[key] = deepMerge(result[key] as Record<string, unknown> || {}, obj[key] as Record<string, unknown>);
             } else {
                 result[key] = obj[key];
             }

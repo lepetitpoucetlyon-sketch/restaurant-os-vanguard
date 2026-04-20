@@ -1,4 +1,4 @@
-import { EmpireInstance } from '@/types/empire';
+import { EmpireInstance } from '@/domain/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 

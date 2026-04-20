@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { EmpireInstance, ProvisioningDNA } from '@/domain/types/empire';
-import { FleetTelemetryService } from './FleetTelemetryService';
+import { fleetTelemetry } from './FleetTelemetryService';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -68,7 +68,7 @@ export const ProvisioningEngine = {
 
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
-            await FleetTelemetryService.pushSiteTelemetry(newInstance);
+            await fleetTelemetry.pushSiteTelemetry(newInstance.id as any, newInstance as any);
 
             logger.info('ProvisioningEngine: Instance registered in Master Registry', { 
                 instanceId: newInstance.id, 

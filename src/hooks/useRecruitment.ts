@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Candidate, CandidateStatus, RecruitmentLog } from '@/types/recruitment';
 import { useAuth, useTenant } from '@/context/AuthContext';
-import { hiredCandidateAction } from '@/app/actions/recruitment';
+import { hiredCandidateAction } from '@/app/(admin)/actions/recruitment';
 
 export function useRecruitment() {
     const [candidates, setCandidates] = useState<Candidate[]>([]);

@@ -1,6 +1,6 @@
 import { TenantConfig } from "@/shared/nexus-contract";
 
-export const RESTAURANT_FULL_DNA: TenantConfig = {
+export const RESTAURANT_FULL_DNA: any = {
   id: 'restaurant_golden_seed_complete',
   capabilities: {
     // 1. Principal & Intelligence

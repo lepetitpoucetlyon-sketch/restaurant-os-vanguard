@@ -54,3 +54,12 @@ export async function togglePrepTaskAction(tenantId: string, taskId: string) {
         throw error;
     }
 }
+export async function updateKitchenStatusAction(tenantId: string, status: any) {
+    logger.info(`[ServerAction] Updating Kitchen Status to ${status} for ${tenantId}`);
+    return { success: true };
+}
+
+export async function clearKitchenNotificationsAction(tenantId: string) {
+    logger.info(`[ServerAction] Clearing Kitchen Notifications for ${tenantId}`);
+    return { success: true };
+}

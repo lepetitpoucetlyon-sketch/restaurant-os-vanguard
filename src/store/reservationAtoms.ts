@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
-import { Reservation, GroupEvent } from '@/types/reservations.types';
+import { Reservation } from '@/types/reservations.types';
+import { GroupEvent } from '@/types/groups.types';
 import { createProxyDomain } from './nexusNodeFactory';
 
 // --- 🏨 RESERVATIONS DOMAIN (Grade IX - Industrial) ---

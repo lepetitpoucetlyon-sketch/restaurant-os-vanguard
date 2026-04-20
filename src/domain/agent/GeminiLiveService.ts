@@ -125,7 +125,7 @@ export class GeminiLiveService {
         // --- RBAC SENTINEL ---
         const hasAccess = AccessPolicyManager.hasAccess(
             this.user, 
-            this.rolePermissions, 
+            this.rolePermissions as any, 
             tool.category as CategoryKey
         );
 

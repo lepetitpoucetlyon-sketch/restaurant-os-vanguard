@@ -88,7 +88,7 @@ export default function NexusSettings() {
                 <div className="flex flex-col md:flex-row items-center gap-10">
                     <div className="relative">
                         <div className="w-40 h-40 rounded-full bg-bg-primary/50 backdrop-blur-md border border-border flex items-center justify-center shadow-2xl relative z-10">
-                            <NexusSphere />
+                            <NexusSphere isActive={false} isProcessing={false} />
                         </div>
                         <motion.div 
                             animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}

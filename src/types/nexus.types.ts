@@ -25,10 +25,10 @@ export interface NexusAuthState {
     // Grade X Extensions (Suture)
     require2FAChallenge?: boolean;
     verifyTwoFactor?: (code: string) => Promise<boolean>;
-    verifyPin?: (pin: string) => Promise<boolean>;
+    verifyPin?: (pin: string, context?: any) => Promise<boolean>;
     switchProfile?: (userId: string) => void;
     canSwitchProfiles?: boolean;
-    updateUserStatus?: (userId: string, status: string) => Promise<void>;
+    updateUserStatus?: (userId: string, status: any) => Promise<void>;
     addUser?: (user: Partial<User>) => Promise<void>;
     deleteUser?: (userId: string) => Promise<void>;
     logAction?: (action: string, metadata?: Record<string, unknown>) => void;
@@ -75,30 +75,26 @@ export interface NexusSettingsState {
     isSaving: boolean;
     lastSaved: Date | null;
     updateSettings: (newSettings: GlobalSettings) => Promise<void>;
-    updateConfig?: (key: string, data: Record<string, unknown>) => Promise<void>;
+    updateConfig: (key: string, data: any) => Promise<void>;
     updateIdentity?: (data: Record<string, unknown>) => Promise<void>;
-    updateGoals?: (data: Record<string, unknown>) => Promise<void>;
-    updateSchedule?: (data: Record<string, unknown>) => Promise<void>;
-    updateService?: (data: Record<string, unknown>) => Promise<void>;
-    addClosedPeriod?: (data: Record<string, unknown>) => Promise<void>;
+    updateGoals?: (data: any) => Promise<void>;
+    updateSchedule?: (data: any) => Promise<void>;
+    updateService?: (data: any) => Promise<void>;
+    addClosedPeriod?: (data: any) => Promise<void>;
     deleteClosedPeriod?: (id: string) => Promise<void>;
-    updateReservationConfig?: (data: Record<string, unknown>) => Promise<void>;
-    updateReservationSlots?: (data: Record<string, unknown>) => Promise<void>;
-    updateSLM?: (data: Record<string, unknown>) => Promise<void>;
-    updateList?: (data: Record<string, unknown>) => Promise<void>;
+    updateReservationConfig?: (data: any) => Promise<void>;
+    updateReservationSlots?: (data: any) => Promise<void>;
+    updateSLM?: (data: any) => Promise<void>;
+    updateList: (key: string, data: any) => Promise<void>;
 }
-export interface NexusFleetState {
-    nodes: Record<string, unknown>[];
-    health: string;
-    triggerRebalancing?: () => Promise<void>;
-}
+
 
 export interface NexusLangState {
     t: (key: string) => string;
     currentLanguage: Language;
+    language: Language; // Heritage alias
     setLanguage: (l: Language) => void;
     availableLanguages: string[];
-    language?: Language; // Legacy alias
 }
 
 export interface NexusNotifState {
@@ -159,7 +155,26 @@ export interface NexusFleetState {
     haccpBridge: any;
     fleet: Record<string, unknown> | null;
     crm: Record<string, unknown>;
-    intelligence: Record<string, unknown>;
+    intelligence: {
+        globalInflationRate: number;
+        setGlobalInflationRate: (rate: number) => void;
+        scenarios: any[];
+        runSimulation: (config: any) => Promise<void>;
+        financialInsight: {
+            revenue: number;
+            foodCostPercent: number;
+            laborCostPercent: number;
+            primeCost: number;
+        } | null;
+        predictSignatureChance: (quote: any, inflation?: number) => number;
+        predictLaborCost: (shift: any) => number;
+    };
+    isTrainingMode: boolean;
+    toggleTrainingMode: () => void;
+    triggerRebalancing?: () => Promise<void>;
+    nodes?: Record<string, unknown>[];
+    health?: string;
+    tutorial?: any;
 }
 
 export interface NexusCoreState {
@@ -171,4 +186,5 @@ export interface NexusCoreState {
     lang: NexusLangState;
     notif: NexusNotifState;
     fleet: NexusFleetState;
+    tenantConfig: TenantConfig | null; // Suture Grade X
 }

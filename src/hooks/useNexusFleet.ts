@@ -43,14 +43,18 @@ export function useNexusFleet() {
                     activeUsers: f.activeUsers || 0,
                     dailyRevenue: f.dailyRevenue || 0,
                     revenue24h: f.dailyRevenue || 0,
+                    aiUsageCost: 0,
                     healthScore: f.healthScore || 100,
                     complianceScore: f.complianceScore || 100,
-                    lowStockAlerts: f.lowStockAlerts || 0
+                    lowStockAlerts: f.lowStockAlerts || 0,
+                    expiringItemsCount: 0
                 },
                 branding: f.branding || { primaryColor: '#6366f1' },
+                featureFlags: {},
                 security: f.security || {
                     twoFactorEnabled: true,
                     nf525Certified: true,
+                    maintenanceAccessGranted: false,
                     supportAccessGranted: false
                 }
             }));

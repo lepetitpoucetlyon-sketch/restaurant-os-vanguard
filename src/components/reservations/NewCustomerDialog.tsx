@@ -109,7 +109,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     <div className="h-1 w-1 rounded-full bg-white/10" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
-                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">Guest Integrity Protocol</span>
+                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">Client Integrity Protocol</span>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
 
                             <div className="grid grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Prénom de l'hôte</label>
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Prénom du client</label>
                                     <input
                                         required
                                         value={formData.firstName}

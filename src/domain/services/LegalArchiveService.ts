@@ -11,11 +11,11 @@ export const LegalArchiveService = {
     ...NF525Service,
     
     // Grade IX Compatibility Wrappers
-    runAudit: (seals: string[]) => FiscalEngine.runAudit(seals, 'master-instance'),
-    sealEntry: NF525Service.sealEntry,
-    sealPeriod: (start: Date, end: Date) => NF525Service.sealEntry('period-seal', { start, end }),
-    verifyIntegrity: NF525Service.verifyIntegrity,
-    verifyVaultIntegrity: NF525Service.verifyIntegrity
+    runAudit: (seals: any[]) => FiscalEngine.runAudit(seals, 'master-instance'),
+    sealEntry: FiscalEngine.sealEntry,
+    sealPeriod: (start: Date, end: Date) => FiscalEngine.sealEntry('period-seal', { start, end }),
+    verifyIntegrity: (seals: any[]) => FiscalEngine.verifyChain(seals),
+    verifyVaultIntegrity: (seals: any[]) => FiscalEngine.verifyChain(seals)
 };
 
 export default LegalArchiveService;

@@ -106,8 +106,8 @@ export function VoiceAssistantOverlay() {
     }, [isVoiceMode, toggleDictation]);
 
     useEffect(() => {
-        const lastMsg = messages[messages.length - 1];
-        if (lastMsg && lastMsg.role === 'model' && !isProcessing) speakMessage(lastMsg.text);
+        const lastMsg = (messages as any[])[messages.length - 1];
+        if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text);
     }, [messages, isProcessing, speakMessage]);
 
     useEffect(() => {
@@ -193,7 +193,7 @@ export function VoiceAssistantOverlay() {
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread messages={messages as any[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
                         )}
 
                         {pendingAction && (

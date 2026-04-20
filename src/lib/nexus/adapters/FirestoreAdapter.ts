@@ -75,9 +75,9 @@ export class FirestoreAdapter implements INexusAdapter {
     batch(): INexusBatch {
         const batch = writeBatch(firestore);
         return {
-            set: (path, data) => batch.set(doc(firestore, path), data),
-            update: (path, data) => batch.update(doc(firestore, path), data),
-            delete: (path) => batch.delete(doc(firestore, path)),
+            set: (path, data) => batch.set(doc(firestore, path) as any, data),
+            update: (path, data) => batch.update(doc(firestore, path) as any, data as any),
+            delete: (path) => batch.delete(doc(firestore, path) as any),
             commit: () => batch.commit()
         };
     }

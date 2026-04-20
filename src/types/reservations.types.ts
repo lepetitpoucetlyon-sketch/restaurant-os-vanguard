@@ -8,9 +8,11 @@ export interface Customer {
     id: string;
     firstName: string;
     lastName: string;
+    name?: string; // Full name alias used in some views
     email?: string;
     phone: string;
     birthDate?: string;
+    segment?: string; // CRM Segment (e.g., 'vip', 'regular', 'new')
     preferences: string[];
     tags: string[];
     notes?: string;
@@ -41,6 +43,14 @@ export interface Reservation {
     source?: 'phone' | 'website' | 'walk-in' | 'google' | 'thefork';
     name?: string; // fallback alias
     guests?: number; // alias for covers
+    createdAt: string;
+    updatedAt: string;
 }
 
 // GroupEvent moved to groups.types.ts
+export interface CRMGroup {
+    id: string;
+    name: string;
+    description?: string;
+    customers: string[]; // Customer IDs
+}

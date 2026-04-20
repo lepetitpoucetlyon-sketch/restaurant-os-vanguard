@@ -20,7 +20,7 @@ export function SaaSBillingGate({ children }: SaaSBillingGateProps) {
     const pathname = usePathname();
     const router = useRouter();
 
-    const isSuspended = activeTenantConfig?.billingStatus === 'suspended';
+    const isSuspended = (activeTenantConfig as any)?.status?.economy?.billingStatus === 'suspended';
     
     // EXCEPTION: Always allow access to Settings (to pay) and Admin (Master Console)
     const isSettingsArea = pathname?.startsWith('/settings');
@@ -43,7 +43,7 @@ export function SaaSBillingGate({ children }: SaaSBillingGateProps) {
                     
                     <div className="p-8 bg-white/[0.03] border border-white/5 rounded-2xl mb-10">
                         <p className="text-xs text-neutral-400 leading-relaxed">
-                            L'abonnement de l'instance <span className="text-white font-black">{activeTenantConfig?.name}</span> est suspendu suite à un incident de facturation.
+                            L'abonnement de l'instance <span className="text-white font-black">{(activeTenantConfig as any)?.metadata?.name}</span> est suspendu suite à un incident de facturation.
                         </p>
                     </div>
 

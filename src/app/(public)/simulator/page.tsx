@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 import { useIntelligence } from "@/context/IntelligenceContext";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNotifications } from "@/context/NotificationsContext";
 import { Modal } from "@/components/ui/Modal";
 
 export default function SimulatorPage() {
-    const { scenarios, runSimulation, financialInsight, globalInflationRate, setGlobalInflationRate } = useIntelligence();
+    const { scenarios, runSimulation, financialInsight, globalInflationRate, setGlobalInflationRate } = useIntelligence() as any;
     const { addNotification } = useNotifications();
 
     const [isSimulating, setIsSimulating] = useState(false);
@@ -90,20 +90,20 @@ export default function SimulatorPage() {
                             <div className="space-y-6">
                                 <div>
                                     <p className="text-sm font-serif italic text-text-secondary">Chiffre d'Affaires (Réel)</p>
-                                    <div className="text-4xl font-serif font-black text-text-primary mt-1">{financialInsight?.revenue?.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) || '0,00 €'}</div>
+                                    <div className="text-4xl font-serif font-black text-text-primary mt-1">{(financialInsight as any)?.revenue?.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) || '0,00 €'}</div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="p-4 bg-white dark:bg-bg-secondary rounded-2xl border border-border">
                                         <p className="text-[10px] font-black text-text-muted uppercase tracking-wider">Food Cost</p>
-                                        <div className={cn("text-2xl font-bold mt-2", (financialInsight?.foodCostPercent || 0) > 30 ? "text-error" : "text-success")}>
-                                            {Math.round(financialInsight?.foodCostPercent || 0)}%
+                                        <div className={cn("text-2xl font-bold mt-2", ((financialInsight as any)?.foodCostPercent || 0) > 30 ? "text-error" : "text-success")}>
+                                            {Math.round((financialInsight as any)?.foodCostPercent || 0)}%
                                         </div>
                                     </div>
                                     <div className="p-4 bg-white dark:bg-bg-secondary rounded-2xl border border-border">
                                         <p className="text-[10px] font-black text-text-muted uppercase tracking-wider">Labor Cost</p>
-                                        <div className={cn("text-2xl font-bold mt-2", (financialInsight?.laborCostPercent || 0) > 35 ? "text-error" : "text-success")}>
-                                            {Math.round(financialInsight?.laborCostPercent || 0)}%
+                                        <div className={cn("text-2xl font-bold mt-2", ((financialInsight as any)?.laborCostPercent || 0) > 35 ? "text-error" : "text-success")}>
+                                            {Math.round((financialInsight as any)?.laborCostPercent || 0)}%
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@ export default function SimulatorPage() {
                                         <p className="text-[10px] font-black text-accent-gold uppercase tracking-wider">Prime Cost</p>
                                         <Zap className="w-4 h-4 text-accent-gold" fill="currentColor" />
                                     </div>
-                                    <div className="text-3xl font-black text-accent-gold">{Math.round(financialInsight?.primeCost || 0)}%</div>
+                                    <div className="text-3xl font-black text-accent-gold">{Math.round((financialInsight as any)?.primeCost || 0)}%</div>
                                     <p className="text-[9px] text-text-muted mt-2">Objectif: &lt; 60%</p>
                                 </div>
 
@@ -131,8 +131,8 @@ export default function SimulatorPage() {
                                         min="0" 
                                         max="20" 
                                         step="1"
-                                        value={globalInflationRate}
-                                        onChange={(e) => setGlobalInflationRate(parseInt(e.target.value))}
+                                        value={(globalInflationRate as number) || 0}
+                                        onChange={(e) => (setGlobalInflationRate as any)?.(parseInt(e.target.value))}
                                         className="w-full h-1.5 bg-neutral-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-accent-gold"
                                     />
                                     

@@ -36,7 +36,7 @@ export async function upsertReservationAction(tenantId: string, data: any) {
         const batch = Nexus.adapter.batch();
         
         // A. Set Reservation
-        batch.set(reservationPath, payload, { merge: true });
+        batch.set(reservationPath, payload);
 
         // B. Suture Spatiale: Update Table Status (if tableId is assigned)
         if (data.tableId) {
@@ -123,3 +123,22 @@ export async function cancelReservationAction(tenantId: string, reservationId: s
     }
 }
 
+export async function createReservationAction(tenantId: string, data: any) {
+    return upsertReservationAction(tenantId, data);
+}
+
+export async function updateReservationStatusAction(tenantId: string, reservationId: string, status: string) {
+    logger.info(`[Reservations] Updating status of ${reservationId} to ${status}`);
+    try {
+        const reservationPath = `tenants/${tenantId}/reservations/${reservationId}`;
+        await Nexus.adapter.update(reservationPath, {
+            status,
+            updatedAt: new Date().toISOString(),
+        });
+        revalidatePath('/omnichannel-reservations');
+        return { success: true };
+    } catch (error) {
+        logger.error(`[Reservations] Status update failed`, error);
+        throw error;
+    }
+}

@@ -54,7 +54,7 @@ export const RecruitmentDashboard = () => {
     });
 
     const handleOpenModal = (candidate?: Candidate) => {
-        setEditingCandidate(candidate || null);
+        (setEditingCandidate as any)(candidate || null);
         setShowCandidateModal(true);
     };
 

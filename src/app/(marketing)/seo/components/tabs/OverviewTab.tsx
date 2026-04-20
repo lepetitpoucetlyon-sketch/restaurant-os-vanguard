@@ -11,7 +11,7 @@ import { useMarketing } from '@/engines/ops/NexusOpsProvider';
 import { cn } from '@/lib/ui.foundations';
 
 export const OverviewTab = () => {
-    const { profile, isLoading } = useMarketing();
+    const { profile, isLoading } = useMarketing() as any;
     const score = MarketingEngine.calculateSEOScore();
     const status = MarketingEngine.getVisibilityStatus(score);
     const livePages = MarketingEngine.getLivePageAnalysis();

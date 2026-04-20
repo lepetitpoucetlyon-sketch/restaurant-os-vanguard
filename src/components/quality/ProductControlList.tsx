@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, Check, X, Thermometer, Info, Calendar } from 'lucide-react';
+import { Package, Check, X, Thermometer, Info, Calendar, PackageSearch } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useQuality } from '@/hooks/useQuality';
 import { QualityControlItem } from '@/domain/types/quality';
@@ -55,7 +55,7 @@ export const ProductControlList: React.FC = () => {
                             <div className={cn(
                                 "w-16 h-16 rounded-[1.5rem] flex items-center justify-center transition-all shadow-inner relative shrink-0",
                                 item.is_rejected ? "bg-rose-500 text-white" : 
-                                item.status === 'pass' ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-50 text-slate-300"
+                                (item as any).status === 'pass' || (item as any).status === 'approved' ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-50 text-slate-300"
                             )}>
                                 <Package className="w-8 h-8" />
                                 {item.is_rejected && (
@@ -111,7 +111,7 @@ export const ProductControlList: React.FC = () => {
                                     onClick={() => handleToggleStatus(item, 'pass')}
                                     className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md group-active:scale-95",
-                                        item.status === 'pass' && !item.is_rejected
+                                        (item as any).status === 'pass' && !item.is_rejected
                                             ? "bg-emerald-500 text-white shadow-emerald-500/30" 
                                             : "bg-slate-50 text-slate-300 hover:bg-emerald-50 hover:text-emerald-500 border border-slate-100"
                                     )}

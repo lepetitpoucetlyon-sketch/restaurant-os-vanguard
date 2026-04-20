@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { SimulationProfile } from '@/domain/services/SimulationService';
 import { ProposalPanel } from "@/components/admin/ProposalPanel";
 import { NexusStaffingOracle as StaffingOracle } from '@/domain/services/NexusStaffingOracle';
+import { SovereignLedger } from '@/domain/services/SovereignLedger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { cn } from '@/lib/ui.foundations';
 
@@ -78,16 +79,18 @@ export function SimulatorConsole() {
 
     const runInquisiteurQA = async () => {
         setIntegrityStatus('VERIFYING');
-        // Simulated Binary Reconciliation with SovereignLedger
-        setTimeout(() => {
-            const isBalanced = Math.random() > 0.05; // 95% chance of integrity
-            setIntegrityStatus(isBalanced ? 'SECURE' : 'BREACH');
-            if (!isBalanced) {
-                addLog('INQUISITEUR QA: Critical Balance Breach Detected!', 'error');
+        try {
+            const audit = await SovereignLedger.runInquisiteurQA();
+            setIntegrityStatus(audit.secure ? 'SECURE' : 'BREACH');
+            if (!audit.secure) {
+                addLog(`INQUISITEUR QA: Critical Balance Breach! Diff: ${(Math.abs(audit.expected - audit.actual)/100).toFixed(2)}€`, 'error');
             } else {
-                addLog('INQUISITEUR QA: Ledger Integrity Certified.', 'info');
+                addLog('INQUISITEUR QA: Ledger Integrity Certified (Grade X).', 'info');
             }
-        }, 1500);
+        } catch(e) {
+            setIntegrityStatus('BREACH');
+            addLog('INQUISITEUR QA: System Failure during scan.', 'error');
+        }
     };
     
     // ⚡ BATCHING JOTAI @ 500ms

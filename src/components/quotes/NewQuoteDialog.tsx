@@ -23,7 +23,7 @@ import { Modal } from '@/components/ui/Modal';
 import { PremiumSelect } from '@/components/ui/PremiumSelect';
 import { useInventory, useQuotes, useCRM } from '@/engines/ops/NexusOpsProvider';
 import { QuoteLine, QuoteLineType } from '@/types/quotes.types';
-import { Product } from '@/domain/types/empire';
+import { Product } from '@/types';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 
@@ -116,7 +116,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
     const { data: inventoryProducts } = useInventory();
     const { createQuote } = useQuotes();
-    const { getActiveCustomer } = useCRM();
+    const { selectedCustomer } = useCRM();
     
     const handleSave = async () => {
         if (!customerName || !customerEmail || lines.length === 0) {
@@ -126,9 +126,8 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
         setIsSaving(true);
         try {
-            const activeCustomer = getActiveCustomer();
             const quoteData = {
-                customerId: activeCustomer?.id || 'ORPHAN', // CRM LINKAGE ESTABLISHED
+                customerId: selectedCustomer?.id || 'ORPHAN', // CRM LINKAGE ESTABLISHED
                 customerName,
                 customerEmail,
                 subject,

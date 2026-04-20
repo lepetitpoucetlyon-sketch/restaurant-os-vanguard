@@ -6,10 +6,9 @@ import {
     recipesNodeAtom, 
     prepTasksNodeAtom, 
     miseEnPlaceTargetSelector,
-    tenantIdAtom,
     stockItemsNodeAtom
 } from "@/store/operationalAtoms";
-import { upsertRecipeAction, deleteRecipeAction, togglePrepTaskAction } from "@/app/actions/kitchen";
+import { useNexusMutation } from "./useNexusMutation";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 
 /**
@@ -18,33 +17,39 @@ import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
  */
 export function useKitchen() {
     useVisibilityPurge('recipes');
-    const recipes = useAtomValue(recipesNodeAtom);
-    const prepTasks = useAtomValue(prepTasksNodeAtom);
+    const recipesNode = useAtomValue(recipesNodeAtom);
+    const prepTasksNode = useAtomValue(prepTasksNodeAtom);
     const miseEnPlaceTarget = useAtomValue(miseEnPlaceTargetSelector);
-    const tenantId = useAtomValue(tenantIdAtom);
     const stockItemsNode = useAtomValue(stockItemsNodeAtom);
+
+    // --- 🔨 LA FORGE ---
+    const recipeForge = useNexusMutation(recipesNodeAtom, 'recipes', 'KITCHEN');
+    const prepForge = useNexusMutation(prepTasksNodeAtom, 'prepTasks', 'KITCHEN');
 
     const calculateRecipeCost = useCallback((recipeIngredients: any[]) => {
         if (!recipeIngredients) return 0;
         return recipeIngredients.reduce((total, ri) => {
-            const ingredient = (stockItemsNode.data || []).find(i => i.id === ri.ingredientId);
+            const ingredient = (stockItemsNode.data || []).find((i: any) => i.id === ri.ingredientId);
             const cost = ingredient?.costInCents || 0;
             return total + (cost * ri.quantity);
         }, 0);
     }, [stockItemsNode.data]);
 
     return { 
-        data: recipes.data || [], 
-        recipes: recipes.data || [],
-        isLoading: recipes.loading, 
-        error: recipes.error,
-        prepTasks: prepTasks.data || [],
-        isPrepLoading: prepTasks.loading,
+        data: recipesNode.data || [], 
+        recipes: recipesNode.data || [],
+        isLoading: recipesNode.loading, 
+        error: recipesNode.error,
+        prepTasks: prepTasksNode.data || [],
+        isPrepLoading: prepTasksNode.loading,
         miseEnPlaceTarget,
-        addRecipe: (data: any) => upsertRecipeAction(tenantId, data),
-        updateRecipe: (id: string, data: any) => upsertRecipeAction(tenantId, { ...data, id }),
-        deleteRecipe: (id: string) => deleteRecipeAction(tenantId, id),
-        togglePrepTask: (id: string) => togglePrepTaskAction(tenantId, id),
+        
+        // --- Forge Actions ---
+        addRecipe: (data: any) => recipeForge.mutate('SET', `rec_${Date.now()}`, data),
+        updateRecipe: (id: string, data: any) => recipeForge.mutate('UPDATE', id, data),
+        deleteRecipe: (id: string) => recipeForge.mutate('DELETE', id, {}),
+        togglePrepTask: (id: string, completed: boolean) => prepForge.mutate('UPDATE', id, { completed }),
+        
         calculateRecipeCost
     };
 }

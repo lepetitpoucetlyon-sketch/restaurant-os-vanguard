@@ -34,7 +34,7 @@ export const menuAnalysisSelector = atom((get) => {
     
     const itemSales = orders
         .filter(o => o.status === 'paid' || o.status === 'delivered')
-        .flatMap(o => o.items)
+        .flatMap(o => o.items || [])
         .reduce((acc, item) => {
             acc[item.productId] = (acc[item.productId] || 0) + (item.quantity || 1);
             return acc;
@@ -44,7 +44,7 @@ export const menuAnalysisSelector = atom((get) => {
         const popularity = itemSales[item.id] || 0;
         const recipe = recipes.find(r => r.id === item.id);
         
-        const foodCost = recipe?.ingredients?.reduce((sum: number, ri) => {
+        const foodCost = (recipe?.ingredients || []).reduce((sum: number, ri) => {
             const stockItem = stockItems.find(si => si.id === ri.id);
             return sum + (ri.quantity * (stockItem?.unitCostInCents || 0));
         }, 0) || item.priceInCents * 0.3; // Default 30% food cost fallback if no recipe
@@ -89,7 +89,7 @@ export const staffPerformanceSelector = atom((get) => {
             const totalSales = serverOrders.reduce((sum: number, o) => sum + (o.totalInCents || 0), 0);
             const orderCount = serverOrders.length;
             const upsellOrders = serverOrders.filter(o =>
-                o.items.some(item => {
+                (o.items || []).some(item => {
                     const product = products.find(p => p.id === item.productId);
                     return product?.category?.toLowerCase().includes('cocktail');
                 })

@@ -1,60 +1,70 @@
+"use client";
+
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback } from 'react';
 import { hrShiftsAtom, hrProcessingAtom } from '@/store/hrAtoms';
 import { 
-    leaveRequestsAtom, 
+    leaveRequestsNodeAtom, 
     leaveBalancesAtom, 
     hrLoadingAtom,
-    updateNexusNode
+    shiftsNodeAtom
 } from '@/store/operationalAtoms';
+import { useNexusMutation } from "./useNexusMutation";
 
 /**
  * 👨‍💼 useHumanResources - Grade VI Atomic Bridge
  * Orchestre la gestion du personnel, le planning et les absences.
  */
 export function useHumanResources() {
-    const [shifts, setShifts] = useAtom(hrShiftsAtom);
     const [isProcessing, setIsProcessing] = useAtom(hrProcessingAtom);
     
     // Grade VI Atomic Data
-    const [leaveRequests, setLeaveRequests] = useAtom(leaveRequestsAtom);
-    const [leaveBalances, setLeaveBalances] = useAtom(leaveBalancesAtom);
+    const leaveRequestsNode = useAtomValue(leaveRequestsNodeAtom);
+    const leaveRequests = leaveRequestsNode.data;
+    
+    const leaveBalances = useAtomValue(leaveBalancesAtom);
     const isLoading = useAtomValue(hrLoadingAtom);
+    const shiftsNode = useAtomValue(shiftsNodeAtom);
+    const shifts = shiftsNode.data;
+
+    // --- 🔨 LA FORGE ---
+    const leaveForge = useNexusMutation(leaveRequestsNodeAtom, 'leaveRequests', 'HR');
+    const shiftForge = useNexusMutation(shiftsNodeAtom, 'shifts', 'HR');
 
     const addShift = useCallback((shift: any) => {
-        setShifts(prev => [...prev, { ...shift, id: Math.random().toString(36).substring(2, 9) }]);
-    }, [setShifts]);
+        const id = shift.id || `shift_${Date.now()}`;
+        return shiftForge.mutate('SET', id, shift);
+    }, [shiftForge]);
 
     const updateShift = useCallback((id: string, data: any) => {
-        setShifts(prev => prev.map(s => s.id === id ? { ...s, ...data } : s));
-    }, [setShifts]);
+        return shiftForge.mutate('UPDATE', id, data);
+    }, [shiftForge]);
 
     const deleteShift = useCallback((id: string) => {
-        setShifts(prev => prev.filter(s => s.id !== id));
-    }, [setShifts]);
+        return shiftForge.mutate('DELETE', id, {});
+    }, [shiftForge]);
 
     const publishShifts = useCallback((ids: string[]) => {
-        setShifts(prev => prev.map(s => ids.includes(s.id) ? { ...s, status: 'published' } : s));
-    }, [setShifts]);
+        // En masse mutation pattern (not strictly standard in v1, but for v2)
+        ids.forEach(id => {
+            shiftForge.mutate('UPDATE', id, { status: 'published' });
+        });
+    }, [shiftForge]);
 
     // --- LEAVE MANAGEMENT ---
     
     const approveLeaveRequest = useCallback(async (id: string) => {
-        setLeaveRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'approved' } : r));
-    }, [setLeaveRequests]);
+        return leaveForge.mutate('UPDATE', id, { status: 'approved' });
+    }, [leaveForge]);
 
     const rejectLeaveRequest = useCallback(async (id: string, reason?: string) => {
-        setLeaveRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'rejected', rejectionReason: reason } : r));
-    }, [setLeaveRequests]);
+        return leaveForge.mutate('UPDATE', id, { status: 'rejected', rejectionReason: reason });
+    }, [leaveForge]);
 
     const createLeaveRequest = useCallback(async (request: any) => {
-        const newRequest = { 
-            ...request, 
-            id: `leave_${Math.random().toString(36).substring(2, 9)}`,
-            status: request.status || 'pending_approval'
-        };
-        setLeaveRequests(prev => [newRequest, ...prev]);
-    }, [setLeaveRequests]);
+        const id = request.id || `leave_${Date.now()}`;
+        return leaveForge.mutate('SET', id, { ...request, status: 'pending_approval' });
+    }, [leaveForge]);
 
     return {
         isProcessing,

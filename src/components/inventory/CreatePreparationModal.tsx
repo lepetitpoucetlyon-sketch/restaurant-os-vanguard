@@ -98,7 +98,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
 
         // Deduct stock for used ingredients
         for (const ing of usedIngredients) {
-            await consumeStock(ing.stockItemId, ing.quantityUsed, `Préparation: ${name}`);
+            await (consumeStock as any)(ing.stockItemId, ing.quantityUsed, `Préparation: ${name}`);
         }
 
         // Calculate total cost in cents

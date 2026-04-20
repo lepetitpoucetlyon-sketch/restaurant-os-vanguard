@@ -6,7 +6,7 @@ import { useMarketing } from '@/engines/ops/NexusOpsProvider';
 import { cn } from "@/lib/ui.foundations";
 
 export const AnalyticsTab = () => {
-    const { profile, isLoading } = useMarketing();
+    const { profile, isLoading } = useMarketing() as any;
 
     // Derive real analytics or use baseline zeros (reality check)
     const analytics = profile?.analytics || {

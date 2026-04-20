@@ -29,7 +29,7 @@ export class DNAInjector {
 
             // 2. Recherche dans la config statique (Fichiers .ts dans /instances)
             const staticConfig = getTenantConfig(tenantId);
-            const staticRules = staticConfig?.branding?.description || "";
+            const staticRules = (staticConfig as any)?.branding?.description || staticConfig?.name || "";
 
             // 3. Fusion et formatage pour l'IA
             const finalDNA = `

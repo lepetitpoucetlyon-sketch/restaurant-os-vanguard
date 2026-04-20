@@ -28,7 +28,7 @@ import { EmpireInstance } from '@/domain/types/empire';
 
 // MCC Components
 import MCCAuditStream from '@/components/admin/mcc/MCCAuditStream';
-import MCCInsights from '@/components/admin/mcc/MCCInsights';
+import { MCCInsights } from '@/components/admin/mcc/MCCInsights';
 import CertificationCenter from '@/components/admin/mcc/CertificationCenter';
 import FiscalChainExplorer from '@/components/admin/mcc/FiscalChainExplorer';
 import DeploymentEngine from '@/components/admin/mcc/DeploymentEngine';

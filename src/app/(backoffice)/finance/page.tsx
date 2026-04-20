@@ -31,9 +31,10 @@ export default function FinancePage() {
     // Adjusted Forecast based on inflation
     const adjustedForecast = useMemo(() => {
         const base = treasury.forecast30Days;
-        if (globalInflationRate === 0) return base;
+        const inflationRate = (globalInflationRate as number) || 0;
+        if (inflationRate === 0) return base;
         // Inflation impacts outflows (estimated at 10% of total volume for 30 days)
-        const inflationLoss = (treasury.pendingPayables || 5000) * (globalInflationRate / 100);
+        const inflationLoss = (treasury.pendingPayables || 5000) * (inflationRate / 100);
         return base - inflationLoss;
     }, [treasury.forecast30Days, treasury.pendingPayables, globalInflationRate]);
 
@@ -209,7 +210,7 @@ export default function FinancePage() {
                                 </p>
                             </div>
 
-                            {globalInflationRate > 0 && (
+                            {((globalInflationRate as number) || 0) > 0 && (
                                 <motion.div 
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}

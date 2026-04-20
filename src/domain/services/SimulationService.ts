@@ -20,7 +20,7 @@ interface ProfileConfig {
     staffCount: number;
 }
 
-const SIMULATION_PROFILES: Record<SimulationProfile, ProfileConfig> = {
+export const SIMULATION_PROFILES: Record<SimulationProfile, ProfileConfig> = {
     PIZZERIA_RUSH: { minVol: 80, maxVol: 150, chaosProbability: 0.05, avgProductCount: 4, laborCostPerHour: 4500, staffCount: 4 },
     FINE_DINING_CALM: { minVol: 15, maxVol: 30, chaosProbability: 0.15, avgProductCount: 2, laborCostPerHour: 8500, staffCount: 6 },
     SUMMER_PEAK: { minVol: 120, maxVol: 250, chaosProbability: 0.08, avgProductCount: 6, laborCostPerHour: 6500, staffCount: 10 },

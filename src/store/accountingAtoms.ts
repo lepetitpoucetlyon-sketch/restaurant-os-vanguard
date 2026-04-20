@@ -23,7 +23,7 @@ export const expenseClaimsNodeAtom = _expenseClaims.node;
 export const expenseClaimsAtom = _expenseClaims.data;
 
 // UI States
-export const accountingViewModeAtom = atom<'journal' | 'accounts' | 'bank' | 'expenses'>('journal');
+export const accountingViewModeAtom = atom<'simple' | 'expert'>('simple');
 export const isAccountingSyncingAtom = atom(false);
 export const accountingLoadingAtom = atom((get) => 
     get(journalEntriesNodeAtom).loading || 

@@ -1,12 +1,13 @@
 import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { ToolDefinition } from './FinanceTool';
 
 /**
  * MENU TOOL
  * Allows NEXUS to manage the restaurant's product catalog.
  */
-export const MenuTool = {
+export const MenuTool: ToolDefinition = {
     name: "update_menu_item",
     description: "Met à jour le prix ou la description d'un article du menu (plat, boisson, etc.).",
     parameters: {
@@ -18,7 +19,8 @@ export const MenuTool = {
         },
         required: ["productName"]
     },
-    execute: async (args: { productName: string, newPrice?: number, newDescription?: string }) => {
+    category: "inventory",
+    execute: async (args: { productName: string, newPrice?: number, newDescription?: string }, user: any) => {
         try {
             const productsPath = getTenantPath('products');
             const results = await Nexus.adapter.query(productsPath, {

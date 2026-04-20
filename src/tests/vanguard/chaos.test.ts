@@ -16,7 +16,7 @@ describe('🔥 OMNI-VANGUARD : BLOC 4 – CHAOS & PERFORMANCE', () => {
 
     it('T41: Data Drift Recovery - Auto-correction des états divergents', async () => {
         // Simulation d'une dérive par ChaosMonkey sur un store réel
-        store.set(ordersNodeAtom, (prev: any) => updateNexusNode(prev, { data: [], loading: false, error: null, lastUpdated: Date.now() }));
+        store.set(ordersNodeAtom, (prev: any) => updateNexusNode(prev, { data: [], loading: false, error: null, lastUpdated: Date.now() } as any));
         // ChaosMonkey.executeRandomDrift utilizes default store; so modifying here is tricky if it relies on getDefaultStore internally which might differ from test 'store'. But keeping it as is.
         // Assuming Chaos Monkey acts on external dependencies. To be precise, ChaosMonkey relies on store.set internally.
         // For test stability, we just get the node.

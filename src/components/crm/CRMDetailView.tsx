@@ -24,8 +24,7 @@ const getEmail = (c: Customer): string => c?.email ?? '';
 export function CRMDetailView() {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const [selectedCustomerBase, setSelectedCustomer] = useAtom(crmSelectedCustomerAtom);
-    const selectedCustomer = selectedCustomerBase as any;
+    const [selectedCustomer, setSelectedCustomer] = useAtom(crmSelectedCustomerAtom);
 
     if (!selectedCustomer) return null;
 
@@ -39,7 +38,7 @@ export function CRMDetailView() {
         return (
             <BottomSheet
                 isOpen={true}
-                onClose={() => (setSelectedCustomer as any)(null)}
+                onClose={() => setSelectedCustomer(null)}
                 title={selectedCustomer.lastName || `${getFirstName(selectedCustomer)} ${getLastName(selectedCustomer)}`}
                 subtitle={`Profil ${(selectedCustomer.id || '').toUpperCase()} • ID: ${(selectedCustomer.id || '').slice(0, 8)}`}
             >
@@ -90,7 +89,7 @@ export function CRMDetailView() {
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent-gold/20 to-transparent pointer-events-none" />
                 
                 <button 
-                    onClick={() => (setSelectedCustomer as any)(null)} 
+                    onClick={() => setSelectedCustomer(null)} 
                     className="absolute top-6 right-6 w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-all z-20"
                 >
                     <X className="w-6 h-6" />
@@ -107,8 +106,8 @@ export function CRMDetailView() {
                         </span>
                     </motion.div>
                     <motion.h3 
-                        initial={{ opacity: 0, y: 20 } as any}
-                        animate={{ opacity: 1, y: 0 } as any}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
                         className="text-5xl font-serif italic mb-4 tracking-tight leading-none"
                     >
                         {getFirstName(selectedCustomer)} {getLastName(selectedCustomer)}
