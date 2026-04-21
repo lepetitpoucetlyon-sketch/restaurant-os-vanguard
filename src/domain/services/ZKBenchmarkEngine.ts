@@ -11,7 +11,7 @@ export const ZKBenchmarkEngine = {
    * Calculates local performance score without exposing raw sales data.
    * Logic: Evolution from Direct Telemetry to Zero-Knowledge Aggregation.
    */
-  async computeLocalZScore(salesData: any[], wasteData: any[]): Promise<{
+  async computeLocalZScore(salesData: { totalInCents: number }[], wasteData: { totalInCents: number }[]): Promise<{
     zScore: number;
     proof: string;
     metrics: string[]; // Only metadata names

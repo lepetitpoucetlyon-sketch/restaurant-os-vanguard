@@ -27,7 +27,7 @@ export const AuditHasher = {
     /**
      * Génère un hash SHA-256 d'une commande avec chaînage au hash précédent.
      */
-    generateProof: async (orderData: any): Promise<AuditProof> => {
+    generateProof: async (orderData: import('@/types').Order): Promise<AuditProof> => {
         // 1. Récupérer le dernier hash pour le chaînage
         let previousHash: string | null = null;
         let sequenceNumber = 1;

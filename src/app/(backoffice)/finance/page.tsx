@@ -21,17 +21,18 @@ import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
 import { useFinance } from "@/engines/fiscal/NexusFiscalProvider";
 import { motion } from "framer-motion";
-import { useIntelligence } from "@/context/IntelligenceContext";
+import { useIntelligence } from "@/engines/ops/NexusOpsProvider";
 import { Zap } from "lucide-react";
 
 export default function FinancePage() {
     const { treasury, alerts, bankTransactions } = useFinance();
-    const { globalInflationRate } = useIntelligence();
+    const { data: config } = useIntelligence();
+    const globalInflationRate = config?.globalInflationRate || 0;
 
     // Adjusted Forecast based on inflation
     const adjustedForecast = useMemo(() => {
         const base = treasury.forecast30Days;
-        const inflationRate = (globalInflationRate as number) || 0;
+        const inflationRate = globalInflationRate || 0;
         if (inflationRate === 0) return base;
         // Inflation impacts outflows (estimated at 10% of total volume for 30 days)
         const inflationLoss = (treasury.pendingPayables || 5000) * (inflationRate / 100);
@@ -210,7 +211,7 @@ export default function FinancePage() {
                                 </p>
                             </div>
 
-                            {((globalInflationRate as number) || 0) > 0 && (
+                            {(globalInflationRate || 0) > 0 && (
                                 <motion.div 
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}

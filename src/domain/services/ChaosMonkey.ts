@@ -4,13 +4,16 @@ import { logger } from '@/lib/logger';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
+import { WritableAtom } from 'jotai';
+import { NexusNode } from '@/store/base';
+
 /**
  * 🐵 ChaosMonkey - Restaurant OS (Darwin V5.5 Master Code)
  * Chaos-V5-Adversarial: Sandboxed stress agent for resilience training.
  */
 export const ChaosMonkey = {
   
-  activeInterval: null as any,
+  activeInterval: null as ReturnType<typeof setInterval> | null,
 
   /**
    * Starts the chaos agent within a specific sandbox.
@@ -27,7 +30,7 @@ export const ChaosMonkey = {
   },
 
   stop() {
-    clearInterval(this.activeInterval);
+    if (this.activeInterval) clearInterval(this.activeInterval);
     this.activeInterval = null;
     logger.info("[Chaos-Monkey] Adversarial Agent Deactivated.");
   },
@@ -37,13 +40,13 @@ export const ChaosMonkey = {
    */
   executeRandomDrift() {
     const store = getDefaultStore();
-    const targets: Array<{ atom: any; path: string }> = [
-      { atom: ordersNodeAtom, path: 'operational/orders' },
-      { atom: stockItemsNodeAtom, path: 'operational/stock' }
+    const targets: Array<{ atom: WritableAtom<NexusNode<unknown>, [unknown], void>; path: string }> = [
+      { atom: ordersNodeAtom as WritableAtom<NexusNode<unknown>, [unknown], void>, path: 'operational/orders' },
+      { atom: stockItemsNodeAtom as WritableAtom<NexusNode<unknown>, [unknown], void>, path: 'operational/stock' }
     ];
     
     const choice = targets[Math.floor(Math.random() * targets.length)];
-    const node = store.get(choice.atom) as any;
+    const node = store.get(choice.atom);
 
     if (!node || !node.data || node.data.length === 0) return;
 
@@ -64,7 +67,7 @@ export const ChaosMonkey = {
     logger.debug(`[Chaos-Monkey] DRIFT_INJECTED into ${choice.path}`);
     
     // Silent write (Bypass validation)
-    store.set(choice.atom, (prev: any) => updateNexusNode(prev, { data: corruptedData }));
+    store.set(choice.atom, (prev: NexusNode<unknown>) => updateNexusNode(prev, { data: corruptedData }));
 
     // 🍵 VERIFICATION: Trigger self-healing audit
     const persistencePath = Nexus.getTenantPath(choice.path);

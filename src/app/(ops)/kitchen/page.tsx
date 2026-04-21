@@ -12,11 +12,13 @@ import {
     Truck,
     ShieldAlert,
     ChevronRight,
-    ChevronLeft
+    ChevronLeft,
+    LucideIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useManagement, useInventory } from "@/engines/ops/NexusOpsProvider";
+import { Recipe, PrepTask, Product } from "@/types";
 import { useUI } from "@/context/UIContext";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { PrepTaskDetailDialog } from "@/modules/ops/components/kitchen/PrepTaskDetailDialog";
@@ -64,11 +66,12 @@ export default function KitchenPage() {
     const wasteLogs = wasteDomain.data;
     
     const { data: ingredients } = inventory;
+    const { data: products } = inventory;
 
-    const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
-    const [selectedPrepTask, setSelectedPrepTask] = useState<any>(null);
+    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+    const [selectedPrepTask, setSelectedPrepTask] = useState<PrepTask | null>(null);
     const [showProductModal, setShowProductModal] = useState(false);
-    const [editingProduct, setEditingProduct] = useState<any>(null);
+    const [editingProduct, setEditingProduct] = useState<Product | Recipe | null>(null);
 
     const [isSideNavOpen, setIsSideNavOpen] = useState(true);
 
@@ -137,7 +140,7 @@ export default function KitchenPage() {
                             className="space-y-1.5 flex-1 min-w-[260px]"
                         >
                             {(['mise-en-place', 'recipes', 'ingredients', 'margins', 'waste', 'suppliers', 'allergens', 'cooking-times'] as const).map((tab) => {
-                                const icons: Record<KitchenTab, any> = {
+                                const icons: Record<KitchenTab, LucideIcon> = {
                                     'mise-en-place': Utensils,
                                     'recipes': BookOpen,
                                     'ingredients': Truck,
@@ -288,7 +291,7 @@ export default function KitchenPage() {
                 task={selectedPrepTask}
                 onToggleStatus={(id) => {
                     togglePrepTask(id);
-                    setSelectedPrepTask((prev: any) => prev ? { ...prev, isCompleted: !prev.isCompleted } : null);
+                    setSelectedPrepTask((prev) => prev ? { ...prev, isCompleted: !prev.isCompleted } : null);
                 }}
             />
 

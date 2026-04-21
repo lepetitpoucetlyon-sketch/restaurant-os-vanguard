@@ -255,7 +255,7 @@ export interface InventoryContextType {
     triggerRebalancing: () => Promise<void>;
     
     expert: {
-        queryExpert: (prompt: string, contextData?: Record<string, any>) => Promise<{
+        queryExpert: (prompt: string, contextData?: Record<string, unknown>) => Promise<{
             response: string;
             suggestions?: string[];
         }>;
@@ -266,7 +266,7 @@ export interface InventoryContextType {
     };
     
     agent?: {
-        query: (prompt: string, context?: Record<string, any>) => Promise<{
+        query: (prompt: string, context?: Record<string, unknown>) => Promise<{
             answer: string;
             confidence: number;
         }>;

@@ -55,7 +55,7 @@ export const MasterBridge = {
   /**
    * Vassal-side: Subscribes to the master configuration flow with FLOOD & REPLAY PROTECTION.
    */
-  listenToMaster(store: any) {
+  listenToMaster(store: ReturnType<typeof getDefaultStore>) {
     logger.debug("[MasterBridge] Establishing Vassal Tunnel to Master...");
     let lastUpdate = 0;
 

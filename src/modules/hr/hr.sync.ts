@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
 import { 
     shiftLogsNodeAtom, 
     activeShiftsNodeAtom, 
@@ -26,7 +27,7 @@ export const HRSyncService = {
     // 0. STAFF MEMBERS (USERS)
     this.private_listeners.staff = Nexus.adapter.onSnapshot(
       path('users'),
-      (data: any[]) => {
+      (data: User[]) => {
         store.set(staffMembersNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
@@ -50,7 +51,7 @@ export const HRSyncService = {
           if (entry.type === 'clock_in') activeMap.set(entry.userId, entry);
           else if (entry.type === 'clock_out') activeMap.delete(entry.userId);
         });
-        store.set(activeShiftsNodeAtom, (prev) => updateNexusNode(prev, { data: Array.from(activeMap.values()) as any, loading: false }));
+        store.set(activeShiftsNodeAtom, (prev) => updateNexusNode(prev, { data: Array.from(activeMap.values()), loading: false }));
       },
       {
         orderBy: { field: 'timestamp', direction: 'desc' },

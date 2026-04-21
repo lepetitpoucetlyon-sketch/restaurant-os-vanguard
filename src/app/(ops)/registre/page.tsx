@@ -72,7 +72,7 @@ export default function RegistrePage() {
         { doc: incendieDoc, tab: 'incendie' as TabType, icon: Flame, color: '#EF4444' },
         { doc: hottesDoc, tab: 'conformite' as TabType, icon: ShieldCheck, color: '#f97316' },
         { doc: certHalal, tab: 'conformite' as TabType, icon: Beef, color: '#10b981' },
-        { doc: cerfa, tab: 'cerfa' as any, icon: ShieldCheck, color: '#8B5CF6', isModal: true },
+        { doc: cerfa, tab: 'overview' as TabType, icon: ShieldCheck, color: '#8B5CF6', isModal: true },
         { doc: pmrDoc, tab: 'pmr' as TabType, icon: Accessibility, color: '#0EA5E9' },
     ];
 
@@ -129,7 +129,7 @@ export default function RegistrePage() {
                             <div className="space-y-4">
                                 <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1">Registres Obligatoires</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {allDocs.map(({ doc, tab, icon: Icon, color, isModal }: any) => (
+                                    {allDocs.map(({ doc, tab, icon: Icon, color, isModal }) => (
                                         <button
                                             key={doc.id}
                                             onClick={() => isModal ? setIsCerfaOpen(true) : setActiveTab(tab)}

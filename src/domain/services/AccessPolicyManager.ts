@@ -67,7 +67,7 @@ function canDo(user: User | null, action: string, actionPermissions: Record<stri
     }
 
     // Level-based check
-    const userLevel = (user as any).clearanceLevel || 0;
+    const userLevel = user.accessLevel || 0;
     const requiredLevel = actionPermissions[action] || 0;
     
     return userLevel >= requiredLevel;

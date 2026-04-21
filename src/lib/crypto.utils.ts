@@ -28,7 +28,7 @@ function toHexString(buffer: ArrayBuffer, uppercase: boolean = false): string {
 /**
  * Deterministic JSON Stringification.
  */
-export const canonicalStringify = (obj: any): string => {
+export const canonicalStringify = (obj: Record<string, unknown>): string => {
   const allKeys: string[] = [];
   JSON.stringify(obj, (key, value) => {
     allKeys.push(key);

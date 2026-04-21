@@ -128,7 +128,7 @@ export async function suggestChickenProcurement(qty: number): Promise<void> {
   const { SovereignLedger } = await import('./SovereignLedger');
   await SovereignLedger.recordTransfer({
     debitAccount: 'PURCHASES',
-    creditAccount: 'PROPOSALS' as any, // Awaiting human signing
+    creditAccount: 'PROPOSALS', // Awaiting human signing
     amountInCents: cost,
     referenceId: `AI-SUGG-${Date.now()}`,
     description: `[AI-SUGGESTION] Ravitaillement Rôtisserie (${qty} unités)`

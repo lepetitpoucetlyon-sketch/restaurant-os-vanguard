@@ -8,6 +8,7 @@ import {
 } from '@/store/settingsAtoms';
 import { SettingsManager } from '@/domain/services/SettingsManager';
 import { GlobalSettings } from '@/types/settings';
+import { RestaurantIdentity } from '@/types/settings/identity';
 
 /**
  * 🛰️ useSettings - Grade VI Atomic Bridge
@@ -21,20 +22,20 @@ export const useSettings = () => {
     
     const setSettings = useSetAtom(globalSettingsAtom);
     const setSaving = useSetAtom(settingsSavingAtom);
-    const setLastSaved = useSetAtom(settingsLastSavedAtom as any);
+    const setLastSaved = useSetAtom(settingsLastSavedAtom);
 
     const updateSettings = useCallback(async (newSettings: GlobalSettings) => {
         setSaving(true);
         try {
             const savedAt = await SettingsManager.saveSettings(newSettings);
-            setLastSaved(savedAt);
+            if (savedAt) setLastSaved(savedAt instanceof Date ? savedAt.toISOString() : savedAt);
             setSettings(newSettings);
         } finally {
             setSaving(false);
         }
     }, [setSettings, setSaving, setLastSaved]);
 
-    const updateConfig = useCallback(async (key: keyof GlobalSettings, data: any) => {
+    const updateConfig = useCallback(async <K extends keyof GlobalSettings>(key: K, data: GlobalSettings[K]) => {
         if (!settings) return;
         const newSettings = {
             ...settings,
@@ -43,8 +44,8 @@ export const useSettings = () => {
         return updateSettings(newSettings);
     }, [settings, updateSettings]);
 
-    const updateList = useCallback(async (key: string, data: any) => {
-        return updateConfig(key as any, data);
+    const updateList = useCallback(async <K extends keyof GlobalSettings>(key: K, data: GlobalSettings[K]) => {
+        return updateConfig(key, data);
     }, [updateConfig]);
     
     return {
@@ -55,6 +56,6 @@ export const useSettings = () => {
         updateSettings,
         updateConfig,
         updateList,
-        updateIdentity: (data: any) => updateConfig('identity', data)
+        updateIdentity: (data: RestaurantIdentity) => updateConfig('identity', data)
     };
 };

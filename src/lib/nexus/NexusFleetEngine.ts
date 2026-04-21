@@ -28,7 +28,7 @@ export class NexusFleetEngine {
      * Fetches real-time telemetry from Firestore and generates strategic insights.
      */
     public async updateFleetIntelligence(instances: EmpireInstance[]): Promise<{
-        metrics: any;
+        metrics: import('@/domain/services/MacroBrain').ConsolidatedMetrics | null;
         insights: FleetInsight[];
     }> {
         if (this._isSyncing) return { metrics: null, insights: [] };

@@ -25,8 +25,8 @@ export const useQuality = () => {
     const [controls, setControls] = useAtom(qualityControlsAtom);
     const loading = useAtomValue(qualityLoadingAtom);
     const [activeControl, setActiveControl] = useAtom(qualityActiveControlAtom);
-    const [step, setStep] = useAtom(qualityControlStepAtom) as [any, any];
-    const [selectedDeliveryId, setSelectedDeliveryId] = useAtom(qualitySelectedDeliveryIdAtom) as [any, any];
+    const [step, setStep] = useAtom(qualityControlStepAtom);
+    const [selectedDeliveryId, setSelectedDeliveryId] = useAtom(qualitySelectedDeliveryIdAtom);
     
     const alerts = useAtomValue(qualityAlertsAtom);
     const todayStats = useAtomValue(todayReceptionStatsAtom);
@@ -46,15 +46,22 @@ export const useQuality = () => {
         setSelectedDeliveryId(deliveryId);
         setStep(1);
         
-        const newControl: Partial<QualityControl> = {
+        const newControl: QualityControl = {
+            id: IDService.generateId('qc'),
+            control_number: `QC-${Date.now()}`,
             type: 'reception',
             supplier_id: delivery.supplier_id,
             supplier_name: delivery.supplier_name,
+            controlled_at: new Date().toISOString(),
+            controlled_by: 'system', // Should be current user
+            controller_name: 'Antigravity',
             delivery: {
                 id: deliveryId,
                 reference: delivery.reference
             },
-            controlled_at: new Date().toISOString(),
+            color_aspect: true,
+            texture_aspect: true,
+            odor_aspect: true,
             items: (delivery.items || []).map((item) => ({
                 id: IDService.generateId('qci'),
                 product_id: item.productId,
@@ -94,10 +101,16 @@ export const useQuality = () => {
                 visual_issues: 0,
                 overall_status: 'pass',
                 supplier_score_impact: 0
+            },
+            metadata: {
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                synced: false,
+                fingerprint: 'pending'
             }
         };
         
-        setActiveControl(newControl as QualityControl);
+        setActiveControl(newControl);
     };
 
     /**
@@ -133,6 +146,14 @@ export const useQuality = () => {
             
             // 🏛️ Sovereign Session Cleanup (Zero Debt)
             setActiveControl({
+                id: IDService.generateId('qc'),
+                control_number: 'PENDING',
+                type: 'reception',
+                supplier_id: '',
+                supplier_name: '',
+                controlled_at: new Date().toISOString(),
+                controlled_by: '',
+                controller_name: '',
                 items: [],
                 delivery_conditions: {
                     vehicle_type: 'unknown',
@@ -150,8 +171,14 @@ export const useQuality = () => {
                     visual_issues: 0,
                     overall_status: 'pass',
                     supplier_score_impact: 0
+                },
+                metadata: {
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    synced: false,
+                    fingerprint: ''
                 }
-            } as QualityControl);
+            });
             setSelectedDeliveryId(null);
             setStep(1);
             

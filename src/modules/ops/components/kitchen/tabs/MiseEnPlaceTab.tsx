@@ -6,10 +6,12 @@ import { CheckCircle2, Clock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
 
+import { MiseEnPlaceTask } from "@/types";
+
 interface MiseEnPlaceTabProps {
-    prepTasks: any[];
+    prepTasks: MiseEnPlaceTask[];
     togglePrepTask: (id: string) => Promise<void>;
-    onSelectTask: (task: any) => void;
+    onSelectTask: (task: MiseEnPlaceTask) => void;
 }
 
 export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask }: MiseEnPlaceTabProps) {

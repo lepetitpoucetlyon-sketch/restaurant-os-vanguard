@@ -54,7 +54,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     const searchParams = useSearchParams();
     const hasInitialized = useRef(false);
-    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as any);
+    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom);
     
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
@@ -251,10 +251,10 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             return pin === '9999';
         },
         switchProfile: (uid: string) => console.log('Profile switch', uid),
-        updateUserStatus: async (id: string, data: any) => console.log('Update user', id, data),
-        addUser: async (data: any) => console.log('Add user', data),
+        updateUserStatus: async (id: string, status: 'active' | 'suspended' | 'on_leave') => console.log('Update user status', id, status),
+        addUser: async (data: Partial<User>) => console.log('Add user', data),
         deleteUser: async (id: string) => console.log('Delete user', id),
-        logAction: (action: string, metadata?: any) => console.log('Log action', action, metadata)
+        logAction: (action: string, metadata?: Record<string, unknown>) => console.log('Log action', action, metadata)
     }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.hasAccess, access.canDo, access.updateRolePermissions, access.getAccessibleCategories, login, logout]);
 
     const uiValue: NexusUIState = useMemo(() => ({
@@ -286,10 +286,10 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         unreadCount,
         notifications: notifications as any[],
         addNotification: (n) => addToast({ ...n, duration: 3000 } as any),
-        markAsRead: () => {},
-        markAllAsRead: () => {},
-        removeNotification: () => {},
-        clearAll: () => {}
+        markAsRead: (id: string) => console.log('Mark as read', id),
+        markAllAsRead: () => console.log('Mark all read'),
+        removeNotification: (id: string) => console.log('Remove notification', id),
+        clearAll: () => console.log('Clear all notifications')
     }), [unreadCount, notifications, addToast]);
 
     const themeValue: NexusTheme = useMemo(() => ({
@@ -344,7 +344,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
 
 
     return (
-        <NexusCoreContext.Provider value={contextValue as any}>
+        <NexusCoreContext.Provider value={contextValue}>
             {children}
         </NexusCoreContext.Provider>
     );

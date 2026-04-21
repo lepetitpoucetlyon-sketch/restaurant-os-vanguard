@@ -21,9 +21,10 @@ export async function processPaymentAction(tenantId: string, orderData: Partial<
     try {
         const result = await TransactionService.processPayment(tenantId, orderData.id);
         return result;
-    } catch (error: any) {
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Transaction failed. System integrity preserved.";
         logger.error(`[ServerAction] Transaction delegation failed!`, { error, orderId: orderData.id });
-        throw new Error(error.message || "Transaction failed. System integrity preserved.");
+        throw new Error(errorMessage);
     }
 }
 

@@ -5,7 +5,7 @@ export interface AgentRequest {
     domain: AgentDomain;
     userRole: AgentRole;
     userPrompt: string;
-    contextData?: any;
+    contextData?: unknown;
     apiKey: string;
     endpoint: string;
     modelId: string;

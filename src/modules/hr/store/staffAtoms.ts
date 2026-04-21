@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { createProxyDomain } from './nexusNodeFactory';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
 import { ShiftEntry } from '@/domain/schemas/hr';
 

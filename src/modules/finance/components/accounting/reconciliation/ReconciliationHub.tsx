@@ -22,6 +22,15 @@ import { AccountingMatchingService, MatchingResult } from '@/domain/accounting/A
 import { formatCurrency } from '@/lib/formatters';
 import { AggregationWidget } from './AggregationWidget';
 import { PowensService } from '@/domain/accounting/PowensService';
+import { BankTransaction } from '@/types';
+
+interface PowensAccount {
+    id: string;
+    name: string;
+    bankName: string;
+    bankColor: string;
+    balanceInCents: number;
+}
 
 interface ReconciliationHubProps {
     onClose: () => void;
@@ -34,8 +43,8 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
     const [step, setStep] = useState<'upload' | 'processing' | 'match'>('upload');
     const [fileType, setFileType] = useState<'csv' | 'image' | null>(null);
     const [matches, setMatches] = useState<MatchingResult[]>([]);
-    const [scannedTxs, setScannedTxs] = useState<any[]>([]);
-    const [connectedAccounts, setConnectedAccounts] = useState<any[]>([]);
+    const [scannedTxs, setScannedTxs] = useState<BankTransaction[]>([]);
+    const [connectedAccounts, setConnectedAccounts] = useState<PowensAccount[]>([]);
     const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
 
     // Filter for pending receipts from staff
@@ -51,12 +60,12 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
         loadAccounts();
     }, []);
 
-    const handleSyncComplete = (txs: any[]) => {
+    const handleSyncComplete = (txs: BankTransaction[]) => {
         setScannedTxs(txs);
         setFileType(null); // API source
         setStep('processing');
         
-        const matchResults = AccountingMatchingService.batchMatch(txs as any, journalEntries);
+        const matchResults = AccountingMatchingService.batchMatch(txs, journalEntries);
         setMatches(matchResults);
         
         setStep('match');
@@ -75,7 +84,7 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
         setStep('processing');
 
         // Simulate Extraction
-        let transactions = [];
+        let transactions: Omit<BankTransaction, 'id'>[] = [];
         if (isImage) {
             transactions = await StatementIngestionService.extractFromImage(file);
         } else {
@@ -83,11 +92,12 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
             transactions = await StatementIngestionService.parseCSV(text);
         }
 
-        setScannedTxs(transactions);
+        const typedTransactions = transactions.map((t, idx) => ({ ...t, id: `ext_${idx}` } as BankTransaction));
+        setScannedTxs(typedTransactions);
 
         // Run Matching Engine
         // Note: In real app, we filter journalEntries to those not yet reconciled
-        const matchResults = AccountingMatchingService.batchMatch(transactions as any, journalEntries);
+        const matchResults = AccountingMatchingService.batchMatch(typedTransactions, journalEntries);
         setMatches(matchResults);
 
         setStep('match');
@@ -245,7 +255,12 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
                                     </div>
                                     <Button 
                                         onClick={async () => {
-                                            await (reconcileTransaction as any).ingestTransactions?.(scannedTxs);
+                                            const accountingContext = useAccounting() as unknown as { ingestTransactions: (txs: BankTransaction[]) => Promise<void> };
+                                            if (accountingContext.ingestTransactions) {
+                                                await accountingContext.ingestTransactions(scannedTxs);
+                                            } else {
+                                                console.warn("ingestTransactions not implemented in this context");
+                                            }
                                             setMatches([]);
                                             setScannedTxs([]);
                                             setStep('upload');

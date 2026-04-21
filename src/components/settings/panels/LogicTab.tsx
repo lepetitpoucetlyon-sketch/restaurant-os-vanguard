@@ -11,8 +11,8 @@ import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput"
 
 interface LogicTabProps {
     filteredSettings: PageSettingConfig[];
-    localValues: Record<string, any>;
-    updateValue: (key: string, value: any) => void;
+    localValues: Record<string, unknown>;
+    updateValue: (key: string, value: unknown) => void;
 }
 
 export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTabProps) {

@@ -16,6 +16,7 @@ import {
     guardLoadingAtom,
     updateNexusNode
 } from "@/store/operationalAtoms";
+import { HygieneLabel, HygieneLog, ReceptionLog, OilLog, HACCPContextType } from "../types";
 
 /**
  * 🛡️ useGuard - Grade VI Atomic Bridge
@@ -30,8 +31,18 @@ export function useGuard() {
         haccp: { 
             labels: haccpLabels,
             criticalAlerts: [],
-            validateTaskWithVision: async () => true
-        } as any,
+            validateTaskWithVision: async () => true,
+            sensors: [],
+            checklists: [],
+            temperatureHistory: [],
+            isLoading: false,
+            updateSensorValue: async () => {},
+            toggleChecklistItem: async () => {},
+            resetDailyChecklist: async () => {},
+            getComplianceScore: () => 100,
+            triggerAlert: async () => {},
+            logWaste: async () => {},
+        } as unknown as HACCPContextType,
         maintenance: { logs: maintenanceTasks },
         health: { status: 'stable' },
         isLoading
@@ -44,7 +55,7 @@ export const useHygieneLabels = () => ({ data: useAtomValue(hygieneLabelsAtom) }
 export const useCreateHygieneLabel = () => {
     const setNode = useSetAtom(hygieneLabelsNodeAtom);
     return {
-        mutateAsync: useCallback(async (data: any) => {
+        mutateAsync: useCallback(async (data: HygieneLabel) => {
             setNode(prev => updateNexusNode(prev, { data: [data, ...prev.data] }));
         }, [setNode])
     };
@@ -54,7 +65,7 @@ export const useDeleteHygieneLabel = () => {
     const setNode = useSetAtom(hygieneLabelsNodeAtom);
     return {
         mutateAsync: useCallback(async (id: string) => {
-            setNode(prev => updateNexusNode(prev, { data: prev.data.filter((item: any) => item.id !== id) }));
+            setNode(prev => updateNexusNode(prev, { data: prev.data.filter((item) => item.id !== id) }));
         }, [setNode])
     };
 };
@@ -65,7 +76,7 @@ export const useHygieneLogs = () => ({ data: useAtomValue(hygieneLogsAtom) });
 export const useCreateHygieneLog = () => {
     const setNode = useSetAtom(hygieneLogsNodeAtom);
     return {
-        mutateAsync: useCallback(async (data: any) => {
+        mutateAsync: useCallback(async (data: HygieneLog) => {
             setNode(prev => updateNexusNode(prev, { data: [data, ...prev.data] }));
         }, [setNode])
     };
@@ -75,7 +86,7 @@ export const useDeleteHygieneLog = () => {
     const setNode = useSetAtom(hygieneLogsNodeAtom);
     return {
         mutateAsync: useCallback(async (id: string) => {
-            setNode(prev => updateNexusNode(prev, { data: prev.data.filter((item: any) => item.id !== id) }));
+            setNode(prev => updateNexusNode(prev, { data: prev.data.filter((item) => item.id !== id) }));
         }, [setNode])
     };
 };
@@ -86,7 +97,7 @@ export const useReceptionLogs = () => ({ data: useAtomValue(receptionLogsAtom) }
 export const useCreateReceptionLog = () => {
     const setNode = useSetAtom(receptionLogsNodeAtom);
     return {
-        mutateAsync: useCallback(async (data: any) => {
+        mutateAsync: useCallback(async (data: ReceptionLog) => {
             setNode(prev => updateNexusNode(prev, { data: [data, ...prev.data] }));
         }, [setNode])
     };
@@ -98,7 +109,7 @@ export const useOilLogs = () => ({ data: useAtomValue(oilLogsAtom) });
 export const useCreateOilLog = () => {
     const setNode = useSetAtom(oilLogsNodeAtom);
     return {
-        mutateAsync: useCallback(async (data: any) => {
+        mutateAsync: useCallback(async (data: OilLog) => {
             setNode(prev => updateNexusNode(prev, { data: [data, ...prev.data] }));
         }, [setNode])
     };

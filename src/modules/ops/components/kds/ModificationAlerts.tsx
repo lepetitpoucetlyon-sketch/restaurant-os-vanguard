@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { X, Check, AlertTriangle, ChefHat, Clock, User, Minus, Plus, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { OrderItemModification } from "@/types";
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { Order, OrderItem, OrderItemModification } from "@/modules/ops/types";
 
 interface ModificationAlertProps {
     modification: OrderItemModification;
@@ -197,13 +197,13 @@ interface ModificationAlertsPanelProps {
 }
 
 export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsPanelProps) {
-    const { data: orders, getPendingModifications, isLoading } = useOrders();
+    const { data: orders, getPendingModifications } = useOrders();
     const pendingModifications = getPendingModifications();
 
     // Get item details
-    const modificationsWithDetails = pendingModifications.map((mod: any) => {
-        const order = (orders || []).find((o: any) => o.id === mod.orderId);
-        const item = (order?.items || []).find((i: any) => i.id === mod.orderItemId);
+    const modificationsWithDetails = pendingModifications.map((mod: OrderItemModification) => {
+        const order = (orders || []).find((o: Order) => o.id === mod.orderId);
+        const item = (order?.items || []).find((i: OrderItem) => i.id === mod.orderItemId);
         return {
             modification: mod,
             itemName: item?.name || 'Unknown Item',

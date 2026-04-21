@@ -45,11 +45,11 @@ export function getTenantFirebase(tenantId: string): TenantFirebaseContext {
 
         const app = initializeApp(dummyConfig, tenantId);
         const fbFirestore = getFirestore(app);
-        (fbFirestore as any).isMock = true; // Flag for our contexts
+        (fbFirestore as Firestore & { isMock?: boolean }).isMock = true; // Flag for our contexts
 
         const mockContext: TenantFirebaseContext = {
             app,
-            firestore: fbFirestore as any,
+            firestore: fbFirestore,
             auth: getAuth(app),
             storage: getStorage(app),
         };

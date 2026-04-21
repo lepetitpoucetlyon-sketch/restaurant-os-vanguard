@@ -26,16 +26,15 @@ export class Slayer {
     /**
      * Traduit un objet brut (CSV/JSON) en structure compatible Nexus via une config.
      */
-    static mapLegacy(raw: Record<string, unknown>, config: SlayerMappingConfig): any {
+    static mapLegacy(raw: Record<string, unknown>, config: SlayerMappingConfig): Partial<Order> {
         return {
             id: String(raw[config.fields.id]),
-            total: typeof raw[config.fields.total] === 'number' 
+            totalInCents: typeof raw[config.fields.total] === 'number' 
                 ? raw[config.fields.total] as number
                 : parseFloat(DataDigester.decontaminate(String(raw[config.fields.total]))),
-            timestamp: String(raw[config.fields.date]),
-            items: (raw[config.fields.items || 'items'] as any[]) || [],
-            source: config.source,
-            customer: config.fields.customerName ? { firstName: String(raw[config.fields.customerName]), lastName: '' } : undefined
+            timestamp: new Date(String(raw[config.fields.date])),
+            items: (raw[config.fields.items || 'items'] as { id: string; name: string; quantity: number; priceInCents: number }[]) || [],
+            customerName: config.fields.customerName ? String(raw[config.fields.customerName]) : undefined
         };
     }
 
@@ -67,13 +66,13 @@ export class Slayer {
                         for (const legacy of chunk) {
                             try {
                                 // 1. NORMALISATION & DÉCONTAMINATION
-                                const rawOrder: any = {
+                                const rawOrder: Record<string, unknown> = {
                                     ...legacy,
-                                    source: (legacy as any).source || 'SLAYER_LEGACY',
-                                    tenantId: (legacy as any).tenantId || tenantId,
+                                    source: (legacy as Record<string, unknown>).source || 'SLAYER_LEGACY',
+                                    tenantId: (legacy as Record<string, unknown>).tenantId || tenantId,
                                     createdAt: legacy.timestamp || new Date().toISOString(),
                                     status: 'PAID', // Archives scellées par défaut
-                                    customer: (legacy as any).customer || { firstName: 'Legacy', lastName: 'Customer' }
+                                    customer: (legacy as Record<string, unknown>).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
                                 const nexusOrder = await DataDigester.digestOrder(rawOrder, { isLegacy: true });

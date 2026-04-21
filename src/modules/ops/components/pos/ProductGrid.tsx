@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Search } from "lucide-react";
 import { Product, Option } from "@/types";
 import { cn } from "@/lib/ui.foundations";
-import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from "@/store/posAtoms";
+import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from "@/modules/ops/store/posAtoms";
 import { performanceModeAtom } from "@/store/operationalAtoms";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
@@ -183,7 +183,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
 
         return products.filter(p => {
             const matchesSearch = p.name.toLowerCase().includes(query);
-            const matchesCategory = categoryFilter === "all" || (p as any).category === categoryFilter || (p as any).categoryId === categoryFilter;
+            const matchesCategory = categoryFilter === "all" || p.category === categoryFilter || p.categoryId === categoryFilter;
             return matchesSearch && matchesCategory;
         }).map(product => {
             // COMPLIANCE GUARD LOGIC

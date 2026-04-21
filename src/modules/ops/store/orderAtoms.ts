@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { Order, Table, Reservation, GroupEvent, OrderItem, OrderItemModification } from '@/types';
-import { createProxyDomain } from './nexusNodeFactory';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
 
 // --- 🛒 ORDERS & TABLES DOMAIN (Service room, KDS, Additions) ---
 

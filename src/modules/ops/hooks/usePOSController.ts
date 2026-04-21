@@ -24,8 +24,8 @@ export interface CartItem {
 
 export function usePOSController() {
     const { currentUser } = useAuth();
-    const { data: tables, updateTable } = useTables() as any;
-    const { addOrder } = useOrders() as any;
+    const { data: tables, updateTable } = useTables();
+    const { addOrder } = useOrders();
     const { data: products, isLoading: productsLoading } = useProducts();
     const { data: categories, isLoading: categoriesLoading } = useCategories();
 
@@ -56,16 +56,16 @@ export function usePOSController() {
 
     // --- ACTIONS ---
 
-    const handleAddToCart = useCallback((product: any, quantity: number, selectedOptions: any, note?: string) => {
+    const handleAddToCart = useCallback((product: Product, quantity: number, selectedOptions: Record<string, { name: string }[]>, note?: string) => {
         const cartId = `${product.id}-${Date.now()}`;
         const newItem: CartItem = {
             cartId,
             productId: product.id,
-            categoryId: product.categoryId,
+            categoryId: product.categoryId || 'uncategorized',
             name: product.name,
             priceInCents: product.priceInCents,
             quantity,
-            modifiers: Object.values(selectedOptions).flat().map((opt: any) => opt.name),
+            modifiers: Object.values(selectedOptions).flat().map((opt) => opt.name),
             notes: note
         };
         setCartItems(prev => [...prev, newItem]);
@@ -144,11 +144,12 @@ export function usePOSController() {
 
     // --- ORACLE AI INTEGRATION ---
     useEffect(() => {
-        const handleAIAction = (e: any) => {
-            const { name, args } = e.detail;
+        const handleAIAction = (e: Event) => {
+            const customEvent = e as CustomEvent<{ name: string; args: { tableNumber: string; productName: string; quantity: number; specialRequest?: string } }>;
+            const { name, args } = customEvent.detail;
 
             if (name === "addOrderItems" && selectedTableId) {
-                const aiTable = tables.find(t => t.number.toString() === args.tableNumber?.toString());
+                const aiTable = (tables as Table[]).find(t => t.number.toString() === args.tableNumber?.toString());
 
                 if (aiTable && aiTable.id === selectedTableId) {
                     const newItem: CartItem = {

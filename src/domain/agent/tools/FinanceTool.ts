@@ -4,9 +4,9 @@ import { User } from '@/types';
 export interface ToolDefinition {
     name: string;
     description: string;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
     category: string; // RBAC Category
-    execute: (args: any, user: User, context?: any) => Promise<any>;
+    execute: (args: any, user: User, context?: unknown) => Promise<unknown>;
 }
 
 export const FinanceTool: ToolDefinition = {

@@ -71,18 +71,18 @@ export default function StorageMapPage() {
     const highlightedLocationIds = useMemo(() => {
         if (!selectedIngredientId) return new Set<string>();
         return new Set(stockItems
-            .filter((s: any) => s.ingredientId === selectedIngredientId)
-            .map((s: any) => s.storageLocationId)
+            .filter((s) => s.ingredientId === selectedIngredientId)
+            .map((s) => s.storageLocationId)
         );
     }, [selectedIngredientId, stockItems]);
 
-    const expiringStock = (getExpiringStock as any)(2);
-    const expiringPreps = (getExpiringPreparations as any)(1);
+    const expiringStock = getExpiringStock(2);
+    const expiringPreps = getExpiringPreparations(1);
 
     // Ingredient filtering
     const ingredientCategories = useMemo(() => {
         const cats = new Set<string>();
-        (ingredients as any).forEach((ing: any) => cats.add(ing.category));
+        ingredients.forEach((ing) => cats.add(ing.category));
         return Array.from(cats).sort();
     }, [ingredients]);
 
@@ -124,8 +124,8 @@ export default function StorageMapPage() {
             const query = searchQuery.toLowerCase();
             locs = locs.filter(l =>
                 l.name.toLowerCase().includes(query) ||
-                stockItems.some((s: any) => s.storageLocationId === l.id && s.ingredientName.toLowerCase().includes(query)) ||
-                preparations.some((p: any) => p.storageLocationId === l.id && p.name.toLowerCase().includes(query))
+                stockItems.some((s) => s.storageLocationId === l.id && s.ingredientName.toLowerCase().includes(query)) ||
+                preparations.some((p) => p.storageLocationId === l.id && p.name.toLowerCase().includes(query))
             );
         }
         return locs;
@@ -140,8 +140,8 @@ export default function StorageMapPage() {
     const getLocationStats = (locationId: string) => {
         const stock = stockItems.filter(s => s.storageLocationId === locationId);
         const preps = preparations.filter(p => p.storageLocationId === locationId);
-        const expiring = expiringStock.filter((s: any) => s.storageLocationId === locationId).length +
-            expiringPreps.filter((p: any) => p.storageLocationId === locationId).length;
+        const expiring = expiringStock.filter((s: StockItem) => s.storageLocationId === locationId).length +
+            expiringPreps.filter((p: Preparation) => p.storageLocationId === locationId).length;
         return { stockCount: stock.length, prepCount: preps.length, expiringCount: expiring };
     };
 
@@ -151,7 +151,7 @@ export default function StorageMapPage() {
     } : null;
 
     const handleTransferStock = async (stockItemId: string, toLocationId: string) => {
-        await (transferStock as any)(stockItemId, toLocationId);
+        await transferStock(stockItemId, toLocationId);
         showToast('Stock transféré avec succès !', 'success');
     };
 
@@ -523,7 +523,7 @@ export default function StorageMapPage() {
                             onClose={() => setSelectedLocation(null)}
                             onTransferStock={handleTransferStock}
                             onTransferPreparation={handleTransferPreparation}
-                            allLocations={storageLocations as any}
+                            allLocations={storageLocations}
                         />
                     )}
                 </AnimatePresence>

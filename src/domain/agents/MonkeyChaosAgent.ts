@@ -75,9 +75,9 @@ export class MonkeyChaosAgent {
 
     private static injectSyncLatency() {
         // Simule un ralentissement du NexusBridge
-        (global as any).__NEXUS_LATENCY__ = 5000;
+        (global as typeof globalThis & { __NEXUS_LATENCY__?: number }).__NEXUS_LATENCY__ = 5000;
         logger.warn('🐌 [MonkeyChaos] Sync Latency injected (5000ms).');
-        setTimeout(() => (global as any).__NEXUS_LATENCY__ = 0, 15000);
+        setTimeout(() => (global as typeof globalThis & { __NEXUS_LATENCY__?: number }).__NEXUS_LATENCY__ = 0, 15000);
     }
 
     private static simulateGuardBypass() {

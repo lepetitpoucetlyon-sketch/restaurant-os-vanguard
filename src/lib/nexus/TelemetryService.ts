@@ -2,6 +2,24 @@ import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
 import { fiscalLedgerAtom } from '@/store/complianceAtoms';
 import { TelemetryPulse } from '@/shared/nexus-contract';
+import { FiscalSeal } from '@/types';
+
+interface BatteryManager {
+  level: number;
+  charging: boolean;
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
+}
+
+interface NetworkInformation extends EventTarget {
+  readonly effectiveType: string;
+}
+
+interface ExtendedNavigator extends Navigator {
+  getBattery?: () => Promise<BatteryManager>;
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+}
 
 /**
  * 💓 TelemetryService - The Nexus Heartbeat (Phase 3: Le Miroir)
@@ -39,9 +57,10 @@ export class TelemetryService {
 
       // 1. Gather Battery Info
       let batteryInfo = { level: 1, charging: true, supported: false };
-      if (typeof navigator !== 'undefined' && 'getBattery' in navigator) {
+      const extendedNav = navigator as ExtendedNavigator;
+      if (typeof extendedNav !== 'undefined' && extendedNav.getBattery) {
         try {
-          const battery = await (navigator as any).getBattery() as { level: number; charging: boolean };
+          const battery = await extendedNav.getBattery();
           batteryInfo = {
             level: battery.level,
             charging: battery.charging,
@@ -51,12 +70,12 @@ export class TelemetryService {
       }
 
       // 2. Gather NF525 Status
-      const fiscalData = this.store.get(fiscalLedgerAtom);
+      const fiscalData = this.store.get(fiscalLedgerAtom) as FiscalSeal[];
       const isSealed = Array.isArray(fiscalData) && fiscalData.length > 0;
-      const lastHash = isSealed ? (fiscalData[0] as any).hash : undefined;
+      const lastHash = isSealed ? fiscalData[0].hash : undefined;
 
       // Type-safe connection check
-      const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+      const connection = extendedNav.connection || extendedNav.mozConnection || extendedNav.webkitConnection;
       const effectiveType = connection?.effectiveType || 'unknown';
 
       const payload: TelemetryPulse = {

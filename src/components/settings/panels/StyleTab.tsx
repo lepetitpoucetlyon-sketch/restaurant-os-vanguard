@@ -12,8 +12,8 @@ import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput"
 
 interface StyleTabProps {
     filteredSettings: PageSettingConfig[];
-    localValues: Record<string, any>;
-    updateValue: (key: string, value: any) => void;
+    localValues: Record<string, unknown>;
+    updateValue: (key: string, value: unknown) => void;
 }
 
 export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTabProps) {
@@ -39,7 +39,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                         ].map((m) => (
                             <button
                                 key={m.id}
-                                onClick={() => theme.setMode(m.id as any)}
+                                onClick={() => theme.setMode(m.id as never)}
                                 className={cn(
                                     "flex flex-col items-center py-2 px-1 rounded-xl border-2 transition-all gap-1",
                                     theme.mode === m.id
@@ -113,7 +113,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                         ].map((r) => (
                             <button
                                 key={r.id}
-                                onClick={() => theme.setBorderRadius(r.id as any)}
+                                onClick={() => theme.setBorderRadius(r.id as never)}
                                 className={cn(
                                     "py-2 rounded-xl text-[8px] font-black uppercase tracking-widest border-2 transition-all",
                                     theme.borderRadius === r.id

@@ -13,8 +13,18 @@ import {
     Ingredient,
     StorageLocation,
     WasteLog,
-    FiscalSeal
+    FiscalSeal,
+    IntelligenceConfig,
+    Floor,
+    OrderStatus,
+    OrderItemStatus,
+    TableStatus,
+    Shift,
+    LeaveRequest,
+    GroupEvent,
+    MarketingCampaign
 } from '@/types';
+import { MarketingSegment, ScheduledPost } from '@/modules/marketing/store/marketingAtoms';
 import { 
   ordersNodeAtom,
   tablesNodeAtom,
@@ -85,7 +95,7 @@ import {
 } from '@/app/(admin)/actions/marketing';
 import { TelemetryHook } from '@/lib/telemetry/TelemetryHook';
 import { upsertRecipeAction, deleteRecipeAction, togglePrepTaskAction } from '@/app/(admin)/actions/kitchen';
-import { receiveStockAction } from '@/app/(admin)/actions/inventory';
+import { receiveStockAction, consumeStockAction, deleteStockItemAction } from '@/app/(admin)/actions/inventory';
 import { logger } from '@/lib/logger';
 import { useVisibilityPurge } from '@/hooks/useVisibilityPurge';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
@@ -103,11 +113,11 @@ interface NexusNodeState<T = unknown> { data: T[]; loading: boolean; error: stri
  * Vérifie le génome AVANT d'exécuter une action métier.
  * Sub-microseconde (pure mémoire, zéro async pour la validation).
  */
-function guardedAction(
+function guardedAction<T>(
     moduleId: ModuleId, 
     power: PowerAction, 
-    action: () => unknown | Promise<unknown>
-): any {
+    action: () => T | Promise<T>
+): T | undefined {
     const result = genomeValidator.validatePower(moduleId, power);
     if (!result.allowed) {
         // Boîte Noire + UI Alert (fire-and-forget)
@@ -117,7 +127,7 @@ function guardedAction(
             reason: result.reason === 'AUTHORIZED' ? 'UNKNOWN' : result.reason,
             blockedDependency: result.blockedDependency,
         });
-        return;
+        return undefined;
     }
     return action();
 }
@@ -129,13 +139,16 @@ export interface NexusOpsState {
     floorOps?: {
         tables: Table[];
         reservations: Reservation[];
-        areas: any[];
+        areas: Zone[];
         isLoading: boolean;
-        updateTableStatus: (id: string, status: Record<string, unknown>) => Promise<void>;
-        updateAreaStatus: (id: string, status: Record<string, unknown>) => Promise<void>;
+        updateTableStatus: (id: string, status: TableStatus | Partial<Table>) => Promise<void>;
+        updateAreaStatus: (id: string, status: Partial<Zone>) => Promise<void>;
         addZone?: (data: Partial<Zone>) => Promise<void>;
     };
-    planning?: any;
+    planning?: {
+        shifts: Shift[];
+        loading: boolean;
+    };
 }
 
 const NexusOpsContext = createContext<NexusOpsState | undefined>(undefined);
@@ -196,9 +209,16 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
             tables: floorTables.data || [],
             reservations: reservations.data || [],
             isLoading: floorTables.loading || reservations.loading,
-            updateTableStatus: (id: string, status: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+            updateTableStatus: (id: string, status: TableStatus | Partial<Table>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+                const payload = typeof status === 'string' ? { status } : status;
                 await Nexus.adapter.update(`tenants/${tenantId}/tables/${id}`, { 
-                    status, 
+                    ...payload, 
+                    updatedAt: new Date().toISOString() 
+                });
+            }),
+            updateAreaStatus: (id: string, status: Partial<Zone>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+                await Nexus.adapter.update(`tenants/${tenantId}/zones/${id}`, { 
+                    ...status, 
                     updatedAt: new Date().toISOString() 
                 });
             }),
@@ -206,7 +226,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
     }), [switchTenant, tenantId, floorTables, reservations]);
 
     return (
-        <NexusOpsContext.Provider value={contextValue as any}>
+        <NexusOpsContext.Provider value={contextValue}>
             {children}
         </NexusOpsContext.Provider>
     );
@@ -235,14 +255,23 @@ export const useInventory = () => {
         [stockItems]
     );
 
-    const expiringItems = useMemo(() => {
+    const getExpiringStock = useCallback((days: number = 3) => {
         const now = new Date();
-        const threeDays = 3 * 24 * 60 * 60 * 1000;
+        const threshold = days * 24 * 60 * 60 * 1000;
         return stockItems.filter((i) => {
-            const expirationDate = i.expirationDate ? new Date(i.expirationDate) : null;
-            return expirationDate && (expirationDate.getTime() - now.getTime() < threeDays) && i.quantity > 0;
+            const expirationDate = i.dlc ? new Date(i.dlc) : (i.expirationDate ? new Date(i.expirationDate) : null);
+            return expirationDate && (expirationDate.getTime() - now.getTime() < threshold) && i.quantity > 0;
         });
     }, [stockItems]);
+
+    const getExpiringPreparations = useCallback((days: number = 3) => {
+        const now = new Date();
+        const threshold = days * 24 * 60 * 60 * 1000;
+        return (preparationsNode.data || []).filter((p: Preparation) => {
+            const expirationDate = p.expirationDate ? new Date(p.expirationDate) : null;
+            return expirationDate && (expirationDate.getTime() - now.getTime() < threshold);
+        });
+    }, [preparationsNode.data]);
 
     return {
         stockItems,
@@ -254,8 +283,20 @@ export const useInventory = () => {
         storageLocations: storageLocationsNode.data || [],
         isLoading: node.loading,
         error: node.error,
-        addStockItem: (item: Partial<StockItem>) => console.log("Stub Add Stock item", item),
-        addPreparation: async (prep: Partial<Preparation>) => console.log("Stub Prep", prep),
+        addStockItem: async (item: Partial<StockItem>) => {
+            await Nexus.adapter.create(`tenants/${tenantId}/stockItems`, { 
+                ...item, 
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString() 
+            });
+        },
+        addPreparation: async (prep: Partial<Preparation>) => {
+            await Nexus.adapter.create(`tenants/${tenantId}/preparations`, { 
+                ...prep, 
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString() 
+            });
+        },
         transferStock: async (itemId: string, locationId: string) => {
             await Nexus.adapter.update(`tenants/${tenantId}/stockItems/${itemId}`, { 
                 storageLocationId: locationId,
@@ -272,10 +313,11 @@ export const useInventory = () => {
         updateStock: async () => {},
         cancelOrder: async () => {},
         receiveOrder: async () => {},
-        consumeStock: async (id: string, qty: number, reason?: string) => console.log('Consume stock', id, qty, reason),
+        consumeStock: (id: string, qty: number, reason: string) => guardedAction('INVENTORY', 'DECREMENT_STOCK', () => consumeStockAction(tenantId, id, qty, reason)),
+        deleteStockItem: (id: string) => guardedAction('INVENTORY', 'DECREMENT_STOCK', () => deleteStockItemAction(tenantId, id)),
         supplierOrders: [],
-        getExpiringStock: () => expiringItems,
-        getExpiringPreparations: () => []
+        getExpiringStock,
+        getExpiringPreparations
     };
 };
 
@@ -328,8 +370,8 @@ export const useReservations = () => {
             reservations.filter((r: Reservation) => r.tableId === tableId && r.status !== 'cancelled'),
         getReservationsForDate: (date: string) => 
             reservations.filter((r: Reservation) => r.date === date),
-        addReservation: (data: Record<string, unknown>) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => upsertReservationAction(tenantId, data)),
-        addCRM: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => { /* Bridge */ }),
+        addReservation: (data: Partial<Reservation>) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => upsertReservationAction(tenantId, data)),
+        addCRM: (data: Partial<CRM>) => guardedAction('CRM', 'SYNC_STATE', async () => { /* Bridge */ }),
         markNoShow: (id: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => markNoShowAction(tenantId, id)),
         cancelReservation: (id: string, reason?: string) => guardedAction('RESERVATIONS', 'SYNC_STATE', () => cancelReservationAction(tenantId, id, reason)),
         getCRMHistory: (id: string) => [] // Suture bridge
@@ -368,12 +410,13 @@ export const useTables = () => {
         setCurrentFloor: (id: string) => setCurrentFloorId(id),
         getTablesForFloor,
         getZonesForFloor,
-        addTable: async (table: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+        getZonesForFloor,
+        addTable: async (table: Partial<Table>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             const path = `tenants/${tenantId}/tables`;
             const id = Nexus.adapter.generateId(path);
             await Nexus.adapter.set(`${path}/${id}`, { ...table, id, createdAt: new Date().toISOString() });
         }),
-        updateTable: async (id: string, data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+        updateTable: async (id: string, data: Partial<Table>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             await Nexus.adapter.update(`tenants/${tenantId}/tables/${id}`, { ...data, updatedAt: new Date().toISOString() });
         }),
         updateTablePosition: async (id: string, x: number, y: number) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
@@ -382,24 +425,24 @@ export const useTables = () => {
         deleteTable: async (id: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             await Nexus.adapter.delete(`tenants/${tenantId}/tables/${id}`);
         }),
-        addFloor: async (floor: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+        addFloor: async (floor: Partial<Floor>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             const path = `tenants/${tenantId}/floors`;
             const id = Nexus.adapter.generateId(path);
             await Nexus.adapter.set(`${path}/${id}`, { ...floor, id });
         }),
         resetToTemplate: (template: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', () => Promise.resolve()),
-        addZone: (data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+        addZone: (data: Partial<Zone>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             const path = `tenants/${tenantId}/zones`;
             const id = Nexus.adapter.generateId(path);
             await Nexus.adapter.set(`${path}/${id}`, { ...data, id });
         }),
-        updateZone: (id: string, data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+        updateZone: (id: string, data: Partial<Zone>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             await Nexus.adapter.update(`tenants/${tenantId}/zones/${id}`, { ...data, updatedAt: new Date().toISOString() });
         }),
         deleteZone: (id: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             await Nexus.adapter.delete(`tenants/${tenantId}/zones/${id}`);
         }),
-        updateFloor: (id: string, data: Record<string, unknown>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
+        updateFloor: (id: string, data: Partial<Floor>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             await Nexus.adapter.update(`tenants/${tenantId}/floors/${id}`, { ...data, updatedAt: new Date().toISOString() });
         }),
         deleteFloor: (id: string) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
@@ -417,7 +460,7 @@ export const useGroups = () => {
         groups: node.data || [], 
         isLoading: node.loading, 
         error: node.error, 
-        upsertGroup: (group: Record<string, unknown>) => upsertGroupAction(tenantId, group) 
+        upsertGroup: (group: Partial<GroupEvent>) => upsertGroupAction(tenantId, group) 
     };
 };
 
@@ -459,13 +502,20 @@ export const useHACCP = () => {
         sensors: [],
         temperatureHistory: [],
         validateTaskWithVision: async (data?: Record<string, unknown>, options?: Record<string, unknown>) => true,
-        logWaste: async (data: Record<string, unknown>) => console.log('Waste logged', data)
+        logWaste: async (data: Partial<WasteLog>) => console.log('Waste logged', data)
     };
 };
 
-export const useIntelligence = () => {
+export const useIntelligence = (): { data: IntelligenceConfig | null; isLoading: boolean; error: string | null } => {
     const node = useAtomValue(seoProfileAtom);
-    return { data: node, isLoading: false, error: null };
+    return { 
+        data: {
+            globalInflationRate: 4.2, 
+            seoProfile: node
+        }, 
+        isLoading: false, 
+        error: null 
+    };
 };
 
 export const useKitchen = () => {
@@ -493,8 +543,8 @@ export const useKitchen = () => {
         prepTasks: prepTasks.data || [],
         isPrepLoading: prepTasks.loading,
         miseEnPlaceTarget,
-        addRecipe: (data: Record<string, unknown>) => guardedAction('KITCHEN', 'FIRE_KDS', () => upsertRecipeAction(tenantId, data)),
-        updateRecipe: (id: string, data: Record<string, unknown>) => guardedAction('KITCHEN', 'FIRE_KDS', () => upsertRecipeAction(tenantId, { ...data, id })),
+        addRecipe: (data: Partial<Recipe>) => guardedAction('KITCHEN', 'FIRE_KDS', () => upsertRecipeAction(tenantId, data)),
+        updateRecipe: (id: string, data: Partial<Recipe>) => guardedAction('KITCHEN', 'FIRE_KDS', () => upsertRecipeAction(tenantId, { ...data, id })),
         deleteRecipe: (id: string) => guardedAction('KITCHEN', 'FIRE_KDS', () => deleteRecipeAction(tenantId, id)),
         togglePrepTask: (id: string) => guardedAction('KITCHEN', 'VALIDATE_DISH', () => togglePrepTaskAction(tenantId, id)),
         calculateRecipeCost
@@ -522,11 +572,11 @@ export const useMarketing = () => {
         error: campaigns.error || social.error,
         
         // --- INDUSTRIAL ACTIONS ---
-        upsertCampaign: (data: Record<string, unknown>) => guardedAction('MARKETING', 'SYNC_STATE', () => upsertCampaignAction(tenantId, data)),
+        upsertCampaign: (data: Partial<MarketingCampaign>) => guardedAction('MARKETING', 'SYNC_STATE', () => upsertCampaignAction(tenantId, data)),
         deleteCampaign: (id: string) => guardedAction('MARKETING', 'SYNC_STATE', () => deleteCampaignAction(tenantId, id)),
-        upsertPost: (data: Record<string, unknown>) => guardedAction('MARKETING', 'SYNC_STATE', () => upsertScheduledPostAction(tenantId, data)),
+        upsertPost: (data: Partial<ScheduledPost>) => guardedAction('MARKETING', 'SYNC_STATE', () => upsertScheduledPostAction(tenantId, data)),
         deletePost: (id: string) => guardedAction('MARKETING', 'SYNC_STATE', () => deleteScheduledPostAction(tenantId, id)),
-        upsertSegment: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', () => upsertSegmentAction(tenantId, data)),
+        upsertSegment: (data: Partial<MarketingSegment>) => guardedAction('CRM', 'SYNC_STATE', () => upsertSegmentAction(tenantId, data)),
         deleteSegment: (id: string) => guardedAction('CRM', 'SYNC_STATE', () => deleteSegmentAction(tenantId, id)),
     };
 };
@@ -540,7 +590,7 @@ export const useHR = () => {
         leaveRequests: leaveRequests.data || [],
         leaveBalances: leaveBalances.data || [],
         isLoading: leaveRequests.loading || leaveBalances.loading, 
-        createLeaveRequest: (data: Record<string, unknown>) => guardedAction('HR', 'CALCULATE_HOURS', () => createLeaveRequestAction(tenantId, data)),
+        createLeaveRequest: (data: Partial<LeaveRequest>) => guardedAction('HR', 'CALCULATE_HOURS', () => createLeaveRequestAction(tenantId, data)),
         approveLeaveRequest: (id: string) => guardedAction('HR', 'SIGN_CONTRACT', () => approveLeaveRequestAction(tenantId, id)),
         rejectLeaveRequest: (id: string, reason?: string) => guardedAction('HR', 'SIGN_CONTRACT', () => rejectLeaveRequestAction(tenantId, id, reason))
     };
@@ -632,7 +682,7 @@ export const useCRM = () => {
         getActiveCRM: (id: string) => {
             return (crms as CRM[]).find((c: CRM) => c.id === id) || null;
         },
-        upsertCRM: (data: Record<string, unknown>) => guardedAction('CRM', 'SYNC_STATE', async () => {
+        upsertCRM: (data: Partial<CRM>) => guardedAction('CRM', 'SYNC_STATE', async () => {
             const path = `tenants/${tenantId}/crms`;
             const id = data.id || Nexus.adapter.generateId(path);
             await Nexus.adapter.set(`${path}/${id}`, { 

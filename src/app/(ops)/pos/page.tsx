@@ -12,7 +12,7 @@ import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/Toast";
-import { ShoppingCart, Plus, ArrowLeft, MoreHorizontal, LayoutGrid, Star, Pizza, UtensilsCrossed, GlassWater, Beef, Coffee, Zap } from "lucide-react";
+import { LucideIcon, ShoppingCart, Plus, ArrowLeft, MoreHorizontal, LayoutGrid, Star, Pizza, UtensilsCrossed, GlassWater, Beef, Coffee, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks";
 import { fabVariants, mobileSpring } from "@/lib/motion";
 import { BottomSheet } from "@/components/ui/BottomSheet";
@@ -23,7 +23,7 @@ import { usePOSController } from "@/hooks/usePOSController";
 import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, LucideIcon> = {
     all: Star,
     pizzas: Pizza,
     pastas: UtensilsCrossed,

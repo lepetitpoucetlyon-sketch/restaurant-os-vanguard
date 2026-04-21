@@ -3,7 +3,7 @@
  * Specific business data structures for services.
  */
 
-import { TransactionCategory, AccountSide } from './accounting.types';
+import { TransactionCategory, AccountSide } from '@/modules/finance/types';
 
 export interface ExpenseData {
     amountInCents: number;
@@ -12,7 +12,7 @@ export interface ExpenseData {
     timestamp?: string;
 }
 
-export interface SyncMessage<T = any> {
+export interface SyncMessage<T = unknown> {
     type: string;
     payload: T;
     timestamp: number;

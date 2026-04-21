@@ -50,7 +50,7 @@ export const QuantumCrypto = {
   /**
    * Verifies a quantum seal.
    */
-  verifySeal(seal: any, originalData: string): boolean {
+  verifySeal(seal: { version: string, hash: string, latticeSignature: string }, originalData: string): boolean {
     if (seal.version !== 'V5.5-PQ') return false;
     // ... validation logic
     return true;

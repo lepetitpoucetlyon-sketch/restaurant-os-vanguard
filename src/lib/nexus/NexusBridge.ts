@@ -10,6 +10,12 @@ import { db } from '@/lib/offline/offline-store';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
 
+interface LegacyTenantConfig {
+  features?: Record<string, boolean>;
+  layout?: string;
+  laws?: Record<string, boolean>;
+}
+
 /**
  * 🛰️ NexusBridge - The Command Omphalos
  * Establishes a real-time, resilient link between the MCC and the OS.
@@ -28,13 +34,13 @@ export class NexusBridge {
     console.log(`[NexusBridge] Initialisation de la suture pour ${tenantId}...`);
 
     // 1. Local-First Boot: Load from Dexie
-    const localConfig = await db.config.get(tenantId);
+    const localConfig = await db.config.get(tenantId) as (TenantConfig & LegacyTenantConfig) | undefined;
     if (localConfig) {
       console.log(`[NexusBridge] Config chargée depuis Dexie (Offline Resilience)`);
       this.store.set(tenantConfigAtom, {
         ...localConfig,
         // Ensure keys from Phase 1 exist if migrating from Grade VI
-        capabilities: localConfig.capabilities || (localConfig as any).features || {},
+        capabilities: localConfig.capabilities || localConfig.features || {},
         status: {
           ...DEFAULT_TENANT_CONFIG.status,
           ...localConfig.status,
@@ -62,7 +68,7 @@ export class NexusBridge {
 
     this.unsubscribe = onSnapshot(configDocRef, (snapshot) => {
       if (snapshot.exists()) {
-        const remoteData = snapshot.data() as any;
+        const remoteData = snapshot.data() as Partial<TenantConfig> & LegacyTenantConfig;
         
         // Grade VIII Mapping: Accept everything, map to core structure
         const nextConfig: TenantConfig = {
@@ -72,8 +78,8 @@ export class NexusBridge {
           status: { 
             ...RESTAURANT_FULL_DNA.status, 
             ...remoteData.status,
-            layoutType: remoteData.status?.layoutType || (remoteData as any).layout || RESTAURANT_FULL_DNA.status.layoutType,
-            businessLaws: remoteData.status?.businessLaws || (remoteData as any).laws || RESTAURANT_FULL_DNA.status.businessLaws
+            layoutType: remoteData.status?.layoutType || remoteData.layout || RESTAURANT_FULL_DNA.status.layoutType,
+            businessLaws: remoteData.status?.businessLaws || remoteData.laws || RESTAURANT_FULL_DNA.status.businessLaws
           },
           metadata: { ...RESTAURANT_FULL_DNA.metadata, ...remoteData.metadata },
         };

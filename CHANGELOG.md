@@ -1,5 +1,13 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.4.1] - 2026-04-21 - LA LIQUIDATION DE GRADE X 💎
+### 💎 SOUVERAINETÉ (TYPE-SAFETY PURGE)
+- **Éradication des "any"** : Purge systématique dans les modules `Finance`, `Kitchen`, `HACCP`, `Simulator` et `Analytics`.
+- **Généricité Nexus** : Migration des adaptateurs `Simulacra` et `NexusBridge` vers une généricité stricte `<T>`.
+- **Récupération des Fins de Services** : Suturation des hooks `useSettings`, `useGuard` et `useIntelligence` pour un typage domaine 100% souverain.
+- **Certification Runner** : Purification des mocks du banc de test industriel.
+
+
 ## [1.4.0] - 2026-04-21 - LA CONFÉDÉRATION SOUVERAINE 🏛️
 ### 🧩 MODULARISATION (HÉGÉMONIES SOVERAINES)
 - **Migration Confédérée** : Liquidation totale de `src/components`, `src/hooks`, `src/lib` et `src/types` au profit de modules isolés : `Finance`, `HR`, `HACCP`, `Inventory`, `Marketing`, `Ops`.

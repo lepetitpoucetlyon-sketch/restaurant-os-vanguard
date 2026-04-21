@@ -7,11 +7,12 @@ import { cn } from "@/lib/ui.foundations";;
 import { staggerContainer, staggerItem } from "@/lib/motion";
 import { Modal } from "@/components/ui/Modal";
 import { useUI } from "@/context/UIContext";
+import { Recipe, RecipeIngredient, RecipeStep } from "@/types";
 
 interface RecipeDetailDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    recipe: any;
+    recipe: Recipe;
 }
 
 export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDialogProps) {
@@ -112,19 +113,14 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                     animate="visible"
                                     className="grid grid-cols-1 gap-2"
                                 >
-                                    {(recipe.ingredients || [
-                                        { name: "Produit de saison", amount: 500, unit: "g" },
-                                        { name: "Beurre noisette", amount: 50, unit: "g" },
-                                        { name: "Fleur de sel", amount: 5, unit: "g" },
-                                        { name: "Assaisonnement chef", amount: 15, unit: "cl" }
-                                    ]).map((ing: any, i: number) => (
+                                    {(recipe.ingredients || []).map((ing: RecipeIngredient, i: number) => (
                                         <motion.li
                                             variants={staggerItem}
                                             key={i}
                                             className="flex items-center justify-between py-3 border-b group px-2 rounded-xl transition-all border-black/5 hover:bg-black/5"
                                         >
                                             <span className="text-[14px] font-medium transition-colors group-hover:text-accent text-zinc-700">{ing.name}</span>
-                                            <span className="text-[12px] font-mono font-bold px-3 py-1 rounded-lg border transition-colors text-zinc-500 bg-white/40 border-black/5">{ing.amount} {ing.unit}</span>
+                                            <span className="text-[12px] font-mono font-bold px-3 py-1 rounded-lg border transition-colors text-zinc-500 bg-white/40 border-black/5">{ing.quantity} {ing.unit}</span>
                                         </motion.li>
                                     ))}
                                 </motion.ul>
@@ -186,12 +182,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                 viewport={{ once: true, margin: "-100px" }}
                                 className="space-y-16"
                             >
-                                {(recipe.instructions || [
-                                    { step: "Préparation des éléments", text: "Commencer par peser rigoureusement chaque ingrédient. La précision est la clé de la régularité." },
-                                    { step: "Traitement primaire", text: "Nettoyer et tailler les légumes selon les spécifications techniques. Maintenir une température constante." },
-                                    { step: "Technique de cuisson", text: "Saisir à feu vif pour caraméliser les sucs, puis baisser l'intensité pour une cuisson à cœur homogène." },
-                                    { step: "Finitions & Dressage", text: "Rectifier l'assaisonnement. Dresser en respectant le volume et l'équilibre visuel défini." }
-                                ]).map((step: any, idx: number) => (
+                                {(recipe.steps || []).map((step: RecipeStep, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         variants={staggerItem}
@@ -201,9 +192,9 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                             {(idx + 1).toString().padStart(2, '0')}
                                         </div>
                                         <div className="space-y-4">
-                                            <h3 className="text-2xl font-serif font-black tracking-tight group-hover:text-accent transition-all duration-500 text-black">{step.step || `Étape ${idx + 1}`}</h3>
+                                            <h3 className="text-2xl font-serif font-black tracking-tight group-hover:text-accent transition-all duration-500 text-black">{`Étape ${idx + 1}`}</h3>
                                             <p className="text-lg leading-relaxed font-serif opacity-80 group-hover:opacity-100 transition-all text-zinc-600">
-                                                {step.text || step}
+                                                {step.instruction}
                                             </p>
 
                                             {step.tip && (

@@ -175,6 +175,11 @@ export interface QualityControl {
     notes?: string;
   };
   
+  // --- Grade X Sensory Audit ---
+  color_aspect?: boolean;
+  texture_aspect?: boolean;
+  odor_aspect?: boolean;
+
   items: QualityControlItem[];
   
   summary: {

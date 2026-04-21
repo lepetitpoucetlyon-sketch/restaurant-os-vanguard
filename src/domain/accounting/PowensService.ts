@@ -33,7 +33,7 @@ export class PowensService {
      * Step 2: Fetch Synced Accounts
      * Support for Multi-Bank entities with metadata.
      */
-    static async getAccounts(userToken: string): Promise<any[]> {
+    static async getAccounts(userToken: string): Promise<unknown[]> {
         genomeValidator.validatePower('ACCOUNTING', 'SYNC_STATE');
         try {
             logger.info('PowensService: Fetching connected accounts (Unified Dashboard)...');
@@ -48,7 +48,7 @@ export class PowensService {
     /**
      * Step 3: Fetch Transactions (Multi-Source)
      */
-    static async getTransactions(accountId: string, userToken: string): Promise<any[]> {
+    static async getTransactions(accountId: string, userToken: string): Promise<import('@/modules/finance/types').BankTransaction[]> {
         genomeValidator.validatePower('ACCOUNTING', 'GENERATE_FEC');
         try {
             logger.info(`PowensService: Fetching transitions for account ${accountId}...`);

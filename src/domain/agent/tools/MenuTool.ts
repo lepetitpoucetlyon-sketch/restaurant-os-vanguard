@@ -20,7 +20,7 @@ export const MenuTool: ToolDefinition = {
         required: ["productName"]
     },
     category: "inventory",
-    execute: async (args: { productName: string, newPrice?: number, newDescription?: string }, user: any) => {
+    execute: async (args: { productName: string, newPrice?: number, newDescription?: string }, user: import('@/types').User) => {
         try {
             const productsPath = getTenantPath('products');
             const results = await Nexus.adapter.query(productsPath, {
@@ -33,7 +33,7 @@ export const MenuTool: ToolDefinition = {
             }
 
             const product = results[0];
-            const updates: any = {};
+            const updates: Record<string, unknown> = {};
             if (args.newPrice !== undefined) updates.price = args.newPrice;
             if (args.newDescription) updates.description = args.newDescription;
             updates.updatedAt = new Date().toISOString();
@@ -46,9 +46,10 @@ export const MenuTool: ToolDefinition = {
                 success: true, 
                 message: `L'article '${args.productName}' a été mis à jour avec succès : ${args.newPrice ? `${args.newPrice}€` : ''} ${args.newDescription ? 'Description modifiée' : ''}` 
             };
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
             logger.error('MenuTool Error:', error);
-            return { error: `Échec de la mise à jour : ${error.message}` };
+            return { error: `Échec de la mise à jour : ${errorMessage}` };
         }
     }
 };

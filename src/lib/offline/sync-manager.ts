@@ -53,13 +53,14 @@ export class SyncManager {
                 // Mark as synced and delete from queue if successful
                 await db.syncQueue.delete(op.id!);
                 logger.info('SyncManager: Operation synced and removed', { id: op.id, type: op.type });
-            } catch (error: any) {
-                logger.error('SyncManager: Sync failed for operation', { id: op.id, error: error.message });
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                logger.error('SyncManager: Sync failed for operation', { id: op.id, error: errorMessage });
                 
                 await db.syncQueue.update(op.id!, {
                     status: 'failed',
                     attempts: op.attempts + 1,
-                    lastError: error.message
+                    lastError: errorMessage
                 });
 
                 // Si c'est une erreur de connexion, on arrête la boucle

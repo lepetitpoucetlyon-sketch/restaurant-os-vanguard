@@ -19,13 +19,11 @@ export function useFiscal() {
     const ledgerEntries = node.data || [];
     const isLoading = node.loading;
 
-    // Filter seals for audit
-    const fiscalSeals = useMemo(() => 
-        ledgerEntries.filter((e: any) => e.fiscalSeal).map((e: any) => e.fiscalSeal),
-    [ledgerEntries]);
+    // The ledger entries are the seals themselves in Grade X
+    const fiscalSeals = ledgerEntries;
 
     // Action: Submit Expense
-    const submitExpense = useCallback(async (expenseData: any) => {
+    const submitExpense = useCallback(async (expenseData: Partial<import("../types").ExpenseClaim>) => {
         if (!activeTenantId || !currentUser) {
             throw new Error("Cannot submit expense: No active tenant ID or User session.");
         }

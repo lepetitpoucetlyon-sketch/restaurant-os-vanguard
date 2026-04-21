@@ -10,12 +10,13 @@ import { revalidatePath } from 'next/cache';
  */
 
 import { ReservationService } from '@/domain/services/ReservationService';
+import { Reservation, ReservationStatus } from '@/modules/ops/reservations.types';
 
 /**
  * 📅 Reservations Actions - Restaurant OS
  */
 
-export async function upsertReservationAction(tenantId: string, data: any) {
+export async function upsertReservationAction(tenantId: string, data: Partial<Reservation>) {
     if (!tenantId) throw new Error("Tenant ID is required for reservation actions.");
     
     // 1. Validate Business Rules
@@ -63,7 +64,7 @@ export async function deleteReservationAction(tenantId: string, reservationId: s
     
     try {
         const reservationPath = `tenants/${tenantId}/reservations/${reservationId}`;
-        const reservation = await Nexus.adapter.get(reservationPath) as any;
+        const reservation = await Nexus.adapter.get<Reservation>(reservationPath);
         const batch = Nexus.adapter.batch();
         batch.delete(reservationPath);
         if (reservation?.tableId) {
@@ -123,11 +124,11 @@ export async function cancelReservationAction(tenantId: string, reservationId: s
     }
 }
 
-export async function createReservationAction(tenantId: string, data: any) {
+export async function createReservationAction(tenantId: string, data: Partial<Reservation>) {
     return upsertReservationAction(tenantId, data);
 }
 
-export async function updateReservationStatusAction(tenantId: string, reservationId: string, status: string) {
+export async function updateReservationStatusAction(tenantId: string, reservationId: string, status: ReservationStatus) {
     logger.info(`[Reservations] Updating status of ${reservationId} to ${status}`);
     try {
         const reservationPath = `tenants/${tenantId}/reservations/${reservationId}`;

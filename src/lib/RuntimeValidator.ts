@@ -11,7 +11,7 @@ export const RuntimeValidator = {
    * Asserts that the data matches the expected Branded Schema.
    * If failure: Quarantine and return null (Safe-Fail).
    */
-  validate<T>(data: any, schema: 'Cents' | 'Quantity' | 'Rate'): T | null {
+  validate<T>(data: unknown, schema: 'Cents' | 'Quantity' | 'Rate'): T | null {
     try {
       switch (schema) {
         case 'Cents': 
@@ -24,10 +24,11 @@ export const RuntimeValidator = {
           if (typeof data !== 'number' || data < 0 || data > 1) throw new Error('Invalid Rate');
           return data as unknown as T;
         default:
-          return data;
+          return data as T;
       }
-    } catch (e: any) {
-      logger.error(`[RuntimeValidator] QUARANTINE: ${e.message}`, { data });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      logger.error(`[RuntimeValidator] QUARANTINE: ${message}`, { data });
       // In production, this would trigger an audit log to the MasterBridge
       return null;
     }
@@ -36,14 +37,15 @@ export const RuntimeValidator = {
   /**
    * Batch validation for whole entities
    */
-  validateOrder(orderData: any) {
+  validateOrder(orderData: Record<string, unknown>) {
+    const items = Array.isArray(orderData.items) ? orderData.items : [];
     return {
       ...orderData,
-      totalInCents: (this.validate as any)(orderData.totalInCents, 'Cents'),
-      items: (orderData.items || []).map((item: any) => ({
+      totalInCents: this.validate<Cents>(orderData.totalInCents, 'Cents'),
+      items: items.map((item: Record<string, unknown>) => ({
         ...item,
-        priceInCents: (this.validate as any)(item.priceInCents, 'Cents'),
-        quantity: (this.validate as any)(item.quantity, 'Quantity')
+        priceInCents: this.validate<Cents>(item.priceInCents, 'Cents'),
+        quantity: this.validate<Quantity>(item.quantity, 'Quantity')
       }))
     };
   }

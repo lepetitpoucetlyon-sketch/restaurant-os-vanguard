@@ -11,7 +11,7 @@ export type ZoneColor = 'emerald' | 'blue' | 'purple' | 'amber' | 'cyan' | 'rose
 export interface ZoneConfig {
     id: string;
     label: string;
-    icon: any; 
+    icon: React.ElementType; 
     color: ZoneColor;
     tasks: CleaningTask[];
 }
@@ -77,8 +77,11 @@ export interface MaintenanceLog {
 export interface SensorReading {
     id: string;
     name: string;
+    sensorId?: string;
     type: 'temperature' | 'humidity' | 'air_quality';
     value: number;
     unit: string;
     status: 'normal' | 'warning' | 'alert';
+    timestamp?: string;
+    isAnomaly?: boolean;
 }

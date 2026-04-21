@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { TrendingUp, TrendingDown, Package, ShieldCheck, Truck, CheckCircle2, Clock, ChefHat, ArrowDownLeft, AlertTriangle, Search, Filter, Plus, FileDown, MoreVertical, SearchIcon, ChevronRight, User, Layers, BookOpen, PackageCheck, XCircle, RefreshCw, Trash2, MapPin, Thermometer, Calendar, ArrowRight, Apple, Milk, Flame, Bird, Fish, Beef, Sandwich, Box, Droplets, Droplet, Coffee, Wine, GlassWater, Snowflake } from "lucide-react";
+import { TrendingUp, TrendingDown, Package, ShieldCheck, Truck, CheckCircle2, Clock, ChefHat, ArrowDownLeft, AlertTriangle, Search, Filter, Plus, FileDown, MoreVertical, SearchIcon, ChevronRight, User, Layers, BookOpen, PackageCheck, XCircle, RefreshCw, Trash2, MapPin, Thermometer, Calendar, ArrowRight, Apple, Milk, Flame, Bird, Fish, Beef, Sandwich, Box, Droplets, Droplet, Coffee, Wine, GlassWater, Snowflake, LucideIcon } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";;
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { ExpertHub } from "@/modules/marketing/components/agency/ExpertHub";
-import { SupplierOrder, SupplierOrderStatus } from "@/types";
+import { SupplierOrder, SupplierOrderStatus, StockItem, Preparation } from "@/types";
 import { useToast } from "@/components/ui/Toast";
 import { useUI } from "@/context/UIContext";
 import { StockReceptionModal, CreatePreparationModal, StockTransferModal } from "@/components/inventory";
@@ -17,7 +17,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
-import { useIntelligence } from "@/context/IntelligenceContext";
+import { useIntelligence } from "@/engines/ops/NexusOpsProvider";
 import { InventoryService } from "@/lib/inventory-service";
 import { Zap, Sparkles, ScanText } from "lucide-react";
 import { VisionScanner } from "@/components/shared/VisionScanner";
@@ -42,7 +42,7 @@ const CATEGORY_LABELS: Record<string, string> = {
     other: 'Autre'
 };
 
-const CATEGORY_ICONS: Record<string, any> = {
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
     produce: Apple,
     dairy: Milk,
     meat: Flame,
@@ -95,10 +95,11 @@ export default function InventoryPage() {
     }, [lowStockItems]);
 
     const { showToast } = useToast();
-    const { globalInflationRate } = useIntelligence();
+    const { data: config } = useIntelligence();
+    const globalInflationRate = config?.globalInflationRate || 0;
 
     const stockValuation = useMemo(() => InventoryService.calculateStockValuation(stockItems), [stockItems]);
-    const inflationImpact = useMemo(() => InventoryService.getReplacementCostImpact(stockValuation, (globalInflationRate as number) || 0), [stockValuation, globalInflationRate]);
+    const inflationImpact = useMemo(() => InventoryService.getReplacementCostImpact(stockValuation, globalInflationRate || 0), [stockValuation, globalInflationRate]);
 
     // Dispatch AI Context
     useEffect(() => {
@@ -124,7 +125,7 @@ export default function InventoryPage() {
 
     // Filter stock items
     const filteredStockItems = useMemo(() => {
-        let items = (stockItems as any).filter((s: any) => s.status !== 'expired' && s.quantity > 0);
+        let items = (stockItems as StockItem[]).filter((s: StockItem) => s.status !== 'expired' && (s.quantity || 0) > 0);
         if (searchQuery) items = items.filter(s => s.ingredientName.toLowerCase().includes(searchQuery.toLowerCase()));
         if (filterCategory) items = items.filter(s => s.category === filterCategory);
         return items.sort((a, b) => new Date(a.dlc).getTime() - new Date(b.dlc).getTime());
@@ -132,7 +133,7 @@ export default function InventoryPage() {
 
     // Filter preparations
     const filteredPreparations = useMemo(() => {
-        let preps = (preparations as any).filter((p: any) => p.status !== 'discarded' && p.status !== 'expired');
+        let preps = (preparations as Preparation[]).filter((p: Preparation) => p.status !== 'discarded' && p.status !== 'expired');
         if (searchQuery) preps = preps.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
         return preps.sort((a, b) => new Date(a.dlc).getTime() - new Date(b.dlc).getTime());
     }, [preparations, searchQuery]);
@@ -236,14 +237,14 @@ export default function InventoryPage() {
                         </div>
                     </div>
 
-                    {((globalInflationRate as number) || 0) > 0 && (
+                    {(globalInflationRate || 0) > 0 && (
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="p-6 bg-error/5 rounded-[2rem] border border-error/20 backdrop-blur-xl"
                         >
                             <div className="flex justify-between items-center mb-2">
-                                <p className="text-[9px] font-black text-error uppercase tracking-[0.2em]">Surcoût Réappro (Inflation {globalInflationRate as any}%)</p>
+                                <p className="text-[9px] font-black text-error uppercase tracking-[0.2em]">Surcoût Réappro (Inflation {globalInflationRate}%)</p>
                                 <Zap className="w-4 h-4 text-error animate-pulse" />
                             </div>
                             <div className="text-3xl font-serif font-black italic text-error">

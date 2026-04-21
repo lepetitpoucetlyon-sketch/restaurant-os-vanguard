@@ -37,6 +37,11 @@ export const ExternalOrderSchema = z.object({
   status: z.enum(['PENDING', 'ACCEPTED', 'READY', 'DELIVERED', 'CANCELLED', 'PAID']),
   createdAt: z.string().datetime(),
   tenantId: z.string(),
+  _metadata: z.object({
+    isLegacy: z.boolean().optional(),
+    ingestedAt: z.string().optional(),
+    engine: z.string().optional()
+  }).optional()
 });
 
 export type ExternalOrder = z.infer<typeof ExternalOrderSchema>;
@@ -74,28 +79,27 @@ export class DataDigester {
       const sanitized = {
         ...rawData,
         total: this.resolvePrice(rawData.total),
-        items: Array.isArray(rawData.items) ? rawData.items.map((item: any) => ({
+        items: Array.isArray(rawData.items) ? (rawData.items as Record<string, unknown>[]).map((item) => ({
           ...item,
           price: this.resolvePrice(item.price),
-          options: Array.isArray(item.options) ? item.options.map((opt: any) => ({
+          options: Array.isArray(item.options) ? (item.options as Record<string, unknown>[]).map((opt) => ({
             ...opt,
             price: opt.price ? this.resolvePrice(opt.price) : undefined
           })) : []
         })) : []
       };
 
-      logger.info('[DataDigester] Starting ingestion...', { source: (sanitized as any).source, isLegacy: !!options.isLegacy });
-      const validatedOrder = ExternalOrderSchema.parse(sanitized);
+      logger.info('[DataDigester] Starting ingestion...', { source: sanitized.source as string, isLegacy: !!options.isLegacy });
       
-      // Tag legacy data to prevent NF525 pollution in active ledger
       if (options.isLegacy) {
-        (validatedOrder as any)._metadata = { 
+        sanitized._metadata = { 
             isLegacy: true, 
             ingestedAt: new Date().toISOString(),
             engine: 'Slayer-2.0'
         };
       }
 
+      const validatedOrder = ExternalOrderSchema.parse(sanitized);
       return validatedOrder;
     } catch (error) {
       if (error instanceof z.ZodError) {

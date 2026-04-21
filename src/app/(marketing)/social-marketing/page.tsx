@@ -15,10 +15,13 @@ import { CampaignCard } from "@/modules/marketing/components/marketing/CampaignC
 import { SegmentCard } from "@/modules/marketing/components/marketing/SegmentCard";
 import { NewPostModal } from "@/modules/marketing/components/marketing/NewPostModal";
 import { NewCampaignModal } from "@/modules/marketing/components/marketing/NewCampaignModal";
+import { SocialAccount, ScheduledPost, MarketingSegment } from "@/modules/marketing/store/marketingAtoms";
+import { MarketingCampaign } from "@/types/marketing.types";
+import { LucideIcon } from "lucide-react";
 
 import { useMarketing } from "@/engines/ops/NexusOpsProvider";
 
-const PLATFORM_ICONS: Record<string, any> = {
+const PLATFORM_ICONS: Record<string, LucideIcon> = {
     instagram: Instagram,
     facebook: Facebook,
     twitter: Share2, // Fallback
@@ -51,7 +54,7 @@ export default function SocialMarketingPage() {
     const [showNewCampaign, setShowNewCampaign] = useState(false);
 
     // Map real social accounts to UI format
-    const enrichedAccounts = (socialAccounts || []).map((acc: any) => ({
+    const enrichedAccounts = (socialAccounts || []).map((acc: SocialAccount) => ({
         ...acc,
         icon: PLATFORM_ICONS[(acc.platform as string)?.toLowerCase()] || Share2,
         color: PLATFORM_COLORS[(acc.platform as string)?.toLowerCase()] || '#888888',
@@ -60,10 +63,10 @@ export default function SocialMarketingPage() {
 
     // Scheduled posts would normally come from marketing state too, but let's assume they are handled via a common collection or subcollection
     // For now, if profile has posts, use them, otherwise empty
-    const scheduledPosts = (profile as any)?.scheduledPosts || [];
+    const scheduledPosts = (profile as any)?.scheduledPosts as ScheduledPost[] || [];
 
     // Customer segments derived from profile or local state
-    const customerSegments = (profile as any)?.customerSegments || [];
+    const customerSegments = (profile as any)?.customerSegments as MarketingSegment[] || [];
 
     return (
         <div className="relative min-h-screen bg-bg-primary/50 text-text-primary p-6 md:p-10 font-sans overflow-hidden">
@@ -107,7 +110,7 @@ export default function SocialMarketingPage() {
                         <motion.div key="social" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {enrichedAccounts.length > 0 ? (
-                                    enrichedAccounts.map((acc: any) => <SocialAccountCard key={acc.id} account={acc} />)
+                                    enrichedAccounts.map((acc) => <SocialAccountCard key={acc.id} account={acc} />)
                                 ) : (
                                     <p className="text-text-muted italic">Aucun compte social connecté.</p>
                                 )}
@@ -121,7 +124,7 @@ export default function SocialMarketingPage() {
                                 </div>
                                 <div className="space-y-4">
                                     {scheduledPosts.length > 0 ? (
-                                        scheduledPosts.map((post: any) => <ScheduledPostItem key={post.id} post={post} socialAccounts={enrichedAccounts} />)
+                                        scheduledPosts.map((post) => <ScheduledPostItem key={post.id} post={post} socialAccounts={enrichedAccounts} />)
                                     ) : (
                                         <p className="text-text-muted text-center py-10">Aucune publication programmée.</p>
                                     )}
@@ -157,7 +160,7 @@ export default function SocialMarketingPage() {
                                 </div>
                                 <div className="space-y-4">
                                     {campaigns.length > 0 ? (
-                                        campaigns.map((c: any) => <CampaignCard key={c.id} campaign={c} />)
+                                        campaigns.map((c: MarketingCampaign) => <CampaignCard key={c.id} campaign={c} />)
                                     ) : (
                                         <p className="text-text-muted italic">Aucune campagne active.</p>
                                     )}
@@ -168,7 +171,7 @@ export default function SocialMarketingPage() {
 
                     {activeTab === 'segments' && (
                         <motion.div key="segments" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {customerSegments.map((s: any) => <SegmentCard key={s.id} segment={s} />)}
+                            {customerSegments.map((s) => <SegmentCard key={s.id} segment={s} />)}
                             <button onClick={() => showToast("Fonctionnalité à venir", "info")} className="group flex flex-col items-center justify-center gap-6 border-2 border-dashed border-text-muted/20 hover:border-text-primary/50 rounded-[2.5rem] p-8 transition-all min-h-[300px]">
                                 <div className="w-20 h-20 rounded-full bg-bg-tertiary flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Plus size={32} className="text-text-muted group-hover:text-text-primary" />

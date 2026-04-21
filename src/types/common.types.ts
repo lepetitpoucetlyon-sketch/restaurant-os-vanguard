@@ -63,6 +63,7 @@ export interface RecipeStep {
 export interface Product {
     id: string;
     category: string;
+    categoryId?: string;
     name: string;
     priceInCents: number;
     color: string;
@@ -105,7 +106,31 @@ export interface Recipe {
     color: string;
     isActive: boolean;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt: string;
+}
+
+import { SEOProfile } from '@/modules/marketing/seo.types';
+import { FleetInsight } from '@/domain/services/MacroBrain';
+
+/**
+ * 🧠 IntelligenceConfig - Grade VI Atomic Bridge
+ * Centralizes the configuration for the system's strategic engine.
+ */
+export interface IntelligenceConfig {
+    globalInflationRate: number;
+    setGlobalInflationRate?: (rate: number) => void;
+    insights?: FleetInsight[];
+    seoProfile?: SEOProfile;
+    scenarios?: SimulationScenario[];
+    financialInsight?: {
+        revenue: number;
+        foodCostPercent: number;
+        laborCostPercent: number;
+        primeCost: number;
+    } | null;
+    runSimulation?: (config: Partial<SimulationScenario>) => Promise<void>; 
+    predictSignatureChance?: (quote: Quote, inflation?: number) => number;
+    predictLaborCost?: (shift: import('./auth.types').User) => number; // Using User as a proxy for shift logic if Shift not defined
 }
 
 export interface RecipeContextType {
@@ -127,10 +152,10 @@ export interface RecipeContextType {
     ingredients: Ingredient[]; 
     
     expert: {
-        queryExpert: (prompt: string, contextData?: Record<string, any>) => Promise<{
+        queryExpert: (prompt: string, contextData?: Record<string, unknown>) => Promise<{
             response: string;
             suggestions?: string[];
-            metadata?: Record<string, any>;
+            metadata?: Record<string, unknown>;
         }>;
         isConfigured: boolean;
         isAuthorized: boolean;
@@ -138,7 +163,7 @@ export interface RecipeContextType {
         modelId: string;
     };
     agent: {
-        query: (prompt: string, context?: Record<string, any>) => Promise<{
+        query: (prompt: string, context?: Record<string, unknown>) => Promise<{
             answer: string;
             confidence: number;
             source?: string;

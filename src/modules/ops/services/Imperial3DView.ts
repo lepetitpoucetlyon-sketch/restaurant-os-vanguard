@@ -1,4 +1,4 @@
-import { logger } from './logger';
+import { logger } from '@/lib/logger';
 
 /**
  * 👁️ Imperial3DView - Restaurant OS (Darwin V5.5 Master Code)

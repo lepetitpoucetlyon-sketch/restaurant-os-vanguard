@@ -14,7 +14,7 @@ export default function MigrationSettings() {
     
     const [activeTab, setActiveTab] = useState<'menu' | 'staff' | 'customer' | 'seed'>('menu');
     const [rawMenuText, setRawMenuText] = useState("");
-    const [parsedMenuData, setParsedMenuData] = useState<any>(null);
+    const [parsedMenuData, setParsedMenuData] = useState<{ categories: { id: string; name: string }[]; products: { name: string; description: string; priceInCents: number; categoryId: string; categoryName?: string }[] } | null>(null);
 
     // AI MENU DETECTION HANDLER
     const handleMenuAnalysis = async () => {
@@ -23,8 +23,9 @@ export default function MigrationSettings() {
             const data = await analyzeMenuWithAI(rawMenuText);
             setParsedMenuData(data);
             showToast("Menu analysé avec succès. Veuillez vérifier les données.", "success");
-        } catch (err: any) {
-            showToast(`Erreur d'analyse: ${err.message}`, "error");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            showToast(`Erreur d'analyse: ${message}`, "error");
         }
     };
 
@@ -35,8 +36,9 @@ export default function MigrationSettings() {
             showToast("Menu injecté dans la base de données !", "success");
             setParsedMenuData(null);
             setRawMenuText("");
-        } catch (err: any) {
-            showToast(`Erreur d'injection: ${err.message}`, "error");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            showToast(`Erreur d'injection: ${message}`, "error");
         }
     };
 
@@ -53,8 +55,9 @@ export default function MigrationSettings() {
             } else {
                 showToast("Fichier vide ou mal formaté.", "warning");
             }
-        } catch (err: any) {
-            showToast(`Erreur de lecture CSV: ${err.message}`, "error");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            showToast(`Erreur de lecture CSV: ${message}`, "error");
         }
         
         // Reset input
@@ -65,8 +68,9 @@ export default function MigrationSettings() {
         try {
             await seedProduction();
             showToast("Système ressuscité ! Les données de production sont en ligne.", "success");
-        } catch (err: any) {
-            showToast(`Échec de la résurrection: ${err.message}`, "error");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            showToast(`Échec de la résurrection: ${message}`, "error");
         }
     };
 
@@ -105,7 +109,7 @@ export default function MigrationSettings() {
                 ].map((tab) => (
                     <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id as any)}
+                        onClick={() => setActiveTab(tab.id as 'menu' | 'staff' | 'customer' | 'seed')}
                         className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider transition-all ${activeTab === tab.id ? 'bg-bg-primary text-text-primary shadow-sm border border-border' : 'text-text-muted hover:text-text-primary'}`}
                     >
                         <tab.icon className="w-4 h-4" />
@@ -169,11 +173,11 @@ export default function MigrationSettings() {
                                          <h4 className="font-bold text-sm uppercase tracking-widest text-text-primary">Aperçu Base de Données</h4>
                                          <span className="text-xs bg-success/20 text-success px-2 py-1 rounded font-bold">{parsedMenuData.products?.length} Plats trouvés</span>
                                     </div>
-                                    {parsedMenuData.categories?.map((cat: any) => (
+                                    {parsedMenuData.categories?.map((cat: { id: string; name: string }) => (
                                         <div key={cat.id} className="mb-6">
                                             <h5 className="font-bold text-accent text-sm mb-3 uppercase tracking-wider">{cat.name}</h5>
                                             <div className="space-y-2">
-                                                {parsedMenuData.products?.filter((p: any) => p.categoryId === cat.id).map((prod: any, idx: number) => (
+                                                {parsedMenuData.products?.filter((p: { categoryId: string }) => p.categoryId === cat.id).map((prod: { name: string; description: string; priceInCents: number }, idx: number) => (
                                                     <div key={idx} className="flex justify-between items-center bg-bg-secondary p-3 rounded-lg border border-border text-sm">
                                                         <div>
                                                             <p className="font-bold text-text-primary">{prod.name}</p>

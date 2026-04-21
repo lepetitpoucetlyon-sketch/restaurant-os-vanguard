@@ -31,7 +31,7 @@ export const ImmunityAuditLogger = {
 
     // 1. Persistance Dexie (inaltérable localement)
     try {
-      await db.immunityLogs.add(fullEntry as any);
+      await db.immunityLogs.add(fullEntry);
     } catch (error) {
       logger.error('[ImmunityAudit] Échec d\'écriture Dexie', error);
     }

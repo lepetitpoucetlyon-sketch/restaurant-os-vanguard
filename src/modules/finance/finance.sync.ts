@@ -3,7 +3,7 @@ import { FiscalSeal, JournalEntry } from '@/types';
 import { 
     fiscalLedgerNodeAtom, 
     updateNexusNode 
-} from '../store/accountingAtoms';
+} from '@/modules/haccp/store/complianceAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
@@ -28,7 +28,7 @@ export const FinanceSyncService = {
     this.private_listeners.fiscal = Nexus.adapter.onSnapshot(
       path('fiscalLedger'),
       async (data: FiscalSeal[]) => {
-        store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: data as unknown as JournalEntry[], loading: false }));
+        store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
         // Secure in local storage
         await db.fiscalSeals.bulkPut(data);
       },
@@ -47,7 +47,7 @@ export const FinanceSyncService = {
     try {
       const seals = await db.fiscalSeals.toArray();
       if (seals.length > 0) {
-        store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: seals as unknown as JournalEntry[], loading: false }));
+        store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: seals as FiscalSeal[], loading: false }));
       }
     } catch (error) {
       logger.error('[FinanceSync] Local Hydration Failed', error);

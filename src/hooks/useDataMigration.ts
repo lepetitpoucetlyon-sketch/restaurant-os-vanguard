@@ -8,7 +8,7 @@ export function useDataMigration() {
     const [progress, setProgress] = useState(0);
 
     // DUMMY PARSER FOR CSV
-    const parseCSV = async (file: File): Promise<any[]> => {
+    const parseCSV = async (file: File): Promise<Record<string, string>[]> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -19,10 +19,10 @@ export function useDataMigration() {
                     const result = [];
                     for (let i = 1; i < lines.length; i++) {
                         if (!lines[i].trim()) continue;
-                        const obj: any = {};
+                        const obj: Record<string, string> = {};
                         const currentline = lines[i].split(',');
                         for (let j = 0; j < headers.length; j++) {
-                            obj[headers[j]] = currentline[j]?.trim();
+                            obj[headers[j]] = currentline[j]?.trim() || '';
                         }
                         result.push(obj);
                     }
@@ -91,7 +91,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
     };
 
 
-    const performMigration = useCallback(async <T extends { version: number }>(data: T, migrations: Record<number, (d: any) => any>) => {
+    const performMigration = useCallback(async <T extends { version: number }>(data: T, migrations: Record<number, (d: T) => T>) => {
         let current = { ...data };
         const targetVersion = Math.max(...Object.keys(migrations).map(Number));
 
@@ -115,7 +115,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
         
         try {
             if (entity === 'menu') {
-                const { categories, products } = data as { categories: any[], products: any[] };
+                const { categories, products } = data as { categories: { name: string; type: string; sortOrder: number }[], products: { name: string; description: string; price: number; categoryName: string; status: string; taxRate: number }[] };
                 const categoryIdMap: Record<string, string> = {};
 
                 // Add Categories to Batch
@@ -142,7 +142,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
                 setProgress(100);
             } 
             else if (entity === 'staff') {
-                const staffData = data as any[];
+                const staffData = data as Record<string, string>[];
                 for (const emp of staffData) {
                     const id = Nexus.adapter.generateId('users');
                     batch.set(`users/${id}`, {
@@ -158,7 +158,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
                 setProgress(100);
             }
             else if (entity === 'crm') {
-                const crmData = data as any[];
+                const crmData = data as Record<string, string>[];
                 for (const crm of crmData) {
                     const id = Nexus.adapter.generateId('crms');
                     batch.set(`crms/${id}`, {

@@ -36,9 +36,10 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ error: 'Action inconnue' }, { status: 400 });
 
-    } catch (e: any) {
-        console.error(`[SimulationAPI] Erreur : ${e.message}`, e);
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : String(e);
+        console.error(`[SimulationAPI] Erreur : ${message}`, e);
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -70,7 +71,8 @@ async function initSandbox() {
     }
 
     // Products
-    const products = [
+    interface SimulationProduct { id: string; name: string; priceInCents: number; categoryId: string }
+    const products: SimulationProduct[] = [
         { id: 'prod_margherita', name: 'Margherita Royale', priceInCents: 1450, categoryId: 'cat_cuisine' }
     ];
 
@@ -121,8 +123,8 @@ async function runEmpireWeek() {
             const orderData = {
                 id: orderId,
                 status: 'pending',
-                totalInCents: (product as any).priceInCents || 1000,
-                items: [{ productId: product.id, quantity: 1, name: (product as any).name, unitPrice: (product as any).priceInCents || 1000 }],
+                totalInCents: product.priceInCents || 1000,
+                items: [{ productId: product.id, quantity: 1, name: product.name, unitPrice: product.priceInCents || 1000 }],
                 createdAt: timestamp.getTime(),
                 updatedAt: timestamp.getTime(),
                 tenantId: TENANT_ID
@@ -191,8 +193,9 @@ async function runAuditData() {
     console.log("🧐 Extraction des données d'audit...");
     const allOrders = await Nexus.adapter.query(path('orders'));
     
-    const empireOrders = allOrders.filter((o: any) => o.id.includes('order_empire'));
-    const chaosOrders = allOrders.filter((o: any) => o.id.includes('order_chaos'));
+    interface AuditOrder { id: string; totalInCents: number }
+    const empireOrders = allOrders.filter((o) => (o as AuditOrder).id.includes('order_empire')) as AuditOrder[];
+    const chaosOrders = allOrders.filter((o) => (o as AuditOrder).id.includes('order_chaos')) as AuditOrder[];
     
     const fiscalSeals = await Nexus.adapter.query(path('fiscalSeals'));
     const stockItems = await Nexus.adapter.query(path('stockItems'));
@@ -200,17 +203,18 @@ async function runAuditData() {
     return {
         empire: {
             count: empireOrders.length,
-            revenue: empireOrders.reduce((acc: number, o: any) => acc + (o.totalInCents || 0), 0) / 100
+            revenue: empireOrders.reduce((acc: number, o) => acc + (o.totalInCents || 0), 0) / 100
         },
         chaos: {
             count: chaosOrders.length,
-            revenue: chaosOrders.reduce((acc: number, o: any) => acc + (o.totalInCents || 0), 0) / 100
+            revenue: chaosOrders.reduce((acc: number, o) => acc + (o.totalInCents || 0), 0) / 100
         },
         fiscal: {
             sealsCount: fiscalSeals.length
         },
-        stock: stockItems.map((s: any) => {
-            return { name: s.ingredientName, quantity: s.quantity, status: s.status };
+        stock: stockItems.map((s) => {
+            const stock = s as { ingredientName: string; quantity: number; status: string };
+            return { name: stock.ingredientName, quantity: stock.quantity, status: stock.status };
         })
     };
 }

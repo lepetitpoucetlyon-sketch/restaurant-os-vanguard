@@ -4,12 +4,23 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { Area } from '@/types/tables.types';
 
+import { CRM } from '@/modules/ops/reservations.types';
+
 /**
  * 🌉 Operations actions (OMS) - Restaurant OS
  * Grade IX: Surgical Suture Operations -> Accounting
  */
 
-export async function arrivalAreaAction(tenantId: string, area: any, customerData: any) {
+interface OperationalArea {
+    id: string;
+    number: string;
+    status: 'vacant' | 'busy' | 'maintenance' | 'reserved';
+    type: string;
+    price: number;
+    lastCleaning: string;
+}
+
+export async function arrivalAreaAction(tenantId: string, area: OperationalArea, customerData: Partial<CRM>) {
     logger.info(`[OMSAction] Recording Arrival in Area ${area.number} (Tenant: ${tenantId})`);
 
     try {

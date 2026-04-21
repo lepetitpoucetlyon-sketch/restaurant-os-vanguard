@@ -401,7 +401,7 @@ export default function QuotesPage() {
                                     <QuoteCard
                                         key={quote.id}
                                         quote={quote}
-                                        inflationRate={(globalInflationRate as number) || 0}
+                                        inflationRate={globalInflationRate || 0}
                                         onView={() => { }}
                                     />
                                 ))

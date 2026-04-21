@@ -4,12 +4,13 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { revalidatePath } from "next/cache";
 import { GroupService } from '@/domain/services/GroupService';
+import { GroupEvent } from '@/modules/ops/groups.types';
 
 /**
  * 🏢 Groups Actions - Restaurant OS
  */
 
-export async function upsertGroupAction(tenantId: string, group: any) {
+export async function upsertGroupAction(tenantId: string, group: Partial<GroupEvent>) {
     if (!tenantId) throw new Error("Tenant ID is required.");
     
     // 1. Validate Business Rules

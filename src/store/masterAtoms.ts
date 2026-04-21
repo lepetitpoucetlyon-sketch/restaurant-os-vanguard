@@ -41,7 +41,10 @@ export interface MasterConfig {
     maintenanceMode: boolean;
     killSwitch: boolean;
     allowedFeatures: string[];
-    [key: string]: any;
+    securityLevel?: 'standard' | 'high' | 'critical';
+    forceLogout?: boolean;
+    globalMessage?: string;
+    [key: string]: unknown;
 }
 
 /** 🌐 Fleet Health Tracking (Master only) */

@@ -5,7 +5,7 @@ import { AGENT_TOOLS } from './tools';
 export type GeminiLiveEvent = 
     | { type: 'audio', data: Int16Array }
     | { type: 'text', data: string }
-    | { type: 'tool_call', name: string, args: any, callId: string }
+    | { type: 'tool_call', name: string, args: Record<string, unknown>, callId: string }
     | { type: 'error', message: string };
 
 /**
@@ -21,21 +21,21 @@ export class GeminiLiveService {
     private nextStartTime: number = 0;
 
     private onTranscript: ((text: string, isUser: boolean) => void) | null = null;
-    private onToolCall: ((name: string, args: any) => void) | null = null;
+    private onToolCall: ((name: string, args: Record<string, unknown>) => void) | null = null;
 
-    constructor(user: User, rolePermissions: any, callbacks?: { 
+    constructor(user: User, rolePermissions: string[], callbacks?: { 
         onTranscript?: (text: string, isUser: boolean) => void,
-        onToolCall?: (name: string, args: any) => void 
+        onToolCall?: (name: string, args: Record<string, unknown>) => void 
     }) {
         this.user = user;
         this.rolePermissions = rolePermissions;
         this.onTranscript = callbacks?.onTranscript || null;
         this.onToolCall = callbacks?.onToolCall || null;
-        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+        this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)({ sampleRate: 16000 });
     }
 
 
-    async connect(config?: { system_instruction?: string, tools?: any[] }) {
+    async connect(config?: { system_instruction?: string, tools?: Record<string, unknown>[] }) {
         const relayPort = 3001;
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         // Connect to the specialized relay port
@@ -113,7 +113,7 @@ export class GeminiLiveService {
         this.nextStartTime = this.audioContext.currentTime;
     }
 
-    private async handleToolCall(event: { name: string, args: any, callId: string }) {
+    private async handleToolCall(event: { name: string, args: Record<string, unknown>, callId: string }) {
 
         const tool = AGENT_TOOLS[event.name];
         
@@ -125,7 +125,7 @@ export class GeminiLiveService {
         // --- RBAC SENTINEL ---
         const hasAccess = AccessPolicyManager.hasAccess(
             this.user, 
-            this.rolePermissions as any, 
+            this.rolePermissions as string[], 
             tool.category as CategoryKey
         );
 
@@ -151,7 +151,7 @@ export class GeminiLiveService {
         }
     }
 
-    private sendToolResult(callId: string, result: any) {
+    private sendToolResult(callId: string, result: unknown) {
         this.socket?.send(JSON.stringify({
             type: 'tool_result',
             callId,

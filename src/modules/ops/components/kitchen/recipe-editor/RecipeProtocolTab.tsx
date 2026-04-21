@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Clock, Timer, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { Recipe, RecipeStep } from "@/types";
+import { Recipe, RecipeStep, RecipeIngredient } from "@/types";
 
 interface RecipeProtocolTabProps {
     formData: Partial<Recipe>;
     newStep: Partial<RecipeStep>;
-    setNewStep: (data: any) => void;
+    setNewStep: (data: Partial<RecipeStep> | ((prev: Partial<RecipeStep>) => Partial<RecipeStep>)) => void;
     handleAddStep: () => void;
     handleRemoveStep: (order: number) => void;
 }
@@ -29,7 +29,7 @@ export function RecipeProtocolTab({
                     <textarea
                         placeholder="Instruction technique détaillée..."
                         value={newStep.instruction}
-                        onChange={(e) => setNewStep((prev: any) => ({ ...prev, instruction: e.target.value }))}
+                        onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, instruction: e.target.value }))}
                         className="w-full h-24 px-6 py-4 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold text-sm outline-none resize-none"
                     />
                     <div className="grid grid-cols-2 gap-4">
@@ -39,7 +39,7 @@ export function RecipeProtocolTab({
                                 type="number"
                                 placeholder="Temps requis (min)"
                                 value={newStep.duration}
-                                onChange={(e) => setNewStep((prev: any) => ({ ...prev, duration: parseInt(e.target.value) || 5 }))}
+                                onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, duration: parseInt(e.target.value) || 5 }))}
                                 className="w-full h-14 pl-10 pr-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                             />
                         </div>
@@ -47,14 +47,14 @@ export function RecipeProtocolTab({
                             type="text"
                             placeholder="URL Illustration (Visuel)"
                             value={newStep.imageUrl}
-                            onChange={(e) => setNewStep((prev: any) => ({ ...prev, imageUrl: e.target.value }))}
+                            onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, imageUrl: e.target.value }))}
                             className="w-full h-14 px-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
                     <textarea
                         placeholder="Le conseil du Chef (Astuces de dressage, points de vigilance...)"
                         value={newStep.tip}
-                        onChange={(e) => setNewStep((prev: any) => ({ ...prev, tip: e.target.value }))}
+                        onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, tip: e.target.value }))}
                         className="w-full h-20 px-6 py-4 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold italic text-sm outline-none resize-none"
                     />
                     <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-black text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">

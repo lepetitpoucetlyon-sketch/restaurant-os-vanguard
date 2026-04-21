@@ -115,7 +115,7 @@ export class FinanceCore {
         };
 
         // 2. SEAL THE REPORT
-        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as any);
+        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as unknown as Record<string, unknown>);
         
         return zReport;
     }

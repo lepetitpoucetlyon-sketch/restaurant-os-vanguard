@@ -8,7 +8,7 @@ import { Recipe } from "@/types";
 
 interface RecipeBasicsTabProps {
     formData: Partial<Recipe>;
-    setFormDraft: (data: any) => void;
+    setFormDraft: (data: Partial<Recipe> | ((prev: Partial<Recipe>) => Partial<Recipe>)) => void;
     initialFormData: Partial<Recipe>;
     categories: string[];
     colors: string[];
@@ -29,7 +29,7 @@ export function RecipeBasicsTab({
                     <input
                         type="text"
                         value={formData.name}
-                        onChange={(e) => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), name: e.target.value }))}
+                        onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), name: e.target.value }))}
                         className="w-full h-16 px-8 bg-white rounded-3xl border-2 border-border focus:border-accent font-serif font-black text-xl outline-none transition-all placeholder:text-text-muted/30"
                         placeholder="Ex: Risotto aux Morilles & Truffe..."
                     />
@@ -38,7 +38,7 @@ export function RecipeBasicsTab({
                     <PremiumSelect
                         label="Catégorie du Menu"
                         value={formData.category || ''}
-                        onChange={(val) => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), category: val }))}
+                        onChange={(val) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), category: val }))}
                         options={categories.map(cat => ({ value: cat, label: cat.toUpperCase() }))}
                     />
                 </div>
@@ -48,7 +48,7 @@ export function RecipeBasicsTab({
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Description Gastronomique</label>
                 <textarea
                     value={formData.description}
-                    onChange={(e) => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), description: e.target.value }))}
+                    onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), description: e.target.value }))}
                     className="w-full h-32 px-8 py-6 bg-white rounded-[2rem] border-2 border-border focus:border-accent font-bold text-sm outline-none resize-none transition-all placeholder:text-text-muted/30"
                     placeholder="Texte court pour le menu ou le personnel de salle..."
                 />
@@ -56,9 +56,9 @@ export function RecipeBasicsTab({
 
             <div className="grid grid-cols-4 gap-6">
                 {[
-                    { label: 'Préparation', value: formData.prepTime, key: 'prepTime', icon: Clock, unit: 'MIN' },
-                    { label: 'Cuisson', value: formData.cookTime, key: 'cookTime', icon: Timer, unit: 'MIN' },
-                    { label: 'Portions', value: formData.portions, key: 'portions', icon: Users, unit: 'PAX' },
+                    { label: 'Préparation', value: formData.prepTime, key: 'prepTime' as const, icon: Clock, unit: 'MIN' },
+                    { label: 'Cuisson', value: formData.cookTime, key: 'cookTime' as const, icon: Timer, unit: 'MIN' },
+                    { label: 'Portions', value: formData.portions, key: 'portions' as const, icon: Users, unit: 'PAX' },
                 ].map(item => (
                     <div key={item.key} className="bg-white p-6 rounded-[2rem] border border-border/50">
                         <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 block flex items-center gap-2">
@@ -69,7 +69,7 @@ export function RecipeBasicsTab({
                             <input
                                 type="number"
                                 value={item.value}
-                                onChange={(e) => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), [item.key]: parseInt(e.target.value) || 0 }))}
+                                onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), [item.key]: parseInt(e.target.value) || 0 }))}
                                 className="w-full h-12 px-4 bg-bg-tertiary rounded-xl font-black text-lg outline-none"
                             />
                             <span className="text-[10px] font-black text-text-muted">{item.unit}</span>
@@ -81,7 +81,7 @@ export function RecipeBasicsTab({
                     <PremiumSelect
                         label="Expertise"
                         value={formData.difficulty || 'medium'}
-                        onChange={(val) => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), difficulty: val as Recipe["difficulty"] }))}
+                        onChange={(val) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), difficulty: val as Recipe["difficulty"] }))}
                         options={[
                             { value: 'easy', label: 'FACILE' },
                             { value: 'medium', label: 'MAÎTRISÉ' },
@@ -97,7 +97,7 @@ export function RecipeBasicsTab({
                     {colors.map(color => (
                         <button
                             key={color}
-                            onClick={() => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), color }))}
+                            onClick={() => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), color }))}
                             className={cn(
                                 "w-12 h-12 rounded-2xl transition-all shrink-0 border-4",
                                 formData.color === color ? "border-accent scale-110 shadow-lg shadow-black/10" : "border-transparent opacity-60 hover:opacity-100"

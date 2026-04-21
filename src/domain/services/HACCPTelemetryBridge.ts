@@ -32,7 +32,7 @@ export const HACCPTelemetryBridge = {
         if (r.hygieneStatus === 'acceptable') riskPoints += 10;
         
         // Check items for temperature violations
-        r.itemsChecked?.forEach((item: any) => {
+        (r.itemsChecked as Array<{ status: string }> || []).forEach((item) => {
           if (item.status === 'rejected') {
             riskPoints += 20;
             criticalEvents++;
@@ -43,10 +43,10 @@ export const HACCPTelemetryBridge = {
       const healthScore = Math.max(0, 100 - riskPoints);
 
       // 📡 Push to Telemetry Hub
-      await fleetTelemetry.pushSiteTelemetry(tenantId as any, {
+      await fleetTelemetry.pushSiteTelemetry(tenantId, {
         healthScore,
-        complianceScore: receptions.length > 0 ? 100 : 50, // Penalty for missing audits
-      } as any);
+        complianceScore: (receptions as unknown[]).length > 0 ? 100 : 50, // Penalty for missing audits
+      });
 
       // 🚨 Trigger SOS if health is critical
       if (healthScore < 60 || criticalEvents > 2) {

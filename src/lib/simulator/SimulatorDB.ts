@@ -8,7 +8,7 @@ import Dexie, { Table } from 'dexie';
 
 export interface VirtualDocument {
     path: string;       // Unique document path (e.g., 'tenants/lepetitpoucet/inventory/item1')
-    data: any;          // Serialized document data
+    data: unknown;      // Serialized document data
     isDeleted: boolean; // Flag to simulate document deletion
     forkId: string;     // ID of the simulation timeline
     updatedAt: string;

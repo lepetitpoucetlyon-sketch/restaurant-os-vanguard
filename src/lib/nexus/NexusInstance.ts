@@ -13,23 +13,27 @@ export type NexusQueryOperator =
 export interface INexusQueryOptions {
     orderBy?: { field: string; direction: 'asc' | 'desc' };
     limit?: number;
-    where?: { field: string; operator: NexusQueryOperator; value: any }[];
+    where?: { field: string; operator: NexusQueryOperator; value: unknown }[];
 }
 
 export interface INexusBatch {
-    set(path: string, data: any): void;
-    update(path: string, data: any): void;
+    set<T = Record<string, unknown>>(path: string, data: T): void;
+    update<T = Record<string, unknown>>(path: string, data: Partial<T>): void;
     delete(path: string): void;
     commit(): Promise<void>;
 }
 
 export interface INexusAdapter {
-    get(path: string): Promise<any | null>;
-    query(collectionPath: string, options?: INexusQueryOptions): Promise<any[]>;
-    onSnapshot(path: string, callback: (data: any) => void, options?: INexusQueryOptions & { onError?: (error: any) => void }): () => void;
+    get<T = Record<string, unknown>>(path: string): Promise<T | null>;
+    query<T = Record<string, unknown>>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
+    onSnapshot<T = Record<string, unknown>>(
+        path: string, 
+        callback: (data: T | null) => void, 
+        options?: INexusQueryOptions & { onError?: (error: Error) => void }
+    ): () => void;
     batch(): INexusBatch;
-    set(path: string, data: any, options?: { merge?: boolean }): Promise<void>;
-    update(path: string, data: any): Promise<void>;
+    set<T = Record<string, unknown>>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
+    update<T = Record<string, unknown>>(path: string, data: Partial<T>): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
 }

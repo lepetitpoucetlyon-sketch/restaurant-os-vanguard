@@ -2,6 +2,7 @@ import { logger } from '@/lib/logger';
 import { RealityGenerator } from './RealityGenerator';
 import { FiscalHACCPBridge } from '@/modules/finance/services/FiscalHACCPBridge';
 import { StockItem } from '@/modules/inventory/types';
+import { SensorReading } from '@/modules/haccp/types';
 
 /**
  * 🌀 SinfoniaGradeXProof - The 120x Efficiency Proof
@@ -11,27 +12,30 @@ export async function runGradeXProof() {
     logger.info('🚀 [SINFONIA_PROOF] Starting Ultra-Complex Multi-Domain Task...');
 
     // 1. Simulate a Critical Anomaly
-    const anomalyReading = {
+    const anomalyReading: SensorReading = {
         id: 'read_999',
+        name: 'Fridge Main Sensor',
         sensorId: 'fridge_main_01',
+        type: 'temperature',
         value: 12.5,
-        unit: '°C' as const,
+        unit: '°C',
+        status: 'alert',
         timestamp: new Date().toISOString(),
         isAnomaly: true
     };
 
     // 2. Mock some impacted stock
-    const impactedStock: StockItem[] = [
-        { id: 'stock_1', name: 'Filet de Bœuf', quantity: 15, unit: 'kg', costInCents: 4500 } as any,
-        { id: 'stock_2', name: 'Homard Bleu', quantity: 8, unit: 'pcs', costInCents: 3500 } as any
+    const impactedStock: Partial<StockItem>[] = [
+        { id: 'stock_1', name: 'Filet de Bœuf', quantity: 15, unit: 'kg', costInCents: 4500 },
+        { id: 'stock_2', name: 'Homard Bleu', quantity: 8, unit: 'pcs', costInCents: 3500 }
     ];
 
     logger.info('🧠 [PROOF] Antigravity is now analyzing the fiscal impact of this sensor anomaly...');
 
     // 3. Trigger the Bridge
     const result = await FiscalHACCPBridge.processCriticalWaste(
-        anomalyReading as any,
-        impactedStock as any,
+        anomalyReading,
+        impactedStock as StockItem[],
         'tenant_demo_grade_x'
     );
 

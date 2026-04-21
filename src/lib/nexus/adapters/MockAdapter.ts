@@ -5,13 +5,13 @@ import { logger } from '@/lib/logger';
  * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI)
  */
 export class MockAdapter implements INexusAdapter {
-    private storage: Record<string, any> = {};
+    private storage: Record<string, unknown> = {};
 
-    async get(path: string): Promise<any | null> {
-        return this.storage[path] || null;
+    async get<T = unknown>(path: string): Promise<T | null> {
+        return (this.storage[path] as T) || null;
     }
 
-    async query(collectionPath: string, options?: INexusQueryOptions): Promise<any[]> {
+    async query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
             .map(([, data]) => data);
@@ -36,8 +36,8 @@ export class MockAdapter implements INexusAdapter {
         return results;
     }
 
-    onSnapshot(path: string, callback: (data: any) => void): () => void {
-        callback(this.storage[path]);
+    onSnapshot<T = unknown>(path: string, callback: (data: T) => void): () => void {
+        callback(this.storage[path] as T);
         return () => {}; // No-op for mock
     }
 
@@ -56,11 +56,11 @@ export class MockAdapter implements INexusAdapter {
         };
     }
 
-    async set(path: string, data: any): Promise<void> {
+    async set<T = unknown>(path: string, data: T): Promise<void> {
         this.storage[path] = data;
     }
 
-    async update(path: string, data: any): Promise<void> {
+    async update<T = unknown>(path: string, data: Partial<T>): Promise<void> {
         this.storage[path] = { ...(this.storage[path] || {}), ...data };
     }
 

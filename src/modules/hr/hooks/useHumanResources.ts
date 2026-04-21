@@ -53,12 +53,22 @@ export function useHumanResources() {
 
     // --- LEAVE MANAGEMENT ---
     
-    const approveLeaveRequest = useCallback(async (id) => {
-        return leaveForge.mutate('UPDATE', id, { status: 'approved' });
+    const approveLeaveRequest = useCallback(async (id: string) => {
+        return leaveForge.mutate('UPDATE', id, { 
+            status: 'approved',
+            finalDecision: 'approved',
+            finalDecisionAt: new Date().toISOString()
+        });
     }, [leaveForge]);
 
-    const rejectLeaveRequest = useCallback(async (id, reason) => {
-        return leaveForge.mutate('UPDATE', id, { status: 'rejected' });
+    const rejectLeaveRequest = useCallback(async (id: string, reason: string | RejectionReason, details?: string) => {
+        return leaveForge.mutate('UPDATE', id, { 
+            status: 'rejected',
+            finalDecision: 'rejected',
+            rejectionReason: reason as RejectionReason,
+            rejectionDetails: details,
+            finalDecisionAt: new Date().toISOString()
+        });
     }, [leaveForge]);
 
     const createLeaveRequest = useCallback(async (request: LeaveRequest) => {

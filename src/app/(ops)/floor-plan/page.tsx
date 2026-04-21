@@ -13,11 +13,22 @@ import { fadeInUp, easing } from "@/lib/motion";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useRouter } from "next/navigation";
+import { Table, TableStatus } from "@/types";
 
 const FloorPlanEditor = dynamic(
     () => import("@/modules/ops/components/floor-plan/FloorPlanEditor"),
     { ssr: false }
-) as React.ComponentType<any>;
+) as React.ComponentType<{
+    ref?: React.RefObject<unknown>;
+    scale: number;
+    onScaleChange: (s: number) => void;
+    position: { x: number; y: number };
+    onPositionChange: (p: { x: number; y: number }) => void;
+    mode: 'select' | 'add';
+    viewMode: '2d' | '3d';
+    currentFloorId: string;
+    onTableSelect: (id: string) => void;
+}>;
 
 // Floor icons mapping
 const FLOOR_ICONS: Record<string, React.ElementType> = {
@@ -31,7 +42,7 @@ export default function FloorPlanPage() {
     const router = useRouter();
     const isMobile = useIsMobile();
     const { showToast } = useToast();
-    const editorRef = useRef<any>(null);
+    const editorRef = useRef<unknown>(null);
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mode, setMode] = useState<'select' | 'add'>('select');
@@ -224,7 +235,7 @@ export default function FloorPlanPage() {
                             {['available', 'seated', 'ordered', 'paying'].map(s => (
                                 <button
                                     key={s}
-                                    onClick={() => { updateTable(selectedTableId!, { status: s as any }); setSelectedTableId(null); }}
+                                    onClick={() => { updateTable(selectedTableId!, { status: s as TableStatus }); setSelectedTableId(null); }}
                                     className={cn("h-10 rounded-xl text-[8px] font-black uppercase tracking-tighter border", selectedTable?.status === s ? "bg-accent-gold text-white border-transparent" : "bg-bg-primary text-text-muted border-border")}
                                 >
                                     {s}

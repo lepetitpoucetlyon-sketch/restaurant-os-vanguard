@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { Order, Recipe } from "@/types";
 
 // Components
 import { KDSHeader } from "./components/KDSHeader";
@@ -20,6 +21,12 @@ import { PlateAuditWizard } from "@/modules/ops/components/kitchen/PlateAuditWiz
 // Constants
 import { ITEM_STATION_MAP, KitchenStation } from "./constants";
 
+interface AuditTicket {
+    id: string;
+    recipeName: string;
+    standardImage?: string;
+}
+
 export default function KDSPage() {
     const { orders, updateOrderStatus, getPendingModifications } = useOrders();
     const { recipes } = useRecipes();
@@ -32,8 +39,8 @@ export default function KDSPage() {
     
     // UI State
     const [showModificationAlerts, setShowModificationAlerts] = useState(false);
-    const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
-    const [auditTicket, setAuditTicket] = useState<any>(null);
+    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+    const [auditTicket, setAuditTicket] = useState<AuditTicket | null>(null);
     const [isAuditOpen, setIsAuditOpen] = useState(false);
 
     // Settings

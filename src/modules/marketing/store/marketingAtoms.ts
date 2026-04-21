@@ -1,5 +1,5 @@
 import { atom, type PrimitiveAtom } from 'jotai';
-import { createProxyDomain } from './nexusNodeFactory';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { MarketingCampaign, CRMFeedback } from '@/types/marketing.types';
 import { Quote } from '@/types/quotes.types';
 import { SEOProfile } from '@/types/seo.types';
@@ -25,6 +25,16 @@ export interface ScheduledPost {
     imageUrl?: string;
 }
 
+export interface SocialAccount {
+    id: string;
+    platform: 'Instagram' | 'Facebook' | 'Twitter' | 'LinkedIn' | string;
+    username: string;
+    avatarUrl?: string;
+    followersCount?: number;
+    isConnected: boolean;
+    lastSyncedAt?: string;
+}
+
 // --- 📢 MARKETING & CRM DOMAIN (SEO, Campagnes, Réseaux sociaux, Clients) ---
 
 
@@ -36,7 +46,7 @@ const _marketingCampaigns = createProxyDomain<MarketingCampaign>('marketingCampa
 export const marketingCampaignsNodeAtom = _marketingCampaigns.node;
 export const marketingCampaignsAtom = _marketingCampaigns.data;
 
-const _socialAccounts = createProxyDomain<Record<string, unknown>>('socialAccounts');
+const _socialAccounts = createProxyDomain<SocialAccount>('socialAccounts');
 export const socialAccountsNodeAtom = _socialAccounts.node;
 export const socialAccountsAtom = _socialAccounts.data;
 

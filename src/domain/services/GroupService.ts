@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { GroupEvent } from '@/modules/ops/groups.types';
 
 /**
  * 🏢 GroupService - Restaurant OS
@@ -24,7 +25,7 @@ export class GroupService {
     /**
      * Business validation for group events.
      */
-    static validateGroup(data: any): { valid: boolean; error?: string } {
+    static validateGroup(data: Partial<GroupEvent>): { valid: boolean; error?: string } {
         if (!data.name || data.name.length < 3) {
             return { valid: false, error: "Le nom de l'événement est requis." };
         }

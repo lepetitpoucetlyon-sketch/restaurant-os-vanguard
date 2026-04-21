@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal } from '@/types';
+import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal, Recipe } from '@/types';
 import { TenantConfig } from '@/shared/nexus-contract';
 import type { ImmunityLogEntry } from '@/shared/genome.types';
 
@@ -13,7 +13,7 @@ export interface SyncOperation {
     action: 'SET' | 'UPDATE' | 'DELETE' | 'COMMIT_BATCH';
     collection: string;
     targetId: string;
-    payload: any; // Données complètes de la transaction ou du changement
+    payload: unknown; // Données complètes de la transaction ou du changement
     timestamp: string;
     status: 'pending' | 'syncing' | 'failed';
     priority: number; // 0: Normal, 1: High (Fiscal)
@@ -39,7 +39,7 @@ export class RestaurantOfflineDB extends Dexie {
     /** Grade IX: Boîte Noire des rejets du GenomeValidator */
     immunityLogs!: Table<ImmunityLogEntry>;
     /** Grade X: Suture des Recettes pour le calcul offline */
-    recipes!: Table<any>;
+    recipes!: Table<Recipe>;
 
     constructor() {
         super('RestaurantOS_Offline');

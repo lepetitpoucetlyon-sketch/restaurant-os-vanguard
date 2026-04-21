@@ -1,4 +1,4 @@
-import { createProxyDomain } from './nexusNodeFactory';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@/types';
 import { atom } from 'jotai';
 

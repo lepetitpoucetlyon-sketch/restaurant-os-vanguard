@@ -1,4 +1,5 @@
 "use client";
+import React from 'react';
 import { useNexusCore } from '@/engines/core/NexusCoreProvider';
 
 const fallbackT = (key: string) => key;
@@ -11,4 +12,4 @@ const fallbackLang = {
 };
 
 export const useLanguage = () => useNexusCore()?.lang || fallbackLang;
-export const LanguageProvider = ({ children }: { children: any }) => <>{children}</>;
+export const LanguageProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;

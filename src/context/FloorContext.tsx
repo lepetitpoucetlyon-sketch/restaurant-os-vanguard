@@ -8,4 +8,4 @@ export type { Table, Floor, Zone } from '@/types/tables.types';
  */
 export const useFloorOps = () => useNexusOps()?.floorOps;
 
-export const FloorProvider = ({ children }: { children: any }) => <>{children}</>;
+export const FloorProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;

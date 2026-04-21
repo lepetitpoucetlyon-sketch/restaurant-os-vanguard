@@ -182,7 +182,7 @@ export function MindMap() {
             .attr('class', 'node-group')
             .style('cursor', 'pointer')
             .on('click', (event, d) => setSelectedNode(d))
-            .call(d3.drag<any, any>()
+            .call(d3.drag<SVGGElement, Node>()
                 .on('start', dragstarted)
                 .on('drag', dragged)
                 .on('end', dragended));
@@ -220,32 +220,48 @@ export function MindMap() {
 
         simulation.on('tick', () => {
             link.selectAll('path')
-                .attr('d', (d: any) => {
-                    const dx = d.target.x - d.source.x;
-                    const dy = d.target.y - d.source.y;
-                    const dr = Math.sqrt(dx * dx + dy * dy) * 1.5; // More pronounced arc for wide links
-                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                .attr('d', (d) => {
+                    const l = d as unknown as Link;
+                    const source = l.source as unknown as Node;
+                    const target = l.target as unknown as Node;
+                    const dx = target.x! - source.x!;
+                    const dy = target.y! - source.y!;
+                    const dr = Math.sqrt(dx * dx + dy * dy) * 1.5; 
+                    return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
                 });
 
             linkLabel
-                .attr('x', (d: any) => (d.source.x + d.target.x) / 2)
-                .attr('y', (d: any) => (d.source.y + d.target.y) / 2);
+                .attr('x', (d) => {
+                    const l = d as unknown as Link;
+                    const source = l.source as unknown as Node;
+                    const target = l.target as unknown as Node;
+                    return (source.x! + target.x!) / 2;
+                })
+                .attr('y', (d) => {
+                    const l = d as unknown as Link;
+                    const source = l.source as unknown as Node;
+                    const target = l.target as unknown as Node;
+                    return (source.y! + target.y!) / 2;
+                });
 
-            node.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
+            node.attr('transform', (d) => {
+                const n = d as unknown as Node;
+                return `translate(${n.x},${n.y})`;
+            });
         });
 
-        function dragstarted(event: any) {
+        function dragstarted(event: d3.D3DragEvent<SVGGElement, Node, Node>) {
             if (!event.active) simulation.alphaTarget(0.3).restart();
             event.subject.fx = event.subject.x;
             event.subject.fy = event.subject.y;
         }
 
-        function dragged(event: any) {
+        function dragged(event: d3.D3DragEvent<SVGGElement, Node, Node>) {
             event.subject.fx = event.x;
             event.subject.fy = event.y;
         }
 
-        function dragended(event: any) {
+        function dragended(event: d3.D3DragEvent<SVGGElement, Node, Node>) {
             if (!event.active) simulation.alphaTarget(0);
             event.subject.fx = null;
             event.subject.fy = null;

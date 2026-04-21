@@ -12,6 +12,7 @@ import {
     Circle 
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import { Table, Zone, Floor, TableShape } from "@/types";
 
 const TABLE_SHAPES = [
     { id: 'rect', label: 'Rectangle', icon: Square },
@@ -19,11 +20,11 @@ const TABLE_SHAPES = [
 ];
 
 interface MobilierConfigProps {
-    tables: any[];
-    zones: any[];
-    floors: any[];
-    addTable: (table: any) => void;
-    updateTable: (id: string, table: any) => void;
+    tables: Table[];
+    zones: Zone[];
+    floors: Floor[];
+    addTable: (table: Omit<Table, 'id'>) => void;
+    updateTable: (id: string, table: Partial<Table>) => void;
     deleteTable: (id: string) => void;
     isEditingTable: boolean;
     setIsEditingTable: (is: boolean) => void;
@@ -46,8 +47,8 @@ export function MobilierConfig({
         setIsEditingTable(true);
     };
 
-    const handleEditTable = (table: any) => {
-        setEditingTable({ id: table.id, number: table.number, seats: table.seats, shape: table.shape as any, zoneId: table.zoneId || 'main', floorId: table.floorId || 'rdc' });
+    const handleEditTable = (table: Table) => {
+        setEditingTable({ id: table.id, number: table.number, seats: table.seats, shape: table.shape as TableShape, zoneId: table.zoneId || 'main', floorId: table.floorId || 'rdc' });
         setIsEditingTable(true);
     };
 
@@ -146,7 +147,7 @@ export function MobilierConfig({
                                         {TABLE_SHAPES.map((shape) => (
                                             <button
                                                 key={shape.id}
-                                                onClick={() => setEditingTable({ ...editingTable!, shape: shape.id as any })}
+                                                onClick={() => setEditingTable({ ...editingTable!, shape: shape.id as TableShape })}
                                                 className={cn(
                                                     "flex-1 py-3 rounded-xl flex items-center justify-center transition-all border border-border",
                                                     editingTable.shape === shape.id

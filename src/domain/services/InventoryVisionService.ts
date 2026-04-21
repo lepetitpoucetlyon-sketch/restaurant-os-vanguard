@@ -77,11 +77,11 @@ export const InventoryVisionService = {
             ingredientId: match.matchedIngredientId,
             ingredientName: match.matchedIngredientName || match.extracted.name,
             quantity: match.extracted.quantity,
-            unit: match.extracted.unit as any,
-            unitCost: match.extracted.unitPriceHT,
-            dlc: match.extracted.expirationDate,
+            unit: match.extracted.unit,
+            unitCostInCents: match.extracted.unitPriceHT,
+            expirationDate: match.extracted.expirationDate,
             batchNumber: match.extracted.batchNumber,
             priceEvolution: evolution
-        } as any;
+        };
     }
 };

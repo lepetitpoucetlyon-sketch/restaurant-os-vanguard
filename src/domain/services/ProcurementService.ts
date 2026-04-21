@@ -3,6 +3,8 @@ import { SharedKernel } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
+import { StockItem } from '@/types';
+
 /**
  * 📦 ProcurementService - Restaurant OS
  * Centralized Domain Logic for Automated Sourcing and Supplier Relations.
@@ -42,7 +44,7 @@ export class ProcurementService {
     /**
      * Analyzes current stock batches to find the most recent cost.
      */
-    static getRecentCostForIngredient(ingredientId: string, stockItems: any[]): number {
+    static getRecentCostForIngredient(ingredientId: string, stockItems: StockItem[]): number {
         const batches = stockItems
             .filter(item => item.ingredientId === ingredientId)
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());

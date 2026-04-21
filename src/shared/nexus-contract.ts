@@ -35,7 +35,7 @@ export interface OrchestratorSignal {
 export interface TelemetryPulse {
   version: string;
   status: 'active' | 'maintenance' | 'critical';
-  lastPulse: any; // Allow serverTimestamp (any)
+  lastPulse: string | number | { seconds: number; nanoseconds: number }; 
   health: {
     uptime: number;
     battery: {
@@ -68,14 +68,22 @@ export interface TenantFirebaseConfig {
 
 export interface TenantConfig {
   id: string;
-  name?: string; // Heritage
-  tier?: string; // Heritage
-  billing?: any; // Heritage
-  marketplace?: any; // Heritage
-  ai?: any; // Heritage
-  branding?: any; // Heritage
+  name?: string; 
+  tier?: string; 
+  billing?: {
+    status: string;
+    plan: string;
+    nextBillingDate?: string;
+  };
+  marketplace?: Record<string, unknown>;
+  ai?: {
+    enabled: boolean;
+    model?: string;
+    quota?: number;
+  };
+  branding?: TenantTheme;
   capabilities?: Record<string, boolean>;
-  features?: Record<string, boolean>; // Heritage Alias
+  features?: Record<string, boolean>; 
   theme?: TenantTheme;
   status?: OrchestratorSignal;
   metadata?: {

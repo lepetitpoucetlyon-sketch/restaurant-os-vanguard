@@ -37,7 +37,17 @@ const cinematicReveal = {
     transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
 };
 
-const StatCard = ({ title, value, change, trend, icon: Icon, suffix = '', delay = 0 }: any) => (
+interface StatCardProps {
+    title: string;
+    value: number | string;
+    change: number;
+    trend: 'up' | 'down';
+    icon: React.ElementType;
+    suffix?: string;
+    delay?: number;
+}
+
+const StatCard = ({ title, value, change, trend, icon: Icon, suffix = '', delay = 0 }: StatCardProps) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -80,8 +90,20 @@ export default function AnalyticsIntegrationPage() {
     const [period, setPeriod] = useState<'7d' | '30d' | '90d'>('30d');
     const { showToast } = useToast();
 
+    interface AnalyticsData {
+        visitors: number;
+        pageViews: number;
+        reservations: number;
+        conversionRate: number;
+        sources: Array<{ name: string; visitors: number; percentage: number; color: string }>;
+        devices: Array<{ name: string; percentage: number; icon: React.ElementType }>;
+        topPages: Array<{ path: string; views: number; avgTime: string }>;
+        reservationFunnel: Array<{ step: string; value: string; percentage: number }>;
+        weeklyTrend: Array<{ day: string; visitors: number; reservations: number }>;
+    }
+
     // Reality Check: Derive stats from real profile or use baseline zeros
-    const analytics = (profile as any)?.analytics || {
+    const analytics: AnalyticsData = (profile as { analytics?: AnalyticsData })?.analytics || {
         visitors: 0,
         pageViews: 0,
         reservations: 0,
@@ -93,7 +115,7 @@ export default function AnalyticsIntegrationPage() {
         weeklyTrend: []
     };
 
-    const isConnected = !!(profile as any)?.googlePropertyId;
+    const isConnected = !!(profile as { googlePropertyId?: string })?.googlePropertyId;
 
     const handleConnect = async () => {
         showToast("Initialisation de la connexion Google...", "premium");
@@ -176,7 +198,7 @@ export default function AnalyticsIntegrationPage() {
                                 <CheckCircle2 className="w-3 h-3 text-accent" />
                                 <span className="text-[9px] font-black text-accent uppercase tracking-widest leading-none">Actif</span>
                             </div>
-                            <span className="text-[10px] font-bold text-text-muted tracking-wide">• {(profile as any)?.googlePropertyId || 'GA4-NON-CONFIGURÉ'}</span>
+                            <span className="text-[10px] font-bold text-text-muted tracking-wide">• {(profile as { googlePropertyId?: string })?.googlePropertyId || 'GA4-NON-CONFIGURÉ'}</span>
                         </div>
                     </div>
                 </div>
@@ -267,7 +289,7 @@ export default function AnalyticsIntegrationPage() {
                             <Globe className="w-5 h-5 text-accent opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
                         </div>
                         <div className="space-y-6">
-                            {(analytics.sources || []).map((source: any, i: number) => (
+                            {analytics.sources.map((source, i: number) => (
                                 <div key={i} className="group/item">
                                     <div className="flex justify-between items-end mb-3">
                                         <div className="flex items-center gap-3">
@@ -302,7 +324,7 @@ export default function AnalyticsIntegrationPage() {
                             <TrendingUp className="w-5 h-5 text-accent opacity-40" />
                         </div>
                         <div className="h-56 flex items-end justify-between gap-4">
-                            {(analytics.weeklyTrend || []).map((day: any, i: number) => (
+                            {analytics.weeklyTrend.map((day, i: number) => (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-4 group/bar">
                                     <div className="w-full relative h-[140px] flex items-end justify-center gap-1">
                                         <motion.div
@@ -348,7 +370,7 @@ export default function AnalyticsIntegrationPage() {
                             <Target className="w-5 h-5 text-accent opacity-40" />
                         </div>
                         <div className="space-y-6">
-                            {(analytics.reservationFunnel || []).map((step: any, i: number) => (
+                            {analytics.reservationFunnel.map((step, i: number) => (
                                 <div key={i} className="relative">
                                     <div className="flex justify-between items-center mb-2 px-1">
                                         <span className="font-black text-[9px] uppercase tracking-[0.2em] text-text-primary/60">{step.step}</span>
@@ -385,7 +407,7 @@ export default function AnalyticsIntegrationPage() {
                     >
                         <h3 className="text-xl font-serif font-black italic text-text-primary mb-10 tracking-tighter">Pages Populaires</h3>
                         <div className="space-y-4">
-                            {(analytics.topPages || []).map((page: any, i: number) => (
+                            {analytics.topPages.map((page, i: number) => (
                                 <div key={i} className="flex items-center justify-between p-4 rounded-3xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-500 border border-transparent hover:border-white/40 dark:hover:border-white/10 group/page">
                                     <div className="flex items-center gap-6">
                                         <span className="w-10 h-10 rounded-2xl bg-bg-tertiary dark:bg-white/5 flex items-center justify-center font-serif italic font-black text-accent text-lg group-hover/page:bg-accent group-hover:text-white transition-all duration-500 shadow-soft">
@@ -418,7 +440,7 @@ export default function AnalyticsIntegrationPage() {
                     >
                         <h3 className="text-xl font-serif font-black italic text-text-primary mb-10 tracking-tighter">Plateformes</h3>
                         <div className="flex items-center justify-around h-full pb-10">
-                            {(analytics.devices || []).map((device: any, i: number) => {
+                            {analytics.devices.map((device, i: number) => {
                                 const Icon = device.icon;
                                 return (
                                     <motion.div

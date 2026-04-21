@@ -19,7 +19,7 @@ export const OrderSchema = z.object({
   status: z.enum(['draft', 'new', 'preparing', 'ready', 'delivered', 'cancelled', 'paid']),
   items: z.array(OrderItemSchema),
   totalInCents: z.number().int().min(0),
-  timestamp: z.any(), // Support for Firestore Timestamp or Date
+  timestamp: z.union([z.date(), z.object({ seconds: z.number(), nanoseconds: z.number() }), z.string()]), // Support for Firestore Timestamp, Date or ISO String
 });
 
 export type ValidatedOrder = z.infer<typeof OrderSchema>;

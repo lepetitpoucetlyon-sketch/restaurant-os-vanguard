@@ -83,7 +83,7 @@ class TelemetryService {
   private async getBatteryInfo() {
     try {
       if ('getBattery' in navigator) {
-        const bat = await (navigator as any).getBattery();
+        const bat = await (navigator as Navigator & { getBattery: () => Promise<{ level: number, charging: boolean }> }).getBattery();
         return {
           level: bat.level,
           charging: bat.charging,
@@ -100,7 +100,8 @@ class TelemetryService {
   }
 
   private getNetworkInfo() {
-    const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const nav = navigator as Navigator & { connection?: { effectiveType: string }, mozConnection?: { effectiveType: string }, webkitConnection?: { effectiveType: string } };
+    const conn = nav.connection || nav.mozConnection || nav.webkitConnection;
     return {
       online: navigator.onLine,
       effectiveType: conn?.effectiveType || 'unknown'

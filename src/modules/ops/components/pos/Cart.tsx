@@ -44,7 +44,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
     const isMobile = useIsMobile();
     const splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
     const { data: config } = useIntelligence();
-    const globalInflationRate = (config as any)?.globalInflationRate || 0;
+    const globalInflationRate = config?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
 
     const { totalInCents, htInCents, tvaByRateInCents } = useMemo(() => {

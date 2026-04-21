@@ -8,7 +8,8 @@ import {
     miseEnPlaceTargetSelector,
     stockItemsNodeAtom
 } from "@/store/operationalAtoms";
-import { useNexusMutation } from "./useNexusMutation";
+import { Recipe, StockItem } from "@/types";
+import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 
 /**
@@ -23,14 +24,14 @@ export function useKitchen() {
     const stockItemsNode = useAtomValue(stockItemsNodeAtom);
 
     // --- 🔨 LA FORGE ---
-    const recipeForge = useNexusMutation(recipesNodeAtom, 'recipes', 'KITCHEN');
-    const prepForge = useNexusMutation(prepTasksNodeAtom, 'prepTasks', 'KITCHEN');
+    const recipeForge = useNexusMutation<Recipe>(recipesNodeAtom, 'recipes', 'KITCHEN');
+    const prepForge = useNexusMutation<any>(prepTasksNodeAtom, 'prepTasks', 'KITCHEN');
 
-    const calculateRecipeCost = useCallback((recipeIngredients: any[]) => {
+    const calculateRecipeCost = useCallback((recipeIngredients: { ingredientId: string; quantity: number }[]) => {
         if (!recipeIngredients) return 0;
         return recipeIngredients.reduce((total, ri) => {
-            const ingredient = (stockItemsNode.data || []).find((i: any) => i.id === ri.ingredientId);
-            const cost = ingredient?.costInCents || 0;
+            const ingredient = (stockItemsNode.data || []).find((i: StockItem) => i.id === ri.ingredientId);
+            const cost = ingredient?.costInCents || ingredient?.unitCostInCents || 0;
             return total + (cost * ri.quantity);
         }, 0);
     }, [stockItemsNode.data]);
@@ -45,8 +46,8 @@ export function useKitchen() {
         miseEnPlaceTarget,
         
         // --- Forge Actions ---
-        addRecipe: (data: any) => recipeForge.mutate('SET', `rec_${Date.now()}`, data),
-        updateRecipe: (id: string, data: any) => recipeForge.mutate('UPDATE', id, data),
+        addRecipe: (data: Partial<Recipe>) => recipeForge.mutate('SET', `rec_${Date.now()}`, data),
+        updateRecipe: (id: string, data: Partial<Recipe>) => recipeForge.mutate('UPDATE', id, data),
         deleteRecipe: (id: string) => recipeForge.mutate('DELETE', id, {}),
         togglePrepTask: (id: string, completed: boolean) => prepForge.mutate('UPDATE', id, { completed }),
         

@@ -51,10 +51,12 @@ export class PayrollAccountingBridge {
             lines,
             referenceId: payrollData.id,
             referenceType: 'payroll',
+            isSystemGenerated: true,
+            isValidated: false,
             metadata: {
                 employeeId: payrollData.employeeId,
                 period: payrollData.period
             }
-        } as any;
+        };
     }
 }

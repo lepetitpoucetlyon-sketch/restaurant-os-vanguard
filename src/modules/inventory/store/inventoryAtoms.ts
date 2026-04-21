@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { createProxyDomain } from './nexusNodeFactory';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { reservationStatsAtom } from './reservationAtoms';
 import { 
     StockItem, 

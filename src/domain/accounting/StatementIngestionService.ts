@@ -63,7 +63,7 @@ export class StatementIngestionService {
                     isReconciled: false
                 };
 
-                (transaction as any).signature = await this.generateSignature(transaction);
+                transaction.signature = await this.generateSignature(transaction);
                 transactions.push(transaction);
             } catch (err) {
                 logger.warn('StatementIngestion: Failed to parse line', { line, error: err });
@@ -86,7 +86,7 @@ export class StatementIngestionService {
             results.push({
                 ...tx,
                 signature: await this.generateSignature(tx)
-            } as any);
+            });
         }
         return results;
     }

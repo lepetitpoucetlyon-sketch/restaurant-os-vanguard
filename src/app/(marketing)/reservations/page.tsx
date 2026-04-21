@@ -9,19 +9,19 @@ import { useLanguage } from "@/context/LanguageContext";
 import { AnimatePresence } from "framer-motion";
 
 // Modular Components (Sutured for Grade X Stability)
-const ReservationSidebar = (props: any) => null;
-const ReservationToolbar = (props: any) => null;
-const FloorPlanView = (props: any) => null;
-const CustomerListView = (props: any) => null;
-const CustomerDetailPanel = (props: any) => null;
-const ReservationCalendarPopup = (props: any) => null;
+import { ReservationSidebar } from "./components/ReservationSidebar";
+import { ReservationToolbar } from "./components/ReservationToolbar";
+import { FloorPlanView } from "./components/FloorPlanView";
+import { CustomerListView } from "./components/CustomerListView";
+import { CustomerDetailPanel } from "./components/CustomerDetailPanel";
+import { ReservationCalendarPopup } from "./components/ReservationCalendarPopup";
 
 // Shared Components
 import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
-const transferStockAction = async (data: any) => ({ success: true });
-const TableInsightPanel = (props: any) => null;
-const NewCustomerDialog = (props: any) => null;
+import { TableInsightPanel } from "@/modules/ops/components/floor-plan/TableInsightPanel";
+import { NewCustomerDialog } from "@/components/reservations/NewCustomerDialog";
 import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
+import { Table } from "@/modules/ops/tables.types";
 
 export default function ReservationsPage() {
     const { t } = useLanguage();
@@ -35,7 +35,7 @@ export default function ReservationsPage() {
     const [isNewCustomerModalOpen, setIsNewCustomerModalOpen] = useState(false);
     const [isNewReservationModalOpen, setIsNewReservationModalOpen] = useState(false);
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-    const [selectedTable, setSelectedTable] = useState<any | null>(null);
+    const [selectedTable, setSelectedTable] = useState<Table | null>(null);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [calendarMonth, setCalendarMonth] = useState(new Date());
     const calendarRef = useRef<HTMLDivElement>(null);
@@ -65,7 +65,7 @@ export default function ReservationsPage() {
     }, [calendarMonth]);
 
     const handleTransferStock = async (stockItemId: string, toLocationId: string) => {
-        await (transferStockAction as any)(stockItemId, toLocationId);
+        console.log(`Transferring stock ${stockItemId} to ${toLocationId}`);
         return reservations.filter(r => r.date === "").length;
     };
 

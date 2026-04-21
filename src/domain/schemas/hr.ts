@@ -36,7 +36,7 @@ export const ShiftEntrySchema = z.object({
     signedPayload: z.string()
   }).optional(),
 
-  metadata: z.record(z.string(), z.any()).optional()
+  metadata: z.record(z.string(), z.unknown()).optional()
 });
 
 export type ShiftEntry = z.infer<typeof ShiftEntrySchema>;

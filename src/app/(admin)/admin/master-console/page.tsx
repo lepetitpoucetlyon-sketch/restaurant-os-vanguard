@@ -27,6 +27,8 @@ import { cn } from "@/lib/ui.foundations";
 import { useFleet } from "@/context/FleetContext";
 import { ProvisioningWizard } from '@/components/admin/ProvisioningWizard';
 import { TenantOrchestrator } from '@/components/fleet/TenantOrchestrator';
+import { EmpireInstance } from '@/domain/types/empire';
+import { FleetInsight } from '@/domain/services/MacroBrain';
 
 export default function MasterConsolePage() {
   const { 
@@ -43,7 +45,7 @@ export default function MasterConsolePage() {
     broadcastConfiguration
   } = useFleet();
 
-  const triggerRebalancing = (insight: any) => {
+  const triggerRebalancing = (insight: FleetInsight) => {
     logger.info('[MCC] Rebalancing Triggered', { insight });
     alert(`[Nexus Intelligence] Action Executed: ${insight.message}\nLogic: ${insight.recommendation}`);
   };
@@ -51,8 +53,8 @@ export default function MasterConsolePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
-  const selectedInstance = (instances as any[]).find(i => i.id === selectedInstanceId);
-  const filteredInstances = (instances as any[]).filter(i => 
+  const selectedInstance = (instances as EmpireInstance[]).find(i => i.id === selectedInstanceId);
+  const filteredInstances = (instances as EmpireInstance[]).filter(i => 
     i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     i.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -182,10 +184,10 @@ export default function MasterConsolePage() {
                 {/* Macro KPIs */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {[
-                        { label: 'Revenue Global', value: `€${stats.totalRevenue.toLocaleString()}`, trend: '+12.4%', icon: TrendingUp },
-                        { label: 'Labor Cost (Avg)', value: `${stats.consolidated?.totalLaborCost ? '35%' : '---'}`, trend: '-1.2%', icon: Activity },
-                        { label: 'Direct Margin', value: `${stats.consolidated?.averageFoodCost ? '71.5%' : '---'}`, trend: 'Target Focus', icon: Target },
-                        { label: 'Fleet Health', value: `${Math.round(stats.averageHealth)}%`, trend: 'Stable', icon: ShieldCheck }
+                        { label: 'Revenue Global', value: `€${(stats.totalRevenue as number).toLocaleString()}`, trend: '+12.4%', icon: TrendingUp },
+                        { label: 'Labor Cost (Avg)', value: `${(stats.consolidated as any)?.totalLaborCost ? '35%' : '---'}`, trend: '-1.2%', icon: Activity },
+                        { label: 'Direct Margin', value: `${(stats.consolidated as any)?.averageFoodCost ? '71.5%' : '---'}`, trend: 'Target Focus', icon: Target },
+                        { label: 'Fleet Health', value: `${Math.round(stats.averageHealth as number)}%`, trend: 'Stable', icon: ShieldCheck }
                     ].map((stat) => (
                         <div key={stat.label} className="bg-[#0B0B0C] border border-white/5 rounded-[3rem] p-10 hover:border-white/10 transition-all group">
                              <div className="flex items-center justify-between mb-8">
@@ -320,12 +322,12 @@ export default function MasterConsolePage() {
                     <div 
                       className="w-32 h-32 rounded-[2.5rem] flex items-center justify-center border-2 shadow-2xl relative overflow-hidden"
                       style={{ 
-                        backgroundColor: `${(selectedInstance as any).primaryColor || '#FFFFFF'}15`, 
-                        borderColor: `${(selectedInstance as any).primaryColor || '#FFFFFF'}30`,
-                        boxShadow: `0 30px 60px -12px ${(selectedInstance as any).primaryColor || '#FFFFFF'}20`
+                        backgroundColor: `${(selectedInstance as EmpireInstance).branding?.primaryColor || '#FFFFFF'}15`, 
+                        borderColor: `${(selectedInstance as EmpireInstance).branding?.primaryColor || '#FFFFFF'}30`,
+                        boxShadow: `0 30px 60px -12px ${(selectedInstance as EmpireInstance).branding?.primaryColor || '#FFFFFF'}20`
                       }}
                     >
-                      <Globe className="w-12 h-12" style={{ color: (selectedInstance as any).primaryColor || '#FFFFFF' }} />
+                      <Globe className="w-12 h-12" style={{ color: (selectedInstance as EmpireInstance).branding?.primaryColor || '#FFFFFF' }} />
                     </div>
                     <div>
                       <div className="flex items-center gap-4 mb-3">
@@ -338,7 +340,7 @@ export default function MasterConsolePage() {
                         {selectedInstance.name}
                       </h2>
                       <p className="text-xs font-bold text-neutral-400 uppercase tracking-[0.3em] font-mono opacity-60">
-                         {selectedInstance.id.toUpperCase()} • {(selectedInstance as any).version || 'OS Core v1.2.0'}
+                         {selectedInstance.id.toUpperCase()} • {(selectedInstance as EmpireInstance).version || 'OS Core v1.2.0'}
                       </p>
                     </div>
                   </div>

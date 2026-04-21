@@ -3,12 +3,13 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { KitchenService } from '@/domain/services/KitchenService';
+import { Recipe } from '@/types';
 
 /**
  * 👨‍🍳 Kitchen Actions - Restaurant OS
  */
 
-export async function upsertRecipeAction(tenantId: string, recipe: any) {
+export async function upsertRecipeAction(tenantId: string, recipe: Partial<Recipe>) {
     if (!tenantId) throw new Error("Tenant ID is required.");
     
     try {
@@ -54,7 +55,7 @@ export async function togglePrepTaskAction(tenantId: string, taskId: string) {
         throw error;
     }
 }
-export async function updateKitchenStatusAction(tenantId: string, status: any) {
+export async function updateKitchenStatusAction(tenantId: string, status: string) {
     logger.info(`[ServerAction] Updating Kitchen Status to ${status} for ${tenantId}`);
     return { success: true };
 }

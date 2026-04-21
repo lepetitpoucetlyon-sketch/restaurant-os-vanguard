@@ -6,9 +6,9 @@ import { ordersNodeAtom } from '@/store/operationalAtoms';
 import { getDefaultStore } from 'jotai';
 
 // Mocking browser-specifics for the Vitest Node environment
-global.requestAnimationFrame = (cb) => setTimeout(cb, 16) as any;
-global.cancelAnimationFrame = (id) => clearTimeout(id);
-global.performance = performance;
+global.requestAnimationFrame = (cb) => setTimeout(cb, 16) as unknown as number;
+global.cancelAnimationFrame = (id) => clearTimeout(id as unknown as NodeJS.Timeout);
+global.performance = performance as unknown as Performance;
 
 describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
 
@@ -19,27 +19,27 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
     it('💠 TEST 1: Saturation & Worker Velocity', async () => {
         // Mock MessageChannel for Node environment
         global.MessageChannel = class {
-            port1: any;
-            port2: any;
+            port1: { onmessage: ((e: { data: unknown }) => void) | null; close: () => void };
+            port2: { postMessage: (data: unknown) => void };
             constructor() {
                 this.port1 = { onmessage: null, close: vi.fn() };
-                this.port2 = { postMessage: (data: any) => {
+                this.port2 = { postMessage: (data: unknown) => {
                     // Simulate worker latency
                     setTimeout(() => {
                         if (this.port1.onmessage) this.port1.onmessage({ data });
                     }, 1);
                 }};
             }
-        } as any;
+        } as unknown as { new(): MessageChannel };
 
         const mockWorker = {
-            postMessage: vi.fn((msg, transfer) => {
+            postMessage: vi.fn((msg: { id: string }, transfer?: MessagePort[]) => {
                 const port2 = transfer ? transfer[0] : null;
                 if (port2) {
                     port2.postMessage({ id: msg.id, result: 'sha256_mock_hash' });
                 }
             })
-        } as any;
+        } as unknown as Worker;
 
         const results = await BlackFridaySimulation.runWorkerSaturationTest(mockWorker);
         
@@ -54,7 +54,7 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         
         // We run the test logic directly to avoid the internal setTimeout in Simulation
         // 1. Corrupt
-        store.set(ordersNodeAtom, (prev: any) => ({ ...prev, data: [{ id: 'corrupt' }] }));
+        store.set(ordersNodeAtom, (prev: { data: unknown[] }) => ({ ...prev, data: [{ id: 'corrupt' }] }));
         
         // 2. Heal
         const start = performance.now();

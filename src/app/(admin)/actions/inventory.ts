@@ -74,3 +74,46 @@ export async function searchIngredientsAction(tenantId: string, query: string): 
     }
 }
 
+
+/**
+ * consumeStockAction
+ * 📉 Operational Deduction: Reduces quantity of a stock item.
+ */
+export async function consumeStockAction(tenantId: string, itemId: string, quantity: number, reason: string) {
+    logger.info(`[ServerAction] Consuming ${quantity} from ${itemId} (Reason: ${reason})`);
+    
+    try {
+        const path = `tenants/${tenantId}/stockItems/${itemId}`;
+        const item = await Nexus.adapter.get<StockItem>(path);
+        
+        if (!item) throw new Error("Stock item not found");
+        
+        const newQuantity = Math.max(0, item.quantity - quantity);
+        await Nexus.adapter.update(path, { 
+            quantity: newQuantity,
+            status: newQuantity === 0 ? 'out_of_stock' : item.status,
+            updatedAt: new Date().toISOString()
+        });
+
+        logger.info(`[ServerAction] Stock consumed successfully. New quantity: ${newQuantity}`);
+        return { success: true };
+    } catch (error) {
+        logger.error(`[ServerAction] Consumption failed`, error);
+        throw new Error("Failed to consume stock");
+    }
+}
+
+/**
+ * deleteStockItemAction
+ * 🗑️ Purge Operation
+ */
+export async function deleteStockItemAction(tenantId: string, itemId: string) {
+    logger.info(`[ServerAction] Deleting Stock Item: ${itemId}`);
+    try {
+        await Nexus.adapter.delete(`tenants/${tenantId}/stockItems/${itemId}`);
+        return { success: true };
+    } catch (error) {
+        logger.error(`[ServerAction] Delete failed`, error);
+        throw new Error("Failed to delete stock item");
+    }
+}

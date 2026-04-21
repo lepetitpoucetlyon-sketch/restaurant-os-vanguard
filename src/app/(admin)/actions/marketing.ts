@@ -9,12 +9,14 @@ import { logger } from '@/lib/logger';
  */
 
 import { MarketingService } from '@/domain/services/MarketingService';
+import { MarketingCampaign } from '@/modules/marketing/types';
+import { MarketingSegment, ScheduledPost } from '@/modules/marketing/store/marketingAtoms';
 
 /**
  * 📣 Marketing Actions - Restaurant OS
  */
 
-export async function saveMarketingSettingsAction(tenantId: string, settings: any) {
+export async function saveMarketingSettingsAction(tenantId: string, settings: Record<string, unknown>) {
     logger.info(`[ServerAction] Saving Marketing/Reputation Settings (Tenant: ${tenantId})`);
 
     try {
@@ -39,7 +41,7 @@ export async function validatePromoCodeAction(tenantId: string, code: string) {
 
 // --- 📣 INDUSTRIAL MARKETING & Customer SEGMENTS (Grade IX) ---
 
-export async function upsertScheduledPostAction(tenantId: string, data: any) {
+export async function upsertScheduledPostAction(tenantId: string, data: Partial<ScheduledPost>) {
     if (!tenantId) throw new Error("[Marketing] Tenant ID required.");
     try {
         const collectionPath = `tenants/${tenantId}/scheduledPosts`;
@@ -69,7 +71,7 @@ export async function deleteScheduledPostAction(tenantId: string, postId: string
     }
 }
 
-export async function upsertCampaignAction(tenantId: string, data: any) {
+export async function upsertCampaignAction(tenantId: string, data: Partial<MarketingCampaign>) {
     if (!tenantId) throw new Error("[Marketing] Tenant ID required.");
     try {
         const collectionPath = `tenants/${tenantId}/campaigns`;
@@ -100,7 +102,7 @@ export async function deleteCampaignAction(tenantId: string, campaignId: string)
     }
 }
 
-export async function upsertSegmentAction(tenantId: string, data: any) {
+export async function upsertSegmentAction(tenantId: string, data: Partial<MarketingSegment>) {
     if (!tenantId) throw new Error("[Marketing] Tenant ID required.");
     try {
         const collectionPath = `tenants/${tenantId}/customerSegments`;

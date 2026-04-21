@@ -29,9 +29,16 @@ import { useTenant } from '@/context/AuthContext';
 import { arrivalAreaAction } from '@/app/actions/operations';
 import { toast } from 'sonner';
 
-// Re-defining Area locally or importing it if needed. 
-// For now, aliasing useFloorOps to useOMS to minimize impact.
-type Area = any; 
+// Re-defining OperationalArea locally for the Empire Forge page.
+// This page manages high-level spaces (salons, terrasses) rather than individual tables.
+interface OperationalArea {
+    id: string;
+    number: string;
+    status: 'vacant' | 'busy' | 'maintenance' | 'reserved';
+    type: string;
+    price: number;
+    lastCleaning: string;
+}
 
 
 // --- STYLED COMPONENTS FOR THE NOTEBOOK AESTHETIC ---
@@ -64,10 +71,10 @@ const HandDrawnBorder = ({ children, className }: { children: React.ReactNode, c
 export default function OperationsPage() {
     const { areas, updateAreaStatus } = useOMS();
     const [view, setView] = useState<'grid' | 'map'>('grid');
-    const [selectedArea, setSelectedArea] = useState<Area | null>(null);
+    const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();
 
-    const handleArrival = async (area: Area) => {
+    const handleArrival = async (area: OperationalArea) => {
         if (!activeTenantId) return;
         try {
             const promise = arrivalAreaAction({ tenantId: activeTenantId, areaId: area.id, ...area });
@@ -423,7 +430,7 @@ export default function OperationsPage() {
     );
 }
 
-const MindMapNode = ({ x, y, label, icon: Icon, color, description }: { x: number, y: number, label: string, icon: any, color: string, description?: string }) => (
+const MindMapNode = ({ x, y, label, icon: Icon, color, description }: { x: number, y: number, label: string, icon: React.ElementType, color: string, description?: string }) => (
     <motion.div
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -453,7 +460,7 @@ const HandDrawnLegend = ({ label, color }: { label: string, color: string }) => 
     </div>
 );
 
-const ExplanatoryCard = ({ title, description, icon: Icon }: { title: string, description: string, icon: any }) => (
+const ExplanatoryCard = ({ title, description, icon: Icon }: { title: string, description: string, icon: React.ElementType }) => (
     <motion.div
         whileHover={{ y: -5 }}
         className="p-8 bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm group relative overflow-hidden"

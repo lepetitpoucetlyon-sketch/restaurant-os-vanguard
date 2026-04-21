@@ -68,7 +68,7 @@ export const ProvisioningEngine = {
 
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
-            await fleetTelemetry.pushSiteTelemetry(newInstance.id as any, newInstance as any);
+            await fleetTelemetry.pushSiteTelemetry(newInstance.id, newInstance);
 
             logger.info('ProvisioningEngine: Instance registered in Master Registry', { 
                 instanceId: newInstance.id, 

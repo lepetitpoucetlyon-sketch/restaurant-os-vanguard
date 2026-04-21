@@ -39,9 +39,13 @@ export const EndOfDayWizard: React.FC = () => {
         try {
             // 📡 Industrial Call to FinanceCore (Grade VI)
             const zReport = await FinanceCore.generateZReport(activeTenantId);
-            const signature = (zReport as any)._fiscalSeal;
+            const signature = zReport._fiscalSeal;
             
-            showToast(`Journée Clôturée. Z-Report Scellé : ${signature.hash.substring(0, 10)}`, "success");
+            if (signature) {
+                showToast(`Journée Clôturée. Z-Report Scellé : ${signature.hash.substring(0, 10)}`, "success");
+            } else {
+                showToast("Journée Clôturée mais le scellage fiscal a échoué.", "warning");
+            }
             setIsClosed(true);
         } catch (error) {
             showToast("Erreur lors de la clôture fiscale", "error");

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { createProxyDomain } from './nexusNodeFactory';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { 
     JournalEntry, 
     HygieneLabel, 
@@ -9,13 +9,14 @@ import {
     RegulatoryWasteLog,
     SupplierOrder,
     MaintenanceLog,
-    Delivery
+    Delivery,
+    FiscalSeal
 } from '@/types';
 
 // --- 🛡️ COMPLIANCE DOMAIN (Fiscal NF525, Guard/HACCP, Maintenance, Livraisons) ---
 
 // FISCAL
-const _fiscalLedger = createProxyDomain<JournalEntry>('fiscalLedger');
+const _fiscalLedger = createProxyDomain<FiscalSeal>('fiscalLedger');
 export const fiscalLedgerNodeAtom = _fiscalLedger.node;
 export const fiscalLedgerAtom = _fiscalLedger.data;
 export const fiscalLoadingAtom = _fiscalLedger.loading;

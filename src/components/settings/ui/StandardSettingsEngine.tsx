@@ -11,8 +11,31 @@ import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
+export interface SettingsOption {
+    label: string;
+    value: string | number;
+}
+
+export interface SettingsField {
+    id: string;
+    key?: string; // Legacy support
+    label: string;
+    description?: string;
+    type: 'boolean' | 'string' | 'text' | 'textarea' | 'number' | 'percentage' | 'select' | 'color' | 'list';
+    unit?: 'cents' | 'grams' | 'percent';
+    options?: SettingsOption[];
+    subFields?: SettingsField[];
+    validation?: unknown; // Zod or simple rules
+}
+
+export interface SettingsSchema {
+    id: string;
+    title?: string;
+    fields: SettingsField[];
+}
+
 interface StandardSettingsEngineProps {
-    schema: any; // On utilise any pour compatibilité avec ModuleSchema v1 et v2
+    schema: SettingsSchema; 
 }
 
 export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ schema }) => {
@@ -20,7 +43,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     const schemaKey = schema.id;
     
     // État local pour le "Dirty Tracking"
-    const [localData, setLocalData] = useState<any>({});
+    const [localData, setLocalData] = useState<Record<string, unknown>>({});
     const [isSaving, setIsSaving] = useState(false);
 
     // Initialisation
@@ -37,8 +60,8 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
         return original !== current;
     }, [localData, settings, schemaKey]);
 
-    const handleChange = (fieldId: string, value: any) => {
-        setLocalData((prev: any) => ({
+    const handleChange = (fieldId: string, value: unknown) => {
+        setLocalData((prev) => ({
             ...prev,
             [fieldId]: value
         }));
@@ -54,7 +77,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields);
             
             // 3. Mise à jour via le Context (Global State + Firestore)
-            await updateConfig(schemaKey as any, sanitizedData);
+            await updateConfig(schemaKey as never, sanitizedData);
             
             toast.success("Synchronisation Nexus-Sync réussie");
         } catch (error) {
@@ -66,10 +89,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     };
 
     const handleReset = () => {
-        setLocalData(settings?.[schemaKey as keyof typeof settings] || {});
+        setLocalData((settings?.[schemaKey as keyof typeof settings] as Record<string, unknown>) || {});
     };
 
-    const renderField = (field: any, value: any, onChange: (val: any) => void) => {
+    const renderField = (field: SettingsField, value: unknown, onChange: (val: unknown) => void) => {
         // Adaptation pour supporter 'key' ou 'id'
         const fieldId = field.id || field.key;
 
@@ -129,7 +152,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                             onChange={(e) => onChange(e.target.value)}
                         >
                             <option value="" className="bg-slate-900">Sélectionner...</option>
-                            {field.options?.map((opt: any) => (
+                            {field.options?.map((opt: SettingsOption) => (
                                 <option key={opt.value} value={opt.value} className="bg-slate-900">{opt.label}</option>
                             ))}
                         </select>
@@ -175,11 +198,11 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                     >
                                         <Trash2 size={12} />
                                     </button>
-                                    {field.subFields?.map((sub: any) => (
+                                    {field.subFields?.map((sub: SettingsField) => (
                                         <div key={sub.id || sub.key}>
-                                            {renderField(sub, item[sub.id || sub.key], (val) => {
+                                            {renderField(sub, (item as Record<string, unknown>)[sub.id || sub.key!], (val: unknown) => {
                                                 const newList = [...listValue];
-                                                newList[index] = { ...newList[index], [sub.id || sub.key]: val };
+                                                newList[index] = { ...newList[index], [sub.id || sub.key!]: val };
                                                 onChange(newList);
                                             })}
                                         </div>
@@ -249,7 +272,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             {/* Fields Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <AnimatePresence mode='popLayout'>
-                    {schema.fields.map((field: any) => (
+                    {schema.fields.map((field: SettingsField) => (
                         <motion.div
                             key={field.id || field.key}
                             variants={fadeInUp}
@@ -258,7 +281,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >
-                            {renderField(field, localData[field.id || field.key], (val) => handleChange(field.id || field.key, val))}
+                            {renderField(field, localData[field.id || field.key!], (val: unknown) => handleChange(field.id || field.key!, val))}
                         </motion.div>
                     ))}
                 </AnimatePresence>

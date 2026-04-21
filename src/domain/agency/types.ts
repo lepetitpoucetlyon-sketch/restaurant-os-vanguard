@@ -18,7 +18,7 @@ export interface AgentInsight {
     description: string;
     suggestedAction?: {
         label: string;
-        payload: any;
+        payload: Record<string, unknown>;
     };
     reasoning: AgentReasoningStep[];
 }

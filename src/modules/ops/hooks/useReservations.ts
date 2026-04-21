@@ -5,6 +5,7 @@ import { useAtomValue } from "jotai";
 import { reservationsNodeAtom } from "@/store/operationalAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
+import { Reservation } from "../reservations.types";
 
 /**
  * 📅 useReservations - Grade VI Atomic Bridge
@@ -24,17 +25,17 @@ export function useReservations() {
         isLoading: node.loading, 
         error: node.error,
         getReservationsForTable: useCallback((tableId: string) => 
-            reservations.filter((r: any) => r.tableId === tableId && r.status !== 'cancelled'),
+            reservations.filter((r: Reservation) => r.tableId === tableId && r.status !== 'cancelled'),
             [reservations]
         ),
         
         // --- Forge Actions ---
-        addReservation: (data: any) => {
+        addReservation: (data: Partial<Reservation>) => {
             const id = data.id || `res_${Date.now()}`;
             return reservationForge.mutate('SET', id, data);
         },
-        updateReservation: (id: string, data: any) => reservationForge.mutate('UPDATE', id, data),
+        updateReservation: (id: string, data: Partial<Reservation>) => reservationForge.mutate('UPDATE', id, data),
         deleteReservation: (id: string) => reservationForge.mutate('DELETE', id, {}),
-        updateStatus: (id: string, status: string) => reservationForge.mutate('UPDATE', id, { status })
+        updateStatus: (id: string, status: Reservation['status']) => reservationForge.mutate('UPDATE', id, { status })
     };
 }

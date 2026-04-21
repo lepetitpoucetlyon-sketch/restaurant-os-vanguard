@@ -29,7 +29,7 @@ type TelemetryEventType =
 interface TelemetryEvent {
     moduleId: string;
     eventType: TelemetryEventType;
-    payload?: Record<string, any>;
+    payload?: Record<string, unknown>;
     timestamp: string;
     tenantId: string;
 }
@@ -68,7 +68,7 @@ class TelemetryHookService {
      * Emit a metric event. If opt-in is false, this is a complete no-op.
      * The MCC will never see this event.
      */
-    emit(moduleId: string, eventType: TelemetryEventType, payload?: Record<string, any>): void {
+    emit(moduleId: string, eventType: TelemetryEventType, payload?: Record<string, unknown>): void {
         // 🛡️ SOVEREIGNTY GATE: If not opted in, do absolutely nothing.
         if (!this._optedIn) return;
 

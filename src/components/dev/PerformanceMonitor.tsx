@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
-import { posCartCountSelector } from '@/store/posAtoms';
+import { posCartCountSelector } from '@/modules/ops/store/posAtoms';
 
 /**
  * 📊 PerformanceMonitor - Grade VI

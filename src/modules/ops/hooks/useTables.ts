@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { tablesNodeAtom } from "@/store/operationalAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
+import { Table, Floor, Zone } from "../tables.types";
 
 /**
  * 🪑 useTables - Grade VI Atomic Bridge
@@ -13,16 +14,16 @@ export function useTables() {
     useVisibilityPurge('tables');
     const node = useAtomValue(tablesNodeAtom);
     const tables = node.data || [];
-    const floors: any[] = []; 
-    const zones: any[] = []; 
+    const floors: Floor[] = []; 
+    const zones: Zone[] = []; 
 
     const getTablesForFloor = useCallback((floorId: string) => 
-        (tables || []).filter((t: any) => t.floorId === floorId), 
+        (tables || []).filter((t: Table) => t.floorId === floorId), 
         [tables]
     );
 
     const getZonesForFloor = useCallback((floorId: string) => 
-        (zones || []).filter((z: any) => z.floorId === floorId), 
+        (zones || []).filter((z: Zone) => z.floorId === floorId), 
         [zones]
     );
 
@@ -37,13 +38,13 @@ export function useTables() {
         setCurrentFloor: () => {},
         getTablesForFloor,
         getZonesForFloor,
-        addTable: async (table: any) => console.log('[Tables] Add:', table),
-        updateTable: async (id: string, data: any) => console.log('[Tables] Update:', id, data),
+        addTable: async (table: Partial<Table>) => console.log('[Tables] Add:', table),
+        updateTable: async (id: string, data: Partial<Table>) => console.log('[Tables] Update:', id, data),
         updateTablePosition: async (id: string, x: number, y: number) => console.log('[Tables] Move:', id, x, y),
         deleteTable: async (id: string) => console.log('[Tables] Delete:', id),
-        addFloor: async (floor: any) => console.log('[Floors] Add:', floor),
+        addFloor: async (floor: Partial<Floor>) => console.log('[Floors] Add:', floor),
         resetToTemplate: (template: string) => console.log('[Tables] Reset:', template),
-        updateZone: (id: string, data: any) => console.log('[Zones] Update:', id, data),
+        updateZone: (id: string, data: Partial<Zone>) => console.log('[Zones] Update:', id, data),
         isLoading: node.loading, 
         error: node.error 
     };

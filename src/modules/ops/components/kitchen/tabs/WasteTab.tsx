@@ -10,9 +10,11 @@ import { useToast } from "@/components/ui/Toast";
 import React, { useState } from "react";
 import { PremiumSelect } from "@/components/ui/PremiumSelect";
 
+import { Ingredient, RegulatoryWasteLog } from "@/types";
+
 interface WasteTabProps {
-    ingredients: any[];
-    wasteLogs: any[];
+    ingredients: Ingredient[];
+    wasteLogs: RegulatoryWasteLog[];
 }
 
 export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {

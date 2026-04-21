@@ -47,7 +47,7 @@ export class RealityGenerator {
      * Starts a live stream of HACCP data into the system.
      * This is the "Traffic" on the highway.
      */
-    static startHACCPStream(callback: (reading: any) => void, frequencyMs: number = 5000) {
+    static startHACCPStream(callback: (reading: ReturnType<typeof RealityGenerator.generateHACCPReading>) => void, frequencyMs: number = 5000) {
         logger.info(`✨ [SIMULACRA] Starting Live HACCP Reality Stream (${frequencyMs}ms)`);
         const interval = setInterval(() => {
             const reading = this.generateHACCPReading();

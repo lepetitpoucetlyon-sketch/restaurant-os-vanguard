@@ -36,7 +36,7 @@ export class SLMDataGenerator {
         const stocks = await Nexus.adapter.query('stock_items');
         const pairs: SLMTrainingPair[] = [];
 
-        (stocks as any[]).forEach(item => {
+        (stocks as StockItem[]).forEach(item => {
             const itemName = item.ingredientName;
             const quantity = item.quantity || item.currentStock || 0;
             const unit = item.unit || "unités";
@@ -90,7 +90,10 @@ export class SLMDataGenerator {
         const pairs: SLMTrainingPair[] = [];
 
         (recipes as Recipe[]).forEach(recipe => {
-            const ingredientsList = recipe.ingredients?.map((i: any) => `${i.quantity}${i.unit} de ${i.name}`).join(', ');
+            const ingredientsList = recipe.ingredients?.map((i) => {
+                const ing = i as { quantity: number; unit: string; name: string };
+                return `${ing.quantity}${ing.unit} de ${ing.name}`;
+            }).join(', ');
             pairs.push({
                 instruction: `Comment préparer le plat : ${recipe.name} ?`,
                 input: `Recette technique ${recipe.name}`,
@@ -157,7 +160,7 @@ export class SLMDataGenerator {
             pairs.push({
                 instruction: `Quel est le rôle de ${u.name} dans l'équipe ?`,
                 input: `Infos employé ${u.name}`,
-                output: `${u.name} occupe le poste de ${u.role}. Performance moyenne : ${(u as any).performanceScore?.toFixed(1) || "N/A"}/5.`,
+                output: `${u.name} occupe le poste de ${u.role}. Performance moyenne : ${u.performanceScore?.toFixed(1) || "N/A"}/5.`,
                 category: 'staff'
             });
         });

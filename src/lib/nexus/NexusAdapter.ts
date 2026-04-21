@@ -18,23 +18,23 @@ export interface INexusQueryOptions {
 }
 
 export interface INexusBatch {
-    set<T = any>(path: string, data: T): void;
-    update<T = any>(path: string, data: Partial<T>): void;
+    set<T = unknown>(path: string, data: T): void;
+    update<T = unknown>(path: string, data: Partial<T>): void;
     delete(path: string): void;
     commit(): Promise<void>;
 }
 
 export interface INexusAdapter {
-    get<T = any>(path: string): Promise<T | null>;
-    query<T = any>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
-    onSnapshot<T = any>(
+    get<T = unknown>(path: string): Promise<T | null>;
+    query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
+    onSnapshot<T = unknown>(
         path: string, 
         callback: (data: T) => void, 
-        options?: INexusQueryOptions & { onError?: (error: any) => void }
+        options?: INexusQueryOptions & { onError?: (error: Error) => void }
     ): () => void;
     batch(): INexusBatch;
-    set<T = any>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
-    update<T = any>(path: string, data: Partial<T>): Promise<void>;
+    set<T = unknown>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
+    update<T = unknown>(path: string, data: Partial<T>): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
 }

@@ -4,12 +4,13 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
 import { StaffService } from '@/domain/services/StaffService';
+import { Shift, LeaveRequest } from '@/modules/hr/types';
 
 /**
  * 🧑‍🍳 HR Actions - Restaurant OS
  */
 
-export async function upsertShiftAction(tenantId: string, shiftData: any) {
+export async function upsertShiftAction(tenantId: string, shiftData: Partial<Shift>) {
     logger.info(`[ServerAction] Upserting Shift (Tenant: ${tenantId})`);
 
     try {
@@ -161,7 +162,7 @@ export async function deleteShiftAction(tenantId: string, shiftId: string) {
  * 🛫 Leave Management Actions
  */
 
-export async function createLeaveRequestAction(tenantId: string, requestData: any) {
+export async function createLeaveRequestAction(tenantId: string, requestData: Partial<LeaveRequest>) {
     logger.info(`[ServerAction] Creating Leave Request (Tenant: ${tenantId})`);
     
     // 1. Validate Business Rules via StaffService

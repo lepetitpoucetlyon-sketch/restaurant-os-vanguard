@@ -12,7 +12,7 @@ export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'ha
 export interface AuditEvent {
     module: AuditModule;
     action: string;
-    details?: any;
+    details?: Record<string, unknown>;
     severity?: AuditSeverity;
     userId?: string;
     timestamp: Date;
@@ -114,7 +114,7 @@ class EmpireAuditLogger {
     /**
      * Report an error to the observability stack.
      */
-    public error(error: Error | string, module: AuditModule, context?: any) {
+    public error(error: Error | string, module: AuditModule, context?: Record<string, unknown>) {
         this.log({
             module,
             action: typeof error === 'string' ? error : error.message,

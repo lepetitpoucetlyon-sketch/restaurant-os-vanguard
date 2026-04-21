@@ -14,8 +14,7 @@ import {
 } from "lucide-react";
 import { useAtomValue } from "jotai";
 import { recipesAtom } from "@/store/operationalAtoms";
-import { cn } from "@/lib/ui.foundations";
-import { BarOrder } from "@/domain/types/bar";
+import { Recipe } from "@/types";
 
 
 interface KdsTabProps {
@@ -26,7 +25,7 @@ interface KdsTabProps {
   updateOrderStatus: (orderId: string, nextStatus: string) => void;
   setRushMode: (mode: boolean) => void;
   setSearchQueryKDS: (query: string) => void;
-  setSelectedRecipe: (recipe: any) => void;
+  setSelectedRecipe: (recipe: Recipe | BarOrderItem) => void;
 }
 
 export const KdsTab: React.FC<KdsTabProps> = ({
@@ -169,13 +168,13 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                         {/* Ticket Items - Splitting Logic */}
                         <div className="flex-1 p-6 flex flex-col gap-5">
                             {ticket.items.flatMap(item => {
-                                if ((item.modifiers?.length || (item as any).notes) && item.qty > 1) {
+                                if ((item.modifiers?.length || item.notes) && item.qty > 1) {
                                     return Array(item.qty).fill(null).map(() => ({ ...item, qty: 1 }));
                                 }
                                 return [item];
                             }).map((item, i) => {
                                 const product = recipes.find(p => p.name === item.name);
-                                const hasMods = (item.modifiers && item.modifiers.length > 0) || (item as any).notes;
+                                const hasMods = (item.modifiers && item.modifiers.length > 0) || item.notes;
 
                                 return (
                                     <div key={i} className={cn(
@@ -226,9 +225,9 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                                 </div>
                                             )}
 
-                                            {(item as any).notes && (
+                                            {item.notes && (
                                                 <div className="mt-3 p-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-xs font-bold text-amber-700 italic">
-                                                    "{ (item as any).notes }"
+                                                    "{ item.notes }"
                                                 </div>
                                             )}
 

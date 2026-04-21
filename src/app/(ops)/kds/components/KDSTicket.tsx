@@ -4,6 +4,12 @@ import { cn } from "@/lib/ui.foundations";
 import { Order, OrderStatus, Recipe } from "@/types";
 import { ITEM_STATION_MAP } from "@/app/(ops)/kds/constants";
 
+interface AuditTicket {
+    id: string;
+    recipeName: string;
+    standardImage?: string;
+}
+
 interface KDSTicketProps {
     ticket: Order;
     gridColumns: number;
@@ -11,7 +17,7 @@ interface KDSTicketProps {
     updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
     setSelectedRecipe: (recipe: Recipe) => void;
     setIsAuditOpen: (isOpen: boolean) => void;
-    setAuditTicket: (ticket: any) => void;
+    setAuditTicket: (ticket: AuditTicket) => void;
     recipes: Recipe[];
 }
 

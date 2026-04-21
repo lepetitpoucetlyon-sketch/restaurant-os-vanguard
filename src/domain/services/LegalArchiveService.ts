@@ -1,5 +1,6 @@
 import { FiscalEngine } from './FiscalEngine';
 import { NF525Service } from './NF525Service';
+import { FiscalSeal } from '@/types';
 
 /**
  * 🏛️ LegalArchiveService - Grade IX Sovereign Bridge
@@ -11,11 +12,11 @@ export const LegalArchiveService = {
     ...NF525Service,
     
     // Grade IX Compatibility Wrappers
-    runAudit: (seals: any[]) => FiscalEngine.runAudit(seals, 'master-instance'),
+    runAudit: (seals: FiscalSeal[]) => FiscalEngine.runAudit(seals, 'master-instance'),
     sealEntry: FiscalEngine.sealEntry,
     sealPeriod: (start: Date, end: Date) => FiscalEngine.sealEntry('period-seal', { start, end }),
-    verifyIntegrity: (seals: any[]) => FiscalEngine.verifyChain(seals),
-    verifyVaultIntegrity: (seals: any[]) => FiscalEngine.verifyChain(seals)
+    verifyIntegrity: (seals: FiscalSeal[]) => FiscalEngine.verifyChain(seals),
+    verifyVaultIntegrity: (seals: FiscalSeal[]) => FiscalEngine.verifyChain(seals)
 };
 
 export default LegalArchiveService;

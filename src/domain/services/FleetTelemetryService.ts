@@ -75,10 +75,10 @@ export class FleetTelemetryService {
       
       const payload = {
         ...this.telemetryBuffer,
-        lastSeen: new Date(),
+        lastSeen: new Date().toISOString(),
         engineVersion: "5.4.1-NEXUS",
         nodeHealth: {
-          memoryUsageMB: Math.round((typeof window !== 'undefined' && (window.performance as any)?.memory?.usedJSHeapSize) / 1024 / 1024) || 0,
+          memoryUsageMB: Math.round((typeof window !== 'undefined' && (window.performance as unknown as { memory: { usedJSHeapSize: number } })?.memory?.usedJSHeapSize) / 1024 / 1024) || 0,
           lowResActive: true,
           timestamp: Date.now()
         }
@@ -104,9 +104,9 @@ export class FleetTelemetryService {
    * @method discoverRealFleet
    * @description Récupère la liste des nœuds actifs avec leurs métriques de base.
    */
-  public async discoverRealFleet(): Promise<any[]> {
+  public async discoverRealFleet(): Promise<SiteTelemetry[]> {
     try {
-      const fleetSnap = await Nexus.adapter.query("fleet-telemetry");
+      const fleetSnap = await Nexus.adapter.query<SiteTelemetry>("fleet-telemetry");
       return fleetSnap;
     } catch (e) {
       console.error("[Fleet] Discovery failed", e);
@@ -118,7 +118,7 @@ export class FleetTelemetryService {
    * @method getGlobalMetrics
    * @description Agrège les données pour le dashboard MCC sans saturer la RAM.
    */
-  public async getGlobalMetrics(sites?: any[]): Promise<{ totalNodes: number; empireHealth: number }> {
+  public async getGlobalMetrics(sites?: SiteTelemetry[]): Promise<{ totalNodes: number; empireHealth: number }> {
     const nodes = sites || (await this.discoverRealFleet());
     return {
       totalNodes: nodes.length,
@@ -129,14 +129,14 @@ export class FleetTelemetryService {
   /**
    * @static Static Wrapper for Fleet Discovery (Compatibility)
    */
-  public static async discoverRealFleet(): Promise<any[]> {
+  public static async discoverRealFleet(): Promise<SiteTelemetry[]> {
     return this.getInstance().discoverRealFleet();
   }
 
   /**
    * @static Static Wrapper for Global Metrics (Compatibility)
    */
-  public static async getGlobalMetrics(sites?: any[]): Promise<{ totalNodes: number; empireHealth: number }> {
+  public static async getGlobalMetrics(sites?: SiteTelemetry[]): Promise<{ totalNodes: number; empireHealth: number }> {
     return this.getInstance().getGlobalMetrics(sites);
   }
 }

@@ -32,8 +32,8 @@ export class KitchenService {
             marginInCents: recipe.marginInCents || (recipe.sellingPriceInCents || 0) - (recipe.costPriceInCents || 0),
             updatedAt: new Date(),
             createdAt: recipe.createdAt instanceof Date ? recipe.createdAt : new Date(recipe.createdAt || now),
-            color: (recipe as any).color || '#000000',
-            isActive: (recipe as any).isActive ?? true
+            color: recipe.color || '#000000',
+            isActive: recipe.isActive ?? true
         } as Recipe;
     }
 

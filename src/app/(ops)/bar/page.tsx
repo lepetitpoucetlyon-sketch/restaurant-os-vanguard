@@ -15,6 +15,8 @@ import {
   COCKTAILS, 
   BAR_ORDERS 
 } from "@/domain/constants/bar-data";
+import { Recipe } from "@/types";
+import { BarOrder } from "@/domain/types/bar";
 
 // Components
 import { BarSidebar } from "@/components/bar/BarSidebar";
@@ -35,9 +37,9 @@ export default function BarPage() {
     const [rushMode, setRushMode] = useState(false);
     
     // Data State
-    const [orders, setOrders] = useState(BAR_ORDERS.map(o => ({ 
+    const [orders, setOrders] = useState<BarOrder[]>(BAR_ORDERS.map(o => ({ 
       ...o, 
-      status: (o.items[0]?.status === 'done' ? 'ready' : (o.items[0]?.status === 'preparing' ? 'preparing' : 'new')) as any
+      status: (o.items[0]?.status === 'done' ? 'ready' : (o.items[0]?.status === 'preparing' ? 'preparing' : 'new')) as BarOrder['status']
     })));
     
     // Selection State
@@ -45,10 +47,10 @@ export default function BarPage() {
     const [filterRegion, setFilterRegion] = useState<string | null>(null);
     const [showCocktailModal, setShowCocktailModal] = useState(false);
     const [editingCocktail, setEditingCocktail] = useState<Cocktail | null>(null);
-    const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
+    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
-    const updateOrderStatus = (orderId: string, nextStatus: string) => {
-        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: nextStatus as any } : o));
+    const updateOrderStatus = (orderId: string, nextStatus: BarOrder['status']) => {
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: nextStatus } : o));
         showToast(`Commande ${nextStatus === 'delivered' ? 'terminée' : nextStatus === 'preparing' ? 'lancée' : 'prête'}`, "success");
     };
 
@@ -75,7 +77,7 @@ export default function BarPage() {
             <div className="flex-1 overflow-auto p-8 custom-scrollbar">
                 {activeTab === 'kds' && (
                     <KdsTab 
-                        orders={orders as any}
+                        orders={orders}
                         rushMode={rushMode}
                         searchQueryKDS={searchQueryKDS}
                         gridColumns={3}

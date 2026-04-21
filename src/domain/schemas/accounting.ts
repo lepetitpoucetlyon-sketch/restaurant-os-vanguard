@@ -11,7 +11,7 @@ export const JournalLineSchema = z.object({
 
 export const JournalEntrySchema = z.object({
   id: z.string(),
-  date: z.any(), // Support for Firestore Timestamp or Date
+  date: z.union([z.date(), z.object({ seconds: z.number(), nanoseconds: z.number() }), z.string()]), // Support for Firestore Timestamp, Date or ISO String
   pieceNumber: z.string(),
   description: z.string(),
   lines: z.array(JournalLineSchema),
@@ -26,7 +26,7 @@ export const ExpenseClaimSchema = z.object({
   id: z.string(),
   userId: z.string(),
   userName: z.string(),
-  date: z.any(),
+  date: z.union([z.date(), z.object({ seconds: z.number(), nanoseconds: z.number() }), z.string()]),
   amountInCents: z.number().int().positive(),
   category: z.string(),
   description: z.string(),

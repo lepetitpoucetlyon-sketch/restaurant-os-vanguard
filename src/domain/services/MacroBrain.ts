@@ -169,7 +169,7 @@ export const MacroBrain = {
      * 🧠 ORACLE AUDIT BRIDGE (Industrial Grade)
      * Direct interface for Strategic AI Analysis.
      */
-    async getOracleAudit(prompt: string, context: any): Promise<string> {
+    async getOracleAudit(prompt: string, context: Record<string, unknown>): Promise<string> {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);
         
         try {

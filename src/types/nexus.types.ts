@@ -1,4 +1,5 @@
 import { User, UserRole, UserStatus } from './auth.types';
+import { IntelligenceConfig } from './common.types';
 import { TenantConfig } from '@/shared/nexus-contract';
 import { GlobalSettings } from './settings';
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
@@ -25,10 +26,10 @@ export interface NexusAuthState {
     // Grade X Extensions (Suture)
     require2FAChallenge?: boolean;
     verifyTwoFactor?: (code: string) => Promise<boolean>;
-    verifyPin?: (pin: string, context?: any) => Promise<boolean>;
+    verifyPin?: (pin: string, userId?: string) => Promise<boolean>;
     switchProfile?: (userId: string) => void;
     canSwitchProfiles?: boolean;
-    updateUserStatus?: (userId: string, status: any) => Promise<void>;
+    updateUserStatus?: (userId: string, status: 'active' | 'suspended' | 'on_leave') => Promise<void>;
     addUser?: (user: Partial<User>) => Promise<void>;
     deleteUser?: (userId: string) => Promise<void>;
     logAction?: (action: string, metadata?: Record<string, unknown>) => void;
@@ -75,17 +76,17 @@ export interface NexusSettingsState {
     isSaving: boolean;
     lastSaved: Date | null;
     updateSettings: (newSettings: GlobalSettings) => Promise<void>;
-    updateConfig: (key: string, data: any) => Promise<void>;
+    updateConfig: (key: string, data: Record<string, unknown>) => Promise<void>;
     updateIdentity?: (data: Record<string, unknown>) => Promise<void>;
-    updateGoals?: (data: any) => Promise<void>;
-    updateSchedule?: (data: any) => Promise<void>;
-    updateService?: (data: any) => Promise<void>;
-    addClosedPeriod?: (data: any) => Promise<void>;
+    updateGoals?: (data: Record<string, unknown>) => Promise<void>;
+    updateSchedule?: (data: Record<string, unknown>) => Promise<void>;
+    updateService?: (data: Record<string, unknown>) => Promise<void>;
+    addClosedPeriod?: (data: Record<string, unknown>) => Promise<void>;
     deleteClosedPeriod?: (id: string) => Promise<void>;
-    updateReservationConfig?: (data: any) => Promise<void>;
-    updateReservationSlots?: (data: any) => Promise<void>;
-    updateSLM?: (data: any) => Promise<void>;
-    updateList: (key: string, data: any) => Promise<void>;
+    updateReservationConfig?: (data: Record<string, unknown>) => Promise<void>;
+    updateReservationSlots?: (data: Record<string, unknown>) => Promise<void>;
+    updateSLM?: (data: Record<string, unknown>) => Promise<void>;
+    updateList: (key: string, data: Record<string, unknown>[]) => Promise<void>;
 }
 
 
@@ -148,33 +149,20 @@ export interface NexusFleetState {
     refreshFleet: (isBackground?: boolean) => Promise<void>;
     syncFleet: () => Promise<void>;
     selectInstance: (id: string | null) => void;
-    registerInstance: (instance: Record<string, unknown>) => Promise<void>;
+    registerInstance: (instance: EmpireInstance) => Promise<void>;
     launchPreview: (key: string) => void;
     broadcastConfiguration: (config: Record<string, unknown>) => Promise<void>;
-    complianceService: any;
-    haccpBridge: any;
+    complianceService: Record<string, unknown>;
+    haccpBridge: Record<string, unknown>;
     fleet: Record<string, unknown> | null;
     customer: Record<string, unknown>;
-    intelligence: {
-        globalInflationRate: number;
-        setGlobalInflationRate: (rate: number) => void;
-        scenarios: any[];
-        runSimulation: (config: any) => Promise<void>;
-        financialInsight: {
-            revenue: number;
-            foodCostPercent: number;
-            laborCostPercent: number;
-            primeCost: number;
-        } | null;
-        predictSignatureChance: (quote: any, inflation?: number) => number;
-        predictLaborCost: (shift: any) => number;
-    };
+    intelligence: IntelligenceConfig;
     isTrainingMode: boolean;
     toggleTrainingMode: () => void;
     triggerRebalancing?: () => Promise<void>;
     nodes?: Record<string, unknown>[];
     health?: string;
-    tutorial?: any;
+    tutorial?: Record<string, unknown>;
 }
 
 export interface NexusCoreState {

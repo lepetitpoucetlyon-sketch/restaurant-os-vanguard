@@ -1,4 +1,10 @@
 "use client";
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
-export const useIntelligence = () => useNexusFleet()?.intelligence;
-export const IntelligenceProvider = ({ children }: { children: any }) => <>{children}</>;
+import { NexusFleetState } from '@/types/nexus.types';
+
+export const useIntelligence = () => {
+    const fleet = useNexusFleet();
+    return fleet?.intelligence;
+};
+
+export const IntelligenceProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;

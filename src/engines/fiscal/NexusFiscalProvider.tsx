@@ -7,6 +7,16 @@ import { NF525Service } from '@/domain/services/NF525Service';
 import { ZodInterceptor } from '@/domain/services/ZodInterceptor';
 import { ExpenseClaimSchema } from '@/domain/schemas/accounting';
 import { submitExpenseAction } from '@/app/(admin)/actions/accounting';
+import { 
+    JournalEntry, 
+    Account, 
+    BankTransaction, 
+    ExpenseClaim, 
+    TreasuryMetrics,
+    FiscalSeal,
+    FiscalAuditResult
+} from '@/modules/finance/types';
+import { SensorReading, HygieneLog } from '@/modules/haccp/types';
 
 import { useAtomValue } from 'jotai';
 import { 
@@ -20,8 +30,8 @@ import {
 
 interface NexusFiscalState {
     accounting: {
-        entries: any[];
-        journalEntries: any[];
+        entries: JournalEntry[];
+        journalEntries: JournalEntry[];
         isLoading: boolean;
         metrics: {
             totalRevenueInCents: number;
@@ -31,31 +41,33 @@ interface NexusFiscalState {
         legacyMetrics: {
             cashOnHandInCents: number;
         };
-        submitExpense: (claim: any) => Promise<void>;
+        submitExpense: (claim: Omit<ExpenseClaim, 'id' | 'status' | 'date' | 'userName' | 'userRole'>) => Promise<string>;
         recordPayrollSalary: (userId: string, net: number, charges: number, month: string) => Promise<void>;
-        syncBankAccounts: (token: string) => Promise<any>;
-        accounts: any[];
-        bankTransactions: any[];
-        expenseClaims: any[];
+        syncBankAccounts: (token: string) => Promise<BankTransaction[]>;
+        accounts: Account[];
+        bankTransactions: BankTransaction[];
+        expenseClaims: ExpenseClaim[];
         isSyncing: boolean;
     };
-    compliance: any;
-    finance: {
-        treasury: {
-            cashOnHand: number;
-            bankBalance: number;
-            pendingReceivables: number;
-            pendingPayables: number;
-            forecast30Days: number;
-            netCashPosition: number;
-            cashFlowTrend: any[];
-            forecast30DaysValue?: number; // compat
-        };
-        alerts: any[];
-        bankTransactions: any[];
+    compliance: {
+        seals: string[];
+        runAudit: () => Promise<FiscalAuditResult>;
+        getComplianceScore: () => number;
+        checklists: HygieneLog[];
+        sensors: SensorReading[];
+        temperatureHistory: SensorReading[];
     };
-    audit: any;
-    registre: any;
+    finance: {
+        treasury: TreasuryMetrics;
+        alerts: { id: string; level: 'info' | 'warning' | 'critical'; message: string }[];
+        bankTransactions: BankTransaction[];
+    };
+    audit: { runAudit: () => Promise<FiscalAuditResult> };
+    registre: {
+        sales: JournalEntry[];
+        dailyReports: { date: string; totalInCents: number; status: string }[];
+        isCertified: boolean;
+    };
 }
 
 const NexusFiscalContext = createContext<NexusFiscalState | undefined>(undefined);
@@ -74,7 +86,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     
     // 2. COMPLIANCE & NF525
     const fiscalSeals = useMemo(() => 
-        ledgerEntries.filter((e: any) => e.fiscalSeal).map((e: any) => e.fiscalSeal),
+        ledgerEntries.filter((e: JournalEntry) => e.fiscalSealHash).map((e: JournalEntry) => e.fiscalSealHash as string),
     [ledgerEntries]);
 
     // 3. FINANCIAL STATE (Grade X Mock/Sync)
@@ -100,7 +112,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     }), [financialMetrics]);
 
 
-    const submitExpense = useCallback(async (expenseData: any) => {
+    const submitExpense = useCallback(async (expenseData: Omit<ExpenseClaim, 'id' | 'status' | 'date' | 'userName' | 'userRole'>) => {
         if (!activeTenantId || !currentUser) {
             throw new Error("Cannot submit expense: No active tenant ID or User session.");
         }
@@ -138,7 +150,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         });
     }, [activeTenantId, submitExpense]);
 
-    const contextValue: any = useMemo(() => ({
+    const contextValue: NexusFiscalState = useMemo(() => ({
         accounting: { 
             entries: ledgerEntries,
             journalEntries: ledgerEntries,

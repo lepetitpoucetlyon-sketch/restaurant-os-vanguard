@@ -20,13 +20,13 @@ export const MonkeyChaos = {
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',
                 amountInCents: 10000, 
-                _monkeyPatch: { forceAsymmetry: true }, 
                 description: 'MONKEY_ATTACK: Asymmetric Corruption Attempt'
-            } as any);
+            });
             
             return { success: false, message: 'CRITICAL: Ledger accepted unbalanced transaction! Resilience Compromised.' };
-        } catch (error: any) {
-            logger.info(`🛡️ [MonkeyChaos] Attack Blocked by Ledger: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            logger.info(`🛡️ [MonkeyChaos] Attack Blocked by Ledger: ${errorMessage}`);
             return { success: true, message: 'Audit Passed: Ledger financier stopped the saboteur.' };
         }
     },
@@ -38,6 +38,6 @@ export const MonkeyChaos = {
     simulateSensorCut(updateSensorValue: (id: string, value: number | null) => void): void {
         logger.warn('🧪 [MonkeyChaos] Cutting sensor hardware stream...');
         // We inject null values to simulate a loss of signal
-        updateSensorValue('ROTISSERIE_CORE_TEMP', null as any);
+        updateSensorValue('ROTISSERIE_CORE_TEMP', null);
     }
 };

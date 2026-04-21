@@ -21,7 +21,7 @@ export function useFloorPlanControls({
     mode,
     currentFloorId,
 }: FloorPlanControlsOptions) {
-    const stageRef = useRef<any>(null);
+    const stageRef = useRef<{ getStage: () => unknown } | null>(null);
     const [isManualPan, setIsManualPan] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -148,14 +148,14 @@ export function useFloorPlanControls({
         }
     }, [centerPlan, dimensions.width, floorTables.length, isManualPan]);
 
-    const handleDragStart = useCallback((e: any) => {
+    const handleDragStart = useCallback((e: { target: { setAttrs: (attrs: Record<string, unknown>) => void } }) => {
         e.target.setAttrs({
             shadowBlur: 15,
             shadowOpacity: 0.15
         });
     }, []);
 
-    const handleDragEnd = useCallback(async (e: any, id: string) => {
+    const handleDragEnd = useCallback(async (e: { target: { setAttrs: (attrs: Record<string, unknown>) => void; x: () => number; y: () => number } }, id: string) => {
         e.target.setAttrs({
             shadowBlur: 8,
             shadowOpacity: 0.08
@@ -163,7 +163,7 @@ export function useFloorPlanControls({
         updateTablePosition(id, e.target.x(), e.target.y());
     }, [updateTablePosition]);
 
-    const handleWheel = useCallback((e: any) => {
+    const handleWheel = useCallback((e: { evt: WheelEvent & { preventDefault: () => void }; target: { getStage: () => { scaleX: () => number; getPointerPosition: () => { x: number; y: number }; x: () => number; y: () => number } } }) => {
         e.evt.preventDefault();
         const stage = e.target.getStage();
         const oldScale = stage.scaleX();
@@ -187,13 +187,13 @@ export function useFloorPlanControls({
         onPositionChange(newPos);
     }, [onScaleChange, onPositionChange]);
 
-    const handleStageClick = useCallback(async (e: any) => {
+    const handleStageClick = useCallback(async (e: { target: { getStage: () => { getPointerPosition: () => { x: number; y: number }; x: () => number; y: () => number; scaleX: () => number; scaleY: () => number } } }) => {
         if (mode === 'add' && e.target === e.target.getStage()) {
             const stage = e.target.getStage();
             const pointer = stage.getPointerPosition();
             const x = (pointer.x - stage.x()) / stage.scaleX();
             const y = (pointer.y - stage.y()) / stage.scaleY();
-            const newTableNumber = (Math.max(0, ...floorTables.map((t: any) => parseInt(t.number) || 0)) + 1).toString();
+            const newTableNumber = (Math.max(0, ...floorTables.map((t: Table) => parseInt(t.number) || 0)) + 1).toString();
 
             await addTable({
                 number: newTableNumber,
@@ -225,14 +225,14 @@ export function useFloorPlanControls({
         }
     }, [selectedId, updateTable]);
 
-    const handleStageDragEnd = useCallback((e: any) => {
+    const handleStageDragEnd = useCallback((e: { target: { getStage: () => unknown; x: () => number; y: () => number } }) => {
         if (e.target === e.target.getStage()) {
             onPositionChange({ x: e.target.x(), y: e.target.y() });
             setIsManualPan(true);
         }
     }, [onPositionChange]);
 
-    const handleStageDragStart = useCallback((e: any) => {
+    const handleStageDragStart = useCallback((e: { target: { getStage: () => unknown } }) => {
         if (e.target === e.target.getStage()) {
             setIsManualPan(true);
         }

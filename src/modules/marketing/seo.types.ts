@@ -1,3 +1,5 @@
+import { ScheduledPost, MarketingSegment } from "./store/marketingAtoms";
+
 /**
  * SEO & REFERENCING TYPES
  */
@@ -15,6 +17,24 @@ export interface SEOScore {
     };
     issues: string[];
     recommendations: string[];
+}
+
+export interface KeywordStat {
+    term: string;
+    clicks: number;
+    impressions: number;
+    avgPosition: number;
+}
+
+export interface TrendPoint {
+    date: string;
+    value: number;
+}
+
+export interface StatSource {
+    name: string;
+    value: number;
+    percent: number;
 }
 
 export interface PageSEO {
@@ -61,13 +81,13 @@ export interface SEOConfig {
         keywords: string[];
         language: string;
         locale: string;
-        reservationFunnel?: any[];
-        weeklyTrend?: any[];
+        reservationFunnel?: TrendPoint[];
+        weeklyTrend?: TrendPoint[];
         impressions?: number;
         clicks?: number;
         ctr?: number;
         avgPosition?: number;
-        topKeywords?: any[];
+        topKeywords?: KeywordStat[];
         opened?: number;
         clicked?: number;
         conversions?: number;
@@ -85,24 +105,24 @@ export interface SEOConfig {
         pageViews?: number;
         reservations?: number;
         conversionRate?: number;
-        sources?: any[];
-        devices?: any[];
-        topPages?: any[];
-        reservationFunnel?: any[];
-        weeklyTrend?: any[];
+        sources?: StatSource[];
+        devices?: StatSource[];
+        topPages?: StatSource[];
+        reservationFunnel?: TrendPoint[];
+        weeklyTrend?: TrendPoint[];
         impressions?: number;
         clicks?: number;
         ctr?: number;
         avgPosition?: number;
-        topKeywords?: any[];
+        topKeywords?: KeywordStat[];
         opened?: number;
         clicked?: number;
         conversions?: number;
     };
     name?: string;
     lastSync?: string;
-    scheduledPosts?: any[];
-    crmSegments?: any[];
+    scheduledPosts?: ScheduledPost[];
+    crmSegments?: MarketingSegment[];
 
     organization: {
         name: string;

@@ -9,15 +9,15 @@ export interface NexusNode<T> {
     error: string | null;
     lastUpdated: number;
     // --- Grade X Survival Legalisation (Array Mimicry) ---
-    filter: (callback: (item: T, index: number, array: T[]) => any) => any;
-    find: (callback: (item: T, index: number, array: T[]) => any) => any;
-    map: (callback: (item: T, index: number, array: T[]) => any) => any;
+    filter: (callback: (item: T, index: number, array: T[]) => boolean) => T[];
+    find: (callback: (item: T, index: number, array: T[]) => boolean) => T | undefined;
+    map: <U>(callback: (item: T, index: number, array: T[]) => U) => U[];
     forEach: (callback: (item: T, index: number, array: T[]) => void) => void;
-    reduce: (callback: (acc: any, item: T, index: number, array: T[]) => any, initial?: any) => any;
+    reduce: <U>(callback: (acc: U, item: T, index: number, array: T[]) => U, initial: U) => U;
     every: (callback: (item: T, index: number, array: T[]) => boolean) => boolean;
     some: (callback: (item: T, index: number, array: T[]) => boolean) => boolean;
     includes: (item: T) => boolean;
-    sort: (compareFn?: (a: T, b: T) => number) => any;
+    sort: (compareFn?: (a: T, b: T) => number) => T[];
     slice: (start?: number, end?: number) => T[];
     join: (separator?: string) => string;
     reverse: () => T[];
@@ -27,8 +27,8 @@ export interface NexusNode<T> {
     length: number;
     pop: () => T | undefined;
     push: (...items: T[]) => number;
-    concat: (...items: T[]) => any;
-    [key: string]: any;
+    concat: (...items: T[]) => T[];
+    [key: string]: unknown;
 }
 
 /**

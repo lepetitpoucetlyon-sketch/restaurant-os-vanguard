@@ -21,7 +21,7 @@ export interface SiteTelemetry {
   tenantId: TenantID;
   status: 'ONLINE' | 'OFFLINE' | 'CRITICAL' | 'MAINTENANCE';
   healthScore: number; // 0 à 100
-  lastSeen: any; // serverTimestamp
+  lastSeen: string | number | { seconds: number; nanoseconds: number }; 
   activeOrders: number;
   dailyRevenue: number;
   engineVersion: string;

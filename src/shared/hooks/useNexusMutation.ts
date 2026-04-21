@@ -1,8 +1,9 @@
 "use client";
 
-import { useSetAtom } from 'jotai';
+import { useSetAtom, WritableAtom } from 'jotai';
 import { useCallback } from 'react';
 import { updateNexusNode, emitPulseAtom } from '@/store/operationalAtoms';
+import { NexusNode } from '@/store/base';
 import { validateMutation } from '../validation/SchemaRegistry';
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,8 +13,8 @@ import { v4 as uuidv4 } from 'uuid';
  * Orchestre les mutations atomiques avec validation génomique (Zod)
  * et diffusion de Pulses réactifs.
  */
-export function useNexusMutation<T>(
-    nodeAtom: any, 
+export function useNexusMutation<T extends { id: string }>(
+    nodeAtom: WritableAtom<NexusNode<T>, [NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)], void>, 
     key: string, 
     moduleId: string = 'CORE'
 ) {
@@ -43,16 +44,16 @@ export function useNexusMutation<T>(
 
         try {
             // 2. ATOMIC LOCAL UPDATE
-            setNode((prev: any) => {
+            setNode((prev: NexusNode<T>) => {
                 let newData = [...prev.data];
 
                 if (action === 'SET') {
-                    const existingIndex = newData.findIndex((item: any) => item.id === id);
+                    const existingIndex = newData.findIndex((item: T) => item.id === id);
                     const newItem = { 
-                        ...(payload as any), 
+                        ...(payload as T), 
                         id, 
                         _mutationMetadata: { mutationId, timestamp, moduleId } 
-                    };
+                    } as T;
                     
                     if (existingIndex !== -1) {
                         logger.warn(`[FORGE v3] IDEMPOTENCE: Resource ${id} already exists in ${moduleId}:${key}. Merging instead of adding.`);
@@ -61,11 +62,11 @@ export function useNexusMutation<T>(
                         newData = [newItem, ...newData];
                     }
                 } else if (action === 'UPDATE') {
-                    newData = newData.map((item: any) => 
-                        item.id === id ? { ...item, ...(payload as any) } : item
+                    newData = newData.map((item: T) => 
+                        item.id === id ? { ...item, ...(payload as Partial<T>) } : item
                     );
                 } else if (action === 'DELETE') {
-                    newData = newData.filter((item: any) => item.id !== id);
+                    newData = newData.filter((item: T) => item.id !== id);
                 }
 
                 return updateNexusNode(prev, { data: newData });

@@ -1,7 +1,7 @@
-import { CartItem } from "@/hooks/usePOSController";
+import { CartItem } from "@/modules/ops/hooks/usePOSController";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Category, Product } from "@/types";
-import { SharedKernel } from "./shared-kernel";
+import { SharedKernel } from "@/lib/shared-kernel";
 
 /**
  * POS Business Logic Service - The "Translator" between UI and Reality
@@ -36,8 +36,8 @@ export const POSService = {
      */
     analyzeProfitability: (items: CartItem[]) => {
         return items.map(item => {
-            const cost = (item as any).costInCents || 0;
-            const margin = SharedKernel.calculateMargin(item.priceInCents, cost);
+            const cost = (item as CartItem & { costInCents?: number }).costInCents || 0;
+            const margin = SharedKernel.calculateMargin(item.priceInCents, cost || 0);
             if (margin < 60) return { name: item.name, alert: 'Low Margin' };
             return null;
         }).filter(Boolean);
@@ -64,7 +64,7 @@ export const POSService = {
     fetchProducts: async (categoryId?: string): Promise<Product[]> => {
         try {
             const path = Nexus.getTenantPath('products');
-            const options: any = {};
+            const options: Parameters<typeof Nexus.adapter.query>[1] = {};
             if (categoryId) {
                 options.where = [{ field: 'categoryId', operator: '==', value: categoryId }];
             }

@@ -29,8 +29,8 @@ export function VoiceAssistantOverlay() {
     const [isVoiceMode, setIsVoiceMode] = useState(false);
     
     // All refs must be declared unconditionally (Rules of Hooks)
-    const pageContextRef = useRef<any>(null);
-    const recognitionRef = useRef<any>(null);
+    const pageContextRef = useRef<Record<string, unknown> | null>(null);
+    const recognitionRef = useRef<{ stop: () => void } | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
 
@@ -40,7 +40,7 @@ export function VoiceAssistantOverlay() {
     const aiName = config?.aiName || "NEXUS";
 
     useEffect(() => {
-        const handleContextUpdate = (e: any) => {
+        const handleContextUpdate = (e: CustomEvent) => {
             pageContextRef.current = e.detail;
         };
         window.addEventListener('ai:context_update', handleContextUpdate);
@@ -79,14 +79,14 @@ export function VoiceAssistantOverlay() {
             return;
         }
 
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
         if (!SpeechRecognition) return;
 
         const recognition = new SpeechRecognition();
         recognitionRef.current = recognition;
         recognition.lang = 'fr-FR';
         recognition.onstart = () => setIsDictating(true);
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
             const transcript = event.results[0][0].transcript;
             if (transcript.trim()) sendMessage(transcript, pageContextRef.current);
         };
@@ -106,7 +106,7 @@ export function VoiceAssistantOverlay() {
     }, [isVoiceMode, toggleDictation]);
 
     useEffect(() => {
-        const lastMsg = (messages as any[])[messages.length - 1];
+        const lastMsg = (messages as { role: string; content?: string; text?: string }[])[messages.length - 1];
         if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text);
     }, [messages, isProcessing, speakMessage]);
 
@@ -129,7 +129,7 @@ export function VoiceAssistantOverlay() {
 
     const toggleHistory = async () => {
         if (!showHistory) {
-            const hist = await (fetchAllSessions as any)();
+            const hist = await (fetchAllSessions as () => Promise<{ id: string, timestamp: Date, lastMessage: string }[]>)();
             setSessions(hist);
         }
         setShowHistory(!showHistory);
@@ -186,14 +186,14 @@ export function VoiceAssistantOverlay() {
                                     {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                                 </button>
                                 <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-primary"><Minus className="w-4 h-4" /></button>
-                                <button onClick={() => { handleClose(); (startNewSession as any)(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+                                <button onClick={() => { handleClose(); (startNewSession as () => void)(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
                             </div>
                         </div>
 
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages as any[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread messages={messages as { role: string; content?: string; text?: string }[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
                         )}
 
                         {pendingAction && (

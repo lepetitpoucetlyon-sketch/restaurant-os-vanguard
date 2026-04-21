@@ -16,7 +16,7 @@ export const ProductControlList: React.FC = () => {
             status: status,
             is_rejected: status === 'fail',
             decision: status === 'pass' ? 'accepted' : 'rejected'
-        } as any);
+        });
     };
 
     const handleFreshnessChange = (item: QualityControlItem, score: number) => {
@@ -26,7 +26,7 @@ export const ProductControlList: React.FC = () => {
                 ...item.checks,
                 freshness: {
                     ...item.checks.freshness,
-                    score: score as any,
+                    score: score as 1 | 2 | 3 | 4 | 5,
                     performed: true
                 }
             }
@@ -55,7 +55,7 @@ export const ProductControlList: React.FC = () => {
                             <div className={cn(
                                 "w-16 h-16 rounded-[1.5rem] flex items-center justify-center transition-all shadow-inner relative shrink-0",
                                 item.is_rejected ? "bg-rose-500 text-white" : 
-                                (item as any).status === 'pass' || (item as any).status === 'approved' ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-50 text-slate-300"
+                                item.status === 'pass' ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-50 text-slate-300"
                             )}>
                                 <Package className="w-8 h-8" />
                                 {item.is_rejected && (
@@ -111,7 +111,7 @@ export const ProductControlList: React.FC = () => {
                                     onClick={() => handleToggleStatus(item, 'pass')}
                                     className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md group-active:scale-95",
-                                        (item as any).status === 'pass' && !item.is_rejected
+                                        item.status === 'pass' && !item.is_rejected
                                             ? "bg-emerald-500 text-white shadow-emerald-500/30" 
                                             : "bg-slate-50 text-slate-300 hover:bg-emerald-50 hover:text-emerald-500 border border-slate-100"
                                     )}

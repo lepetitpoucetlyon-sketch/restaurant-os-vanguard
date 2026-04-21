@@ -20,7 +20,7 @@ export function useInventory() {
         [stockItems]
     );
 
-    const receiveOrder = useCallback((id: string, data: any) => {
+    const receiveOrder = useCallback((id: string, data: unknown) => {
         console.log('[Inventory] Bridge: Receive Order', id, data);
     }, []);
 

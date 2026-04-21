@@ -26,25 +26,25 @@ export class SimulacraAdapter implements INexusAdapter {
         logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
     }
 
-    async get(path: string): Promise<any | null> {
+    async get<T = unknown>(path: string): Promise<T | null> {
         // 1. Check Virtual Store first
         const virtual = await simulatorDb.virtualStore.get(path);
         
         if (virtual) {
             if (virtual.isDeleted) return null;
-            return virtual.data;
+            return virtual.data as T;
         }
 
         // 2. Fallback to Real Adapter (Read-only source)
-        return this.realAdapter.get(path);
+        return this.realAdapter.get<T>(path);
     }
 
     /**
      * ⚠️ Query in Simulacra mode is complex. 
      * For Grade X Alpha, we merge real results with virtual overrides.
      */
-    async query(collectionPath: string, options?: INexusQueryOptions): Promise<any[]> {
-        const realResults = await this.realAdapter.query(collectionPath, options);
+    async query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+        const realResults = await this.realAdapter.query<T>(collectionPath, options);
         const virtualResults = await simulatorDb.virtualStore
             .where('forkId').equals(this.forkId)
             // This is a naive filter for path matching - in production we'd need a more robust approach
@@ -55,19 +55,19 @@ export class SimulacraAdapter implements INexusAdapter {
         const merged = [...realResults];
         
         virtualResults.forEach(v => {
-            const index = merged.findIndex(m => m.id === v.data.id);
+            const index = merged.findIndex(m => (m as { id: string }).id === (v.data as { id: string }).id);
             if (v.isDeleted) {
                 if (index !== -1) merged.splice(index, 1);
             } else {
-                if (index !== -1) merged[index] = v.data;
-                else merged.push(v.data);
+                if (index !== -1) merged[index] = v.data as T;
+                else merged.push(v.data as T);
             }
         });
 
         return merged;
     }
 
-    onSnapshot(path: string, callback: (data: any) => void, options?: any): () => void {
+    onSnapshot<T = unknown>(path: string, callback: (data: T) => void, options?: INexusQueryOptions): () => void {
         logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X Alpha.");
         
         // Initial load
@@ -100,11 +100,11 @@ export class SimulacraAdapter implements INexusAdapter {
         };
     }
 
-    async set(path: string, data: any, options?: { merge?: boolean }): Promise<void> {
-        let finalData = data;
+    async set<T = unknown>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
+        let finalData = data as Record<string, unknown>;
         if (options?.merge) {
-            const existing = await this.get(path);
-            finalData = { ...existing, ...data };
+            const existing = await this.get<Record<string, unknown>>(path);
+            finalData = { ...existing, ...finalData };
         }
 
         await simulatorDb.virtualStore.put({
@@ -116,8 +116,8 @@ export class SimulacraAdapter implements INexusAdapter {
         });
     }
 
-    async update(path: string, data: any): Promise<void> {
-        const existing = await this.get(path);
+    async update<T = unknown>(path: string, data: Partial<T>): Promise<void> {
+        const existing = await this.get<Record<string, unknown>>(path);
         const finalData = { ...existing, ...data };
 
         await simulatorDb.virtualStore.put({

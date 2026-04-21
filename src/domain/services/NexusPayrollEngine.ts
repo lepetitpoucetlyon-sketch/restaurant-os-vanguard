@@ -59,7 +59,7 @@ export class NexusPayrollEngine {
         const newPath = `${tenantPath}/${newId}`;
 
         // 4. Generate Final Sealed Entry
-        const seal = await FiscalEngine.sealEntry(newId, { userId: user.id, timestamp: rawData.timestamp, type } as any, { lastSeal });
+        const seal = await FiscalEngine.sealEntry(newId, { userId: user.id, timestamp: rawData.timestamp as Date, type: type as string }, { lastSeal });
 
         const finalEntry = {
           ...rawData,

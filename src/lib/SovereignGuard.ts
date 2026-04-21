@@ -49,11 +49,12 @@ export const SovereignGuard = {
     try {
       await MasterBridge.pushGlobalConfig({
         maintenanceMode: true,
+        killSwitch: true,
         forceLogout: true,
         securityLevel: 'critical',
         globalMessage: errorMsg,
         allowedFeatures: []
-      } as any);
+      });
     } catch (e) {}
 
     if (typeof window !== 'undefined') {

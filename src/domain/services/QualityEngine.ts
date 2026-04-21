@@ -115,8 +115,17 @@ export class QualityEngine {
                 userId: 'system_quality',
                 type: 'CRITICAL_BUG',
                 description: 'Three consecutive deliveries failed hygiene standards. Mandatory floor audit required.',
-                systemState: { currentRoute: '/quality', orderCount: 0, lastActions: ['THREAT_DETECTED'], inventoryStatus: 'nominal', offlineMode: false }
-            } as any);
+                pageKey: 'HACCP',
+                systemState: { 
+                    currentRoute: '/quality', 
+                    orderCount: 0, 
+                    lastActions: ['THREAT_DETECTED'], 
+                    inventoryStatus: 'nominal', 
+                    offlineMode: false,
+                    activeModules: ['HACCP']
+                },
+                logs: ['[QualityEngine] Initiating automated SOS due to repeated hygiene failures.']
+            });
         }
     } catch (err) {
         logger.error('[QualityEngine] Trend tracking failed:', (err as Error).message);

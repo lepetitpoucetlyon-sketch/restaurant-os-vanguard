@@ -20,5 +20,5 @@ export interface Delivery {
   status: 'pending' | 'received' | 'cancelled';
   expected_at: string;
   items: DeliveryItem[];
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }

@@ -30,7 +30,7 @@ export function useExpert(domain: AgentDomain) {
     const isAuthorized = rolePower[userRole] >= rolePower[(expertConfig?.minRole as AgentRole) || 'admin'];
     const modelId = expertConfig?.modelId || slmConfig?.modelId || 'gemini-1.5-flash';
 
-    const queryExpert = useCallback(async (prompt: string, contextData?: any): Promise<AgentResponse> => {
+    const queryExpert = useCallback(async (prompt: string, contextData?: unknown): Promise<AgentResponse> => {
         if (!slmConfig?.apiKey || !slmConfig?.endpoint) {
             throw new Error('Erreur Système : Services d\'expertise non configurés.');
         }

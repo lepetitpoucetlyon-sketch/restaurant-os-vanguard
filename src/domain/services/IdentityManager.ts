@@ -90,7 +90,7 @@ export const IdentityManager = {
      * 🛡️ Multi-tenant Privacy Gate
      * Checks if a user has authority to access a specific tenant's business data.
      */
-    canAccessTenantData(user: User, instance: any): boolean {
+    canAccessTenantData(user: User, instance: import('@/domain/types/empire').EmpireInstance): boolean {
         // 1. Ownership Check (Normal User)
         if (user.role === 'admin' && !this.isSuperAdmin(user)) {
              // Basic assumption: normal admins are scoped to their own tenant

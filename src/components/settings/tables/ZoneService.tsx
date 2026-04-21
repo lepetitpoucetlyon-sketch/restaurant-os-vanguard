@@ -10,14 +10,16 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 
+import { Table, Zone, Floor } from "@/types";
+
 const ZONE_COLORS = ['#F5F5F0', '#E8E8E0', '#D0D0C8', '#FFF8E1', '#F0EFEA', '#EAE0D5', '#D6CFC7', '#C0B8B0'];
 
 interface ZoneServiceProps {
-    zones: any[];
-    floors: any[];
-    tables: any[];
-    addZone: (zone: any) => void;
-    updateZone: (id: string, zone: any) => void;
+    zones: Zone[];
+    floors: Floor[];
+    tables: Table[];
+    addZone: (zone: Omit<Zone, 'id'>) => void;
+    updateZone: (id: string, zone: Partial<Zone>) => void;
     deleteZone: (id: string) => void;
     isEditingZone: boolean;
     setIsEditingZone: (is: boolean) => void;
@@ -40,7 +42,7 @@ export function ZoneService({
         setIsEditingZone(true);
     };
 
-    const handleEditZone = (zone: any) => {
+    const handleEditZone = (zone: Zone) => {
         setEditingZone({ id: zone.id, name: zone.name, color: zone.color, description: zone.description || '', floorId: zone.floorId || 'rdc' });
         setIsEditingZone(true);
     };

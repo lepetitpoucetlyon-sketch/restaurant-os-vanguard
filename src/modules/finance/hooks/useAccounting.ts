@@ -6,9 +6,9 @@ import {
     accountsAtom, 
     bankTransactionsAtom, 
     expenseClaimsAtom,
-    accountingViewModeAtom,
-    fiscalLedgerAtom
+    accountingViewModeAtom
 } from '../store/accountingAtoms';
+import { fiscalLedgerAtom } from '@/modules/haccp/store/complianceAtoms';
 import { 
     AccountingMetrics, 
     FinancialMetrics,

@@ -60,7 +60,7 @@ export interface JournalEntry {
     validatedAt?: Date;
     fiscalSealHash?: string; // NF525 Seal
     sealedAt?: string;       // Date of sealing
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     // Operation Aliases (Grade X)
     type?: 'revenue' | 'expense' | 'tax' | 'bank' | 'payroll' | 'other';
     amountInCents?: number;
@@ -135,6 +135,7 @@ export interface BankTransaction {
     isReconciled: boolean;
     reconciledWith?: string; // JournalEntry ID
     reconciledAt?: Date;
+    signature?: string;    // NF525/Audit unique signature
 }
 
 export interface BankReconciliation {
@@ -242,11 +243,36 @@ export interface Transaction {
     expenseClaimId?: string;
 }
 
+export interface BankConnection {
+    id: string;
+    provider: 'plaid' | 'bridge' | 'manual';
+    institutionName: string;
+    status: 'active' | 'error' | 'disconnected';
+    lastSyncAt: Date;
+}
+
+export interface FiscalAuditResult {
+    isValid: boolean;
+    errors: string[];
+    warnings: string[];
+    periodCovered: { start: Date; end: Date };
+    integrityHash: string;
+}
+
+export interface ComplianceCertificate {
+    id: string;
+    type: 'NF525' | 'ISO27001' | 'HACCP';
+    issuedBy: string;
+    issuedAt: Date;
+    expiryDate: Date;
+    documentUrl: string;
+}
+
 export interface AccountingContextType {
     accounts: Account[];
     journalEntries: JournalEntry[];
     bankTransactions: BankTransaction[];
-    bankConnections: any[];
+    bankConnections: BankConnection[];
     expenseClaims: ExpenseClaim[];
     fiscalPeriods: FiscalPeriod[];
     ledger: LedgerAccount[];
@@ -273,9 +299,9 @@ export interface AccountingContextType {
     rejectExpenseClaim: (id: string) => Promise<void>;
     
     reconcileTransaction: (bankTxId: string, journalEntryId: string) => Promise<void>;
-    linkBankConnection: (connectionData: any) => Promise<void>;
+    linkBankConnection: (connectionData: Partial<BankConnection>) => Promise<void>;
     recordPayrollSalary: (userId: string, netAmount: number, socialCharges: number, month: string) => Promise<void>;
-    submitExpense: (claim: any) => Promise<void>;
+    submitExpense: (claim: Partial<ExpenseClaim>) => Promise<void>;
     
     generatePandL: (periodId: string) => ProfitAndLossReport;
     generateBalanceSheet: (date: Date) => BalanceSheetReport;
@@ -289,20 +315,20 @@ export interface AccountingContextType {
     
     // Expert/AI
     expert: {
-        queryExpert: (prompt: string, contextData?: any) => Promise<any>;
+        queryExpert: (prompt: string, contextData?: unknown) => Promise<unknown>;
         isConfigured: boolean;
         isAuthorized: boolean;
         role: string;
         modelId: string;
     };
     agent: {
-        query: (prompt: string, context?: any) => Promise<any>;
+        query: (prompt: string, context?: unknown) => Promise<unknown>;
         isProcessing: boolean;
     };
 
     // Fiscal & Compliance (Industrial)
     generateAnnualFEC: (year: number, siren?: string) => Promise<void>;
-    runFiscalAudit: () => Promise<any>;
-    certificates: any[];
-    saveCertification: (cert: any) => Promise<void>;
+    runFiscalAudit: () => Promise<FiscalAuditResult>;
+    certificates: ComplianceCertificate[];
+    saveCertification: (cert: ComplianceCertificate) => Promise<void>;
 }

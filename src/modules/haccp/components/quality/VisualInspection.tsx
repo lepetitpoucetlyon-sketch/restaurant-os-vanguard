@@ -33,19 +33,19 @@ export const VisualInspection: React.FC = () => {
             key: 'color_aspect', 
             label: 'Aspect / Couleur', 
             icon: <CircleDot className="w-4 h-4" />,
-            status: (activeControl as any)?.color_aspect !== false ? 'pass' : 'fail' 
+            status: activeControl?.color_aspect !== false ? 'pass' : 'fail' 
         },
         { 
             key: 'texture_aspect', 
             label: 'Texture / Fermeté', 
             icon: <Waves className="w-4 h-4" />,
-            status: (activeControl as any)?.texture_aspect !== false ? 'pass' : 'fail' 
+            status: activeControl?.texture_aspect !== false ? 'pass' : 'fail' 
         },
         { 
             key: 'odor_aspect', 
             label: 'Odeur / Fraîcheur', 
             icon: <Wind className="w-4 h-4" />,
-            status: (activeControl as any)?.odor_aspect !== false ? 'pass' : 'fail' 
+            status: activeControl?.odor_aspect !== false ? 'pass' : 'fail' 
         },
     ];
 
@@ -64,8 +64,8 @@ export const VisualInspection: React.FC = () => {
         } else {
             updateControl({
                 ...activeControl,
-                [key]: currentStatus !== 'pass'
-            } as any);
+                [key as keyof QualityControl]: currentStatus !== 'pass'
+            });
         }
     };
 

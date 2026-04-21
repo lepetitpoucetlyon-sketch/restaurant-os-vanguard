@@ -5,6 +5,7 @@ import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { cn } from "@/lib/ui.foundations";
 import { Users, AlertCircle, LayoutGrid, Layers, ChevronUp, ChevronDown, MousePointer2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Table } from "@/modules/ops/tables.types";
 
 interface TableSelectorProps {
     onSelectTable: (tableId: string) => void;
@@ -32,7 +33,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
         return () => clearTimeout(timer);
     }, []);
 
-    const renderTableButton = (table: any, index: number) => {
+    const renderTableButton = (table: Table, index: number) => {
         const getStatusStyles = () => {
             switch (table.status) {
                 case 'free':

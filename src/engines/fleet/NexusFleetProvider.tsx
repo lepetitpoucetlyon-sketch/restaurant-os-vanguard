@@ -9,56 +9,21 @@ import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { TenantID } from '@/domain/types/brands';
 import { fleetEngine } from '@/lib/nexus/NexusFleetEngine';
 import { EmpireInstance } from '@/domain/types/empire';
-import { FleetInsight } from '@/domain/services/MacroBrain';
+import { FleetInsight, ConsolidatedMetrics } from '@/domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-/**
- * 🛰️ NexusFleetState - Grade V (NEXUS-LOW-RES)
- * Optimized for 8GB RAM using ID-First strategy.
- */
-interface NexusFleetState {
-    instanceIds: TenantID[];
-    instances: any[];
-    globalMetrics: any | null;
-    stats: {
-        totalRevenue: number;
-        averageHealth: number;
-        consolidated?: {
-            totalLaborCost?: number;
-            averageFoodCost?: number;
-        };
+interface NexusFleetStateInternal extends NexusFleetState {
+    tutorial?: {
+        isActive: boolean;
+        step: number;
+        start: () => void;
+        stop: () => void;
     };
-    macroInsights: any[];
-    isLoading: boolean;
-    isSyncing: boolean;
-    isEmpireMode: boolean;
-    selectedInstanceId: string | null;
-    isUpdateAvailable: boolean;
-    updateInfo: {
-        version: string;
-        url: string;
-    } | null;
-    priceMultiplier: number;
-    refreshFleet: (isBackground?: boolean) => Promise<void>;
-    syncFleet: () => Promise<void>;
-    selectInstance: (id: string | null) => void;
-    registerInstance: (instance: Record<string, unknown>) => Promise<void>;
-    launchPreview: (key: string) => void;
-    broadcastConfiguration: (config: Record<string, unknown>) => Promise<void>;
-    complianceService: typeof FleetComplianceService;
-    haccpBridge: typeof HACCPTelemetryBridge;
-    isTrainingMode: boolean;
-    toggleTrainingMode: () => void;
-    // Legacy support proxies
-    fleet: Record<string, unknown> | null;
-    customer: Record<string, unknown>;
-    intelligence: Record<string, unknown>;
-    tutorial?: any;
 }
 
-const NexusFleetContext = createContext<NexusFleetState | undefined>(undefined);
+const NexusFleetContext = createContext<NexusFleetStateInternal | undefined>(undefined);
 
 /**
  * 🏥 NexusFleetProvider - The Heart of the Fleet
@@ -66,7 +31,7 @@ const NexusFleetContext = createContext<NexusFleetState | undefined>(undefined);
  */
 export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [liveFleet, setLiveFleet] = useState<EmpireInstance[]>([]);
-    const [globalMetrics, setGlobalMetrics] = useState<any | null>(null);
+    const [globalMetrics, setGlobalMetrics] = useState<ConsolidatedMetrics | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
     const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
@@ -74,15 +39,20 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     
     // --- INTELLIGENCE STATE (Grade X) ---
     const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
-    const [scenarios, setScenarios] = useState<any[]>([]);
-    const [financialInsight, setFinancialInsight] = useState<any>({
+    const [scenarios, setScenarios] = useState<import('@/types/common.types').SimulationScenario[]>([]); 
+    const [financialInsight, setFinancialInsight] = useState<{
+        revenue: number;
+        foodCostPercent: number;
+        laborCostPercent: number;
+        primeCost: number;
+    }>({
         revenue: 425000,
         foodCostPercent: 28.5,
         laborCostPercent: 32.1,
         primeCost: 60.6
     });
 
-    const runSimulation = useCallback(async (config: any) => {
+    const runSimulation = useCallback(async (config: { name: string; description: string; inputs?: { priceChange?: number } }) => {
         console.log('[FleetIntelligence] Running simulation...', config);
         await new Promise(r => setTimeout(r, 1500));
         const newScenario = {
@@ -189,7 +159,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const selectInstance = (id: string | null) => setSelectedInstanceId(id);
 
-    const registerInstance = async (instance: Record<string, unknown>) => {
+    const registerInstance = async (instance: Partial<EmpireInstance>) => {
         console.log('[Fleet] Registering new instance:', instance);
         await refreshFleet(true);
     };
@@ -199,7 +169,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         window.open(`/preview/${key}`, '_blank');
     };
 
-    const broadcastConfiguration = async (config: Record<string, unknown>) => {
+    const broadcastConfiguration = async (config: { priceMultiplier?: number; targetVersion?: string; maintenance?: boolean }) => {
         console.log('[Fleet] Broadcasting global configuration:', config);
         // Simulate network delay
         await new Promise(r => setTimeout(r, 800));
@@ -244,7 +214,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         }
     }), [globalMetrics]);
 
-    const contextValue = useMemo(() => ({
+    const contextValue: NexusFleetStateInternal = useMemo(() => ({
         instanceIds: liveFleet.map(f => f.id),
         instances: liveFleet,
         globalMetrics,
@@ -267,15 +237,16 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         broadcastConfiguration,
         complianceService: FleetComplianceService,
         haccpBridge: HACCPTelemetryBridge,
-        fleet: {} as any, 
-        customer: { customers: [] } as any,
+        fleet: {}, 
+        customer: { customers: [] },
         intelligence: { 
-            insights: macroInsights,
             globalInflationRate,
             setGlobalInflationRate,
             scenarios,
             runSimulation,
-            financialInsight
+            financialInsight,
+            predictSignatureChance: () => 0.5,
+            predictLaborCost: () => 0.0
         },
         tutorial: {
             isActive: false,
@@ -287,7 +258,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
 
     return (
-        <NexusFleetContext.Provider value={contextValue as any}>
+        <NexusFleetContext.Provider value={contextValue}>
             {children}
         </NexusFleetContext.Provider>
     );

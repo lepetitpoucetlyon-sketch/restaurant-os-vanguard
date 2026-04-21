@@ -8,7 +8,7 @@ import { NexusNode, updateNexusNode } from '@/store/nexusNodeFactory';
  * Enables O(1) fleet-wide purge and memory management.
  */
 interface RegisteredAtom {
-    atom: WritableAtom<NexusNode<unknown>, [any], void>;
+    atom: WritableAtom<NexusNode<unknown>, [NexusNode<unknown> | ((prev: NexusNode<unknown>) => NexusNode<unknown>)], void>;
     lastAccessed: number;
     usageCount: number;
 }
@@ -29,10 +29,10 @@ export const GlobalRegistryService = {
     /**
      * Registers a new domain atom for memory management.
      */
-    register(id: string, atom: WritableAtom<NexusNode<any>, [any], void>) {
+    register(id: string, atom: WritableAtom<NexusNode<unknown>, [NexusNode<unknown> | ((prev: NexusNode<unknown>) => NexusNode<unknown>)], void>) {
         if (!registry.has(id)) {
             registry.set(id, {
-                atom: atom as WritableAtom<NexusNode<unknown>, [any], void>,
+                atom,
                 lastAccessed: Date.now(),
                 usageCount: 0
             });
@@ -66,7 +66,7 @@ export const GlobalRegistryService = {
      * Decrements usage count (for hook cleanup).
      * TRIGGER: Immediate GC if count reaches 0 for volatile domains.
      */
-    release(id: string, store?: any) {
+    release(id: string, store?: { set: (atom: WritableAtom<unknown, unknown[], void>, value: unknown) => void }) {
         const entry = registry.get(id);
         if (entry && entry.usageCount > 0) {
             entry.usageCount--;
@@ -81,7 +81,7 @@ export const GlobalRegistryService = {
     /**
      * 🧹 Nuclear Purge (Zero Leak Policy)
      */
-    purgeInactive(store: any, ttlMax: number = 120000) {
+    purgeInactive(store: { set: (atom: WritableAtom<unknown, unknown[], void>, value: unknown) => void }, ttlMax: number = 120000) {
         const now = Date.now();
         let purgedCount = 0;
 
@@ -107,7 +107,7 @@ export const GlobalRegistryService = {
     /**
      * ☢️ Force Nuclear Purge
      */
-    forceNuclearPurge(store: any) {
+    forceNuclearPurge(store: { set: (atom: WritableAtom<unknown, unknown[], void>, value: unknown) => void }) {
         this.purgeInactive(store, -1);
     },
 

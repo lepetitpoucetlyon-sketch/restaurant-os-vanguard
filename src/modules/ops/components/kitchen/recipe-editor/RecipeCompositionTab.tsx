@@ -10,7 +10,7 @@ import { Recipe, RecipeIngredient } from "@/types";
 interface RecipeCompositionTabProps {
     formData: Partial<Recipe>;
     newIngredient: Partial<RecipeIngredient>;
-    setNewIngredient: (data: any) => void;
+    setNewIngredient: (data: Partial<RecipeIngredient> | ((prev: Partial<RecipeIngredient>) => Partial<RecipeIngredient>)) => void;
     handleAddIngredient: () => void;
     handleRemoveIngredient: (id: string) => void;
 }
@@ -32,7 +32,7 @@ export function RecipeCompositionTab({
                             type="text"
                             placeholder="Nom du composant..."
                             value={newIngredient.name}
-                            onChange={(e) => setNewIngredient((prev: any) => ({ ...prev, name: e.target.value }))}
+                            onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, name: e.target.value }))}
                             className="w-full h-14 px-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
@@ -41,14 +41,14 @@ export function RecipeCompositionTab({
                             type="number"
                             placeholder="Qté"
                             value={newIngredient.quantity || ''}
-                            onChange={(e) => setNewIngredient((prev: any) => ({ ...prev, quantity: parseFloat(e.target.value) || 0 }))}
+                            onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, quantity: parseFloat(e.target.value) || 0 }))}
                             className="w-full h-14 px-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
                     <div className="col-span-2">
                         <PremiumSelect
                             value={newIngredient.unit || 'g'}
-                            onChange={(val) => setNewIngredient((prev: any) => ({ ...prev, unit: val }))}
+                            onChange={(val) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, unit: val }))}
                             options={['g', 'kg', 'L', 'cl', 'ml', 'pièces'].map(u => ({ value: u, label: u }))}
                         />
                     </div>
@@ -59,7 +59,7 @@ export function RecipeCompositionTab({
                                 type="number"
                                 placeholder="Coût Unitaire"
                                 value={newIngredient.costInCents ? (newIngredient.costInCents / 100) : ''}
-                                onChange={(e) => setNewIngredient((prev: any) => ({ ...prev, costInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
+                                onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, costInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
                                 className="w-full h-14 pl-10 pr-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                             />
                         </div>
