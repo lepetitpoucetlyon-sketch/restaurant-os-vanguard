@@ -1,66 +1,58 @@
 /**
- * RESTAURANT OS - Centralized Type Definitions
- * All domain types re-exported from modular files for consistency and maintainability.
+ * 🏛️ RESTAURANT OS - Centralized Type Definitions
+ * Version Grade X - Sovereign Alignment
  * 
- * This is the barrel export file - import from here for backward compatibility.
- * For new code, prefer importing directly from the specific type file.
+ * This file is the primary binary bridge for all modules.
+ * It re-exports both Shared Kernel and Domain-specific types.
  */
 
-// Auth & Users
-export * from './auth.types';
+// 🏛️ GRADE X : MASTER KERNEL SUTURE
+export * from '@/shared/types';
 export * from '@/shared/nexus-contract';
+export * from '@/shared/genome.types';
 
-// Tables & Floor Plan
-export * from '@/modules/ops/tables.types';
-
-// Orders
+// Domain Core (Bridge to Modules)
 export * from '@/modules/ops/types';
-
-// Reservations & CRM
+export * from '@/modules/ops/tables.types';
 export * from '@/modules/ops/reservations.types';
-export type { CRM, CRMGroup } from '@/modules/ops/reservations.types';
-
-// Inventory & Stock Management
-export * from '@/modules/inventory/types';
-
-// Accounting & Finance
-export * from '@/modules/finance/types';
-
-// Staff & HR (Leaves, Compliance)
-export * from '@/modules/hr/types';
-
-// HACCP & Quality Control
-export * from '@/modules/haccp/types';
-
-// Common / Shared Types (Products, Menu, Notifications, etc.)
-export * from './common.types';
-
-// Quotes (Devis)
-export * from '@/modules/marketing/quotes.types';
-
-// Groups & Events
 export * from '@/modules/ops/groups.types';
-
-// Recruitment & HR Pipeline
-export * from './recruitment';
-
-// Oracle AI Types
-export * from './oracle.types';
-
-// SEO & Referencing
+export * from '@/modules/inventory/types';
+export * from '@/modules/haccp/types';
+export * from '@/modules/finance/types';
+export * from '@/modules/hr/types';
+export * from '@/modules/marketing/types';
+export * from '@/modules/marketing/quotes.types';
 export * from '@/modules/marketing/seo.types';
 
-// Permissions & Roles
-export * from './permissions.types';
-
-// Marketing & Reputation
-export * from '@/modules/marketing/types';
-
-// Doc Types
-export * from '@/lib/docs/types';
-
-// Maintenance Support
+// Internal Type Files (Local src/types/)
+export * from './common.types';
+export * from './domain.types';
 export * from './maintenance.types';
+export * from './nexus.types';
+export * from './oracle.types';
+export * from './permissions.types';
+export * from './recruitment';
+export * from './settings';
+
+// Recursive Settings Re-exports
+export * from './settings/Customer';
+export * from './settings/accounting';
+export * from './settings/catalog';
+export * from './settings/delivery';
+export * from './settings/haccp';
+export * from './settings/hr';
+export * from './settings/identity';
+export * from './settings/integrations';
+export * from './settings/inventory';
+export * from './settings/nexus';
+export * from './settings/notifications';
+export * from './settings/performance';
+export * from './settings/pos';
+export * from './settings/recipes';
+export * from './settings/reservations';
+export * from './settings/schedule';
+export * from './settings/security';
+export * from './settings/theme';
 
 // --- GRADE X : SOVEREIGN TYPES ---
 export interface StockEvent {
@@ -72,6 +64,5 @@ export interface StockEvent {
   referenceId?: string;
 }
 
+import { Order } from '@/modules/ops/types';
 export type LegacyOrder = Order;
-
-// Grade X Blueprints for Payroll & Shifts are now defined in staff.types.ts and exported via barrel.

@@ -2,6 +2,7 @@ import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { ToolDefinition } from './FinanceTool';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * MENU TOOL
@@ -33,7 +34,7 @@ export const MenuTool: ToolDefinition = {
             }
 
             const product = results[0];
-            const updates: Record<string, unknown> = {};
+            const updates: SovereignData = {};
             if (args.newPrice !== undefined) updates.price = args.newPrice;
             if (args.newDescription) updates.description = args.newDescription;
             updates.updatedAt = new Date().toISOString();
@@ -46,8 +47,9 @@ export const MenuTool: ToolDefinition = {
                 success: true, 
                 message: `L'article '${args.productName}' a été mis à jour avec succès : ${args.newPrice ? `${args.newPrice}€` : ''} ${args.newDescription ? 'Description modifiée' : ''}` 
             };
-        } catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
+        } catch (error) {
+            const err = error as Error;
+            const errorMessage = err.message || String(error);
             logger.error('MenuTool Error:', error);
             return { error: `Échec de la mise à jour : ${errorMessage}` };
         }

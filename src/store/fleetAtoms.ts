@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { EmpireInstance } from '@/domain/types/empire';
 import { FleetBloomFilter } from '@/lib/bloom-filter';
-import { Floor, Zone } from '@/types/tables.types';
+import { Floor, Zone } from '@/types';
 
 // 🔐 SINGLE SOURCE OF TRUTH: Re-export from masterAtoms to prevent split-brain
 export { tenantConfigAtom } from '@/store/masterAtoms';

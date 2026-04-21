@@ -72,9 +72,9 @@ export default function OmnichannelReservationsPage() {
     const filteredReservations = (reservations || []).filter(r => {
         if (filterSource && r.source !== filterSource) return false;
         if (filterStatus && r.status !== filterStatus) return false;
-        if (searchQuery && !(r as any).name?.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+        if (searchQuery && !r.name?.toLowerCase().includes(searchQuery.toLowerCase())) return false;
         return true;
-});
+    });
 
     const stats = {
         total: (reservations || []).length,
@@ -201,8 +201,8 @@ export default function OmnichannelReservationsPage() {
                             { id: 'all', label: 'TOUTES', count: stats.total, icon: LayoutGrid },
                             { id: 'website', label: 'SITE WEB', count: (reservations || []).filter(r => r.source === 'website').length, icon: Globe },
                             { id: 'google', label: 'GOOGLE', count: (reservations || []).filter(r => r.source === 'google').length, icon: Globe },
-                            { id: 'instagram', label: 'INSTAGRAM', count: (reservations || []).filter((r: any) => (r.source as any) === 'instagram').length, icon: Instagram },
-                            { id: 'facebook', label: 'FACEBOOK', count: (reservations || []).filter((r: any) => (r.source as any) === 'facebook').length, icon: Facebook },
+                            { id: 'instagram', label: 'INSTAGRAM', count: (reservations || []).filter(r => r.source === 'instagram').length, icon: Instagram },
+                            { id: 'facebook', label: 'FACEBOOK', count: (reservations || []).filter(r => r.source === 'facebook').length, icon: Facebook },
                             { id: 'phone', label: 'TÉLÉPHONE', count: (reservations || []).filter(r => r.source === 'phone').length, icon: Phone },
                             { id: 'thefork', label: 'THEFORK', count: (reservations || []).filter(r => r.source === 'thefork').length, icon: ExternalLink }
                         ].map((platform) => {
@@ -313,7 +313,7 @@ export default function OmnichannelReservationsPage() {
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         <Layout className="w-4 h-4 text-accent" strokeWidth={2.5} />
-                                                        <span>{(res as any).table || (res as any).tableId}</span>
+                                                        <span>{res.tableId || 'T-?'}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -377,8 +377,8 @@ export default function OmnichannelReservationsPage() {
                                             <input 
                                                 type="text" 
                                                 placeholder={field.placeholder} 
-                                                value={(newRes as any)[field.key]}
-                                                onChange={(e) => setNewRes({ ...newRes, [field.key as keyof typeof newRes]: e.target.value })}
+                                                value={newRes[field.key as keyof typeof newRes]}
+                                                onChange={(e) => setNewRes({ ...newRes, [field.key]: e.target.value })}
                                                 className="w-full bg-[#f5f5f0] border border-[#ebebe0] rounded-2xl px-6 py-4 text-xs font-bold outline-none focus:border-accent-gold transition-all" 
                                             />
                                         </div>

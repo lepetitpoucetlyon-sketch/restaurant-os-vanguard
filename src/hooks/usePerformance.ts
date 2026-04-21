@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useRef, useMemo, useEffect, useLayoutEffect } from "react";
+import { SovereignValue } from "@/shared/nexus-contract";
 
 /**
  * Hook to memoize a callback with stable dependencies.
  * Uses useLayoutEffect to update the ref safely for React 19.
  */
-export function useEventCallback<T extends (...args: unknown[]) => unknown>(
+export function useEventCallback<T extends (...args: SovereignValue[]) => SovereignValue>(
+
     callback: T
 ): T {
     const ref = useRef<T>(callback);
@@ -15,9 +17,10 @@ export function useEventCallback<T extends (...args: unknown[]) => unknown>(
         ref.current = callback;
     });
 
-    const stableCallback = useCallback((...args: unknown[]) => {
-        return ref.current?.(...args);
+    const stableCallback = useCallback((...args: SovereignValue[]) => {
+        return ref.current?.(...args as Parameters<T>);
     }, []);
+
 
     return stableCallback as T;
 }
@@ -26,7 +29,8 @@ export function useEventCallback<T extends (...args: unknown[]) => unknown>(
  * Hook for deep comparison memoization.
  * Simplified for React 19 compliance (avoids reading ref in render).
  */
-export function useDeepMemo<T>(factory: () => T, deps: unknown[]): T {
+export function useDeepMemo<T>(factory: () => T, deps: SovereignValue[]): T {
+
     const memoKey = JSON.stringify(deps);
     return useMemo(() => factory(), [memoKey, factory]);
 }

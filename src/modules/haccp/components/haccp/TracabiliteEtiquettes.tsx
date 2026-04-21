@@ -76,9 +76,10 @@ export function TracabiliteEtiquettes() {
                 imageUrl: ''
             });
             setIsAdding(false);
-        } catch (e: any) {
-            console.error(e);
-            addNotification({ type: 'error', title: 'Erreur d\'envoi', message: e.message || 'Impossible d\'enregistrer l\'étiquette.' });
+        } catch (e) {
+            const error = e as Error;
+            console.error(error);
+            addNotification({ type: 'error', title: 'Erreur d\'envoi', message: error.message || 'Impossible d\'enregistrer l\'étiquette.' });
         } finally {
             setIsUploading(false);
         }
@@ -121,7 +122,6 @@ export function TracabiliteEtiquettes() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence>
                     {labels.map((label, idx) => {
-                        const lastLog = (label as any).logs && (label as any).logs.length > 0 ? (label as any).logs[(label as any).logs.length - 1] : null;
                         return (
                             <motion.div
                                 key={label.id}
@@ -135,9 +135,7 @@ export function TracabiliteEtiquettes() {
 
                                 <div className="flex justify-between items-start mb-6 relative z-10">
                                     <div className="w-12 h-12 rounded-2xl bg-bg-tertiary flex items-center justify-center border border-border relative overflow-hidden">
-                                        {lastLog ? (
-                                            <StatusBadge status={lastLog.status === 'ok' ? 'success' : lastLog.status === 'warning' ? 'warning' : 'error'} label={lastLog.status} />
-                                        ) : label.imageUrl ? (
+                                        {label.imageUrl ? (
                                             <img src={label.imageUrl} alt="Étiquette" className="w-full h-full object-cover" />
                                         ) : (
                                             <PackageSearch size={22} className="text-text-muted" />

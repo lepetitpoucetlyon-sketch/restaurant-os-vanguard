@@ -5,7 +5,8 @@ export interface AgentRequest {
     domain: AgentDomain;
     userRole: AgentRole;
     userPrompt: string;
-    contextData?: unknown;
+    contextData?: import('@/shared/nexus-contract').SovereignValue;
+
     apiKey: string;
     endpoint: string;
     modelId: string;

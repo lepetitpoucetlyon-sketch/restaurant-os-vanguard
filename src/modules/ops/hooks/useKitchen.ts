@@ -25,7 +25,7 @@ export function useKitchen() {
 
     // --- 🔨 LA FORGE ---
     const recipeForge = useNexusMutation<Recipe>(recipesNodeAtom, 'recipes', 'KITCHEN');
-    const prepForge = useNexusMutation<any>(prepTasksNodeAtom, 'prepTasks', 'KITCHEN');
+    const prepForge = useNexusMutation<import('@/types').Preparation>(prepTasksNodeAtom, 'prepTasks', 'KITCHEN');
 
     const calculateRecipeCost = useCallback((recipeIngredients: { ingredientId: string; quantity: number }[]) => {
         if (!recipeIngredients) return 0;

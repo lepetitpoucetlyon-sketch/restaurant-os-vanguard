@@ -6,6 +6,8 @@ import { stockItemsNodeAtom } from "../store/inventoryAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
 import { StockItem } from "../types";
 
+import { SovereignData } from "@/shared/nexus-contract";
+
 /**
  * 🥫 useInventory - Grade X Atomic Bridge
  * Centralisation de la gestion des stocks et de la chaîne d'approvisionnement.
@@ -20,7 +22,7 @@ export function useInventory() {
         [stockItems]
     );
 
-    const receiveOrder = useCallback((id: string, data: unknown) => {
+    const receiveOrder = useCallback((id: string, data: SovereignData) => {
         console.log('[Inventory] Bridge: Receive Order', id, data);
     }, []);
 

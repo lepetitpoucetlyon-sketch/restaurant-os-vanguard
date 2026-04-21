@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { chromium } from 'playwright';
 
 /**
@@ -38,7 +37,8 @@ async function runShadowAudit() {
         // 4. Rapport Final
         console.log('🏁 AUDIT SHADOW TERMINÉ : Intégrité 100% opérationnelle.');
 
-    } catch (error: any) {
+    } catch (e) {
+        const error = e as Error;
         console.error('❌ ECHEC DE L\'AUDIT SHADOW :', error.message);
         process.exit(1);
     } finally {

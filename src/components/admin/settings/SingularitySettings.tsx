@@ -16,7 +16,7 @@ import { logger } from '@/lib/logger';
  * Permet d'ajuster l'intelligence de l'Oracle et la profondeur comptable.
  */
 export function SingularitySettings() {
-    const [settings, setSettings] = useState<any>(null);
+    const [settings, setSettings] = useState<import('@/types').GlobalSettings | null>(null);
     const [saving, setSaving] = useState(false);
     const [rbacLevel, setRbacLevel] = useState<'ADMIN' | 'MANAGER' | 'DENIED'>('DENIED');
 
@@ -33,11 +33,12 @@ export function SingularitySettings() {
 
     const loadSettings = async () => {
         try {
-            const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
+            const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@/types').GlobalSettings;
             setSettings(data || {
-                hr: { planning: { staffToCoversRatio: DEFAULT_STAFF_RATIO } },
-                accounting: { complexityMode: 'EXPERT' }
-            });
+                planningConfig: { staffToCoversRatio: DEFAULT_STAFF_RATIO },
+                accountingConfig: { complexityMode: 'EXPERT' }
+            } as import('@/types').GlobalSettings);
+
         } catch (e) {
             console.error("Failed to load settings", e);
         }
@@ -92,10 +93,10 @@ export function SingularitySettings() {
                             <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Ratio de Charge (Couverts / Brigadier)</label>
                             <input 
                                 type="number" 
-                                value={settings?.hr?.planning?.staffToCoversRatio || DEFAULT_STAFF_RATIO}
+                                value={settings?.planningConfig?.staffToCoversRatio || DEFAULT_STAFF_RATIO}
                                 onChange={(e) => setSettings({
-                                    ...settings,
-                                    hr: { ...settings.hr, planning: { ...settings.hr.planning, staffToCoversRatio: parseInt(e.target.value) } }
+                                    ...settings!,
+                                    planningConfig: { ...settings?.planningConfig, staffToCoversRatio: parseInt(e.target.value) } as import('@/types/hr').PlanningConfig
                                 })}
                                 className="bg-black/40 border border-white/10 rounded-lg p-3 text-sm font-mono focus:border-accent outline-none transition-colors"
                             />
@@ -121,11 +122,11 @@ export function SingularitySettings() {
                                     <button
                                         key={mode}
                                         onClick={() => setSettings({
-                                            ...settings,
-                                            accounting: { ...settings.accounting, complexityMode: mode as AccountingMode }
+                                            ...settings!,
+                                            accountingConfig: { ...settings?.accountingConfig, complexityMode: mode as AccountingMode }
                                         })}
                                         className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
-                                            settings?.accounting?.complexityMode === mode 
+                                            settings?.accountingConfig?.complexityMode === mode 
                                             ? 'bg-accent text-white shadow-lg' 
                                             : 'text-text-muted hover:text-white'
                                         }`}
@@ -136,7 +137,7 @@ export function SingularitySettings() {
                             </div>
                         </div>
                         <p className="text-[10px] text-text-muted italic leading-relaxed">
-                            {settings?.accounting?.complexityMode === 'SIMPLE' 
+                            {settings?.accountingConfig?.complexityMode === 'SIMPLE' 
                                 ? "Mode Flux : L'interface se concentre sur les rentrées/sorties de cash. Idéal pour un pilotage rapide."
                                 : "Mode Ledger : Audit complet en partie double. Débit/Crédit activés pour chaque transaction."
                             }

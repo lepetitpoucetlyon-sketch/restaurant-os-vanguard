@@ -10,8 +10,9 @@ export const TimeSync = {
   offset: 0,
   isSynced: false,
 
-  private_unsub: (() => void) | null = null,
-  private_interval: NodeJS.Timeout | null = null,
+  private_unsub: null as (() => void) | null,
+  private_interval: null as NodeJS.Timeout | null, // NodeJS.Timeout depends on environment
+
 
   /**
    * Initializes the heartbeat to calculate the drift offset.

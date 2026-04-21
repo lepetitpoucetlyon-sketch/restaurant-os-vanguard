@@ -29,7 +29,7 @@ import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TYPE_CONFIG: Record<NotificationType, { icon: any; bgColor: string; textColor: string; borderColor: string; badgeColor: string; animate: boolean }> = {
+const TYPE_CONFIG: Record<NotificationType, { icon: React.ElementType; bgColor: string; textColor: string; borderColor: string; badgeColor: string; animate: boolean }> = {
     critical: {
         icon: Zap,
         bgColor: 'bg-red-500/10 dark:bg-red-500/20',
@@ -82,7 +82,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
     };
 
     // Group by Module
-    const groupedNotifications = notifications.reduce((acc: Record<string, any[]>, notification: any) => {
+    const groupedNotifications = notifications.reduce((acc: Record<string, Notification[]>, notification: Notification) => {
         const moduleName = notification.module || 'Système';
         if (!acc[moduleName]) {
             acc[moduleName] = [];
@@ -158,7 +158,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                             <NotificationCategory
                                 key={moduleName}
                                 title={moduleName}
-                                notifications={moduleNotifications as any[]}
+                                notifications={moduleNotifications}
                                 onRead={handleNotificationClick}
                                 onRemove={removeNotification}
                             />

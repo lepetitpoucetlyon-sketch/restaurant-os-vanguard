@@ -54,7 +54,7 @@ describe('RAM Plateau & Manual GC', () => {
         // Verify that while domains are registered, their HEAP (data) is empty
         tenantIds.forEach(id => {
             const entry = GlobalRegistryService.getEntry(`orders-${id}`);
-            const state = store.get(entry!.atom as any) as any;
+            const state = store.get(entry!.atom);
             expect(state.data).toHaveLength(0);
         });
         

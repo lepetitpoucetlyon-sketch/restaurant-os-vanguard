@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+
 import { 
     Table, 
     Reservation, 
@@ -106,7 +108,8 @@ import { ImmunityAuditLogger } from '@/lib/services/ImmunityAuditLogger';
 import type { ModuleId, PowerAction } from '@/shared/genome.types';
 
 // --- DOMAIN TYPES ---
-interface NexusNodeState<T = unknown> { data: T[]; loading: boolean; error: string | null; }
+interface NexusNodeState<T = SovereignValue> { data: T[]; loading: boolean; error: string | null; }
+
 
 /**
  * 🛡️ Grade IX: Guarded Action Wrapper
@@ -501,7 +504,8 @@ export const useHACCP = () => {
         checklists: [],
         sensors: [],
         temperatureHistory: [],
-        validateTaskWithVision: async (data?: Record<string, unknown>, options?: Record<string, unknown>) => true,
+        validateTaskWithVision: async (data?: SovereignData, options?: SovereignData) => true,
+
         logWaste: async (data: Partial<WasteLog>) => console.log('Waste logged', data)
     };
 };
@@ -610,13 +614,15 @@ export const useQuotes = () => {
         quotes: node.data || [],
         isLoading: node.loading, 
         error: node.error,
-        createQuote: (data: Record<string, unknown>) => guardedAction('QUOTES', 'CREATE_TRANSACTION', () => Promise.resolve(data))
+        createQuote: (data: SovereignData) => guardedAction('QUOTES', 'CREATE_TRANSACTION', () => Promise.resolve(data))
+
     };
 };
 
 export const useNotifications = () => {
     return {
-        addNotification: (notif: { type: Record<string, unknown>, title: string, message: string }) => {
+        addNotification: (notif: { type: SovereignData, title: string, message: string }) => {
+
             console.log("Notif Stub:", notif);
         }
     };

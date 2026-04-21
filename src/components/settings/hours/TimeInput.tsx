@@ -11,7 +11,7 @@ interface TimeInputProps {
     onChange: (value: string) => void;
     disabled?: boolean;
     label?: string;
-    icon: any;
+    icon: import('lucide-react').LucideIcon;
 }
 
 export function TimeInput({ value, onChange, disabled, label, icon: Icon }: TimeInputProps) {

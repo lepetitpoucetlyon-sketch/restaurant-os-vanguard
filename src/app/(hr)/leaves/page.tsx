@@ -44,7 +44,7 @@ export default function LeavesPage() {
     const [isNewRequestOpen, setIsNewRequestOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState<LeaveRequestStatus | 'all'>('all');
 
-    const isManager = (currentUser as any)?.role === 'manager' || (currentUser as any)?.role === 'admin' || (currentUser as any)?.role === 'owner';
+    const isManager = currentUser?.role === 'manager' || currentUser?.role === 'admin' || currentUser?.role === 'owner';
 
     const myRequests = requests.filter(r => r.employeeId === currentUser?.id);
     const pendingApprovals = requests.filter(r => 
@@ -88,7 +88,7 @@ export default function LeavesPage() {
         }
     };
 
-    const handleSubmitRequest = async (data: any) => {
+    const handleSubmitRequest = async (data: Partial<LeaveRequest>) => {
         try {
             await createLeaveRequest({
                 ...data,
@@ -128,7 +128,7 @@ export default function LeavesPage() {
                                 ].map((tab) => (
                                     <button
                                         key={tab.id}
-                                        onClick={() => setActiveTab(tab.id as any)}
+                                        onClick={() => setActiveTab(tab.id as 'my_requests' | 'team_calendar' | 'to_approve')}
                                         className={cn(
                                             "px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2.5",
                                             activeTab === tab.id

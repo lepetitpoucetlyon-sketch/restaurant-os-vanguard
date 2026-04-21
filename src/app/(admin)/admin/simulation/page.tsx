@@ -19,9 +19,15 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@/components/ui/button";
 import { useExpert } from "@/domain/agency/useExpert";
-import { SimulationService, SimulationMode } from "@/domain/services/SimulationService";
+import { SimulationService, SimulationMode, MonteCarloResult } from "@/domain/services/SimulationService";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@/components/ui/Toast";
+
+interface SimulationDayResult extends MonteCarloResult['metrics'] {
+    date: string;
+    anomalies: string[];
+    orders: import('@/types').Order[];
+}
 
 export default function SimulationPage() {
     const { ingredients, stockItems } = useInventory();
@@ -29,7 +35,7 @@ export default function SimulationPage() {
     const [isSimulating, setIsSimulating] = useState(false);
     const [progress, setProgress] = useState(0);
     const [mode, setMode] = useState<SimulationMode>('EMPIRE');
-    const [results, setResults] = useState<any[]>([]);
+    const [results, setResults] = useState<SimulationDayResult[]>([]);
     const [stats, setStats] = useState({ revenue: 0, anomalies: 0, integrity: 100 });
 
     const handleRunSimulation = async () => {
@@ -47,11 +53,11 @@ export default function SimulationPage() {
             const date = new Date();
             date.setDate(date.getDate() - (14 - day));
 
-            const result = await SimulationService.simulateDay(date, currentMode, 'DEFAULT', { ingredients: ingredients as any, stockItems: stockItems as any });
+            const result = await SimulationService.simulateDay(date, currentMode, 'DEFAULT', { ingredients, stockItems });
             
             setResults(prev => [...prev, { date: date.toLocaleDateString(), ...result, anomalies: Array(result.anomalyCount).fill("Écart de flux détecté") }]);
             setStats(prev => ({
-                revenue: prev.revenue + result.orders.reduce((acc, o: any) => acc + (o.totalInCents || 0), 0),
+                revenue: prev.revenue + result.orders.reduce((acc, o: import('@/types').Order) => acc + (o.totalInCents || 0), 0),
                 anomalies: prev.anomalies + result.anomalyCount,
                 integrity: currentMode === 'CHAOS' ? Math.max(0, prev.integrity - (result.anomalyCount * 2)) : prev.integrity
             }));
@@ -165,7 +171,7 @@ export default function SimulationPage() {
 
                         <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar">
                             <AnimatePresence>
-                                {results.slice().reverse().map((dayResult, idx) => (
+                                {results.slice().reverse().map((dayResult: SimulationDayResult, idx) => (
                                     <motion.div 
                                         key={idx}
                                         initial={{ opacity: 0, x: -20 }}
@@ -256,7 +262,15 @@ export default function SimulationPage() {
     );
 }
 
-function MetricCard({ label, value, icon, subtitle, highlight = false }: any) {
+interface MetricCardProps {
+    label: string;
+    value: string | number;
+    icon: React.ReactNode;
+    subtitle: string;
+    highlight?: boolean;
+}
+
+function MetricCard({ label, value, icon, subtitle, highlight = false }: MetricCardProps) {
     return (
         <div className={cn(
             "bg-zinc-900/30 border border-zinc-800/50 rounded-[2.5rem] p-8 backdrop-blur-3xl transition-all hover:border-zinc-700",

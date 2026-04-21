@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 
 export function StatCard({
@@ -11,7 +12,7 @@ export function StatCard({
 }: {
     label: string;
     value: string | number;
-    icon: any;
+    icon: LucideIcon;
     change?: { value: number; isPositive: boolean };
 }) {
     return (

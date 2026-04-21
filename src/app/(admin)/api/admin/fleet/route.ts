@@ -24,11 +24,12 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       orchestrationMode: 'reality-welding'
     });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Erreur inconnue";
     logger.error('[FleetAPI] Orchestration Failure:', error);
     return NextResponse.json({ 
       error: 'Failed to synchronize fleet reality', 
-      details: error.message 
+      details: message
     }, { status: 500 });
   }
 }

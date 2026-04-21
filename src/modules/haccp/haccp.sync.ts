@@ -2,9 +2,9 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { HygieneLabel, MaintenanceLog } from '@/types';
 import { 
     hygieneLabelsNodeAtom, 
-    maintenanceLogsNodeAtom, 
-    updateNexusNode 
+    maintenanceLogsNodeAtom 
 } from '../store/complianceAtoms';
+import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 

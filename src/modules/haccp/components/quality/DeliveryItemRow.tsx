@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtom } from 'jotai';
-import { qualityActiveControlAtom } from '@/store/qualityAtoms';
+import { qualityActiveControlAtom } from '@/modules/haccp/store/qualityAtoms';
 import { QualityControlItem, DecisionType } from '@/domain/types/quality';
 import { cn } from "@/lib/ui.foundations";
 import { CheckCircle2, AlertTriangle, XOctagon, Thermometer, Box } from 'lucide-react';

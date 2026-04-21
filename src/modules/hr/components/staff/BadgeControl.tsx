@@ -130,12 +130,17 @@ export const BadgeControl: React.FC = () => {
                         <p className="text-[9px] font-black uppercase tracking-tighter text-text-muted">Début de Session</p>
                         <p className="text-xs font-mono font-bold text-text-primary">
                             {(() => {
-                                const ts = currentShift.timestamp;
-                                if (typeof ts === 'string') return new Date(ts).toLocaleTimeString('fr-FR');
-                                if (ts instanceof Date) return ts.toLocaleTimeString('fr-FR');
-                                // Handle Firestore Timestamp lookalike
-                                if (ts && typeof (ts as any).toDate === 'function') return (ts as any).toDate().toLocaleTimeString('fr-FR');
-                                return 'N/A';
+                                    const ts = currentShift.timestamp;
+                                    if (typeof ts === 'string') return new Date(ts).toLocaleTimeString('fr-FR');
+                                    if (ts instanceof Date) return ts.toLocaleTimeString('fr-FR');
+                                    
+                                    // Handle Firestore Timestamp lookalike with strict casting
+                                    const fireTs = ts as { toDate?: () => Date };
+                                    if (fireTs && typeof fireTs.toDate === 'function') {
+                                        return fireTs.toDate().toLocaleTimeString('fr-FR');
+                                    }
+
+                                    return 'N/A';
                             })()}
                         </p>
                     </div>

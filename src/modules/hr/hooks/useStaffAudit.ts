@@ -3,14 +3,16 @@
 import { useState, useEffect } from "react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 
+import { AuditLog } from "@/types";
+
 export function useStaffAudit(limitCount = 50) {
-    const [auditLogs, setAuditLogs] = useState<any[]>([]);
+    const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = Nexus.adapter.onSnapshot(
             'audit_logs',
-            (data: any[]) => {
+            (data: AuditLog[]) => {
                 setAuditLogs(data);
                 setLoading(false);
             },

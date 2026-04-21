@@ -1,4 +1,5 @@
 import { PageKey } from "./permissions.types";
+import { SovereignData } from "@/shared/nexus-contract";
 
 /**
  * 🛡️ MaintenanceTicket - Restaurant OS
@@ -35,7 +36,7 @@ export interface MaintenanceAIAnalysis {
     affectedFiles: string[];
     proposedFix?: string;
     prLink?: string;
-    domainConfig?: Record<string, unknown>;
+    domainConfig?: SovereignData;
 }
 
 export interface MaintenanceTicketContext {

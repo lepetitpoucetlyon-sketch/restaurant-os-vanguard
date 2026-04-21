@@ -2,7 +2,7 @@
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { Area } from '@/types/tables.types';
+import { Area } from '@/types';
 
 import { CRM } from '@/modules/ops/reservations.types';
 

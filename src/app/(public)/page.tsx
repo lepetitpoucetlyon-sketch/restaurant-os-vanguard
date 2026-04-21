@@ -37,7 +37,18 @@ import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useIsMobile } from "@/hooks";
 import { kpiContainerVariants, kpiCardVariants, fadeInUp, staggerContainer } from "@/lib/motion";
 
-const KpiCard = ({ title, value, trend, trendValue, icon: Icon, delay = 0, tutorialId, isMobile }: any) => (
+interface KpiCardProps {
+  title: string;
+  value: string | number;
+  trend: 'up' | 'down';
+  trendValue: string;
+  icon: import('lucide-react').LucideIcon;
+  delay?: number;
+  tutorialId?: string;
+  isMobile?: boolean;
+}
+
+const KpiCard = ({ title, value, trend, trendValue, icon: Icon, delay = 0, tutorialId, isMobile }: KpiCardProps) => (
   <motion.div
     variants={kpiCardVariants}
     data-tutorial={tutorialId}
@@ -81,7 +92,18 @@ const KpiCard = ({ title, value, trend, trendValue, icon: Icon, delay = 0, tutor
   </motion.div>
 );
 
-const SmartAlert = ({ type, title, message, action, time, onAction, index, isMobile }: any) => (
+interface SmartAlertProps {
+  type: string;
+  title: string;
+  message: string;
+  action?: string;
+  time: string;
+  onAction?: () => void;
+  index: number;
+  isMobile?: boolean;
+}
+
+const SmartAlert = ({ type, title, message, action, time, onAction, index, isMobile }: SmartAlertProps) => (
   <motion.div
     initial={{ opacity: 0, x: 20 }}
     animate={{ opacity: 1, x: 0 }}

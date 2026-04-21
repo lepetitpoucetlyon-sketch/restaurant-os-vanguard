@@ -11,7 +11,7 @@
 
 ## Phase 2: Purge du Barrel de Types [x]
 - [x] `orderAtoms.ts` : Épuration des `any`.
-- [/] Recherche globale et remplacement des `any` résiduels par des interfaces.
+- [x] Recherche globale et remplacement des `any` résiduels par des interfaces.
 
 ## Phase 3: Alignement Ledger & Kernel [x]
 - [x] Retirer `@ts-nocheck` de `src/lib/shared-kernel.ts`

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
+import { SovereignData } from "@/shared/nexus-contract";
+
 
 interface UseFilteringOptions<T> {
     searchKeys?: (keyof T)[];
@@ -26,7 +28,8 @@ interface UseFilteringReturn<T> {
  *   searchKeys: ['name', 'email']
  * });
  */
-export function useFiltering<T extends Record<string, unknown>>(
+export function useFiltering<T extends SovereignData>(
+
     items: T[],
     options: UseFilteringOptions<T> = {}
 ): UseFilteringReturn<T> {

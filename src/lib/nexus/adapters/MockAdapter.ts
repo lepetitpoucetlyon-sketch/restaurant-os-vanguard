@@ -5,13 +5,15 @@ import { logger } from '@/lib/logger';
  * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI)
  */
 export class MockAdapter implements INexusAdapter {
-    private storage: Record<string, unknown> = {};
-
-    async get<T = unknown>(path: string): Promise<T | null> {
+    private storage: import('@/shared/nexus-contract').SovereignData = {};
+    
+    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
         return (this.storage[path] as T) || null;
     }
 
-    async query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+
+    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
             .map(([, data]) => data);
@@ -36,7 +38,8 @@ export class MockAdapter implements INexusAdapter {
         return results;
     }
 
-    onSnapshot<T = unknown>(path: string, callback: (data: T) => void): () => void {
+    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void): () => void {
+
         callback(this.storage[path] as T);
         return () => {}; // No-op for mock
     }
@@ -56,11 +59,13 @@ export class MockAdapter implements INexusAdapter {
         };
     }
 
-    async set<T = unknown>(path: string, data: T): Promise<void> {
+    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
+
         this.storage[path] = data;
     }
 
-    async update<T = unknown>(path: string, data: Partial<T>): Promise<void> {
+    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
+
         this.storage[path] = { ...(this.storage[path] || {}), ...data };
     }
 

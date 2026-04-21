@@ -1,11 +1,10 @@
-import { atom } from 'jotai';
-import { v4 as uuidv4 } from 'uuid';
+import { SovereignData } from '@/shared/nexus-contract';
 
 export interface NexusPulse {
     id: string;
     type: string;
     sourceModule: string;
-    payload: any;
+    payload: SovereignData;
     timestamp: string;
 }
 

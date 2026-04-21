@@ -17,7 +17,23 @@ describe('NexusSyncService Multi-tenant Isolation', () => {
 
     it('should purge the local cache when switching tenants', async () => {
         // 1. Setup Tenant A data
-        await db.orders.add({ id: 'order_A', status: 'completed', timestamp: new Date().toISOString(), tableId: 'A1' } as any);
+        await db.orders.add({ 
+            id: 'order_A', 
+            status: 'completed', 
+            timestamp: new Date().toISOString(), 
+            tableId: 'A1',
+            tenantId: 'tenant-A',
+            items: [],
+            totalInCents: 0,
+            paymentMethod: 'cash',
+            type: 'dine_in',
+            currency: 'EUR',
+            taxBreakdown: { total: 0, ht: 0, totalTax: 0, rates: {} },
+            orderNumber: 'ORD-A',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }); 
+
         expect(await db.orders.count()).toBe(1);
 
         // 2. Perform Switch to Tenant B

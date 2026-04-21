@@ -23,10 +23,10 @@ import {
     BalanceSheetReport,
     TrialBalance,
     FiscalAuditResult
-} from '@/modules/finance/types';
+} from '@/types';
 
 // Alias FinancialMetrics to avoid confusion if needed
-type FinancialMetricsTyped = any; // Will fix later if import fails
+type FinancialMetricsTyped = FinancialMetrics; 
 
 const AccountingContext = createContext<AccountingContextType | undefined>(undefined);
 
@@ -127,6 +127,10 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         console.log("Stub Submit Expense", claim);
     }, []);
 
+    const ingestTransactions = useCallback(async (transactions: BankTransaction[]) => {
+        console.log("Stub Ingest Transactions", transactions);
+    }, []);
+
     const generateBalanceSheet = useCallback((date: Date): BalanceSheetReport => ({
         asOfDate: date,
         assets: [],
@@ -210,6 +214,7 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         linkBankConnection,
         recordPayrollSalary,
         submitExpense,
+        ingestTransactions,
         getLedger,
         getLedgerForAccount,
         getAccountByCode,

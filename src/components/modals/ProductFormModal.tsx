@@ -18,6 +18,8 @@ import { useToast } from "@/components/ui/Toast";
 import { Modal } from "@/components/ui/Modal";
 import { PremiumSelect } from "@/components/ui/PremiumSelect";
 import { AnimatePresence } from "framer-motion";
+import type { Recipe } from "@/types";
+
 
 // Sub-components
 import { ProductFinancials } from "./product-form/ProductFinancials";
@@ -31,7 +33,7 @@ interface ProductFormModalProps {
     isOpen: boolean;
     onClose: () => void;
     productType: 'dish' | 'cocktail';
-    editProduct?: any;
+    editProduct?: Recipe;
 }
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
@@ -150,7 +152,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 await updateRecipe(editProduct.id, productData);
                 showToast("Fiche mise à jour", "success");
             } else {
-                await addRecipe(productData as any);
+                await addRecipe(productData);
                 showToast("Fiche créée", "success");
             }
             onClose();

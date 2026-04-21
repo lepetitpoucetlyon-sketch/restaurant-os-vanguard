@@ -11,9 +11,9 @@ import {
     marketingCampaignsNodeAtom, 
     socialAccountsNodeAtom, 
     quotesNodeAtom, 
-    deliveriesNodeAtom,
-    updateNexusNode 
+    deliveriesNodeAtom 
 } from '../store/marketingAtoms';
+import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 import { MarketingEngine } from "@/lib/marketing-engine";
 import { whiteLabelInstanceConfig } from '@/config/instance';

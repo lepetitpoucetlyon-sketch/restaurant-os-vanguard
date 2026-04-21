@@ -23,7 +23,7 @@ import {
     SecurityConfig,
     NotificationsConfig,
     IntegrationsConfig
-} from '@/types/settings';
+} from '@/types';
 
 export const defaultIdentity: RestaurantIdentity = {
     ...whiteLabelInstanceConfig.identityDefaults,
@@ -265,7 +265,7 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
     ],
 };
 
-export const defaultNexusConfig: import('@/types/settings/nexus').NexusAIConfig = {
+export const defaultNexusConfig: import('@/types/nexus').NexusAIConfig = {
     aiName: 'NEXUS',
     voiceId: 'aoede',
     personality: 'expert',

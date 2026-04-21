@@ -129,7 +129,7 @@ export default function MenuSettings() {
                         { key: 'seasonalLabels', label: 'Cycle Logic', sub: 'Seasonal identifiers', icon: Leaf },
                         { key: 'suggestionsEnabled', label: 'Neural Recs', sub: 'AI upselling engine', icon: Sparkles },
                     ].map((setting) => {
-                        const Icon = setting.icon as any;
+                        const Icon = setting.icon;
                         const isEnabled = menuSettings[setting.key as keyof typeof menuSettings];
                         return (
                             <motion.button

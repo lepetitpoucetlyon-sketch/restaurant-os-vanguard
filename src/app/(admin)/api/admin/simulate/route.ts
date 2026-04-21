@@ -9,8 +9,16 @@ const path = (coll: string) => `tenants/${TENANT_ID}/${coll}`;
  * SIMULATION API GATEWAY
  * Triggers Sandbox Init and Dual-Week Simulations
  */
+
+type SimulationAction = 'INIT_SANDBOX' | 'RUN_EMPIRE_WEEK' | 'RUN_CHAOS_WEEK' | 'AUDIT';
+
+interface SimulationRequestBody {
+    action: SimulationAction;
+}
+
 export async function POST(req: Request) {
-    const { action } = await req.json();
+    const { action }: SimulationRequestBody = await req.json();
+
     console.log(`[SimulationAPI] Action reçue : ${action}`);
 
     try {
@@ -36,7 +44,8 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ error: 'Action inconnue' }, { status: 400 });
 
-    } catch (e: unknown) {
+    } catch (e) {
+
         const message = e instanceof Error ? e.message : String(e);
         console.error(`[SimulationAPI] Erreur : ${message}`, e);
         return NextResponse.json({ error: message }, { status: 500 });

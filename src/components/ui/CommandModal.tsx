@@ -33,7 +33,7 @@ interface CommandItem {
     id: string;
     label: string;
     description?: string;
-    icon: any;
+    icon: React.ElementType;
     action?: () => void;
     href?: string;
     category: 'navigation' | 'actions' | 'search';

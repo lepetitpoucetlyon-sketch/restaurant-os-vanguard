@@ -5,8 +5,10 @@ interface LogMetadata {
     userId?: string;
     version?: string;
     module?: string;
-    [key: string]: unknown;
+    module?: string;
+    [key: string]: import('@/shared/nexus-contract').SovereignValue;
 }
+
 
 interface AppLogger {
     debug: (message: string, meta?: LogMetadata) => void;

@@ -1,4 +1,4 @@
-import { ThemeSettings } from '@/types/settings';
+import { ThemeSettings } from '@/types';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '@/lib/axiom';
 

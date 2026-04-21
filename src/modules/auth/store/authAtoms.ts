@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { User } from '@/types';
+import { TenantConfig } from '@/shared/nexus-contract';
 
 /**
  * 🔒 AUTH & IDENTITY ATOMS - Grade VI
@@ -23,7 +24,7 @@ export const isAuthenticatedAtom = atom((get) => !!get(currentUserAtom));
 export const userRoleAtom = atom((get) => get(currentUserAtom)?.role || 'client');
 
 // Multi-tenant isolation atom
-export const tenantConfigAtom = atom<any>(null);
+export const tenantConfigAtom = atom<TenantConfig | null>(null);
 
 // Grade VI Permissions Strategy
 export type Role = 'admin' | 'manager' | 'staff' | 'client';

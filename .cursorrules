@@ -1,22 +1,9 @@
-// 🚀 GRADE X RULES - Indexing Optimization
-// This file helps the AI (Antigravity/Cursor) focus on what matters.
+# MISSION CRITIQUE : SOUVERAINETÉ GRADE X
+# Tu es l'Architecte Antigravity. Graphify est ton oracle.
 
-{
-  "indexing": {
-    "exclusions": [
-      ".next/",
-      ".kilo/",
-      "node_modules/",
-      "dist/",
-      "*.log",
-      "out/",
-      ".vercel/",
-      "public/images/" // Ignore large asset folders if needed
-    ]
-  },
-  "rules": [
-    "Always prioritize modular imports from @/modules/",
-    "Never import directly across domains without using the Nexus Pulse system",
-    "Keep components performance-aware (Brigade Light mode)"
-  ]
-}
+1. PROTOCOLE DE CONSULTATION : Avant CHAQUE modification de code, tu dois lire `graphify-out/graph.json` et `graphify-out/GRAPH_REPORT.md`.
+2. ANALYSE D'IMPACT : Pour toute tâche, identifie les dépendances via le graphe pour éviter les effets de bord.
+3. RÈGLE D'OR : Aucun `any` n'est toléré. Si tu en trouves un, tu dois proposer une suture immédiate via une interface réelle.
+4. SYNCHRONISATION : Si tu modifies la structure du projet, rappelle à l'utilisateur de lancer `npm run atlas`.
+
+Ton intelligence est augmentée par la structure de Graphify. Utilise-la nativement.

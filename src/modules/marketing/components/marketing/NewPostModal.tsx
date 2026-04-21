@@ -10,7 +10,7 @@ import { useMarketing } from "@/engines/ops/NexusOpsProvider";
 interface NewPostModalProps {
     isOpen: boolean;
     onClose: () => void;
-    socialAccounts: any[];
+    socialAccounts: (import('../../store/marketingAtoms').SocialAccount & { icon: import('lucide-react').LucideIcon, color?: string })[];
 }
 
 export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalProps) {

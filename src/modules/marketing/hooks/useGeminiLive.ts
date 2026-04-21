@@ -2,7 +2,17 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { GeminiLiveService } from '@/domain/agent/GeminiLiveService';
 import { useSettings } from '@/context/SettingsContext';
+import { SovereignData } from '@/shared/nexus-contract';
 
+interface WebkitWindow extends Window {
+    webkitAudioContext: typeof AudioContext;
+}
+
+interface PerformanceMemory {
+    memory: {
+        usedJSHeapSize: number;
+    };
+}
 
 /**
  * PRODUCTION-GRADE HOOK: useGeminiLive
@@ -14,7 +24,7 @@ export function useGeminiLive() {
     const [isActive, setIsActive] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
     const [transcripts, setTranscripts] = useState<{ text: string, isUser: boolean, timestamp: number }[]>([]);
-    const [lastToolCall, setLastToolCall] = useState<{ name: string, args: any } | null>(null);
+    const [lastToolCall, setLastToolCall] = useState<{ name: string, args: SovereignData } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const serviceRef = useRef<GeminiLiveService | null>(null);
@@ -45,7 +55,7 @@ export function useGeminiLive() {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
             
-            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+            const audioContext = new (window.AudioContext || (window as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
             audioContextRef.current = audioContext;
             
             const source = audioContext.createMediaStreamSource(stream);
@@ -91,8 +101,9 @@ export function useGeminiLive() {
 
             
             setIsActive(true);
-        } catch (err: any) {
-            console.error("Gemini Live Hook Error:", err);
+        } catch (err) {
+            const errorObj = err as Error;
+            console.error("Gemini Live Hook Error:", errorObj);
             setError("Microphone ou Relais inaccessible.");
             stopSession();
         } finally {

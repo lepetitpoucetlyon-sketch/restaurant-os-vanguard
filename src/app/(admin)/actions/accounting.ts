@@ -37,7 +37,7 @@ export async function submitExpenseAction(tenantId: string, expenseData: {
             orderBy: { field: 'timestamp', direction: 'desc' },
             limit: 1
         });
-        const lastHash = lastSeals.length > 0 ? lastSeals[0].hash : null;
+        const lastHash = lastSeals.length > 0 ? (lastSeals[0] as FiscalSeal).hash : null;
 
         // 2. Prepare Data via AccountingService
         const { seal, journalEntry } = await AccountingService.prepareExpenseTransaction(

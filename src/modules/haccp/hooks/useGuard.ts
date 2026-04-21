@@ -5,17 +5,10 @@ import { useCallback, useMemo } from "react";
 import { 
     hygieneLabelsAtom, 
     hygieneLabelsNodeAtom,
-    maintenanceLogsAtom, 
-    deliveriesAtom, 
-    hygieneLogsAtom,
-    hygieneLogsNodeAtom,
-    receptionLogsAtom,
-    receptionLogsNodeAtom,
-    oilLogsAtom,
-    oilLogsNodeAtom,
-    guardLoadingAtom,
-    updateNexusNode
+    maintenanceLogsAtom,
+    guardLoadingAtom
 } from "@/store/operationalAtoms";
+import { deliveriesAtom, tenantIdAtom } from '../store/complianceAtoms';
 import { HygieneLabel, HygieneLog, ReceptionLog, OilLog, HACCPContextType } from "../types";
 
 /**
@@ -42,7 +35,7 @@ export function useGuard() {
             getComplianceScore: () => 100,
             triggerAlert: async () => {},
             logWaste: async () => {},
-        } as unknown as HACCPContextType,
+        } as HACCPContextType,
         maintenance: { logs: maintenanceTasks },
         health: { status: 'stable' },
         isLoading

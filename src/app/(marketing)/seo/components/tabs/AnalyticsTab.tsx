@@ -6,7 +6,7 @@ import { useMarketing } from '@/engines/ops/NexusOpsProvider';
 import { cn } from "@/lib/ui.foundations";
 
 export const AnalyticsTab = () => {
-    const { profile, isLoading } = useMarketing() as any;
+    const { profile, isLoading } = useMarketing();
 
     // Derive real analytics or use baseline zeros (reality check)
     const analytics = profile?.analytics || {
@@ -67,17 +67,17 @@ export const AnalyticsTab = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {analytics.topKeywords.map((kw: any, i: number) => (
+                             {analytics.topKeywords.map((kw: import('@/app/(marketing)/seo/seo.types').KeywordStat, i: number) => (
                                 <tr key={i} className="border-b border-border/50">
-                                    <td className="py-4 pr-4 text-sm font-medium text-text-primary">{kw.keyword}</td>
+                                    <td className="py-4 pr-4 text-sm font-medium text-text-primary">{kw.term}</td>
                                     <td className="py-4 px-4 text-right text-sm text-text-muted">{kw.clicks}</td>
                                     <td className={cn(
                                         "py-4 px-4 text-right text-sm font-bold",
-                                        kw.position <= 3 ? 'text-[#00D9A6]' :
-                                            kw.position <= 10 ? 'text-amber-500' :
+                                        kw.avgPosition <= 3 ? 'text-[#00D9A6]' :
+                                            kw.avgPosition <= 10 ? 'text-amber-500' :
                                                 'text-rose-500'
                                     )}>
-                                        {kw.position.toFixed(1)}
+                                        {kw.avgPosition.toFixed(1)}
                                     </td>
                                 </tr>
                             ))}

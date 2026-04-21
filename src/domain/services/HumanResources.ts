@@ -1,6 +1,7 @@
 import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/domain/schemas/hr";
 import { User } from '@/types';
 import { format, addDays, isSameDay } from 'date-fns';
+import { SovereignData } from "@/shared/nexus-contract";
 
 export class HumanResourcesService {
     /**
@@ -82,7 +83,7 @@ export class HumanResourcesService {
     /**
      * Validate a payroll entry before accounting injection
      */
-    static validatePayroll(data: unknown) {
+    static validatePayroll(data: SovereignData) {
         return PayrollPeriodSchema.parse(data);
     }
 }

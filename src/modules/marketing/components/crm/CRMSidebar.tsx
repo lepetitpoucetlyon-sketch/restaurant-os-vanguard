@@ -29,7 +29,7 @@ export function CRMSidebar() {
 
     const getCount = (key: string | null) => {
         if (!key) return crms.length;
-        return crms.filter((c: any) => c.segment === key).length;
+        return crms.filter((c) => c.segment === key).length;
     };
 
     return (
@@ -51,7 +51,7 @@ export function CRMSidebar() {
 
             <div className="space-y-4 flex-1">
                 <button
-                    onClick={() => (setNewCRMModalOpen as any)(true)}
+                    onClick={() => (setNewCRMModalOpen as (v: boolean) => void)(true)}
                     className="w-full h-16 bg-accent-gold text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
                 >
                     <Plus className="w-4 h-4" />
@@ -59,7 +59,7 @@ export function CRMSidebar() {
                 </button>
 
                 <button
-                    onClick={() => (setFilterSegment as any)(null)}
+                    onClick={() => (setFilterSegment as (v: string | null) => void)(null)}
                     className={cn(
                         "w-full flex items-center justify-between px-8 py-5 rounded-[2rem] transition-all relative group",
                         !filterSegment ? "bg-accent-gold/10 text-accent-gold shadow-sm" : "text-text-muted hover:bg-bg-tertiary"
@@ -79,7 +79,7 @@ export function CRMSidebar() {
                     return (
                         <button
                             key={key}
-                            onClick={() => (setFilterSegment as any)(filterSegment === key ? null : key)}
+                            onClick={() => (setFilterSegment as (v: string | null) => void)(filterSegment === key ? null : key)}
                             className={cn(
                                 "w-full flex items-center justify-between px-8 py-5 rounded-[2rem] transition-all",
                                 filterSegment === key ? "text-text-primary bg-bg-tertiary shadow-sm" : "text-text-muted hover:bg-bg-tertiary"

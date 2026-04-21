@@ -12,13 +12,14 @@ export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'ha
 export interface AuditEvent {
     module: AuditModule;
     action: string;
-    details?: Record<string, unknown>;
+    details?: import('@/shared/nexus-contract').SovereignData;
     severity?: AuditSeverity;
     userId?: string;
     timestamp: Date;
     fiscalSeal?: string; // Optional NF525 seal hash
     instanceId?: string;
 }
+
 
 class EmpireAuditLogger {
     private static instance: EmpireAuditLogger;
@@ -114,18 +115,19 @@ class EmpireAuditLogger {
     /**
      * Report an error to the observability stack.
      */
-    public error(error: Error | string, module: AuditModule, context?: Record<string, unknown>) {
+    public error(error: Error | string, module: AuditModule, context?: import('@/shared/nexus-contract').SovereignData) {
         this.log({
             module,
             action: typeof error === 'string' ? error : error.message,
             severity: 'critical',
             details: {
                 stack: typeof error === 'string' ? null : error.stack,
-                ...context
+                ...(context as Record<string, any>)
             },
             timestamp: new Date()
         });
     }
+
 
     /**
      * Hook into global browser errors.

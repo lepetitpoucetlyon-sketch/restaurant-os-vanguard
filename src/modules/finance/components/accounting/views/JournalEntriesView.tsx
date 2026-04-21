@@ -24,7 +24,7 @@ export function JournalEntriesView() {
                     {['all', 'pending', 'validated'].map(f => (
                         <button
                             key={f}
-                            onClick={() => setFilter(f as any)}
+                            onClick={() => setFilter(f as 'all' | 'pending' | 'validated')}
                             className={cn(
                                 "px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all",
                                 filter === f ? "bg-accent text-white" : "text-text-muted hover:text-text-primary"

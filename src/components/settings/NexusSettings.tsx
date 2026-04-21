@@ -17,7 +17,7 @@ import {
     Check
 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
-import { GEMINI_VOICES, NexusMacro } from '@/types/settings/nexus';
+import { GEMINI_VOICES, NexusMacro } from '@/types/nexus';
 import { NexusSphere } from "@/components/layout/NexusSphere";
 import { cn } from '@/lib/ui.foundations';
 
@@ -36,7 +36,7 @@ export default function NexusSettings() {
         autoLanguage: true
     };
 
-    const updateConfig = (updates: any) => {
+    const updateConfig = (updates: Partial<import('@/types/nexus').NexusConfig>) => {
         // Proper immutable update via the settings context
         updateSLM({ nexusConfig: { ...config, ...updates } });
     };

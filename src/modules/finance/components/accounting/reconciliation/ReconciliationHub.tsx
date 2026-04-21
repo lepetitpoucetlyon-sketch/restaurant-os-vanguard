@@ -255,7 +255,7 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
                                     </div>
                                     <Button 
                                         onClick={async () => {
-                                            const accountingContext = useAccounting() as unknown as { ingestTransactions: (txs: BankTransaction[]) => Promise<void> };
+                                            const accountingContext = useAccounting();
                                             if (accountingContext.ingestTransactions) {
                                                 await accountingContext.ingestTransactions(scannedTxs);
                                             } else {

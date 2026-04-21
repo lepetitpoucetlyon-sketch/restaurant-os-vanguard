@@ -29,7 +29,7 @@ const _leaveBalances = createProxyDomain<LeaveBalance>('leaveBalances');
 export const leaveBalancesNodeAtom = _leaveBalances.node;
 export const leaveBalancesAtom = _leaveBalances.data;
 
-import { Candidate } from '@/types/recruitment';
+import { Candidate } from '@/types';
 export const staffSearchQueryAtom = atom('');
 export const staffStatusFilterAtom = atom<'all' | 'new' | 'interview' | 'trial' | 'hired' | 'refused'>('all');
 export const staffCandidateModalOpenAtom = atom(false);

@@ -1,6 +1,6 @@
 import { TenantConfig } from "@/shared/nexus-contract";
 
-export const RESTAURANT_FULL_DNA: any = {
+export const RESTAURANT_FULL_DNA: TenantConfig = {
   id: 'restaurant_golden_seed_complete',
   capabilities: {
     // 1. Principal & Intelligence
@@ -58,11 +58,14 @@ export const RESTAURANT_FULL_DNA: any = {
   },
   theme: {
     primaryColor: '#C5A059', // Classic Gold branding
-    typography: 'sans',
-    logoUrl: '/default-restaurant-logo.png'
+    secondaryColor: '#B08D48',
+    logoUrl: '/default-restaurant-logo.png',
+    borderRadius: '12px',
+    appearance: 'dark'
   },
   status: {
-    active: true,
+    maintenanceMode: false,
+    killSwitch: false,
     licenceStatus: 'active',
     lastSignalId: 'GOLDEN_SEED_V2_INIT',
     updatedAt: new Date().toISOString(),
@@ -82,6 +85,7 @@ export const RESTAURANT_FULL_DNA: any = {
   },
   metadata: {
     name: 'Full Complete Matrix (34+ Modules)',
+    version: '1.0.0-gold',
     ownerId: 'suzerain_root',
     createdAt: new Date().toISOString()
   }

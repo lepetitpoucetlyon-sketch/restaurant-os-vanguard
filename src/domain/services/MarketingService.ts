@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { PromoCode, CustomerFeedback } from '@/types/marketing.types';
+import { PromoCode, CustomerFeedback } from '@/types';
 
 /**
  * 📣 MarketingService - Restaurant OS

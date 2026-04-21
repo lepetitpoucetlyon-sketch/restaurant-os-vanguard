@@ -9,14 +9,15 @@ import { logger } from '@/lib/logger';
  */
 
 import { MarketingService } from '@/domain/services/MarketingService';
-import { MarketingCampaign } from '@/modules/marketing/types';
+import { MarketingCampaign } from '@/types';
 import { MarketingSegment, ScheduledPost } from '@/modules/marketing/store/marketingAtoms';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 📣 Marketing Actions - Restaurant OS
  */
 
-export async function saveMarketingSettingsAction(tenantId: string, settings: Record<string, unknown>) {
+export async function saveMarketingSettingsAction(tenantId: string, settings: SovereignData) {
     logger.info(`[ServerAction] Saving Marketing/Reputation Settings (Tenant: ${tenantId})`);
 
     try {

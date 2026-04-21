@@ -1,14 +1,29 @@
 import { logger } from '@/lib/axiom';
 import { genomeValidator } from '@/domain/services/GenomeValidator';
 
+export interface PowensAccount {
+    id: string;
+    balance: number;
+    bankName: string;
+    label: string;
+    currency: string;
+    lastUpdate: string;
+}
+
 /**
  * PowensService - Professional Bank Aggregator Integration (Budget Insight)
  * Handles PSD2 compliant bank synchronization using the Sandbox environment.
  */
 export class PowensService {
     private static API_URL = 'https://sandbox.biapi.pro/2.0';
-    private static CLIENT_ID = process.env.NEXT_PUBLIC_POWENS_CLIENT_ID || 'restaurant-os-master';
-    private static CLIENT_SECRET = process.env.POWENS_CLIENT_SECRET || 'industrial-secret';
+    private static CLIENT_ID = process.env.NEXT_PUBLIC_POWENS_CLIENT_ID;
+    private static get CLIENT_SECRET(): string {
+        const secret = process.env.POWENS_CLIENT_SECRET;
+        if (!secret) {
+            throw new Error('❌ SÉCURITÉ : POWENS_CLIENT_SECRET manquant. Accès bancaire refusé.');
+        }
+        return secret;
+    }
 
     public static isDemoMode(): boolean {
         return this.CLIENT_ID.includes('placeholder') || this.CLIENT_ID === 'restaurant-os-master';
@@ -33,7 +48,7 @@ export class PowensService {
      * Step 2: Fetch Synced Accounts
      * Support for Multi-Bank entities with metadata.
      */
-    static async getAccounts(userToken: string): Promise<unknown[]> {
+    static async getAccounts(userToken: string): Promise<PowensAccount[]> {
         genomeValidator.validatePower('ACCOUNTING', 'SYNC_STATE');
         try {
             logger.info('PowensService: Fetching connected accounts (Unified Dashboard)...');
@@ -48,7 +63,7 @@ export class PowensService {
     /**
      * Step 3: Fetch Transactions (Multi-Source)
      */
-    static async getTransactions(accountId: string, userToken: string): Promise<import('@/modules/finance/types').BankTransaction[]> {
+    static async getTransactions(accountId: string, userToken: string): Promise<import('@/types').BankTransaction[]> {
         genomeValidator.validatePower('ACCOUNTING', 'GENERATE_FEC');
         try {
             logger.info(`PowensService: Fetching transitions for account ${accountId}...`);

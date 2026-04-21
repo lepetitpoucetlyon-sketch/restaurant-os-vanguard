@@ -12,14 +12,14 @@ import { Modal } from "@/components/ui/Modal";
 interface NewReservationDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (reservation: any) => void;
-    customers: any[];
+    onSave: (reservation: import('@/types').Reservation) => void;
+    customers: import('@/types').Customer[];
 }
 
 export function NewReservationDialog({ isOpen, onClose, onSave, customers }: NewReservationDialogProps) {
     const [step, setStep] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+    const [selectedCustomer, setSelectedCustomer] = useState<import('@/types').Customer | null>(null);
     const [formData, setFormData] = useState({
         time: "20:00",
         covers: 2,

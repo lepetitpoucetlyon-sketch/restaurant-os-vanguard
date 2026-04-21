@@ -17,7 +17,7 @@ import { FleetInsight, MacroBrain } from "@/domain/services/MacroBrain";
 export function useNexusFleet() {
     const [liveFleet, setLiveFleet] = useAtom(fleetSnapshotAtom);
     
-    const [globalMetrics, setGlobalMetrics] = useState<any | null>(null);
+    const [globalMetrics, setGlobalMetrics] = useState<import('@/domain/services/MacroBrain').ConsolidatedMetrics | null>(null);
     const [macroInsights, setMacroInsights] = useState<FleetInsight[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
@@ -93,15 +93,16 @@ export function useNexusFleet() {
         selectedInstanceId,
         refreshFleet,
         syncFleet: () => refreshFleet(false),
-        triggerRebalancing: (insight: any) => MacroBrain.executeStrategicAction(insight),
+        triggerRebalancing: (insight: import('@/domain/services/MacroBrain').FleetInsight) => MacroBrain.executeStrategicAction(insight),
         selectInstance: (id: string | null) => setSelectedInstanceId(id),
-        registerInstance: async (instance: any) => {
+        registerInstance: async (instance: Partial<import('@/domain/types/empire').EmpireInstance>) => {
             await refreshFleet(true);
         },
         launchPreview: (key: string) => {
             window.open(`/preview/${key}`, '_blank');
         },
-        broadcastConfiguration: async (config: any) => {
+        broadcastConfiguration: async (config: import('@/shared/nexus-contract').SovereignData) => {
+
             await new Promise(r => setTimeout(r, 800));
         },
         complianceService: FleetComplianceService,

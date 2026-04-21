@@ -73,7 +73,8 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         }
 
         return (
-            <div ref={ref} className={baseClasses} {...(props as unknown as React.HTMLAttributes<HTMLDivElement>)}>
+            <div ref={ref} className={baseClasses} {...(props as React.HTMLAttributes<HTMLDivElement>)}>
+
                 {children}
             </div>
         );

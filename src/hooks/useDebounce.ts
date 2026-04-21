@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { SovereignValue, SovereignData } from "@/shared/nexus-contract";
+
 
 interface UseDebounceOptions {
     delay?: number;
@@ -42,7 +44,8 @@ export function useDebounce<T>(value: T, delay: number = 300): T {
  *   300
  * );
  */
-export function useDebouncedCallback<T extends (...args: unknown[]) => unknown>(
+export function useDebouncedCallback<T extends (...args: SovereignValue[]) => SovereignValue>(
+
     callback: T,
     delay: number = 300,
     options: UseDebounceOptions = {}

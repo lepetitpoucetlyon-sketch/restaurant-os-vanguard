@@ -29,10 +29,13 @@ export const SchemaRegistry: Record<string, Record<string, z.ZodSchema>> = {
     }
 };
 
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+
 /**
  * Helper to validate data against local domain schema
  */
-export function validateMutation(moduleId: string, key: string, data: any) {
+export function validateMutation(moduleId: string, key: string, data: SovereignData | SovereignValue) {
+
     const schema = SchemaRegistry[moduleId]?.[key];
     if (!schema) return { success: true }; // No schema = warning but pass in Phase 1
 

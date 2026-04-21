@@ -11,7 +11,7 @@ interface ScheduledPostItemProps {
         media: { type: string, url: string };
         scheduledFor: string;
     };
-    socialAccounts: any[];
+    socialAccounts: (import('../../store/marketingAtoms').SocialAccount & { icon: import('lucide-react').LucideIcon, color?: string })[];
 }
 
 export function ScheduledPostItem({ post, socialAccounts }: ScheduledPostItemProps) {

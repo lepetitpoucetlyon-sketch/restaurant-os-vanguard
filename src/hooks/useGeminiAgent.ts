@@ -1,16 +1,24 @@
 import { useState, useCallback, useEffect } from 'react';
 
+import { SovereignData } from '@/shared/nexus-contract';
+
+export interface MessageMetadata extends SovereignData {
+    tokens?: number;
+    model?: string;
+    latency?: number;
+}
+
 export interface Message {
     id: string;
     role: 'user' | 'assistant' | 'system';
     content: string;
     timestamp: Date;
-    [key: string]: any;
+    metadata?: MessageMetadata;
 }
 
 export interface PendingAction {
     name: string;
-    args: Record<string, unknown>;
+    args: SovereignData;
 }
 
 /**
@@ -25,7 +33,7 @@ export function useGeminiAgent() {
 
     const clearError = useCallback(() => setError(null), []);
 
-    const sendMessage = useCallback(async (text: string, context: Record<string, unknown> = {}) => {
+    const sendMessage = useCallback(async (text: string, context: SovereignData = {}) => {
         if (!text.trim()) return;
 
         const userMsg: Message = {
@@ -52,7 +60,7 @@ export function useGeminiAgent() {
 
             if (!response.ok) throw new Error("Erreur de communication avec l'Oracle");
 
-            const data = await response.json() as { content: string; usage?: unknown };
+            const data = await response.json() as { content: string; usage?: MessageMetadata };
             
             const assistanceMsg: Message = {
                 id: (Date.now() + 1).toString(),
@@ -68,9 +76,10 @@ export function useGeminiAgent() {
                 console.log("Gemini Usage:", data.usage);
             }
 
-        } catch (err: unknown) {
+        } catch (e) {
+            const err = e as Error;
             console.error("useGeminiAgent Error:", err);
-            setError(err instanceof Error ? err.message : "Une erreur est survenue.");
+            setError(err.message || "Une erreur est survenue.");
         } finally {
             setIsProcessing(false);
         }

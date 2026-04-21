@@ -7,6 +7,12 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantID, SiteTelemetry } from '@/domain/types/brands';
 
+interface PerformanceMemory extends Performance {
+  memory?: {
+    usedJSHeapSize: number;
+  };
+}
+
 export class FleetTelemetryService {
   private static instance: FleetTelemetryService;
   
@@ -78,7 +84,7 @@ export class FleetTelemetryService {
         lastSeen: new Date().toISOString(),
         engineVersion: "5.4.1-NEXUS",
         nodeHealth: {
-          memoryUsageMB: Math.round((typeof window !== 'undefined' && (window.performance as unknown as { memory: { usedJSHeapSize: number } })?.memory?.usedJSHeapSize) / 1024 / 1024) || 0,
+          memoryUsageMB: Math.round((typeof window !== 'undefined' && 'memory' in window.performance) ? ((window.performance as PerformanceMemory).memory?.usedJSHeapSize || 0) / 1024 / 1024 : 0),
           lowResActive: true,
           timestamp: Date.now()
         }

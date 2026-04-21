@@ -3,6 +3,9 @@ import './mocks';
 import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
 import { createStore } from 'jotai';
 import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
+import { type Order } from '@/types';
+import { type NexusNode } from '@/store/nexusNodeFactory';
+
 
 describe('🔥 OMNI-VANGUARD : BLOC 4 – CHAOS & PERFORMANCE', () => {
     let store: ReturnType<typeof createStore>;
@@ -16,7 +19,8 @@ describe('🔥 OMNI-VANGUARD : BLOC 4 – CHAOS & PERFORMANCE', () => {
 
     it('T41: Data Drift Recovery - Auto-correction des états divergents', async () => {
         // Simulation d'une dérive par ChaosMonkey sur un store réel
-        store.set(ordersNodeAtom, (prev: any) => updateNexusNode(prev, { data: [], loading: false, error: null, lastUpdated: Date.now() } as any));
+        store.set(ordersNodeAtom, (prev: NexusNode<Order>) => updateNexusNode(prev, { data: [], loading: false, error: null }));
+
         // ChaosMonkey.executeRandomDrift utilizes default store; so modifying here is tricky if it relies on getDefaultStore internally which might differ from test 'store'. But keeping it as is.
         // Assuming Chaos Monkey acts on external dependencies. To be precise, ChaosMonkey relies on store.set internally.
         // For test stability, we just get the node.
@@ -48,8 +52,28 @@ describe('🔥 OMNI-VANGUARD : BLOC 4 – CHAOS & PERFORMANCE', () => {
 
     it('T45: Batch Update Speed - 1000 items processed < 50ms', () => {
         const start = performance.now();
-        const largeData = Array.from({ length: 1000 }, (_, i) => ({ id: `${i}`, name: 'Item' }));
-        store.set(ordersNodeAtom, (prev: any) => updateNexusNode(prev, { data: largeData as any }));
+        const largeData: Order[] = Array.from({ length: 1000 }, (_, i) => ({
+            id: `${i}`,
+            number: `${i}`,
+            crmId: 'test',
+            crmName: 'Test',
+            customerName: 'Test',
+            items: [],
+            status: 'pending',
+            totalInCents: 0,
+            tableId: '1',
+            tenantId: 'test',
+            covers: 1,
+            isPaid: false,
+            payments: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            source: 'pos',
+            type: 'dine-in'
+        } as Order));
+        store.set(ordersNodeAtom, (prev: NexusNode<Order>) => updateNexusNode(prev, { data: largeData }));
+
+
         const end = performance.now();
         expect(end - start).toBeLessThan(50);
     });

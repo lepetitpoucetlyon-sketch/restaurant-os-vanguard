@@ -3,9 +3,9 @@ import { StockItem, Category, Recipe } from '@/types';
 import { 
     stockItemsNodeAtom, 
     categoriesNodeAtom, 
-    recipesNodeAtom, 
-    updateNexusNode 
+    recipesNodeAtom 
 } from '../store/inventoryAtoms';
+import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';

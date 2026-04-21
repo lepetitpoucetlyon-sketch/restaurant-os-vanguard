@@ -16,11 +16,13 @@ import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/context/LanguageContext";
 import { cinematicContainer, cinematicItem } from "@/app/(marketing)/reservations/constants";
 import { easing } from "@/lib/motion";
+import type { Reservation } from "@/types";
+
 
 interface ReservationSidebarProps {
     isSidebarVisible: boolean;
     setIsSidebarVisible: (visible: boolean) => void;
-    currentReservations: any[];
+    currentReservations: Reservation[];
 }
 
 export function ReservationSidebar({

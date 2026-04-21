@@ -16,7 +16,7 @@ import { SegmentCard } from "@/modules/marketing/components/marketing/SegmentCar
 import { NewPostModal } from "@/modules/marketing/components/marketing/NewPostModal";
 import { NewCampaignModal } from "@/modules/marketing/components/marketing/NewCampaignModal";
 import { SocialAccount, ScheduledPost, MarketingSegment } from "@/modules/marketing/store/marketingAtoms";
-import { MarketingCampaign } from "@/types/marketing.types";
+import { MarketingCampaign } from "@/types";
 import { LucideIcon } from "lucide-react";
 
 import { useMarketing } from "@/engines/ops/NexusOpsProvider";
@@ -61,12 +61,8 @@ export default function SocialMarketingPage() {
         gradient: PLATFORM_GRADIENTS[(acc.platform as string)?.toLowerCase()] || 'from-neutral-500 to-neutral-700'
     }));
 
-    // Scheduled posts would normally come from marketing state too, but let's assume they are handled via a common collection or subcollection
-    // For now, if profile has posts, use them, otherwise empty
-    const scheduledPosts = (profile as any)?.scheduledPosts as ScheduledPost[] || [];
-
-    // Customer segments derived from profile or local state
-    const customerSegments = (profile as any)?.customerSegments as MarketingSegment[] || [];
+    const scheduledPosts = profile?.scheduledPosts || [];
+    const customerSegments = profile?.crmSegments || [];
 
     return (
         <div className="relative min-h-screen bg-bg-primary/50 text-text-primary p-6 md:p-10 font-sans overflow-hidden">
@@ -93,7 +89,7 @@ export default function SocialMarketingPage() {
                         ].map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
+                                onClick={() => setActiveTab(tab.id as 'social' | 'campaigns' | 'segments')}
                                 className={cn(
                                     "relative px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all",
                                     activeTab === tab.id ? "bg-text-primary text-bg-primary shadow-lg scale-105" : "text-text-muted hover:text-text-primary"
@@ -138,9 +134,9 @@ export default function SocialMarketingPage() {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                                 {[
                                     { label: 'Campagnes', value: campaigns.length.toString(), icon: Send, color: 'text-text-primary' },
-                                    { label: "Taux d'ouverture", value: `${(profile as any)?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
-                                    { label: 'Taux de clic', value: `${(profile as any)?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
-                                    { label: 'Conversions', value: `${(profile as any)?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
+                                    { label: "Taux d'ouverture", value: `${profile?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
+                                    { label: 'Taux de clic', value: `${profile?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
+                                    { label: 'Conversions', value: `${profile?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
                                 ].map((stat, i) => (
                                     <div key={i} className="bg-white/40 dark:bg-neutral-900/40 backdrop-blur-xl border border-white/20 rounded-[2rem] p-6 group cursor-crosshair relative">
                                         <div className="absolute top-0 right-0 p-6 opacity-50 group-hover:opacity-100 transition-all">

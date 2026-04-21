@@ -10,7 +10,7 @@ import { Modal } from "@/components/ui/Modal";
 interface NewCustomerDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (customer: any) => void;
+    onSave: (customer: import('@/types').Customer) => void;
 }
 
 export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialogProps) {

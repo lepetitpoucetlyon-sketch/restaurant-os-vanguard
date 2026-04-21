@@ -36,7 +36,7 @@ type PmsSection = {
     id: string;
     title: string;
     description: string;
-    icon: any;
+    icon: import('lucide-react').LucideIcon;
     subsections: PmsSubsection[];
 };
 

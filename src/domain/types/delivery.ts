@@ -12,6 +12,8 @@ export interface DeliveryItem {
   price?: number;
 }
 
+import { SovereignData } from '@/shared/nexus-contract';
+
 export interface Delivery {
   id: string;
   reference: string;
@@ -20,5 +22,5 @@ export interface Delivery {
   status: 'pending' | 'received' | 'cancelled';
   expected_at: string;
   items: DeliveryItem[];
-  metadata?: Record<string, unknown>;
+  metadata?: SovereignData;
 }

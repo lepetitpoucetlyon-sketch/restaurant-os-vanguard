@@ -15,11 +15,13 @@ interface GlobalSettings {
     };
 }
 
+import { SovereignData } from '@/shared/nexus-contract';
+
 /**
  * 📢 Nexus Extension for internal communications
  */
 interface IBroadcastAdapter extends INexusAdapter {
-    broadcast: (event: string, payload: Record<string, unknown>) => void;
+    broadcast: (event: string, payload: SovereignData) => void;
 }
 
 /**
@@ -37,7 +39,8 @@ export class SovereignLedger {
         // Notification immédiate à l'UI pour bloquer toute transaction asymétrique
         // Note: Adaptation si broadcast n'existe pas nativement sur l'adapter
         if (Nexus.adapter && 'broadcast' in Nexus.adapter) {
-            (Nexus.adapter as unknown as IBroadcastAdapter).broadcast('SYSTEM_LOCKDOWN', { reason: 'Data Integrity Breach' });
+            const adapter = Nexus.adapter as IBroadcastAdapter;
+            adapter.broadcast('SYSTEM_LOCKDOWN', { reason: 'Data Integrity Breach' });
         }
     }
 
@@ -66,7 +69,7 @@ export class SovereignLedger {
             const settings = await Nexus.adapter.get<GlobalSettings>(Nexus.getTenantPath('settings/global'));
             mode = settings?.accounting?.complexityMode || 'EXPERT';
         } catch { 
-            mode = 'LOCAL_LOCK' as unknown as AccountingMode; 
+            mode = 'LOCAL_LOCK' as AccountingMode; 
         }
 
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({

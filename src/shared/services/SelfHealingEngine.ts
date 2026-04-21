@@ -1,7 +1,7 @@
 import { getDefaultStore } from 'jotai';
 import { logger } from './logger';
-import { MasterBridge } from './MasterBridge';
-import { Nexus } from './nexus/NexusAdapter';
+import { MasterBridge } from '@/lib/MasterBridge';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 /**
  * 🍵 SelfHealingEngine - Restaurant OS (Singularity 5.4)
@@ -12,7 +12,9 @@ export const SelfHealingEngine = {
   /**
    * Performs a silent audit of the current state vs a distributed root.
    */
-  async auditAndHeal(atom: any, expectedHash: string, persistencePath?: string) {
+  async auditAndHeal<T, Args extends import('@/shared/nexus-contract').SovereignValue[], Result>(atom: import('jotai').WritableAtom<T, Args, Result>, expectedHash: string, persistencePath?: string) {
+
+
     const store = getDefaultStore();
     const currentState = store.get(atom);
     
@@ -29,7 +31,7 @@ export const SelfHealingEngine = {
         securityLevel: 'medium',
         globalMessage: `SILENT_HEALING: Corrected drift for atom at ${persistencePath || 'internal_node'}`,
         allowedFeatures: []
-      } as any).catch(() => {});
+      }).catch(() => {});
 
       // 💉 INJECTION (Silent Restore)
       if (persistencePath) {
@@ -49,7 +51,8 @@ export const SelfHealingEngine = {
   /**
    * Polynomial CRC Calculation for the state heap.
    */
-  calculateCRC(data: any): string {
+  calculateCRC(data: import('@/shared/nexus-contract').SovereignData | import('@/shared/nexus-contract').SovereignValue): string {
+
     const str = JSON.stringify(data);
     let hash = 0;
     for (let i = 0; i < str.length; i++) {

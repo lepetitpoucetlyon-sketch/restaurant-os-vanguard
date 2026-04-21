@@ -37,7 +37,7 @@ export function TwoFactorChallenge() {
         if (code.length < 6) return;
         setIsLoading(true);
         try {
-            const success = await (verifyTwoFactor as any)(code);
+            const success = await verifyTwoFactor(code);
             if (!success) {
                 showToast("Code de vérification invalide", "error");
                 setCode("");
@@ -85,8 +85,8 @@ export function TwoFactorChallenge() {
                             className="space-y-8"
                         >
                             <motion.h3
-                                initial={{ opacity: 0, y: 20 } as any}
-                                animate={{ opacity: 1, y: 0 } as any}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
                                 className="text-xl font-serif text-text-primary mb-2"
                             >
                                 Vérification requise

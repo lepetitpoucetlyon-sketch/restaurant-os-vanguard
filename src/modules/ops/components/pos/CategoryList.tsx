@@ -15,7 +15,7 @@ interface CategoryListProps {
 
 import { useLanguage } from "@/context/LanguageContext";
 
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, import('lucide-react').LucideIcon> = {
     all: Star,
     pizzas: Pizza,
     pastas: UtensilsCrossed,

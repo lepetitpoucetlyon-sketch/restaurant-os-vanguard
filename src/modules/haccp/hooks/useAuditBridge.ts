@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
  * Sovereign tunnel for NF525/HACCP external reporting.
  */
 export const useAuditBridge = () => {
-    const reportIncident = async (incident: any) => {
+    const reportIncident = async (incident: import('@/types').HygieneLog) => {
         logger.info(`[AuditBridge] Reporting incident to Sovereign Vault`);
         // Integrated reporting logic
     };

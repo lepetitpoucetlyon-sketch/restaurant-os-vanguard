@@ -29,10 +29,11 @@ type TelemetryEventType =
 interface TelemetryEvent {
     moduleId: string;
     eventType: TelemetryEventType;
-    payload?: Record<string, unknown>;
+    payload?: import('@/shared/nexus-contract').SovereignData;
     timestamp: string;
     tenantId: string;
 }
+
 
 class TelemetryHookService {
     private _optedIn: boolean = false;
@@ -68,7 +69,8 @@ class TelemetryHookService {
      * Emit a metric event. If opt-in is false, this is a complete no-op.
      * The MCC will never see this event.
      */
-    emit(moduleId: string, eventType: TelemetryEventType, payload?: Record<string, unknown>): void {
+    emit(moduleId: string, eventType: TelemetryEventType, payload?: import('@/shared/nexus-contract').SovereignData): void {
+
         // 🛡️ SOVEREIGNTY GATE: If not opted in, do absolutely nothing.
         if (!this._optedIn) return;
 
@@ -78,8 +80,9 @@ class TelemetryHookService {
             payload,
             timestamp: new Date().toISOString(),
             tenantId: typeof window !== 'undefined' 
-                ? localStorage.getItem('nexus_tenant_id') || 'unknown'
+                ? localStorage.getItem('nexus_tenant_id') || 'SOVEREIGN_UNKNOWN'
                 : 'server',
+
         };
 
         this._buffer.push(event);

@@ -26,7 +26,8 @@ import { validateMutation } from '@/shared/validation/SchemaRegistry';
  */
 export class FirestoreAdapter implements INexusAdapter {
     
-    private validate(path: string, data: Record<string, unknown>) {
+    private validate(path: string, data: import('@/shared/nexus-contract').SovereignData) {
+
         const parts = path.split('/');
         let moduleId = 'COMMON';
         let key = parts[parts.length - 1];
@@ -43,12 +44,14 @@ export class FirestoreAdapter implements INexusAdapter {
         }
     }
 
-    async get<T = unknown>(path: string): Promise<T | null> {
+    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
         const snap = await getDoc(doc(firestore, path));
-        return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+        return snap.exists() ? { id: snap.id, ...snap.data() } as T : null;
     }
 
-    async query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+
+    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+
         const constraints: QueryConstraint[] = [];
         
         if (options?.where) {
@@ -66,7 +69,8 @@ export class FirestoreAdapter implements INexusAdapter {
         return snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    onSnapshot<T = unknown>(path: string, callback: (data: T) => void, options?: INexusQueryOptions & { onError?: (error: Error) => void }): () => void {
+    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void, options?: INexusQueryOptions & { onError?: (error: Error) => void }): () => void {
+
         const isCollection = path.split('/').length % 2 !== 0;
         
         if (isCollection) {
@@ -99,23 +103,26 @@ export class FirestoreAdapter implements INexusAdapter {
                 batch.set(doc(firestore, path), data);
             },
             update: (path, data) => {
-                this.validate(path, data);
-                batch.update(doc(firestore, path), data as { [x: string]: any }); // Required by Firestore for partial updates
+                this.validate(path, data as import('@/shared/nexus-contract').SovereignData);
+                batch.update(doc(firestore, path), data as import('@/shared/nexus-contract').SovereignData); // Required by Firestore for partial updates
             },
+
             delete: (path) => batch.delete(doc(firestore, path)),
             commit: () => batch.commit()
         };
     }
 
-    async set<T = unknown>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
-        this.validate(path, data as Record<string, unknown>);
+    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
+        this.validate(path, data as import('@/shared/nexus-contract').SovereignData);
         await setDoc(doc(firestore, path), data, options);
     }
 
-    async update<T = unknown>(path: string, data: Partial<T>): Promise<void> {
-        this.validate(path, data as Record<string, unknown>);
+
+    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
+        this.validate(path, data as import('@/shared/nexus-contract').SovereignData);
         await updateDoc(doc(firestore, path), data);
     }
+
 
     async delete(path: string): Promise<void> {
         await deleteDoc(doc(firestore, path));

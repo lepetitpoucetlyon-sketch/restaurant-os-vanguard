@@ -27,7 +27,7 @@ export const dashboardHACCPAlertsSelector = atom((get) => {
 
     return stockItems.filter(s => {
         const dlc = new Date(s.dlc);
-        return dlc <= threeDaysFromNow && (s as any).status !== 'discarded' && s.status !== 'depleted';
+        return dlc <= threeDaysFromNow && s.status !== 'discarded' && s.status !== 'depleted';
     }).length;
 });
 
@@ -43,5 +43,5 @@ export const dashboardStockRupturesSelector = atom((get) => {
 // 4. KPI: Active Tables
 export const dashboardActiveTablesSelector = atom((get) => {
     const orders = get(ordersNodeAtom).data || [];
-    return orders.filter(o => o.status === 'new' || (o as any).status === 'ordered').length;
+    return orders.filter(o => o.status === 'new' || o.status === 'ordered').length;
 });

@@ -15,6 +15,8 @@ import {
     OilCheckData
 } from '../schemas/haccp';
 
+import { SovereignData } from '@/shared/nexus-contract';
+
 /**
  * 🏺 QualityEngine - Restaurant OS Guard
  * Ensures food safety and traceability via strict HACCP enforcement.
@@ -25,7 +27,7 @@ export class QualityEngine {
   /**
    * Records a delivery reception with HACCP controls.
    */
-  static async validateReception(rawData: unknown, tenantId: string = 'main'): Promise<{ id: string; currentStatus: string }> {
+  static async validateReception(rawData: SovereignData, tenantId: string = 'main'): Promise<{ id: string; currentStatus: string }> {
     logger.info(`[QualityEngine] Initiating reception validation for tenant: ${tenantId}`);
 
     const validatedData = ReceptionSchema.parse(rawData);
@@ -64,7 +66,7 @@ export class QualityEngine {
   /**
    * Logs a cleaning operation.
    */
-  static async validateCleaning(rawData: unknown, tenantId: string = 'main'): Promise<string> {
+  static async validateCleaning(rawData: SovereignData, tenantId: string = 'main'): Promise<string> {
     const validatedData = CleaningSchema.parse(rawData);
     const id = `cln_${Math.random().toString(36).substring(2, 10)}`;
     
@@ -81,7 +83,7 @@ export class QualityEngine {
   /**
    * Logs food waste.
    */
-  static async logWaste(rawData: unknown, tenantId: string = 'main'): Promise<string> {
+  static async logWaste(rawData: SovereignData, tenantId: string = 'main'): Promise<string> {
     const validatedData = WasteSchema.parse(rawData);
     const id = `wst_${Math.random().toString(36).substring(2, 10)}`;
     

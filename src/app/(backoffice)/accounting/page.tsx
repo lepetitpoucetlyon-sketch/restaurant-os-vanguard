@@ -37,12 +37,14 @@ import { FECGenerator } from "@/lib/accounting/FECGenerator";
 import { useToast } from "@/components/ui/Toast";
 import { FiscalAuditView } from "@/modules/finance/components/accounting/FiscalAuditView";
 
+type AccountingTab = 'pilotage' | 'flux' | 'pertes' | 'registres' | 'syntheses' | 'audit';
+
 export default function AccountingConsolePage() {
     const { sidebarOpen } = useUI();
     const { journalEntries, metrics, legacyMetrics } = useAccounting();
     const { showToast } = useToast();
     const performanceMode = useAtomValue(performanceModeAtom);
-    const [activeTab, setActiveTab] = useState<'pilotage' | 'flux' | 'pertes' | 'registres' | 'syntheses' | 'audit'>('pilotage');
+    const [activeTab, setActiveTab] = useState<AccountingTab>('pilotage');
     const [selectedYear, setSelectedYear] = useState(2025);
     const [showReconciliationHub, setShowReconciliationHub] = useState(false);
     const [viewMode, setViewMode] = useState<'standard' | 'simple'>('standard');
@@ -129,7 +131,7 @@ export default function AccountingConsolePage() {
                         ].map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
+                                onClick={() => setActiveTab(tab.id as AccountingTab)}
                                 className={cn(
                                     "flex items-center gap-3 px-8 py-4 rounded-[2rem] transition-all duration-500 relative group overflow-hidden",
                                     activeTab === tab.id

@@ -10,15 +10,14 @@ import { extractBrandingFromUrl } from '@/app/actions/branding';
 import { cn } from '@/lib/ui.foundations';
 
 export default function ProspectingDashboard() {
-  const { updateIdentity, settings } = useSettings();
-  const updateTheme = (useSettings() as any).updateTheme;
+  const { updateIdentity, updateConfig } = useSettings();
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [lastGenerated, setLastGenerated] = useState<any>(null);
+  const [lastGenerated, setLastGenerated] = useState<import('@/types').ThemeSettings | null>(null);
 
   const handleApplySauce = async (input: BrandInput) => {
     const newTheme = BrandingService.generateThemeFromBrand(input);
-    if (updateTheme) await updateTheme(newTheme as any);
+    await updateConfig('theme', newTheme);
     if (updateIdentity) await updateIdentity({ name: input.name });
     setLastGenerated(newTheme);
   };

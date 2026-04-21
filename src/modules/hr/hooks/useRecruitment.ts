@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { Candidate, CandidateStatus, RecruitmentLog } from '@/types/recruitment';
+import { Candidate, CandidateStatus, RecruitmentLog } from '@/types';
 import { useAuth, useTenant } from '@/context/AuthContext';
 import { hiredCandidateAction } from '@/app/(admin)/actions/recruitment';
 
@@ -17,9 +17,9 @@ export function useRecruitment() {
         if (!activeTenantId) return;
         
         const path = `tenants/${activeTenantId}/candidates`;
-        const unsubscribe = Nexus.adapter.onSnapshot(path, (data: any) => {
+        const unsubscribe = Nexus.adapter.onSnapshot(path, (data: Candidate[]) => {
             if (Array.isArray(data)) {
-                setCandidates(data as Candidate[]);
+                setCandidates(data);
             }
         }, {
             orderBy: { field: 'updatedAt', direction: 'desc' }
@@ -32,9 +32,9 @@ export function useRecruitment() {
         if (!activeTenantId) return;
 
         const path = `tenants/${activeTenantId}/recruitment_logs`;
-        const unsubscribe = Nexus.adapter.onSnapshot(path, (data: any) => {
+        const unsubscribe = Nexus.adapter.onSnapshot(path, (data: RecruitmentLog[]) => {
             if (Array.isArray(data)) {
-                setLogs(data as RecruitmentLog[]);
+                setLogs(data);
             }
         }, {
             orderBy: { field: 'timestamp', direction: 'desc' }
@@ -119,7 +119,7 @@ export function useRecruitment() {
             const relatedLogs = await Nexus.adapter.query(logsPath, {
                 where: [{ field: 'candidateId', operator: '==', value: candidate.id }]
             });
-            relatedLogs.forEach((l: any) => batch.delete(`${logsPath}/${l.id}`));
+            relatedLogs.forEach((l: RecruitmentLog) => batch.delete(`${logsPath}/${l.id}`));
         }
 
         await batch.commit();

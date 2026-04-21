@@ -1,4 +1,4 @@
-import type { RestaurantIdentity } from '@/types/settings';
+import type { RestaurantIdentity } from '@/types';
 
 export interface FirebaseInstanceConfig {
     apiKey: string;

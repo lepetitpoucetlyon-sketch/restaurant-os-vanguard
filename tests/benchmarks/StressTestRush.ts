@@ -23,12 +23,26 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0
 const db = getFirestore(app);
 
 // --- TYPES ---
+interface OrderItem {
+    productId: string;
+    name: string;
+    quantity: number;
+    priceInCents: number;
+}
+
 interface Order {
     id: string;
-    items: any[];
+    items: OrderItem[];
     totalInCents: number;
     status: 'paid';
     timestamp: string;
+}
+
+interface RushResult {
+    id: string;
+    hash?: string;
+    latency: number;
+    success: boolean;
 }
 
 // --- UTILS ---
@@ -50,7 +64,7 @@ async function runProtocolOverload() {
     console.log(`📡 Cible: ${TENANT_ID} | Volume: ${RUSH_COUNT} units`);
 
     const startTime = Date.now();
-    const results: any[] = [];
+    const results: RushResult[] = [];
     
     const fiscalSealsRef = collection(db, `tenants/${TENANT_ID}/fiscalSeals`);
     const qLast = query(fiscalSealsRef, orderBy('timestamp', 'desc'), limit(1));

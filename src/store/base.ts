@@ -28,7 +28,6 @@ export interface NexusNode<T> {
     pop: () => T | undefined;
     push: (...items: T[]) => number;
     concat: (...items: T[]) => T[];
-    [key: string]: unknown;
 }
 
 /**

@@ -11,7 +11,7 @@ import { useMarketing } from '@/engines/ops/NexusOpsProvider';
 import { cn } from '@/lib/ui.foundations';
 
 export const OverviewTab = () => {
-    const { profile, isLoading } = useMarketing() as any;
+    const { profile, isLoading } = useMarketing();
     const score = MarketingEngine.calculateSEOScore();
     const status = MarketingEngine.getVisibilityStatus(score);
     const livePages = MarketingEngine.getLivePageAnalysis();
@@ -67,7 +67,7 @@ export const OverviewTab = () => {
                     {livePages.map((page, idx) => (
                         <PageCard
                             key={page.id}
-                            page={page as any}
+                            page={page as import('@/app/(marketing)/seo/seo.types').PageSEO}
                             onEdit={() => { }}
                             id={idx === 0 ? "seo-page-to-optimize-0" : undefined}
                         />

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, History, X, Zap, Maximize2, Minimize2, AlertTriangle, CheckCircle2, Minus, Bot } from 'lucide-react';
 import { useGeminiAgent } from "@/hooks/useGeminiAgent";
@@ -29,7 +31,8 @@ export function VoiceAssistantOverlay() {
     const [isVoiceMode, setIsVoiceMode] = useState(false);
     
     // All refs must be declared unconditionally (Rules of Hooks)
-    const pageContextRef = useRef<Record<string, unknown> | null>(null);
+    const pageContextRef = useRef<SovereignData | null>(null);
+
     const recognitionRef = useRef<{ stop: () => void } | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +82,14 @@ export function VoiceAssistantOverlay() {
             return;
         }
 
-        const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+        const SpeechRecognition = (window as Window & { 
+            SpeechRecognition?: typeof import('react').Component, 
+            webkitSpeechRecognition?: typeof import('react').Component 
+        } & import('@/shared/nexus-contract').SovereignData).SpeechRecognition || (window as Window & { 
+            webkitSpeechRecognition?: typeof import('react').Component 
+        } & import('@/shared/nexus-contract').SovereignData).webkitSpeechRecognition;
+
+
         if (!SpeechRecognition) return;
 
         const recognition = new SpeechRecognition();

@@ -36,10 +36,14 @@ export const TenantOrchestrator: React.FC = () => {
         { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'online', metrics: { dailyRevenue: 2800, alerts: 2, errorRate: 0.05, uptime: 99.1 } },
         { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'error', metrics: { dailyRevenue: 1200, alerts: 8, errorRate: 0.15, uptime: 95.0 } },
         { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'maintenance', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
-    ].map(inst => ({
-        ...inst,
-        healthScore: inst.metrics ? FleetCommander.evaluateHealth(inst.metrics.alerts || 0, inst.metrics.errorRate || 0, inst.metrics.uptime || 0) : 100
-    }));
+    ].map(inst => {
+        const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
+        const health = FleetCommander.evaluateHealth(metrics.alerts || 0, metrics.errorRate || 0, metrics.uptime || 0);
+        return {
+            metrics: { ...metrics, healthScore: health }
+        } as import('@/domain/types/empire').EmpireInstance;
+
+    });
 
     const handleSwitch = (tenantId: string, name: string) => {
         if (tenantId === activeTenantId) return;
@@ -148,7 +152,7 @@ export const TenantOrchestrator: React.FC = () => {
                                                     "text-[8px] font-black uppercase tracking-widest",
                                                     isActive ? "text-white/50" : "text-text-muted"
                                                 )}>
-                                                    Health: {(instance as any).healthScore || (instance as any).metrics?.healthScore}%
+                                                    Health: {instance.metrics.healthScore}%
                                                 </span>
                                             </div>
                                         )}

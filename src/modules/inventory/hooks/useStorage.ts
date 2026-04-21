@@ -120,8 +120,10 @@ export function useCloudStorage() {
         try {
             const url = await Storage.upload(file, subPath);
             return url;
-        } catch (err: any) {
-            const msg = err.message || "Erreur lors de l'upload";
+        } catch (err) {
+
+            const error = err as Error;
+            const msg = error.message || "Erreur lors de l'upload";
             setError(msg);
             throw err;
         } finally {
@@ -142,8 +144,9 @@ export function useCloudStorage() {
         setError(null);
         try {
             await Storage.delete(subPath);
-        } catch (err: any) {
-            setError(err.message || "Erreur lors de la suppression");
+        } catch (err) {
+
+            setError((err as Error).message || "Erreur lors de la suppression");
             throw err;
         } finally {
             setLoading(false);
@@ -156,8 +159,9 @@ export function useCloudStorage() {
         try {
             const url = await Storage.getUrl(subPath);
             return url;
-        } catch (err: any) {
-            setError(err.message || "Erreur lors de la récupération de l'URL");
+        } catch (err) {
+
+            setError((err as Error).message || "Erreur lors de la récupération de l'URL");
             throw err;
         } finally {
             setLoading(false);

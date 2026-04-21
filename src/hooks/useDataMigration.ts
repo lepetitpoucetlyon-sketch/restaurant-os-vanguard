@@ -108,7 +108,8 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
     }, []);
 
     // INJECTION IN DATABASE
-    const injectToDB = async (entity: 'staff' | 'menu' | 'crm', data: unknown) => {
+    const injectToDB = async (entity: 'staff' | 'menu' | 'crm', data: import('@/shared/nexus-contract').SovereignValue) => {
+
         setIsMigrating(true);
         setProgress(10);
         const batch = Nexus.adapter.batch();

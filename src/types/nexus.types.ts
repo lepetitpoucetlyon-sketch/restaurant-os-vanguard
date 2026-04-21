@@ -1,11 +1,13 @@
 import { User, UserRole, UserStatus } from './auth.types';
 import { IntelligenceConfig } from './common.types';
-import { TenantConfig } from '@/shared/nexus-contract';
+import { TenantConfig, BusinessLaws, ExpertConfig, SovereignData } from '@/shared/nexus-contract';
+
 import { GlobalSettings } from './settings';
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
 import { Language } from '@/i18n/translations';
 import { ThemeMode, AccentColor, UIDensity, BorderRadius } from '@/store/themeAtoms';
-import { EmpireInstance } from '@/domain/types/empire';
+import { EmpireInstance, EmpireGlobalMetrics } from '@/domain/types/empire';
+import { FleetInsight, ConsolidatedMetrics } from '@/shared/types/fleet.types';
 
 /**
  * 🏛️ NEXUS CORE INTERFACES (GRADE X)
@@ -32,7 +34,12 @@ export interface NexusAuthState {
     updateUserStatus?: (userId: string, status: 'active' | 'suspended' | 'on_leave') => Promise<void>;
     addUser?: (user: Partial<User>) => Promise<void>;
     deleteUser?: (userId: string) => Promise<void>;
-    logAction?: (action: string, metadata?: Record<string, unknown>) => void;
+    logAction?: (action: string, metadata?: {
+        moduleId?: string;
+        previousValue?: string | number | boolean;
+        newValue?: string | number | boolean;
+        [key: string]: string | number | boolean | undefined;
+    }) => void;
 }
 
 export interface NexusTenantState {
@@ -67,7 +74,7 @@ export interface NexusUIState {
     toggleTheme: () => void;
     unreadCount: number;
     sidebarOpen?: boolean; 
-    settings?: Record<string, unknown>; // Shortcut to settings module if needed
+    settings?: GlobalSettings; // Precise type
 }
 
 export interface NexusSettingsState {
@@ -76,18 +83,19 @@ export interface NexusSettingsState {
     isSaving: boolean;
     lastSaved: Date | null;
     updateSettings: (newSettings: GlobalSettings) => Promise<void>;
-    updateConfig: (key: string, data: Record<string, unknown>) => Promise<void>;
-    updateIdentity?: (data: Record<string, unknown>) => Promise<void>;
-    updateGoals?: (data: Record<string, unknown>) => Promise<void>;
-    updateSchedule?: (data: Record<string, unknown>) => Promise<void>;
-    updateService?: (data: Record<string, unknown>) => Promise<void>;
-    addClosedPeriod?: (data: Record<string, unknown>) => Promise<void>;
+    updateConfig: (key: string, data: Partial<GlobalSettings>) => Promise<void>;
+    updateIdentity?: (data: Partial<GlobalSettings['identity']>) => Promise<void>;
+    updateGoals?: (data: Partial<GlobalSettings['goals']>) => Promise<void>;
+    updateSchedule?: (data: Partial<GlobalSettings['schedule']>) => Promise<void>;
+    updateService?: (data: Partial<GlobalSettings['service']>) => Promise<void>;
+    addClosedPeriod?: (data: { start: string; end: string; reason: string }) => Promise<void>;
     deleteClosedPeriod?: (id: string) => Promise<void>;
-    updateReservationConfig?: (data: Record<string, unknown>) => Promise<void>;
-    updateReservationSlots?: (data: Record<string, unknown>) => Promise<void>;
-    updateSLM?: (data: Record<string, unknown>) => Promise<void>;
-    updateList: (key: string, data: Record<string, unknown>[]) => Promise<void>;
+    updateReservationConfig?: (data: { [key: string]: boolean | number | string }) => Promise<void>;
+    updateReservationSlots?: (data: { [key: string]: string[] }) => Promise<void>;
+    updateSLM?: (data: { model: string; temperature: number }) => Promise<void>;
+    updateList: (key: string, data: SovereignData[]) => Promise<void>;
 }
+
 
 
 export interface NexusLangState {
@@ -100,12 +108,18 @@ export interface NexusLangState {
 
 export interface NexusNotifState {
     unreadCount: number;
-    addNotification: (notif: { title: string; message: string; type: 'success' | 'error' | 'info' | 'warning' }) => void;
+    notifications: import('@/types').Notification[];
+    addNotification: (notif: { 
+        title: string; 
+        message: string; 
+        type: import('@/types').NotificationType;
+        module?: string;
+        action?: { label: string; href?: string };
+    }) => void;
     markAsRead: (id: string) => void;
     markAllAsRead: () => void;
     removeNotification: (id: string) => void;
     clearAll: () => void;
-    notifications: Record<string, unknown>[];
 }
 
 export interface NexusTheme {
@@ -126,7 +140,7 @@ export interface NexusTheme {
 export interface NexusFleetState {
     instanceIds: string[];
     instances: EmpireInstance[];
-    globalMetrics: Record<string, unknown> | null;
+    globalMetrics: EmpireGlobalMetrics | null;
     stats: {
         totalRevenue: number;
         averageHealth: number;
@@ -135,7 +149,7 @@ export interface NexusFleetState {
             averageFoodCost?: number;
         };
     };
-    macroInsights: Record<string, unknown>[];
+    macroInsights: FleetInsight[];
     isLoading: boolean;
     isSyncing: boolean;
     isEmpireMode: boolean;
@@ -151,19 +165,25 @@ export interface NexusFleetState {
     selectInstance: (id: string | null) => void;
     registerInstance: (instance: EmpireInstance) => Promise<void>;
     launchPreview: (key: string) => void;
-    broadcastConfiguration: (config: Record<string, unknown>) => Promise<void>;
-    complianceService: Record<string, unknown>;
-    haccpBridge: Record<string, unknown>;
-    fleet: Record<string, unknown> | null;
-    customer: Record<string, unknown>;
+    broadcastConfiguration: (config: {
+        targetVersion?: string;
+        maintenanceMode?: boolean;
+    }) => Promise<void>;
+    complianceService: SovereignData;
+    haccpBridge: SovereignData;
+    fleet: EmpireGlobalMetrics | null;
+    customer: {
+        customers: SovereignData[];
+    };
     intelligence: IntelligenceConfig;
     isTrainingMode: boolean;
     toggleTrainingMode: () => void;
     triggerRebalancing?: () => Promise<void>;
-    nodes?: Record<string, unknown>[];
+    nodes?: SovereignData[];
     health?: string;
-    tutorial?: Record<string, unknown>;
+    tutorial?: SovereignData;
 }
+
 
 export interface NexusCoreState {
     auth: NexusAuthState;

@@ -23,7 +23,8 @@ export default function MigrationSettings() {
             const data = await analyzeMenuWithAI(rawMenuText);
             setParsedMenuData(data);
             showToast("Menu analysé avec succès. Veuillez vérifier les données.", "success");
-        } catch (err: unknown) {
+        } catch (err) {
+
             const message = err instanceof Error ? err.message : String(err);
             showToast(`Erreur d'analyse: ${message}`, "error");
         }
@@ -36,7 +37,8 @@ export default function MigrationSettings() {
             showToast("Menu injecté dans la base de données !", "success");
             setParsedMenuData(null);
             setRawMenuText("");
-        } catch (err: unknown) {
+        } catch (err) {
+
             const message = err instanceof Error ? err.message : String(err);
             showToast(`Erreur d'injection: ${message}`, "error");
         }
@@ -55,7 +57,8 @@ export default function MigrationSettings() {
             } else {
                 showToast("Fichier vide ou mal formaté.", "warning");
             }
-        } catch (err: unknown) {
+        } catch (err) {
+
             const message = err instanceof Error ? err.message : String(err);
             showToast(`Erreur de lecture CSV: ${message}`, "error");
         }
@@ -68,7 +71,8 @@ export default function MigrationSettings() {
         try {
             await seedProduction();
             showToast("Système ressuscité ! Les données de production sont en ligne.", "success");
-        } catch (err: unknown) {
+        } catch (err) {
+
             const message = err instanceof Error ? err.message : String(err);
             showToast(`Échec de la résurrection: ${message}`, "error");
         }

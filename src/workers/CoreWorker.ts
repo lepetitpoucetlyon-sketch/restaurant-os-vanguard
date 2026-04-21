@@ -32,8 +32,9 @@ self.onmessage = async (e) => {
       default:
         self.postMessage({ id, error: 'Unknown Task' });
     }
-  } catch (error: any) {
-    self.postMessage({ id, error: error.message });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown Worker Error';
+    self.postMessage({ id, error: message });
   }
 };
 
@@ -65,8 +66,13 @@ async function generateSHA256(data: string, previousHash: string = ''): Promise<
   return hex;
 }
 
+interface StockEvent {
+  type: 'IN' | 'OUT';
+  quantity: number;
+}
+
 /** 📦 Deterministic Stock Logic (Sync) */
-function reconstructQuantity(initial: number, events: any[]): number {
+function reconstructQuantity(initial: number, events: StockEvent[]): number {
   return events.reduce((acc, event) => {
     if (event.type === 'IN') return acc + event.quantity;
     if (event.type === 'OUT') return acc - event.quantity;

@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🔐 CryptoService - Restaurant OS (The Imperial Safe)
@@ -14,7 +15,7 @@ export class CryptoService {
      * Deterministic JSON Stringification.
      * Ensures consistent hashes across different JS engines.
      */
-    static canonicalStringify(obj: Record<string, unknown>): string {
+    static canonicalStringify(obj: SovereignData): string {
         const allKeys: string[] = [];
         JSON.stringify(obj, (key, value) => {
             allKeys.push(key);
@@ -87,7 +88,7 @@ export class CryptoService {
     /**
      * Verifies the integrity of a hash chain.
      */
-    static async verifyIntegrity(data: Record<string, unknown>, expectedHash: string, previousHash: string = ''): Promise<boolean> {
+    static async verifyIntegrity(data: SovereignData, expectedHash: string, previousHash: string = ''): Promise<boolean> {
         const snapshot = this.canonicalStringify(data);
         const computedHash = await this.generateHash(snapshot, previousHash);
         return computedHash === expectedHash;

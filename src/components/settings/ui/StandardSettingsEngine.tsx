@@ -10,6 +10,8 @@ import { GlassInput } from '@/components/shared/atomic/GlassInput';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+
 
 export interface SettingsOption {
     label: string;
@@ -25,7 +27,8 @@ export interface SettingsField {
     unit?: 'cents' | 'grams' | 'percent';
     options?: SettingsOption[];
     subFields?: SettingsField[];
-    validation?: unknown; // Zod or simple rules
+    validation?: SovereignData; // Zod or simple rules
+
 }
 
 export interface SettingsSchema {
@@ -43,7 +46,8 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     const schemaKey = schema.id;
     
     // État local pour le "Dirty Tracking"
-    const [localData, setLocalData] = useState<Record<string, unknown>>({});
+    const [localData, setLocalData] = useState<SovereignData>({});
+
     const [isSaving, setIsSaving] = useState(false);
 
     // Initialisation
@@ -60,7 +64,8 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
         return original !== current;
     }, [localData, settings, schemaKey]);
 
-    const handleChange = (fieldId: string, value: unknown) => {
+    const handleChange = (fieldId: string, value: SovereignValue) => {
+
         setLocalData((prev) => ({
             ...prev,
             [fieldId]: value
@@ -89,10 +94,11 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     };
 
     const handleReset = () => {
-        setLocalData((settings?.[schemaKey as keyof typeof settings] as Record<string, unknown>) || {});
+        setLocalData((settings?.[schemaKey as keyof typeof settings] as SovereignData) || {});
     };
 
-    const renderField = (field: SettingsField, value: unknown, onChange: (val: unknown) => void) => {
+    const renderField = (field: SettingsField, value: SovereignValue, onChange: (val: SovereignValue) => void) => {
+
         // Adaptation pour supporter 'key' ou 'id'
         const fieldId = field.id || field.key;
 
@@ -200,7 +206,8 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                     </button>
                                     {field.subFields?.map((sub: SettingsField) => (
                                         <div key={sub.id || sub.key}>
-                                            {renderField(sub, (item as Record<string, unknown>)[sub.id || sub.key!], (val: unknown) => {
+                                            {renderField(sub, (item as SovereignData)[sub.id || sub.key!], (val: SovereignValue) => {
+
                                                 const newList = [...listValue];
                                                 newList[index] = { ...newList[index], [sub.id || sub.key!]: val };
                                                 onChange(newList);
@@ -281,7 +288,8 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >
-                            {renderField(field, localData[field.id || field.key!], (val: unknown) => handleChange(field.id || field.key!, val))}
+                            {renderField(field, localData[field.id || field.key!], (val: SovereignValue) => handleChange(field.id || field.key!, val))}
+
                         </motion.div>
                     ))}
                 </AnimatePresence>

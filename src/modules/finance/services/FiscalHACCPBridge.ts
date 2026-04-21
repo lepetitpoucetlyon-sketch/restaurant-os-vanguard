@@ -1,8 +1,8 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
-import { JournalEntry } from '@/modules/finance/types';
+import { JournalEntry } from '@/types';
 import { StockItem } from '@/modules/inventory/types';
-import { SensorReading } from '@/modules/haccp/types';
+import { SensorReading } from '@/types';
 
 /**
  * 🏛️ FiscalHACCPBridge - Grade X Cross-Domain Symphony

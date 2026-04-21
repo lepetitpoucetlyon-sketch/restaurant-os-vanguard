@@ -8,7 +8,7 @@ import { ROLE_LABELS } from "@/domain/services/AccessPolicyManager";
 import { empireAudit } from "@/lib/audit";
 
 interface SidebarProfileProps {
-    currentUser: any;
+    currentUser: import('@/types').User | null;
     isSidebarCollapsed: boolean;
     canSwitchProfiles: boolean;
     setIsProfileSwitcherOpen: (val: boolean) => void;
@@ -20,7 +20,7 @@ const navItemReveal = {
     visible: {
         opacity: 1,
         x: 0,
-        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }
+        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
     }
 };
 

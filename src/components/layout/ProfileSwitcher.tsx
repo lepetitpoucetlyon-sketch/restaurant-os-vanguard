@@ -16,7 +16,9 @@ export function ProfileSwitcher({ isOpen, onClose }: ProfileSwitcherProps) {
     const { users, switchProfile, currentUser, canSwitchProfiles } = useAuth();
 
     const handleSwitch = async (userId: string) => {
-        await (switchProfile as any)(userId);
+        if (switchProfile) {
+            await switchProfile(userId);
+        }
         onClose();
     };
 

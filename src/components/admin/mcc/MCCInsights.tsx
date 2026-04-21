@@ -9,11 +9,12 @@ import { useFleet } from '@/context/FleetContext';
 
 export function MCCInsights() {
     const { macroInsights, refreshFleet } = useFleet();
-    const triggerRebalancing = (insight: any) => {
+    const triggerRebalancing = (insight: import('@/shared/nexus-contract').SovereignData) => {
         console.log('[Fleet] Triggering rebalancing for insight:', insight);
+
         refreshFleet?.(true);
     };
-    const fleetState = useAtomValue(fleetSnapshotAtom) as any;
+    const fleetState = useAtomValue(fleetSnapshotAtom);
 
     if (!macroInsights || macroInsights.length === 0) return null;
 

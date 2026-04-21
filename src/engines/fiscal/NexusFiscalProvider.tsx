@@ -15,8 +15,8 @@ import {
     TreasuryMetrics,
     FiscalSeal,
     FiscalAuditResult
-} from '@/modules/finance/types';
-import { SensorReading, HygieneLog } from '@/modules/haccp/types';
+} from '@/types';
+import { SensorReading, HygieneLog } from '@/types';
 
 import { useAtomValue } from 'jotai';
 import { 

@@ -12,8 +12,9 @@ interface LogEntry {
     action: string;
     severity: string;
     timestamp: Date;
-    details?: any;
+    details?: import('@/shared/nexus-contract').SovereignValue;
 }
+
 
 export default function MCCAuditStream() {
     const [logs, setLogs] = useState<LogEntry[]>([]);

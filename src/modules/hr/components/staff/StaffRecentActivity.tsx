@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 interface StaffRecentActivityProps {
-    logs: any[];
+    logs: import('@/types').AuditLog[];
 }
 
 export const StaffRecentActivity = ({ logs }: StaffRecentActivityProps) => {

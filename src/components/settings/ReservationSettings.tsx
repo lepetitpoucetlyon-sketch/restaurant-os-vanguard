@@ -101,7 +101,7 @@ export default function ReservationSettingsComponent() {
                             <div className="relative group">
                                 <input
                                     type="number"
-                                    value={(config as any)[item.key]}
+                                    value={config[item.key as keyof typeof config] as number}
                                     onChange={(e) => setConfig(c => ({ ...c, [item.key]: Number(e.target.value) }))}
                                     className="w-full px-6 py-5 bg-bg-primary border border-border rounded-2xl text-text-primary font-serif outline-none focus:border-accent shadow-sm"
                                     data-tutorial={item.key === 'minAdvanceHours' ? 'settings-5-3' : undefined}
@@ -290,12 +290,12 @@ export default function ReservationSettingsComponent() {
                                         onClick={() => setConfig(c => ({ ...c, [toggle.id]: !c[toggle.id as keyof typeof c] }))}
                                         className={cn(
                                             "w-12 h-6 rounded-full relative transition-all duration-300",
-                                            (config as any)[toggle.id] ? "bg-emerald-500" : "bg-bg-tertiary border border-border"
+                                            config[toggle.id as keyof typeof config] ? "bg-emerald-500" : "bg-bg-tertiary border border-border"
                                         )}
                                         data-tutorial={toggle.id === 'requireDeposit' ? 'settings-5-5' : undefined}
                                     >
                                         <motion.div
-                                            animate={{ x: (config as any)[toggle.id] ? 26 : 2 }}
+                                            animate={{ x: config[toggle.id as keyof typeof config] ? 26 : 2 }}
                                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                             className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm"
                                         />
@@ -444,7 +444,7 @@ export default function ReservationSettingsComponent() {
                                 {template.label}
                             </label>
                             <textarea
-                                value={(config as any)[template.key]}
+                                value={config[template.key as keyof typeof config] as string}
                                 onChange={(e) => setConfig(c => ({ ...c, [template.key]: e.target.value }))}
                                 rows={2}
                                 className="w-full px-8 py-6 bg-bg-tertiary border border-border rounded-[2rem] text-sm font-medium shadow-inner focus:bg-bg-primary transition-all outline-none resize-none text-text-primary placeholder:text-text-muted"

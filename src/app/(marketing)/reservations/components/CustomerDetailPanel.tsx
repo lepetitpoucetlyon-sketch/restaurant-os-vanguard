@@ -12,12 +12,13 @@ import {
     Calendar 
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { Customer } from "@/types";
+import { Customer, Reservation } from "@/types";
 
 interface CustomerDetailPanelProps {
     customer: Customer;
-    getCustomerHistory: (id: string) => any;
+    getCustomerHistory: (id: string) => Reservation[];
     setSelectedCustomer: (val: Customer | null) => void;
+
     setIsNewReservationModalOpen: (val: boolean) => void;
 }
 

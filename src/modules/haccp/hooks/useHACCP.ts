@@ -84,8 +84,8 @@ export function useHACCP() {
             ...maintenanceLogs
         ].filter((log: HygieneLog | ReceptionLog | MaintenanceLog) => 
             log.status === 'critical' || 
-            (log as any).critical_issue || 
-            (log as any).integrityStatus === 'non-conforme'
+            ('critical_issue' in log && (log as { critical_issue?: boolean }).critical_issue) || 
+            ('integrityStatus' in log && log.integrityStatus === 'non-conforme')
         );
     }, [hygieneLogs, receptionLogs, maintenanceLogs]);
 
@@ -108,7 +108,7 @@ export function useHACCP() {
 
         // --- 🔨 Forge Actions ---
         addHygieneLog: (data: Partial<HygieneLog>) => hygieneForge.mutate('SET', `log_${Date.now()}`, data),
-        addLabel: (data: any) => labelForge.mutate('SET', `lab_${Date.now()}`, data),
+        addLabel: (data: Partial<import('../types').HygieneLabel>) => labelForge.mutate('SET', `lab_${Date.now()}`, data),
         addReception: (data: Partial<ReceptionLog>) => receptionForge.mutate('SET', `rec_${Date.now()}`, data),
         addMaintenance: (data: Partial<MaintenanceLog>) => maintenanceForge.mutate('SET', `maint_${Date.now()}`, data)
     };

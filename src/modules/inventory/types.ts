@@ -109,7 +109,7 @@ export interface StockItem {
     unitCostInCents: number;
 
     // Status
-    status: 'available' | 'reserved' | 'expired' | 'low' | 'quarantine' | 'depleted';
+    status: 'available' | 'reserved' | 'expired' | 'low' | 'quarantine' | 'depleted' | 'discarded';
     notes?: string;
     initialQuantity?: number;
     costInCents?: number; // legacy alias for unitCostInCents
@@ -255,10 +255,11 @@ export interface InventoryContextType {
     triggerRebalancing: () => Promise<void>;
     
     expert: {
-        queryExpert: (prompt: string, contextData?: Record<string, unknown>) => Promise<{
+        queryExpert: (prompt: string, contextData?: import('@/shared/nexus-contract').SovereignData) => Promise<{
             response: string;
             suggestions?: string[];
         }>;
+
         isConfigured: boolean;
         isAuthorized: boolean;
         role: string;
@@ -266,8 +267,9 @@ export interface InventoryContextType {
     };
     
     agent?: {
-        query: (prompt: string, context?: Record<string, unknown>) => Promise<{
+        query: (prompt: string, context?: import('@/shared/nexus-contract').SovereignData) => Promise<{
             answer: string;
+
             confidence: number;
         }>;
         isProcessing: boolean;

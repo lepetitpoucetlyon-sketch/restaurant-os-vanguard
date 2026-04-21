@@ -23,7 +23,7 @@ import { cn } from "@/lib/ui.foundations";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TableInsightPanelProps {
-    selectedTable: any | null; // Table should be imported or use any for now to fix build
+    selectedTable: import('@/types').Table | null;
     onClose: () => void;
     onCheckout?: (total: number) => void;
 }
@@ -35,12 +35,12 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
     const data = useMemo(() => {
         if (!selectedTable || !orders || !reservations) return null;
 
-        const tableOrders = (orders || []).filter((o: any) => o.tableId === selectedTable.id && o.status !== 'paid' && o.status !== 'cancelled');
+        const tableOrders = (orders || []).filter((o: import('@/types').Order) => o.tableId === selectedTable.id && o.status !== 'paid' && o.status !== 'cancelled');
         const activeOrder = tableOrders[0];
-
-        const tableReservations = (reservations || []).filter((r: any) => r.tableId === selectedTable.id);
+        
+        const tableReservations = (reservations || []).filter((r: import('@/types').Reservation) => r.tableId === selectedTable.id);
         const today = new Date();
-        const activeReservation = tableReservations?.find((r: any) => {
+        const activeReservation = tableReservations?.find((r: import('@/types').Reservation) => {
             const rDate = new Date(r.date);
             const diff = Math.abs(today.getTime() - rDate.getTime());
             return diff < (2 * 60 * 60 * 1000);

@@ -3,6 +3,24 @@
  * Version Grade X - Sovereign Alignment
  */
 
+export interface BusinessLaws {
+  table_count: number;
+  tax_rate: number;
+  currency: string;
+  pmsEnabled: boolean;
+  [key: string]: string | number | boolean | undefined;
+}
+
+export type SovereignValue = string | number | boolean | null | undefined | Date;
+export type SovereignData = { [key: string]: SovereignValue | SovereignData | SovereignData[] };
+
+export interface ExpertConfig {
+  role: string;
+  modelId: string;
+  isConfigured: boolean;
+  isAuthorized: boolean;
+}
+
 export interface TenantTheme {
   primaryColor: string;
   secondaryColor: string;
@@ -22,8 +40,8 @@ export interface OrchestratorSignal {
     currency: string;
     billingStatus: string;
   };
-  businessLaws: Record<string, unknown>;
-  expert?: Record<string, unknown>;
+  businessLaws: BusinessLaws;
+  expert?: ExpertConfig;
   // --- Grade X OTA & Fleet Extensions ---
   targetVersion?: string;
   otaUrl?: string;
@@ -75,11 +93,15 @@ export interface TenantConfig {
     plan: string;
     nextBillingDate?: string;
   };
-  marketplace?: Record<string, unknown>;
+  marketplace?: {
+    enabledModules: string[];
+    [key: string]: string[] | undefined;
+  };
   ai?: {
     enabled: boolean;
     model?: string;
     quota?: number;
+    geminiApiKey?: string;
   };
   branding?: TenantTheme;
   capabilities?: Record<string, boolean>;
@@ -90,7 +112,8 @@ export interface TenantConfig {
     name: string;
     version: string;
     ownerId?: string;
-    [key: string]: unknown;
+    createdAt?: string;
+    subscriptionTier?: string;
   };
   customFeatures?: Record<string, boolean>;
   firebase?: TenantFirebaseConfig;

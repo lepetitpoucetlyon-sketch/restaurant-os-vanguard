@@ -2,7 +2,19 @@
 
 import { useEffect, useState } from 'react';
 
-export function useInstanceGuard(): any {
+export interface InstanceGuardResult {
+    result: import('@/shared/nexus-contract').SovereignData;
+    isAuthorized: boolean;
+
+    verdict: 'AUTHORIZED' | 'DENIED' | 'PENDING';
+    host: string;
+    tenantId: string;
+    isDevMode: boolean;
+    isInitialized: boolean;
+    revalidate: () => void;
+}
+
+export function useInstanceGuard(): InstanceGuardResult {
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {

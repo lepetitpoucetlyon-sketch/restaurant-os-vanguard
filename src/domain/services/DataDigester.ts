@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
+import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 /**
  * DataDigester - Service de normalisation et validation (Zod-based)
@@ -51,7 +52,7 @@ export class DataDigester {
    * 🏗️ Decontaminate CSV/JSON Value
    * Cleans "Radioactive" strings (symbols, spaces, extra chars) and normalizes prices.
    */
-  static decontaminate(val: unknown): string {
+  static decontaminate(val: SovereignValue): string {
     if (val === null || val === undefined) return '0';
     if (typeof val !== 'string') return String(val);
     return val.replace(/[€$£\s]/g, '').replace(',', '.').trim();
@@ -62,7 +63,7 @@ export class DataDigester {
    * Ensures fiscal precision (rounding to 2 decimals) and conversion to Cents if needed.
    * Mandat NF525: Toute manipulation de prix doit être scellée par cet arrondi.
    */
-  static resolvePrice(val: unknown): number {
+  static resolvePrice(val: SovereignValue): number {
     if (typeof val === 'number') return Math.round(val * 100) / 100;
     const cleaned = this.decontaminate(val);
     const parsed = parseFloat(cleaned);
@@ -73,18 +74,18 @@ export class DataDigester {
    * 🏷️ Sanitize and Tag
    * Ingests raw data and adds metadata flags like LEGACY_DATA.
    */
-  static async digestOrder(rawData: Record<string, unknown>, options: { isLegacy?: boolean } = {}): Promise<ExternalOrder | null> {
+  static async digestOrder(rawData: SovereignData, options: { isLegacy?: boolean } = {}): Promise<ExternalOrder | null> {
     try {
       // 🏛️ GRADE VI : DÉCONTAMINATION PROFONDE
       const sanitized = {
         ...rawData,
-        total: this.resolvePrice(rawData.total),
-        items: Array.isArray(rawData.items) ? (rawData.items as Record<string, unknown>[]).map((item) => ({
+        total: this.resolvePrice(rawData.total as SovereignValue),
+        items: Array.isArray(rawData.items) ? (rawData.items as SovereignData[]).map((item) => ({
           ...item,
-          price: this.resolvePrice(item.price),
-          options: Array.isArray(item.options) ? (item.options as Record<string, unknown>[]).map((opt) => ({
+          price: this.resolvePrice(item.price as SovereignValue),
+          options: Array.isArray(item.options) ? (item.options as SovereignData[]).map((opt) => ({
             ...opt,
-            price: opt.price ? this.resolvePrice(opt.price) : undefined
+            price: opt.price ? this.resolvePrice(opt.price as SovereignValue) : undefined
           })) : []
         })) : []
       };
@@ -119,7 +120,7 @@ export class DataDigester {
    * Processed data in blocks (default 250) to optimize back-pressure and cloud limits.
    */
   static async digestBatch(
-    rawArray: Record<string, unknown>[], 
+    rawArray: SovereignData[], 
     options: { isLegacy?: boolean, onProgress?: (processed: number) => void } = {}
   ): Promise<ExternalOrder[]> {
     const CHUNK_SIZE = 250;

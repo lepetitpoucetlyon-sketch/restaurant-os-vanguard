@@ -14,12 +14,14 @@ import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useRouter } from "next/navigation";
 import { Table, TableStatus } from "@/types";
+import { FloorPlanEditorRef } from "@/modules/ops/components/floor-plan/FloorPlanEditor";
+
 
 const FloorPlanEditor = dynamic(
     () => import("@/modules/ops/components/floor-plan/FloorPlanEditor"),
     { ssr: false }
 ) as React.ComponentType<{
-    ref?: React.RefObject<unknown>;
+    ref?: React.RefObject<FloorPlanEditorRef>;
     scale: number;
     onScaleChange: (s: number) => void;
     position: { x: number; y: number };
@@ -29,6 +31,7 @@ const FloorPlanEditor = dynamic(
     currentFloorId: string;
     onTableSelect: (id: string) => void;
 }>;
+
 
 // Floor icons mapping
 const FLOOR_ICONS: Record<string, React.ElementType> = {
@@ -42,7 +45,8 @@ export default function FloorPlanPage() {
     const router = useRouter();
     const isMobile = useIsMobile();
     const { showToast } = useToast();
-    const editorRef = useRef<unknown>(null);
+    const editorRef = useRef<FloorPlanEditorRef>(null);
+
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mode, setMode] = useState<'select' | 'add'>('select');

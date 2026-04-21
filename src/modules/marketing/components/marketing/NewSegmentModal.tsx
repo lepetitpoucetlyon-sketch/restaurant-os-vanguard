@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 interface NewSegmentModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (segment: any) => void;
+    onSave: (segment: import('../../store/marketingAtoms').MarketingSegment) => void;
 }
 
 const CRITERIA_OPTIONS = [

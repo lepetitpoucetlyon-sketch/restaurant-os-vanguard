@@ -1,6 +1,6 @@
 import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { GlobalSettings } from '@/types/settings';
+import { GlobalSettings } from '@/types';
 import { logger } from '@/lib/logger';
 
 export class SettingsManager {

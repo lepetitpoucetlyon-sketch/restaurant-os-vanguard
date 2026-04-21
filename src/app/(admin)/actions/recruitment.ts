@@ -2,8 +2,8 @@
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { Candidate } from '@/types/recruitment';
-import { EmployeeSettings } from '@/types/settings/hr';
+import { Candidate } from '@/types';
+import { EmployeeSettings } from '@/types/hr';
 
 /**
  * 🧑‍💼 Recruitment Actions - Restaurant OS

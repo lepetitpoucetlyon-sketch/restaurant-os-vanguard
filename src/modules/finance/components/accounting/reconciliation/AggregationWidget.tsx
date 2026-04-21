@@ -10,7 +10,7 @@ import { useAccounting } from '@/context/AccountingContext';
 import { logger } from '@/lib/logger';
 
 interface AggregationWidgetProps {
-    onSyncComplete: (transactions: any[]) => void;
+    onSyncComplete: (transactions: import('@/domain/accounting/PowensService').PowensAccount[]) => void;
 }
 
 /**

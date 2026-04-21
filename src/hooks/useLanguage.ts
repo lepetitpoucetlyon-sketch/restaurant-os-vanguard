@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { currentLanguageAtom, Language } from '@/store/languageAtoms';
 import { translations } from '@/i18n/translations';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 /**
  * 🌍 useLanguage - Grade VI
@@ -17,11 +18,12 @@ export function useLanguage() {
 
     const t = (key: string) => {
         const keys = key.split('.');
-        let value: any = translations[language as keyof typeof translations];
+        let value: SovereignValue = translations[language as keyof typeof translations];
         
         for (const k of keys) {
-            value = value?.[k];
+            value = (value as SovereignData)?.[k];
         }
+
 
         return typeof value === 'string' ? value : key;
     };

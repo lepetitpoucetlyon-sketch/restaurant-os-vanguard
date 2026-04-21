@@ -8,7 +8,9 @@ import { cn } from "@/lib/ui.foundations";;
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { ExpertHub } from "@/modules/marketing/components/agency/ExpertHub";
 import { SupplierOrder, SupplierOrderStatus, StockItem, Preparation } from "@/types";
+import { type ExtractedInvoice } from "@/domain/services/VisionService";
 import { useToast } from "@/components/ui/Toast";
+
 import { useUI } from "@/context/UIContext";
 import { StockReceptionModal, CreatePreparationModal, StockTransferModal } from "@/components/inventory";
 import { motion, AnimatePresence, Variants } from "framer-motion";
@@ -120,8 +122,9 @@ export default function InventoryPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterCategory, setFilterCategory] = useState<string | null>(null);
     const [isVisionScannerOpen, setIsVisionScannerOpen] = useState(false);
-    const [visionData, setVisionData] = useState<any>(null);
+    const [visionData, setVisionData] = useState<ExtractedInvoice | null>(null);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
 
     // Filter stock items
     const filteredStockItems = useMemo(() => {
@@ -263,7 +266,7 @@ export default function InventoryPage() {
                     ].map(tab => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
+                            onClick={() => setActiveTab(tab.id as 'stock' | 'preparations' | 'orders')}
                             className={cn(
                                 "flex items-center gap-2 h-11 px-6 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                                 activeTab === tab.id ? "bg-accent-gold text-white" : "bg-bg-tertiary text-text-muted"

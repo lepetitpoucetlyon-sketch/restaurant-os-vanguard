@@ -8,7 +8,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
 
 interface MarginsTabProps {
-    recipes: any[];
+    recipes: import('@/types').Recipe[];
 }
 
 export function MarginsTab({ recipes }: MarginsTabProps) {

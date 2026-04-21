@@ -6,7 +6,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Order, OrderItem, OrderItemModification } from "@/modules/ops/types";
+import { Order, OrderItem, OrderItemModification } from "@/types";
 
 interface ModificationAlertProps {
     modification: OrderItemModification;

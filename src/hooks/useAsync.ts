@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { SovereignValue, SovereignData } from "@/shared/nexus-contract";
 
 type AsyncStatus = "idle" | "loading" | "success" | "error";
 
@@ -11,7 +12,7 @@ interface UseAsyncOptions<T> {
     resetOnExecute?: boolean;
 }
 
-interface UseAsyncReturn<T, Args extends unknown[]> {
+interface UseAsyncReturn<T, Args extends (SovereignValue | SovereignData)[]> {
     execute: (...args: Args) => Promise<T | undefined>;
     data: T | undefined;
     error: Error | null;
@@ -31,7 +32,7 @@ interface UseAsyncReturn<T, Args extends unknown[]> {
  *   { onSuccess: (data) => toast.success('Chargé !') }
  * );
  */
-export function useAsync<T, Args extends unknown[] = []>(
+export function useAsync<T, Args extends (SovereignValue | SovereignData)[] = []>(
     asyncFunction: (...args: Args) => Promise<T>,
     options: UseAsyncOptions<T> = {}
 ): UseAsyncReturn<T, Args> {

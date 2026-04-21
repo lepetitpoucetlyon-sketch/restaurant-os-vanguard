@@ -29,6 +29,7 @@ import { ProvisioningWizard } from '@/components/admin/ProvisioningWizard';
 import { TenantOrchestrator } from '@/components/fleet/TenantOrchestrator';
 import { EmpireInstance } from '@/domain/types/empire';
 import { FleetInsight } from '@/domain/services/MacroBrain';
+import { HermesDashboard } from '@/components/admin/HermesDashboard';
 
 export default function MasterConsolePage() {
   const { 
@@ -185,8 +186,8 @@ export default function MasterConsolePage() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {[
                         { label: 'Revenue Global', value: `€${(stats.totalRevenue as number).toLocaleString()}`, trend: '+12.4%', icon: TrendingUp },
-                        { label: 'Labor Cost (Avg)', value: `${(stats.consolidated as any)?.totalLaborCost ? '35%' : '---'}`, trend: '-1.2%', icon: Activity },
-                        { label: 'Direct Margin', value: `${(stats.consolidated as any)?.averageFoodCost ? '71.5%' : '---'}`, trend: 'Target Focus', icon: Target },
+                        { label: 'Labor Cost (Avg)', value: stats.consolidated?.totalLaborCost ? '35%' : '---', trend: '-1.2%', icon: Activity },
+                        { label: 'Direct Margin', value: stats.consolidated?.averageFoodCost ? '71.5%' : '---', trend: 'Target Focus', icon: Target },
                         { label: 'Fleet Health', value: `${Math.round(stats.averageHealth as number)}%`, trend: 'Stable', icon: ShieldCheck }
                     ].map((stat) => (
                         <div key={stat.label} className="bg-[#0B0B0C] border border-white/5 rounded-[3rem] p-10 hover:border-white/10 transition-all group">
@@ -200,6 +201,12 @@ export default function MasterConsolePage() {
                             <p className="text-[9px] font-black text-neutral-500 uppercase tracking-[0.3em]">{stat.label}</p>
                         </div>
                     ))}
+                </div>
+
+                {/* 🏺 HERMES ORCHESTRATION (GRADE X) */}
+                <div className="bg-[#0B0B0C] border border-accent/20 shadow-[0_0_50px_rgba(255,100,100,0.05)] rounded-[4rem] p-12 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[100px] -mr-[250px] -mt-[250px] pointer-events-none" />
+                    <HermesDashboard tenantId={selectedInstanceId || 'empire_nexus_global'} />
                 </div>
 
                 {/* Insights & Strategy Grid */}

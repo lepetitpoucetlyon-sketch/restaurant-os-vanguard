@@ -2,7 +2,14 @@
 
 import { motion } from "framer-motion";
 
-export function GroupStatCard({ stat }: { stat: any }) {
+interface Stat {
+    label: string;
+    value: string;
+    icon: React.ElementType;
+    change: number;
+}
+
+export function GroupStatCard({ stat }: { stat: Stat }) {
     const Icon = stat.icon;
     return (
         <motion.div

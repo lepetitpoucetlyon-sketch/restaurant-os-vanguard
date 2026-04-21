@@ -49,7 +49,8 @@ export function BottomSheet({
         };
     }, [isOpen]);
 
-    const handleDragEnd = (_: any, info: PanInfo) => {
+    const handleDragEnd = (_: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
+
         if (dragToDismiss && info.offset.y > 150 && info.velocity.y > 0) {
             onClose();
         }

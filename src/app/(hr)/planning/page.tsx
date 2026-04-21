@@ -92,9 +92,10 @@ export default function PlanningPage() {
     const handleHomologuer = () => {
         if (!activeUser) return;
 
-        const shiftData: any = {
+        const shiftData: Omit<Shift, 'id'> = {
             userId: activeUser.id,
-            date: selectedDay,
+            userName: activeUser.name,
+            date: format(selectedDay, 'yyyy-MM-dd'),
             startTime: editStartTime,
             endTime: editEndTime,
             type: editType,

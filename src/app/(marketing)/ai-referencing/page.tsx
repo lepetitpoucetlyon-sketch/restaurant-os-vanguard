@@ -37,7 +37,7 @@ import { useMarketing } from "@/engines/ops/NexusOpsProvider";
 
 export default function AIReferencingPage() {
     const { showToast } = useToast();
-    const { profile, isLoading: isSeoLoading } = useMarketing() as any;
+    const { profile, isLoading: isSeoLoading } = useMarketing();
     const [activeTab, setActiveTab] = useState<'overview' | 'schema' | 'api' | 'prompts'>('overview');
 
     // 🎯 INDUSTRIAL SOUDURE: Dynamic Schema from Real Metadata
@@ -184,7 +184,7 @@ export default function AIReferencingPage() {
                     ].map((tab) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
+                            onClick={() => setActiveTab(tab.id as 'overview' | 'schema' | 'api' | 'prompts')}
                             className={cn(
                                 "flex items-center gap-2 px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
                                 activeTab === tab.id

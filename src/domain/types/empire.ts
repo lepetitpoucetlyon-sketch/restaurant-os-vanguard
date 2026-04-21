@@ -36,6 +36,8 @@ export const EmpireInstanceSchema = z.object({
     revenue24h: z.number().default(0), // Alias for UI compatibility
     aiUsageCost: z.number().default(0), // New telemetry field
     healthScore: z.number().min(0).max(100).default(100),
+    errorRate: z.number().optional().default(0),
+    uptime: z.number().optional().default(99.9),
     lowStockAlerts: z.number().default(0),
     expiringItemsCount: z.number().optional().default(0),
     complianceScore: z.number().min(0).max(100).default(100)

@@ -2,7 +2,7 @@
  * ORDERS TYPES
  */
 
-export type OrderStatus = 'draft' | 'new' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | 'paid';
+export type OrderStatus = 'draft' | 'new' | 'ordered' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | 'paid';
 export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';
 

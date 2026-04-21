@@ -4,11 +4,17 @@ import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { ordersNodeAtom } from '@/store/operationalAtoms';
 import { getDefaultStore } from 'jotai';
+import { SovereignValue } from '@/shared/nexus-contract';
+
 
 // Mocking browser-specifics for the Vitest Node environment
-global.requestAnimationFrame = (cb) => setTimeout(cb, 16) as unknown as number;
-global.cancelAnimationFrame = (id) => clearTimeout(id as unknown as NodeJS.Timeout);
-global.performance = performance as unknown as Performance;
+global.requestAnimationFrame = (cb) => (setTimeout(cb, 16) as ReturnType<typeof setTimeout>);
+
+global.cancelAnimationFrame = (id) => clearTimeout(id as ReturnType<typeof setTimeout>);
+
+
+global.performance = performance as Performance;
+
 
 describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
 
@@ -19,18 +25,20 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
     it('💠 TEST 1: Saturation & Worker Velocity', async () => {
         // Mock MessageChannel for Node environment
         global.MessageChannel = class {
-            port1: { onmessage: ((e: { data: unknown }) => void) | null; close: () => void };
-            port2: { postMessage: (data: unknown) => void };
+            port1: { onmessage: ((e: { data: SovereignValue }) => void) | null; close: () => void };
+            port2: { postMessage: (data: SovereignValue) => void };
             constructor() {
                 this.port1 = { onmessage: null, close: vi.fn() };
-                this.port2 = { postMessage: (data: unknown) => {
+                this.port2 = { postMessage: (data: SovereignValue) => {
+
                     // Simulate worker latency
                     setTimeout(() => {
                         if (this.port1.onmessage) this.port1.onmessage({ data });
                     }, 1);
                 }};
             }
-        } as unknown as { new(): MessageChannel };
+        } as { new(): MessageChannel };
+
 
         const mockWorker = {
             postMessage: vi.fn((msg: { id: string }, transfer?: MessagePort[]) => {
@@ -39,7 +47,8 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
                     port2.postMessage({ id: msg.id, result: 'sha256_mock_hash' });
                 }
             })
-        } as unknown as Worker;
+        } as Worker;
+
 
         const results = await BlackFridaySimulation.runWorkerSaturationTest(mockWorker);
         
@@ -54,7 +63,8 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         
         // We run the test logic directly to avoid the internal setTimeout in Simulation
         // 1. Corrupt
-        store.set(ordersNodeAtom, (prev: { data: unknown[] }) => ({ ...prev, data: [{ id: 'corrupt' }] }));
+        store.set(ordersNodeAtom, (prev: { data: SovereignValue[] }) => ({ ...prev, data: [{ id: 'corrupt' }] }));
+
         
         // 2. Heal
         const start = performance.now();

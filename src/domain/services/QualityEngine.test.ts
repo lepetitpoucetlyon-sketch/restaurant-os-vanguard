@@ -83,7 +83,7 @@ describe('QualityEngine - Grade VI HACCP Validation', () => {
   });
 
   it('should validate a compliant reception and update stock', async () => {
-    const result = await QualityEngine.validateReception(baseControl, mockTenantId) as any;
+    const result = await QualityEngine.validateReception(baseControl, mockTenantId);
     
     expect(result).toBeDefined();
     expect(result.currentStatus).toBeDefined();
@@ -105,14 +105,14 @@ describe('QualityEngine - Grade VI HACCP Validation', () => {
       }
     };
 
-    const result = await QualityEngine.validateReception(failedControl, mockTenantId) as any;
+    const result = await QualityEngine.validateReception(failedControl, mockTenantId);
     expect(result.currentStatus).toBe('dirty');
     // In Grade VI, a failed reception might still be logged but maybe not injected in stock
     // Check logic in QualityEngine to see if stock update is skipped for 'fail'
   });
 
   it('should seal the control with SHA-256 fingerprint', async () => {
-    const result = await QualityEngine.validateReception(baseControl as any, mockTenantId) as any;
+    const result = await QualityEngine.validateReception(baseControl, mockTenantId);
     expect(result.id).toBeDefined();
   });
 });

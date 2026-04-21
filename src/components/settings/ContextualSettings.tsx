@@ -16,6 +16,8 @@ import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";
 import { PageSettingConfig, PageKey } from "@/types/permissions.types";
 import { logger } from "@/lib/axiom";
+import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+
 
 // ============ CONTEXT & PROVIDER ============
 
@@ -26,8 +28,9 @@ interface ContextualSettingsContextType {
     currentPage: PageKey | null;
     getPageSettings: (page: PageKey) => { title: string; settings: PageSettingConfig[] } | undefined;
     canAccessSetting: (setting: PageSettingConfig) => boolean;
-    allSettings: Record<string, Record<string, unknown>>;
-    updatePageSettings: (page: PageKey, settings: Record<string, unknown>) => void;
+    allSettings: Record<string, SovereignData>;
+    updatePageSettings: (page: PageKey, settings: SovereignData) => void;
+
 }
 
 const ContextualSettingsContext = createContext<ContextualSettingsContextType | undefined>(undefined);
@@ -35,7 +38,8 @@ const ContextualSettingsContext = createContext<ContextualSettingsContextType | 
 export function ContextualSettingsProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState<PageKey | null>(null);
-    const [allSettings, setAllSettings] = useState<Record<string, Record<string, unknown>>>(() => {
+    const [allSettings, setAllSettings] = useState<Record<string, SovereignData>>(() => {
+
         if (typeof window === 'undefined') return {};
         try {
             const saved = localStorage.getItem("restaurant_os_page_settings");
@@ -55,7 +59,8 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
         setIsOpen(false);
     };
 
-    const updatePageSettings = (page: PageKey, newSettings: Record<string, unknown>) => {
+    const updatePageSettings = (page: PageKey, newSettings: SovereignData) => {
+
         const updated = { ...allSettings, [page]: newSettings };
         setAllSettings(updated);
         localStorage.setItem("restaurant_os_page_settings", JSON.stringify(updated));
@@ -102,7 +107,8 @@ export function useContextualSettings() {
     return context;
 }
 
-export function usePageSetting<T = unknown>(page: PageKey, key: string, defaultValue: T): T {
+export function usePageSetting<T = SovereignValue>(page: PageKey, key: string, defaultValue: T): T {
+
     const context = useContext(ContextualSettingsContext);
     if (!context) return defaultValue;
     return (context.allSettings[page]?.[key] ?? defaultValue) as T;
@@ -115,9 +121,10 @@ interface ContextualSettingsPanelContentProps {
     pageSettings: { title: string; settings: PageSettingConfig[] } | null;
     closeSettings: () => void;
     canAccessSetting: (setting: PageSettingConfig) => boolean;
-    allSettings: Record<string, Record<string, unknown>>;
-    updatePageSettings: (page: PageKey, settings: Record<string, unknown>) => void;
+    allSettings: Record<string, SovereignData>;
+    updatePageSettings: (page: PageKey, settings: SovereignData) => void;
 }
+
 
 function ContextualSettingsPanelContent({
     currentPage,
@@ -128,7 +135,8 @@ function ContextualSettingsPanelContent({
     updatePageSettings,
 }: ContextualSettingsPanelContentProps) {
     const { t } = useLanguage();
-    const [draftValues, setDraftValues] = useState<Record<string, unknown> | null>(null);
+    const [draftValues, setDraftValues] = useState<SovereignData | null>(null);
+
     const [activeTab, setActiveTab] = useState<'logic' | 'style'>('logic');
     const localValues = draftValues ?? (allSettings[currentPage] || {});
 
@@ -144,7 +152,8 @@ function ContextualSettingsPanelContent({
         setDraftValues({});
     };
 
-    const updateValue = (key: string, value: unknown) => {
+    const updateValue = (key: string, value: SovereignValue) => {
+
         setDraftValues(prev => ({ ...(prev ?? localValues), [key]: value }));
     };
 

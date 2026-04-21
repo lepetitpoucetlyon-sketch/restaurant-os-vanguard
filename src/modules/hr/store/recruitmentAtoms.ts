@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { Candidate, RecruitmentLog } from '@/types/recruitment';
+import { Candidate, RecruitmentLog } from '@/types';
 
 /**
  * 🛰️ RECRUITMENT ATOMS (GRADE VI)

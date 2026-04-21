@@ -9,9 +9,9 @@ import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
 
 interface RecipesTabProps {
-    recipes: any[];
-    onSelectRecipe: (recipe: any) => void;
-    onEditRecipe: (recipe: any) => void;
+    recipes: import('@/types').Recipe[];
+    onSelectRecipe: (recipe: import('@/types').Recipe) => void;
+    onEditRecipe: (recipe: import('@/types').Recipe) => void;
     onDeleteRecipe?: (id: string) => void;
     onNewRecipe: () => void;
 }

@@ -163,13 +163,27 @@ export function KDSTicket({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        const fullRecipe = (product || {
+                                        const fullRecipe: Recipe = (product || {
+                                            id: `mock_${item.name}`,
                                             name: item.name,
-                                            imageUrl: imageUrl,
-                                            description: "Recette standard",
+                                            category: 'general',
+                                            prepTime: 15,
+                                            cookTime: 10,
+                                            portions: 1,
+                                            difficulty: 'medium',
                                             ingredients: [],
-                                            steps: []
-                                        }) as unknown as Recipe;
+                                            steps: [],
+                                            allergens: [],
+                                            dietaryInfo: [],
+                                            costPriceInCents: 0,
+                                            sellingPriceInCents: 0,
+                                            marginInCents: 0,
+                                            isActive: true,
+                                            imageUrl: imageUrl,
+                                            color: '#000000',
+                                            createdAt: new Date(),
+                                            updatedAt: new Date().toISOString()
+                                        }) as Recipe;
                                         setSelectedRecipe(fullRecipe);
                                     }}
                                     className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all group-hover:scale-110 z-20 shadow-lg"

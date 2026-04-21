@@ -5,7 +5,7 @@ import {
     qualityActiveControlAtom,
     qualityAlertsAtom,
     todayReceptionStatsAtom 
-} from '@/store/qualityAtoms';
+} from '@/modules/haccp/store/qualityAtoms';
 import { QualityEngine } from '@/domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@/domain/types/quality';
 import { logger } from '@/lib/logger';

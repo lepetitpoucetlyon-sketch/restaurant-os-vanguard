@@ -29,14 +29,14 @@ export function SidebarQuickActions({
     const [currentAmbiance, setCurrentAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());
 
     useEffect(() => {
-        const handleAmbianceChange = (e: any) => {
+        const handleAmbianceChange = (e: Event) => {
             setCurrentAmbiance(AmbianceService.getCurrentAmbiance());
         };
         window.addEventListener('ambiance-changed', handleAmbianceChange);
         return () => window.removeEventListener('ambiance-changed', handleAmbianceChange);
     }, []);
 
-    const ambiences: { key: RestaurantAmbiance; icon: any; label: string; color: string }[] = [
+    const ambiences: { key: RestaurantAmbiance; icon: React.ElementType; label: string; color: string }[] = [
         { key: 'SERENITY', icon: Sparkles, label: 'Serenity', color: 'text-indigo-400' },
         { key: 'RUSH_SPEED', icon: Flame, label: 'Rush', color: 'text-emerald-400' },
         { key: 'ELEGANCE_NIGHT', icon: Moon, label: 'Elegance', color: 'text-amber-400' },

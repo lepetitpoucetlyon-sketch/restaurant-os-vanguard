@@ -5,14 +5,16 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { PremiumSelect } from "@/components/ui/PremiumSelect";
 
-interface Ingredient {
+import type { Ingredient as MasterIngredient } from "@/types";
+
+interface RecipeIngredientSlot {
     ingredientId: string;
     quantity: number;
 }
 
 interface ProductIngredientsProps {
-    recipeIngredients: Ingredient[];
-    ingredients: any[]; // From InventoryContext
+    recipeIngredients: RecipeIngredientSlot[];
+    ingredients: MasterIngredient[]; // From InventoryContext
     addIngredient: () => void;
     updateIngredient: (index: number, field: 'ingredientId' | 'quantity', value: string | number) => void;
     removeIngredient: (index: number) => void;

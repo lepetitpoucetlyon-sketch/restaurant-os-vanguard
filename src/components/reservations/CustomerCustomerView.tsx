@@ -27,11 +27,15 @@ const cinematicItem: Variants = {
 };
 
 // Safe accessors for customer data that may come in different formats
-const getFirstName = (c: any): string => c?.firstName || (c?.name ? c.name.split(' ')[0] : '') || '';
-const getLastName = (c: any): string => c?.lastName || (c?.name ? c.name.split(' ').slice(1).join(' ') : '') || '';
+const getFirstName = (c: Customer): string => c?.firstName || (c?.name ? c.name.split(' ')[0] : '') || '';
+const getLastName = (c: Customer): string => c?.lastName || (c?.name ? c.name.split(' ').slice(1).join(' ') : '') || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s.charAt(0) : '?');
-const getVisitCount = (c: any): number => c?.visitCount ?? c?.totalVisits ?? 0;
-const getTotalSpent = (c: any): number => c?.totalSpent ?? 0;
+const getVisitCount = (c: Customer): number => {
+    const flexible = c as import('@/shared/nexus-contract').SovereignData;
+
+    return flexible?.visitCount ?? flexible?.totalVisits ?? 0;
+};
+const getTotalSpent = (c: Customer): number => c?.totalSpent ?? 0;
 
 interface CustomerCustomerViewProps {
     customers: Customer[];

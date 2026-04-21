@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { useRecruitment } from '@/hooks/useRecruitment';
-import { Candidate, CandidateStatus } from '@/types/recruitment';
+import { Candidate, CandidateStatus } from '@/types';
 import { PremiumSelect } from '@/components/ui/PremiumSelect';
 
 const COLUMNS: { id: CandidateStatus; label: string; color: string }[] = [
@@ -208,7 +208,7 @@ function CandidateCard({ candidate, onStatusChange }: {
 function AddCandidateModal({ isOpen, onClose, onAdd }: { 
     isOpen: boolean; 
     onClose: () => void;
-    onAdd: (candidate: any) => Promise<any>;
+    onAdd: (candidate: Partial<Candidate>) => Promise<void>;
 }) {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
@@ -217,8 +217,8 @@ function AddCandidateModal({ isOpen, onClose, onAdd }: {
         email: '',
         phone: '',
         appliedRole: '',
-        cvUrl: null as string | null,
-        gdpr: { consented: false, method: 'digital', date: new Date().toISOString() }
+        cvUrl: undefined as string | undefined,
+        gdpr: { consented: false, method: 'digital', date: new Date().toISOString() } as const
     });
 
     if (!isOpen) return null;

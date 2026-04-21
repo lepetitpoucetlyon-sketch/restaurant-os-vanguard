@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useSettings } from "@/context/SettingsContext";
-import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@/types/settings";
+import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@/types";
 
 const INTEGRATIONS_METADATA = [
     { id: 'stripe', name: 'Stripe', category: 'Payment Gateway', icon: CreditCard, description: 'Neural Payment Processing' },

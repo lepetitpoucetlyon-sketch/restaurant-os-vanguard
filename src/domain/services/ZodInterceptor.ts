@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
+import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🛡️ ZodInterceptor - The "Great Wall" of Restaurant OS
@@ -12,12 +13,12 @@ export class ZodInterceptor {
    * Validates data against a schema.
    * If validation fails, logs a forensic error and throws.
    */
-  static validate<T>(schema: z.ZodSchema<T>, data: unknown, context: string): T {
+  static validate<T>(schema: z.ZodSchema<T>, data: SovereignValue | SovereignData | (SovereignValue | SovereignData)[], context: string): T {
     const result = schema.safeParse(data);
     
     if (!result.success) {
       const errors = result.error.format();
-      logger.error(`[ZodInterceptor] SCHEMA VIOLATION in ${context}`, { errors, data });
+      logger.error(`[ZodInterceptor] SCHEMA VIOLATION in ${context}`, { errors, data: data as SovereignValue });
       
       // Industrial Alert: In production, this would trigger a Sentry/Datadog event.
       throw new Error(`[Nexus-Titan] Data Integrity Violation in ${context}. Please check the logs.`);

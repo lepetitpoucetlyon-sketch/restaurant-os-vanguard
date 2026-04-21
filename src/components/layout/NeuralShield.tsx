@@ -45,7 +45,8 @@ export function NeuralShield() {
 
             const ticketId = await MaintenanceAgent.submitSOS({
                 tenantId: resolvedTenant,
-                userId: currentUser?.id || 'unknown',
+                userId: currentUser?.id || 'SOVEREIGN_ANONYMOUS',
+
                 type: issueType,
                 description,
                 systemState,

@@ -6,9 +6,9 @@ import {
     shiftsNodeAtom, 
     leaveRequestsNodeAtom, 
     leaveBalancesNodeAtom,
-    staffMembersNodeAtom,
-    updateNexusNode 
+    staffMembersNodeAtom 
 } from '../store/hrAtoms';
+import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 

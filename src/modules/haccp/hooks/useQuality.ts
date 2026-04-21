@@ -9,7 +9,7 @@ import {
     todayReceptionStatsAtom,
     productQualityConfigsAtom,
     supplierScoresAtom
-} from '@/store/qualityAtoms';
+} from '@/modules/haccp/store/qualityAtoms';
 import { deliveriesAtom, tenantIdAtom } from '../store/complianceAtoms';
 import { QualityEngine } from '@/domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@/domain/types/quality';
@@ -32,7 +32,7 @@ export const useQuality = () => {
     const todayStats = useAtomValue(todayReceptionStatsAtom);
     const productConfigs = useAtomValue(productQualityConfigsAtom);
     const supplierScores = useAtomValue(supplierScoresAtom);
-    const deliveries = useAtomValue(deliveriesAtom) as unknown as Delivery[];
+    const deliveries = useAtomValue(deliveriesAtom);
     
     const tenantId = useAtomValue(tenantIdAtom);
 
@@ -87,8 +87,9 @@ export const useQuality = () => {
                 }
             })),
             delivery_conditions: {
-                vehicle_type: 'unknown',
+                vehicle_type: 'SOVEREIGN_UNKNOWN',
                 vehicle_temperature: { compliant: true, measured: 0 },
+
                 vehicle_cleanliness: 'not_checked',
                 packaging_integrity: 'intact',
                 delivery_time_compliant: true
@@ -156,8 +157,9 @@ export const useQuality = () => {
                 controller_name: '',
                 items: [],
                 delivery_conditions: {
-                    vehicle_type: 'unknown',
+                    vehicle_type: 'SOVEREIGN_UNKNOWN',
                     vehicle_temperature: { compliant: true, measured: 0 },
+
                     vehicle_cleanliness: 'not_checked',
                     packaging_integrity: 'intact',
                     delivery_time_compliant: true

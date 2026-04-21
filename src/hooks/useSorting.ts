@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { SovereignData } from "@/shared/nexus-contract";
 
 type SortDirection = "asc" | "desc";
 
@@ -27,7 +28,8 @@ interface UseSortingReturn<T> {
  *   initialDirection: 'desc'
  * });
  */
-export function useSorting<T extends Record<string, unknown>>(
+export function useSorting<T extends SovereignData>(
+
     items: T[],
     options: UseSortingOptions<T> = {}
 ): UseSortingReturn<T> {

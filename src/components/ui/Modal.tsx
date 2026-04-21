@@ -79,7 +79,8 @@ export function Modal({
         return () => window.removeEventListener("keydown", handleEscape);
     }, [isOpen, onClose]);
 
-    const handleDragEnd = (_: any, info: PanInfo) => {
+    const handleDragEnd = (_: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
+
         if (info.offset.y > 100 && info.velocity.y > 0) {
             onClose();
         }

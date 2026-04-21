@@ -5,7 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { SettingsManager } from '@/domain/services/SettingsManager';
 import { defaultSettings } from '@/context/settings/defaults';
-import { GlobalSettings } from '@/types/settings';
+import { GlobalSettings } from '@/types';
 
 export function useSettingsModule() {
     const [settings, setSettings] = useState<GlobalSettings>(defaultSettings);

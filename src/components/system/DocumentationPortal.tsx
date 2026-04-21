@@ -52,7 +52,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
         >
             {doc.isRecipe && !showFullTutorial ? (
                 <RecipeTechnicalSheet
-                    {...(doc.recipe as any)}
+                    {...doc.recipe!}
                     onClose={closeDocumentation}
                 />
             ) : (

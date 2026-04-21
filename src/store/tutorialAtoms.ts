@@ -31,7 +31,7 @@ export const currentTutorialPointAtom = atom((get) => {
 export const startTutorialAtom = atom(
     null,
     (get, set, section: TutorialSection) => {
-        set(tutorialSectionAtom as any, section as any);
+        set(tutorialSectionAtom, section);
         set(tutorialPointIndexAtom, 0);
         set(tutorialActiveAtom, true);
     }
@@ -41,7 +41,7 @@ export const stopTutorialAtom = atom(
     null,
     (get, set) => {
         set(tutorialActiveAtom, false);
-        set(tutorialSectionAtom as any, null as any);
+        set(tutorialSectionAtom, null);
         set(tutorialPointIndexAtom, 0);
     }
 );

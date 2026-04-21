@@ -69,7 +69,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
         const usersPath = Nexus.getTenantPath('users');
         const unsubscribeUsers = Nexus.adapter.onSnapshot(
             usersPath,
-            async (fetchedUsers: any[]) => {
+            async (fetchedUsers: User[]) => {
                 let currentUsers = fetchedUsers || [];
 
                 if (currentUsers.length === 0) {
@@ -130,7 +130,8 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
     }, []);
 
     const updateUserStatus = useCallback(async (userId: string, data: Partial<User>) => {
-        const patch: Record<string, unknown> = {};
+        const patch: import('@/shared/nexus-contract').SovereignData = {};
+
         for (const [key, value] of Object.entries(data)) {
             if (value !== undefined) patch[key] = value;
         }

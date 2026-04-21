@@ -26,7 +26,7 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 
 import { useSettings } from "@/context/SettingsContext";
-import { PositionSettings, StaffConfig } from "@/types/settings";
+import { PositionSettings, StaffConfig } from "@/types";
 
 interface PositionConfig {
     id: string;

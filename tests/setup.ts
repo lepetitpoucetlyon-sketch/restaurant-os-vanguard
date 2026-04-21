@@ -4,9 +4,14 @@ import { vi } from 'vitest';
 // Protection globale contre les initialisations Firebase/Dexie/IDB
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/lib/nexus/adapters/MockAdapter';
+import { Order } from '@/modules/ops/types';
+import { StockItem, InventoryMovement } from '@/modules/inventory/types';
+import { JournalEntry, FiscalSeal } from '@/modules/finance/types';
 
 // Initialisation immédiate du Mock pour les tests
 Nexus.adapter = new MockAdapter();
+
+const mockTableData = new Set<string>();
 
 // 1. Mock de Firebase (Tous les services)
 vi.mock('firebase/app', () => ({ initializeApp: vi.fn(), getApps: vi.fn(() => []), getApp: vi.fn() }));
@@ -36,17 +41,17 @@ vi.mock('@/lib/firebase', () => ({
     firebaseApp: {}
 }));
 
-const mockTableData = new Set<string>();
+type MockDatabaseItem = Order | StockItem | InventoryMovement | JournalEntry | FiscalSeal;
 
 const mockTable = {
     clear: vi.fn().mockImplementation(async () => {
         mockTableData.clear();
     }),
-    add: vi.fn().mockImplementation(async (item: any) => {
+    add: vi.fn().mockImplementation(async (item: MockDatabaseItem) => {
         mockTableData.add(item.id);
         return item.id;
     }),
-    put: vi.fn().mockImplementation(async (item: any) => {
+    put: vi.fn().mockImplementation(async (item: MockDatabaseItem) => {
         mockTableData.add(item.id);
         return item.id;
     }),
@@ -102,6 +107,9 @@ vi.mock('@/lib/offline/offline-store', () => ({
 }));
 
 // 4. Utils
-global.performance = { now: () => Date.now() } as any;
+Object.defineProperty(global, 'performance', {
+    value: { now: () => Date.now() },
+    writable: true
+});
 
 console.log('🏛️  [FALANGE MASTER SHIELD] Environment Neutralized.');

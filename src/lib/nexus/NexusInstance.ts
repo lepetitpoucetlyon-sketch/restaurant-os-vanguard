@@ -1,9 +1,4 @@
-import { logger } from '@/lib/logger';
-
-/**
- * 🛰️ INexusAdapter - Restaurant OS (Grade VI)
- * Data Abstraction Layer for total portability and high-speed testing.
- */
+import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 
@@ -13,27 +8,27 @@ export type NexusQueryOperator =
 export interface INexusQueryOptions {
     orderBy?: { field: string; direction: 'asc' | 'desc' };
     limit?: number;
-    where?: { field: string; operator: NexusQueryOperator; value: unknown }[];
+    where?: { field: string; operator: NexusQueryOperator; value: SovereignValue }[];
 }
 
 export interface INexusBatch {
-    set<T = Record<string, unknown>>(path: string, data: T): void;
-    update<T = Record<string, unknown>>(path: string, data: Partial<T>): void;
+    set<T = SovereignData>(path: string, data: T): void;
+    update<T = SovereignData>(path: string, data: Partial<T>): void;
     delete(path: string): void;
     commit(): Promise<void>;
 }
 
 export interface INexusAdapter {
-    get<T = Record<string, unknown>>(path: string): Promise<T | null>;
-    query<T = Record<string, unknown>>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
-    onSnapshot<T = Record<string, unknown>>(
+    get<T = SovereignData>(path: string): Promise<T | null>;
+    query<T = SovereignData>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
+    onSnapshot<T = SovereignData>(
         path: string, 
         callback: (data: T | null) => void, 
         options?: INexusQueryOptions & { onError?: (error: Error) => void }
     ): () => void;
     batch(): INexusBatch;
-    set<T = Record<string, unknown>>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
-    update<T = Record<string, unknown>>(path: string, data: Partial<T>): Promise<void>;
+    set<T = SovereignData>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
+    update<T = SovereignData>(path: string, data: Partial<T>): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
 }

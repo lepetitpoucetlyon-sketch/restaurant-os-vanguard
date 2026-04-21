@@ -9,11 +9,13 @@ import {
     Edit3, 
     Trash2 
 } from "lucide-react";
+import type { Floor } from "@/types";
+
 
 interface FloorArchitectureProps {
-    floors: any[];
-    addFloor: (floor: any) => void;
-    updateFloor: (id: string, floor: any) => void;
+    floors: Floor[];
+    addFloor: (floor: Partial<Floor>) => void;
+    updateFloor: (id: string, floor: Partial<Floor>) => void;
     deleteFloor: (id: string) => void;
     isEditingFloor: boolean;
     setIsEditingFloor: (is: boolean) => void;
@@ -34,7 +36,7 @@ export function FloorArchitecture({
         setIsEditingFloor(true);
     };
 
-    const handleEditFloor = (floor: any) => {
+    const handleEditFloor = (floor: Floor) => {
         setEditingFloor({ id: floor.id, name: floor.name, level: floor.level, description: floor.description || '' });
         setIsEditingFloor(true);
     };

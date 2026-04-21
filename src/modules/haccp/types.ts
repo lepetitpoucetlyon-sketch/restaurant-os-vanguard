@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Box, Snowflake, Droplets, ChefHat, Truck } from 'lucide-react';
-import { SupplierOrder } from './inventory.types';
+import { SupplierOrder } from '@/types';
+import { SovereignData } from '@/shared/nexus-contract';
 
 
 export interface CleaningTask {
@@ -15,7 +16,7 @@ export type ZoneColor = 'emerald' | 'blue' | 'purple' | 'amber' | 'cyan' | 'rose
 export interface ZoneConfig {
     id: string;
     label: string;
-    icon: any; // LucideIcon Component
+    icon: LucideIcon; // LucideIcon Component
     color: ZoneColor;
     tasks: CleaningTask[];
 }
@@ -222,11 +223,15 @@ export interface HACCPContextType {
     
     // Quality Guard / Intelligence
     agent?: {
-        query: (prompt: string, context?: any) => Promise<any>;
+        query: (prompt: string, context?: SovereignData) => Promise<string>;
         isProcessing: boolean;
     };
     expert?: {
-        queryExpert: (prompt: string, contextData?: any) => Promise<any>;
+        queryExpert: (prompt: string, contextData?: SovereignData) => Promise<{
+            response: string;
+            suggestions?: string[];
+            metadata?: SovereignData;
+        }>;
         isConfigured: boolean;
         isAuthorized: boolean;
         role: string;

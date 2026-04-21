@@ -1,3 +1,4 @@
+import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@/shared/types/fleet.types';
 import { EmpireInstance } from '@/domain/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
@@ -7,38 +8,6 @@ import { empireAudit } from '@/lib/audit';
  * The high-level intelligence engine that analyzes the entire fleet.
  * Now evolved into a Strategic Decision Oracle.
  */
-
-export interface FleetInsight {
-    id: string;
-    type: 'anomaly' | 'opportunity' | 'strategic_move';
-    title: string;
-    description: string;
-    impact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    action: string;
-    affectedInstances: string[];
-    priority?: 'low' | 'medium' | 'high' | 'critical';
-    confidence: number; // 0-100 reliability score
-    potentialRoI: number;
-    canAutoExecute: boolean;
-}
-
-export interface ConsolidatedMetrics {
-    totalRevenue: number;
-    activeUsers: number;
-    averageHealth: number;
-    totalAlerts: number;
-    totalLaborCost: number;
-    averageFoodCost: number;
-    collectiveArbitrageSavings: number;
-    volatilityIndex: number; // New: Quantum metric for stability
-}
-
-export interface QuantumMetrics {
-    globalROI: number;
-    fleetEntropy: number;
-    arbitrageOpportunities: number;
-    otaStagingCount: number;
-}
 
 export const MacroBrain = {
     /**
@@ -60,6 +29,7 @@ export const MacroBrain = {
                 priority: 'high',
                 title: 'Empire DNA Configuration Drift',
                 description: `Node '${bottom.name}' is underperforming by 250% compared to Cluster Lead '${top.name}'. Architectural alignment required.`,
+                message: `Drift critique: ${bottom.name} vs ${top.name}`, // Bridge Alias
                 action: 'Sync Node DNA',
                 confidence: 94,
                 potentialRoI: (top.metrics.dailyRevenue - bottom.metrics.dailyRevenue) * 0.4, // Estimation
@@ -129,8 +99,6 @@ export const MacroBrain = {
             timestamp: new Date()
         });
 
-        // Industrial Reality: Instant Strategic Execution
-
         return true;
     },
 
@@ -148,7 +116,7 @@ export const MacroBrain = {
             totalLaborCost: 31.4,
             averageFoodCost: 27.2,
             collectiveArbitrageSavings: 14200,
-            volatilityIndex: Math.random() * 0.15 // Real-time calculation mockup
+            volatilityIndex: Math.random() * 0.15 
         };
     },
 
@@ -173,9 +141,6 @@ export const MacroBrain = {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);
         
         try {
-            // Integration with Gemini API
-            // In the browser/SSR, this calls the internal route.
-            // In a CLI context, we directly use the SDK if available.
             const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/gemini`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -190,4 +155,3 @@ export const MacroBrain = {
         }
     }
 };
-

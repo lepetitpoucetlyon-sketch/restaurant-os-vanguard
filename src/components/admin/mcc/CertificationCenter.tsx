@@ -7,6 +7,23 @@ import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/ui.foundations';
 
+interface AuditReport {
+  isValid: boolean;
+  totalSeals: number;
+  isChainValid: boolean;
+  entryCount: number;
+}
+
+interface DigitalCertificate {
+  id: string;
+  instanceId: string;
+  instanceName: string;
+  year: number;
+  type: string;
+  issuedAt: string;
+  issuer: string;
+}
+
 export default function CertificationCenter() {
   const { instances, complianceService } = useNexusFleet();
   
@@ -14,11 +31,11 @@ export default function CertificationCenter() {
   const [selectedInstanceId, setSelectedInstanceId] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [auditReport, setAuditReport] = useState<any>(null);
+  const [auditReport, setAuditReport] = useState<AuditReport | null>(null);
   const [auditStatus, setAuditStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
 
   // Local certificates state (could be moved to a global atom later)
-  const [certificates, setCertificates] = useState<any[]>([]);
+  const [certificates, setCertificates] = useState<DigitalCertificate[]>([]);
 
   const selectedInstance = instances.find(i => i.id === selectedInstanceId);
 
@@ -28,7 +45,7 @@ export default function CertificationCenter() {
     try {
         // 🛡️ INDUSTRIAL AUDIT: Real cross-tenant ledger check
         const report = await complianceService.verifySiteIntegrity(selectedInstanceId);
-        setAuditReport({ ...report, isValid: report.isChainValid, totalSeals: report.entryCount });
+        setAuditReport({ ...report, isValid: report.isChainValid, totalSeals: report.entryCount } as AuditReport);
         setAuditStatus(report.isChainValid ? 'valid' : 'invalid');
         logger.info('CertificationCenter: Audit check complete', { isValid: report.isChainValid });
     } catch (error) {
@@ -45,8 +62,9 @@ export default function CertificationCenter() {
         // 🔒 GLOBAL SEAL: Signing the fleet manifest
         const cert = await complianceService.issueGlobalCertificate('FLEET_CMDR_01');
         
-        setCertificates(prev => [cert, ...prev]);
+        setCertificates(prev => [cert as DigitalCertificate, ...prev]);
         setIsGenerating(false);
+
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 5000);
     } catch (error) {
@@ -385,7 +403,7 @@ export default function CertificationCenter() {
                 >
                     {certificates.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {certificates.map((cert: any) => (
+                            {certificates.map((cert) => (
                                 <div key={cert.id} className="p-6 bg-[#0a0a0b] border border-white/5 rounded-2xl flex items-center justify-between group hover:border-indigo-500/30 transition-all">
                                     <div className="flex gap-4 items-center">
                                         <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 group-hover:scale-110 transition-transform">

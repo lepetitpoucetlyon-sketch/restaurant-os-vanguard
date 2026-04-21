@@ -31,7 +31,7 @@ import {
     TemperatureLog,
     RegulatoryWasteLog,
     MaintenanceLog
-} from '@/modules/haccp/types';
+} from '@/types';
 
 interface NexusGuardState {
     haccp: {

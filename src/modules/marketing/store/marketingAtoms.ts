@@ -1,6 +1,6 @@
 import { atom, type PrimitiveAtom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import { MarketingCampaign, CRMFeedback } from '@/types/marketing.types';
+import { MarketingCampaign, CRMFeedback } from '@/types';
 import { Quote } from '@/types/quotes.types';
 import { SEOProfile } from '@/types/seo.types';
 import { CRM } from '@/types/reservations.types';

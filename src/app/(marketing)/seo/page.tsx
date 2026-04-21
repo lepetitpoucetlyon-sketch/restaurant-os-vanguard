@@ -78,7 +78,7 @@ export default function SEOPage() {
                         {tabs.map(tab => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
+                                onClick={() => setActiveTab(tab.id as 'overview' | 'pages' | 'analytics' | 'settings')}
                                 className={cn(
                                     "px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2",
                                     activeTab === tab.id

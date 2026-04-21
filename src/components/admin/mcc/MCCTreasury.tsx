@@ -153,7 +153,16 @@ export default function MCCTreasury() {
     );
 }
 
-function FinancialCard({ label, value, trend, icon, chartColor, isSpecial = false }: any) {
+interface FinancialCardProps {
+    label: string;
+    value: string;
+    trend: string;
+    icon: React.ReactNode;
+    chartColor: string;
+    isSpecial?: boolean;
+}
+
+function FinancialCard({ label, value, trend, icon, chartColor, isSpecial = false }: FinancialCardProps) {
     return (
         <motion.div 
             whileHover={{ y: -4 }}
@@ -176,7 +185,15 @@ function FinancialCard({ label, value, trend, icon, chartColor, isSpecial = fals
     );
 }
 
-function ProcurementRow({ category, volume, unit, discount, status }: any) {
+interface ProcurementRowProps {
+    category: string;
+    volume: number;
+    unit: string;
+    discount: number;
+    status: 'NEGOTIATED' | 'ACTIVE' | 'COMPLETED';
+}
+
+function ProcurementRow({ category, volume, unit, discount, status }: ProcurementRowProps) {
     return (
         <div className="grid grid-cols-12 items-center py-4 border-b border-white/5 last:border-0 hover:bg-white/[0.01] transition-all rounded-lg px-2">
             <div className="col-span-5">

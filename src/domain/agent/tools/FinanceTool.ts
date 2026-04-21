@@ -1,12 +1,12 @@
-import { AccessPolicyManager } from "@/domain/services/AccessPolicyManager";
 import { User } from '@/types';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 export interface ToolDefinition {
     name: string;
     description: string;
-    parameters: Record<string, unknown>;
+    parameters: SovereignData;
     category: string; // RBAC Category
-    execute: (args: any, user: User, context?: unknown) => Promise<unknown>;
+    execute: (args: SovereignData, user: User, context?: SovereignData) => Promise<SovereignValue>;
 }
 
 export const FinanceTool: ToolDefinition = {

@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
-import { SensorReading } from '@/modules/haccp/types';
-import { Order } from '@/modules/ops/types';
+import { SensorReading } from '@/types';
+import { Order } from '@/types';
 
 /**
  * 🌀 RealityGenerator - The Vital Heart of the Simulacra

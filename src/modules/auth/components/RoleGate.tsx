@@ -51,7 +51,7 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     const isPublicPath = pathname === '/welcome' || pathname === '/onboarding/setup';
     if (isPublicPath) return <>{children}</>;
 
-    const isAllowed = !requiredCategory || hasAccess(requiredCategory as any);
+    const isAllowed = !requiredCategory || hasAccess(requiredCategory as import('@/domain/services/AccessPolicyManager').CategoryKey);
 
     if (!isAuthenticated) return null; // AuthGate handles this
 

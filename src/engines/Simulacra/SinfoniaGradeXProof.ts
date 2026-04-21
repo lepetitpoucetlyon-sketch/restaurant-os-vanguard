@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 import { RealityGenerator } from './RealityGenerator';
 import { FiscalHACCPBridge } from '@/modules/finance/services/FiscalHACCPBridge';
 import { StockItem } from '@/modules/inventory/types';
-import { SensorReading } from '@/modules/haccp/types';
+import { SensorReading } from '@/types';
 
 /**
  * 🌀 SinfoniaGradeXProof - The 120x Efficiency Proof

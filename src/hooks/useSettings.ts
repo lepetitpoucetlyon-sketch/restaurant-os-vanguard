@@ -7,8 +7,8 @@ import {
     settingsLastSavedAtom 
 } from '@/store/settingsAtoms';
 import { SettingsManager } from '@/domain/services/SettingsManager';
-import { GlobalSettings } from '@/types/settings';
-import { RestaurantIdentity } from '@/types/settings/identity';
+import { GlobalSettings } from '@/types';
+import { RestaurantIdentity } from '@/types/identity';
 
 /**
  * 🛰️ useSettings - Grade VI Atomic Bridge

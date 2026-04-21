@@ -102,7 +102,7 @@ const EditPanel = ({
                         Localisation Dynamique
                     </label>
                     <div className="grid grid-cols-1 gap-3">
-                        {zones.map((zone: any) => (
+                        {zones.map((zone: import('@/types').Zone) => (
                             <motion.button
                                 key={zone.id}
                                 whileHover={{ scale: 1.02, x: 5 }}

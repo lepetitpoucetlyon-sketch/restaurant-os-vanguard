@@ -1,4 +1,4 @@
-import { DaySchedule, ReservationSlotSettings, GlobalSettings } from '@/types/settings';
+import { DaySchedule, ReservationSlotSettings, GlobalSettings } from '@/types';
 import { Reservation, Table } from '@/types';
 import { format, parse, addMinutes, isWithinInterval, isBefore, isAfter, startOfDay } from 'date-fns';
 
@@ -19,7 +19,7 @@ export class AvailabilityEngine {
     existingReservations: Reservation[],
     tables: Table[]
   ): AvailableSlot[] {
-    const dayOfWeek = format(date, 'EEEE').toLowerCase() as import('@/types/settings/schedule').DayOfWeek;
+    const dayOfWeek = format(date, 'EEEE').toLowerCase() as import('@/types/schedule').DayOfWeek;
     const schedule = settings.schedule.find(s => s.day === dayOfWeek);
 
     if (!schedule || !schedule.isOpen) return [];

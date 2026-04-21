@@ -30,7 +30,7 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                     ingredientName: match.matchedIngredientName || match.extracted.name,
                     category: 'other',
                     quantity: match.extracted.quantity,
-                    unit: match.extracted.unit as any,
+                    unit: match.extracted.unit as import('@/types').IngredientUnit,
                     storageLocationId: 'frigo_1',
                     batchNumber: match.extracted.batchNumber || `VISION-${Date.now()}`,
                     receptionDate: new Date().toISOString().split('T')[0],

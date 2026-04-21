@@ -53,8 +53,9 @@ export class SyncManager {
                 // Mark as synced and delete from queue if successful
                 await db.syncQueue.delete(op.id!);
                 logger.info('SyncManager: Operation synced and removed', { id: op.id, type: op.type });
-            } catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
+            } catch (error) {
+                const err = error as Error;
+                const errorMessage = err.message || String(error);
                 logger.error('SyncManager: Sync failed for operation', { id: op.id, error: errorMessage });
                 
                 await db.syncQueue.update(op.id!, {
@@ -87,7 +88,8 @@ export class SyncManager {
             const batch = Nexus.adapter.batch();
             
             // Le payload contient une liste d'instructions { path, data, method }
-            const instructions = op.payload.instructions;
+            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: any }> };
+            const instructions = payload.instructions;
             for (const ins of instructions) {
                 if (ins.method === 'SET') batch.set(ins.path, ins.data);
                 if (ins.method === 'UPDATE') batch.update(ins.path, ins.data);

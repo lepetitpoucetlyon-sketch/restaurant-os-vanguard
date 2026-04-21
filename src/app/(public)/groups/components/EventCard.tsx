@@ -4,7 +4,19 @@ import { motion } from "framer-motion";
 import { Users, Calendar, Clock, Euro, ArrowUpRight } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 
-export function EventCard({ group }: { group: any }) {
+interface GroupEvent {
+    id: string;
+    status: string;
+    type: string;
+    name: string;
+    date: string;
+    time: string;
+    pax: number;
+    budget: number;
+    tags: string[];
+}
+
+export function EventCard({ group }: { group: GroupEvent }) {
     return (
         <motion.div
             layout

@@ -15,25 +15,25 @@ export const ALL_CATEGORIES = [
 export type CategoryKey = string; // Generic string for dynamic injection
 export type RolePermissions = Record<UserRole | string, CategoryKey[]>;
 
+import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
+
 /**
  * AccessPolicyManager
  * Universal policy engine for a multi-tenant platform.
  */
-function normalizeCategoryList(categories: unknown): CategoryKey[] {
+function normalizeCategoryList(categories: SovereignValue[]): CategoryKey[] {
     if (!Array.isArray(categories)) {
         return [];
     }
     return categories.filter(c => typeof c === 'string') as CategoryKey[];
 }
 
-function sanitizeRolePermissions(value: unknown, defaultPermissions: RolePermissions): RolePermissions {
+function sanitizeRolePermissions(value: SovereignData, defaultPermissions: RolePermissions): RolePermissions {
     const merged = { ...defaultPermissions };
-    const candidate = typeof value === 'object' && value !== null
-        ? value as Partial<Record<string, unknown>>
-        : {};
+    const candidate = value || {};
 
     for (const role of Object.keys(defaultPermissions)) {
-        const normalized = normalizeCategoryList(candidate[role]);
+        const normalized = normalizeCategoryList(candidate[role] as SovereignValue[]);
         if (normalized.length > 0) {
             merged[role] = normalized;
         }

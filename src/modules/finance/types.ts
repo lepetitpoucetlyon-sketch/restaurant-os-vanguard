@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 /**
  * ACCOUNTING & FINANCE TYPES - Professional ERP
@@ -60,7 +61,7 @@ export interface JournalEntry {
     validatedAt?: Date;
     fiscalSealHash?: string; // NF525 Seal
     sealedAt?: string;       // Date of sealing
-    metadata?: Record<string, unknown>;
+    metadata?: SovereignData;
     // Operation Aliases (Grade X)
     type?: 'revenue' | 'expense' | 'tax' | 'bank' | 'payroll' | 'other';
     amountInCents?: number;
@@ -302,6 +303,7 @@ export interface AccountingContextType {
     linkBankConnection: (connectionData: Partial<BankConnection>) => Promise<void>;
     recordPayrollSalary: (userId: string, netAmount: number, socialCharges: number, month: string) => Promise<void>;
     submitExpense: (claim: Partial<ExpenseClaim>) => Promise<void>;
+    ingestTransactions: (transactions: BankTransaction[]) => Promise<void>;
     
     generatePandL: (periodId: string) => ProfitAndLossReport;
     generateBalanceSheet: (date: Date) => BalanceSheetReport;
@@ -315,14 +317,14 @@ export interface AccountingContextType {
     
     // Expert/AI
     expert: {
-        queryExpert: (prompt: string, contextData?: unknown) => Promise<unknown>;
+        queryExpert: (prompt: string, contextData?: SovereignData) => Promise<SovereignValue>;
         isConfigured: boolean;
         isAuthorized: boolean;
         role: string;
         modelId: string;
     };
     agent: {
-        query: (prompt: string, context?: unknown) => Promise<unknown>;
+        query: (prompt: string, context?: SovereignData) => Promise<SovereignValue>;
         isProcessing: boolean;
     };
 

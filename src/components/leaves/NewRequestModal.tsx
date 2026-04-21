@@ -17,14 +17,16 @@ import {
     LeaveType,
     DayPeriod,
     LEAVE_TYPE_LABELS,
-    LEAVE_TYPE_ICONS
+    LEAVE_TYPE_ICONS,
+    LeaveRequest
 } from '@/types';
+
 
 interface NewRequestModalProps {
     isOpen: boolean;
     onClose: () => void;
     balances: LeaveBalance[];
-    onSubmit: (data: any) => Promise<void>;
+    onSubmit: (data: Partial<LeaveRequest>) => Promise<void>;
 }
 
 export function NewRequestModal({

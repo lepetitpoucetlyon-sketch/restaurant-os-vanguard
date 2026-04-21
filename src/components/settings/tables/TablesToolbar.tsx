@@ -12,6 +12,8 @@ import {
     Loader2 
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import type { Floor } from "@/types";
+
 
 interface TablesToolbarProps {
     activeTab: 'zones' | 'tables' | 'floors';
@@ -20,7 +22,7 @@ interface TablesToolbarProps {
     onAdd: () => void;
     onSave: () => void;
     isSaving: boolean;
-    floors: any[];
+    floors: Floor[];
 }
 
 export function TablesToolbar({

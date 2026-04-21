@@ -92,13 +92,18 @@ vi.mock('@/lib/offline/offline-store', () => ({
 
 // 3. MOCK CRYPTO (Si nécessaire pour certains environnements Node anciens)
 if (typeof global.crypto === 'undefined') {
-    (global as any).crypto = {
-        subtle: {
-            digest: vi.fn(),
+    Object.defineProperty(global, 'crypto', {
+        value: {
+            subtle: {
+                digest: vi.fn(),
+            },
+            randomUUID: vi.fn(() => 'mock-uuid'),
         },
-        randomUUID: vi.fn(() => 'mock-uuid'),
-    };
+        writable: true,
+        configurable: true
+    });
 }
+
 
 // 4. MOCK JOTAI (Storage/Store)
 vi.mock('jotai', async () => {

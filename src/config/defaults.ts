@@ -1,4 +1,4 @@
-import { GlobalSettings } from '@/types/settings';
+import { GlobalSettings } from '@/types';
 
 /**
  * RESTAURANT OS - GRADE VI DEFAULT SETTINGS

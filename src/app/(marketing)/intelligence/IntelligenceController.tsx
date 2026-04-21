@@ -19,10 +19,10 @@ type TabId = 'reputation' | 'hr' | 'iot' | 'profitability' | 'simulator';
 
 interface IntelligenceControllerProps {
     data: {
-        reviews: any[];
-        complianceAlerts: any[];
-        equipmentMetrics: any[];
-        profitabilityAlerts: any[];
+        reviews: import('@/components/intelligence/ReputationView').Review[];
+        complianceAlerts: import('@/components/intelligence/ComplianceView').ComplianceAlert[];
+        equipmentMetrics: import('@/components/intelligence/ComplianceView').IoTMetric[];
+        profitabilityAlerts: import('@/components/intelligence/ProfitabilityView').ProfitabilityAlert[];
     }
 }
 

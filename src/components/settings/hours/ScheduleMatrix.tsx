@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import { Clock } from "lucide-react";
-import { DaySchedule, DayOfWeek } from "@/types/settings";
+import { DaySchedule, DayOfWeek } from "@/types";
 import { DAYS_CONFIG } from "@/constants/scheduling";
 import { DayRow } from "./DayRow";
 

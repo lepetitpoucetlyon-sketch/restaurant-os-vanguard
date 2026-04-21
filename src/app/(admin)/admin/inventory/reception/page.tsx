@@ -21,11 +21,22 @@ import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 import { receiveStockAction, searchIngredientsAction } from '@/app/actions/inventory';
 import { toast } from 'sonner';
 
+interface ScannedItem {
+  id: string;
+  name: string;
+  qty: number;
+  unit: string;
+  price: number;
+  dlc: string;
+  forceScan: boolean;
+  ingredient?: import('@/types').StockItem;
+}
+
 export default function ReceptionDashboard() {
   const { tenantId } = useNexusOps();
   const [isScanning, setIsScanning] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [scanResult, setScanResult] = useState<any[] | null>(null);
+  const [scanResult, setScanResult] = useState<ScannedItem[] | null>(null);
   const [activeStep, setActiveStep] = useState<'scan' | 'verify' | 'advice'>('scan');
 
   const handleScan = async () => {
@@ -37,7 +48,7 @@ export default function ReceptionDashboard() {
         // Instead of hardcoded data, we simulate the OCR detection by searching for common keywords
         // This validates the IA-Persistence bridge
         const keywords = ['Saumon', 'Aneth', 'Sel'];
-        const results: any[] = [];
+        const results: ScannedItem[] = [];
         
         for (const word of keywords) {
             const matches = await searchIngredientsAction(word);
@@ -87,7 +98,7 @@ export default function ReceptionDashboard() {
             unit: item.unit,
             shelfLifeDays: 3, 
             defaultLocationId: 'frigo_1'
-        } as any, {
+        } as import('@/types').StockItem, {
             quantity: item.qty,
             cost: Math.round(item.price * 100),
             manualDlc: item.dlc,

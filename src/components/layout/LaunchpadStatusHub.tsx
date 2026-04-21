@@ -81,7 +81,7 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                                         <button
                                             key={lang.code}
                                             onClick={() => {
-                                                setLanguage(lang.code as any);
+                                                setLanguage(lang.code);
                                                 setIsLangMenuOpen(false);
                                             }}
                                             className="w-full flex items-center gap-3 px-4 py-3 hover:bg-neutral-100/50 dark:hover:bg-white/5 transition-colors text-left"

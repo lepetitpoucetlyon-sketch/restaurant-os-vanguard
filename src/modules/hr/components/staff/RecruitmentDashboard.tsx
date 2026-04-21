@@ -8,7 +8,7 @@ import {
     staffEditingCandidateAtom 
 } from "@/store/staffAtoms";
 import { useRecruitment } from "@/hooks/useRecruitment";
-import { Candidate, CandidateStatus } from "@/types/recruitment";
+import { Candidate, CandidateStatus } from "@/types";
 import { 
     Search, 
     Plus, 
@@ -31,7 +31,7 @@ import { fr } from "date-fns/locale";
 import { CandidateModal } from "./CandidateModal";
 import { useToast } from "@/components/ui/Toast";
 
-const STATUS_CONFIG: Record<CandidateStatus, { label: string; icon: any; color: string; bg: string }> = {
+const STATUS_CONFIG: Record<CandidateStatus, { label: string; icon: import('lucide-react').LucideIcon; color: string; bg: string }> = {
     new: { label: "Nouveau", icon: UserPlus, color: "text-blue-500", bg: "bg-blue-50" },
     interview: { label: "Entretien", icon: Clock, color: "text-purple-500", bg: "bg-purple-50" },
     trial: { label: "Essai", icon: CheckCircle2, color: "text-amber-500", bg: "bg-amber-50" },
@@ -54,7 +54,7 @@ export const RecruitmentDashboard = () => {
     });
 
     const handleOpenModal = (candidate?: Candidate) => {
-        (setEditingCandidate as any)(candidate || null);
+        setEditingCandidate(candidate || null);
         setShowCandidateModal(true);
     };
 
@@ -80,7 +80,7 @@ export const RecruitmentDashboard = () => {
         <div className="space-y-8 max-w-[1600px] mx-auto">
             {/* Header / Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                {(Object.entries(STATUS_CONFIG) as [CandidateStatus, any][]).map(([status, config]) => {
+                {(Object.entries(STATUS_CONFIG) as [CandidateStatus, typeof STATUS_CONFIG['new']][]).map(([status, config]) => {
                     const count = candidates.filter(c => c.status === status).length;
                     return (
                         <motion.div

@@ -28,6 +28,8 @@ export interface Reservation {
     id: string;
     crmId?: string;
     crmName: string;
+    customerName: string;
+
     email?: string;
     phone: string;
     date: string;

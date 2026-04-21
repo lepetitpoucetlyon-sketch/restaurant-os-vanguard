@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
+import { SovereignData } from "@/shared/nexus-contract";
+
 import { useSorting } from "./useSorting";
 import { useFiltering } from "./useFiltering";
 import { usePagination } from "./usePagination";
@@ -30,7 +32,8 @@ interface UseListOptions<T> {
  *   initialPageSize: 10
  * });
  */
-export function useList<T extends Record<string, unknown>>(
+export function useList<T extends SovereignData>(
+
     data: T[],
     options: UseListOptions<T> = {}
 ) {

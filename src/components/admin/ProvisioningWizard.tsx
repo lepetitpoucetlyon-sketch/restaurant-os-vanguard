@@ -10,8 +10,9 @@ import { cn } from '@/lib/ui.foundations';
 
 interface ProvisioningWizardProps {
     onClose: () => void;
-    onSuccess: (newInstance: any) => void;
+    onSuccess: (newInstance: import('@/shared/nexus-contract').SovereignData) => void;
 }
+
 
 type Step = 'identity' | 'config' | 'deploying';
 
@@ -42,8 +43,9 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
         try {
             const newInstance = await ProvisioningEngine.provisionNewInstance(formData);
             onSuccess(newInstance);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Unknown Deployment Error';
+            setError(message);
             setStep('identity');
             setIsLoading(false);
         }
@@ -146,7 +148,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                     <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Tier de Service</label>
                                     <select 
                                         value={formData.tier}
-                                        onChange={(e) => setFormData({...formData, tier: e.target.value as any})}
+                                        onChange={(e) => setFormData({...formData, tier: e.target.value as 'standard' | 'premium' | 'enterprise'})}
                                         className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none appearance-none cursor-pointer"
                                     >
                                         <option value="standard">Standard Node</option>

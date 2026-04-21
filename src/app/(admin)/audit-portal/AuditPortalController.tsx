@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/Toast";
 interface AuditSection {
     id: string;
     title: string;
-    icon: any;
+    icon: import('lucide-react').LucideIcon;
     color: string;
     description: string;
     axes: {

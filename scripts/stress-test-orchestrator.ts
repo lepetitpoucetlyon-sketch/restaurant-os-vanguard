@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { runProtocolOverload } from '../tests/benchmarks/StressTestRush';
 import { fleetEngine } from '../src/lib/nexus/NexusFleetEngine';
 import { MacroBrain } from '../src/domain/services/MacroBrain';
+import { type EmpireInstance } from '../src/domain/types/empire';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -47,17 +47,21 @@ async function main() {
         // Generate insights based on the new rush data
         console.log("\n🛰️  Querying NexusFleetEngine for post-rush telemetry...");
         // We simulate fetching instances. In production, this pulls from Firestore.
-        const mockInstances: any[] = [
+        const mockInstances: EmpireInstance[] = [
             {
                 id: 'stress_test_tenant',
                 name: 'Stress Test Node',
+                status: 'online',
                 metrics: {
                     dailyRevenue: metrics.orderCount * 15,
+                    revenue24h: metrics.orderCount * 15,
                     healthScore: metrics.successRate,
                     lowStockAlerts: 3, // Pain, Steak, Fromage should be low now
-                    activeUsers: 1
+                    activeUsers: 1,
+                    aiUsageCost: 0,
+                    complianceScore: 100
                 }
-            }
+            } as EmpireInstance
         ];
 
         const { insights } = await fleetEngine.updateFleetIntelligence(mockInstances);

@@ -5,7 +5,7 @@ import { Modal, PremiumSelect } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/Toast";
 import { useRecruitment } from "@/hooks/useRecruitment";
-import { Candidate, CandidateStatus, GDPRConsent } from "@/types/recruitment";
+import { Candidate, CandidateStatus, GDPRConsent } from "@/types";
 import { 
     User, 
     Mail, 

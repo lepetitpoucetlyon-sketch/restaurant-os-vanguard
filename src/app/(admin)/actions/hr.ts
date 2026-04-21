@@ -4,7 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
 import { StaffService } from '@/domain/services/StaffService';
-import { Shift, LeaveRequest } from '@/modules/hr/types';
+import { Shift, LeaveRequest } from '@/types';
 
 /**
  * 🧑‍🍳 HR Actions - Restaurant OS

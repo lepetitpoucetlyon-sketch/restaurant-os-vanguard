@@ -7,6 +7,8 @@
 // ============================================
 
 import { Ingredient } from './inventory.types';
+import { SovereignData } from '@/shared/nexus-contract';
+
 
 export type NotificationType = 'info' | 'warning' | 'critical' | 'success';
 
@@ -147,15 +149,16 @@ export interface RecipeContextType {
     togglePrepTask: (id: string) => Promise<void>;
     assignPrepTask: (taskId: string, staffId: string) => Promise<void>;
     getRecipeSteps: (productId: string) => RecipeStep[];
-    miseEnPlaceTarget: Record<string, number>;
+    miseEnPlaceTarget: { [key: string]: number };
     calculateRecipeCost: (ingredients: RecipeIngredient[]) => number;
+
     ingredients: Ingredient[]; 
     
     expert: {
-        queryExpert: (prompt: string, contextData?: Record<string, unknown>) => Promise<{
+        queryExpert: (prompt: string, contextData?: SovereignData) => Promise<{
             response: string;
             suggestions?: string[];
-            metadata?: Record<string, unknown>;
+            metadata?: SovereignData;
         }>;
         isConfigured: boolean;
         isAuthorized: boolean;
@@ -163,13 +166,14 @@ export interface RecipeContextType {
         modelId: string;
     };
     agent: {
-        query: (prompt: string, context?: Record<string, unknown>) => Promise<{
+        query: (prompt: string, context?: SovereignData) => Promise<{
             answer: string;
             confidence: number;
             source?: string;
         }>;
         isProcessing: boolean;
     };
+
 }
 
 export interface Category {

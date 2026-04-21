@@ -23,8 +23,8 @@ export function AlertSync() {
             const notifiedKey = `inventory-${item.id}`;
             if (notifiedItems.current.has(notifiedKey)) return false;
 
-            const alreadyHasNotification = (notifications as any[]).some(n =>
-                n.module === 'inventory' && (n.message as string).includes(item.ingredientName) && !n.read
+            const alreadyHasNotification = notifications.some(n =>
+                n.module === 'inventory' && n.message.includes(item.ingredientName) && !n.read
             );
 
             return !alreadyHasNotification;
@@ -33,7 +33,7 @@ export function AlertSync() {
         newLowStockItems.forEach(item => {
             const notifiedKey = `inventory-${item.id}`;
             notifiedItems.current.add(notifiedKey);
-            (addNotification as any)({
+            addNotification({
                 type: 'warning',
                 title: 'Stock Bas',
                 message: `${item.ingredientName}: Seuil critique atteint (quantité: ${item.quantity} ${item.unit})`,
@@ -74,8 +74,8 @@ export function AlertSync() {
             if (notifiedItems.current.has(notifiedKey)) return;
 
             notifiedItems.current.add(notifiedKey);
-            (addNotification as any)({
-                type: 'error',
+            addNotification({
+                type: 'critical',
                 title: 'Alerte HACCP',
                 message: `${sensor.name}: Valeur critique detectée (${sensor.value}${sensor.unit})`,
                 module: 'haccp',

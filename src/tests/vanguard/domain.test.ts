@@ -65,7 +65,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
     describe('POSService : Opérations & Projections', () => {
         
         it('T5: Intégrité du Panier (calculateCartTotal)', () => {
-            const items: any[] = [
+            const items: { priceInCents: number; quantity: number }[] = [
                 { priceInCents: 1500, quantity: 2 }, // 30.00
                 { priceInCents: 550, quantity: 1 }   // 5.50
             ];
@@ -73,7 +73,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
         });
 
         it('T6: Analyse de Rentabilité (Deding)', () => {
-            const items: any[] = [
+            const items: { name: string; priceInCents: number; costInCents: number; quantity: number }[] = [
                 { name: 'Burger', priceInCents: 1000, costInCents: 420, quantity: 1 }
             ];
             // Marge = (1000 - 420) / 1000 = 58%
@@ -93,7 +93,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
 
         it('T8: Stock Théorique (Schema Validation)', () => {
             // Simulation de formatage pour la cuisine
-            const items: any[] = [{ cartId: 'c1', name: 'Test', priceInCents: 100, quantity: 1 }];
+            const items: { cartId: string; name: string; priceInCents: number; quantity: number }[] = [{ cartId: 'c1', name: 'Test', priceInCents: 100, quantity: 1 }];
             const kitchenData = POSService.formatForKitchen(items);
             expect(kitchenData[0].status).toBe('pending');
             expect(kitchenData[0]).toHaveProperty('productId');
@@ -154,7 +154,9 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
             // On vérifie que SyncCompliance.init ne crash pas avec nos mocks
             const mockStore = { set: vi.fn(), get: vi.fn() };
             expect(async () => {
-                await SyncCompliance.init('tenant-test', mockStore as any);
+                await SyncCompliance.init('tenant-test', mockStore as ReturnType<typeof import('jotai').getDefaultStore>);
+
+
             }).not.toThrow();
         });
 

@@ -16,6 +16,14 @@ const bigquery = new BigQuery({
     keyFilename: path.join(__dirname, '../../service-account.json')
 });
 
+interface JournalLine {
+    accountId: string;
+    accountCode: string;
+    accountName: string;
+    side: 'credit' | 'debit';
+    amount: string | number;
+}
+
 export const onJournalEntryCreated = onDocumentCreated('journalEntries/{entryId}', async (event) => {
     const snapshot = event.data;
     if (!snapshot) return;
@@ -27,7 +35,7 @@ export const onJournalEntryCreated = onDocumentCreated('journalEntries/{entryId}
 
     try {
         // Préparation des lignes pour BigQuery (Aplatissement)
-        const rows = (entry.lines || []).map((line: any) => ({
+        const rows = (entry.lines || []).map((line: JournalLine) => ({
             entry_id: entryId,
             date: entry.date,
             piece_number: entry.pieceNumber,
@@ -38,7 +46,7 @@ export const onJournalEntryCreated = onDocumentCreated('journalEntries/{entryId}
             account_code: line.accountCode,
             account_name: line.accountName,
             side: line.side,
-            amount: parseFloat(line.amount),
+            amount: typeof line.amount === 'string' ? parseFloat(line.amount) : line.amount,
             is_system_generated: !!entry.isSystemGenerated,
             is_validated: !!entry.isValidated,
             fiscal_seal_hash: entry.fiscalSealHash || null,
@@ -52,12 +60,13 @@ export const onJournalEntryCreated = onDocumentCreated('journalEntries/{entryId}
         await bigquery.dataset(DATASET_ID).table(TABLE_ID).insert(rows);
         
         console.log(`✅ AccountingMirror: Successfully streamed ${rows.length} lines to BQ for entry ${entryId}`);
-    } catch (error: any) {
-        console.error(`❌ AccountingMirror Error:`, error);
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Erreur inconnue";
+        console.error(`❌ AccountingMirror Error:`, message);
         
         // Tentative de diagnostic (Table manquante ?)
-        if (error.name === 'PartialFailureError') {
-            console.error('BQ Partial Failure Details:', JSON.stringify(error.errors, null, 2));
+        if (error && typeof error === 'object' && 'name' in error && error.name === 'PartialFailureError') {
+            console.error('BQ Partial Failure Details:', JSON.stringify((error as any).errors, null, 2));
         }
     }
 });

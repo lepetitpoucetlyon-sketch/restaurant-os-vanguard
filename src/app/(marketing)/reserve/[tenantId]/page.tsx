@@ -31,12 +31,12 @@ const MOCK_SETTINGS = {
     { day: 'friday', isOpen: true, lunchOpen: '12:00', lunchClose: '14:30', dinnerOpen: '19:00', dinnerClose: '23:30' },
     { day: 'saturday', isOpen: true, lunchOpen: '12:00', lunchClose: '15:00', dinnerOpen: '19:00', dinnerClose: '23:30' },
     { day: 'sunday', isOpen: true, lunchOpen: '12:00', lunchClose: '15:00', dinnerOpen: '19:00', dinnerClose: '22:00' },
-  ] as any,
+  ] as import('@/types.ts').DaySchedule[],
   reservationSlots: {
     slotDuration: 30,
     intervalBetweenSlots: 15,
     maxCoversPerSlot: 20
-  } as any
+  } as import('@/types.ts').ReservationSlotsConfig
 };
 
 const MOCK_TABLES = [
@@ -46,7 +46,7 @@ const MOCK_TABLES = [
   { id: 't4', number: '4', seats: 4, status: 'free', zoneId: 'main' },
   { id: 't5', number: '5', seats: 6, status: 'free', zoneId: 'vip' },
   { id: 't6', number: '6', seats: 8, status: 'free', zoneId: 'terrace' },
-] as any;
+] as import('@/types.ts').Table[];
 
 export default function PublicBookingPage({ params }: { params: { tenantId: string } }) {
   const [step, setStep] = useState(1);
@@ -65,7 +65,7 @@ export default function PublicBookingPage({ params }: { params: { tenantId: stri
   };
 
   const slots = useMemo(() => {
-    return AvailabilityEngine.getAvailableSlots(selectedDate, { schedule: MOCK_SETTINGS.schedule, reservationSlots: MOCK_SETTINGS.reservationSlots } as any, [], MOCK_TABLES);
+    return AvailabilityEngine.getAvailableSlots(selectedDate, { schedule: MOCK_SETTINGS.schedule, reservationSlots: MOCK_SETTINGS.reservationSlots }, [], MOCK_TABLES);
   }, [selectedDate]);
 
   const handleSubmit = async () => {
@@ -115,7 +115,7 @@ export default function PublicBookingPage({ params }: { params: { tenantId: stri
           className="w-full max-w-4xl bg-bg-secondary rounded-[4rem] border border-border shadow-[0_32px_128px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col md:flex-row min-h-[700px] relative z-10"
           initial="hidden"
           animate="visible"
-          variants={containerVariants as any}
+          variants={containerVariants}
         >
           {/* Left Panel: Context & Branding */}
           <div className="w-full md:w-2/5 p-12 bg-bg-tertiary/50 border-r border-border flex flex-col justify-between">

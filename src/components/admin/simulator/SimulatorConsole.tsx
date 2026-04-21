@@ -31,9 +31,9 @@ export function SimulatorConsole() {
     useEffect(() => {
         const loadSettings = async () => {
             try {
-                const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
-                if (data?.hr?.planning?.staffToCoversRatio) setStaffRatio(data.hr.planning.staffToCoversRatio);
-                if (data?.accounting?.complexityMode) setAccountingMode(data.accounting.complexityMode);
+                const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@/types').GlobalSettings;
+                if (data?.planningConfig?.staffToCoversRatio) setStaffRatio(data.planningConfig.staffToCoversRatio);
+                if (data?.accountingConfig?.complexityMode) setAccountingMode(data.accountingConfig.complexityMode);
             } catch (e) {}
         };
         loadSettings();
@@ -41,10 +41,10 @@ export function SimulatorConsole() {
     const updateStaffRatio = async (val: number) => {
         setStaffRatio(val);
         try {
-            const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
+            const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@/types').GlobalSettings;
             const newSettings = {
                 ...data,
-                hr: { ...data?.hr, planning: { ...data?.hr?.planning, staffToCoversRatio: val } }
+                planningConfig: { ...data?.planningConfig, staffToCoversRatio: val }
             };
             await Nexus.adapter.set(Nexus.getTenantPath('settings/global'), newSettings);
             addLog(`Oracle Ratio Adjusted: 1:${val}`, 'info');
@@ -62,10 +62,10 @@ export function SimulatorConsole() {
         const newMode = accountingMode === 'SIMPLE' ? 'EXPERT' : 'SIMPLE';
         setAccountingMode(newMode);
         try {
-            const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
+            const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@/types').GlobalSettings;
             await Nexus.adapter.set(Nexus.getTenantPath('settings/global'), {
                 ...data,
-                accounting: { ...data?.accounting, complexityMode: newMode }
+                accountingConfig: { ...data?.accountingConfig, complexityMode: newMode }
             });
             addLog(`Financial Complexity: ${newMode}`, 'info');
             

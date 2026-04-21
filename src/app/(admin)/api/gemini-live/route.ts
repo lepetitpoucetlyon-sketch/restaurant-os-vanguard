@@ -6,6 +6,22 @@ import { AGENT_TOOLS } from '@/domain/agent/tools';
  * This handles the security handshake and session initialization.
  * For full Multimodal Live (Audio), a WebSocket tunnel is required.
  */
+
+interface GeminiLiveRequestBody {
+    type: 'session_init';
+    user: {
+        id: string;
+        name: string;
+        role: string;
+    };
+    nexusConfig?: {
+        aiName?: string;
+        voiceId?: string;
+        personality?: string;
+        macros?: { trigger: string; instruction: string }[];
+    };
+}
+
 export async function POST(req: Request) {
     const apiKey = process.env.GEMINI_API_KEY;
     
@@ -14,7 +30,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const body = await req.json();
+        const body: GeminiLiveRequestBody = await req.json();
         const { type, user } = body;
 
         if (type === 'session_init') {
@@ -24,7 +40,7 @@ export async function POST(req: Request) {
             const macros = nexusConfig?.macros || [];
 
             const MACROS_PROMPT = macros.length > 0 
-                ? `\nRACCOURCIS OPÉRATIONNELS CONFIGURÉS:\n${macros.map((m: any) => `- Si on te dit "${m.trigger}", tu dois: ${m.instruction}`).join('\n')}`
+                ? `\nRACCOURCIS OPÉRATIONNELS CONFIGURÉS:\n${macros.map((m: { trigger: string; instruction: string }) => `- Si on te dit "${m.trigger}", tu dois: ${m.instruction}`).join('\n')}`
                 : '';
 
             const NEXUS_DNA = `
@@ -72,8 +88,9 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });
 
-    } catch (error: any) {
-        console.error("Gemini Live Relay Error:", error.message);
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Erreur inconnue";
+        console.error("Gemini Live Relay Error:", errorMessage);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

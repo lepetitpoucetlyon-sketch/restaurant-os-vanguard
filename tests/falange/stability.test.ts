@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { atom } from 'jotai';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
-import { updateNexusNode, createNexusNode } from '@/store/operationalAtoms';
+import { updateNexusNode, createNexusNode, NexusNode } from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
 
 // Mocking dependencies
@@ -13,6 +13,16 @@ vi.mock('@/lib/logger', () => ({
         debug: vi.fn()
     }
 }));
+
+interface StabilityItem {
+    id: string;
+    a: number;
+    self?: StabilityItem;
+    data?: number[];
+    loading?: boolean;
+    error?: string | null;
+    lastUpdated?: number;
+}
 
 describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
     
@@ -46,9 +56,10 @@ describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
      * TEST 3: createNexusNode - Valeurs par défaut
      */
     it('3. createNexusNode devrait initialiser un état Grade VI standard', () => {
-        // createNexusNode retourne directement un atome Jotai
-        const nodeAtom = createNexusNode<any>('test-node-stability');
-        const state = (nodeAtom as any).init;
+        // createNexusNode retourne un atome Jotai. On vérifie son état initial via store.get()
+        const nodeAtom = createNexusNode<StabilityItem[]>('test-node-stability');
+        const state = store.get(nodeAtom);
+        
         expect(state.loading).toBe(true);
         expect(state.data).toEqual([]);
         expect(state.lastUpdated).toBeGreaterThan(0);
@@ -69,7 +80,7 @@ describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
      * TEST 5: Stress-test d'updates (Memory/Perf simulation)
      */
     it('5. updateNexusNode devrait supporter 10 000 mises à jour en < 100ms', () => {
-        let state = { data: [] as any[], loading: true, error: null as any, lastUpdated: 0 };
+        let state = { data: [] as number[], loading: true, error: null as string | null, lastUpdated: 0 };
         const start = performance.now();
         for (let i = 0; i < 10000; i++) {
             state = updateNexusNode(state, { data: [i] });
@@ -109,7 +120,7 @@ describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
      * TEST 9: Cohérence des Timestamps
      */
     it('9. lastUpdated doit toujours être strictement croissant', async () => {
-        const prev = { data: [], loading: true, error: null, lastUpdated: 100 };
+        const prev: NexusNode<number> = { data: [], loading: true, error: null, lastUpdated: 100 };
         await new Promise(r => setTimeout(r, 10));
         const next = updateNexusNode(prev, { loading: false });
         expect(next.lastUpdated).toBeGreaterThan(prev.lastUpdated);
@@ -119,7 +130,7 @@ describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
      * TEST 10: Résilience du moteur de calcul
      */
     it('10. calculateCRC devrait gérer les objets circulaires (limitation connue)', () => {
-        const obj: any = { a: 1 };
+        const obj: StabilityItem = { id: 'circular', a: 1 };
         obj.self = obj;
         expect(() => SelfHealingEngine.calculateCRC(obj)).toThrow(); // JSON.stringify throws
     });

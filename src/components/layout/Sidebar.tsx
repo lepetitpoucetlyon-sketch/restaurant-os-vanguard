@@ -58,7 +58,7 @@ export function Sidebar() {
 
     // Filtered navigation based on permissions, settings, and Suzerain Feature Flags
     const accessibleSections = useMemo(() => {
-        const features: any = (tenantConfig as any)?.features || {};
+        const features = tenantConfig?.features || {};
         
         return (NAV_SECTIONS || []).map(section => ({
             ...section,

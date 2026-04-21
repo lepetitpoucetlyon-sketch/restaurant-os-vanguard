@@ -20,7 +20,16 @@ import {
     PenTool
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
+
+interface CheckedItem {
+    id: string;
+    name: string;
+    status: 'ok' | 'warning' | 'rejected';
+    temp?: number;
+    quantity: number;
+    unit?: string;
+}
 
 const getDeliverySlipNumber = (deliveryId: string) =>
     deliveryId.replace(/\D+/g, "").slice(-4).padStart(4, "0");
@@ -50,8 +59,8 @@ export default function QualityControlPage() {
     const [controlData, setControlData] = useState({
         truckTemp: "",
         hygiene: "clean",
-        itemsChecked: [] as any[],
-        rejectedItems: [] as any[]
+        itemsChecked: [] as CheckedItem[],
+        rejectedItems: [] as CheckedItem[]
     });
 
     const handleValidControl = async () => {
@@ -116,7 +125,7 @@ export default function QualityControlPage() {
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
+                                onClick={() => setActiveTab(tab.id as 'reception' | 'history')}
                                 className={cn(
                                     "flex items-center gap-2.5 py-6 relative font-black text-[10px] uppercase tracking-[0.25em] transition-all",
                                     active ? "text-accent-gold" : "text-text-muted hover:text-text-primary"

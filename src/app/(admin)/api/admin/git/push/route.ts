@@ -48,12 +48,13 @@ export async function POST() {
             output,
             timestamp: new Date().toISOString()
         });
-    } catch (error: any) {
+    } catch (error) {
         console.error('Git Push API Error:', error);
+        const err = error as { message?: string; stdout?: Buffer; stderr?: Buffer };
         return NextResponse.json({ 
             success: false, 
-            error: error.message || 'Failed to execute git push.',
-            output: error.stdout?.toString() || error.stderr?.toString()
+            error: err.message || 'Failed to execute git push.',
+            output: err.stdout?.toString() || err.stderr?.toString()
         }, { status: 500 });
     }
 }

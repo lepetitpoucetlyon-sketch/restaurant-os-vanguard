@@ -7,8 +7,8 @@ import { useLanguage } from "@/context/LanguageContext";
 import { cinematicContainer, cinematicItem } from "@/app/(marketing)/reservations/constants";
 
 interface CustomerListViewProps {
-    customers: any[];
-    setSelectedCustomer: (customer: any) => void;
+    customers: import('@/types').CRM[];
+    setSelectedCustomer: (customer: import('@/types').CRM) => void;
 }
 
 export function CustomerListView({ 

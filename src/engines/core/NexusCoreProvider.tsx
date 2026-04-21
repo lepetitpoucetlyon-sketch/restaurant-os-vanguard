@@ -31,9 +31,10 @@ import {
     borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
 } from '@/store/themeAtoms';
 import { User, UserRole } from '@/types';
-import { TenantConfig } from '@/shared/nexus-contract';
+import { TenantConfig, SovereignData, SovereignValue } from '@/shared/nexus-contract';
+
 import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
-import { GlobalSettings } from '@/types/settings';
+import { GlobalSettings } from '@/types';
 import {
     NexusCoreState, 
     NexusAuthState, 
@@ -71,7 +72,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // 🐒 Monkey Chaos Agent (Grade X) - Injection de Résilience
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            (window as any).awakenTheMonkey = (key: string) => {
+            window.awakenTheMonkey = (key: string) => {
                 MonkeyChaosAgent.activate(key);
             };
         }
@@ -198,12 +199,13 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     const t = useCallback((key: string): string => {
         const keys = key.split('.');
-        let val: unknown = translations[currentLanguage];
+        let val: SovereignValue = translations[currentLanguage];
         
         for (const k of keys) {
-            if (val && typeof val === 'object' && k in (val as Record<string, unknown>)) {
-                val = (val as Record<string, unknown>)[k];
+            if (val && typeof val === 'object' && k in (val as SovereignData)) {
+                val = (val as SovereignData)[k];
             } else {
+
                 return key; 
             }
         }
@@ -254,7 +256,8 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         updateUserStatus: async (id: string, status: 'active' | 'suspended' | 'on_leave') => console.log('Update user status', id, status),
         addUser: async (data: Partial<User>) => console.log('Add user', data),
         deleteUser: async (id: string) => console.log('Delete user', id),
-        logAction: (action: string, metadata?: Record<string, unknown>) => console.log('Log action', action, metadata)
+        logAction: (action: string, metadata?: SovereignData) => console.log('Log action', action, metadata)
+
     }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.hasAccess, access.canDo, access.updateRolePermissions, access.getAccessibleCategories, login, logout]);
 
     const uiValue: NexusUIState = useMemo(() => ({
@@ -284,8 +287,8 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     const notifValue: NexusNotifState = useMemo(() => ({
         unreadCount,
-        notifications: notifications as any[],
-        addNotification: (n) => addToast({ ...n, duration: 3000 } as any),
+        notifications: notifications as import('@/types').Notification[],
+        addNotification: (n) => addToast({ ...n, duration: 3000 } as import('@/store/uiAtoms').ToastItem),
         markAsRead: (id: string) => console.log('Mark as read', id),
         markAllAsRead: () => console.log('Mark all read'),
         removeNotification: (id: string) => console.log('Remove notification', id),
@@ -330,7 +333,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
     }), []);
 
-    const contextValue: any = useMemo(() => ({
+    const contextValue: NexusCoreState = useMemo(() => ({
         auth: authValue,
         tenant: tenantValue,
         ui: uiValue,

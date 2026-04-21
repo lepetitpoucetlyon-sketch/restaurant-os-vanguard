@@ -1,10 +1,9 @@
-// @ts-nocheck
-// @ts-nocheck
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import ws from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import { config } from 'dotenv';
 import path from 'path';
+import { Server as HttpServer } from 'http';
 
 // Load env vars
 config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -32,17 +31,17 @@ const server = serve({
 
 // Since @hono/node-server returns a standard Node server or similar, 
 // we attach the WebSocket server to it.
-const wss = new (ws.WebSocketServer || (ws as any).Server)({ server: server as any, path: '/api/gemini-live/ws' });
+const wss = new WebSocketServer({ server: server as HttpServer, path: '/api/gemini-live/ws' });
 
 wss.on('connection', (socket) => {
     console.log("🟢 Client connecté au Relais Nexus...");
 
     const GEMINI_WS_URL = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.MultimodalLive?key=${API_KEY}`;
-    const geminiWs = new ws.WebSocket(GEMINI_WS_URL);
+    const geminiWs = new WebSocket(GEMINI_WS_URL);
 
     // Proxy Frontend -> Gemini
     socket.on('message', (message, isBinary) => {
-        if (geminiWs.readyState === ws.WebSocket.OPEN) {
+        if (geminiWs.readyState === WebSocket.OPEN) {
             geminiWs.send(message, { binary: isBinary });
         }
     });

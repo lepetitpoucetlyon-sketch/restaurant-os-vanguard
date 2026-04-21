@@ -53,8 +53,6 @@ export class MonkeyChaos {
     static simulateNetworkDrift() {
         logger.warn("⚠️ [CHAOS] SIMULATING NETWORK DRIFT. Optimistic updates will be tested.");
     }
-}
-
     /**
      * FISCAL STRESS: Seals a large batch of sales to verify cryptographic performance.
      */

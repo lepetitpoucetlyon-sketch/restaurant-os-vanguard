@@ -9,13 +9,21 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Table as CustomerTable } from '@/types/tables.types'; // Suture Nexus
-import { GroupEventStatus } from '@/types/groups.types';
+import { Table as CustomerTable } from '@/types'; // Suture Nexus
+import { GroupEventStatus } from '@/types';
 
 // Extracted Components (Sutured for Grade X Stability)
-const GroupStatCard = (props: any) => null;
-const EventCard = (props: any) => null;
-const GroupFilters = (props: any) => null;
+import { GroupStatCard } from './components/GroupStatCard';
+import { EventCard } from './components/EventCard';
+// GroupFilters is not yet implemented or imported elsewhere, let's keep it as is but type it correctly if possible
+const GroupFilters = (props: {
+    searchQuery: string;
+    setSearchQuery: (v: string) => void;
+    selectedType: string;
+    setSelectedType: (v: string) => void;
+    selectedStatus: string;
+    setSelectedStatus: (v: string) => void;
+}) => null;
 
 // Constants
 import { useGroups } from '@/engines/ops/NexusOpsProvider';

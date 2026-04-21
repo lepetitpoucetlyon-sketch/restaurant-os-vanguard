@@ -26,7 +26,8 @@ export class SimulacraAdapter implements INexusAdapter {
         logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
     }
 
-    async get<T = unknown>(path: string): Promise<T | null> {
+    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
+
         // 1. Check Virtual Store first
         const virtual = await simulatorDb.virtualStore.get(path);
         
@@ -43,7 +44,8 @@ export class SimulacraAdapter implements INexusAdapter {
      * ⚠️ Query in Simulacra mode is complex. 
      * For Grade X Alpha, we merge real results with virtual overrides.
      */
-    async query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+
         const realResults = await this.realAdapter.query<T>(collectionPath, options);
         const virtualResults = await simulatorDb.virtualStore
             .where('forkId').equals(this.forkId)
@@ -67,7 +69,8 @@ export class SimulacraAdapter implements INexusAdapter {
         return merged;
     }
 
-    onSnapshot<T = unknown>(path: string, callback: (data: T) => void, options?: INexusQueryOptions): () => void {
+    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void, options?: INexusQueryOptions): () => void {
+
         logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X Alpha.");
         
         // Initial load
@@ -100,10 +103,12 @@ export class SimulacraAdapter implements INexusAdapter {
         };
     }
 
-    async set<T = unknown>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
-        let finalData = data as Record<string, unknown>;
+    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
+        let finalData = data as import('@/shared/nexus-contract').SovereignData;
+
         if (options?.merge) {
-            const existing = await this.get<Record<string, unknown>>(path);
+            const existing = await this.get<import('@/shared/nexus-contract').SovereignData>(path);
+
             finalData = { ...existing, ...finalData };
         }
 
@@ -116,9 +121,10 @@ export class SimulacraAdapter implements INexusAdapter {
         });
     }
 
-    async update<T = unknown>(path: string, data: Partial<T>): Promise<void> {
-        const existing = await this.get<Record<string, unknown>>(path);
+    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
+        const existing = await this.get<import('@/shared/nexus-contract').SovereignData>(path);
         const finalData = { ...existing, ...data };
+
 
         await simulatorDb.virtualStore.put({
             path,

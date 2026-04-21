@@ -11,12 +11,12 @@ import { SyncManager } from '@/lib/offline/sync-manager';
 import { checkOnlineStatus } from '@/lib/offline/status';
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '../store/accountingAtoms';
-import { MasterBridge } from '@/lib/MasterBridge';
+import { SovereignData } from '@/shared/nexus-contract';
 
 export interface FiscalInstruction {
     path: string;
     method: 'SET' | 'UPDATE' | 'DELETE';
-    data: Record<string, unknown>;
+    data: SovereignData;
 }
 
 /**
@@ -109,7 +109,7 @@ export class NF525Service {
             impact.push({ 
                 path: `${getTenantPath('inventoryMovements', tenantId)}/mov_${Math.random().toString(36).substring(2, 7)}`, 
                 method: 'SET', 
-                data: m as unknown as Record<string, unknown>
+                data: m as SovereignData
             });
         });
 
@@ -177,9 +177,9 @@ export class NF525Service {
                     else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, ins.data as Partial<InventoryMovement>);
                     else if (ins.method === 'DELETE') await db.inventoryMovements.delete(id);
                 } else if (coll === 'journalEntries') {
-                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as unknown as JournalEntry);
+                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as JournalEntry);
                 } else if (coll === 'fiscalSeals') {
-                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as unknown as FiscalSeal);
+                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as FiscalSeal);
                 }
             }
         });

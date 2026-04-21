@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { SovereignValue } from '@/shared/nexus-contract';
+
 
 /**
  * TYPES DU REGISTRE NEXUS-SYNC
@@ -11,7 +13,8 @@ export interface SettingField {
     label: string;
     required?: boolean;
     description?: string;
-    options?: { label: string; value: any }[];
+    options?: { label: string; value: SovereignValue }[];
+
     subFields?: SettingField[];
     unit?: 'cents' | 'grams';
     validation?: z.ZodTypeAny;

@@ -1,12 +1,17 @@
 import { AccessPolicyManager, CategoryKey } from "@/domain/services/AccessPolicyManager";
 import { User } from '@/types';
 import { AGENT_TOOLS } from './tools';
+import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
 
 export type GeminiLiveEvent = 
     | { type: 'audio', data: Int16Array }
     | { type: 'text', data: string }
-    | { type: 'tool_call', name: string, args: Record<string, unknown>, callId: string }
+    | { type: 'tool_call', name: string, args: SovereignData, callId: string }
     | { type: 'error', message: string };
+
+interface WebkitWindow extends Window {
+    webkitAudioContext: typeof AudioContext;
+}
 
 /**
  * PRODUCTION-GRADE SERVICE: GeminiLiveService
@@ -21,21 +26,21 @@ export class GeminiLiveService {
     private nextStartTime: number = 0;
 
     private onTranscript: ((text: string, isUser: boolean) => void) | null = null;
-    private onToolCall: ((name: string, args: Record<string, unknown>) => void) | null = null;
+    private onToolCall: ((name: string, args: SovereignData) => void) | null = null;
 
     constructor(user: User, rolePermissions: string[], callbacks?: { 
         onTranscript?: (text: string, isUser: boolean) => void,
-        onToolCall?: (name: string, args: Record<string, unknown>) => void 
+        onToolCall?: (name: string, args: SovereignData) => void 
     }) {
         this.user = user;
         this.rolePermissions = rolePermissions;
         this.onTranscript = callbacks?.onTranscript || null;
         this.onToolCall = callbacks?.onToolCall || null;
-        this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)({ sampleRate: 16000 });
+        this.audioContext = new (window.AudioContext || (window as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
     }
 
 
-    async connect(config?: { system_instruction?: string, tools?: Record<string, unknown>[] }) {
+    async connect(config?: { system_instruction?: string, tools?: SovereignData[] }) {
         const relayPort = 3001;
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         // Connect to the specialized relay port
@@ -113,7 +118,7 @@ export class GeminiLiveService {
         this.nextStartTime = this.audioContext.currentTime;
     }
 
-    private async handleToolCall(event: { name: string, args: Record<string, unknown>, callId: string }) {
+    private async handleToolCall(event: { name: string, args: SovereignData, callId: string }) {
 
         const tool = AGENT_TOOLS[event.name];
         
@@ -151,7 +156,7 @@ export class GeminiLiveService {
         }
     }
 
-    private sendToolResult(callId: string, result: unknown) {
+    private sendToolResult(callId: string, result: SovereignValue) {
         this.socket?.send(JSON.stringify({
             type: 'tool_result',
             callId,

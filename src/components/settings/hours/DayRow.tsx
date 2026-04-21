@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Sun, Moon, Coffee, ArrowRight, ChevronRight, Clock } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { DaySchedule } from "@/types/settings";
+import { DaySchedule } from "@/types";
 import { TimeInput } from "./TimeInput";
 import { DAYS_CONFIG } from "@/constants/scheduling";
 

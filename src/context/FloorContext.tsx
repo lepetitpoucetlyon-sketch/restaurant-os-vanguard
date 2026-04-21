@@ -1,6 +1,6 @@
 "use client";
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
-export type { Table, Floor, Zone } from '@/types/tables.types';
+export type { Table, Floor, Zone } from '@/types';
 
 /**
  * 🍷 FloorContext (Grade IX)

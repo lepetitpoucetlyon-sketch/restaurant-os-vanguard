@@ -76,9 +76,10 @@ export function ReceptionMarchandises() {
                 user: 'Chef Paul'
             });
             setIsAdding(false);
-        } catch (e: any) {
-            console.error(e);
-            addNotification({ type: 'error', title: 'Erreur', message: e.message || 'Impossible d\'enregistrer la réception.' });
+        } catch (e) {
+            const error = e as Error;
+            console.error(error);
+            addNotification({ type: 'error', title: 'Erreur', message: error.message || 'Impossible d\'enregistrer la réception.' });
         } finally {
             setIsUploading(false);
         }

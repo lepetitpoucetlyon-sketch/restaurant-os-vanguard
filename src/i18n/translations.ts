@@ -15,14 +15,16 @@ import { dashboardTranslations } from './domains/dashboard';
 import { operationsTranslations } from './domains/operations';
 
 // Deep merge utility — fusionner les objets de traduction par langue
-function deepMerge(...objects: Record<string, unknown>[]): Record<string, unknown> {
-    const result: Record<string, unknown> = {};
+function deepMerge(...objects: import('@/shared/nexus-contract').SovereignData[]): import('@/shared/nexus-contract').SovereignData {
+    const result: import('@/shared/nexus-contract').SovereignData = {};
+
     for (const obj of objects) {
         if (!obj) continue;
         for (const key of Object.keys(obj)) {
             if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-                result[key] = deepMerge(result[key] as Record<string, unknown> || {}, obj[key] as Record<string, unknown>);
+                result[key] = deepMerge(result[key] as import('@/shared/nexus-contract').SovereignData || {}, obj[key] as import('@/shared/nexus-contract').SovereignData);
             } else {
+
                 result[key] = obj[key];
             }
         }
@@ -30,8 +32,8 @@ function deepMerge(...objects: Record<string, unknown>[]): Record<string, unknow
     return result;
 }
 
-// Assemble all domain translations
-export const translations = {
+// Assemble all domain translations with strict SovereignData typing
+export const translations: Record<Language, import('@/shared/nexus-contract').SovereignData> = {
     fr: deepMerge(
         commonTranslations.fr,
         dashboardTranslations.fr,
@@ -58,6 +60,7 @@ export const translations = {
         operationsTranslations.es
     )
 };
+
 
 export type Language = keyof typeof translations;
 export type TranslationKey = string; // Simplified for now, could be improved with template literal types

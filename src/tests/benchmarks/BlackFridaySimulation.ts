@@ -3,6 +3,8 @@ import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
+import { SovereignValue } from '@/shared/nexus-contract';
+
 
 /**
  * 🌋 Black Friday Simulation - Restaurant OS (Singularity 5.4)
@@ -64,7 +66,8 @@ export const BlackFridaySimulation = {
     const store = getDefaultStore();
     
     // 1. Force a drift (Corruption)
-    store.set(ordersNodeAtom, (prev: any) => updateNexusNode(prev, { data: [{ id: 'corrupt', totalInCents: 0 }] as any }));
+    store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: [{ id: 'corrupt', totalInCents: 0 }] as unknown as SovereignValue[] }));
+
     const expectedHash = 'correct_state_crc'; 
 
     logger.info("[BF_CHAOS] State corrupted. Simulating network cut...");

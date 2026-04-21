@@ -1,4 +1,4 @@
-import { DayOfWeek } from "@/types/settings";
+import { DayOfWeek } from "@/types";
 
 export const DAYS_CONFIG: { id: DayOfWeek; label: string; shortLabel: string }[] = [
     { id: 'monday', label: 'Lundi', shortLabel: 'Lun' },

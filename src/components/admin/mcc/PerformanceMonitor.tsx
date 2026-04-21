@@ -24,7 +24,8 @@ export const PerformanceMonitor: React.FC = () => {
     // Real-time monitoring (Zero Leak Phase 4)
     useEffect(() => {
         const interval = setInterval(() => {
-            const memory = (performance as any).memory;
+            const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
+
             const domains = GlobalRegistryService.getInventory();
             
             setStats(prev => ({

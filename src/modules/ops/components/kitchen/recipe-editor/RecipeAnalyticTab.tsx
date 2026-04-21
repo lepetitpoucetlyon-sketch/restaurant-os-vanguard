@@ -7,7 +7,7 @@ import { Recipe } from "@/types";
 
 interface RecipeAnalyticTabProps {
     formData: Partial<Recipe>;
-    setFormDraft: (data: any) => void;
+    setFormDraft: (data: Partial<Recipe> | ((prev: Partial<Recipe>) => Partial<Recipe>)) => void;
     initialFormData: Partial<Recipe>;
     margin: string;
     allergens: string[];
@@ -44,7 +44,7 @@ export function RecipeAnalyticTab({
                             type="number"
                             step="0.01"
                             value={formData.sellingPriceInCents ? (formData.sellingPriceInCents / 100) : ''}
-                            onChange={(e) => setFormDraft((prev: any) => ({ ...(prev ?? initialFormData), sellingPriceInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
+                            onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), sellingPriceInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
                             className="w-full bg-transparent text-4xl font-serif font-black text-text-primary outline-none"
                             placeholder="0.00"
                         />

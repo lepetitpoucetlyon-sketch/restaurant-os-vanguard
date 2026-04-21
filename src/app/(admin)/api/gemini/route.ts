@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🌌 NEXUS ORACLE API (Industrial Grade)
@@ -16,16 +17,17 @@ const LOCAL_RESPONSES: Record<string, string> = {
     config: "Vos configurations de DNA sont centralisées dans le Master Command Control.",
 };
 
-function getLocalResponse(prompt: string, context: any): string {
+function getLocalResponse(prompt: string, context: SovereignData): string {
     const lower = prompt.toLowerCase().trim();
     
     // Contextual Data Answers
     if (context?.metrics) {
+        const metrics = context.metrics as Record<string, number>;
         if (lower.includes('santé') || lower.includes('health')) {
-            return `La santé moyenne de votre flotte est de **${Math.round(context.metrics.averageHealth || 0)}%**. Aucun incident critique à signaler.`;
+            return `La santé moyenne de votre flotte est de **${Math.round(metrics.averageHealth || 0)}%**. Aucun incident critique à signaler.`;
         }
         if (lower.includes('revenu') || lower.includes('mrr') || lower.includes('argent')) {
-            return `Le revenu total consolidé de l'empire est de **${Math.round(context.metrics.totalRevenue || 0).toLocaleString()} €**.`;
+            return `Le revenu total consolidé de l'empire est de **${Math.round(metrics.totalRevenue || 0).toLocaleString()} €**.`;
         }
     }
 
@@ -41,7 +43,7 @@ function getLocalResponse(prompt: string, context: any): string {
 
 export async function POST(request: Request) {
     try {
-        const { prompt, context, history } = await request.json() as { prompt: string; context: Record<string, unknown>; history: { role: string; text: string }[] };
+        const { prompt, context, history } = await request.json() as { prompt: string; context: SovereignData; history: { role: string; text: string }[] };
         const apiKey = process.env.GEMINI_API_KEY;
 
         // --- LOCAL MODE FALLBACK ---
@@ -73,7 +75,7 @@ export async function POST(request: Request) {
             history: [
                 { role: 'user', parts: [{ text: systemInstruction }] },
                 { role: 'model', parts: [{ text: "Compris. Nexus est prêt. Comment puis-je optimiser l'empire ?" }] },
-                ...history.map((m: any) => ({
+                ...history.map((m: { role: string; text: string }) => ({
                     role: m.role === 'model' ? 'model' : 'user',
                     parts: [{ text: m.text }]
                 }))
@@ -90,8 +92,9 @@ export async function POST(request: Request) {
             mode: 'cloud'
         });
 
-    } catch (error: any) {
-        console.error("Nexus Oracle Error:", error.message);
+    } catch (error) {
+
+        console.error("Nexus Oracle Error:", error instanceof Error ? error.message : String(error));
         
         // Final fallback logic to prevent crash
         return NextResponse.json({ 

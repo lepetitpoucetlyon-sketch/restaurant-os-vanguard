@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createStore } from 'jotai';
-import './mocks'; // 🛡️ Import centralisé des mocks (Firebase, Storage, Auth, Dexie)
+import './mocks'; 
+import { SovereignData } from '@/shared/nexus-contract';
 import { 
     createNexusNode, 
     updateNexusNode, 
@@ -13,6 +14,7 @@ import {
 } from '@/store/operationalAtoms';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 
+
 describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     let store: ReturnType<typeof createStore>;
 
@@ -23,8 +25,9 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
 
     // --- SECTION 1 : NEXUSNODE FACTORY ---
 
+
     it('T16: Initialisation Stérile - État par défaut conforme', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const state = store.get(testAtom);
         expect(state.data).toEqual([]);
         expect(state.loading).toBe(true);
@@ -32,7 +35,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T17: Sûreté d\'Action (append) - Mise à jour atomique', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const item = { id: '1', name: 'Test' };
         
         store.set(testAtom, (prev) => updateNexusNode(prev, { data: [item], loading: false }));
@@ -44,7 +47,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T18: Résilience Patch - Conservation des données collatérales', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         store.set(testAtom, (prev) => updateNexusNode(prev, { data: [{ id: '1', val: 'a' }], loading: false }));
         
         // Patch error without touching data
@@ -56,7 +59,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T19: Purge & Reset - Retour à la singularité', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         store.set(testAtom, (prev) => updateNexusNode(prev, { data: [1, 2, 3], loading: false }));
         
         // Reset
@@ -68,7 +71,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T20: Erreur de Propagation - Capture des anomalies Firestore', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const firestoreError = "PERMISSION_DENIED";
         
         store.set(testAtom, (prev) => updateNexusNode(prev, { loading: false, error: firestoreError }));
@@ -81,7 +84,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     // --- SECTION 2 : JOTAI ATOM LIFECYCLE ---
 
     it('T21: Multi-Abonnement - Cohérence inter-contextuelle', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         let callCount = 0;
         
         store.sub(testAtom, () => {
@@ -103,7 +106,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T23: Race Condition Shield - Ordre de priorité séquentiel', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         
         // Send two updates
         store.set(testAtom, (prev) => updateNexusNode(prev, { data: ['A'] }));
@@ -114,7 +117,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T24: Store Isolation - Barrière d\'étanchéité inter-store', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const storeB = createStore();
         
         store.set(testAtom, (prev) => updateNexusNode(prev, { data: ['StoreA'] }));
@@ -125,7 +128,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     });
 
     it('T25: Memory Pressure (WeakRef Simulation) - Stabilité structurelle', () => {
-        const testAtom = createNexusNode<any>('T16-test-node');
+        const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const node = store.get(testAtom);
         expect(node).toBeDefined();
     });
@@ -151,13 +154,15 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
         expect(true).toBe(true); 
     });
 
+
     it('T29: Global Error Recovery - Résilience aux crashs de services', async () => {
         try {
-            await NexusSyncService.init(null as any);
+            await NexusSyncService.init('');
         } catch (e) {
         }
         expect(true).toBe(true);
     });
+
 
     it('T30: Cache Purge Logic - Nettoyage Dexie conforme', async () => {
         await NexusSyncService.clearCache();

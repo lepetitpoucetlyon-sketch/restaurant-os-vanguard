@@ -12,7 +12,10 @@ import { EmpireInstance } from '@/domain/types/empire';
 import { FleetInsight, ConsolidatedMetrics } from '@/domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
+import { SovereignData } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+
+import { NexusFleetState } from '@/types/nexus.types';
 
 interface NexusFleetStateInternal extends NexusFleetState {
     tutorial?: {
@@ -177,7 +180,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         // Broadcasting to all nodes in the Empire
         try {
             for (const instance of liveFleet) {
-                const patch: Record<string, unknown> = {
+                const patch: SovereignData = {
+
                     updatedAt: new Date().toISOString()
                 };
 

@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal, Recipe } from '@/types';
-import { TenantConfig } from '@/shared/nexus-contract';
+import { TenantConfig, SovereignValue, SovereignData } from '@/shared/nexus-contract';
 import type { ImmunityLogEntry } from '@/shared/genome.types';
 
 /**
@@ -13,7 +13,7 @@ export interface SyncOperation {
     action: 'SET' | 'UPDATE' | 'DELETE' | 'COMMIT_BATCH';
     collection: string;
     targetId: string;
-    payload: unknown; // Données complètes de la transaction ou du changement
+    payload: SovereignValue; // Données complètes de la transaction ou du changement
     timestamp: string;
     status: 'pending' | 'syncing' | 'failed';
     priority: number; // 0: Normal, 1: High (Fiscal)

@@ -18,23 +18,26 @@ export interface INexusQueryOptions {
 }
 
 export interface INexusBatch {
-    set<T = unknown>(path: string, data: T): void;
-    update<T = unknown>(path: string, data: Partial<T>): void;
+    set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): void;
+    update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): void;
+
     delete(path: string): void;
     commit(): Promise<void>;
 }
 
 export interface INexusAdapter {
-    get<T = unknown>(path: string): Promise<T | null>;
-    query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
-    onSnapshot<T = unknown>(
+    get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null>;
+    query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
+    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(
+
         path: string, 
         callback: (data: T) => void, 
         options?: INexusQueryOptions & { onError?: (error: Error) => void }
     ): () => void;
     batch(): INexusBatch;
-    set<T = unknown>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
-    update<T = unknown>(path: string, data: Partial<T>): Promise<void>;
+    set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
+    update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void>;
+
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
 }

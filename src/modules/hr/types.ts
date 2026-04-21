@@ -227,8 +227,9 @@ export interface ShiftLog {
     timestamp: string;
     type: 'clock_in' | 'clock_out' | 'break_start' | 'break_end' | 'note' | 'compliance_violation';
     message: string;
-    metadata?: Record<string, unknown>;
+    metadata?: import('@/shared/nexus-contract').SovereignData;
 }
+
 
 // ============================================
 // HR COMPLIANCE
@@ -272,13 +273,27 @@ export interface PayrollCalculation {
     netAmountCents: number;
     taxAmountCents: number;
     status: 'draft' | 'validated' | 'paid';
-    metadata?: Record<string, unknown>;
+    metadata?: import('@/shared/nexus-contract').SovereignData;
 }
+
 
 /** 
  * 📊 ShiftStats - Blueprint Grade X 
  * TODO: À alimenter via le moteur d'analyse de performance
  */
+/** 
+ * 🔍 AuditLog - Grade X
+ */
+export interface AuditLog {
+    id: string;
+    userId?: string;
+    userName: string;
+    action: string;
+    timestamp: number | string | Date;
+    metadata?: import('@/shared/nexus-contract').SovereignData;
+}
+
+
 export interface ShiftStats {
     shiftId: string;
     durationMinutes: number;

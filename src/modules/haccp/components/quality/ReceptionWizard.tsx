@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { 
-  qualityCurrentSessionStatsSelector,
-  qualitySelectedDeliveryIdAtom 
-} from '@/store/qualityAtoms';
+    qualityActiveControlAtom, 
+    qualityControlStepAtom,
+    qualityControlsAtom,
+    qualitySelectedDeliveryIdAtom
+} from '@/modules/haccp/store/qualityAtoms';
 import { HACCPGauge } from './HACCPGauge';
 import { DeliveryItemRow } from './DeliveryItemRow';
 import { Button } from "@/components/ui/button";
@@ -129,7 +131,7 @@ export function ReceptionWizard() {
                             {['clean', 'acceptable', 'dirty'].map((status) => (
                                 <button
                                     key={status}
-                                    onClick={() => updateConditions({ vehicle_cleanliness: status as any })}
+                                    onClick={() => updateConditions({ vehicle_cleanliness: status as import('@/domain/types/quality').CleanlinessStatus })}
                                     className={cn(
                                         "flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all",
                                         session.delivery_conditions?.vehicle_cleanliness === status 

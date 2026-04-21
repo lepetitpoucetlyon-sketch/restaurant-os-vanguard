@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
  */
 export function useTenantLifecycle(tenantId: string | null) {
     const setSlots = useSetAtom(activeTenantSlotsAtom);
-    const setActiveTenant = useSetAtom(activeFleetTenantAtom as any);
+    const setActiveTenant = useSetAtom(activeFleetTenantAtom);
     const store = useStore();
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export function useTenantLifecycle(tenantId: string | null) {
                     branding: { primaryColor: '#6366f1' },
                     featureFlags: {},
                     security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
-                } as any);
+                } as import('@/domain/types/empire').EmpireInstance);
             }
             return next;
         });
@@ -51,11 +51,16 @@ export function useTenantLifecycle(tenantId: string | null) {
             const entry = GlobalRegistryService.getEntry(domainId);
             if (entry) {
                 // We set loading to true to trigger re-fetch in components
-                store.set(entry.atom, (prev: any) => ({
-                    ...prev,
-                    data: [],
-                    loading: true
-                }));
+                store.set(entry.atom, (prev) => {
+                    const node = prev as import('@/store/nexusNodeFactory').NexusNode<import('@/shared/nexus-contract').SovereignValue>;
+                    return {
+
+                        ...node,
+                        data: [],
+                        loading: true,
+                        lastUpdated: Date.now()
+                    };
+                });
             }
         });
 

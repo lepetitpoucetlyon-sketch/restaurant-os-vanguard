@@ -141,7 +141,8 @@ export function MindMap() {
             .force('collision', d3.forceCollide<Node>().radius(d => d.size + 120)); // Buffer territory expansion
 
         // Interaction handlers
-        const zoom = d3.zoom<SVGSVGElement, unknown>()
+        const zoom = d3.zoom<SVGSVGElement, import('@/shared/nexus-contract').SovereignValue>()
+
             .scaleExtent([0.5, 4])
             .on('zoom', (event) => {
                 container.attr('transform', event.transform);
@@ -221,33 +222,36 @@ export function MindMap() {
         simulation.on('tick', () => {
             link.selectAll('path')
                 .attr('d', (d) => {
-                    const l = d as unknown as Link;
-                    const source = l.source as unknown as Node;
-                    const target = l.target as unknown as Node;
+                    const l = d as Link;
+                    const source = l.source as Node;
+                    const target = l.target as Node;
                     const dx = target.x! - source.x!;
                     const dy = target.y! - source.y!;
                     const dr = Math.sqrt(dx * dx + dy * dy) * 1.5; 
                     return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
                 });
 
+
             linkLabel
                 .attr('x', (d) => {
-                    const l = d as unknown as Link;
-                    const source = l.source as unknown as Node;
-                    const target = l.target as unknown as Node;
+                    const l = d as Link;
+                    const source = l.source as Node;
+                    const target = l.target as Node;
                     return (source.x! + target.x!) / 2;
                 })
                 .attr('y', (d) => {
-                    const l = d as unknown as Link;
-                    const source = l.source as unknown as Node;
-                    const target = l.target as unknown as Node;
+                    const l = d as Link;
+                    const source = l.source as Node;
+                    const target = l.target as Node;
                     return (source.y! + target.y!) / 2;
                 });
 
+
             node.attr('transform', (d) => {
-                const n = d as unknown as Node;
+                const n = d as Node;
                 return `translate(${n.x},${n.y})`;
             });
+
         });
 
         function dragstarted(event: d3.D3DragEvent<SVGGElement, Node, Node>) {

@@ -45,7 +45,12 @@ import { QuotesService } from "@/lib/quotes-service";
 import { useGeminiAgent } from "@/hooks/useGeminiAgent";
 import { useIntelligence } from "@/context/IntelligenceContext";
 
-const NewQuoteDialog = (props: any) => null;
+interface NewQuoteDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+const NewQuoteDialog = ({ isOpen, onClose }: NewQuoteDialogProps) => null;
 
 import { useQuotes } from "@/engines/ops/NexusOpsProvider";
 

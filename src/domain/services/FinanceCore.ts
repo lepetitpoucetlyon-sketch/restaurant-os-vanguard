@@ -5,6 +5,7 @@
  */
 
 import { Order, OrderItem } from "@/types";
+import { SovereignData } from "@/shared/nexus-contract";
 
 export interface TaxBreakdown {
     total: number;
@@ -115,7 +116,7 @@ export class FinanceCore {
         };
 
         // 2. SEAL THE REPORT
-        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as unknown as Record<string, unknown>);
+        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as SovereignData);
         
         return zReport;
     }
@@ -124,10 +125,13 @@ export class FinanceCore {
      * 🔐 SEAL RECORD WITH HASH (NF525 Compliance)
      * Scelle une transaction ou un rapport de clôture avec un Hash Post-Quantum.
      */
-    static async sealRecordWithHash(id: string, data: Record<string, unknown>): Promise<FiscalSeal> {
+    static async sealRecordWithHash(id: string, data: SovereignData): Promise<FiscalSeal> {
         const { QuantumCrypto } = await import('@/lib/QuantumCrypto');
         const serialized = JSON.stringify(data);
-        const secret = process.env.NEXT_PUBLIC_FISCAL_SECRET || 'darwin-v5-master-code';
+        const secret = process.env.NEXT_PUBLIC_FISCAL_SECRET;
+        if (!secret) {
+            throw new Error('❌ SÉCURITÉ : NEXT_PUBLIC_FISCAL_SECRET manquant. Le scellage fiscal ne peut être cryptographiquement souverain.');
+        }
         
         const seal = await QuantumCrypto.generateQuantumSeal(serialized, secret);
         return {

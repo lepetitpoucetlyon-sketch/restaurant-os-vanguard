@@ -3,7 +3,9 @@
  * Specific business data structures for services.
  */
 
-import { TransactionCategory, AccountSide } from '@/modules/finance/types';
+import { TransactionCategory, AccountSide } from '@/types';
+import { SovereignData } from '@/shared/nexus-contract';
+
 
 export interface ExpenseData {
     amountInCents: number;
@@ -12,7 +14,8 @@ export interface ExpenseData {
     timestamp?: string;
 }
 
-export interface SyncMessage<T = unknown> {
+export interface SyncMessage<T = SovereignData> {
+
     type: string;
     payload: T;
     timestamp: number;

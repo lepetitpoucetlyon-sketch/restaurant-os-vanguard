@@ -8,12 +8,14 @@ import { useLanguage } from "@/context/LanguageContext";
 import { PageSettingConfig } from "@/types/permissions.types";
 import { PremiumSelect } from "@/components/settings/ui/PremiumSelect";
 import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput";
+import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
 
 interface LogicTabProps {
     filteredSettings: PageSettingConfig[];
-    localValues: Record<string, unknown>;
-    updateValue: (key: string, value: unknown) => void;
+    localValues: SovereignData;
+    updateValue: (key: string, value: SovereignValue) => void;
 }
+
 
 export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTabProps) {
     const { t } = useLanguage();

@@ -47,7 +47,7 @@ export const generatePaySlip = (user: User) => {
 
     // --- Pay Details Table ---
     const head = [['Rubrique', 'Base', 'Taux', 'Montant Salarial', 'Montant Patronal']];
-    const body: any[] = [
+    const body: (string | number | { content: string; colSpan: number; styles: Record<string, unknown> })[][] = [
         ['Salaire de base', '151.67h', '16.15 €', '2 450.00 €', '-'],
         ['Heures Supplémenaires 25%', '4.00h', '20.19 €', '80.76 €', '-'],
         ['Prime de Service', '-', '-', '150.00 €', '-'],

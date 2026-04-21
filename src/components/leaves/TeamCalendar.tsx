@@ -7,6 +7,9 @@ import {
     ChevronRight,
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
+import type { LeaveRequest } from "@/types";
+import { isWithinInterval, parseISO, startOfDay } from 'date-fns';
+
 
 export function TeamCalendar() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -38,12 +41,16 @@ export function TeamCalendar() {
     const monthName = currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
 
     // Purged team absences.
-    const teamAbsences: any[] = [];
+    const teamAbsences: LeaveRequest[] = [];
 
     const getAbsencesForDate = (date: Date | null) => {
         if (!date) return [];
-        const dateStr = date.toISOString().split('T')[0];
-        return teamAbsences.filter(a => a.dates.includes(dateStr));
+        const targetDate = startOfDay(date);
+        return teamAbsences.filter(a => {
+            const start = startOfDay(parseISO(a.startDate));
+            const end = startOfDay(parseISO(a.endDate));
+            return isWithinInterval(targetDate, { start, end });
+        });
     };
 
     return (

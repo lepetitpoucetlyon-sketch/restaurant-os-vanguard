@@ -180,7 +180,7 @@ export default function AccountSettingsPage() {
                                                     Utilisateurs avec ce rôle
                                                 </h4>
                                                 <div className="flex flex-wrap gap-2">
-                                                    {users.filter(u => u.role === role).map((user: any) => (
+                                                    {users.filter(u => u.role === role).map((user: import('@/types').User) => (
                                                         <div
                                                             key={user.id}
                                                             className="flex items-center gap-2 bg-neutral-50 dark:bg-bg-tertiary px-3 py-2 rounded-xl"

@@ -55,7 +55,7 @@ export default function CRMPage() {
                 { id: '2', firstName: 'Marie', lastName: 'Curie', phone: '0623456789', email: 'marie@science.fr', segment: 'regular', visitCount: 5, totalSpentInCents: 18000, createdAt: new Date().toISOString(), preferences: [], tags: [] },
                 { id: '3', firstName: 'Alpha', lastName: 'Techno', phone: '0634567890', email: 'alpha@enterprise.com', segment: 'new', visitCount: 1, totalSpentInCents: 4500, createdAt: new Date().toISOString(), preferences: [], tags: [] },
             ];
-            (setCRMs as any)(mockCRMs as any);
+            setCRMs(mockCRMs as import('@/types').CRM[]);
             setCRMsNode(prev => ({ ...prev, loading: false }));
         }
     }, [crms.length, setCRMs, setCRMsNode]);

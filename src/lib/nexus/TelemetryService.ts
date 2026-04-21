@@ -76,7 +76,8 @@ export class TelemetryService {
 
       // Type-safe connection check
       const connection = extendedNav.connection || extendedNav.mozConnection || extendedNav.webkitConnection;
-      const effectiveType = connection?.effectiveType || 'unknown';
+      const effectiveType = connection?.effectiveType || 'SOVEREIGN_UNKNOWN';
+
 
       const payload: TelemetryPulse = {
         version: '9.0.0-grade-ix',

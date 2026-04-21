@@ -13,7 +13,7 @@ interface OraclePredictorProps {
 }
 
 export const OraclePredictor: React.FC<OraclePredictorProps> = ({ prediction, itemName }) => {
-    const riskColors = {
+    const riskColors: Record<'LOW' | 'MEDIUM' | 'HIGH', import('@/components/ui/StatusBadge').BadgeStatus> = {
         LOW: 'success',
         MEDIUM: 'warning',
         HIGH: 'error'
@@ -38,7 +38,7 @@ export const OraclePredictor: React.FC<OraclePredictorProps> = ({ prediction, it
                         </div>
                     </div>
                     <StatusBadge 
-                        status={riskColors[prediction.riskLevel] as any} 
+                        status={riskColors[prediction.riskLevel]} 
                         label={`Risque ${prediction.riskLevel}`} 
                     />
                 </div>

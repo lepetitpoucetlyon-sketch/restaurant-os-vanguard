@@ -116,7 +116,7 @@ export default function GoalsSettings() {
                                 <div className="relative">
                                     <input
                                         type="number"
-                                        value={(goals as any)[goal.key] || 0}
+                                        value={goals[goal.key] || 0}
                                         onChange={(e) => updateGoal(goal.key, Number(e.target.value))}
                                         className="w-full bg-transparent text-3xl font-serif text-text-primary outline-none pr-10"
                                         data-tutorial={goal.key === 'dailyRevenue' ? 'settings-2-0' : undefined}
@@ -186,7 +186,7 @@ export default function GoalsSettings() {
                                         <input
                                             type="number"
                                             step={goal.key === 'avgReviewScore' ? 0.1 : 1}
-                                            value={(goals as any)[goal.key] || 0}
+                                            value={goals[goal.key] || 0}
                                             onChange={(e) => updateGoal(goal.key, Number(e.target.value))}
                                             className="w-24 text-right bg-transparent text-2xl font-serif text-text-primary outline-none"
                                             data-tutorial={goal.key === 'laborCostPercent' ? 'settings-2-1' : undefined}
