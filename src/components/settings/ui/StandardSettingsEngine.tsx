@@ -15,7 +15,7 @@ import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 export interface SettingsOption {
     label: string;
-    value: string | number;
+    value: SovereignValue;
 }
 
 export interface SettingsField {
@@ -23,11 +23,11 @@ export interface SettingsField {
     key?: string; // Legacy support
     label: string;
     description?: string;
-    type: 'boolean' | 'string' | 'text' | 'textarea' | 'number' | 'percentage' | 'select' | 'color' | 'list';
+    type: 'string' | 'number' | 'boolean' | 'select' | 'color' | 'percentage' | 'list' | 'textarea' | 'text';
     unit?: 'cents' | 'grams' | 'percent';
     options?: SettingsOption[];
     subFields?: SettingsField[];
-    validation?: SovereignData; // Zod or simple rules
+    validation?: any; // Zod or simple rules
 
 }
 

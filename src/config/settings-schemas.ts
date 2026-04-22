@@ -5,7 +5,7 @@ import { SovereignValue } from '@/shared/nexus-contract';
 /**
  * TYPES DU REGISTRE NEXUS-SYNC
  */
-export type SettingFieldType = 'string' | 'number' | 'boolean' | 'select' | 'color' | 'percentage' | 'list' | 'font' | 'textarea' | 'text';
+export type SettingFieldType = 'string' | 'number' | 'boolean' | 'select' | 'color' | 'percentage' | 'list' | 'textarea' | 'text';
 
 export interface SettingField {
     id: string;
