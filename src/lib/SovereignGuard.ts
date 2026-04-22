@@ -2,18 +2,144 @@ import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
 import { MasterBridge } from './MasterBridge';
+import { CryptoService } from '@/domain/services/CryptoService';
+import type { SignedSovereignData, SovereignData, SovereignWriteSignature } from '@/shared/nexus-contract';
 
 /**
  * 🛡️ SovereignGuard - Restaurant OS (Shadow Context 5.4)
  * The Atomic Context Barrier with Hardware-level isolation simulation.
  */
 export const SovereignGuard = {
+  SIGNED_WRITE_COLLECTIONS: new Set([
+    'orders',
+    'stockItems',
+    'inventoryMovements',
+    'journalEntries',
+    'fiscalSeals',
+    'wasteLogs',
+    'hygieneLogs',
+    'receptionLogs',
+    'maintenanceLogs',
+    'oilLogs',
+    'deliveries'
+  ]),
   
   /**
    * Shadow Channel for Suzerain/Vassal isolation.
    * Ensures the Suzerain dashboard cannot "bleed" into the Vassal state.
    */
   private_channel: typeof MessageChannel !== 'undefined' ? new MessageChannel() : null,
+
+  extractCollectionName(path: string): string {
+    const parts = path.split('/').filter(Boolean);
+    if (parts.length === 0) return '';
+    return parts.length % 2 === 0 ? parts[parts.length - 2] : parts[parts.length - 1];
+  },
+
+  resolveTenantForPath(path: string, anchoredTenantId?: string): string {
+    const store = getDefaultStore();
+    const currentTenant = anchoredTenantId || store.get(tenantIdAtom) || 'main';
+    const pathParts = path.split('/');
+    return pathParts[0] === 'tenants' ? pathParts[1] : currentTenant;
+  },
+
+  getWriteSignatureSecret(path: string, tenantId: string): string {
+    return `${tenantId}:${this.extractCollectionName(path)}:NF525_WRITE_V1`;
+  },
+
+  requiresSignedWrite(path: string): boolean {
+    return this.SIGNED_WRITE_COLLECTIONS.has(this.extractCollectionName(path));
+  },
+
+  stripWriteSignature(data: SignedSovereignData): SovereignData {
+    const { __nf525, ...unsignedData } = data;
+    return unsignedData;
+  },
+
+  async createWriteSignature(path: string, data: SovereignData, anchoredTenantId?: string): Promise<SovereignWriteSignature> {
+    const tenantId = this.resolveTenantForPath(path, anchoredTenantId);
+    const payload = {
+      path,
+      tenantId,
+      data
+    };
+
+    const { payloadHash, signature } = await CryptoService.signSovereignPayload(
+      payload,
+      this.getWriteSignatureSecret(path, tenantId)
+    );
+
+    return {
+      scope: 'NF525_WRITE',
+      version: 'NF525_WRITE_V1',
+      tenantId,
+      path,
+      signedAt: new Date().toISOString(),
+      payloadHash,
+      signature
+    };
+  },
+
+  async verifyWriteSignature(path: string, data: SignedSovereignData, anchoredTenantId?: string): Promise<boolean> {
+    if (!this.requiresSignedWrite(path)) {
+      return true;
+    }
+
+    const writeSignature = data.__nf525;
+    if (!writeSignature) {
+      return false;
+    }
+
+    const tenantId = this.resolveTenantForPath(path, anchoredTenantId);
+    if (
+      writeSignature.scope !== 'NF525_WRITE' ||
+      writeSignature.version !== 'NF525_WRITE_V1' ||
+      writeSignature.path !== path ||
+      writeSignature.tenantId !== tenantId
+    ) {
+      return false;
+    }
+
+    const payload = {
+      path,
+      tenantId,
+      data: this.stripWriteSignature(data)
+    };
+
+    const expectedHash = await CryptoService.generateHash(
+      CryptoService.canonicalStringify(payload)
+    );
+
+    if (expectedHash !== writeSignature.payloadHash) {
+      return false;
+    }
+
+    return CryptoService.verifyFiscalSignature(
+      expectedHash,
+      writeSignature.signature,
+      this.getWriteSignatureSecret(path, tenantId)
+    );
+  },
+
+  async protectWrite(path: string, data: SovereignData, anchoredTenantId?: string): Promise<SignedSovereignData> {
+    this.validateAccess(path, anchoredTenantId);
+
+    if (!this.requiresSignedWrite(path)) {
+      return data;
+    }
+
+    const signedData: SignedSovereignData = {
+      ...data,
+      __nf525: await this.createWriteSignature(path, data, anchoredTenantId)
+    };
+
+    const isValid = await this.verifyWriteSignature(path, signedData, anchoredTenantId);
+    if (!isValid) {
+      throw new Error('NF525_WRITE_SIGNATURE_INVALID');
+    }
+
+    return signedData;
+  },
 
   /**
    * Validates if the path being accessed matches the current anchored session.

@@ -3,10 +3,9 @@ import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { Order, Table, Reservation, GroupEvent } from '@/types';
 import { 
     ordersNodeAtom, 
-    tablesNodeAtom, 
-    reservationsNodeAtom, 
-    groupsNodeAtom 
+    tablesNodeAtom
 } from './store/orderAtoms';
+import { reservationsNodeAtom, groupsNodeAtom } from './store/reservationAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
@@ -32,6 +31,11 @@ export const OpsSyncService = {
       path('orders'),
       async (data: Order[]) => {
         await db.orders.bulkPut(data);
+        store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         orderBy: { field: 'updatedAt', direction: 'desc' },
@@ -45,6 +49,11 @@ export const OpsSyncService = {
     this.private_listeners.tables = Nexus.adapter.onSnapshot(
       path('tables'),
       (data: Table[]) => {
+        store.set(tablesNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         onError: (error: Error) => {
@@ -57,6 +66,11 @@ export const OpsSyncService = {
     this.private_listeners.reservations = Nexus.adapter.onSnapshot(
       path('reservations'),
       (data: Reservation[]) => {
+        store.set(reservationsNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         onError: (error: Error) => {
@@ -69,6 +83,11 @@ export const OpsSyncService = {
     this.private_listeners.groups = Nexus.adapter.onSnapshot(
       path('groups'),
       (data: GroupEvent[]) => {
+        store.set(groupsNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         onError: (error: Error) => {
@@ -82,6 +101,11 @@ export const OpsSyncService = {
     try {
       const orders = await db.orders.toArray();
       if (orders.length > 0) {
+        store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, {
+          data: orders,
+          loading: false,
+          error: null
+        }));
       }
     } catch (error) {
       logger.error('[OpsSync] Local Hydration Failed', error);

@@ -3,7 +3,16 @@ import { logger } from './logger';
 import { firestore } from './firebase';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
-import { MasterConfig, globalPolicyAtom, commanderSignatureAtom } from '@/store/masterAtoms';
+import { MasterConfig, globalPolicyAtom } from '@/store/masterAtoms';
+import { CryptoService } from '@/domain/services/CryptoService';
+import type { SovereignData } from '@/shared/nexus-contract';
+
+type SignedMasterConfig = MasterConfig & {
+  pushedAt: string;
+  payloadHash: string;
+  signature: string;
+  signatureVersion: 'NF525_BRIDGE_V1';
+};
 
 /**
  * 🌉 MasterBridge - Restaurant OS (Singularity 5.4)
@@ -25,17 +34,33 @@ export const MasterBridge = {
 
     const timestamp = TimeSync.now();
     const configRef = doc(firestore, this.CONFIG_PATH);
+    const pushedAt = new Date(timestamp).toISOString();
+    const signedPayload = await this.sealMasterConfig(config, pushedAt);
 
-    await setDoc(configRef, {
-        ...config,
-        pushedAt: new Date(timestamp).toISOString(),
-        signature: this.generateHegemonicSignature(timestamp)
-    }, { merge: true });
+    await setDoc(configRef, signedPayload, { merge: true });
   },
 
-  generateHegemonicSignature(ts: number): string {
-    // In production, this would be a HMAC(key, ts)
-    return `HEGEMONY-${ts}-${Math.random().toString(36).substring(2, 5)}`;
+  getBridgeSecret(): string {
+    return `${this.MASTER_TENANT_ID}:${this.CONFIG_PATH}:NF525_BRIDGE_V1`;
+  },
+
+  async sealMasterConfig(config: MasterConfig, pushedAt: string): Promise<SignedMasterConfig> {
+    const payload = {
+      ...config,
+      pushedAt
+    };
+
+    const { payloadHash, signature } = await CryptoService.signSovereignPayload(
+      payload as SovereignData,
+      this.getBridgeSecret()
+    );
+
+    return {
+      ...payload,
+      payloadHash,
+      signature,
+      signatureVersion: 'NF525_BRIDGE_V1'
+    };
   },
 
   /**
@@ -60,7 +85,7 @@ export const MasterBridge = {
     let lastUpdate = 0;
 
     const configRef = doc(firestore, this.CONFIG_PATH);
-    return onSnapshot(configRef, (snapshot) => {
+    return onSnapshot(configRef, async (snapshot) => {
         const now = Date.now();
         if (now - lastUpdate < this.THROTTLE_LIMIT_MS) {
             logger.warn("[MasterBridge] FLOOD DETECTED: Throttling master order.");
@@ -69,7 +94,7 @@ export const MasterBridge = {
         lastUpdate = now;
 
         if (snapshot.exists()) {
-            const data = snapshot.data() as MasterConfig & { signature: string; pushedAt: string };
+            const data = snapshot.data() as SignedMasterConfig;
             const serverTs = new Date(data.pushedAt).getTime();
             const timeNow = TimeSync.now();
 
@@ -80,19 +105,30 @@ export const MasterBridge = {
             }
             
             // SECURITY CHECK: Verify if the message is authentic
-            if (this.verifyVassalBoundSignature(data.signature)) {
-                store.set(globalPolicyAtom, data);
+            if (await this.verifyVassalBoundSignature(data)) {
+                const { payloadHash, signature, signatureVersion, ...policy } = data;
+                store.set(globalPolicyAtom, policy);
+            } else {
+                logger.error("[MasterBridge] INVALID_MASTER_SIGNATURE: Policy rejected.");
             }
         }
     });
   },
 
-  generateSignature(): string {
-    const store = getDefaultStore();
-    return store.get(commanderSignatureAtom) || 'SIG-INTERNAL-MASTER-CORE';
-  },
+  async verifyVassalBoundSignature(payload: SignedMasterConfig): Promise<boolean> {
+    if (payload.signatureVersion !== 'NF525_BRIDGE_V1') {
+      return false;
+    }
 
-  verifyVassalBoundSignature(sig: string): boolean {
-    return sig === 'SIG-INTERNAL-MASTER-CORE' || sig.startsWith('SIG-');
+    const { payloadHash, signature, signatureVersion, ...unsignedPayload } = payload;
+    const expectedHash = await CryptoService.generateHash(
+      CryptoService.canonicalStringify(unsignedPayload as SovereignData)
+    );
+
+    if (expectedHash !== payloadHash) {
+      return false;
+    }
+
+    return CryptoService.verifyFiscalSignature(payloadHash, signature, this.getBridgeSecret());
   }
 };

@@ -1,5 +1,7 @@
 import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
 import { logger } from '@/lib/logger';
+import { SovereignGuard } from '@/lib/SovereignGuard';
+import type { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI)
@@ -16,7 +18,7 @@ export class MockAdapter implements INexusAdapter {
 
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
-            .map(([, data]) => data);
+            .map(([, data]) => data as SovereignData);
         
         // Grade VI: Basic Mock Ordering
         if (options?.orderBy) {
@@ -35,7 +37,7 @@ export class MockAdapter implements INexusAdapter {
             results = results.slice(0, options.limit);
         }
 
-        return results;
+        return results as unknown as T[];
     }
 
     onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void): () => void {
@@ -45,28 +47,33 @@ export class MockAdapter implements INexusAdapter {
     }
 
     batch(): INexusBatch {
-        const operations: (() => void)[] = [];
+        const operations: Array<() => Promise<void>> = [];
         return {
-            set: (path, data) => operations.push(() => { this.storage[path] = data; }),
-            update: (path, data) => operations.push(() => { 
-                this.storage[path] = { ...(this.storage[path] || {}), ...data }; 
+            set: (path, data) => operations.push(async () => { await this.set(path, data); }),
+            update: (path, data) => operations.push(async () => { 
+                await this.update(path, data); 
             }),
-            delete: (path) => operations.push(() => { delete this.storage[path]; }),
+            delete: (path) => operations.push(async () => { delete this.storage[path]; }),
             commit: async () => {
-                operations.forEach(op => op());
+                for (const op of operations) {
+                    await op();
+                }
                 logger.debug('[MockAdapter] Batch committed.');
             }
         };
     }
 
     async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
-
-        this.storage[path] = data;
+        this.storage[path] = await SovereignGuard.protectWrite(path, data as SovereignData);
     }
 
     async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
-
-        this.storage[path] = { ...(this.storage[path] || {}), ...data };
+        const existingData = this.storage[path];
+        const baseData = existingData && typeof existingData === 'object' && !Array.isArray(existingData)
+            ? existingData as SovereignData
+            : {};
+        const mergedData = { ...baseData, ...(data as Record<string, unknown>) } as SovereignData;
+        this.storage[path] = await SovereignGuard.protectWrite(path, mergedData);
     }
 
     async delete(path: string): Promise<void> {

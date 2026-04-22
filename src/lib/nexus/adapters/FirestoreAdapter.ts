@@ -20,6 +20,8 @@ import {
 import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
 import { logger } from '@/lib/logger';
 import { validateMutation } from '@/shared/validation/SchemaRegistry';
+import { SovereignGuard } from '@/lib/SovereignGuard';
+import type { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🔥 FirestoreAdapter - Real implementation using Firebase SDK
@@ -44,6 +46,11 @@ export class FirestoreAdapter implements INexusAdapter {
         }
     }
 
+    private async prepareWrite(path: string, data: SovereignData): Promise<SovereignData> {
+        this.validate(path, data);
+        return SovereignGuard.protectWrite(path, data);
+    }
+
     async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
         const snap = await getDoc(doc(firestore, path));
         return snap.exists() ? { id: snap.id, ...snap.data() } as T : null;
@@ -66,7 +73,7 @@ export class FirestoreAdapter implements INexusAdapter {
 
         const q = query(collection(firestore, collectionPath), ...constraints);
         const snap = await getDocs(q);
-        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        return snap.docs.map(d => ({ id: d.id, ...d.data() } as T));
     }
 
     onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void, options?: INexusQueryOptions & { onError?: (error: Error) => void }): () => void {
@@ -86,41 +93,72 @@ export class FirestoreAdapter implements INexusAdapter {
             }
             const q = query(collection(firestore, path), ...constraints);
             return onSnapshot(q, (snap) => {
-                callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+                callback(snap.docs.map(d => ({ id: d.id, ...d.data() } as T)) as T);
             }, options?.onError);
         } else {
             return onSnapshot(doc(firestore, path), (snap) => {
-                callback(snap.exists() ? { id: snap.id, ...snap.data() } : null);
+                callback((snap.exists() ? { id: snap.id, ...snap.data() } : null) as T);
             }, options?.onError);
         }
     }
 
     batch(): INexusBatch {
         const batch = writeBatch(firestore);
+        const operations: Promise<
+            | { type: 'set'; path: string; data: SovereignData }
+            | { type: 'update'; path: string; data: SovereignData }
+            | { type: 'delete'; path: string }
+        >[] = [];
+
         return {
             set: (path, data) => {
-                this.validate(path, data);
-                batch.set(doc(firestore, path), data);
+                operations.push(
+                    this.prepareWrite(path, data as SovereignData).then((prepared) => ({
+                        type: 'set' as const,
+                        path,
+                        data: prepared
+                    }))
+                );
             },
             update: (path, data) => {
-                this.validate(path, data as import('@/shared/nexus-contract').SovereignData);
-                batch.update(doc(firestore, path), data as import('@/shared/nexus-contract').SovereignData); // Required by Firestore for partial updates
+                operations.push(
+                    this.prepareWrite(path, data as SovereignData).then((prepared) => ({
+                        type: 'update' as const,
+                        path,
+                        data: prepared
+                    }))
+                );
             },
 
-            delete: (path) => batch.delete(doc(firestore, path)),
-            commit: () => batch.commit()
+            delete: (path) => {
+                operations.push(Promise.resolve({ type: 'delete' as const, path }));
+            },
+            commit: async () => {
+                const preparedOperations = await Promise.all(operations);
+                preparedOperations.forEach((operation) => {
+                    if (operation.type === 'set') {
+                        batch.set(doc(firestore, operation.path), operation.data);
+                    } else if (operation.type === 'update') {
+                        batch.update(doc(firestore, operation.path), operation.data);
+                    } else {
+                        batch.delete(doc(firestore, operation.path));
+                    }
+                });
+
+                await batch.commit();
+            }
         };
     }
 
     async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
-        this.validate(path, data as import('@/shared/nexus-contract').SovereignData);
-        await setDoc(doc(firestore, path), data, options);
+        const prepared = await this.prepareWrite(path, data as SovereignData);
+        await setDoc(doc(firestore, path), prepared, options);
     }
 
 
     async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
-        this.validate(path, data as import('@/shared/nexus-contract').SovereignData);
-        await updateDoc(doc(firestore, path), data);
+        const prepared = await this.prepareWrite(path, data as SovereignData);
+        await updateDoc(doc(firestore, path), prepared);
     }
 
 

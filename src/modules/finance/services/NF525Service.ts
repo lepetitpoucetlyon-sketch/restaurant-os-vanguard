@@ -1,6 +1,7 @@
 import { getTenantPath } from '@/lib/firebase';
 import { Table } from 'dexie';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { MasterBridge } from '@/lib/MasterBridge';
 import { FiscalEngine, FiscalSeal } from '@/domain/services/FiscalEngine';
 import { StockEngine } from '@/domain/services/StockEngine';
 import { Order, StockItem, Recipe, InventoryMovement } from '@/types';
@@ -107,7 +108,7 @@ export class NF525Service {
 
         stockImpact.movements.forEach(m => {
             impact.push({ 
-                path: `${getTenantPath('inventoryMovements', tenantId)}/mov_${Math.random().toString(36).substring(2, 7)}`, 
+                path: `${getTenantPath('inventoryMovements', tenantId)}/${m.id}`, 
                 method: 'SET', 
                 data: m as SovereignData
             });

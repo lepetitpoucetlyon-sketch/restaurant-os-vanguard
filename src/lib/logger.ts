@@ -38,7 +38,7 @@ export const logger = {
     /**
      * Debug log - Only in development, completely silent in production
      */
-    debug: (message: string, ...args: import('@/shared/nexus-contract').SovereignValue[]): void => {
+    debug: (message: string, ...args: unknown[]): void => {
 
         if (isDevelopment) {
             console.log(formatMessage('debug', message), ...args);
@@ -48,7 +48,7 @@ export const logger = {
     /**
      * Info log - Important operational info, visible in all environments
      */
-    info: (message: string, ...args: import('@/shared/nexus-contract').SovereignValue[]): void => {
+    info: (message: string, ...args: unknown[]): void => {
 
         console.log(formatMessage('info', message), ...args);
     },
@@ -56,7 +56,7 @@ export const logger = {
     /**
      * Warning log - Potential issues, visible in all environments
      */
-    warn: (message: string, ...args: import('@/shared/nexus-contract').SovereignValue[]): void => {
+    warn: (message: string, ...args: unknown[]): void => {
 
         console.warn(formatMessage('warn', message), ...args);
     },
@@ -64,7 +64,7 @@ export const logger = {
     /**
      * Error log - Errors and exceptions, visible in all environments
      */
-    error: (message: string, error?: import('@/shared/nexus-contract').SovereignValue, ...args: import('@/shared/nexus-contract').SovereignValue[]): void => {
+    error: (message: string, error?: unknown, ...args: unknown[]): void => {
         console.error(formatMessage('error', message), error, ...args);
     },
 

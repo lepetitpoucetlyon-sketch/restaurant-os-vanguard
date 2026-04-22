@@ -59,6 +59,28 @@ export class CryptoService {
     }
 
     /**
+     * Signs a canonical sovereign payload and returns the resulting hash/signature pair.
+     */
+    static async signSovereignPayload(
+        payload: SovereignData,
+        secret: string,
+        previousHash: string = ''
+    ): Promise<{ payloadHash: string; signature: string }> {
+        const snapshot = this.canonicalStringify(payload);
+        const payloadHash = await this.generateHash(snapshot, previousHash);
+        const signature = await this.signFiscalData(payloadHash, secret);
+        return { payloadHash, signature };
+    }
+
+    /**
+     * Verifies that a signature matches the provided hash and secret.
+     */
+    static async verifyFiscalSignature(hash: string, signature: string, secret: string): Promise<boolean> {
+        const expectedSignature = await this.signFiscalData(hash, secret);
+        return expectedSignature === signature;
+    }
+
+    /**
      * Post-Quantum Lattice-based Sealing (Darwin V5.5).
      * Used for Zero-Knowledge Proofs and Fleet Performance.
      */

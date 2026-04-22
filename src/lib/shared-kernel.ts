@@ -4,6 +4,7 @@
  */
 
 import { IdGenerator } from './utils/IdGenerator';
+import type { SovereignData, SovereignSchemaField } from '@/shared/nexus-contract';
 
 export const SharedKernel = {
     // --- FINANCE & CALCULS (BASE CENTIMES / INTEGER ONLY) ---
@@ -78,25 +79,25 @@ export const SharedKernel = {
      * SYNC ENGINE : Assainit et synchronise les données avec le registre de schémas.
      * Gère automatiquement les conversions (Cents, Grammes) avant persistance.
      */
-    sync: (schemaKey: string, rawData: import('@/shared/nexus-contract').SovereignData, schemaFields: import('@/shared/nexus-contract').SovereignData[]): import('@/shared/nexus-contract').SovereignData => {
+    sync: (schemaKey: string, rawData: SovereignData, schemaFields: SovereignSchemaField[]): SovereignData => {
 
         const sanitized = { ...rawData };
 
         schemaFields.forEach(field => {
-            const value = (sanitized as import('@/shared/nexus-contract').SovereignData)[field.id as string];
+            const value = sanitized[field.id];
             if (value === undefined || value === null) return;
 
             // Conversion automatique basée sur les unités du registre
             if (field.unit === 'cents' && typeof value === 'number') {
-                (sanitized as import('@/shared/nexus-contract').SovereignData)[field.id as string] = SharedKernel.eurosToCents(value);
+                sanitized[field.id] = SharedKernel.eurosToCents(value);
             } else if (field.unit === 'grams' && typeof value === 'number') {
-                (sanitized as import('@/shared/nexus-contract').SovereignData)[field.id as string] = SharedKernel.kilogramsToGrams(value);
+                sanitized[field.id] = SharedKernel.kilogramsToGrams(value);
             }
 
             // Gestion récursive pour les listes
             if (field.type === 'list' && Array.isArray(value) && field.subFields) {
-                (sanitized as import('@/shared/nexus-contract').SovereignData)[field.id as string] = value.map(item => 
-                    SharedKernel.sync(schemaKey, item as import('@/shared/nexus-contract').SovereignData, field.subFields as import('@/shared/nexus-contract').SovereignData[])
+                sanitized[field.id] = value.map(item => 
+                    SharedKernel.sync(schemaKey, item as SovereignData, field.subFields as SovereignSchemaField[])
                 );
             }
         });

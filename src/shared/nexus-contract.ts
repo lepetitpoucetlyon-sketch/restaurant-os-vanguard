@@ -11,8 +11,32 @@ export interface BusinessLaws {
   [key: string]: string | number | boolean | undefined;
 }
 
-export type SovereignValue = string | number | boolean | null | undefined | Date;
-export type SovereignData = { [key: string]: SovereignValue | SovereignData | SovereignData[] };
+export type SovereignPrimitive = string | number | boolean | null | undefined | Date;
+export type SovereignValue = SovereignPrimitive;
+export type SovereignField = SovereignValue | SovereignData | SovereignField[];
+export type SovereignData = { [key: string]: SovereignField };
+
+export interface SovereignSchemaField {
+  id: string;
+  type?: string;
+  unit?: string;
+  subFields?: SovereignSchemaField[];
+  [key: string]: SovereignField;
+}
+
+export interface SovereignWriteSignature {
+  scope: 'NF525_WRITE';
+  version: 'NF525_WRITE_V1';
+  tenantId: string;
+  path: string;
+  signedAt: string;
+  payloadHash: string;
+  signature: string;
+}
+
+export type SignedSovereignData = SovereignData & {
+  __nf525?: SovereignWriteSignature;
+};
 
 export interface ExpertConfig {
   role: string;
@@ -39,6 +63,7 @@ export interface OrchestratorSignal {
     basePrice: number;
     currency: string;
     billingStatus: string;
+    discountMultiplier?: number;
   };
   businessLaws: BusinessLaws;
   expert?: ExpertConfig;
@@ -137,10 +162,21 @@ export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
     economy: {
       basePrice: 49.00,
       billingStatus: 'active',
-      currency: 'EUR'
+      currency: 'EUR',
+      discountMultiplier: 1
     },
-    businessLaws: {},
-    expert: {}
+    businessLaws: {
+      table_count: 0,
+      tax_rate: 0.1,
+      currency: 'EUR',
+      pmsEnabled: false
+    },
+    expert: {
+      role: 'disabled',
+      modelId: 'none',
+      isConfigured: false,
+      isAuthorized: false
+    }
   },
   metadata: {
     name: 'Nexus Node',

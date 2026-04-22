@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { 
   DEFAULT_TENANT_CONFIG, 
+  type SovereignData,
   type TenantConfig 
 } from '@/shared/nexus-contract';
 

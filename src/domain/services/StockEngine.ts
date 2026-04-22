@@ -61,8 +61,9 @@ export class StockEngine {
                 });
 
                 deduction.events.forEach(e => {
+                    const movementId = `mov_${correlationId}_${ing.id}_${e.id}_${impact.movements.length}`;
                     impact.movements.push({
-                        id: SharedKernel.generateId('MOV'),
+                        id: movementId,
                         stockItemId: e.id,
                         type: 'sale',
                         quantity: e.quantity,

@@ -1,5 +1,5 @@
 import { getDefaultStore } from 'jotai';
-import { logger } from './logger';
+import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
@@ -12,7 +12,7 @@ export const SelfHealingEngine = {
   /**
    * Performs a silent audit of the current state vs a distributed root.
    */
-  async auditAndHeal<T, Args extends import('@/shared/nexus-contract').SovereignValue[], Result>(atom: import('jotai').WritableAtom<T, Args, Result>, expectedHash: string, persistencePath?: string) {
+  async auditAndHeal<T>(atom: import('jotai').PrimitiveAtom<T>, expectedHash: string, persistencePath?: string) {
 
 
     const store = getDefaultStore();
@@ -27,6 +27,7 @@ export const SelfHealingEngine = {
       // 🛰️ Report Silent Healing to MCC
       MasterBridge.pushGlobalConfig({
         maintenanceMode: false,
+        killSwitch: false,
         forceLogout: false,
         securityLevel: 'medium',
         globalMessage: `SILENT_HEALING: Corrected drift for atom at ${persistencePath || 'internal_node'}`,
@@ -38,7 +39,7 @@ export const SelfHealingEngine = {
         try {
           const freshData = await Nexus.adapter.get(persistencePath);
           if (freshData) {
-            store.set(atom, freshData);
+            store.set(atom, freshData as T);
             logger.info(`[Self-Healing] Atomic injection SUCCESSFUL: ${persistencePath}`);
           }
         } catch (error) {

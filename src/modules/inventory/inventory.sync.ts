@@ -31,6 +31,11 @@ export const InventorySyncService = {
       path('stockItems'),
       async (data: StockItem[]) => {
         await db.stockItems.bulkPut(data);
+        store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         onError: (error: Error) => {
@@ -43,6 +48,11 @@ export const InventorySyncService = {
     this.private_listeners.categories = Nexus.adapter.onSnapshot(
       path('categories'),
       (data: Category[]) => {
+        store.set(categoriesNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         onError: (error: Error) => {
@@ -55,6 +65,11 @@ export const InventorySyncService = {
     this.private_listeners.recipes = Nexus.adapter.onSnapshot(
       path('recipes'),
       (data: Recipe[]) => {
+        store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
       },
       {
         onError: (error: Error) => {
@@ -68,6 +83,11 @@ export const InventorySyncService = {
     try {
       const stock = await db.stockItems.toArray();
       if (stock.length > 0) {
+        store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, {
+          data: stock,
+          loading: false,
+          error: null
+        }));
       }
     } catch (error) {
       logger.error('[InventorySync] Local Hydration Failed', error);
