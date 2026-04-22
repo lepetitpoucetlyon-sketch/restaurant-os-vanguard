@@ -99,6 +99,7 @@ export interface StockItem {
     // Dates for raw products
     receptionDate: string; // Date received
     dlc: string; // Date Limite de Consommation
+    expirationDate?: string; // Grade X Alias for dlc
     dlu?: string; // Date Limite d'Utilisation (after opening)
     openedDate?: string; // Date when opened
 
@@ -107,6 +108,8 @@ export interface StockItem {
     supplierName?: string;
     invoiceReference?: string;
     unitCostInCents: number;
+    priceInCents?: number; // Grade X Alias for unitCostInCents
+    taxRate?: number;
 
     // Status
     status: 'available' | 'reserved' | 'expired' | 'low' | 'quarantine' | 'depleted' | 'discarded';
@@ -150,6 +153,7 @@ export interface Preparation {
     preparationDate: string; // When it was made
     preparedBy: string; // Who made it
     dlc: string; // Date Limite de Consommation
+    expirationDate?: string; // Grade X Alias for dlc
 
     // Ingredients used (for traceability & costing)
     ingredients: {
@@ -167,6 +171,7 @@ export interface Preparation {
 
     notes: string;
     costInCents?: number; // Total cost in cents
+    completed?: boolean; // Grade X Task Tracking
 }
 
 // Supplier Order Types

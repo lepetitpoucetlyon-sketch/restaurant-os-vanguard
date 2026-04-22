@@ -30,6 +30,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
         if (!name.trim()) return;
 
         onSave({
+            id: `seg_${Date.now()}`,
             name: name.trim(),
             description: description.trim(),
             criteria,

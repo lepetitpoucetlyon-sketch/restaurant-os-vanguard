@@ -5,10 +5,9 @@ import { useAtom } from 'jotai';
 import { motion } from 'framer-motion';
 import { 
     crmSearchQueryAtom, 
-    crmFilterSegmentAtom,
-    crmSelectedCRMAtom
+    crmFilterSegmentAtom
 } from '@/modules/marketing/store/crmAtoms';
-import { crmsAtom } from '../store/marketingAtoms';
+import { crmsAtom, selectedCRMAtom } from '@/modules/marketing/store/marketingAtoms';
 import { useLanguage } from '@/context/LanguageContext';
 import { cn } from '@/lib/ui.foundations';
 import { CRM } from '@/types';
@@ -26,7 +25,7 @@ export function CRMList() {
     const [searchQuery] = useAtom(crmSearchQueryAtom);
     const [filterSegment] = useAtom(crmFilterSegmentAtom);
     const [crms] = useAtom(crmsAtom);
-    const [, setSelectedCRM] = useAtom(crmSelectedCRMAtom);
+    const [selectedCRM, setSelectedCRM] = useAtom(selectedCRMAtom) as [CRM | null, (crm: CRM | null) => void];
 
     const filteredCRMs = crms.filter(c => {
         const cName = c.name || `${getFirstName(c)} ${getLastName(c)}`;

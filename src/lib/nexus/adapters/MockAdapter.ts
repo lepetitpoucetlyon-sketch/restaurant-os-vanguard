@@ -67,6 +67,10 @@ export class MockAdapter implements INexusAdapter {
         this.storage[path] = await SovereignGuard.protectWrite(path, data as SovereignData);
     }
 
+    async create<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
+        return this.set(path, data);
+    }
+
     async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
         const existingData = this.storage[path];
         const baseData = existingData && typeof existingData === 'object' && !Array.isArray(existingData)

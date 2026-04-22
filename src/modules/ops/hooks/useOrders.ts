@@ -16,11 +16,11 @@ export function useOrders() {
     const node = useAtomValue(ordersNodeAtom);
     const pendingModifications = useAtomValue(pendingModificationsAtom);
     
-    // --- 🔨 LA FORGE ---
-    const orderForge = useNexusMutation<Order>(ordersNodeAtom, 'orders', 'POS');
+    const ordersNode = useAtomValue(ordersNodeAtom);
+    const orderForge = useNexusMutation<Order>(ordersNodeAtom as any, 'orders', 'KITCHEN');
     
     const updateOrderStatus = useCallback(async (orderId: string, status: OrderStatus) => {
-        return orderForge.mutate('UPDATE', orderId, { status });
+        return orderForge.mutate('UPDATE', orderId, { status } as any);
     }, [orderForge]);
 
     const stats = {

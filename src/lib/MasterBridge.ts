@@ -68,9 +68,8 @@ export const MasterBridge = {
    */
   isMasterMode(): boolean {
     try {
-      const { getDefaultStore } = require('jotai');
-      const { tenantIdAtom } = require('@/store/operationalAtoms');
       const store = getDefaultStore();
+      const { tenantIdAtom } = require('@/store/operationalAtoms'); // Keep this if circular dependency risk, but prefer clean import
       return store.get(tenantIdAtom) === this.MASTER_TENANT_ID;
     } catch {
       return false;

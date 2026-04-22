@@ -22,8 +22,9 @@ import { cn } from "@/lib/ui.foundations";;
 import { Modal } from '@/components/ui/Modal';
 import { PremiumSelect } from '@/components/ui/PremiumSelect';
 import { useInventory, useQuotes, useCRM } from '@/engines/ops/NexusOpsProvider';
-import { QuoteLine, QuoteLineType } from '@/types/quotes.types';
+import { QuoteLine, QuoteLineType } from '@/modules/marketing/types';
 import { Product } from '@/types';
+import { StockItem } from '@/modules/inventory/types';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 
@@ -33,13 +34,13 @@ interface NewQuoteDialogProps {
     onClose: () => void;
 }
 
-function createQuoteLine(product?: Product): Partial<QuoteLine> {
+function createQuoteLine(product?: any): Partial<QuoteLine> {
     return {
         id: crypto.randomUUID(),
         type: product ? 'product' : 'service',
         designation: product ? product.name : '',
         quantity: 1,
-        unitPriceHTInCents: product ? product.priceInCents : 0,
+        unitPriceHTInCents: product ? (product.priceInCents || product.unitCostInCents || 0) : 0,
         vatRate: 20,
         unit: 'unité',
         totalHTInCents: product ? product.priceInCents : 0,
@@ -58,7 +59,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [showCatalog, setShowCatalog] = useState(false);
 
-    const addNewLine = (product?: Product) => {
+    const addNewLine = (product?: any) => {
         setLines([...lines, createQuoteLine(product)]);
         setShowCatalog(false);
     };

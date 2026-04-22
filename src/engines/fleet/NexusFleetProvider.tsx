@@ -34,7 +34,7 @@ const NexusFleetContext = createContext<NexusFleetStateInternal | undefined>(und
  */
 export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [liveFleet, setLiveFleet] = useState<EmpireInstance[]>([]);
-    const [globalMetrics, setGlobalMetrics] = useState<ConsolidatedMetrics | null>(null);
+    const [globalMetrics, setGlobalMetrics] = useState<EmpireGlobalMetrics | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
     const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
@@ -143,10 +143,9 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             setInstanceIds(mappedInstances); // Update global state
             setLiveFleet(mappedInstances);
 
-            // --- THE BRIDGING POINT ---
-            // Atomically upgrade raw metrics into strategic insights via the FleetEngine
+            // Atomic upgrade to Grade X Intelligence
             const intelligence = await fleetEngine.updateFleetIntelligence(mappedInstances);
-            if (intelligence.metrics) setGlobalMetrics(intelligence.metrics);
+            if (intelligence.metrics) setGlobalMetrics(intelligence.metrics as any);
             if (intelligence.insights) setMacroInsights(intelligence.insights);
 
         } catch (error) {
@@ -162,7 +161,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const selectInstance = (id: string | null) => setSelectedInstanceId(id);
 
-    const registerInstance = async (instance: Partial<EmpireInstance>) => {
+    const registerInstance = async (instance: EmpireInstance) => {
         console.log('[Fleet] Registering new instance:', instance);
         await refreshFleet(true);
     };
@@ -172,7 +171,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         window.open(`/preview/${key}`, '_blank');
     };
 
-    const broadcastConfiguration = async (config: { priceMultiplier?: number; targetVersion?: string; maintenance?: boolean }) => {
+    const broadcastConfiguration = async (config: { priceMultiplier?: number; targetVersion?: string; maintenanceMode?: boolean }) => {
         console.log('[Fleet] Broadcasting global configuration:', config);
         // Simulate network delay
         await new Promise(r => setTimeout(r, 800));
@@ -181,7 +180,6 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         try {
             for (const instance of liveFleet) {
                 const patch: SovereignData = {
-
                     updatedAt: new Date().toISOString()
                 };
 
@@ -191,8 +189,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                 if (config.targetVersion !== undefined) {
                     patch['status.targetVersion'] = config.targetVersion;
                 }
-                if (config.maintenance !== undefined) {
-                    patch['status.maintenance'] = config.maintenance;
+                if (config.maintenanceMode !== undefined) {
+                    patch['status.maintenance'] = config.maintenanceMode;
                 }
                 
                 await Nexus.adapter.update(`tenants/${instance.id}`, patch);
@@ -239,9 +237,9 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         registerInstance,
         launchPreview,
         broadcastConfiguration,
-        complianceService: FleetComplianceService,
-        haccpBridge: HACCPTelemetryBridge,
-        fleet: {}, 
+        complianceService: FleetComplianceService as any,
+        haccpBridge: HACCPTelemetryBridge as any,
+        fleet: globalMetrics, 
         customer: { customers: [] },
         intelligence: { 
             globalInflationRate,

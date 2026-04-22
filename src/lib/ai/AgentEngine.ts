@@ -6,6 +6,12 @@ export interface AgentRequest {
     userRole: AgentRole;
     userPrompt: string;
     contextData?: import('@/shared/nexus-contract').SovereignValue;
+    
+    // Grade X: DNA Injection
+    dna?: {
+        tenantId: string;
+        businessLaws: import('@/shared/nexus-contract').BusinessLaws;
+    };
 
     apiKey: string;
     endpoint: string;
@@ -40,11 +46,11 @@ export const AgentEngine = {
                     thought: 'Application du blindage système et vérification des autorisations métier par profil.'
                 },
                 {
-                    id: 'r2',
+                    id: `r2_${Date.now()}`,
                     timestamp: new Date().toISOString(),
                     action: 'Analyse Profonde',
                     observation: request.userPrompt,
-                    thought: `Utilisation du modèle ${request.modelId} pour croisement avec le contexte ${request.domain} fourni.`
+                    thought: `Utilisation du modèle ${request.modelId} pour croisement avec le contexte ${request.domain} fourni (${request.dna?.tenantId || 'GLOBAL'}).`
                 }
             ];
 

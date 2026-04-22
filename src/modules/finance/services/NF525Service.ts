@@ -32,7 +32,7 @@ export class NF525Service {
     static async executeAtomicPayment(orderId: string, options: { isTrainingMode?: boolean } = {}): Promise<void> {
         // 🛡️ ANCHORING: Capture tenantId at the exact start of transaction
         const store = getDefaultStore();
-        const anchoredTenantId = store.get(tenantIdAtom);
+        const anchoredTenantId = store.get(tenantIdAtom) as string;
         const isOnline = checkOnlineStatus();
 
         try {
@@ -40,7 +40,7 @@ export class NF525Service {
             if (!order || order.status === 'paid') return;
 
             // 🛡️ RACE CONDITION CHECK
-            const currentTenantId = store.get(tenantIdAtom);
+            const currentTenantId = store.get(tenantIdAtom) as string;
             if (currentTenantId !== anchoredTenantId) {
                 logger.warn(`[NF525] CRITICAL_DRIFT_PREVENTED: Tenant shifted from ${anchoredTenantId} to ${currentTenantId} during signature.`);
                 MasterBridge.pushGlobalConfig({ 
@@ -150,7 +150,7 @@ export class NF525Service {
                 orderBy: { field: 'timestamp', direction: 'desc' },
                 limit: 1
             });
-            return docs.length > 0 ? docs[0] as FiscalSeal : undefined;
+            return docs.length > 0 ? docs[0] as unknown as FiscalSeal : undefined;
         }
         return typeof window !== 'undefined' ? await db.fiscalSeals.orderBy('timestamp').last() : undefined;
     }
@@ -166,21 +166,21 @@ export class NF525Service {
                 
                 // Type-safe table selection (Grade VI)
                 if (coll === 'orders') {
-                    if (ins.method === 'SET') await db.orders.put(ins.data as Order);
-                    else if (ins.method === 'UPDATE') await db.orders.update(id, ins.data as Partial<Order>);
+                    if (ins.method === 'SET') await db.orders.put(ins.data as unknown as Order);
+                    else if (ins.method === 'UPDATE') await db.orders.update(id, ins.data as unknown as Partial<Order>);
                     else if (ins.method === 'DELETE') await db.orders.delete(id);
                 } else if (coll === 'stockItems') {
-                    if (ins.method === 'SET') await db.stockItems.put(ins.data as StockItem);
-                    else if (ins.method === 'UPDATE') await db.stockItems.update(id, ins.data as Partial<StockItem>);
+                    if (ins.method === 'SET') await db.stockItems.put(ins.data as unknown as StockItem);
+                    else if (ins.method === 'UPDATE') await db.stockItems.update(id, ins.data as unknown as Partial<StockItem>);
                     else if (ins.method === 'DELETE') await db.stockItems.delete(id);
                 } else if (coll === 'inventoryMovements') {
-                    if (ins.method === 'SET') await db.inventoryMovements.put(ins.data as InventoryMovement);
-                    else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, ins.data as Partial<InventoryMovement>);
+                    if (ins.method === 'SET') await db.inventoryMovements.put(ins.data as unknown as InventoryMovement);
+                    else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, ins.data as unknown as Partial<InventoryMovement>);
                     else if (ins.method === 'DELETE') await db.inventoryMovements.delete(id);
                 } else if (coll === 'journalEntries') {
-                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as JournalEntry);
+                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as unknown as JournalEntry);
                 } else if (coll === 'fiscalSeals') {
-                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as FiscalSeal);
+                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as unknown as FiscalSeal);
                 }
             }
         });
@@ -190,10 +190,7 @@ export class NF525Service {
             targetId: orderId, 
             payload: { instructions }, 
             priority: 1,
-            collection: 'orders',
-            status: 'pending',
-            attempts: 0,
-            timestamp: new Date().toISOString()
+            collection: 'orders'
         }); // Suture Grade X Complete
     }
 }

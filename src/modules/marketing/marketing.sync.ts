@@ -37,7 +37,7 @@ export const MarketingSyncService = {
       (data: SEOProfile[]) => {
         const seoData = Array.isArray(data) ? data : [];
         if (seoData.length > 0) {
-          store.set(seoProfileAtom, seoData[0] as SEOProfile);
+          store.set(seoProfileAtom as any, seoData[0]);
         } else {
           // Fallback to defaults defined in config
           const { identityDefaults } = whiteLabelInstanceConfig;
@@ -54,7 +54,6 @@ export const MarketingSyncService = {
                 ctr: 27.5, 
                 avgPosition: 3.2, 
                 topKeywords: MarketingEngine.getKeywords(),
-                historicalStats: [],
                 cpc: 0,
                 cost: 0,
                 roi: 0,
@@ -63,7 +62,7 @@ export const MarketingSyncService = {
             keywords: [],
             competitors: []
           };
-          store.set(seoProfileAtom, fallback);
+          store.set(seoProfileAtom as any, fallback);
         }
       },
       {
@@ -120,7 +119,9 @@ export const MarketingSyncService = {
   },
 
   stop() {
-    Object.values(this.private_listeners).forEach((unsub) => unsub());
+    Object.values(this.private_listeners).forEach((unsub: any) => {
+        if (typeof unsub === 'function') unsub();
+    });
     this.private_listeners = {};
   }
 };

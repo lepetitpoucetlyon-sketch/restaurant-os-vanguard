@@ -29,11 +29,14 @@ export function useFiscal() {
         }
         try {
             const result = await submitExpenseAction(activeTenantId, {
-                ...expenseData,
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'System User'
+                userId: currentUser.uid || (currentUser as any).id,
+                userName: currentUser.displayName || 'System User',
+                amountInCents: expenseData.amountInCents || 0,
+                category: (expenseData.category as any) || 'other',
+                description: expenseData.description || 'Frais sans description',
+                receiptImage: expenseData.receiptUrl, // Mapping receiptUrl to receiptImage if needed
             });
-            return result.id;
+            return (result as any).id as string;
         } catch (error) {
             console.error('useFiscal: Failed to submit expense:', error);
             throw error;

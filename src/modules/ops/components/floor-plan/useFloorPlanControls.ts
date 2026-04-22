@@ -13,6 +13,8 @@ interface FloorPlanControlsOptions {
     currentFloorId: string;
 }
 
+import Konva from 'konva';
+
 export function useFloorPlanControls({
     scale,
     onScaleChange,
@@ -21,7 +23,7 @@ export function useFloorPlanControls({
     mode,
     currentFloorId,
 }: FloorPlanControlsOptions) {
-    const stageRef = useRef<{ getStage: () => unknown } | null>(null);
+    const stageRef = useRef<Konva.Stage | null>(null);
     const [isManualPan, setIsManualPan] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -187,10 +189,13 @@ export function useFloorPlanControls({
         onPositionChange(newPos);
     }, [onScaleChange, onPositionChange]);
 
-    const handleStageClick = useCallback(async (e: { target: { getStage: () => { getPointerPosition: () => { x: number; y: number }; x: () => number; y: () => number; scaleX: () => number; scaleY: () => number } } }) => {
-        if (mode === 'add' && e.target === e.target.getStage()) {
-            const stage = e.target.getStage();
+    const handleStageClick = useCallback(async (e: Konva.KonvaEventObject<MouseEvent>) => {
+        const stage = e.target.getStage();
+        if (mode === 'add' && e.target === stage) {
+            if (!stage) return;
             const pointer = stage.getPointerPosition();
+            if (!pointer) return;
+            
             const x = (pointer.x - stage.x()) / stage.scaleX();
             const y = (pointer.y - stage.y()) / stage.scaleY();
             const newTableNumber = (Math.max(0, ...floorTables.map((t: Table) => parseInt(t.number) || 0)) + 1).toString();
@@ -207,7 +212,7 @@ export function useFloorPlanControls({
                 zoneId: floorZones[0]?.id || 'main',
                 floorId: currentFloorId
             });
-        } else if (e.target === e.target.getStage()) {
+        } else if (e.target === stage) {
             setSelectedId(null);
         }
     }, [mode, floorTables, floorZones, currentFloorId, addTable]);

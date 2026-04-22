@@ -1,11 +1,12 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
-## [1.4.1] - 2026-04-21 - LA LIQUIDATION DE GRADE X 💎
-### 💎 SOUVERAINETÉ (TYPE-SAFETY PURGE)
-- **Éradication des "any"** : Purge systématique dans les modules `Finance`, `Kitchen`, `HACCP`, `Simulator` et `Analytics`.
-- **Généricité Nexus** : Migration des adaptateurs `Simulacra` et `NexusBridge` vers une généricité stricte `<T>`.
-- **Récupération des Fins de Services** : Suturation des hooks `useSettings`, `useGuard` et `useIntelligence` pour un typage domaine 100% souverain.
-- **Certification Runner** : Purification des mocks du banc de test industriel.
+## [1.5.0] - 2026-04-22 - LA PURIFICATION VANGUARD 🏛️
+### 🏛️ RÉCONCILIATION & PURIFICATION (PHASES 1-7)
+- **Purification Multi-Pôles** : Liquidation de ~110 errors TSC dans les domaines `Marketing`, `CRM`, `Ops` et `Fleet`.
+- **Aliasing de Souveraineté** : Implémentation d'alias temporels (`expirationDate`, `priceInCents`, `lastVisitDate`) pour assurer une compatibilité Grade X sans migration de données.
+- **Moteur Hermes & Vanguard** : Stabilisation de l'orchestrateur autonome, durcissement des types `OracleToolArgs` et déploiement du protocole **DNA Injection**.
+- **Sceau Fiscal NF525** : Éradication totale des `as any` dans le `NF525Service` et extension des collections signées (`vouchers`, `coupons`).
+- **Certification Nexus** : Alignement strict du `NexusFleetProvider` avec le shared-kernel.
 
 
 ## [1.4.0] - 2026-04-21 - LA CONFÉDÉRATION SOUVERAINE 🏛️

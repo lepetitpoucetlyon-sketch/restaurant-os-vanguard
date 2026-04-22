@@ -104,6 +104,8 @@ export interface Recipe {
     sellingPriceInCents: number;
     marginInCents: number;
     imageUrl?: string;
+    image?: string; // Grade X Alias for UI components
+    priceInCents?: number; // Grade X Alias for legacy POS compatibility
     standardImage?: string; // Technical reference for AI Plate Audit
     color: string;
     isActive: boolean;
@@ -317,4 +319,36 @@ export interface SimulationScenario {
         netProfitChange: number;
     };
     confidenceScore: number;
+}
+
+// ============================================
+// DOCUMENTATION & TUTORIALS
+// ============================================
+
+export interface DocCategory {
+    title: string;
+    description: string;
+    icon: LucideIcon;
+    color: string;
+    isRecipe?: boolean;
+    recipe?: {
+        name: string;
+        description: string;
+        image: string;
+        prepTime: string;
+        difficulty: string;
+        ingredients: { name: string; quantity: string }[];
+        steps: { order: string; instruction: string; time: string }[];
+        allergens: string[];
+    };
+    details: {
+        label: string;
+        content: string;
+    }[];
+    fullTutorial?: {
+        title: string;
+        icon: string;
+        content: string;
+        points: string[];
+    }[];
 }

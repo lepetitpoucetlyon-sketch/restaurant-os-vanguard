@@ -21,7 +21,10 @@ export const SovereignGuard = {
     'receptionLogs',
     'maintenanceLogs',
     'oilLogs',
-    'deliveries'
+    'deliveries',
+    'vouchers',
+    'coupons',
+    'paymentMethods'
   ]),
   
   /**

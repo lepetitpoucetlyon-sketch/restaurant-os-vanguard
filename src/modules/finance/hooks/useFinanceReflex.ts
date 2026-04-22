@@ -26,8 +26,8 @@ export function useFinanceReflex() {
                 type: 'expense',
                 amountInCents: (wasteData.quantity || 1) * 1000, // Débit par défaut 10€ pour simuler
                 lines: [
-                    { accountCode: '601', accountName: 'Achats stockés - Matières premières', side: 'debit', amountInCents: 1000, accountId: 'acc_601' },
-                    { accountCode: '371', accountName: 'Stocks de matières premières', side: 'credit', amountInCents: 1000, accountId: 'acc_371' }
+                    { accountCode: '601', accountName: 'Achats stockés - Matières premières', side: 'debit', amountInCents: 1000, accountId: 'acc_601', description: 'Correction de stock automatique (Débit)' },
+                    { accountCode: '371', accountName: 'Stocks de matières premières', side: 'credit', amountInCents: 1000, accountId: 'acc_371', description: 'Correction de stock automatique (Crédit)' }
                 ],
                 isSystemGenerated: true,
                 isValidated: false

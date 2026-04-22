@@ -30,3 +30,7 @@ export const accountingLoadingAtom = atom((get) =>
     get(accountsNodeAtom).loading || 
     get(bankTransactionsNodeAtom).loading
 );
+
+// Grade X Anchors
+export { nexusPulseAtom } from '@/store/pulseAtoms';
+export { tenantIdAtom } from '@/store/operationalAtoms';

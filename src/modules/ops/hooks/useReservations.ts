@@ -17,7 +17,8 @@ export function useReservations() {
     const reservations = node.data || [];
     
     // --- 🔨 LA FORGE ---
-    const reservationForge = useNexusMutation(reservationsNodeAtom, 'reservations', 'RESERVATIONS');
+    const resNode = useAtomValue(reservationsNodeAtom);
+    const reservationForge = useNexusMutation<Reservation>(reservationsNodeAtom as any, 'reservations', 'RESERVATIONS');
     
     return { 
         data: reservations, 

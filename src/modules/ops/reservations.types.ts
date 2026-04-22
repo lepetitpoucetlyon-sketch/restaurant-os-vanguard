@@ -21,6 +21,7 @@ export interface CRM {
     totalSpent: number;
     averageSpendInCents: number;
     lastVisit?: string;
+    lastVisitDate?: string; // Grade X Alias for lastVisit
     createdAt: string;
 }
 

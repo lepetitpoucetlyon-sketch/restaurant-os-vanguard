@@ -164,7 +164,7 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }: ProductGridProps) {
-    const [selectedProduct, setSelectedProduct] = useAtom(posSelectedProductAtom);
+    const [selectedProduct, setSelectedProduct] = useAtom(posSelectedProductAtom) as [Product | null, (p: Product | null) => void];
     const [isDialogOpen, setIsDialogOpen] = useAtom(posProductDetailsOpenAtom);
     const [searchQuery, setSearchQuery] = useAtom(posSearchQueryAtom);
     const { t } = useLanguage();

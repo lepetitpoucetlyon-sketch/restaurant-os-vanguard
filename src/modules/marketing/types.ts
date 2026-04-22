@@ -20,7 +20,7 @@ export interface MarketingCampaign {
     id: string;
     name: string;
     type: 'email' | 'sms' | 'social';
-    status: 'planned' | 'active' | 'completed';
+    status: 'planned' | 'active' | 'completed' | 'draft' | 'scheduled';
     budgetInCents: number;
     spentInCents: number;
     targetSegment: string;

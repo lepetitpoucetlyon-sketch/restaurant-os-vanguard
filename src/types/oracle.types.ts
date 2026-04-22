@@ -16,23 +16,31 @@ export interface ToolWithAccess {
 }
 
 export interface OracleToolArgs {
-    filterStatus?: 'rupture' | 'alert';
-    recipeName?: string;
-    dateTarget?: string;
+    // Inventory & Stock
     ingredientName?: string;
     newQuantity?: number;
     justification?: string;
-    modificationDetails?: string;
-    customerName?: string;
+    filterStatus?: 'rupture' | 'alert';
+    
+    // Reservations & FloorPlan
     tableNumber?: string | number;
+    customerName?: string;
     newStatus?: string;
-    actionType?: string;
-    zoneOrItem?: string;
+    dateTarget?: string;
+    
+    // HR & Planning
     employeeName?: string;
     date?: string;
-    shiftType?: string;
+    shiftType?: 'morning' | 'evening' | 'double';
+    
+    // POS & Kitchen
     productName?: string;
     quantity?: number;
     specialRequest?: string;
+    
+    // Metadata & Generic
+    actionType?: string;
+    zoneOrItem?: string;
+    modificationDetails?: string;
     [key: string]: string | number | boolean | undefined;
 }

@@ -160,6 +160,10 @@ export class FirestoreAdapter implements INexusAdapter {
         const prepared = await this.prepareWrite(path, data as SovereignData);
         await updateDoc(doc(firestore, path), prepared);
     }
+    
+    async create<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
+        return this.set(path, data, { merge: false });
+    }
 
 
     async delete(path: string): Promise<void> {

@@ -179,6 +179,7 @@ export type Delivery = SupplierOrder;
 // Old Types Restored to fix dependencies
 export interface SensorReading {
     id: string;
+    sensorId?: string;
     name: string;
     type: 'temperature' | 'humidity' | 'air_quality';
     value: number;

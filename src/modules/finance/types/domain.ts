@@ -1,4 +1,12 @@
 import { z } from 'zod';
+import { 
+  JournalEntry as KernelJournalEntry, 
+  JournalLine as KernelJournalLine,
+  AccountSide as KernelAccountSide,
+  TransactionCategory as KernelTransactionCategory,
+  FiscalSeal as KernelFiscalSeal,
+  FinancialMetrics as KernelFinancialMetrics
+} from '@/shared/types/finance.types';
 
 export const FiscalSealSchema = z.object({
   id: z.string(),
@@ -10,48 +18,14 @@ export const FiscalSealSchema = z.object({
   signature: z.string()
 });
 
-export type FiscalSeal = z.infer<typeof FiscalSealSchema>;
+export type FiscalSeal = KernelFiscalSeal;
+export type JournalEntry = KernelJournalEntry;
+export type JournalLine = KernelJournalLine;
+export type AccountSide = KernelAccountSide;
+export type TransactionType = KernelTransactionCategory;
+export type TransactionCategory = KernelTransactionCategory;
 
-export type TransactionType = 'income' | 'expense' | 'revenue' | 'tax' | 'bank' | 'payroll' | 'other';
-export type AccountSide = 'debit' | 'credit';
-
-export interface JournalLine {
-    accountId: string;
-    accountCode: string;
-    accountName: string;
-    description: string;
-    side: AccountSide;
-    amountInCents: number;
-}
-
-export interface JournalEntry {
-    id: string;
-    date: Date | string;
-    pieceNumber: string;
-    description: string;
-    lines: JournalLine[];
-    referenceId?: string;
-    referenceType?: 'order' | 'supplier_order' | 'expense' | 'payroll' | 'bank' | 'manual';
-    isSystemGenerated: boolean;
-    isValidated: boolean;
-    fiscalSealHash?: string;
-    sealedAt?: string;
-    type?: TransactionType;
-    amountInCents?: number;
-    status?: 'draft' | 'validated' | 'closed';
-}
-
-export interface AccountingMetrics {
-    totalRevenueInCents: number;
-    totalExpensesInCents: number;
-    grossMarginInCents: number;
-    grossMarginPercent: number;
-    foodCostPercent: number;
-    laborCostPercent: number;
-    operatingExpensesInCents: number;
-    ebitdaInCents: number;
-    netProfitInCents: number;
-}
+export type AccountingMetrics = KernelFinancialMetrics;
 
 export interface TreasuryMetrics {
     cashOnHandInCents: number;

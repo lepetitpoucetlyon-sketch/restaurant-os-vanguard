@@ -8,8 +8,6 @@
 
 // 🏛️ GRADE X : MASTER KERNEL SUTURE
 export * from '@/shared/types';
-export * from '@/shared/nexus-contract';
-export * from '@/shared/genome.types';
 
 // Domain Core (Bridge to Modules)
 export * from '@/modules/ops/types';
@@ -35,7 +33,7 @@ export * from './recruitment';
 export * from './settings';
 
 // Recursive Settings Re-exports
-export * from './settings/Customer';
+export * from './settings/customer';
 export * from './settings/accounting';
 export * from './settings/catalog';
 export * from './settings/delivery';
@@ -66,3 +64,6 @@ export interface StockEvent {
 
 import { Order } from '@/modules/ops/types';
 export type LegacyOrder = Order;
+
+import { ClientSettings } from './settings/customer';
+export type Customer = ClientSettings;

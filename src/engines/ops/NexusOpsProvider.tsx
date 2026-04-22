@@ -120,7 +120,7 @@ function guardedAction<T>(
     moduleId: ModuleId, 
     power: PowerAction, 
     action: () => T | Promise<T>
-): T | undefined {
+): T | Promise<T> | undefined {
     const result = genomeValidator.validatePower(moduleId, power);
     if (!result.allowed) {
         // Boîte Noire + UI Alert (fire-and-forget)
@@ -412,7 +412,6 @@ export const useTables = () => {
         currentFloorId,
         setCurrentFloor: (id: string) => setCurrentFloorId(id),
         getTablesForFloor,
-        getZonesForFloor,
         getZonesForFloor,
         addTable: async (table: Partial<Table>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
             const path = `tenants/${tenantId}/tables`;

@@ -22,7 +22,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
     const { upsertCampaign } = useMarketing();
     const [name, setName] = useState('');
     const [subject, setSubject] = useState('');
-    const [type, setType] = useState('email');
+    const [type, setType] = useState<'email' | 'social' | 'sms'>('email');
     const [targetSegment, setTargetSegment] = useState('');
     const [scheduledDate, setScheduledDate] = useState('');
     const [scheduledTime, setScheduledTime] = useState('12:00');
@@ -32,14 +32,15 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
         if (!name.trim()) return;
 
         await upsertCampaign({
+            id: `camp_${Date.now()}`,
             name: name.trim(),
             subject: subject.trim(),
-            type,
+            type: type,
             targetSegment: targetSegment.trim() || 'Tous les clients',
             scheduledDate,
             scheduledTime,
             content: content.trim(),
-            status: scheduledDate ? 'scheduled' : 'draft',
+            status: (scheduledDate ? 'scheduled' : 'draft'),
         });
 
         // Reset

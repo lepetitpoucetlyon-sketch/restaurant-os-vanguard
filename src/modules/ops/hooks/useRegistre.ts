@@ -14,7 +14,7 @@ export function useRegistre() {
     const validateHACCP = useCallback(async (data: Partial<QualityControl>, tenantId: string) => {
         setIsProcessing(true);
         try {
-            return await QualityEngine.validateReception(data, tenantId);
+            return await QualityEngine.validateReception(data as any, tenantId);
         } finally {
             setIsProcessing(false);
         }

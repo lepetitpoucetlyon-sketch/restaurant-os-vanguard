@@ -5,7 +5,6 @@ interface LogMetadata {
     userId?: string;
     version?: string;
     module?: string;
-    module?: string;
     [key: string]: import('@/shared/nexus-contract').SovereignValue;
 }
 

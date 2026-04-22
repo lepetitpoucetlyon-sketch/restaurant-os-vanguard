@@ -1,8 +1,17 @@
 import { z } from 'zod';
 import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { 
+  JournalEntry as KernelJournalEntry, 
+  JournalLine as KernelJournalLine,
+  AccountSide as KernelAccountSide,
+  TransactionCategory as KernelTransactionCategory,
+  FiscalSeal as KernelFiscalSeal,
+  FinancialMetrics as KernelFinancialMetrics
+} from '@/shared/types/finance.types';
 
 /**
  * ACCOUNTING & FINANCE TYPES - Professional ERP
+ * Version Grade X - Sovereign Alignment
  */
 
 export const FiscalSealSchema = z.object({
@@ -11,63 +20,34 @@ export const FiscalSealSchema = z.object({
   previousHash: z.string(),
   hash: z.string(),
   timestamp: z.string().datetime(),
-  dataSnapshot: z.string(), // Stringified record of the transaction
-  signature: z.string() // Digital signature 
+  dataSnapshot: z.string(), 
+  signature: z.string()
 });
 
-export type FiscalSeal = z.infer<typeof FiscalSealSchema>;
+export type FiscalSeal = KernelFiscalSeal;
 
 // --- Account Types (PCG Classes 1-7) ---
 export type AccountClass = '1' | '2' | '3' | '4' | '5' | '6' | '7';
 export type AccountType = 'asset' | 'liability' | 'equity' | 'revenue' | 'expense';
-export type AccountSide = 'debit' | 'credit';
-export type TransactionType = 'income' | 'expense';
-export type TransactionCategory = 'sales' | 'purchases' | 'fixed' | 'payroll' | 'bank' | 'tax' | 'other';
+export type AccountSide = KernelAccountSide;
+export type TransactionType = KernelTransactionCategory;
+export type TransactionCategory = KernelTransactionCategory;
 
 // --- Chart of Accounts (Plan Comptable Général) ---
 export interface Account {
     id: string;
-    code: string;          // e.g., "512", "601"
+    code: string;          
     name: string;
     type: AccountType;
     class: AccountClass;
-    parentCode?: string;   // For hierarchical display
+    parentCode?: string;   
     isActive: boolean;
     description?: string;
 }
 
 // --- Journal Entries (Écritures Comptables) ---
-export interface JournalLine {
-    accountId: string;
-    accountCode: string;
-    accountName: string;
-    description: string;
-    side: AccountSide;
-    amountInCents: number;
-}
-
-export interface JournalEntry {
-    id: string;
-    date: Date;
-    pieceNumber: string;   // Numéro de pièce
-    description: string;
-    lines: JournalLine[];
-    referenceId?: string;
-    referenceType?: 'order' | 'supplier_order' | 'expense' | 'payroll' | 'bank' | 'manual';
-    isSystemGenerated: boolean;
-    isValidated: boolean;
-    createdBy?: string;
-    validatedBy?: string;
-    validatedAt?: Date;
-    fiscalSealHash?: string; // NF525 Seal
-    sealedAt?: string;       // Date of sealing
-    metadata?: SovereignData;
-    // Operation Aliases (Grade X)
-    type?: 'revenue' | 'expense' | 'tax' | 'bank' | 'payroll' | 'other';
-    amountInCents?: number;
-    amount?: number;
-    status?: 'draft' | 'validated' | 'closed';
-}
+export type JournalLine = KernelJournalLine;
+export type JournalEntry = KernelJournalEntry;
 
 // --- Ledger (Grand Livre) ---
 export interface LedgerAccount extends Account {
@@ -78,7 +58,7 @@ export interface LedgerAccount extends Account {
 }
 
 export interface LedgerMovement {
-    date: Date;
+    date: Date | string;
     pieceNumber: string;
     description: string;
     debitInCents: number;
@@ -92,11 +72,11 @@ export type FiscalPeriodStatus = 'open' | 'closed' | 'locked';
 
 export interface FiscalPeriod {
     id: string;
-    name: string;           // e.g., "Janvier 2026"
-    startDate: Date;
-    endDate: Date;
+    name: string;           
+    startDate: Date | string;
+    endDate: Date | string;
     status: FiscalPeriodStatus;
-    closedAt?: Date;
+    closedAt?: Date | string;
     closedBy?: string;
 }
 
@@ -105,38 +85,38 @@ export interface ExpenseClaim {
     id: string;
     userId: string;
     userName: string;
-    userRole: string; // e.g., 'commis', 'chef', 'admin'
-    date: Date;
+    userRole: string; 
+    date: Date | string;
     amountInCents: number;
     category: TransactionCategory;
     description: string;
-    receiptUrl?: string; // Standardized Cloud Storage URL
-    receiptImage?: string; // Local preview or base64
+    receiptUrl?: string; 
+    receiptImage?: string; 
     status: 'pending' | 'approved' | 'rejected';
     approvedBy?: string;
-    approvedAt?: Date;
+    approvedAt?: Date | string;
     journalEntryId?: string;
     ocrData?: {
         merchant?: string;
         taxAmountInCents?: number;
         confidence?: number;
-        isFacturXCertified?: boolean; // Phase 29
-        fiscalNetworkId?: string; // TXN ID from PDP/PPF
+        isFacturXCertified?: boolean; 
+        fiscalNetworkId?: string; 
     };
 }
 
 // --- Bank Reconciliation (Rapprochement Bancaire) ---
 export interface BankTransaction {
     id: string;
-    date: Date;
+    date: Date | string;
     label: string;
     amountInCents: number;
-    amount?: number; // Legacy visibility
+    amount?: number; 
     type: 'credit' | 'debit';
     isReconciled: boolean;
-    reconciledWith?: string; // JournalEntry ID
-    reconciledAt?: Date;
-    signature?: string;    // NF525/Audit unique signature
+    reconciledWith?: string; 
+    reconciledAt?: Date | string;
+    signature?: string;    
 }
 
 export interface BankReconciliation {
@@ -146,10 +126,10 @@ export interface BankReconciliation {
     ledgerBalanceInCents: number;
     differenceInCents: number;
     status: 'pending' | 'balanced' | 'discrepancy';
-    createdAt: Date;
+    createdAt: Date | string;
 }
 
-// --- Financial Metrics (Module Finance - Opérationnel) ---
+// --- Financial Metrics ---
 export interface TreasuryMetrics {
     cashOnHandInCents: number;
     bankBalanceInCents: number;
@@ -160,12 +140,12 @@ export interface TreasuryMetrics {
         date: string; 
         inflowInCents: number; 
         outflowInCents: number;
-        inflow: number;  // UI compatibility
-        outflow: number; // UI compatibility
+        inflow: number;  
+        outflow: number; 
     }[];
     forecast30DaysInCents: number;
     
-    // UI Aliases (DEPRECATED - Use ...InCents)
+    // UI Aliases (DEPRECATED)
     cashOnHand: number;
     bankBalance: number;
     pendingReceivables: number;
@@ -174,18 +154,7 @@ export interface TreasuryMetrics {
     forecast30Days: number;
 }
 
-// --- Accounting Metrics (Module Comptabilité - Certifié) ---
-export interface AccountingMetrics {
-    totalRevenueInCents: number;
-    totalExpensesInCents: number;
-    grossMarginInCents: number;
-    grossMarginPercent: number;
-    foodCostPercent: number;
-    laborCostPercent: number;
-    operatingExpensesInCents: number;
-    ebitdaInCents: number;
-    netProfitInCents: number;
-}
+export type AccountingMetrics = KernelFinancialMetrics;
 
 // --- Financial Reports ---
 export interface ProfitAndLossReport {
@@ -196,11 +165,11 @@ export interface ProfitAndLossReport {
     totalRevenueInCents: number;
     totalExpensesInCents: number;
     netResultInCents: number;
-    generatedAt: Date;
+    generatedAt: Date | string;
 }
 
 export interface BalanceSheetReport {
-    asOfDate: Date;
+    asOfDate: Date | string;
     assets: { accountCode: string; accountName: string; amountInCents: number }[];
     liabilities: { accountCode: string; accountName: string; amountInCents: number }[];
     equity: { accountCode: string; accountName: string; amountInCents: number }[];
@@ -208,7 +177,7 @@ export interface BalanceSheetReport {
     totalLiabilitiesInCents: number;
     totalEquityInCents: number;
     isBalanced: boolean;
-    generatedAt: Date;
+    generatedAt: Date | string;
 }
 
 export interface TrialBalance {
@@ -219,18 +188,8 @@ export interface TrialBalance {
     isBalanced: boolean;
 }
 
-// Legacy compatibility
-export interface FinancialMetrics {
-    totalRevenueInCents: number;
-    totalExpensesInCents: number;
-    grossMarginInCents: number;
-    foodCostInCents: number;
-    laborCostInCents: number;
-    opExInCents: number;
-    ebitdaInCents: number;
-    netProfitInCents: number;
-    cashOnHandInCents: number;
-}
+export type FinanceFinancialMetrics = KernelFinancialMetrics;
+export type FinancialMetrics = KernelFinancialMetrics;
 
 export interface Transaction {
     id: string;
@@ -238,7 +197,7 @@ export interface Transaction {
     category: TransactionCategory;
     title: string;
     amountInCents: number;
-    date: Date;
+    date: Date | string;
     orderId?: string;
     supplierOrderId?: string;
     expenseClaimId?: string;
@@ -249,14 +208,14 @@ export interface BankConnection {
     provider: 'plaid' | 'bridge' | 'manual';
     institutionName: string;
     status: 'active' | 'error' | 'disconnected';
-    lastSyncAt: Date;
+    lastSyncAt: Date | string;
 }
 
 export interface FiscalAuditResult {
     isValid: boolean;
     errors: string[];
     warnings: string[];
-    periodCovered: { start: Date; end: Date };
+    periodCovered: { start: Date | string; end: Date | string };
     integrityHash: string;
 }
 
@@ -264,8 +223,8 @@ export interface ComplianceCertificate {
     id: string;
     type: 'NF525' | 'ISO27001' | 'HACCP';
     issuedBy: string;
-    issuedAt: Date;
-    expiryDate: Date;
+    issuedAt: Date | string;
+    expiryDate: Date | string;
     documentUrl: string;
 }
 
@@ -278,7 +237,7 @@ export interface AccountingContextType {
     fiscalPeriods: FiscalPeriod[];
     ledger: LedgerAccount[];
     metrics: AccountingMetrics;
-    legacyMetrics: FinancialMetrics;
+    legacyMetrics: FinanceFinancialMetrics;
     isLoading: boolean;
     
     // UI State
@@ -313,7 +272,7 @@ export interface AccountingContextType {
     getLedgerForAccount: (id: string) => LedgerMovement[];
     getAccountByCode: (code: string) => Account | undefined;
     getMetrics: () => AccountingMetrics;
-    getCalculatedFinancialMetrics: () => FinancialMetrics;
+    getCalculatedFinancialMetrics: () => FinanceFinancialMetrics;
     
     // Expert/AI
     expert: {
@@ -328,7 +287,7 @@ export interface AccountingContextType {
         isProcessing: boolean;
     };
 
-    // Fiscal & Compliance (Industrial)
+    // Fiscal & Compliance
     generateAnnualFEC: (year: number, siren?: string) => Promise<void>;
     runFiscalAudit: () => Promise<FiscalAuditResult>;
     certificates: ComplianceCertificate[];

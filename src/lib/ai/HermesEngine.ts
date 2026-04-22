@@ -60,9 +60,9 @@ export class HermesEngine {
         // 1. SCAN: HACCP -> Finance Anomaly Detection
         // Here we simulate an autonomous bridge trigger if temperature rises
         try {
-            const haccpResults = await Nexus.adapter.query('haccp_readings', {
+            const haccpPath = Nexus.getTenantPath('haccp_readings', tenantId);
+            const haccpResults = await Nexus.adapter.query(haccpPath, {
                 where: [
-                    { field: 'tenantId', operator: '==', value: tenantId },
                     { field: 'isAnomaly', operator: '==', value: true },
                     { field: 'processed', operator: '==', value: false }
                 ],
@@ -86,7 +86,7 @@ export class HermesEngine {
                     actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId}`);
                     
                     // Mark as processed in Nexus
-                    await Nexus.adapter.update(`haccp_readings`, reading.id, { processed: true });
+                    await Nexus.adapter.update(`${haccpPath}/${reading.id}`, { processed: true });
                 }
             }
         } catch (err) {
@@ -95,9 +95,9 @@ export class HermesEngine {
 
         // 2. SCAN: Accounting Unmatched Invoices
         try {
-            const unmatchedInvoices = await Nexus.adapter.query('accounting_invoices', {
+            const accountingPath = Nexus.getTenantPath('accounting_invoices', tenantId);
+            const unmatchedInvoices = await Nexus.adapter.query(accountingPath, {
                 where: [
-                    { field: 'tenantId', operator: '==', value: tenantId },
                     { field: 'status', operator: '==', value: 'unmatched' }
                 ],
                 limit: 3

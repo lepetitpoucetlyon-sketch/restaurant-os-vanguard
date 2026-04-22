@@ -24,8 +24,8 @@ export function useKitchen() {
     const stockItemsNode = useAtomValue(stockItemsNodeAtom);
 
     // --- 🔨 LA FORGE ---
-    const recipeForge = useNexusMutation<Recipe>(recipesNodeAtom, 'recipes', 'KITCHEN');
-    const prepForge = useNexusMutation<import('@/types').Preparation>(prepTasksNodeAtom, 'prepTasks', 'KITCHEN');
+    const recipeForge = useNexusMutation<Recipe>(recipesNodeAtom as any, 'recipes', 'KITCHEN');
+    const prepForge = useNexusMutation<import('@/types').Preparation>(prepTasksNodeAtom as any, 'prepTasks', 'KITCHEN');
 
     const calculateRecipeCost = useCallback((recipeIngredients: { ingredientId: string; quantity: number }[]) => {
         if (!recipeIngredients) return 0;
@@ -46,10 +46,10 @@ export function useKitchen() {
         miseEnPlaceTarget,
         
         // --- Forge Actions ---
-        addRecipe: (data: Partial<Recipe>) => recipeForge.mutate('SET', `rec_${Date.now()}`, data),
-        updateRecipe: (id: string, data: Partial<Recipe>) => recipeForge.mutate('UPDATE', id, data),
-        deleteRecipe: (id: string) => recipeForge.mutate('DELETE', id, {}),
-        togglePrepTask: (id: string, completed: boolean) => prepForge.mutate('UPDATE', id, { completed }),
+        addRecipe: (data: Partial<Recipe>) => recipeForge.mutate('SET', `rec_${Date.now()}`, data as any),
+        updateRecipe: (id: string, data: Partial<Recipe>) => recipeForge.mutate('UPDATE', id, data as any),
+        deleteRecipe: (id: string) => recipeForge.mutate('DELETE', id, {} as any),
+        togglePrepTask: (id: string, completed: boolean) => prepForge.mutate('UPDATE', id, { completed } as any),
         
         calculateRecipeCost
     };

@@ -29,15 +29,7 @@ export interface ScheduledPost {
     updatedAt?: string;
 }
 
-export interface SocialAccount {
-    id: string;
-    platform: 'Instagram' | 'Facebook' | 'Twitter' | 'LinkedIn' | string;
-    username: string;
-    avatarUrl?: string;
-    followersCount?: number;
-    isConnected: boolean;
-    lastSyncedAt?: string;
-}
+// SocialAccount moved to types.ts
 
 // --- 📢 MARKETING & CRM DOMAIN (SEO, Campagnes, Réseaux sociaux, Clients) ---
 
@@ -78,6 +70,8 @@ export const selectedCRMAtom = atom<CRM | null>(null);
 
 // --- 🛰️ SYNC & TELEMETRY ---
 export const isMarketingSyncingAtom = atom(false);
+const _deliveries = createProxyDomain<any>('deliveries');
+export const deliveriesNodeAtom = _deliveries.node;
 
 // SEO LOADING
 export const seoLoadingAtom = atom((get) => get(_marketingCampaigns.node).loading || get(_scheduledPosts.node).loading);

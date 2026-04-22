@@ -67,6 +67,18 @@ interface NexusFiscalState {
         sales: JournalEntry[];
         dailyReports: { date: string; totalInCents: number; status: string }[];
         isCertified: boolean;
+        cerfa?: any;
+        duerp?: any;
+        incendieDoc?: any;
+        extincteurs?: any;
+        exercices?: any;
+        interventions?: any;
+        pmrDoc?: any;
+        pmrAmenagements?: any;
+        prestataires?: any;
+        certHalal?: any;
+        agrementBoucher?: any;
+        hottesDoc?: any;
     };
 }
 
@@ -142,12 +154,10 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     const recordPayrollSalary = useCallback(async (userId: string, net: number, charges: number, month: string) => {
         if (!activeTenantId) return;
         return submitExpense({
-            label: `Salaire [User:${userId}] - ${month}`,
-            amount: net + charges,
-            type: 'expense',
-            category: 'staff',
-            date: new Date()
-        });
+            description: `Salaire [User:${userId}] - ${month}`,
+            amountInCents: (net + charges) * 100,
+            category: 'payroll'
+        } as any); // Cast as any because Omit might be tricky with Partial internally
     }, [activeTenantId, submitExpense]);
 
     const contextValue: NexusFiscalState = useMemo(() => ({
@@ -184,7 +194,19 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         registre: {
             sales: [],
             dailyReports: [],
-            isCertified: true
+            isCertified: true,
+            cerfa: null,
+            duerp: null,
+            incendieDoc: null,
+            extincteurs: [],
+            exercices: [],
+            interventions: [],
+            pmrDoc: null,
+            pmrAmenagements: [],
+            prestataires: [],
+            certHalal: null,
+            agrementBoucher: null,
+            hottesDoc: null
         }
     }), [ledgerEntries, accounts, bankTransactions, expenseClaims, isLoading, isSyncing, financialMetrics, treasury, fiscalSeals, runFiscalAudit, submitExpense, syncBankAccounts]);
 

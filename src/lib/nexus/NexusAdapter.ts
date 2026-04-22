@@ -37,7 +37,7 @@ export interface INexusAdapter {
     batch(): INexusBatch;
     set<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
     update<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): Promise<void>;
-
+    create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
 }

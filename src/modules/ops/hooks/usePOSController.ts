@@ -24,8 +24,8 @@ export interface CartItem {
 
 export function usePOSController() {
     const { currentUser } = useAuth();
-    const { data: tables, updateTable } = useTables();
-    const { addOrder } = useOrders();
+    const { tables, updateTable } = useTables();
+    const { submitOrder: addOrder } = useOrders();
     const { data: products, isLoading: productsLoading } = useProducts();
     const { data: categories, isLoading: categoriesLoading } = useCategories();
 
@@ -149,7 +149,7 @@ export function usePOSController() {
             const { name, args } = customEvent.detail;
 
             if (name === "addOrderItems" && selectedTableId) {
-                const aiTable = (tables as Table[]).find(t => t.number.toString() === args.tableNumber?.toString());
+                const aiTable = (tables).find(t => t.number.toString() === args.tableNumber?.toString());
 
                 if (aiTable && aiTable.id === selectedTableId) {
                     const newItem: CartItem = {

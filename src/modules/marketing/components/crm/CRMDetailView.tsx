@@ -24,7 +24,7 @@ const getEmail = (c: CRM): string => c?.email ?? '';
 export function CRMDetailView() {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const [selectedCRM, setSelectedCRM] = useAtom(crmSelectedCRMAtom);
+    const [selectedCRM, setSelectedCRM] = useAtom(crmSelectedCRMAtom) as [CRM | null, (crm: CRM | null) => void];
 
     if (!selectedCRM) return null;
 
