@@ -4,7 +4,7 @@
  */
 
 export type TransactionCategory = 
-  | 'revenue' | 'expense' | 'purchases' | 'fixed' | 'payroll' | 'bank' | 'tax' | 'other' | 'loss';
+  | 'revenue' | 'expense' | 'purchases' | 'fixed' | 'payroll' | 'bank' | 'tax' | 'other' | 'loss' | 'sales';
 
 export type AccountSide = 'debit' | 'credit';
 

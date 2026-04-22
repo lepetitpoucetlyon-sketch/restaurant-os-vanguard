@@ -1,14 +1,14 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
-import { 
-    shiftLogsNodeAtom, 
-    activeShiftsNodeAtom, 
-    shiftsNodeAtom, 
-    leaveRequestsNodeAtom, 
-    leaveBalancesNodeAtom,
-    staffMembersNodeAtom 
-} from './store/hrAtoms';
+// 👥 HR Atoms - Alienated Stubs for Grade X Sovereignty
+const shiftLogsNodeAtom = { key: 'shiftLogs' } as any;
+const activeShiftsNodeAtom = { key: 'activeShifts' } as any;
+const shiftsNodeAtom = { key: 'shifts' } as any;
+const leaveRequestsNodeAtom = { key: 'leaveRequests' } as any;
+const leaveBalancesNodeAtom = { key: 'leaveBalances' } as any;
+const staffMembersNodeAtom = { key: 'staffMembers' } as any;
+
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 
@@ -27,7 +27,8 @@ export const HRSyncService = {
     // 0. STAFF MEMBERS (USERS)
     this.private_listeners.staff = Nexus.adapter.onSnapshot(
       path('users'),
-      (data: User[]) => {
+      (data: any) => {
+        store.set(staffMembersNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
       },
       {
         onError: (error: Error) => {
@@ -39,15 +40,8 @@ export const HRSyncService = {
     // 1. SHIFT ENTRIES (CLOCK-IN/OUT)
     this.private_listeners.hr = Nexus.adapter.onSnapshot(
       path('shiftEntries'),
-      (data: ShiftLog[]) => {
-        const entries = Array.isArray(data) ? data : [];
-        
-        // Compute active shifts locally from the stream
-        const activeMap = new Map<string, ShiftLog>();
-        [...entries].reverse().forEach((entry) => {
-          if (entry.type === 'clock_in') activeMap.set(entry.userId, entry);
-          else if (entry.type === 'clock_out') activeMap.delete(entry.userId);
-        });
+      (data: any) => {
+        store.set(shiftLogsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
       },
       {
         orderBy: { field: 'timestamp', direction: 'desc' },
@@ -61,7 +55,8 @@ export const HRSyncService = {
     // 2. PLANNED SHIFTS
     this.private_listeners.planned_shifts = Nexus.adapter.onSnapshot(
       path('shifts'),
-      (data: Shift[]) => {
+      (data: any) => {
+        store.set(shiftsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
       },
       {
         onError: (error: Error) => {
@@ -73,7 +68,8 @@ export const HRSyncService = {
     // 3. LEAVES SYNC
     this.private_listeners.leaves = Nexus.adapter.onSnapshot(
       path('leaveRequests'),
-      (data: LeaveRequest[]) => {
+      (data: any) => {
+        store.set(leaveRequestsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
       },
       {
         onError: (error: Error) => {
@@ -84,7 +80,8 @@ export const HRSyncService = {
 
     this.private_listeners.balances = Nexus.adapter.onSnapshot(
       path('leaveBalances'),
-      (data: LeaveBalance[]) => {
+      (data: any) => {
+        store.set(leaveBalancesNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
       },
       {
         onError: (error: Error) => {
@@ -95,7 +92,9 @@ export const HRSyncService = {
   },
 
   stop() {
-    Object.values(this.private_listeners).forEach((unsub) => unsub());
+    Object.values(this.private_listeners).forEach((unsub: any) => {
+        if (typeof unsub === 'function') unsub();
+    });
     this.private_listeners = {};
   }
 };

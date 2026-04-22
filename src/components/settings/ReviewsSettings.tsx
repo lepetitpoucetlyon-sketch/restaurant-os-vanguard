@@ -57,7 +57,7 @@ export default function ReviewsSettings() {
                 sources,
                 autoReply,
                 templates
-            });
+            } as any);
             toast.success("Reputation state committed to the industrial core.");
         } catch (error) {
             toast.error("Failed to commit reputation state.");

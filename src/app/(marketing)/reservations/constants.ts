@@ -24,22 +24,22 @@ export const cinematicItem: Variants = {
 
 export const TABLES_DATA = {
     "VIP": [
-        { id: "V1", seats: 4, type: 'vip', status: 'occupied', number: "V1" },
-        { id: "V2", seats: 2, type: 'vip', status: 'reserved', number: "V2" },
-        { id: "V3", seats: 6, type: 'vip', status: 'available', number: "V3" },
+        { id: "V1", seats: 4, type: 'vip' as const, status: 'seated' as const, number: "V1", shape: 'rect' as const, x: 100, y: 100, zoneId: 'VIP' },
+        { id: "V2", seats: 2, type: 'vip' as const, status: 'reserved' as const, number: "V2", shape: 'circle' as const, x: 300, y: 100, zoneId: 'VIP' },
+        { id: "V3", seats: 6, type: 'vip' as const, status: 'free' as const, number: "V3", shape: 'rect' as const, x: 500, y: 100, zoneId: 'VIP' },
     ],
     "TERRACE": [
-        { id: "T1", seats: 2, type: 'terrace', status: 'available', number: "T1" },
-        { id: "T2", seats: 4, type: 'terrace', status: 'occupied', number: "T2" },
-        { id: "T3", seats: 4, type: 'terrace', status: 'available', number: "T3" },
-        { id: "T4", seats: 2, type: 'terrace', status: 'available', number: "T4" },
+        { id: "T1", seats: 2, type: 'terrace' as const, status: 'free' as const, number: "T1", shape: 'rect' as const, x: 100, y: 300, zoneId: 'TERRACE' },
+        { id: "T2", seats: 4, type: 'terrace' as const, status: 'seated' as const, number: "T2", shape: 'rect' as const, x: 300, y: 300, zoneId: 'TERRACE' },
+        { id: "T3", seats: 4, type: 'terrace' as const, status: 'free' as const, number: "T3", shape: 'circle' as const, x: 500, y: 300, zoneId: 'TERRACE' },
+        { id: "T4", seats: 2, type: 'terrace' as const, status: 'free' as const, number: "T4", shape: 'rect' as const, x: 700, y: 300, zoneId: 'TERRACE' },
     ],
     "STANDARD": [
-        { id: "1", seats: 2, type: 'standard', status: 'reserved', number: "1" },
-        { id: "2", seats: 4, type: 'standard', status: 'occupied', number: "2" },
-        { id: "3", seats: 4, type: 'standard', status: 'available', number: "3" },
-        { id: "4", seats: 6, type: 'standard', status: 'available', number: "4" },
-        { id: "5", seats: 8, type: 'standard', status: 'available', number: "5" },
-        { id: "6", seats: 4, type: 'standard', status: 'reserved', number: "6" },
+        { id: "1", seats: 2, type: 'standard' as const, status: 'reserved' as const, number: "1", shape: 'rect' as const, x: 100, y: 500, zoneId: 'STANDARD' },
+        { id: "2", seats: 4, type: 'standard' as const, status: 'seated' as const, number: "2", shape: 'rect' as const, x: 300, y: 500, zoneId: 'STANDARD' },
+        { id: "3", seats: 4, type: 'standard' as const, status: 'free' as const, number: "3", shape: 'circle' as const, x: 500, y: 500, zoneId: 'STANDARD' },
+        { id: "4", seats: 6, type: 'standard' as const, status: 'free' as const, number: "4", shape: 'rect' as const, x: 700, y: 500, zoneId: 'STANDARD' },
+        { id: "5", seats: 8, type: 'standard' as const, status: 'free' as const, number: "5", shape: 'rect' as const, x: 900, y: 500, zoneId: 'STANDARD' },
+        { id: "6", seats: 4, type: 'standard' as const, status: 'reserved' as const, number: "6", shape: 'circle' as const, x: 1100, y: 500, zoneId: 'STANDARD' },
     ]
 };

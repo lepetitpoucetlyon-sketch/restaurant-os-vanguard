@@ -11,7 +11,7 @@ import {
     crmFilterSegmentAtom,
     crmNewCRMModalAtom
 } from '@/modules/marketing/store/crmAtoms';
-import { crmsAtom } from '../store/marketingAtoms';
+import { crmsAtom } from '../../store/marketingAtoms';
 
 const SEGMENTS = {
     vip: { name: 'VIP', color: '#8B5CF6', icon: Star },

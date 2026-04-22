@@ -34,10 +34,12 @@ import { toast } from 'sonner';
 interface OperationalArea {
     id: string;
     number: string;
-    status: 'vacant' | 'busy' | 'maintenance' | 'reserved';
+    status: 'vacant' | 'busy' | 'maintenance' | 'reserved' | 'occupied' | 'available';
     type: string;
     price: number;
     lastCleaning: string;
+    capacity?: number;
+    currentCovers?: number;
 }
 
 
@@ -69,7 +71,7 @@ const HandDrawnBorder = ({ children, className }: { children: React.ReactNode, c
     </div>
 );
 export default function OperationsPage() {
-    const { areas, updateAreaStatus } = useOMS();
+    const { areas, updateAreaStatus } = useOMS() as any;
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();

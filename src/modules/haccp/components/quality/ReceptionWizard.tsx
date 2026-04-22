@@ -6,7 +6,8 @@ import {
     qualityActiveControlAtom, 
     qualityControlStepAtom,
     qualityControlsAtom,
-    qualitySelectedDeliveryIdAtom
+    qualitySelectedDeliveryIdAtom,
+    qualityCurrentSessionStatsSelector
 } from '@/modules/haccp/store/qualityAtoms';
 import { HACCPGauge } from './HACCPGauge';
 import { DeliveryItemRow } from './DeliveryItemRow';
@@ -25,7 +26,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from 'framer-motion';
-import { useQuality } from '@/hooks/useQuality';
+import { useQuality } from '../../hooks/useQuality';
 import { useRouter } from 'next/navigation';
 import { QualityControl } from '@/domain/types/quality';
 

@@ -69,7 +69,7 @@ export function Sidebar() {
                 }
 
                 // 2. Hardware/Instance settings filter
-                if (item.href === '/pms' && !settings?.pmsEnabled) return false;
+                if (item.href === '/pms' && !(settings as any)?.pmsEnabled) return false;
 
                 // 3. Suzerain Feature Flag Mapping
                 const cat = item.category as string;
@@ -103,7 +103,7 @@ export function Sidebar() {
                 return isFeatureEnabled && (hasAccess?.(item.category) ?? true);
             })
         })).filter(section => (section.items?.length || 0) > 0);
-    }, [hasAccess, settings?.pmsEnabled, tenantConfig?.features]);
+    }, [hasAccess, (settings as any)?.pmsEnabled, tenantConfig?.features]);
 
     // Cleanup and effects
     useEffect(() => {

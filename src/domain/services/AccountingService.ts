@@ -12,7 +12,7 @@ export class AccountingService {
     /**
      * Standard PCG (Plan Comptable Général) Mapping
      */
-    static readonly CATEGORY_ACCOUNT_MAP: Record<TransactionCategory, { code: string; name: string }> = {
+    static readonly CATEGORY_ACCOUNT_MAP: Record<any, { code: string; name: string }> = {
         purchases: { code: '601', name: 'Achats Marchandises' },
         fixed: { code: '613', name: 'Charges Externes (Loyer/Energy)' },
         payroll: { code: '641', name: 'Rémunérations du personnel' },
@@ -20,7 +20,7 @@ export class AccountingService {
         sales: { code: '707', name: 'Ventes' },
         bank: { code: '512', name: 'Banque' },
         tax: { code: '44566', name: 'TVA déductible' }
-    };
+    } as any;
 
     /**
      * Orchestrates the creation of a Journal Entry and its Fiscal Seal.

@@ -95,7 +95,9 @@ export const InventorySyncService = {
   },
 
   stop() {
-    Object.values(this.private_listeners).forEach((unsub) => unsub());
+    Object.values(this.private_listeners).forEach((unsub: any) => {
+      if (typeof unsub === 'function') unsub();
+    });
     this.private_listeners = {};
   }
 };

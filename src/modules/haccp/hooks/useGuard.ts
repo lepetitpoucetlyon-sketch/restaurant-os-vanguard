@@ -5,10 +5,23 @@ import { useCallback, useMemo } from "react";
 import { 
     hygieneLabelsAtom, 
     hygieneLabelsNodeAtom,
+    hygieneLogsAtom,
+    hygieneLogsNodeAtom,
+    receptionLogsAtom,
+    receptionLogsNodeAtom,
+    oilLogsAtom,
+    oilLogsNodeAtom,
     maintenanceLogsAtom,
-    guardLoadingAtom
+    guardLoadingAtom,
+    updateNexusNode,
+    ordersAtom, 
+    productsAtom, 
+    recipesAtom, 
+    staffMembersAtom,
+    stockItemsAtom,
+    deliveriesAtom
 } from "@/store/operationalAtoms";
-import { deliveriesAtom, tenantIdAtom } from '../store/complianceAtoms';
+import { tenantIdAtom } from '@/store/fleetAtoms';
 import { HygieneLabel, HygieneLog, ReceptionLog, OilLog, HACCPContextType } from "../types";
 
 /**
@@ -114,8 +127,4 @@ export const useMaintenance = () => {
     return maintenance;
 };
 
-// --- HACCP ALIAS ---
-export const useHACCP = () => {
-    const { haccp } = useGuard();
-    return haccp;
-};
+// useHACCP is exported from useHACCP.ts

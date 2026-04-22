@@ -39,8 +39,8 @@ export default function BarPage() {
     // Data State
     const [orders, setOrders] = useState<BarOrder[]>(BAR_ORDERS.map(o => ({ 
       ...o, 
-      status: (o.items[0]?.status === 'done' ? 'ready' : (o.items[0]?.status === 'preparing' ? 'preparing' : 'new')) as BarOrder['status']
-    })));
+      status: (o.items[0]?.status === 'done' ? 'ready' : (o.items[0]?.status === 'preparing' ? 'preparing' : 'new')) as any
+    })) as BarOrder[]);
     
     // Selection State
     const [selectedWine, setSelectedWine] = useState<Wine | null>(null);
@@ -142,7 +142,7 @@ export default function BarPage() {
                     setEditingCocktail(null);
                 }}
                 productType="cocktail"
-                editProduct={editingCocktail}
+                editProduct={editingCocktail as any}
             />
         </div>
     );

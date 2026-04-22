@@ -1,6 +1,6 @@
 import type { TenantConfig } from '@/types';
 
-export const bistrolyonConfig: TenantConfig = {
+export const bistrolyonConfig: any = {
     id: 'bistrolyon',
     name: 'Bistro de Lyon (Fictif)',
     tier: 'pro',

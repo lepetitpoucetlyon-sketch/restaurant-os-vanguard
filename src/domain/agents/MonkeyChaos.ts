@@ -20,6 +20,7 @@ export const MonkeyChaos = {
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',
                 amountInCents: 10000, 
+                referenceId: 'MONKEY-PATCH-2026',
                 description: 'MONKEY_ATTACK: Asymmetric Corruption Attempt'
             });
             

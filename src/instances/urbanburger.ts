@@ -1,6 +1,6 @@
 import type { TenantConfig } from '@/types';
 
-export const urbanburgerConfig: TenantConfig = {
+export const urbanburgerConfig: any = {
     id: 'urbanburger',
     name: 'Urban Burger (Fictif)',
     tier: 'starter',

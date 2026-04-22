@@ -40,7 +40,7 @@ export default function ReservationsPage() {
     const [calendarMonth, setCalendarMonth] = useState(new Date());
     const calendarRef = useRef<HTMLDivElement>(null);
 
-    const { reservations, getReservationsForDate, customers, addCustomer, getCustomerHistory } = useReservations();
+    const { reservations, getReservationsForDate, crms, addCRM, getCRMHistory } = useReservations();
 
     // Click outside to close calendar
     useEffect(() => {
@@ -129,7 +129,7 @@ export default function ReservationsPage() {
                         <FloorPlanView setSelectedTable={setSelectedTable} />
                     ) : (
                         <CustomerListView 
-                            customers={customers} 
+                            customers={crms} 
                             setSelectedCustomer={setSelectedCustomer} 
                         />
                     )}
@@ -148,7 +148,7 @@ export default function ReservationsPage() {
                 {selectedCustomer && (
                     <CustomerDetailPanel
                         customer={selectedCustomer}
-                        getCustomerHistory={getCustomerHistory}
+                        getCustomerHistory={getCRMHistory}
                         setSelectedCustomer={setSelectedCustomer}
                         setIsNewReservationModalOpen={setIsNewReservationModalOpen}
                     />
@@ -159,7 +159,7 @@ export default function ReservationsPage() {
                 isOpen={isNewCustomerModalOpen}
                 onClose={() => setIsNewCustomerModalOpen(false)}
                 onSave={(customer) => {
-                    addCustomer(customer);
+                    addCRM(customer);
                     showToast(t('reservations.customer.add_success'), "success");
                 }}
             />
@@ -168,7 +168,7 @@ export default function ReservationsPage() {
                 isOpen={isNewReservationModalOpen}
                 onClose={() => setIsNewReservationModalOpen(false)}
                 onSave={() => showToast(t('reservations.customer.reserve_success'), "success")}
-                customers={customers}
+                customers={crms}
             />
         </div>
     );

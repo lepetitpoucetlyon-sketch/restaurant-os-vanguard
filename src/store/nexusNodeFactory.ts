@@ -9,13 +9,8 @@ export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
  * Interface NexusNode - Grade VI Standard
  * Le contrat atomique universel pour tous les domaines.
  */
-export interface NexusNode<T> {
-    data: T[];
-    loading: boolean;
-    error: string | null;
-    lastUpdated: number;
-    moduleId?: ModuleId;
-}
+import { NexusNode } from './base';
+export type { NexusNode };
 
 /**
  * createNexusNode
@@ -36,7 +31,7 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
         orphanNodesRegistry.set(id, new WeakRef(nodeAtom));
     }
 
-    GlobalRegistryService.register(id, nodeAtom);
+    GlobalRegistryService.register(id, nodeAtom as any);
     return nodeAtom;
 }
 

@@ -81,8 +81,11 @@ export function useSorting<T extends SovereignData>(
                 comparison = aValue.localeCompare(bValue, "fr");
             } else if (typeof aValue === "number" && typeof bValue === "number") {
                 comparison = aValue - bValue;
-            } else if (aValue instanceof Date && bValue instanceof Date) {
-                comparison = aValue.getTime() - bValue.getTime();
+            } else if (
+                aValue && typeof aValue === "object" && (aValue as unknown) instanceof Date &&
+                bValue && typeof bValue === "object" && (bValue as unknown) instanceof Date
+            ) {
+                comparison = (aValue as unknown as Date).getTime() - (bValue as unknown as Date).getTime();
             } else {
                 comparison = String(aValue).localeCompare(String(bValue));
             }

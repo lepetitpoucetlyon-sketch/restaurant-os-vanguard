@@ -25,7 +25,7 @@ export function MCCInsights() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400">Empire Intelligence</h3>
             </div>
             
-            {macroInsights.map((insight, idx) => (
+            {macroInsights.map((insight: any, idx) => (
                 <motion.div
                     key={insight.id}
                     initial={{ opacity: 0, y: 10 }}

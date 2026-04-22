@@ -33,6 +33,8 @@ export interface INexusAdapter {
     generateId(collectionPath: string): string;
 }
 
+import { logger } from '@/lib/logger';
+
 /**
  * 🏛️ Nexus Singleton Manager
  * LEAF MODULE: Must not import anything that could loop back to firebase.

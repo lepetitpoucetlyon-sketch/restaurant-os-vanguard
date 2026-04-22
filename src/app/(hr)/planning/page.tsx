@@ -25,7 +25,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
-import { usePlanning, Shift as ContextShift } from "@/context/PlanningContext";
+import { usePlanning } from "@/modules/hr/hooks/useHumanResources";
+import { Shift as ContextShift } from "@/modules/hr/types";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { TimePicker } from "@/components/ui/TimePicker";
@@ -43,7 +44,7 @@ const ZONES = [
 export default function PlanningPage() {
     const isMobile = useIsMobile();
     const { users } = useAuth();
-    const { shifts, addShift, updateShift, deleteShift, publishShifts } = usePlanning();
+    const { shifts, addShift, updateShift, deleteShift, publishShifts, isLoading } = usePlanning();
     const { showToast } = useToast();
     const { t } = useLanguage();
 
@@ -99,7 +100,9 @@ export default function PlanningPage() {
             startTime: editStartTime,
             endTime: editEndTime,
             type: editType,
-            status: 'draft'
+            status: 'draft',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         };
 
         if (activeShift) {

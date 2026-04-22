@@ -1,16 +1,15 @@
-import { chromium } from 'playwright';
-
-/**
- * VISUAL IDENTITY EXTRACTOR (Nexus V15.5)
- * The "Eye" of the Branding Engine.
- * Responsible for capturing a visual representation of a prospect's digital presence.
- */
 export const VisualIdentityExtractor = {
     /**
      * Captures a screenshot of a given URL and returns it as a Base64 string.
      * Uses Playwright Headless for industrial performance.
      */
     captureUrl: async (url: string): Promise<string> => {
+        if (typeof window !== 'undefined') {
+            throw new Error("VisualIdentityExtractor is server-only and cannot be executed on the client side.");
+        }
+
+        const { chromium } = await import('playwright');
+        
         console.log(`[Nexus Vision] Launching capture for: ${url}`);
         
         const browser = await chromium.launch({

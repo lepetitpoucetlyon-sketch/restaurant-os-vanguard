@@ -9,6 +9,10 @@
 // 🏛️ GRADE X : MASTER KERNEL SUTURE
 export * from '@/shared/types';
 
+// Explicitly resolve ambiguities early (Authoritative sources)
+export type { FiscalSeal, JournalEntry, JournalLine, TransactionCategory } from '@/shared/types';
+export type { AuditLog, RecipeIngredient, RecipeStep } from './common.types';
+
 // Domain Core (Bridge to Modules)
 export * from '@/modules/ops/types';
 export * from '@/modules/ops/tables.types';
@@ -22,6 +26,11 @@ export * from '@/modules/marketing/types';
 export * from '@/modules/marketing/quotes.types';
 export * from '@/modules/marketing/seo.types';
 
+// Explicitly resolve common ambiguities (Losing priority to authoritative modules)
+export type { AccountSide, FinancialMetrics } from '@/modules/finance/types';
+export type { QuoteLine, QuoteLineType } from '@/modules/marketing/types';
+export type { Ingredient } from '@/modules/inventory/types';
+
 // Internal Type Files (Local src/types/)
 export * from './common.types';
 export * from './domain.types';
@@ -33,7 +42,7 @@ export * from './recruitment';
 export * from './settings';
 
 // Recursive Settings Re-exports
-export * from './settings/customer';
+// export * from './settings/customer'; // Missing Module
 export * from './settings/accounting';
 export * from './settings/catalog';
 export * from './settings/delivery';
@@ -53,6 +62,7 @@ export * from './settings/security';
 export * from './settings/theme';
 
 // --- GRADE X : SOVEREIGN TYPES ---
+export type { ReservationSlotsConfig } from './settings/reservations';
 export interface StockEvent {
   id: string;
   itemId: string;
@@ -65,5 +75,5 @@ export interface StockEvent {
 import { Order } from '@/modules/ops/types';
 export type LegacyOrder = Order;
 
-import { ClientSettings } from './settings/customer';
-export type Customer = ClientSettings;
+import { CRM } from '@/modules/ops/reservations.types';
+export type Customer = CRM;

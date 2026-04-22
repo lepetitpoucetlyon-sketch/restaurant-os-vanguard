@@ -12,7 +12,7 @@ export default function MigrationSettings() {
     const { showToast } = useToast();
     const { parseCSV, analyzeMenuWithAI, injectToDB, seedProduction, isMigrating, progress } = useDataMigration();
     
-    const [activeTab, setActiveTab] = useState<'menu' | 'staff' | 'customer' | 'seed'>('menu');
+    const [activeTab, setActiveTab] = useState<'menu' | 'staff' | 'crm' | 'seed'>('menu');
     const [rawMenuText, setRawMenuText] = useState("");
     const [parsedMenuData, setParsedMenuData] = useState<{ categories: { id: string; name: string }[]; products: { name: string; description: string; priceInCents: number; categoryId: string; categoryName?: string }[] } | null>(null);
 
@@ -33,7 +33,7 @@ export default function MigrationSettings() {
     const handleInjectMenu = async () => {
         if (!parsedMenuData) return;
         try {
-            await injectToDB('menu', parsedMenuData);
+            await injectToDB('menu', parsedMenuData as any);
             showToast("Menu injecté dans la base de données !", "success");
             setParsedMenuData(null);
             setRawMenuText("");
@@ -45,14 +45,14 @@ export default function MigrationSettings() {
     };
 
     // CSV UPLOAD HANDLER
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, entity: 'staff' | 'customer') => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, entity: 'staff' | 'crm') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         try {
             const data = await parseCSV(file);
             if (data && data.length > 0) {
-                await injectToDB(entity, data);
+                await injectToDB(entity, data as any);
                 showToast(`Import réussi : ${data.length} enregistrements ajoutés.`, "success");
             } else {
                 showToast("Fichier vide ou mal formaté.", "warning");
@@ -108,12 +108,12 @@ export default function MigrationSettings() {
                 {[
                     { id: 'menu', label: 'Scanner de Menu IA', icon: MenuIcon },
                     { id: 'staff', label: 'Import Équipe', icon: Users },
-                    { id: 'customer', label: 'Import Clients', icon: Database },
+                    { id: 'crm', label: 'Import Clients', icon: Database },
                     { id: 'seed', label: 'Ressusciter le Système', icon: Play }
                 ].map((tab) => (
                     <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id as 'menu' | 'staff' | 'customer' | 'seed')}
+                        onClick={() => setActiveTab(tab.id as 'menu' | 'staff' | 'crm' | 'seed')}
                         className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider transition-all ${activeTab === tab.id ? 'bg-bg-primary text-text-primary shadow-sm border border-border' : 'text-text-muted hover:text-text-primary'}`}
                     >
                         <tab.icon className="w-4 h-4" />
@@ -209,7 +209,7 @@ export default function MigrationSettings() {
             )}
 
             {/* TAB CONTENT: CSV UPLOADS */}
-            {(activeTab === 'staff' || activeTab === 'customer') && (
+            {(activeTab === 'staff' || activeTab === 'crm') && (
                 <div className="bg-bg-secondary rounded-2xl border border-border p-8 md:p-16 max-w-4xl mx-auto shadow-sm text-center border-dashed border-2">
                     <div className="w-24 h-24 bg-accent/5 rounded-full flex items-center justify-center mx-auto mb-8">
                         <Upload strokeWidth={1} className="w-10 h-10 text-accent" />

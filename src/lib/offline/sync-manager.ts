@@ -101,7 +101,7 @@ export class SyncManager {
             // Logique générique pour les opérations simples
             const fullPath = `${op.collection}/${op.targetId}`;
             if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
-            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload);
+            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as any);
         }
     }
 }

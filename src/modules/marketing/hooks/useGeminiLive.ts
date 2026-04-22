@@ -55,7 +55,7 @@ export function useGeminiLive() {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
             
-            const audioContext = new (window.AudioContext || (window as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
+            const audioContext = new (window.AudioContext || (window as unknown as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
             audioContextRef.current = audioContext;
             
             const source = audioContext.createMediaStreamSource(stream);
@@ -83,7 +83,7 @@ export function useGeminiLive() {
             processor.connect(audioContext.destination);
 
             // 3. Connecter le service central avec l'ADN injecté
-            const service = new GeminiLiveService(currentUser, rolePermissions, {
+            const service = new GeminiLiveService(currentUser, rolePermissions as any, {
                 onTranscript: (text, isUser) => {
                     setTranscripts(prev => [...prev, { text, isUser, timestamp: Date.now() }]);
                 },

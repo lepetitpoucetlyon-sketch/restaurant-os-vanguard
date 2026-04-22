@@ -1,7 +1,7 @@
 import React from 'react';
 import { Package, Check, X, Thermometer, Info, Calendar, PackageSearch } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useQuality } from '@/hooks/useQuality';
+import { useQuality } from '@/modules/haccp';
 import { QualityControlItem } from '@/domain/types/quality';
 import { FreshnessRating } from './FreshnessRating';
 import { DLCAlertBadge } from './DLCAlertBadge';
@@ -16,7 +16,7 @@ export const ProductControlList: React.FC = () => {
             status: status,
             is_rejected: status === 'fail',
             decision: status === 'pass' ? 'accepted' : 'rejected'
-        });
+        } as any);
     };
 
     const handleFreshnessChange = (item: QualityControlItem, score: number) => {

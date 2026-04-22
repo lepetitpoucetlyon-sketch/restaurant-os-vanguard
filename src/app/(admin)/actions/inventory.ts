@@ -61,12 +61,12 @@ export async function searchIngredientsAction(tenantId: string, query: string): 
     
     try {
         const path = `tenants/${tenantId}/ingredients`;
-        const ingredients = await Nexus.adapter.query(path);
+        const ingredients = await Nexus.adapter.query(path) as unknown as Ingredient[];
         
         // Final industrial filtering (simulating fuzzy match)
         return ingredients.filter(i => 
-            i.name.toLowerCase().includes(query.toLowerCase()) || 
-            i.tags?.some((t: string) => t.toLowerCase().includes(query.toLowerCase()))
+            (i.name || '').toLowerCase().includes(query.toLowerCase()) || 
+            (i.tags || []).some((t: string) => t.toLowerCase().includes(query.toLowerCase()))
         );
     } catch (error) {
         logger.error(`[ServerAction] Search failed`, error);

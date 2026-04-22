@@ -49,7 +49,11 @@ export function GestionHuiles() {
 
     const handleSubmit = async () => {
         try {
-            await createLog(formData);
+            await createLog({
+                ...formData,
+                id: `oil_${Date.now()}`,
+                createdAt: new Date().toISOString()
+            } as any);
             addNotification({ 
                 type: formData.status === 'ok' ? 'success' : 'warning', 
                 title: 'Contrôle Huile', 

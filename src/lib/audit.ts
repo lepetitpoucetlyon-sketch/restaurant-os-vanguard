@@ -69,7 +69,7 @@ class EmpireAuditLogger {
 
                 // 1. Axiom Integration (Long-term Observability)
                 try {
-                    logger.info(event.action, payload);
+                    logger.info(event.action, payload as any);
                 } catch (e) {
                     // Silently fail if axiom is not configured
                 }
@@ -122,7 +122,7 @@ class EmpireAuditLogger {
             severity: 'critical',
             details: {
                 stack: typeof error === 'string' ? null : error.stack,
-                ...(context as Record<string, any>)
+                ...(context as import('@/shared/nexus-contract').SovereignData)
             },
             timestamp: new Date()
         });

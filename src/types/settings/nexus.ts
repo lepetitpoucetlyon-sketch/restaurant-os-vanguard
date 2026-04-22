@@ -12,7 +12,7 @@ export interface NexusMacro {
     isActive: boolean;
 }
 
-export interface NexusAIConfig {
+export interface NexusConfig {
     aiName: string;       // Custom name for the assistant (e.g., Albert, Étienne)
     voiceId: GeminiVoiceId; // Selected voice
     personality: 'expert' | 'concise' | 'friendly' | 'protective';
@@ -20,6 +20,8 @@ export interface NexusAIConfig {
     historyEnabled: boolean;
     autoLanguage: boolean;
 }
+
+export type NexusAIConfig = NexusConfig;
 
 export const GEMINI_VOICES: { id: GeminiVoiceId, name: string, gender: 'female' | 'male', description: string }[] = [
     { id: 'aoede', name: 'Aoede', gender: 'female', description: 'Voix claire, calme et experte.' },

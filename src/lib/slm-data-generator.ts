@@ -1,9 +1,9 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { StockItem } from '@/types/inventory.types';
-import { Reservation } from '@/types/reservations.types';
-import { User } from '@/types/auth.types';
-import { Recipe } from '@/types/common.types';
-import { Account } from '@/types/accounting.types';
+import { StockItem } from '@/modules/inventory/types';
+import { Reservation } from '@/modules/ops/reservations.types';
+import { User } from '@/types';
+import { Recipe } from '@/types';
+import { Account } from '@/modules/finance/types';
 import { HygieneLog, Candidate } from '@/types';
 
 export interface SLMTrainingPair {
@@ -33,10 +33,10 @@ export class SLMDataGenerator {
      * Generates stock knowledge pairs from Firestore
      */
     static async generateStockPairs(): Promise<SLMTrainingPair[]> {
-        const stocks = await Nexus.adapter.query('stock_items');
+        const stocks = await Nexus.adapter.query<StockItem>('stock_items');
         const pairs: SLMTrainingPair[] = [];
 
-        (stocks as StockItem[]).forEach(item => {
+        stocks.forEach(item => {
             const itemName = item.ingredientName;
             const quantity = item.quantity || item.currentStock || 0;
             const unit = item.unit || "unités";
@@ -66,10 +66,10 @@ export class SLMDataGenerator {
      * Generates Customer & Reservation knowledge from Firestore
      */
     static async generateReservationPairs(): Promise<SLMTrainingPair[]> {
-        const reservations = await Nexus.adapter.query('reservations');
+        const reservations = await Nexus.adapter.query<Reservation>('reservations');
         const pairs: SLMTrainingPair[] = [];
 
-        (reservations as Reservation[]).forEach(res => {
+        reservations.forEach(res => {
             const anonName = this.anonymizeName(res.customerName);
             pairs.push({
                 instruction: `Consulte les détails de la réservation de ${anonName}.`,
@@ -86,12 +86,11 @@ export class SLMDataGenerator {
      * Generates Menu & Recipe knowledge from Firestore
      */
     static async generateRecipePairs(): Promise<SLMTrainingPair[]> {
-        const recipes = await Nexus.adapter.query('recipes');
+        const recipes = await Nexus.adapter.query<Recipe>('recipes');
         const pairs: SLMTrainingPair[] = [];
 
-        (recipes as Recipe[]).forEach(recipe => {
-            const ingredientsList = recipe.ingredients?.map((i) => {
-                const ing = i as { quantity: number; unit: string; name: string };
+        recipes.forEach(recipe => {
+            const ingredientsList = recipe.ingredients?.map((ing) => {
                 return `${ing.quantity}${ing.unit} de ${ing.name}`;
             }).join(', ');
             pairs.push({
@@ -109,10 +108,10 @@ export class SLMDataGenerator {
      * Finance Knowledge from Firestore
      */
     static async generateFinancePairs(): Promise<SLMTrainingPair[]> {
-        const accounts = await Nexus.adapter.query('accounts');
+        const accounts = await Nexus.adapter.query<Account>('accounts');
         const pairs: SLMTrainingPair[] = [];
 
-        (accounts as Account[]).forEach(acc => {
+        accounts.forEach(acc => {
             pairs.push({
                 instruction: `Quel est le solde du compte ${acc.code} (${acc.name}) ?`,
                 input: `Consultation compte compta ${acc.code}`,
@@ -128,13 +127,13 @@ export class SLMDataGenerator {
      * HACCP & Compliance Knowledge from Firestore
      */
     static async generateHACCPPairs(): Promise<SLMTrainingPair[]> {
-        const logs = await Nexus.adapter.query('hygieneLogs', {
+        const logs = await Nexus.adapter.query<HygieneLog>('hygieneLogs', {
             orderBy: { field: 'createdAt', direction: 'desc' },
             limit: 20
         });
         const pairs: SLMTrainingPair[] = [];
 
-        (logs as HygieneLog[]).forEach(log => {
+        logs.forEach(log => {
             pairs.push({
                 instruction: `Quel est l'état du dernier contrôle d'hygiène sur ${log.item} ?`,
                 input: `Vérification conformité HACCP ${log.item}`,
@@ -150,13 +149,13 @@ export class SLMDataGenerator {
      * HR & Staff Knowledge from Firestore
      */
     static async generateStaffHRPairs(): Promise<SLMTrainingPair[]> {
-        const users = await Nexus.adapter.query('users');
-        const candidates = await Nexus.adapter.query('candidates');
+        const users = await Nexus.adapter.query<User>('users');
+        const candidates = await Nexus.adapter.query<Candidate>('candidates');
         
         const pairs: SLMTrainingPair[] = [];
 
         // Staff
-        (users as User[]).forEach(u => {
+        users.forEach(u => {
             pairs.push({
                 instruction: `Quel est le rôle de ${u.name} dans l'équipe ?`,
                 input: `Infos employé ${u.name}`,
@@ -166,9 +165,9 @@ export class SLMDataGenerator {
         });
 
         // Recruitment
-        const openRoles = [...new Set((candidates as Candidate[]).map(c => c.appliedRole))].filter(Boolean);
+        const openRoles = [...new Set(candidates.map(c => c.appliedRole))].filter((role): role is string => !!role);
         openRoles.forEach(role => {
-            const applicants = (candidates as Candidate[]).filter(c => c.appliedRole === role && c.status === 'new');
+            const applicants = candidates.filter(c => c.appliedRole === role && c.status === 'new');
             pairs.push({
                 instruction: `Avancement du recrutement pour le poste de ${role} ?`,
                 input: `Pipeline recrutement ${role}`,

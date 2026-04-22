@@ -9,7 +9,7 @@ import {
 import { QualityEngine } from '@/domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@/domain/types/quality';
 import { logger } from '@/lib/logger';
-import { useSettings } from './useSettings';
+import { useSettings } from '@/hooks/useSettings';
 import { useTenant } from '@/engines/core/NexusCoreProvider';
 
 /**

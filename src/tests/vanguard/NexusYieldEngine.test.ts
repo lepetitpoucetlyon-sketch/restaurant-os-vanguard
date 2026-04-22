@@ -39,7 +39,7 @@ describe('🌀 VANGUARD : NexusYieldEngine Certification', () => {
         const mockStock = [{ ingredientId: 'ing_wagyu', quantity: 10000 }]; // 10kg
         const velocity = 20; // 20 orders/h
 
-        const results = await NexusYieldEngine.processYieldCycle({
+        const results = await (NexusYieldEngine as any).processYieldCycle({
             products: mockProducts,
             allStock: mockStock,
             currentVelocity: velocity
@@ -58,7 +58,7 @@ describe('🌀 VANGUARD : NexusYieldEngine Certification', () => {
         const mockStock = [{ ingredientId: 'ing_wagyu', quantity: 10000 }]; // 10kg
         const velocity = 75; // 75 orders/h (Rush)
 
-        const results = await NexusYieldEngine.processYieldCycle({
+        const results = await (NexusYieldEngine as any).processYieldCycle({
             products: mockProducts,
             allStock: mockStock,
             currentVelocity: velocity
@@ -73,7 +73,7 @@ describe('🌀 VANGUARD : NexusYieldEngine Certification', () => {
         const mockStock = [{ ingredientId: 'ing_wagyu', quantity: 2000 }]; // 2kg (Critical < 5kg)
         const velocity = 10;
 
-        const results = await NexusYieldEngine.processYieldCycle({
+        const results = await (NexusYieldEngine as any).processYieldCycle({
             products: mockProducts,
             allStock: mockStock,
             currentVelocity: velocity
@@ -93,7 +93,7 @@ describe('🌀 VANGUARD : NexusYieldEngine Certification', () => {
         const mockStock = [{ ingredientId: 'ing_wagyu', quantity: 3000 }]; // 3kg (Critical)
         const velocity = 88; // 88 orders/h (Rush)
 
-        const results = await NexusYieldEngine.processYieldCycle({
+        const results = await (NexusYieldEngine as any).processYieldCycle({
             products: mockProducts,
             allStock: mockStock,
             currentVelocity: velocity

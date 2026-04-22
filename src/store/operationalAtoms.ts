@@ -64,7 +64,7 @@ export {
     shiftLogsNodeAtom, shiftLogsAtom,
     leaveRequestsNodeAtom, leaveRequestsAtom,
     leaveBalancesNodeAtom, leaveBalancesAtom,
-    hrLoadingAtom
+    hrStaffLoadingAtom as hrLoadingAtom
 } from '@/modules/hr/store/staffAtoms';
 
 // 🛡️ COMPLIANCE DOMAIN (Fiscal + Guard/HACCP)

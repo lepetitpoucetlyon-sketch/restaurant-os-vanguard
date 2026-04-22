@@ -59,13 +59,14 @@ export interface SiteTelemetry {
     id: string;
     key: string;
     name: string;
-    status:  'error' | 'provisioning' | 'online' | 'offline' | 'maintenance' | 'locked';
-    tier: 'standard' | 'premium' | 'enterprise' | 'empire-limitless';
+    status:  'CRITICAL' | 'PROVISIONING' | 'ONLINE' | 'OFFLINE' | 'MAINTENANCE' | 'LOCKED';
+    tier: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     version: string;
     createdAt: string;
     lastHeartbeat: string;
     activeUsers: number;
     complianceScore: number;
+    healthScore: number;
     lowStockAlerts: number;
     branding: SiteBranding;
     security: SiteSecurity;

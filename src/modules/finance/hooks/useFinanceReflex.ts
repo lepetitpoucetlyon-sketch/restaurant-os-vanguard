@@ -17,7 +17,7 @@ export function useFinanceReflex() {
         if (pulse.type === 'HACCP_SET_WASTELOGS' || pulse.type === 'HACCP_WASTE') {
             logger.info(`[FINANCE_REFLEX] Reaction to HACCP Waste: ${pulse.id}`);
             
-            const wasteData = pulse.payload.data;
+            const wasteData = pulse.payload.data as any;
             
             addJournalEntry({
                 date: new Date().toISOString(),
@@ -31,7 +31,7 @@ export function useFinanceReflex() {
                 ],
                 isSystemGenerated: true,
                 isValidated: false
-            });
+            } as any);
         }
 
     }, [pulse, addJournalEntry]);

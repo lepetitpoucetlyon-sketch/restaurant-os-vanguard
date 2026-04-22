@@ -36,7 +36,7 @@ export class GeminiLiveService {
         this.rolePermissions = rolePermissions;
         this.onTranscript = callbacks?.onTranscript || null;
         this.onToolCall = callbacks?.onToolCall || null;
-        this.audioContext = new (window.AudioContext || (window as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
+        this.audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
     }
 
 
@@ -130,7 +130,7 @@ export class GeminiLiveService {
         // --- RBAC SENTINEL ---
         const hasAccess = AccessPolicyManager.hasAccess(
             this.user, 
-            this.rolePermissions as string[], 
+            this.rolePermissions as any, 
             tool.category as CategoryKey
         );
 
@@ -144,19 +144,19 @@ export class GeminiLiveService {
 
         try {
             // Injecting Engines/State as context for the tool
-            const result = await tool.execute(event.args, this.user!, {
+            const result = await (tool as any).execute(event.args as any, this.user!, {
                 // Here we can inject real engine instances if we have access to them
                 // For now, we provide the metadata needed for strategic analysis
                 timestamp: new Date().toISOString()
             });
-            this.sendToolResult(event.callId, result);
+            this.sendToolResult(event.callId, result as any);
         } catch (error) {
             console.error(`Tool Execution Error (${tool.name}):`, error);
             this.sendToolResult(event.callId, { error: "Une erreur est survenue lors de l'exécution de la commande." });
         }
     }
 
-    private sendToolResult(callId: string, result: SovereignValue) {
+    private sendToolResult(callId: string, result: any) {
         this.socket?.send(JSON.stringify({
             type: 'tool_result',
             callId,

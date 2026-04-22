@@ -44,7 +44,7 @@ export async function togglePrepTaskAction(tenantId: string, taskId: string) {
         const snap = await Nexus.adapter.get(path);
         
         if (snap) {
-            const currentStatus = snap.isCompleted || false;
+            const currentStatus = !!snap.isCompleted;
             const updates = KitchenService.togglePrepTask(currentStatus);
             await Nexus.adapter.update(path, updates);
         }

@@ -1,4 +1,4 @@
-import { SupplierOrder } from '@/types/inventory.types';
+import { SupplierOrder } from '@/modules/inventory/types';
 
 export interface CleaningTask {
     id: string;
@@ -74,14 +74,4 @@ export interface MaintenanceLog {
     status: 'completed' | 'pending';
 }
 
-export interface SensorReading {
-    id: string;
-    name: string;
-    sensorId?: string;
-    type: 'temperature' | 'humidity' | 'air_quality';
-    value: number;
-    unit: string;
-    status: 'normal' | 'warning' | 'alert';
-    timestamp?: string;
-    isAnomaly?: boolean;
-}
+// SensorReading moved to central types.ts

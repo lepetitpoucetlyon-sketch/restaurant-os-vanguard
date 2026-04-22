@@ -116,7 +116,7 @@ export class FinanceCore {
         };
 
         // 2. SEAL THE REPORT
-        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as SovereignData);
+        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as unknown as SovereignData);
         
         return zReport;
     }
@@ -161,5 +161,8 @@ export class FinanceCore {
         return true;
     }
 }
+
+// Bridge Alias for Server Actions
+export const FinanceService = FinanceCore;
 
 

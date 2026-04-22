@@ -1,0 +1,11 @@
+src/store/pulseAtoms.ts:30:        set(nexusPulseAtom as any, pulse);
+src/store/nexusNodeFactory.ts:34:    GlobalRegistryService.register(id, nodeAtom as any);
+src/store/tutorialAtoms.ts:34:        set(tutorialSectionAtom as any, section);
+src/store/tutorialAtoms.ts:35:        set(tutorialPointIndexAtom as any, 0);
+src/store/tutorialAtoms.ts:36:        set(tutorialActiveAtom as any, true);
+src/store/tutorialAtoms.ts:43:        set(tutorialActiveAtom as any, false);
+src/store/tutorialAtoms.ts:44:        set(tutorialSectionAtom as any, null);
+src/store/tutorialAtoms.ts:45:        set(tutorialPointIndexAtom as any, 0);
+src/store/tutorialAtoms.ts:55:            set(tutorialPointIndexAtom as any, index + 1);
+src/store/tutorialAtoms.ts:57:            set(tutorialActiveAtom as any, false);
+src/store/tutorialAtoms.ts:67:            set(tutorialPointIndexAtom as any, index - 1);

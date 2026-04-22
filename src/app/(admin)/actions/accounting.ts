@@ -2,6 +2,7 @@
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 import { FiscalEngine } from '@/domain/services/FiscalEngine';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { ExpenseClaimSchema, JournalEntrySchema } from '@/domain/schemas/accounting';
@@ -38,7 +39,7 @@ export async function submitExpenseAction(tenantId: string, expenseData: {
             orderBy: { field: 'timestamp', direction: 'desc' },
             limit: 1
         });
-        const lastHash = lastSeals.length > 0 ? (lastSeals[0] as FiscalSeal).hash : null;
+        const lastHash = lastSeals.length > 0 ? (lastSeals[0] as unknown as FiscalSeal).hash : null;
 
         // 2. Prepare Data via AccountingService
         const { seal, journalEntry } = await AccountingService.prepareExpenseTransaction(
@@ -51,8 +52,8 @@ export async function submitExpenseAction(tenantId: string, expenseData: {
         // 3. ATOMIC TRANSACTION
         return await NexusTransaction.run({
             expense: { 
-                schema: ExpenseClaimSchema, 
-                data: { ...expenseData, id: expenseId, status: 'pending', date: timestamp.toISOString() } 
+                schema: ExpenseClaimSchema as unknown as z.ZodSchema<import('@/shared/nexus-contract').SovereignValue>, 
+                data: { ...expenseData, id: expenseId, status: 'pending', date: timestamp.toISOString() } as import('@/shared/nexus-contract').SovereignData
             }
         }, async (transaction) => {
             // A. Create Expense Claim

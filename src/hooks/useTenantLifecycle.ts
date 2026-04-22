@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
  */
 export function useTenantLifecycle(tenantId: string | null) {
     const setSlots = useSetAtom(activeTenantSlotsAtom);
-    const setActiveTenant = useSetAtom(activeFleetTenantAtom);
+    const setActiveTenant = useSetAtom(activeFleetTenantAtom as any);
     const store = useStore();
 
     useEffect(() => {
@@ -31,8 +31,8 @@ export function useTenantLifecycle(tenantId: string | null) {
                     id: tenantId, 
                     key: tenantId,
                     name: `Tenant ${tenantId}`,
-                    status: 'online',
-                    tier: 'standard',
+                    status: 'ONLINE',
+                    tier: 'STANDARD',
                     version: '1.0.0',
                     createdAt: new Date().toISOString(),
                     lastHeartbeat: new Date().toISOString(),
@@ -51,7 +51,7 @@ export function useTenantLifecycle(tenantId: string | null) {
             const entry = GlobalRegistryService.getEntry(domainId);
             if (entry) {
                 // We set loading to true to trigger re-fetch in components
-                store.set(entry.atom, (prev) => {
+                store.set(entry.atom as any, (prev: any) => {
                     const node = prev as import('@/store/nexusNodeFactory').NexusNode<import('@/shared/nexus-contract').SovereignValue>;
                     return {
 
@@ -59,7 +59,7 @@ export function useTenantLifecycle(tenantId: string | null) {
                         data: [],
                         loading: true,
                         lastUpdated: Date.now()
-                    };
+                    } as any;
                 });
             }
         });

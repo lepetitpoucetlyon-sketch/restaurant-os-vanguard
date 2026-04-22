@@ -39,7 +39,7 @@ export class TransactionService {
                 orderBy: { field: 'timestamp', direction: 'desc' },
                 limit: 1
             });
-            const lastHash = lastSeals.length > 0 ? (lastSeals[0] as FiscalSeal).hash : null;
+            const lastHash = lastSeals.length > 0 ? (lastSeals[0] as any as FiscalSeal).hash : null;
 
             const seal = await FiscalEngine.sealEntry(order.id, {
                 amount: order.totalInCents, // Correction: changed from totalInCents to amount to match FiscalEngine expected data
@@ -56,7 +56,7 @@ export class TransactionService {
             // 3. STOCK DEDUCTION (Powered by StockEngine)
             const stockImpact = await StockEngine.calculateOrderStockImpact(
                 order, 
-                recipes as Recipe[], 
+                recipes as any[] as Recipe[], 
                 allStock as StockItem[], 
                 orderId
             );

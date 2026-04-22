@@ -30,8 +30,8 @@ export class KitchenService {
             costPriceInCents: recipe.costPriceInCents || 0,
             sellingPriceInCents: recipe.sellingPriceInCents || 0,
             marginInCents: recipe.marginInCents || (recipe.sellingPriceInCents || 0) - (recipe.costPriceInCents || 0),
-            updatedAt: new Date(),
-            createdAt: recipe.createdAt instanceof Date ? recipe.createdAt : new Date(recipe.createdAt || now),
+            updatedAt: new Date().toISOString(),
+            createdAt: typeof recipe.createdAt === 'string' ? recipe.createdAt : now,
             color: recipe.color || '#000000',
             isActive: recipe.isActive ?? true
         } as Recipe;

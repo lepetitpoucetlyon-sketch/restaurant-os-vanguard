@@ -23,11 +23,11 @@ import { SimulationService, SimulationMode, MonteCarloResult } from "@/domain/se
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@/components/ui/Toast";
 
-interface SimulationDayResult extends MonteCarloResult['metrics'] {
+type SimulationDayResult = MonteCarloResult['metrics'] & {
     date: string;
     anomalies: string[];
     orders: import('@/types').Order[];
-}
+};
 
 export default function SimulationPage() {
     const { ingredients, stockItems } = useInventory();

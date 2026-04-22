@@ -8,7 +8,7 @@ import { NexusNode, updateNexusNode } from '@/store/nexusNodeFactory';
  * Enables O(1) fleet-wide purge and memory management.
  */
 interface RegisteredAtom {
-    atom: WritableAtom<NexusNode<import('@/shared/nexus-contract').SovereignValue>, [NexusNode<import('@/shared/nexus-contract').SovereignValue> | ((prev: NexusNode<import('@/shared/nexus-contract').SovereignValue>) => NexusNode<import('@/shared/nexus-contract').SovereignValue>)], void>;
+    atom: WritableAtom<NexusNode<any>, [any | ((prev: any) => any)], void>;
     lastAccessed: number;
     usageCount: number;
 }
@@ -31,7 +31,7 @@ export const GlobalRegistryService = {
     /**
      * Registers a new domain atom for memory management.
      */
-    register(id: string, atom: WritableAtom<NexusNode<import('@/shared/nexus-contract').SovereignValue>, [NexusNode<import('@/shared/nexus-contract').SovereignValue> | ((prev: NexusNode<import('@/shared/nexus-contract').SovereignValue>) => NexusNode<import('@/shared/nexus-contract').SovereignValue>)], void>) {
+    register(id: string, atom: WritableAtom<NexusNode<any>, [any | ((prev: any) => any)], void>) {
 
         if (!registry.has(id)) {
             registry.set(id, {
@@ -70,7 +70,7 @@ export const GlobalRegistryService = {
      * Decrements usage count (for hook cleanup).
      * TRIGGER: Immediate GC if count reaches 0 for volatile domains.
      */
-    release(id: string, store?: { set: (atom: WritableAtom<import('@/shared/nexus-contract').SovereignValue, import('@/shared/nexus-contract').SovereignValue[], void>, value: import('@/shared/nexus-contract').SovereignValue) => void }) {
+    release(id: string, store?: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }) {
 
         const entry = registry.get(id);
         if (entry && entry.usageCount > 0) {
@@ -86,18 +86,19 @@ export const GlobalRegistryService = {
     /**
      * 🧹 Nuclear Purge (Zero Leak Policy)
      */
-    purgeInactive(store: { set: (atom: WritableAtom<import('@/shared/nexus-contract').SovereignValue, import('@/shared/nexus-contract').SovereignValue[], void>, value: import('@/shared/nexus-contract').SovereignValue) => void }, ttlMax: number = 120000) {
+    purgeInactive(store: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }, ttlMax: number = 120000) {
 
         const now = Date.now();
         let purgedCount = 0;
 
         registry.forEach((entry, id) => {
             const isIdle = entry.usageCount === 0;
-            const isExpired = (now - entry.lastAccessed) > ttlMax;
+            const serverDate = (entry.lastAccessed as any) instanceof Date ? entry.lastAccessed : new Date(entry.lastAccessed);
+            const isExpired = (now - ((serverDate as any) instanceof Date ? serverDate.getTime() : new Date(serverDate).getTime())) > ttlMax;
 
             if (isIdle && isExpired) {
                 logger.info(`[Registry] Purging idle atom: ${id}`);
-                store.set(entry.atom, (prev: NexusNode<import('@/shared/nexus-contract').SovereignValue>) => updateNexusNode(prev, { 
+                store.set(entry.atom, (prev: NexusNode<any>) => updateNexusNode(prev, { 
                     data: [], 
                     loading: true 
                 }));
@@ -113,7 +114,7 @@ export const GlobalRegistryService = {
     /**
      * ☢️ Force Nuclear Purge
      */
-    forceNuclearPurge(store: { set: (atom: WritableAtom<import('@/shared/nexus-contract').SovereignValue, import('@/shared/nexus-contract').SovereignValue[], void>, value: import('@/shared/nexus-contract').SovereignValue) => void }) {
+    forceNuclearPurge(store: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }) {
 
         this.purgeInactive(store, -1);
     },

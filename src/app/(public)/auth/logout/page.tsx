@@ -3,8 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/hooks/useAuth';
-import { MCCInsights } from '@/components/admin/mcc/MCCInsights';
+import { useAuth } from "@/engines/core/NexusCoreProvider";
 import { ShieldAlert, RefreshCcw, Home } from 'lucide-react';
 
 /**
@@ -86,7 +85,7 @@ export default function LogoutPage() {
                             </button>
                             
                             <button 
-                                onClick={() => router.push('/landing')}
+                                onClick={() => router.push('/')}
                                 className="w-full h-14 border border-zinc-800 hover:bg-zinc-900 text-zinc-400 font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 rounded-lg"
                             >
                                 <Home className="w-5 h-5" />

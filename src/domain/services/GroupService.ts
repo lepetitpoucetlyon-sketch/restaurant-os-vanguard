@@ -30,7 +30,7 @@ export class GroupService {
             return { valid: false, error: "Le nom de l'événement est requis." };
         }
         
-        if (!data.guestCount || data.guestCount <= 0) {
+        if (!data.covers?.initial || data.covers.initial <= 0) {
             return { valid: false, error: "Le nombre d'invités doit être positif." };
         }
 

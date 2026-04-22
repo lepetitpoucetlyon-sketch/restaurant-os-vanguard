@@ -52,14 +52,14 @@ export class NexusPayrollEngine {
 
     // 3. Execute Transaction
     return await NexusTransaction.run(
-      { HR_EVENT: { schema: ShiftEntrySchema, data: rawData } },
+      { HR_EVENT: { schema: ShiftEntrySchema as any, data: rawData as any } },
       async (transaction) => {
         const tenantPath = getTenantPath(this.COLLECTION);
         const newId = Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 12);
         const newPath = `${tenantPath}/${newId}`;
 
         // 4. Generate Final Sealed Entry
-        const seal = await FiscalEngine.sealEntry(newId, { userId: user.id, timestamp: rawData.timestamp as Date, type: type as string }, { lastSeal });
+        const seal = await FiscalEngine.sealEntry(newId, { userId: user.id, timestamp: rawData.timestamp as Date, type: type as string }, { lastSeal }) as any;
 
         const finalEntry = {
           ...rawData,
@@ -87,7 +87,7 @@ export class NexusPayrollEngine {
         limit: 1
       });
       if (snap.length === 0) return null;
-      return snap[0].fiscalSeal;
+      return snap[0].fiscalSeal as any;
     } catch (e) {
       logger.error('[NexusPayrollEngine] Failed to fetch last HR seal', e);
       return null;

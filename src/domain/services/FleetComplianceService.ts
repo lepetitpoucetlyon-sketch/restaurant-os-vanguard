@@ -21,16 +21,16 @@ export const FleetComplianceService = {
       const ledgerPath = getTenantPath('fiscal_ledger', tenantId);
       const entriesRaw = await Nexus.adapter.query(ledgerPath);
       
-      const entries = entriesRaw.sort((a, b) => a.sequence - b.sequence);
+      const entries = entriesRaw.sort((a, b) => (a as any).sequence - (b as any).sequence);
       
       let isChainValid = true;
       let sequenceError: number | null = null;
       
       // Verify hashes and sequence continuity
       for (let i = 1; i < entries.length; i++) {
-        if (entries[i].sequence !== entries[i-1].sequence + 1) {
+        if ((entries[i] as any).sequence !== (entries[i-1] as any).sequence + 1) {
           isChainValid = false;
-          sequenceError = entries[i].sequence;
+          sequenceError = (entries[i] as any).sequence;
           break;
         }
       }

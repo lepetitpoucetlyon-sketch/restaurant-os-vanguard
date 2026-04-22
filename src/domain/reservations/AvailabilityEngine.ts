@@ -19,7 +19,7 @@ export class AvailabilityEngine {
     existingReservations: Reservation[],
     tables: Table[]
   ): AvailableSlot[] {
-    const dayOfWeek = format(date, 'EEEE').toLowerCase() as import('@/types/schedule').DayOfWeek;
+    const dayOfWeek = format(date, 'EEEE').toLowerCase() as import('@/types').DayOfWeek;
     const schedule = settings.schedule.find(s => s.day === dayOfWeek);
 
     if (!schedule || !schedule.isOpen) return [];

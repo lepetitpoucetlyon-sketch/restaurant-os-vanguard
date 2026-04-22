@@ -21,13 +21,13 @@ export default function MCCAuditStream() {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const unsubscribe = empireAudit.subscribe((event) => {
+        const unsubscribe = (empireAudit as any).subscribe((event: any) => {
             const entry: LogEntry = {
                 id: Math.random().toString(36).substring(7),
                 module: event.module || 'system',
                 action: event.action || 'telemetry',
                 severity: event.severity || 'info',
-                timestamp: event.timestamp || new Date(),
+                timestamp: event.timestamp instanceof Date ? event.timestamp : new Date(event.timestamp || Date.now()),
                 details: event.details
             };
             setLogs(prev => [entry, ...prev].slice(0, 50));

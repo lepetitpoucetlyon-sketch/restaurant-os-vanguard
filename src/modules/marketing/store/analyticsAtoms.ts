@@ -5,10 +5,8 @@ import {
     recipesAtom, 
     staffMembersAtom,
     stockItemsAtom
-} from './operationalAtoms';
-import { Order } from '@/types/orders.types';
-import { Product, Recipe } from '@/types/common.types';
-import { User as StaffMember } from '@/types/auth.types';
+} from '@/store/operationalAtoms';
+import { Order, Product, Recipe, User as StaffMember } from '@/types';
 
 // --- 📈 ANALYTICS DOMAIN (Cross-domain computed selectors) ---
 

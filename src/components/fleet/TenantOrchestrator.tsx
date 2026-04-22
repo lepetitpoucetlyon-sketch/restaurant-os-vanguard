@@ -32,17 +32,17 @@ export const TenantOrchestrator: React.FC = () => {
 
     // HYDRATION: Bridge mock data with FleetCommander logic for evaluation
     const displayFleet = fleet.length > 0 ? fleet : [
-        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'online', metrics: { dailyRevenue: 4500, alerts: 0, errorRate: 0.01, uptime: 99.9 } },
-        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'online', metrics: { dailyRevenue: 2800, alerts: 2, errorRate: 0.05, uptime: 99.1 } },
-        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'error', metrics: { dailyRevenue: 1200, alerts: 8, errorRate: 0.15, uptime: 95.0 } },
-        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'maintenance', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
+        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'ONLINE', metrics: { dailyRevenue: 4500, alerts: 0, errorRate: 0.01, uptime: 99.9 } },
+        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'ONLINE', metrics: { dailyRevenue: 2800, alerts: 2, errorRate: 0.05, uptime: 99.1 } },
+        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { dailyRevenue: 1200, alerts: 8, errorRate: 0.15, uptime: 95.0 } },
+        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
     ].map(inst => {
-        const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
+        const metrics = (inst as any).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(metrics.alerts || 0, metrics.errorRate || 0, metrics.uptime || 0);
         return {
+            ...inst,
             metrics: { ...metrics, healthScore: health }
-        } as import('@/domain/types/empire').EmpireInstance;
-
+        } as any;
     });
 
     const handleSwitch = (tenantId: string, name: string) => {
@@ -80,8 +80,8 @@ export const TenantOrchestrator: React.FC = () => {
             <div className="p-4 space-y-3 max-h-[500px] overflow-y-auto elegant-scrollbar">
                 {displayFleet.map((instance) => {
                     const isActive = instance.id === activeTenantId;
-                    const isError = instance.status === 'error';
-                    const isMaintenance = instance.status === 'maintenance';
+                    const isError = instance.status === 'CRITICAL';
+                    const isMaintenance = instance.status === 'MAINTENANCE';
 
                     return (
                         <motion.button
@@ -135,7 +135,7 @@ export const TenantOrchestrator: React.FC = () => {
                                         <div className="flex items-center gap-1.5">
                                             <div className={cn(
                                                 "w-2 h-2 rounded-full",
-                                                instance.status === 'online' ? "bg-success" : 
+                                                instance.status === 'ONLINE' ? "bg-success" : 
                                                 isError ? "bg-error" : "bg-warning animate-pulse"
                                             )} />
                                             <span className={cn(

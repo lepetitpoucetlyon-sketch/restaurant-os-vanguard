@@ -1,7 +1,7 @@
 /**
  * INVENTORY TYPES - Complete Stock Management System
  */
-import { TemperatureLog } from './haccp.types';
+import { TemperatureLog } from '@/modules/haccp/types';
 
 // Storage Location Types
 export type StorageType = 'fridge' | 'freezer' | 'dry_storage' | 'cellar' | 'counter' | 'other';
@@ -61,6 +61,7 @@ export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'piece' |
 
 // Base Ingredient Definition (Master data)
 export interface Ingredient {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined; // Phase 9: Sovereign Mapping
     id: string;
     name: string;
     category: IngredientCategory;
@@ -78,10 +79,12 @@ export interface Ingredient {
     isOrganic?: boolean;
     origin?: string; // Country/Region of origin
     certifications?: string[]; // AOC, AOP, Label Rouge, etc.
+    tags?: string[]; // Added for Phase 8 Vision Search
 }
 
 // Stock Item - Actual physical stock with batch/lot tracking
 export interface StockItem {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined; // Phase 9: Sovereign Mapping
     id: string;
     ingredientId: string;
     ingredientName: string;
@@ -110,6 +113,8 @@ export interface StockItem {
     unitCostInCents: number;
     priceInCents?: number; // Grade X Alias for unitCostInCents
     taxRate?: number;
+    shelfLifeDays?: number; // Added for Phase 8 UI stability
+    unitCost?: number; // Added for Phase 8 UI stability
 
     // Status
     status: 'available' | 'reserved' | 'expired' | 'low' | 'quarantine' | 'depleted' | 'discarded';

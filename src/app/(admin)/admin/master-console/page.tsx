@@ -47,8 +47,8 @@ export default function MasterConsolePage() {
   } = useFleet();
 
   const triggerRebalancing = (insight: FleetInsight) => {
-    logger.info('[MCC] Rebalancing Triggered', { insight });
-    alert(`[Nexus Intelligence] Action Executed: ${insight.message}\nLogic: ${insight.recommendation}`);
+    logger.info('[MCC] Rebalancing Triggered', { insight: insight as any });
+    alert(`[Nexus Intelligence] Action Executed: ${(insight as any).message}\nLogic: ${(insight as any).recommendation}`);
   };
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,7 +120,7 @@ export default function MasterConsolePage() {
                     </div>
                     <div className="text-left">
                         <p className="text-[11px] font-black uppercase tracking-widest">Empire Overview</p>
-                        <p className="text-[8px] font-bold text-neutral-500 uppercase tracking-tight">{instances.length} Sites Online</p>
+                        <p className="text-[8px] font-bold text-neutral-500 uppercase tracking-tight">{(instances as any[]).length} Sites Online</p>
                     </div>
                 </div>
             </button>
@@ -173,7 +173,7 @@ export default function MasterConsolePage() {
 
                     <div className="flex gap-4">
                         <button 
-                            onClick={() => broadcastConfiguration({ maintenance: false })}
+                            onClick={() => broadcastConfiguration({ maintenanceMode: false })}
                             className="px-8 py-4 bg-accent text-white rounded-2xl text-[9px] font-black uppercase tracking-[0.3em] shadow-2xl shadow-accent/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
                         >
                             <Zap className="w-3 h-3 fill-current" />
@@ -392,7 +392,7 @@ export default function MasterConsolePage() {
                         <p className="text-[10px] uppercase tracking-widest text-neutral-500">Simulate Stripe webhook for payment failure.</p>
                     </div>
                     <button 
-                        onClick={() => broadcastConfiguration({ licenceStatus: 'locked' })}
+                        onClick={() => broadcastConfiguration({ licenceStatus: 'locked' } as any)}
                         className="px-6 py-3 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all"
                     >
                         Trigger Lockout
@@ -410,9 +410,9 @@ export default function MasterConsolePage() {
             <ProvisioningWizard 
                 onClose={() => setIsWizardOpen(false)} 
                 onSuccess={(newInstance) => {
-                    registerInstance(newInstance);
+                    registerInstance(newInstance as unknown as EmpireInstance);
                     setIsWizardOpen(false);
-                    selectInstance(newInstance.id);
+                    selectInstance(String(newInstance.id));
                 }} 
             />
         )}

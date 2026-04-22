@@ -1,7 +1,4 @@
-/**
- * 🛒 POS SERVICE - Restaurant OS Bridge
- * Version Grade X - Sovereign Financial Projections
- */
+import { OrderItem } from "@/modules/ops/types";
 
 export class POSService {
     /**
@@ -27,14 +24,14 @@ export class POSService {
     /**
      * Calculates the total for a set of cart items.
      */
-    static calculateCartTotal(items: any[]): number {
+    static calculateCartTotal(items: OrderItem[]): number {
         return items.reduce((acc, item) => acc + (item.priceInCents * item.quantity), 0);
     }
 
     /**
      * Formats car items for the Kitchen Display System (KDS).
      */
-    static formatForKitchen(items: any[]): any {
+    static formatForKitchen(items: OrderItem[]): { name: string; quantity: number; notes: string }[] {
         return items.map(item => ({
             name: item.name,
             quantity: item.quantity,

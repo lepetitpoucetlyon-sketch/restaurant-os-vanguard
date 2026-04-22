@@ -43,7 +43,7 @@ export interface Reservation {
     isVip?: boolean;
     visitCount?: number;
     duration: number;
-    source?: 'phone' | 'website' | 'walk-in' | 'google' | 'thefork';
+    source?: 'phone' | 'website' | 'walk-in' | 'google' | 'thefork' | 'instagram' | 'facebook' | 'tripadvisor' | 'direct';
     name?: string; // fallback alias
     guests?: number; // alias for covers
     createdAt: string;

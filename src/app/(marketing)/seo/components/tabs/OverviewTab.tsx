@@ -30,7 +30,7 @@ export const OverviewTab = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <div className="p-8 rounded-[2.5rem] bg-bg-secondary border border-border flex flex-col items-center justify-center" id="seo-score-gauge">
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mb-6">Score SEO Global</p>
-                    <ScoreGauge score={score} size={160} />
+                    <ScoreGauge score={score.overall} size={160} />
                     <p className={cn("text-sm font-bold mt-6", status.color)}>{status.label}</p>
                 </div>
 
@@ -67,7 +67,7 @@ export const OverviewTab = () => {
                     {livePages.map((page, idx) => (
                         <PageCard
                             key={page.id}
-                            page={page as import('@/app/(marketing)/seo/seo.types').PageSEO}
+                            page={page as any}
                             onEdit={() => { }}
                             id={idx === 0 ? "seo-page-to-optimize-0" : undefined}
                         />

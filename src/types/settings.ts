@@ -9,7 +9,7 @@ import { RecipesConfig, RecipeSettings, RecipeStep, RecipeIngredient } from './s
 import { IngredientSettings, SupplierSettings } from './settings/inventory';
 import { EmployeeSettings, PositionSettings, StaffConfig, ShiftTemplate, AbsenceSettings, PlanningConfig } from './settings/hr';
 import { ReservationSettings } from './settings/reservations';
-import { ClientSettings, LoyaltyProgram } from './settings/Customer';
+import { ClientSettings, LoyaltyProgram } from './settings/customer';
 import { POSSettings, PaymentMethod, ReceiptTemplate } from './settings/pos';
 import { AccountingConfig } from './settings/accounting';
 import { HACCPConfig, ControlPoint, NonConformity } from './settings/haccp';
@@ -28,7 +28,7 @@ export * from './settings/recipes';
 export * from './settings/inventory';
 export * from './settings/hr';
 export * from './settings/reservations';
-export * from './settings/Customer';
+export * from './settings/customer';
 export * from './settings/pos';
 export * from './settings/accounting';
 export * from './settings/haccp';

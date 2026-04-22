@@ -7,7 +7,7 @@ async function runStressTest() {
     logger.info(`🏛️ INITIATING GRADE VI STRESS TEST: ${VOLUME} ENTRIES`);
     
     // 🧪 Génération de données factices massives
-    const fakeStream: LegacyOrder[] = Array.from({ length: VOLUME }).map((_, i) => ({
+    const fakeStream: any[] = Array.from({ length: VOLUME }).map((_, i) => ({
         id: `LG-${100000 + i}`,
         total: Math.floor(Math.random() * 5000) + 1000,
         timestamp: new Date().toISOString(),
@@ -19,7 +19,7 @@ async function runStressTest() {
 
     const start = Date.now();
     
-    const results = await Slayer.ingestMassive(fakeStream, 'lepetitpoucet', (processed) => {
+    const results = await Slayer.ingestMassive(fakeStream as any, 'lepetitpoucet', (processed) => {
         if (processed % 1000 === 0) {
             const elapsed = (Date.now() - start) / 1000;
             logger.info(`[StressTest] Progress: ${processed}/${VOLUME} (Elapsed: ${elapsed.toFixed(1)}s)`);

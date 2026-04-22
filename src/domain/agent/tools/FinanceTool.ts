@@ -20,7 +20,7 @@ export const FinanceTool: ToolDefinition = {
         required: ['period']
     },
     category: 'finance',
-    execute: async (args, user) => {
+    execute: async (args: any, user: any): Promise<any> => {
         // Enforced by GeminiLiveService's RBAC Sentinel
         // Mock data for now, would call FiscalEngine in production
         return {

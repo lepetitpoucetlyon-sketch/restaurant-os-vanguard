@@ -46,7 +46,7 @@ export function TracabiliteEtiquettes() {
 
     const handleSubmit = async () => {
         if (!formData.productName || !formData.batchNumber) {
-            addNotification({ type: 'error', title: 'Erreur', message: 'Veuillez remplir le nom du produit et le numéro de lot.' });
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Veuillez remplir le nom du produit et le numéro de lot.' });
             return;
         }
 
@@ -79,7 +79,7 @@ export function TracabiliteEtiquettes() {
         } catch (e) {
             const error = e as Error;
             console.error(error);
-            addNotification({ type: 'error', title: 'Erreur d\'envoi', message: error.message || 'Impossible d\'enregistrer l\'étiquette.' });
+            addNotification({ type: 'critical', title: 'Erreur d\'envoi', message: error.message || 'Impossible d\'enregistrer l\'étiquette.' });
         } finally {
             setIsUploading(false);
         }

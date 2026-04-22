@@ -46,9 +46,9 @@ export function useKitchen() {
         miseEnPlaceTarget,
         
         // --- Forge Actions ---
-        addRecipe: (data: Partial<Recipe>) => recipeForge.mutate('SET', `rec_${Date.now()}`, data as any),
-        updateRecipe: (id: string, data: Partial<Recipe>) => recipeForge.mutate('UPDATE', id, data as any),
-        deleteRecipe: (id: string) => recipeForge.mutate('DELETE', id, {} as any),
+        addRecipe: (data: Partial<Recipe>) => recipeForge.mutate('SET', `rec_${Date.now()}`, data),
+        updateRecipe: (id: string, data: Partial<Recipe>) => recipeForge.mutate('UPDATE', id, data),
+        deleteRecipe: (id: string) => recipeForge.mutate('DELETE', id),
         togglePrepTask: (id: string, completed: boolean) => prepForge.mutate('UPDATE', id, { completed } as any),
         
         calculateRecipeCost

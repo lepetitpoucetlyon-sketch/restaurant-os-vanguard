@@ -37,7 +37,7 @@ export class MockAdapter implements INexusAdapter {
             results = results.slice(0, options.limit);
         }
 
-        return results as unknown as T[];
+        return results as any as T[];
     }
 
     onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void): () => void {
@@ -76,7 +76,7 @@ export class MockAdapter implements INexusAdapter {
         const baseData = existingData && typeof existingData === 'object' && !Array.isArray(existingData)
             ? existingData as SovereignData
             : {};
-        const mergedData = { ...baseData, ...(data as Record<string, unknown>) } as SovereignData;
+        const mergedData = { ...baseData, ...(data as Record<string, import('@/shared/nexus-contract').SovereignField>) } as SovereignData;
         this.storage[path] = await SovereignGuard.protectWrite(path, mergedData);
     }
 

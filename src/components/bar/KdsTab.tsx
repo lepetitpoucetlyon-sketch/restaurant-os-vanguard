@@ -15,7 +15,27 @@ import {
 import { useAtomValue } from "jotai";
 import { recipesAtom } from "@/store/operationalAtoms";
 import { Recipe } from "@/types";
+import { cn } from "@/lib/ui.foundations";
 
+interface BarOrderItem {
+  name: string;
+  qty: number;
+  station: string;
+  image?: string;
+  modifiers?: string[];
+  notes?: string;
+  details?: { glass?: string; method?: string };
+}
+
+interface BarOrder {
+  id: string;
+  table: string;
+  serverName: string;
+  status: string;
+  priority: string;
+  elapsed: number;
+  items: BarOrderItem[];
+}
 
 interface KdsTabProps {
   orders: BarOrder[];
@@ -25,7 +45,7 @@ interface KdsTabProps {
   updateOrderStatus: (orderId: string, nextStatus: string) => void;
   setRushMode: (mode: boolean) => void;
   setSearchQueryKDS: (query: string) => void;
-  setSelectedRecipe: (recipe: Recipe | BarOrderItem) => void;
+  setSelectedRecipe: (recipe: any) => void;
 }
 
 export const KdsTab: React.FC<KdsTabProps> = ({
@@ -173,7 +193,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                 }
                                 return [item];
                             }).map((item, i) => {
-                                const product = recipes.find(p => p.name === item.name);
+                                const product = (recipes as any[]).find(p => p.name === item.name);
                                 const hasMods = (item.modifiers && item.modifiers.length > 0) || item.notes;
 
                                 return (
@@ -201,7 +221,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                             <button 
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    setSelectedRecipe(product || item);
+                                                    setSelectedRecipe(product || (item as any));
                                                 }}
                                                 className="absolute bottom-3 right-3 w-9 h-9 rounded-xl bg-black/40 hover:bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white transition-all scale-0 group-hover/item:scale-100"
                                             >

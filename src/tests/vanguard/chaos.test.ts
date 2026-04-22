@@ -70,7 +70,7 @@ describe('🔥 OMNI-VANGUARD : BLOC 4 – CHAOS & PERFORMANCE', () => {
             updatedAt: new Date().toISOString(),
             source: 'pos',
             type: 'dine-in'
-        } as Order));
+        } as any as Order));
         store.set(ordersNodeAtom, (prev: NexusNode<Order>) => updateNexusNode(prev, { data: largeData }));
 
 

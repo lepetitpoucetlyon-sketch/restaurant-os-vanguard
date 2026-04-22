@@ -6,13 +6,16 @@ import { Star } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { Button } from '@/components/ui/button';
 
-interface Review {
+export interface Review {
     id: string;
     author: string;
     content: string;
     rating: number;
+    platform: 'google' | 'tripadvisor' | 'thefork' | 'instagram';
+    date: string;
     replied: boolean;
     suggestedReply?: string;
+    sentiment?: 'positive' | 'neutral' | 'negative';
 }
 
 interface ReputationViewProps {

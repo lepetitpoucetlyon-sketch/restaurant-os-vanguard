@@ -93,7 +93,8 @@ export class FirestoreAdapter implements INexusAdapter {
             }
             const q = query(collection(firestore, path), ...constraints);
             return onSnapshot(q, (snap) => {
-                callback(snap.docs.map(d => ({ id: d.id, ...d.data() } as T)) as T);
+                const results = snap.docs.map(d => ({ id: d.id, ...d.data() } as any));
+                callback(results as T);
             }, options?.onError);
         } else {
             return onSnapshot(doc(firestore, path), (snap) => {
@@ -151,13 +152,17 @@ export class FirestoreAdapter implements INexusAdapter {
     }
 
     async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
-        const prepared = await this.prepareWrite(path, data as SovereignData);
+        const prepared = (typeof data === 'object' && data !== null) 
+            ? await this.prepareWrite(path, data as unknown as SovereignData)
+            : data as unknown as SovereignData;
         await setDoc(doc(firestore, path), prepared, options);
     }
 
 
     async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
-        const prepared = await this.prepareWrite(path, data as SovereignData);
+        const prepared = (typeof data === 'object' && data !== null)
+            ? await this.prepareWrite(path, data as unknown as SovereignData)
+            : data as unknown as SovereignData;
         await updateDoc(doc(firestore, path), prepared);
     }
     

@@ -79,7 +79,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
         if (!ing) return;
 
         try {
-            const result = await receiveStockAction(tenantId, ing, {
+            const result = await receiveStockAction(tenantId, ing as any, {
                 quantity: parseFloat(quantity),
                 cost: Math.round((parseFloat(unitCostInCents) || (ing.costInCents / 100)) * 100),
                 manualDlc: dlc,

@@ -149,6 +149,10 @@ export class SimulacraAdapter implements INexusAdapter {
             updatedAt: new Date().toISOString()
         });
     }
+    
+    async create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void> {
+        await this.set(path, data);
+    }
 
     generateId(collectionPath: string): string {
         return IdGenerator.generateWithPrefix('sim');

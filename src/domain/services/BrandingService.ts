@@ -1,5 +1,5 @@
+import 'server-only';
 import { ThemeSettings } from '@/types';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '@/lib/axiom';
 
 /**
@@ -7,9 +7,6 @@ import { logger } from '@/lib/axiom';
  * The engine responsible for 'Putting his Sauce' (Mettre à sa sauce).
  * Orchestrates the conversion of a brand identity into professional Design Tokens.
  */
-
-// Initialize Gemini with the secured API Key
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export interface BrandInput {
     name: string;
@@ -33,8 +30,12 @@ export const BrandingService = {
         logger.info(`[Nexus Branding] Initiating AI Extraction for: ${url}`);
         
         try {
-            // Dynamic import to isolate server-side dependencies like playwright
+            // Dynamic imports to isolate server-side dependencies
             const { VisualIdentityExtractor } = await import('./VisualIdentityExtractor');
+            const { GoogleGenerativeAI } = await import('@google/generative-ai');
+
+            // Initialize Gemini with the secured API Key inside the server context
+            const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
             // 1. Capture the visual identity
             const base64Image = await VisualIdentityExtractor.captureUrl(url);

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { createNexusNode, updateNexusNode } from './operationalAtoms';
+import { createNexusNode, updateNexusNode } from '@/store/operationalAtoms';
 import { QualityControl, ProductQualityConfig, SupplierQualityScore } from '@/domain/types/quality';
 
 /**
@@ -120,51 +120,51 @@ export const supplierScoresAtom = atom((get) => {
 // 5. Statistics & Alert Selectors
 export const qualityAlertsAtom = atom((get) => {
     const controls = get(qualityControlsAtom);
-    return controls.filter(c => c.summary.overall_status === 'fail' || c.summary.overall_status === 'warning');
+    return (controls as any[]).filter(c => c.summary?.overall_status === 'fail' || c.summary?.overall_status === 'warning');
 });
 
 // Selector for today's reception performance
 export const todayReceptionStatsAtom = atom((get) => {
-    const controls = get(qualityControlsAtom);
+    const controls = get(qualityControlsAtom) as any[];
     const today = new Date().toISOString().split('T')[0];
-    const todayControls = controls.filter(c => c.controlled_at.startsWith(today));
+    const todayControls = (controls || []).filter(c => c.controlled_at?.startsWith(today));
     
     return {
         total: todayControls.length,
-        accepted: todayControls.filter(c => c.summary.overall_status === 'pass').length,
-        rejected: todayControls.filter(c => c.summary.overall_status === 'fail').length,
-        issues: todayControls.filter(c => c.summary.visual_issues > 0 || c.summary.temperature_issues > 0).length
+        accepted: todayControls.filter(c => c.summary?.overall_status === 'pass').length,
+        rejected: todayControls.filter(c => c.summary?.overall_status === 'fail').length,
+        issues: todayControls.filter(c => c.summary?.visual_issues > 0 || c.summary?.temperature_issues > 0).length
     };
 });
 
 // Selector for current session summary
 export const qualityCurrentSessionStatsSelector = atom((get) => {
-    const session = get(qualityActiveControlAtom);
+    const session = get(qualityActiveControlAtom) as any;
     const items = session.items || [];
     
-    const accepted = items.filter(i => i.quantity_accepted > 0).length;
-    const rejected = items.filter(i => i.is_rejected).length;
-    const tempIssues = items.filter(i => i.checks.temperature.status === 'fail').length;
+    const accepted = items.filter((i: any) => i.quantity_accepted > 0).length;
+    const rejected = items.filter((i: any) => i.is_rejected).length;
+    const tempIssues = items.filter((i: any) => i.checks?.temperature?.status === 'fail').length;
     
     return {
         total: items.length,
         accepted,
         rejected,
         tempIssues,
-        status: rejected > 0 || tempIssues > 0 ? 'fail' : 'pass'
+        status: (rejected > 0 || tempIssues > 0 ? 'fail' : 'pass') as any
     };
 });
 
 // Global Metrics Selector for Finance Suture
 export const qualityGlobalMetricsSelector = atom((get) => {
-    const scores = get(supplierScoresAtom);
-    const controls = get(qualityControlsAtom);
-    const avgRejection = scores.reduce((sum, s) => sum + s.rejectionRate, 0) / (scores.length || 1);
-    const avgCompliance = scores.reduce((sum, s) => sum + s.complianceRate, 0) / (scores.length || 1);
+    const scores = get(supplierScoresAtom) as any[];
+    const controls = get(qualityControlsAtom) as any[];
+    const avgRejection = (scores || []).reduce((sum, s) => sum + (s.rejectionRate || 0), 0) / (scores.length || 1);
+    const avgCompliance = (scores || []).reduce((sum, s) => sum + (s.complianceRate || 0), 0) / (scores.length || 1);
     return {
         monthlyRejectionRate: avgRejection,
         complianceScore: avgCompliance,
-        totalControlsThisMonth: controls.length,
+        totalControlsThisMonth: (controls || []).length,
         averageFreshness: 4.8 // Mock constant for Grade X UI
     };
 });

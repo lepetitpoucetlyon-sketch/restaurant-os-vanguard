@@ -18,16 +18,16 @@ export function KeywordsCard() {
                 {keywords.map((kw, i) => (
                     <div key={i} className="flex items-center justify-between py-2">
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-text-primary truncate">{kw.keyword}</p>
+                            <p className="text-sm font-medium text-text-primary truncate">{kw.term}</p>
                             <p className="text-[10px] text-text-muted uppercase tracking-widest">{kw.clicks} clics</p>
                         </div>
                         <div className={cn(
                             "text-sm font-black px-3 py-1 rounded-lg border",
-                            kw.position <= 3 ? 'text-[#00D9A6] bg-[#00D9A6]/5 border-[#00D9A6]/20' :
-                                kw.position <= 10 ? 'text-amber-500 bg-amber-500/5 border-amber-500/20' :
+                            (kw.avgPosition || 11) <= 3 ? 'text-[#00D9A6] bg-[#00D9A6]/5 border-[#00D9A6]/20' :
+                                (kw.avgPosition || 11) <= 10 ? 'text-amber-500 bg-amber-500/5 border-amber-500/20' :
                                     'text-rose-500 bg-rose-500/5 border-rose-500/20'
                         )}>
-                            #{kw.position.toFixed(1)}
+                            #{(kw.avgPosition || 11).toFixed(1)}
                         </div>
                     </div>
                 ))}

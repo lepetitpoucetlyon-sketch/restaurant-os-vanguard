@@ -265,7 +265,9 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
     ],
 };
 
-export const defaultNexusConfig: import('@/types/nexus').NexusAIConfig = {
+import { NexusAIConfig } from '@/types/settings/nexus';
+
+export const defaultNexusConfig: NexusAIConfig = {
     aiName: 'NEXUS',
     voiceId: 'aoede',
     personality: 'expert',

@@ -13,7 +13,7 @@ import {
     Plus
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
-import { EQUIPMENT_CONFIG, EquipmentConfig } from '@/types/haccp.types';
+import { EQUIPMENT_CONFIG, EquipmentConfig } from '@/modules/haccp/types';
 import { useHygieneLogs, useCreateHygieneLog } from '@/engines/guard/NexusGuardProvider';
 import { useNotifications } from '@/context/NotificationsContext';
 import { BottomSheet } from '@/components/ui/BottomSheet';
@@ -59,7 +59,7 @@ export function ReleveTemperatures() {
                 createdAt: new Date().toISOString()
             });
             if (isAlert) {
-                addNotification({ type: 'error', title: 'Température Anormale', message: `Alerte de température sur ${recordingEq.label}.` });
+                addNotification({ type: 'critical', title: 'Température Anormale', message: `Alerte de température sur ${recordingEq.label}.` });
             } else {
                 addNotification({ type: 'success', title: 'Relevé enregistré', message: `Température de ${recordingEq.label} validée.` });
             }

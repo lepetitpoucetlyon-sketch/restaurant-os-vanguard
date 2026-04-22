@@ -24,6 +24,7 @@ export interface MarketingCampaign {
     budgetInCents: number;
     spentInCents: number;
     targetSegment: string;
+    subject?: string;
     startsAt: string;
     endsAt: string;
     metrics?: {
@@ -65,3 +66,7 @@ export interface SocialAccount {
     expiresAt?: string;
     isActive: boolean;
 }
+
+export type QuoteLine = import('./quotes.types').QuoteLine;
+export type QuoteLineType = import('./quotes.types').QuoteLineType;
+export type CustomerFeedback = CRMFeedback;

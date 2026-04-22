@@ -21,7 +21,7 @@ export const MenuTool: ToolDefinition = {
         required: ["productName"]
     },
     category: "inventory",
-    execute: async (args: { productName: string, newPrice?: number, newDescription?: string }, user: import('@/types').User) => {
+    execute: async (args: any, user: any): Promise<any> => {
         try {
             const productsPath = getTenantPath('products');
             const results = await Nexus.adapter.query(productsPath, {

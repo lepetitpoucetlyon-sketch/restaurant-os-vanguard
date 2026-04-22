@@ -69,7 +69,7 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
         logger.info(`Configuration updated for domain: ${page}`, {
             domain: page,
             type: 'CONFIG_CHANGE',
-            newSettings
+            newSettings: newSettings as any
         });
     };
 
@@ -154,7 +154,7 @@ function ContextualSettingsPanelContent({
 
     const updateValue = (key: string, value: SovereignValue) => {
 
-        setDraftValues(prev => ({ ...(prev ?? localValues), [key]: value }));
+        setDraftValues(prev => ({ ...(prev ?? localValues), [key]: value } as any));
     };
 
     const accessibleSettings = (pageSettings?.settings || []).filter(canAccessSetting);

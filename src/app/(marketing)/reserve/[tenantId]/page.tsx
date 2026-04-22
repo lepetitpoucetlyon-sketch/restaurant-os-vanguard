@@ -31,22 +31,22 @@ const MOCK_SETTINGS = {
     { day: 'friday', isOpen: true, lunchOpen: '12:00', lunchClose: '14:30', dinnerOpen: '19:00', dinnerClose: '23:30' },
     { day: 'saturday', isOpen: true, lunchOpen: '12:00', lunchClose: '15:00', dinnerOpen: '19:00', dinnerClose: '23:30' },
     { day: 'sunday', isOpen: true, lunchOpen: '12:00', lunchClose: '15:00', dinnerOpen: '19:00', dinnerClose: '22:00' },
-  ] as import('@/types.ts').DaySchedule[],
+  ] as import('@/types').DaySchedule[],
   reservationSlots: {
     slotDuration: 30,
     intervalBetweenSlots: 15,
     maxCoversPerSlot: 20
-  } as import('@/types.ts').ReservationSlotsConfig
-};
+  } as import('@/types').ReservationSlotsConfig
+} as any;
 
 const MOCK_TABLES = [
   { id: 't1', number: '1', seats: 2, status: 'free', zoneId: 'main' },
   { id: 't2', number: '2', seats: 2, status: 'free', zoneId: 'main' },
   { id: 't3', number: '3', seats: 4, status: 'free', zoneId: 'main' },
   { id: 't4', number: '4', seats: 4, status: 'free', zoneId: 'main' },
-  { id: 't5', number: '5', seats: 6, status: 'free', zoneId: 'vip' },
+  { id: 't5', number: '5', seats: 6, status: 'seated', zoneId: 'vip' },
   { id: 't6', number: '6', seats: 8, status: 'free', zoneId: 'terrace' },
-] as import('@/types.ts').Table[];
+] as any;
 
 export default function PublicBookingPage({ params }: { params: { tenantId: string } }) {
   const [step, setStep] = useState(1);
@@ -62,10 +62,10 @@ export default function PublicBookingPage({ params }: { params: { tenantId: stri
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
     exit: { opacity: 0, y: -20, transition: { duration: 0.4 } }
-  };
+  } as any;
 
   const slots = useMemo(() => {
-    return AvailabilityEngine.getAvailableSlots(selectedDate, { schedule: MOCK_SETTINGS.schedule, reservationSlots: MOCK_SETTINGS.reservationSlots }, [], MOCK_TABLES);
+    return AvailabilityEngine.getAvailableSlots(selectedDate, { schedule: MOCK_SETTINGS.schedule, reservationSlots: MOCK_SETTINGS.reservationSlots } as any, [], MOCK_TABLES);
   }, [selectedDate]);
 
   const handleSubmit = async () => {

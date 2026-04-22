@@ -116,11 +116,11 @@ interface NexusNodeState<T = SovereignValue> { data: T[]; loading: boolean; erro
  * Vérifie le génome AVANT d'exécuter une action métier.
  * Sub-microseconde (pure mémoire, zéro async pour la validation).
  */
-function guardedAction<T>(
+async function guardedAction<T>(
     moduleId: ModuleId, 
     power: PowerAction, 
     action: () => T | Promise<T>
-): T | Promise<T> | undefined {
+): Promise<T | undefined> {
     const result = genomeValidator.validatePower(moduleId, power);
     if (!result.allowed) {
         // Boîte Noire + UI Alert (fire-and-forget)
@@ -132,7 +132,7 @@ function guardedAction<T>(
         });
         return undefined;
     }
-    return action();
+    return await action();
 }
 
 // Grade VI: Protocol Scalpel - Mono-context for master orchestration only
@@ -204,6 +204,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const floorTables = useAtomValue(tablesNodeAtom);
     const reservations = useAtomValue(reservationsNodeAtom);
+    const areas = useAtomValue(zonesAtom);
 
     const contextValue = useMemo(() => ({ 
         switchTenant, 
@@ -211,6 +212,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
         floorOps: {
             tables: floorTables.data || [],
             reservations: reservations.data || [],
+            areas: areas || [],
             isLoading: floorTables.loading || reservations.loading,
             updateTableStatus: (id: string, status: TableStatus | Partial<Table>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
                 const payload = typeof status === 'string' ? { status } : status;
@@ -226,7 +228,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
                 });
             }),
         }
-    }), [switchTenant, tenantId, floorTables, reservations]);
+    }), [switchTenant, tenantId, floorTables, reservations, areas]);
 
     return (
         <NexusOpsContext.Provider value={contextValue}>

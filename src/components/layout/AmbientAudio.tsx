@@ -24,7 +24,7 @@ export const AmbientAudio: React.FC = () => {
     const initializeAudio = useCallback(() => {
         if (ctxRef.current) return;
         
-        const AudioContextClass = (window.AudioContext || (window as Window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
+        const AudioContextClass = (window.AudioContext || (window as unknown as Window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
 
         const ctx = new AudioContextClass();
         ctxRef.current = ctx;

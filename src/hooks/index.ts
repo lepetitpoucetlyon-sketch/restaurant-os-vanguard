@@ -23,6 +23,6 @@ export { useVirtualizedList, useInfiniteScroll } from "./useVirtualization";
 export { useHACCP, useGuard, useQuality } from "@/modules/haccp";
 export { useAccounting, useFinance, useFiscal, useFinanceReflex } from "@/modules/finance";
 export { useOrders, useReservations, useTables, useFloorOps, useKitchen, usePOSController, useNexusOps } from "@/modules/ops";
-export { useInventory, useProducts, useStorage, useCategories, useStockBridge } from "@/modules/inventory";
-export { useHumanResources, useRecruitment, useStaffAudit, useStaff } from "@/modules/hr";
+export { useInventory, useProducts, useCategories, useStockBridge } from "@/modules/inventory";
+export { useHumanResources, useRecruitment, useStaffAudit } from "@/modules/hr";
 export { useMarketing } from "@/modules/marketing";

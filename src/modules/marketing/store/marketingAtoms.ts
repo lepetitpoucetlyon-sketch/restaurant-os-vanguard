@@ -1,9 +1,9 @@
 import { atom, type PrimitiveAtom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import { MarketingCampaign, CRMFeedback } from '@/types';
-import { Quote } from '@/types/quotes.types';
-import { SEOProfile } from '@/types/seo.types';
-import { CRM } from '@/types/reservations.types';
+import { MarketingCampaign, CRMFeedback, SocialAccount } from '../types';
+import { Quote } from '../quotes.types';
+import { SEOProfile } from '../seo.types';
+import { CRM } from '@/modules/ops/reservations.types';
 
 // --- 📢 INDUSTRIAL TYPES (V3 - Agnostic) ---
 export interface MarketingSegment {
@@ -29,7 +29,8 @@ export interface ScheduledPost {
     updatedAt?: string;
 }
 
-// SocialAccount moved to types.ts
+// SocialAccount availability for pages
+export type { SocialAccount } from '../types';
 
 // --- 📢 MARKETING & CRM DOMAIN (SEO, Campagnes, Réseaux sociaux, Clients) ---
 
@@ -64,7 +65,13 @@ export const scheduledPostsLoadingAtom = _scheduledPosts.loading;
 // CRM - Use centralized crm type from reservations.types
 const _crms = createProxyDomain<CRM>('crms');
 export const crmsNodeAtom = _crms.node;
-export const crmsAtom = _crms.data;
+export const crmsAtom = atom(
+    (get) => get(_crms.data),
+    (get, set, newValue: CRM[]) => {
+        const node = get(_crms.node);
+        set(_crms.node, { ...node, data: newValue });
+    }
+);
 export const crmsLoadingAtom = _crms.loading;
 export const selectedCRMAtom = atom<CRM | null>(null);
 

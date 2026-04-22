@@ -34,13 +34,13 @@ export const AuditHasher = {
         let chainBroken = false;
 
         try {
-            const lastProofs = await Nexus.adapter.query('auditProofs', {
+            const lastProofs = await Nexus.adapter.query<AuditProof>('auditProofs', {
                 orderBy: { field: 'sequenceNumber', direction: 'desc' },
                 limit: 1
             });
             
             if (lastProofs.length > 0) {
-                const lastProof = lastProofs[0] as AuditProof;
+                const lastProof = lastProofs[0];
                 previousHash = lastProof.hash;
                 sequenceNumber = lastProof.sequenceNumber + 1;
             }
@@ -54,7 +54,7 @@ export const AuditHasher = {
         // 2. Préparer les données à hasher
         const rawData = JSON.stringify({
             items: orderData.items,
-            total: orderData.total,
+            total: orderData.totalInCents || orderData.total,
             timestamp: orderData.timestamp,
             tableId: orderData.tableId,
             previousHash // Le chaînage est DANS le hash
@@ -101,14 +101,14 @@ export const AuditHasher = {
         brokenAt?: number;
         totalVerified: number;
     }> => {
-        const proofs = await Nexus.adapter.query('auditProofs', {
+        const proofs = await Nexus.adapter.query<AuditProof>('auditProofs', {
             orderBy: { field: 'sequenceNumber', direction: 'asc' }
         });
 
         let prevHash: string | null = null;
         let verified = 0;
 
-        for (const proof of proofs as AuditProof[]) {
+        for (const proof of proofs) {
             if (proof.sequenceNumber < startSeq) continue;
             if (endSeq && proof.sequenceNumber > endSeq) break;
 

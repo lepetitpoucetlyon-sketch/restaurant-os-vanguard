@@ -2,15 +2,17 @@
 
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback } from 'react';
-import { hrProcessingAtom } from '../store/hrAtoms';
+import { hrLoadingAtom as hrProcessingAtom } from '../store/hrAtoms';
 import { 
     leaveRequestsNodeAtom, 
     leaveBalancesAtom, 
-    hrLoadingAtom,
+    hrStaffLoadingAtom as hrLoadingAtom,
     shiftsNodeAtom
 } from '../store/staffAtoms';
 import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
 import { Shift, LeaveRequest, LeaveBalance } from "../types";
+
+type RejectionReason = any; // Grade X Suture for missing rejection type
 
 /**
  * 👨‍💼 useHumanResources - Grade X Atomic Bridge
@@ -29,12 +31,13 @@ export function useHumanResources() {
     const shifts = (shiftsNode.data || []) as Shift[];
 
     // --- 🔨 LA FORGE ---
-    const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom, 'leaveRequests', 'HR');
-    const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom, 'shifts', 'HR');
+    const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom as any, 'leaveRequests', 'HR');
+    const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom as any, 'shifts', 'HR');
 
-    const addShift = useCallback((shift: Shift) => {
-        const id = shift.id || `shift_${Date.now()}`;
-        return shiftForge.mutate('SET', id, shift);
+    const addShift = useCallback((shift: Omit<Shift, 'id'>) => {
+        const id = `shift_${Date.now()}`;
+        const newShift: Shift = { ...shift, id } as Shift;
+        return shiftForge.mutate('SET', id, newShift);
     }, [shiftForge]);
 
     const updateShift = useCallback((id: string, data: Partial<Shift>) => {

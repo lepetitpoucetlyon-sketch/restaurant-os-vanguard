@@ -33,8 +33,8 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                             {tableList.map((table: import('@/types').Table) => {
                                 // Status Mapping for Style Consistency
                                 const effectiveStatus =
-                                    table.status === 'available' ? 'free' :
-                                        table.status === 'occupied' ? 'seated' :
+                                    table.status === 'free' ? 'free' :
+                                        table.status === 'seated' ? 'seated' :
                                             table.status;
 
                                 const getStatusStyles = () => {

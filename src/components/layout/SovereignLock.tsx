@@ -13,7 +13,7 @@ import { ShieldAlert, CreditCard } from 'lucide-react';
 export const SovereignLock: React.FC = () => {
     const { tenantConfig } = useNexusCore();
 
-    const isLocked = tenantConfig.status?.licenceStatus === 'locked';
+    const isLocked = tenantConfig.status?.licenceStatus === 'LOCKED';
 
     return (
         <AnimatePresence>

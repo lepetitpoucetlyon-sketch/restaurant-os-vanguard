@@ -67,7 +67,7 @@ export const AnalyticsTab = () => {
                             </tr>
                         </thead>
                         <tbody>
-                             {analytics.topKeywords.map((kw: import('@/app/(marketing)/seo/seo.types').KeywordStat, i: number) => (
+                             {analytics.topKeywords.map((kw: any, i: number) => (
                                 <tr key={i} className="border-b border-border/50">
                                     <td className="py-4 pr-4 text-sm font-medium text-text-primary">{kw.term}</td>
                                     <td className="py-4 px-4 text-right text-sm text-text-muted">{kw.clicks}</td>

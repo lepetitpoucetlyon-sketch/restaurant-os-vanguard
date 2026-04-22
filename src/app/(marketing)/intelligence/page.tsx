@@ -9,18 +9,62 @@ async function getIntelligenceData() {
 
     return {
         reviews: [
-            { id: '1', author: 'Jean D.', content: 'Service impeccable, mais un peu bruyant.', rating: 4, replied: false, suggestedReply: "Merci Jean ! On travaille sur l'acoustique." },
-            { id: '2', author: 'Marie L.', content: 'Le meilleur burger de Paris.', rating: 5, replied: true },
+            { 
+                id: '1', 
+                author: 'Jean D.', 
+                content: 'Service impeccable, mais un peu bruyant.', 
+                rating: 4, 
+                platform: 'google' as const, 
+                date: new Date().toISOString(), 
+                replied: false, 
+                suggestedReply: "Merci Jean ! On travaille sur l'acoustique.",
+                sentiment: 'positive' as const
+            },
+            { 
+                id: '2', 
+                author: 'Marie L.', 
+                content: 'Le meilleur burger de Paris.', 
+                rating: 5, 
+                platform: 'tripadvisor' as const, 
+                date: new Date().toISOString(), 
+                replied: true,
+                sentiment: 'positive' as const
+            },
         ],
         complianceAlerts: [
             { id: 'c1', userName: 'Paul B.', message: 'Repos compensateur non respecté (11h requis).' },
         ],
         equipmentMetrics: [
-            { id: 'm1', name: 'Chambre Froide 1', value: 4.2, type: 'temperature', anomalous: false },
-            { id: 'm2', name: 'Four Vario', value: 180, type: 'hz', anomalous: true },
+            { 
+                id: 'm1', 
+                name: 'Chambre Froide 1', 
+                value: 4.2, 
+                type: 'temperature' as const, 
+                status: 'normal' as const, 
+                trend: 'stable' as const, 
+                anomalous: false, 
+                timestamp: new Date().toISOString() 
+            },
+            { 
+                id: 'm2', 
+                name: 'Four Vario', 
+                value: 180, 
+                type: 'hz' as const, 
+                status: 'alert' as const, 
+                trend: 'up' as const, 
+                anomalous: true, 
+                timestamp: new Date().toISOString() 
+            },
         ],
         profitabilityAlerts: [
-            { productId: 'p1', productName: 'Entrecôte 300g', currentMarginInCents: 6500, suggestedPriceInCents: 2800 },
+            { 
+                productId: 'p1', 
+                productName: 'Entrecôte 300g', 
+                currentMarginInCents: 6500, 
+                suggestedPriceInCents: 2800, 
+                impactLevel: 'high' as const, 
+                category: 'Viandes' 
+            },
         ]
     };
 }

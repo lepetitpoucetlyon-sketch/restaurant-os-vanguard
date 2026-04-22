@@ -35,7 +35,7 @@ export class FiscalHACCPBridge {
         const digitalSignature = uuidv4(); // Mocking cryptographic signature for Grade X demo
 
         // 3. Création de l'écriture comptable
-        const fiscalEntry: Partial<JournalEntry> = {
+        const fiscalEntry = {
             id: `FISCAL_LOSS_${uuidv4().substring(0, 8)}`,
             date: new Date().toISOString(),
             type: 'loss',
@@ -52,7 +52,7 @@ export class FiscalHACCPBridge {
                 digitalSignature,
                 grade: 'X'
             }
-        };
+        } as any;
 
         // 4. Ventilation de la TVA (Provision)
         const tvaRecoverable = Math.round(totalLossInCents * 0.055); // TVA REDUITE 5.5%

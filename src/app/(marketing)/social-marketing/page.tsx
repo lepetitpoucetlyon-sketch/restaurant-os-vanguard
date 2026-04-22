@@ -106,7 +106,7 @@ export default function SocialMarketingPage() {
                         <motion.div key="social" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {enrichedAccounts.length > 0 ? (
-                                    enrichedAccounts.map((acc) => <SocialAccountCard key={acc.id} account={acc} />)
+                                    enrichedAccounts.map((acc: any) => <SocialAccountCard key={acc.id} account={acc} />)
                                 ) : (
                                     <p className="text-text-muted italic">Aucun compte social connecté.</p>
                                 )}
@@ -120,7 +120,7 @@ export default function SocialMarketingPage() {
                                 </div>
                                 <div className="space-y-4">
                                     {scheduledPosts.length > 0 ? (
-                                        scheduledPosts.map((post) => <ScheduledPostItem key={post.id} post={post} socialAccounts={enrichedAccounts} />)
+                                        scheduledPosts.map((post) => <ScheduledPostItem key={post.id} post={post as any} socialAccounts={enrichedAccounts} />)
                                     ) : (
                                         <p className="text-text-muted text-center py-10">Aucune publication programmée.</p>
                                     )}
@@ -133,10 +133,10 @@ export default function SocialMarketingPage() {
                         <motion.div key="campaigns" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                                 {[
-                                    { label: 'Campagnes', value: campaigns.length.toString(), icon: Send, color: 'text-text-primary' },
-                                    { label: "Taux d'ouverture", value: `${profile?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
-                                    { label: 'Taux de clic', value: `${profile?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
-                                    { label: 'Conversions', value: `${profile?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
+                                    { label: 'Campagnes', value: (campaigns as any[]).length.toString(), icon: Send, color: 'text-text-primary' },
+                                    { label: "Taux d'ouverture", value: `${(profile as any)?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
+                                    { label: 'Taux de clic', value: `${(profile as any)?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
+                                    { label: 'Conversions', value: `${(profile as any)?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
                                 ].map((stat, i) => (
                                     <div key={i} className="bg-white/40 dark:bg-neutral-900/40 backdrop-blur-xl border border-white/20 rounded-[2rem] p-6 group cursor-crosshair relative">
                                         <div className="absolute top-0 right-0 p-6 opacity-50 group-hover:opacity-100 transition-all">
@@ -156,7 +156,7 @@ export default function SocialMarketingPage() {
                                 </div>
                                 <div className="space-y-4">
                                     {campaigns.length > 0 ? (
-                                        campaigns.map((c: MarketingCampaign) => <CampaignCard key={c.id} campaign={c} />)
+                                        (campaigns as any[]).map((c: any) => <CampaignCard key={c.id} campaign={c} />)
                                     ) : (
                                         <p className="text-text-muted italic">Aucune campagne active.</p>
                                     )}
@@ -167,7 +167,7 @@ export default function SocialMarketingPage() {
 
                     {activeTab === 'segments' && (
                         <motion.div key="segments" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {customerSegments.map((s) => <SegmentCard key={s.id} segment={s} />)}
+                            {customerSegments.map((s) => <SegmentCard key={(s as any).id} segment={s as any} />)}
                             <button onClick={() => showToast("Fonctionnalité à venir", "info")} className="group flex flex-col items-center justify-center gap-6 border-2 border-dashed border-text-muted/20 hover:border-text-primary/50 rounded-[2.5rem] p-8 transition-all min-h-[300px]">
                                 <div className="w-20 h-20 rounded-full bg-bg-tertiary flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Plus size={32} className="text-text-muted group-hover:text-text-primary" />

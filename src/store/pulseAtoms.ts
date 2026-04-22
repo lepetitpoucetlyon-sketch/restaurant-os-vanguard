@@ -1,3 +1,4 @@
+import { atom } from 'jotai';
 import { SovereignData } from '@/shared/nexus-contract';
 
 export interface NexusPulse {
@@ -23,10 +24,10 @@ export const emitPulseAtom = atom(
     (get, set, update: Omit<NexusPulse, 'id' | 'timestamp'>) => {
         const pulse: NexusPulse = {
             ...update,
-            id: uuidv4(),
+            id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `pulse_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             timestamp: new Date().toISOString()
         };
-        set(nexusPulseAtom, pulse);
+        set(nexusPulseAtom as any, pulse);
         // On pourrait ici ajouter une persistance en base si besoin d'audit
     }
 );

@@ -13,8 +13,8 @@ export interface BusinessLaws {
 
 export type SovereignPrimitive = string | number | boolean | null | undefined | Date;
 export type SovereignValue = SovereignPrimitive;
+export type SovereignData<T = Record<string, SovereignField>> = T;
 export type SovereignField = SovereignValue | SovereignData | SovereignField[];
-export type SovereignData = { [key: string]: SovereignField };
 
 export interface SovereignSchemaField {
   id: string;
@@ -56,7 +56,7 @@ export interface TenantTheme {
 export interface OrchestratorSignal {
   maintenanceMode: boolean;
   killSwitch: boolean;
-  licenceStatus: 'active' | 'locked' | 'trial';
+  licenceStatus: 'ACTIVE' | 'LOCKED' | 'TRIAL';
   layoutType: 'default' | 'kiosk' | 'hud' | 'admin' | 'sidebar' | 'topbar';
   updatedAt: string;
   economy: {
@@ -77,8 +77,8 @@ export interface OrchestratorSignal {
 
 export interface TelemetryPulse {
   version: string;
-  status: 'active' | 'maintenance' | 'critical';
-  lastPulse: string | number | { seconds: number; nanoseconds: number }; 
+  status: 'ACTIVE' | 'MAINTENANCE' | 'CRITICAL';
+  lastPulse: string | number | Date | { seconds: number; nanoseconds: number } | any; // 'any' for Firestore FieldValue
   health: {
     uptime: number;
     battery: {
@@ -157,11 +157,11 @@ export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
     maintenanceMode: false,
     killSwitch: false,
     layoutType: 'default',
-    licenceStatus: 'active',
+    licenceStatus: 'ACTIVE',
     updatedAt: new Date().toISOString(),
     economy: {
       basePrice: 49.00,
-      billingStatus: 'active',
+      billingStatus: 'ACTIVE',
       currency: 'EUR',
       discountMultiplier: 1
     },

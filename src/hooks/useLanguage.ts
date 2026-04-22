@@ -18,10 +18,10 @@ export function useLanguage() {
 
     const t = (key: string) => {
         const keys = key.split('.');
-        let value: SovereignValue = translations[language as keyof typeof translations];
+        let value: any = translations[language as keyof typeof translations];
         
         for (const k of keys) {
-            value = (value as SovereignData)?.[k];
+            value = (value as any)?.[k];
         }
 
 

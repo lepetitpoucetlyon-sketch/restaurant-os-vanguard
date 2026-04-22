@@ -203,8 +203,8 @@ async function runAuditData() {
     const allOrders = await Nexus.adapter.query(path('orders'));
     
     interface AuditOrder { id: string; totalInCents: number }
-    const empireOrders = allOrders.filter((o) => (o as AuditOrder).id.includes('order_empire')) as AuditOrder[];
-    const chaosOrders = allOrders.filter((o) => (o as AuditOrder).id.includes('order_chaos')) as AuditOrder[];
+    const empireOrders = (allOrders as unknown as AuditOrder[]).filter((o) => o.id.includes('order_empire'));
+    const chaosOrders = (allOrders as unknown as AuditOrder[]).filter((o) => o.id.includes('order_chaos'));
     
     const fiscalSeals = await Nexus.adapter.query(path('fiscalSeals'));
     const stockItems = await Nexus.adapter.query(path('stockItems'));

@@ -18,7 +18,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useManagement, useInventory } from "@/engines/ops/NexusOpsProvider";
-import { Recipe, PrepTask, Product } from "@/types";
+import { Recipe, PrepTask, Product, Order } from "@/types";
 import { useUI } from "@/context/UIContext";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { PrepTaskDetailDialog } from "@/modules/ops/components/kitchen/PrepTaskDetailDialog";
@@ -42,12 +42,13 @@ type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'was
 
 export default function KitchenPage() {
     const router = useRouter();
+    const orders: any[] = (typeof window !== 'undefined' ? ((window as any).mockOrders || []) : []);
     const [activeTab, setActiveTab] = useState<KitchenTab>('mise-en-place');
     
     // Nexus Grade VI Hooks
-    const kitchen = useKitchen();
-    const management = useManagement();
-    const inventory = useInventory();
+    const kitchen = useKitchen() as any;
+    const management = useManagement() as any;
+    const inventory = useInventory() as any;
     const { openDocumentation } = useUI();
     const performanceMode = useAtomValue(performanceModeAtom);
 
@@ -100,10 +101,10 @@ export default function KitchenPage() {
             <AnimatePresence initial={false}>
                 {isSideNavOpen && (
                     <motion.div
-                        initial={performanceMode ? false : { opacity: 0, x: -320 }}
-                        animate={performanceMode ? false : { opacity: 1, x: 0 }}
-                        exit={performanceMode ? false : { opacity: 0, x: -320 }}
-                        transition={performanceMode ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        initial={performanceMode ? (false as any) : { opacity: 0, x: -320 }}
+                        animate={performanceMode ? (false as any) : { opacity: 1, x: 0 }}
+                        exit={performanceMode ? (false as any) : { opacity: 0, x: -320 }}
+                        transition={performanceMode ? { duration: 0 } as any : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         className={cn(
                             "hidden md:flex w-[320px] bg-bg-secondary border-r border-border flex-col p-8 elegant-scrollbar overflow-hidden shrink-0",
                             performanceMode ? "" : "backdrop-blur-xl"
@@ -288,7 +289,7 @@ export default function KitchenPage() {
             <PrepTaskDetailDialog
                 isOpen={!!selectedPrepTask}
                 onClose={() => setSelectedPrepTask(null)}
-                task={selectedPrepTask}
+                task={selectedPrepTask as any}
                 onToggleStatus={(id) => {
                     togglePrepTask(id);
                     setSelectedPrepTask((prev) => prev ? { ...prev, isCompleted: !prev.isCompleted } : null);
@@ -303,7 +304,7 @@ export default function KitchenPage() {
                     setEditingProduct(null);
                 }}
                 productType="dish"
-                editProduct={editingProduct}
+                editProduct={editingProduct as any}
             />
 
             {/* Diagnostic & Expertise Center */}

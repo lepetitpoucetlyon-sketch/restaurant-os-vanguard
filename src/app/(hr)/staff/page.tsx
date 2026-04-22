@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@/components/ui/Toast";
-import { generatePaySlip } from "@/lib/paySlipGenerator";
+import { generatePaySlip } from "@/modules/hr/services/paySlipGenerator";
 import { OptimizationDialog } from "@/components/ui/OptimizationDialog";
 import { Modal } from "@/components/ui";
 import { RecruitmentDashboard } from "@/modules/hr/components/staff/RecruitmentDashboard";
@@ -305,7 +305,7 @@ export default function StaffPage() {
                 );
 
             case 'audit':
-                return <StaffAuditLog logs={auditLogs} />;
+                return <StaffAuditLog logs={auditLogs as any} />;
 
             case 'directory':
             default:

@@ -45,12 +45,12 @@ export const RuntimeValidator = {
     const items = Array.isArray(orderData.items) ? orderData.items : [];
     return {
       ...orderData,
-      totalInCents: this.validate<Cents>(orderData.totalInCents, 'Cents'),
+      totalInCents: RuntimeValidator.validate<Cents>(orderData.totalInCents as import('@/shared/nexus-contract').SovereignValue, 'Cents'),
       items: items.map((item: import('@/shared/nexus-contract').SovereignData) => ({
 
         ...item,
-        priceInCents: this.validate<Cents>(item.priceInCents, 'Cents'),
-        quantity: this.validate<Quantity>(item.quantity, 'Quantity')
+        priceInCents: RuntimeValidator.validate<Cents>(item.priceInCents as import('@/shared/nexus-contract').SovereignValue, 'Cents'),
+        quantity: RuntimeValidator.validate<Quantity>(item.quantity as import('@/shared/nexus-contract').SovereignValue, 'Quantity')
       }))
     };
   }

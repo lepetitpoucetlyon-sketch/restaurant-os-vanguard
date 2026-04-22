@@ -23,6 +23,7 @@ export interface OrderItemModification {
 }
 
 export interface OrderItem {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined; // Phase 9: Sovereign Mapping
     id: string;
     productId: string;
     categoryId?: string;
@@ -35,10 +36,11 @@ export interface OrderItem {
     removedIngredients?: string[];
     addedIngredients?: string[];
     allergens?: string[];
-    pendingModification?: OrderItemModification;
+    pendingModification?: any;
 }
 
 export interface Order {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined; // Phase 9: Sovereign Mapping
     id: string;
     tableId: string;
     tableNumber: string;
@@ -60,7 +62,7 @@ export interface Order {
         maticTxId?: string;
     };
     totalRevenue?: number; // computed alias
-    data?: Record<string, unknown>; // legacy alias
+    data?: any; // legacy alias
     updatedAt?: Date | string;
 }
 

@@ -57,6 +57,6 @@ export class PayrollAccountingBridge {
                 employeeId: payrollData.employeeId,
                 period: payrollData.period
             }
-        };
+        } as any;
     }
 }

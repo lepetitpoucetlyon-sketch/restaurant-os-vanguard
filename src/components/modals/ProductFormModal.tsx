@@ -63,11 +63,11 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setSellPriceInCents(editProduct.priceInCents || editProduct.sellingPriceInCents || 0);
             setPrepTime(editProduct.prepTime || 0);
             setSelectedAllergens(editProduct.allergens || []);
-            setIsVegetarian(editProduct.isVegetarian || false);
-            setIsVegan(editProduct.isVegan || false);
-            setIsGlutenFree(editProduct.isGlutenFree || false);
-            setRecipeIngredients(editProduct.ingredients || []);
-            setRecipeSteps(editProduct.recipeSteps || []);
+            setIsVegetarian((editProduct as any).isVegetarian || false);
+            setIsVegan((editProduct as any).isVegan || false);
+            setIsGlutenFree((editProduct as any).isGlutenFree || false);
+            setRecipeIngredients((editProduct as any).ingredients || []);
+            setRecipeSteps((editProduct as any).recipeSteps || []);
         } else if (!editProduct && isOpen) {
             setName("");
             setDescription("");
@@ -233,7 +233,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                         </div>
                     </div>
 
-                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
+                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients as any} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
                     <ProductSteps recipeSteps={recipeSteps} addStep={addStep} updateStep={updateStep} removeStep={removeStep} />
                 </div>
 

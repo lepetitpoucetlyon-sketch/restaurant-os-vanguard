@@ -75,7 +75,7 @@ export const QuantumDashboard: React.FC = () => {
                                 key={node.id} 
                                 title={`${node.name} - Version: ${node.version}`}
                                 className={`aspect-square rounded-sm transition-all cursor-pointer hover:scale-110 ${
-                                    node.status === 'online' ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50' : 'bg-slate-700'
+                                    node.status === 'ONLINE' ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50' : 'bg-slate-700'
                                 }`} 
                             />
                         ))}

@@ -44,7 +44,7 @@ export default function LeavesPage() {
     const [isNewRequestOpen, setIsNewRequestOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState<LeaveRequestStatus | 'all'>('all');
 
-    const isManager = currentUser?.role === 'manager' || currentUser?.role === 'admin' || currentUser?.role === 'owner';
+    const isManager = currentUser?.role === 'manager' || currentUser?.role === 'admin' || (currentUser?.role as any) === 'owner';
 
     const myRequests = requests.filter(r => r.employeeId === currentUser?.id);
     const pendingApprovals = requests.filter(r => 

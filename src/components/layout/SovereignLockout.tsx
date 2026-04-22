@@ -14,12 +14,12 @@ export function SovereignLockout() {
   const config = useAtomValue(tenantConfigAtom);
   
   // Logic: Only activate if maintenance mode is ON, license is INVALID, or killSwitch is active
-  const isLocked = config.status?.maintenanceMode || config.status?.licenceStatus === 'locked' || config.status?.killSwitch;
+  const isLocked = config.status?.maintenanceMode || config.status?.licenceStatus === 'LOCKED' || config.status?.killSwitch;
 
   const getLockReason = () => {
     if (config.status?.killSwitch) return "SOUVERAINETÉ_RÉVOQUÉE";
     if (config.status?.maintenanceMode) return "STABILISATION_SYSTÈME";
-    if (config.status?.licenceStatus === 'locked') return "LICENCE_EXPIREE";
+    if (config.status?.licenceStatus === 'LOCKED') return "LICENCE_EXPIREE";
     return "ACCÈS_RESTREINT";
   };
 

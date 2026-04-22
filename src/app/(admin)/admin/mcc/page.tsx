@@ -71,7 +71,7 @@ export default function MCCDashboard() {
         key: newCloneKey,
         ownerEmail: 'admin@empire.com',
         initialPrimaryColor: '#6366f1',
-        tier: 'standard',
+        tier: 'STANDARD',
         copyBaseTemplates: true
       });
 
@@ -461,10 +461,10 @@ function InstanceRow({ instance, index }: { instance: EmpireInstance, index: num
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    provisioning: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-    online: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    maintenance: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    locked: 'bg-red-500/10 text-red-400 border-red-500/30',
+    PROVISIONING: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+    ONLINE: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+    MAINTENANCE: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+    LOCKED: 'bg-red-500/10 text-red-400 border-red-500/30',
   };
 
   return (

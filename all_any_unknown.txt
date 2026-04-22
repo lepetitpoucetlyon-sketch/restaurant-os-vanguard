@@ -1,0 +1,483 @@
+src/types/common.types.ts:137:    predictSignatureChance?: (quote: any, inflation?: number) => number;
+src/types/common.types.ts:138:    predictLaborCost?: (shift: any) => number; 
+src/types/common.types.ts:332:    icon: any;
+src/context/AccountingContext.tsx:34:    const accounts = useAtomValue(accountsAtom) as any[];
+src/context/AccountingContext.tsx:35:    const journalEntries = useAtomValue(journalEntriesAtom) as any[];
+src/context/AccountingContext.tsx:36:    const bankTransactions = useAtomValue(bankTransactionsAtom) as any[];
+src/context/AccountingContext.tsx:37:    const expenseClaims = useAtomValue(expenseClaimsAtom) as any[];
+src/context/AccountingContext.tsx:63:    const generatePandL = useCallback((periodId: string): any => ({
+src/context/AccountingContext.tsx:82:    const addJournalEntry = useCallback(async (entry: any) => {
+src/context/AccountingContext.tsx:86:    const addManualJournalEntry = useCallback(async (entry: any) => {
+src/context/AccountingContext.tsx:90:    const updateJournalEntry = useCallback(async (id: string, updates: any) => {
+src/context/AccountingContext.tsx:98:    const addAccount = useCallback(async (account: any) => {
+src/context/AccountingContext.tsx:102:    const contextValue: any = useMemo(() => ({
+src/context/AccountingContext.tsx:149:    const ingestTransactions = useCallback(async (transactions: any[]) => {
+src/context/AccountingContext.tsx:251:            queryExpert: async () => ({}) as any,
+src/context/AccountingContext.tsx:258:            query: async () => ({}) as any,
+src/app/(ops)/kds/page.tsx:31:    const { orders, updateOrderStatus, getPendingModifications } = useOrders() as any;
+src/app/(ops)/kds/page.tsx:78:        const activeOrders = (orders as any[]).filter(o => o.status !== 'delivered');
+src/app/(ops)/kds/page.tsx:104:    }, [orders, activeStation, searchQuery]) as any[];
+src/app/(ops)/kds/page.tsx:161:                                    ticket={ticket as any}
+src/app/(ops)/kds/page.tsx:168:                                    recipes={recipes as any}
+src/app/(ops)/operations/page.tsx:74:    const { areas, updateAreaStatus } = useOMS() as any;
+src/app/(ops)/pos/page.tsx:66:    } = (useOrders() as any);
+src/app/(ops)/registre/page.tsx:69:    const overall = (getOverallStatus() as any);
+src/app/(ops)/bar/page.tsx:42:      status: (o.items[0]?.status === 'done' ? 'ready' : (o.items[0]?.status === 'preparing' ? 'preparing' : 'new')) as any
+src/app/(ops)/bar/page.tsx:145:                editProduct={editingCocktail as any}
+src/app/(ops)/kitchen/page.tsx:45:    const orders: any[] = (typeof window !== 'undefined' ? ((window as any).mockOrders || []) : []);
+src/app/(ops)/kitchen/page.tsx:49:    const kitchen = useKitchen() as any;
+src/app/(ops)/kitchen/page.tsx:50:    const management = useManagement() as any;
+src/app/(ops)/kitchen/page.tsx:51:    const inventory = useInventory() as any;
+src/app/(ops)/kitchen/page.tsx:104:                        initial={performanceMode ? (false as any) : { opacity: 0, x: -320 }}
+src/app/(ops)/kitchen/page.tsx:105:                        animate={performanceMode ? (false as any) : { opacity: 1, x: 0 }}
+src/app/(ops)/kitchen/page.tsx:106:                        exit={performanceMode ? (false as any) : { opacity: 0, x: -320 }}
+src/app/(ops)/kitchen/page.tsx:107:                        transition={performanceMode ? { duration: 0 } as any : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+src/app/(ops)/kitchen/page.tsx:292:                task={selectedPrepTask as any}
+src/app/(ops)/kitchen/page.tsx:307:                editProduct={editingProduct as any}
+src/app/(backoffice)/accounting/page.tsx:175:                                initial={performanceMode ? (false as any) : { opacity: 0, y: 10 }}
+src/app/(backoffice)/accounting/page.tsx:176:                                animate={performanceMode ? (false as any) : { opacity: 1, y: 0 }}
+src/app/(backoffice)/accounting/page.tsx:177:                                exit={performanceMode ? (false as any) : { opacity: 0, y: -10 }}
+src/app/(backoffice)/quotes/page.tsx:150:                    <h3 className="text-4xl font-serif text-text-primary italic tracking-tight group-hover:text-accent-gold transition-colors duration-500">{(quote.customer as any)?.companyName || (quote.customer as any)?.name || 'Client Inconnu'}</h3>
+src/app/(hr)/leaves/page.tsx:47:    const isManager = currentUser?.role === 'manager' || currentUser?.role === 'admin' || (currentUser?.role as any) === 'owner';
+src/app/(hr)/recruitment/page.tsx:122:                onAdd={addCandidate as any}
+src/app/(hr)/staff/page.tsx:308:                return <StaffAuditLog logs={auditLogs as any} />;
+src/app/(marketing)/analytics-integration/page.tsx:106:    const analytics: AnalyticsData = (profile as any)?.analytics || {
+src/app/(marketing)/analytics-integration/page.tsx:118:    const isConnected = !!(profile as any)?.googlePropertyId;
+src/app/(marketing)/analytics-integration/page.tsx:201:                            <span className="text-[10px] font-bold text-text-muted tracking-wide">• {(profile as any)?.googlePropertyId || 'GA4-NON-CONFIGURÉ'}</span>
+src/app/(marketing)/omnichannel-reservations/page.tsx:115:            } as any);
+src/app/(marketing)/social-marketing/page.tsx:109:                                    enrichedAccounts.map((acc: any) => <SocialAccountCard key={acc.id} account={acc} />)
+src/app/(marketing)/social-marketing/page.tsx:123:                                        scheduledPosts.map((post) => <ScheduledPostItem key={post.id} post={post as any} socialAccounts={enrichedAccounts} />)
+src/app/(marketing)/social-marketing/page.tsx:136:                                    { label: 'Campagnes', value: (campaigns as any[]).length.toString(), icon: Send, color: 'text-text-primary' },
+src/app/(marketing)/social-marketing/page.tsx:137:                                    { label: "Taux d'ouverture", value: `${(profile as any)?.analytics?.opened || 0}%`, icon: Eye, color: 'text-blue-500' },
+src/app/(marketing)/social-marketing/page.tsx:138:                                    { label: 'Taux de clic', value: `${(profile as any)?.analytics?.clicked || 0}%`, icon: Target, color: 'text-amber-500' },
+src/app/(marketing)/social-marketing/page.tsx:139:                                    { label: 'Conversions', value: `${(profile as any)?.analytics?.conversions || 0}%`, icon: Zap, color: 'text-purple-500' }
+src/app/(marketing)/social-marketing/page.tsx:159:                                        (campaigns as any[]).map((c: any) => <CampaignCard key={c.id} campaign={c} />)
+src/app/(marketing)/social-marketing/page.tsx:170:                            {customerSegments.map((s) => <SegmentCard key={(s as any).id} segment={s as any} />)}
+src/app/(marketing)/reserve/[tenantId]/page.tsx:40:} as any;
+src/app/(marketing)/reserve/[tenantId]/page.tsx:49:] as any;
+src/app/(marketing)/reserve/[tenantId]/page.tsx:65:  } as any;
+src/app/(marketing)/reserve/[tenantId]/page.tsx:68:    return AvailabilityEngine.getAvailableSlots(selectedDate, { schedule: MOCK_SETTINGS.schedule, reservationSlots: MOCK_SETTINGS.reservationSlots } as any, [], MOCK_TABLES);
+src/app/(marketing)/seo/components/tabs/OverviewTab.tsx:70:                            page={page as any}
+src/app/(marketing)/seo/components/tabs/AnalyticsTab.tsx:70:                             {analytics.topKeywords.map((kw: any, i: number) => (
+src/app/(marketing)/seo/components/tabs/PagesTab.tsx:28:                        page={page as any}
+src/app/(public)/groups/page.tsx:116:                                    <EventCard key={group.id} group={group as any} />
+src/app/(admin)/admin/master-console/page.tsx:50:    logger.info('[MCC] Rebalancing Triggered', { insight: insight as any });
+src/app/(admin)/admin/master-console/page.tsx:51:    alert(`[Nexus Intelligence] Action Executed: ${(insight as any).message}\nLogic: ${(insight as any).recommendation}`);
+src/app/(admin)/admin/master-console/page.tsx:123:                        <p className="text-[8px] font-bold text-neutral-500 uppercase tracking-tight">{(instances as any[]).length} Sites Online</p>
+src/app/(admin)/admin/master-console/page.tsx:395:                        onClick={() => broadcastConfiguration({ licenceStatus: 'locked' } as any)}
+src/app/(admin)/admin/master-console/page.tsx:413:                    registerInstance(newInstance as unknown as EmpireInstance);
+src/app/(admin)/admin/inventory/reception/page.tsx:98:            unit: item.unit as any,
+src/app/(admin)/admin/prospecting/page.tsx:21:    await updateConfig('theme', newTheme as any);
+src/app/(admin)/actions/inventory.ts:64:        const ingredients = await Nexus.adapter.query(path) as unknown as Ingredient[];
+src/app/(admin)/actions/accounting.ts:42:        const lastHash = lastSeals.length > 0 ? (lastSeals[0] as unknown as FiscalSeal).hash : null;
+src/app/(admin)/actions/accounting.ts:55:                schema: ExpenseClaimSchema as unknown as z.ZodSchema<import('@/shared/nexus-contract').SovereignValue>, 
+src/app/(admin)/api/admin/simulate/route.ts:206:    const empireOrders = (allOrders as unknown as AuditOrder[]).filter((o) => o.id.includes('order_empire'));
+src/app/(admin)/api/admin/simulate/route.ts:207:    const chaosOrders = (allOrders as unknown as AuditOrder[]).filter((o) => o.id.includes('order_chaos'));
+src/tests/vanguard/chaos.test.ts:73:        } as any as Order));
+src/tests/vanguard/nexus.test.ts:41:        store.set(testAtom, (prev: any) => updateNexusNode(prev, { data: [item], loading: false } as any));
+src/tests/vanguard/nexus.test.ts:51:        store.set(testAtom, (prev: any) => updateNexusNode(prev, { data: [{ id: '1', val: 'a' }], loading: false } as any));
+src/tests/vanguard/nexus.test.ts:54:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { error: 'CritFail' }) as any);
+src/tests/vanguard/nexus.test.ts:63:        store.set(testAtom, (prev: any) => updateNexusNode(prev, { data: [1, 2, 3], loading: false } as any));
+src/tests/vanguard/nexus.test.ts:66:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: [], loading: true, error: null }) as any);
+src/tests/vanguard/nexus.test.ts:77:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { loading: false, error: firestoreError }) as any);
+src/tests/vanguard/nexus.test.ts:94:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['data'] }) as any);
+src/tests/vanguard/nexus.test.ts:95:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { loading: false }) as any);
+src/tests/vanguard/nexus.test.ts:112:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['A'] }) as any);
+src/tests/vanguard/nexus.test.ts:113:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['B'] }) as any);
+src/tests/vanguard/nexus.test.ts:123:        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['StoreA'] }) as any);
+src/tests/vanguard/nexus.test.ts:124:        storeB.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['StoreB'] }) as any);
+src/tests/vanguard/domain.test.ts:7:const SyncCompliance = { init: async (...args: any[]) => {} } as any;
+src/tests/vanguard/domain.test.ts:78:            ] as any;
+src/tests/vanguard/domain.test.ts:81:            const alerts = (POSService as any).analyzeProfitability(items);
+src/tests/vanguard/domain.test.ts:137:            expect(QuantumCrypto.verifySeal(seal as any, "data")).toBe(true);
+src/tests/vanguard/domain.test.ts:138:            expect(QuantumCrypto.verifySeal({ version: 'V1' } as any, "data")).toBe(false);
+src/tests/vanguard/domain.test.ts:157:                await SyncCompliance.init('tenant-test', mockStore as any);
+src/tests/vanguard/NexusYieldEngine.test.ts:42:        const results = await (NexusYieldEngine as any).processYieldCycle({
+src/tests/vanguard/NexusYieldEngine.test.ts:61:        const results = await (NexusYieldEngine as any).processYieldCycle({
+src/tests/vanguard/NexusYieldEngine.test.ts:76:        const results = await (NexusYieldEngine as any).processYieldCycle({
+src/tests/vanguard/NexusYieldEngine.test.ts:96:        const results = await (NexusYieldEngine as any).processYieldCycle({
+src/tests/benchmarks/BlackFridaySimulation.ts:69:    store.set(ordersNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: [{ id: 'corrupt', totalInCents: 0 }] as any }));
+src/tests/benchmarks/stress_test_omega.ts:10:    const fakeStream: any[] = Array.from({ length: VOLUME }).map((_, i) => ({
+src/tests/benchmarks/stress_test_omega.ts:22:    const results = await Slayer.ingestMassive(fakeStream as any, 'lepetitpoucet', (processed) => {
+src/tests/benchmarks/CertificationRunner.test.ts:12:global.requestAnimationFrame = (cb) => (setTimeout(cb, 16) as any);
+src/tests/benchmarks/CertificationRunner.test.ts:13:global.cancelAnimationFrame = (id) => clearTimeout(id as any);
+src/tests/benchmarks/CertificationRunner.test.ts:14:global.performance = (global.performance || performance || { now: () => Date.now() }) as any;
+src/tests/benchmarks/CertificationRunner.test.ts:38:        } as any;
+src/tests/benchmarks/CertificationRunner.test.ts:48:        } as any;
+src/tests/benchmarks/CertificationRunner.test.ts:64:        store.set(ordersNodeAtom as any, (prev: any) => ({ ...prev, data: [{ id: 'corrupt' }] }));
+src/shared/hooks/useNexusMutation.ts:35:            const validation = validateMutation(moduleId, key, payload as any);
+src/shared/hooks/useNexusMutation.ts:47:            setNode((prev: any) => {
+src/shared/hooks/useNexusMutation.ts:51:                    const existingIndex = newData.findIndex((item: any) => item.id === id);
+src/shared/hooks/useNexusMutation.ts:53:                        ...(payload as any), 
+src/shared/hooks/useNexusMutation.ts:56:                    } as any;
+src/shared/hooks/useNexusMutation.ts:65:                    newData = newData.map((item: any) => 
+src/shared/hooks/useNexusMutation.ts:66:                        item.id === id ? { ...item, ...(payload as any) } : item
+src/shared/hooks/useNexusMutation.ts:69:                    newData = newData.filter((item: any) => item.id !== id);
+src/shared/hooks/useNexusMutation.ts:72:                return updateNexusNode(prev as any, { data: newData as any }) as any;
+src/shared/hooks/useNexusMutation.ts:80:                    payload: { id, action, data: payload as any }
+src/components/ui/GlassCard.tsx:76:            <div ref={ref} className={baseClasses} {...(props as any)}>
+src/components/settings/IntegrationSettings.tsx:56:            await updateConfig('integrationsConfig', localConfig as any);
+src/components/settings/IntegrationSettings.tsx:57:            await updateList('integrations', localIntegrations as any);
+src/components/settings/ui/StandardSettingsEngine.tsx:30:    validation?: any; // Zod or simple rules
+src/components/settings/ui/StandardSettingsEngine.tsx:56:            setLocalData(settings[schemaKey as keyof typeof settings] as any);
+src/components/settings/ui/StandardSettingsEngine.tsx:82:            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as any);
+src/components/settings/ui/StandardSettingsEngine.tsx:97:        setLocalData((settings?.[schemaKey as keyof typeof settings] as any) || {});
+src/components/settings/ui/StandardSettingsEngine.tsx:120:                        value={(value as any) || ''}
+src/components/settings/ui/StandardSettingsEngine.tsx:131:                            value={(value as any) || ''}
+src/components/settings/ui/StandardSettingsEngine.tsx:146:                        value={(displayValue as any) || 0}
+src/components/settings/ui/StandardSettingsEngine.tsx:157:                            value={(value as any) || ''}
+src/components/settings/ui/StandardSettingsEngine.tsx:162:                                <option key={(opt.value as any)} value={(opt.value as any)} className="bg-slate-900">{opt.label}</option>
+src/components/settings/ui/StandardSettingsEngine.tsx:173:                            value={(value as any) || '#ffffff'} 
+src/components/settings/ui/StandardSettingsEngine.tsx:186:                                onClick={() => onChange([...listValue, {}] as any)}
+src/components/settings/ui/StandardSettingsEngine.tsx:202:                                        onClick={() => onChange(listValue.filter((_, i) => i !== index) as any)}
+src/components/settings/ui/StandardSettingsEngine.tsx:209:                                            {renderField(sub, (item as any)[sub.id || sub.key!], (val: SovereignValue) => {
+src/components/settings/ui/StandardSettingsEngine.tsx:213:                                                onChange(newList as any);
+src/components/settings/ui/StandardSettingsEngine.tsx:291:                            {renderField(field, (localData as any)[field.id || field.key!], (val: SovereignValue) => handleChange(field.id || field.key!, val))}
+src/components/settings/MigrationSettings.tsx:36:            await injectToDB('menu', parsedMenuData as any);
+src/components/settings/MigrationSettings.tsx:55:                await injectToDB(entity, data as any);
+src/components/settings/panels/StyleTab.tsx:226:                                    value={(localValues[setting.key] as any) || ""}
+src/components/settings/panels/StyleTab.tsx:234:                                    value={(localValues[setting.key] as any) || setting.min || 0}
+src/components/settings/panels/LogicTab.tsx:85:                            value={(localValues[setting.key] as any) || ""}
+src/components/settings/panels/LogicTab.tsx:93:                            value={(localValues[setting.key] as any) || setting.min || 0}
+src/components/settings/panels/LogicTab.tsx:103:                            value={(localValues[setting.key] as any) || ""}
+src/components/settings/ExpertGovernanceHub.tsx:81:        updateSLM({ experts: newExperts } as any);
+src/components/settings/NexusSettings.tsx:41:        updateSLM({ nexusConfig: { ...config, ...updates } } as any);
+src/components/settings/NexusSettings.tsx:148:                                            onClick={() => updateConfig({ personality: p as any })}
+src/components/settings/ProfileSettings.tsx:93:            } as any);
+src/components/settings/StaffSettings.tsx:71:            await updateConfig('staffConfig', localConfig as any);
+src/components/settings/StaffSettings.tsx:72:            await updateList('positions', positions as any);
+src/components/settings/ReservationSettings.tsx:37:        await updateReservationConfig(config as any);
+src/components/settings/ReservationSettings.tsx:38:        await updateReservationSlots(slots as any);
+src/components/settings/ContextualSettings.tsx:72:            newSettings: newSettings as any
+src/components/settings/ContextualSettings.tsx:157:        setDraftValues(prev => ({ ...(prev ?? localValues), [key]: value } as any));
+src/components/settings/ReviewsSettings.tsx:60:            } as any);
+src/components/settings/HoursSettings.tsx:72:        await addClosedPeriod({ ...period, isAnnual: false } as any);
+src/components/reservations/NewCustomerDialog.tsx:37:        } as any);
+src/components/reservations/CustomerCustomerView.tsx:34:    const flexible = (c as any);
+src/components/reservations/NewReservationDialog.tsx:45:        } as any);
+src/components/layout/sidebar/SidebarProfile.tsx:49:            variants={navItemReveal as any}
+src/components/layout/Sidebar.tsx:72:                if (item.href === '/pms' && !(settings as any)?.pmsEnabled) return false;
+src/components/layout/Sidebar.tsx:106:    }, [hasAccess, (settings as any)?.pmsEnabled, tenantConfig?.features]);
+src/components/layout/AmbientAudio.tsx:27:        const AudioContextClass = (window.AudioContext || (window as unknown as Window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
+src/components/layout/VoiceAssistantOverlay.tsx:85:        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+src/components/layout/VoiceAssistantOverlay.tsx:137:            const hist = await (fetchAllSessions as any)();
+src/components/layout/VoiceAssistantOverlay.tsx:201:                            <ChatThread messages={messages as any[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+src/components/admin/mcc/FiscalChainExplorer.tsx:25:      ? (fiscalSeals as any[]).filter(s => s.instanceId === instanceId)
+src/components/admin/mcc/FiscalChainExplorer.tsx:26:      : (fiscalSeals as any[]);
+src/components/admin/mcc/FiscalChainExplorer.tsx:29:      .sort((a, b) => (b as any).sequence - (a as any).sequence) // Most recent first
+src/components/admin/mcc/FiscalChainExplorer.tsx:30:      .map((seal: any): HashNode => ({
+src/components/admin/mcc/MCCAuditStream.tsx:24:        const unsubscribe = (empireAudit as any).subscribe((event: any) => {
+src/components/admin/mcc/MCCInsights.tsx:28:            {macroInsights.map((insight: any, idx) => (
+src/components/admin/mcc/CertificationCenter.tsx:47:        const report = await (complianceService as any).verifySiteIntegrity(selectedInstanceId);
+src/components/admin/mcc/CertificationCenter.tsx:48:        setAuditReport({ ...report, isValid: report.isChainValid, totalSeals: report.entryCount } as any);
+src/components/admin/mcc/CertificationCenter.tsx:63:        const cert = await (complianceService as any).issueGlobalCertificate('FLEET_CMDR_01');
+src/components/admin/ProvisioningWizard.tsx:45:            onSuccess(newInstance as any);
+src/components/modals/ProductFormModal.tsx:66:            setIsVegetarian((editProduct as any).isVegetarian || false);
+src/components/modals/ProductFormModal.tsx:67:            setIsVegan((editProduct as any).isVegan || false);
+src/components/modals/ProductFormModal.tsx:68:            setIsGlutenFree((editProduct as any).isGlutenFree || false);
+src/components/modals/ProductFormModal.tsx:69:            setRecipeIngredients((editProduct as any).ingredients || []);
+src/components/modals/ProductFormModal.tsx:70:            setRecipeSteps((editProduct as any).recipeSteps || []);
+src/components/modals/ProductFormModal.tsx:236:                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients as any} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
+src/components/system/TutorialBubble.tsx:14:    const { isActive, currentSection, currentPointIndex, nextStep, prevStep, stopTutorial } = useTutorial() as any;
+src/components/system/DocumentationPortal.tsx:14:    const { startTutorial } = useTutorial() as any;
+src/components/bar/KdsTab.tsx:48:  setSelectedRecipe: (recipe: any) => void;
+src/components/bar/KdsTab.tsx:196:                                const product = (recipes as any[]).find(p => p.name === item.name);
+src/components/bar/KdsTab.tsx:224:                                                    setSelectedRecipe(product || (item as any));
+src/components/fleet/TenantOrchestrator.tsx:40:        const metrics = (inst as any).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
+src/components/fleet/TenantOrchestrator.tsx:45:        } as any;
+src/engines/core/hooks/auth/AuthAccess.tsx:31:                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as any, DEFAULT_ROLE_PERMISSIONS));
+src/engines/core/NexusCoreProvider.tsx:58:    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as any);
+src/engines/core/NexusCoreProvider.tsx:171:        logger.info('NexusAuth: Updating user profile', { userId, data: data as any });
+src/engines/core/NexusCoreProvider.tsx:207:        let val: any = translations[currentLanguage as keyof typeof translations];
+src/engines/core/NexusCoreProvider.tsx:210:            if (val && typeof val === 'object' && k in (val as any)) {
+src/engines/core/NexusCoreProvider.tsx:211:                val = (val as any)[k];
+src/engines/core/NexusCoreProvider.tsx:342:    const contextValue: any = useMemo(() => ({
+src/engines/core/NexusCoreProvider.tsx:356:        <NexusCoreContext.Provider value={contextValue as any}>
+src/engines/fiscal/NexusFiscalProvider.tsx:70:        cerfa?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:71:        duerp?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:72:        incendieDoc?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:73:        extincteurs?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:74:        exercices?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:75:        interventions?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:76:        pmrDoc?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:77:        pmrAmenagements?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:78:        prestataires?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:79:        certHalal?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:80:        agrementBoucher?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:81:        hottesDoc?: any;
+src/engines/fiscal/NexusFiscalProvider.tsx:92:    const ledgerEntries = useAtomValue(fiscalLedgerAtom) as any;
+src/engines/fiscal/NexusFiscalProvider.tsx:94:    const accounts = useAtomValue(accountsAtom) as any;
+src/engines/fiscal/NexusFiscalProvider.tsx:95:    const bankTransactions = useAtomValue(bankTransactionsAtom) as any;
+src/engines/fiscal/NexusFiscalProvider.tsx:96:    const expenseClaims = useAtomValue(expenseClaimsAtom) as any;
+src/engines/fiscal/NexusFiscalProvider.tsx:106:        const revenue = (ledgerEntries as any[]).filter(e => e.type === 'revenue').reduce((acc, e) => acc + (e.amountInCents || e.amount || 0), 0);
+src/engines/fiscal/NexusFiscalProvider.tsx:107:        const expenses = (ledgerEntries as any[]).filter(e => e.type === 'expense').reduce((acc, e) => acc + (e.amountInCents || e.amount || 0), 0);
+src/engines/fiscal/NexusFiscalProvider.tsx:117:        bankBalance: (financialMetrics.netProfitInCents as any) * 0.8,
+src/engines/fiscal/NexusFiscalProvider.tsx:139:        } catch (error: any) {
+src/engines/fiscal/NexusFiscalProvider.tsx:160:        } as any); // Cast as any because Omit might be tricky with Partial internally
+src/engines/fiscal/NexusFiscalProvider.tsx:163:    const contextValue: any = useMemo(() => ({
+src/engines/fiscal/NexusFiscalProvider.tsx:215:        <NexusFiscalContext.Provider value={contextValue as any}>
+src/engines/Simulacra/SinfoniaGradeXProof.ts:15:    const anomalyReading: any = {
+src/engines/Simulacra/SinfoniaGradeXProof.ts:19:        type: 'temperature' as any,
+src/engines/Simulacra/SinfoniaGradeXProof.ts:22:        status: 'alert' as any,
+src/engines/Simulacra/SinfoniaGradeXProof.ts:30:        { id: 'stock_2', name: 'Homard Bleu', quantity: 8, unit: 'unit' as any, costInCents: 3500 }
+src/engines/Simulacra/SinfoniaGradeXProof.ts:45:        logger.info(`📊 [PROOF] Ledger Impact: ${(result.fiscalEntry as any).amountInCents / 100}€ PROVISIONED.`);
+src/engines/fleet/NexusFleetProvider.tsx:115:            const mappedInstances: EmpireInstance[] = (fleetData || []).map((f: any) => ({
+src/engines/fleet/NexusFleetProvider.tsx:142:            } as any));
+src/engines/fleet/NexusFleetProvider.tsx:149:            if (intelligence.metrics) setGlobalMetrics(intelligence.metrics as any);
+src/engines/fleet/NexusFleetProvider.tsx:228:    const contextValue: any = useMemo(() => ({
+src/engines/fleet/NexusFleetProvider.tsx:249:        complianceService: FleetComplianceService as any,
+src/engines/fleet/NexusFleetProvider.tsx:250:        haccpBridge: HACCPTelemetryBridge as any,
+src/engines/fleet/NexusFleetProvider.tsx:287:    return context as any;
+src/hooks/useStrategicOracle.ts:33:            context as any
+src/hooks/useTenantLifecycle.ts:17:    const setActiveTenant = useSetAtom(activeFleetTenantAtom as any);
+src/hooks/useTenantLifecycle.ts:54:                store.set(entry.atom as any, (prev: any) => {
+src/hooks/useTenantLifecycle.ts:62:                    } as any;
+src/hooks/useDataMigration.ts:119:                const { categories, products } = data as unknown as { categories: { name: string; type: string; sortOrder: number }[], products: { name: string; description: string; price: number; categoryName: string; status: string; taxRate: number }[] };
+src/hooks/useDataMigration.ts:146:                const staffData = data as unknown as Record<string, string>[];
+src/hooks/useDataMigration.ts:162:                const crmData = data as unknown as Record<string, string>[];
+src/hooks/useNexusFleet.ts:10:    return useNexusFleetContext() as any;
+src/hooks/useLanguage.ts:21:        let value: any = translations[language as keyof typeof translations];
+src/hooks/useLanguage.ts:24:            value = (value as any)?.[k];
+src/hooks/useSettings.ts:25:    const setLastSaved = useSetAtom(settingsLastSavedAtom as any);
+src/lib/RuntimeValidator.ts:48:      totalInCents: RuntimeValidator.validate<Cents>(orderData.totalInCents as any, 'Cents'),
+src/lib/RuntimeValidator.ts:52:        priceInCents: RuntimeValidator.validate<Cents>(item.priceInCents as any, 'Cents'),
+src/lib/RuntimeValidator.ts:53:        quantity: RuntimeValidator.validate<Quantity>(item.quantity as any, 'Quantity')
+src/lib/logger.ts:41:    debug: (message: string, ...args: unknown[]): void => {
+src/lib/logger.ts:51:    info: (message: string, ...args: unknown[]): void => {
+src/lib/logger.ts:59:    warn: (message: string, ...args: unknown[]): void => {
+src/lib/logger.ts:67:    error: (message: string, error?: unknown, ...args: unknown[]): void => {
+src/lib/TimeSync.ts:42:            const serverDate = data.heartbeat instanceof Date ? data.heartbeat : ((data.heartbeat as any)?.toDate?.() || new Date(data.heartbeat as any));
+src/lib/nexus/NexusBridge.ts:81:            layoutType: (remoteData.status?.layoutType || remoteData.layout || RESTAURANT_FULL_DNA.status.layoutType) as any,
+src/lib/nexus/NexusBridge.ts:82:            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || RESTAURANT_FULL_DNA.status.businessLaws) as any
+src/lib/nexus/TelemetryService.ts:85:        lastPulse: serverTimestamp() as any,
+src/lib/nexus/adapters/MockAdapter.ts:40:        return results as unknown as T[];
+src/lib/marketing-engine.ts:16:    suggestOptimization: (profile: any) => 'SEO baseline established.',
+src/lib/marketing-engine.ts:42:            score: { overall: 92, breakdown: {} as any, issues: [], recommendations: [] },
+src/lib/marketing-engine.ts:51:            score: { overall: 78, breakdown: {} as any, issues: [], recommendations: [] },
+src/lib/ai/HermesEngine.ts:81:                        detectedAt: reading.timestamp as any
+src/lib/ai/HermesEngine.ts:85:                    await FiscalHACCPBridge.processCriticalWaste(reading as unknown as import('@/types').SensorReading, [], tenantId);
+src/lib/ai/DNAInjector.ts:24:                dynamicRules = results.map(doc => doc.rule as any);
+src/lib/ai/DNAInjector.ts:32:            const staticRules = (staticConfig as any)?.branding?.description || staticConfig?.name || "";
+src/lib/slm-data-generator.ts:39:        (stocks as any[]).forEach(item => {
+src/lib/slm-data-generator.ts:40:            const itemName = (item as any).ingredientName;
+src/lib/slm-data-generator.ts:41:            const quantity = (item as any).quantity || (item as any).currentStock || 0;
+src/lib/slm-data-generator.ts:42:            const unit = (item as any).unit || "unités";
+src/lib/slm-data-generator.ts:43:            const location = (item as any).storageLocationId || "Zone inconnue";
+src/lib/slm-data-generator.ts:52:            if ((item as any).status === 'low' || (quantity as number) < 5) {
+src/lib/slm-data-generator.ts:72:        (reservations as any[]).forEach(res => {
+src/lib/slm-data-generator.ts:73:            const anonName = this.anonymizeName((res as any).customerName);
+src/lib/slm-data-generator.ts:92:        (recipes as any[]).forEach(recipe => {
+src/lib/slm-data-generator.ts:115:        (accounts as any[]).forEach(acc => {
+src/lib/slm-data-generator.ts:137:        (logs as any[]).forEach(log => {
+src/lib/slm-data-generator.ts:159:        (users as any[]).forEach(u => {
+src/lib/slm-data-generator.ts:169:        const openRoles = [...new Set((candidates as any[]).map(c => c.appliedRole))].filter(Boolean);
+src/lib/slm-data-generator.ts:171:            const applicants = (candidates as any[]).filter(c => c.appliedRole === role && c.status === 'new');
+src/lib/blockchain-ledger.ts:43:                const lastProof = (lastProofs[0] as any) as AuditProof;
+src/lib/blockchain-ledger.ts:55:        const order = orderData as any;
+src/lib/blockchain-ledger.ts:112:        for (const proof of proofs as any[] as AuditProof[]) {
+src/lib/audit.ts:72:                    (logger as any).info(event.action, payload);
+src/lib/pos-service.ts:30:    static calculateCartTotal(items: any[]): number {
+src/lib/pos-service.ts:37:    static formatForKitchen(items: any[]): any {
+src/lib/services/GlobalRegistryService.ts:73:    release(id: string, store?: { set: (atom: any, value: any) => void }) {
+src/lib/services/GlobalRegistryService.ts:89:    purgeInactive(store: { set: (atom: any, value: any) => void }, ttlMax: number = 120000) {
+src/lib/services/GlobalRegistryService.ts:96:            const serverDate = (entry.lastAccessed as any) instanceof Date ? entry.lastAccessed : new Date(entry.lastAccessed);
+src/lib/services/GlobalRegistryService.ts:97:            const isExpired = (now - (serverDate as any).getTime()) > ttlMax;
+src/lib/services/GlobalRegistryService.ts:117:    forceNuclearPurge(store: { set: (atom: any, value: any) => void }) {
+src/lib/offline/sync-manager.ts:91:            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: any }> };
+src/lib/offline/sync-manager.ts:104:            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as any);
+src/instances/urbanburger.ts:3:export const urbanburgerConfig: any = {
+src/instances/bistrolyon.ts:3:export const bistrolyonConfig: any = {
+src/instances/lepetitpoucet.ts:7:export const lepetitpoucetConfig: any = {
+src/modules/haccp/haccp.sync.ts:53:    Object.values(this.private_listeners).forEach((unsub: any) => {
+src/modules/haccp/components/haccp/GestionHuiles.tsx:56:            } as any);
+src/modules/haccp/components/haccp/ReceptionMarchandises.tsx:52:            addNotification({ type: 'fail' as any, title: 'Champs manquants', message: 'Veuillez renseigner au moins le fournisseur et le produit.' });
+src/modules/haccp/components/haccp/ReceptionMarchandises.tsx:66:            await createLog({ ...formData, imageUrl: finalImageUrl } as any);
+src/modules/haccp/components/haccp/ReceptionMarchandises.tsx:82:            addNotification({ type: 'fail' as any, title: 'Erreur', message: error.message || 'Impossible d\'enregistrer la réception.' });
+src/modules/haccp/components/quality/ProductControlList.tsx:19:        } as any);
+src/modules/haccp/hooks/useQuality.ts:26:    const [controls, setControls] = useAtom(qualityControlsAtom) as any;
+src/modules/haccp/hooks/useQuality.ts:28:    const [activeControl, setActiveControl] = useAtom(qualityActiveControlAtom) as any;
+src/modules/haccp/hooks/useQuality.ts:32:    const alerts = useAtomValue(qualityAlertsAtom) as any[];
+src/modules/haccp/hooks/useQuality.ts:33:    const todayStats = useAtomValue(todayReceptionStatsAtom) as any;
+src/modules/haccp/hooks/useQuality.ts:34:    const productConfigs = useAtomValue(productQualityConfigsAtom) as any[];
+src/modules/haccp/hooks/useQuality.ts:35:    const supplierScores = useAtomValue(supplierScoresAtom) as any[];
+src/modules/haccp/hooks/useQuality.ts:36:    const deliveries = useAtomValue(deliveriesAtom) as any[];
+src/modules/haccp/hooks/useQuality.ts:44:        const delivery = deliveries.find((d: any) => d.id === deliveryId);
+src/modules/haccp/hooks/useQuality.ts:47:        (setSelectedDeliveryId as any)(deliveryId);
+src/modules/haccp/hooks/useQuality.ts:48:        (setStep as any)(1);
+src/modules/haccp/hooks/useQuality.ts:50:        const newControl: any = {
+src/modules/haccp/hooks/useQuality.ts:61:                reference: (delivery as any).reference
+src/modules/haccp/hooks/useQuality.ts:66:            items: ((delivery as any).items || []).map((item: any) => ({
+src/modules/haccp/hooks/useQuality.ts:99:                total_items: (delivery as any).items?.length || 0,
+src/modules/haccp/hooks/useQuality.ts:100:                items_accepted: (delivery as any).items?.length || 0,
+src/modules/haccp/hooks/useQuality.ts:147:            const result = await QualityEngine.validateReception(activeControl as any, tenantId);
+src/modules/haccp/hooks/useQuality.ts:184:            } as any);
+src/modules/haccp/hooks/useQuality.ts:185:            (setSelectedDeliveryId as any)(null);
+src/modules/haccp/hooks/useQuality.ts:186:            (setStep as any)(1);
+src/modules/haccp/hooks/useHACCP.ts:29:    const hygieneLabels = useAtomValue(hygieneLabelsAtom) as any[];
+src/modules/haccp/hooks/useHACCP.ts:30:    const hygieneLogs = useAtomValue(hygieneLogsAtom) as any[];
+src/modules/haccp/hooks/useHACCP.ts:31:    const receptionLogs = useAtomValue(receptionLogsAtom) as any[];
+src/modules/haccp/hooks/useHACCP.ts:32:    const oilLogs = useAtomValue(oilLogsAtom) as any[];
+src/modules/haccp/hooks/useHACCP.ts:33:    const wasteLogs = useAtomValue(wasteLogsAtom) as any[];
+src/modules/haccp/hooks/useHACCP.ts:34:    const maintenanceLogs = useAtomValue(maintenanceLogsAtom) as any[];
+src/modules/haccp/hooks/useHACCP.ts:38:    const hygieneForge = useNexusMutation(hygieneLogsNodeAtom as any, 'hygieneLogs', 'HACCP');
+src/modules/haccp/hooks/useHACCP.ts:39:    const labelForge = useNexusMutation(hygieneLabelsNodeAtom as any, 'hygieneLabels', 'HACCP');
+src/modules/haccp/hooks/useHACCP.ts:40:    const receptionForge = useNexusMutation(receptionLogsNodeAtom as any, 'receptionLogs', 'HACCP');
+src/modules/haccp/hooks/useHACCP.ts:41:    const maintenanceForge = useNexusMutation(maintenanceLogsNodeAtom as any, 'maintenanceLogs', 'HACCP');
+src/modules/haccp/hooks/useHACCP.ts:72:            ...(hygieneLogs as any[]).filter(l => l.status === 'alert'),
+src/modules/haccp/hooks/useHACCP.ts:73:            ...(receptionLogs as any[]).filter(l => l.integrityStatus === 'non-conforme'),
+src/modules/haccp/hooks/useHACCP.ts:74:            ...(maintenanceLogs as any[]).filter(l => l.status === 'pending')
+src/modules/haccp/hooks/useHACCP.ts:85:        ].filter((log: any) => 
+src/modules/haccp/hooks/useHACCP.ts:110:        addHygieneLog: (data: any) => hygieneForge.mutate('SET', `log_${Date.now()}`, data),
+src/modules/haccp/hooks/useHACCP.ts:111:        addLabel: (data: any) => labelForge.mutate('SET', `lab_${Date.now()}`, data),
+src/modules/haccp/hooks/useHACCP.ts:112:        addReception: (data: any) => receptionForge.mutate('SET', `rec_${Date.now()}`, data),
+src/modules/haccp/hooks/useHACCP.ts:113:        addMaintenance: (data: any) => maintenanceForge.mutate('SET', `maint_${Date.now()}`, data)
+src/modules/haccp/store/qualityAtoms.ts:123:    return (controls as any[]).filter(c => c.summary?.overall_status === 'fail' || c.summary?.overall_status === 'warning');
+src/modules/haccp/store/qualityAtoms.ts:128:    const controls = get(qualityControlsAtom) as any[];
+src/modules/haccp/store/qualityAtoms.ts:142:    const session = get(qualityActiveControlAtom) as any;
+src/modules/haccp/store/qualityAtoms.ts:145:    const accepted = items.filter((i: any) => i.quantity_accepted > 0).length;
+src/modules/haccp/store/qualityAtoms.ts:146:    const rejected = items.filter((i: any) => i.is_rejected).length;
+src/modules/haccp/store/qualityAtoms.ts:147:    const tempIssues = items.filter((i: any) => i.checks?.temperature?.status === 'fail').length;
+src/modules/haccp/store/qualityAtoms.ts:154:        status: (rejected > 0 || tempIssues > 0 ? 'fail' : 'pass') as any
+src/modules/haccp/store/qualityAtoms.ts:160:    const scores = get(supplierScoresAtom) as any[];
+src/modules/haccp/store/qualityAtoms.ts:161:    const controls = get(qualityControlsAtom) as any[];
+src/modules/inventory/inventory.sync.ts:98:    Object.values(this.private_listeners).forEach((unsub: any) => {
+src/modules/inventory/components/inventory/StockReceptionModal.tsx:82:            const result = await receiveStockAction(tenantId, ing as any, {
+src/modules/hr/types.ts:282:    fiscalSeal?: any;
+src/modules/hr/components/staff/BadgeControl.tsx:135:                                    if ((ts as any) instanceof Date) return (ts as any).toLocaleTimeString('fr-FR');
+src/modules/hr/components/staff/BadgeControl.tsx:150:                            {(currentShift as any).fiscalSeal?.hash || "PENDING_SYNC"}
+src/modules/hr/components/staff/RecruitmentDashboard.tsx:57:        (setEditingCandidate as any)(candidate || null);
+src/modules/hr/hooks/useRecruitment.ts:120:                where: [{ field: 'candidateId', operator: '==', value: candidate.id as any }]
+src/modules/hr/hooks/useRecruitment.ts:122:            relatedLogs.forEach((l: any) => batch.delete(`${logsPath}/${l.id}`));
+src/modules/hr/hooks/useHumanResources.ts:34:    const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom as any, 'leaveRequests', 'HR');
+src/modules/hr/hooks/useHumanResources.ts:35:    const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom as any, 'shifts', 'HR');
+src/modules/hr/hr.sync.ts:5:const shiftLogsNodeAtom = { key: 'shiftLogs' } as any;
+src/modules/hr/hr.sync.ts:6:const activeShiftsNodeAtom = { key: 'activeShifts' } as any;
+src/modules/hr/hr.sync.ts:7:const shiftsNodeAtom = { key: 'shifts' } as any;
+src/modules/hr/hr.sync.ts:8:const leaveRequestsNodeAtom = { key: 'leaveRequests' } as any;
+src/modules/hr/hr.sync.ts:9:const leaveBalancesNodeAtom = { key: 'leaveBalances' } as any;
+src/modules/hr/hr.sync.ts:10:const staffMembersNodeAtom = { key: 'staffMembers' } as any;
+src/modules/hr/hr.sync.ts:30:      (data: any) => {
+src/modules/hr/hr.sync.ts:31:        store.set(staffMembersNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+src/modules/hr/hr.sync.ts:43:      (data: any) => {
+src/modules/hr/hr.sync.ts:44:        store.set(shiftLogsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+src/modules/hr/hr.sync.ts:58:      (data: any) => {
+src/modules/hr/hr.sync.ts:59:        store.set(shiftsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+src/modules/hr/hr.sync.ts:71:      (data: any) => {
+src/modules/hr/hr.sync.ts:72:        store.set(leaveRequestsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+src/modules/hr/hr.sync.ts:83:      (data: any) => {
+src/modules/hr/hr.sync.ts:84:        store.set(leaveBalancesNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+src/modules/hr/hr.sync.ts:95:    Object.values(this.private_listeners).forEach((unsub: any) => {
+src/modules/marketing/marketing.sync.ts:40:          store.set(seoProfileAtom as any, seoData[0]);
+src/modules/marketing/marketing.sync.ts:61:            } as any,
+src/modules/marketing/marketing.sync.ts:64:          } as any;
+src/modules/marketing/marketing.sync.ts:65:          store.set(seoProfileAtom as any, fallback);
+src/modules/marketing/marketing.sync.ts:122:    Object.values(this.private_listeners).forEach((unsub: any) => {
+src/modules/marketing/components/quotes/NewQuoteDialog.tsx:37:function createQuoteLine(product?: any): Partial<QuoteLine> {
+src/modules/marketing/components/quotes/NewQuoteDialog.tsx:62:    const addNewLine = (product?: any) => {
+src/modules/marketing/components/marketing/NewCampaignModal.tsx:44:        } as any);
+src/modules/marketing/components/marketing/NewCampaignModal.tsx:111:                                            onClick={() => setType(ct.id as any)}
+src/modules/marketing/hooks/useGeminiLive.ts:58:            const audioContext = new (window.AudioContext || (window as unknown as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
+src/modules/marketing/hooks/useGeminiLive.ts:86:            const service = new GeminiLiveService(currentUser, rolePermissions as any, {
+src/modules/marketing/services/SEOManager.ts:17:    const instances = store.get(fleetSnapshotAtom) as any[];
+src/modules/ops/types.ts:39:    pendingModification?: any;
+src/modules/ops/types.ts:65:    data?: any; // legacy alias
+src/modules/ops/types.ts:83:        query: (prompt: string, context?: unknown) => Promise<unknown>;
+src/modules/ops/types.ts:87:        queryExpert: (prompt: string, contextData?: unknown) => Promise<unknown>;
+src/modules/ops/hooks/useRegistre.ts:17:            return await QualityEngine.validateReception(data as any, tenantId);
+src/modules/ops/hooks/useOrders.ts:20:    const orderForge = useNexusMutation<Order>(ordersNodeAtom as any, 'orders', 'KITCHEN');
+src/modules/ops/hooks/useKitchen.ts:27:    const recipeForge = useNexusMutation<Recipe>(recipesNodeAtom as any, 'recipes', 'KITCHEN');
+src/modules/ops/hooks/useKitchen.ts:28:    const prepForge = useNexusMutation<import('@/types').Preparation>(prepTasksNodeAtom as any, 'prepTasks', 'KITCHEN');
+src/modules/ops/hooks/useKitchen.ts:52:        togglePrepTask: (id: string, completed: boolean) => prepForge.mutate('UPDATE', id, { completed } as any),
+src/modules/ops/hooks/useReservations.ts:21:    const reservationForge = useNexusMutation<Reservation>(reservationsNodeAtom as any, 'reservations', 'RESERVATIONS');
+src/modules/ops/ops.sync.ts:116:    Object.values(this.private_listeners).forEach((unsub: any) => unsub());
+src/modules/finance/components/accounting/reconciliation/ReconciliationHub.tsx:57:            setConnectedAccounts(accs as any);
+src/modules/finance/components/accounting/reconciliation/ReconciliationHub.tsx:139:                                <AggregationWidget onSyncComplete={handleSyncComplete as any} />
+src/modules/finance/components/accounting/reconciliation/ReconciliationHub.tsx:251:                                                const tx = scannedTxs.find(t => t.id === m.transactionId) as any;
+src/modules/finance/components/accounting/ExpenseClaimDialog.tsx:71:            } as any);
+src/modules/finance/hooks/useAccounting.ts:35:    const accountingForge = useNexusMutation<JournalEntry>(journalEntriesNodeAtom as any, 'journalEntries', 'ACCOUNTING');
+src/modules/finance/hooks/useFiscal.ts:32:                userId: currentUser.uid || (currentUser as any).id,
+src/modules/finance/hooks/useFiscal.ts:35:                category: (expenseData.category as any) || 'other',
+src/modules/finance/hooks/useFiscal.ts:39:            return (result as any).id as string;
+src/modules/finance/hooks/useFinanceReflex.ts:20:            const wasteData = pulse.payload.data as any;
+src/modules/finance/hooks/useFinanceReflex.ts:34:            } as any);
+src/modules/finance/finance.sync.ts:55:    Object.values(this.private_listeners).forEach((unsub: any) => {
+src/modules/finance/services/FiscalHACCPBridge.ts:55:        } as any;
+src/modules/finance/services/NF525Service.ts:35:        const anchoredTenantId = store.get(tenantIdAtom as any) as string;
+src/modules/finance/services/NF525Service.ts:43:            const currentTenantId = store.get(tenantIdAtom as any) as string;
+src/modules/finance/services/NF525Service.ts:113:                data: m as unknown as SovereignData
+src/modules/finance/services/NF525Service.ts:126:            { path: `${getTenantPath('fiscalSeals', tenantId)}/${seal.id}`, method: 'SET', data: seal as unknown as SovereignData },
+src/modules/finance/services/NF525Service.ts:153:            return docs.length > 0 ? docs[0] as unknown as FiscalSeal : undefined;
+src/modules/finance/services/NF525Service.ts:169:                    if (ins.method === 'SET') await db.orders.put(ins.data as unknown as Order);
+src/modules/finance/services/NF525Service.ts:170:                    else if (ins.method === 'UPDATE') await db.orders.update(id, ins.data as unknown as Partial<Order>);
+src/modules/finance/services/NF525Service.ts:173:                    if (ins.method === 'SET') await db.stockItems.put(ins.data as unknown as StockItem);
+src/modules/finance/services/NF525Service.ts:174:                    else if (ins.method === 'UPDATE') await db.stockItems.update(id, ins.data as unknown as Partial<StockItem>);
+src/modules/finance/services/NF525Service.ts:177:                    if (ins.method === 'SET') await db.inventoryMovements.put(ins.data as unknown as InventoryMovement);
+src/modules/finance/services/NF525Service.ts:178:                    else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, ins.data as unknown as Partial<InventoryMovement>);
+src/modules/finance/services/NF525Service.ts:181:                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as unknown as JournalEntry);
+src/modules/finance/services/NF525Service.ts:183:                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as unknown as FiscalSeal);
+src/modules/finance/services/NF525Service.ts:191:            payload: { instructions } as any, 
+src/domain/accounting/PayrollAccountingBridge.ts:60:        } as any;
+src/domain/accounting/BlockchainLedgerService.ts:44:            this.lastSealCache = results.length > 0 ? (results[0] as unknown as FiscalSeal) : undefined;
+src/domain/accounting/BlockchainLedgerService.ts:75:        return this.sealQueue as unknown as Promise<FiscalSeal>;
+src/domain/accounting/BlockchainLedgerService.ts:87:        const seals = results as unknown as FiscalSeal[];
+src/domain/types/brands.ts:35:  branding?: any;
+src/domain/types/brands.ts:36:  security?: any;
+src/domain/agency/useExpert.ts:33:    const queryExpert = useCallback(async (prompt: string, contextData?: unknown): Promise<AgentResponse> => {
+src/domain/agency/useExpert.ts:46:            contextData: contextData as any,
+src/domain/agents/MonkeyChaos.ts:28:        } catch (error: unknown) {
+src/domain/agent/tools/StockTool.ts:12:    execute: async (args: any, user: any): Promise<any> => {
+src/domain/agent/tools/StockTool.ts:29:    execute: async (args: any, user: any): Promise<any> => {
+src/domain/agent/tools/MenuTool.ts:24:    execute: async (args: any, user: any): Promise<any> => {
+src/domain/agent/tools/FinanceTool.ts:23:    execute: async (args: any, user: any): Promise<any> => {
+src/domain/agent/tools/FleetTool.ts:18:    execute: async (args: any, user: any): Promise<any> => {
+src/domain/agent/tools/FleetTool.ts:44:    execute: async (args: any, user: any): Promise<any> => {
+src/domain/agent/GeminiLiveService.ts:39:        this.audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+src/domain/agent/GeminiLiveService.ts:133:            this.rolePermissions as any, 
+src/domain/agent/GeminiLiveService.ts:147:            const result = await (tool as any).execute(event.args as any, this.user!, {
+src/domain/agent/GeminiLiveService.ts:152:            this.sendToolResult(event.callId, result as any);
+src/domain/agent/GeminiLiveService.ts:159:    private sendToolResult(callId: string, result: any) {
+src/domain/services/HACCPTelemetryBridge.ts:46:      await fleetTelemetry.pushSiteTelemetry(tenantId as any, {
+src/domain/services/HACCPTelemetryBridge.ts:48:        complianceScore: (receptions as unknown[]).length > 0 ? 100 : 50, // Penalty for missing audits
+src/domain/services/FinanceCore.ts:119:        zReport._fiscalSeal = await this.sealRecordWithHash(zReport.id, zReport as unknown as SovereignData);
+src/domain/services/Slayer.ts:36:            items: (raw[config.fields.items || 'items'] as any[]) || [],
+src/domain/services/Slayer.ts:78:                                const nexusOrder = await DataDigester.digestOrder(rawOrder as any, { isLegacy: true });
+src/domain/services/DataDigester.ts:93:      logger.info('[DataDigester] Starting ingestion...', { source: (sanitized as any).source as string, isLegacy: !!options.isLegacy });
+src/domain/services/DataDigester.ts:96:        (sanitized as any)._metadata = { 
+src/domain/services/FleetCommander.ts:46:    logger.info('FleetCommander: Generating global sync payload', { overrideKeys: Object.keys(overrides) as any });
+src/domain/services/FleetComplianceService.ts:24:      const entries = entriesRaw.sort((a, b) => (a as any).sequence - (b as any).sequence);
+src/domain/services/FleetComplianceService.ts:31:        if ((entries[i] as any).sequence !== (entries[i-1] as any).sequence + 1) {
+src/domain/services/FleetComplianceService.ts:33:          sequenceError = (entries[i] as any).sequence;
+src/domain/services/QualityEngine.ts:34:  static async validateReception(rawData: any, tenantId: string = 'main'): Promise<{ id: string; currentStatus: string }> {
+src/domain/services/QualityEngine.ts:37:    const validatedData = rawData as any;
+src/domain/services/QualityEngine.ts:39:    const result: any = await NexusTransaction.run(
+src/domain/services/QualityEngine.ts:40:      { RECEPTION_VALIDATION: { schema: ReceptionSchema as any, data: validatedData } },
+src/domain/services/QualityEngine.ts:78:    const validatedData = CleaningSchema.parse(rawData as any) as any;
+src/domain/services/QualityEngine.ts:95:    const validatedData = WasteSchema.parse(rawData as any) as any;
+src/domain/services/NexusPayrollEngine.ts:55:      { HR_EVENT: { schema: ShiftEntrySchema as any, data: rawData as any } },
+src/domain/services/NexusPayrollEngine.ts:62:        const seal = await FiscalEngine.sealEntry(newId, { userId: user.id, timestamp: rawData.timestamp as Date, type: type as string }, { lastSeal }) as any;
+src/domain/services/NexusPayrollEngine.ts:90:      return snap[0].fiscalSeal as any;
+src/domain/services/ChaosMonkey.ts:43:    const targets: Array<{ atom: any; path: string }> = [
+src/domain/services/ChaosMonkey.ts:44:      { atom: ordersNodeAtom as any, path: 'operational/orders' },
+src/domain/services/ChaosMonkey.ts:45:      { atom: stockItemsNodeAtom as any, path: 'operational/stock' }
+src/domain/services/ChaosMonkey.ts:49:    const node = store.get(choice.atom) as any;
+src/domain/services/NexusStaffingOracle.ts:21:            const settings = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
+src/domain/services/AccountingService.ts:23:    } as any;
+src/domain/services/FiscalEngine.ts:33:    const dataSnapshot = CryptoService.canonicalStringify(data as any); 
+src/domain/services/ProvisioningEngine.ts:73:            await fleetTelemetry.pushSiteTelemetry(newInstance.id as any, newInstance as any);
+src/domain/services/QuoteEngine.ts:34:      { QUOTE_GENERATION: { schema: QuoteSchema as any, data: rawData } },
+src/domain/services/OfflineMasteryEngine.ts:22:    // (order as any)._syncTimestamp = Date.now();
+src/domain/services/InventoryVisionService.ts:80:            unit: match.extracted.unit as any,
+src/domain/services/TransactionService.ts:42:            const lastHash = lastSeals.length > 0 ? (lastSeals[0] as any as FiscalSeal).hash : null;
+src/domain/services/TransactionService.ts:59:                recipes as any[] as Recipe[], 
+src/domain/services/MarketingService.ts:63:            } as unknown as PromoCode
+src/store/pulseAtoms.ts:30:        set(nexusPulseAtom as any, pulse);
+src/store/nexusNodeFactory.ts:39:    GlobalRegistryService.register(id, nodeAtom as any);
+src/store/tutorialAtoms.ts:34:        set(tutorialSectionAtom as any, section);
+src/store/tutorialAtoms.ts:35:        set(tutorialPointIndexAtom as any, 0);
+src/store/tutorialAtoms.ts:36:        set(tutorialActiveAtom as any, true);
+src/store/tutorialAtoms.ts:43:        set(tutorialActiveAtom as any, false);
+src/store/tutorialAtoms.ts:44:        set(tutorialSectionAtom as any, null);
+src/store/tutorialAtoms.ts:45:        set(tutorialPointIndexAtom as any, 0);
+src/store/tutorialAtoms.ts:55:            set(tutorialPointIndexAtom as any, index + 1);
+src/store/tutorialAtoms.ts:57:            set(tutorialActiveAtom as any, false);
+src/store/tutorialAtoms.ts:67:            set(tutorialPointIndexAtom as any, index - 1);

@@ -37,9 +37,19 @@ export const TimeSync = {
         }
     };
 
-    this.private_unsub = Nexus.adapter.onSnapshot(syncPath, (data) => {
-        if (data) {
-            const serverDate = data.heartbeat instanceof Date ? data.heartbeat : (data.heartbeat?.toDate?.() || new Date(data.heartbeat));
+    this.private_unsub = Nexus.adapter.onSnapshot<import('@/shared/nexus-contract').SovereignData>(syncPath, (data) => {
+        if (data && data.heartbeat) {
+            const h = data.heartbeat;
+            let serverDate: Date | null = null;
+
+            if (h instanceof Date) {
+                serverDate = h;
+            } else if (h && typeof h === 'object' && 'toDate' in h && typeof (h as any).toDate === 'function') {
+                serverDate = (h as { toDate: () => Date }).toDate();
+            } else if (typeof h === 'string' || typeof h === 'number') {
+                serverDate = new Date(h);
+            }
+
             if (serverDate) {
                 const now = Date.now();
                 this.offset = serverDate.getTime() - now;

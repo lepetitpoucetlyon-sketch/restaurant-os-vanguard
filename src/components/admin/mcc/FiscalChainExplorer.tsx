@@ -22,16 +22,16 @@ export default function FiscalChainExplorer({ instanceId }: { instanceId?: strin
   const nodes = useMemo(() => {
     // Filter by instance if provided
     const filteredSeals = instanceId 
-      ? fiscalSeals.filter(s => s.instanceId === instanceId)
-      : fiscalSeals;
+      ? (fiscalSeals as any[]).filter(s => s.instanceId === instanceId)
+      : (fiscalSeals as any[]);
 
     return filteredSeals
-      .sort((a, b) => b.sequence - a.sequence) // Most recent first
-      .map((seal): HashNode => ({
+      .sort((a, b) => (b as any).sequence - (a as any).sequence) // Most recent first
+      .map((seal: any): HashNode => ({
         index: seal.sequence,
         hash: seal.hash,
         previousHash: seal.previousHash || 'GENESIS_BLOCK',
-        timestamp: format(seal.timestamp, 'yyyy-MM-dd HH:mm:ss'),
+        timestamp: format(new Date(seal.timestamp), 'yyyy-MM-dd HH:mm:ss'),
         status: 'verified' // In this view, we show signed seals
       }));
   }, [fiscalSeals, instanceId]);

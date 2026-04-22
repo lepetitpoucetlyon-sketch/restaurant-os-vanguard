@@ -36,6 +36,6 @@ export const staffCandidateModalOpenAtom = atom(false);
 export const staffEditingCandidateAtom = atom<Candidate | null>(null);
 
 // 4. HR LOADING AGGREGATOR
-export const hrLoadingAtom = atom((get) => 
+export const hrStaffLoadingAtom = atom((get) => 
     get(shiftsNodeAtom).loading || get(activeShiftsNodeAtom).loading || get(leaveRequestsNodeAtom).loading
 );

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/ui.foundations";;
 import { ReactNode } from "react";
 
-type BadgeStatus = "success" | "warning" | "error" | "info" | "neutral" | "accent";
+export type BadgeStatus = "success" | "warning" | "error" | "info" | "neutral" | "accent";
 
 interface StatusBadgeProps {
     status: BadgeStatus;

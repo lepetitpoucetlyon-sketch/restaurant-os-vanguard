@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { FiscalSeal } from '@/types/accounting.types';
+import { FiscalSeal } from '@/types';
 export type { FiscalSeal };
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from './CryptoService';
@@ -30,7 +30,7 @@ export const FiscalEngine = {
     options: { lastSeal?: FiscalSeal, isTrainingMode?: boolean, instanceId?: string } = {}
   ): Promise<FiscalSeal> {
     const timestamp = new Date().toISOString();
-    const dataSnapshot = CryptoService.canonicalStringify(data); 
+    const dataSnapshot = CryptoService.canonicalStringify(data as any); 
     const id = SharedKernel.generateId('SEAL');
 
     const previousHash = options.lastSeal ? options.lastSeal.hash : FISCAL_CONSTANTS.GENESIS_ROOT;

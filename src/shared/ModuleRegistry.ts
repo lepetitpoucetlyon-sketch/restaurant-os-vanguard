@@ -21,13 +21,13 @@ export const SOVEREIGN_MODULE_IDS: ReadonlySet<ModuleId> = new Set<ModuleId>([
   // Opérations
   'POS', 'FLOOR_PLAN', 'KDS', 'RESERVATIONS', 'OMNI_RES',
   // Relation Client
-  'Customer', 'QUOTES', 'GROUPS',
+  'CRM', 'QUOTES', 'GROUPS',
   // Production
   'KITCHEN', 'BAR', 'STORAGE_MAP',
   // Back-Office
   'INVENTORY', 'HACCP', 'RECEPTION',
   // RH
-  'CLOCK_IN', 'HR', 'PLANNING', 'LEAVE', 'RECRUITMENT',
+  'CLOCK_IN', 'HR', 'PLANNING', 'LEAVE', 'RECRUITMENT', 'ONBOARDING',
   // Intelligence
   'BI', 'GOOGLE_ANALYTICS', 'MARKETING', 'AI_REFERENCING', 'SEO',
   // Gouvernance

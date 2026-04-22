@@ -20,7 +20,7 @@ export function useOrders() {
     const orderForge = useNexusMutation<Order>(ordersNodeAtom as any, 'orders', 'KITCHEN');
     
     const updateOrderStatus = useCallback(async (orderId: string, status: OrderStatus) => {
-        return orderForge.mutate('UPDATE', orderId, { status } as any);
+        return orderForge.mutate('UPDATE', orderId, { status } as Partial<Order>);
     }, [orderForge]);
 
     const stats = {

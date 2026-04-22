@@ -61,7 +61,7 @@ export class HermesEngine {
         // Here we simulate an autonomous bridge trigger if temperature rises
         try {
             const haccpPath = Nexus.getTenantPath('haccp_readings', tenantId);
-            const haccpResults = await Nexus.adapter.query(haccpPath, {
+            const haccpResults = await Nexus.adapter.query<import('@/types').SensorReading>(haccpPath, {
                 where: [
                     { field: 'isAnomaly', operator: '==', value: true },
                     { field: 'processed', operator: '==', value: false }
@@ -78,12 +78,12 @@ export class HermesEngine {
                         domain: 'haccp',
                         severity: 'critical',
                         message: `Critical temperature reached: ${reading.value}${reading.unit} for ${reading.name}`,
-                        detectedAt: reading.timestamp
+                        detectedAt: reading.timestamp as string | Date
                     });
 
                     // Auto-Trigger Bridge: Themis Agent Intervention
-                    await FiscalHACCPBridge.processCriticalWaste(reading as import('@/types').SensorReading, [], tenantId);
-                    actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId}`);
+                    await FiscalHACCPBridge.processCriticalWaste(reading, [], tenantId);
+                    actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId || reading.id}`);
                     
                     // Mark as processed in Nexus
                     await Nexus.adapter.update(`${haccpPath}/${reading.id}`, { processed: true });

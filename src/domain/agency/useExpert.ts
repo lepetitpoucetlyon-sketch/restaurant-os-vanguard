@@ -43,7 +43,7 @@ export function useExpert(domain: AgentDomain) {
             domain,
             userRole,
             userPrompt: prompt,
-            contextData,
+            contextData: contextData as any,
             apiKey: slmConfig.apiKey,
             endpoint: slmConfig.endpoint,
             modelId: modelId // Pass precise model

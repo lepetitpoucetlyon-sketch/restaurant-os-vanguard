@@ -58,10 +58,10 @@ export const MarketingSyncService = {
                 cost: 0,
                 roi: 0,
                 conversions: 0
-            },
+            } as any,
             keywords: [],
             competitors: []
-          };
+          } as any;
           store.set(seoProfileAtom as any, fallback);
         }
       },

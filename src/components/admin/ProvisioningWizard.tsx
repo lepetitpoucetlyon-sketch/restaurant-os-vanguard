@@ -25,7 +25,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
         key: '',
         ownerEmail: 'admin@empire.com',
         initialPrimaryColor: '#C5A059',
-        tier: 'standard',
+        tier: 'STANDARD',
         copyBaseTemplates: true
     });
 
@@ -42,7 +42,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
         setStep('deploying');
         try {
             const newInstance = await ProvisioningEngine.provisionNewInstance(formData);
-            onSuccess(newInstance);
+            onSuccess(newInstance as any);
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Unknown Deployment Error';
             setError(message);
@@ -148,12 +148,12 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                     <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Tier de Service</label>
                                     <select 
                                         value={formData.tier}
-                                        onChange={(e) => setFormData({...formData, tier: e.target.value as 'standard' | 'premium' | 'enterprise'})}
+                                        onChange={(e) => setFormData({...formData, tier: e.target.value as 'STANDARD' | 'PREMIUM' | 'ENTERPRISE'})}
                                         className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none appearance-none cursor-pointer"
                                     >
-                                        <option value="standard">Standard Node</option>
-                                        <option value="premium">Premium Pro</option>
-                                        <option value="enterprise">Enterprise OS</option>
+                                        <option value="STANDARD">Standard Node</option>
+                                        <option value="PREMIUM">Premium Pro</option>
+                                        <option value="ENTERPRISE">Enterprise OS</option>
                                     </select>
                                 </div>
 

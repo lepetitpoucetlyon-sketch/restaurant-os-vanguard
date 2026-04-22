@@ -54,7 +54,7 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
     React.useEffect(() => {
         const loadAccounts = async () => {
             const accs = await PowensService.getAccounts('demo-token');
-            setConnectedAccounts(accs);
+            setConnectedAccounts(accs as any);
             if (accs.length > 0) setSelectedAccountId(accs[0].id);
         };
         loadAccounts();
@@ -136,7 +136,7 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
                                 className="space-y-12"
                             >
                                 {/* Automated Option */}
-                                <AggregationWidget onSyncComplete={handleSyncComplete} />
+                                <AggregationWidget onSyncComplete={handleSyncComplete as any} />
 
                                 {/* Manual Separator */}
                                 <div className="relative py-4">
@@ -248,7 +248,7 @@ export function ReconciliationHub({ onClose }: ReconciliationHubProps) {
                                         <ShieldCheck className="w-6 h-6" />
                                         <span className="text-sm font-black uppercase tracking-widest">
                                             {matches.filter(m => {
-                                                const tx = scannedTxs.find(t => t.id === m.transactionId);
+                                                const tx = scannedTxs.find(t => t.id === m.transactionId) as any;
                                                 return tx?.bankName?.toLowerCase().includes(connectedAccounts.find(a => a.id === selectedAccountId)?.bankName?.toLowerCase() || '---');
                                             }).length} Mouvements sur ce compte
                                         </span>

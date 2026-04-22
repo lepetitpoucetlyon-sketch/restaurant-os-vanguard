@@ -31,18 +31,18 @@ export const currentTutorialPointAtom = atom((get) => {
 export const startTutorialAtom = atom(
     null,
     (get, set, section: TutorialSection) => {
-        set(tutorialSectionAtom, section);
-        set(tutorialPointIndexAtom, 0);
-        set(tutorialActiveAtom, true);
+        set(tutorialSectionAtom as any, section);
+        set(tutorialPointIndexAtom as any, 0);
+        set(tutorialActiveAtom as any, true);
     }
 );
 
 export const stopTutorialAtom = atom(
     null,
     (get, set) => {
-        set(tutorialActiveAtom, false);
-        set(tutorialSectionAtom, null);
-        set(tutorialPointIndexAtom, 0);
+        set(tutorialActiveAtom as any, false);
+        set(tutorialSectionAtom as any, null);
+        set(tutorialPointIndexAtom as any, 0);
     }
 );
 
@@ -52,9 +52,9 @@ export const nextTutorialStepAtom = atom(
         const section = get(tutorialSectionAtom);
         const index = get(tutorialPointIndexAtom);
         if (section && index < section.points.length - 1) {
-            set(tutorialPointIndexAtom, index + 1);
+            set(tutorialPointIndexAtom as any, index + 1);
         } else {
-            set(tutorialActiveAtom, false);
+            set(tutorialActiveAtom as any, false);
         }
     }
 );
@@ -64,7 +64,7 @@ export const prevTutorialStepAtom = atom(
     (get, set) => {
         const index = get(tutorialPointIndexAtom);
         if (index > 0) {
-            set(tutorialPointIndexAtom, index - 1);
+            set(tutorialPointIndexAtom as any, index - 1);
         }
     }
 );

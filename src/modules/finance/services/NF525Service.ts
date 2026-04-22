@@ -11,8 +11,9 @@ import { db } from '@/lib/offline/offline-store';
 import { SyncManager } from '@/lib/offline/sync-manager';
 import { checkOnlineStatus } from '@/lib/offline/status';
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom } from '../store/accountingAtoms';
+import { tenantIdAtom } from '@/modules/finance/store/accountingAtoms';
 import { SovereignData } from '@/shared/nexus-contract';
+import { secureCast } from '@/shared/validation/SchemaRegistry';
 
 export interface FiscalInstruction {
     path: string;
@@ -32,7 +33,7 @@ export class NF525Service {
     static async executeAtomicPayment(orderId: string, options: { isTrainingMode?: boolean } = {}): Promise<void> {
         // 🛡️ ANCHORING: Capture tenantId at the exact start of transaction
         const store = getDefaultStore();
-        const anchoredTenantId = store.get(tenantIdAtom) as string;
+        const anchoredTenantId = store.get(tenantIdAtom);
         const isOnline = checkOnlineStatus();
 
         try {
@@ -40,7 +41,7 @@ export class NF525Service {
             if (!order || order.status === 'paid') return;
 
             // 🛡️ RACE CONDITION CHECK
-            const currentTenantId = store.get(tenantIdAtom) as string;
+            const currentTenantId = store.get(tenantIdAtom);
             if (currentTenantId !== anchoredTenantId) {
                 logger.warn(`[NF525] CRITICAL_DRIFT_PREVENTED: Tenant shifted from ${anchoredTenantId} to ${currentTenantId} during signature.`);
                 MasterBridge.pushGlobalConfig({ 
@@ -110,7 +111,7 @@ export class NF525Service {
             impact.push({ 
                 path: `${getTenantPath('inventoryMovements', tenantId)}/${m.id}`, 
                 method: 'SET', 
-                data: m as SovereignData
+                data: secureCast<SovereignData<InventoryMovement>>('STOCK', 'movements', m)
             });
         });
 
@@ -121,9 +122,9 @@ export class NF525Service {
     private static prepareBatchInstructions(order: Order, seal: FiscalSeal, stockImpact: FiscalInstruction[], timestamp: Date, tenantId: string): FiscalInstruction[] {
         const journalId = `je_sale_${order.id}`;
         return [
-            { path: `${getTenantPath('orders', tenantId)}/${order.id}`, method: 'UPDATE', data: { status: 'paid', updatedAt: timestamp.toISOString(), fiscalSealHash: seal.hash } },
-            { path: `${getTenantPath('journalEntries', tenantId)}/${journalId}`, method: 'SET', data: { id: journalId, date: timestamp.toISOString(), amount: order.totalInCents, fiscalSealHash: seal.hash } },
-            { path: `${getTenantPath('fiscalSeals', tenantId)}/${seal.id}`, method: 'SET', data: seal },
+            { path: `${getTenantPath('orders', tenantId)}/${order.id}`, method: 'UPDATE', data: { status: 'paid', updatedAt: timestamp.toISOString(), fiscalSealHash: seal.hash } as SovereignData },
+            { path: `${getTenantPath('journalEntries', tenantId)}/${journalId}`, method: 'SET', data: { id: journalId, date: timestamp.toISOString(), amount: order.totalInCents, fiscalSealHash: seal.hash } as SovereignData },
+            { path: `${getTenantPath('fiscalSeals', tenantId)}/${seal.id}`, method: 'SET', data: secureCast<SovereignData<FiscalSeal>>('FISCAL', 'seals', seal) },
             ...stockImpact
         ];
     }
@@ -150,7 +151,7 @@ export class NF525Service {
                 orderBy: { field: 'timestamp', direction: 'desc' },
                 limit: 1
             });
-            return docs.length > 0 ? docs[0] as unknown as FiscalSeal : undefined;
+            return docs.length > 0 ? secureCast<FiscalSeal>('FISCAL', 'seals', docs[0]) : undefined;
         }
         return typeof window !== 'undefined' ? await db.fiscalSeals.orderBy('timestamp').last() : undefined;
     }
@@ -166,21 +167,21 @@ export class NF525Service {
                 
                 // Type-safe table selection (Grade VI)
                 if (coll === 'orders') {
-                    if (ins.method === 'SET') await db.orders.put(ins.data as unknown as Order);
-                    else if (ins.method === 'UPDATE') await db.orders.update(id, ins.data as unknown as Partial<Order>);
+                    if (ins.method === 'SET') await db.orders.put(secureCast<Order>('ORDERS', 'orders', ins.data));
+                    else if (ins.method === 'UPDATE') await db.orders.update(id, secureCast<Partial<Order>>('ORDERS', 'orders', ins.data));
                     else if (ins.method === 'DELETE') await db.orders.delete(id);
                 } else if (coll === 'stockItems') {
-                    if (ins.method === 'SET') await db.stockItems.put(ins.data as unknown as StockItem);
-                    else if (ins.method === 'UPDATE') await db.stockItems.update(id, ins.data as unknown as Partial<StockItem>);
+                    if (ins.method === 'SET') await db.stockItems.put(secureCast<StockItem>('STOCK', 'items', ins.data));
+                    else if (ins.method === 'UPDATE') await db.stockItems.update(id, secureCast<Partial<StockItem>>('STOCK', 'items', ins.data));
                     else if (ins.method === 'DELETE') await db.stockItems.delete(id);
                 } else if (coll === 'inventoryMovements') {
-                    if (ins.method === 'SET') await db.inventoryMovements.put(ins.data as unknown as InventoryMovement);
-                    else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, ins.data as unknown as Partial<InventoryMovement>);
+                    if (ins.method === 'SET') await db.inventoryMovements.put(secureCast<InventoryMovement>('STOCK', 'movements', ins.data));
+                    else if (ins.method === 'UPDATE') await db.inventoryMovements.update(id, secureCast<Partial<InventoryMovement>>('STOCK', 'movements', ins.data));
                     else if (ins.method === 'DELETE') await db.inventoryMovements.delete(id);
                 } else if (coll === 'journalEntries') {
-                    if (ins.method === 'SET') await db.journalEntries.put(ins.data as unknown as JournalEntry);
+                    if (ins.method === 'SET') await db.journalEntries.put(secureCast<JournalEntry>('ACCOUNTING', 'journalEntries', ins.data));
                 } else if (coll === 'fiscalSeals') {
-                    if (ins.method === 'SET') await db.fiscalSeals.put(ins.data as unknown as FiscalSeal);
+                    if (ins.method === 'SET') await db.fiscalSeals.put(secureCast<FiscalSeal>('FISCAL', 'seals', ins.data));
                 }
             }
         });

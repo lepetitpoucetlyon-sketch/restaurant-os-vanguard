@@ -103,7 +103,7 @@ export default function AnalyticsIntegrationPage() {
     }
 
     // Reality Check: Derive stats from real profile or use baseline zeros
-    const analytics: AnalyticsData = (profile as { analytics?: AnalyticsData })?.analytics || {
+    const analytics: AnalyticsData = (profile as any)?.analytics || {
         visitors: 0,
         pageViews: 0,
         reservations: 0,
@@ -115,7 +115,7 @@ export default function AnalyticsIntegrationPage() {
         weeklyTrend: []
     };
 
-    const isConnected = !!(profile as { googlePropertyId?: string })?.googlePropertyId;
+    const isConnected = !!(profile as any)?.googlePropertyId;
 
     const handleConnect = async () => {
         showToast("Initialisation de la connexion Google...", "premium");
@@ -198,7 +198,7 @@ export default function AnalyticsIntegrationPage() {
                                 <CheckCircle2 className="w-3 h-3 text-accent" />
                                 <span className="text-[9px] font-black text-accent uppercase tracking-widest leading-none">Actif</span>
                             </div>
-                            <span className="text-[10px] font-bold text-text-muted tracking-wide">• {(profile as { googlePropertyId?: string })?.googlePropertyId || 'GA4-NON-CONFIGURÉ'}</span>
+                            <span className="text-[10px] font-bold text-text-muted tracking-wide">• {(profile as any)?.googlePropertyId || 'GA4-NON-CONFIGURÉ'}</span>
                         </div>
                     </div>
                 </div>

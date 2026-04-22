@@ -1,5 +1,6 @@
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom, fleetSnapshotAtom } from '../store/marketingAtoms';
+import { tenantIdAtom } from '@/store/fleetAtoms';
+import { fleetSnapshotAtom } from '@/store/operationalAtoms';
 
 /**
  * 🔍 SEOManager - Restaurant OS
@@ -13,7 +14,7 @@ export const SEOManager = {
   generateConfig() {
     const store = getDefaultStore();
     const tenantId = store.get(tenantIdAtom);
-    const instances = store.get(fleetSnapshotAtom);
+    const instances = store.get(fleetSnapshotAtom) as any[];
     const instance = instances.find(i => i.key === tenantId) || { name: 'Restaurant OS' };
 
     const baseUrl = `https://${tenantId}.restaurant-os.app`;

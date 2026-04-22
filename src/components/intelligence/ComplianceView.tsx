@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 // --- Compliance View ---
 
-interface ComplianceAlert {
+export interface ComplianceAlert {
     id: string;
     userName: string;
     message: string;
@@ -54,12 +54,15 @@ export const ComplianceView: React.FC<{ alerts: ComplianceAlert[] }> = ({ alerts
 
 // --- IoT View ---
 
-interface IoTMetric {
+export interface IoTMetric {
     id: string;
     name: string;
     value: number;
-    type: 'temperature' | 'hz';
+    type: 'temperature' | 'hz' | 'humidity' | 'pressure';
+    status: 'normal' | 'alert' | 'critical';
+    trend: 'up' | 'down' | 'stable';
     anomalous: boolean;
+    timestamp: string;
 }
 
 export const IoTView: React.FC<{ metrics: IoTMetric[] }> = ({ metrics }) => {

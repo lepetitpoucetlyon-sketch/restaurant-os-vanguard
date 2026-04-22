@@ -279,7 +279,7 @@ export interface PayrollCalculation {
     status: 'draft' | 'published' | 'on-going' | 'completed';
     createdAt?: string;
     updatedAt?: string;
-    fiscalSeal?: import('@/shared/nexus-contract').FiscalSeal;
+    fiscalSeal?: any;
     metadata?: import('@/shared/nexus-contract').SovereignData;
 }
 

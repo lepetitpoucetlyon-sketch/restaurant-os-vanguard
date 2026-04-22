@@ -166,6 +166,11 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         await session.logoutFirebase();
         session.clearPersistedSession();
     }, [session]);
+    
+    const updateUser = useCallback(async (userId: string, data: Partial<User>) => {
+        logger.info('NexusAuth: Updating user profile', { userId, data });
+        // Suture to Firestore/Nexus logic later
+    }, []);
 
     // -------------------------------------------------------------------------
     // 3. UI MODULE (Grade X Sovereign)
@@ -199,11 +204,11 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     const t = useCallback((key: string): string => {
         const keys = key.split('.');
-        let val: SovereignValue = translations[currentLanguage];
+        let val: SovereignValue | SovereignData = translations[currentLanguage as keyof typeof translations];
         
         for (const k of keys) {
-            if (val && typeof val === 'object' && k in (val as SovereignData)) {
-                val = (val as SovereignData)[k];
+            if (val && typeof val === 'object' && val !== null && k in val) {
+                val = (val as Record<string, any>)[k];
             } else {
 
                 return key; 
@@ -253,6 +258,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             return pin === '9999';
         },
         switchProfile: (uid: string) => console.log('Profile switch', uid),
+        updateUser: async (id: string, data: Partial<User>) => console.log('Update user', id, data),
         updateUserStatus: async (id: string, status: 'active' | 'suspended' | 'on_leave') => console.log('Update user status', id, status),
         addUser: async (data: Partial<User>) => console.log('Add user', data),
         deleteUser: async (id: string) => console.log('Delete user', id),
@@ -331,7 +337,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             predictSignatureChance: () => 0.5,
             predictLaborCost: () => 0.0
         }
-    }), []);
+    } as NexusFleetState), []);
 
     const contextValue: NexusCoreState = useMemo(() => ({
         auth: authValue,

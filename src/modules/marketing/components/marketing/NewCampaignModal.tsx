@@ -15,7 +15,7 @@ interface NewCampaignModalProps {
 const CAMPAIGN_TYPES = [
     { id: 'email', label: 'Email', icon: Mail, description: 'Newsletter ou offre par email' },
     { id: 'sms', label: 'SMS', icon: MessageSquare, description: 'Message court et direct' },
-    { id: 'push', label: 'Push', icon: Send, description: 'Notification mobile' },
+    { id: 'social', label: 'Social', icon: Send, description: 'Notification mobile ou sociale' },
 ];
 
 export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
@@ -41,7 +41,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
             scheduledTime,
             content: content.trim(),
             status: (scheduledDate ? 'scheduled' : 'draft'),
-        });
+        } as any);
 
         // Reset
         setName('');
@@ -108,7 +108,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     {CAMPAIGN_TYPES.map((ct) => (
                                         <button
                                             key={ct.id}
-                                            onClick={() => setType(ct.id)}
+                                            onClick={() => setType(ct.id as any)}
                                             className={`group flex flex-col items-center gap-2 p-5 rounded-2xl border transition-all ${
                                                 type === ct.id
                                                     ? 'border-indigo-500 bg-indigo-500/5 shadow-lg'

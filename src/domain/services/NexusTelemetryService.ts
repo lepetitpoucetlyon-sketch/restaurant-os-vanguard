@@ -66,7 +66,7 @@ class TelemetryService {
 
     return {
       version: whiteLabelInstanceConfig.version || "1.0.0",
-      status: 'active', // Dynamic status based on error store in real app
+      status: 'ACTIVE', // Dynamic status based on error store in real app
       lastPulse: new Date().toISOString(),
       health: {
         uptime: performance.now(),

@@ -18,7 +18,7 @@ import {
 import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
 import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
-import { receiveStockAction, searchIngredientsAction } from '@/app/actions/inventory';
+import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
 import { toast } from 'sonner';
 
 interface ScannedItem {
@@ -29,7 +29,7 @@ interface ScannedItem {
   price: number;
   dlc: string;
   forceScan: boolean;
-  ingredient?: import('@/types').StockItem;
+  ingredient?: import('@/types').Ingredient;
 }
 
 export default function ReceptionDashboard() {
@@ -51,7 +51,7 @@ export default function ReceptionDashboard() {
         const results: ScannedItem[] = [];
         
         for (const word of keywords) {
-            const matches = await searchIngredientsAction(word);
+            const matches = await searchIngredientsAction(tenantId, word);
             if (matches.length > 0) {
                 const match = matches[0];
                 results.push({
@@ -92,13 +92,17 @@ export default function ReceptionDashboard() {
     
     try {
       for (const item of scanResult) {
-        await receiveStockAction(tenantId, item.ingredient || {
+        await receiveStockAction(tenantId, (item.ingredient || {
             id: item.id,
             name: item.name,
-            unit: item.unit,
-            shelfLifeDays: 3, 
-            defaultLocationId: 'frigo_1'
-        } as import('@/types').StockItem, {
+            unit: item.unit as any,
+            category: 'other',
+            costInCents: Math.round(item.price * 100),
+            minQuantity: 0,
+            supplier: 'Inconnu',
+            defaultStorageLocation: 'frigo_1',
+            shelfLifeDays: 3
+        }) as import('@/types').Ingredient, {
             quantity: item.qty,
             cost: Math.round(item.price * 100),
             manualDlc: item.dlc,

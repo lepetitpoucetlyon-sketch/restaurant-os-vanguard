@@ -49,7 +49,7 @@ export function ReceptionMarchandises() {
 
     const handleSubmit = async () => {
         if (!formData.supplier || !formData.productName) {
-            addNotification({ type: 'error', title: 'Champs manquants', message: 'Veuillez renseigner au moins le fournisseur et le produit.' });
+            addNotification({ type: 'fail' as any, title: 'Champs manquants', message: 'Veuillez renseigner au moins le fournisseur et le produit.' });
             return;
         }
 
@@ -63,7 +63,7 @@ export function ReceptionMarchandises() {
                 finalImageUrl = await StorageService.uploadBase64Image(formData.imageUrl, storagePath);
             }
 
-            await createLog({ ...formData, imageUrl: finalImageUrl });
+            await createLog({ ...formData, imageUrl: finalImageUrl } as any);
             addNotification({ type: 'success', title: 'Réception enregistrée', message: `Le contrôle de ${formData.productName} a été archivé.` });
             setFormData({
                 supplier: '',
@@ -79,7 +79,7 @@ export function ReceptionMarchandises() {
         } catch (e) {
             const error = e as Error;
             console.error(error);
-            addNotification({ type: 'error', title: 'Erreur', message: error.message || 'Impossible d\'enregistrer la réception.' });
+            addNotification({ type: 'fail' as any, title: 'Erreur', message: error.message || 'Impossible d\'enregistrer la réception.' });
         } finally {
             setIsUploading(false);
         }

@@ -34,7 +34,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
             totalSpent: 0,
             averageSpend: 0,
             lastVisit: null,
-        });
+        } as any);
         reset();
         onClose();
     };

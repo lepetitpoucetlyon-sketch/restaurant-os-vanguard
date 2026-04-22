@@ -126,23 +126,20 @@ export default function FinancePage() {
                                     key={alert.id}
                                     className={cn(
                                         "p-6 rounded-2xl border flex gap-4",
-                                        alert.type === 'critical' && "bg-error/5 border-error/20",
-                                        alert.type === 'warning' && "bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30",
-                                        alert.type === 'info' && "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/30"
+                                        alert.level === 'critical' && "bg-error/5 border-error/20",
+                                        alert.level === 'warning' && "bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30",
+                                        alert.level === 'info' && "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/30"
                                     )}
                                 >
                                     <AlertTriangle className={cn(
                                         "w-5 h-5 shrink-0",
-                                        alert.type === 'critical' && "text-error",
-                                        alert.type === 'warning' && "text-amber-600",
-                                        alert.type === 'info' && "text-indigo-600"
+                                        alert.level === 'critical' && "text-error",
+                                        alert.level === 'warning' && "text-amber-600",
+                                        alert.level === 'info' && "text-indigo-600"
                                     )} />
                                     <div>
-                                        <h4 className="text-sm font-bold text-text-primary">{alert.title}</h4>
+                                        <h4 className="text-sm font-bold text-text-primary uppercase tracking-widest">{alert.level}</h4>
                                         <p className="text-xs text-text-muted mt-1">{alert.message}</p>
-                                        {alert.amount && (
-                                            <p className="text-sm font-black mt-2 text-text-primary">{formatCurrency(alert.amount)}</p>
-                                        )}
                                     </div>
                                 </div>
                             ))}

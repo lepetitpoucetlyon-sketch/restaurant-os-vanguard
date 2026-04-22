@@ -66,7 +66,7 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
   status: {
     maintenanceMode: false,
     killSwitch: false,
-    licenceStatus: 'active',
+    licenceStatus: 'ACTIVE',
     lastSignalId: 'GOLDEN_SEED_V2_INIT',
     updatedAt: new Date().toISOString(),
     layoutType: 'sidebar',
@@ -79,7 +79,7 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
     economy: {
       basePrice: 49.00,
       discountMultiplier: 1.0,
-      billingStatus: 'active',
+      billingStatus: 'ACTIVE',
       currency: 'EUR'
     }
   },

@@ -117,9 +117,9 @@ export function useRecruitment() {
             // Also need to find and delete related logs
             const logsPath = `tenants/${activeTenantId}/recruitment_logs`;
             const relatedLogs = await Nexus.adapter.query(logsPath, {
-                where: [{ field: 'candidateId', operator: '==', value: candidate.id }]
+                where: [{ field: 'candidateId', operator: '==', value: candidate.id as any }]
             });
-            relatedLogs.forEach((l: RecruitmentLog) => batch.delete(`${logsPath}/${l.id}`));
+            relatedLogs.forEach((l: any) => batch.delete(`${logsPath}/${l.id}`));
         }
 
         await batch.commit();

@@ -80,8 +80,8 @@ export function FleetCommandTable() {
                                 <td className="px-6 py-5">
                                     <div className="flex items-center gap-3">
                                         <div className={`w-2.5 h-2.5 rounded-full ${
-                                            instance.status === 'online' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]' : 
-                                            instance.status === 'error' ? 'bg-error shadow-[0_0_12px_rgba(239,68,68,0.4)] animate-pulse' : 
+                                            instance.status === 'ONLINE' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]' : 
+                                            instance.status === 'CRITICAL' ? 'bg-error shadow-[0_0_12px_rgba(239,68,68,0.4)] animate-pulse' : 
                                             'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
                                         }`} />
                                         <div className="flex flex-col">

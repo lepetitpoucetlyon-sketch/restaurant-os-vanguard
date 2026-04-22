@@ -1,5 +1,10 @@
 export type ReservationChannel = 'phone' | 'website' | 'thefork' | 'google' | 'walkin';
-export type ReservationStatus = 'pending' | 'confirmed' | 'arrived' | 'seated' | 'finished' | 'cancelled' | 'noshow';
+export interface ReservationSlotsConfig {
+    slotDuration: number;
+    intervalBetweenSlots: number;
+    maxCoversPerSlot: number;
+    maxReservationsPerSlot?: number;
+}
 
 export interface ReservationSettings {
     minAdvanceHours: number;

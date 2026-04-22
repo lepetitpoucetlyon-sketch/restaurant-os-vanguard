@@ -38,7 +38,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
         const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const item = { id: '1', name: 'Test' };
         
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: [item], loading: false }));
+        store.set(testAtom, (prev: any) => updateNexusNode(prev, { data: [item], loading: false } as any));
         
         const state = store.get(testAtom);
         expect(state.data).toHaveLength(1);
@@ -48,10 +48,10 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
 
     it('T18: Résilience Patch - Conservation des données collatérales', () => {
         const testAtom = createNexusNode<SovereignData>('T16-test-node');
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: [{ id: '1', val: 'a' }], loading: false }));
+        store.set(testAtom, (prev: any) => updateNexusNode(prev, { data: [{ id: '1', val: 'a' }], loading: false } as any));
         
         // Patch error without touching data
-        store.set(testAtom, (prev) => updateNexusNode(prev, { error: 'CritFail' }));
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { error: 'CritFail' }) as any);
         
         const state = store.get(testAtom);
         expect(state.data[0].val).toBe('a');
@@ -60,10 +60,10 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
 
     it('T19: Purge & Reset - Retour à la singularité', () => {
         const testAtom = createNexusNode<SovereignData>('T16-test-node');
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: [1, 2, 3], loading: false }));
+        store.set(testAtom, (prev: any) => updateNexusNode(prev, { data: [1, 2, 3], loading: false } as any));
         
         // Reset
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: [], loading: true, error: null }));
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: [], loading: true, error: null }) as any);
         
         const state = store.get(testAtom);
         expect(state.data).toEqual([]);
@@ -74,7 +74,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
         const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const firestoreError = "PERMISSION_DENIED";
         
-        store.set(testAtom, (prev) => updateNexusNode(prev, { loading: false, error: firestoreError }));
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { loading: false, error: firestoreError }) as any);
         
         const state = store.get(testAtom);
         expect(state.error).toBe(firestoreError);
@@ -91,8 +91,8 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
             callCount++;
         });
 
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: ['data'] }));
-        store.set(testAtom, (prev) => updateNexusNode(prev, { loading: false }));
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['data'] }) as any);
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { loading: false }) as any);
 
         expect(callCount).toBeGreaterThanOrEqual(2);
     });
@@ -109,8 +109,8 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
         const testAtom = createNexusNode<SovereignData>('T16-test-node');
         
         // Send two updates
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: ['A'] }));
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: ['B'] }));
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['A'] }) as any);
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['B'] }) as any);
         
         const state = store.get(testAtom);
         expect(state.data).toEqual(['B']);
@@ -120,8 +120,8 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
         const testAtom = createNexusNode<SovereignData>('T16-test-node');
         const storeB = createStore();
         
-        store.set(testAtom, (prev) => updateNexusNode(prev, { data: ['StoreA'] }));
-        storeB.set(testAtom, (prev) => updateNexusNode(prev, { data: ['StoreB'] }));
+        store.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['StoreA'] }) as any);
+        storeB.set(testAtom as any, (prev: any) => updateNexusNode(prev, { data: ['StoreB'] }) as any);
         
         expect(store.get(testAtom).data).toEqual(['StoreA']);
         expect(storeB.get(testAtom).data).toEqual(['StoreB']);

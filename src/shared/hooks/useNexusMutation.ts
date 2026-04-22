@@ -32,7 +32,7 @@ export function useNexusMutation<T extends { id: string }>(
 
         // 🧬 1. VALIDATION GÉNOMIQUE
         if (!options.skipValidation && (action === 'SET' || action === 'UPDATE')) {
-            const validation = validateMutation(moduleId, key, payload);
+            const validation = validateMutation(moduleId, key, (payload || {}) as import("@/shared/nexus-contract").SovereignData);
             if (!validation.success) {
                 const errorMsg = `[FORGE v3] VALIDATION ERROR in ${moduleId}:${key}: ${validation.errors?.join(', ')}`;
                 logger.error(errorMsg);
@@ -53,7 +53,7 @@ export function useNexusMutation<T extends { id: string }>(
                         ...(payload as T), 
                         id, 
                         _mutationMetadata: { mutationId, timestamp, moduleId } 
-                    } as T;
+                    };
                     
                     if (existingIndex !== -1) {
                         logger.warn(`[FORGE v3] IDEMPOTENCE: Resource ${id} already exists in ${moduleId}:${key}. Merging instead of adding.`);

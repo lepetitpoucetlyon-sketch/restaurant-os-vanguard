@@ -26,7 +26,7 @@ interface StaffMemberFormProps {
 }
 
 export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFormProps) => {
-    const { updateUserStatus, addUser, deleteUser, canDo, logAction } = useAuth();
+    const { updateUser, addUser, deleteUser, canDo, logAction } = useAuth();
     const { showToast } = useToast();
     const [showSecurityModal, setShowSecurityModal] = useState(false);
     
@@ -65,7 +65,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
         
         try {
             if (editingUser) {
-                await updateUserStatus(editingUser.id, {
+                await updateUser!(editingUser.id, {
                     name: formData.name,
                     role: formData.role,
                     avatar: formData.avatar,

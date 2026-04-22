@@ -19,7 +19,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
-import { usePOSController } from "@/hooks/usePOSController";
+import { usePOSController } from "@/modules/ops/hooks/usePOSController";
 import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 
@@ -63,7 +63,7 @@ export default function POSPage() {
         handleAddToCart, handleUpdateQuantity, handleClearCart,
         handleSendToKitchen, handlePaymentComplete,
         handleCheckout, handlePaySplit
-    } = usePOSController();
+    } = (useOrders() as any);
 
     const isRushMode = ambiance === 'RUSH_SPEED';
 

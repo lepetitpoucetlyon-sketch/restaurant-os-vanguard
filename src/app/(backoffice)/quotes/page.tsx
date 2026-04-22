@@ -128,7 +128,7 @@ function QuoteCard({ quote, onView, inflationRate = 0 }: { quote: Quote; onView:
                 <div className="relative">
                     <div className="absolute inset-0 bg-accent/10 blur-[30px] rounded-full scale-125 group-hover:bg-accent-gold/20 transition-all duration-700" />
                     <div className="w-24 h-24 rounded-[32px] bg-bg-tertiary border border-border/30 flex items-center justify-center relative z-10 shadow-premium transition-transform duration-700 group-hover:rotate-6">
-                        {quote.customer.type === 'company' ? (
+                        {quote.customer?.type === 'company' ? (
                             <Building2 strokeWidth={1} className="w-10 h-10 text-accent-gold" />
                         ) : (
                             <User strokeWidth={1} className="w-10 h-10 text-accent-gold" />
@@ -147,7 +147,7 @@ function QuoteCard({ quote, onView, inflationRate = 0 }: { quote: Quote; onView:
                             {statusConfig.label}
                         </span>
                     </div>
-                    <h3 className="text-4xl font-serif text-text-primary italic tracking-tight group-hover:text-accent-gold transition-colors duration-500">{quote.customer.companyName || quote.customer.name}</h3>
+                    <h3 className="text-4xl font-serif text-text-primary italic tracking-tight group-hover:text-accent-gold transition-colors duration-500">{(quote.customer as any)?.companyName || (quote.customer as any)?.name || 'Client Inconnu'}</h3>
                     <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em] truncate max-w-xl opacity-40">{quote.subject}</p>
                 </div>
             </div>

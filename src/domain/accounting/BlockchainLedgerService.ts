@@ -41,7 +41,7 @@ export class BlockchainLedgerService {
                 limit: 1
             });
             
-            this.lastSealCache = results.length > 0 ? (results[0] as FiscalSeal) : undefined;
+            this.lastSealCache = results.length > 0 ? (results[0] as unknown as FiscalSeal) : undefined;
             return this.lastSealCache;
         } catch (error) {
             logger.warn('BlockchainLedgerService: Remote fetch failed, falling back to local', error);
@@ -72,7 +72,7 @@ export class BlockchainLedgerService {
             return newSeal;
         });
 
-        return this.sealQueue;
+        return this.sealQueue as unknown as Promise<FiscalSeal>;
     }
 
     /**
@@ -84,7 +84,7 @@ export class BlockchainLedgerService {
             orderBy: { field: 'timestamp', direction: 'asc' }
         });
         
-        const seals = results as FiscalSeal[];
+        const seals = results as unknown as FiscalSeal[];
         return await FiscalEngine.verifyChain(seals);
     }
 

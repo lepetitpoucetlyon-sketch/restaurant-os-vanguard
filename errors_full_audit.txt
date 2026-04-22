@@ -1,0 +1,169 @@
+src/app/(admin)/admin/simulation/page.tsx(26,39): error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
+src/app/(public)/groups/page.tsx(116,63): error TS2739: Type 'GroupEvent' is missing the following properties from type 'GroupEvent': date, time, pax, tags
+src/components/settings/ContextualSettings.tsx(72,13): error TS2322: Type 'SovereignData' is not assignable to type 'SovereignPrimitive'.
+src/components/settings/MigrationSettings.tsx(55,34): error TS2345: Argument of type '"customer" | "staff"' is not assignable to parameter of type '"menu" | "staff" | "crm"'.
+src/components/ui/GlassCard.tsx(76,57): error TS2352: Conversion of type '{ id?: string; key?: Key; custom?: any; security?: string; suppressHydrationWarning?: boolean; color?: string; lang?: string; style?: MotionStyle; role?: AriaRole; tabIndex?: number; ... 323 more ...; tw?: string; }' to type 'HTMLAttributes<HTMLDivElement>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/components/ui/SecurityPinModal.tsx(59,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+src/context/settings/defaults.ts(268,41): error TS2307: Cannot find module '@/types/nexus' or its corresponding type declarations.
+src/domain/agency/useExpert.ts(46,13): error TS2322: Type 'unknown' is not assignable to type 'SovereignPrimitive'.
+src/domain/agent/GeminiLiveService.ts(39,58): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'WebkitWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/domain/agent/GeminiLiveService.ts(133,13): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'RolePermissions'.
+src/domain/services/DataDigester.ts(93,79): error TS2339: Property 'source' does not exist on type '{ total: number; items: { price: number; options: { price: number; }[]; }[]; }'.
+src/domain/services/DataDigester.ts(96,19): error TS2339: Property '_metadata' does not exist on type '{ total: number; items: { price: number; options: { price: number; }[]; }[]; }'.
+src/domain/services/EdgeSyncService.ts(52,35): error TS2345: Argument of type '(prev: import("@/store/base").NexusNode<Order[]>) => NexusNode<Order | Order[]>' is not assignable to parameter of type 'SetStateAction<NexusNode<Order>>'.
+src/domain/services/FinanceCore.ts(119,73): error TS2352: Conversion of type 'ZReport' to type 'SovereignData' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/domain/services/FiscalEngine.ts(2,28): error TS2307: Cannot find module '@/types/accounting.types' or its corresponding type declarations.
+src/domain/services/FiscalEngine.ts(33,59): error TS2345: Argument of type 'Record<string, unknown>' is not assignable to parameter of type 'SovereignData'.
+src/domain/services/FleetCommander.ts(46,69): error TS2322: Type 'string[]' is not assignable to type 'SovereignPrimitive'.
+src/domain/services/FleetComplianceService.ts(24,49): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/domain/services/FleetComplianceService.ts(24,62): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/domain/services/FleetComplianceService.ts(31,37): error TS2365: Operator '+' cannot be applied to types 'string | number | boolean | SovereignData | Date | SovereignField[]' and 'number'.
+src/domain/services/FleetComplianceService.ts(33,11): error TS2322: Type 'SovereignField' is not assignable to type 'number'.
+src/domain/services/GroupService.ts(33,19): error TS2339: Property 'guestCount' does not exist on type 'Partial<GroupEvent>'.
+src/domain/services/GroupService.ts(33,38): error TS2339: Property 'guestCount' does not exist on type 'Partial<GroupEvent>'.
+src/domain/services/HACCPTelemetryBridge.ts(46,46): error TS2345: Argument of type 'string' is not assignable to parameter of type 'TenantID'.
+src/domain/services/InventoryVisionService.ts(80,13): error TS2322: Type 'string' is not assignable to type 'IngredientUnit'.
+src/domain/services/KitchenService.ts(17,16): error TS2352: Conversion of type '{ id: string; name: string; category: string; prepTime: number; cookTime: number; portions: number; difficulty: "easy" | "medium" | "hard"; ingredients: RecipeIngredient[]; ... 15 more ...; standardImage?: string; }' to type 'Recipe' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/domain/services/MarketingService.ts(2,21): error TS2305: Module '"@/types"' has no exported member 'CustomerFeedback'.
+src/domain/services/MarketingService.ts(55,20): error TS2352: Conversion of type '{ id: string; code: string; currentUsage: number; isActive: true; startDate: string; endDate: string; discountPercent: number; type: string; label: string; }' to type 'PromoCode' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/domain/services/NexusPayrollEngine.ts(55,21): error TS2322: Type 'ZodObject<{ id: ZodOptional<ZodString>; userId: ZodString; userName: ZodString; type: ZodEnum<{ CLOCK_IN: "CLOCK_IN"; CLOCK_OUT: "CLOCK_OUT"; BREAK_START: "BREAK_START"; BREAK_END: "BREAK_END"; }>; timestamp: ZodUnion<...>; location: ZodObject<...>; fiscalSeal: ZodOptional<...>; metadata: ZodOptional<...>; }, $strip>' is not assignable to type 'ZodType<SovereignPrimitive, unknown, $ZodTypeInternals<SovereignPrimitive, unknown>>'.
+src/domain/services/NexusPayrollEngine.ts(55,47): error TS2322: Type 'Partial<{ userId: string; userName: string; type: "CLOCK_IN" | "CLOCK_OUT" | "BREAK_START" | "BREAK_END"; location: { terminalId: string; coords?: { lat?: number; lng?: number; }; }; id?: string; timestamp?: string | Date; fiscalSeal?: { ...; }; metadata?: Record<...>; }>' is not assignable to type 'SovereignData'.
+src/domain/services/NexusStaffingOracle.ts(22,31): error TS2339: Property 'planning' does not exist on type 'unknown'.
+src/domain/services/NexusStaffingOracle.ts(23,37): error TS2339: Property 'planning' does not exist on type 'unknown'.
+src/domain/services/ProvisioningEngine.ts(36,17): error TS2739: Type '{ activeUsers: number; dailyRevenue: number; revenue24h: number; aiUsageCost: number; healthScore: number; lowStockAlerts: number; expiringItemsCount: number; complianceScore: number; }' is missing the following properties from type '{ activeUsers: number; dailyRevenue: number; revenue24h: number; aiUsageCost: number; healthScore: number; errorRate: number; uptime: number; lowStockAlerts: number; expiringItemsCount: number; complianceScore: number; }': errorRate, uptime
+src/domain/services/ProvisioningEngine.ts(71,52): error TS2345: Argument of type 'string' is not assignable to parameter of type 'TenantID'.
+src/domain/services/QualityEngine.ts(40,33): error TS2322: Type 'ZodObject<{ deliveryId: ZodString; supplierName: ZodString; truckTemp: ZodNumber; hygieneStatus: ZodEnum<{ dirty: "dirty"; acceptable: "acceptable"; clean: "clean"; }>; itemsChecked: ZodArray<...>; rejectionReason: ZodOptional<...>; photos: ZodOptional<...>; validatedBy: ZodString; }, $strip>' is not assignable to type 'ZodType<SovereignPrimitive, unknown, $ZodTypeInternals<SovereignPrimitive, unknown>>'.
+src/domain/services/QualityEngine.ts(66,16): error TS2339: Property 'currentStatus' does not exist on type 'unknown'.
+src/domain/services/QualityEngine.ts(71,5): error TS2739: Type '{}' is missing the following properties from type '{ id: string; currentStatus: string; }': id, currentStatus
+src/domain/services/QualityEngine.ts(132,17): error TS2820: Type '"HACCP"' is not assignable to type 'PageKey'. Did you mean '"haccp"'?
+src/domain/services/QualityEngine.ts(139,37): error TS2820: Type '"HACCP"' is not assignable to type 'PageKey'. Did you mean '"haccp"'?
+src/domain/services/QuoteEngine.ts(34,29): error TS2322: Type 'ZodObject<{ customerId: ZodString; customerName: ZodString; items: ZodArray<ZodObject<{ id: ZodString; name: ZodString; quantity: ZodNumber; price: ZodNumber; }, $strip>>; total: ZodNumber; status: ZodDefault<...>; validTo: ZodString; notes: ZodOptional<...>; }, $strip>' is not assignable to type 'ZodType<SovereignPrimitive, unknown, $ZodTypeInternals<SovereignPrimitive, unknown>>'.
+src/domain/services/Slayer.ts(36,13): error TS2322: Type '{ id: string; name: string; quantity: number; priceInCents: number; }[]' is not assignable to type 'OrderItem[]'.
+src/domain/services/Slayer.ts(78,83): error TS2345: Argument of type 'Record<string, unknown>' is not assignable to parameter of type 'SovereignData'.
+src/domain/services/TransactionService.ts(59,17): error TS2352: Conversion of type 'SovereignData[]' to type 'Recipe[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/engines/core/hooks/auth/AuthAccess.tsx(31,84): error TS2345: Argument of type 'SovereignField' is not assignable to parameter of type 'SovereignData'.
+src/engines/core/NexusCoreProvider.tsx(58,46): error TS2769: No overload matches this call.
+src/engines/core/NexusCoreProvider.tsx(205,57): error TS2352: Conversion of type 'Date' to type 'SovereignData' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/engines/core/NexusCoreProvider.tsx(206,17): error TS2322: Type 'SovereignField' is not assignable to type 'SovereignPrimitive'.
+src/engines/core/NexusCoreProvider.tsx(206,24): error TS2352: Conversion of type 'Date' to type 'SovereignData' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/engines/ops/NexusOpsProvider.tsx(232,35): error TS2322: Type '{ switchTenant: (newTenantId: string) => Promise<void>; tenantId: string; floorOps: { tables: Table[]; reservations: Reservation[]; isLoading: boolean; updateTableStatus: (id: string, status: TableStatus | Partial<Table>) => void | Promise<...>; updateAreaStatus: (id: string, status: Partial<Zone>) => void | Promise...' is not assignable to type 'NexusOpsState'.
+src/engines/Simulacra/SinfoniaGradeXProof.ts(23,9): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'SensorReading'.
+src/engines/Simulacra/SinfoniaGradeXProof.ts(30,60): error TS2322: Type '"pcs"' is not assignable to type 'IngredientUnit'.
+src/hooks/index.ts(13,52): error TS2307: Cannot find module './useStorage' or its corresponding type declarations.
+src/hooks/index.ts(26,37): error TS2305: Module '"@/modules/inventory"' has no exported member 'useStorage'.
+src/hooks/index.ts(27,60): error TS2305: Module '"@/modules/hr"' has no exported member 'useStaff'.
+src/hooks/useDataMigration.ts(119,50): error TS2352: Conversion of type 'string | number | boolean | Date' to type '{ categories: { name: string; type: string; sortOrder: number; }[]; products: { name: string; description: string; price: number; categoryName: string; status: string; taxRate: number; }[]; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/hooks/useDataMigration.ts(146,35): error TS2352: Conversion of type 'string | number | boolean | Date' to type 'Record<string, string>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/hooks/useDataMigration.ts(162,33): error TS2352: Conversion of type 'string | number | boolean | Date' to type 'Record<string, string>[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/hooks/useLanguage.ts(24,13): error TS2322: Type 'SovereignField' is not assignable to type 'SovereignPrimitive'.
+src/hooks/useLanguage.ts(24,22): error TS2352: Conversion of type 'string | number | boolean | Date' to type 'SovereignData' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/hooks/useSettings.ts(11,36): error TS2307: Cannot find module '@/types/identity' or its corresponding type declarations.
+src/hooks/useSettings.ts(25,37): error TS2769: No overload matches this call.
+src/hooks/useStrategicOracle.ts(33,13): error TS2345: Argument of type '{ fleetSize: any; metrics: ConsolidatedMetrics; topInsights: FleetInsight[]; timestamp: string; }' is not assignable to parameter of type 'SovereignData'.
+src/hooks/useTenantLifecycle.ts(17,40): error TS2769: No overload matches this call.
+src/i18n/translations.ts(36,14): error TS2502: 'translations' is referenced directly or indirectly in its own type annotation.
+src/i18n/translations.ts(65,13): error TS2456: Type alias 'Language' circularly references itself.
+src/instances/bistrolyon.ts(9,9): error TS2353: Object literal may only specify known properties, and 'monthlyFee' does not exist in type '{ status: string; plan: string; nextBillingDate?: string; }'.
+src/instances/bistrolyon.ts(36,5): error TS2741: Property 'enabled' is missing in type '{ geminiApiKey: string; }' but required in type '{ enabled: boolean; model?: string; quota?: number; geminiApiKey?: string; }'.
+src/instances/lepetitpoucet.ts(35,9): error TS2739: Type '{}' is missing the following properties from type 'BusinessLaws': table_count, tax_rate, currency, pmsEnabled
+src/instances/lepetitpoucet.ts(36,9): error TS2739: Type '{}' is missing the following properties from type 'ExpertConfig': role, modelId, isConfigured, isAuthorized
+src/instances/urbanburger.ts(9,9): error TS2353: Object literal may only specify known properties, and 'monthlyFee' does not exist in type '{ status: string; plan: string; nextBillingDate?: string; }'.
+src/instances/urbanburger.ts(36,5): error TS2741: Property 'enabled' is missing in type '{ geminiApiKey: string; }' but required in type '{ enabled: boolean; model?: string; quota?: number; geminiApiKey?: string; }'.
+src/lib/ai/DNAInjector.ts(24,17): error TS2322: Type 'SovereignField[]' is not assignable to type 'string[]'.
+src/lib/ai/DNAInjector.ts(32,72): error TS2694: Namespace '"/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/instances/index"' has no exported member 'InstanceConfig'.
+src/lib/ai/HermesEngine.ts(81,25): error TS2322: Type 'SovereignField' is not assignable to type 'string'.
+src/lib/ai/HermesEngine.ts(85,66): error TS2352: Conversion of type 'SovereignData' to type 'SensorReading' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/audit.ts(72,47): error TS2345: Argument of type '{ env: "development" | "production" | "test"; context: string; module: AuditModule; action: string; details?: import("@/shared/nexus-contract").SovereignData; severity?: AuditSeverity; userId?: string; timestamp: Date; fiscalSeal?: string; instanceId?: string; }' is not assignable to parameter of type 'LogMetadata'.
+src/lib/blockchain-ledger.ts(43,35): error TS2352: Conversion of type 'SovereignData' to type 'AuditProof' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/blockchain-ledger.ts(111,29): error TS2352: Conversion of type 'SovereignData[]' to type 'AuditProof[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/nexus/adapters/SimulacraAdapter.ts(15,14): error TS2420: Class 'SimulacraAdapter' incorrectly implements interface 'INexusAdapter'.
+src/lib/nexus/NexusAdapter.ts(85,9): error TS2741: Property 'create' is missing in type 'SimulacraAdapter' but required in type 'INexusAdapter'.
+src/lib/nexus/NexusBridge.ts(81,13): error TS2322: Type 'string' is not assignable to type '"default" | "admin" | "kiosk" | "hud" | "sidebar" | "topbar"'.
+src/lib/nexus/NexusBridge.ts(82,13): error TS2322: Type 'Record<string, boolean> | BusinessLaws' is not assignable to type 'BusinessLaws'.
+src/lib/nexus/NexusInstance.ts(47,9): error TS2304: Cannot find name 'logger'.
+src/lib/nexus/TelemetryService.ts(85,9): error TS2322: Type 'FieldValue' is not assignable to type 'string | number | { seconds: number; nanoseconds: number; }'.
+src/lib/offline/sync-manager.ts(91,29): error TS2352: Conversion of type 'string | number | boolean | Date' to type '{ instructions: { method: string; path: string; data: any; }[]; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/offline/sync-manager.ts(104,78): error TS2345: Argument of type 'SovereignPrimitive' is not assignable to parameter of type 'Partial<{ toString: () => string; charAt: (pos: number) => string; charCodeAt: (index: number) => number; concat: (...strings: string[]) => string; indexOf: (searchString: string, position?: number) => number; ... 46 more ...; [Symbol.iterator]: () => StringIterator<...>; }>'.
+src/lib/RuntimeValidator.ts(48,21): error TS2347: Untyped function calls may not accept type arguments.
+src/lib/RuntimeValidator.ts(52,23): error TS2347: Untyped function calls may not accept type arguments.
+src/lib/RuntimeValidator.ts(53,19): error TS2347: Untyped function calls may not accept type arguments.
+src/lib/services/GlobalRegistryService.ts(100,27): error TS2345: Argument of type 'WritableAtom<NexusNode<SovereignPrimitive>, [NexusNode<SovereignPrimitive> | ((prev: NexusNode<SovereignPrimitive>) => NexusNode<...>)], void>' is not assignable to parameter of type 'WritableAtom<SovereignPrimitive, SovereignPrimitive[], void>'.
+src/lib/slm-data-generator.ts(2,27): error TS2307: Cannot find module '@/types/inventory.types' or its corresponding type declarations.
+src/lib/slm-data-generator.ts(3,29): error TS2307: Cannot find module '@/types/reservations.types' or its corresponding type declarations.
+src/lib/slm-data-generator.ts(4,22): error TS2307: Cannot find module '@/types/auth.types' or its corresponding type declarations.
+src/lib/slm-data-generator.ts(6,25): error TS2307: Cannot find module '@/types/accounting.types' or its corresponding type declarations.
+src/lib/TimeSync.ts(42,99): error TS2339: Property 'toDate' does not exist on type 'string | number | boolean | SovereignData | SovereignField[]'.
+src/modules/finance/finance.sync.ts(55,62): error TS2349: This expression is not callable.
+src/modules/finance/hooks/useAccounting.ts(35,60): error TS2345: Argument of type 'PrimitiveAtom<NexusNode<JournalEntry>> & WithInitialValue<NexusNode<JournalEntry>>' is not assignable to parameter of type 'WritableAtom<NexusNode<JournalEntry>, [NexusNode<JournalEntry> | ((prev: NexusNode<JournalEntry>) => NexusNode<...>)], void>'.
+src/modules/finance/services/FiscalHACCPBridge.ts(48,13): error TS2353: Object literal may only specify known properties, and 'metadata' does not exist in type 'Partial<JournalEntry>'.
+src/modules/finance/services/NF525Service.ts(113,23): error TS2352: Conversion of type 'InventoryMovement' to type 'SovereignData' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/modules/finance/services/NF525Service.ts(191,24): error TS2353: Object literal may only specify known properties, and 'instructions' does not exist in type 'Date'.
+src/modules/haccp/components/haccp/GestionHuiles.tsx(52,29): error TS2345: Argument of type '{ fryerName: string; tpomValue: number; action: "control" | "fitering" | "changing"; status: "ok" | "warning" | "critical"; user: string; }' is not assignable to parameter of type 'OilLog'.
+src/modules/haccp/components/haccp/PlanNettoyage.tsx(15,44): error TS2307: Cannot find module '@/types/haccp.types' or its corresponding type declarations.
+src/modules/haccp/components/haccp/ReceptionMarchandises.tsx(52,31): error TS2322: Type '"error"' is not assignable to type 'NotificationType'.
+src/modules/haccp/components/haccp/ReceptionMarchandises.tsx(66,29): error TS2345: Argument of type '{ imageUrl: string; supplier: string; productName: string; temperature: number; expirationDate: string; batchNumber: string; integrityStatus: "conforme" | "non-conforme"; user: string; }' is not assignable to parameter of type 'ReceptionLog'.
+src/modules/haccp/components/haccp/ReceptionMarchandises.tsx(82,31): error TS2322: Type '"error"' is not assignable to type 'NotificationType'.
+src/modules/haccp/components/haccp/ReleveTemperatures.tsx(16,51): error TS2307: Cannot find module '@/types/haccp.types' or its corresponding type declarations.
+src/modules/haccp/components/haccp/ReleveTemperatures.tsx(62,35): error TS2322: Type '"error"' is not assignable to type 'NotificationType'.
+src/modules/haccp/components/haccp/TracabiliteEtiquettes.tsx(49,31): error TS2322: Type '"error"' is not assignable to type 'NotificationType'.
+src/modules/haccp/components/haccp/TracabiliteEtiquettes.tsx(82,31): error TS2322: Type '"error"' is not assignable to type 'NotificationType'.
+src/modules/haccp/components/quality/ProductControlList.tsx(4,28): error TS2307: Cannot find module '@/hooks/useQuality' or its corresponding type declarations.
+src/modules/haccp/components/quality/ReceptionWizard.tsx(28,28): error TS2307: Cannot find module '@/hooks/useQuality' or its corresponding type declarations.
+src/modules/haccp/components/quality/ReceptionWizard.tsx(39,30): error TS2304: Cannot find name 'qualityCurrentSessionStatsSelector'.
+src/modules/haccp/haccp.sync.ts(53,62): error TS2349: This expression is not callable.
+src/modules/haccp/hooks/useHACCP.ts(49,117): error TS2322: Type 'number' is not assignable to type 'Date'.
+src/modules/haccp/hooks/useHACCP.ts(50,115): error TS2322: Type 'number' is not assignable to type 'Date'.
+src/modules/haccp/hooks/useHACCP.ts(51,98): error TS2322: Type 'number' is not assignable to type 'Date'.
+src/modules/haccp/hooks/useQuality.ts(47,9): error TS2349: This expression is not callable.
+src/modules/haccp/hooks/useQuality.ts(185,13): error TS2349: This expression is not callable.
+src/modules/haccp/hooks/useQualityBridge.ts(12,29): error TS2307: Cannot find module './useSettings' or its corresponding type declarations.
+src/modules/haccp/index.ts(7,1): error TS2308: Module './hooks/useHACCP' has already exported a member named 'useHACCP'. Consider explicitly re-exporting to resolve the ambiguity.
+src/modules/haccp/index.ts(13,1): error TS2308: Module './types' has already exported a member named 'SensorReading'. Consider explicitly re-exporting to resolve the ambiguity.
+src/modules/haccp/store/qualityAtoms.ts(2,50): error TS2307: Cannot find module './operationalAtoms' or its corresponding type declarations.
+src/modules/haccp/store/qualityAtoms.ts(89,47): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/modules/haccp/store/qualityAtoms.ts(92,78): error TS2339: Property 'loading' does not exist on type 'unknown'.
+src/modules/haccp/store/qualityAtoms.ts(111,91): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/modules/haccp/store/qualityAtoms.ts(116,46): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/modules/haccp/types/domain.ts(1,31): error TS2307: Cannot find module '@/types/inventory.types' or its corresponding type declarations.
+src/modules/hr/components/staff/BadgeControl.tsx(6,49): error TS2307: Cannot find module '../store/hrAtoms' or its corresponding type declarations.
+src/modules/hr/components/staff/RecruitmentDashboard.tsx(57,9): error TS2349: This expression is not callable.
+src/modules/hr/components/staff/StaffMemberForm.tsx(68,56): error TS2345: Argument of type '{ pin?: string; name: string; role: UserRole; avatar: string; hourlyRate: number; }' is not assignable to parameter of type '"active" | "suspended" | "on_leave"'.
+src/modules/hr/hooks/useRecruitment.ts(122,33): error TS2345: Argument of type '(l: RecruitmentLog) => void' is not assignable to parameter of type '(value: SovereignData, index: number, array: SovereignData[]) => void'.
+src/modules/hr/hr.sync.ts(95,62): error TS2349: This expression is not callable.
+src/modules/hr/index.ts(9,15): error TS2307: Cannot find module './hooks/useStaff' or its corresponding type declarations.
+src/modules/hr/types.ts(282,52): error TS2694: Namespace '"/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus-contract"' has no exported member 'FiscalSeal'.
+src/modules/inventory/components/inventory/StockReceptionModal.tsx(82,63): error TS2345: Argument of type 'Ingredient' is not assignable to parameter of type 'StockItem'.
+src/modules/inventory/inventory.sync.ts(98,62): error TS2349: This expression is not callable.
+src/modules/inventory/types.ts(4,32): error TS2307: Cannot find module './haccp.types' or its corresponding type declarations.
+src/modules/marketing/components/crm/CRMSidebar.tsx(14,26): error TS2307: Cannot find module '../store/marketingAtoms' or its corresponding type declarations.
+src/modules/marketing/components/marketing/NewCampaignModal.tsx(111,68): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<"email" | "social" | "sms">'.
+src/modules/marketing/marketing.sync.ts(57,17): error TS2353: Object literal may only specify known properties, and 'cpc' does not exist in type '{ connected: boolean; provider: string; visitors?: number; pageViews?: number; reservations?: number; conversionRate?: number; sources?: StatSource[]; devices?: StatSource[]; ... 10 more ...; conversions?: number; }'.
+src/modules/marketing/store/analyticsAtoms.ts(9,23): error TS2307: Cannot find module '@/types/orders.types' or its corresponding type declarations.
+src/modules/marketing/store/analyticsAtoms.ts(11,37): error TS2307: Cannot find module '@/types/auth.types' or its corresponding type declarations.
+src/modules/marketing/store/marketingAtoms.ts(4,23): error TS2307: Cannot find module '@/types/quotes.types' or its corresponding type declarations.
+src/modules/marketing/store/marketingAtoms.ts(5,28): error TS2307: Cannot find module '@/types/seo.types' or its corresponding type declarations.
+src/modules/marketing/store/marketingAtoms.ts(6,21): error TS2307: Cannot find module '@/types/reservations.types' or its corresponding type declarations.
+src/modules/marketing/store/marketingAtoms.ts(46,43): error TS2304: Cannot find name 'SocialAccount'.
+src/modules/ops/types.ts(39,5): error TS2411: Property 'pendingModification' of type 'OrderItemModification' is not assignable to 'string' index type 'SovereignField'.
+src/modules/ops/types.ts(65,5): error TS2411: Property 'data' of type 'Record<string, unknown>' is not assignable to 'string' index type 'SovereignField'.
+src/shared/hooks/useNexusMutation.ts(35,64): error TS2345: Argument of type 'Partial<T>' is not assignable to parameter of type 'SovereignData | SovereignPrimitive'.
+src/shared/hooks/useNexusMutation.ts(47,21): error TS2345: Argument of type '(prev: NexusNode<T>) => NexusNode<T>' is not assignable to parameter of type 'NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)'.
+src/shared/hooks/useNexusMutation.ts(80,44): error TS2322: Type 'Partial<T>' is not assignable to type 'SovereignField'.
+src/shared/ModuleRegistry.ts(18,64): error TS2769: No overload matches this call.
+src/store/pulseAtoms.ts(30,13): error TS2345: Argument of type 'Atom<NexusPulse>' is not assignable to parameter of type 'WritableAtom<NexusPulse, [NexusPulse], unknown>'.
+src/tests/benchmarks/BlackFridaySimulation.ts(69,65): error TS2322: Type 'SovereignPrimitive[]' is not assignable to type 'Order[]'.
+src/tests/benchmarks/CertificationRunner.test.ts(11,40): error TS2322: Type 'Timeout' is not assignable to type 'number'.
+src/tests/benchmarks/CertificationRunner.test.ts(11,41): error TS2352: Conversion of type 'number' to type 'Timeout' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/tests/benchmarks/CertificationRunner.test.ts(13,52): error TS2352: Conversion of type 'number' to type 'Timeout' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/tests/benchmarks/CertificationRunner.test.ts(66,35): error TS2345: Argument of type '(prev: { data: SovereignValue[]; }) => { data: { id: string; }[]; }' is not assignable to parameter of type 'SetStateAction<NexusNode<Order>>'.
+src/tests/benchmarks/stress_test_omega.ts(10,11): error TS2322: Type '{ id: string; total: number; timestamp: string; items: { id: string; title: string; price: number; quantity: number; }[]; }[]' is not assignable to type 'Order[]'.
+src/tests/vanguard/chaos.test.ts(55,76): error TS2352: Conversion of type '{ id: string; number: string; crmId: string; crmName: string; customerName: string; items: undefined[]; status: "pending"; totalInCents: number; tableId: string; tenantId: string; covers: number; isPaid: false; ... 4 more ...; type: string; }' to type 'Order' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/types/index.ts(13,75): error TS2305: Module '"@/shared/types"' has no exported member 'LedgerEntry'.
+src/types/index.ts(23,1): error TS2308: Module '@/shared/types' has already exported a member named 'AccountSide'. Consider explicitly re-exporting to resolve the ambiguity.
+src/types/index.ts(23,1): error TS2308: Module '@/shared/types' has already exported a member named 'FinancialMetrics'. Consider explicitly re-exporting to resolve the ambiguity.
+src/types/index.ts(26,1): error TS2308: Module '@/modules/marketing/types' has already exported a member named 'QuoteLine'. Consider explicitly re-exporting to resolve the ambiguity.
+src/types/index.ts(26,1): error TS2308: Module '@/modules/marketing/types' has already exported a member named 'QuoteLineType'. Consider explicitly re-exporting to resolve the ambiguity.
+src/types/index.ts(30,1): error TS2308: Module '@/modules/inventory/types' has already exported a member named 'Ingredient'. Consider explicitly re-exporting to resolve the ambiguity.
+src/types/settings.ts(12,48): error TS2307: Cannot find module './settings/Customer' or its corresponding type declarations.
+src/types/settings.ts(31,15): error TS2307: Cannot find module './settings/Customer' or its corresponding type declarations.
+src/types/settings.ts(141,46): error TS2694: Namespace '"/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/types/settings/nexus"' has no exported member 'NexusAIConfig'.

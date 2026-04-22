@@ -31,6 +31,7 @@ export interface NexusAuthState {
     verifyPin?: (pin: string, userId?: string) => Promise<boolean>;
     switchProfile?: (userId: string) => void;
     canSwitchProfiles?: boolean;
+    updateUser?: (userId: string, data: Partial<User>) => Promise<void>;
     updateUserStatus?: (userId: string, status: 'active' | 'suspended' | 'on_leave') => Promise<void>;
     addUser?: (user: Partial<User>) => Promise<void>;
     deleteUser?: (userId: string) => Promise<void>;
@@ -195,4 +196,11 @@ export interface NexusCoreState {
     notif: NexusNotifState;
     fleet: NexusFleetState;
     tenantConfig: TenantConfig | null; // Suture Grade X
+}
+
+export interface BrandInput {
+    name: string;
+    primaryColor?: string;
+    logoUrl?: string;
+    atmosphere?: 'luxury' | 'bistro' | 'fast-food' | 'zen' | 'modern';
 }

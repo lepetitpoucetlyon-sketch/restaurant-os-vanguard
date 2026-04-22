@@ -8,7 +8,7 @@ import {
 } from '@/store/settingsAtoms';
 import { SettingsManager } from '@/domain/services/SettingsManager';
 import { GlobalSettings } from '@/types';
-import { RestaurantIdentity } from '@/types/identity';
+import { RestaurantIdentity } from '@/types/settings/identity';
 
 /**
  * 🛰️ useSettings - Grade VI Atomic Bridge
@@ -22,7 +22,7 @@ export const useSettings = () => {
     
     const setSettings = useSetAtom(globalSettingsAtom);
     const setSaving = useSetAtom(settingsSavingAtom);
-    const setLastSaved = useSetAtom(settingsLastSavedAtom);
+    const setLastSaved = useSetAtom(settingsLastSavedAtom as any);
 
     const updateSettings = useCallback(async (newSettings: GlobalSettings) => {
         setSaving(true);

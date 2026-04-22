@@ -10,7 +10,8 @@ import {
     SupplierOrder,
     MaintenanceLog,
     Delivery,
-    FiscalSeal
+    FiscalSeal,
+    SensorReading
 } from '@/types';
 
 // --- 🛡️ COMPLIANCE DOMAIN (Fiscal NF525, Guard/HACCP, Maintenance, Livraisons) ---
@@ -62,14 +63,7 @@ export const guardLoadingAtom = atom((get) =>
     get(wasteLogsNodeAtom).loading
 );
 // ⚡ HARDWARE SIMULATION (Electrification)
-export interface SensorReading {
-    id: string;
-    name: string;
-    type: 'temperature' | 'vibration' | 'humidity';
-    value: number | null; // null simulates hardware cut
-    unit: string;
-    lastUpdated: string;
-}
+// SensorReading moved to central types.ts
 
 export const sensorsAtom = atom<Record<string, SensorReading>>({
     'ROTISSERIE_CORE_TEMP': {
@@ -78,6 +72,7 @@ export const sensorsAtom = atom<Record<string, SensorReading>>({
         type: 'temperature',
         value: 75,
         unit: '°C',
-        lastUpdated: new Date().toISOString()
+        status: 'ok',
+        lastUpdated: new Date()
     }
 });

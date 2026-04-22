@@ -8,11 +8,24 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 
 // --- Profitability View ---
 
-interface ProfitabilityAlert {
+export interface IoTMetric {
+    id: string;
+    name: string;
+    value: number;
+    type: 'temperature' | 'hz' | 'humidity' | 'pressure';
+    status: 'normal' | 'alert' | 'critical';
+    trend: 'up' | 'down' | 'stable';
+    anomalous: boolean;
+    timestamp: string;
+}
+
+export interface ProfitabilityAlert {
     productId: string;
     productName: string;
     currentMarginInCents: number;
     suggestedPriceInCents: number;
+    impactLevel: 'high' | 'medium' | 'low';
+    category: string;
 }
 
 export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ alerts }) => {

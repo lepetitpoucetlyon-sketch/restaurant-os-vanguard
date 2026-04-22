@@ -81,7 +81,7 @@ export class TelemetryService {
 
       const payload: TelemetryPulse = {
         version: '9.0.0-grade-ix',
-        status: 'active',
+        status: 'ACTIVE',
         lastPulse: serverTimestamp(),
         health: {
           uptime: typeof process !== 'undefined' && process.uptime ? Math.floor(process.uptime()) : 0,

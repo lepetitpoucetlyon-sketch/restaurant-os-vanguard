@@ -60,7 +60,14 @@ export default function OmnichannelReservationsPage() {
     const [showNewReservation, setShowNewReservation] = useState(false);
 
     // New Reservation State
-    const [newRes, setNewRes] = useState({
+    const [newRes, setNewRes] = useState<{
+        name: string;
+        phone: string;
+        source: 'phone' | 'website' | 'walk-in' | 'google' | 'thefork' | 'instagram' | 'facebook' | 'tripadvisor' | 'direct';
+        guests: number;
+        time: string;
+        date: string;
+    }>({
         name: '',
         phone: '',
         source: 'website',
@@ -99,8 +106,13 @@ export default function OmnichannelReservationsPage() {
                 id: `RES-${Math.random().toString(36).substr(2, 9)}`,
                 status: 'confirmed',
                 tags: ['Direct'],
-                table: 'T-?'
-            });
+                tableId: 'T-?',
+                crmName: newRes.name,
+                customerName: newRes.name,
+                covers: newRes.guests,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            } as any);
             showToast("Réservation enregistrée", "premium");
             setShowNewReservation(false);
         } catch (error) {

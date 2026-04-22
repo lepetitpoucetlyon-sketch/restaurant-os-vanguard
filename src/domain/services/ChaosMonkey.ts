@@ -40,13 +40,13 @@ export const ChaosMonkey = {
    */
   executeRandomDrift() {
     const store = getDefaultStore();
-    const targets: Array<{ atom: WritableAtom<NexusNode<unknown>, [unknown], void>; path: string }> = [
-      { atom: ordersNodeAtom as WritableAtom<NexusNode<unknown>, [unknown], void>, path: 'operational/orders' },
-      { atom: stockItemsNodeAtom as WritableAtom<NexusNode<unknown>, [unknown], void>, path: 'operational/stock' }
+    const targets: Array<{ atom: any; path: string }> = [
+      { atom: ordersNodeAtom as any, path: 'operational/orders' },
+      { atom: stockItemsNodeAtom as any, path: 'operational/stock' }
     ];
     
     const choice = targets[Math.floor(Math.random() * targets.length)];
-    const node = store.get(choice.atom);
+    const node = store.get(choice.atom) as any;
 
     if (!node || !node.data || node.data.length === 0) return;
 

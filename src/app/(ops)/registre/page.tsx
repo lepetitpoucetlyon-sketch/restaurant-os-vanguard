@@ -18,7 +18,7 @@ import {
     Beef,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { useRegistre } from "@/context/RegistreContext";
+import { useRegistre } from "@/modules/ops/hooks/useRegistre";
 import { DUERPSection } from "@/modules/ops/components/registre/DUERPSection";
 import { IncendieSection } from "@/modules/ops/components/registre/IncendieSection";
 import { Cerfa13984Section } from "@/modules/ops/components/registre/Cerfa13984Section";
@@ -66,7 +66,7 @@ export default function RegistrePage() {
     const [isCerfaOpen, setIsCerfaOpen] = useState(false);
     const { duerp, cerfa, pmrDoc, incendieDoc, hottesDoc, certHalal, agrementBoucher, prestataires, getOverallStatus } = useRegistre();
 
-    const overall = getOverallStatus();
+    const overall = (getOverallStatus() as any);
     const allDocs = [
         { doc: duerp, tab: 'duerp' as TabType, icon: FileText, color: '#3B82F6' },
         { doc: incendieDoc, tab: 'incendie' as TabType, icon: Flame, color: '#EF4444' },

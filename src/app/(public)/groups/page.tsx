@@ -113,7 +113,7 @@ export default function GroupsPage() {
                         <div className="grid grid-cols-1 gap-6" id="groups-list">
                             <AnimatePresence mode="popLayout">
                                 {filteredGroups.map(group => (
-                                    <EventCard key={group.id} group={group} />
+                                    <EventCard key={group.id} group={group as any} />
                                 ))}
                             </AnimatePresence>
                         </div>

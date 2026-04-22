@@ -28,7 +28,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
             permissionsPath,
             async (data) => {
                 if (data) {
-                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions(data.permissions ?? data, DEFAULT_ROLE_PERMISSIONS));
+                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as import("@/shared/nexus-contract").SovereignData, DEFAULT_ROLE_PERMISSIONS));
                 } else {
                     const seededPermissions = AccessPolicyManager.sanitizeRolePermissions(DEFAULT_ROLE_PERMISSIONS, DEFAULT_ROLE_PERMISSIONS);
                     setRolePermissions(seededPermissions);

@@ -172,9 +172,9 @@ export default function AccountingConsolePage() {
                         {activeTab === 'pilotage' && (
                             <motion.div
                                 key={`${activeTab}-${viewMode}`}
-                                initial={performanceMode ? false : { opacity: 0, y: 10 }}
-                                animate={performanceMode ? false : { opacity: 1, y: 0 }}
-                                exit={performanceMode ? false : { opacity: 0, y: -10 }}
+                                initial={performanceMode ? (false as any) : { opacity: 0, y: 10 }}
+                                animate={performanceMode ? (false as any) : { opacity: 1, y: 0 }}
+                                exit={performanceMode ? (false as any) : { opacity: 0, y: -10 }}
                                 transition={performanceMode ? { duration: 0 } : { duration: 0.3 }}
                             >
                                 {viewMode === 'simple' ? (

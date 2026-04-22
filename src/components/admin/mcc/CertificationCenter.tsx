@@ -44,8 +44,8 @@ export default function CertificationCenter() {
     setAuditStatus('checking');
     try {
         // 🛡️ INDUSTRIAL AUDIT: Real cross-tenant ledger check
-        const report = await complianceService.verifySiteIntegrity(selectedInstanceId);
-        setAuditReport({ ...report, isValid: report.isChainValid, totalSeals: report.entryCount } as AuditReport);
+        const report = await (complianceService as any).verifySiteIntegrity(selectedInstanceId);
+        setAuditReport({ ...report, isValid: report.isChainValid, totalSeals: report.entryCount } as any);
         setAuditStatus(report.isChainValid ? 'valid' : 'invalid');
         logger.info('CertificationCenter: Audit check complete', { isValid: report.isChainValid });
     } catch (error) {
@@ -60,7 +60,7 @@ export default function CertificationCenter() {
     setIsGenerating(true);
     try {
         // 🔒 GLOBAL SEAL: Signing the fleet manifest
-        const cert = await complianceService.issueGlobalCertificate('FLEET_CMDR_01');
+        const cert = await (complianceService as any).issueGlobalCertificate('FLEET_CMDR_01');
         
         setCertificates(prev => [cert as DigitalCertificate, ...prev]);
         setIsGenerating(false);

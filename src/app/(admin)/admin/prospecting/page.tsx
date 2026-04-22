@@ -5,7 +5,8 @@ import { motion } from 'framer-motion';
 import { Sparkles, Palette, Globe, Check, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSettings } from '@/context/SettingsContext';
-import { BrandingService, BrandInput } from '@/domain/services/BrandingService';
+import { BrandingUI } from '@/domain/services/BrandingUI';
+import { BrandInput } from '@/types';
 import { extractBrandingFromUrl } from '@/app/actions/branding';
 import { cn } from '@/lib/ui.foundations';
 
@@ -16,8 +17,8 @@ export default function ProspectingDashboard() {
   const [lastGenerated, setLastGenerated] = useState<import('@/types').ThemeSettings | null>(null);
 
   const handleApplySauce = async (input: BrandInput) => {
-    const newTheme = BrandingService.generateThemeFromBrand(input);
-    await updateConfig('theme', newTheme);
+    const newTheme = BrandingUI.generateThemeFromBrand(input);
+    await updateConfig('theme', newTheme as any);
     if (updateIdentity) await updateIdentity({ name: input.name });
     setLastGenerated(newTheme);
   };

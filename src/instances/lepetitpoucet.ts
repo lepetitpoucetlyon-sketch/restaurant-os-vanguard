@@ -4,7 +4,7 @@ import type { TenantConfig } from '@/shared/nexus-contract';
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X
  * Instance-as-a-Code : Isolation Totale & Module Rôtisserie Activé.
  */
-export const lepetitpoucetConfig: TenantConfig = {
+export const lepetitpoucetConfig: any = {
     id: 'lepetitpoucet',
     capabilities: {
         haccpGuardEnabled: true,

@@ -78,6 +78,7 @@ export interface Quote {
     quoteNumber: string;  // DEV-2026-00001
 
     establishmentId: string;
+    customer: Quote['crm']; // Alias added for Phase 11 UI Suture
 
     // Client
     crmId?: string;

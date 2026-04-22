@@ -25,7 +25,7 @@ export const PagesTab = () => {
                 {pages.map((page, idx) => (
                     <PageCard
                         key={page.id}
-                        page={page as import('@/app/(marketing)/seo/seo.types').PageSEO}
+                        page={page as any}
                         onEdit={() => { }}
                         id={idx === 0 ? "seo-edit-page-0" : undefined}
                     />

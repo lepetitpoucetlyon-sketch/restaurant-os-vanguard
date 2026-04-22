@@ -8,12 +8,10 @@ import { SovereignValue } from '@/shared/nexus-contract';
 
 
 // Mocking browser-specifics for the Vitest Node environment
-global.requestAnimationFrame = (cb) => (setTimeout(cb, 16) as ReturnType<typeof setTimeout>);
-
-global.cancelAnimationFrame = (id) => clearTimeout(id as ReturnType<typeof setTimeout>);
-
-
-global.performance = performance as Performance;
+// Mocking browser-specifics for the Vitest Node environment
+global.requestAnimationFrame = (cb) => (setTimeout(cb, 16) as any);
+global.cancelAnimationFrame = (id) => clearTimeout(id as any);
+global.performance = (global.performance || performance || { now: () => Date.now() }) as any;
 
 
 describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
@@ -37,7 +35,7 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
                     }, 1);
                 }};
             }
-        } as { new(): MessageChannel };
+        } as any;
 
 
         const mockWorker = {
@@ -47,7 +45,7 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
                     port2.postMessage({ id: msg.id, result: 'sha256_mock_hash' });
                 }
             })
-        } as Worker;
+        } as any;
 
 
         const results = await BlackFridaySimulation.runWorkerSaturationTest(mockWorker);
@@ -63,7 +61,7 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         
         // We run the test logic directly to avoid the internal setTimeout in Simulation
         // 1. Corrupt
-        store.set(ordersNodeAtom, (prev: { data: SovereignValue[] }) => ({ ...prev, data: [{ id: 'corrupt' }] }));
+        store.set(ordersNodeAtom as any, (prev: any) => ({ ...prev, data: [{ id: 'corrupt' }] }));
 
         
         // 2. Heal

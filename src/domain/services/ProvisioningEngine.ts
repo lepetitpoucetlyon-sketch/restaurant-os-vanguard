@@ -27,7 +27,7 @@ export const ProvisioningEngine = {
                 id: `node_${Math.random().toString(36).substring(2, 11)}`,
                 key: dna.key,
                 name: dna.name.toUpperCase(),
-                status: 'online', // Ready for single-core bridge
+                status: 'ONLINE', // Ready for single-core bridge
                 tier: dna.tier,
                 version: '4.5.0-empire',
                 createdAt: new Date().toISOString(),
@@ -39,6 +39,8 @@ export const ProvisioningEngine = {
                     revenue24h: 0,
                     aiUsageCost: 0,
                     healthScore: 100,
+                    errorRate: 0,
+                    uptime: 100,
                     lowStockAlerts: 0,
                     expiringItemsCount: 0,
                     complianceScore: 100
@@ -53,7 +55,7 @@ export const ProvisioningEngine = {
                 featureFlags: {
                     pos: true,
                     inventory: true,
-                    analytics: dna.tier !== 'standard',
+                    analytics: dna.tier !== 'STANDARD',
                     bar: false, // Optional
                     kitchen: true
                 },
@@ -68,7 +70,7 @@ export const ProvisioningEngine = {
 
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
-            await fleetTelemetry.pushSiteTelemetry(newInstance.id, newInstance);
+            await fleetTelemetry.pushSiteTelemetry(newInstance.id as any, newInstance as any);
 
             logger.info('ProvisioningEngine: Instance registered in Master Registry', { 
                 instanceId: newInstance.id, 

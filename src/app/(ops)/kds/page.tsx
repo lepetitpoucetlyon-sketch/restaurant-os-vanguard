@@ -28,7 +28,7 @@ interface AuditTicket {
 }
 
 export default function KDSPage() {
-    const { orders, updateOrderStatus, getPendingModifications } = useOrders();
+    const { orders, updateOrderStatus, getPendingModifications } = useOrders() as any;
     const { recipes } = useRecipes();
     
     // Core State
@@ -75,7 +75,7 @@ export default function KDSPage() {
 
     // Filtering & Sorting Logic
     const filteredOrders = useMemo(() => {
-        const activeOrders = orders.filter(o => o.status !== 'delivered');
+        const activeOrders = (orders as any[]).filter(o => o.status !== 'delivered');
         let result = activeOrders;
 
         if (activeStation !== 'all') {
@@ -101,7 +101,7 @@ export default function KDSPage() {
             if (!isAReady && isBReady) return -1;
             return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
         });
-    }, [orders, activeStation, searchQuery]);
+    }, [orders, activeStation, searchQuery]) as any[];
 
     const preparingOrdersCount = orders.filter(o => o.status === 'preparing' || o.status === 'new').length;
     const pendingModificationsCount = getPendingModifications().length;
@@ -158,14 +158,14 @@ export default function KDSPage() {
                             {filteredOrders.map(ticket => (
                                 <KDSTicket 
                                     key={ticket.id}
-                                    ticket={ticket}
+                                    ticket={ticket as any}
                                     gridColumns={gridColumns}
                                     rushMode={rushMode}
                                     updateOrderStatus={updateOrderStatus}
                                     setSelectedRecipe={setSelectedRecipe}
                                     setIsAuditOpen={setIsAuditOpen}
                                     setAuditTicket={setAuditTicket}
-                                    recipes={recipes}
+                                    recipes={recipes as any}
                                 />
                             ))}
                         </motion.div>

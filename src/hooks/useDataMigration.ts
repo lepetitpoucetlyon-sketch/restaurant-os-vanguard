@@ -107,8 +107,13 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
         return current;
     }, []);
 
+    interface MenuMigration {
+        categories: { name: string; type: string; sortOrder: number }[];
+        products: { name: string; description: string; price: number; categoryName: string; status: string; taxRate: number }[];
+    }
+
     // INJECTION IN DATABASE
-    const injectToDB = async (entity: 'staff' | 'menu' | 'crm', data: import('@/shared/nexus-contract').SovereignValue) => {
+    const injectToDB = async (entity: 'staff' | 'menu' | 'crm', data: import('@/shared/nexus-contract').SovereignField) => {
 
         setIsMigrating(true);
         setProgress(10);
@@ -116,7 +121,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
         
         try {
             if (entity === 'menu') {
-                const { categories, products } = data as { categories: { name: string; type: string; sortOrder: number }[], products: { name: string; description: string; price: number; categoryName: string; status: string; taxRate: number }[] };
+                const { categories, products } = data as MenuMigration;
                 const categoryIdMap: Record<string, string> = {};
 
                 // Add Categories to Batch

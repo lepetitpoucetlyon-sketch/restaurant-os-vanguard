@@ -68,8 +68,8 @@ export default function StaffSettings() {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            await updateConfig('staffConfig', localConfig);
-            await updateList('positions', positions);
+            await updateConfig('staffConfig', localConfig as any);
+            await updateList('positions', positions as any);
         } catch (error) {
             console.error(error);
         } finally {

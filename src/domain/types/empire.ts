@@ -5,15 +5,15 @@ import { z } from 'zod';
  * This file serves as the single source of truth for multi-instance orchestration.
  */
 
-export const ServiceTierSchema = z.enum(['standard', 'premium', 'enterprise', 'empire-limitless']);
+export const ServiceTierSchema = z.enum(['STANDARD', 'PREMIUM', 'ENTERPRISE', 'EMPIRE-LIMITLESS']);
 
 export const InstanceStatusSchema = z.enum([
-  'provisioning', 
-  'online', 
-  'offline', 
-  'maintenance', 
-  'locked', // For legal or billing issues
-  'error'
+  'PROVISIONING', 
+  'ONLINE', 
+  'OFFLINE', 
+  'MAINTENANCE', 
+  'LOCKED', 
+  'CRITICAL'
 ]);
 
 /**
@@ -86,7 +86,7 @@ export const ProvisioningDNA = z.object({
   key: z.string().regex(/^[a-z0-9-]+$/),
   ownerEmail: z.string().email(),
   initialPrimaryColor: z.string().default('#6366f1'),
-  tier: ServiceTierSchema.default('standard'),
+  tier: ServiceTierSchema.default('STANDARD'),
   copyBaseTemplates: z.boolean().default(true)
 }).passthrough();
 

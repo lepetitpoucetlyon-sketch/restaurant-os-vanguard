@@ -33,7 +33,7 @@ export class Slayer {
                 ? raw[config.fields.total] as number
                 : parseFloat(DataDigester.decontaminate(String(raw[config.fields.total]))),
             timestamp: new Date(String(raw[config.fields.date])),
-            items: (raw[config.fields.items || 'items'] as { id: string; name: string; quantity: number; priceInCents: number }[]) || [],
+            items: (raw[config.fields.items || 'items'] as any[]) || [],
             customerName: config.fields.customerName ? String(raw[config.fields.customerName]) : undefined
         };
     }
@@ -75,7 +75,7 @@ export class Slayer {
                                     customer: (legacy as Record<string, unknown>).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
-                                const nexusOrder = await DataDigester.digestOrder(rawOrder, { isLegacy: true });
+                                const nexusOrder = await DataDigester.digestOrder(rawOrder as any, { isLegacy: true });
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
                                 // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum)

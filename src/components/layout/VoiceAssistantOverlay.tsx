@@ -6,7 +6,7 @@ import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, History, X, Zap, Maximize2, Minimize2, AlertTriangle, CheckCircle2, Minus, Bot } from 'lucide-react';
 import { useGeminiAgent } from "@/hooks/useGeminiAgent";
-import { useGeminiLive } from '@/hooks/useGeminiLive';
+import { useGeminiLive } from '@/modules/marketing/hooks/useGeminiLive';
 import { useSettings } from "@/context/SettingsContext";
 
 import { cn } from "@/lib/ui.foundations";
@@ -82,12 +82,7 @@ export function VoiceAssistantOverlay() {
             return;
         }
 
-        const SpeechRecognition = (window as Window & { 
-            SpeechRecognition?: typeof import('react').Component, 
-            webkitSpeechRecognition?: typeof import('react').Component 
-        } & import('@/shared/nexus-contract').SovereignData).SpeechRecognition || (window as Window & { 
-            webkitSpeechRecognition?: typeof import('react').Component 
-        } & import('@/shared/nexus-contract').SovereignData).webkitSpeechRecognition;
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
 
         if (!SpeechRecognition) return;
@@ -139,7 +134,7 @@ export function VoiceAssistantOverlay() {
 
     const toggleHistory = async () => {
         if (!showHistory) {
-            const hist = await (fetchAllSessions as () => Promise<{ id: string, timestamp: Date, lastMessage: string }[]>)();
+            const hist = await (fetchAllSessions as any)();
             setSessions(hist);
         }
         setShowHistory(!showHistory);
@@ -203,7 +198,7 @@ export function VoiceAssistantOverlay() {
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages as { role: string; content?: string; text?: string }[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread messages={messages as any[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
                         )}
 
                         {pendingAction && (

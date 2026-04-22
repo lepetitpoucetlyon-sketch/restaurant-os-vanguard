@@ -32,6 +32,8 @@ function deepMerge(...objects: import('@/shared/nexus-contract').SovereignData[]
     return result;
 }
 
+export type Language = 'fr' | 'en' | 'ja' | 'pt' | 'es';
+
 // Assemble all domain translations with strict SovereignData typing
 export const translations: Record<Language, import('@/shared/nexus-contract').SovereignData> = {
     fr: deepMerge(
@@ -61,6 +63,4 @@ export const translations: Record<Language, import('@/shared/nexus-contract').So
     )
 };
 
-
-export type Language = keyof typeof translations;
 export type TranslationKey = string; // Simplified for now, could be improved with template literal types

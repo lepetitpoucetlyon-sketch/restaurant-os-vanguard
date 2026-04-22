@@ -119,7 +119,7 @@ export default function RecruitmentPage() {
             <AddCandidateModal 
                 isOpen={isAddModalOpen} 
                 onClose={() => setIsAddModalOpen(false)} 
-                onAdd={addCandidate}
+                onAdd={addCandidate as any}
             />
         </div>
     );
@@ -218,7 +218,11 @@ function AddCandidateModal({ isOpen, onClose, onAdd }: {
         phone: '',
         appliedRole: '',
         cvUrl: undefined as string | undefined,
-        gdpr: { consented: false, method: 'digital', date: new Date().toISOString() } as const
+        gdpr: { 
+            consented: false, 
+            method: 'digital' as "digital" | "written" | "verbal_logged", 
+            date: new Date().toISOString() 
+        }
     });
 
     if (!isOpen) return null;

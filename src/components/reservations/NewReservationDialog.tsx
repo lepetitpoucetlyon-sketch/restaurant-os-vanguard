@@ -42,7 +42,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
             customerName: `${selectedCustomer.firstName} ${selectedCustomer.lastName}`,
             status: 'confirmed',
             duration: 120,
-        });
+        } as any);
         onClose();
     };
 

@@ -15,7 +15,7 @@ export const FleetTool: ToolDefinition = {
         }
     },
     category: 'fleet',
-    execute: async (args, user) => {
+    execute: async (args: any, user: any): Promise<any> => {
         // Enforced by RBAC - Should ideally call useNexusFleet but tools run in class context
         // We will pass the fleet state as context to the GeminiLiveService later
         return {
@@ -41,7 +41,7 @@ export const FlagSiteTool: ToolDefinition = {
         required: ['instanceId', 'reason']
     },
     category: 'fleet',
-    execute: async (args, user) => {
+    execute: async (args: any, user: any): Promise<any> => {
         return {
             success: true,
             notificationSent: true,

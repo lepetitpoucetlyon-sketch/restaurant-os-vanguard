@@ -31,7 +31,7 @@ const getFirstName = (c: Customer): string => c?.firstName || (c?.name ? c.name.
 const getLastName = (c: Customer): string => c?.lastName || (c?.name ? c.name.split(' ').slice(1).join(' ') : '') || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s.charAt(0) : '?');
 const getVisitCount = (c: Customer): number => {
-    const flexible = c as import('@/shared/nexus-contract').SovereignData;
+    const flexible = (c as any);
 
     return flexible?.visitCount ?? flexible?.totalVisits ?? 0;
 };

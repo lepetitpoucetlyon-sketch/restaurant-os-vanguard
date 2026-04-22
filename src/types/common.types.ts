@@ -6,9 +6,10 @@
 // NOTIFICATIONS
 // ============================================
 
-import { Ingredient } from './inventory.types';
+import { User } from '@/shared/types/auth.types';
 import { SovereignData } from '@/shared/nexus-contract';
 
+export type Ingredient = import('@/modules/inventory/types').Ingredient;
 
 export type NotificationType = 'info' | 'warning' | 'critical' | 'success';
 
@@ -109,7 +110,7 @@ export interface Recipe {
     standardImage?: string; // Technical reference for AI Plate Audit
     color: string;
     isActive: boolean;
-    createdAt: Date;
+    createdAt: string;
     updatedAt: string;
 }
 
@@ -133,8 +134,8 @@ export interface IntelligenceConfig {
         primeCost: number;
     } | null;
     runSimulation?: (config: Partial<SimulationScenario>) => Promise<void>; 
-    predictSignatureChance?: (quote: Quote, inflation?: number) => number;
-    predictLaborCost?: (shift: import('./auth.types').User) => number; // Using User as a proxy for shift logic if Shift not defined
+    predictSignatureChance?: (quote: import('@/modules/marketing/quotes.types').Quote, inflation?: number) => number;
+    predictLaborCost?: (shift: import('@/modules/hr/types').Shift) => number; 
 }
 
 export interface RecipeContextType {
@@ -328,7 +329,7 @@ export interface SimulationScenario {
 export interface DocCategory {
     title: string;
     description: string;
-    icon: LucideIcon;
+    icon: import('lucide-react').LucideIcon | string;
     color: string;
     isRecipe?: boolean;
     recipe?: {
