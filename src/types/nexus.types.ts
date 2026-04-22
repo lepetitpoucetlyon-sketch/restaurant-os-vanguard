@@ -1,4 +1,4 @@
-import { User, UserRole, UserStatus } from './auth.types';
+import { User, UserRole, UserStatus } from '@/shared/types/auth.types';
 import { IntelligenceConfig } from './common.types';
 import { TenantConfig, BusinessLaws, ExpertConfig, SovereignData } from '@/shared/nexus-contract';
 

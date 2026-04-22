@@ -26,6 +26,14 @@ export interface MarketingCampaign {
     targetSegment: string;
     startsAt: string;
     endsAt: string;
+    metrics?: {
+        sent: number;
+        opened: number;
+        clicked: number;
+        conversions: number;
+    };
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface CRMFeedback {

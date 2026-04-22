@@ -7,7 +7,7 @@ import {
     crmSearchQueryAtom, 
     crmFilterSegmentAtom,
     crmSelectedCRMAtom
-} from '@/store/crmAtoms';
+} from '@/modules/marketing/store/crmAtoms';
 import { crmsAtom } from '../store/marketingAtoms';
 import { useLanguage } from '@/context/LanguageContext';
 import { cn } from '@/lib/ui.foundations';

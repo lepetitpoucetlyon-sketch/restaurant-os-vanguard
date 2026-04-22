@@ -96,7 +96,7 @@ export function SingularitySettings() {
                                 value={settings?.planningConfig?.staffToCoversRatio || DEFAULT_STAFF_RATIO}
                                 onChange={(e) => setSettings({
                                     ...settings!,
-                                    planningConfig: { ...settings?.planningConfig, staffToCoversRatio: parseInt(e.target.value) } as import('@/types/hr').PlanningConfig
+                                    planningConfig: { ...settings?.planningConfig, staffToCoversRatio: parseInt(e.target.value) } as import('@/types').PlanningConfig
                                 })}
                                 className="bg-black/40 border border-white/10 rounded-lg p-3 text-sm font-mono focus:border-accent outline-none transition-colors"
                             />

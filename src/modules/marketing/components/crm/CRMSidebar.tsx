@@ -10,7 +10,7 @@ import {
     crmSearchQueryAtom, 
     crmFilterSegmentAtom,
     crmNewCRMModalAtom
-} from '@/store/crmAtoms';
+} from '@/modules/marketing/store/crmAtoms';
 import { crmsAtom } from '../store/marketingAtoms';
 
 const SEGMENTS = {

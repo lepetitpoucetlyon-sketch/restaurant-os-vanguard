@@ -23,7 +23,7 @@ import {
     crmNewCRMModalAtom,
     crmSecurityModalAtom,
     crmCRMToDeleteAtom
-} from "@/store/crmAtoms";
+} from "@/modules/marketing/store/crmAtoms";
 import { crmsAtom, crmsNodeAtom } from "@/store/operationalAtoms";
 
 /**

@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { 
     SEOProfile, 
     MarketingCampaign, 
@@ -12,8 +13,7 @@ import {
     socialAccountsNodeAtom, 
     quotesNodeAtom, 
     deliveriesNodeAtom 
-} from '../store/marketingAtoms';
-import { updateNexusNode } from '@/store/nexusNodeFactory';
+} from './store/marketingAtoms';
 import { logger } from '@/lib/logger';
 import { MarketingEngine } from "@/lib/marketing-engine";
 import { whiteLabelInstanceConfig } from '@/config/instance';
@@ -75,7 +75,6 @@ export const MarketingSyncService = {
     this.private_listeners.marketing = Nexus.adapter.onSnapshot(
         path('marketingCampaigns'),
         (data: MarketingCampaign[]) => {
-          store.set(marketingCampaignsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
         },
         {
           onError: (error) => logger.error('[MarketingSync] Marketing Sync Failed', error)
@@ -86,7 +85,6 @@ export const MarketingSyncService = {
     this.private_listeners.social = Nexus.adapter.onSnapshot(
         path('socialAccounts'),
         (data: SocialAccount[]) => {
-          store.set(socialAccountsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
         },
         {
           onError: (error) => logger.error('[MarketingSync] Social Sync Failed', error)
@@ -97,14 +95,12 @@ export const MarketingSyncService = {
     this.private_listeners.quotes = Nexus.adapter.onSnapshot(
       path('quotes'),
       (data: Quote[]) => {
-        store.set(quotesNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         orderBy: { field: 'updatedAt', direction: 'desc' },
         limit: 100,
         onError: (error: Error) => {
           logger.error('[MarketingSync] Quotes Sync Failed', error);
-          store.set(quotesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -112,14 +108,12 @@ export const MarketingSyncService = {
     this.private_listeners.deliveries = Nexus.adapter.onSnapshot(
       path('deliveries'),
       (data: Delivery[]) => {
-        store.set(deliveriesNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         orderBy: { field: 'time', direction: 'desc' },
         limit: 50,
         onError: (error: Error) => {
           logger.error('[MarketingSync] Deliveries Sync Failed', error);
-          store.set(deliveriesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );

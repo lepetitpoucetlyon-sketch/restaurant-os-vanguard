@@ -5,7 +5,8 @@ import { logger } from '@/lib/logger';
 import { FiscalEngine } from '@/domain/services/FiscalEngine';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { ExpenseClaimSchema, JournalEntrySchema } from '@/domain/schemas/accounting';
-import { TransactionCategory } from '@/types';
+import { TransactionCategory, FiscalSeal } from '@/types';
+import { FinanceService } from '@/domain/services/FinanceCore';
 
 import { AccountingService } from '@/domain/services/AccountingService';
 

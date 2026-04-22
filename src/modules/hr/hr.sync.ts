@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
 import { 
     shiftLogsNodeAtom, 
@@ -7,8 +8,7 @@ import {
     leaveRequestsNodeAtom, 
     leaveBalancesNodeAtom,
     staffMembersNodeAtom 
-} from '../store/hrAtoms';
-import { updateNexusNode } from '@/store/nexusNodeFactory';
+} from './store/hrAtoms';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 
@@ -28,12 +28,10 @@ export const HRSyncService = {
     this.private_listeners.staff = Nexus.adapter.onSnapshot(
       path('users'),
       (data: User[]) => {
-        store.set(staffMembersNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[HRSync] Staff Sync Failed', error);
-          store.set(staffMembersNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -43,7 +41,6 @@ export const HRSyncService = {
       path('shiftEntries'),
       (data: ShiftLog[]) => {
         const entries = Array.isArray(data) ? data : [];
-        store.set(shiftLogsNodeAtom, (prev) => updateNexusNode(prev, { data: entries, loading: false }));
         
         // Compute active shifts locally from the stream
         const activeMap = new Map<string, ShiftLog>();
@@ -51,14 +48,12 @@ export const HRSyncService = {
           if (entry.type === 'clock_in') activeMap.set(entry.userId, entry);
           else if (entry.type === 'clock_out') activeMap.delete(entry.userId);
         });
-        store.set(activeShiftsNodeAtom, (prev) => updateNexusNode(prev, { data: Array.from(activeMap.values()), loading: false }));
       },
       {
         orderBy: { field: 'timestamp', direction: 'desc' },
         limit: 100,
         onError: (error: Error) => {
           logger.error('[HRSync] HR Entries Sync Failed', error);
-          store.set(shiftLogsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -67,12 +62,10 @@ export const HRSyncService = {
     this.private_listeners.planned_shifts = Nexus.adapter.onSnapshot(
       path('shifts'),
       (data: Shift[]) => {
-        store.set(shiftsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[HRSync] Planned Shifts Sync Failed', error);
-          store.set(shiftsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -81,12 +74,10 @@ export const HRSyncService = {
     this.private_listeners.leaves = Nexus.adapter.onSnapshot(
       path('leaveRequests'),
       (data: LeaveRequest[]) => {
-        store.set(leaveRequestsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[HRSync] Leaves Sync Failed', error);
-          store.set(leaveRequestsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -94,12 +85,10 @@ export const HRSyncService = {
     this.private_listeners.balances = Nexus.adapter.onSnapshot(
       path('leaveBalances'),
       (data: LeaveBalance[]) => {
-        store.set(leaveBalancesNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[HRSync] Balances Sync Failed', error);
-          store.set(leaveBalancesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );

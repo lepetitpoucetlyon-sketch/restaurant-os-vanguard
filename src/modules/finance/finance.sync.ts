@@ -1,9 +1,9 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { FiscalSeal, JournalEntry } from '@/types';
 import { 
     fiscalLedgerNodeAtom 
 } from '@/modules/haccp/store/complianceAtoms';
-import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
@@ -28,7 +28,6 @@ export const FinanceSyncService = {
     this.private_listeners.fiscal = Nexus.adapter.onSnapshot(
       path('fiscalLedger'),
       async (data: FiscalSeal[]) => {
-        store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
         // Secure in local storage
         await db.fiscalSeals.bulkPut(data);
       },
@@ -37,7 +36,6 @@ export const FinanceSyncService = {
         limit: 50,
         onError: (error: Error) => {
           logger.error('[FinanceSync] Fiscal Sync Failed', error);
-          store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -47,7 +45,6 @@ export const FinanceSyncService = {
     try {
       const seals = await db.fiscalSeals.toArray();
       if (seals.length > 0) {
-        store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: seals as FiscalSeal[], loading: false }));
       }
     } catch (error) {
       logger.error('[FinanceSync] Local Hydration Failed', error);

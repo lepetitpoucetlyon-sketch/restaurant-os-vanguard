@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { stockItemsAtom } from '@/store/inventoryAtoms';
+import { stockItemsAtom } from '@/modules/inventory/store/inventoryAtoms';
 import { StockEngine } from '@/domain/services/StockEngine';
 import { logger } from '@/lib/logger';
 import { useTenant } from '@/engines/core/NexusCoreProvider';

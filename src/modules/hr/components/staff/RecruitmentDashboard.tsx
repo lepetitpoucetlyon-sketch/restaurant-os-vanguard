@@ -6,7 +6,7 @@ import {
     staffStatusFilterAtom, 
     staffCandidateModalOpenAtom, 
     staffEditingCandidateAtom 
-} from "@/store/staffAtoms";
+} from "@/modules/hr/store/staffAtoms";
 import { useRecruitment } from "@/hooks/useRecruitment";
 import { Candidate, CandidateStatus } from "@/types";
 import { 

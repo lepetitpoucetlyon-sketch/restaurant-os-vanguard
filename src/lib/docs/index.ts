@@ -5,7 +5,7 @@ import { floorPlan } from './floor-plan';
 import { pos } from './pos';
 import { kds } from './kds';
 import { kitchen } from './kitchen';
-import { customer } from './customer';
+import { customer } from './Customer';
 import { intelligence } from './intelligence';
 import { inventory } from './inventory';
 import { haccp } from './haccp';

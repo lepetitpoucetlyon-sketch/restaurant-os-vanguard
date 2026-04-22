@@ -8,7 +8,7 @@ import {
     bankTransactionsAtom,
     expenseClaimsAtom,
     accountingLoadingAtom
-} from '@/store/accountingAtoms';
+} from '@/modules/finance/store/accountingAtoms';
 import { 
     AccountingContextType, 
     LedgerAccount, 

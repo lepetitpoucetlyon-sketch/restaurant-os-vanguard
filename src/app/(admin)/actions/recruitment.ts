@@ -3,7 +3,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { Candidate } from '@/types';
-import { EmployeeSettings } from '@/types/hr';
+import { EmployeeSettings } from '@/types';
 
 /**
  * 🧑‍💼 Recruitment Actions - Restaurant OS

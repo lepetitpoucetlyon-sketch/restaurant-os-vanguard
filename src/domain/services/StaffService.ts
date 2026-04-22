@@ -72,7 +72,10 @@ export class StaffService {
     /**
      * Validates a leave request against business rules.
      */
-    static validateLeaveRequest(request: LeaveRequest): { valid: boolean; error?: string } {
+    static validateLeaveRequest(request: Partial<LeaveRequest>): { valid: boolean; error?: string } {
+        if (!request.startDate || !request.endDate) {
+            return { valid: false, error: "Missing period dates." };
+        }
         const start = new Date(request.startDate);
         const end = new Date(request.endDate);
 

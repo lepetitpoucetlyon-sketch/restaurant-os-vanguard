@@ -1,12 +1,12 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { Order, Table, Reservation, GroupEvent } from '@/types';
 import { 
     ordersNodeAtom, 
     tablesNodeAtom, 
     reservationsNodeAtom, 
-    groupsNodeAtom, 
-    updateNexusNode 
-} from '../store/orderAtoms';
+    groupsNodeAtom 
+} from './store/orderAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
@@ -31,14 +31,12 @@ export const OpsSyncService = {
     this.private_listeners.orders = Nexus.adapter.onSnapshot(
       path('orders'),
       async (data: Order[]) => {
-        store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
         await db.orders.bulkPut(data);
       },
       {
         orderBy: { field: 'updatedAt', direction: 'desc' },
         onError: (error: Error) => {
           logger.error('[OpsSync] Orders Sync Failed', error);
-          store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -47,12 +45,10 @@ export const OpsSyncService = {
     this.private_listeners.tables = Nexus.adapter.onSnapshot(
       path('tables'),
       (data: Table[]) => {
-        store.set(tablesNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[OpsSync] Tables Sync Failed', error);
-          store.set(tablesNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -61,12 +57,10 @@ export const OpsSyncService = {
     this.private_listeners.reservations = Nexus.adapter.onSnapshot(
       path('reservations'),
       (data: Reservation[]) => {
-        store.set(reservationsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[OpsSync] Reservations Sync Failed', error);
-          store.set(reservationsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -75,12 +69,10 @@ export const OpsSyncService = {
     this.private_listeners.groups = Nexus.adapter.onSnapshot(
       path('groups'),
       (data: GroupEvent[]) => {
-        store.set(groupsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         onError: (error: Error) => {
           logger.error('[OpsSync] Groups Sync Failed', error);
-          store.set(groupsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -90,7 +82,6 @@ export const OpsSyncService = {
     try {
       const orders = await db.orders.toArray();
       if (orders.length > 0) {
-        store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: orders as Order[], loading: false }));
       }
     } catch (error) {
       logger.error('[OpsSync] Local Hydration Failed', error);

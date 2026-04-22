@@ -9,6 +9,7 @@ export * from '../genome.types';
 // Domain Core (Bridge to Modules)
 export * from './auth.types';
 export * from './fleet.types';
+export * from './finance.types';
 export * from '@/modules/ops/types';
 export * from '@/modules/ops/tables.types';
 export * from '@/modules/ops/reservations.types';

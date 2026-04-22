@@ -1,10 +1,10 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { HygieneLabel, MaintenanceLog } from '@/types';
 import { 
     hygieneLabelsNodeAtom, 
     maintenanceLogsNodeAtom 
-} from '../store/complianceAtoms';
-import { updateNexusNode } from '@/store/nexusNodeFactory';
+} from './store/complianceAtoms';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 
@@ -24,14 +24,12 @@ export const HACCPSyncService = {
     this.private_listeners.hygiene = Nexus.adapter.onSnapshot(
       path('hygieneLabels'),
       (data: HygieneLabel[]) => {
-        store.set(hygieneLabelsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         orderBy: { field: 'createdAt', direction: 'desc' },
         limit: 100,
         onError: (error: Error) => {
           logger.error('[HACCPSync] Hygiene Labels Sync Failed', error);
-          store.set(hygieneLabelsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );
@@ -40,14 +38,12 @@ export const HACCPSyncService = {
     this.private_listeners.maintenance = Nexus.adapter.onSnapshot(
       path('maintenanceLogs'),
       (data: MaintenanceLog[]) => {
-        store.set(maintenanceLogsNodeAtom, (prev) => updateNexusNode(prev, { data, loading: false }));
       },
       {
         orderBy: { field: 'date', direction: 'desc' },
         limit: 100,
         onError: (error: Error) => {
           logger.error('[HACCPSync] Maintenance Logs Sync Failed', error);
-          store.set(maintenanceLogsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: error.message }));
         }
       }
     );

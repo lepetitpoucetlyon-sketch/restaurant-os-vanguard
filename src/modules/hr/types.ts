@@ -103,7 +103,9 @@ export interface LeaveApprovalStep {
     approverId: string;
     approverName: string;
     approverRole: string;
-    status: 'pending' | 'approved' | 'rejected' | 'skipped';
+    status: 'pending_approval' | 'approved' | 'rejected' | 'cancelled';
+    createdAt?: string;
+    updatedAt?: string;
     decidedAt?: string;
     comments?: string;
 }
@@ -218,6 +220,8 @@ export interface Shift {
     isOvertime?: boolean;
     breakDurationMinutes?: number;
     type?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ShiftLog {
@@ -272,7 +276,10 @@ export interface PayrollCalculation {
     grossAmountCents: number;
     netAmountCents: number;
     taxAmountCents: number;
-    status: 'draft' | 'validated' | 'paid';
+    status: 'draft' | 'published' | 'on-going' | 'completed';
+    createdAt?: string;
+    updatedAt?: string;
+    fiscalSeal?: import('@/shared/nexus-contract').FiscalSeal;
     metadata?: import('@/shared/nexus-contract').SovereignData;
 }
 

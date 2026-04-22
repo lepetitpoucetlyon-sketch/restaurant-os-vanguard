@@ -1,6 +1,6 @@
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
-import { fiscalLedgerAtom } from '@/store/complianceAtoms';
+import { fiscalLedgerAtom } from '@/modules/haccp/store/complianceAtoms';
 import { TelemetryPulse } from '@/shared/nexus-contract';
 import { FiscalSeal } from '@/types';
 

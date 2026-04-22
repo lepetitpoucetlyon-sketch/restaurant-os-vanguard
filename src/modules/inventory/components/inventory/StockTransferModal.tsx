@@ -6,7 +6,7 @@ import {
     stockTransferTargetLocationAtom, 
     stockTransferIsSubmittingAtom, 
     stockTransferSuccessAtom 
-} from "@/store/inventoryAtoms";
+} from "@/modules/inventory/store/inventoryAtoms";
 import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";

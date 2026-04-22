@@ -4,6 +4,10 @@ import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from './HACCPTelemetryBridge';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { FiscalEngine } from './FiscalEngine';
+import { SovereignLedger } from './SovereignLedger';
+import { SharedKernel } from '@/lib/shared-kernel';
+
 import { 
     ReceptionSchema, 
     ReceptionData, 
@@ -36,15 +40,19 @@ export class QualityEngine {
       { RECEPTION_VALIDATION: { schema: ReceptionSchema, data: validatedData } },
       async (transaction) => {
         const tenantPath = getTenantPath(this.COLLECTION, tenantId);
-        const receptionId = `rec_${Math.random().toString(36).substring(2, 10)}`;
+        const receptionId = SharedKernel.generateId('HACCP-REC');
         const receptionPath = `${tenantPath}/${receptionId}`;
+
+        // 🛡️ NF525 BRIDGE : Fiscal Sealing
+        const seal = await FiscalEngine.sealEntry(receptionId, validatedData, { instanceId: tenantId });
 
         const log = {
           ...validatedData,
           id: receptionId,
           type: 'reception',
           createdAt: new Date().toISOString(),
-          status: 'completed'
+          status: 'completed',
+          _fiscalSeal: seal
         };
         transaction.set(receptionPath, log);
 
@@ -68,7 +76,7 @@ export class QualityEngine {
    */
   static async validateCleaning(rawData: SovereignData, tenantId: string = 'main'): Promise<string> {
     const validatedData = CleaningSchema.parse(rawData);
-    const id = `cln_${Math.random().toString(36).substring(2, 10)}`;
+    const id = SharedKernel.generateId('HACCP-CLN');
     
     await Nexus.adapter.set(`${getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
         ...validatedData,
@@ -85,13 +93,17 @@ export class QualityEngine {
    */
   static async logWaste(rawData: SovereignData, tenantId: string = 'main'): Promise<string> {
     const validatedData = WasteSchema.parse(rawData);
-    const id = `wst_${Math.random().toString(36).substring(2, 10)}`;
+    const id = SharedKernel.generateId('HACCP-WST');
     
+    // 🛡️ NF525 BRIDGE : Fiscal Sealing of Waste
+    const seal = await FiscalEngine.sealEntry(id, validatedData, { instanceId: tenantId });
+
     await Nexus.adapter.set(`${getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
         ...validatedData,
         id,
         type: 'waste',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        _fiscalSeal: seal
     });
 
     return id;
@@ -134,7 +146,7 @@ export class QualityEngine {
     }
   }
 
-  private static async pingTelemetry(tenantId: string) {
+  private static async pingTelemetry(tenantId) {
     try {
         await HACCPTelemetryBridge.reportHygieneHealth(tenantId);
     } catch (err) {

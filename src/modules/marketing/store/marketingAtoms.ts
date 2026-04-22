@@ -13,6 +13,8 @@ export interface MarketingSegment {
     criteria: Record<string, string>;
     estimatedSize: number;
     color: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface ScheduledPost {
@@ -23,6 +25,8 @@ export interface ScheduledPost {
     scheduledTime: string;
     status: 'draft' | 'scheduled' | 'published' | 'failed';
     imageUrl?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface SocialAccount {

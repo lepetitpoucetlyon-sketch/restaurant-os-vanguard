@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtom } from 'jotai';
-import { crmFormAtom, crmNewCRMModalAtom } from '@/store/crmAtoms';
+import { crmFormAtom, crmNewCRMModalAtom } from '@/modules/marketing/store/crmAtoms';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, MapPin, Tag, Plus, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
