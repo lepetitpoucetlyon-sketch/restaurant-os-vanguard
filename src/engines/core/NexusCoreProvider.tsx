@@ -55,7 +55,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     const searchParams = useSearchParams();
     const hasInitialized = useRef(false);
-    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom);
+    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as any); // Forge Grade X Write
     
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
@@ -317,6 +317,20 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     }), [themeMode, setThemeMode, accentColor, setAccentColor, uiDensity, setUiDensity, borderRadius, setBorderRadius, glassmorphism, setGlassmorphism, animationsEnabled, setAnimationsEnabled]);
 
     const fleetValue = useMemo(() => ({
+        instanceIds: [],
+        instances: [],
+        globalMetrics: null,
+        stats: {
+            totalRevenue: 0,
+            averageHealth: 100
+        },
+        macroInsights: [],
+        isLoading: false,
+        isSyncing: false,
+        isEmpireMode: false,
+        selectedInstanceId: null,
+        isUpdateAvailable: false,
+        updateInfo: null,
         nodes: [],
         health: 'EXCELLENT',
         isTrainingMode: false,
@@ -331,13 +345,16 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         complianceService: {},
         haccpBridge: {},
         fleet: null,
-        customer: {},
+        customer: {
+            customers: []
+        },
         intelligence: {
             globalInflationRate: 0.0,
             predictSignatureChance: () => 0.5,
             predictLaborCost: () => 0.0
         }
     } as NexusFleetState), []);
+
 
     const contextValue: NexusCoreState = useMemo(() => ({
         auth: authValue,

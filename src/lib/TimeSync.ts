@@ -45,7 +45,7 @@ export const TimeSync = {
             if (h instanceof Date) {
                 serverDate = h;
             } else if (h && typeof h === 'object' && 'toDate' in h && typeof (h as any).toDate === 'function') {
-                serverDate = (h as { toDate: () => Date }).toDate();
+                serverDate = (h as unknown as { toDate: () => Date }).toDate();
             } else if (typeof h === 'string' || typeof h === 'number') {
                 serverDate = new Date(h);
             }

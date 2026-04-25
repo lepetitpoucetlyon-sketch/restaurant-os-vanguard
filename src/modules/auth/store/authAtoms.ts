@@ -23,8 +23,6 @@ export const currentUserAtom = atom(
 export const isAuthenticatedAtom = atom((get) => !!get(currentUserAtom));
 export const userRoleAtom = atom((get) => get(currentUserAtom)?.role || 'client');
 
-// Multi-tenant isolation atom
-export const tenantConfigAtom = atom<TenantConfig | null>(null);
 
 // Grade VI Permissions Strategy
 export type Role = 'admin' | 'manager' | 'staff' | 'client';

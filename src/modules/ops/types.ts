@@ -1,3 +1,5 @@
+import { SovereignData } from '@/shared/nexus-contract';
+
 /**
  * ORDERS TYPES
  */
@@ -7,6 +9,7 @@ export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';
 
 export interface OrderItemModification {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     id: string;
     orderId: string;
     orderItemId: string;
@@ -23,8 +26,8 @@ export interface OrderItemModification {
 }
 
 export interface OrderItem {
-    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined; // Phase 9: Sovereign Mapping
-    id: string;
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
+    id?: string;
     productId: string;
     categoryId?: string;
     name: string;
@@ -32,15 +35,26 @@ export interface OrderItem {
     priceInCents: number;
     modifiers?: string[];
     notes?: string;
-    status: OrderItemStatus;
+    status?: OrderItemStatus;
     removedIngredients?: string[];
     addedIngredients?: string[];
     allergens?: string[];
-    pendingModification?: any;
+    pendingModification?: OrderItemModification;
+}
+
+export interface CartItem {
+    cartId: string;
+    productId: string;
+    categoryId: string;
+    name: string;
+    priceInCents: number;
+    quantity: number;
+    modifiers?: string[];
+    notes?: string;
 }
 
 export interface Order {
-    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined; // Phase 9: Sovereign Mapping
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     id: string;
     tableId: string;
     tableNumber: string;
@@ -62,7 +76,7 @@ export interface Order {
         maticTxId?: string;
     };
     totalRevenue?: number; // computed alias
-    data?: any; // legacy alias
+    data?: SovereignData; // legacy alias
     updatedAt?: Date | string;
 }
 

@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -65,13 +66,14 @@ export default function RootLayout({
         className={`${inter.variable} ${cormorant.variable} ${jetbrainsMono.variable} font-sans antialiased bg-bg-primary text-text-primary transition-colors duration-500`}
       >
         <ErrorBoundary>
-          <NexusCoreProvider>
-            <ToastProvider>
-              <ContextualSettingsProvider>
-                <NexusOpsProvider>
-                  <NexusGuardProvider>
-                    <NexusFiscalProvider>
-                      <NexusFleetProvider>
+          <React.Suspense fallback={<div className="min-h-screen bg-bg-primary flex items-center justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>}>
+            <NexusCoreProvider>
+              <ToastProvider>
+                <ContextualSettingsProvider>
+                  <NexusOpsProvider>
+                    <NexusGuardProvider>
+                      <NexusFiscalProvider>
+                        <NexusFleetProvider>
                         <ThemeEngine />
                         <PerformanceEngine />
                         <NexusPulseOrchestrator />
@@ -89,15 +91,16 @@ export default function RootLayout({
                             </ComplianceGate>
                           </SaaSBillingGate>
                         </AuthGate>
-                      </NexusFleetProvider>
-                    </NexusFiscalProvider>
-                  </NexusGuardProvider>
-                </NexusOpsProvider>
-              </ContextualSettingsProvider>
-            </ToastProvider>
-          </NexusCoreProvider>
-        </ErrorBoundary>
-      </body>
-    </html>
+                    </NexusFleetProvider>
+                  </NexusFiscalProvider>
+                </NexusGuardProvider>
+              </NexusOpsProvider>
+            </ContextualSettingsProvider>
+          </ToastProvider>
+        </NexusCoreProvider>
+      </React.Suspense>
+    </ErrorBoundary>
+  </body>
+</html>
   );
 }

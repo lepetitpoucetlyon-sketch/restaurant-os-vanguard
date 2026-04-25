@@ -189,7 +189,7 @@ export default function OperationsPage() {
                     <div className="col-span-9">
                         {view === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {areas.map((area, idx) => (
+                                {areas?.map((area: any, idx: number) => (
                                     <motion.div
                                         key={area.id}
                                         initial={{ opacity: 0, scale: 0.9 }}
@@ -212,13 +212,13 @@ export default function OperationsPage() {
                                                 <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-neutral-50 border border-neutral-100 italic">No. {area.number}</span>
                                                 <div className={cn(
                                                     "w-2 h-2 rounded-full",
-                                                    area.status === 'vacant' ? "bg-green-400" :
-                                                        area.status === 'busy' ? "bg-blue-400" :
-                                                            area.status === 'maintenance' ? "bg-red-400" : "bg-amber-400"
+                                                    area?.status === 'vacant' ? "bg-green-400" :
+                                                        area?.status === 'busy' ? "bg-blue-400" :
+                                                            area?.status === 'maintenance' ? "bg-red-400" : "bg-amber-400"
                                                 )} />
                                             </div>
                                             <h3 className="text-2xl font-black text-neutral-900 mb-1 capitalize group-hover:italic transition-all">{area.type}</h3>
-                                            <p className="text-xs text-neutral-400 font-sans font-bold uppercase tracking-wider mb-6">{area.status}</p>
+                                            <p className="text-xs text-neutral-400 font-sans font-bold uppercase tracking-wider mb-6">{area?.status}</p>
 
                                             <div className="flex items-end justify-between">
                                                 <div>
@@ -367,7 +367,7 @@ export default function OperationsPage() {
                                         <div>
                                             <h2 className="text-4xl font-black italic tracking-tighter mb-2">Détails de l'Espace {selectedArea.number}</h2>
                                             <div className="flex gap-4 items-center">
-                                                <div className="px-3 py-1 bg-neutral-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest italic">{selectedArea.status}</div>
+                                                <div className="px-3 py-1 bg-neutral-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest italic">{selectedArea?.status}</div>
                                                 <p className="text-xs text-neutral-400 font-sans font-bold uppercase tracking-widest">{selectedArea.type} Premium</p>
                                             </div>
                                         </div>
@@ -391,7 +391,7 @@ export default function OperationsPage() {
                                                 <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mb-2 italic flex items-center gap-2">
                                                     <Key className="w-3 h-3 text-amber-400" /> Disponibilité Immédiate
                                                 </p>
-                                                <p className="text-sm font-sans font-black italic">{selectedArea.status === 'vacant' ? 'Oui, prêt pour accueil' : 'Non, procédure en cours'}</p>
+                                                <p className="text-sm font-sans font-black italic">{selectedArea?.status === 'vacant' ? 'Oui, prêt pour accueil' : 'Non, procédure en cours'}</p>
                                             </div>
                                         </div>
 

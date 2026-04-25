@@ -52,6 +52,13 @@ export class FirestoreAdapter implements INexusAdapter {
     }
 
     async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
+        const isCollection = path.split('/').length % 2 !== 0;
+        
+        if (isCollection) {
+            const data = await this.query(path);
+            return data as unknown as T;
+        }
+
         const snap = await getDoc(doc(firestore, path));
         return snap.exists() ? { id: snap.id, ...snap.data() } as T : null;
     }

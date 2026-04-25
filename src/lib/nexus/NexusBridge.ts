@@ -1,5 +1,4 @@
 import { 
-  getFirestore, 
   doc, 
   onSnapshot, 
   Unsubscribe
@@ -15,6 +14,8 @@ interface LegacyTenantConfig {
   layout?: string;
   laws?: Record<string, boolean>;
 }
+
+import { firestore } from '@/lib/firebase';
 
 /**
  * 🛰️ NexusBridge - The Command Omphalos
@@ -63,7 +64,6 @@ export class NexusBridge {
   static listen(tenantId: string) {
     this.stop();
 
-    const firestore = getFirestore();
     const configDocRef = doc(firestore, 'tenants', tenantId, 'config', 'master');
 
     this.unsubscribe = onSnapshot(configDocRef, (snapshot) => {

@@ -1,13 +1,13 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
-import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@/types';
-// 👥 HR Atoms - Alienated Stubs for Grade X Sovereignty
-const shiftLogsNodeAtom = { key: 'shiftLogs' } as any;
-const activeShiftsNodeAtom = { key: 'activeShifts' } as any;
-const shiftsNodeAtom = { key: 'shifts' } as any;
-const leaveRequestsNodeAtom = { key: 'leaveRequests' } as any;
-const leaveBalancesNodeAtom = { key: 'leaveBalances' } as any;
-const staffMembersNodeAtom = { key: 'staffMembers' } as any;
+import { 
+  shiftLogsNodeAtom, 
+  activeShiftsNodeAtom, 
+  shiftsNodeAtom, 
+  leaveRequestsNodeAtom, 
+  leaveBalancesNodeAtom, 
+  staffMembersNodeAtom 
+} from '@/store/operationalAtoms';
 
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';

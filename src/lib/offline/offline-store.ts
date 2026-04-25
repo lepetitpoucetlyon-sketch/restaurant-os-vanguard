@@ -60,6 +60,19 @@ export class RestaurantOfflineDB extends Dexie {
         this.version(3).stores({
             immunityLogs: '++id, timestamp, moduleId, reason'
         });
+
+        // Version 4 — Grade X: Consolidation totale Vanguard (Suture intégrale)
+        this.version(4).stores({
+            orders: 'id, status, timestamp, tableId',
+            stockItems: 'id, ingredientId, status',
+            inventoryMovements: 'id, ingredientId, timestamp, salesId',
+            journalEntries: 'id, date, pieceNumber, referenceId',
+            fiscalSeals: 'id, transactionId, hash, timestamp',
+            syncQueue: '++id, status, timestamp, collection, type',
+            config: 'id',
+            immunityLogs: '++id, timestamp, moduleId, reason',
+            recipes: 'id, name'
+        });
     }
 
     /**

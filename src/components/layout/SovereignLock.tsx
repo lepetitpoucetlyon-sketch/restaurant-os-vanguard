@@ -13,7 +13,7 @@ import { ShieldAlert, CreditCard } from 'lucide-react';
 export const SovereignLock: React.FC = () => {
     const { tenantConfig } = useNexusCore();
 
-    const isLocked = tenantConfig.status?.licenceStatus === 'LOCKED';
+    const isLocked = tenantConfig?.status?.licenceStatus === 'LOCKED';
 
     return (
         <AnimatePresence>
@@ -33,7 +33,7 @@ export const SovereignLock: React.FC = () => {
                         
                         <h2 className="text-3xl font-serif italic text-white mb-4">Accès Suspendu</h2>
                         <p className="text-neutral-400 mb-10 leading-relaxed">
-                            Votre abonnement pour l'instance <strong className="text-white">{tenantConfig.name || tenantConfig.metadata?.name || 'Nexus Node'}</strong> est actuellement suspendu suite à un incident de facturation.
+                            Votre abonnement pour l'instance <strong className="text-white">{tenantConfig?.name || tenantConfig?.metadata?.name || 'Nexus Node'}</strong> est actuellement suspendu suite à un incident de facturation.
                         </p>
                         
                         <button 

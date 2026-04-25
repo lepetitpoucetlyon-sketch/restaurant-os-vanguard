@@ -2,10 +2,13 @@
 
 import React from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from '@/store/masterAtoms';
+import { tenantConfigAtom } from '@/store/operationalAtoms';
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import { MobileNavBar } from "@/components/layout/MobileNavBar";
 import { GlobalFAB } from "@/components/layout/GlobalFAB";
+import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
+import { DesktopTopbar } from "@/components/layout/DesktopTopbar";
+import { cn } from "@/lib/ui.foundations";
 
 /**
  * 🌀 LayoutResolver
@@ -14,49 +17,70 @@ import { GlobalFAB } from "@/components/layout/GlobalFAB";
  */
 export function LayoutResolver({ children }: { children: React.ReactNode }) {
     const config = useAtomValue(tenantConfigAtom);
-    const layout = config.status?.layoutType || 'default';
+    const layout = config?.status?.layoutType || 'default';
 
     // Morphing Logic
     switch (layout) {
         case 'sidebar':
             return (
-                <div className="flex h-screen bg-slate-50 dark:bg-slate-950">
-                    <aside className="w-64 border-r border-slate-200 dark:border-slate-800 hidden md:block">
-                        {/* Sidebar content here */}
-                        <div className="p-4 font-bold opacity-50">SIDEBAR MODE</div>
-                    </aside>
-                    <main className="flex-1 overflow-auto relative">
+                <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
+                    <DesktopSidebar />
+                    <main className="flex-1 overflow-auto relative scroll-smooth">
                         {children}
+                        <GlobalFAB />
                     </main>
                 </div>
             );
 
         case 'topbar':
             return (
-                <div className="min-h-screen pt-16">
-                    <nav className="fixed top-0 inset-x-0 h-16 bg-white dark:bg-slate-900 border-b z-50 flex items-center px-6">
-                         <div className="font-bold opacity-50">TOPBAR MODE</div>
-                    </nav>
-                    {children}
+                <div className="min-h-screen pt-20 bg-bg-primary">
+                    <DesktopTopbar />
+                    <main className="relative">
+                        {children}
+                        <GlobalFAB />
+                    </main>
                 </div>
             );
 
         case 'kiosk':
             return (
-                <div className="h-screen w-screen overflow-hidden bg-black text-white p-12">
-                     <div className="text-center text-4xl font-black mb-8">KIOSK TERMINAL</div>
-                     {children}
+                <div className="h-screen w-screen overflow-hidden bg-black text-white p-12 flex flex-col">
+                     <div className="flex justify-between items-center mb-12">
+                        <div className="text-4xl font-serif italic font-black">TERMINAL <span className="text-accent-gold not-italic">OS</span></div>
+                        <div className="px-6 py-2 rounded-full border border-white/20 text-[10px] font-black tracking-widest animate-pulse">KIOSK MODE ACTIVE</div>
+                     </div>
+                     <div className="flex-1 overflow-auto">
+                        {children}
+                     </div>
                 </div>
             );
 
         case 'default':
         default:
             return (
-                <div className="animate-fade-in pb-24">
-                    <MobileHeader />
-                    {children}
-                    <MobileNavBar />
-                    <GlobalFAB />
+                <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
+                    {/* Desktop Sidebar (Only visible on Desktop) */}
+                    <div className="hidden lg:block">
+                        <DesktopSidebar />
+                    </div>
+
+                    <div className="flex-1 flex flex-col min-w-0 relative">
+                        {/* Mobile Header (Hidden on Desktop via lg:hidden internally) */}
+                        <MobileHeader />
+                        
+                        <main className={cn(
+                            "flex-1 overflow-auto relative scroll-smooth",
+                            "pb-24 lg:pb-0" // Space for Mobile NavBar
+                        )}>
+                            {children}
+                        </main>
+
+                        {/* Mobile NavBar (Hidden on Desktop via lg:hidden internally) */}
+                        <MobileNavBar />
+                        
+                        <GlobalFAB />
+                    </div>
                 </div>
             );
     }

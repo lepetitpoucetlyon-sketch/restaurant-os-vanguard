@@ -44,7 +44,7 @@ Date: 2026-04-22
 ## Sector 3: Sync, Debt, DX, Completion
 
 ### `ALPHA`
-- The Bloom filter core is cheap in memory, but its transport path still serializes the whole buffer on the main thread in [src/lib/bloom-filter.ts](/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/bloom-filter.ts:68). The worker can evaluate bloom checks in [src/workers/CoreWorker.ts](/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/workers/CoreWorker.ts:26), but serialization/offloading is not wired into the fleet path shown here.
+- The Bloom filter core is cheap in memory, but its transport path still serializes the whole buffer on the main thread in [src/lib/bloom-filter.ts](/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/bloom-filter.ts:68). The worker can evaluate bloom checks in [src/workers/CoreWorker.ts](/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/workers/CoreWorker><Q>.ts:26), but serialization/offloading is not wired into the fleet path shown here.
 - The target of `< 180ms` tenant switching is not yet supported by evidence. The current switch path stops all sync, may reinitialize Firebase, updates local storage, then restarts all services in [src/engines/ops/NexusOpsProvider.tsx](/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/ops/NexusOpsProvider.tsx:185). There is no instrumentation in this path proving the budget.
 
 ### `BETA`

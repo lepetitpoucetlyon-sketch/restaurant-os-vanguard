@@ -9,6 +9,7 @@ export type TransactionCategory =
 export type AccountSide = 'debit' | 'credit';
 
 export interface FiscalSeal {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     id?: string;
     hash: string;
     previousHash: string;

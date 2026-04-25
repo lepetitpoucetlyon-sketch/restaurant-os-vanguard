@@ -32,7 +32,7 @@ export function KDSTicket({
     recipes
 }: KDSTicketProps) {
     const elapsedMinutes = Math.floor((new Date().getTime() - new Date(ticket.timestamp).getTime()) / 60000);
-    const isReady = ticket.status === 'ready';
+    const isReady = ticket?.status === 'ready';
     const isUrgent = !isReady && elapsedMinutes >= 15;
     const isWarning = !isReady && elapsedMinutes >= 8 && elapsedMinutes < 15;
 
@@ -248,7 +248,7 @@ export function KDSTicket({
             <div className="p-6 pt-0 mt-auto">
                 <div className="h-px w-full bg-neutral-100 mb-6" />
                 <AnimatePresence mode="wait">
-                    {ticket.status === "ready" ? (
+                    {ticket?.status === "ready" ? (
                         <motion.button
                             key="delivered"
                             initial={{ opacity: 0, y: 10 }}
@@ -261,7 +261,7 @@ export function KDSTicket({
                         </motion.button>
                     ) : (
                         <motion.div key="progress" className="flex gap-4">
-                            {ticket.status === "new" ? (
+                            {ticket?.status === "new" ? (
                                 <button
                                     className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all bg-neutral-100 text-gray-900 hover:bg-neutral-200 active:scale-[0.98] shadow-premium flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'preparing')}
@@ -298,5 +298,5 @@ export function KDSTicket({
                 </AnimatePresence>
             </div>
         </motion.div>
-    );
+);
 }

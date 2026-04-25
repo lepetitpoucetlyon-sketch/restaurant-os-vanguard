@@ -89,3 +89,14 @@ build_errors_v*.txt
 build_errors_brut.txt
 test-results/
 .DS_Store
+
+# Hermes Staging Bunker & Agents
+.staging/
+.staging/**
+.staging_old/
+.staging_old/**
+.agents/
+.agents/**
+**/.staging/
+**/.agents/
+**/.hermes/

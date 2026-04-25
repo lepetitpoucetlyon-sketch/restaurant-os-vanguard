@@ -71,5 +71,15 @@
     "files.watcherExclude": {
         "**/.next/**": true,
         "**/node_modules/**": true
+    },
+    "foam.edit.linkReferenceDefinitions": "off",
+    "foam.graph.style": {
+        "node": {
+            "fontSize": 12,
+            "opacity": 1
+        },
+        "edge": {
+            "opacity": 0.5
+        }
     }
 }
