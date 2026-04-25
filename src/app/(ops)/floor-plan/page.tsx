@@ -74,7 +74,7 @@ export default function FloorPlanPage() {
         updateTable
     } = useTables();
 
-    const currentFloor = floors.find(f => f.id === currentFloorId) || floors[0];
+    const currentFloor = floors?.find(f => f.id === currentFloorId) || floors?.[0];
     const tablesOnCurrentFloor = getTablesForFloor(currentFloorId);
     const selectedTable = tables.find(t => t.id === selectedTableId);
 

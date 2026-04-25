@@ -219,6 +219,7 @@ export default function Home() {
     if (points.length < 2) return `M${padding},${height / 2} L${width - padding},${height / 2}`;
 
     // Generate smooth cubic bezier curve
+    if (!points[0]) return "";
     let path = `M${points[0].x},${points[0].y}`;
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1];
@@ -235,7 +236,7 @@ export default function Home() {
     const alerts: { type: string; title: string; message: string; action?: string; time: string; onAction?: () => void }[] = [];
 
     // Alert 1: Low stock items
-    if (lowStockItems.length > 0) {
+    if (lowStockItems && lowStockItems.length > 0) {
       const topLowItem = lowStockItems[0];
       alerts.push({
         type: "error",
@@ -317,7 +318,7 @@ export default function Home() {
 
           <h2 className="text-4xl md:text-7xl font-serif font-light text-text-primary tracking-tight leading-[1.1]">
             {t('dashboard.hello')}, <br />
-            <span className="italic">{currentUser?.name.split(' ')[0]}</span>
+            <span className="italic">{currentUser?.name?.split(' ')?.[0] || 'Invité'}</span>
           </h2>
         </div>
 

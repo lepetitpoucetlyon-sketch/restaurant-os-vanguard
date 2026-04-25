@@ -6,9 +6,11 @@ export type { NexusPulse } from './pulseAtoms';
 // 🔑 AUTH & IDENTITY
 export {
     currentUserAtom, isAuthenticatedAtom, userRoleAtom,
-    tenantConfigAtom, rolePermissionsAtom, userPermissionsAtom,
+    rolePermissionsAtom, userPermissionsAtom,
     canDoAtom, updateRolePermissionsAtom
 } from '@/modules/auth/store/authAtoms';
+
+export { tenantConfigAtom } from './masterAtoms';
 
 // 📊 ACCOUNTING & FINANCE
 export {

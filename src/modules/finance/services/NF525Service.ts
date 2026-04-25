@@ -16,6 +16,7 @@ import { SovereignData } from '@/shared/nexus-contract';
 import { secureCast } from '@/shared/validation/SchemaRegistry';
 
 export interface FiscalInstruction {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     path: string;
     method: 'SET' | 'UPDATE' | 'DELETE';
     data: SovereignData;

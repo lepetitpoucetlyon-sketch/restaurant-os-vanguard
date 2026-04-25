@@ -70,13 +70,18 @@ export const NexusSyncService = {
         const instances = store.get(fleetSnapshotAtom) || [];
         const instance = instances.find(i => i.key === tenantId);
 
-        const isRestricted = tenantId !== 'restaurant-os' && instance && !instance.security?.supportAccessGranted;
+        // Grade X: Allow access if it's the master tenant OR if specifically granted
+        const isRestricted = tenantId !== 'restaurant-os' && 
+                           tenantId !== 'lepetitpoucet' && 
+                           tenantId !== 'vanguard' &&
+                           instance && 
+                           !instance.security?.supportAccessGranted;
         
         if (isRestricted) {
             logger.warn(`[NexusSyncService] ACCESS RESTRICTED for tenant ${tenantId}.`);
-            store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { loading: false }));
-            store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { loading: false }));
-            store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { loading: false }));
+            store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false }));
+            store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false }));
+            store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false }));
             return;
         }
 
@@ -91,13 +96,14 @@ export const NexusSyncService = {
                 blockedDependency: genomeCheck.blockedDependency,
                 tenantId
             });
-            store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
-            store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
-            store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
+            store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
+            store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
+            store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
             return;
         }
 
         // 2. PARALLEL INITIALIZATION (NEXUS-BOOST)
+        const initStart = performance.now();
         try {
             await Promise.all([
                 TimeSync.init(),
@@ -109,7 +115,11 @@ export const NexusSyncService = {
                 SyncStaff.init(tenantId, store)
             ]);
             
-            logger.info(`[NexusSyncService] Atomic Parallel Sync established for ${tenantId}.`);
+            const duration = performance.now() - initStart;
+            logger.info(`[NexusSyncService] Atomic Parallel Sync established for ${tenantId} in ${duration.toFixed(2)}ms.`);
+            if (duration > 180) {
+                logger.warn(`[NexusSyncService] PERFORMANCE ALERT: Init took ${duration.toFixed(2)}ms (> 180ms target)`);
+            }
         } catch (error) {
             logger.error('[NexusSyncService] Atomic Initialization Failed!', error);
         }

@@ -3,12 +3,16 @@ import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { Order, Table, Reservation, GroupEvent } from '@/types';
 import { 
     ordersNodeAtom, 
-    tablesNodeAtom
-} from './store/orderAtoms';
-import { reservationsNodeAtom, groupsNodeAtom } from './store/reservationAtoms';
+    tablesNodeAtom,
+    zonesAtom,
+    floorsAtom,
+    reservationsNodeAtom, 
+    groupsNodeAtom
+} from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
+import { Zone, Floor } from '@/types';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;
 
@@ -92,6 +96,32 @@ export const OpsSyncService = {
       {
         onError: (error: Error) => {
           logger.error('[OpsSync] Groups Sync Failed', error);
+        }
+      }
+    );
+
+    // 5. ZONES SYNC (Empire Forge)
+    this.private_listeners.zones = Nexus.adapter.onSnapshot(
+      path('zones'),
+      (data: Zone[]) => {
+        store.set(zonesAtom, data || []);
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Zones Sync Failed', error);
+        }
+      }
+    );
+
+    // 6. FLOORS SYNC
+    this.private_listeners.floors = Nexus.adapter.onSnapshot(
+      path('floors'),
+      (data: Floor[]) => {
+        store.set(floorsAtom, data || []);
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Floors Sync Failed', error);
         }
       }
     );

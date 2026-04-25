@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import './mocks'; // Charge l'infrastructure de mocks
 
 import { SharedKernel } from '@/lib/shared-kernel';
+import { OrderItem, CartItem } from '@/types';
 import { POSService } from '@/lib/pos-service';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 const SyncCompliance = { init: async (...args: any[]) => {} } as any;
@@ -65,16 +66,16 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
     describe('POSService : Opérations & Projections', () => {
         
         it('T5: Intégrité du Panier (calculateCartTotal)', () => {
-            const items: { priceInCents: number; quantity: number }[] = [
-                { priceInCents: 1500, quantity: 2 }, // 30.00
-                { priceInCents: 550, quantity: 1 }   // 5.50
+            const items: (OrderItem | CartItem)[] = [
+                { cartId: '1', productId: 'p1', categoryId: 'c1', name: 'A', priceInCents: 1500, quantity: 2 },
+                { cartId: '2', productId: 'p2', categoryId: 'c2', name: 'B', priceInCents: 550, quantity: 1 }
             ];
             expect(POSService.calculateCartTotal(items)).toBe(3550);
         });
 
         it('T6: Analyse de Rentabilité (Deding)', () => {
-            const items: { name: string; priceInCents: number; costInCents: number; quantity: number }[] = [
-                { name: 'Burger', priceInCents: 1000, costInCents: 420, quantity: 1 }
+            const items: CartItem[] = [
+                { cartId: 'c1', productId: 'p1', categoryId: 'c1', name: 'Burger', priceInCents: 1000, quantity: 1 }
             ] as any;
             // Marge = (1000 - 420) / 1000 = 58%
             // Le seuil est à 60% dans POSService.analyzeProfitability
@@ -93,7 +94,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
 
         it('T8: Stock Théorique (Schema Validation)', () => {
             // Simulation de formatage pour la cuisine
-            const items: { cartId: string; name: string; priceInCents: number; quantity: number }[] = [{ cartId: 'c1', name: 'Test', priceInCents: 100, quantity: 1 }];
+            const items: CartItem[] = [{ cartId: 'c1', productId: 'p1', categoryId: 'cat1', name: 'Test', priceInCents: 100, quantity: 1 }];
             const kitchenData = POSService.formatForKitchen(items);
             expect(kitchenData[0].status).toBe('pending');
             expect(kitchenData[0]).toHaveProperty('productId');

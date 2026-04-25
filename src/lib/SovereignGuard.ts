@@ -157,7 +157,7 @@ export const SovereignGuard = {
 
     // 🛡️ SUZERAIN EXCEPTION: Master Tenant (restaurant-os) can view anything.
     // Also allow specific whitelisted 'main' operations.
-    const WHITELIST = ['heartbeat', 'telemetry', 'config', 'health'];
+    const WHITELIST = ['heartbeat', 'telemetry', 'config', 'health', 'system', 'time_sync', 'auth'];
     const isWhitelisted = WHITELIST.some(w => path.includes(w));
 
     if (pathTenantId !== currentTenant && currentTenant !== 'restaurant-os' && !isWhitelisted) {

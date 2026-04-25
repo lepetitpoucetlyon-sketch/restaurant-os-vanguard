@@ -194,6 +194,7 @@ export interface SupplierOrderItem {
 export type InventoryMovementType = 'reception' | 'transfer' | 'consumption' | 'waste' | 'adjustment' | 'sale';
 
 export interface InventoryMovement {
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     id: string;
     stockItemId: string;
     type: InventoryMovementType;

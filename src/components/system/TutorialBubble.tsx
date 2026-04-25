@@ -17,7 +17,7 @@ export function TutorialBubble() {
     const bubbleRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
     const router = useRouter();
-    const currentPoint = currentSection?.points[currentPointIndex];
+    const currentPoint = currentSection?.points?.[currentPointIndex];
     const isNavigating = Boolean(isActive && currentPoint?.path && pathname !== currentPoint.path);
 
     // Auto-Navigation Logic

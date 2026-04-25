@@ -38,8 +38,8 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
     // Determine current page key for settings (simplified logic matching Header)
     // Note: In Launchpad, we might want to open Global Settings or Dashboard settings
     // For now, we'll default to 'dashboard' if pathname is root, or try to respect underlying page
-    const getPageKeyFromPath = (path: string) => {
-        const segment = path.split('/').filter(Boolean)[0] || 'dashboard';
+    const getPageKeyFromPath = (path: string | null) => {
+        const segment = (path || "").split('/').filter(Boolean)[0] || 'dashboard';
         return segment; // Simplified
     };
 

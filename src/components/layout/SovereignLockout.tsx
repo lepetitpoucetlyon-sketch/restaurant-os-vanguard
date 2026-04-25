@@ -14,18 +14,18 @@ export function SovereignLockout() {
   const config = useAtomValue(tenantConfigAtom);
   
   // Logic: Only activate if maintenance mode is ON, license is INVALID, or killSwitch is active
-  const isLocked = config.status?.maintenanceMode || config.status?.licenceStatus === 'LOCKED' || config.status?.killSwitch;
+  const isLocked = config?.status?.maintenanceMode || config?.status?.licenceStatus === 'LOCKED' || config?.status?.killSwitch;
 
   const getLockReason = () => {
-    if (config.status?.killSwitch) return "SOUVERAINETÉ_RÉVOQUÉE";
-    if (config.status?.maintenanceMode) return "STABILISATION_SYSTÈME";
-    if (config.status?.licenceStatus === 'LOCKED') return "LICENCE_EXPIREE";
+    if (config?.status?.killSwitch) return "SOUVERAINETÉ_RÉVOQUÉE";
+    if (config?.status?.maintenanceMode) return "STABILISATION_SYSTÈME";
+    if (config?.status?.licenceStatus === 'LOCKED') return "LICENCE_EXPIREE";
     return "ACCÈS_RESTREINT";
   };
 
   const getLockDescription = () => {
-    if (config.status?.killSwitch) return "L'accès à cette instance a été révoqué par l'Orchestrateur Central (MCC) pour des raisons de conformité ou de sécurité.";
-    if (config.status?.maintenanceMode) return "Le système est actuellement en cours de maintenance préventive. Toutes les opérations locales sont suspendues.";
+    if (config?.status?.killSwitch) return "L'accès à cette instance a été révoqué par l'Orchestrateur Central (MCC) pour des raisons de conformité ou de sécurité.";
+    if (config?.status?.maintenanceMode) return "Le système est actuellement en cours de maintenance préventive. Toutes les opérations locales sont suspendues.";
     return "Votre licence d'utilisation a expiré. Veuillez contacter le support technique pour réactiver vos services.";
   };
   
@@ -39,7 +39,7 @@ export function SovereignLockout() {
         <div className="relative inline-flex items-center justify-center">
           <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse" />
           <div className="relative p-6 bg-primary/10 border border-primary/20 rounded-full">
-            {config.status?.maintenanceMode ? (
+            {config?.status?.maintenanceMode ? (
               <Construction className="w-12 h-12 text-primary animate-bounce" />
             ) : (
               <Lock className="w-12 h-12 text-primary" />
@@ -50,10 +50,10 @@ export function SovereignLockout() {
         {/* Message Content */}
         <div className="space-y-3">
           <h1 className="text-3xl font-serif font-bold text-white tracking-tight">
-            ACCÈS RÉSERVÉ : {config.status?.maintenanceMode ? 'MAINTENANCE' : 'SUSPENSION'}
+            ACCÈS RÉSERVÉ : {config?.status?.maintenanceMode ? 'MAINTENANCE' : 'SUSPENSION'}
           </h1>
           <p className="text-neutral-400 text-lg leading-relaxed">
-            {config.status?.maintenanceMode
+            {config?.status?.maintenanceMode
               ? "Le Suzerain (MCC) effectue une mise à jour critique de votre infrastructure. Le système redeviendra opérationnel sous peu."
               : "L'accès à cette instance a été suspendu pour des raisons administratives. Veuillez contacter le support technique."}
           </p>
@@ -69,7 +69,7 @@ export function SovereignLockout() {
 
         {/* Meta details */}
         <div className="text-[10px] font-mono text-neutral-600 tracking-widest uppercase">
-          Signal ID: {config.status?.lastSignalId || 'LOCAL_OVERRIDE'} | NODE: {process.env.NEXT_PUBLIC_TENANT_ID}
+          Signal ID: {config?.status?.lastSignalId || 'LOCAL_OVERRIDE'} | NODE: {process.env.NEXT_PUBLIC_TENANT_ID}
         </div>
       </div>
     </div>

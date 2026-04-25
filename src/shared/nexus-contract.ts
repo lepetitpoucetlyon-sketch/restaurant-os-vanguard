@@ -13,8 +13,11 @@ export interface BusinessLaws {
 
 export type SovereignPrimitive = string | number | boolean | null | undefined | Date;
 export type SovereignValue = SovereignPrimitive;
-export type SovereignData<T = Record<string, SovereignField>> = T;
-export type SovereignField = SovereignValue | SovereignData | SovereignField[];
+export interface SovereignMap {
+  [key: string]: SovereignField;
+}
+export type SovereignData<T = SovereignMap> = T;
+export type SovereignField = SovereignValue | SovereignMap | SovereignField[];
 
 export interface SovereignSchemaField {
   id: string;
@@ -136,6 +139,7 @@ export interface TenantConfig {
   metadata?: {
     name: string;
     version: string;
+    description?: string;
     ownerId?: string;
     createdAt?: string;
     subscriptionTier?: string;

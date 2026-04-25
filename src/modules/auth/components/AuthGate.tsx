@@ -4,8 +4,6 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/ui.foundations";
 import { useAuth } from "@/context/AuthContext";
 import { PinLogin } from "./PinLogin";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
 import { useUI } from "@/context/UIContext";
 import { useTenant } from "@/context/TenantContext";
 import { motion, AnimatePresence } from "framer-motion";
@@ -75,12 +73,6 @@ export function AuthGate({ children }: AuthGateProps) {
 
     return (
         <div className="flex min-h-screen bg-bg-primary transition-colors duration-500 overflow-x-hidden">
-            {!isFullWidth && (
-                <div>
-                    <Sidebar />
-                </div>
-            )}
-
             <AnimatePresence>
                 {!isFullWidth && isMobileMenuOpen && (
                     <motion.div
@@ -94,12 +86,8 @@ export function AuthGate({ children }: AuthGateProps) {
             </AnimatePresence>
 
             <div className={cn(
-                "flex-1 flex flex-col min-h-screen transition-all duration-500 min-w-0",
-                !isMccFullWidth && "ml-0 lg:ml-[260px]",
-                !isMccFullWidth && isSidebarCollapsed && "lg:ml-[80px]",
-                isMccFullWidth && "ml-0"
+                "flex-1 flex flex-col min-h-screen transition-all duration-500 min-w-0"
             )}>
-                {!isFullWidth && <Header />}
                 <main className={cn(
                     "flex-1 overflow-y-auto",
                     !isFullWidth ? "p-4 pb-32 md:p-8" : "p-0"

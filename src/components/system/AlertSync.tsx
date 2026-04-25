@@ -19,6 +19,7 @@ export function AlertSync() {
 
     // Inventory Alerts
     useEffect(() => {
+        if (!lowStockItems) return;
         const newLowStockItems = lowStockItems.filter(item => {
             const notifiedKey = `inventory-${item.id}`;
             if (notifiedItems.current.has(notifiedKey)) return false;
@@ -46,6 +47,7 @@ export function AlertSync() {
 
     // HACCP Alerts Optimized
     useEffect(() => {
+        if (!criticalAlerts) return;
         // Create a set of existing unread notifications for fast lookup
         const existingAlertKeys = new Set(
             notifications

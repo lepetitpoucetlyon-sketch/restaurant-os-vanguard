@@ -83,11 +83,30 @@ if (!fs.existsSync(TOOL_DIR)) {
 }
 
 let graphifyBinary = '';
+let userBinDir = '';
+
+const pyProbes = ['python3', 'python', '/usr/local/bin/python3', '/opt/homebrew/bin/python3'];
+for (const py of pyProbes) {
+  const resolvedPy = resolveCommand(py);
+  if (resolvedPy) {
+    try {
+      const userBase = execFileSync(resolvedPy, ['-m', 'site', '--user-base'], { encoding: 'utf8' }).trim();
+      if (userBase) {
+        userBinDir = path.join(userBase, 'bin');
+        break;
+      }
+    } catch {
+      continue;
+    }
+  }
+}
+
 const commonPaths = [
   '/usr/local/bin/graphify',
   '/opt/homebrew/bin/graphify',
-  path.join(process.env.HOME || '', 'Library/Python/3.11/bin/graphify')
-];
+  userBinDir ? path.join(userBinDir, 'graphify') : null
+].filter(Boolean);
+
 
 try {
   graphifyBinary = execFileSync('which', ['graphify'], { encoding: 'utf8' }).trim();

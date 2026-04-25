@@ -10,7 +10,7 @@ export { tenantConfigAtom } from '@/store/masterAtoms';
 
 
 export const tenantIdAtom = atom<string>(
-    typeof window !== 'undefined' ? (localStorage.getItem('nexus_tenant_id') || 'restaurant-os') : 'restaurant-os'
+    typeof window !== 'undefined' ? (localStorage.getItem('nexus_tenant_id') || 'lepetitpoucet') : 'lepetitpoucet'
 );
 
 export const fleetSnapshotAtom = atom<EmpireInstance[]>([]);

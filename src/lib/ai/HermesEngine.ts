@@ -78,7 +78,7 @@ export class HermesEngine {
                         domain: 'haccp',
                         severity: 'critical',
                         message: `Critical temperature reached: ${reading.value}${reading.unit} for ${reading.name}`,
-                        detectedAt: reading.timestamp as string | Date
+                        detectedAt: reading.lastUpdated instanceof Date ? reading.lastUpdated.toISOString() : String(reading.lastUpdated)
                     });
 
                     // Auto-Trigger Bridge: Themis Agent Intervention
@@ -122,7 +122,7 @@ export class HermesEngine {
         logger.info(`✅ [HERMES] Pulse cycle completed in ${duration}ms. ${anomalies.length} issues found.`);
 
         return {
-            timestamp: this.manifest.lastPulse,
+            timestamp: this.manifest.lastPulse as string,
             anomalies,
             actionsTaken,
             insights: [] // To be populated by AgentEngine query if needed

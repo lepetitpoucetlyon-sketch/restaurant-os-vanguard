@@ -1,4 +1,4 @@
-import { CartItem } from "@/modules/ops/hooks/usePOSController";
+import { CartItem } from "@/types";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Category, Product } from "@/types";
 import { SharedKernel } from "@/lib/shared-kernel";

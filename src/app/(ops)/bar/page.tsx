@@ -39,7 +39,7 @@ export default function BarPage() {
     // Data State
     const [orders, setOrders] = useState<BarOrder[]>(BAR_ORDERS.map(o => ({ 
       ...o, 
-      status: (o.items[0]?.status === 'done' ? 'ready' : (o.items[0]?.status === 'preparing' ? 'preparing' : 'new')) as any
+      status: (o.items?.[0]?.status === 'done' ? 'ready' : (o.items?.[0]?.status === 'preparing' ? 'preparing' : 'new')) as any
     })) as BarOrder[]);
     
     // Selection State

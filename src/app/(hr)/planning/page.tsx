@@ -191,7 +191,7 @@ export default function PlanningPage() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="w-14 h-14 rounded-2xl bg-bg-tertiary overflow-hidden border border-border">
-                                                {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl font-serif italic">{user.name[0]}</div>}
+                                                {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl font-serif italic">{user.name?.[0] || '?'}</div>}
                                             </div>
                                             <div>
                                                 <h4 className="text-xl font-serif font-black italic text-text-primary">{user.name}</h4>

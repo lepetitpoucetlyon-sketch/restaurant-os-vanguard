@@ -84,17 +84,17 @@ export interface NexusSettingsState {
     isSaving: boolean;
     lastSaved: Date | null;
     updateSettings: (newSettings: GlobalSettings) => Promise<void>;
-    updateConfig: (key: string, data: Partial<GlobalSettings>) => Promise<void>;
-    updateIdentity?: (data: Partial<GlobalSettings['identity']>) => Promise<void>;
-    updateGoals?: (data: Partial<GlobalSettings['goals']>) => Promise<void>;
-    updateSchedule?: (data: Partial<GlobalSettings['schedule']>) => Promise<void>;
-    updateService?: (data: Partial<GlobalSettings['service']>) => Promise<void>;
+    updateConfig: (key: keyof GlobalSettings, data: any) => Promise<void>;
+    updateList: (key: keyof GlobalSettings, data: any) => Promise<void>;
+    updateIdentity?: (data: any) => Promise<void>;
+    updateGoals?: (data: any) => Promise<void>;
+    updateSchedule?: (data: any) => Promise<void>;
+    updateService?: (data: any) => Promise<void>;
     addClosedPeriod?: (data: { start: string; end: string; reason: string }) => Promise<void>;
     deleteClosedPeriod?: (id: string) => Promise<void>;
-    updateReservationConfig?: (data: { [key: string]: boolean | number | string }) => Promise<void>;
-    updateReservationSlots?: (data: { [key: string]: string[] }) => Promise<void>;
-    updateSLM?: (data: { model: string; temperature: number }) => Promise<void>;
-    updateList: (key: string, data: SovereignData[]) => Promise<void>;
+    updateReservationConfig?: (data: any) => Promise<void>;
+    updateReservationSlots?: (data: any) => Promise<void>;
+    updateSLM?: (data: any) => Promise<void>;
 }
 
 

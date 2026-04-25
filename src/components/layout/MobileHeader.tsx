@@ -15,14 +15,14 @@ export function MobileHeader() {
     const { currentUser } = useAuth();
     const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
 
-    const getTitle = (path: string) => {
-        const segment = (path.split("/").filter(Boolean)[0] || "Dashboard").trim();
+    const getTitle = (path: string | null) => {
+        const segment = ((path || "").split("/").filter(Boolean)[0] || "Dashboard").trim();
         return (segment.charAt(0) || '').toUpperCase() + segment.slice(1).replace("-", " ");
     };
 
     // Map pathname to PageKey
-    const getPageKeyFromPath = (path: string): PageKey | 'dashboard' => {
-        const segment = path.split('/').filter(Boolean)[0] || 'dashboard';
+    const getPageKeyFromPath = (path: string | null): PageKey | 'dashboard' => {
+        const segment = (path || "").split('/').filter(Boolean)[0] || 'dashboard';
         const pathToPageKey: Record<string, PageKey> = {
             '': 'dashboard',
             'dashboard': 'dashboard',

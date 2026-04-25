@@ -93,8 +93,7 @@ export const GlobalRegistryService = {
 
         registry.forEach((entry, id) => {
             const isIdle = entry.usageCount === 0;
-            const serverDate = (entry.lastAccessed as any) instanceof Date ? entry.lastAccessed : new Date(entry.lastAccessed);
-            const isExpired = (now - ((serverDate as any) instanceof Date ? serverDate.getTime() : new Date(serverDate).getTime())) > ttlMax;
+            const isExpired = (now - entry.lastAccessed) > ttlMax;
 
             if (isIdle && isExpired) {
                 logger.info(`[Registry] Purging idle atom: ${id}`);

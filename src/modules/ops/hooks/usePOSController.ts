@@ -6,21 +6,8 @@ import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import { processPaymentAction } from '@/app/(admin)/actions/transactions';
 
 import { useToast } from "@/components/ui/Toast";
-import { Table, Category, Product } from "@/types";
+import { Table, Category, Product, CartItem } from "@/types";
 import { POSService } from "@/lib/pos-service";
-import { BlockchainLedger } from "@/lib/blockchain-ledger";
-
-
-export interface CartItem {
-    cartId: string;
-    productId: string;
-    categoryId: string;
-    name: string;
-    priceInCents: number;
-    quantity: number;
-    modifiers?: string[];
-    notes?: string;
-}
 
 export function usePOSController() {
     const { currentUser } = useAuth();

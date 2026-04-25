@@ -75,7 +75,7 @@ export default function KDSPage() {
 
     // Filtering & Sorting Logic
     const filteredOrders = useMemo(() => {
-        const activeOrders = (orders as any[]).filter(o => o.status !== 'delivered');
+        const activeOrders = (orders as any[]).filter(o => o?.status !== 'delivered');
         let result = activeOrders;
 
         if (activeStation !== 'all') {
@@ -95,15 +95,15 @@ export default function KDSPage() {
         }
 
         return result.sort((a, b) => {
-            const isAReady = a.status === 'ready';
-            const isBReady = b.status === 'ready';
+            const isAReady = a?.status === 'ready';
+            const isBReady = b?.status === 'ready';
             if (isAReady && !isBReady) return 1;
             if (!isAReady && isBReady) return -1;
             return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
         });
     }, [orders, activeStation, searchQuery]) as any[];
 
-    const preparingOrdersCount = orders.filter(o => o.status === 'preparing' || o.status === 'new').length;
+    const preparingOrdersCount = orders.filter(o => o?.status === 'preparing' || o?.status === 'new').length;
     const pendingModificationsCount = getPendingModifications().length;
 
     return (
