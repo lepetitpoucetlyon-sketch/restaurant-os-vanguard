@@ -19,7 +19,7 @@ export const toastsAtom = atom<ToastItem[]>([]);
 export const addToastAtom = atom(
     null,
     (get, set, toast: Omit<ToastItem, 'id'>) => {
-        const id = Math.random().toString(36).substring(2, 9);
+        const id = `toast_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         const newItem = { ...toast, id };
         set(toastsAtom, (prev) => [...prev, newItem]);
         

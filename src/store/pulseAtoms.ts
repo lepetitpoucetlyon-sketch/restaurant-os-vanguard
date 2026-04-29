@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom, WritableAtom } from 'jotai';
 import { SovereignData } from '@/shared/nexus-contract';
 
 export interface NexusPulse {
@@ -13,7 +13,7 @@ export interface NexusPulse {
  * 🛰️ nexusPulseAtom
  * Shared event stream for cross-domain communication.
  */
-export const nexusPulseAtom = atom<NexusPulse | null>(null);
+export const nexusPulseAtom = atom<NexusPulse | null>(null) as unknown as WritableAtom<NexusPulse | null, [NexusPulse | null], void>;
 
 /**
  * 📢 emitPulseAtom (Write-only)
@@ -27,7 +27,7 @@ export const emitPulseAtom = atom(
             id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `pulse_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             timestamp: new Date().toISOString()
         };
-        set(nexusPulseAtom as any, pulse);
+        set(nexusPulseAtom, pulse);
         // On pourrait ici ajouter une persistance en base si besoin d'audit
     }
 );

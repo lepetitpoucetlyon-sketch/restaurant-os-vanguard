@@ -27,8 +27,8 @@ export const HRSyncService = {
     // 0. STAFF MEMBERS (USERS)
     this.private_listeners.staff = Nexus.adapter.onSnapshot(
       path('users'),
-      (data: any) => {
-        store.set(staffMembersNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+      (data: import('@/types').User[]) => {
+        store.set(staffMembersNodeAtom, (prev) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }));
       },
       {
         onError: (error: Error) => {
@@ -40,8 +40,8 @@ export const HRSyncService = {
     // 1. SHIFT ENTRIES (CLOCK-IN/OUT)
     this.private_listeners.hr = Nexus.adapter.onSnapshot(
       path('shiftEntries'),
-      (data: any) => {
-        store.set(shiftLogsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+      (data: import('@/types').ShiftLog[]) => {
+        store.set(shiftLogsNodeAtom, (prev) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }));
       },
       {
         orderBy: { field: 'timestamp', direction: 'desc' },
@@ -55,8 +55,8 @@ export const HRSyncService = {
     // 2. PLANNED SHIFTS
     this.private_listeners.planned_shifts = Nexus.adapter.onSnapshot(
       path('shifts'),
-      (data: any) => {
-        store.set(shiftsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+      (data: import('@/types').Shift[]) => {
+        store.set(shiftsNodeAtom, (prev) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }));
       },
       {
         onError: (error: Error) => {
@@ -68,8 +68,8 @@ export const HRSyncService = {
     // 3. LEAVES SYNC
     this.private_listeners.leaves = Nexus.adapter.onSnapshot(
       path('leaveRequests'),
-      (data: any) => {
-        store.set(leaveRequestsNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+      (data: import('@/types').LeaveRequest[]) => {
+        store.set(leaveRequestsNodeAtom, (prev) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }));
       },
       {
         onError: (error: Error) => {
@@ -80,8 +80,8 @@ export const HRSyncService = {
 
     this.private_listeners.balances = Nexus.adapter.onSnapshot(
       path('leaveBalances'),
-      (data: any) => {
-        store.set(leaveBalancesNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }) as any);
+      (data: import('@/types').LeaveBalance[]) => {
+        store.set(leaveBalancesNodeAtom, (prev) => updateNexusNode(prev, { data: Array.isArray(data) ? data : [], loading: false }));
       },
       {
         onError: (error: Error) => {

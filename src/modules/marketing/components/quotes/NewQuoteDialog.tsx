@@ -156,7 +156,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     };
 
     const filteredProducts = (inventoryProducts || []).filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+        String(p.name || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
 
@@ -462,8 +462,8 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                         className="w-full p-6 bg-bg-primary border border-border rounded-[28px] hover:border-accent-gold group transition-all text-left flex items-center justify-between shadow-sm"
                                     >
                                         <div>
-                                            <p className="text-sm font-black text-text-primary group-hover:text-accent-gold transition-colors">{product.name}</p>
-                                            <p className="text-[10px] text-text-muted font-medium mt-1">{(product.priceInCents / 100).toFixed(2)}€ HT</p>
+                                            <p className="text-sm font-black text-text-primary group-hover:text-accent-gold transition-colors">{String(product.name || '')}</p>
+                                            <p className="text-[10px] text-text-muted font-medium mt-1">{(Number(product.priceInCents || 0) / 100).toFixed(2)}€ HT</p>
                                         </div>
                                         <div className="w-10 h-10 rounded-full bg-bg-tertiary border border-border flex items-center justify-center text-text-muted group-hover:bg-accent-gold group-hover:text-white transition-all">
                                             <Plus className="w-4 h-4" />

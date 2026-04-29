@@ -4,20 +4,20 @@
  */
 
 export interface BusinessLaws {
-  table_count: number;
-  tax_rate: number;
+  node_capacity: number;
+  fiscal_coefficient: number;
   currency: string;
   pmsEnabled: boolean;
   [key: string]: string | number | boolean | undefined;
 }
 
-export type SovereignPrimitive = string | number | boolean | null | undefined | Date;
-export type SovereignValue = SovereignPrimitive;
+export type SovereignPrimitive = string | number | boolean | null | undefined;
+export type SovereignField = SovereignPrimitive | SovereignMap | SovereignField[];
+export type SovereignValue = SovereignField;
 export interface SovereignMap {
   [key: string]: SovereignField;
 }
 export type SovereignData<T = SovereignMap> = T;
-export type SovereignField = SovereignValue | SovereignMap | SovereignField[];
 
 export interface SovereignSchemaField {
   id: string;
@@ -81,7 +81,7 @@ export interface OrchestratorSignal {
 export interface TelemetryPulse {
   version: string;
   status: 'ACTIVE' | 'MAINTENANCE' | 'CRITICAL';
-  lastPulse: string | number | Date | { seconds: number; nanoseconds: number } | any; // 'any' for Firestore FieldValue
+  lastPulse: string | number | Date | { seconds: number; nanoseconds: number };
   health: {
     uptime: number;
     battery: {
@@ -148,6 +148,49 @@ export interface TenantConfig {
   firebase?: TenantFirebaseConfig;
 }
 
+/**
+ * 🏛️ SovereignNode - Universal Entity Contract
+ * Any business object MUST implement this to be handled by the Core.
+ */
+export interface SovereignNode {
+  id: string;
+  updatedAt: string;
+  createdAt?: string;
+  [key: string]: SovereignField;
+}
+
+/**
+ * 🏛️ OperationalIdentity - Abstract Identifiers
+ */
+export enum OperationalIdentity {
+  NODES = 'STX_ALPHA',
+  ALLOCATIONS = 'STX_BETA',
+  FLOWS = 'STX_GAMMA',
+  RESOURCES = 'STX_DELTA',
+  PROTOCOLS = 'STX_EPSILON',
+  COMPLIANCE = 'STX_ZETA',
+  RELATIONS = 'STX_ETA',
+  STRUCTURES = 'STX_THETA',
+  ZONES = 'STX_IOTA'
+}
+
+/**
+ * 🏛️ DomainRegistry - Mapping Injection Guard
+ */
+export class DomainRegistry {
+    private static mapping: Record<string, string> = {};
+
+    static inject(domainMapping: Record<OperationalIdentity, string>) {
+        DomainRegistry.mapping = domainMapping;
+    }
+
+    static resolve(identity: OperationalIdentity): string {
+        const resolved = DomainRegistry.mapping[identity];
+        if (!resolved) throw new Error(`UNRESOLVED_IDENTITY: Core attempted to access ${identity} without domain mapping.`);
+        return resolved;
+    }
+}
+
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
   capabilities: {},
   theme: {
@@ -170,8 +213,8 @@ export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
       discountMultiplier: 1
     },
     businessLaws: {
-      table_count: 0,
-      tax_rate: 0.1,
+      node_capacity: 0,
+      fiscal_coefficient: 0.1,
       currency: 'EUR',
       pmsEnabled: false
     },

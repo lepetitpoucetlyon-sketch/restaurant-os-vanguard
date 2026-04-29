@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, ShieldCheck, Zap, Globe, Palette, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
-import { ProvisioningDNA } from '@/domain/types/empire';
+import { ProvisioningDNA, EmpireInstance } from '@/domain/types/empire';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/ui.foundations';
 
 interface ProvisioningWizardProps {
     onClose: () => void;
-    onSuccess: (newInstance: import('@/shared/nexus-contract').SovereignData) => void;
+    onSuccess: (newInstance: EmpireInstance) => void;
 }
 
 
@@ -42,7 +42,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
         setStep('deploying');
         try {
             const newInstance = await ProvisioningEngine.provisionNewInstance(formData);
-            onSuccess(newInstance as any);
+            onSuccess(newInstance);
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Unknown Deployment Error';
             setError(message);

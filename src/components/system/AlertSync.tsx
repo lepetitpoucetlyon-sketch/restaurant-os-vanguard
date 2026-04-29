@@ -25,7 +25,7 @@ export function AlertSync() {
             if (notifiedItems.current.has(notifiedKey)) return false;
 
             const alreadyHasNotification = notifications.some(n =>
-                n.module === 'inventory' && n.message.includes(item.ingredientName) && !n.read
+                n.module === 'inventory' && n.message.includes(String(item.ingredientName || '')) && !n.read
             );
 
             return !alreadyHasNotification;
@@ -37,7 +37,7 @@ export function AlertSync() {
             addNotification({
                 type: 'warning',
                 title: 'Stock Bas',
-                message: `${item.ingredientName}: Seuil critique atteint (quantité: ${item.quantity} ${item.unit})`,
+                message: `${String(item.ingredientName || '')}: Seuil critique atteint (quantité: ${item.quantity} ${item.unit})`,
                 module: 'inventory',
                 action: { label: 'Voir Inventaire', href: '/inventory' }
             });

@@ -24,9 +24,14 @@ export interface MarketingCampaign {
     budgetInCents: number;
     spentInCents: number;
     targetSegment: string;
+    audience?: string;
+    audienceSize?: number;
     subject?: string;
     startsAt: string;
     endsAt: string;
+    sent?: number;
+    opened?: number;
+    clicked?: number;
     metrics?: {
         sent: number;
         opened: number;
@@ -59,7 +64,14 @@ export interface ReputationSummary {
 export interface SocialAccount {
     id: string;
     platform: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'tiktok' | 'google';
+    handle: string;
     username: string;
+    followers: number;
+    posts: number;
+    engagement: number;
+    trend: string;
+    gradient: string;
+    icon?: any;
     connectedAt: string;
     accessToken?: string;
     refreshToken?: string;

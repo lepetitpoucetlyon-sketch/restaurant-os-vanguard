@@ -1,5 +1,11 @@
 import { getDefaultStore } from 'jotai';
-import { ordersNodeAtom, stockItemsNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
+import { 
+    ordersNodeAtom, 
+    stockItemsNodeAtom, 
+    journalEntriesNodeAtom,
+    updateNexusNode 
+} from '@/store/operationalAtoms';
+import { qualityActiveControlAtom } from '@/modules/haccp/store/qualityAtoms';
 import { logger } from '@/lib/logger';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -10,6 +16,7 @@ import { NexusNode } from '@/store/base';
 /**
  * 🐵 ChaosMonkey - Restaurant OS (Darwin V5.5 Master Code)
  * Chaos-V5-Adversarial: Sandboxed stress agent for resilience training.
+ * Enforces Grade X Sovereignty by attacking it.
  */
 export const ChaosMonkey = {
   
@@ -17,7 +24,6 @@ export const ChaosMonkey = {
 
   /**
    * Starts the chaos agent within a specific sandbox.
-   * ADVERSARIAL: Targets atoms with the highest update frequency.
    */
   start(intensity: number = 0.5) {
     if (this.activeInterval) return;
@@ -36,43 +42,134 @@ export const ChaosMonkey = {
   },
 
   /**
+   * 🐒 NETWORK CHAOS: Simulates latency and drops on Nexus persistence.
+   */
+  async simulateNetworkInstability() {
+    const originalQuery = Nexus.adapter.query;
+    logger.warn("[Chaos-Monkey] Injecting NETWORK_INSTABILITY (Latency: 500-3000ms)");
+    
+    Nexus.adapter.query = async (...args) => {
+        const delay = Math.floor(Math.random() * 2500) + 500;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        
+        // 5% chance of absolute drop
+        if (Math.random() < 0.05) {
+            throw new Error("NETWORK_DROP: Connection timed out in mid-seal.");
+        }
+        
+        return originalQuery.apply(Nexus.adapter, args);
+    };
+  },
+
+  /**
+   * 💉 TOXICITY INJECTION: Mathematical Corruptions
+   */
+  injectMathematicalToxicity() {
+    logger.warn("[Chaos-Monkey] Injecting MATHEMATICAL_TOXICITY (Float Regression & DAG Cycles)");
+    
+    // 1. Attempt Float Injection via Mock PhysicalNode
+    try {
+        const corruptedValue = 10.5523; // Floats are prohibited
+        const { SovereignMath } = require('@/shared/services/SovereignMath');
+        SovereignMath.toMicrounits(corruptedValue); 
+    } catch (e) {
+        logger.info("[Chaos-Monkey] Float Injection BLOCKED by SovereignMath.");
+    }
+
+    // 2. Attempt DAG Cycle Injection
+    try {
+        const { CycleGuard } = require('@/shared/services/CycleGuard');
+        CycleGuard.validateRecipe("CHAOS_RECIPE", ["CHAOS_RECIPE"]); // Self-referencing cycle
+    } catch (e) {
+        logger.info("[Chaos-Monkey] DAG Cycle Injection BLOCKED by CycleGuard.");
+    }
+  },
+
+  /**
+   * 🧟 ZOMBIE RUSH: Concurrency Stress
+   */
+  async simulateZombieRush() {
+    logger.warn("[Chaos-Monkey] Starting ZOMBIE_RUSH (50 simultaneous sales on stock: 10)");
+    const store = getDefaultStore();
+    
+    const attempts = Array.from({ length: 50 });
+    const results = await Promise.allSettled(attempts.map(async (_, i) => {
+        // Simulate a stock decrement attempt
+        const currentStock = store.get(stockItemsNodeAtom).data?.[0]?.quantity || 0;
+        if (currentStock <= 0) throw new Error("OUT_OF_STOCK");
+        
+        // Optimistic decrement
+        store.set(stockItemsNodeAtom, (prev: any) => ({
+            ...prev,
+            data: prev.data.map((item: any, idx: number) => idx === 0 ? { ...item, quantity: item.quantity - 1 } : item)
+        }));
+
+        // Simulate DB Latency and potential reject
+        if (i >= 10) {
+            throw new Error("DB_REJECT: Negative stock constraint violated.");
+        }
+    }));
+
+    const rejects = results.filter(r => r.status === 'rejected').length;
+    logger.info(`[Chaos-Monkey] Rush Completed. Rejects: ${rejects}/50. Triggering Slayer Recovery.`);
+    
+    // Trigger Slayer explicitly for the crash test
+    const { ResilienceSlayer } = require('@/domain/services/ResilienceSlayer');
+    ResilienceSlayer.handleTransactionFailure('operational/stock', new Error("CONCURRENCY_VIOLATION"));
+  },
+
+  /**
    * Inject a bit-flip or data-drift in the state heap.
    */
   executeRandomDrift() {
     const store = getDefaultStore();
-    const targets: Array<{ atom: any; path: string }> = [
-      { atom: ordersNodeAtom as any, path: 'operational/orders' },
-      { atom: stockItemsNodeAtom as any, path: 'operational/stock' }
-    ];
+    const targets = [
+      { atom: ordersNodeAtom, path: 'operational/orders', type: 'node' },
+      { atom: stockItemsNodeAtom, path: 'operational/stock', type: 'node' },
+      { atom: journalEntriesNodeAtom, path: 'finance/ledger', type: 'node' },
+      { atom: qualityActiveControlAtom, path: 'haccp/active_session', type: 'direct' }
+    ] as const;
     
     const choice = targets[Math.floor(Math.random() * targets.length)];
-    const node = store.get(choice.atom) as any;
-
-    if (!node || !node.data || node.data.length === 0) return;
-
-    // 🏆 PRE-CORRUPTION: Calculate valid hash for the audit
-    const validHash = SelfHealingEngine.calculateCRC(node.data);
-
-    // 💉 CORRUPTION: We slightly modify a value without triggering a standard sync
-    const corruptedData = JSON.parse(JSON.stringify(node.data));
-    const index = Math.floor(Math.random() * corruptedData.length);
     
-    // Simulate a drift (Example: random currency modification)
-    if (corruptedData[index].totalInCents !== undefined) {
-        corruptedData[index].totalInCents += 1;
-    } else {
-        corruptedData[index].quantity = (corruptedData[index].quantity || 0) + 1;
+    if (choice.type === 'node') {
+        const node = store.get(choice.atom as any) as NexusNode<any>;
+        const nodeData = node.data || [];
+        if (nodeData.length === 0) return;
+
+        const validHash = SelfHealingEngine.calculateCRC(nodeData);
+        const corruptedData = JSON.parse(JSON.stringify(nodeData));
+        const index = Math.floor(Math.random() * corruptedData.length);
+        const targetItem = corruptedData[index];
+
+        // 💉 DRIFT INJECTION
+        if ('totalInCents' in targetItem) {
+            targetItem.totalInCents += 100; // Drift on price
+        } else if ('quantity' in targetItem) {
+            targetItem.quantity = (targetItem.quantity || 0) + 1;
+        } else if ('amountInCents' in targetItem) {
+            targetItem.amountInCents -= 50; // Drift on ledger
+        }
+
+        logger.debug(`[Chaos-Monkey] NODE_DRIFT_INJECTED: ${choice.path}`);
+        
+        // Use functional update to bypass read-only issues
+        store.set(choice.atom as any, (prev: any) => updateNexusNode(prev, { data: corruptedData }));
+
+        // 🛡️ RECOVERY TRIGGER
+        const persistencePath = Nexus.getTenantPath(choice.path);
+        setTimeout(() => {
+            // @ts-ignore - SelfHealingEngine needs a generic WritableAtom which matches the signature
+            SelfHealingEngine.auditAndHeal(choice.atom as any, validHash, persistencePath);
+        }, 1500);
+
+    } else if (choice.type === 'direct' && choice.path === 'haccp/active_session') {
+        const session = store.get(qualityActiveControlAtom);
+        if (!session) return;
+
+        logger.debug(`[Chaos-Monkey] SESSION_NULL_FLIP: ${choice.path}`);
+        // Simulate a crash/wipe of active session
+        store.set(qualityActiveControlAtom, null);
     }
-
-    logger.debug(`[Chaos-Monkey] DRIFT_INJECTED into ${choice.path}`);
-    
-    // Silent write (Bypass validation)
-    store.set(choice.atom, (prev: NexusNode<unknown>) => updateNexusNode(prev, { data: corruptedData }));
-
-    // 🍵 VERIFICATION: Trigger self-healing audit
-    const persistencePath = Nexus.getTenantPath(choice.path);
-    setTimeout(() => {
-        SelfHealingEngine.auditAndHeal(choice.atom, validHash, persistencePath);
-    }, 1000);
   }
 };

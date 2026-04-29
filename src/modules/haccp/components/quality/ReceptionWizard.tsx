@@ -71,7 +71,7 @@ export function ReceptionWizard() {
     setSession({
       ...session,
       delivery_conditions: { ...session.delivery_conditions, ...updates }
-    } as QualityControl);
+    } as any);
   };
 
   return (

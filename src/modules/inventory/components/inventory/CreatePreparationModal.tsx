@@ -76,9 +76,9 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
 
         setUsedIngredients([...usedIngredients, {
             stockItemId: stock.id,
-            ingredientName: stock.ingredientName,
+            ingredientName: stock.ingredientName as string,
             quantityUsed: parseFloat(ingredientQty),
-            unit: stock.unit
+            unit: stock.unit as IngredientUnit
         }]);
         setSelectedStockItem('');
         setIngredientQty('');
@@ -105,7 +105,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
         const totalCostInCents = usedIngredients.reduce((acc, used) => {
             const stock = stockItems.find(s => s.id === used.stockItemId);
             if (stock && stock.unitCostInCents) {
-                return acc + Math.round(used.quantityUsed * stock.unitCostInCents);
+                return acc + Math.round(used.quantityUsed * (Number(stock.unitCostInCents) || 0));
             }
             return acc;
         }, 0);
@@ -141,7 +141,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
     };
 
     const activeLocations = storageLocations.length > 0 ? storageLocations : DEFAULT_STORAGE_LOCATIONS;
-    const availableStock = stockItems.filter(s => s.status === 'available' && s.quantity > 0);
+    const availableStock = stockItems.filter(s => s.status === 'available' && (Number(s.quantity) || 0) > 0);
 
     return (
         <Modal
@@ -271,7 +271,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                         onChange={setStorageLocation}
                                         options={activeLocations.filter(l => l.isActive).map(loc => ({
                                             value: loc.id,
-                                            label: loc.name?.toUpperCase() || ''
+                                            label: String(loc.name || '').toUpperCase()
                                         }))}
                                     />
                                 </div>
@@ -306,8 +306,8 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                             onChange={setSelectedStockItem}
                                             options={availableStock.map(s => ({
                                                 value: s.id,
-                                                label: s.ingredientName?.toUpperCase() || '',
-                                                description: `${s.quantity} ${s.unit?.toUpperCase() || ''} EN ARCHIVE`
+                                                label: String(s.ingredientName || '').toUpperCase(),
+                                                description: `${s.quantity} ${String(s.unit || '').toUpperCase()} EN ARCHIVE`
                                             }))}
                                         />
                                     </div>
@@ -346,7 +346,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                                         <span className="text-[12px] font-black text-text-primary uppercase tracking-widest">{ing.ingredientName}</span>
                                                     </div>
                                                     <div className="flex items-center gap-8">
-                                                        <span className="text-[14px] font-serif italic font-black text-accent-gold">{ing.quantityUsed} {ing.unit?.toUpperCase() || ''}</span>
+                                                        <span className="text-[14px] font-serif italic font-black text-accent-gold">{ing.quantityUsed} {ing.unit.toUpperCase()}</span>
                                                         <button
                                                             onClick={() => removeIngredient(idx)}
                                                             className="w-10 h-10 rounded-xl bg-error/5 text-error flex items-center justify-center hover:bg-error hover:text-white transition-all opacity-0 group-hover/inv:opacity-100"

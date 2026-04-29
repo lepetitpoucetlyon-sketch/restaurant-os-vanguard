@@ -17,6 +17,7 @@ function getStableApp() {
 }
 
 export const firebaseApp = getStableApp();
+export const app = firebaseApp; // 🏛️ Nexus Alias Bridge
 
 /**
  * 🛡️ FIRESTORE LOCAL-FIRST ENGINE (NF525 Compliant)

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { 
     Code2, 
@@ -9,7 +11,7 @@ import {
     Cpu as AiIcon
 } from 'lucide-react';
 import { AuditPortalController } from './AuditPortalController';
-import { motion } from 'framer-motion'; // Wait, motion is client-side. I'll need a wrapper or keep it in controller.
+import { motion } from 'framer-motion';
 
 // For RSC, I'll use standard <div> for the non-interactive header parts.
 
@@ -53,7 +55,7 @@ const AUDIT_DATA = [
     // ... Simplified for the example, we keep the structure.
 ];
 
-export default async function AuditPortal() {
+export default function AuditPortal() {
     return (
         <div className="min-h-screen bg-bg-primary text-text-primary px-4 md:px-12 py-20 elegant-scrollbar relative overflow-hidden">
             {/* Background Atmosphere - HTML elements for RSC */}

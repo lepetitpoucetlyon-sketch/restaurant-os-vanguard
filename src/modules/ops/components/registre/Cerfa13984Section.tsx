@@ -20,17 +20,17 @@ export function Cerfa13984Section() {
                         <div>
                             <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Cerfa 13984</h2>
                             <p className="text-[10px] font-black text-purple-500 uppercase tracking-[0.3em] mt-1">Déclaration de manipulation de denrées alimentaires d'origine animale</p>
-                            <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{cerfa.description}</p>
-                            <div className="flex items-center gap-6 mt-4">
-                                <div className="flex items-center gap-2 text-text-muted">
-                                    <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Déclaration : {cerfa.lastUpdated}</span>
+                            <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(cerfa?.description || 'Détails réglementaires en attente de synchronisation.')}</p>
+                                <div className="flex items-center gap-6 mt-4">
+                                    <div className="flex items-center gap-2 text-text-muted">
+                                        <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
+                                        <span className="text-[10px] font-mono font-bold">Déclaration : {String(cerfa?.lastUpdated || 'N/A')}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-text-muted">
+                                        <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
+                                        <span className="text-[10px] font-mono font-bold">Prochaine vérification : {String(cerfa?.nextReview || 'N/A')}</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 text-text-muted">
-                                    <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Prochaine vérification : {cerfa.nextReview}</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div className="flex gap-3">

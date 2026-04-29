@@ -13,7 +13,7 @@ import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
 import { useLanguage } from "@/context/LanguageContext";
 import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/hooks";
-import { POSService } from "@/lib/pos-service";
+import { POSService } from "@/infrastructure/adapters/POSAdapter";
 
 interface CartItem {
     cartId: string;

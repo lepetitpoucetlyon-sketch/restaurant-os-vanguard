@@ -8,10 +8,11 @@ import { cn } from "@/lib/ui.foundations";;
 export function PMRSection() {
     const { pmrDoc, pmrAmenagements } = useRegistre();
 
+    const amenagementsArray = (pmrAmenagements || []);
     const stats = {
-        conforme: pmrAmenagements.filter(a => a.status === 'conforme').length,
-        en_cours: pmrAmenagements.filter(a => a.status === 'en_cours').length,
-        a_faire: pmrAmenagements.filter(a => a.status === 'a_faire').length,
+        conforme: amenagementsArray.filter(a => a.status === 'conforme').length,
+        en_cours: amenagementsArray.filter(a => a.status === 'en_cours').length,
+        a_faire: amenagementsArray.filter(a => a.status === 'a_faire').length,
     };
 
     return (
@@ -26,15 +27,15 @@ export function PMRSection() {
                     <div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Accessibilité PMR</h2>
                         <p className="text-[10px] font-black text-sky-500 uppercase tracking-[0.3em] mt-1">Registre Public d'Accessibilité</p>
-                        <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{pmrDoc.description}</p>
+                        <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(pmrDoc?.description || 'Diagnostic accessibilité PMR en attente de synchronisation.')}</p>
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">MAJ : {pmrDoc.lastUpdated}</span>
+                                <span className="text-[10px] font-mono font-bold">MAJ : {String(pmrDoc?.lastUpdated || 'N/A')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">Révision : {pmrDoc.nextReview}</span>
+                                <span className="text-[10px] font-mono font-bold">Révision : {String(pmrDoc?.nextReview || 'N/A')}</span>
                             </div>
                         </div>
                     </div>
@@ -65,7 +66,7 @@ export function PMRSection() {
                     Diagnostic par Zone
                 </h3>
                 <div className="space-y-4">
-                    {pmrAmenagements.map((am) => (
+                    {amenagementsArray.map((am) => (
                         <div key={am.id} className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-sm flex items-center justify-between hover:shadow-lg transition-all">
                             <div className="flex items-center gap-5">
                                 <div className={cn(
@@ -108,7 +109,7 @@ export function PMRSection() {
                         <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-sky-500 mt-0.5 shrink-0" />
                         <div>
                             <h4 className="font-serif font-bold text-sky-900 dark:text-sky-300 mb-2">Notes</h4>
-                            <p className="text-sm text-sky-800 dark:text-sky-200/80 leading-relaxed">{pmrDoc.notes}</p>
+                            <p className="text-sm text-sky-800 dark:text-sky-200/80 leading-relaxed">{String(pmrDoc?.notes || '')}</p>
                         </div>
                     </div>
                 </div>

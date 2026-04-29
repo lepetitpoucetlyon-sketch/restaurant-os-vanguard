@@ -57,7 +57,7 @@ export const SimulationService = {
      * Simulation d'une journée complète avec calcul financier et burnout.
      */
     async simulateDay(
-        date: Date, 
+        date: string, 
         mode: SimulationMode, 
         profileId: SimulationProfile = 'DEFAULT',
         context: {
@@ -86,7 +86,7 @@ export const SimulationService = {
         metrics.burnoutIndex = Math.min(100, (intensity / 15) * 100);
 
         const orders: Order[] = [];
-        let currentLastSeal = context.lastSeal;
+        const currentLastSeal = context.lastSeal;
 
         for (let i = 0; i < dailyVolume; i++) {
             const isChaos = mode === 'CHAOS' && Math.random() < config.chaosProbability;
@@ -148,7 +148,7 @@ export const SimulationService = {
             };
 
             for (let d = 0; d < days; d++) {
-                const day = await this.simulateDay(new Date(), mode, profileId, { 
+                const day = await this.simulateDay(new Date().toISOString(), mode, profileId, { 
                     ingredients: [], // Placeholder
                     stockItems: []   // Placeholder
                 });

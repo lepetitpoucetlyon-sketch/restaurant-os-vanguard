@@ -1,12 +1,13 @@
 /**
- * 🔐 AUTH & USER DOMAIN - Shared Kernel
+ * 🔐 SOVEREIGN AUTH PROTOCOL
+ * Agnostic to domain implementation.
  */
+export type UserRole = string; // Domain-Specific roles are injected at the Domain layer
 
-export type UserRole = 
-  | 'server' | 'manager' | 'floor_manager' 
-  | 'kitchen_chef' | 'kitchen_line' | 'bartender' 
-  | 'host' | 'cashier' | 'admin' 
-  | 'kds-view' | 'pos-standard' | 'guest-view' | 'kitchen';
+export interface UserPermissions {
+    level: number; // 0 to 10
+    scope: string[]; // e.g. ['FINANCE_READ', 'OPS_WRITE']
+}
 
 export interface User {
     id: string;

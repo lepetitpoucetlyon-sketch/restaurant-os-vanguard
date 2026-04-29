@@ -31,7 +31,7 @@ export class HumanResourcesService {
      */
     static calculateEmployeeStats(shifts: ShiftEntry[], weekStart: Date): ShiftStats {
         let totalHours = 0;
-        let breakTime = 0;
+        const breakTime = 0;
 
         for (let i = 0; i < 7; i++) {
             const dayDate = addDays(weekStart, i);

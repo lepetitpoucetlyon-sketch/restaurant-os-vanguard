@@ -24,10 +24,6 @@ import { Modal } from "@/components/ui/Modal";
 export default function SimulatorPage() {
     const intelligence = useIntelligence();
     const { addNotification } = useNotifications();
-    
-    if (!intelligence) return null;
-    
-    const { scenarios, runSimulation, financialInsight, globalInflationRate, setGlobalInflationRate } = intelligence;
 
     const [isSimulating, setIsSimulating] = useState(false);
     const [showNewSimModal, setShowNewSimModal] = useState(false);
@@ -38,6 +34,10 @@ export default function SimulatorPage() {
         laborChange: 0,
         marketingSpend: 0
     });
+    
+    if (!intelligence) return null;
+    
+    const { scenarios, runSimulation, financialInsight, globalInflationRate, setGlobalInflationRate } = intelligence;
 
     const handleRunSimulation = async () => {
         setIsSimulating(true);

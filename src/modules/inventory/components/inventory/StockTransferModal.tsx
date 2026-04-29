@@ -25,10 +25,10 @@ interface StockTransferModalProps {
 export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransferModalProps) {
     const { stockItems, transferStock, storageLocations } = useInventory();
 
-    const [selectedItem, setSelectedItem] = useAtom(stockTransferSelectedItemAtom);
-    const [targetLocation, setTargetLocation] = useAtom(stockTransferTargetLocationAtom);
-    const [isSubmitting, setIsSubmitting] = useAtom(stockTransferIsSubmittingAtom);
-    const [success, setSuccess] = useAtom(stockTransferSuccessAtom);
+    const [selectedItem, setSelectedItem] = useAtom(stockTransferSelectedItemAtom) as any;
+    const [targetLocation, setTargetLocation] = useAtom(stockTransferTargetLocationAtom) as any;
+    const [isSubmitting, setIsSubmitting] = useAtom(stockTransferIsSubmittingAtom) as any;
+    const [success, setSuccess] = useAtom(stockTransferSuccessAtom) as any;
 
     // Sync selectedItem if stockItem prop changes
     useEffect(() => {
@@ -44,7 +44,8 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
         if (!selectedItem || !targetLocation) return;
 
         setIsSubmitting(true);
-        await transferStock(selectedItem, targetLocation);
+        const qty = currentItem ? (Number(currentItem.quantity) || 0) : 0;
+        await transferStock(selectedItem, targetLocation, qty);
         setIsSubmitting(false);
         setSuccess(true);
         // Instant closure after success - zero delay mandate
@@ -54,7 +55,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
         setSuccess(false);
     };
 
-    const availableStock = stockItems.filter(s => s.status === 'available' && s.quantity > 0);
+    const availableStock = stockItems.filter(s => s.status === 'available' && (Number(s.quantity) || 0) > 0);
     const currentLocation = currentItem
         ? activeLocations.find(l => l.id === currentItem.storageLocationId)
         : null;
@@ -116,8 +117,8 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 onChange={setSelectedItem}
                                 options={availableStock.map(s => ({
                                     value: s.id,
-                                    label: s.ingredientName,
-                                    description: `${s.quantity} ${s.unit?.toUpperCase() || ''}`
+                                    label: String(s.ingredientName || ''),
+                                    description: `${s.quantity} ${String(s.unit || '').toUpperCase()}`
                                 }))}
                                 placeholder="SELECTIONNER UN ARTICLE..."
                             />
@@ -137,11 +138,11 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] leading-none">ORIGINE ACTUELLE</span>
-                                                <span className="text-[15px] font-serif italic font-black text-text-primary tracking-tight leading-none">{currentLocation.name?.toUpperCase() || ''}</span>
+                                                <span className="text-[15px] font-serif italic font-black text-text-primary tracking-tight leading-none">{String(currentLocation.name || '').toUpperCase()}</span>
                                             </div>
                                         </div>
                                         <div className="px-5 py-3 rounded-xl bg-accent-gold/10 border border-accent-gold/20 text-accent-gold text-[11px] font-black tracking-widest uppercase">
-                                            {currentItem.quantity} {currentItem.unit?.toUpperCase() || ''}
+                                            {String(currentItem.quantity)} {String(currentItem.unit || '').toUpperCase()}
                                         </div>
                                     </motion.div>
                                 )}
@@ -168,7 +169,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                     .filter(l => l.isActive && l.id !== currentItem?.storageLocationId)
                                     .map(loc => ({
                                         value: loc.id,
-                                        label: loc.name,
+                                        label: String(loc.name || ''),
                                         description: loc.temperature !== undefined ? `${loc.temperature}°C` : ''
                                     }))
                                 }

@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom, WritableAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
 export interface TutorialPoint {
@@ -16,9 +16,9 @@ export interface TutorialSection {
 }
 
 // State Atoms
-export const tutorialActiveAtom = atom<boolean>(false);
-export const tutorialSectionAtom = atom<TutorialSection | null>(null);
-export const tutorialPointIndexAtom = atom<number>(0);
+export const tutorialActiveAtom = atom<boolean>(false) as unknown as WritableAtom<boolean, [boolean], void>;
+export const tutorialSectionAtom = atom<TutorialSection | null>(null) as unknown as WritableAtom<TutorialSection | null, [TutorialSection | null], void>;
+export const tutorialPointIndexAtom = atom<number>(0) as unknown as WritableAtom<number, [number], void>;
 
 // Computed Atoms
 export const currentTutorialPointAtom = atom((get) => {
@@ -31,18 +31,18 @@ export const currentTutorialPointAtom = atom((get) => {
 export const startTutorialAtom = atom(
     null,
     (get, set, section: TutorialSection) => {
-        set(tutorialSectionAtom as any, section);
-        set(tutorialPointIndexAtom as any, 0);
-        set(tutorialActiveAtom as any, true);
+        set(tutorialSectionAtom, section);
+        set(tutorialPointIndexAtom, 0);
+        set(tutorialActiveAtom, true);
     }
 );
 
 export const stopTutorialAtom = atom(
     null,
     (get, set) => {
-        set(tutorialActiveAtom as any, false);
-        set(tutorialSectionAtom as any, null);
-        set(tutorialPointIndexAtom as any, 0);
+        set(tutorialActiveAtom, false);
+        set(tutorialSectionAtom, null);
+        set(tutorialPointIndexAtom, 0);
     }
 );
 
@@ -52,9 +52,9 @@ export const nextTutorialStepAtom = atom(
         const section = get(tutorialSectionAtom);
         const index = get(tutorialPointIndexAtom);
         if (section && index < section.points.length - 1) {
-            set(tutorialPointIndexAtom as any, index + 1);
+            set(tutorialPointIndexAtom, index + 1);
         } else {
-            set(tutorialActiveAtom as any, false);
+            set(tutorialActiveAtom, false);
         }
     }
 );
@@ -64,7 +64,7 @@ export const prevTutorialStepAtom = atom(
     (get, set) => {
         const index = get(tutorialPointIndexAtom);
         if (index > 0) {
-            set(tutorialPointIndexAtom as any, index - 1);
+            set(tutorialPointIndexAtom, index - 1);
         }
     }
 );

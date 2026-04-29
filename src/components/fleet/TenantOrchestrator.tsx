@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/Toast';
 
 import { FleetCommander } from '@/domain/services/FleetCommander';
+import { EmpireInstance } from '@/domain/types/empire';
 
 /**
  * 🛰️ TenantOrchestrator - Restaurant OS
@@ -31,18 +32,22 @@ export const TenantOrchestrator: React.FC = () => {
     const { showToast } = useToast();
 
     // HYDRATION: Bridge mock data with FleetCommander logic for evaluation
-    const displayFleet = fleet.length > 0 ? fleet : [
-        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'ONLINE', metrics: { dailyRevenue: 4500, alerts: 0, errorRate: 0.01, uptime: 99.9 } },
-        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'ONLINE', metrics: { dailyRevenue: 2800, alerts: 2, errorRate: 0.05, uptime: 99.1 } },
-        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { dailyRevenue: 1200, alerts: 8, errorRate: 0.15, uptime: 95.0 } },
-        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
-    ].map(inst => {
-        const metrics = (inst as any).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
-        const health = FleetCommander.evaluateHealth(metrics.alerts || 0, metrics.errorRate || 0, metrics.uptime || 0);
+    const displayFleet: EmpireInstance[] = (fleet.length > 0 ? fleet : [
+        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'ONLINE', metrics: { alerts: 0, errorRate: 0.01, uptime: 99.9, dailyRevenue: 4500 } },
+        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'ONLINE', metrics: { alerts: 2, errorRate: 0.05, uptime: 99.1, dailyRevenue: 2800 } },
+        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { alerts: 8, errorRate: 0.15, uptime: 95.0, dailyRevenue: 1200 } },
+        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { alerts: 0, errorRate: 0, uptime: 100, dailyRevenue: 0 } },
+    ] as unknown as EmpireInstance[]).map(inst => {
+        const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
+        const health = FleetCommander.evaluateHealth(
+            metrics.alerts || 0, 
+            metrics.errorRate || 0, 
+            metrics.uptime || 0
+        );
         return {
             ...inst,
             metrics: { ...metrics, healthScore: health }
-        } as any;
+        } as EmpireInstance;
     });
 
     const handleSwitch = (tenantId: string, name: string) => {

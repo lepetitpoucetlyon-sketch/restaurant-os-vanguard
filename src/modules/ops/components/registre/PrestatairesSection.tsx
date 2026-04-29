@@ -37,7 +37,7 @@ export function PrestatairesSection() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-serif font-black italic text-text-primary tracking-tight">Certifications Prestataires</h2>
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mt-0.5">{prestataires.length} prestataires</p>
+                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mt-0.5">{(prestataires)?.length || 0} prestataires</p>
                     </div>
                 </div>
                 <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-[10px] uppercase tracking-widest">
@@ -46,7 +46,7 @@ export function PrestatairesSection() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {prestataires.map((p) => (
+                {(prestataires || []).map((p) => (
                     <div key={p.id} className="group bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm hover:shadow-2xl transition-all duration-500">
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex items-center gap-4">

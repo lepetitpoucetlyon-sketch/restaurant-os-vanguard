@@ -53,7 +53,7 @@ export function GestionHuiles() {
                 ...formData,
                 id: `oil_${Date.now()}`,
                 createdAt: new Date().toISOString()
-            } as any);
+            } as import('@/types').OilLog);
             addNotification({ 
                 type: formData.status === 'ok' ? 'success' : 'warning', 
                 title: 'Contrôle Huile', 

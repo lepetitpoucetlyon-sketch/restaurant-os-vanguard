@@ -7,29 +7,19 @@ import { FleetComplianceService } from '@/domain/services/FleetComplianceService
 import { HACCPTelemetryBridge } from '@/domain/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { TenantID } from '@/domain/types/brands';
-import { fleetEngine } from '@/lib/nexus/NexusFleetEngine';
+import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
 import { EmpireInstance, EmpireGlobalMetrics } from '@/domain/types/empire';
 import { FleetInsight, ConsolidatedMetrics } from '@/domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { SovereignData } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { SiteTelemetry } from '@/domain/types/brands';
 
 import { NexusFleetState } from '@/types/nexus.types';
 
-interface NexusFleetStateInternal extends Omit<any, 'tutorial'> {
-    tutorial?: {
-        isActive: boolean;
-        step: number;
-        start: () => void;
-        stop: () => void;
-        startTutorial?: () => void;
-        stopTutorial?: () => void;
-        nextStep?: () => void;
-        prevStep?: () => void;
-        currentSection?: string;
-        currentPointIndex?: number;
-    };
+interface NexusFleetStateInternal extends Omit<NexusFleetState, 'tutorial'> {
+    tutorial?: import('@/types/nexus.types').NexusTutorialState;
 }
 
 const NexusFleetContext = createContext<NexusFleetStateInternal | undefined>(undefined);
@@ -40,7 +30,7 @@ const NexusFleetContext = createContext<NexusFleetStateInternal | undefined>(und
  */
 export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [liveFleet, setLiveFleet] = useState<EmpireInstance[]>([]);
-    const [globalMetrics, setGlobalMetrics] = useState<any>(null);
+    const [globalMetrics, setGlobalMetrics] = useState<EmpireGlobalMetrics | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
     const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
@@ -48,8 +38,13 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     
     // --- INTELLIGENCE STATE (Grade X) ---
     const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
-    const [scenarios, setScenarios] = useState<any>([]); 
-    const [financialInsight, setFinancialInsight] = useState<any>({
+    const [scenarios, setScenarios] = useState<import('@/types').SimulationScenario[]>([]); 
+    const [financialInsight, setFinancialInsight] = useState<{
+        revenue: number;
+        foodCostPercent: number;
+        laborCostPercent: number;
+        primeCost: number;
+    }>({
         revenue: 425000,
         foodCostPercent: 28.5,
         laborCostPercent: 32.1,
@@ -68,7 +63,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                 revenueImpact: 12500 * (config.inputs?.priceChange || 1),
                 laborCostImpact: -4500,
                 netProfitChange: 8000
-            }
+            },
+            inputs: config.inputs || {}
         };
         setScenarios(prev => [newScenario, ...prev]);
     }, []);
@@ -112,42 +108,86 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             const fleetData = await fleetTelemetry.discoverRealFleet();
             
             // Sync to Global Atom (Empire Snapshot)
-            const mappedInstances: EmpireInstance[] = (fleetData || []).map((f: any) => ({
-                id: f.id,
-                key: f.key || f.id,
-                name: f.name || `Node ${f.id.slice(0, 4)}`,
-                status: f.status || 'ONLINE',
-                tier: f.tier || 'STANDARD',
-                version: f.version || '1.0.0',
-                createdAt: f.createdAt || new Date().toISOString(),
-                lastHeartbeat: f.lastHeartbeat || new Date().toISOString(),
-                metrics: {
-                    activeUsers: f.activeUsers || 0,
-                    dailyRevenue: f.dailyRevenue || 0,
-                    revenue24h: f.dailyRevenue || 0,
-                    aiUsageCost: 0,
-                    healthScore: f.healthScore || 100,
-                    complianceScore: f.complianceScore || 100,
-                    lowStockAlerts: f.lowStockAlerts || 0,
-                    expiringItemsCount: 0
-                },
-                branding: f.branding || { primaryColor: '#6366f1' },
-                featureFlags: {},
-                security: f.security || {
-                    twoFactorEnabled: true,
-                    nf525Certified: true,
-                    maintenanceAccessGranted: false,
-                    supportAccessGranted: false
-                }
-            } as any));
+            const mappedInstances: EmpireInstance[] = (fleetData || []).map((f: SiteTelemetry): EmpireInstance => {
+                const branding = f.branding;
+                const security = f.security;
+                
+                return {
+                    id: f.id || f.key || `node-${Math.random().toString(36).substring(7)}`,
+                    key: f.key || f.id || `key-${Math.random().toString(36).substring(7)}`,
+                    name: f.name || `Nexus Node ${(f.id || '').slice(0, 4) || '??'}`,
+                    status: f.status || 'ONLINE',
+                    tier: f.tier || 'STANDARD',
+                    version: f.engineVersion || '1.0.0',
+                    createdAt: f.createdAt || new Date().toISOString(),
+                    lastHeartbeat: (typeof f.lastSeen === 'string' ? f.lastSeen : (typeof f.lastSeen === 'number' ? new Date(f.lastSeen).toISOString() : new Date((f.lastSeen as any)?.seconds * 1000).toISOString())) || new Date().toISOString(),
+                    metrics: {
+                        activeUsers: Number(f.activeUsers) || 0,
+                        dailyRevenue: Number(f.dailyRevenue) || 0,
+                        revenue24h: Number(f.dailyRevenue) || 0,
+                        aiUsageCost: 0,
+                        healthScore: (() => {
+                            if (!f.healthScore) {
+                                import('@/lib/nexus/TelemetryService').then(({ TelemetryService }) => 
+                                    TelemetryService.reportIssue('FALLBACK_VALUE', 'FleetEngine', { field: 'healthScore', instanceId: f.id } as any)
+                                );
+                            }
+                            return Number(f.healthScore) || 100;
+                        })(),
+                        complianceScore: Number(f.complianceScore) || 100,
+                        lowStockAlerts: Number(f.lowStockAlerts) || 0,
+                        expiringItemsCount: 0,
+                        alerts: 0,
+                        errorRate: 0,
+                        uptime: 99.9
+                    },
+                    branding: {
+                        primaryColor: (branding?.primaryColor as string) || '#6366f1',
+                        secondaryColor: (branding?.secondaryColor as string) || '#a5b4fc',
+                        logoUrl: (branding?.logoUrl as string) || '',
+                        tagline: (branding?.tagline as string) || ''
+                    },
+                    featureFlags: Object.entries(f.featureFlags || {}).reduce((acc, [key, val]) => ({
+                        ...acc,
+                        [key]: Boolean(val)
+                    }), {} as Record<string, boolean>),
+                    security: {
+                        twoFactorEnabled: Boolean(security?.twoFactorEnabled) || true,
+                        nf525Certified: Boolean(security?.nf525Certified) || true,
+                        maintenanceAccessGranted: Boolean(security?.maintenanceAccessGranted) || false,
+                        supportAccessGranted: Boolean(security?.supportAccessGranted) || false
+                    }
+                };
+            });
             
             setInstanceIds(mappedInstances); // Update global state
             setLiveFleet(mappedInstances);
 
             // Atomic upgrade to Grade X Intelligence
             const intelligence = await fleetEngine.updateFleetIntelligence(mappedInstances);
-            if (intelligence.metrics) setGlobalMetrics(intelligence.metrics as any);
-            if (intelligence.insights) setMacroInsights(intelligence.insights);
+            
+            if (intelligence.metrics) {
+                const metrics: EmpireGlobalMetrics = {
+                    totalInstances: mappedInstances.length,
+                    activeFleetCount: mappedInstances.filter(m => m.status === 'ONLINE').length,
+                    fleetTotalRevenue: Number(intelligence.metrics.totalRevenue) || 0,
+                    totalActiveUsers: Number(intelligence.metrics.activeUsers) || 0,
+                    averageHealthScore: Number(intelligence.metrics.averageHealth) || 0,
+                    averageComplianceScore: 100,
+                    criticalAlerts: mappedInstances.filter(m => m.status === 'CRITICAL').length,
+                    totalRisks: 0,
+                    totalMRR: 0,
+                    averageDiscount: 0,
+                    lockedInstances: 0,
+                    totalLaborCost: Number(intelligence.metrics.totalLaborCost) || 0,
+                    averageFoodCost: Number(intelligence.metrics.averageFoodCost) || 0
+                };
+                setGlobalMetrics(metrics);
+            }
+            
+            if (intelligence.insights) {
+                setMacroInsights(intelligence.insights);
+            }
 
         } catch (error) {
             console.error('[Fleet] Sync failed:', error);
@@ -217,15 +257,15 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     }, [refreshFleet]);
 
     const stats = useMemo(() => ({
-        totalRevenue: globalMetrics?.totalRevenue || 0,
-        averageHealth: globalMetrics?.averageHealth || 0,
+        totalRevenue: globalMetrics?.fleetTotalRevenue || 0,
+        averageHealth: globalMetrics?.averageHealthScore || 0,
         consolidated: {
             totalLaborCost: globalMetrics?.totalLaborCost || 0,
             averageFoodCost: globalMetrics?.averageFoodCost || 0
         }
     }), [globalMetrics]);
 
-    const contextValue: any = useMemo(() => ({
+    const contextValue: NexusFleetStateInternal = useMemo(() => ({
         instanceIds: liveFleet.map(f => f.id),
         instances: liveFleet,
         globalMetrics,
@@ -246,8 +286,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         registerInstance,
         launchPreview,
         broadcastConfiguration,
-        complianceService: FleetComplianceService as any,
-        haccpBridge: HACCPTelemetryBridge as any,
+        complianceService: FleetComplianceService,
+        haccpBridge: HACCPTelemetryBridge as unknown as import('@/shared/nexus-contract').SovereignMap,
         fleet: globalMetrics, 
         customer: { customers: [] },
         intelligence: { 
@@ -264,11 +304,16 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             step: 0,
             start: () => {},
             stop: () => {},
-            startTutorial: () => {},
+            startTutorial: (section?: import('@/types/nexus.types').NexusTutorialSection) => {
+                console.log('[Tutorial] Starting section:', section?.id);
+            },
             stopTutorial: () => {},
             nextStep: () => {},
             prevStep: () => {},
-            currentSection: 'nexus_core',
+            currentSection: {
+                id: 'nexus_core',
+                points: []
+            },
             currentPointIndex: 0
         }
     }), [liveFleet, globalMetrics, stats, macroInsights, isLoading, isEmpireMode, selectedInstanceId, isUpdateAvailable, updateInfo, priceMultiplier, refreshFleet, syncFleet, broadcastConfiguration, globalInflationRate, scenarios, runSimulation, financialInsight]);
@@ -284,5 +329,5 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 export const useNexusFleet = () => {
     const context = useContext(NexusFleetContext);
     if (!context) throw new Error('useNexusFleet error');
-    return context as any;
+    return context as NexusFleetStateInternal;
 };

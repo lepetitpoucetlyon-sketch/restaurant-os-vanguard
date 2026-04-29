@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useOrders } from "@/engines/ops/NexusOpsProvider";
+import { useKitchen, useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useNexusOps } from "@/modules/ops/hooks/useNexusOps";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
-import { useRecipes } from "@/engines/ops/NexusOpsProvider";
 import { Order, Recipe } from "@/types";
 
 // Components
@@ -28,8 +28,12 @@ interface AuditTicket {
 }
 
 export default function KDSPage() {
-    const { orders, updateOrderStatus, getPendingModifications } = useOrders() as any;
-    const { recipes } = useRecipes();
+    const { orders, updateOrderStatus, getPendingModifications } = useKitchen();
+    const { floorOps } = useNexusOps();
+    const tables = floorOps.operationalNodes;
+    
+    const activeOrders = orders.filter(o => o?.status !== 'delivered');
+    const { data: recipes } = useRecipes();
     
     // Core State
     const [currentTime, setCurrentTime] = useState(new Date());

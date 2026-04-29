@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import './mocks';
+import { mockLogger as logger } from './mocks';
 import { TimeSync } from '@/lib/TimeSync';
 import { FleetBloomFilter } from '@/lib/bloom-filter';
-import { logger } from '@/lib/logger';
 
 describe('🏗️ OMNI-VANGUARD : BLOC 3 – INFRA & PERSISTENCE', () => {
 

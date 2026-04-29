@@ -89,6 +89,11 @@ build_errors_v*.txt
 build_errors_brut.txt
 test-results/
 .DS_Store
+.mempalace/
+.staging-mcc/
+src_VANGUARD_AUDIT/
+src_OLD_VIBE_BACKUP/
+.nexus/agents/
 
 # Hermes Staging Bunker & Agents
 .staging/
@@ -100,3 +105,23 @@ test-results/
 **/.staging/
 **/.agents/
 **/.hermes/
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json
+
+# Local Environment & Large Audits
+.venv/
+*_count.txt
+*_audit*.txt
+*_report*.txt
+*_liquidation*.txt
+*_tsc*.txt
+*_any_audit*.txt
+*_any_unknown*.txt
+final_*.txt
+industrial_*.txt
+imperial_*.txt
+suture_*.txt
+phase_*.txt
+*.txt.bak

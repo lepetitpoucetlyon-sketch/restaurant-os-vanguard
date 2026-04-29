@@ -23,7 +23,7 @@ export const CleaningSchema = z.object({
   zoneId: z.string(),
   areaName: z.string(),
   status: z.enum(['pending', 'completed', 'verified']),
-  checkedAt: z.string().or(z.date()),
+  checkedAt: z.string(),
   staffId: z.string(),
   verifierId: z.string().optional(),
   notes: z.string().optional(),
@@ -34,7 +34,7 @@ export const OilCheckSchema = z.object({
   fryerId: z.string(),
   tpmValue: z.number(), // Total Polar Materials
   decision: z.enum(['ok', 'change_soon', 'must_change']),
-  changedAt: z.string().or(z.date()).optional(),
+  changedAt: z.string().optional(),
   staffId: z.string(),
 });
 
@@ -45,7 +45,7 @@ export const WasteSchema = z.object({
   quantity: z.number(),
   unit: z.string(),
   reason: z.enum(['expired', 'damaged', 'preparation_error', 'inventory_gap']),
-  timestamp: z.string().or(z.date()),
+  timestamp: z.string(),
   staffId: z.string(),
 });
 

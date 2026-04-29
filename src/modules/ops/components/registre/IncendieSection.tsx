@@ -19,15 +19,15 @@ export function IncendieSection() {
                     </div>
                     <div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Registre de Sécurité Incendie</h2>
-                        <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{incendieDoc.description}</p>
+                        <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{String(incendieDoc?.description || 'Registre de sécurité incendie en attente de synchronisation.')}</p>
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">MAJ : {incendieDoc.lastUpdated}</span>
+                                <span className="text-[10px] font-mono font-bold">MAJ : {String(incendieDoc?.lastUpdated || 'N/A')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">Révision : {incendieDoc.nextReview}</span>
+                                <span className="text-[10px] font-mono font-bold">Révision : {String(incendieDoc?.nextReview || 'N/A')}</span>
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@ export function IncendieSection() {
                         <MapPin strokeWidth={1.5} className="w-3.5 h-3.5" />
                         Registre des Extincteurs
                     </h3>
-                    <span className="text-[10px] font-mono font-bold text-text-muted">{extincteurs.length} équipements</span>
+                    <span className="text-[10px] font-mono font-bold text-text-muted">{(extincteurs)?.length || 0} équipements</span>
                 </div>
                 <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
                     <table className="w-full text-sm text-left">
@@ -55,7 +55,7 @@ export function IncendieSection() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
-                            {extincteurs.map((ext) => (
+                            {(extincteurs || []).map((ext) => (
                                 <tr key={ext.id} className="hover:bg-bg-tertiary/10 transition-colors">
                                     <td className="px-8 py-5 font-serif font-semibold text-text-primary">{ext.location}</td>
                                     <td className="px-8 py-5 text-text-muted font-mono text-[12px]">{ext.type}</td>
@@ -90,7 +90,7 @@ export function IncendieSection() {
                     </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {exercices.map((ex) => (
+                    {(exercices || []).map((ex) => (
                         <div key={ex.id} className={cn(
                             "bg-white dark:bg-bg-secondary rounded-2xl border p-8 shadow-sm relative overflow-hidden",
                             ex.status === 'planifie' ? 'border-dashed border-accent/30' : 'border-border'

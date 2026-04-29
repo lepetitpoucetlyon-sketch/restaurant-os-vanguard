@@ -19,7 +19,7 @@ export const QuoteSchema = z.object({
   notes: z.string().optional(),
 });
 
-export type Quote = z.infer<typeof QuoteSchema> & { id: string; createdAt: Date };
+export type Quote = z.infer<typeof QuoteSchema> & { id: string; createdAt: string };
 
 export class QuoteEngine {
   private static COLLECTION = 'quotes';
@@ -40,7 +40,7 @@ export class QuoteEngine {
         const finalQuote = {
           ...rawData,
           id: quoteId,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
           status: 'pending',
           version: 1
         };

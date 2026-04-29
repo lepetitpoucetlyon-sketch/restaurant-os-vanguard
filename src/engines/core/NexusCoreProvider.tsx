@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 
 // Modules internes (logique extraite)
 import { useAuthSession } from '@/engines/core/hooks/auth/AuthSession';
+import { FleetComplianceService } from '@/domain/services/FleetComplianceService';
 import { useAuthAccess } from '@/engines/core/hooks/auth/AuthAccess';
 import { useAuthStaff } from '@/engines/core/hooks/auth/AuthStaff';
 
@@ -17,8 +18,9 @@ import { translations, Language } from '@/i18n/translations';
 
 // Nexus Architecture (Grade X)
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FirestoreAdapter } from '@/lib/nexus/adapters/FirestoreAdapter';
-import { MonkeyChaosAgent } from '@/domain/agents/MonkeyChaosAgent';
+import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
+import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
+import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { 
     tenantConfigAtom,
@@ -55,7 +57,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     const searchParams = useSearchParams();
     const hasInitialized = useRef(false);
-    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as any); // Forge Grade X Write
+    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as import('jotai').WritableAtom<TenantConfig | null, [import('jotai').SetStateAction<TenantConfig | null>], void>); // Forge Grade X Write
     
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
@@ -69,15 +71,21 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
     }, []);
 
-    // 🐒 Monkey Chaos Agent (Grade X) - Injection de Résilience
+    // 🐒 Chaos & Resilience (Grade X)
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            window.awakenTheMonkey = (key: string) => {
-                MonkeyChaosAgent.activate(key);
+            window.awakenTheMonkey = (intensity?: number) => {
+                ChaosMonkey.start(intensity);
+                ResilienceSlayer.start();
+            };
+            window.silenceTheMonkey = () => {
+                ChaosMonkey.stop();
+                ResilienceSlayer.stop();
             };
         }
         return () => {
-            MonkeyChaosAgent.deactivate();
+            ChaosMonkey.stop();
+            ResilienceSlayer.stop();
         };
     }, []);
 
@@ -97,6 +105,16 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         
         // Synchronize with the global Nexus manager
         Nexus.tenantOverride = tenantId;
+
+        // 🛡️ SENTRY SUTURE: Injecting Empire DNA
+        import('@sentry/nextjs').then(Sentry => {
+            Sentry.setTag("empire.domain", tenantId);
+            Sentry.setTag("nexus.grade", "X+++");
+            Sentry.setContext("Sovereign Session", {
+                activeTenant: tenantId,
+                initializedAt: new Date().toISOString()
+            });
+        });
     }, [setGlobalTenantConfig]);
 
     // Auto-resolve initial tenant
@@ -208,7 +226,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         
         for (const k of keys) {
             if (val && typeof val === 'object' && val !== null && k in val) {
-                val = (val as Record<string, any>)[k];
+                val = (val as Record<string, SovereignValue | SovereignData>)[k];
             } else {
 
                 return key; 
@@ -342,7 +360,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         registerInstance: async () => {},
         launchPreview: () => {},
         broadcastConfiguration: async () => {},
-        complianceService: {},
+        complianceService: FleetComplianceService,
         haccpBridge: {},
         fleet: null,
         customer: {

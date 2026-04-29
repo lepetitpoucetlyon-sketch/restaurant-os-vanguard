@@ -2,6 +2,7 @@ export {};
 
 declare global {
   interface Window {
-    awakenTheMonkey: (key: string) => void;
+    awakenTheMonkey: (intensity?: number) => void;
+    silenceTheMonkey: () => void;
   }
 }

@@ -8,7 +8,7 @@ import { Cart } from "@/modules/ops/components/pos/Cart";
 import { TableSelector } from "@/modules/ops/components/pos/TableSelector";
 import { PaymentDialog } from "@/modules/ops/components/pos/PaymentDialog";
 import { SplitBillDialog } from "@/modules/ops/components/pos/SplitBillDialog";
-import { useOrders } from "@/engines/ops/NexusOpsProvider";
+import { useKitchen } from "@/engines/ops/NexusOpsProvider";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/Toast";
@@ -19,7 +19,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
-import { usePOSController } from "@/modules/ops/hooks/usePOSController";
+import { usePOSController } from "@/modules/ops";
 import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 
@@ -36,7 +36,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 export default function POSPage() {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const { expert, totalRevenue, orders } = useOrders();
+    const { orders } = useKitchen();
     const [ambiance, setAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());
     const [tokens, setTokens] = useState(AmbianceService.getThemeTokens());
 
@@ -63,7 +63,7 @@ export default function POSPage() {
         handleAddToCart, handleUpdateQuantity, handleClearCart,
         handleSendToKitchen, handlePaymentComplete,
         handleCheckout, handlePaySplit
-    } = (useOrders() as any);
+    } = (usePOSController() as any);
 
     const isRushMode = ambiance === 'RUSH_SPEED';
 

@@ -28,16 +28,16 @@ export function DUERPSection() {
                             <FileText strokeWidth={1.5} className="w-8 h-8 text-blue-500" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">{duerp.title}</h2>
-                            <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{duerp.description}</p>
+                            <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">{String(duerp?.title || 'Document Unique (DUERP)')}</h2>
+                            <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{String(duerp?.description || 'Évaluation des risques professionnels en attente.')}</p>
                             <div className="flex items-center gap-6 mt-4">
                                 <div className="flex items-center gap-2 text-text-muted">
                                     <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Dernière MAJ : {duerp.lastUpdated}</span>
+                                    <span className="text-[10px] font-mono font-bold">Dernière MAJ : {String(duerp?.lastUpdated || 'N/A')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-text-muted">
                                     <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Prochaine révision : {duerp.nextReview}</span>
+                                    <span className="text-[10px] font-mono font-bold">Prochaine révision : {String(duerp?.nextReview || 'N/A')}</span>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@ export function DUERPSection() {
             {duerp.notes && (
                 <div className="bg-blue-50 dark:bg-blue-500/5 rounded-2xl border border-blue-200 dark:border-blue-500/10 p-6 flex items-start gap-4">
                     <CheckCircle2 strokeWidth={1.5} className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
-                    <p className="text-sm text-blue-900 dark:text-blue-300 leading-relaxed">{duerp.notes}</p>
+                    <p className="text-sm text-blue-900 dark:text-blue-300 leading-relaxed">{String(duerp?.notes || '')}</p>
                 </div>
             )}
 

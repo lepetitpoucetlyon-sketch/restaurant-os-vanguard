@@ -100,6 +100,9 @@ export class SimulacraAdapter implements INexusAdapter {
             delete: (path) => {
                 ops.push(() => this.delete(path));
             },
+            increment: (path, field, amount) => {
+                ops.push(() => this.increment(path, field, amount));
+            },
             commit: async () => {
                 for (const op of ops) await op();
             }
@@ -156,5 +159,12 @@ export class SimulacraAdapter implements INexusAdapter {
 
     generateId(collectionPath: string): string {
         return IdGenerator.generateWithPrefix('sim');
+    }
+
+    async increment(path: string, field: string, amount: number): Promise<void> {
+        logger.warn("[Simulacra] Increment is mocked and not fully implemented.");
+        const existing = await this.get<any>(path) || {};
+        existing[field] = (existing[field] || 0) + amount;
+        await this.set(path, existing);
     }
 }

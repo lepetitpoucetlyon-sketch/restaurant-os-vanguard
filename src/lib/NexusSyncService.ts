@@ -20,6 +20,7 @@ import { HRSyncService as SyncStaff } from '@/modules/hr/hr.sync';
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';
 import { TimeSync } from './TimeSync';
+import { MasterBridge } from './MasterBridge';
 
 import { Mutex } from './utils/Mutex';
 
@@ -38,6 +39,7 @@ const syncMutex = new Mutex();
  */
 export const NexusSyncService = {
   healing_interval: null as NodeJS.Timeout | null,
+  master_unsub: null as (() => void) | null,
 
   /**
    * Initializes all operational listeners in parallel.
@@ -58,6 +60,11 @@ export const NexusSyncService = {
         // --- OMPHALOS SUTURE (Mission 1 & 3) ---
         await NexusBridge.init(tenantId);
         TelemetryService.start(tenantId);
+
+        // --- MASTER BRIDGE SUTURE ---
+        if (tenantId !== 'restaurant-os' && tenantId !== 'lepetitpoucet' && tenantId !== 'vanguard') {
+            this.master_unsub = MasterBridge.listenToMaster(store);
+        }
 
         // --- SELF-HEALING ACTIVATION (Grade X+) ---
         this.healing_interval = setInterval(() => {
@@ -156,6 +163,10 @@ export const NexusSyncService = {
     SyncMarketing.stop();
     SyncStaff.stop();
     
+    if (this.master_unsub) {
+        this.master_unsub();
+        this.master_unsub = null;
+    }
     NexusBridge.stop();
     TelemetryService.stop();
 

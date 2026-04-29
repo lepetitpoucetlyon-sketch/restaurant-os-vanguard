@@ -47,6 +47,11 @@ export const useSettings = () => {
     const updateList = useCallback(async <K extends keyof GlobalSettings>(key: K, data: GlobalSettings[K]) => {
         return updateConfig(key, data);
     }, [updateConfig]);
+
+    const updateSLM = useCallback(async (data: Partial<GlobalSettings>) => {
+        if (!settings) return;
+        return updateSettings({ ...settings, ...data });
+    }, [settings, updateSettings]);
     
     return {
         settings,
@@ -56,6 +61,7 @@ export const useSettings = () => {
         updateSettings,
         updateConfig,
         updateList,
+        updateSLM,
         updateIdentity: (data: RestaurantIdentity) => updateConfig('identity', data)
     };
 };

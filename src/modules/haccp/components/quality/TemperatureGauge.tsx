@@ -19,19 +19,22 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
 }) => {
   const [currentValue, setCurrentValue] = useState<number | undefined>(initialValue);
 
+  // Sync state with prop updates without triggering cascading renders
+  if (!isSensing && currentValue !== initialValue) {
+      setCurrentValue(initialValue);
+  }
+
   // 🛰️ LIVE SENSOR SIMULATION (IoT Drift)
   useEffect(() => {
-    if (!isSensing || initialValue === undefined) {
-      setCurrentValue(initialValue);
-      return;
-    }
+    if (!isSensing || initialValue === undefined) return;
 
     const interval = setInterval(() => {
       setCurrentValue(prev => {
         if (prev === undefined) return initialValue;
-        // Random drift ±0.1°C
-        const drift = (Math.random() - 0.5) * 0.2;
-        return Number((prev + drift).toFixed(1));
+        // Deterministic drift simulation
+        const time = Date.now() / 2000;
+        const drift = Math.sin(time) * 0.1;
+        return Number((initialValue + drift).toFixed(1));
       });
     }, 2000);
 

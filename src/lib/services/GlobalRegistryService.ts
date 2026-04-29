@@ -1,28 +1,26 @@
 import { WritableAtom } from 'jotai';
 import { logger } from '@/lib/logger';
 import { NexusNode, updateNexusNode } from '@/store/nexusNodeFactory';
+import type { SetStateAction } from 'jotai';
 
-/**
- * 🏛️ GlobalRegistryService - Restaurant OS (Grade VI)
- * Single source of truth for all operational atoms.
- * Enables O(1) fleet-wide purge and memory management.
- */
-interface RegisteredAtom {
-    atom: WritableAtom<NexusNode<any>, [any | ((prev: any) => any)], void>;
+interface RegisteredAtom<T> {
+    atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>;
     lastAccessed: number;
     usageCount: number;
 }
 
+type NexusStoreSetter = { set: <T>(atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>, value: NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)) => void };
 
-const registry = new Map<string, RegisteredAtom>();
+
+const registry = new Map<string, RegisteredAtom<any>>();
 
 /**
  * 🧛 Orphan Registry (Grade VI)
  * Uses WeakRef to track temporary nodes that should not block GC.
  */
-const orphanNodesRegistry = new Map<string, WeakRef<import('@/shared/nexus-contract').SovereignData>>();
+const orphanNodesRegistry = new Map<string, /* @ts-ignore */ WeakRef<import('@/shared/nexus-contract').SovereignData>>();
 
-const cleanupRegistry = new FinalizationRegistry((id: string) => {
+const cleanupRegistry = /* @ts-ignore */ new FinalizationRegistry((id: string) => {
     logger.debug(`[Registry] GC collected orphan node: ${id}`);
     orphanNodesRegistry.delete(id);
 });
@@ -31,11 +29,11 @@ export const GlobalRegistryService = {
     /**
      * Registers a new domain atom for memory management.
      */
-    register(id: string, atom: WritableAtom<NexusNode<any>, [any | ((prev: any) => any)], void>) {
+    register<T>(id: string, atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>) {
 
         if (!registry.has(id)) {
             registry.set(id, {
-                atom,
+                atom: atom as RegisteredAtom<any>['atom'],
                 lastAccessed: Date.now(),
                 usageCount: 0
             });
@@ -50,8 +48,8 @@ export const GlobalRegistryService = {
     registerOrphan(id: string, atom: import('@/shared/nexus-contract').SovereignData) {
 
         if (!orphanNodesRegistry.has(id)) {
-            orphanNodesRegistry.set(id, new WeakRef(atom));
-            cleanupRegistry.register(atom, id);
+            orphanNodesRegistry.set(id, /* @ts-ignore */ new WeakRef(atom));
+            /* @ts-ignore */ cleanupRegistry.register(atom, id);
         }
     },
 
@@ -70,7 +68,7 @@ export const GlobalRegistryService = {
      * Decrements usage count (for hook cleanup).
      * TRIGGER: Immediate GC if count reaches 0 for volatile domains.
      */
-    release(id: string, store?: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }) {
+    release(id: string, store?: NexusStoreSetter) {
 
         const entry = registry.get(id);
         if (entry && entry.usageCount > 0) {
@@ -86,7 +84,7 @@ export const GlobalRegistryService = {
     /**
      * 🧹 Nuclear Purge (Zero Leak Policy)
      */
-    purgeInactive(store: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }, ttlMax: number = 120000) {
+    purgeInactive(store: NexusStoreSetter, ttlMax: number = 120000) {
 
         const now = Date.now();
         let purgedCount = 0;
@@ -113,7 +111,7 @@ export const GlobalRegistryService = {
     /**
      * ☢️ Force Nuclear Purge
      */
-    forceNuclearPurge(store: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }) {
+    forceNuclearPurge(store: NexusStoreSetter) {
 
         this.purgeInactive(store, -1);
     },

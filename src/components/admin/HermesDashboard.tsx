@@ -14,7 +14,7 @@ import {
     Crosshair
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
-import { HermesEngine } from '@/lib/ai/HermesEngine';
+import { HermesEngine } from '@/infrastructure/adapters/HermesAdapter';
 import { HermesPulseResult, VanguardAgentConfig } from '@/domain/agency/hermes.types';
 
 /**

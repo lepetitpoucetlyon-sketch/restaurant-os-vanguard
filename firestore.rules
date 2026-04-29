@@ -1,65 +1,79 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Utility functions
+    
+    // --- 🏛️ SOVEREIGN UTILITIES (Grade X+++) ---
+    
     function isSignedIn() {
       return request.auth != null;
     }
 
-    function isAdmin() {
-      return isSignedIn() &&
-        (
-          request.auth.token.admin == true ||
-          request.auth.token.role == 'admin'
-        );
+    function getTenantId() {
+      return request.auth.token.tenantId;
     }
 
-    function isManager() {
-      return isSignedIn() &&
-        (
-          isAdmin() ||
-          request.auth.token.role == 'manager'
-        );
+    function isFleetAdmin() {
+      return isSignedIn() && request.auth.token.role == 'fleet_admin';
     }
 
-    function isCurrentUser(userId) {
-      return isSignedIn() && request.auth.uid == userId;
+    function isTenantManager(tenantId) {
+      return isSignedIn() && 
+             getTenantId() == tenantId && 
+             (request.auth.token.role == 'manager' || request.auth.token.role == 'admin');
     }
 
-    // Rules for Users collection
-    match /users/{userId} {
-      allow read: if isSignedIn();
-      allow create: if isAdmin();
-      allow update: if isAdmin() || isCurrentUser(userId);
-      allow delete: if isAdmin() && userId != 'user_root';
+    function isTenantStaff(tenantId) {
+      return isSignedIn() && getTenantId() == tenantId;
     }
 
-    // Rules for Inventory
-    match /inventory/{itemId} {
-      allow read: if isSignedIn();
-      allow create, update: if isManager();
-      allow delete: if isAdmin();
+    // --- 🏛️ TENANT ISOLATION CORE ---
+
+    match /tenants/{tenantId} {
+      
+      // Configuration de l'instance (Read only pour le staff)
+      match /config/{docId} {
+        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow write: if isFleetAdmin();
+      }
+
+      // Opérations (POS, KDS, Tables)
+      match /operations/{docId} {
+        allow read, write: if isTenantStaff(tenantId) || isFleetAdmin();
+      }
+
+      // Inventaire & Stock
+      match /inventory/{docId} {
+        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow write: if isTenantManager(tenantId) || isFleetAdmin();
+      }
+
+      // 🔐 DONNÉES FISCALES (Grade X+++ Immutable)
+      match /fiscal_ledger/{docId} {
+        allow read: if isTenantManager(tenantId) || isFleetAdmin();
+        allow create: if isTenantStaff(tenantId);
+        allow update, delete: if false; // 🚫 NF525: Strict write-once protocol
+      }
+
+      // 🔐 AUDIT LOGS (Grade X+++ Immutable)
+      match /audit_logs/{docId} {
+        allow read: if isTenantManager(tenantId) || isFleetAdmin();
+        allow create: if isTenantStaff(tenantId);
+        allow update, delete: if false; // 🚫 NO MODIFICATION ALLOWED
+      }
+
+      // RH & Staff
+      match /staff/{docId} {
+        allow read, write: if isTenantManager(tenantId) || isFleetAdmin();
+      }
     }
 
-    // Rules for Financial Data (Strict)
-    match /financials/{docId} {
-      allow read, write: if isAdmin();
+    // --- 🏛️ FLEET GLOBAL OVERLAY ---
+    
+    match /fleet/{docId} {
+      allow read, write: if isFleetAdmin();
     }
 
-    // Rules for System Config
-    match /systemConfig/{documentId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin();
-    }
-
-    // Rules for Audit Logs (Immutable)
-    match /audit_logs/{logId} {
-      allow create: if isSignedIn();
-      allow read: if isManager();
-      allow update, delete: if false; // No one can modify logs
-    }
-
-    // Default: Deny everything else (The "Safe" catch-all)
+    // --- 🛡️ EMERGENCY CATCH-ALL ---
     match /{document=**} {
       allow read, write: if false;
     }

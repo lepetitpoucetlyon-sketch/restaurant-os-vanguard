@@ -55,6 +55,9 @@
     "graphify-out",
     "scratch",
     "scripts",
-    "playwright-report"
+    "playwright-report",
+    "src_VANGUARD_AUDIT",
+    "src_OLD_VIBE_BACKUP",
+    ".nexus/agents"
   ]
 }

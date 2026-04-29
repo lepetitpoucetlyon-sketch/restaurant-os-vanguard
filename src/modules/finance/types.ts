@@ -43,6 +43,7 @@ export interface Account {
     parentCode?: string;   
     isActive: boolean;
     description?: string;
+    balanceInCents?: number; // Grade X Sovereign Balance Tracking
 }
 
 // --- Journal Entries (Écritures Comptables) ---
@@ -86,15 +87,16 @@ export interface ExpenseClaim {
     userId: string;
     userName: string;
     userRole: string; 
-    date: Date | string;
+    date: string; // Grade X: ISO string enforced for determinism
     amountInCents: number;
-    category: TransactionCategory;
+    category: string; // Grade X: Normalized string
     description: string;
+    invoiceId?: string; // Grade X: Business Unique Identifier
     receiptUrl?: string; 
     receiptImage?: string; 
     status: 'pending' | 'approved' | 'rejected';
     approvedBy?: string;
-    approvedAt?: Date | string;
+    approvedAt?: string;
     journalEntryId?: string;
     ocrData?: {
         merchant?: string;

@@ -144,6 +144,33 @@ export interface QualityControlItem {
   corrective_action: CorrectiveActionType;
 }
 
+// --- 🧪 PHASE 1: HARD ENGINEERING TYPES (NO OPTIONALS IN ACTIVE SESSIONS) ---
+export interface ActiveQualityControlItem extends Omit<QualityControlItem, 'batch_number' | 'lot_number' | 'origin' | 'production_date' | 'expiry_date' | 'decision_reason'> {
+  batch_number: string;
+  lot_number: string;
+  origin: string;
+  production_date: string;
+  expiry_date: string;
+  decision_reason: string;
+}
+
+export interface ActiveQualityControl extends Omit<QualityControl, 'delivery' | 'duration_minutes' | 'signature' | 'color_aspect' | 'texture_aspect' | 'odor_aspect'> {
+  delivery: {
+    id: string;
+    reference: string;
+  };
+  duration_minutes: number;
+  color_aspect: boolean;
+  texture_aspect: boolean;
+  odor_aspect: boolean;
+  items: ActiveQualityControlItem[];
+  signature: {
+    captured: boolean;
+    data: string;
+    signer_name: string;
+  };
+}
+
 export interface QualityControl {
   id: string;
   control_number: string;

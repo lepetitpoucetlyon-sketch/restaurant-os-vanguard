@@ -97,8 +97,8 @@ export default function FloorPlanPage() {
         showToast(`Niveau "${newFloorName}" créé`, "success");
     };
 
-    const FloorIcon = currentFloor?.icon ? FLOOR_ICONS[currentFloor.icon] || Layers : Layers;
-    const totalSeatsOnFloor = tablesOnCurrentFloor.reduce((acc, t) => acc + t.seats, 0);
+    const FloorIcon = currentFloor?.icon ? FLOOR_ICONS[String(currentFloor.icon)] || Layers : Layers;
+    const totalSeatsOnFloor = tablesOnCurrentFloor.reduce((acc, t) => acc + Number(t.seats || 0), 0);
 
     return (
         <div className="flex h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 flex-col overflow-hidden bg-bg-primary pb-24 lg:pb-0">
@@ -120,7 +120,7 @@ export default function FloorPlanPage() {
                             </div>
                             <div className="text-left">
                                 <div className="flex items-center gap-1 lg:gap-2">
-                                    <span className="text-[8px] lg:text-[10px] font-black uppercase tracking-widest truncate">{currentFloor?.name}</span>
+                                    <span className="text-[8px] lg:text-[10px] font-black uppercase tracking-widest truncate">{String(currentFloor?.name || '')}</span>
                                     <ChevronDown className={cn("w-3 h-3 text-accent transition-transform", showFloorSelector && "rotate-180")} />
                                 </div>
                                 <p className="text-[7px] lg:text-[8px] text-accent/60 font-bold tracking-tighter hidden lg:block">{tablesOnCurrentFloor.length} UNITÉS • {totalSeatsOnFloor} PAX</p>
@@ -143,12 +143,12 @@ export default function FloorPlanPage() {
                                             className={cn("w-full grid grid-cols-[32px_1fr] items-center gap-3 p-2 rounded-2xl mb-1 transition-all text-left", f.id === currentFloorId ? "bg-bg-tertiary text-accent" : "hover:bg-bg-tertiary text-text-muted")}
                                         >
                                             <div className="w-8 h-8 rounded-full bg-accent/5 flex items-center justify-center place-self-center">
-                                                {f.icon && FLOOR_ICONS[f.icon] ?
-                                                    (() => { const I = FLOOR_ICONS[f.icon]; return <I className="w-4 h-4" /> })()
+                                                {f.icon && FLOOR_ICONS[String(f.icon)] ?
+                                                    (() => { const I = FLOOR_ICONS[String(f.icon)]; return <I className="w-4 h-4" /> })()
                                                     : <Layers className="w-4 h-4" />
                                                 }
                                             </div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest truncate">{f.name}</span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest truncate">{String(f.name || '')}</span>
                                         </button>
                                     ))}
                                 </motion.div>

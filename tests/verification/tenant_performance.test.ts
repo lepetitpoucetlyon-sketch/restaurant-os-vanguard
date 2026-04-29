@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
 
@@ -6,88 +7,75 @@ import { logger } from '@/lib/logger';
  * Verifies that switching tenants purges the cache and measures transition latency.
  */
 
-async function runTransitionBenchmark() {
-    console.log("🚀 Starting Tenant Isolation & Transition Benchmark...");
+describe('🚀 PERFORMANCE : TENANT TRANSITION', () => {
+    it('should verify transition latency < 200ms and cache isolation', async () => {
+        console.log("🚀 Starting Tenant Isolation & Transition Benchmark...");
 
-    // 1. Setup Mock Data for Tenant A
-    console.log("📝 Populating Tenant A local cache...");
-    await db.orders.bulkPut([
-        { 
-            id: 'order_A1', 
-            status: 'paid', 
-            timestamp: new Date(), 
-            tableId: 'T1', 
-            tableNumber: '1', 
-            serverName: 'Atlas',
-            items: [],
-            totalInCents: 1500
-        },
-        { 
-            id: 'order_A2', 
-            status: 'preparing', 
-            timestamp: new Date(), 
-            tableId: 'T2', 
-            tableNumber: '2', 
-            serverName: 'Atlas',
-            items: [],
-            totalInCents: 2500
-        }
-    ]);
-    
-    let countA = await db.orders.count();
-    console.log(`✅ Tenant A Cache: ${countA} orders.`);
+        // 1. Setup Mock Data for Tenant A
+        console.log("📝 Populating Tenant A local cache...");
+        await db.orders.bulkPut([
+            { 
+                id: 'order_A1', 
+                status: 'paid', 
+                timestamp: new Date().toISOString(), 
+                tableId: 'T1', 
+                tableNumber: '1', 
+                serverName: 'Atlas',
+                items: [],
+                totalInCents: 1500
+            },
+            { 
+                id: 'order_A2', 
+                status: 'preparing', 
+                timestamp: new Date().toISOString(), 
+                tableId: 'T2', 
+                tableNumber: '2', 
+                serverName: 'Atlas',
+                items: [],
+                totalInCents: 2500
+            }
+        ]);
+        
+        const countA = await db.orders.count();
+        console.log(`✅ Tenant A Cache: ${countA} orders.`);
 
-    // 2. Measure Transition Performance
-    console.log("⏱️  Measuring Transition (Stop + Clear + Re-init simulation)...");
-    const startTime = performance.now();
+        // 2. Measure Transition Performance
+        console.log("⏱️  Measuring Transition (Stop + Clear + Re-init simulation)...");
+        const startTime = performance.now();
 
-    // Simulate NexusSyncService.stopAll()
-    await db.clearAll();
-    
-    // Simulate check
-    const countAfterPurge = await db.orders.count();
-    const transitionTime = performance.now() - startTime;
+        // Simulate NexusSyncService.stopAll()
+        await db.clearAll();
+        
+        // Simulate check
+        const countAfterPurge = await db.orders.count();
+        const transitionTime = performance.now() - startTime;
 
-    console.log(`📊 Purge Latency: ${transitionTime.toFixed(2)}ms`);
-    console.log(`📊 Orders after purge: ${countAfterPurge}`);
+        console.log(`📊 Purge Latency: ${transitionTime.toFixed(2)}ms`);
+        console.log(`📊 Orders after purge: ${countAfterPurge}`);
 
-    // 3. Isolation Verification
-    if (countAfterPurge === 0) {
-        console.log("✅ ISOLATION VERIFIED: Cache was fully purged during transition.");
-    } else {
-        console.error("❌ ISOLATION BREACH: Residual data found in local cache!");
-        process.exit(1);
-    }
+        // 3. Isolation Verification
+        expect(countAfterPurge).toBe(0);
 
-    // 4. Populate Tenant B
-    console.log("📝 Populating Tenant B local cache...");
-    await db.orders.bulkPut([
-        { 
-            id: 'order_B1', 
-            status: 'paid', 
-            timestamp: new Date(), 
-            tableId: 'B1', 
-            tableNumber: 'B1', 
-            serverName: 'Nexus',
-            items: [],
-            totalInCents: 4500
-        }
-    ]);
-    
-    let countB = await db.orders.count();
-    console.log(`✅ Tenant B Cache: ${countB} orders.`);
+        // 4. Populate Tenant B
+        console.log("📝 Populating Tenant B local cache...");
+        await db.orders.bulkPut([
+            { 
+                id: 'order_B1', 
+                status: 'paid', 
+                timestamp: new Date().toISOString(), 
+                tableId: 'B1', 
+                tableNumber: 'B1', 
+                serverName: 'Nexus',
+                items: [],
+                totalInCents: 4500
+            }
+        ]);
+        
+        const countB = await db.orders.count();
+        console.log(`✅ Tenant B Cache: ${countB} orders.`);
 
-    if (transitionTime < 200) {
-        console.log(`✅ PERFORMANCE VERIFIED: Transition took ${transitionTime.toFixed(2)}ms (< 200ms target).`);
-    } else {
-        console.warn(`⚠️ PERFORMANCE WARNING: Transition took ${transitionTime.toFixed(2)}ms (> 200ms target).`);
-    }
+        expect(transitionTime).toBeLessThan(200);
 
-    console.log("\n✨ BENCHMARK COMPLETE.");
-    process.exit(0);
-}
-
-runTransitionBenchmark().catch(err => {
-    console.error("❌ Benchmark Failed:", err);
-    process.exit(1);
+        console.log("\n✨ BENCHMARK COMPLETE.");
+    });
 });

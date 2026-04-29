@@ -10,13 +10,17 @@ export const InventoryService = {
      * @returns Total valuation in cents
      */
     calculateStockValuation: (items: StockItem[]): number => {
-        return items.reduce((acc, item) => {
-            // Only count items with a valid unit cost and quantity
+        // 🏛️ MICROUNITS PROTOCOL: We calculate in Microunits (10^-6) to avoid float drift.
+        // Final return is converted back to cents (10^-2) only for UI/Fiscal sealing.
+        const totalMicrounits = items.reduce((acc, item) => {
             if (item.unitCostInCents && item.quantity > 0) {
-                return acc + Math.round(item.unitCostInCents * item.quantity);
+                const microQuantity = Math.floor(item.quantity * 1_000_000);
+                return acc + (item.unitCostInCents * microQuantity);
             }
             return acc;
         }, 0);
+        
+        return Math.floor(totalMicrounits / 1_000_000);
     },
 
     /**

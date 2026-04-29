@@ -10,9 +10,8 @@ import {
     shiftsNodeAtom
 } from '../store/staffAtoms';
 import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
-import { Shift, LeaveRequest, LeaveBalance } from "../types";
-
-type RejectionReason = any; // Grade X Suture for missing rejection type
+import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "../types";
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 👨‍💼 useHumanResources - Grade X Atomic Bridge
@@ -31,8 +30,8 @@ export function useHumanResources() {
     const shifts = (shiftsNode.data || []) as Shift[];
 
     // --- 🔨 LA FORGE ---
-    const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom as any, 'leaveRequests', 'HR');
-    const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom as any, 'shifts', 'HR');
+    const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom, 'leaveRequests', 'HR');
+    const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom, 'shifts', 'HR');
 
     const addShift = useCallback((shift: Omit<Shift, 'id'>) => {
         const id = `shift_${Date.now()}`;
@@ -45,13 +44,13 @@ export function useHumanResources() {
     }, [shiftForge]);
 
     const deleteShift = useCallback((id: string) => {
-        return shiftForge.mutate('DELETE', id, {});
+        return shiftForge.mutate('DELETE', id, {} as SovereignData);
     }, [shiftForge]);
 
-    const publishShifts = useCallback((ids: string[]) => {
-        ids.forEach(id => {
-            shiftForge.mutate('UPDATE', id, { status: 'published' });
-        });
+    const publishShifts = useCallback(async (ids: string[]) => {
+        return Promise.all(ids.map(id => 
+            shiftForge.mutate('UPDATE', id, { status: 'published' } as Partial<Shift>)
+        ));
     }, [shiftForge]);
 
     // --- LEAVE MANAGEMENT ---
@@ -61,17 +60,17 @@ export function useHumanResources() {
             status: 'approved',
             finalDecision: 'approved',
             finalDecisionAt: new Date().toISOString()
-        });
+        } as Partial<LeaveRequest>);
     }, [leaveForge]);
 
-    const rejectLeaveRequest = useCallback(async (id: string, reason: string | RejectionReason, details?: string) => {
+    const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, details?: string) => {
         return leaveForge.mutate('UPDATE', id, { 
             status: 'rejected',
             finalDecision: 'rejected',
-            rejectionReason: reason as RejectionReason,
+            rejectionReason: reason,
             rejectionDetails: details,
             finalDecisionAt: new Date().toISOString()
-        });
+        } as Partial<LeaveRequest>);
     }, [leaveForge]);
 
     const createLeaveRequest = useCallback(async (request: LeaveRequest) => {
@@ -92,15 +91,9 @@ export function useHumanResources() {
         publishShifts,
         approveLeaveRequest,
         rejectLeaveRequest,
-        createLeaveRequest,
-        usePlanning: () => ({
-            shifts,
-            addShift,
-            updateShift,
-            deleteShift,
-            publishShifts
-        })
+        createLeaveRequest
     };
 }
 
 export const usePlanning = useHumanResources;
+

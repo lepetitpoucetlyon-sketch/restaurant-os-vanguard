@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useSettings } from '@/context/SettingsContext';
 import { BrandingUI } from '@/domain/services/BrandingUI';
 import { BrandInput } from '@/types';
-import { extractBrandingFromUrl } from '@/app/actions/branding';
+// import { extractBrandingFromUrl } from '@/app/actions/branding';
 import { cn } from '@/lib/ui.foundations';
 
 export default function ProspectingDashboard() {
@@ -23,12 +23,13 @@ export default function ProspectingDashboard() {
     setLastGenerated(newTheme);
   };
 
-  const handleMagicScan = async () => {
+    const handleMagicScan = async () => {
     if (!url) return;
     setIsAnalyzing(true);
     try {
-      const result = await extractBrandingFromUrl(url);
-      await handleApplySauce(result);
+      // Simulation pour l'export statique
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      await handleApplySauce({ name: "Branding Simulé", primaryColor: "#C5A059", atmosphere: 'luxury' });
     } finally {
       setIsAnalyzing(false);
     }
