@@ -3,13 +3,30 @@
  * Orchestrates orders, reservations, and real-time floor operations.
  */
 
-export * from './hooks/useOrders';
-export * from './hooks/useReservations';
-export * from './hooks/useTables';
-export * from './hooks/useFloorOps';
-export * from './hooks/useKitchen';
-export * from './hooks/usePOSController';
-export * from './hooks/useNexusOps';
+export { 
+  useOrders, 
+  useReservations, 
+  useTables, 
+  useKitchen, 
+  usePOSController, 
+  useNexusOps,
+  useOperationalNodes,
+  useFloorOps,
+  useRecipes,
+  useMarketing,
+  useHR,
+  useCRM,
+  useProducts,
+  useCategories,
+  useFiscal,
+  useInventory,
+  useIntelligence,
+  useManagement,
+  useQuotes,
+  useAllocations,
+  useGroups
+} from '@/engines/ops/NexusOpsProvider';
+
 export * from './types';
 export * from './store/orderAtoms';
 export * from './store/posAtoms';

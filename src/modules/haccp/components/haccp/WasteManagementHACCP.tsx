@@ -106,8 +106,8 @@ export function WasteManagementHACCP() {
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                                 </div>
                                 <p className="text-sm text-text-muted leading-relaxed">
-                                    Dernière maintenance certifiée par **Extraction Lyon Expert** le **{hottesDoc.lastUpdated}**. 
-                                    Prochaine intervention réglementaire conseillée avant le **{hottesDoc.nextReview}**.
+                                    Dernière maintenance certifiée par **Extraction Lyon Expert** le **{String(hottesDoc?.lastUpdated || 'N/A')}**. 
+                                    Prochaine intervention réglementaire conseillée avant le **{String(hottesDoc?.nextReview || 'N/A')}**.
                                 </p>
                                 <div className="pt-2">
                                     <button className="text-[10px] font-black text-accent-gold uppercase tracking-[0.2em] flex items-center gap-2 hover:gap-3 transition-all">

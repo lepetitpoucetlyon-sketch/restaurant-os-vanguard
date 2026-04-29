@@ -10,8 +10,9 @@ export interface MarketingSegment {
     id: string;
     name: string;
     description: string;
-    criteria: Record<string, string>;
+    criteria: Record<string, string> | string;
     estimatedSize: number;
+    count?: number;
     color: string;
     createdAt?: string;
     updatedAt?: string;
@@ -19,12 +20,15 @@ export interface MarketingSegment {
 
 export interface ScheduledPost {
     id: string;
-    caption: string;
+    caption?: string;
+    content: string;
     platforms: string[];
     scheduledDate: string;
     scheduledTime: string;
+    scheduledFor: string;
     status: 'draft' | 'scheduled' | 'published' | 'failed';
     imageUrl?: string;
+    media: { type: string; url: string; };
     createdAt?: string;
     updatedAt?: string;
 }

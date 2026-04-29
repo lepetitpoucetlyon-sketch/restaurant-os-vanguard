@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { FiscalEngine, FiscalSeal } from '@/domain/services/FiscalEngine';
+import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
 import { StockEngine } from '@/domain/services/StockEngine';
 import { Order, StockItem, Recipe } from '@/types';
 import { getTenantPath } from '@/lib/firebase';

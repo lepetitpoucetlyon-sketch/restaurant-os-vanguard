@@ -10,13 +10,12 @@ export const ProductControlList: React.FC = () => {
     const { activeControl, updateControlItem } = useQuality();
     const items = activeControl?.items || [];
 
-    const handleToggleStatus = (item: QualityControlItem, status: 'pass' | 'fail') => {
+    const handleToggleStatus = (item: QualityControlItem, decision: import('@/domain/types/quality').DecisionType) => {
         updateControlItem({
             ...item,
-            status: status,
-            is_rejected: status === 'fail',
-            decision: status === 'pass' ? 'accepted' : 'rejected'
-        } as any);
+            decision: decision,
+            is_rejected: decision === 'rejected',
+        });
     };
 
     const handleFreshnessChange = (item: QualityControlItem, score: number) => {
@@ -55,7 +54,7 @@ export const ProductControlList: React.FC = () => {
                             <div className={cn(
                                 "w-16 h-16 rounded-[1.5rem] flex items-center justify-center transition-all shadow-inner relative shrink-0",
                                 item.is_rejected ? "bg-rose-500 text-white" : 
-                                item.status === 'pass' ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-50 text-slate-300"
+                                item.decision === 'accepted' ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-50 text-slate-300"
                             )}>
                                 <Package className="w-8 h-8" />
                                 {item.is_rejected && (
@@ -108,10 +107,10 @@ export const ProductControlList: React.FC = () => {
                             
                             <div className="flex items-center gap-3 shrink-0">
                                 <button
-                                    onClick={() => handleToggleStatus(item, 'pass')}
+                                    onClick={() => handleToggleStatus(item, 'accepted')}
                                     className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md group-active:scale-95",
-                                        item.status === 'pass' && !item.is_rejected
+                                        item.decision === 'accepted' && !item.is_rejected
                                             ? "bg-emerald-500 text-white shadow-emerald-500/30" 
                                             : "bg-slate-50 text-slate-300 hover:bg-emerald-50 hover:text-emerald-500 border border-slate-100"
                                     )}
@@ -119,7 +118,7 @@ export const ProductControlList: React.FC = () => {
                                     <Check className="w-6 h-6" />
                                 </button>
                                 <button
-                                    onClick={() => handleToggleStatus(item, 'fail')}
+                                    onClick={() => handleToggleStatus(item, 'rejected')}
                                     className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md group-active:scale-95",
                                         item.is_rejected

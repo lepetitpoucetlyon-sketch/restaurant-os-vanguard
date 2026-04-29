@@ -12,13 +12,15 @@ import { InstanceGuard } from '@/domain/services/InstanceGuard';
  */
 export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useAtom(instanceStateAtom);
-    const [mounted, setMounted] = React.useState(false);
+    const [traceId] = React.useState(() => Math.random().toString(36).substring(7).toUpperCase());
 
     useEffect(() => {
-        setMounted(true);
         if (typeof window !== 'undefined') {
             const hostname = window.location.hostname;
-            const tenantId = InstanceGuard.validateHost(hostname);
+            // 🛡️ PROJECT_ID_CAPTURE: Get current Firebase Project from environment
+            const firebaseProjectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'UNSET';
+            
+            const tenantId = InstanceGuard.validateInstance(hostname, firebaseProjectId);
             const isAuthorized = tenantId !== 'UNAUTHORIZED';
             const isDev = tenantId === '__dev__';
 
@@ -30,13 +32,13 @@ export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ chi
             });
 
             if (!isAuthorized) {
-                console.error(`[ SOVEREIGNTY_ALERT ] UNAUTHORIZED_INSTANCE_DETECTED: ${hostname}`);
+                console.error(`[ SOVEREIGNTY_ALERT ] UNAUTHORIZED_INSTANCE_DETECTED: Host=${hostname}, Project=${firebaseProjectId}`);
             }
         }
     }, [setState]);
 
     // --- 🏛️ LOCK SCREEN (UNAUTHORIZED) ---
-    if (mounted && !state.isAuthorized && state.hostname !== null) {
+    if (state.hostname !== null && !state.isAuthorized) {
         return (
             <div style={{
                 backgroundColor: '#000',
@@ -64,7 +66,7 @@ export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ chi
                     Execution halted to prevent code extraction.
                 </div>
                 <div style={{ marginTop: '3rem', opacity: 0.5, fontSize: '0.8rem' }}>
-                    &gt; REMOTE_TRACE_ID: {Math.random().toString(36).substring(7).toUpperCase()}
+                    &gt; REMOTE_TRACE_ID: {traceId}
                     <br />
                     &gt; STATUS: ACCESS_DENIED
                 </div>
@@ -73,7 +75,7 @@ export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     // --- 🛠️ DEV MODE BADGE ---
-    const devBadge = mounted && state.isDev && (
+    const devBadge = state.hostname !== null && state.isDev && (
         <div style={{
             position: 'fixed',
             bottom: '10px',
@@ -93,7 +95,7 @@ export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ chi
     );
 
     // Initial state check (avoiding flicker or permanent hang)
-    if (!mounted || state.hostname === null) {
+    if (state.hostname === null) {
         return (
             <div style={{ backgroundColor: '#000', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.2em' }}>
                 [ INITIALIZING_EMPIRE_SIGNALS... ]

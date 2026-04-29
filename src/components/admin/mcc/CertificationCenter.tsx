@@ -6,6 +6,7 @@ import { Award, FileText, Download, Printer, CheckCircle, ShieldCheck, User, Ale
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/ui.foundations';
+import { SiteIntegrityReport, GlobalComplianceCertificate } from '@/domain/services/FleetComplianceService';
 
 interface AuditReport {
   isValid: boolean;
@@ -44,8 +45,13 @@ export default function CertificationCenter() {
     setAuditStatus('checking');
     try {
         // 🛡️ INDUSTRIAL AUDIT: Real cross-tenant ledger check
-        const report = await (complianceService as any).verifySiteIntegrity(selectedInstanceId);
-        setAuditReport({ ...report, isValid: report.isChainValid, totalSeals: report.entryCount } as any);
+        const report: SiteIntegrityReport = await complianceService.verifySiteIntegrity(selectedInstanceId);
+        setAuditReport({ 
+            isValid: report.isChainValid, 
+            totalSeals: report.entryCount,
+            isChainValid: report.isChainValid,
+            entryCount: report.entryCount
+        });
         setAuditStatus(report.isChainValid ? 'valid' : 'invalid');
         logger.info('CertificationCenter: Audit check complete', { isValid: report.isChainValid });
     } catch (error) {
@@ -60,9 +66,19 @@ export default function CertificationCenter() {
     setIsGenerating(true);
     try {
         // 🔒 GLOBAL SEAL: Signing the fleet manifest
-        const cert = await (complianceService as any).issueGlobalCertificate('FLEET_CMDR_01');
+        const cert: GlobalComplianceCertificate = await complianceService.issueGlobalCertificate('FLEET_CMDR_01');
         
-        setCertificates(prev => [cert as DigitalCertificate, ...prev]);
+        const digitalCert: DigitalCertificate = {
+            id: cert.id,
+            instanceId: selectedInstanceId,
+            instanceName: selectedInstance?.name || 'Unknown',
+            year: new Date(cert.issuedAt).getFullYear(),
+            type: cert.status,
+            issuedAt: new Date(cert.issuedAt).toISOString(),
+            issuer: cert.issuedBy
+        };
+
+        setCertificates(prev => [digitalCert, ...prev]);
         setIsGenerating(false);
 
         setShowSuccess(true);

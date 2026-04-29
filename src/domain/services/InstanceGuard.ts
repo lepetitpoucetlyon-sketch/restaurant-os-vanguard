@@ -6,6 +6,7 @@
 
 export interface InstanceSecurityConfig {
     authorizedDomains: Record<string, string>; // hostname -> tenantId
+    authorizedProjects: Record<string, string>; // tenantId -> firebaseProjectId
     allowDevMode: boolean;
 }
 
@@ -22,7 +23,13 @@ export const DEFAULT_SECURITY_CONFIG: InstanceSecurityConfig = {
         // --- 🛠️ Localhost / Dev ---
         'localhost': '__dev__',
         '127.0.0.1': '__dev__',
-        '0.0.0.0': '__dev__',
+    },
+    authorizedProjects: {
+        'lepetitpoucet': 'lepetitpoucet-prod',
+        'bistrolyon': 'bistrolyon-prod',
+        'urbanburger': 'urbanburger-prod',
+        'restaurant-os': 'restaurant-os-web',
+        '__dev__': 'restaurant-os-dev'
     },
     allowDevMode: process.env.NODE_ENV === 'development',
 };
@@ -31,27 +38,33 @@ export class InstanceGuard {
     private static config = DEFAULT_SECURITY_CONFIG;
 
     /**
-     * Valide l'hôte actuel et retourne le tenantId associé ou 'UNAUTHORIZED'.
+     * Valide l'instance complète (Host + Project) et retourne le tenantId ou 'UNAUTHORIZED'.
      */
-    static validateHost(hostname: string): string {
+    static validateInstance(hostname: string, firebaseProjectId: string): string {
         const tenantId = this.config.authorizedDomains[hostname];
 
-        if (tenantId) {
-            return tenantId;
+        if (!tenantId) {
+            // Mode Dev Bypass
+            if (this.config.allowDevMode && (hostname === 'localhost' || hostname === '127.0.0.1')) {
+                return '__dev__';
+            }
+            return 'UNAUTHORIZED';
         }
 
-        // Mode Dev Bypass
-        if (this.config.allowDevMode && (hostname === 'localhost' || hostname === '127.0.0.1')) {
-            return '__dev__';
+        // 🛡️ VANGUARD SECURITY: Cross-check Project ID
+        const expectedProjectId = this.config.authorizedProjects[tenantId];
+        if (expectedProjectId !== firebaseProjectId) {
+            console.error(`🚨 SOUVEREIGNTY_VIOLATION: Host ${hostname} (Tenant: ${tenantId}) attempted to boot with Project ID ${firebaseProjectId}. Expected: ${expectedProjectId}`);
+            return 'UNAUTHORIZED';
         }
 
-        return 'UNAUTHORIZED';
+        return tenantId;
     }
 
     /**
-     * Vérifie si l'instance est sécurisée.
+     * Vérifie si l'instance est sécurisée (Compatibilité descendante).
      */
     static isAuthorized(hostname: string): boolean {
-        return this.validateHost(hostname) !== 'UNAUTHORIZED';
+        return !!this.config.authorizedDomains[hostname] || (this.config.allowDevMode && (hostname === 'localhost' || hostname === '127.0.0.1'));
     }
 }

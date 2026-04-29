@@ -8,10 +8,11 @@ import { useUI } from '@/context/UIContext';
 import { useTutorial } from '@/context/TutorialContext';
 import { cn } from "@/lib/ui.foundations";;
 import { X, ChevronRight, BookOpen, Zap } from 'lucide-react';
+import { NexusTutorialState } from '@/types/nexus.types';
 
 export function DocumentationPortal({ isPage = false, categoryOverride }: { isPage?: boolean; categoryOverride?: string }) {
     const { isDocumentationOpen, documentationCategory, closeDocumentation } = useUI();
-    const { startTutorial } = useTutorial() as any;
+    const { startTutorial } = useTutorial() as unknown as NexusTutorialState;
     const [showFullTutorial, setShowFullTutorial] = React.useState(true);
 
     const activeCategory = categoryOverride || documentationCategory;
@@ -111,9 +112,10 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                 <div
                                                                     className="flex items-center gap-4 px-5 py-4 bg-neutral-900 dark:bg-neutral-800 text-white cursor-pointer hover:bg-black dark:hover:bg-neutral-700 transition-colors group/banner"
                                                                     onClick={() => {
-                                                                        const tutorialSection = {
+                                                                        const tutorialSection: import('@/types/nexus.types').NexusTutorialSection = {
+                                                                            id: activeCategory as string,
                                                                             title: actionTitle,
-                                                                            points: steps.map((step, stepIdx) => {
+                                                                            points: steps.map((step, stepIdx): import('@/types/nexus.types').NexusTutorialStep => {
                                                                                 const isAutoClick = step.includes('[CLICK]');
                                                                                 const selectorMatch = step.match(/\[SELECTOR:(.*?)\]/);
                                                                                 const pathMatch = step.match(/\[PATH:(.*?)\]/);
@@ -130,6 +132,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                                 const selector = manualSelector || `[data-tutorial="${activeCategory}-${sidx}-${pidx}-${stepIdx}"]`;
 
                                                                                 return {
+                                                                                    id: `${activeCategory}-${sidx}-${pidx}-${stepIdx}`,
                                                                                     label: cleanStep.split(' → ')[0] || cleanStep,
                                                                                     description: cleanStep,
                                                                                     selector: selector,

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { createNexusNode, updateNexusNode } from '@/store/operationalAtoms';
-import { QualityControl, ProductQualityConfig, SupplierQualityScore } from '@/domain/types/quality';
+import { QualityControl, ProductQualityConfig, SupplierQualityScore, QualityControlItem } from '@/domain/types/quality';
 
 /**
  * ⚛️ Quality Module Atoms - Grade VI
@@ -85,26 +85,34 @@ const INITIAL_SCORES: SupplierQualityScore[] = [
 
 // 1. Quality Controls History (NexusNode managed)
 export const qualityControlsNodeAtom = createNexusNode<QualityControl>('qualityControls');
-export const qualityControlsAtom = atom((get) => {
+export const qualityControlsAtom = atom<QualityControl[]>((get) => {
     const data = get(qualityControlsNodeAtom).data;
     return data.length > 0 ? data : INITIAL_CONTROLS;
 });
-export const qualityLoadingAtom = atom((get) => get(qualityControlsNodeAtom).loading);
+export const qualityLoadingAtom = atom<boolean>((get) => get(qualityControlsNodeAtom).loading);
 
 // 2. Active Session Store (Current Reception)
-export const qualityActiveControlAtom = atom<Partial<QualityControl>>({
-    items: [],
-    delivery_conditions: {
-        vehicle_type: 'unknown',
-        vehicle_temperature: { compliant: true, measured: 0 },
-        vehicle_cleanliness: 'not_checked',
-        packaging_integrity: 'intact',
-        delivery_time_compliant: true
+export const qualityActiveControlAtom = atom<import('@/domain/types/quality').ActiveQualityControl | null, [import('@/domain/types/quality').ActiveQualityControl | null | ((prev: import('@/domain/types/quality').ActiveQualityControl | null) => import('@/domain/types/quality').ActiveQualityControl | null)], void>(
+    null,
+    (get, set, update) => {
+        const next = typeof update === 'function' ? update(get(qualityActiveControlAtom)) : update;
+        set(qualityActiveControlAtom, next);
     }
-});
-
-export const qualityControlStepAtom = atom<1 | 2 | 3>(1);
-export const qualitySelectedDeliveryIdAtom = atom<string | null>(null);
+);
+export const qualityControlStepAtom = atom<number, [number | ((prev: number) => number)], void>(
+    1,
+    (get, set, update) => {
+        const next = typeof update === 'function' ? update(get(qualityControlStepAtom)) : update;
+        set(qualityControlStepAtom, next);
+    }
+);
+export const qualitySelectedDeliveryIdAtom = atom<string | null, [string | null | ((prev: string | null) => string | null)], void>(
+    null,
+    (get, set, update) => {
+        const next = typeof update === 'function' ? update(get(qualitySelectedDeliveryIdAtom)) : update;
+        set(qualitySelectedDeliveryIdAtom, next);
+    }
+);
 
 // 3. Product-Specific Quality Configs
 export const productQualityConfigsNodeAtom = createNexusNode<ProductQualityConfig>('productQualityConfigs');
@@ -120,12 +128,12 @@ export const supplierScoresAtom = atom((get) => {
 // 5. Statistics & Alert Selectors
 export const qualityAlertsAtom = atom((get) => {
     const controls = get(qualityControlsAtom);
-    return (controls as any[]).filter(c => c.summary?.overall_status === 'fail' || c.summary?.overall_status === 'warning');
+    return controls.filter(c => c.summary?.overall_status === 'fail' || c.summary?.overall_status === 'warning');
 });
 
 // Selector for today's reception performance
 export const todayReceptionStatsAtom = atom((get) => {
-    const controls = get(qualityControlsAtom) as any[];
+    const controls = get(qualityControlsAtom);
     const today = new Date().toISOString().split('T')[0];
     const todayControls = (controls || []).filter(c => c.controlled_at?.startsWith(today));
     
@@ -139,26 +147,26 @@ export const todayReceptionStatsAtom = atom((get) => {
 
 // Selector for current session summary
 export const qualityCurrentSessionStatsSelector = atom((get) => {
-    const session = get(qualityActiveControlAtom) as any;
+    const session = get(qualityActiveControlAtom);
     const items = session.items || [];
     
-    const accepted = items.filter((i: any) => i.quantity_accepted > 0).length;
-    const rejected = items.filter((i: any) => i.is_rejected).length;
-    const tempIssues = items.filter((i: any) => i.checks?.temperature?.status === 'fail').length;
+    const accepted = items.filter((i: QualityControlItem) => i.quantity_accepted > 0).length;
+    const rejected = items.filter((i: QualityControlItem) => i.is_rejected).length;
+    const tempIssues = items.filter((i: QualityControlItem) => i.checks?.temperature?.status === 'fail').length;
     
     return {
         total: items.length,
         accepted,
         rejected,
         tempIssues,
-        status: (rejected > 0 || tempIssues > 0 ? 'fail' : 'pass') as any
+        status: (rejected > 0 || tempIssues > 0 ? 'fail' : 'pass') as 'pass' | 'fail' | 'warning'
     };
 });
 
 // Global Metrics Selector for Finance Suture
 export const qualityGlobalMetricsSelector = atom((get) => {
-    const scores = get(supplierScoresAtom) as any[];
-    const controls = get(qualityControlsAtom) as any[];
+    const scores = get(supplierScoresAtom);
+    const controls = get(qualityControlsAtom);
     const avgRejection = (scores || []).reduce((sum, s) => sum + (s.rejectionRate || 0), 0) / (scores.length || 1);
     const avgCompliance = (scores || []).reduce((sum, s) => sum + (s.complianceRate || 0), 0) / (scores.length || 1);
     return {

@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/domain/services/FiscalEngine';
+import { FiscalEngine, FiscalizableRecord } from '@/infrastructure/adapters/FiscalAdapter';
 import { checkOnlineStatus } from '@/lib/offline/status';
 import { FiscalSeal } from '@/types';
 import { db } from '@/lib/offline/offline-store';
@@ -41,7 +41,7 @@ export class BlockchainLedgerService {
                 limit: 1
             });
             
-            this.lastSealCache = results.length > 0 ? (results[0] as unknown as FiscalSeal) : undefined;
+            this.lastSealCache = results.length > 0 ? (results[0] as FiscalSeal) : undefined;
             return this.lastSealCache;
         } catch (error) {
             logger.warn('BlockchainLedgerService: Remote fetch failed, falling back to local', error);
@@ -55,7 +55,7 @@ export class BlockchainLedgerService {
      * Scelle une écriture en la liant à la chaîne existante.
      * GARANTIE D'ATOMICITÉ: Utilise une file d'attente de promesses.
      */
-    static async sealWithChain(entryId: string, entryData: Record<string, unknown>, isTrainingMode: boolean = false): Promise<FiscalSeal> {
+    static async sealWithChain(entryId: string, entryData: FiscalizableRecord, isTrainingMode: boolean = false): Promise<FiscalSeal> {
         // We chain the next seal to the previous one to avoid concurrency forks
         this.sealQueue = this.sealQueue.then(async () => {
             const lastSeal = await this.getLastSeal();
@@ -72,7 +72,7 @@ export class BlockchainLedgerService {
             return newSeal;
         });
 
-        return this.sealQueue as unknown as Promise<FiscalSeal>;
+        return this.sealQueue as Promise<FiscalSeal>;
     }
 
     /**
@@ -84,7 +84,7 @@ export class BlockchainLedgerService {
             orderBy: { field: 'timestamp', direction: 'asc' }
         });
         
-        const seals = results as unknown as FiscalSeal[];
+        const seals = results as FiscalSeal[];
         return await FiscalEngine.verifyChain(seals);
     }
 

@@ -60,6 +60,8 @@ export function Sidebar() {
     const accessibleSections = useMemo(() => {
         const features = tenantConfig?.features || {};
         
+        const pmsEnabled = !!(settings as any)?.pmsEnabled;
+        
         return (NAV_SECTIONS || []).map(section => ({
             ...section,
             items: (section.items || []).filter(item => {
@@ -69,29 +71,29 @@ export function Sidebar() {
                 }
 
                 // 2. Hardware/Instance settings filter
-                if (item.href === '/pms' && !(settings as any)?.pmsEnabled) return false;
+                if (item.href === '/pms' && !pmsEnabled) return false;
 
                 // 3. Suzerain Feature Flag Mapping
                 const cat = item.category as string;
                 let isFeatureEnabled = true;
 
                 const featureMapping: Record<string, boolean> = {
-                    'pos': features.pos,
-                    'floor-plan': features.pos,
-                    'kds': features.kds,
-                    'kitchen': features.kds,
-                    'inventory': features.inventory,
-                    'haccp': features.inventory, // HACCP often coupled with Inventory/Stock
-                    'staff': features.hr,
-                    'planning': features.hr,
-                    'recruitment': features.hr,
-                    'onboarding': features.hr,
-                    'reservations': features.reservations,
-                    'customer': features.reservations,
-                    'accounting': features.finance,
-                    'finance': features.finance,
-                    'analytics': features.marketing,
-                    'marketing': features.marketing,
+                    'pos': !!features.pos,
+                    'floor-plan': !!features.pos,
+                    'kds': !!features.kds,
+                    'kitchen': !!features.kds,
+                    'inventory': !!features.inventory,
+                    'haccp': !!features.inventory, // HACCP often coupled with Inventory/Stock
+                    'staff': !!features.hr,
+                    'planning': !!features.hr,
+                    'recruitment': !!features.hr,
+                    'onboarding': !!features.hr,
+                    'reservations': !!features.reservations,
+                    'customer': !!features.reservations,
+                    'accounting': !!features.finance,
+                    'finance': !!features.finance,
+                    'analytics': !!features.marketing,
+                    'marketing': !!features.marketing,
                     'registre': true, // Standard requirement
                 };
 
@@ -103,7 +105,7 @@ export function Sidebar() {
                 return isFeatureEnabled && (hasAccess?.(item.category) ?? true);
             })
         })).filter(section => (section.items?.length || 0) > 0);
-    }, [hasAccess, (settings as any)?.pmsEnabled, tenantConfig?.features]);
+    }, [hasAccess, settings, tenantConfig]);
 
     // Cleanup and effects
     useEffect(() => {

@@ -14,11 +14,11 @@ export function IngredientsTab() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-    const categories = ["all", ...Array.from(new Set((ingredients || []).map((i) => i.category || 'other')))];
+    const categories = ["all", ...Array.from(new Set((ingredients || []).map((i) => String(i.category || 'other'))))];
 
     const filteredIngredients = (ingredients || []).filter((ing) => {
-        const matchesSearch = ing.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (ing.supplierName || 'Nexus').toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = String(ing.name || ing.ingredientName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            String(ing.supplierName || 'Nexus').toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = selectedCategory === "all" || ing.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
@@ -42,16 +42,16 @@ export function IngredientsTab() {
                     <div className="flex items-center gap-2 bg-bg-secondary p-1 rounded-xl border border-border">
                         {categories.map(cat => (
                             <button
-                                key={cat}
-                                onClick={() => setSelectedCategory(cat)}
+                                key={String(cat)}
+                                onClick={() => setSelectedCategory(String(cat))}
                                 className={cn(
                                     "px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
-                                    selectedCategory === cat
+                                    selectedCategory === String(cat)
                                         ? "bg-accent text-white shadow-lg shadow-accent/20"
                                         : "text-text-muted hover:text-text-primary"
                                 )}
                             >
-                                {cat}
+                                {String(cat)}
                             </button>
                         ))}
                     </div>
@@ -91,28 +91,28 @@ export function IngredientsTab() {
                         </div>
 
                         <div className="space-y-4">
-                            <div>
-                                <h3 className="text-lg font-serif font-black text-text-primary tracking-tight truncate">{ing.ingredientName}</h3>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <Tag className="w-3 h-3 text-accent" />
-                                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{ing.category}</span>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4 py-4 border-y border-border/50">
-                                <div>
-                                    <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Coût Unitaire</p>
-                                    <p className="text-xl font-mono font-black text-text-primary">{formatCurrency((ing.unitCostInCents || ing.costInCents || 0) / 100)}<span className="text-[10px] text-text-muted ml-1">/{ing.unit}</span></p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Stock Min</p>
-                                    <p className="text-xl font-mono font-black text-text-primary">{ing.minQuantity} <span className="text-[10px] text-text-muted ml-0.5">{ing.unit}</span></p>
-                                </div>
-                            </div>
+                             <div>
+                                 <h3 className="text-lg font-serif font-black text-text-primary tracking-tight truncate">{String(ing.ingredientName || ing.name || '')}</h3>
+                                 <div className="flex items-center gap-2 mt-1">
+                                     <Tag className="w-3 h-3 text-accent" />
+                                     <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{String(ing.category || '')}</span>
+                                 </div>
+                             </div>
+ 
+                             <div className="grid grid-cols-2 gap-4 py-4 border-y border-border/50">
+                                 <div>
+                                     <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Coût Unitaire</p>
+                                     <p className="text-xl font-mono font-black text-text-primary">{formatCurrency((Number(ing.unitCostInCents || ing.costInCents || 0)) / 100)}<span className="text-[10px] text-text-muted ml-1">/{String(ing.unit || '')}</span></p>
+                                 </div>
+                                 <div className="text-right">
+                                     <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Stock Min</p>
+                                     <p className="text-xl font-mono font-black text-text-primary">{String(ing.minQuantity || 0)} <span className="text-[10px] text-text-muted ml-0.5">{String(ing.unit || '')}</span></p>
+                                 </div>
+                             </div>
 
                             <div className="flex items-center gap-3 text-text-muted">
                                 <Truck className="w-4 h-4" />
-                                <span className="text-[11px] font-bold truncate">{ing.supplierName || 'Nexus'}</span>
+                                <span className="text-[11px] font-bold truncate">{String(ing.supplierName || 'Nexus')}</span>
                             </div>
                         </div>
                     </motion.div>

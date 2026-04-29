@@ -16,6 +16,7 @@ import {
     Account, 
     ExpenseClaim, 
     BankConnection, 
+    BankTransaction,
     ComplianceCertificate,
     AccountingMetrics,
     FinanceFinancialMetrics as FinancialMetrics, // Conflict with common metrics maybe?
@@ -31,14 +32,14 @@ type FinancialMetricsTyped = FinancialMetrics;
 const AccountingContext = createContext<AccountingContextType | undefined>(undefined);
 
 export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const accounts = useAtomValue(accountsAtom) as any[];
-    const journalEntries = useAtomValue(journalEntriesAtom) as any[];
-    const bankTransactions = useAtomValue(bankTransactionsAtom) as any[];
-    const expenseClaims = useAtomValue(expenseClaimsAtom) as any[];
+    const accounts = useAtomValue(accountsAtom) as Account[];
+    const journalEntries = useAtomValue(journalEntriesAtom) as JournalEntry[];
+    const bankTransactions = useAtomValue(bankTransactionsAtom) as BankTransaction[];
+    const expenseClaims = useAtomValue(expenseClaimsAtom) as ExpenseClaim[];
     const isLoading = useAtomValue(accountingLoadingAtom);
 
     // Mock/Compute Ledger for UI
-    const ledger = useMemo<any[]>(() => {
+    const ledger = useMemo<LedgerAccount[]>(() => {
         return (accounts || []).map(acc => ({
             ...acc,
             balanceInCents: 0,
@@ -48,7 +49,7 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }));
     }, [accounts]);
 
-    const metrics = useMemo<any>(() => ({
+    const metrics = useMemo<AccountingMetrics>(() => ({
         totalRevenueInCents: 0,
         totalExpensesInCents: 0,
         grossMarginInCents: 0,
@@ -60,7 +61,7 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         netProfitInCents: 0
     }), []);
 
-    const generatePandL = useCallback((periodId: string): any => ({
+    const generatePandL = useCallback((periodId: string): ProfitAndLossReport => ({
         periodId,
         periodName: periodId === 'current' ? 'Période Actuelle' : periodId,
         revenues: [],
@@ -79,15 +80,15 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         console.log("Stub Reconcile", { bankTxId, entryId });
     }, []);
 
-    const addJournalEntry = useCallback(async (entry: any) => {
+    const addJournalEntry = useCallback(async (entry: JournalEntry) => {
         console.log("Stub Add Entry", entry);
     }, []);
 
-    const addManualJournalEntry = useCallback(async (entry: any) => {
+    const addManualJournalEntry = useCallback(async (entry: JournalEntry) => {
         console.log("Stub Add Manual Entry", entry);
     }, []);
 
-    const updateJournalEntry = useCallback(async (id: string, updates: any) => {
+    const updateJournalEntry = useCallback(async (id: string, updates: Partial<JournalEntry>) => {
         console.log("Stub Update Entry", id, updates);
     }, []);
 
@@ -95,29 +96,11 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         console.log("Stub Delete Entry", id);
     }, []);
 
-    const addAccount = useCallback(async (account: any) => {
+    const addAccount = useCallback(async (account: Account) => {
         console.log("Stub Add Account", account);
     }, []);
 
-    const contextValue: any = useMemo(() => ({
-        accounts,
-        ledger,
-        journalEntries,
-        bankTransactions,
-        expenseClaims,
-        isLoading,
-        metrics,
-        generatePandL,
-        validateJournalEntry,
-        reconcileTransaction,
-        addJournalEntry,
-        addManualJournalEntry,
-        updateJournalEntry,
-        deleteJournalEntry,
-        addAccount
-    }), [accounts, ledger, journalEntries, bankTransactions, expenseClaims, isLoading, metrics, generatePandL, validateJournalEntry, reconcileTransaction, addJournalEntry, addManualJournalEntry, updateJournalEntry, deleteJournalEntry, addAccount]);
-
-
+    // Dead contextValue stub removed
     const updateAccount = useCallback(async (id: string, updates: Partial<Account>) => {
         console.log("Stub Update Account", id, updates);
     }, []);
@@ -146,7 +129,7 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         console.log("Stub Submit Expense", claim);
     }, []);
 
-    const ingestTransactions = useCallback(async (transactions: any[]) => {
+    const ingestTransactions = useCallback(async (transactions: BankTransaction[]) => {
         console.log("Stub Ingest Transactions", transactions);
     }, []);
 
@@ -248,14 +231,14 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         saveCertification,
         certificates: [],
         expert: {
-            queryExpert: async () => ({}) as any,
+            queryExpert: async () => ({ response: 'STUB', confidence: 100 }),
             isConfigured: true,
             isAuthorized: true,
             role: 'accounting_expert',
             modelId: 'gemini-1.5-pro'
         },
         agent: {
-            query: async () => ({}) as any,
+            query: async () => ({ status: 'STUB' }),
             isProcessing: false
         }
     };

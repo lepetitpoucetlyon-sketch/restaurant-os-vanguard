@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 // 🏛️ RESTAURANT OS - MASTER TEST SHIELD
 // Protection globale contre les initialisations Firebase/Dexie/IDB
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MockAdapter } from '@/lib/nexus/adapters/MockAdapter';
+import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
 import { Order } from '@/modules/ops/types';
 import { StockItem, InventoryMovement } from '@/modules/inventory/types';
 import { JournalEntry, FiscalSeal } from '@/modules/finance/types';

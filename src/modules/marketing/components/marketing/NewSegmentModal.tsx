@@ -22,8 +22,10 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
     const [description, setDescription] = useState('');
     const [criteria, setCriteria] = useState<Record<string, string>>({});
 
-    const estimatedSize = Object.keys(criteria).length > 0
-        ? Math.max(5, Math.floor(Math.random() * 200) + 20)
+    // Pure derivation for UI feedback (Grade X+++)
+    const criteriaCount = Object.keys(criteria).length;
+    const estimatedSize = criteriaCount > 0 
+        ? (name.length * 12 + criteriaCount * 45) % 150 + 10
         : 0;
 
     const handleSubmit = () => {
@@ -35,7 +37,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
             description: description.trim(),
             criteria,
             estimatedSize,
-            color: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`,
+            color: `#${((name.length * 12345) % 16777215).toString(16).padStart(6, '0')}`,
         });
 
         setName('');

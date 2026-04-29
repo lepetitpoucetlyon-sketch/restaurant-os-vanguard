@@ -21,10 +21,10 @@
     },
     "a7104e83-d946-4cda-9957-089b082d1618": {
       "role": "Orchestrator / Infrastructure",
-      "current_task": "Phase 4: Verification & Improvement Report Complete",
-      "status": "Idle / Awaiting Orders",
+      "current_task": "Monitoring Phase 9 (Hermès Execution)",
+      "status": "Delegated to Hermès Surgical Agent",
       "files_locked": [],
-      "last_heartbeat": "2026-04-13T02:35:00Z"
+      "last_heartbeat": "2026-04-25T13:23:00Z"
     },
     "ed70e69e-6299-484d-9d81-504e5ae3420f": {
       "role": "Fleet / Compliance",
@@ -46,6 +46,28 @@
       "status": "Infiltrating / Grade X",
       "files_locked": [],
       "last_heartbeat": "2026-04-21T13:00:00Z"
+    },
+    "a561a9a9-5835-4cd0-a7d6-a474fa11fab2": {
+      "role": "Hermès Surgical Agent (Vassal)",
+      "current_task": "Phase 9: Staging Suture Execution",
+      "status": "Active / Surgical Mode",
+      "files_locked": [
+        ".staging/src/app/(admin)/admin/master-console/page.tsx",
+        ".staging/src/app/(hr)/staff/page.tsx",
+        ".staging/src/shared/types/fleet.types.ts"
+      ],
+      "last_heartbeat": "2026-04-25T13:23:00Z"
+    },
+    "4886c53f-dd38-4ab3-a261-83d349a28e09": {
+      "role": "Frontend Sentinel / Antigravity",
+      "current_task": "Building Imperial Library (MD Archive Dashboard)",
+      "status": "Executing / Grade X",
+      "files_locked": [
+        ".staging/imperial-dashboards/archive.html",
+        ".staging/imperial-dashboards/viewer.html",
+        ".staging/imperial-dashboards/index.html"
+      ],
+      "last_heartbeat": "2026-04-26T10:30:00Z"
     }
   },
   "global_locks": {},

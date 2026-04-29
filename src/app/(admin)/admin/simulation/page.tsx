@@ -53,7 +53,15 @@ export default function SimulationPage() {
             const date = new Date();
             date.setDate(date.getDate() - (14 - day));
 
-            const result = await SimulationService.simulateDay(date, currentMode, 'DEFAULT', { ingredients, stockItems });
+            const result = await SimulationService.simulateDay(
+                date.toISOString(), 
+                currentMode, 
+                'DEFAULT', 
+                { 
+                    ingredients: ingredients as unknown as import('@/types').Ingredient[], 
+                    stockItems: stockItems as unknown as import('@/types').StockItem[] 
+                }
+            );
             
             setResults(prev => [...prev, { date: date.toLocaleDateString(), ...result, anomalies: Array(result.anomalyCount).fill("Écart de flux détecté") }]);
             setStats(prev => ({

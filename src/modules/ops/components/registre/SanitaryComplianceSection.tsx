@@ -83,21 +83,21 @@ export function SanitaryComplianceSection() {
 
                                 <div className="space-y-4">
                                     <div className="bg-bg-tertiary/30 rounded-2xl p-6 border border-border/50">
-                                        <p className="text-sm text-text-primary font-medium">{s.doc.title}</p>
-                                        <p className="text-[12px] text-text-muted mt-2 leading-relaxed">{s.doc.description}</p>
+                                        <p className="text-sm text-text-primary font-medium">{s.doc?.title || 'Document sans titre'}</p>
+                                        <p className="text-[12px] text-text-muted mt-2 leading-relaxed">{s.doc?.description || 'Détails non renseignés.'}</p>
                                     </div>
 
                                     <div className="flex items-center gap-6">
                                         <div className="flex items-center gap-2 text-text-muted">
                                             <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
-                                            <span className="text-[10px] font-mono whitespace-nowrap">MAJ : {s.doc.lastUpdated}</span>
+                                            <span className="text-[10px] font-mono whitespace-nowrap">MAJ : {s.doc?.lastUpdated || 'N/A'}</span>
                                         </div>
                                         <div className={cn(
                                             "flex items-center gap-2",
-                                            s.doc.status === 'conforme' ? 'text-success' : 'text-warning'
+                                            s.doc?.status === 'certified' ? 'text-success' : 'text-warning'
                                         )}>
                                             <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
-                                            <span className="text-[10px] font-mono whitespace-nowrap font-bold text-text-muted">Échéance : {s.doc.nextReview}</span>
+                                            <span className="text-[10px] font-mono whitespace-nowrap font-bold text-text-muted">Échéance : {s.doc?.nextReview || 'N/A'}</span>
                                         </div>
                                     </div>
 
@@ -111,9 +111,9 @@ export function SanitaryComplianceSection() {
                             <div className="flex flex-col items-center md:items-end gap-4 min-w-[140px]">
                                 <div className={cn(
                                     "px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center gap-2 shadow-sm",
-                                    s.doc.status === 'conforme' ? 'bg-success/10 text-success border-success/20' : 'bg-warning/10 text-warning border-warning/20'
+                                    s.doc.status === 'certified' ? 'bg-success/10 text-success border-success/20' : 'bg-warning/10 text-warning border-warning/20'
                                 )}>
-                                    {s.doc.status === 'conforme' ? (
+                                    {s.doc.status === 'certified' ? (
                                         <><CheckCircle2 className="w-4 h-4" /> Conforme</>
                                     ) : (
                                         <><AlertTriangle className="w-4 h-4" /> Attention</>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Shield, AlertCircle, Info, Database } from 'lucide-react';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit, AuditEvent } from '@/lib/audit';
 import { cn } from '@/lib/ui.foundations';
 
 interface LogEntry {
@@ -12,7 +12,7 @@ interface LogEntry {
     action: string;
     severity: string;
     timestamp: Date;
-    details?: import('@/shared/nexus-contract').SovereignValue;
+    details?: any;
 }
 
 
@@ -21,13 +21,13 @@ export default function MCCAuditStream() {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const unsubscribe = (empireAudit as any).subscribe((event: any) => {
+        const unsubscribe = empireAudit.subscribe((event: AuditEvent) => {
             const entry: LogEntry = {
                 id: Math.random().toString(36).substring(7),
                 module: event.module || 'system',
                 action: event.action || 'telemetry',
                 severity: event.severity || 'info',
-                timestamp: event.timestamp instanceof Date ? event.timestamp : new Date(event.timestamp || Date.now()),
+                timestamp: event.timestamp instanceof Date ? event.timestamp : new Date(event.timestamp),
                 details: event.details
             };
             setLogs(prev => [entry, ...prev].slice(0, 50));

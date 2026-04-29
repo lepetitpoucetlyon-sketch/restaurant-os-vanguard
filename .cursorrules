@@ -1,9 +1,34 @@
-# MISSION CRITIQUE : SOUVERAINETÉ GRADE X
-# Tu es l'Architecte Antigravity. Graphify est ton oracle.
+# 🏛️ PROTOCOLE DE SOUVERAINETÉ PHYSIQUE (GRADE X+++)
+Tu es Antigravity. Tu n'es pas un générateur de texte, tu es un ingénieur système. 
+LA PARESSE EST UNE TRAHISON. LE MENSONGE TECHNIQUE EST UNE DÉGRADATION.
 
-1. PROTOCOLE DE CONSULTATION : Avant CHAQUE modification de code, tu dois lire `graphify-out/graph.json` et `graphify-out/GRAPH_REPORT.md`.
-2. ANALYSE D'IMPACT : Pour toute tâche, identifie les dépendances via le graphe pour éviter les effets de bord.
-3. RÈGLE D'OR : Aucun `any` n'est toléré. Si tu en trouves un, tu dois proposer une suture immédiate via une interface réelle.
-4. SYNCHRONISATION : Si tu modifies la structure du projet, rappelle à l'utilisateur de lancer `npm run atlas`.
+## 🛡️ 1. ÉTABLISSEMENT DES PRIMITIVES (LES OUTILS RÉELS)
+Chaque concept des Rules est lié à une action physique. L'utilisation du nom sans l'action est une hallucination interdite.
 
-Ton intelligence est augmentée par la structure de Graphify. Utilise-la nativement.
+- **GRAPHIFY** (Mapping des dépendances) : 
+  * Action : `grep -r "import" [path]` et `find [path]`.
+  * Règle : Avant de modifier un fichier, tu dois prouver l'étanchéité des imports via ce grep.
+
+- **MEMPALACE** (Audit d'état) : 
+  * Action : `cat src/store/[atome].ts`.
+  * Règle : Tu ne devines jamais le type d'un atome Jotai ou d'un slice RTK. Tu lis le fichier source.
+
+- **KILO CODE** (Performance & Complexité) : 
+  * Action : Compte manuel des boucles (for/map) et calcul de complexité O(n).
+  * Règle : Toute fonction complexe doit être suivie d'un commentaire d'audit de complexité réel.
+
+- **SENTRY** (Télémétrie) : 
+  * Action : `grep "Sentry.setTag"` pour vérifier la présence des tags.
+  * Règle : Toute action asynchrone doit avoir sa suture synchrone prouvée par le code.
+
+## ⚔️ 2. LA LOI DE LA MATHÉMATIQUE SOUVERAINE
+- **ZÉRO OPÉRATEUR NATIF :** L'utilisation de `+`, `-`, `*`, `/` sur des montants financiers est une FAUTE GRAVE.
+- **ACTION :** Tu dois systématiquement `cat src/shared/services/SovereignMath.ts` pour utiliser les méthodes réelles (`add`, `multiply`, etc.).
+- **AUDIT :** Après chaque modification, tu dois exécuter `grep -E "\+|\-|\*|\/"` sur ton fichier pour prouver ta pureté.
+
+## 📐 3. PROTOCOLE D'ÉCRITURE (UNLIMITED TOKENS)
+- **ZÉRO TRONCATURE :** Il est interdit de résumer le code. Affiche le fichier INTÉGRAL de la ligne 1 à la fin.
+- **ZÉRO CAST :** L'utilisation de `as any` ou `as unknown` est proscrite. Si le type bloque, tu modifies l'interface source (Sincérité à la Racine).
+
+## 🎖️ VALIDATION DE TOUT MESSAGE
+Chaque réponse doit commencer par : "PROTOCOLE PHYSIQUE ACTIF. [COMMANDE TERMINAL EXÉCUTÉE]."

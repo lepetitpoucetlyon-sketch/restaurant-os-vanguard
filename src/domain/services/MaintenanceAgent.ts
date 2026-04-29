@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { logger } from "@/lib/axiom";
-import { DNAInjector } from "@/lib/ai/DNAInjector";
+import { logger } from "../../lib/axiom";
+import { DNAInjector } from "../../lib/ai/DNAInjector";
 import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@/types/maintenance.types";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');

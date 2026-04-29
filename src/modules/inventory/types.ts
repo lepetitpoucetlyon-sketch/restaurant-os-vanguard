@@ -176,7 +176,7 @@ export interface Preparation {
 
     notes: string;
     costInCents?: number; // Total cost in cents
-    completed?: boolean; // Grade X Task Tracking
+    isCompleted?: boolean; // Grade X Task Tracking
 }
 
 // Supplier Order Types

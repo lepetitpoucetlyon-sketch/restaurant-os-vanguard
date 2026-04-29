@@ -6,23 +6,20 @@ import { vi } from 'vitest';
  */
 
 // 1. MOCK LOGGER
+export const mockLogger = {
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    group: vi.fn(),
+    groupEnd: vi.fn(),
+    time: vi.fn(),
+    timeEnd: vi.fn(),
+};
+
 vi.mock('@/lib/logger', () => ({
-    logger: {
-        debug: vi.fn(),
-        info: vi.fn(),
-        warn: vi.fn(),
-        error: vi.fn(),
-        group: vi.fn(),
-        groupEnd: vi.fn(),
-        time: vi.fn(),
-        timeEnd: vi.fn(),
-    },
-    default: {
-        debug: vi.fn(),
-        info: vi.fn(),
-        warn: vi.fn(),
-        error: vi.fn(),
-    }
+    logger: mockLogger,
+    default: mockLogger
 }));
 
 // 2. MOCK FIREBASE APP & FIRESTORE
@@ -54,9 +51,14 @@ vi.mock('firebase/firestore', () => ({
         docs: []
     })),
     onSnapshot: vi.fn((q, cb) => {
-        // Simule un snapshot vide par défaut
+        // Simule un snapshot vide par défaut conforme
         if (typeof cb === 'function') {
-            cb({ docs: [], empty: true });
+            cb({ 
+                docs: [], 
+                empty: true,
+                exists: () => false,
+                data: () => ({})
+            });
         }
         return vi.fn(); // Unsubscribe mock
     }),
@@ -67,38 +69,66 @@ vi.mock('firebase/firestore', () => ({
 }));
 
 // 2b. MOCK OFFLINE STORE (Dexie)
-const createTableMock = () => ({
-    bulkPut: vi.fn(async () => {}),
-    toArray: vi.fn(async () => []),
-    clear: vi.fn(async () => {}),
-    put: vi.fn(async () => {}),
-    where: vi.fn().mockReturnThis(),
-    equals: vi.fn().mockReturnThis(),
-    delete: vi.fn(async () => {}),
-});
+function createTableMock() {
+    let internalStore: any[] = [];
+    return {
+        bulkPut: vi.fn(async (items) => { 
+            if (Array.isArray(items)) internalStore.push(...items); 
+        }),
+        toArray: vi.fn(async () => internalStore),
+        clear: vi.fn(async () => { internalStore = []; }),
+        put: vi.fn(async (item) => { if (item) internalStore.push(item); }),
+        add: vi.fn(async (item) => { if (item) internalStore.push(item); }),
+        get: vi.fn(async () => undefined),
+        count: vi.fn(async () => internalStore.length),
+        where: vi.fn().mockReturnThis(),
+        equals: vi.fn().mockReturnThis(),
+        first: vi.fn(async () => undefined),
+        orderBy: vi.fn().mockReturnThis(),
+        reverse: vi.fn().mockReturnThis(),
+        delete: vi.fn(async () => { internalStore.pop(); }),
+    };
+}
+
+const mockTables: Record<string, ReturnType<typeof createTableMock>> = {
+    fiscalSeals: createTableMock(),
+    orders: createTableMock(),
+    stockItems: createTableMock(),
+    inventoryMovements: createTableMock(),
+    journalEntries: createTableMock(),
+    syncQueue: createTableMock(),
+    config: createTableMock(),
+    immunityLogs: createTableMock(),
+    recipes: createTableMock(),
+};
 
 vi.mock('@/lib/offline/offline-store', () => ({
     db: {
-        fiscalSeals: createTableMock(),
-        orders: createTableMock(),
-        stockItems: createTableMock(),
-        tables: createTableMock(),
-        categories: createTableMock(),
-        shifts: createTableMock(),
-        ledger: createTableMock(),
-        clearAll: vi.fn(async () => {}),
+        ...mockTables,
+        clearAll: vi.fn(async () => {
+            for (const table of Object.values(mockTables)) {
+                await table.clear();
+            }
+        }),
     }
 }));
 
-// 3. MOCK CRYPTO (Si nécessaire pour certains environnements Node anciens)
-if (typeof global.crypto === 'undefined') {
-    Object.defineProperty(global, 'crypto', {
-        value: {
-            subtle: {
-                digest: vi.fn(),
-            },
-            randomUUID: vi.fn(() => 'mock-uuid'),
+// 3. MOCK CRYPTO (Standardizes behavior across Node/Browser)
+if (typeof global.crypto === 'undefined' || (global.crypto as any)._isMock) {
+    const mockCrypto = {
+        _isMock: true,
+        subtle: {
+            digest: vi.fn(async (algo, data) => {
+                // Return a dummy but valid ArrayBuffer (32 bytes for SHA-256 simulation)
+                return new Uint8Array(32).fill(0).buffer;
+            }),
         },
+        randomUUID: vi.fn(() => 'mock-uuid'),
+        getRandomValues: vi.fn((arr) => arr),
+    };
+    
+    Object.defineProperty(global, 'crypto', {
+        value: mockCrypto,
         writable: true,
         configurable: true
     });

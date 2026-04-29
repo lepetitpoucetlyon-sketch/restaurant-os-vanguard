@@ -3,6 +3,25 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getAllTenants } from '@/instances';
 
+export interface SiteIntegrityReport {
+  tenantId: string;
+  isChainValid: boolean;
+  sequenceError: number | null;
+  entryCount: number;
+  verifiedAt: string;
+}
+
+export interface GlobalComplianceCertificate {
+  id: string;
+  issuedAt: Date;
+  issuedBy: string;
+  totalSites: number;
+  complianceRatio: number;
+  results: SiteIntegrityReport[];
+  status: 'FULL_COMPLIANCE' | 'PARTIAL_COMPLIANCE';
+  manifestHash: string;
+}
+
 /**
  * 👑 FleetComplianceService - Industrial v1.0
  * The Audit Authority for the Empire. Verifies ledger integrity across 10,000+ sites.
@@ -14,7 +33,7 @@ export const FleetComplianceService = {
    * 🔍 Verifies the fiscal chain of a specific site.
    * Checks for sequence breaks in the secure ledger.
    */
-  async verifySiteIntegrity(tenantId: string) {
+  async verifySiteIntegrity(tenantId: string): Promise<SiteIntegrityReport> {
     logger.info(`[Compliance] Verifying ledger chain for ${tenantId}...`);
     
     try {
@@ -52,7 +71,7 @@ export const FleetComplianceService = {
    * 🛡️ Issues a Fleet-wide Compliance Certificate (Self-Certification).
    * Aggregates all site verification results and signs a global manifest.
    */
-  async issueGlobalCertificate(commanderId: string) {
+  async issueGlobalCertificate(commanderId: string): Promise<GlobalComplianceCertificate> {
     logger.info(`[Compliance] Issuing Global Fleet Certificate for Commander ${commanderId}`);
     
     const tenants = getAllTenants();
@@ -61,7 +80,7 @@ export const FleetComplianceService = {
     const totalSites = results.length;
     const compliantSites = results.filter(r => r.isChainValid).length;
     
-    const certificate = {
+    const certificate: GlobalComplianceCertificate = {
       id: `CERT-${Date.now()}`,
       issuedAt: new Date(),
       issuedBy: commanderId,

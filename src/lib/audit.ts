@@ -53,6 +53,7 @@ class EmpireAuditLogger {
         setTimeout(() => {
             const payload = {
                 ...event,
+                timestamp: event.timestamp.toISOString() as any, // Cast temporaire pour le bridge Axiom
                 env: process.env.NODE_ENV || 'development',
                 context: 'RESTAURANT-OS-EMPIRE'
             };
@@ -69,7 +70,7 @@ class EmpireAuditLogger {
 
                 // 1. Axiom Integration (Long-term Observability)
                 try {
-                    logger.info(event.action, payload as any);
+                    logger.info(event.action, payload as import('@/shared/nexus-contract').SovereignMap);
                 } catch (e) {
                     // Silently fail if axiom is not configured
                 }

@@ -20,11 +20,11 @@ export const FinanceTool: ToolDefinition = {
         required: ['period']
     },
     category: 'finance',
-    execute: async (args: any, user: any): Promise<any> => {
+    execute: async (args: SovereignData, user: User): Promise<SovereignValue> => {
         // Enforced by GeminiLiveService's RBAC Sentinel
         // Mock data for now, would call FiscalEngine in production
         return {
-            period: args.period,
+            period: args.period as string,
             totalRevenueInCents: 1545050, // 15,450.50 €
             currency: 'EUR',
             status: 'validated_nf525'

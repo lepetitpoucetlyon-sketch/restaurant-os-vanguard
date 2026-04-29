@@ -74,7 +74,9 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
       'table_count': 50,
       'tax_rate': 10.0,
       'currency': 'EUR',
-      'pmsEnabled': true
+      'pmsEnabled': true,
+      'node_capacity': 200,
+      'fiscal_coefficient': 1.0
     },
     economy: {
       basePrice: 49.00,

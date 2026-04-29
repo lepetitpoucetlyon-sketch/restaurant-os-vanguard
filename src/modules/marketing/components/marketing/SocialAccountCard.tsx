@@ -10,7 +10,7 @@ interface SocialAccountCardProps {
         platform: string;
         handle: string;
         followers: number;
-        icon: LucideIcon;
+        icon?: any;
         gradient: string;
         posts: number;
         engagement: number;

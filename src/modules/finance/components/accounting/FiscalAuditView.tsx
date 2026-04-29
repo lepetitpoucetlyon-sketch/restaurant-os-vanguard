@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useFiscal } from '@/engines/ops/NexusOpsProvider';
-import { FiscalSeal } from '@/domain/services/FiscalEngine';
+import { FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
 import { BlockchainLedgerService } from '@/domain/accounting/BlockchainLedgerService';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ShieldCheck, ShieldAlert, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
@@ -33,8 +33,8 @@ export const FiscalAuditView: React.FC = () => {
     };
 
     const filteredSeals = seals.filter(s => 
-        s.transactionId.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        s.hash.toLowerCase().includes(searchTerm.toLowerCase())
+        (s.pieceNumber || s.id).toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (s.fiscalSealHash || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -100,29 +100,29 @@ export const FiscalAuditView: React.FC = () => {
                             <div className="space-y-2">
                                 <div className="flex items-center gap-3">
                                     <span className="text-xs font-mono bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded">
-                                        #{seal.transactionId.slice(-8).toUpperCase()}
+                                        #{(seal.pieceNumber || seal.id).slice(-8).toUpperCase()}
                                     </span>
                                     <span className="text-zinc-500 text-sm flex items-center gap-1">
                                         <Clock className="w-3 h-3" />
-                                        {new Date(seal.timestamp).toLocaleString()}
+                                        {new Date(seal.date).toLocaleString()}
                                     </span>
                                 </div>
                                 <div className="text-zinc-300 font-mono text-xs break-all">
-                                    <span className="text-zinc-500 mr-2 uppercase tracking-tighter">Hash:</span>
-                                    {seal.hash}
+                                    <span className="text-zinc-500 mr-2 uppercase tracking-tighter">Seal:</span>
+                                    {seal.fiscalSealHash || 'PENDING_SEAL'}
                                 </div>
                                 <div className="text-zinc-500 font-mono text-[10px] break-all">
-                                    <span className="text-zinc-600 mr-2 uppercase tracking-tighter">Prev:</span>
-                                    {seal.previousHash}
+                                    <span className="text-zinc-600 mr-2 uppercase tracking-tighter">Type:</span>
+                                    {seal.type || 'transaction'}
                                 </div>
                             </div>
                             <div className="flex flex-col items-end gap-2">
                                 <div className="px-3 py-1 bg-zinc-800 text-zinc-400 rounded-lg text-xs font-bold border border-zinc-700">
-                                    {seal.signature}
+                                    {seal.isValidated ? 'CERTIFIED' : 'PENDING'}
                                 </div>
-                                {seal.hash === 'TRAINING_MODE_UNSIGNED_HASH' && (
+                                {seal.isSystemGenerated && (
                                     <span className="text-[10px] text-amber-500 font-bold uppercase italic px-2 py-0.5 bg-amber-500/10 rounded border border-amber-500/20">
-                                        Mode Ecole
+                                        Système
                                     </span>
                                 )}
                             </div>

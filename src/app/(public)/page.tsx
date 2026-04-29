@@ -143,7 +143,8 @@ const SmartAlert = ({ type, title, message, action, time, onAction, index, isMob
 export default function Home() {
   const router = useRouter();
   const { tables } = useTables();
-  const { orders, totalRevenue } = useOrders();
+  const { data: orders } = useOrders();
+  const totalRevenue = orders.reduce((acc: number, o: any) => acc + Number(o.totalInCents || 0), 0);
   const { lowStockItems } = useInventory();
   const { currentUser } = useAuth();
   const { showToast } = useToast();
@@ -160,7 +161,7 @@ export default function Home() {
   // C3 FIX: 100% DATA-DRIVEN KPIs from real Firestore data
   const todayOrders = useMemo(() => {
     return orders.filter(o => {
-      const orderDate = o.timestamp instanceof Date ? o.timestamp : new Date(o.timestamp);
+      const orderDate = new Date(o.timestamp);
       return isToday(orderDate);
     });
   }, [orders]);
@@ -197,7 +198,7 @@ export default function Home() {
     const dailyRevenues = last7Days.map(day => {
       const dayStart = startOfDay(day);
       const dayOrders = orders.filter(o => {
-        const orderDate = o.timestamp instanceof Date ? o.timestamp : new Date(o.timestamp);
+        const orderDate = new Date(o.timestamp);
         return startOfDay(orderDate).getTime() === dayStart.getTime()
           && (o.status === 'paid' || o.status === 'delivered');
       });

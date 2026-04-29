@@ -10,7 +10,7 @@ interface GlassCardProps extends HTMLMotionProps<"div"> {
     variant?: 'default' | 'elevated' | 'inset';
     padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
     rounded?: 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    animate?: boolean;
+    enableInitialAnimation?: boolean;
 }
 
 const paddingMap = {
@@ -42,7 +42,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         variant = 'default',
         padding = 'lg',
         rounded = '2xl',
-        animate = true,
+        enableInitialAnimation = true,
         ...props
     }, ref) => {
         const baseClasses = cn(
@@ -53,7 +53,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
             className
         );
 
-        if (animate) {
+        if (enableInitialAnimation) {
             return (
                 <motion.div
                     ref={ref}
@@ -72,9 +72,17 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
             );
         }
 
-        return (
-            <div ref={ref} className={baseClasses} {...(props as any)}>
+        const { 
+            whileHover, whileTap, whileDrag, whileFocus, whileInView,
+            initial, animate, transition, variants,
+            onAnimationStart, onAnimationComplete, onUpdate,
+            onDragStart, onDragEnd, onDrag, onDirectionLock,
+            onDragTransitionEnd, layout, layoutId,
+            ...htmlProps 
+        } = props;
 
+        return (
+            <div ref={ref} className={baseClasses} {...(htmlProps as React.HTMLAttributes<HTMLDivElement>)}>
                 {children}
             </div>
         );

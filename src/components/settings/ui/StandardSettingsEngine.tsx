@@ -27,7 +27,7 @@ export interface SettingsField {
     unit?: 'cents' | 'grams' | 'percent';
     options?: SettingsOption[];
     subFields?: SettingsField[];
-    validation?: any; // Zod or simple rules
+    validation?: import('zod').ZodTypeAny; // Zod or simple rules
 
 }
 
@@ -53,7 +53,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     // Initialisation
     useEffect(() => {
         if (settings && settings[schemaKey as keyof typeof settings]) {
-            setLocalData(settings[schemaKey as keyof typeof settings] as any);
+            setLocalData(settings[schemaKey as keyof typeof settings] as SovereignData);
         }
     }, [settings, schemaKey]);
 
@@ -79,7 +79,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             // Pour l'instant on se concentre sur le sync
             
             // 2. Synchronisation via le Kernel (Assainissement + Persistence)
-            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as any);
+            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as unknown as import('@/shared/nexus-contract').SovereignSchemaField[]);
             
             // 3. Mise à jour via le Context (Global State + Firestore)
             await updateConfig(schemaKey as never, sanitizedData);
@@ -94,7 +94,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     };
 
     const handleReset = () => {
-        setLocalData((settings?.[schemaKey as keyof typeof settings] as any) || {});
+        setLocalData((settings?.[schemaKey as keyof typeof settings] as SovereignData) || {});
     };
 
     const renderField = (field: SettingsField, value: SovereignValue, onChange: (val: SovereignValue) => void) => {
@@ -117,7 +117,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                 return (
                     <GlassInput
                         label={field.label}
-                        value={(value as any) || ''}
+                        value={(value as string) || ''}
                         onChange={(e) => onChange(e.target.value)}
                         placeholder={`Saisir ${field.label.toLowerCase()}...`}
                     />
@@ -128,7 +128,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <span className="text-sm font-medium text-slate-300">{field.label}</span>
                         <textarea
                             className="w-full bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-3 text-slate-100 outline-none transition-all focus:border-amber-500/50 min-h-[100px]"
-                            value={(value as any) || ''}
+                            value={(value as string) || ''}
                             onChange={(e) => onChange(e.target.value)}
                         />
                     </div>
@@ -143,7 +143,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                     <GlassInput
                         type="number"
                         label={field.label}
-                        value={(displayValue as any) || 0}
+                        value={(displayValue as number) || 0}
                         onChange={(e) => onChange(parseFloat(e.target.value))}
                         icon={field.type === 'percentage' ? <span className="text-xs text-amber-500 font-bold">%</span> : null}
                     />
@@ -154,12 +154,12 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <span className="text-sm font-medium text-slate-300">{field.label}</span>
                         <select
                             className="w-full bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-amber-500/50"
-                            value={(value as any) || ''}
+                            value={(value as string) || ''}
                             onChange={(e) => onChange(e.target.value)}
                         >
                             <option value="" className="bg-slate-900">Sélectionner...</option>
                             {field.options?.map((opt: SettingsOption) => (
-                                <option key={(opt.value as any)} value={(opt.value as any)} className="bg-slate-900">{opt.label}</option>
+                                <option key={(opt.value as string)} value={(opt.value as string)} className="bg-slate-900">{opt.label}</option>
                             ))}
                         </select>
                     </div>
@@ -170,7 +170,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <span className="text-sm font-medium text-slate-300">{field.label}</span>
                         <input 
                             type="color" 
-                            value={(value as any) || '#ffffff'} 
+                            value={(value as string) || '#ffffff'} 
                             onChange={(e) => onChange(e.target.value)}
                             className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-none"
                         />
@@ -183,7 +183,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <div className="flex justify-between items-center">
                             <span className="text-sm font-bold text-amber-500/80 uppercase tracking-wider">{field.label}</span>
                             <button 
-                                onClick={() => onChange([...listValue, {}] as any)}
+                                onClick={() => onChange([...listValue, {}] as SovereignValue)}
                                 className="p-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 rounded-lg transition-colors border border-amber-500/30"
                             >
                                 <Plus size={16} />
@@ -199,18 +199,18 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                     className="relative grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-slate-900/40 rounded-xl border border-slate-700/30 group/item"
                                 >
                                     <button 
-                                        onClick={() => onChange(listValue.filter((_, i) => i !== index) as any)}
+                                        onClick={() => onChange(listValue.filter((_, i) => i !== index) as SovereignValue)}
                                         className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg z-10 opacity-0 group-hover/item:opacity-100 transition-opacity"
                                     >
                                         <Trash2 size={12} />
                                     </button>
                                     {field.subFields?.map((sub: SettingsField) => (
                                         <div key={sub.id || sub.key}>
-                                            {renderField(sub, (item as any)[sub.id || sub.key!], (val: SovereignValue) => {
+                                            {renderField(sub, (item as Record<string, SovereignValue>)[sub.id || sub.key!], (val: SovereignValue) => {
 
                                                 const newList = [...listValue];
-                                                newList[index] = { ...newList[index], [sub.id || sub.key!]: val };
-                                                onChange(newList as any);
+                                                newList[index] = { ...(newList[index] as object), [sub.id || sub.key!]: val };
+                                                onChange(newList as SovereignValue);
                                             })}
                                         </div>
                                     ))}
@@ -288,7 +288,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >
-                            {renderField(field, (localData as any)[field.id || field.key!], (val: SovereignValue) => handleChange(field.id || field.key!, val))}
+                            {renderField(field, (localData as Record<string, SovereignValue>)[field.id || field.key!], (val: SovereignValue) => handleChange(field.id || field.key!, val))}
 
                         </motion.div>
                     ))}

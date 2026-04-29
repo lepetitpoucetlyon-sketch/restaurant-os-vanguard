@@ -8,11 +8,11 @@ interface CampaignCardProps {
         id: string;
         name: string;
         type: string;
-        audience: string;
-        audienceSize: number;
-        sent: number;
-        opened: number;
-        clicked: number;
+        audience?: string;
+        audienceSize?: number;
+        sent?: number;
+        opened?: number;
+        clicked?: number;
     };
 }
 

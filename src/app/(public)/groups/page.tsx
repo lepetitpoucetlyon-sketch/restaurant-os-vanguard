@@ -30,7 +30,7 @@ import { useGroups } from '@/engines/ops/NexusOpsProvider';
 import { Calendar, BarChart3, Star } from 'lucide-react';
 
 export default function GroupsPage() {
-    const { groups, isLoading } = useGroups();
+    const { data: groups, isLoading } = useGroups();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState('Tous');
     const [selectedStatus, setSelectedStatus] = useState('Tous');

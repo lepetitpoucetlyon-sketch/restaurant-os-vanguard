@@ -182,8 +182,8 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
         const now = new Date();
 
         return products.filter(p => {
-            const matchesSearch = p.name.toLowerCase().includes(query);
-            const matchesCategory = categoryFilter === "all" || p.category === categoryFilter || p.categoryId === categoryFilter;
+            const matchesSearch = String(p.name || '').toLowerCase().includes(query);
+            const matchesCategory = categoryFilter === "all" || String(p.category || '') === categoryFilter || String(p.categoryId || '') === categoryFilter;
             return matchesSearch && matchesCategory;
         }).map(product => {
             // COMPLIANCE GUARD LOGIC
@@ -196,11 +196,11 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                     const relatedStock = stockItems.filter(s => s.ingredientId === req.ingredientId);
                     
                     const nonExpiredStock = relatedStock.filter(s => {
-                        const dlc = new Date(s.dlc);
+                        const dlc = new Date(String(s.dlc || ''));
                         return dlc > now && s.status !== 'expired' && s.status !== 'discarded';
                     });
 
-                    const totalQty = nonExpiredStock.reduce((acc, s) => acc + s.quantity, 0);
+                    const totalQty = nonExpiredStock.reduce((acc, s) => acc + Number(s.quantity || 0), 0);
 
                     if (totalQty < req.quantity) {
                         isDisabled = true;
@@ -224,7 +224,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
         } else {
             onAddToCart(product, 1, {});
         }
-    }, [onAddToCart]);
+    }, [onAddToCart, setSelectedProduct, setIsDialogOpen]);
 
     return (
         <div className="flex-1 flex flex-col h-full bg-bg-primary transition-colors duration-700 overflow-hidden relative">

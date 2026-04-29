@@ -121,19 +121,19 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                     >
                         <Layer>
                             <ZoneRenderer
-                                tables={floorTables}
-                                zones={floorZones}
+                                tables={floorTables as any}
+                                zones={floorZones as any}
                                 isLocked={isZonesLocked}
                                 onUpdateTablePosition={updateTablePosition}
                                 onUpdateZone={updateZone}
                                 isDarkMode={isDarkMode}
                             />
 
-                            {floorTables.map((table) => {
+                            {floorTables.map((table: any) => {
                                 const reservations = getReservationsForTable(table.id);
                                 const hasReservation = reservations && reservations.length > 0;
                                 const isSelected = selectedId === table.id;
-                                const statusColor = STATUS_COLORS[table.status as TableStatus] || STATUS_COLORS['free'];
+                                const statusColor = (STATUS_COLORS as any)[table.status] || STATUS_COLORS['free'];
 
                                 const tableBaseColor = isDarkMode ? "#FFFFFF" : "#FFFFFF";
                                 const tableTextColor = isDarkMode ? "#000000" : "#1A1A1A";
@@ -147,8 +147,8 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                                         key={table.id}
                                         id={table.id}
                                         name={table.id}
-                                        x={table.x}
-                                        y={table.y}
+                                        x={Number(table.x) || 0}
+                                        y={Number(table.y) || 0}
                                         draggable
                                         onDragStart={handleDragStart}
                                         onDragEnd={(e) => handleDragEnd(e, table.id)}
@@ -161,16 +161,16 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                                         {viewMode === '3d' && (
                                             table.shape === "circle" ? (
                                                 <Circle
-                                                    radius={table.radius!}
+                                                    radius={Number(table.radius) || 0}
                                                     fill='#9CA3AF'
                                                     offsetY={-8}
                                                 />
                                             ) : (
                                                 <Rect
-                                                    width={table.width!}
-                                                    height={table.height!}
-                                                    offsetX={table.width! / 2}
-                                                    offsetY={table.height! / 2 - 8}
+                                                    width={Number(table.width) || 0}
+                                                    height={Number(table.height) || 0}
+                                                    offsetX={(Number(table.width) || 0) / 2}
+                                                    offsetY={(Number(table.height) || 0) / 2 - 8}
                                                     cornerRadius={16}
                                                     fill='#9CA3AF'
                                                 />
@@ -179,7 +179,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
 
                                         {/* Dynamic Status Glow */}
                                         <Circle
-                                            radius={Math.max(table.width || 0, table.height || 0, table.radius || 0) + (isSelected ? 25 : 15)}
+                                            radius={Math.max(Number(table.width) || 0, Number(table.height) || 0, Number(table.radius) || 0) + (isSelected ? 25 : 15)}
                                             fill={statusColor}
                                             opacity={isSelected ? 0.2 : 0}
                                             listening={false}
@@ -188,7 +188,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                                         {/* Main Table Shape */}
                                         {table.shape === "circle" ? (
                                             <Circle
-                                                radius={table.radius!}
+                                                radius={Number(table.radius) || 0}
                                                 fill={table.status === 'free' ? bgColor : statusColor}
                                                 stroke={strokeColor}
                                                 strokeWidth={isSelected ? 3 : 2}
@@ -200,10 +200,10 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                                             />
                                         ) : (
                                             <Rect
-                                                width={table.width!}
-                                                height={table.height!}
-                                                offsetX={table.width! / 2}
-                                                offsetY={table.height! / 2}
+                                                width={Number(table.width) || 0}
+                                                height={Number(table.height) || 0}
+                                                offsetX={(Number(table.width) || 0) / 2}
+                                                offsetY={(Number(table.height) || 0) / 2}
                                                 cornerRadius={16}
                                                 fill={table.status === 'free' ? bgColor : statusColor}
                                                 stroke={strokeColor}
@@ -217,7 +217,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                                         )}
 
                                         <Text
-                                            text={table.number}
+                                            text={String(table.number || '')}
                                             fontSize={16}
                                             fontFamily="Outfit"
                                             fontStyle="900"
@@ -233,8 +233,8 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                                         {/* Reservation Badge */}
                                         {hasReservation && !isSelected && (
                                             <Circle
-                                                x={table.width ? table.width / 2 - 8 : table.radius! - 8}
-                                                y={table.height ? -table.height / 2 + 8 : -table.radius! + 8}
+                                                x={table.width ? (Number(table.width) / 2 - 8) : (Number(table.radius) - 8)}
+                                                y={table.height ? (-Number(table.height) / 2 + 8) : (-Number(table.radius) + 8)}
                                                 radius={6}
                                                 fill="#F97316"
                                                 stroke="#FFFFFF"
@@ -253,7 +253,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
             <AnimatePresence>
                 {selectedTable && (
                     <TableInsightPanel
-                        selectedTable={selectedTable}
+                        selectedTable={selectedTable as any}
                         onClose={() => setSelectedId(null)}
                         onCheckout={handleCheckout}
                     />
@@ -271,7 +271,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
             <AnimatePresence>
                 {selectedTable && (
                     <EditPanel
-                        selectedTable={selectedTable}
+                        selectedTable={selectedTable as any}
                         updateTable={updateTable}
                         deleteTable={deleteTable}
                         onClose={() => setSelectedId(null)}

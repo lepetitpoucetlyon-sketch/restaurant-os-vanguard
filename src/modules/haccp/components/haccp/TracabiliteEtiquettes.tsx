@@ -18,7 +18,7 @@ import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { CameraCapture } from './CameraCapture';
-import { StorageService } from '@/lib/StorageService';
+import { StorageService } from '@/domain/services/Storage';
 import { useTenant } from '@/context/TenantContext';
 import { Loader2 } from 'lucide-react';
 

@@ -2,7 +2,7 @@ import { getTenantPath } from '@/lib/firebase';
 import { Table } from 'dexie';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MasterBridge } from '@/lib/MasterBridge';
-import { FiscalEngine, FiscalSeal } from '@/domain/services/FiscalEngine';
+import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
 import { StockEngine } from '@/domain/services/StockEngine';
 import { Order, StockItem, Recipe, InventoryMovement } from '@/types';
 import { JournalEntry } from '../types/domain';

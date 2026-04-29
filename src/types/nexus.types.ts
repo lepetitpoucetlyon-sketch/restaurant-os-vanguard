@@ -109,13 +109,13 @@ export interface NexusLangState {
 
 export interface NexusNotifState {
     unreadCount: number;
-    notifications: import('@/types').Notification[];
+    notifications: import('./common.types').Notification[];
     addNotification: (notif: { 
+        type: import('./common.types').NotificationType; 
         title: string; 
         message: string; 
-        type: import('@/types').NotificationType;
         module?: string;
-        action?: { label: string; href?: string };
+        action?: { label: string; href: string };
     }) => void;
     markAsRead: (id: string) => void;
     markAllAsRead: () => void;
@@ -136,6 +136,34 @@ export interface NexusTheme {
     setGlassmorphism: (val: number) => void;
     animations: boolean;
     setAnimations: (val: boolean) => void;
+}
+
+export interface NexusTutorialStep {
+    id: string;
+    label: string;
+    description: string;
+    selector: string;
+    path?: string;
+    action?: () => void;
+}
+
+export interface NexusTutorialSection {
+    id: string;
+    title?: string;
+    points: NexusTutorialStep[];
+}
+
+export interface NexusTutorialState {
+    isActive: boolean;
+    step: number;
+    start: () => void;
+    stop: () => void;
+    startTutorial: (section?: NexusTutorialSection) => void;
+    stopTutorial: () => void;
+    nextStep: () => void;
+    prevStep: () => void;
+    currentSection: NexusTutorialSection | null;
+    currentPointIndex: number;
 }
 
 export interface NexusFleetState {
@@ -170,7 +198,7 @@ export interface NexusFleetState {
         targetVersion?: string;
         maintenanceMode?: boolean;
     }) => Promise<void>;
-    complianceService: SovereignData;
+    complianceService: typeof import('@/domain/services/FleetComplianceService').FleetComplianceService;
     haccpBridge: SovereignData;
     fleet: EmpireGlobalMetrics | null;
     customer: {
@@ -182,7 +210,7 @@ export interface NexusFleetState {
     triggerRebalancing?: () => Promise<void>;
     nodes?: SovereignData[];
     health?: string;
-    tutorial?: SovereignData;
+    tutorial?: NexusTutorialState;
 }
 
 

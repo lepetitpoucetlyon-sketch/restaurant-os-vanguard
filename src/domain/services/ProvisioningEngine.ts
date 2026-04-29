@@ -41,6 +41,7 @@ export const ProvisioningEngine = {
                     healthScore: 100,
                     errorRate: 0,
                     uptime: 100,
+                    alerts: 0,
                     lowStockAlerts: 0,
                     expiringItemsCount: 0,
                     complianceScore: 100

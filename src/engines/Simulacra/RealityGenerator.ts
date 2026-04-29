@@ -78,8 +78,8 @@ export class RealityGenerator {
                     status: 'pending'
                 }],
                 totalInCents: 1500,
-                timestamp: new Date(),
-                tableNumber: String(Math.floor(Math.random() * 20) + 1)
+                timestamp: new Date().toISOString(),
+                nodeIdentifier: String(Math.floor(Math.random() * 20) + 1)
             };
             
             // Random delay to simulate real customers

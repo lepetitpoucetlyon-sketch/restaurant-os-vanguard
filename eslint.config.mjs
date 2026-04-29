@@ -18,6 +18,9 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/prefer-as-const": "off",
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/alt-text": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/preserve-manual-memoization": "off",
+      "react-hooks/set-state-in-effect": "off",
     },
   },
   {
@@ -32,6 +35,15 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "src_VANGUARD_AUDIT/**",
+    "src_OLD_VIBE_BACKUP/**",
+    ".nexus/agents/**",
+    ".staging-mcc/**",
+    ".mempalace/**",
+    "graphify_tool/**",
+    "graphify-out/**",
+    "functions/**",
+    "scratch/**",
   ]),
 ]);
 

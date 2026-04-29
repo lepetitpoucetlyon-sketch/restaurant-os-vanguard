@@ -28,7 +28,7 @@ export class NexusStaffingOracle {
         }
 
         // 2. Get Predicted Velocity from Oracle
-        const prediction = await SimulationService.simulateDay(new Date(date), 'EMPIRE', 'PIZZERIA_RUSH', {
+        const prediction = await SimulationService.simulateDay(date, 'EMPIRE', 'PIZZERIA_RUSH', {
             ingredients: [],
             stockItems: []
         });

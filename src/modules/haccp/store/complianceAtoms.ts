@@ -16,8 +16,8 @@ import {
 
 // --- 🛡️ COMPLIANCE DOMAIN (Fiscal NF525, Guard/HACCP, Maintenance, Livraisons) ---
 
-// FISCAL
-const _fiscalLedger = createProxyDomain<FiscalSeal>('fiscalLedger');
+// FISCAL (Grade X Suture: Ledger must track JournalEntry)
+const _fiscalLedger = createProxyDomain<JournalEntry>('fiscalLedger');
 export const fiscalLedgerNodeAtom = _fiscalLedger.node;
 export const fiscalLedgerAtom = _fiscalLedger.data;
 export const fiscalLoadingAtom = _fiscalLedger.loading;

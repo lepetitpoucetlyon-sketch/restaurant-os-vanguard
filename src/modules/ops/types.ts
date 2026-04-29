@@ -18,10 +18,10 @@ export interface OrderItemModification {
     oldValue?: string;
     newValue?: string;
     requestedBy: string;
-    requestedAt: Date;
+    requestedAt: string;
     status: ModificationStatus;
     respondedBy?: string;
-    respondedAt?: Date;
+    respondedAt?: string;
     responseNote?: string;
 }
 
@@ -59,7 +59,7 @@ export interface Order {
     tableId: string;
     tableNumber: string;
     serverName: string;
-    timestamp: Date;
+    timestamp: string;
     status: OrderStatus;
     items: OrderItem[];
     totalInCents: number;
@@ -77,7 +77,7 @@ export interface Order {
     };
     totalRevenue?: number; // computed alias
     data?: SovereignData; // legacy alias
-    updatedAt?: Date | string;
+    updatedAt?: string;
 }
 
 export interface OrdersContextType {

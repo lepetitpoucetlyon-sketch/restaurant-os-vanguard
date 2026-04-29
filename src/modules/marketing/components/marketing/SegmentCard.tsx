@@ -7,9 +7,9 @@ interface SegmentCardProps {
     segment: {
         id: string;
         name: string;
-        count: number;
+        count?: number;
         color: string;
-        criteria: string;
+        criteria: string | Record<string, string>;
     };
 }
 
@@ -29,7 +29,7 @@ export function SegmentCard({ segment }: SegmentCardProps) {
                 <div>
                     <h3 className="text-3xl font-serif font-bold text-text-primary tracking-tight mb-2">{segment.name}</h3>
                     <p className="text-sm font-medium text-text-muted p-3 bg-white/50 rounded-xl border border-white/20 inline-block">
-                        {segment.criteria}
+                        {typeof segment.criteria === 'string' ? segment.criteria : JSON.stringify(segment.criteria)}
                     </p>
                 </div>
 

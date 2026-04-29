@@ -3,7 +3,7 @@ import './mocks'; // Charge l'infrastructure de mocks
 
 import { SharedKernel } from '@/lib/shared-kernel';
 import { OrderItem, CartItem } from '@/types';
-import { POSService } from '@/lib/pos-service';
+import { POSService } from '@/infrastructure/adapters/POSAdapter';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 const SyncCompliance = { init: async (...args: any[]) => {} } as any;
 

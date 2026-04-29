@@ -15,11 +15,7 @@ export interface InstanceGuardResult {
 }
 
 export function useInstanceGuard(): InstanceGuardResult {
-    const [isInitialized, setIsInitialized] = useState(false);
-
-    useEffect(() => {
-        setIsInitialized(true);
-    }, []);
+    const isInitialized = true;
 
     return {
         result: {},

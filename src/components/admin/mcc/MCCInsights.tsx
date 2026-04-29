@@ -6,10 +6,11 @@ import { Lightbulb, TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-re
 import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/operationalAtoms';
 import { useFleet } from '@/context/FleetContext';
+import { FleetInsight } from '@/domain/services/MacroBrain';
 
 export function MCCInsights() {
     const { macroInsights, refreshFleet } = useFleet();
-    const triggerRebalancing = (insight: import('@/shared/nexus-contract').SovereignData) => {
+    const triggerRebalancing = (insight: FleetInsight) => {
         console.log('[Fleet] Triggering rebalancing for insight:', insight);
 
         refreshFleet?.(true);
@@ -25,7 +26,7 @@ export function MCCInsights() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400">Empire Intelligence</h3>
             </div>
             
-            {macroInsights.map((insight: any, idx) => (
+            {macroInsights.map((insight: FleetInsight, idx: number) => (
                 <motion.div
                     key={insight.id}
                     initial={{ opacity: 0, y: 10 }}

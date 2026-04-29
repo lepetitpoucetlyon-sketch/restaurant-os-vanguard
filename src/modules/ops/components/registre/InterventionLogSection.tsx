@@ -63,7 +63,7 @@ export function InterventionLogSection() {
                     <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Historique des Interventions</h3>
                 </div>
 
-                {interventions.map((int) => (
+                {(interventions || []).map((int) => (
                     <div key={int.id} className="group bg-white dark:bg-bg-secondary border border-border rounded-3xl p-6 hover:shadow-2xl hover:border-accent/30 transition-all duration-500 relative overflow-hidden">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="flex items-center gap-6">

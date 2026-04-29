@@ -26,12 +26,23 @@ export const useQualityBridge = () => {
     const { tenantId } = useTenant();
 
     const startReception = (supplier: { id: string, name: string }) => {
-        const newControl: Partial<QualityControl> = {
+        const newControl: QualityControl = {
+            id: `qc-${Math.random().toString(36).substring(7)}`,
+            control_number: `QC-${Date.now()}`,
             type: 'reception',
             supplier_id: supplier.id,
             supplier_name: supplier.name,
             controlled_at: new Date().toISOString(),
+            controlled_by: 'system',
+            controller_name: 'Antigravity',
             items: [],
+            delivery_conditions: {
+                vehicle_type: 'unknown',
+                vehicle_temperature: { compliant: true, measured: 0 },
+                vehicle_cleanliness: 'not_checked',
+                packaging_integrity: 'intact',
+                delivery_time_compliant: true
+            },
             summary: {
                 total_items: 0,
                 items_accepted: 0,
@@ -40,16 +51,43 @@ export const useQualityBridge = () => {
                 visual_issues: 0,
                 overall_status: 'pass',
                 supplier_score_impact: 0
+            },
+            metadata: {
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                synced: false,
+                fingerprint: 'pending'
             }
         };
-        setActiveControl(newControl);
+        setActiveControl(newControl as any);
     };
 
     const commitReception = async () => {
         if (!activeControl) return;
         try {
-            logger.info(`[Bridge] Committing Reception for ${activeControl.supplier_name}`);
-            return await QualityEngine.validateReception(activeControl, tenantId);
+            // 👑 Transform UI state into Sovereign Domain Contract
+            // 💍 LE SERTI MYSTÉRIEUX : Utilisation de l'Adapter Agnostique
+            const receptionData: import('@/domain/schemas/haccp').ReceptionData = {
+                deliveryId: activeControl.delivery?.id || 'manual',
+                supplierName: activeControl.supplier_name || 'UNKNOWN',
+                truckTemp: activeControl.delivery_conditions?.vehicle_temperature?.measured || 0,
+                hygieneStatus: 'acceptable',
+                itemsChecked: (activeControl.items || []).map(item => {
+                    const isOk = item.decision === 'accepted' || item.decision === 'accepted_reservation';
+                    const isWarning = item.decision === 'partially_accepted';
+                    
+                    return {
+                        id: item.product_id,
+                        name: item.product_name,
+                        status: (isOk ? 'ok' : (isWarning ? 'warning' : 'rejected')) as 'warning' | 'rejected' | 'ok',
+                        quantity: item.quantity_delivered,
+                        temp: item.checks?.temperature?.measured
+                    };
+                }),
+                validatedBy: activeControl.controller_name || 'Antigravity'
+            };
+
+            return await QualityEngine.validateReception(receptionData, tenantId);
         } catch (error) {
             logger.error(`[Bridge] Reception failed:`, error);
             throw error;

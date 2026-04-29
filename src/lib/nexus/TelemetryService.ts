@@ -70,9 +70,9 @@ export class TelemetryService {
       }
 
       // 2. Gather NF525 Status
-      const fiscalData = this.store.get(fiscalLedgerAtom) as FiscalSeal[];
-      const isSealed = Array.isArray(fiscalData) && fiscalData.length > 0;
-      const lastHash = isSealed ? fiscalData[0].hash : undefined;
+      const ledgerData: import('@/shared/types/finance.types').JournalEntry[] = this.store.get(fiscalLedgerAtom);
+      const isSealed = Array.isArray(ledgerData) && ledgerData.some(e => e.fiscalSealHash);
+      const lastHash = isSealed ? ledgerData.find(e => e.fiscalSealHash)?.fiscalSealHash : undefined;
 
       // Type-safe connection check
       const connection = extendedNav.connection || extendedNav.mozConnection || extendedNav.webkitConnection;
@@ -82,7 +82,7 @@ export class TelemetryService {
       const payload: TelemetryPulse = {
         version: '9.0.0-grade-ix',
         status: 'ACTIVE',
-        lastPulse: serverTimestamp(),
+        lastPulse: serverTimestamp() as any,
         health: {
           uptime: typeof process !== 'undefined' && process.uptime ? Math.floor(process.uptime()) : 0,
           battery: batteryInfo,
@@ -102,6 +102,32 @@ export class TelemetryService {
       console.log(`[TelemetryService] Heartbeat envoyé à ${new Date().toLocaleTimeString()}`);
     } catch (error) {
       console.warn(`[TelemetryService] Échec du heartbeat:`, error);
+    }
+  }
+
+  /**
+   * 📢 Dénonce une anomalie TECHNIQUE au MCC (Anonymisation Totale).
+   * INTERDICTION : Pas de montants, pas de noms, pas de PII.
+   */
+  static async reportIssue(code: 'FALLBACK_VALUE' | 'INTEGRITY_DRIFT' | 'AUTH_ANOMALY', source: string, techMetadata: { field: string, type?: string }) {
+    try {
+      const firestore = getFirestore();
+      // ID d'incident totalement anonyme
+      const issueId = `INCIDENT-${Math.random().toString(36).substring(7).toUpperCase()}`;
+      const issueRef = doc(firestore, 'system_alerts', issueId);
+      
+      await setDoc(issueRef, {
+        code,
+        source,
+        techMetadata, // Uniquement des noms de champs/types
+        timestamp: serverTimestamp(),
+        version: '9.0.0-grade-ix',
+        severity: code === 'INTEGRITY_DRIFT' ? 'CRITICAL' : 'WARNING'
+      });
+      
+      console.warn(`[TelemetryService] TECHNICAL_SIGNAL_SENT: ${code} from ${source}`, techMetadata);
+    } catch (e) {
+      // Échec silencieux pour ne pas perturber l'expérience locale
     }
   }
 

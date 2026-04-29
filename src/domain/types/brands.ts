@@ -16,6 +16,8 @@ export interface NodeHealth {
   timestamp: number;
 }
 
+import { SovereignData } from '@/shared/nexus-contract';
+
 // Structure de télémétrie pour le MCC
 export interface SiteTelemetry {
   tenantId: TenantID;
@@ -24,14 +26,17 @@ export interface SiteTelemetry {
   name?: string;
   status: 'ONLINE' | 'OFFLINE' | 'CRITICAL' | 'MAINTENANCE' | 'PROVISIONING' | 'LOCKED';
   tier?: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
+  createdAt?: string;
   healthScore: number;
   complianceScore?: number;
   lowStockAlerts?: number;
   lastSeen: string | number | { seconds: number; nanoseconds: number }; 
   activeOrders?: number;
+  activeUsers?: number;
   dailyRevenue?: number;
   engineVersion: string;
   nodeHealth: NodeHealth;
-  branding?: any;
-  security?: any;
+  featureFlags?: SovereignData;
+  branding?: SovereignData;
+  security?: SovereignData;
 }

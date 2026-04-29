@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { GeminiLiveService } from '@/domain/agent/GeminiLiveService';
+import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
 import { useSettings } from '@/context/SettingsContext';
 import { SovereignData } from '@/shared/nexus-contract';
 

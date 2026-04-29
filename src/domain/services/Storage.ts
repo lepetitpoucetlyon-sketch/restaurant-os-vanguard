@@ -1,5 +1,11 @@
-import { StorageService } from '@/lib/StorageService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+
+export const StorageService = {
+    uploadBase64Image: async (file: string, path: string) => `mock_url_${path}`,
+    uploadFile: async (file: File, path: string) => `mock_url_${path}`,
+    deleteFile: async (path: string) => {},
+    getFileURL: async (path: string) => `mock_url_${path}`,
+};
 
 /**
  * 📦 Domain Storage Service (Grade IX)

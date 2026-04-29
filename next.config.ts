@@ -29,11 +29,8 @@ const nextConfig: NextConfig = {
     pagesBufferLength: 1,      // 1 seule page
   },
   typescript: {
-    ignoreBuildErrors: true, // Désactivé pour le dev rush
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+    ignoreBuildErrors: false,
+  }
 };
 
 export default nextConfig;

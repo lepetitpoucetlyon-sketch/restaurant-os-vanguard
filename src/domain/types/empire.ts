@@ -38,6 +38,7 @@ export const EmpireInstanceSchema = z.object({
     healthScore: z.number().min(0).max(100).default(100),
     errorRate: z.number().optional().default(0),
     uptime: z.number().optional().default(99.9),
+    alerts: z.number().default(0),
     lowStockAlerts: z.number().default(0),
     expiringItemsCount: z.number().optional().default(0),
     complianceScore: z.number().min(0).max(100).default(100)
@@ -109,5 +110,9 @@ export interface EmpireGlobalMetrics {
   totalMRR: number;
   averageDiscount: number;
   lockedInstances: number;
+  
+  // Operational Insights
+  totalLaborCost: number;
+  averageFoodCost: number;
 }
 

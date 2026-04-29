@@ -2,4 +2,4 @@ import { TenantConfig as SharedTenantConfig } from '@/shared/nexus-contract';
 
 export type { TenantFirebaseConfig } from '@/shared/nexus-contract';
 
-export interface TenantConfig extends SharedTenantConfig {}
+export type TenantConfig = SharedTenantConfig;

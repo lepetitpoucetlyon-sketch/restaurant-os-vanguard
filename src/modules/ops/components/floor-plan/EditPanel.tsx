@@ -102,7 +102,7 @@ const EditPanel = ({
                         Localisation Dynamique
                     </label>
                     <div className="grid grid-cols-1 gap-3">
-                        {zones.map((zone: import('@/types').Zone) => (
+                        {zones.map((zone: any) => (
                             <motion.button
                                 key={zone.id}
                                 whileHover={{ scale: 1.02, x: 5 }}
@@ -116,8 +116,8 @@ const EditPanel = ({
                                 )}
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: zone.color }} />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{zone.name}</span>
+                                    <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: String(zone.color || '') }} />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{String(zone.name || '')}</span>
                                 </div>
                                 {selectedTable.zoneId === zone.id ? (
                                     <Check className="w-4 h-4 text-accent-gold font-black" />

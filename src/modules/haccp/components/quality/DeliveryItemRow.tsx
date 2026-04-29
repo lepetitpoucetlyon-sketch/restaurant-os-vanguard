@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { qualityActiveControlAtom } from '@/modules/haccp/store/qualityAtoms';
 import { QualityControlItem, DecisionType } from '@/domain/types/quality';
 import { cn } from "@/lib/ui.foundations";
@@ -18,15 +18,18 @@ interface DeliveryItemRowProps {
  * Granular control for individual food items.
  */
 export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
-  const [session, setSession] = useAtom(qualityActiveControlAtom);
+  const session = useAtomValue(qualityActiveControlAtom);
+  const setSession = useSetAtom(qualityActiveControlAtom);
 
   const updateItemStatus = (decision: DecisionType) => {
+    if (!session) return;
     const newItems = [...(session.items || [])];
     newItems[index] = { ...newItems[index], decision };
-    setSession({ ...session, items: newItems });
+    setSession(s => s ? { ...s, items: newItems } : null);
   };
 
   const updateItemTemp = (val: string) => {
+    if (!session) return;
     const temp = parseFloat(val);
     const newItems = [...(session.items || [])];
     const status = isTempCompliant(temp, item.checks.temperature.target) ? 'pass' : 'fail';
@@ -38,7 +41,7 @@ export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
         temperature: { ...newItems[index].checks.temperature, measured: temp, status } 
       } 
     };
-    setSession({ ...session, items: newItems });
+    setSession(s => s ? { ...s, items: newItems } : null);
   };
 
   const isTempCompliant = (t: number, target: { min: number, max: number }) => t >= target.min && t <= target.max;

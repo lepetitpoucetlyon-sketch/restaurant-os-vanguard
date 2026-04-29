@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { atom } from 'jotai';
+import { atom, getDefaultStore } from 'jotai';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { updateNexusNode, createNexusNode, NexusNode } from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
@@ -25,9 +25,11 @@ interface StabilityItem {
 }
 
 describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
+    let store: ReturnType<typeof getDefaultStore>;
     
     beforeEach(() => {
         vi.clearAllMocks();
+        store = getDefaultStore();
     });
 
     /**

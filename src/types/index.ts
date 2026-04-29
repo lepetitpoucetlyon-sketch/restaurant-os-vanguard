@@ -39,6 +39,7 @@ export * from './nexus.types';
 export * from './oracle.types';
 export * from './permissions.types';
 export * from './recruitment';
+export * from './registre.types';
 export * from './settings';
 
 // Recursive Settings Re-exports

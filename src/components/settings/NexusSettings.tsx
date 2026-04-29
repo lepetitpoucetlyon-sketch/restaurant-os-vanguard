@@ -17,7 +17,7 @@ import {
     Check
 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
-import { GEMINI_VOICES, NexusMacro } from '@/types/settings/nexus';
+import { GEMINI_VOICES, NexusMacro, NexusConfig } from '@/types/settings/nexus';
 import { NexusSphere } from "@/components/layout/NexusSphere";
 import { cn } from '@/lib/ui.foundations';
 
@@ -36,9 +36,9 @@ export default function NexusSettings() {
         autoLanguage: true
     };
 
-    const updateConfig = (updates: Partial<import('@/types/settings/nexus').NexusConfig>) => {
+    const updateConfig = (updates: Partial<NexusConfig>) => {
         // Proper immutable update via the settings context
-        updateSLM({ nexusConfig: { ...config, ...updates } } as any);
+        updateSLM?.({ nexusConfig: { ...config, ...updates } });
     };
 
     const addMacro = () => {
@@ -145,7 +145,7 @@ export default function NexusSettings() {
                                     {['expert', 'concise', 'friendly', 'protective'].map((p) => (
                                         <button
                                             key={p}
-                                            onClick={() => updateConfig({ personality: p as any })}
+                                            onClick={() => updateConfig({ personality: p as NexusConfig['personality'] })}
                                             className={cn(
                                                 "px-4 py-3 rounded-xl border transition-all text-[11px] font-bold uppercase tracking-widest",
                                                 config.personality === p 

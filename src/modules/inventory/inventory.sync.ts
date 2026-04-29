@@ -64,12 +64,25 @@ export const InventorySyncService = {
     // 3. RECIPES SYNC
     this.private_listeners.recipes = Nexus.adapter.onSnapshot(
       path('recipes'),
-      (data: Recipe[]) => {
-        store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, {
-          data,
-          loading: false,
-          error: null
-        }));
+      async (data: Recipe[]) => {
+        // 🌀 CYCLEGUARD: Before updating, ensure no circular dependencies exist
+        const { CycleGuard } = await import('@/shared/services/CycleGuard');
+        
+        try {
+            data.forEach(recipe => {
+                const dependencies = recipe.ingredients?.map(i => i.id) || [];
+                CycleGuard.validateRecipe(recipe.id, dependencies);
+            });
+            
+            store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, {
+                data,
+                loading: false,
+                error: null
+            }));
+        } catch (error) {
+            logger.error('[InventorySync] DAG_VIOLATION detected in remote recipes. Mutation blocked.', error);
+            // We keep previous valid state if corruption is found
+        }
       },
       {
         onError: (error: Error) => {

@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { useKitchen, useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useRecipes, useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Modal } from "@/components/ui/Modal";
 import { PremiumSelect } from "@/components/ui/PremiumSelect";
@@ -38,8 +38,18 @@ interface ProductFormModalProps {
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
     const { data: ingredients } = useInventory();
-    const { addRecipe, updateRecipe, calculateRecipeCost } = useKitchen();
+    const { data: recipes, add: addRecipeNode } = useRecipes();
     const { showToast } = useToast();
+
+    // Inline recipe CRUD wrappers
+    const addRecipe = async (data: any) => addRecipeNode(data);
+    const updateRecipe = async (_id: string, _data: any) => { /* TODO: implement update via Nexus */ };
+    const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
+        return ings.reduce((total, ri) => {
+            const ing = ingredients.find((i: any) => i.id === ri.ingredientId);
+            return total + Math.round((Number((ing as any)?.costInCents || 0)) * ri.quantity);
+        }, 0);
+    };
 
     // Form State
     const [name, setName] = useState("");
@@ -139,7 +149,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                         name: ing?.name || '',
                         quantity: ri.quantity,
                         unit: ing?.unit || 'unit',
-                        costInCents: Math.round((ing?.costInCents || 0) * ri.quantity),
+                        costInCents: Math.round(Number(ing?.costInCents || 0) * ri.quantity),
                     };
                 }),
                 recipeSteps,

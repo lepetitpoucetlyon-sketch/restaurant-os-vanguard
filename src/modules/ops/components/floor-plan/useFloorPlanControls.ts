@@ -58,15 +58,15 @@ export function useFloorPlanControls({
 
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
         floorTables.forEach(t => {
-            const tableW = t.width || (t.radius ? t.radius * 2 : 80);
-            const tableH = t.height || (t.radius ? t.radius * 2 : 80);
+            const tableW = Number(t.width) || (t.radius ? Number(t.radius) * 2 : 80);
+            const tableH = Number(t.height) || (t.radius ? Number(t.radius) * 2 : 80);
             const halfW = tableW / 2;
             const halfH = tableH / 2;
             const padding = 35;
-            minX = Math.min(minX, t.x - halfW - padding);
-            minY = Math.min(minY, t.y - halfH - padding);
-            maxX = Math.max(maxX, t.x + halfW + padding);
-            maxY = Math.max(maxY, t.y + halfH + padding);
+            minX = Math.min(minX, (Number(t.x) || 0) - halfW - padding);
+            minY = Math.min(minY, (Number(t.y) || 0) - halfH - padding);
+            maxX = Math.max(maxX, (Number(t.x) || 0) + halfW + padding);
+            maxY = Math.max(maxY, (Number(t.y) || 0) + halfH + padding);
         });
 
         const planWidth = maxX - minX;
@@ -198,7 +198,7 @@ export function useFloorPlanControls({
             
             const x = (pointer.x - stage.x()) / stage.scaleX();
             const y = (pointer.y - stage.y()) / stage.scaleY();
-            const newTableNumber = (Math.max(0, ...floorTables.map((t: Table) => parseInt(t.number) || 0)) + 1).toString();
+            const newTableNumber = (Math.max(0, ...floorTables.map((t: any) => parseInt(String(t.number || '')) || 0)) + 1).toString();
 
             await addTable({
                 number: newTableNumber,

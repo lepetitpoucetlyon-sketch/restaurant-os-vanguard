@@ -87,8 +87,44 @@ export const calculateRecipeCostSelector = atom(null, (get, _set, recipeIngredie
     }, 0);
 });
 
-// --- STOCK TRANSFER ATOMS (Grade X Legalisation) ---
-export const stockTransferSelectedItemAtom = atom<string>('');
+// --- ⚡ PHASE 3: REAL-TIME OPTIMISTIC RECONCILIATION ---
+export const decrementStockAtom = atom(
+    null,
+    async (get, set, { itemId, amount }: { itemId: string, amount: number }) => {
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const { logger } = await import('@/lib/logger');
+        
+        // 1. ⚡ OPTIMISTIC UPDATE: Local Deduction
+        const currentNode = get(stockItemsNodeAtom);
+        const itemIndex = currentNode.data.findIndex(i => i.id === itemId);
+        
+        if (itemIndex === -1) return;
+        
+        const originalData = [...currentNode.data];
+        const optimisticData = [...originalData];
+        optimisticData[itemIndex] = {
+            ...optimisticData[itemIndex],
+            quantity: Math.max(0, (Number(optimisticData[itemIndex].quantity) || 0) - amount),
+            version: (Number(optimisticData[itemIndex].version) || 0) + 1 // Local version jump
+        };
+        
+        set(stockItemsNodeAtom, (prev) => ({ ...prev, data: optimisticData }));
+        logger.info(`[Stock-Optimistic] Deducted ${amount} from ${itemId}. UI updated (0ms).`);
+
+        // 2. 🛰️ PERSISTENT ATOMIC BURST
+        try {
+            const persistencePath = Nexus.getTenantPath(`stockItems/${itemId}`);
+            await Nexus.adapter.increment(persistencePath, 'quantity', -amount);
+            logger.debug(`[Stock-Atomic] Persistence success for ${itemId}.`);
+        } catch (error) {
+            // 🛡️ ROLLBACK: Handled by ResilienceSlayer but triggered here if immediate failure
+            logger.error(`[Stock-Atomic] Persistence failed for ${itemId}. Rolling back...`, error);
+            set(stockItemsNodeAtom, (prev) => ({ ...prev, data: originalData }));
+        }
+    }
+);
+// --- 🔄 STOCK TRANSFER FLOW (Grade X) ---
+export const stockTransferSelectedItemAtom = atom<string | null>(null);
 export const stockTransferTargetLocationAtom = atom<string>('');
 export const stockTransferIsSubmittingAtom = atom<boolean>(false);
 export const stockTransferSuccessAtom = atom<boolean>(false);

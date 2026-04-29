@@ -113,7 +113,7 @@ export const BlackFridaySimulation = {
     logger.info(`--- [Test 4] LEDGER STRESS & INTEGRITY (${count} TX/S) ---`);
     const { BlockchainLedgerService } = await import('@/domain/accounting/BlockchainLedgerService');
     const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-    const { MockAdapter } = await import('@/lib/nexus/adapters/MockAdapter');
+    const { MockAdapter } = await import('@/infrastructure/adapters/MockAdapter');
 
     // Setup Mock Environment
     const mockAdapter = new MockAdapter();
