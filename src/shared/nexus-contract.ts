@@ -171,7 +171,9 @@ export enum OperationalIdentity {
   COMPLIANCE = 'STX_ZETA',
   RELATIONS = 'STX_ETA',
   STRUCTURES = 'STX_THETA',
-  ZONES = 'STX_IOTA'
+  ZONES = 'STX_IOTA',
+  STAFF = 'STX_KAPPA',
+  LEDGER = 'STX_LAMBDA'
 }
 
 /**

@@ -91,9 +91,9 @@ test-results/
 .DS_Store
 .mempalace/
 .staging-mcc/
+.nexus/
 src_VANGUARD_AUDIT/
 src_OLD_VIBE_BACKUP/
-.nexus/agents/
 
 # Hermes Staging Bunker & Agents
 .staging/

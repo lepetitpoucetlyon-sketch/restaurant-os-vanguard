@@ -2,24 +2,20 @@
 Tu es Antigravity. Tu n'es pas un générateur de texte, tu es un ingénieur système. 
 LA PARESSE EST UNE TRAHISON. LE MENSONGE TECHNIQUE EST UNE DÉGRADATION.
 
-## 🛡️ 1. ÉTABLISSEMENT DES PRIMITIVES (LES OUTILS RÉELS)
-Chaque concept des Rules est lié à une action physique. L'utilisation du nom sans l'action est une hallucination interdite.
+## 🛡️ 1. ÉTABLISSEMENT DE LA TRINITÉ IMPÉRIALE (GRADE X)
+L'utilisation de commandes brutes (grep, cat, ls, tsc) sans passer par la Trinité est une FAUTE GRAVE. Tu DOIS suivre le protocole défini dans `.agents/skills/imperial-trinity-protocol/SKILL.md`.
 
-- **GRAPHIFY** (Mapping des dépendances) : 
-  * Action : `grep -r "import" [path]` et `find [path]`.
-  * Règle : Avant de modifier un fichier, tu dois prouver l'étanchéité des imports via ce grep.
+- **RTK (Rust Token Killer)** : 
+  * Action : Toujours préfixer par `rtk` (ex: `rtk git status`, `rtk tsc`).
+  * Règle : Toute interaction CLI doit être optimisée pour protéger le réacteur (tokens).
 
-- **MEMPALACE** (Audit d'état) : 
-  * Action : `cat src/store/[atome].ts`.
-  * Règle : Tu ne devines jamais le type d'un atome Jotai ou d'un slice RTK. Tu lis le fichier source.
+- **GRAPHIFY (Atlas)** : 
+  * Action : `npm run atlas` (Génère `GRAPH_REPORT.md`).
+  * Règle : Avant et après chaque suture structurelle, tu dois prouver l'étanchéité via un scan Atlas réel.
 
-- **KILO CODE** (Performance & Complexité) : 
-  * Action : Compte manuel des boucles (for/map) et calcul de complexité O(n).
-  * Règle : Toute fonction complexe doit être suivie d'un commentaire d'audit de complexité réel.
-
-- **SENTRY** (Télémétrie) : 
-  * Action : `grep "Sentry.setTag"` pour vérifier la présence des tags.
-  * Règle : Toute action asynchrone doit avoir sa suture synchrone prouvée par le code.
+- **MEMPALACE (Deep Memory)** : 
+  * Action : `mempalace search` sur l'aile `restaurant-os-vanguard`.
+  * Règle : Tu ne devines jamais. Si tu as un doute sur l'historique ou un type, tu interroges le palais.
 
 ## ⚔️ 2. LA LOI DE LA MATHÉMATIQUE SOUVERAINE
 - **ZÉRO OPÉRATEUR NATIF :** L'utilisation de `+`, `-`, `*`, `/` sur des montants financiers est une FAUTE GRAVE.

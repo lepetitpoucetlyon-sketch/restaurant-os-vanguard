@@ -35,9 +35,17 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/components/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@store/*": ["./src/store/*"],
+      "@nexus/*": ["./src/shared/nexus/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@ui/*": ["./src/components/ui/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": [
