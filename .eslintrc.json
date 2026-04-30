@@ -9,6 +9,69 @@
       {
         "endOfLine": "auto"
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@/shared/types",
+            "message": "Violation de Souveraineté : Veuillez utiliser le Neutral Ground @nexus/contracts."
+          },
+          {
+            "name": "@shared/types",
+            "message": "Violation de Souveraineté : Veuillez utiliser le Neutral Ground @nexus/contracts."
+          },
+          {
+            "name": "@/types",
+            "message": "Violation de Souveraineté : L'ancien dossier /src/types est supprimé. Utilisez @nexus/contracts."
+          },
+          {
+            "name": "@/modules/gateway/auth",
+            "message": "Violation de Souveraineté : Veuillez utiliser le Bastion @nexus/guards."
+          }
+        ],
+        "patterns": [
+          {
+            "group": [
+              "@modules/*/*",
+              "@/modules/*/*"
+            ],
+            "message": "Violation de Souveraineté : Imports profonds interdits. Veuillez utiliser l'API publique du pilier via @modules/nom-du-pilier."
+          },
+          {
+             "group": ["../../*"],
+             "message": "Violation de Souveraineté : Imports relatifs complexes interdits. Utilisez les alias @modules, @nexus, @domain."
+          }
+        ]
+      }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/hooks/**/*",
+        "src/lib/**/*",
+        "src/shared/nexus/**/*"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@modules/*",
+                  "@/modules/*",
+                  "@domain/*",
+                  "@/domain/*"
+                ],
+                "message": "Violation de Souveraineté : Le Cœur (hooks/lib/nexus) ne doit jamais importer la Périphérie (modules/domain). Déplacez la logique ou utilisez un contrat Neutral Ground."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

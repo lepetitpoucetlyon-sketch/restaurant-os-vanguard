@@ -38,17 +38,19 @@ export type PowerAction =
   // Flux Transactionnel
   | 'CREATE_TRANSACTION' | 'SEAL_FISCAL' | 'CLOSE_PERIOD'
   // Production
-  | 'FIRE_KDS' | 'VALIDATE_DISH'
+  | 'FIRE_KDS' | 'VALIDATE_DISH' | 'MANAGE_RECIPES'
   // Stock & Traçabilité
-  | 'DECREMENT_STOCK' | 'LOG_TRACEABILITY' | 'ALERT_RUPTURE'
+  | 'DECREMENT_STOCK' | 'LOG_TRACEABILITY' | 'ALERT_RUPTURE' | 'MANAGE_INVENTORY'
   // Conformité
   | 'SIG_DIGITAL' | 'RECORD_TEMPERATURE' | 'EXPORT_REGISTER'
   // Comptabilité
   | 'GENERATE_FEC' | 'VENTILATE_TVA'
   // RH
   | 'CLOCK_STAFF' | 'SIGN_CONTRACT' | 'CALCULATE_HOURS'
+  // Marketing & Client
+  | 'MANAGE_CAMPAIGNS' | 'MANAGE_CRM'
   // Souveraineté
-  | 'PUSH_GENOME' | 'KILL_SWITCH' | 'SYNC_STATE'
+  | 'PUSH_GENOME' | 'KILL_SWITCH' | 'SYNC_STATE' | 'POWER_USER'
   // Universel
   | 'READ_ONLY';
 
