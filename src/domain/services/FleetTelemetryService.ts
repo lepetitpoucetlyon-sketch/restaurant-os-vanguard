@@ -5,7 +5,7 @@
  */
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TenantID, SiteTelemetry } from '@/domain/types/brands';
+import { TenantID, SiteTelemetry } from '@domain/types/brands';
 
 interface PerformanceMemory extends Performance {
   memory?: {

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { SovereignGuard } from '@/lib/SovereignGuard';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 
 /**
  * 🛰️ INexusAdapter - Restaurant OS (Grade VI)
@@ -18,26 +18,26 @@ export interface INexusQueryOptions {
 }
 
 export interface INexusBatch {
-    set<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): void;
-    update<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): void;
+    set<T = import('@shared/nexus-contract').SovereignData>(path: string, data: T): void;
+    update<T = import('@shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): void;
     increment(path: string, field: string, amount: number): void;
     delete(path: string): void;
     commit(): Promise<void>;
 }
 
 export interface INexusAdapter {
-    get<T = import('@/shared/nexus-contract').SovereignData>(path: string): Promise<T | null>;
-    query<T = import('@/shared/nexus-contract').SovereignData>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
-    onSnapshot<T = import('@/shared/nexus-contract').SovereignData>(
+    get<T = import('@shared/nexus-contract').SovereignData>(path: string): Promise<T | null>;
+    query<T = import('@shared/nexus-contract').SovereignData>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
+    onSnapshot<T = import('@shared/nexus-contract').SovereignData>(
         path: string, 
         callback: (data: T) => void, 
         options?: INexusQueryOptions & { onError?: (error: Error) => void }
     ): () => void;
     batch(): INexusBatch;
-    set<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
-    update<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): Promise<void>;
+    set<T = import('@shared/nexus-contract').SovereignData>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
+    update<T = import('@shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): Promise<void>;
     increment(path: string, field: string, amount: number): Promise<void>;
-    create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void>;
+    create<T = import('@shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
 }

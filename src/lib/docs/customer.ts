@@ -1,5 +1,5 @@
 import { Heart } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const customer: DocCategory = {
     title: 'Customer Hôtelier & Intelligence Client',

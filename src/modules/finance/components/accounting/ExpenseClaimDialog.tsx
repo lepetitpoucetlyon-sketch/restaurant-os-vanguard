@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
 import { X, Camera, Upload, ReceiptEuro, Save, AlertCircle, Sparkles, Gem, ShieldCheck, FileText, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAccounting } from "@/engines/fiscal/NexusFiscalProvider";
-import { useToast } from "@/components/ui/Toast";
-import { TransactionCategory } from "@/types";
-import { Modal } from "@/components/ui/Modal";
+import { useToast } from "@ui/Toast";
+import { TransactionCategory } from "@nexus/contracts";
+import { Modal } from "@ui/Modal";
 import { useUI } from "@/context/UIContext";
 import { cn } from "@/lib/ui.foundations";;
-import { PremiumSelect } from "@/components/ui/PremiumSelect";
+import { PremiumSelect } from "@ui/PremiumSelect";
 import { ListFilter } from "lucide-react";
 
 interface ExpenseClaimDialogProps {

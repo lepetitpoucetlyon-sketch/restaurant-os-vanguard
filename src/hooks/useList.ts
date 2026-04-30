@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { SovereignData } from "@/shared/nexus-contract";
+import { SovereignData } from "@shared/nexus-contract";
 
 import { useSorting } from "./useSorting";
 import { useFiltering } from "./useFiltering";

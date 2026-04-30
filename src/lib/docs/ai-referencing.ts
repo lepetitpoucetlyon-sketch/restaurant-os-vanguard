@@ -1,5 +1,5 @@
 import { Bot } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const aiReferencing: DocCategory = {
     title: 'Référencement IA & SEO Local',

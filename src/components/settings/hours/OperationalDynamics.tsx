@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import { ShieldAlert } from "lucide-react";
-import { ServiceSettings } from "@/types";
+import { ServiceSettings } from "@nexus/contracts";
 
 interface OperationalDynamicsProps {
     service: ServiceSettings;

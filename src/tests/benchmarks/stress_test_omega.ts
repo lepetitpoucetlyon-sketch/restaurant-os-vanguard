@@ -1,5 +1,5 @@
-import { Slayer } from '@/domain/services/Slayer';
-import { LegacyOrder } from '@/types';
+import { Slayer } from '@domain/services/Slayer';
+import { LegacyOrder } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 
 async function runStressTest() {

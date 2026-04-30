@@ -15,14 +15,14 @@ import { dashboardTranslations } from './domains/dashboard';
 import { operationsTranslations } from './domains/operations';
 
 // Deep merge utility — fusionner les objets de traduction par langue
-function deepMerge(...objects: import('@/shared/nexus-contract').SovereignData[]): import('@/shared/nexus-contract').SovereignData {
-    const result: import('@/shared/nexus-contract').SovereignData = {};
+function deepMerge(...objects: import('@shared/nexus-contract').SovereignData[]): import('@shared/nexus-contract').SovereignData {
+    const result: import('@shared/nexus-contract').SovereignData = {};
 
     for (const obj of objects) {
         if (!obj) continue;
         for (const key of Object.keys(obj)) {
             if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-                result[key] = deepMerge(result[key] as import('@/shared/nexus-contract').SovereignData || {}, obj[key] as import('@/shared/nexus-contract').SovereignData);
+                result[key] = deepMerge(result[key] as import('@shared/nexus-contract').SovereignData || {}, obj[key] as import('@shared/nexus-contract').SovereignData);
             } else {
 
                 result[key] = obj[key];
@@ -35,7 +35,7 @@ function deepMerge(...objects: import('@/shared/nexus-contract').SovereignData[]
 export type Language = 'fr' | 'en' | 'ja' | 'pt' | 'es';
 
 // Assemble all domain translations with strict SovereignData typing
-export const translations: Record<Language, import('@/shared/nexus-contract').SovereignData> = {
+export const translations: Record<Language, import('@shared/nexus-contract').SovereignData> = {
     fr: deepMerge(
         commonTranslations.fr,
         dashboardTranslations.fr,

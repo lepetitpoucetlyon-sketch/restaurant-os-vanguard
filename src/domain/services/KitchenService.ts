@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Recipe } from '@/types/common.types';
+import { Recipe } from '@nexus/contracts/common.types';
 
 /**
  * 🍳 KitchenService - Restaurant OS

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@shared/nexus-contract';
 import { 
   JournalEntry as KernelJournalEntry, 
   JournalLine as KernelJournalLine,
@@ -7,7 +7,7 @@ import {
   TransactionCategory as KernelTransactionCategory,
   FiscalSeal as KernelFiscalSeal,
   FinancialMetrics as KernelFinancialMetrics
-} from '@/shared/types/finance.types';
+} from '@nexus/contracts/finance.types';
 
 /**
  * ACCOUNTING & FINANCE TYPES - Professional ERP

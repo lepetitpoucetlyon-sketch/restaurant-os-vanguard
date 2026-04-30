@@ -1,14 +1,14 @@
 import { AgentEngine } from '@/lib/ai/AgentEngine';
-import { AgentDomain, AgentRole } from '@/domain/agency/types';
+import { AgentDomain, AgentRole } from '@domain/agency/types';
 import { 
     VanguardAgentConfig, 
     HermesPulseResult, 
     HermesAnomaly, 
     HermesManifest 
-} from '@/domain/agency/hermes.types';
+} from '@domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalHACCPBridge } from '@/modules/finance/services/FiscalHACCPBridge';
+import { FiscalHACCPMapper } from '@modules/finance';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator
@@ -61,7 +61,7 @@ export class HermesEngine {
         // Here we simulate an autonomous bridge trigger if temperature rises
         try {
             const haccpPath = Nexus.getTenantPath('haccp_readings', tenantId);
-            const haccpResults = await Nexus.adapter.query<import('@/types').SensorReading>(haccpPath, {
+            const haccpResults = await Nexus.adapter.query<import('@nexus/contracts').SensorReading>(haccpPath, {
                 where: [
                     { field: 'isAnomaly', operator: '==', value: true },
                     { field: 'processed', operator: '==', value: false }
@@ -81,8 +81,8 @@ export class HermesEngine {
                         detectedAt: reading.lastUpdated instanceof Date ? reading.lastUpdated.toISOString() : String(reading.lastUpdated)
                     });
 
-                    // Auto-Trigger Bridge: Themis Agent Intervention
-                    await FiscalHACCPBridge.processCriticalWaste(reading, [], tenantId);
+                    // Auto-Trigger Mapper: Themis Agent Intervention
+                    await FiscalHACCPMapper.processCriticalWaste(reading, [], tenantId);
                     actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId || reading.id}`);
                     
                     // Mark as processed in Nexus
@@ -140,7 +140,7 @@ export class HermesEngine {
      * 🔱 Delegate
      * Routes a specific problem to the correct Vanguard Agent.
      */
-    static async delegate(domain: AgentDomain, prompt: string, context?: import('@/shared/nexus-contract').SovereignValue): Promise<import('@/domain/agency/types').AgentResponse> {
+    static async delegate(domain: AgentDomain, prompt: string, context?: import('@shared/nexus-contract').SovereignValue): Promise<import('@domain/agency/types').AgentResponse> {
 
         const agent = this.manifest.activeAgents.find(a => a.domain === domain) || this.manifest.activeAgents[0];
         

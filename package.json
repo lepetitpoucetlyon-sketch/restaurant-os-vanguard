@@ -19,7 +19,9 @@
     "start": "next start",
     "lint": "eslint",
     "benchmark": "ts-node tests/benchmarks/live_performance_test.ts",
-    "gitpush": "node .nexus/scripts/antigravity-push.js"
+    "gitpush": "node .nexus/scripts/antigravity-push.js",
+    "nexus:seal": "node .nexus/scripts/smart-seal.js",
+    "nexus:deploy": "node .nexus/scripts/quick-deploy.js"
   },
   "dependencies": {
     "@axiomhq/nextjs": "^0.2.0",
@@ -49,6 +51,7 @@
     "konva": "^10.0.12",
     "lucide-react": "^0.562.0",
     "next": "^16.2.3",
+    "openai": "^6.35.0",
     "protobufjs": "^7.2.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",

@@ -4,7 +4,7 @@ import {
   Recipe,
   Order,
   InventoryMovement
-} from '@/types';
+} from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { SharedKernel } from '@/lib/shared-kernel';
 

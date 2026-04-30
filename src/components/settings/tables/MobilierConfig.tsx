@@ -12,7 +12,7 @@ import {
     Circle 
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { Table, Zone, Floor, TableShape } from "@/types";
+import { Table, Zone, Floor, TableShape } from "@nexus/contracts";
 
 const TABLE_SHAPES = [
     { id: 'rect', label: 'Rectangle', icon: Square },

@@ -1,8 +1,8 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
-import { StockEngine } from '@/domain/services/StockEngine';
-import { Order, StockItem, Recipe } from '@/types';
+import { StockEngine } from '@domain/services/StockEngine';
+import { Order, StockItem, Recipe } from '@nexus/contracts';
 import { getTenantPath } from '@/lib/firebase';
 
 /**

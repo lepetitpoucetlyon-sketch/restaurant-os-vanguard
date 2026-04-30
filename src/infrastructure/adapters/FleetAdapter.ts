@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { EmpireInstance } from '@/domain/types/empire';
-import { MacroBrain, FleetInsight } from '@/domain/services/MacroBrain';
+import { EmpireInstance } from '@domain/types/empire';
+import { MacroBrain, FleetInsight } from '@domain/services/MacroBrain';
 import { logger } from '@/lib/logger';
 
 /**
@@ -28,7 +28,7 @@ export class NexusFleetEngine {
      * Fetches real-time telemetry from Firestore and generates strategic insights.
      */
     public async updateFleetIntelligence(instances: EmpireInstance[]): Promise<{
-        metrics: import('@/domain/services/MacroBrain').ConsolidatedMetrics | null;
+        metrics: import('@domain/services/MacroBrain').ConsolidatedMetrics | null;
         insights: FleetInsight[];
     }> {
         if (this._isSyncing) return { metrics: null, insights: [] };

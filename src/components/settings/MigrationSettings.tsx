@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { Upload, FileText, CheckCircle2, AlertTriangle, Play, Loader2, Save, Download, Database, Users, Menu as MenuIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/Toast";
+import { Button } from "@ui/button";
+import { useToast } from "@ui/Toast";
 import { useDataMigration } from "@/hooks/useDataMigration";
 import { NexusSphere } from "@/components/layout/NexusSphere";
 

@@ -6,7 +6,7 @@ import {
   TransactionCategory as KernelTransactionCategory,
   FiscalSeal as KernelFiscalSeal,
   FinancialMetrics as KernelFinancialMetrics
-} from '@/shared/types/finance.types';
+} from '@nexus/contracts/finance.types';
 
 export const FiscalSealSchema = z.object({
   id: z.string(),

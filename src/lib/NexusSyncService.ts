@@ -10,12 +10,12 @@ import {
 } from '@/store/operationalAtoms';
 
 // Import Sovereign Modular sub-services
-import { OpsSyncService as SyncOrders } from '@/modules/ops/ops.sync';
-import { InventorySyncService as SyncStocks } from '@/modules/inventory/inventory.sync';
-import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
-import { HACCPSyncService as SyncHACCP } from '@/modules/haccp/haccp.sync';
-import { MarketingSyncService as SyncMarketing } from '@/modules/marketing/marketing.sync';
-import { HRSyncService as SyncStaff } from '@/modules/hr/hr.sync';
+import { OpsSyncService as SyncOrders } from '@modules/ops.sync';
+import { InventorySyncService as SyncStocks } from '@modules/logistics.sync';
+import { FinanceSyncService as SyncFinance } from '@modules/finance.sync';
+import { HACCPSyncService as SyncHACCP } from '@modules/compliance.sync';
+import { MarketingSyncService as SyncMarketing } from '@modules/commerce.sync';
+import { HRSyncService as SyncStaff } from '@modules/human.sync';
 
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';
@@ -25,10 +25,10 @@ import { MasterBridge } from './MasterBridge';
 import { Mutex } from './utils/Mutex';
 
 // Grade IX: Genome Immunity
-import { genomeValidator } from '@/domain/services/GenomeValidator';
+import { genomeValidator } from '@domain/services/GenomeValidator';
 import { ImmunityAuditLogger } from './services/ImmunityAuditLogger';
 
-import { SelfHealingEngine } from '@/shared/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 
 const syncMutex = new Mutex();
 

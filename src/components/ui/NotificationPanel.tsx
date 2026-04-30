@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useNotifications } from "@/context/NotificationsContext";
-import type { Notification, NotificationType } from "@/types";
+import type { Notification, NotificationType } from "@nexus/contracts";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";

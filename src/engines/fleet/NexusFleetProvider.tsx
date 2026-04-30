@@ -2,24 +2,24 @@
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/operationalAtoms';
-import { fleetTelemetry } from '@/domain/services/FleetTelemetryService';
-import { FleetComplianceService } from '@/domain/services/FleetComplianceService';
-import { HACCPTelemetryBridge } from '@/domain/services/HACCPTelemetryBridge';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
-import { TenantID } from '@/domain/types/brands';
+import { fleetTelemetry } from '@domain/services/FleetTelemetryService';
+import { FleetComplianceService } from '@domain/services/FleetComplianceService';
+import { HACCPTelemetryBridge } from '@domain/services/HACCPTelemetryBridge';
+import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
+import { TenantID } from '@domain/types/brands';
 import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
-import { EmpireInstance, EmpireGlobalMetrics } from '@/domain/types/empire';
-import { FleetInsight, ConsolidatedMetrics } from '@/domain/services/MacroBrain';
+import { EmpireInstance, EmpireGlobalMetrics } from '@domain/types/empire';
+import { FleetInsight, ConsolidatedMetrics } from '@domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SiteTelemetry } from '@/domain/types/brands';
+import { SiteTelemetry } from '@domain/types/brands';
 
-import { NexusFleetState } from '@/types/nexus.types';
+import { NexusFleetState } from '@nexus/contracts/nexus.types';
 
 interface NexusFleetStateInternal extends Omit<NexusFleetState, 'tutorial'> {
-    tutorial?: import('@/types/nexus.types').NexusTutorialState;
+    tutorial?: import('@nexus/contracts/nexus.types').NexusTutorialState;
 }
 
 const NexusFleetContext = createContext<NexusFleetStateInternal | undefined>(undefined);
@@ -38,7 +38,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     
     // --- INTELLIGENCE STATE (Grade X) ---
     const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
-    const [scenarios, setScenarios] = useState<import('@/types').SimulationScenario[]>([]); 
+    const [scenarios, setScenarios] = useState<import('@nexus/contracts').SimulationScenario[]>([]); 
     const [financialInsight, setFinancialInsight] = useState<{
         revenue: number;
         foodCostPercent: number;
@@ -287,7 +287,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         launchPreview,
         broadcastConfiguration,
         complianceService: FleetComplianceService,
-        haccpBridge: HACCPTelemetryBridge as unknown as import('@/shared/nexus-contract').SovereignMap,
+        haccpBridge: HACCPTelemetryBridge as unknown as import('@shared/nexus-contract').SovereignMap,
         fleet: globalMetrics, 
         customer: { customers: [] },
         intelligence: { 
@@ -304,7 +304,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             step: 0,
             start: () => {},
             stop: () => {},
-            startTutorial: (section?: import('@/types/nexus.types').NexusTutorialSection) => {
+            startTutorial: (section?: import('@nexus/contracts/nexus.types').NexusTutorialSection) => {
                 console.log('[Tutorial] Starting section:', section?.id);
             },
             stopTutorial: () => {},

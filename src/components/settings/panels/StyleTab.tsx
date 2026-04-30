@@ -6,10 +6,10 @@ import { Check, Zap, Paintbrush } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useTheme } from "@/context/ThemeContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { PageSettingConfig } from "@/types/permissions.types";
+import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@/components/settings/ui/PremiumSelect";
 import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 
 
 interface StyleTabProps {

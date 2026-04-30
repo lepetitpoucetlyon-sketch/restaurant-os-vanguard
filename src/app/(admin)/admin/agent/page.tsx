@@ -17,9 +17,9 @@ import {
   FileCode,
   ShieldAlert
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { StatCard, StatsGrid } from "@/components/ui/StatCard";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { GlassCard } from "@ui/GlassCard";
+import { StatCard, StatsGrid } from "@ui/StatCard";
+import { PageHeader } from "@ui/PageHeader";
 
 interface SentinelReport {
   timestamp: string;

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Reservation } from '@/types';
+import { Reservation } from '@nexus/contracts';
 
 /**
  * 📅 ReservationService - Restaurant OS

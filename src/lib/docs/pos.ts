@@ -1,5 +1,5 @@
 import { Zap } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const pos: DocCategory = {
     title: 'Point de Vente (POS) Haute Performance',

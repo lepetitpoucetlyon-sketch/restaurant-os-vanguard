@@ -1,10 +1,10 @@
 import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/lib/NexusTransaction';
-import { ShiftEntrySchema, ShiftEntry } from "@/domain/schemas/hr";
+import { ShiftEntrySchema, ShiftEntry } from "@domain/schemas/hr";
 import { FiscalEngine } from './FiscalEngine';
 import { logger } from '@/lib/logger';
-import { FiscalSeal } from '@/types';
+import { FiscalSeal } from '@nexus/contracts';
 import { ZodInterceptor } from './ZodInterceptor';
 
 /**

@@ -7,7 +7,7 @@ import { useTutorial } from '@/context/TutorialContext';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { useHasMounted } from '@/hooks';
-import { NexusTutorialState } from '@/types/nexus.types';
+import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 import { usePathname, useRouter } from 'next/navigation';
 

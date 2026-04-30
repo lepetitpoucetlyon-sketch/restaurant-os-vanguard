@@ -20,10 +20,10 @@ import {
 } from "lucide-react";
 
 import { useSettings } from "@/context/SettingsContext";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
-import { SLMExpert } from "@/types";
-import { AgentDomain } from "@/domain/agency/types";
+import { SLMExpert } from "@nexus/contracts";
+import { AgentDomain } from "@domain/agency/types";
 
 const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; description: string }> = {
     inventory: { 

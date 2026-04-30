@@ -8,7 +8,7 @@ import {
     bankTransactionsAtom,
     expenseClaimsAtom,
     accountingLoadingAtom
-} from '@/modules/finance/store/accountingAtoms';
+} from '@modules/finance';
 import { 
     AccountingContextType, 
     LedgerAccount, 
@@ -24,7 +24,7 @@ import {
     BalanceSheetReport,
     TrialBalance,
     FiscalAuditResult
-} from '@/types';
+} from '@nexus/contracts';
 
 // Alias FinancialMetrics to avoid confusion if needed
 type FinancialMetricsTyped = FinancialMetrics; 

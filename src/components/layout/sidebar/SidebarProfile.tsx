@@ -4,11 +4,11 @@ import { motion, Variants } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/context/LanguageContext";
-import { ROLE_LABELS } from "@/domain/services/AccessPolicyManager";
+import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { empireAudit } from "@/lib/audit";
 
 interface SidebarProfileProps {
-    currentUser: import('@/types').User | null;
+    currentUser: import('@nexus/contracts').User | null;
     isSidebarCollapsed: boolean;
     canSwitchProfiles: boolean;
     setIsProfileSwitcherOpen: (val: boolean) => void;

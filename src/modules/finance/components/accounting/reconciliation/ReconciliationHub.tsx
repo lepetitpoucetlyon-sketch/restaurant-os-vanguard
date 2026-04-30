@@ -14,15 +14,15 @@ import {
     ShieldCheck,
     X
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
 import { useAccounting } from '@/context/AccountingContext';
-import { StatementIngestionService } from '@/domain/accounting/StatementIngestionService';
-import { AccountingMatchingService, MatchingResult } from '@/domain/accounting/AccountingMatchingService';
+import { StatementIngestionService } from '@modules/finance/accounting/domain/StatementIngestionService';
+import { AccountingMatchingService, MatchingResult } from '@modules/finance/accounting/domain/AccountingMatchingService';
 import { formatCurrency } from '@/lib/formatters';
 import { AggregationWidget } from './AggregationWidget';
-import { PowensService } from '@/domain/accounting/PowensService';
-import { BankTransaction } from '@/types';
+import { PowensService } from '@modules/finance/accounting/domain/PowensService';
+import { BankTransaction } from '@nexus/contracts';
 
 interface PowensAccount {
     id: string;

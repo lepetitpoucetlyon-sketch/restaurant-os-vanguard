@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
 import { cn } from "@/lib/ui.foundations";
-import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
+import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
 // Dynamic imports for settings components
 const HoursSettings = dynamic(() => import("@/components/settings/HoursSettings"), { loading: () => <SettingsLoading />, ssr: false });

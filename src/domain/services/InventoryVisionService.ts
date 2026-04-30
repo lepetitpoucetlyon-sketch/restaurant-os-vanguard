@@ -1,4 +1,4 @@
-import { Ingredient, StockItem } from '@/types';
+import { Ingredient, StockItem } from '@nexus/contracts';
 import { ExtractedInvoiceItem } from './VisionService';
 import { calculatePriceEvolution } from './StockEngine';
 

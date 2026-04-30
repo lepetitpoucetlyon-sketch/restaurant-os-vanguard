@@ -16,7 +16,7 @@ export interface NodeHealth {
   timestamp: number;
 }
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@shared/nexus-contract';
 
 // Structure de télémétrie pour le MCC
 export interface SiteTelemetry {

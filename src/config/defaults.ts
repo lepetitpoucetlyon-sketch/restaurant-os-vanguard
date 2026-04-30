@@ -1,4 +1,4 @@
-import { GlobalSettings } from '@/types';
+import { GlobalSettings } from '@nexus/contracts';
 
 /**
  * RESTAURANT OS - GRADE VI DEFAULT SETTINGS

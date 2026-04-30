@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { TimePicker } from "@/components/ui/TimePicker";
+import { TimePicker } from "@ui/TimePicker";
 
 interface TimeInputProps {
     value: string;

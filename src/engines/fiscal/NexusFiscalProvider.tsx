@@ -11,8 +11,8 @@ import {
     tenantIdAtom,
     currentUserAtom
 } from '@/store/operationalAtoms';
-import { SovereignMath } from '@/shared/services/SovereignMath';
-import { SovereignNode, OperationalIdentity, DomainRegistry } from '@/shared/nexus-contract';
+import { SovereignMath } from '@shared/services/SovereignMath';
+import { SovereignNode, OperationalIdentity, DomainRegistry } from '@shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { 
@@ -22,7 +22,8 @@ import {
     ExpenseClaim,
     TreasuryMetrics,
     FiscalSeal
-} from '@/types';
+} from '@nexus/contracts';
+import { useBilling } from '@modules/finance';
 
 const Sentry = require("@sentry/nextjs");
 
@@ -162,6 +163,9 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
             treasury
         }
     }), [journalEntries, accounts, bankTransactions, expenseClaims, netProfitInCents, submitExpense, fiscalSeals, runFiscalAudit, treasury]);
+
+    // 🧾 FISCAL ORCHESTRATOR: Connect POS [OPS] -> Ledger [FINANCE]
+    useBilling();
 
     return (
         <NexusFiscalContext.Provider value={contextValue}>

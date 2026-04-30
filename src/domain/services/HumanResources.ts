@@ -1,7 +1,7 @@
-import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/domain/schemas/hr";
-import { User } from '@/types';
+import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@domain/schemas/hr";
+import { User } from '@nexus/contracts';
 import { format, addDays, isSameDay } from 'date-fns';
-import { SovereignData } from "@/shared/nexus-contract";
+import { SovereignData } from "@shared/nexus-contract";
 
 export class HumanResourcesService {
     /**

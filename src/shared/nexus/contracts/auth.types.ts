@@ -7,8 +7,13 @@ export type CategoryKey = string;
 export type RolePermissions = Record<UserRole | string, CategoryKey[]>;
 
 export interface UserPermissions {
+    userId?: string;
+    role?: string;
     level: number; // 0 to 10
     scope: string[]; // e.g. ['FINANCE_READ', 'OPS_WRITE']
+    isSovereignAdmin?: boolean;
+    allowedModules: string[];
+    restrictedPillars?: string[];
 }
 
 export interface User {
@@ -33,6 +38,7 @@ export interface User {
     uid?: string;
     displayName?: string;
     kudos?: number;
+    permissions?: UserPermissions;
 }
 
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'on_leave';

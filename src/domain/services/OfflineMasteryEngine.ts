@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
-import { Order } from '@/types';
+import { Order } from '@nexus/contracts';
 
 /**
  * 🏔️ OfflineMasteryEngine - Restaurant OS (Darwin V5.5 Master Code)

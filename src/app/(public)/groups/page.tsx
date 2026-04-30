@@ -8,9 +8,9 @@ import {
     X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Table as CustomerTable } from '@/types'; // Suture Nexus
-import { GroupEventStatus } from '@/types';
+import { Button } from '@ui/button';
+import { Table as CustomerTable } from '@nexus/contracts'; // Suture Nexus
+import { GroupEventStatus } from '@nexus/contracts';
 
 // Extracted Components (Sutured for Grade X Stability)
 import { GroupStatCard } from './components/GroupStatCard';

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useInventory } from '@/engines/ops/NexusOpsProvider';
 import { useNotifications } from '@/context/NotificationsContext';
-import { useHACCP } from '@/engines/guard/NexusGuardProvider';
+import { useHACCP } from '@nexus/guards/NexusGuardProvider';
 
 /**
  * ALERT SYNC COMPONENT

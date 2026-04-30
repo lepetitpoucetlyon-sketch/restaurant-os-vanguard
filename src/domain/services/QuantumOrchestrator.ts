@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getTenantPath } from '@/lib/firebase';
-import { OrchestratorSignal } from '@/shared/nexus-contract';
+import { OrchestratorSignal } from '@shared/nexus-contract';
 
 /**
  * 🎰 QuantumOrchestrator - Empire Fleet Master

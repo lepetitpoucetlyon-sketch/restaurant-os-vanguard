@@ -8,7 +8,7 @@ export {
     currentUserAtom, isAuthenticatedAtom, userRoleAtom,
     rolePermissionsAtom, userPermissionsAtom,
     canDoAtom, updateRolePermissionsAtom
-} from '@/modules/auth/store/authAtoms';
+} from '@modules/gateway';
 
 export { tenantConfigAtom } from './masterAtoms';
 
@@ -19,7 +19,7 @@ export {
     bankTransactionsNodeAtom, bankTransactionsAtom,
     expenseClaimsNodeAtom, expenseClaimsAtom,
     accountingViewModeAtom, isAccountingSyncingAtom, accountingLoadingAtom
-} from '@/modules/finance/store/accountingAtoms';
+} from '@modules/finance';
 
 // 🏛️ UI & PERSISTENCE
 export {
@@ -35,14 +35,14 @@ export {
     tablesNodeAtom, tablesAtom, tablesLoadingAtom,
     activeCartAtom,
     availableTablesAtom, pendingOrdersAtom, pendingModificationsAtom
-} from '@/modules/ops/store/orderAtoms';
+} from '@modules/ops';
 
 // 📅 RESERVATIONS & EVENTS DOMAIN
 export {
     reservationsNodeAtom, reservationsAtom, reservationsLoadingAtom,
     groupsNodeAtom, groupsAtom, groupsLoadingAtom,
     reservationStatsAtom, isReservationSyncingAtom
-} from '@/modules/ops/store/reservationAtoms';
+} from '@modules/commerce';
 
 // 📦 INVENTORY & KITCHEN DOMAIN
 export {
@@ -56,7 +56,7 @@ export {
     storageLocationsNodeAtom, storageLocationsAtom,
     prepTasksNodeAtom, prepTasksAtom, prepLoadingAtom,
     miseEnPlaceTargetSelector, calculateRecipeCostSelector
-} from '@/modules/inventory/store/inventoryAtoms';
+} from '@modules/logistics';
 
 // 👥 STAFF & HR DOMAIN
 export {
@@ -67,7 +67,7 @@ export {
     leaveRequestsNodeAtom, leaveRequestsAtom,
     leaveBalancesNodeAtom, leaveBalancesAtom,
     hrStaffLoadingAtom as hrLoadingAtom
-} from '@/modules/hr/store/staffAtoms';
+} from '@modules/human';
 
 // 🛡️ COMPLIANCE DOMAIN (Fiscal + Guard/HACCP)
 export {
@@ -80,7 +80,7 @@ export {
     oilLogsNodeAtom, oilLogsAtom,
     wasteLogsNodeAtom, wasteLogsAtom,
     guardLoadingAtom
-} from '@/modules/haccp/store/complianceAtoms';
+} from '@modules/compliance';
 
 // 📢 MARKETING & CUSTOMERS DOMAIN
 export {
@@ -92,7 +92,7 @@ export {
     quotesNodeAtom, quotesAtom, quotesLoadingAtom,
     crmsNodeAtom, crmsAtom, crmsLoadingAtom, selectedCRMAtom,
     seoLoadingAtom, isMarketingSyncingAtom
-} from '@/modules/marketing/store/marketingAtoms';
+} from '@modules/commerce';
 
 // 🛰️ FLEET & MULTI-TENANCY
 export {
@@ -107,4 +107,4 @@ export {
     menuAnalysisSelector,
     staffPerformanceSelector,
     laborCostRatioSelector
-} from '@/modules/marketing/store/analyticsAtoms';
+} from '@modules/commerce';

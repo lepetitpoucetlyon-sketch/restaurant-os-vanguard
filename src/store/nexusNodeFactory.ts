@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
-import type { ModuleId } from '@/shared/genome.types';
+import type { ModuleId } from '@shared/genome.types';
 
 // --- 🧹 MEMORY PROTECTION (PHASE 4 - ZERO LEAK) ---
 export const orphanNodesRegistry = new Map<string, WeakRef<object>>();

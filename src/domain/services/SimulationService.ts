@@ -1,4 +1,4 @@
-import { Order, StockItem, Ingredient, InventoryMovement, FiscalSeal, User } from '@/types';
+import { Order, StockItem, Ingredient, InventoryMovement, FiscalSeal, User } from '@nexus/contracts';
 import { FiscalEngine } from './FiscalEngine';
 import { StockEngine } from './StockEngine';
 import { logger } from '@/lib/logger';

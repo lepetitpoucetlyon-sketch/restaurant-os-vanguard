@@ -15,13 +15,14 @@ import {
     ArrowRight
 } from 'lucide-react';
 import { useFleet } from '@/context/FleetContext';
+import { ProposalPanel } from '../ProposalPanel';
 import { TreasuryEngine } from '@domain/services/TreasuryEngine';
 
 export default function MCCTreasury() {
     const { instances } = useFleet();
     
     const report = useMemo(() => {
-        return TreasuryEngine.generateFleetReport(instances);
+        return TreasuryEngine.generateFleetReport(instances as any);
     }, [instances]);
 
     return (

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
-import { Shift as DomainShift } from '@/types';
+import { Shift as DomainShift } from '@nexus/contracts';
 
 export type Shift = DomainShift;
 

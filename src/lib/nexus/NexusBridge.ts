@@ -6,8 +6,8 @@ import {
 import { getDefaultStore } from 'jotai';
 import { tenantConfigAtom } from '@/store/masterAtoms';
 import { db } from '@/lib/offline/offline-store';
-import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
-import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
+import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@shared/nexus-contract';
+import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 
 interface LegacyTenantConfig {
   features?: Record<string, boolean>;
@@ -78,8 +78,8 @@ export class NexusBridge {
           status: { 
             ...RESTAURANT_FULL_DNA.status, 
             ...remoteData.status,
-            layoutType: (remoteData.status?.layoutType || remoteData.layout || RESTAURANT_FULL_DNA.status.layoutType) as import('@/shared/nexus-contract').TenantConfig['status']['layoutType'],
-            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || RESTAURANT_FULL_DNA.status.businessLaws) as import('@/shared/nexus-contract').TenantConfig['status']['businessLaws']
+            layoutType: (remoteData.status?.layoutType || remoteData.layout || RESTAURANT_FULL_DNA.status.layoutType) as import('@shared/nexus-contract').TenantConfig['status']['layoutType'],
+            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || RESTAURANT_FULL_DNA.status.businessLaws) as import('@shared/nexus-contract').TenantConfig['status']['businessLaws']
           },
           metadata: { ...RESTAURANT_FULL_DNA.metadata, ...remoteData.metadata },
         };

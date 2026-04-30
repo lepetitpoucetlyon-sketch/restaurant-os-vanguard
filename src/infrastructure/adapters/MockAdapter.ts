@@ -1,20 +1,20 @@
 import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
 import { logger } from '@/lib/logger';
-import { SovereignGuard } from '@/lib/SovereignGuard';
-import type { SovereignData } from '@/shared/nexus-contract';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
+import type { SovereignData } from '@shared/nexus-contract';
 
 /**
  * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI)
  */
 export class MockAdapter implements INexusAdapter {
-    private storage: import('@/shared/nexus-contract').SovereignData = {};
+    private storage: import('@shared/nexus-contract').SovereignData = {};
     
-    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
+    async get<T = import('@shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
         return (this.storage[path] as T) || null;
     }
 
 
-    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+    async query<T = import('@shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
 
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
@@ -40,7 +40,7 @@ export class MockAdapter implements INexusAdapter {
         return results as any as T[];
     }
 
-    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void): () => void {
+    onSnapshot<T = import('@shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void): () => void {
 
         callback(this.storage[path] as T);
         return () => {}; // No-op for mock
@@ -66,20 +66,20 @@ export class MockAdapter implements INexusAdapter {
         };
     }
 
-    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
+    async set<T = import('@shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
         this.storage[path] = await SovereignGuard.protectWrite(path, data as SovereignData);
     }
 
-    async create<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
+    async create<T = import('@shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
         return this.set(path, data);
     }
 
-    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
+    async update<T = import('@shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
         const existingData = this.storage[path];
         const baseData = existingData && typeof existingData === 'object' && !Array.isArray(existingData)
             ? existingData as SovereignData
             : {};
-        const mergedData = { ...baseData, ...(data as Record<string, import('@/shared/nexus-contract').SovereignField>) } as SovereignData;
+        const mergedData = { ...baseData, ...(data as Record<string, import('@shared/nexus-contract').SovereignField>) } as SovereignData;
         this.storage[path] = await SovereignGuard.protectWrite(path, mergedData);
     }
 

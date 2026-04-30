@@ -1,0 +1,78 @@
+"use client";
+
+import { useEffect, useCallback } from 'react';
+import { useOrders } from '@/engines/ops/NexusOpsProvider';
+import { InvoiceEngine } from '../domain/InvoiceEngine';
+import { useAtomValue, useStore } from 'jotai';
+import { fiscalLedgerNodeAtom, tenantIdAtom } from '@/store/operationalAtoms';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { DomainRegistry, OperationalIdentity } from '@shared/nexus-contract';
+import { logger } from '@/lib/logger';
+
+/**
+ * 🧾 useBilling - Fiscal Suture Hook
+ * Orchestrates the real-time link between POS [OPS] and Billing [FINANCE].
+ */
+export function useBilling() {
+    const { data: orders, isLoading } = useOrders();
+    const fiscalLedgerNode = useAtomValue(fiscalLedgerNodeAtom);
+    const tenantId = useAtomValue(tenantIdAtom);
+    const store = useStore();
+
+    /**
+     * Fiscal Suture: Process a single order into a LegalInvoice and seal it.
+     */
+    const billOrder = useCallback(async (order: any) => {
+        try {
+            // 1. Transform SovereignOrder -> LegalInvoice
+            const invoice = InvoiceEngine.transform(order);
+            
+            // 2. Map to JournalEntry for the Ledger
+            const journalEntry = InvoiceEngine.toJournalEntry(invoice, tenantId);
+
+            // 3. Save Invoice to Finance Domain
+            const invoicePath = `tenants/${tenantId}/finance/billing`;
+            await Nexus.adapter.create(invoicePath, invoice);
+
+            // 4. Seal to Fiscal Ledger (STX_LAMBDA)
+            const ledgerPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.COMPLIANCE)}`;
+            await Nexus.adapter.create(ledgerPath, journalEntry);
+
+            logger.info(`[Billing] Order ${order.id} billed and sealed successfully as ${invoice.invoiceNumber}`);
+            return invoice;
+        } catch (error) {
+            logger.error(`[Billing] Failed to bill order ${order.id}`, error);
+            throw error;
+        }
+    }, [tenantId]);
+
+    /**
+     * Orchestrator: Watch for completed orders that haven't been billed.
+     */
+    useEffect(() => {
+        if (isLoading || !orders) return;
+
+        const processOrders = async () => {
+            const completedOrders = orders.filter((o: any) => o.status === 'completed' || o.status === 'paid');
+            const ledgerData = fiscalLedgerNode.data || [];
+
+            for (const order of completedOrders) {
+                // Check if already billed (avoid double billing in this session)
+                const isAlreadyBilled = ledgerData.some((entry: any) => entry.metadata?.orderId === order.id);
+                
+                if (!isAlreadyBilled) {
+                    await billOrder(order);
+                }
+            }
+        };
+
+        processOrders();
+    }, [orders, isLoading, fiscalLedgerNode.data, billOrder]);
+
+    return {
+        billOrder,
+        isLoadingOrders: isLoading
+    };
+}
+
+export default useBilling;

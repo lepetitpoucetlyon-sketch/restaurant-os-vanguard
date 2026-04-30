@@ -1,8 +1,8 @@
 import { logger } from '@/lib/logger';
-import { FiscalSeal } from '@/types';
+import { FiscalSeal } from '@nexus/contracts';
 export type { FiscalSeal };
 import { empireAudit } from '@/lib/audit';
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 /**
@@ -32,7 +32,7 @@ export const FiscalEngine = {
     options: { lastSeal?: FiscalSeal, isTrainingMode?: boolean, instanceId?: string } = {}
   ): Promise<FiscalSeal> {
     const timestamp = new Date().toISOString();
-    const dataSnapshot = CryptoService.canonicalStringify(data as unknown as import('@/shared/nexus-contract').SovereignData); 
+    const dataSnapshot = CryptoService.canonicalStringify(data as unknown as import('@shared/nexus-contract').SovereignData); 
     const id = SharedKernel.generateId('SEAL');
 
     const previousHash = options.lastSeal ? options.lastSeal.hash : FISCAL_CONSTANTS.GENESIS_ROOT;

@@ -37,7 +37,7 @@ export const TimeSync = {
         }
     };
 
-    this.private_unsub = Nexus.adapter.onSnapshot<import('@/shared/nexus-contract').SovereignData>(syncPath, (data) => {
+    this.private_unsub = Nexus.adapter.onSnapshot<import('@shared/nexus-contract').SovereignData>(syncPath, (data) => {
         if (data && data.heartbeat) {
             const h = data.heartbeat;
             let serverDate: Date | null = null;

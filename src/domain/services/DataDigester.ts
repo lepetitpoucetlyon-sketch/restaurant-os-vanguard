@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
-import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
+import { SovereignValue, SovereignData } from '@shared/nexus-contract';
 
 /**
  * DataDigester - Service de normalisation et validation (Zod-based)
@@ -90,10 +90,10 @@ export class DataDigester {
         })) : []
       };
 
-      logger.info('[DataDigester] Starting ingestion...', { source: (sanitized as import('@/shared/nexus-contract').SovereignData).source as string, isLegacy: !!options.isLegacy });
+      logger.info('[DataDigester] Starting ingestion...', { source: (sanitized as import('@shared/nexus-contract').SovereignData).source as string, isLegacy: !!options.isLegacy });
       
       if (options.isLegacy) {
-        (sanitized as import('@/shared/nexus-contract').SovereignData)._metadata = { 
+        (sanitized as import('@shared/nexus-contract').SovereignData)._metadata = { 
             isLegacy: true, 
             ingestedAt: new Date().toISOString(),
             engine: 'Slayer-2.0'

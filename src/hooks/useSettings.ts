@@ -6,9 +6,9 @@ import {
     settingsSavingAtom, 
     settingsLastSavedAtom 
 } from '@/store/settingsAtoms';
-import { SettingsManager } from '@/domain/services/SettingsManager';
-import { GlobalSettings } from '@/types';
-import { RestaurantIdentity } from '@/types/settings/identity';
+import { SettingsManager } from '@domain/services/SettingsManager';
+import { GlobalSettings } from '@nexus/contracts';
+import { RestaurantIdentity } from '@nexus/contracts/settings/identity';
 
 /**
  * 🛰️ useSettings - Grade VI Atomic Bridge

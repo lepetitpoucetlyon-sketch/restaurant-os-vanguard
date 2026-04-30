@@ -11,14 +11,14 @@ import {
     Sparkles,
     Gem
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { useRecipes, useInventory } from "@/engines/ops/NexusOpsProvider";
-import { useToast } from "@/components/ui/Toast";
-import { Modal } from "@/components/ui/Modal";
-import { PremiumSelect } from "@/components/ui/PremiumSelect";
+import { useToast } from "@ui/Toast";
+import { Modal } from "@ui/Modal";
+import { PremiumSelect } from "@ui/PremiumSelect";
 import { AnimatePresence } from "framer-motion";
-import type { Recipe } from "@/types";
+import type { Recipe } from "@nexus/contracts/nexus-internal-mapper";
 
 
 // Sub-components
@@ -38,17 +38,17 @@ interface ProductFormModalProps {
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
     const { data: ingredients } = useInventory();
-    const { data: recipes, add: addRecipeNode } = useRecipes();
+    const { data: recipes, add: addRecipe, updateRecipe, calculateRecipeCost: calculateRecipeCostHook } = useRecipes();
     const { showToast } = useToast();
 
-    // Inline recipe CRUD wrappers
-    const addRecipe = async (data: any) => addRecipeNode(data);
-    const updateRecipe = async (_id: string, _data: any) => { /* TODO: implement update via Nexus */ };
     const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
-        return ings.reduce((total, ri) => {
-            const ing = ingredients.find((i: any) => i.id === ri.ingredientId);
-            return total + Math.round((Number((ing as any)?.costInCents || 0)) * ri.quantity);
-        }, 0);
+        // Ensure we pass a properly structured recipe-like object to the hook
+        return calculateRecipeCostHook({
+            ingredients: ings.map(ri => {
+                const ing = ingredients.find(i => i.id === ri.ingredientId);
+                return { ...ing, quantity: ri.quantity };
+            })
+        });
     };
 
     // Form State
@@ -67,17 +67,17 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
 
     useEffect(() => {
         if (editProduct && isOpen) {
-            setName(editProduct.name || "");
-            setDescription(editProduct.description || "");
-            setCategory(editProduct.category || "");
-            setSellPriceInCents(editProduct.priceInCents || editProduct.sellingPriceInCents || 0);
-            setPrepTime(editProduct.prepTime || 0);
+            setName(String(editProduct.name || ""));
+            setDescription(String(editProduct.description || ""));
+            setCategory(String(editProduct.category || ""));
+            setSellPriceInCents(Number(editProduct.price || 0));
+            setPrepTime(Number(editProduct.preparationTimeMinutes || 0));
             setSelectedAllergens(editProduct.allergens || []);
-            setIsVegetarian((editProduct as any).isVegetarian || false);
-            setIsVegan((editProduct as any).isVegan || false);
-            setIsGlutenFree((editProduct as any).isGlutenFree || false);
-            setRecipeIngredients((editProduct as any).ingredients || []);
-            setRecipeSteps((editProduct as any).recipeSteps || []);
+            setIsVegetarian(editProduct?.isVegetarian || false);
+            setIsVegan(editProduct?.isVegan || false);
+            setIsGlutenFree(editProduct?.isGlutenFree || false);
+            setRecipeIngredients((editProduct?.ingredients || []).map(i => ({ ingredientId: i.ingredientId || (i as any).id, quantity: i.quantity })));
+            setRecipeSteps(editProduct?.recipeSteps || []);
         } else if (!editProduct && isOpen) {
             setName("");
             setDescription("");

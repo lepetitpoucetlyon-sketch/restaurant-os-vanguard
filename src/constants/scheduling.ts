@@ -1,4 +1,4 @@
-import { DayOfWeek } from "@/types";
+import { DayOfWeek } from "@nexus/contracts";
 
 export const DAYS_CONFIG: { id: DayOfWeek; label: string; shortLabel: string }[] = [
     { id: 'monday', label: 'Lundi', shortLabel: 'Lun' },

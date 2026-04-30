@@ -1,5 +1,5 @@
 import { Instagram } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const socialMarketing: DocCategory = {
     title: 'Marketing & Rayonnement Social',

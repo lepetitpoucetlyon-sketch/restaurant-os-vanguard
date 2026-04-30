@@ -5,7 +5,7 @@ import {
     journalEntriesNodeAtom,
     updateNexusNode 
 } from '@/store/operationalAtoms';
-import { qualityActiveControlAtom } from '@/modules/haccp/store/qualityAtoms';
+import { qualityActiveControlAtom } from '@modules/compliance';
 import { logger } from '@/lib/logger';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -70,7 +70,7 @@ export const ChaosMonkey = {
     // 1. Attempt Float Injection via Mock PhysicalNode
     try {
         const corruptedValue = 10.5523; // Floats are prohibited
-        const { SovereignMath } = require('@/shared/services/SovereignMath');
+        const { SovereignMath } = require('@shared/services/SovereignMath');
         SovereignMath.toMicrounits(corruptedValue); 
     } catch (e) {
         logger.info("[Chaos-Monkey] Float Injection BLOCKED by SovereignMath.");
@@ -78,7 +78,7 @@ export const ChaosMonkey = {
 
     // 2. Attempt DAG Cycle Injection
     try {
-        const { CycleGuard } = require('@/shared/services/CycleGuard');
+        const { CycleGuard } = require('@shared/services/CycleGuard');
         CycleGuard.validateRecipe("CHAOS_RECIPE", ["CHAOS_RECIPE"]); // Self-referencing cycle
     } catch (e) {
         logger.info("[Chaos-Monkey] DAG Cycle Injection BLOCKED by CycleGuard.");
@@ -114,7 +114,7 @@ export const ChaosMonkey = {
     logger.info(`[Chaos-Monkey] Rush Completed. Rejects: ${rejects}/50. Triggering Slayer Recovery.`);
     
     // Trigger Slayer explicitly for the crash test
-    const { ResilienceSlayer } = require('@/domain/services/ResilienceSlayer');
+    const { ResilienceSlayer } = require('@domain/services/ResilienceSlayer');
     ResilienceSlayer.handleTransactionFailure('operational/stock', new Error("CONCURRENCY_VIOLATION"));
   },
 

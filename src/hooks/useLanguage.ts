@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { currentLanguageAtom, Language } from '@/store/languageAtoms';
 import { translations } from '@/i18n/translations';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@shared/nexus-contract';
 
 /**
  * 🌍 useLanguage - Grade VI

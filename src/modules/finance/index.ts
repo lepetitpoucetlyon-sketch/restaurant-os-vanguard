@@ -1,12 +1,10 @@
-/**
- * 🏛️ Finance Ledger Module - Public API
- * Entry point for fiscal and accounting operations.
- */
-
-export * from './hooks/useAccounting';
-export * from './hooks/useFinance';
-export * from './hooks/useFiscal';
-export * from './hooks/useFinanceReflex';
-export * from './services/NF525Service';
-export * from './types';
+export * from './accounting';
+export * from './billing';
+export * from './components';
 export * from './store/accountingAtoms';
+export { useAccounting } from './hooks/useAccounting';
+export { useFinance } from './hooks/useFinance';
+export { useFiscal } from './hooks/useFiscal';
+export { useFinanceReflex } from './hooks/useFinanceReflex';
+export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
+export { PayrollAccountingMapper } from './accounting/domain/PayrollAccountingMapper';

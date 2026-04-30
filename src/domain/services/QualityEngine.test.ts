@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@/tests/vanguard/mocks';
 import { QualityEngine } from './QualityEngine';
-import { QualityControl } from '@/domain/types/quality';
+import { QualityControl } from '@domain/types/quality';
 import { updateNexusNode } from '@/store/operationalAtoms';
 
 // Mock dependencies

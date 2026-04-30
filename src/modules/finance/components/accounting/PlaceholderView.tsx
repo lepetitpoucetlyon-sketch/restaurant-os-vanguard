@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Plus, LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { useUI } from "@/context/UIContext";
 
 interface PlaceholderViewProps {

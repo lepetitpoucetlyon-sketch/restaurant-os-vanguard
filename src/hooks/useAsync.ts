@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { SovereignValue, SovereignData } from "@/shared/nexus-contract";
+import { SovereignValue, SovereignData } from "@shared/nexus-contract";
 
 type AsyncStatus = "idle" | "loading" | "success" | "error";
 

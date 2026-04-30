@@ -1,5 +1,5 @@
 import { Briefcase } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const onboarding: DocCategory = {
     title: 'Onboarding & Culture Équipe',

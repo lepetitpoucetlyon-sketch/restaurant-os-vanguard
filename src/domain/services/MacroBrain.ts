@@ -1,6 +1,6 @@
-export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@/shared/types/fleet.types';
-import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@/shared/types/fleet.types';
-import { EmpireInstance } from '@/domain/types/empire';
+export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
+import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
+import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 

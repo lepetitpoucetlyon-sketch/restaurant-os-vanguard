@@ -15,7 +15,7 @@
 
 import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
-import type { ImmunityLogEntry } from '@/shared/genome.types';
+import type { ImmunityLogEntry } from '@shared/genome.types';
 
 export const ImmunityAuditLogger = {
 

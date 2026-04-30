@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import { EmpireInstance, ProvisioningDNA } from '@/domain/types/empire';
+import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
 import { fleetTelemetry } from './FleetTelemetryService';
 
 /**

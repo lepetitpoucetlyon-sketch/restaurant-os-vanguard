@@ -1,0 +1,99 @@
+"use client";
+
+import { useAtom, useAtomValue } from 'jotai';
+import { useCallback } from 'react';
+import { hrLoadingAtom as hrProcessingAtom } from '../store/hrAtoms';
+import { 
+    leaveRequestsNodeAtom, 
+    leaveBalancesAtom, 
+    hrStaffLoadingAtom as hrLoadingAtom,
+    shiftsNodeAtom
+} from '../store/staffAtoms';
+import { useNexusMutation } from "@shared/hooks/useNexusMutation";
+import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "../types";
+import { SovereignData } from '@shared/nexus-contract';
+
+/**
+ * 👨‍💼 useHumanResources - Grade X Atomic Mapper
+ * Orchestre la gestion du personnel, le planning et les absences.
+ */
+export function useHumanResources() {
+    const [isProcessing, setIsProcessing] = useAtom(hrProcessingAtom);
+    
+    // Grade X Atomic Data
+    const leaveRequestsNode = useAtomValue(leaveRequestsNodeAtom);
+    const leaveRequests = (leaveRequestsNode.data || []) as LeaveRequest[];
+    
+    const leaveBalances = (useAtomValue(leaveBalancesAtom) || []) as LeaveBalance[];
+    const isLoading = useAtomValue(hrLoadingAtom);
+    const shiftsNode = useAtomValue(shiftsNodeAtom);
+    const shifts = (shiftsNode.data || []) as Shift[];
+
+    // --- 🔨 LA FORGE ---
+    const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom, 'leaveRequests', 'HR');
+    const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom, 'shifts', 'HR');
+
+    const addShift = useCallback((shift: Omit<Shift, 'id'>) => {
+        const id = `shift_${Date.now()}`;
+        const newShift: Shift = { ...shift, id } as Shift;
+        return shiftForge.mutate('SET', id, newShift);
+    }, [shiftForge]);
+
+    const updateShift = useCallback((id: string, data: Partial<Shift>) => {
+        return shiftForge.mutate('UPDATE', id, data);
+    }, [shiftForge]);
+
+    const deleteShift = useCallback((id: string) => {
+        return shiftForge.mutate('DELETE', id, {} as SovereignData);
+    }, [shiftForge]);
+
+    const publishShifts = useCallback(async (ids: string[]) => {
+        return Promise.all(ids.map(id => 
+            shiftForge.mutate('UPDATE', id, { status: 'published' } as Partial<Shift>)
+        ));
+    }, [shiftForge]);
+
+    // --- LEAVE MANAGEMENT ---
+    
+    const approveLeaveRequest = useCallback(async (id: string) => {
+        return leaveForge.mutate('UPDATE', id, { 
+            status: 'approved',
+            finalDecision: 'approved',
+            finalDecisionAt: new Date().toISOString()
+        } as Partial<LeaveRequest>);
+    }, [leaveForge]);
+
+    const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, details?: string) => {
+        return leaveForge.mutate('UPDATE', id, { 
+            status: 'rejected',
+            finalDecision: 'rejected',
+            rejectionReason: reason,
+            rejectionDetails: details,
+            finalDecisionAt: new Date().toISOString()
+        } as Partial<LeaveRequest>);
+    }, [leaveForge]);
+
+    const createLeaveRequest = useCallback(async (request: LeaveRequest) => {
+        const id = request.id || `leave_${Date.now()}`;
+        return leaveForge.mutate('SET', id, { ...request, status: 'pending_approval' });
+    }, [leaveForge]);
+
+    return {
+        isProcessing,
+        setIsProcessing,
+        shifts,
+        leaveRequests,
+        leaveBalances,
+        isLoading,
+        addShift,
+        updateShift,
+        deleteShift,
+        publishShifts,
+        approveLeaveRequest,
+        rejectLeaveRequest,
+        createLeaveRequest
+    };
+}
+
+export const usePlanning = useHumanResources;
+

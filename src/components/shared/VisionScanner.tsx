@@ -3,9 +3,9 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Upload, Loader2, CheckCircle2, XCircle, Scan, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-import { VisionService, type ExtractedInvoice } from '@/domain/services/VisionService';
+import { VisionService, type ExtractedInvoice } from '@domain/services/VisionService';
 
 
 interface VisionScannerProps {

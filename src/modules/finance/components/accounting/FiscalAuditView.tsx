@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useFiscal } from '@/engines/ops/NexusOpsProvider';
 import { FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
-import { BlockchainLedgerService } from '@/domain/accounting/BlockchainLedgerService';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { BlockchainLedgerService } from '@modules/finance/accounting/domain/BlockchainLedgerService';
+import { Card, CardHeader, CardTitle, CardContent } from '@ui/card';
 import { ShieldCheck, ShieldAlert, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

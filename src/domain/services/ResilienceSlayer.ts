@@ -5,7 +5,7 @@ import {
     stockItemsNodeAtom, 
     journalEntriesNodeAtom 
 } from '@/store/operationalAtoms';
-import { qualityActiveControlAtom } from '@/modules/haccp/store/qualityAtoms';
+import { qualityActiveControlAtom } from '@modules/compliance';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 

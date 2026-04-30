@@ -4,8 +4,8 @@
  * Seule source de vérité pour le scellage NF525.
  */
 
-import { Order, OrderItem } from "@/types";
-import { SovereignData } from "@/shared/nexus-contract";
+import { Order, OrderItem } from "@nexus/contracts";
+import { SovereignData } from "@shared/nexus-contract";
 
 export interface TaxBreakdown {
     total: number;

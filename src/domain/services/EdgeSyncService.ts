@@ -1,6 +1,6 @@
 import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
-import { SyncMessage } from '@/types/domain.types';
-import { Order } from '@/types';
+import { SyncMessage } from '@nexus/contracts/domain.types';
+import { Order } from '@nexus/contracts';
 import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 

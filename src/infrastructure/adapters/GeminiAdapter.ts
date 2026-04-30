@@ -1,8 +1,8 @@
-import { AccessPolicyManager, CategoryKey, RolePermissions } from "@/domain/services/AccessPolicyManager";
-import { User } from '@/types';
-import { AGENT_TOOLS } from '@/domain/agent/tools';
-import { ToolDefinition } from '@/domain/agent/tools/FinanceTool';
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { AccessPolicyManager, CategoryKey, RolePermissions } from "@domain/services/AccessPolicyManager";
+import { User } from '@nexus/contracts';
+import { AGENT_TOOLS } from '@domain/agent/tools';
+import { ToolDefinition } from '@domain/agent/tools/FinanceTool';
+import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 
 export type GeminiLiveEvent = 
     | { type: 'audio', data: Int16Array }

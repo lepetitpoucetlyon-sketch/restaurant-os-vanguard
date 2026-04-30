@@ -1,8 +1,8 @@
 import { logger } from '@/lib/logger';
 import { RealityGenerator } from './RealityGenerator';
-import { FiscalHACCPBridge } from '@/modules/finance/services/FiscalHACCPBridge';
-import { StockItem } from '@/modules/inventory/types';
-import { SensorReading } from '@/types';
+import { FiscalHACCPMapper } from '@modules/finance';
+import { StockItem } from '@modules/logistics';
+import { SensorReading } from '@nexus/contracts';
 
 /**
  * 🌀 SinfoniaGradeXProof - The 120x Efficiency Proof
@@ -32,8 +32,8 @@ export async function runGradeXProof() {
 
     logger.info('🧠 [PROOF] Antigravity is now analyzing the fiscal impact of this sensor anomaly...');
 
-    // 3. Trigger the Bridge
-    const result = await FiscalHACCPBridge.processCriticalWaste(
+    // 3. Trigger the Mapper
+    const result = await FiscalHACCPMapper.processCriticalWaste(
         anomalyReading,
         impactedStock as StockItem[],
         'tenant_demo_grade_x'

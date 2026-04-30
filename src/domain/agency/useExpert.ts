@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useSettings } from '@/context/SettingsContext';
-import { AgentDomain, AgentRole, AgentResponse } from '@/domain/agency/types';
+import { AgentDomain, AgentRole, AgentResponse } from '@domain/agency/types';
 import { AgentEngine } from '@/lib/ai/AgentEngine';
 
 /**

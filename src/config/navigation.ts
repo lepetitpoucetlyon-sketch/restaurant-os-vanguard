@@ -35,14 +35,13 @@ import {
     ScrollText,
     Radio,
 } from "lucide-react";
-import type { CategoryKey } from "@/domain/services/AccessPolicyManager";
 
 export interface NavItem {
     label: string;
     key: string;
     href: string;
     icon: LucideIcon;
-    category: CategoryKey;
+    category: string;
 }
 
 export interface NavSection {
@@ -96,11 +95,11 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#EC4899', // Pink
         items: [
             { label: "Réservations", key: "reservations", href: "/reservations", icon: CalendarDays, category: "reservations" },
-            { label: "Réservations Omnicanal", key: "omnichannel", href: "/omnichannel-reservations", icon: Globe, category: "reservations" },
-            { label: "CRM Clients", key: "crm", href: "/crm", icon: Heart, category: "reservations" },
-            { label: "Devis", key: "quotes", href: "/quotes", icon: FileSpreadsheet, category: "reservations" },
+            { label: "Réservations Omnicanal", key: "omnichannel", href: "/migration?module=Réservations Omnicanal", icon: Globe, category: "reservations" },
+            { label: "CRM Clients", key: "crm", href: "/migration?module=CRM Clients", icon: Heart, category: "reservations" },
+            { label: "Devis", key: "quotes", href: "/migration?module=Devis", icon: FileSpreadsheet, category: "reservations" },
             { label: "Groupes & Privatisation", key: "groups", href: "/groups", icon: PartyPopper, category: "reservations" },
-            { label: "Plan de Salle (Service)", key: "floor", href: "/floor", icon: Book, category: "operations" },
+            { label: "Plan de Salle (Service)", key: "floor", href: "/migration?module=Plan de Salle (Service)", icon: Book, category: "operations" },
         ]
     },
     {
@@ -112,10 +111,10 @@ export const NAV_SECTIONS: NavSection[] = [
         items: [
             { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: ChefHat, category: "kitchen" },
             { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen" },
-            { label: "Plan des Stockages", key: "storage_map", href: "/storage-map", icon: Refrigerator, category: "inventory" },
-            { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory" },
-            { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp" },
-            { label: "Contrôle Réception", key: "quality_control", href: "/quality", icon: ShieldCheck, category: "haccp" },
+            { label: "Plan des Stockages", key: "storage_map", href: "/migration?module=Plan des Stockages", icon: Refrigerator, category: "inventory" },
+            { label: "Stocks & Inventaire", key: "inventory", href: "/migration?module=Stocks & Inventaire", icon: Package, category: "inventory" },
+            { label: "HACCP & Qualité", key: "haccp", href: "/migration?module=HACCP & Qualité", icon: ClipboardCheck, category: "haccp" },
+            { label: "Contrôle Réception", key: "quality_control", href: "/migration?module=Contrôle Réception", icon: ShieldCheck, category: "haccp" },
         ]
     },
     {
@@ -125,11 +124,11 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: Users,
         color: '#06B6D4', // Cyan
         items: [
-            { label: "Prise de Poste", key: "onboarding", href: "/onboarding", icon: Briefcase, category: "onboarding" },
-            { label: "Ressources Humaines", key: "hr", href: "/staff", icon: Users, category: "staff" },
-            { label: "Planning", key: "planning", href: "/planning", icon: CalendarRange, category: "planning" },
-            { label: "Congés & Absences", key: "leaves", href: "/leaves", icon: Palmtree, category: "planning" },
-            { label: "Recrutement", key: "recruitment", href: "/recruitment", icon: UserPlus, category: "recruitment" },
+            { label: "Prise de Poste", key: "onboarding", href: "/migration?module=Prise de Poste", icon: Briefcase, category: "onboarding" },
+            { label: "Ressources Humaines", key: "hr", href: "/migration?module=Ressources Humaines", icon: Users, category: "staff" },
+            { label: "Planning", key: "planning", href: "/migration?module=Planning", icon: CalendarRange, category: "planning" },
+            { label: "Congés & Absences", key: "leaves", href: "/migration?module=Congés & Absences", icon: Palmtree, category: "planning" },
+            { label: "Recrutement", key: "recruitment", href: "/migration?module=Recrutement", icon: UserPlus, category: "recruitment" },
         ]
     },
     {
@@ -139,11 +138,11 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: TrendingUp,
         color: '#8B5CF6', // Purple
         items: [
-            { label: "Analytique BI", key: "analytics", href: "/analytics", icon: BarChart3, category: "analytics" },
-            { label: "Google Analytics", key: "google_analytics", href: "/analytics-integration", icon: BarChart3, category: "analytics" },
-            { label: "Marketing & Social", key: "social_marketing", href: "/social-marketing", icon: Instagram, category: "analytics" },
-            { label: "Référencement IA", key: "ai_referencing", href: "/ai-referencing", icon: Bot, category: "analytics" },
-            { label: "SEO & Référencement", key: "seo", href: "/seo", icon: Globe, category: "analytics" },
+            { label: "Analytique BI", key: "analytics", href: "/migration?module=Analytique BI", icon: BarChart3, category: "analytics" },
+            { label: "Google Analytics", key: "google_analytics", href: "/migration?module=Google Analytics", icon: BarChart3, category: "analytics" },
+            { label: "Marketing & Social", key: "social_marketing", href: "/migration?module=Marketing & Social", icon: Instagram, category: "analytics" },
+            { label: "Référencement IA", key: "ai_referencing", href: "/migration?module=Référencement IA", icon: Bot, category: "analytics" },
+            { label: "SEO & Référencement", key: "seo", href: "/migration?module=SEO & Référencement", icon: Globe, category: "analytics" },
         ]
     },
     {
@@ -153,7 +152,7 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: Wallet,
         color: '#EF4444', // Red
         items: [
-            { label: "Trésorerie & Prévisions", key: "treasury", href: "/finance", icon: Wallet, category: "accounting" },
+            { label: "Trésorerie & Prévisions", key: "treasury", href: "/migration?module=Trésorerie & Prévisions", icon: Wallet, category: "accounting" },
         ]
     },
     {
@@ -163,7 +162,7 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: BookOpen,
         color: '#F59E0B', // Amber
         items: [
-            { label: "Gestion Comptable", key: "accounting_management", href: "/accounting", icon: BookOpen, category: "accounting" },
+            { label: "Gestion Comptable", key: "accounting_management", href: "/migration?module=Gestion Comptable", icon: BookOpen, category: "accounting" },
         ]
     },
     {

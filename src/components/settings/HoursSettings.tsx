@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
-import { DaySchedule, DayOfWeek, ServiceSettings, ClosedPeriod } from "@/types";
+import { DaySchedule, DayOfWeek, ServiceSettings, ClosedPeriod } from "@nexus/contracts";
 import { Loader2, Save } from "lucide-react";
 
 // Modular Sub-components

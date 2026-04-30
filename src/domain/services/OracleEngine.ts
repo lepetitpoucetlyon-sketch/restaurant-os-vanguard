@@ -1,4 +1,4 @@
-import { StockItem, StockEvent } from '@/types';
+import { StockItem, StockEvent } from '@nexus/contracts';
 import { Quantity, toQuantity } from '@/lib/brands';
 import { logger } from '@/lib/logger';
 

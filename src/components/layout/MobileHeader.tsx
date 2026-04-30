@@ -5,9 +5,9 @@ import { UserCircle, Bell, Search, Settings } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useAuth } from "@/context/AuthContext";
-import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
+import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { ProfileSwitcher } from "./ProfileSwitcher";
-import { PageKey } from "@/types/permissions.types";
+import { PageKey } from "@nexus/contracts/permissions.types";
 import { useState } from "react";
 
 export function MobileHeader() {

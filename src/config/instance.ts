@@ -1,4 +1,4 @@
-import type { RestaurantIdentity } from '@/types';
+import type { RestaurantIdentity } from '@nexus/contracts';
 
 export interface FirebaseInstanceConfig {
     apiKey: string;

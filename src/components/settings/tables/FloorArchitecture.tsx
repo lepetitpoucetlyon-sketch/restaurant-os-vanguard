@@ -9,7 +9,7 @@ import {
     Edit3, 
     Trash2 
 } from "lucide-react";
-import type { Floor } from "@/types";
+import type { Floor } from "@nexus/contracts";
 
 
 interface FloorArchitectureProps {

@@ -1,4 +1,4 @@
-import { OrderItem, CartItem } from "@/modules/ops/types";
+import { OrderItem, CartItem } from "@modules/ops";
 import { MasterBridge } from "@/lib/MasterBridge"; // For master-level context if needed
 
 export class POSService {

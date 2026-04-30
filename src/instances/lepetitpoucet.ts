@@ -1,4 +1,4 @@
-import type { TenantConfig } from '@/shared/nexus-contract';
+import type { TenantConfig } from '@shared/nexus-contract';
 
 /**
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X

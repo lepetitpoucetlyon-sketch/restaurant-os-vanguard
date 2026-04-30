@@ -1,5 +1,5 @@
 import { Layout } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const general: DocCategory = {
     title: 'Vue d\'Ensemble du Système',

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { GlobalSettings } from '@/types';
+import { GlobalSettings } from '@nexus/contracts';
 import { defaultSettings } from '@/config/defaults';
 
 /**
@@ -19,7 +19,7 @@ export const posSettingsAtom = atom((get) => get(globalSettingsAtom).posSettings
 export const themeSettingsAtom = atom((get) => get(globalSettingsAtom).theme);
 export const nexusConfigAtom = atom((get) => get(globalSettingsAtom).nexusConfig);
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@shared/nexus-contract';
 
 // Contextual UI Settings (Grade VI)
 export const pageSettingsAtom = atomWithStorage<Record<string, SovereignData>>('nexus_page_settings', {});
