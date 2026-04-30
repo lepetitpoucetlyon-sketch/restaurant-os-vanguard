@@ -2,25 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CategoryList } from "@/modules/ops/components/pos/CategoryList";
-import { ProductGrid } from "@/modules/ops/components/pos/ProductGrid";
-import { Cart } from "@/modules/ops/components/pos/Cart";
-import { TableSelector } from "@/modules/ops/components/pos/TableSelector";
-import { PaymentDialog } from "@/modules/ops/components/pos/PaymentDialog";
-import { SplitBillDialog } from "@/modules/ops/components/pos/SplitBillDialog";
+import { CategoryList } from "@modules/ops";
+import { ProductGrid } from "@modules/ops";
+import { Cart } from "@modules/ops";
+import { TableSelector } from "@modules/ops";
+import { PaymentDialog } from "@modules/ops";
+import { SplitBillDialog } from "@modules/ops";
 import { useKitchen } from "@/engines/ops/NexusOpsProvider";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { LucideIcon, ShoppingCart, Plus, ArrowLeft, MoreHorizontal, LayoutGrid, Star, Pizza, UtensilsCrossed, GlassWater, Beef, Coffee, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks";
 import { fabVariants, mobileSpring } from "@/lib/motion";
-import { BottomSheet } from "@/components/ui/BottomSheet";
+import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/ui.foundations";
-import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
-import { usePOSController } from "@/modules/ops";
-import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
+import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
+import { usePOSController } from "@modules/ops";
+import { AmbianceService, RestaurantAmbiance } from "@domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 
 const ICON_MAP: Record<string, LucideIcon> = {

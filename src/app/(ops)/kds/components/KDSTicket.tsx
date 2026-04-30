@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ChefHat, Book, AlertTriangle, MessageSquare, CheckCircle2, Flame, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { Order, OrderStatus, Recipe } from "@/types";
+import { Order, OrderStatus, Recipe } from "@nexus/contracts";
 import { ITEM_STATION_MAP } from "@/app/(ops)/kds/constants";
 
 interface AuditTicket {
@@ -146,7 +146,7 @@ export function KDSTicket({
                                 <div className="absolute inset-0 bg-neutral-100" />
                                 {imageUrl && (
                                     <img
-                                        src={imageUrl}
+                                        src={imageUrl as string}
                                         alt={item.name}
                                         className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                     />
@@ -282,7 +282,7 @@ export function KDSTicket({
                                             setAuditTicket({
                                                 id: ticket.id,
                                                 recipeName: itemWithStandard.name,
-                                                standardImage: recipes.find(r => r.name === itemWithStandard.name)?.standardImage
+                                                standardImage: recipes.find(r => r.name === itemWithStandard.name)?.standardImage as string
                                             });
                                             setIsAuditOpen(true);
                                         } else {

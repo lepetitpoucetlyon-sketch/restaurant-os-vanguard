@@ -2,30 +2,30 @@
 
 import React, { useState } from "react";
 import { cn } from "@/lib/ui.foundations";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
-import { RecipeDetailDialog } from "@/modules/ops/components/kitchen/RecipeDetailDialog";
+import { RecipeDetailDialog } from "@modules/ops";
 import { PRODUCTS } from "@/lib/mock-data";
 
 // Domain & Constants
-import { BarTab, Wine, Cocktail } from "@/domain/types/bar";
+import { BarTab, Wine, Cocktail } from "@domain/types/bar";
 import { 
   WINE_REGIONS, 
   WINE_CELLAR, 
   COCKTAILS, 
   BAR_ORDERS 
-} from "@/domain/constants/bar-data";
-import { Recipe } from "@/types";
-import { BarOrder } from "@/domain/types/bar";
+} from "@domain/constants/bar-data";
+import { Recipe } from "@nexus/contracts";
+import { BarOrder } from "@domain/types/bar";
 
 // Components
-import { BarSidebar } from "@/components/bar/BarSidebar";
-import { KdsTab } from "@/components/bar/KdsTab";
-import { WineCellarTab } from "@/components/bar/WineCellarTab";
-import { SommelierTab } from "@/components/bar/SommelierTab";
-import { CocktailTab } from "@/components/bar/CocktailTab";
-import { StocksTab } from "@/components/bar/StocksTab";
-import { WineDetailPanel } from "@/components/bar/WineDetailPanel";
+import { BarSidebar } from "@modules/ops";
+import { KdsTab } from "@modules/ops";
+import { WineCellarTab } from "@modules/ops";
+import { SommelierTab } from "@modules/ops";
+import { CocktailTab } from "@modules/ops";
+import { StocksTab } from "@modules/ops";
+import { WineDetailPanel } from "@modules/ops";
 
 export default function BarPage() {
     const { showToast } = useToast();

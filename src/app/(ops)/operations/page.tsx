@@ -21,7 +21,7 @@ import {
     CheckCircle2,
     TrendingUp
 } from 'lucide-react';
-import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
+import { NewReservationDialog } from "@modules/commerce";
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import { useFloorOps as useOMS } from '@/context/FloorContext';
 import { cn } from "@/lib/ui.foundations";

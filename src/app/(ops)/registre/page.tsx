@@ -18,15 +18,15 @@ import {
     Beef,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { useRegistre } from "@/modules/ops/hooks/useRegistre";
-import { DUERPSection } from "@/modules/ops/components/registre/DUERPSection";
-import { IncendieSection } from "@/modules/ops/components/registre/IncendieSection";
-import { Cerfa13984Section } from "@/modules/ops/components/registre/Cerfa13984Section";
-import { PrestatairesSection } from "@/modules/ops/components/registre/PrestatairesSection";
-import { PMRSection } from "@/modules/ops/components/registre/PMRSection";
-import { SanitaryComplianceSection } from "@/modules/ops/components/registre/SanitaryComplianceSection";
-import { Modal } from "@/components/ui/Modal";
-import { InterventionLogSection } from "@/modules/ops/components/registre/InterventionLogSection";
+import { useRegistre } from "@modules/ops";
+import { DUERPSection } from "@modules/ops";
+import { IncendieSection } from "@modules/ops";
+import { Cerfa13984Section } from "@modules/ops";
+import { PrestatairesSection } from "@modules/ops";
+import { PMRSection } from "@modules/ops";
+import { SanitaryComplianceSection } from "@modules/ops";
+import { Modal } from "@ui/Modal";
+import { InterventionLogSection } from "@modules/ops";
 
 type TabType = 'overview' | 'duerp' | 'incendie' | 'prestataires' | 'pmr' | 'conformite' | 'interventions';
 

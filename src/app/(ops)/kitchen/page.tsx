@@ -18,23 +18,23 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useManagement, useInventory } from "@/engines/ops/NexusOpsProvider";
-import { Recipe, PrepTask, Product, Order } from "@/types";
+import { Recipe, PrepTask, Product, Order } from "@nexus/contracts";
 import { useUI } from "@/context/UIContext";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
-import { PrepTaskDetailDialog } from "@/modules/ops/components/kitchen/PrepTaskDetailDialog";
-import { RecipeDetailDialog } from "@/modules/ops/components/kitchen/RecipeDetailDialog";
+import { PrepTaskDetailDialog } from "@modules/ops";
+import { RecipeDetailDialog } from "@modules/ops";
 import { cinematicContainer, fadeInUp } from "@/lib/motion";
 import { useRouter } from "next/navigation";
-import { ExpertHub } from "@/modules/marketing/components/agency/ExpertHub";
+import { ExpertHub } from "@modules/commerce";
 
-import { MiseEnPlaceTab } from "@/modules/ops/components/kitchen/tabs/MiseEnPlaceTab";
-import { RecipesTab } from "@/modules/ops/components/kitchen/tabs/RecipesTab";
-import { WasteTab } from "@/modules/ops/components/kitchen/tabs/WasteTab";
-import { MarginsTab } from "@/modules/ops/components/kitchen/tabs/MarginsTab";
-import { SuppliersTab } from "@/modules/ops/components/kitchen/tabs/SuppliersTab";
-import { AllergensTab } from "@/modules/ops/components/kitchen/tabs/AllergensTab";
-import { CookingTimesTab } from "@/modules/ops/components/kitchen/tabs/CookingTimesTab";
-import { IngredientsTab } from "@/modules/ops/components/kitchen/tabs/IngredientsTab";
+import { MiseEnPlaceTab } from "@modules/ops";
+import { RecipesTab } from "@modules/ops";
+import { WasteTab } from "@modules/ops";
+import { MarginsTab } from "@modules/ops";
+import { SuppliersTab } from "@modules/ops";
+import { AllergensTab } from "@modules/ops";
+import { CookingTimesTab } from "@modules/ops";
+import { IngredientsTab } from "@modules/ops";
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/operationalAtoms";
 
