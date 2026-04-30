@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AccessPolicyManager, DEFAULT_ROLE_PERMISSIONS, type CategoryKey, type RolePermissions } from '@/domain/services/AccessPolicyManager';
-import { ROOT_ADMIN } from '@/domain/services/IdentityManager';
-import { User, UserRole } from '@/types';
+import { AccessPolicyManager, DEFAULT_ROLE_PERMISSIONS, type CategoryKey, type RolePermissions } from '@domain/services/AccessPolicyManager';
+import { ROOT_ADMIN } from '@domain/services/IdentityManager';
+import { User, UserRole } from '@nexus/contracts';
 
 const ROLE_PERMISSIONS_COLLECTION = 'systemConfig';
 const ROLE_PERMISSIONS_DOC_ID = 'role_permissions';
@@ -28,7 +28,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
             permissionsPath,
             async (data) => {
                 if (data) {
-                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as import("@/shared/nexus-contract").SovereignData, DEFAULT_ROLE_PERMISSIONS));
+                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as import("@shared/nexus-contract").SovereignData, DEFAULT_ROLE_PERMISSIONS));
                 } else {
                     const seededPermissions = AccessPolicyManager.sanitizeRolePermissions(DEFAULT_ROLE_PERMISSIONS, DEFAULT_ROLE_PERMISSIONS);
                     setRolePermissions(seededPermissions);

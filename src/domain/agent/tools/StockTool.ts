@@ -1,6 +1,6 @@
-import { User } from '@/types';
+import { User } from '@nexus/contracts';
 import { ToolDefinition } from './FinanceTool';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@shared/nexus-contract';
 
 export const StockTool: ToolDefinition = {
     name: 'check_low_stock',

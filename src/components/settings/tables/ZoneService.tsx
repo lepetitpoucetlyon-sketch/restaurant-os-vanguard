@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 
-import { Table, Zone, Floor } from "@/types";
+import { Table, Zone, Floor } from "@nexus/contracts";
 
 const ZONE_COLORS = ['#F5F5F0', '#E8E8E0', '#D0D0C8', '#FFF8E1', '#F0EFEA', '#EAE0D5', '#D6CFC7', '#C0B8B0'];
 

@@ -9,7 +9,7 @@ import { simulationMetricsAtom, isSimulationRunningAtom } from '@/store/simulato
 import { GlassCard } from '@ui/GlassCard';
 import { Button } from '@ui/button';
 import { SimulationProfile } from '@domain/services/SimulationService';
-import { ProposalPanel } from "@modules/gateway/auth/components/admin/ProposalPanel";
+import { ProposalPanel } from '../ProposalPanel';
 import { NexusStaffingOracle as StaffingOracle } from '@domain/services/NexusStaffingOracle';
 import { SovereignLedger } from '@/infrastructure/adapters/SovereignLedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

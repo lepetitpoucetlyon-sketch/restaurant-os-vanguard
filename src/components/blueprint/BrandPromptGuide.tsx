@@ -6,7 +6,7 @@ import {
     Palette, Type, Cpu, Sparkles, 
     Terminal, MessageSquare
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 
 const COLORS = [
     { name: "Or d'Accent", hex: "#EAB308", label: "Identité de Marque", class: "bg-accent-gold" },

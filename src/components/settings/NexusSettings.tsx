@@ -17,7 +17,7 @@ import {
     Check
 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
-import { GEMINI_VOICES, NexusMacro, NexusConfig } from '@/types/settings/nexus';
+import { GEMINI_VOICES, NexusMacro, NexusConfig } from '@nexus/contracts/settings/nexus';
 import { NexusSphere } from "@/components/layout/NexusSphere";
 import { cn } from '@/lib/ui.foundations';
 

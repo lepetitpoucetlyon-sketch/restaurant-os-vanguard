@@ -1,7 +1,7 @@
 import { lepetitpoucetConfig } from './lepetitpoucet';
 import { bistrolyonConfig } from './bistrolyon';
 import { urbanburgerConfig } from './urbanburger';
-import { TenantConfig } from '@/types';
+import { TenantConfig } from '@nexus/contracts';
 
 const tenantRegistry: Record<string, TenantConfig> = {
     'lepetitpoucet': lepetitpoucetConfig,
@@ -22,4 +22,4 @@ export function getAllTenants(): TenantConfig[] {
     return Object.values(tenantRegistry);
 }
 
-export * from '@/types';
+export * from '@nexus/contracts';

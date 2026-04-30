@@ -17,16 +17,16 @@ import {
     CheckCircle2
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { Button } from "@/components/ui/button";
-import { useExpert } from "@/domain/agency/useExpert";
-import { SimulationService, SimulationMode, MonteCarloResult } from "@/domain/services/SimulationService";
+import { Button } from "@ui/button";
+import { useExpert } from "@domain/agency/useExpert";
+import { SimulationService, SimulationMode, MonteCarloResult } from "@domain/services/SimulationService";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {
     date: string;
     anomalies: string[];
-    orders: import('@/types').Order[];
+    orders: import('@nexus/contracts').Order[];
 };
 
 export default function SimulationPage() {
@@ -58,14 +58,14 @@ export default function SimulationPage() {
                 currentMode, 
                 'DEFAULT', 
                 { 
-                    ingredients: ingredients as unknown as import('@/types').Ingredient[], 
-                    stockItems: stockItems as unknown as import('@/types').StockItem[] 
+                    ingredients: ingredients as unknown as import('@nexus/contracts').Ingredient[], 
+                    stockItems: stockItems as unknown as import('@nexus/contracts').StockItem[] 
                 }
             );
             
             setResults(prev => [...prev, { date: date.toLocaleDateString(), ...result, anomalies: Array(result.anomalyCount).fill("Écart de flux détecté") }]);
             setStats(prev => ({
-                revenue: prev.revenue + result.orders.reduce((acc, o: import('@/types').Order) => acc + (o.totalInCents || 0), 0),
+                revenue: prev.revenue + result.orders.reduce((acc, o: import('@nexus/contracts').Order) => acc + (o.totalInCents || 0), 0),
                 anomalies: prev.anomalies + result.anomalyCount,
                 integrity: currentMode === 'CHAOS' ? Math.max(0, prev.integrity - (result.anomalyCount * 2)) : prev.integrity
             }));

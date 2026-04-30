@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/operationalAtoms";
-import { useFinanceReflex } from "@/modules/finance/hooks/useFinanceReflex";
+import { useFinanceReflex } from "@modules/finance";
 import { logger } from "@/lib/logger";
 
 /**

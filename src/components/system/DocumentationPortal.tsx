@@ -8,7 +8,7 @@ import { useUI } from '@/context/UIContext';
 import { useTutorial } from '@/context/TutorialContext';
 import { cn } from "@/lib/ui.foundations";;
 import { X, ChevronRight, BookOpen, Zap } from 'lucide-react';
-import { NexusTutorialState } from '@/types/nexus.types';
+import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 export function DocumentationPortal({ isPage = false, categoryOverride }: { isPage?: boolean; categoryOverride?: string }) {
     const { isDocumentationOpen, documentationCategory, closeDocumentation } = useUI();
@@ -112,10 +112,10 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                 <div
                                                                     className="flex items-center gap-4 px-5 py-4 bg-neutral-900 dark:bg-neutral-800 text-white cursor-pointer hover:bg-black dark:hover:bg-neutral-700 transition-colors group/banner"
                                                                     onClick={() => {
-                                                                        const tutorialSection: import('@/types/nexus.types').NexusTutorialSection = {
+                                                                        const tutorialSection: import('@nexus/contracts/nexus.types').NexusTutorialSection = {
                                                                             id: activeCategory as string,
                                                                             title: actionTitle,
-                                                                            points: steps.map((step, stepIdx): import('@/types/nexus.types').NexusTutorialStep => {
+                                                                            points: steps.map((step, stepIdx): import('@nexus/contracts/nexus.types').NexusTutorialStep => {
                                                                                 const isAutoClick = step.includes('[CLICK]');
                                                                                 const selectorMatch = step.match(/\[SELECTOR:(.*?)\]/);
                                                                                 const pathMatch = step.match(/\[PATH:(.*?)\]/);

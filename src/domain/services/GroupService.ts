@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { GroupEvent } from '@/modules/ops/groups.types';
+import { GroupEvent } from '@modules/ops.types';
 
 /**
  * 🏢 GroupService - Restaurant OS

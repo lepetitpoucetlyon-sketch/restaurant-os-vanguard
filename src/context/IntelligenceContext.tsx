@@ -1,6 +1,6 @@
 "use client";
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
-import { NexusFleetState } from '@/types/nexus.types';
+import { NexusFleetState } from '@nexus/contracts/nexus.types';
 
 export const useIntelligence = () => {
     const fleet = useNexusFleet();

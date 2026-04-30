@@ -3,7 +3,7 @@ import { SharedKernel } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-import { StockItem } from '@/types';
+import { StockItem } from '@nexus/contracts';
 
 /**
  * 📦 ProcurementService - Restaurant OS

@@ -12,7 +12,7 @@ import {
     Loader2 
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import type { Floor } from "@/types";
+import type { Floor } from "@nexus/contracts";
 
 
 interface TablesToolbarProps {

@@ -7,8 +7,8 @@ import {
     CATEGORY_LABELS,
     ROLE_LABELS,
     type CategoryKey,
-} from "@/domain/services/AccessPolicyManager";
-import type { UserRole } from "@/types";
+} from "@domain/services/AccessPolicyManager";
+import type { UserRole } from "@nexus/contracts";
 import {
     Shield,
     Check,
@@ -22,8 +22,8 @@ import {
     ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useToast } from "@/components/ui/Toast";
-import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
+import { useToast } from "@ui/Toast";
+import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
 export default function AccountSettingsPage() {
     const { currentUser, users, rolePermissions, updateRolePermissions, hasAccess } = useAuth();
@@ -180,7 +180,7 @@ export default function AccountSettingsPage() {
                                                     Utilisateurs avec ce rôle
                                                 </h4>
                                                 <div className="flex flex-wrap gap-2">
-                                                    {users.filter(u => u.role === role).map((user: import('@/types').User) => (
+                                                    {users.filter(u => u.role === role).map((user: import('@nexus/contracts').User) => (
                                                         <div
                                                             key={user.id}
                                                             className="flex items-center gap-2 bg-neutral-50 dark:bg-bg-tertiary px-3 py-2 rounded-xl"

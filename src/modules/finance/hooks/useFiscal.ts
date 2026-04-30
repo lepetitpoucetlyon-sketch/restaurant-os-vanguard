@@ -34,7 +34,7 @@ export function useFiscal() {
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'System User',
                 amountInCents: expenseData.amountInCents || 0,
-                category: expenseData.category as import("@/shared/types/finance.types").TransactionCategory || 'other',
+                category: expenseData.category as import("@nexus/contracts/finance.types").TransactionCategory || 'other',
                 description: expenseData.description || 'Frais sans description',
                 receiptImage: expenseData.receiptUrl,
             });
@@ -47,7 +47,7 @@ export function useFiscal() {
 
     // Action: Run Audit
     const runFiscalAudit = useCallback(async () => {
-        const seals: import('@/shared/types/finance.types').FiscalSeal[] = ledgerEntries
+        const seals: import('@nexus/contracts/finance.types').FiscalSeal[] = ledgerEntries
             .filter(e => e.fiscalSealHash)
             .map(e => ({
                 hash: e.fiscalSealHash!,

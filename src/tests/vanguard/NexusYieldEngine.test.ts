@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NexusYieldEngine } from '@/domain/services/NexusYieldEngine';
-import { MarketingService } from '@/domain/services/MarketingService';
-import { ProcurementService } from '@/domain/services/ProcurementService';
+import { NexusYieldEngine } from '@domain/services/NexusYieldEngine';
+import { MarketingService } from '@domain/services/MarketingService';
+import { ProcurementService } from '@domain/services/ProcurementService';
 import { logger } from '@/lib/logger';
 
 // --- GRADE X : MOCKING PROTOCOL ---
-vi.mock('@/domain/services/MarketingService', () => ({
+vi.mock('@domain/services/MarketingService', () => ({
     MarketingService: {
         updateDynamicPricing: vi.fn(),
     }
 }));
 
-vi.mock('@/domain/services/ProcurementService', () => ({
+vi.mock('@domain/services/ProcurementService', () => ({
     ProcurementService: {
         getRecentCostForIngredient: vi.fn(() => 1200),
         generateAutomatedPO: vi.fn(() => Promise.resolve('po_grade_x_valid')),

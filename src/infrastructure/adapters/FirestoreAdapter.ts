@@ -20,7 +20,7 @@ import {
 import { app } from '@/lib/firebase';
 import * as Sentry from "@sentry/nextjs";
 import { z } from 'zod';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@shared/services/SovereignMath';
 import { logger } from '@/lib/logger';
 import { INexusAdapter, INexusQueryOptions, INexusBatch } from '@/lib/nexus/NexusAdapter';
 

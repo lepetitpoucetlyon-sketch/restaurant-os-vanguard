@@ -1,5 +1,5 @@
 import 'server-only';
-import { ThemeSettings } from '@/types';
+import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 
 /**

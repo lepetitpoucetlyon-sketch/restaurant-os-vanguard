@@ -22,21 +22,23 @@ import {
   Wallet,
   BrainCircuit
 } from 'lucide-react';
-import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
-import { EmpireInstance } from '@/domain/types/empire';
+import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
+import { EmpireInstance } from '@domain/types/empire';
 
 
 // MCC Components
-import MCCAuditStream from '@/components/admin/mcc/MCCAuditStream';
-import { MCCInsights } from '@/components/admin/mcc/MCCInsights';
-import CertificationCenter from '@/components/admin/mcc/CertificationCenter';
-import FiscalChainExplorer from '@/components/admin/mcc/FiscalChainExplorer';
-import DeploymentEngine from '@/components/admin/mcc/DeploymentEngine';
-import MCCTreasury from '@/components/admin/mcc/MCCTreasury';
-import StrategyOracle from '@/components/admin/mcc/StrategyOracle';
-import { FleetCommandTable } from '@/components/admin/mcc/FleetCommandTable';
+import { 
+  MCCAuditStream, 
+  MCCInsights, 
+  CertificationCenter, 
+  FiscalChainExplorer, 
+  DeploymentEngine, 
+  MCCTreasury, 
+  StrategyOracle,
+  FleetCommandTable,
+  PerformanceMonitor
+} from '@nexus/guards';
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
-import { PerformanceMonitor } from '@/components/admin/mcc/PerformanceMonitor';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
 

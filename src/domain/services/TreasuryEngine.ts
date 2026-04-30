@@ -1,4 +1,4 @@
-import { EmpireInstance } from '@/domain/types/empire';
+import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
 
 export interface TreasuryReport {

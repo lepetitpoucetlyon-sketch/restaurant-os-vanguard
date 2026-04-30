@@ -2,7 +2,7 @@
  * 📢 MarketingEngine - Industrial Grade X
  * Analytics and SEO Keyword Intelligence.
  */
-import { SEOScore, PageSEO, KeywordStat } from '@/modules/marketing/seo.types';
+import { SEOScore, PageSEO, KeywordStat } from '@modules/commerce.types';
 
 export const MarketingEngine = {
     getKeywords: () => [
@@ -13,7 +13,7 @@ export const MarketingEngine = {
     ] as KeywordStat[],
     
     analyzeSentiment: (text: string) => 0.8,
-    suggestOptimization: (profile: import('@/shared/nexus-contract').SovereignData) => 'SEO baseline established.',
+    suggestOptimization: (profile: import('@shared/nexus-contract').SovereignData) => 'SEO baseline established.',
     
     calculateSEOScore: (): SEOScore => ({
         overall: 84,

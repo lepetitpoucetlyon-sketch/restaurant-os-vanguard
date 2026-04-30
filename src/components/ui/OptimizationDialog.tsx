@@ -1,8 +1,8 @@
 "use client";
 
 import { Sparkles, Settings2, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Modal } from "@/components/ui/Modal";
+import { Button } from "@ui/button";
+import { Modal } from "@ui/Modal";
 
 interface OptimizationDialogProps {
     isOpen: boolean;

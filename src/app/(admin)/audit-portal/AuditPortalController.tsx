@@ -13,9 +13,9 @@ import {
     Shield,
     ArrowRight
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 
 interface AuditSection {
     id: string;

@@ -19,10 +19,6 @@ export { useIntersectionObserver, useLazyImage } from "./useIntersectionObserver
 export { useEventCallback, useDeepMemo, useRenderCount, usePerformanceMeasure } from "./usePerformance";
 export { useVirtualizedList, useInfiniteScroll } from "./useVirtualization";
 
-// 🏛️ Sovereign Modular Bridges (Grade X)
-export { useHACCP, useGuard, useQuality } from "@/modules/haccp";
-export { useAccounting, useFinance, useFiscal, useFinanceReflex } from "@/modules/finance";
-export { useOrders, useReservations, useTables, useFloorOps, useKitchen, usePOSController, useNexusOps } from "@/modules/ops";
-export { useInventory, useProducts, useCategories, useStockBridge } from "@/modules/inventory";
-export { useHumanResources, useRecruitment, useStaffAudit } from "@/modules/hr";
-export { useMarketing } from "@/modules/marketing";
+
+// 🏛️ Sovereign Core Hooks (Grade X)
+// Note: Modular hooks must be imported directly from their respective pillars (@modules/*).

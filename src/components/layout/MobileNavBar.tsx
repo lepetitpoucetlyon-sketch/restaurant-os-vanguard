@@ -8,7 +8,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { useLanguage } from "@/context/LanguageContext";
 import { useUI } from "@/context/UIContext";
 import { useNotifications } from "@/context/NotificationsContext";
-import { NotificationPanel } from "@/components/ui/NotificationPanel";
+import { NotificationPanel } from "@ui/NotificationPanel";
 import {
     LayoutDashboard,
     Store,

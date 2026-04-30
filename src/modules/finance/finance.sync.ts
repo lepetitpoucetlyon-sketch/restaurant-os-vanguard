@@ -1,9 +1,9 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
-import { FiscalSeal, JournalEntry } from '@/types';
+import { FiscalSeal, JournalEntry } from '@nexus/contracts';
 import { 
     fiscalLedgerNodeAtom 
-} from '@/modules/haccp/store/complianceAtoms';
+} from '@modules/compliance';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';

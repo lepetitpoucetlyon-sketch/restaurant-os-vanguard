@@ -15,11 +15,11 @@ import {
     Save
 } from "lucide-react";
 import { useIntelligence } from "@/context/IntelligenceContext";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNotifications } from "@/context/NotificationsContext";
-import { Modal } from "@/components/ui/Modal";
+import { Modal } from "@ui/Modal";
 
 export default function SimulatorPage() {
     const intelligence = useIntelligence();

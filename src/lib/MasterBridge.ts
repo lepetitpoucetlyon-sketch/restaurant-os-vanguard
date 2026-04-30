@@ -4,8 +4,8 @@ import { firestore } from './firebase';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
 import { MasterConfig, globalPolicyAtom } from '@/store/masterAtoms';
-import { CryptoService } from '@/domain/services/CryptoService';
-import type { SovereignData } from '@/shared/nexus-contract';
+import { CryptoService } from '@domain/services/CryptoService';
+import type { SovereignData } from '@shared/nexus-contract';
 
 type SignedMasterConfig = MasterConfig & {
   pushedAt: string;

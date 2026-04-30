@@ -1,5 +1,5 @@
 import { LayoutGrid } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const dashboard: DocCategory = {
     title: 'Tableau de Bord Stratégique',

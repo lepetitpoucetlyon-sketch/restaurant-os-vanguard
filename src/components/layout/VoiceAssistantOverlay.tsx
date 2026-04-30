@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, History, X, Zap, Maximize2, Minimize2, AlertTriangle, CheckCircle2, Minus, Bot } from 'lucide-react';
 import { useGeminiAgent } from "@/hooks/useGeminiAgent";
-import { useGeminiLive } from '@/modules/marketing/hooks/useGeminiLive';
+import { useGeminiLive } from '@modules/commerce';
 import { useSettings } from "@/context/SettingsContext";
 
 import { cn } from "@/lib/ui.foundations";

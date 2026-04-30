@@ -3,7 +3,7 @@
 import { cn } from "@/lib/ui.foundations";;
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@ui/scroll-area";
 
 interface DashboardLayoutProps {
     children: ReactNode;

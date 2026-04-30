@@ -1,5 +1,5 @@
 import { Map } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const floorPlan: DocCategory = {
     title: 'Plan de Salle Interactif',

@@ -26,7 +26,7 @@ import {
     Printer
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { Modal } from "@/components/ui/Modal";
+import { Modal } from "@ui/Modal";
 import { useUI } from "@/context/UIContext";
 
 interface CommandItem {

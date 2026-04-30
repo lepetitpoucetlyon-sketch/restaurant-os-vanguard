@@ -1,5 +1,0 @@
-src/lib/nexus/NexusBridge.ts:81:            layoutType: (remoteData.status?.layoutType || remoteData.layout || RESTAURANT_FULL_DNA.status.layoutType) as any,
-src/lib/nexus/NexusBridge.ts:82:            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || RESTAURANT_FULL_DNA.status.businessLaws) as any
-src/lib/nexus/TelemetryService.ts:85:        lastPulse: serverTimestamp() as any,
-src/lib/nexus/adapters/MockAdapter.ts:40:        return results as unknown as T[];
-src/shared/validation/SchemaRegistry.ts:89:export function secureCast<T>(moduleId: string, key: string, data: any): T {

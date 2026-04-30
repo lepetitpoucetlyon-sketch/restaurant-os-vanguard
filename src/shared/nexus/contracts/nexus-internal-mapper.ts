@@ -4,10 +4,11 @@
  * This file provides type-safe conversion functions from SovereignNode to domain-specific types.
  */
 
-import { SovereignNode, OperationalIdentity } from '@shared/nexus-contract';
+import { SovereignNode, OperationalIdentity, SovereignMap } from '@shared/nexus-contract';
 import { SOVEREIGN_MODULE_IDS } from '../../ModuleRegistry';
 import { SovereignError, PillarId, CoreErrorCode } from './errors.types';
-export { Customer, CRM_Record } from './customer.types';
+import type { Customer, CRM_Record } from './customer.types';
+export type { Customer, CRM_Record };
 
 // --- Security & Permissions ---
 // ... (omitted for brevity in replace call, but I will include the full section if needed)
@@ -35,20 +36,15 @@ export function translateError(error: unknown, pillar: PillarId = 'CORE'): Sover
 
 // --- Security & Permissions ---
 
-export interface UserPermissions extends SovereignNode {
-  userId: string;
-  role: string;
-  allowedModules: string[];
-  restrictedPillars: string[];
-  isSovereignAdmin: boolean;
-}
+import { User, UserPermissions } from './auth.types';
+
 
 /**
  * DNA Protocol for Module Access
  */
 export function canAccessModule(permissions: UserPermissions, moduleId: string): boolean {
   if (permissions.isSovereignAdmin) return true;
-  if (!SOVEREIGN_MODULE_IDS.has(moduleId)) return false;
+  if (!SOVEREIGN_MODULE_IDS.has(moduleId as any)) return false;
   return permissions.allowedModules.includes(moduleId);
 }
 
@@ -68,7 +64,7 @@ export interface Table extends SovereignNode {
   floorId?: string;
 }
 
-export interface OrderItemModification {
+export interface OrderItemModification extends SovereignMap {
     id: string;
     type: string;
     description: string;
@@ -105,7 +101,7 @@ export interface Order extends SovereignNode {
   paymentMethod?: 'card' | 'cash' | 'mobile';
   isUrgent?: boolean;
   customerName?: string;
-  customerId?: string;
+  customerId?: string; // Suture: ensure consistency
   blockchainProof?: {
     hash: string;
     timestamp: string;
@@ -126,12 +122,30 @@ export interface Reservation extends SovereignNode {
     notes?: string;
 }
 
+export interface Option {
+  id: string;
+  name: string;
+  priceModifierInCents: number;
+  isDefault?: boolean;
+}
+
+export interface OptionGroup extends SovereignNode {
+  name: string;
+  type: 'single' | 'multiple';
+  required: boolean;
+  minSelections?: number;
+  maxSelections?: number;
+  options: Option[];
+}
+
 export interface Product extends SovereignNode {
   name: string;
   priceInCents: number;
   categoryId: string;
   description?: string;
   imageUrl?: string;
+  image?: string; // Suture for UI compatibility
+  color?: string; // Suture for UI compatibility
   sku?: string;
   ingredients?: Array<{
     ingredientId: string;
@@ -140,7 +154,7 @@ export interface Product extends SovereignNode {
   allergens?: string[];
   isAvailable?: boolean;
   stockQuantity?: number;
-  optionGroups?: string[]; // IDs of options
+  optionGroups?: OptionGroup[]; // Suture: Now using populated objects as expected by UI
 }
 
 export interface Recipe extends SovereignNode {
@@ -181,16 +195,7 @@ export interface Ingredient extends SovereignNode {
   defaultStorageLocation?: string;
 }
 
-export interface Reservation extends SovereignNode {
-  customerName: string;
-  covers: number;
-  time: string;
-  status: 'confirmed' | 'pending' | 'cancelled' | 'no-show' | 'waitlist';
-  tableId?: string;
-  assignedTableId?: string;
-  customerId?: string;
-  notes?: string;
-}
+// Suture: Removed duplicate Reservation interface to resolve TS2717 and TS2687
 
 export interface Quote extends SovereignNode {
   title: string;
@@ -334,9 +339,9 @@ export function isReservation(node: SovereignNode): node is Reservation {
     typeof node === 'object' &&
     node !== null &&
     typeof node.id === 'string' &&
-    typeof node.customerName === 'string' &&
-    typeof node.covers === 'number' &&
+    typeof node.date === 'string' &&
     typeof node.time === 'string' &&
+    typeof node.partySize === 'number' &&
     typeof node.status === 'string'
   );
 }

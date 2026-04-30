@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import type { ImmunityLogEntry } from '@/shared/genome.types';
+import type { ImmunityLogEntry } from '@shared/genome.types';
 
 /**
  * 🛡️ SOVEREIGN SHIELD — Grade IX (Bouclier UX)

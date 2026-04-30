@@ -1,4 +1,4 @@
-import type { TenantConfig } from '@/types';
+import type { TenantConfig } from '@nexus/contracts';
 
 export const urbanburgerConfig: any = {
     id: 'urbanburger',

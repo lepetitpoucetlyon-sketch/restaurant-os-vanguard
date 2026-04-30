@@ -3,4 +3,4 @@
  * FEC Generator (Legacy Path)
  */
 
-export * from '@/modules/finance/services/FECGenerator';
+export * from '@modules/finance';

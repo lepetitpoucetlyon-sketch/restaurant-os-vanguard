@@ -25,11 +25,11 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { useFleet } from "@/context/FleetContext";
-import { ProvisioningWizard } from '@/components/admin/ProvisioningWizard';
-import { TenantOrchestrator } from '@/components/fleet/TenantOrchestrator';
-import { EmpireInstance } from '@/domain/types/empire';
-import { FleetInsight } from '@/domain/services/MacroBrain';
-import { HermesDashboard } from '@/components/admin/HermesDashboard';
+import { ProvisioningWizard } from '@modules/gateway';
+import { TenantOrchestrator } from '@modules/gateway';
+import { EmpireInstance } from '@domain/types/empire';
+import { FleetInsight } from '@domain/services/MacroBrain';
+import { HermesDashboard } from '@modules/gateway';
 
 export default function MasterConsolePage() {
   const { 
@@ -54,8 +54,8 @@ export default function MasterConsolePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
-  const selectedInstance = (instances as EmpireInstance[]).find(i => i.id === selectedInstanceId);
-  const filteredInstances = (instances as EmpireInstance[]).filter(i => 
+  const selectedInstance = (instances as any[]).find(i => i.id === selectedInstanceId);
+  const filteredInstances = (instances as any[]).filter(i => 
     i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     i.id.toLowerCase().includes(searchQuery.toLowerCase())
   );

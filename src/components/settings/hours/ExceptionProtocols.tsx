@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Calendar, Plus, ArrowRight, Trash2 } from "lucide-react";
-import { ClosedPeriod } from "@/types";
+import { ClosedPeriod } from "@nexus/contracts";
 
 interface ExceptionProtocolsProps {
     closedPeriods: ClosedPeriod[];

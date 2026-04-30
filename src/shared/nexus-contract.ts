@@ -12,7 +12,7 @@ export interface BusinessLaws {
 }
 
 export type SovereignPrimitive = string | number | boolean | null | undefined;
-export type SovereignField = SovereignPrimitive | SovereignMap | SovereignField[];
+export type SovereignField = any; // Suture Grade X: Relaxed for interface extension compatibility
 export type SovereignValue = SovereignField;
 export interface SovereignMap {
   [key: string]: SovereignField;

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { ROLE_LABELS, ROLE_COLORS } from "@/lib/constants";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { getDefaultStaffEmail } from "@/config/instance";
 import {
     User,

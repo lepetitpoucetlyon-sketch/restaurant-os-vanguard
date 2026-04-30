@@ -61,7 +61,7 @@ export const SchemaRegistry: Record<string, Record<string, z.ZodSchema>> = {
     }
 };
 
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@shared/nexus-contract';
 
 /**
  * Helper to validate data against local domain schema

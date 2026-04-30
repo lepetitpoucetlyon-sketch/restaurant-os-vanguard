@@ -1,5 +1,5 @@
 import { Package } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const inventory: DocCategory = {
     title: 'Stocks & Logistique Supply Chain',

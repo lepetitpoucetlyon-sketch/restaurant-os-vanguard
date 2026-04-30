@@ -35,7 +35,7 @@ export const isLaunchpadOpenAtom = atom(false);
 export const themeAtom = atomWithStorage<'light' | 'dark'>('nexus_theme', 'dark');
 export const isTrainingModeAtom = atomWithStorage('nexus_training_mode', false);
 
-import { Notification as AppNotification } from '@/types';
+import { Notification as AppNotification } from '@nexus/contracts';
 export type { AppNotification as Notification };
 
 // 🔔 NOTIFICATIONS STATE

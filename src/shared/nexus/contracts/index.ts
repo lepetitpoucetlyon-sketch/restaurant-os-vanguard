@@ -31,7 +31,10 @@ export type {
     Reservation,
     OrderStatus,
     OrderItem,
-    OrderItemModification
+    OrderItemModification,
+    Floor,
+    Zone,
+    Order as LegacyOrder
 } from './nexus-internal-mapper';
 
 export { NexusInternalMapper, canAccessModule } from './nexus-internal-mapper';
@@ -77,6 +80,7 @@ export type {
 
 // --- 🌿 HYGIENE & COMPLIANCE (HACCP) ---
 export * from './settings/haccp';
+export * from '@/modules/compliance/haccp/types';
 
 // --- ⚙️ SETTINGS REGISTRY ---
 export * from './settings/accounting';

@@ -1,5 +1,5 @@
 import { ToolDefinition } from './FinanceTool';
-import { EmpireInstance } from '@/domain/types/empire';
+import { EmpireInstance } from '@domain/types/empire';
 
 /**
  * FleetTool

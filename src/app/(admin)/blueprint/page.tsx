@@ -7,7 +7,7 @@ import { MindMapDependencies } from "@/components/blueprint/MindMapDependencies"
 import { ActionImpactMap } from "@/components/blueprint/ActionImpactMap";
 import { StructureOverview } from "@/components/blueprint/StructureOverview";
 import { BrandPromptGuide } from "@/components/blueprint/BrandPromptGuide";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 import { Database, Network, Cpu, Palette, Info } from "lucide-react";
 
 export default function BlueprintPage() {

@@ -1,10 +1,10 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { StockItem } from '@/modules/inventory/types';
-import { Reservation } from '@/modules/ops/reservations.types';
-import { User } from '@/types';
-import { Recipe } from '@/types';
-import { Account } from '@/modules/finance/types';
-import { HygieneLog, Candidate } from '@/types';
+import { StockItem } from '@modules/logistics';
+import { Reservation } from '@modules/commerce';
+import { User } from '@nexus/contracts';
+import { Recipe } from '@nexus/contracts';
+import { Account } from '@modules/finance';
+import { HygieneLog, Candidate } from '@nexus/contracts';
 
 export interface SLMTrainingPair {
     instruction: string;

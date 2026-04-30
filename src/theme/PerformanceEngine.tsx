@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAtom } from 'jotai';
 import { performanceModeAtom } from '@/store/operationalAtoms';
-import { useToast } from '@/components/ui/Toast';
+import { useToast } from '@ui/Toast';
 import { logger } from '@/lib/logger';
 
 /**

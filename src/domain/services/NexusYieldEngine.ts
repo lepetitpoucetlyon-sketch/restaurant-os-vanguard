@@ -20,7 +20,7 @@ export class NexusYieldEngine {
      */
     static async processYieldCycle(context: {
         products: { id: string, name: string, basePriceCents: number }[],
-        allStock: import('@/types').StockItem[],
+        allStock: import('@nexus/contracts').StockItem[],
         currentVelocity: number
     }): Promise<YieldState[]> {
         const results: YieldState[] = [];

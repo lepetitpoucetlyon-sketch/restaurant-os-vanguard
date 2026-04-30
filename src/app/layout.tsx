@@ -31,18 +31,18 @@ export const viewport = {
 import { NexusCoreProvider } from "@/engines/core/NexusCoreProvider";
 import { NexusOpsProvider } from "@/engines/ops/NexusOpsProvider";
 import { NexusFiscalProvider } from "@/engines/fiscal/NexusFiscalProvider";
-import { NexusGuardProvider } from "@/engines/guard/NexusGuardProvider";
+import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
 import { NexusFleetProvider } from "@/engines/fleet/NexusFleetProvider";
-import { ToastProvider } from "@/components/ui/Toast";
+import { ToastProvider } from "@ui/Toast";
 import { ContextualSettingsProvider } from "@/components/settings/ContextualSettings";
 import { ErrorBoundary } from "@/components/system/ErrorBoundary";
 
 // Gates & Orchestrators
-import { InstanceGuardGate } from "@/modules/auth/components/InstanceGuardGate";
-import { AuthGate } from "@/modules/auth/components/AuthGate";
-import { SaaSBillingGate } from "@/modules/auth/components/SaaSBillingGate";
-import { ComplianceGate } from "@/modules/auth/components/ComplianceGate";
-import { RoleGate } from "@/modules/auth/components/RoleGate";
+import { InstanceGuardGate } from "@nexus/guards";
+import { AuthGate } from "@nexus/guards";
+import { SaaSBillingGate } from "@nexus/guards";
+import { ComplianceGate } from "@nexus/guards";
+import { RoleGate } from "@nexus/guards";
 import { AlertSync } from "@/components/system/AlertSync";
 import { ClientComponents } from "@/components/layout/ClientComponents";
 import { TrainingOverlay } from "@/components/layout/TrainingOverlay";

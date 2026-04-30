@@ -1,8 +1,8 @@
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
-import { fiscalLedgerAtom } from '@/modules/haccp/store/complianceAtoms';
-import { TelemetryPulse } from '@/shared/nexus-contract';
-import { FiscalSeal } from '@/types';
+import { fiscalLedgerAtom } from '@modules/compliance';
+import { TelemetryPulse } from '@shared/nexus-contract';
+import { FiscalSeal } from '@nexus/contracts';
 
 interface BatteryManager {
   level: number;
@@ -70,7 +70,7 @@ export class TelemetryService {
       }
 
       // 2. Gather NF525 Status
-      const ledgerData: import('@/shared/types/finance.types').JournalEntry[] = this.store.get(fiscalLedgerAtom);
+      const ledgerData: import('@nexus/contracts/finance.types').JournalEntry[] = this.store.get(fiscalLedgerAtom);
       const isSealed = Array.isArray(ledgerData) && ledgerData.some(e => e.fiscalSealHash);
       const lastHash = isSealed ? ledgerData.find(e => e.fiscalSealHash)?.fiscalSealHash : undefined;
 

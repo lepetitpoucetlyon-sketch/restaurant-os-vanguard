@@ -1,4 +1,4 @@
-import { JournalEntry } from '@/types';
+import { JournalEntry } from '@nexus/contracts';
 import { format } from 'date-fns';
 
 /**

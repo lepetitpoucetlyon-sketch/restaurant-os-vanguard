@@ -6,7 +6,7 @@ import {
     Folder, FileCode, Layers, 
     Monitor, Server, Database, Brain
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 
 const STRUCTURE = [
     {

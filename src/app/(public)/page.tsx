@@ -25,13 +25,13 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/ui.foundations";;
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useIsMobile } from "@/hooks";

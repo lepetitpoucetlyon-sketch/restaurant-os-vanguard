@@ -1,5 +1,5 @@
 import { BookOpen } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const accounting: DocCategory = {
     title: 'Finance & Console Comptable',

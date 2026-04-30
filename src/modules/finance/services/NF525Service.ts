@@ -3,20 +3,20 @@ import { Table } from 'dexie';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
-import { StockEngine } from '@/domain/services/StockEngine';
-import { Order, StockItem, Recipe, InventoryMovement } from '@/types';
+import { StockEngine } from '@domain/services/StockEngine';
+import { Order, StockItem, Recipe, InventoryMovement } from '@nexus/contracts';
 import { JournalEntry } from '../types/domain';
 import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
 import { SyncManager } from '@/lib/offline/sync-manager';
 import { checkOnlineStatus } from '@/lib/offline/status';
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom } from '@/modules/finance/store/accountingAtoms';
-import { SovereignData } from '@/shared/nexus-contract';
-import { secureCast } from '@/shared/validation/SchemaRegistry';
+import { tenantIdAtom } from '@modules/finance/store/accountingAtoms';
+import { SovereignData } from '@shared/nexus-contract';
+import { secureCast } from '@shared/validation/SchemaRegistry';
 
 export interface FiscalInstruction {
-    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
     path: string;
     method: 'SET' | 'UPDATE' | 'DELETE';
     data: SovereignData;

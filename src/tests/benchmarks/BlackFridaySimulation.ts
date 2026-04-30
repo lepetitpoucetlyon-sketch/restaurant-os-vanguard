@@ -3,7 +3,7 @@ import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { SovereignValue } from '@shared/nexus-contract';
 
 
 /**
@@ -111,7 +111,7 @@ export const BlackFridaySimulation = {
    */
   async runLedgerStressTest(count: number = 1000) {
     logger.info(`--- [Test 4] LEDGER STRESS & INTEGRITY (${count} TX/S) ---`);
-    const { BlockchainLedgerService } = await import('@/domain/accounting/BlockchainLedgerService');
+    const { BlockchainLedgerService } = await import('@modules/finance');
     const { Nexus } = await import('@/lib/nexus/NexusAdapter');
     const { MockAdapter } = await import('@/infrastructure/adapters/MockAdapter');
 

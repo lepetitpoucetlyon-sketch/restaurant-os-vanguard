@@ -1,4 +1,4 @@
-import { WineRegion, Wine, Cocktail, BarOrderItem } from '@/domain/types/bar';
+import { WineRegion, Wine, Cocktail, BarOrderItem } from '@domain/types/bar';
 
 export const WINE_REGIONS: WineRegion[] = [
     { id: 'bordeaux', name: 'Bordeaux', country: 'France', color: '#722F37' },

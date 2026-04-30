@@ -14,9 +14,9 @@ import { useLanguage } from "@/context/LanguageContext";
 import { PAGE_SETTINGS } from "./config-registry";
 import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";
-import { PageSettingConfig, PageKey } from "@/types/permissions.types";
+import { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 
 
 // ============ CONTEXT & PROVIDER ============

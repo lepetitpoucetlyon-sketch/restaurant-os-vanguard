@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, ShieldAlert, XCircle, RotateCcw } from 'lucide-react';
 import { useFleet } from '@/context/FleetContext';
 import { cn } from '@/lib/ui.foundations';
-import { Button } from '@/components/ui/button';
+import { Button } from '@ui/button';
 
 export function TrainingOverlay() {
     const { isTrainingMode, toggleTrainingMode } = useFleet();

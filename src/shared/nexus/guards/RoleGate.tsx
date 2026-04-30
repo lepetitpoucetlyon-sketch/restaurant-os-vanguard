@@ -55,7 +55,7 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     // 🛡️ PRAETORIAN SUTURE: Check via NexusInternalMapper
     // Sincérité à la Racine : Plus de 'as any'. Utilisation du type User souverain.
     const permissions: User | null = currentUser;
-    const isAllowed = !requiredCategory || (permissions && canAccessModule(permissions, requiredCategory.toUpperCase()));
+    const isAllowed = !requiredCategory || (permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
 
     if (!isAuthenticated) return null; // AuthGate handles this
 

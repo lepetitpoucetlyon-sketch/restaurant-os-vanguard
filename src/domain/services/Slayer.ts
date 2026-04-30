@@ -6,7 +6,7 @@
 
 import { logger } from "@/lib/logger";
 import { DataDigester } from "./DataDigester";
-import { LegacyOrder, Order } from "@/types";
+import { LegacyOrder, Order } from "@nexus/contracts";
 import { FinanceCore } from "./FinanceCore";
 import { NexusTransaction } from "@/lib/NexusTransaction";
 import { getTenantPath } from "@/lib/firebase";
@@ -33,7 +33,7 @@ export class Slayer {
                 ? raw[config.fields.total] as number
                 : parseFloat(DataDigester.decontaminate(String(raw[config.fields.total]))),
             timestamp: new Date(String(raw[config.fields.date])).toISOString(),
-            items: Array.isArray(raw[config.fields.items || 'items']) ? raw[config.fields.items || 'items'] as import('@/modules/ops/types').OrderItem[] : [],
+            items: Array.isArray(raw[config.fields.items || 'items']) ? raw[config.fields.items || 'items'] as import('@modules/ops').OrderItem[] : [],
             customerName: config.fields.customerName ? String(raw[config.fields.customerName]) : undefined
         };
     }
@@ -75,7 +75,7 @@ export class Slayer {
                                     customer: (legacy as Record<string, unknown>).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
-                                const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@/shared/nexus-contract').SovereignMap, { isLegacy: true });
+                                const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@shared/nexus-contract').SovereignMap, { isLegacy: true });
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
                                 // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum)

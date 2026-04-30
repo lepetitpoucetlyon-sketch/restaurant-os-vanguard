@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
-import { Floor, Table, Zone } from "@/types";
+import { Floor, Table, Zone } from "@nexus/contracts";
 import {
     LayoutGrid,
     Users,
@@ -17,9 +17,9 @@ import { MobilierConfig } from "./tables/MobilierConfig";
 
 export default function TablesSettings() {
     const tablesHook = useTables();
-    const tables = tablesHook.tables as unknown as Table[];
-    const zones = tablesHook.zones as unknown as Zone[];
-    const floors = tablesHook.floors as unknown as Floor[];
+    const tables = tablesHook.tables;
+    const zones = tablesHook.zones;
+    const floors = tablesHook.floors;
     const {
         addTable,
         updateTable,
@@ -105,7 +105,7 @@ export default function TablesSettings() {
                     <ZoneService 
                         zones={zones}
                         floors={floors}
-                        tables={tables}
+                        tables={tables as any}
                         addZone={addZone}
                         updateZone={updateZone}
                         deleteZone={deleteZone}
@@ -116,7 +116,7 @@ export default function TablesSettings() {
 
                 {activeTab === 'tables' && (
                     <MobilierConfig 
-                        tables={tables}
+                        tables={tables as any}
                         zones={zones}
                         floors={floors}
                         addTable={addTable}

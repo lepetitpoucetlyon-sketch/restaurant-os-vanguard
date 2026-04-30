@@ -5,8 +5,8 @@ import { browserSessionPersistence, onAuthStateChanged, setPersistence, signInWi
 import { httpsCallable, getFunctions } from 'firebase/functions';
 import { auth, firebaseApp } from '@/lib/firebase';
 import { logger } from '@/lib/axiom';
-import { IdentityManager, ROOT_ADMIN, type PersistedSession } from '@/domain/services/IdentityManager';
-import { User } from '@/types';
+import { IdentityManager, ROOT_ADMIN, type PersistedSession } from '@domain/services/IdentityManager';
+import { User } from '@nexus/contracts';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';

@@ -15,7 +15,7 @@ import {
   ScanLine
 } from 'lucide-react';
 
-import { NewReservationDialog } from "@/components/reservations/NewReservationDialog";
+import { NewReservationDialog } from "@modules/commerce";
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 const upsertReservationAction = async (...args: any[]) => ({ success: true });
 const deleteReservationAction = async (...args: any[]) => ({ success: true });
@@ -34,7 +34,7 @@ interface ScannedItem {
   price: number;
   dlc: string;
   forceScan: boolean;
-  ingredient?: import('@/types').Ingredient;
+  ingredient?: import('@nexus/contracts').Ingredient;
 }
 
 export default function ReceptionDashboard() {
@@ -107,7 +107,7 @@ export default function ReceptionDashboard() {
             supplier: 'Inconnu',
             defaultStorageLocation: 'frigo_1',
             shelfLifeDays: 3
-        }) as import('@/types').Ingredient, {
+        }) as import('@nexus/contracts').Ingredient, {
             quantity: item.qty,
             cost: Math.round(item.price * 100),
             manualDlc: item.dlc,

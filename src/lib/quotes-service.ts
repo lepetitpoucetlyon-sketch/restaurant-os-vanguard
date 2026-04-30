@@ -1,4 +1,4 @@
-import { Quote } from '@/types';
+import { Quote } from '@nexus/contracts';
 
 /**
  * Quotes Business Logic Service - Predictive Intelligence Layer

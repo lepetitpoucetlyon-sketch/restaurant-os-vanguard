@@ -6,7 +6,7 @@ import {
     MousePointer2, Database, Receipt, 
     TrendingUp, Cpu, ChevronRight, Activity
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 
 const ONDES_DE_CHOC = [
     {

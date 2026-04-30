@@ -4,12 +4,12 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 
 // Modules internes (logique extraite)
 import { useAuthSession } from '@/engines/core/hooks/auth/AuthSession';
-import { FleetComplianceService } from '@/domain/services/FleetComplianceService';
+import { FleetComplianceService } from '@domain/services/FleetComplianceService';
 import { useAuthAccess } from '@/engines/core/hooks/auth/AuthAccess';
 import { useAuthStaff } from '@/engines/core/hooks/auth/AuthStaff';
 
 // Utils & Config
-import { IdentityManager } from '@/domain/services/IdentityManager';
+import { IdentityManager } from '@domain/services/IdentityManager';
 import { getTenantConfig } from '@/instances';
 import { logger } from '@/lib/axiom';
 import { useSearchParams } from 'next/navigation';
@@ -19,8 +19,8 @@ import { translations, Language } from '@/i18n/translations';
 // Nexus Architecture (Grade X)
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
-import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
-import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
+import { ChaosMonkey } from '@domain/services/ChaosMonkey';
+import { ResilienceSlayer } from '@domain/services/ResilienceSlayer';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { 
     tenantConfigAtom,
@@ -32,11 +32,11 @@ import {
     themeModeAtom, accentColorAtom, uiDensityAtom, 
     borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
 } from '@/store/themeAtoms';
-import { User, UserRole } from '@/types';
-import { TenantConfig, SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { User, UserRole } from '@nexus/contracts';
+import { TenantConfig, SovereignData, SovereignValue } from '@shared/nexus-contract';
 
-import { RolePermissions, CategoryKey } from '@/domain/services/AccessPolicyManager';
-import { GlobalSettings } from '@/types';
+import { RolePermissions, CategoryKey } from '@domain/services/AccessPolicyManager';
+import { GlobalSettings } from '@nexus/contracts';
 import {
     NexusCoreState, 
     NexusAuthState, 
@@ -47,7 +47,7 @@ import {
     NexusNotifState,
     NexusFleetState,
     NexusTheme
-} from '@/types/nexus.types';
+} from '@nexus/contracts/nexus.types';
 
 const NexusCoreContext = createContext<NexusCoreState | undefined>(undefined);
 
@@ -311,7 +311,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     const notifValue: NexusNotifState = useMemo(() => ({
         unreadCount,
-        notifications: notifications as import('@/types').Notification[],
+        notifications: notifications as import('@nexus/contracts').Notification[],
         addNotification: (n) => addToast({ ...n, duration: 3000 } as import('@/store/uiAtoms').ToastItem),
         markAsRead: (id: string) => console.log('Mark as read', id),
         markAllAsRead: () => console.log('Mark all read'),

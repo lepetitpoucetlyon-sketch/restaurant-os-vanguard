@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, RefreshCw, Layers, ExternalLink, CheckCircle2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-import { PowensService } from '@/domain/accounting/PowensService';
+import { PowensService } from '@modules/finance/accounting/domain/PowensService';
 import { useAccounting } from '@/context/AccountingContext';
 import { logger } from '@/lib/logger';
 
 interface AggregationWidgetProps {
-    onSyncComplete: (transactions: import('@/domain/accounting/PowensService').PowensAccount[]) => void;
+    onSyncComplete: (transactions: import('@modules/finance/accounting/domain/PowensService').PowensAccount[]) => void;
 }
 
 /**

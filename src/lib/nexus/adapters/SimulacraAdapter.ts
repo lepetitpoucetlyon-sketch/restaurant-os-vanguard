@@ -2,8 +2,8 @@ import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/Nexu
 import { simulatorDb } from '@/lib/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
-import { SovereignGuard } from '@/lib/SovereignGuard';
-import type { SovereignData, SovereignField } from '@/shared/nexus-contract';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
+import type { SovereignData, SovereignField } from '@shared/nexus-contract';
 
 const PRODUCTION_TENANT_ID = 'lepetitpoucet';
 
@@ -28,7 +28,7 @@ export class SimulacraAdapter implements INexusAdapter {
         logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
     }
 
-    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
+    async get<T = import('@shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
 
         // 1. Check Virtual Store first
         const virtual = await simulatorDb.virtualStore.get(path);
@@ -46,7 +46,7 @@ export class SimulacraAdapter implements INexusAdapter {
      * ⚠️ Query in Simulacra mode is complex. 
      * For Grade X Alpha, we merge real results with virtual overrides.
      */
-    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+    async query<T = import('@shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
 
         const realResults = await this.realAdapter.query<T>(collectionPath, options);
         const virtualResults = await simulatorDb.virtualStore
@@ -72,7 +72,7 @@ export class SimulacraAdapter implements INexusAdapter {
         return merged as T[];
     }
 
-    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void, options?: INexusQueryOptions): () => void {
+    onSnapshot<T = import('@shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void, options?: INexusQueryOptions): () => void {
 
         logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X Alpha.");
         
@@ -109,7 +109,7 @@ export class SimulacraAdapter implements INexusAdapter {
         };
     }
 
-    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
+    async set<T = import('@shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
         let finalData = data as SovereignData;
 
         if (options?.merge) {
@@ -129,7 +129,7 @@ export class SimulacraAdapter implements INexusAdapter {
         });
     }
 
-    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
+    async update<T = import('@shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
         const existing = await this.get<SovereignData>(path);
         const finalData = await SovereignGuard.protectWrite(path, { ...existing, ...data } as SovereignData);
 
@@ -153,7 +153,7 @@ export class SimulacraAdapter implements INexusAdapter {
         });
     }
     
-    async create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void> {
+    async create<T = import('@shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void> {
         await this.set(path, data);
     }
 

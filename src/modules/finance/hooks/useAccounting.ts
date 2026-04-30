@@ -8,17 +8,17 @@ import {
     expenseClaimsAtom,
     accountingViewModeAtom
 } from '../store/accountingAtoms';
-import { fiscalLedgerAtom } from '@/modules/haccp/store/complianceAtoms';
+import { fiscalLedgerAtom } from '@modules/compliance';
 import { 
     AccountingMetrics, 
     FinancialMetrics,
     JournalEntry 
 } from '../types';
 import { useCallback, useMemo } from 'react';
-import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
+import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 
 /**
- * 📊 useAccounting - Grade X Atomic Bridge
+ * 📊 useAccounting - Grade X Atomic Mapper
  * Orchestre la finance souveraine et la conformité NF525.
  */
 export function useAccounting() {
