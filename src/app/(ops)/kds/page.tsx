@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useKitchen, useRecipes } from "@/engines/ops/NexusOpsProvider";
-import { useNexusOps } from "@/modules/ops/hooks/useNexusOps";
+import { useNexusOps } from "@modules/ops";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
-import { Order, Recipe } from "@/types";
+import { Order, Recipe } from "@nexus/contracts";
 
 // Components
 import { KDSHeader } from "./components/KDSHeader";
@@ -14,9 +14,9 @@ import { KDSTicket } from "./components/KDSTicket";
 import { KDSEmptyState } from "./components/KDSEmptyState";
 
 // UI Components (Modals)
-import { ModificationAlertsPanel } from "@/modules/ops/components/kds/ModificationAlerts";
-import { RecipeDetailDialog } from "@/modules/ops/components/kitchen/RecipeDetailDialog";
-import { PlateAuditWizard } from "@/modules/ops/components/kitchen/PlateAuditWizard";
+import { ModificationAlertsPanel } from "@modules/ops";
+import { RecipeDetailDialog } from "@modules/ops";
+import { PlateAuditWizard } from "@modules/ops";
 
 // Constants
 import { ITEM_STATION_MAP, KitchenStation } from "./constants";
@@ -79,7 +79,7 @@ export default function KDSPage() {
 
     // Filtering & Sorting Logic
     const filteredOrders = useMemo(() => {
-        const activeOrders = (orders as any[]).filter(o => o?.status !== 'delivered');
+        const activeOrders = (orders as Order[]).filter(o => o?.status !== 'delivered');
         let result = activeOrders;
 
         if (activeStation !== 'all') {
@@ -94,7 +94,7 @@ export default function KDSPage() {
         if (searchQuery) {
             result = result.filter(o =>
                 o.tableNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                o.serverName.toLowerCase().includes(searchQuery.toLowerCase())
+                (o.serverName || "").toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
@@ -105,7 +105,7 @@ export default function KDSPage() {
             if (!isAReady && isBReady) return -1;
             return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
         });
-    }, [orders, activeStation, searchQuery]) as any[];
+    }, [orders, activeStation, searchQuery]);
 
     const preparingOrdersCount = orders.filter(o => o?.status === 'preparing' || o?.status === 'new').length;
     const pendingModificationsCount = getPendingModifications().length;
@@ -162,14 +162,14 @@ export default function KDSPage() {
                             {filteredOrders.map(ticket => (
                                 <KDSTicket 
                                     key={ticket.id}
-                                    ticket={ticket as any}
+                                    ticket={ticket}
                                     gridColumns={gridColumns}
                                     rushMode={rushMode}
                                     updateOrderStatus={updateOrderStatus}
                                     setSelectedRecipe={setSelectedRecipe}
                                     setIsAuditOpen={setIsAuditOpen}
                                     setAuditTicket={setAuditTicket}
-                                    recipes={recipes as any}
+                                    recipes={recipes}
                                 />
                             ))}
                         </motion.div>

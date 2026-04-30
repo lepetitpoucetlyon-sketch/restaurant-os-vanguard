@@ -3,22 +3,22 @@
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { ZoomIn, ZoomOut, Maximize, Move, Grid, LayoutTemplate, Plus, MousePointer2, Camera, RefreshCw, Users, Heart, AlertTriangle, Square, Box, Layers, Home, Sun, Building2, ChevronDown, X, Sparkles, Minus, ClipboardList, ChefHat } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
-import { useToast } from "@/components/ui/Toast";
-import { Modal } from "@/components/ui/Modal";
+import { useToast } from "@ui/Toast";
+import { Modal } from "@ui/Modal";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { fadeInUp, easing } from "@/lib/motion";
 import { useIsMobile } from "@/hooks";
-import { BottomSheet } from "@/components/ui/BottomSheet";
+import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
-import { Table, TableStatus } from "@/types";
-import { FloorPlanEditorRef } from "@/modules/ops/components/floor-plan/FloorPlanEditor";
+import { Table, TableStatus } from "@nexus/contracts";
+import { FloorPlanEditorRef } from "@modules/ops";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@/modules/ops/components/floor-plan/FloorPlanEditor"),
+    () => import("@modules/ops"),
     { ssr: false }
 ) as React.ComponentType<{
     ref?: React.RefObject<FloorPlanEditorRef>;
