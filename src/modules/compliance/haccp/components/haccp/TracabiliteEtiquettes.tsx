@@ -11,7 +11,7 @@ import {
     Box,
     Trash2
 } from 'lucide-react';
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { useHygieneLabels, useCreateHygieneLabel, useDeleteHygieneLabel } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/context/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';

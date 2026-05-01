@@ -5,17 +5,14 @@ import { motion } from 'framer-motion';
 import { 
     Wallet, 
     TrendingUp, 
-    Users, 
-    Cpu, 
+    Cpu,
     ArrowUpRight, 
     Package, 
-    BarChart3, 
     Sparkles, 
     ShoppingBag,
     ArrowRight
 } from 'lucide-react';
 import { useFleet } from '@/context/FleetContext';
-import { ProposalPanel } from '../ProposalPanel';
 import { TreasuryEngine } from '@domain/services/TreasuryEngine';
 
 export function MCCTreasury() {
