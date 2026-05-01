@@ -20,7 +20,7 @@ export class PayrollAccountingMapper {
         grossAmount: number;
         chargesSociales: number;
         period: string;
-    }): Omit<JournalEntry, 'id' | 'pieceNumber' | 'isSystemGenerated' | 'isValidated'> {
+    }): Omit<JournalEntry, 'id' | 'pieceNumber' | 'updatedAt'> {
         
         const description = `Paie ${payrollData.period} - ${payrollData.employeeName}`;
         
@@ -58,7 +58,7 @@ export class PayrollAccountingMapper {
         // Note: Dans une configuration réelle, on ajouterait ici les lignes de taxes (431 URSSAF, etc.)
         
         return {
-            date: new Date(),
+            date: now,
             description,
             lines,
             referenceId: payrollData.id,
@@ -69,6 +69,6 @@ export class PayrollAccountingMapper {
                 employeeId: payrollData.employeeId,
                 period: payrollData.period
             }
-        } as any;
+        };
     }
 }

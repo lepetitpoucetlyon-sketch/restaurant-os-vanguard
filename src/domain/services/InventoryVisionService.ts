@@ -73,11 +73,15 @@ export const InventoryVisionService = {
         const lastPrice = lastStocks.find(s => s.ingredientId === match.matchedIngredientId)?.unitCostInCents || 0;
         const evolution = lastPrice > 0 ? ((match.extracted.unitPriceHT - lastPrice) / lastPrice) * 100 : 0;
 
+        const validUnits: import('@nexus/contracts').IngredientUnit[] = ['kg', 'g', 'l', 'ml', 'cl', 'unit', 'piece', 'bunch', 'crate', 'box', 'bottle', 'can'];
+        const normalizedUnit = match.extracted.unit.toLowerCase() as import('@nexus/contracts').IngredientUnit;
+        const unit = validUnits.includes(normalizedUnit) ? normalizedUnit : 'unit';
+
         return {
             ingredientId: match.matchedIngredientId,
             ingredientName: match.matchedIngredientName || match.extracted.name,
             quantity: match.extracted.quantity,
-            unit: match.extracted.unit as import('@nexus/contracts').IngredientUnit,
+            unit,
             unitCostInCents: match.extracted.unitPriceHT,
             expirationDate: match.extracted.expirationDate,
             batchNumber: match.extracted.batchNumber,

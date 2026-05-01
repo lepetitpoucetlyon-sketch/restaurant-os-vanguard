@@ -88,4 +88,3 @@ export class InvoiceEngine {
   }
 }
 
-export default InvoiceEngine;

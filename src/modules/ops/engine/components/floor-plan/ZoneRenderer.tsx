@@ -14,7 +14,7 @@ interface ZoneRendererProps {
 }
 
 // Zone Renderer Component - Optimized for performance
-const ZoneRenderer = ({ tables, zones, isLocked, onUpdateTablePosition, onUpdateZone, isDarkMode }: ZoneRendererProps) => {
+export const ZoneRenderer = ({ tables, zones, isLocked, onUpdateTablePosition, onUpdateZone, isDarkMode }: ZoneRendererProps) => {
     const dragNodesRef = useRef<Record<string, { x: number, y: number, node: import('konva/lib/Node').Node }>>({});
     // Local state ref for resize operations to avoid re-renders during drag
     const resizeStateRef = useRef<{ zoneId: string; updates: Partial<Zone> } | null>(null);
@@ -341,4 +341,4 @@ const ZoneRenderer = ({ tables, zones, isLocked, onUpdateTablePosition, onUpdate
     );
 };
 
-export default ZoneRenderer;
+

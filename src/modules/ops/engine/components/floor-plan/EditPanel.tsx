@@ -25,7 +25,7 @@ interface EditPanelProps {
     isDarkMode: boolean;
 }
 
-const EditPanel = ({
+export const EditPanel = ({
     selectedTable,
     updateTable,
     deleteTable,
@@ -224,4 +224,3 @@ const EditPanel = ({
     );
 };
 
-export default EditPanel;

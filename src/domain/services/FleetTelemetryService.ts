@@ -54,25 +54,83 @@ export class FleetTelemetryService {
   }
 
   /**
+   * @method registerNode
+   * @description Signals the discovery of a new sovereign node via the stream.
+   */
+  public async registerNode(tenantId: TenantID): Promise<void> {
+    this.stream.emit({
+        type: 'HEARTBEAT',
+        tenantId: String(tenantId),
+        payload: { id: tenantId, status: 'ONLINE' },
+        timestamp: Date.now(),
+        priority: 'HIGH'
+    });
+  }
+
+  /**
+   * @method broadcastConfiguration
+   * @description Propagates configuration patches to the entire fleet via event-driven batching.
+   */
+  public async broadcastConfiguration(config: Record<string, any>, targetTenantIds: string[]): Promise<void> {
+    targetTenantIds.forEach(tid => {
+        this.stream.emit({
+            type: 'BROADCAST',
+            tenantId: tid,
+            payload: config,
+            timestamp: Date.now(),
+            priority: 'HIGH'
+        });
+    });
+  }
+
+  /**
    * @internal Processes the batch of events from the stream
    */
   private async handleStreamFlush(events: TelemetryEvent[]): Promise<void> {
-    // Group by tenant for atomic updates
-    const tenantGroups: Record<string, Partial<SiteTelemetry>> = {};
+    // Separate metrics from administrative commands
+    const telemetryUpdates: Record<string, Partial<SiteTelemetry>> = {};
+    const administrativeActions: TelemetryEvent[] = [];
     
     events.forEach(event => {
-        tenantGroups[event.tenantId] = {
-            ...(tenantGroups[event.tenantId] || {}),
-            ...event.payload
-        };
+        if (event.type === 'BROADCAST' || event.type === 'COMMAND') {
+            administrativeActions.push(event);
+        } else {
+            telemetryUpdates[event.tenantId] = {
+                ...(telemetryUpdates[event.tenantId] || {}),
+                ...(event.payload as Partial<SiteTelemetry>)
+            };
+        }
     });
 
-    // Execute parallel cloud sync for each affected tenant
-    await Promise.all(
-        Object.entries(tenantGroups).map(([tid, payload]) => 
-            this.executeCloudSync(tid as TenantID, payload)
-        )
+    // Execute parallel cloud sync for telemetry
+    const syncTasks = Object.entries(telemetryUpdates).map(([tid, payload]) => 
+        this.executeCloudSync(tid as TenantID, payload)
     );
+
+    // Execute administrative actions (Broadcasts)
+    const adminTasks = administrativeActions.map(action => 
+        this.executeAdministrativeAction(action)
+    );
+
+    await Promise.all([...syncTasks, ...adminTasks]);
+  }
+
+  /**
+   * @internal Physical execution of administrative overrides
+   */
+  private async executeAdministrativeAction(event: TelemetryEvent): Promise<void> {
+    try {
+        const path = `tenants/${event.tenantId}`;
+        const patch = {
+            ...event.payload,
+            updatedAt: new Date().toISOString()
+        };
+        await Nexus.adapter.update(path, patch);
+        console.log(`[Fleet] Administrative ${event.type} successful for: ${event.tenantId}`);
+    } catch (error) {
+        console.error(`[Fleet] Administrative action failed for ${event.tenantId}`, error);
+        throw error;
+    }
   }
 
   /**
@@ -103,7 +161,7 @@ export class FleetTelemetryService {
 
   private getMemoryUsage(): number {
     if (typeof window !== 'undefined' && 'performance' in window && 'memory' in window.performance) {
-        return Math.round(((window.performance as any).memory?.usedJSHeapSize || 0) / 1024 / 1024);
+        return Math.round(((window.performance as PerformanceMemory).memory?.usedJSHeapSize || 0) / 1024 / 1024);
     }
     return 0;
   }

@@ -12,7 +12,8 @@ import {
     currentUserAtom
 } from '@/store/operationalAtoms';
 import { SovereignMath } from '@shared/services/SovereignMath';
-import { SovereignNode, OperationalIdentity, DomainRegistry } from '@shared/nexus-contract';
+import { SovereignNode, OperationalIdentity } from '@shared/nexus-contract';
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { 
@@ -83,23 +84,23 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     // 🛡️ SOVEREIGN MATH: Total elimination of native operators
     const netProfitInCents = useMemo(() => {
-        const entries = journalEntries.data || [];
-        return entries.reduce((acc, entry) => {
-            const amount = entry.amountInCents || 0;
+        const entries = (journalEntries.data || []) as any[];
+        const total = entries.reduce((acc: bigint, entry: any) => {
+            const amount = BigInt(entry.amountInCents || 0);
             return SovereignMath.add(acc, amount);
-        }, 0);
+        }, BigInt(0));
+        return Number(total);
     }, [journalEntries.data]);
 
     const generateBusinessSignature = (data: SovereignSignable): string => {
         const payload = `${data.amountInCents}|${data.category}|${data.merchantName || 'NONE'}|${data.date}`;
-        let hash = 0;
+        let hash = BigInt(0);
         for (let i = 0; i < payload.length; i++) {
-            const char = payload.charCodeAt(i);
+            const char = BigInt(payload.charCodeAt(i));
             // 🛡️ NO NATIVE MULTIPLY
-            hash = SovereignMath.add(SovereignMath.multiply(hash, 31), char);
-            hash = hash & hash;
+            hash = SovereignMath.add(SovereignMath.multiply(hash, BigInt(31)), char);
         }
-        return `SIG_${Math.abs(hash).toString(36).toUpperCase()}`;
+        return `SIG_${Math.abs(Number(hash)).toString(36).toUpperCase()}`;
     };
 
     const submitExpense = useCallback(async (expenseData: Omit<ExpenseClaim, 'id' | 'status' | 'userName' | 'userRole'>) => {

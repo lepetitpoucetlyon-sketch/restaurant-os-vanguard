@@ -27,6 +27,11 @@ export const SovereignGuard = {
     'paymentMethods'
   ]),
   
+  /**
+   * Shadow Channel for Suzerain/Vassal isolation.
+   * Ensures the Suzerain dashboard cannot "bleed" into the Vassal state.
+   */
+  private_channel: typeof MessageChannel !== 'undefined' ? new MessageChannel() : null,
 
   extractCollectionName(path: string): string {
     const parts = path.split('/').filter(Boolean);

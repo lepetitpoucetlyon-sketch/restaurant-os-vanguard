@@ -27,14 +27,17 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const now = new Date().toISOString();
         onSave({
             ...formData,
             id: `cust_${crypto.randomUUID()}`,
             visitCount: 0,
-            totalSpent: 0,
-            averageSpend: 0,
-            lastVisit: null,
-        } as any);
+            totalSpentInCents: 0,
+            averageSpendInCents: 0,
+            lastVisitDate: undefined,
+            createdAt: now,
+            updatedAt: now,
+        });
         reset();
         onClose();
     };

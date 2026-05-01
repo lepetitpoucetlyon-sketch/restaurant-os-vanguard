@@ -26,18 +26,20 @@ import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
 import { EmpireInstance } from '@domain/types/empire';
 
 
-// MCC Components
-import { 
-  MCCAuditStream, 
-  MCCInsights, 
-  CertificationCenter, 
-  FiscalChainExplorer, 
-  DeploymentEngine, 
-  MCCTreasury, 
-  StrategyOracle,
-  FleetCommandTable,
-  PerformanceMonitor
-} from '@nexus/guards';
+import dynamic from 'next/dynamic';
+import { MCCWidgetSkeleton } from '@nexus/guards/admin/mcc/MCCWidgetSkeleton';
+
+// 🚀 DYNAMIC MCC WIDGETS (LIGHTSPEED-TURBINE - Direct Sharding)
+const MCCAuditStream = dynamic(() => import('@nexus/guards/admin/mcc/MCCAuditStream').then(mod => mod.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });
+const MCCInsights = dynamic(() => import('@nexus/guards/admin/mcc/MCCInsights').then(mod => mod.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });
+const CertificationCenter = dynamic(() => import('@nexus/guards/admin/mcc/CertificationCenter').then(mod => mod.CertificationCenter), { loading: () => <MCCWidgetSkeleton /> });
+const FiscalChainExplorer = dynamic(() => import('@nexus/guards/admin/mcc/FiscalChainExplorer').then(mod => mod.FiscalChainExplorer), { loading: () => <MCCWidgetSkeleton /> });
+const DeploymentEngine = dynamic(() => import('@nexus/guards/admin/mcc/DeploymentEngine').then(mod => mod.DeploymentEngine), { loading: () => <MCCWidgetSkeleton /> });
+const MCCTreasury = dynamic(() => import('@nexus/guards/admin/mcc/MCCTreasury').then(mod => mod.MCCTreasury), { loading: () => <MCCWidgetSkeleton /> });
+const StrategyOracle = dynamic(() => import('@nexus/guards/admin/mcc/StrategyOracle').then(mod => mod.StrategyOracle), { loading: () => <MCCWidgetSkeleton /> });
+const FleetCommandTable = dynamic(() => import('@nexus/guards/admin/mcc/FleetCommandTable').then(mod => mod.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
+const PerformanceMonitor = dynamic(() => import('@nexus/guards/admin/mcc/PerformanceMonitor').then(mod => mod.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
+
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';

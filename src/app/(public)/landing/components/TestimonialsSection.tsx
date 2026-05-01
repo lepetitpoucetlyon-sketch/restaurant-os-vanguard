@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import Image from 'next/image';
 import { TESTIMONIALS } from "@/app/(public)/landing/constants";
 
 export function TestimonialsSection() {
@@ -47,9 +48,11 @@ export function TestimonialsSection() {
 
                             {/* Author */}
                             <div className="flex items-center gap-4">
-                                <img
+                                <Image
                                     src={testimonial.avatar}
                                     alt={testimonial.author}
+                                    width={48}
+                                    height={48}
                                     className="w-12 h-12 rounded-full object-cover border-2 border-[#C9A227]/30"
                                 />
                                 {testimonial.author && (

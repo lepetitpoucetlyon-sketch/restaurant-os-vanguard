@@ -176,22 +176,7 @@ export enum OperationalIdentity {
   LEDGER = 'STX_LAMBDA'
 }
 
-/**
- * 🏛️ DomainRegistry - Mapping Injection Guard
- */
-export class DomainRegistry {
-    private static mapping: Record<string, string> = {};
 
-    static inject(domainMapping: Record<OperationalIdentity, string>) {
-        DomainRegistry.mapping = domainMapping;
-    }
-
-    static resolve(identity: OperationalIdentity): string {
-        const resolved = DomainRegistry.mapping[identity];
-        if (!resolved) throw new Error(`UNRESOLVED_IDENTITY: Core attempted to access ${identity} without domain mapping.`);
-        return resolved;
-    }
-}
 
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
   capabilities: {},

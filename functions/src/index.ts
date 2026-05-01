@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v2';
 
-import { listLoginProfiles, loginWithPin } from './modules/auth';
-import { askGeminiAgent } from './modules/oracle';
+import { listLoginProfiles, loginWithPin } from './modules/infrastructure/auth';
+import { askGeminiAgent } from './modules/intelligence/oracle';
 
 admin.initializeApp();
 

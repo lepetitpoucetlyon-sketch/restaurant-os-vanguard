@@ -18,8 +18,11 @@ import { FloorPlanEditorRef } from "@modules/ops";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@modules/ops").then(mod => mod.FloorPlanEditor),
-    { ssr: false }
+    () => import("@modules/ops/engine/components/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
+    { 
+        ssr: false,
+        loading: () => <div className="absolute inset-0 bg-bg-primary flex items-center justify-center animate-pulse"><div className="w-20 h-20 bg-accent/10 rounded-full border border-accent/20" /></div>
+    }
 ) as any;
 
 

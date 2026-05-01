@@ -1,7 +1,7 @@
 /**
  * INVENTORY TYPES - Complete Stock Management System
  */
-import { TemperatureLog } from '@modules/compliance';
+import { TemperatureLog } from '@nexus/contracts';
 
 import { 
     StorageType, 

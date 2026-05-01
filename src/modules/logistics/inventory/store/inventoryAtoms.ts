@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import { reservationStatsAtom } from '@modules/commerce';
+import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
 import { 
     StockItem, 
     Product, 
@@ -59,10 +59,9 @@ export const prepLoadingAtom = _prepTasks.loading;
 // Kitchen Prep Progress (Grade X Oracle Connection)
 export const miseEnPlaceTargetSelector = atom((get) => {
     const recipesData = get(recipesAtom);
-    const reservationStats = get(reservationStatsAtom); 
+    const expectedCovers = get(expectedCoversAtom) || 20; 
     
     // AI Forecast Logic: Target = (Expected Covers / 2) + Buffer
-    const expectedCovers = (reservationStats as any).todayCovers || 20;
     const aiTarget = Math.ceil(expectedCovers * 0.4); 
 
     return recipesData.reduce((acc: Record<string, { name: string; target: number }>, r) => {

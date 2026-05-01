@@ -16,18 +16,18 @@ import { useSearchParams } from 'next/navigation';
 import { useSettings as useSettingsInternal } from '@/hooks/useSettings';
 import { translations, Language } from '@/i18n/translations';
 
-// Nexus Architecture (Grade X)
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
-import { ChaosMonkey } from '@domain/services/ChaosMonkey';
-import { ResilienceSlayer } from '@domain/services/ResilienceSlayer';
+import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { 
     tenantConfigAtom,
     isSidebarCollapsedAtom, isLaunchpadOpenAtom, 
     isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom,
-    notificationsAtom, unreadNotificationsCountAtom, addToastAtom
+    notificationsAtom, unreadNotificationsCountAtom, addToastAtom,
+    reservationStatsAtom
 } from '@/store/operationalAtoms';
+import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
 import { 
     themeModeAtom, accentColorAtom, uiDensityAtom, 
     borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
@@ -70,19 +70,15 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     // 🐒 Chaos & Resilience (Grade X)
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            window.awakenTheMonkey = (intensity?: number) => {
-                ChaosMonkey.start(intensity);
-                ResilienceSlayer.start();
-            };
-            window.silenceTheMonkey = () => {
-                ChaosMonkey.stop();
-                ResilienceSlayer.stop();
-            };
-        }
+        NexusTelemetryEngine.mountChaosMonkeys();
+        
+        // 🛰️ INITIALIZE HEADLESS SUTURES (L5)
+        const { NexusSutures } = require('@/store/nexusSutures');
+        NexusSutures.init();
+
         return () => {
-            ChaosMonkey.stop();
-            ResilienceSlayer.stop();
+            NexusTelemetryEngine.unmountChaosMonkeys();
+            NexusSutures.stop();
         };
     }, []);
 
@@ -104,14 +100,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         Nexus.tenantOverride = tenantId;
 
         // 🛡️ SENTRY SUTURE: Injecting Empire DNA
-        import('@sentry/nextjs').then(Sentry => {
-            Sentry.setTag("empire.domain", tenantId);
-            Sentry.setTag("nexus.grade", "X+++");
-            Sentry.setContext("Sovereign Session", {
-                activeTenant: tenantId,
-                initializedAt: new Date().toISOString()
-            });
-        });
+        NexusTelemetryEngine.initSession(tenantId);
     }, [setGlobalTenantConfig]);
 
     // Auto-resolve initial tenant
@@ -345,18 +334,19 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         theme: themeMode === 'auto' ? 'dark' : themeMode as 'light' | 'dark',
         toggleTheme: () => setThemeMode(p => p === 'light' ? 'dark' : 'light'),
         unreadCount,
-        sidebarOpen: !isSidebarCollapsed
-    }), [isSidebarCollapsed, isLaunchpadOpen, isMap3DOpen, isMobileMenuOpen, isCommandOpen, isDocsOpen, themeMode, unreadCount, setIsSidebarCollapsed, setIsLaunchpadOpen, setIsMap3DOpen, setIsMobileMenuOpen, setIsCommandOpen, setIsDocsOpen, setThemeMode]);
+        sidebarOpen: !isSidebarCollapsed,
+        settings: settingsModule.settings
+    }), [isSidebarCollapsed, isLaunchpadOpen, isMap3DOpen, isMobileMenuOpen, isCommandOpen, isDocsOpen, themeMode, unreadCount, settingsModule.settings, setIsSidebarCollapsed, setIsLaunchpadOpen, setIsMap3DOpen, setIsMobileMenuOpen, setIsCommandOpen, setIsDocsOpen, setThemeMode]);
 
     const notifValue: NexusNotifState = useMemo(() => ({
         unreadCount,
         notifications: notifications as import('@nexus/contracts').Notification[],
-        addNotification: (n) => addToast({ ...n, duration: 3000 } as import('@/store/uiAtoms').ToastItem),
+        addNotification: (n: any) => addToast({ ...n, duration: 3000 } as any),
         markAsRead: (id: string) => console.log('Mark as read', id),
         markAllAsRead: () => console.log('Mark all read'),
         removeNotification: (id: string) => console.log('Remove notification', id),
         clearAll: () => console.log('Clear all notifications')
-    }), [unreadCount, notifications, addToast]);
+    }) as any, [unreadCount, notifications, addToast]);
 
     const themeValue: NexusTheme = useMemo(() => ({
         mode: themeMode,

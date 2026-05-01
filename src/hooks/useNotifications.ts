@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { notificationsAtom, unreadNotificationsCountAtom } from '@/store/uiAtoms';
-import type { Notification as AppNotification } from '@/store/uiAtoms';
+import type { Notification as AppNotification } from '@nexus/contracts';
 
 /**
  * 🔔 useNotifications - Grade VI

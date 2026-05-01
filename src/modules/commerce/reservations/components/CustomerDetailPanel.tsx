@@ -79,7 +79,7 @@ export function CustomerDetailPanel({
                             </div>
                             <div className="p-10 text-center">
                                 <p className="text-3xl font-mono font-light text-white italic">
-                                    {((Number((customer as any).averageSpendInCents) || 0) / 100).toFixed(0)}€
+                                    {(((customer.averageSpendInCents ?? (customer.visitCount > 0 ? customer.totalSpentInCents / customer.visitCount : 0))) / 100).toFixed(0)}€
                                 </p>
                                 <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
                                     Engagement
