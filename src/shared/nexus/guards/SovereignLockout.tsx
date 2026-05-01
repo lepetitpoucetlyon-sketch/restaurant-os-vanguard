@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 import { ShieldAlert, LogOut, Terminal, Lock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";

@@ -4,6 +4,8 @@
  * Prevents code unauthorized extraction and cross-tenant leakage.
  */
 
+import { logger } from '@/lib/logger';
+
 export interface InstanceSecurityConfig {
     authorizedDomains: Record<string, string>; // hostname -> tenantId
     authorizedProjects: Record<string, string>; // tenantId -> firebaseProjectId
@@ -54,7 +56,7 @@ export class InstanceGuard {
         // 🛡️ VANGUARD SECURITY: Cross-check Project ID
         const expectedProjectId = this.config.authorizedProjects[tenantId];
         if (expectedProjectId !== firebaseProjectId) {
-            console.error(`🚨 SOUVEREIGNTY_VIOLATION: Host ${hostname} (Tenant: ${tenantId}) attempted to boot with Project ID ${firebaseProjectId}. Expected: ${expectedProjectId}`);
+            logger.error(`🚨 SOUVEREIGNTY_VIOLATION: Host ${hostname} (Tenant: ${tenantId}) attempted to boot with Project ID ${firebaseProjectId}. Expected: ${expectedProjectId}`);
             return 'UNAUTHORIZED';
         }
 
