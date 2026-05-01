@@ -11,8 +11,7 @@ import {
     seoProfileAtom, 
     marketingCampaignsNodeAtom, 
     socialAccountsNodeAtom, 
-    quotesNodeAtom, 
-    deliveriesNodeAtom 
+    quotesNodeAtom
 } from './store/marketingAtoms';
 import { logger } from '@/lib/logger';
 import { MarketingEngine } from "@/lib/marketing-engine";
@@ -100,19 +99,6 @@ export const MarketingSyncService = {
         limit: 100,
         onError: (error: Error) => {
           logger.error('[MarketingSync] Quotes Sync Failed', error);
-        }
-      }
-    );
-
-    this.private_listeners.deliveries = Nexus.adapter.onSnapshot(
-      path('deliveries'),
-      (data: Delivery[]) => {
-      },
-      {
-        orderBy: { field: 'time', direction: 'desc' },
-        limit: 50,
-        onError: (error: Error) => {
-          logger.error('[MarketingSync] Deliveries Sync Failed', error);
         }
       }
     );

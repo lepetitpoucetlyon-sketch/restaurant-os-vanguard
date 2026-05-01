@@ -10,7 +10,7 @@ import {
     shiftsNodeAtom
 } from '../store/staffAtoms';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
-import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "../types";
+import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "@nexus/contracts";
 import { SovereignData } from '@shared/nexus-contract';
 
 /**
@@ -33,14 +33,23 @@ export function useHumanResources() {
     const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom, 'leaveRequests', 'HR');
     const shiftForge = useNexusMutation<Shift>(shiftsNodeAtom, 'shifts', 'HR');
 
-    const addShift = useCallback((shift: Omit<Shift, 'id'>) => {
+    const addShift = useCallback((shift: Omit<Shift, 'id' | 'createdAt' | 'updatedAt'>) => {
         const id = `shift_${Date.now()}`;
-        const newShift: Shift = { ...shift, id } as Shift;
+        const now = new Date().toISOString();
+        const newShift: Shift = { 
+            ...shift, 
+            id,
+            createdAt: now,
+            updatedAt: now
+        } as Shift;
         return shiftForge.mutate('SET', id, newShift);
     }, [shiftForge]);
 
     const updateShift = useCallback((id: string, data: Partial<Shift>) => {
-        return shiftForge.mutate('UPDATE', id, data);
+        return shiftForge.mutate('UPDATE', id, {
+            ...data,
+            updatedAt: new Date().toISOString()
+        });
     }, [shiftForge]);
 
     const deleteShift = useCallback((id: string) => {
@@ -48,34 +57,45 @@ export function useHumanResources() {
     }, [shiftForge]);
 
     const publishShifts = useCallback(async (ids: string[]) => {
+        const now = new Date().toISOString();
         return Promise.all(ids.map(id => 
-            shiftForge.mutate('UPDATE', id, { status: 'published' } as Partial<Shift>)
+            shiftForge.mutate('UPDATE', id, { 
+                status: 'published',
+                updatedAt: now 
+            } as unknown as Partial<Shift>)
         ));
     }, [shiftForge]);
 
     // --- LEAVE MANAGEMENT ---
     
     const approveLeaveRequest = useCallback(async (id: string) => {
+        const now = new Date().toISOString();
         return leaveForge.mutate('UPDATE', id, { 
             status: 'approved',
-            finalDecision: 'approved',
-            finalDecisionAt: new Date().toISOString()
-        } as Partial<LeaveRequest>);
+            updatedAt: now
+        } as unknown as Partial<LeaveRequest>);
     }, [leaveForge]);
 
     const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, details?: string) => {
+        const now = new Date().toISOString();
         return leaveForge.mutate('UPDATE', id, { 
             status: 'rejected',
-            finalDecision: 'rejected',
             rejectionReason: reason,
-            rejectionDetails: details,
-            finalDecisionAt: new Date().toISOString()
-        } as Partial<LeaveRequest>);
+            updatedAt: now
+        } as unknown as Partial<LeaveRequest>);
     }, [leaveForge]);
 
-    const createLeaveRequest = useCallback(async (request: LeaveRequest) => {
-        const id = request.id || `leave_${Date.now()}`;
-        return leaveForge.mutate('SET', id, { ...request, status: 'pending_approval' });
+    const createLeaveRequest = useCallback(async (request: Omit<LeaveRequest, 'id' | 'createdAt' | 'updatedAt'>) => {
+        const id = `leave_${Date.now()}`;
+        const now = new Date().toISOString();
+        const newRequest: LeaveRequest = { 
+            ...request, 
+            id,
+            status: 'pending_approval' as any,
+            createdAt: now,
+            updatedAt: now
+        } as unknown as LeaveRequest;
+        return leaveForge.mutate('SET', id, newRequest);
     }, [leaveForge]);
 
     return {

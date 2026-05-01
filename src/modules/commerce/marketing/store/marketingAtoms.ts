@@ -81,8 +81,7 @@ export const selectedCRMAtom = atom<CRM | null>(null);
 
 // --- 🛰️ SYNC & TELEMETRY ---
 export const isMarketingSyncingAtom = atom(false);
-const _deliveries = createProxyDomain<any>('deliveries');
-export const deliveriesNodeAtom = _deliveries.node;
+
 
 // SEO LOADING
 export const seoLoadingAtom = atom((get) => get(_marketingCampaigns.node).loading || get(_scheduledPosts.node).loading);

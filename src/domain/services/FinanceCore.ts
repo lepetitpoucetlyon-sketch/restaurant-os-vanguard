@@ -4,7 +4,7 @@
  * Seule source de vérité pour le scellage NF525.
  */
 
-import { Order, OrderItem } from "@nexus/contracts";
+import { Order, OrderItem, FiscalSeal } from "@nexus/contracts";
 import { SovereignData } from "@shared/nexus-contract";
 
 export interface TaxBreakdown {
@@ -12,14 +12,6 @@ export interface TaxBreakdown {
     ht: number;
     totalTax: number;
     rates: Record<number, number>;
-}
-
-export interface FiscalSeal {
-    hash: string;
-    previousHash: string;
-    sequence: number;
-    signedPayload: string;
-    algorithm: string;
 }
 
 export interface ZReport {

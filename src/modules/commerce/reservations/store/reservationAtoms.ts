@@ -23,10 +23,10 @@ export const reservationStatsAtom = atom((get) => {
     return {
         total: reservations.length,
         todayCount: todayReservations.length,
-        todayCovers: todayReservations.reduce((sum, r) => sum + r.covers, 0),
+        todayCovers: todayReservations.reduce((sum, r) => sum + r.partySize, 0),
         pending: reservations.filter(r => r.status === 'confirmed').length,
         seated: reservations.filter(r => r.status === 'seated').length,
-        noShow: reservations.filter(r => r.status === 'no-show').length,
+        noShow: reservations.filter(r => r.status === 'no_show').length,
         cancelled: reservations.filter(r => r.status === 'cancelled').length,
     };
 });

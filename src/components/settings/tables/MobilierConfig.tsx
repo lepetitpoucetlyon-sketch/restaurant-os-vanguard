@@ -40,7 +40,7 @@ export function MobilierConfig({
     isEditingTable,
     setIsEditingTable
 }: MobilierConfigProps) {
-    const [editingTable, setEditingTable] = useState<{ id?: string; number: string; seats: number; shape: 'rect' | 'circle'; zoneId: string; floorId: string } | null>(null);
+    const [editingTable, setEditingTable] = useState<{ id?: string; number: string; seats: number; shape: TableShape; zoneId: string; floorId: string } | null>(null);
 
     const handleAddTable = () => {
         setEditingTable({ number: '', seats: 4, shape: 'rect', zoneId: zones[0]?.id || 'main', floorId: floors[0]?.id || 'rdc' });
@@ -48,7 +48,14 @@ export function MobilierConfig({
     };
 
     const handleEditTable = (table: Table) => {
-        setEditingTable({ id: table.id, number: table.number, seats: table.seats, shape: table.shape as TableShape, zoneId: table.zoneId || 'main', floorId: table.floorId || 'rdc' });
+        setEditingTable({ 
+            id: table.id, 
+            number: table.number, 
+            seats: table.seats, 
+            shape: table.shape as TableShape, 
+            zoneId: table.zoneId || 'main', 
+            floorId: table.floorId || 'rdc' 
+        });
         setIsEditingTable(true);
     };
 

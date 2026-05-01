@@ -8,3 +8,5 @@
  */
 
 export * from '@modules/finance';
+import { NF525Service } from '@modules/finance';
+export { NF525Service };

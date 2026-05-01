@@ -124,8 +124,8 @@ export function TeamCalendar() {
                                                     key={j}
                                                     className={cn(
                                                         "h-1.5 flex-1 rounded-full",
-                                                        a.type === 'paid_leave' ? 'bg-blue-400' :
-                                                            a.type === 'sick_leave' ? 'bg-rose-400' : 'bg-amber-400'
+                                                        a.type === 'paid' ? 'bg-blue-400' :
+                                                            a.type === 'sick' ? 'bg-rose-400' : 'bg-amber-400'
                                                     )}
                                                     title={a.employeeName}
                                                 />

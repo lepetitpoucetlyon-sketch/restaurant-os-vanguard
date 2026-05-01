@@ -7,4 +7,10 @@ export { useFinance } from './hooks/useFinance';
 export { useFiscal } from './hooks/useFiscal';
 export { useFinanceReflex } from './hooks/useFinanceReflex';
 export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
+export { BlockchainLedgerService } from './accounting/domain/BlockchainLedgerService';
 export { PayrollAccountingMapper } from './accounting/domain/PayrollAccountingMapper';
+export * from './services';
+
+// 🏛️ SUTURE NEXUS
+export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
+export type { Account, AccountingContextType } from './types';

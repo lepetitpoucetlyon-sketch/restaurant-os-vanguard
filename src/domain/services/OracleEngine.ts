@@ -1,4 +1,4 @@
-import { StockItem, StockEvent } from '@nexus/contracts';
+import { StockItem, InventoryMovement as StockEvent } from '@nexus/contracts';
 import { Quantity, toQuantity } from '@/lib/brands';
 import { logger } from '@/lib/logger';
 
@@ -108,7 +108,7 @@ export const OracleEngine = {
     const usageMap: Record<string, number> = {};
     events.forEach(e => {
       const date = e.timestamp.split('T')[0];
-      if (e.type === 'OUT') {
+      if (e.type === 'consumption' || e.type === 'sale') {
         usageMap[date] = (usageMap[date] || 0) + e.quantity;
       }
     });

@@ -18,7 +18,7 @@ import { useFleet } from '@/context/FleetContext';
 import { ProposalPanel } from '../ProposalPanel';
 import { TreasuryEngine } from '@domain/services/TreasuryEngine';
 
-export default function MCCTreasury() {
+export function MCCTreasury() {
     const { instances } = useFleet();
     
     const report = useMemo(() => {

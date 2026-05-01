@@ -47,7 +47,8 @@ export function PlanNettoyage() {
                     zone: zoneId,
                     status: 'done',
                     user: 'Admin',
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
                 });
             }
         } catch (e) {
@@ -66,7 +67,8 @@ export function PlanNettoyage() {
                 status: 'alert',
                 notes: reportNote,
                 user: 'Admin',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             });
             addNotification({ type: 'warning', title: 'Incident consigné', message: 'L\'anomalie a été enregistrée avec succès.' });
         } catch (e) {

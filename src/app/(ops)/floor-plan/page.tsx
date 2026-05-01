@@ -18,19 +18,9 @@ import { FloorPlanEditorRef } from "@modules/ops";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@modules/ops"),
+    () => import("@modules/ops").then(mod => mod.FloorPlanEditor),
     { ssr: false }
-) as React.ComponentType<{
-    ref?: React.RefObject<FloorPlanEditorRef>;
-    scale: number;
-    onScaleChange: (s: number) => void;
-    position: { x: number; y: number };
-    onPositionChange: (p: { x: number; y: number }) => void;
-    mode: 'select' | 'add';
-    viewMode: '2d' | '3d';
-    currentFloorId: string;
-    onTableSelect: (id: string) => void;
-}>;
+) as any;
 
 
 // Floor icons mapping

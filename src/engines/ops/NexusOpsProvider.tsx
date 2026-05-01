@@ -3,10 +3,11 @@
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode, DomainRegistry } from '@shared/nexus-contract';
 import { 
-  Table, Order, Product, Recipe, Ingredient, Reservation, Quote, Campaign,
+  Table, Order, Product, Recipe, Reservation, Quote, Campaign,
   isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign,
   toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone
 } from '@nexus/contracts/nexus-internal-mapper';
+import type { Ingredient } from '@nexus/contracts/logistics';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';

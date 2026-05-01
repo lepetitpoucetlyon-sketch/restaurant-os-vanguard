@@ -2,7 +2,7 @@
  * 📢 MarketingEngine - Industrial Grade X
  * Analytics and SEO Keyword Intelligence.
  */
-import { SEOScore, PageSEO, KeywordStat } from '@modules/commerce.types';
+import { SEOScore, PageSEO, KeywordStat } from '@nexus/contracts';
 
 export const MarketingEngine = {
     getKeywords: () => [

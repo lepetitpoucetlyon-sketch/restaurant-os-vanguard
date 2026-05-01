@@ -1,6 +1,7 @@
 import { SovereignData } from '@shared/nexus-contract';
 
-import { Order, OrderItem, OrderStatus } from '@nexus/contracts/nexus-internal-mapper';
+import type { Order, OrderItem, OrderStatus } from '@nexus/contracts/nexus-internal-mapper';
+export type { Order, OrderItem, OrderStatus };
 
 export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';

@@ -25,11 +25,11 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { useFleet } from "@/context/FleetContext";
-import { ProvisioningWizard } from '@modules/gateway';
-import { TenantOrchestrator } from '@modules/gateway';
+import { ProvisioningWizard } from '@modules/infrastructure';
+import { TenantOrchestrator } from '@modules/infrastructure';
 import { EmpireInstance } from '@domain/types/empire';
 import { FleetInsight } from '@domain/services/MacroBrain';
-import { HermesDashboard } from '@modules/gateway';
+import { ZeusDashboard } from '@modules/infrastructure';
 
 export default function MasterConsolePage() {
   const { 
@@ -206,7 +206,7 @@ export default function MasterConsolePage() {
                 {/* 🏺 HERMES ORCHESTRATION (GRADE X) */}
                 <div className="bg-[#0B0B0C] border border-accent/20 shadow-[0_0_50px_rgba(255,100,100,0.05)] rounded-[4rem] p-12 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[100px] -mr-[250px] -mt-[250px] pointer-events-none" />
-                    <HermesDashboard tenantId={selectedInstanceId || 'empire_nexus_global'} />
+                    <ZeusDashboard tenantId={selectedInstanceId || 'empire_nexus_global'} />
                 </div>
 
                 {/* Insights & Strategy Grid */}
@@ -410,7 +410,11 @@ export default function MasterConsolePage() {
             <ProvisioningWizard 
                 onClose={() => setIsWizardOpen(false)} 
                 onSuccess={(newInstance) => {
-                    registerInstance(newInstance as unknown as EmpireInstance);
+                    const sovereignInstance = {
+                        ...newInstance,
+                        updatedAt: new Date().toISOString()
+                    } as unknown as EmpireInstance;
+                    registerInstance(sovereignInstance);
                     setIsWizardOpen(false);
                     selectInstance(String(newInstance.id));
                 }} 

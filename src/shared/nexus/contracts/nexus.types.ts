@@ -201,6 +201,8 @@ export interface NexusFleetState {
     complianceService: {
         isNF525Valid: boolean;
         lastSealHash: string;
+        verifySiteIntegrity: (tenantId: string) => Promise<any>;
+        issueGlobalCertificate: (commanderId: string) => Promise<any>;
     }; 
     haccpBridge: SovereignData;
     fleet: EmpireGlobalMetrics | null;

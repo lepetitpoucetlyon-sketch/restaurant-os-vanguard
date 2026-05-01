@@ -64,7 +64,8 @@ export function TracabiliteEtiquettes() {
                 ...formData, 
                 imageUrl: finalImageUrl, 
                 id: `label_${Date.now()}`,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             });
             addNotification({ type: 'success', title: 'Étiquette scannée', message: 'La traçabilité de ce produit a été enregistrée.' });
             setFormData({

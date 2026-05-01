@@ -36,7 +36,7 @@ export function NewRequestModal({
     onSubmit
 }: NewRequestModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [selectedType, setSelectedType] = useState<LeaveType>('paid_leave');
+    const [selectedType, setSelectedType] = useState<LeaveType>('paid');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [startPeriod, setStartPeriod] = useState<DayPeriod>('full_day');

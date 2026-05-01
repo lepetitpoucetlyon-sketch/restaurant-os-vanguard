@@ -69,7 +69,12 @@ export class AccountingService {
                     accountName: targetAccount.name,
                     description: expenseData.description,
                     side: 'debit',
-                    amountInCents: expenseData.amountInCents
+                    amountInCents: expenseData.amountInCents,
+                    date: timestamp.toISOString(),
+                    pieceNumber: `EXP-${timestamp.getTime()}`,
+                    debitInCents: expenseData.amountInCents,
+                    creditInCents: 0,
+                    runningBalanceInCents: 0
                 },
                 {
                     accountId: 'acc_421',
@@ -77,7 +82,12 @@ export class AccountingService {
                     accountName: 'Personnel - Rémunérations dues',
                     description: 'Remboursement à effectuer',
                     side: 'credit',
-                    amountInCents: expenseData.amountInCents
+                    amountInCents: expenseData.amountInCents,
+                    date: timestamp.toISOString(),
+                    pieceNumber: `EXP-${timestamp.getTime()}`,
+                    debitInCents: 0,
+                    creditInCents: expenseData.amountInCents,
+                    runningBalanceInCents: 0
                 }
             ]
         };

@@ -19,7 +19,7 @@ import { useStrategicOracle } from '@/hooks/useStrategicOracle';
 import { useFleet } from '@/context/FleetContext';
 import { FleetInsight } from '@domain/services/MacroBrain';
 
-export default function StrategyOracle() {
+export function StrategyOracle() {
     const { instances } = useFleet();
     const { insights, getExecutiveBriefing, executeAction, messages, isProcessing } = useStrategicOracle();
     const [selectedInsight, setSelectedInsight] = useState<FleetInsight | null>(null);

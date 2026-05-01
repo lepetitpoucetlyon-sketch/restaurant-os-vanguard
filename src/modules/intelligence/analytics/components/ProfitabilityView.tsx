@@ -5,28 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, AreaChart } from 'lucide-react';
 import { Button } from '@ui/button';
 import { BottomSheet } from "@ui/BottomSheet";
+import { IoTMetric, ProfitabilityAlert } from '../types';
 
 // --- Profitability View ---
 
-export interface IoTMetric {
-    id: string;
-    name: string;
-    value: number;
-    type: 'temperature' | 'hz' | 'humidity' | 'pressure';
-    status: 'normal' | 'alert' | 'critical';
-    trend: 'up' | 'down' | 'stable';
-    anomalous: boolean;
-    timestamp: string;
-}
 
-export interface ProfitabilityAlert {
-    productId: string;
-    productName: string;
-    currentMarginInCents: number;
-    suggestedPriceInCents: number;
-    impactLevel: 'high' | 'medium' | 'low';
-    category: string;
-}
+
+
 
 export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ alerts }) => {
     return (

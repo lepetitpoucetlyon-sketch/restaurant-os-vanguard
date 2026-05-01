@@ -48,15 +48,18 @@ export function useRecruitment() {
         
         const logsPath = `tenants/${activeTenantId}/recruitment_logs`;
         const logId = Nexus.adapter.generateId(logsPath);
+        const now = new Date().toISOString();
         
         await Nexus.adapter.set(`${logsPath}/${logId}`, {
             id: logId,
             candidateId,
             action,
             performedBy: currentUser.name,
-            timestamp: new Date().toISOString(),
-            notes: notes || ""
-        });
+            timestamp: now,
+            notes: notes || "",
+            createdAt: now,
+            updatedAt: now
+        } as RecruitmentLog);
     }, [currentUser, activeTenantId]);
 
     const addCandidate = useCallback(async (candidate: Omit<Candidate, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -71,7 +74,7 @@ export function useRecruitment() {
             id: candidateId,
             createdAt: now,
             updatedAt: now,
-        });
+        } as Candidate);
 
         await logAction(candidateId, "Candidat ajouté au système", candidate.gdpr.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant");
         return candidateId;

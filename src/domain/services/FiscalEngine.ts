@@ -1,6 +1,5 @@
 import { logger } from '@/lib/logger';
 import { FiscalSeal } from '@nexus/contracts';
-export type { FiscalSeal };
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from './CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';

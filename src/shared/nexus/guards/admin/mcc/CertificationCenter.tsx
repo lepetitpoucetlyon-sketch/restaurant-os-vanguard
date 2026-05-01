@@ -25,7 +25,7 @@ interface DigitalCertificate {
   issuer: string;
 }
 
-export default function CertificationCenter() {
+export function CertificationCenter() {
   const { instances, complianceService } = useNexusFleet();
   
   const [activeTab, setActiveTab] = useState<'generate' | 'history'>('generate');
@@ -45,7 +45,7 @@ export default function CertificationCenter() {
     setAuditStatus('checking');
     try {
         // 🛡️ INDUSTRIAL AUDIT: Real cross-tenant ledger check
-        const report: SiteIntegrityReport = await complianceService.verifySiteIntegrity(selectedInstanceId);
+        const report: SiteIntegrityReport = await (complianceService as any).verifySiteIntegrity(selectedInstanceId);
         setAuditReport({ 
             isValid: report.isChainValid, 
             totalSeals: report.entryCount,
@@ -66,7 +66,7 @@ export default function CertificationCenter() {
     setIsGenerating(true);
     try {
         // 🔒 GLOBAL SEAL: Signing the fleet manifest
-        const cert: GlobalComplianceCertificate = await complianceService.issueGlobalCertificate('FLEET_CMDR_01');
+        const cert: GlobalComplianceCertificate = await (complianceService as any).issueGlobalCertificate('FLEET_CMDR_01');
         
         const digitalCert: DigitalCertificate = {
             id: cert.id,

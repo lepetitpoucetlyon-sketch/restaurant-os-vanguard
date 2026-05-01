@@ -11,7 +11,7 @@ interface GitStatus {
     lastCommit: string;
 }
 
-export default function DeploymentEngine() {
+export function DeploymentEngine() {
     const [status, setStatus] = useState<GitStatus | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isPushing, setIsPushing] = useState(false);

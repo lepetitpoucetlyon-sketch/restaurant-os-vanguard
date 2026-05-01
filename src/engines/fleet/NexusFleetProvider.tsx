@@ -8,13 +8,12 @@ import { HACCPTelemetryBridge } from '@domain/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
 import { TenantID } from '@domain/types/brands';
 import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
-import { EmpireInstance, EmpireGlobalMetrics } from '@domain/types/empire';
+import { SiteTelemetry, EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight, ConsolidatedMetrics } from '@domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { SovereignData } from '@shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SiteTelemetry } from '@domain/types/brands';
 
 import { NexusFleetState } from '@nexus/contracts/nexus.types';
 
@@ -120,6 +119,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                     tier: f.tier || 'STANDARD',
                     version: f.engineVersion || '1.0.0',
                     createdAt: f.createdAt || new Date().toISOString(),
+                    updatedAt: (f as any).updatedAt || new Date().toISOString(),
                     lastHeartbeat: (typeof f.lastSeen === 'string' ? f.lastSeen : (typeof f.lastSeen === 'number' ? new Date(f.lastSeen).toISOString() : new Date((f.lastSeen as any)?.seconds * 1000).toISOString())) || new Date().toISOString(),
                     metrics: {
                         activeUsers: Number(f.activeUsers) || 0,

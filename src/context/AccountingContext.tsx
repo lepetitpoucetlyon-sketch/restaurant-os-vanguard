@@ -19,7 +19,7 @@ import {
     BankTransaction,
     ComplianceCertificate,
     AccountingMetrics,
-    FinanceFinancialMetrics as FinancialMetrics, // Conflict with common metrics maybe?
+    FinancialMetrics,
     ProfitAndLossReport,
     BalanceSheetReport,
     TrialBalance,
@@ -58,7 +58,8 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         laborCostPercent: 0,
         operatingExpensesInCents: 0,
         ebitdaInCents: 0,
-        netProfitInCents: 0
+        netProfitInCents: 0,
+        cashOnHandInCents: 0
     }), []);
 
     const generatePandL = useCallback((periodId: string): ProfitAndLossReport => ({

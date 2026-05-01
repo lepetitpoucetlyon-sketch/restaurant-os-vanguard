@@ -1,1 +1,2 @@
-export * from './components/MindMap';
+export * from './components';
+export * from './types';

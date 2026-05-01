@@ -33,10 +33,34 @@ export const TenantOrchestrator: React.FC = () => {
 
     // HYDRATION: Bridge mock data with FleetCommander logic for evaluation
     const displayFleet: EmpireInstance[] = (fleet.length > 0 ? fleet : [
-        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'ONLINE', metrics: { alerts: 0, errorRate: 0.01, uptime: 99.9, dailyRevenue: 4500 } },
-        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'ONLINE', metrics: { alerts: 2, errorRate: 0.05, uptime: 99.1, dailyRevenue: 2800 } },
-        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { alerts: 8, errorRate: 0.15, uptime: 95.0, dailyRevenue: 1200 } },
-        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { alerts: 0, errorRate: 0, uptime: 100, dailyRevenue: 0 } },
+        { 
+            id: 'restaurant-os', 
+            key: 'hq',
+            name: 'Master Kitchen (HQ)', 
+            status: 'ONLINE', 
+            tier: 'ENTERPRISE',
+            version: '4.5.0',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            lastHeartbeat: new Date().toISOString(),
+            metrics: { alerts: 0, errorRate: 0.01, uptime: 99.9, dailyRevenue: 4500, activeUsers: 10, revenue24h: 4500, healthScore: 100, complianceScore: 100, lowStockAlerts: 0, expiringItemsCount: 0, aiUsageCost: 0 },
+            branding: { primaryColor: '#C5A059' },
+            security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
+        },
+        { 
+            id: 'bistro-lyon', 
+            key: 'lyon',
+            name: 'Bistro Lyon 2', 
+            status: 'ONLINE', 
+            tier: 'PREMIUM',
+            version: '4.5.0',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            lastHeartbeat: new Date().toISOString(),
+            metrics: { alerts: 2, errorRate: 0.05, uptime: 99.1, dailyRevenue: 2800, activeUsers: 5, revenue24h: 2800, healthScore: 95, complianceScore: 100, lowStockAlerts: 1, expiringItemsCount: 0, aiUsageCost: 0 },
+            branding: { primaryColor: '#C5A059' },
+            security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
+        }
     ] as unknown as EmpireInstance[]).map(inst => {
         const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(

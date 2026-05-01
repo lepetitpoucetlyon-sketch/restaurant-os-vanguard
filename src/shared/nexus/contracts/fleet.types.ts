@@ -13,6 +13,7 @@ export interface EmpireInstance extends SovereignNode {
     tier: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     version: string;
     createdAt: string;
+    updatedAt: string;
     lastHeartbeat: string;
     metrics: {
         activeUsers: number;
@@ -31,7 +32,20 @@ export interface EmpireInstance extends SovereignNode {
     security: {
         twoFactorEnabled: boolean;
         nf525Certified: boolean;
+        maintenanceAccessGranted: boolean;
+        maintenanceGrantedUntil?: string;
+        supportAccessGranted: boolean;
+        supportAccessUntil?: string;
         [key: string]: SovereignField;
+    };
+    featureFlags?: Record<string, boolean>;
+    firebaseConfig?: {
+        apiKey: string;
+        authDomain: string;
+        projectId: string;
+        storageBucket: string;
+        messagingSenderId: string;
+        appId: string;
     };
 }
 
@@ -47,6 +61,8 @@ export interface EmpireGlobalMetrics {
     totalMRR: number;
     totalLaborCost: number;
     averageFoodCost: number;
+    averageDiscount?: number;
+    lockedInstances?: number;
 }
 
 export interface FleetInsight {
@@ -107,11 +123,27 @@ export interface SiteTelemetry {
     tier: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     version: string;
     createdAt: string;
+    updatedAt: string;
     lastHeartbeat: string;
     activeUsers: number;
     complianceScore: number;
     healthScore: number;
     lowStockAlerts: number;
+    tenantId?: string;
+    engineVersion?: string;
+    lastSeen?: string | number | { seconds: number; nanoseconds: number };
+    dailyRevenue?: number;
+    activeOrders?: number;
+    featureFlags?: Record<string, boolean>;
     branding: SiteBranding;
     security: SiteSecurity;
+}
+ 
+export interface ProvisioningDNA {
+    name: string;
+    key: string;
+    ownerEmail: string;
+    initialPrimaryColor?: string;
+    tier?: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
+    copyBaseTemplates?: boolean;
 }

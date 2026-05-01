@@ -1,7 +1,7 @@
 import { AgentDomain, AgentRole, AgentResponse } from './types';
 
 /**
- * 🏺 Hermes - The Sovereign Orchestrator
+ * 🏺 Zeus - The Sovereign Orchestrator
  * Central intelligence for multi-agent coordination in Restaurant OS.
  */
 
@@ -13,14 +13,14 @@ export interface VanguardAgentConfig {
     description: string;
 }
 
-export interface HermesPulseResult {
+export interface ZeusPulseResult {
     timestamp: string;
-    anomalies: HermesAnomaly[];
+    anomalies: ZeusAnomaly[];
     actionsTaken: string[];
     insights: AgentResponse[];
 }
 
-export interface HermesAnomaly {
+export interface ZeusAnomaly {
     id: string;
     domain: AgentDomain;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -29,7 +29,7 @@ export interface HermesAnomaly {
     metadata?: Record<string, unknown>;
 }
 
-export interface HermesManifest {
+export interface ZeusManifest {
     version: string;
     activeAgents: VanguardAgentConfig[];
     lastPulse: string | null;
