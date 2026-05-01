@@ -1,14 +1,11 @@
-# 🧪 THE LABORATORY (Zone de Lab)
+# 🧪 Laboratory - The Suzerain's Sandbox
 
-**Protocol**: Quick & Dirty Experimentation.
-**Rigor**: Level 0 (None).
+This directory is a **Neutral Ground** for rapid prototyping and experimentation.
+It is exempt from strict **Grade X** enforcement and TypeScript rigidity.
 
-## Rules
-1.  **Extension**: All files MUST end in `.lab.tsx` or `.lab.ts`.
-2.  **Isolation**: Core components (`src/modules`, `src/engines`) are STRICTLY FORBIDDEN from importing anything from this directory.
-3.  **No Merge**: This directory is excluded from production builds. A pre-commit hook (to be implemented) will block any commit containing imports from `src/laboratory` in core files.
-4.  **Sandbox**: Use this to test UI ideas, complex logic, or "Ghost Mode" drafts before Suture.
+### Rules of the Lab:
+1. **Move Fast**: Prototype here without worrying about perfect architecture.
+2. **Isolate**: Do not import from the Lab into the Core.
+3. **Suture**: Once a prototype is validated, refactor and move it to the appropriate Pillar.
 
----
-
-*Fly low, fly fast, but keep the Empire clean.*
+*Enjoy your creative sovereignty.*

@@ -2,7 +2,7 @@ import { User, UserRole, UserStatus, CategoryKey, RolePermissions } from './auth
 import { IntelligenceConfig } from './common.types';
 import { TenantConfig, BusinessLaws, ExpertConfig, SovereignData, SovereignNode } from '@shared/nexus-contract';
 
-import { GlobalSettings } from './settings';
+import { GlobalSettings, PerformanceGoals } from './settings';
 import { Language } from '@/i18n/translations';
 import { ThemeMode, AccentColor, UIDensity, BorderRadius } from '@/store/themeAtoms';
 import { EmpireInstance, EmpireGlobalMetrics, FleetInsight, ConsolidatedMetrics } from './fleet.types';
@@ -92,7 +92,7 @@ export interface NexusSettingsState {
     updateSLM?: (data: SovereignData) => Promise<void>;
     updateConfig: <K extends keyof import('@nexus/contracts').GlobalSettings>(key: K, data: import('@nexus/contracts').GlobalSettings[K]) => Promise<void>;
     updateList: <K extends keyof import('@nexus/contracts').GlobalSettings>(key: K, data: import('@nexus/contracts').GlobalSettings[K]) => Promise<void>;
-    updateGoals: (data: any) => Promise<void>;
+    updateGoals: (data: PerformanceGoals) => Promise<void>;
 }
 
 

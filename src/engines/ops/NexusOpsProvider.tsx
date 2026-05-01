@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode, DomainRegistry } from '@shared/nexus-contract';
+import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode } from '@shared/nexus-contract';
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { 
   Table, Order, Product, Recipe, Reservation, Quote, Campaign,
   isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign,
@@ -86,7 +87,10 @@ async function guardedAction<T>(
  * 🏛️ sanitizeToSovereign - Molecular Scanner Grade X
  */
 function sanitizeToSovereign<T>(data: T): T {
-    if (data === null || typeof data !== 'object') return data;
+    if (data === null || typeof data !== 'object') {
+        if (typeof data === 'bigint') return Number(data) as unknown as T;
+        return data;
+    }
     if (Array.isArray(data)) return data.map(val => sanitizeToSovereign(val)) as T;
 
     const PROTECTED_KEYS = ['id', 'tenantId', 'createdAt', 'updatedAt', 'identifier', 'date'];
@@ -96,7 +100,11 @@ function sanitizeToSovereign<T>(data: T): T {
         if (PROTECTED_KEYS.includes(key)) continue;
         const val = (sanitized as any)[key];
         if (typeof val === 'number') {
-            (sanitized as any)[key] = SovereignMath.toMicrounits(val);
+            // Convert to microunits (bigint) then back to number for storage compatibility
+            // This ensures the input was validated via SovereignMath
+            (sanitized as any)[key] = Number(SovereignMath.toMicrounits(val));
+        } else if (typeof val === 'bigint') {
+            (sanitized as any)[key] = Number(val);
         } else if (typeof val === 'object' && val !== null) {
             (sanitized as any)[key] = sanitizeToSovereign(val);
         }

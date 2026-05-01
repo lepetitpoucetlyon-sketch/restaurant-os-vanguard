@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from '@/store/operationalAtoms';
+import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import { MobileNavBar } from "@/components/layout/MobileNavBar";
 import { GlobalFAB } from "@/components/layout/GlobalFAB";

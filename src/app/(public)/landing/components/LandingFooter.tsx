@@ -1,5 +1,3 @@
-"use client";
-
 import { ChefHat, Twitter, Linkedin, Instagram } from "lucide-react";
 
 export function LandingFooter() {

@@ -1,7 +1,6 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
-import { JournalEntry } from '@nexus/contracts';
-import { StockItem } from '@modules/logistics';
+import { JournalEntry, StockItem } from '@nexus/contracts';
 import { SensorReading } from '@nexus/contracts';
 
 /**
@@ -34,10 +33,15 @@ export class FiscalHACCPMapper {
         // 2. Génération de la Signature Digitale (DNA Guard)
         const digitalSignature = uuidv4(); // Mocking cryptographic signature for Grade X demo
 
+        const now = new Date().toISOString();
+        const pieceNumber = `HACCP-${Date.now()}`;
+        
         // 3. Création de l'écriture comptable
-        const fiscalEntry = {
+        const fiscalEntry: JournalEntry = {
             id: `FISCAL_LOSS_${uuidv4().substring(0, 8)}`,
-            date: new Date().toISOString(),
+            date: now,
+            updatedAt: now,
+            pieceNumber,
             type: 'loss',
             status: 'validated',
             description: `[HACCP_AUTO] Perte Critique - Capteur ${reading.sensorId || reading.id} - Temp: ${reading.value}${reading.unit}`,
@@ -52,7 +56,7 @@ export class FiscalHACCPMapper {
                 digitalSignature,
                 grade: 'X'
             }
-        } as any;
+        };
 
         // 4. Ventilation de la TVA (Provision)
         const tvaRecoverable = Math.round(totalLossInCents * 0.055); // TVA REDUITE 5.5%

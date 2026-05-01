@@ -204,6 +204,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const registerInstance = async (instance: EmpireInstance) => {
         console.log('[Fleet] Registering new instance:', instance);
+        await fleetTelemetry.registerNode(instance.id as TenantID);
         await refreshFleet(true);
     };
 
@@ -218,36 +219,18 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         maintenanceMode?: boolean;
         licenceStatus?: 'ACTIVE' | 'LOCKED';
     }) => {
-        console.log('[Fleet] Broadcasting global configuration:', config);
-        // Simulate network delay
-        await new Promise(r => setTimeout(r, 800));
+        console.log('[Fleet] Broadcasting global configuration via stream:', config);
         
-        // Broadcasting to all nodes in the Empire
-        try {
-            for (const instance of liveFleet) {
-                const patch: SovereignData = {
-                    updatedAt: new Date().toISOString()
-                };
+        const patch: Record<string, any> = {};
+        if (config.priceMultiplier !== undefined) patch['status.priceMultiplier'] = config.priceMultiplier;
+        if (config.targetVersion !== undefined) patch['status.targetVersion'] = config.targetVersion;
+        if (config.maintenanceMode !== undefined) patch['status.maintenance'] = config.maintenanceMode;
+        if (config.licenceStatus !== undefined) patch['status.licenceStatus'] = config.licenceStatus;
 
-                if (config.priceMultiplier !== undefined) {
-                    patch['status.priceMultiplier'] = config.priceMultiplier;
-                }
-                if (config.targetVersion !== undefined) {
-                    patch['status.targetVersion'] = config.targetVersion;
-                }
-                if (config.maintenanceMode !== undefined) {
-                    patch['status.maintenance'] = config.maintenanceMode;
-                }
-                if (config.licenceStatus !== undefined) {
-                    patch['status.licenceStatus'] = config.licenceStatus;
-                }
-                
-                await Nexus.adapter.update(`tenants/${instance.id}`, patch);
-            }
-            console.log('[Fleet] Broadcast completed successfully across', liveFleet.length, 'nodes.');
-        } catch (error) {
-            console.error('[Fleet] Broadcast failed:', error);
-        }
+        const targetIds = liveFleet.map(f => f.id);
+        await fleetTelemetry.broadcastConfiguration(patch, targetIds);
+        
+        console.log('[Fleet] Broadcast events emitted into the sovereign stream.');
     };
 
     useEffect(() => {

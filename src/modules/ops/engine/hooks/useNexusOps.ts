@@ -8,4 +8,3 @@ import { useNexusOps as useProviderNexusOps } from '@/engines/ops/NexusOpsProvid
  * while the core logic has migrated to NexusOpsProvider.
  */
 export const useNexusOps = useProviderNexusOps;
-export default useNexusOps;

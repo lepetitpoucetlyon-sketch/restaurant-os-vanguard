@@ -9,8 +9,8 @@ import { SiteTelemetry } from '@nexus/contracts';
 export type TelemetryPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'CRITICAL';
 
 export interface TelemetryEvent {
-    type: 'METRIC' | 'ALERT' | 'HEARTBEAT' | 'SECURITY';
-    payload: Partial<SiteTelemetry>;
+    type: 'METRIC' | 'ALERT' | 'HEARTBEAT' | 'SECURITY' | 'COMMAND' | 'BROADCAST';
+    payload: Partial<SiteTelemetry> | Record<string, any>;
     timestamp: number;
     priority: TelemetryPriority;
     tenantId: string;

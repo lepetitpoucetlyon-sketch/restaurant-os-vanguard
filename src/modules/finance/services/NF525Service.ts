@@ -13,7 +13,7 @@ import { checkOnlineStatus } from '@/lib/offline/status';
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@modules/finance/store/accountingAtoms';
 import { SovereignData } from '@shared/nexus-contract';
-import { secureCast } from '@shared/validation/SchemaRegistry';
+import { secureCast } from '@shared/nexus/engines/MutationValidator';
 
 export interface FiscalInstruction {
     [key: string]: import('@shared/nexus-contract').SovereignField | undefined;

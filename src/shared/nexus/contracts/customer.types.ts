@@ -15,6 +15,7 @@ export interface Customer extends SovereignNode {
   tags: string[];
   visitCount: number;
   totalSpentInCents: number;
+  averageSpendInCents?: number;
   lastVisitDate?: string;
   segment?: 'vip' | 'regular' | 'new' | string;
   notes?: string;

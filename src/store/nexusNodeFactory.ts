@@ -50,19 +50,39 @@ export function updateNexusNode<T>(
     };
 }
 
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { canDoAtom } from '@shared/nexus/state/SovereignGenome';
+
 // --- ⚛️ PROXY PATTERN FACTORY (Grade VI Stability) ---
 
 /**
  * createProxyDomain
  * Crée un triplet (node, data selector, loading selector) pour un domaine métier.
+ * GRADE X: Injecte systématiquement un middleware de vérification RBAC.
  */
 export function createProxyDomain<T>(id: string, initialData: T[] = [], moduleId?: ModuleId) {
     const node = createNexusNode<T>(id, initialData, true, moduleId);
+    
+    // Resolve permission for this domain
+    const metadata = DomainRegistry.getMetadata(id);
+    const permission = metadata.requiredPermission;
+
     return {
         id,
         node,
-        data: atom((get) => get(node).data),
-        loading: atom((get) => get(node).loading)
+        data: atom((get) => {
+            // 🛡️ RBAC ENFORCEMENT (Invisible & Automatic)
+            const hasAccess = get(canDoAtom)(permission);
+            if (!hasAccess) {
+                return []; // Return empty array to prevent leak
+            }
+            return get(node).data;
+        }),
+        loading: atom((get) => {
+            const hasAccess = get(canDoAtom)(permission);
+            if (!hasAccess) return false;
+            return get(node).loading;
+        })
     };
 }
 

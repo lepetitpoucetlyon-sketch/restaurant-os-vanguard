@@ -15,11 +15,10 @@ export {
     userRoleAtom,
     rolePermissionsAtom,
     userPermissionsAtom,
-    canDoAtom,
-    updateRolePermissionsAtom,
-} from '@modules/infrastructure';
+    canDoAtom
+} from '@nexus/state/SovereignGenome';
 
-export { tenantConfigAtom } from './masterAtoms';
+export { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 
 // 📊 ACCOUNTING & FINANCE
 export {
@@ -48,9 +47,9 @@ export {
     isMobileMenuOpenAtom,
     isDocsOpenAtom,
     isMap3DOpenAtom,
-    addToastAtom,
     performanceModeAtom,
-} from './uiAtoms';
+    addToastAtom,
+} from '@nexus/state/SovereignGenome';
 
 // 🍽️ ORDERS DOMAIN
 export {
@@ -172,15 +171,11 @@ export {
 export {
     tenantIdAtom,
     fleetSnapshotAtom,
-    fleetBloomFilterAtom,
-    activeTenantSlotsAtom,
-    activeFleetTenantAtom,
-    focusedTenantDetailsAtom,
     floorsAtom,
     zonesAtom,
     zonesLockedAtom,
     currentFloorIdAtom,
-} from './fleetAtoms';
+} from '@nexus/state/SovereignGenome';
 
 // 📈 ANALYTICS (Cross-domain selectors)
 export {

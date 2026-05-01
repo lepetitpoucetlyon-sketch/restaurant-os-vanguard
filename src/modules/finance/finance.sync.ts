@@ -3,7 +3,7 @@ import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { FiscalSeal, JournalEntry } from '@nexus/contracts';
 import { 
     fiscalLedgerNodeAtom 
-} from '@modules/compliance';
+} from '@/store/operationalAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';

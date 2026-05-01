@@ -1,20 +1,21 @@
 import { logger } from '@/lib/logger';
 
 /**
- * 🏛️ SovereignMath - Grade X+++
+ * 🏛️ SovereignMath - Grade X OFFICIAL STANDARD
  * Enforces the Microunits Protocol across the Empire.
+ * Precision: 10^-6 (Microunits).
  * 1 Unit = 1,000,000 Microunits.
  */
 export const SovereignMath = {
-    PRECISION: 1_000_000,
-    EPSILON: 1e-10,
+    PRECISION: BigInt(1_000_000),
+    EPSILON: 1e-10, // Kept for float input validation
 
     /**
-     * Converts a float value to microunits with Epsilon safety.
+     * Converts a float value to microunits (bigint) with Epsilon safety.
      * Use this at the PhysicalNode / Input layer.
      */
-    toMicrounits: (value: number): number => {
-        const rawValue = value * SovereignMath.PRECISION;
+    toMicrounits: (value: number): bigint => {
+        const rawValue = value * Number(SovereignMath.PRECISION);
         const roundedValue = Math.round(rawValue);
         
         // 🛡️ EPSILON SECURITY: Detect real precision loss (> 1e-10)
@@ -27,52 +28,51 @@ export const SovereignMath = {
             });
         }
         
-        return Math.floor(rawValue + SovereignMath.EPSILON);
+        return BigInt(roundedValue);
     },
 
     /**
-     * Converts microunits back to a display/fiscal value.
+     * Converts microunits back to a display/fiscal value (number).
      */
-    fromMicrounits: (microunits: number): number => {
-        return microunits / SovereignMath.PRECISION;
+    fromMicrounits: (microunits: bigint): number => {
+        return Number(microunits) / Number(SovereignMath.PRECISION);
     },
 
     /**
-     * Performs a multiplication with full precision.
+     * Performs a multiplication with full BigInt precision.
      */
-    multiply: (valA: number, valB: number): number => {
-        // Calculation is done in microunits to prevent float drift
-        return Math.floor((valA * valB) / SovereignMath.PRECISION);
+    multiply: (valA: bigint, valB: bigint): bigint => {
+        return (valA * valB) / SovereignMath.PRECISION;
     },
 
     /**
-     * Adds two microunit values with integer safety.
+     * Adds two microunit values (bigint).
      */
-    add: (a: number, b: number): number => {
-        return Math.round(a + b);
+    add: (a: bigint, b: bigint): bigint => {
+        return a + b;
     },
 
     /**
-     * Subtracts two microunit values with integer safety.
+     * Subtracts two microunit values (bigint).
      */
-    subtract: (a: number, b: number): number => {
-        return Math.round(a - b);
+    subtract: (a: bigint, b: bigint): bigint => {
+        return a - b;
     },
 
     /**
-     * Divides two microunit values, returning microunits.
+     * Divides two microunit values, returning microunits (bigint).
      */
-    divide: (numerator: number, denominator: number): number => {
-        if (denominator === 0) {
+    divide: (numerator: bigint, denominator: bigint): bigint => {
+        if (denominator === BigInt(0)) {
             throw new Error('FISCAL_DIVISION_BY_ZERO: Sovereign arithmetic violation.');
         }
-        return Math.floor((numerator * SovereignMath.PRECISION) / denominator);
+        return (numerator * SovereignMath.PRECISION) / denominator;
     },
 
     /**
-     * Suture check: Ensures a value is a safe integer before fiscal sealing.
+     * Suture check: Ensures a value is a valid BigInt.
      */
-    isSovereignInteger: (value: number): boolean => {
-        return Number.isInteger(value);
+    isSovereignInteger: (value: any): value is bigint => {
+        return typeof value === 'bigint';
     }
 };

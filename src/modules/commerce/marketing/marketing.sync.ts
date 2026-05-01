@@ -36,12 +36,13 @@ export const MarketingSyncService = {
       (data: SEOProfile[]) => {
         const seoData = Array.isArray(data) ? data : [];
         if (seoData.length > 0) {
-          store.set(seoProfileAtom as any, seoData[0]);
+          store.set(seoProfileAtom as any, seoData[0] as any);
         } else {
           // Fallback to defaults defined in config
           const { identityDefaults } = whiteLabelInstanceConfig;
           const fallback: SEOProfile = {
             id: 'generated-baseline',
+            establishmentId: 'DEFAULT',
             name: identityDefaults.name,
             isVerified: true,
             rating: 4.8,
@@ -52,16 +53,47 @@ export const MarketingSyncService = {
                 clicks: 342, 
                 ctr: 27.5, 
                 avgPosition: 3.2, 
-                topKeywords: MarketingEngine.getKeywords(),
-                cpc: 0,
-                cost: 0,
-                roi: 0,
+                topKeywords: (MarketingEngine as any).getKeywords ? (MarketingEngine as any).getKeywords() : [],
                 conversions: 0
-            } as any,
+            },
+            site: {
+                title: identityDefaults.name,
+                titleTemplate: `%s | ${identityDefaults.name}`,
+                description: "Sovereign Restaurant Experience",
+                keywords: [],
+                language: 'fr',
+                locale: 'fr_FR'
+            },
+            organization: {
+                name: identityDefaults.name,
+                description: "Sovereign Restaurant",
+                logo: '',
+                logoSquare: '',
+                contact: { telephone: '', email: '' },
+                address: { street: '', city: '', postalCode: '', country: 'France' },
+                geo: { latitude: 0, longitude: 0 },
+                socialProfiles: {}
+            },
+            restaurant: {
+                cuisineTypes: [],
+                priceRange: '€€',
+                acceptsReservations: true,
+                openingHours: [],
+                services: { dineIn: true, takeaway: true, delivery: false, outdoorSeating: false, wifi: true, parking: false, wheelchairAccessible: true }
+            },
+            integrations: {},
+            technical: {
+                canonicalDomain: '',
+                trailingSlash: true,
+                robots: { index: true, follow: true },
+                sitemap: { enabled: true, frequency: 'weekly' }
+            },
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
             keywords: [],
             competitors: []
-          } as any;
-          store.set(seoProfileAtom as any, fallback);
+          };
+          store.set(seoProfileAtom as any, fallback as any);
         }
       },
       {

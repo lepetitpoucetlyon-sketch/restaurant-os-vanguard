@@ -11,7 +11,7 @@ interface TableChairsProps {
 }
 
 // Helper to render chairs around a table
-const TableChairs = ({ table, isSelected, viewMode, isDarkMode }: TableChairsProps) => {
+export const TableChairs = ({ table, isSelected, viewMode, isDarkMode }: TableChairsProps) => {
     const chairs = [];
     const seatCount = table.seats;
     const chairDistance = 5;
@@ -116,4 +116,3 @@ const TableChairs = ({ table, isSelected, viewMode, isDarkMode }: TableChairsPro
     return <Group>{chairs}</Group>;
 };
 
-export default TableChairs;

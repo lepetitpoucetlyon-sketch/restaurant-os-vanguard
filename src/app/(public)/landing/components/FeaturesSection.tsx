@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import Image from 'next/image';
 import { FEATURES } from "@/app/(public)/landing/constants";
 
 export function FeaturesSection() {
@@ -44,10 +45,11 @@ export function FeaturesSection() {
                         >
                             {/* Background Image */}
                             <div className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-700">
-                                <img
+                                <Image
                                     src={feature.image}
                                     alt={feature.title}
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    className="object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
                             </div>

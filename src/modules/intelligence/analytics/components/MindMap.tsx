@@ -3,6 +3,5 @@
  * MindMap Component (Legacy Path)
  */
 
-import { MindMap } from '@modules/commerce';
+import { MindMap } from '@/shared/nexus/components/MindMap';
 export { MindMap };
-export default MindMap;

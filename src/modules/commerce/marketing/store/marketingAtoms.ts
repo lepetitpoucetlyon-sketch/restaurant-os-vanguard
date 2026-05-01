@@ -72,8 +72,8 @@ export const crmsNodeAtom = _crms.node;
 export const crmsAtom = atom(
     (get) => get(_crms.data),
     (get, set, newValue: CRM[]) => {
-        const node = get(_crms.node);
-        set(_crms.node, { ...node, data: newValue });
+        const node = get(_crms.node) as import('@/store/nexusNodeFactory').NexusNode<CRM>;
+        set(_crms.node as any, { ...node, data: newValue });
     }
 );
 export const crmsLoadingAtom = _crms.loading;
@@ -84,4 +84,8 @@ export const isMarketingSyncingAtom = atom(false);
 
 
 // SEO LOADING
-export const seoLoadingAtom = atom((get) => get(_marketingCampaigns.node).loading || get(_scheduledPosts.node).loading);
+export const seoLoadingAtom = atom((get) => {
+    const mNode = get(marketingCampaignsNodeAtom) as any;
+    const pNode = get(scheduledPostsNodeAtom) as any;
+    return (mNode?.loading || pNode?.loading) || false;
+});

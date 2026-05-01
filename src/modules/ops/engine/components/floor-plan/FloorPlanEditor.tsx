@@ -8,9 +8,9 @@ import { AnimatePresence } from "framer-motion";
 
 // Decomposed modules
 import { STATUS_COLORS } from "./constants";
-import TableChairs from "./TableChairs";
-import ZoneRenderer from "./ZoneRenderer";
-import EditPanel from "./EditPanel";
+import { TableChairs } from "./TableChairs";
+import { ZoneRenderer } from "./ZoneRenderer";
+import { EditPanel } from "./EditPanel";
 import { TableInsightPanel } from "./TableInsightPanel";
 import { PaymentDialog } from "@modules/ops/pos/components/PaymentDialog";
 import { useFloorPlanControls } from "./useFloorPlanControls";
