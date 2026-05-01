@@ -69,7 +69,7 @@ export const MasterBridge = {
   isMasterMode(): boolean {
     try {
       const store = getDefaultStore();
-      const { tenantIdAtom } = require('@/store/operationalAtoms'); // Keep this if circular dependency risk, but prefer clean import
+      const { tenantIdAtom } = require('@/store/fleetAtoms'); // Breaking circular dependency via direct shard import
       return store.get(tenantIdAtom) === this.MASTER_TENANT_ID;
     } catch {
       return false;

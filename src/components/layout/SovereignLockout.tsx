@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
-import { ShieldAlert, Construction, Lock, ExternalLink } from 'lucide-react';
+import { Construction, Lock, ExternalLink } from 'lucide-react';
 
 /**
  * 🔒 SovereignLockout - The Suzerain's Shield
