@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { Customer } from "@nexus/contracts";
 import { Button } from "@ui/button";
 import { ScrollArea } from "@ui/scroll-area";
