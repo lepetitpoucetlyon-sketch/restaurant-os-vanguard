@@ -104,7 +104,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                         >
                             {recipe.image ? (
                                 <div className="h-48 w-full overflow-hidden relative">
-                                    <img src={recipe.image} alt={recipe.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                    <img src={String(recipe.image)} alt={String(recipe.name)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-50" />
                                     <div className="absolute top-4 left-4 flex gap-2 z-20">
                                         <button
@@ -153,7 +153,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
 
                             <div className={cn("p-8", !recipe.image && "text-center")}>
                                 <div className={cn("mb-8", !recipe.image && "flex flex-col items-center")}>
-                                    <h3 className="font-serif font-semibold text-2xl text-text-primary tracking-tight group-hover:text-accent transition-colors">{recipe.name}</h3>
+                                    <h3 className="font-serif font-semibold text-2xl text-text-primary tracking-tight group-hover:text-accent transition-colors">{String(recipe.name)}</h3>
                                     <p className="text-text-muted text-[10px] font-bold uppercase tracking-[0.2em] mt-2 font-mono">
                                         {recipe.prepTime} MIN PREP • 4 ITEMS
                                     </p>

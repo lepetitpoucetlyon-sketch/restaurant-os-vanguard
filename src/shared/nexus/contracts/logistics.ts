@@ -140,6 +140,7 @@ export interface InventoryMovement {
     reason: string;
     performedAt: string;
     performedBy: string;
+    timestamp: string; // Grade X Alias for performedAt
     unitCostInCents?: number;
 }
 

@@ -128,7 +128,7 @@ export default function POSPage() {
                         <Star className="w-3.5 h-3.5" />
                         Favoris
                     </button>
-                    {categories.map(cat => {
+                    {categories.map((cat: any) => {
                         const Icon = ICON_MAP[cat.id] || UtensilsCrossed;
                         return (
                             <button

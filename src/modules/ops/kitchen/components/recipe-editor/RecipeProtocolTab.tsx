@@ -66,7 +66,7 @@ export function RecipeProtocolTab({
             <div className="space-y-6">
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Chronologie d'Exécution</label>
                 <AnimatePresence mode="popLayout">
-                    {formData.steps?.map((step, idx) => (
+                    {formData.steps?.map((step: RecipeStep, idx: number) => (
                         <motion.div
                             key={step.order}
                             initial={{ opacity: 0, scale: 0.95 }}

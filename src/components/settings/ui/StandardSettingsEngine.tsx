@@ -82,7 +82,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as unknown as import('@shared/nexus-contract').SovereignSchemaField[]);
             
             // 3. Mise à jour via le Context (Global State + Firestore)
-            await updateConfig(schemaKey as never, sanitizedData);
+            await updateConfig(schemaKey as any, sanitizedData);
             
             toast.success("Synchronisation Nexus-Sync réussie");
         } catch (error) {

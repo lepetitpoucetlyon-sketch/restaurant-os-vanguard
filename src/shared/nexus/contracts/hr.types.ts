@@ -1,4 +1,4 @@
-import { SovereignNode } from "../../nexus-contract";
+import { SovereignNode, SovereignData, SovereignField } from "../../nexus-contract";
 
 /**
  * 👥 HUMAN RESOURCES DOMAIN - Shared Kernel
@@ -108,7 +108,7 @@ export interface Shift extends SovereignNode {
         hash: string;
         timestamp: string;
     };
-    metadata?: Record<string, any>;
+    metadata?: Record<string, SovereignField>;
 }
 
 export interface ShiftLog extends SovereignNode {

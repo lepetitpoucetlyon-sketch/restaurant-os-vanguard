@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
  * Orchestre les mutations atomiques avec validation génomique (Zod)
  * et diffusion de Pulses réactifs.
  */
-export function useNexusMutation<T extends { id: string }>(
+export function useNexusMutation<T extends { id: string } & import("@shared/nexus-contract").SovereignMap>(
     nodeAtom: WritableAtom<NexusNode<T>, [NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)], void>, 
     key: string, 
     moduleId: string = 'CORE'

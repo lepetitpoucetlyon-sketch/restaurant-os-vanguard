@@ -18,9 +18,9 @@ export class NexusStaffingOracle {
         // 1. Fetch Dynamic Configuration
         let ratio = DEFAULT_STAFF_RATIO;
         try {
-            const settings = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
-            if (settings?.hr?.planning?.staffToCoversRatio) {
-                ratio = settings.hr.planning.staffToCoversRatio;
+            const settings = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@nexus/contracts').GlobalSettings;
+            if (settings?.planningConfig?.staffToCoversRatio) {
+                ratio = settings.planningConfig.staffToCoversRatio;
                 logger.info(`[StaffingOracle] Using Custom Ratio: 1 brigadier / ${ratio} covers`);
             }
         } catch (e) {

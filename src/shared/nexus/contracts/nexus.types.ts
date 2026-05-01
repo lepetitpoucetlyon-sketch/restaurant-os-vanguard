@@ -1,6 +1,6 @@
 import { User, UserRole, UserStatus, CategoryKey, RolePermissions } from './auth.types';
 import { IntelligenceConfig } from './common.types';
-import { TenantConfig, BusinessLaws, ExpertConfig, SovereignData } from '@shared/nexus-contract';
+import { TenantConfig, BusinessLaws, ExpertConfig, SovereignData, SovereignNode } from '@shared/nexus-contract';
 
 import { GlobalSettings } from './settings';
 import { Language } from '@/i18n/translations';
@@ -81,19 +81,18 @@ export interface NexusSettingsState {
     isLoading: boolean;
     isSaving: boolean;
     lastSaved: Date | null;
-    updateSettings: (newSettings: GlobalSettings) => Promise<void>;
-    // 🛡️ SUTURE GRADE X: No more 'any'
-    updateConfig: (key: keyof GlobalSettings, data: SovereignData) => Promise<void>;
-    updateList: (key: keyof GlobalSettings, data: SovereignData) => Promise<void>;
-    updateIdentity?: (data: SovereignData) => Promise<void>;
-    updateGoals?: (data: SovereignData) => Promise<void>;
-    updateSchedule?: (data: SovereignData) => Promise<void>;
-    updateService?: (data: SovereignData) => Promise<void>;
-    addClosedPeriod?: (data: { start: string; end: string; reason: string }) => Promise<void>;
-    deleteClosedPeriod?: (id: string) => Promise<void>;
+    updateSettings: (data: import('@nexus/contracts').GlobalSettings) => Promise<void>;
+    updateSchedule: (data: import('@nexus/contracts').DaySchedule[]) => Promise<void>;
+    updateService: (data: import('@nexus/contracts').ServiceSettings) => Promise<void>;
+    addClosedPeriod: (period: import('@nexus/contracts').ClosedPeriod) => Promise<void>;
+    deleteClosedPeriod: (id: string) => Promise<void>;
+    updateIdentity: (data: import('@nexus/contracts/settings/identity').RestaurantIdentity) => Promise<void>;
     updateReservationConfig?: (data: SovereignData) => Promise<void>;
     updateReservationSlots?: (data: SovereignData) => Promise<void>;
     updateSLM?: (data: SovereignData) => Promise<void>;
+    updateConfig: <K extends keyof import('@nexus/contracts').GlobalSettings>(key: K, data: import('@nexus/contracts').GlobalSettings[K]) => Promise<void>;
+    updateList: <K extends keyof import('@nexus/contracts').GlobalSettings>(key: K, data: import('@nexus/contracts').GlobalSettings[K]) => Promise<void>;
+    updateGoals: (data: any) => Promise<void>;
 }
 
 
@@ -201,8 +200,8 @@ export interface NexusFleetState {
     complianceService: {
         isNF525Valid: boolean;
         lastSealHash: string;
-        verifySiteIntegrity: (tenantId: string) => Promise<any>;
-        issueGlobalCertificate: (commanderId: string) => Promise<any>;
+        verifySiteIntegrity: (tenantId: string) => Promise<SovereignNode>;
+        issueGlobalCertificate: (commanderId: string) => Promise<SovereignNode>;
     }; 
     haccpBridge: SovereignData;
     fleet: EmpireGlobalMetrics | null;

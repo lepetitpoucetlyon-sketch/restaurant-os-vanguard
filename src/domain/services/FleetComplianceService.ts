@@ -3,7 +3,9 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getAllTenants } from '@/instances';
 
-export interface SiteIntegrityReport {
+import { SovereignNode } from '@shared/nexus-contract';
+
+export interface SiteIntegrityReport extends SovereignNode {
   tenantId: string;
   isChainValid: boolean;
   sequenceError: number | null;
@@ -11,9 +13,8 @@ export interface SiteIntegrityReport {
   verifiedAt: string;
 }
 
-export interface GlobalComplianceCertificate {
-  id: string;
-  issuedAt: Date;
+export interface GlobalComplianceCertificate extends SovereignNode {
+  issuedAt: string;
   issuedBy: string;
   totalSites: number;
   complianceRatio: number;
@@ -42,21 +43,25 @@ export const FleetComplianceService = {
       const ledgerPath = getTenantPath('fiscal_ledger', tenantId);
       const entriesRaw = await Nexus.adapter.query(ledgerPath);
       
-      const entries = entriesRaw.sort((a, b) => (a as any).sequence - (b as any).sequence);
+      const entries = entriesRaw.map(e => e as unknown as import('@nexus/contracts').FiscalSeal).sort((a, b) => (a.sequence || 0) - (b.sequence || 0));
       
       let isChainValid = true;
       let sequenceError: number | null = null;
       
       // Verify hashes and sequence continuity
       for (let i = 1; i < entries.length; i++) {
-        if ((entries[i] as any).sequence !== (entries[i-1] as any).sequence + 1) {
+        const currentSeq = entries[i].sequence || 0;
+        const prevSeq = entries[i-1].sequence || 0;
+        if (currentSeq !== prevSeq + 1) {
           isChainValid = false;
-          sequenceError = (entries[i] as any).sequence;
+          sequenceError = currentSeq;
           break;
         }
       }
 
       return {
+        id: `REPORT-${tenantId}-${Date.now()}`,
+        updatedAt: new Date().toISOString(),
         tenantId,
         isChainValid,
         sequenceError,
@@ -84,7 +89,8 @@ export const FleetComplianceService = {
     
     const certificate: GlobalComplianceCertificate = {
       id: `CERT-${Date.now()}`,
-      issuedAt: new Date(),
+      updatedAt: new Date().toISOString(),
+      issuedAt: new Date().toISOString(),
       issuedBy: commanderId,
       totalSites,
       complianceRatio: compliantSites / totalSites,

@@ -21,7 +21,7 @@ export const EdgeSyncService = {
     
     this.localChannel = new BroadcastChannel('nexus_edge_sync');
     
-    this.localChannel.onmessage = (event) => {
+    this.localChannel.onmessage = (event: MessageEvent) => {
         this.handleLocalEvent(event.data);
     };
 

@@ -77,7 +77,7 @@ export const InventoryVisionService = {
             ingredientId: match.matchedIngredientId,
             ingredientName: match.matchedIngredientName || match.extracted.name,
             quantity: match.extracted.quantity,
-            unit: match.extracted.unit as any,
+            unit: match.extracted.unit as import('@nexus/contracts').IngredientUnit,
             unitCostInCents: match.extracted.unitPriceHT,
             expirationDate: match.extracted.expirationDate,
             batchNumber: match.extracted.batchNumber,

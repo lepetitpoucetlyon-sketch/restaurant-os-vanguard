@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
  * ⚡ PerformanceEngine - Lumière de Brigade
  * Orchestre l'optimisation adaptative de l'UI en fonction du matériel.
  */
-export function PerformanceEngine() {
+export function PerformanceEngine(): null {
     const [performanceMode, setPerformanceMode] = useAtom(performanceModeAtom);
     const { showToast } = useToast();
     const frameCount = useRef(0);

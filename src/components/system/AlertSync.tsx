@@ -10,7 +10,7 @@ import { useHACCP } from '@nexus/guards/NexusGuardProvider';
  * Bridges Inventory and HACCP alerts to the Notifications system.
  * This component renders nothing but performs side effects.
  */
-export function AlertSync() {
+export function AlertSync(): null {
     const { lowStockItems } = useInventory();
     const { criticalAlerts } = useHACCP();
     const { addNotification, notifications } = useNotifications();

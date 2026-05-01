@@ -40,22 +40,22 @@ export const OracleEngine = {
     }
 
     const dailyUsage = this.calculateBitwiseDailyUsage(events);
-    const avgUsage = dailyUsage.reduce((a, b) => a + b, 0) / dailyUsage.length;
+    const avgUsage = dailyUsage.reduce((a: number, b: number) => a + b, 0) / dailyUsage.length;
     
     // Variance calculation for Monte Carlo
-    const variance = dailyUsage.reduce((acc, val) => acc + Math.pow(val - avgUsage, 2), 0) / dailyUsage.length;
+    const variance = dailyUsage.reduce((acc: number, val: number) => acc + Math.pow(val - avgUsage, 2), 0) / dailyUsage.length;
     const stdDev = Math.sqrt(variance);
 
     // Run Monte Carlo Simulation (1000 iterations for Grade VII)
     const simulations = this.runMonteCarlo(currentQty, avgUsage, stdDev, 1000);
-    simulations.sort((a, b) => a - b);
+    simulations.sort((a: number, b: number) => a - b);
     
     const p50 = simulations[Math.floor(simulations.length * 0.5)];
     const p10 = simulations[Math.floor(simulations.length * 0.1)]; // Pessimistic (runs out fast)
     const p90 = simulations[Math.floor(simulations.length * 0.9)]; // Optimistic
 
     // Acceleration detection
-    const recentUsage = dailyUsage.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const recentUsage = dailyUsage.slice(-3).reduce((a: number, b: number) => a + b, 0) / 3;
     const acceleration = recentUsage / (avgUsage || 1);
 
     let trend: 'STABLE' | 'ACCELERATING' | 'DECELERATING' = 'STABLE';
@@ -107,7 +107,7 @@ export const OracleEngine = {
   calculateBitwiseDailyUsage(events: StockEvent[]): number[] {
     const usageMap: Record<string, number> = {};
     events.forEach(e => {
-      const date = e.timestamp.split('T')[0];
+      const date = (e.performedAt as string).split('T')[0];
       if (e.type === 'consumption' || e.type === 'sale') {
         usageMap[date] = (usageMap[date] || 0) + e.quantity;
       }

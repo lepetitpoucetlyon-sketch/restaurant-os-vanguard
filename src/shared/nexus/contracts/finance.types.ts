@@ -1,15 +1,11 @@
-/**
- * 🧾 FINANCE DOMAIN - Shared Kernel
- * Version Grade X - Sovereign Alignment
- */
+import { SovereignField, SovereignMap, SovereignNode } from '@shared/nexus-contract';
 
 export type TransactionCategory = 
   | 'revenue' | 'expense' | 'purchases' | 'fixed' | 'payroll' | 'bank' | 'tax' | 'other' | 'loss' | 'sales';
 
 export type AccountSide = 'debit' | 'credit';
 
-export interface FiscalSeal {
-    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+export interface FiscalSeal extends SovereignMap {
     id?: string;
     hash: string;
     previousHash: string;
@@ -20,9 +16,10 @@ export interface FiscalSeal {
     timestamp?: string;
     dataSnapshot?: string;
     transactionId?: string;
+    updatedAt: string;
 }
 
-export interface JournalLine {
+export interface JournalLine extends SovereignMap {
     accountId: string;
     accountCode: string;
     accountName: string;
@@ -36,7 +33,7 @@ export interface JournalLine {
     runningBalanceInCents: number;
 }
 
-export interface JournalEntry {
+export interface JournalEntry extends SovereignNode {
     id: string;
     date: string | Date;
     pieceNumber: string;
@@ -51,9 +48,10 @@ export interface JournalEntry {
     type?: TransactionCategory;
     amountInCents?: number;
     status?: 'draft' | 'validated' | 'closed' | 'pending';
+    updatedAt: string;
 }
 
-export interface Account {
+export interface Account extends SovereignMap {
     id: string;
     code: string;          
     name: string;
@@ -63,6 +61,7 @@ export interface Account {
     isActive: boolean;
     description?: string;
     balanceInCents?: number;
+    updatedAt: string;
 }
 
 export interface BankTransaction {
@@ -76,6 +75,7 @@ export interface BankTransaction {
     reconciledWith?: string; 
     reconciledAt?: Date | string;
     signature?: string;    
+    updatedAt: string;
 }
 
 export interface BankConnection {
@@ -102,6 +102,7 @@ export interface ExpenseClaim {
     approvedBy?: string;
     approvedAt?: string;
     journalEntryId?: string;
+    updatedAt: string;
 }
 
 export interface TreasuryMetrics {
@@ -192,6 +193,21 @@ export interface ComplianceCertificate {
     hash: string;
 }
 
+export interface FiscalPeriod {
+    id: string;
+    name: string;
+    startDate: string | Date;
+    endDate: string | Date;
+    status: 'open' | 'closed' | 'archived';
+    isTaxReported: boolean;
+}
+
+export interface CalculatedFinancialMetrics extends FinancialMetrics {
+    foodCostInCents: number;
+    laborCostInCents: number;
+    opExInCents: number;
+}
+
 export interface AccountingContextType {
     accounts: Account[];
     ledger: LedgerAccount[];
@@ -199,9 +215,10 @@ export interface AccountingContextType {
     bankTransactions: BankTransaction[];
     bankConnections: BankConnection[];
     expenseClaims: ExpenseClaim[];
-    fiscalPeriods: SovereignData[];
+    fiscalPeriods: FiscalPeriod[];
+    metrics: AccountingMetrics;
+    legacyMetrics: CalculatedFinancialMetrics;
     isSyncing: boolean;
-    legacyMetrics: SovereignData;
     isLoading: boolean;
     viewMode: 'simple' | 'expert';
     toggleViewMode: () => void;
@@ -216,10 +233,12 @@ export interface AccountingContextType {
     deleteJournalEntry: (id: string) => Promise<void>;
     addAccount: (account: Account) => Promise<void>;
     updateAccount: (id: string, updates: Partial<Account>) => Promise<void>;
-    submitExpenseClaim: (claim: SovereignData, receiptBlob?: string) => Promise<void>;
+    submitExpenseClaim: (claim: ExpenseClaim, receiptBlob?: string) => Promise<void>;
     approveExpenseClaim: (id: string) => Promise<void>;
     rejectExpenseClaim: (id: string) => Promise<void>;
     linkBankConnection: (connectionData: Partial<BankConnection>) => Promise<void>;
+    syncBankConnection: (id: string) => Promise<void>;
+    disconnectBank: (id: string) => Promise<void>;
     recordPayrollSalary: (userId: string, netAmount: number, socialCharges: number, month: string) => Promise<void>;
     submitExpense: (claim: Partial<ExpenseClaim>) => Promise<void>;
     ingestTransactions: (transactions: BankTransaction[]) => Promise<void>;
@@ -227,7 +246,7 @@ export interface AccountingContextType {
     getLedgerForAccount: (id: string) => JournalLine[];
     getAccountByCode: (code: string) => Account | undefined;
     getMetrics: () => AccountingMetrics;
-    getCalculatedFinancialMetrics: () => any;
+    getCalculatedFinancialMetrics: () => CalculatedFinancialMetrics;
     generateAnnualFEC: (year: number, siren?: string) => Promise<void>;
     runFiscalAudit: () => Promise<FiscalAuditResult>;
     saveCertification: (cert: ComplianceCertificate) => Promise<void>;

@@ -12,7 +12,7 @@ export type ZoneColor = 'emerald' | 'blue' | 'purple' | 'amber' | 'cyan' | 'rose
 export interface ZoneConfig {
     id: string;
     label: string;
-    icon: any; 
+    icon: import('lucide-react').LucideIcon; 
     color: ZoneColor;
     tasks: CleaningTask[];
 }
@@ -212,7 +212,7 @@ export interface TemperatureLog {
 
 export interface HACCPContextType {
     labels: HygieneLabel[];
-    criticalAlerts: any[];
+    criticalAlerts: SensorReading[];
     validateTaskWithVision: (image: string) => Promise<boolean>;
     sensors: SensorReading[];
     checklists: HACCPChecklistItem[];
@@ -222,6 +222,6 @@ export interface HACCPContextType {
     toggleChecklistItem: (id: string) => Promise<void>;
     resetDailyChecklist: () => Promise<void>;
     getComplianceScore: () => number;
-    triggerAlert: (alert: any) => Promise<void>;
-    logWaste: (data: any) => Promise<void>;
+    triggerAlert: (alert: SensorReading) => Promise<void>;
+    logWaste: (data: RegulatoryWasteLog) => Promise<void>;
 }

@@ -1,4 +1,6 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+"use client";
+
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
 import { useSettings } from '@/context/SettingsContext';

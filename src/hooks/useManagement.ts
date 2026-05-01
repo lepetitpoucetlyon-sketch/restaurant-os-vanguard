@@ -14,7 +14,7 @@ import {
  * Aide à la décision stratégique et optimisation des marges opérationnelles.
  */
 export function useManagement() {
-    const wasteNode = useAtomValue(wasteLogsNodeAtom);
+    const wasteNode = useAtomValue(wasteLogsNodeAtom) as { data: import('@nexus/contracts').RegulatoryWasteLog[], loading: boolean, error: string | null };
     const waste = wasteNode.data;
     const analysis = useAtomValue(menuAnalysisSelector);
     const staffPerformance = useAtomValue(staffPerformanceSelector);
@@ -22,19 +22,19 @@ export function useManagement() {
 
     return {
         waste: { 
-            data: wasteNode.data || [], 
+            data: waste || [], 
             isLoading: wasteNode.loading, 
             error: wasteNode.error 
         },
         analysis: { 
             data: analysis, 
             isLoading: false, 
-            error: null 
+            error: null as string | null
         },
         staffPerformance: { 
             data: staffPerformance, 
             isLoading: false, 
-            error: null 
+            error: null as string | null
         },
         laborCostRatio
     };

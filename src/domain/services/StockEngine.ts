@@ -68,11 +68,12 @@ export class StockEngine {
                         type: 'sale',
                         quantity: e.quantity,
                         unit: allStock.find(s => s.id === e.id)?.unit || 'unit',
-                        ingredientId: ing.id,
-                        ingredientName: ing.name,
+                        ingredientId: ing.id as string,
+                        ingredientName: ing.name as string,
                         reason: `Order #${correlationId}`,
                         performedAt: timestamp,
-                        performedBy: 'System (Titan-StockEngine)'
+                        performedBy: 'System (Titan-StockEngine)',
+                        timestamp: timestamp // Grade X Compliance
                     });
                 });
             }
@@ -139,7 +140,7 @@ export class StockEngine {
             unitCostInCents: receivedData.cost,
             dlc: dlcDate.toISOString(),
             status: 'available',
-            storageLocationId: ingredient.defaultLocationId || 'general_storage',
+            storageLocationId: ingredient.defaultStorageLocation || 'general_storage',
             notes: receivedData.chefNotes || "Standard Industrialized Reception",
             createdAt: timestamp.toISOString(),
             updatedAt: timestamp.toISOString()
@@ -157,6 +158,7 @@ export class StockEngine {
             reason: `Reception from Supplier / NanoID-Authenticated`,
             performedBy: 'System (Industrialized)',
             performedAt: timestamp.toISOString(),
+            timestamp: timestamp.toISOString() // Grade X Compliance
         };
 
         return { newItem, movement };

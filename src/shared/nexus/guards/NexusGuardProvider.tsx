@@ -65,14 +65,14 @@ export const NexusGuardProvider: React.FC<{ children: ReactNode }> = ({ children
     const contextValue: NexusGuardState = useMemo(() => ({
         haccp: { 
             labels: haccpLabels,
-            criticalAlerts: [], 
+            criticalAlerts: [] as SensorReading[], 
             getComplianceScore: () => 98,
-            checklists: [],
+            checklists: [] as HACCPChecklistItem[],
             sensors: [
-                { id: 'S1', name: 'Rôtissoire 1 (Cœur)', type: 'temperature' as const, value: 76, unit: '°C', status: 'ok' as const, lastUpdated: new Date() },
-                { id: 'S2', name: 'Rôtissoire 2 (Cuve)', type: 'temperature' as const, value: 68, unit: '°C', status: 'warning' as const, lastUpdated: new Date() }
+                { id: 'S1', name: 'Rôtissoire 1 (Cœur)', type: 'temperature' as const, value: 76, unit: '°C', status: 'ok' as const, lastUpdated: new Date().toISOString() },
+                { id: 'S2', name: 'Rôtissoire 2 (Cuve)', type: 'temperature' as const, value: 68, unit: '°C', status: 'warning' as const, lastUpdated: new Date().toISOString() }
             ],
-            temperatureHistory: [],
+            temperatureHistory: [] as TemperatureLog[],
             validateTaskWithVision: async (taskId: string, photoBase64: string) => {
                 // 🧪 SAFE MODE: Blocking if signal is lost (Monkey Chaos Stress Test)
                 console.log('Validating vision task', taskId, photoBase64.slice(0, 20));

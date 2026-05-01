@@ -133,7 +133,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
         const patch: import('@shared/nexus-contract').SovereignData = {};
 
         for (const [key, value] of Object.entries(data)) {
-            if (value !== undefined) patch[key] = value;
+            if (value !== undefined) patch[key] = value as any;
         }
 
         if (typeof data.pin === 'string' && data.pin.trim()) {

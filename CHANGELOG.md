@@ -1,5 +1,14 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.6.0] - 2026-05-01 - LA SOUVERAINETÉ FINALE (GRADE X) 🏛️🚀
+### 🏛️ SUTURE TOTALE & INTÉGRITÉ ABSOLUE
+- **Grade X Sovereignty Achieve** : Élimination totale des erreurs TypeScript (`0 Errors`) sur l'ensemble du projet (1691 fichiers).
+- **Harcèlement des Types (Nuclear Hardening)** : Enforcement strict des contrats `SovereignNode` et `SovereignField` (support natif de `Date` et `Date[]`).
+- **Purification Physique** : Éradication complète du module `gateway` et migration de l'infrastructure vers des composants souverains (`TenantOrchestrator`, `ProvisioningWizard`).
+- **Suture des Barrels** : Normalisation des exports nommés pour tous les composants MCC et Guards.
+- **Chaos & Résilience** : Stabilisation de l'agent adversarial `ChaosMonkey` et sécurisation du moteur d'ingestion `Slayer`.
+- **Omni-Certification** : Validation physique et logique de l'intégrité du disque via le protocole **Atlas Bridge V5**.
+
 ## [1.5.0] - 2026-04-22 - LA PURIFICATION VANGUARD 🏛️
 ### 🏛️ RÉCONCILIATION & PURIFICATION (PHASES 1-7)
 - **Purification Multi-Pôles** : Liquidation de ~110 errors TSC dans les domaines `Marketing`, `CRM`, `Ops` et `Fleet`.

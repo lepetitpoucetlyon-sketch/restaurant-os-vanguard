@@ -56,6 +56,7 @@ export * from './customer.types';
 export * from './settings';
 export * from './ops.types';
 export * from './recruitment';
+export * from './registre.types';
 
 // 4. Operations Bridge (POS & Groups)
 export type { CartItem } from '@/modules/ops/engine/types';

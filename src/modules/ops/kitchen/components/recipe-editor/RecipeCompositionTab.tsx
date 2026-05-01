@@ -77,7 +77,7 @@ export function RecipeCompositionTab({
                 <AnimatePresence mode="popLayout">
                     {formData.ingredients?.map((ing, idx) => (
                         <motion.div
-                            key={ing.id}
+                            key={String(ing.id || idx)}
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 20 }}
@@ -93,9 +93,9 @@ export function RecipeCompositionTab({
                                 </div>
                             </div>
                             <div className="flex items-center gap-8">
-                                <span className="text-lg font-black text-accent">{(ing.costInCents / 100).toFixed(2)}€</span>
+                                <span className="text-lg font-black text-accent">{(Number(ing.costInCents || 0) / 100).toFixed(2)}€</span>
                                 <button
-                                    onClick={() => handleRemoveIngredient(ing.id)}
+                                    onClick={() => handleRemoveIngredient(String(ing.id || ''))}
                                     className="w-10 h-10 rounded-xl bg-error/5 hover:bg-error/10 text-error flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <Trash2 className="w-4 h-4" />

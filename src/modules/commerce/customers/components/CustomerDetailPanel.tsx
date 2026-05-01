@@ -71,7 +71,7 @@ export function CustomerDetailPanel({
                             </div>
                             <div className="p-10 text-center border-r border-white/5">
                                 <p className="text-3xl font-mono font-light text-white italic">
-                                    {((customer.totalSpentInCents || 0) / 100).toFixed(0)}€
+                                    {((Number(customer.totalSpentInCents || 0)) / 100).toFixed(0)}€
                                 </p>
                                 <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
                                     CA Réalisé
@@ -79,7 +79,7 @@ export function CustomerDetailPanel({
                             </div>
                             <div className="p-10 text-center">
                                 <p className="text-3xl font-mono font-light text-white italic">
-                                    {((customer.averageSpendInCents || 0) / 100).toFixed(0)}€
+                                    {((Number(customer.averageSpendInCents || 0)) / 100).toFixed(0)}€
                                 </p>
                                 <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
                                     Engagement

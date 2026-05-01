@@ -232,7 +232,7 @@ export const useOrders = () => {
         getPendingModifications: () => {
             const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string, orderItemId: string }> = [];
             (base.data || []).forEach((order) => {
-                (order.items || []).forEach((item) => {
+                (order.items || []).forEach((item: import('@nexus/contracts').OrderItem) => {
                     if (item.modification && !item.modification.respondedAt) {
                         mods.push({ ...item.modification, orderId: order.id, orderItemId: item.id });
                     }
@@ -623,7 +623,7 @@ export const useIntelligence = () => {
 
 export const useManagement = () => ({
     quotes: createSovereignHook(quotesNodeAtom, OperationalIdentity.RELATIONS)(),
-    reports: []
+    reports: [] as unknown[]
 });
 
 export const useQuotes = () => {

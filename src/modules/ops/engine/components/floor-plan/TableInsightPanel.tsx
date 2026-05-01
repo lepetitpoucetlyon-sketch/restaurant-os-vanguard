@@ -221,7 +221,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                 </div>
 
                                 <div className="space-y-6 relative z-10">
-                                    {activeOrder.items.map((item, i) => (
+                                    {activeOrder.items.map((item: import('@nexus/contracts/ops.types').OrderItem, i: number) => (
                                         <div key={i} className="flex justify-between items-start group">
                                             <div className="flex flex-col gap-1.5 flex-1">
                                                 <div className="flex items-baseline gap-2">

@@ -13,11 +13,13 @@ export class ReservationService {
      * Ensures strict compliance with the CCR (Client-Couverts-Réservation) model.
      */
     static validateReservation(data: Partial<Reservation>): { valid: boolean; error?: string } {
-        if (!data.customerName || data.customerName.length < 2) {
+        const customerName = data.customerName;
+        if (!customerName || customerName.length < 2) {
             return { valid: false, error: "Nom du client invalide." };
         }
 
-        if (!data.covers || data.covers <= 0) {
+        const partySize = data.partySize || 0;
+        if (partySize <= 0) {
             return { valid: false, error: "Nombre de couverts invalide." };
         }
 

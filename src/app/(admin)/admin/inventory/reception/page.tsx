@@ -23,7 +23,7 @@ const cancelReservationAction = async (...args: any[]) => ({ success: true });
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 // import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
 const receiveStockAction = async (...args: any[]) => ({ success: true });
-const searchIngredientsAction = async (...args: any[]) => ([]);
+const searchIngredientsAction = async (...args: any[]): Promise<any[]> => ([]);
 import { toast } from 'sonner';
 
 interface ScannedItem {

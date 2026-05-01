@@ -70,8 +70,8 @@ export const InventorySyncService = {
         
         try {
             data.forEach(recipe => {
-                const dependencies = recipe.ingredients?.map(i => i.id) || [];
-                CycleGuard.validateRecipe(recipe.id, dependencies);
+                const dependencies = (recipe.ingredients?.map(i => String(i.id)) || []) as string[];
+                CycleGuard.validateRecipe(String(recipe.id), dependencies);
             });
             
             store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, {

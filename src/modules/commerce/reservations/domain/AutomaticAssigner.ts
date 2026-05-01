@@ -24,7 +24,7 @@ export class AutomaticAssigner {
         if (res.tableId !== table.id || res.date !== date) return false;
         
         const resStart = parse(`${res.date} ${res.time}`, 'yyyy-MM-dd HH:mm', new Date());
-        const resEnd = addMinutes(resStart, res.duration || 120);
+        const resEnd = addMinutes(resStart, Number(res.duration || 120));
         const reqEnd = addMinutes(reservationStart, 120); // Default 2h duration for check
 
         return areIntervalsOverlapping(

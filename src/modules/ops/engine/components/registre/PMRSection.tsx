@@ -10,9 +10,9 @@ export function PMRSection() {
 
     const amenagementsArray = (pmrAmenagements || []);
     const stats = {
-        conforme: amenagementsArray.filter(a => a.status === 'conforme').length,
-        en_cours: amenagementsArray.filter(a => a.status === 'en_cours').length,
-        a_faire: amenagementsArray.filter(a => a.status === 'a_faire').length,
+        conforme: amenagementsArray.filter((a: any) => a.status === 'conforme').length,
+        en_cours: amenagementsArray.filter((a: any) => a.status === 'en_cours').length,
+        a_faire: amenagementsArray.filter((a: any) => a.status === 'a_faire').length,
     };
 
     return (
@@ -66,7 +66,7 @@ export function PMRSection() {
                     Diagnostic par Zone
                 </h3>
                 <div className="space-y-4">
-                    {amenagementsArray.map((am) => (
+                    {amenagementsArray.map((am: any) => (
                         <div key={am.id} className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-sm flex items-center justify-between hover:shadow-lg transition-all">
                             <div className="flex items-center gap-5">
                                 <div className={cn(

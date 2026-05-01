@@ -122,8 +122,8 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                         </thead>
                         <tbody className="divide-y divide-border/30">
                             {recipes.map((recipe, idx) => {
-                                const sellPriceInCents = recipe.priceInCents || 0;
-                                const costPriceInCents = recipe.costPriceInCents || 0;
+                                const sellPriceInCents = Number(recipe.sellingPriceInCents || 0);
+                                const costPriceInCents = Number(recipe.costPriceInCents || 0);
                                 const marginInCents = sellPriceInCents - costPriceInCents;
                                 const marginPercent = sellPriceInCents > 0 ? (marginInCents / sellPriceInCents) * 100 : 0;
                                 const status = marginPercent >= 70 ? 'excellent' : marginPercent >= 50 ? 'good' : 'warning';
@@ -140,7 +140,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                             <div className="flex items-center gap-6">
                                                 <div className="w-12 h-12 rounded-xl overflow-hidden shadow-sm relative shrink-0">
                                                     {recipe.image ? (
-                                                        <img src={recipe.image} className="w-full h-full object-cover" alt="" />
+                                                        <img src={String(recipe.image)} className="w-full h-full object-cover" alt="" />
                                                     ) : (
                                                         <div className="w-full h-full bg-bg-tertiary flex items-center justify-center">
                                                             <ChefHat className="w-5 h-5 opacity-20" />

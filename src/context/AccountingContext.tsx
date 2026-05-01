@@ -45,7 +45,7 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             balanceInCents: 0,
             debitTotalInCents: 0,
             creditTotalInCents: 0,
-            movements: []
+            movements: [] as import('@nexus/contracts/finance.types').JournalLine[]
         }));
     }, [accounts]);
 
@@ -172,7 +172,7 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         grossMarginPercent: 0,
         foodCostPercent: 0,
         laborCostPercent: 0,
-        operatingExpensesInCents: 0
+        operatingExpensesInCents: 0,
     }), []);
 
     const generateAnnualFEC = useCallback(async (year: number, siren?: string) => {
@@ -186,6 +186,14 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         periodCovered: { start: new Date(), end: new Date() },
         integrityHash: "stub_hash"
     }), []);
+
+    const syncBankConnection = useCallback(async (id: string) => {
+        console.log("Stub Sync Bank", id);
+    }, []);
+
+    const disconnectBank = useCallback(async (id: string) => {
+        console.log("Stub Disconnect Bank", id);
+    }, []);
 
     const saveCertification = useCallback(async (cert: ComplianceCertificate) => {
         console.log("Stub Cert", cert);
@@ -201,9 +209,12 @@ export const AccountingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         fiscalPeriods: [],
         metrics,
         legacyMetrics: getCalculatedFinancialMetrics(),
+        isSyncing: false,
         isLoading,
         viewMode: 'simple',
         toggleViewMode: () => {},
+        syncBankConnection,
+        disconnectBank,
         generatePandL,
         generateBalanceSheet,
         generateTrialBalance,

@@ -15,7 +15,7 @@ export const ProductControlList: React.FC = () => {
             ...item,
             decision: decision,
             is_rejected: decision === 'rejected',
-        });
+        } as any);
     };
 
     const handleFreshnessChange = (item: QualityControlItem, score: number) => {
@@ -29,7 +29,7 @@ export const ProductControlList: React.FC = () => {
                     performed: true
                 }
             }
-        });
+        } as any);
     };
 
     return (

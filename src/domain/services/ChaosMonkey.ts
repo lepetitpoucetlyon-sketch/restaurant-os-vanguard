@@ -78,7 +78,7 @@ export const ChaosMonkey = {
 
     // 2. Attempt DAG Cycle Injection
     try {
-        const { CycleGuard } = require('@shared/services/CycleGuard');
+        const { CycleGuard } = require('@shared/nexus/guards/CycleGuard');
         CycleGuard.validateRecipe("CHAOS_RECIPE", ["CHAOS_RECIPE"]); // Self-referencing cycle
     } catch (e) {
         logger.info("[Chaos-Monkey] DAG Cycle Injection BLOCKED by CycleGuard.");

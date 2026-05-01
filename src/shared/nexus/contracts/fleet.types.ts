@@ -21,6 +21,7 @@ export interface EmpireInstance extends SovereignNode {
         revenue24h: number;
         healthScore: number;
         complianceScore: number;
+        lowStockAlerts: number;
         [key: string]: SovereignField;
     };
     branding: {

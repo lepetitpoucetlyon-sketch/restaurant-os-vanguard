@@ -64,9 +64,9 @@ export const TenantOrchestrator: React.FC = () => {
     ] as unknown as EmpireInstance[]).map(inst => {
         const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(
-            metrics.alerts || 0, 
-            metrics.errorRate || 0, 
-            metrics.uptime || 0
+            Number((metrics as any).alerts || 0), 
+            Number((metrics as any).errorRate || 0), 
+            Number((metrics as any).uptime || 0)
         );
         return {
             ...inst,

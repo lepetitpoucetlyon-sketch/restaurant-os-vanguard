@@ -5,7 +5,9 @@
 
 export * from './auth';
 
-// 📡 Telemetry & MCC Monitoring (Re-exports for architectural visibility)
+
+
+// 📡 Telemetry & MCC Monitoring (Sovereign Infrastructure)
 export { 
     MCCAuditStream,
     MCCTreasury,
@@ -13,7 +15,9 @@ export {
     DeploymentEngine,
     FiscalChainExplorer,
     StrategyOracle,
-    ProvisioningWizard,
-    ZeusDashboard,
-    TenantOrchestrator
+    ZeusDashboard
 } from "@nexus/guards";
+
+// 🏗️ Infrastructure Components (Relocated from Guards)
+export { ProvisioningWizard } from './components/ProvisioningWizard';
+export { TenantOrchestrator } from './components/TenantOrchestrator';

@@ -7,6 +7,7 @@ export type CategoryKey = string;
 export type RolePermissions = Record<UserRole | string, CategoryKey[]>;
 
 export interface UserPermissions {
+    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
     userId?: string;
     role?: string;
     level: number; // 0 to 10
@@ -17,6 +18,7 @@ export interface UserPermissions {
 }
 
 export interface User {
+    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
     id: string;
     tenantId?: string;
     name: string;

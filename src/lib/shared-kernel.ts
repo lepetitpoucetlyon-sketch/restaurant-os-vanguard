@@ -104,6 +104,18 @@ export const SharedKernel = {
 
 
         return sanitized;
+    },
+
+    /** Force le cast d'un SovereignField en string (Grade X Compliance) */
+    castString: (value: any): string => {
+        if (typeof value === 'string') return value;
+        return String(value ?? '');
+    },
+
+    /** Force le cast d'un SovereignField en nombre (Grade X Compliance) */
+    castNumber: (value: any): number => {
+        if (typeof value === 'number') return value;
+        return Number(value ?? 0);
     }
 };
 
