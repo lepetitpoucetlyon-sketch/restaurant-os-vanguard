@@ -2,7 +2,7 @@
 
 import { Stage, Layer, Rect, Circle, Text, Group } from "react-konva";
 import { forwardRef, useImperativeHandle } from "react";
-import { TableStatus } from "@nexus/contracts";
+import { Table, TableStatus, Zone } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 import { AnimatePresence } from "framer-motion";
 
@@ -32,7 +32,7 @@ export interface FloorPlanEditorRef {
     zoomOut: () => void;
 }
 
-const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
+export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
     scale,
     onScaleChange,
     position,
@@ -121,15 +121,15 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
                     >
                         <Layer>
                             <ZoneRenderer
-                                tables={floorTables as any}
-                                zones={floorZones as any}
+                                tables={floorTables as Table[]}
+                                zones={floorZones as Zone[]}
                                 isLocked={isZonesLocked}
                                 onUpdateTablePosition={updateTablePosition}
                                 onUpdateZone={updateZone}
                                 isDarkMode={isDarkMode}
                             />
 
-                            {floorTables.map((table: any) => {
+                            {floorTables.map((table: Table) => {
                                 const reservations = getReservationsForTable(table.id);
                                 const hasReservation = reservations && reservations.length > 0;
                                 const isSelected = selectedId === table.id;
@@ -253,7 +253,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
             <AnimatePresence>
                 {selectedTable && (
                     <TableInsightPanel
-                        selectedTable={selectedTable as any}
+                        selectedTable={selectedTable as Table}
                         onClose={() => setSelectedId(null)}
                         onCheckout={handleCheckout}
                     />
@@ -271,7 +271,7 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
             <AnimatePresence>
                 {selectedTable && (
                     <EditPanel
-                        selectedTable={selectedTable as any}
+                        selectedTable={selectedTable as Table}
                         updateTable={updateTable}
                         deleteTable={deleteTable}
                         onClose={() => setSelectedId(null)}
@@ -285,4 +285,4 @@ const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorProps>(({
 
 FloorPlanEditor.displayName = "FloorPlanEditor";
 
-export default FloorPlanEditor;
+// End of FloorPlanEditor component

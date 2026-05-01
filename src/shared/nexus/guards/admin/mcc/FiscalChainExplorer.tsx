@@ -17,7 +17,7 @@ interface HashNode {
   status: 'verified' | 'tampered' | 'pending';
 }
 
-export default function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
+export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
   const { seals: fiscalSeals = [] } = useCompliance();
 
   // Memotize the chain nodes from real fiscal seals

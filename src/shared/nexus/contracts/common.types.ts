@@ -7,8 +7,11 @@
 // ============================================
 
 import { User } from '@nexus/contracts/auth.types';
-import { SovereignData, SovereignField, SovereignMap } from '@shared/nexus-contract';
-import { Ingredient } from './nexus-internal-mapper';
+import { SovereignNode, SovereignField, SovereignData } from '@shared/nexus-contract';
+import { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone } from './nexus-internal-mapper';
+export type { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone };
+import { OptionGroup as NexusOptionGroup } from './nexus-internal-mapper';
+import { Ingredient } from './logistics';
 
 // Ingredient is defined in nexus-internal-mapper.ts (Neutral Ground)
 
@@ -26,6 +29,8 @@ export interface Notification {
         label: string;
         href?: string;
     };
+    createdAt: string;
+    updatedAt: string;
 }
 
 // ============================================
@@ -64,56 +69,9 @@ export interface RecipeStep {
     videoUrl?: string;
 }
 
-export interface Product {
-    id: string;
-    category: string;
-    categoryId?: string;
-    name: string;
-    priceInCents: number;
-    color: string;
-    image?: string;
-    description?: string;
-    optionGroups?: OptionGroup[];
-    ingredients?: ProductIngredient[];
-    recipeSteps?: RecipeStep[];
-    prepTime?: number; // Minutes
-    tags?: string[]; // Star, Dog, Plowhorse, Puzzle
-}
+// Product is now imported from nexus-internal-mapper.ts
 
-export interface RecipeIngredient {
-    id: string;
-    name: string;
-    quantity: number;
-    unit: string;
-    costInCents: number;
-}
 
-export interface Recipe {
-    id: string;
-    productId?: string;
-    name: string;
-    category: string;
-    description?: string;
-    prepTime: number;
-    cookTime: number;
-    portions: number;
-    difficulty: 'easy' | 'medium' | 'hard';
-    ingredients: RecipeIngredient[];
-    steps: RecipeStep[];
-    allergens: string[];
-    dietaryInfo: string[];
-    costPriceInCents: number;
-    sellingPriceInCents: number;
-    marginInCents: number;
-    imageUrl?: string;
-    image?: string; // Grade X Alias for UI components
-    priceInCents?: number; // Grade X Alias for legacy POS compatibility
-    standardImage?: string; // Technical reference for AI Plate Audit
-    color: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-}
 
 // SEOProfile: Defined locally to avoid peripheral import
 export interface SEOProfile {
@@ -194,6 +152,8 @@ export interface Category {
     id: string;
     name: string;
     color: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 // ============================================
@@ -211,6 +171,8 @@ export interface WasteLog {
     costInCents: number;
     timestamp: Date;
     loggedBy: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface PrepTask {
@@ -221,6 +183,8 @@ export interface PrepTask {
     isCompleted: boolean;
     assignedTo?: string;
     dueDate: Date;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
 }
 
 export interface MiseEnPlaceTask extends PrepTask {

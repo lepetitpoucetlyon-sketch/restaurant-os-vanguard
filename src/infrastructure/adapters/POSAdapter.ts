@@ -1,4 +1,5 @@
-import { OrderItem, CartItem } from "@modules/ops";
+import { OrderItem } from "@nexus/contracts";
+import { CartItem } from "@modules/ops";
 import { MasterBridge } from "@/lib/MasterBridge"; // For master-level context if needed
 
 export class POSService {
@@ -47,7 +48,9 @@ export class POSService {
      * Formats items for the Kitchen Display System (KDS).
      */
     static formatForKitchen(items: (OrderItem | CartItem)[]): OrderItem[] {
+        const now = new Date().toISOString();
         return items.map(item => ({
+            id: (item as any).id || `item_${Math.random().toString(36).substring(2, 11)}`,
             productId: (item as CartItem).productId || (item as OrderItem).productId,
             categoryId: (item as CartItem).categoryId || (item as OrderItem).categoryId,
             name: item.name,
@@ -55,7 +58,9 @@ export class POSService {
             quantity: item.quantity,
             notes: item.notes || "",
             modifiers: item.modifiers || [],
-            status: 'pending'
+            status: 'pending',
+            createdAt: (item as any).createdAt || now,
+            updatedAt: (item as any).updatedAt || now
         }));
     }
 }

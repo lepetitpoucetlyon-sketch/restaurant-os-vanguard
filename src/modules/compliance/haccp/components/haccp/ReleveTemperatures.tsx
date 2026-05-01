@@ -56,7 +56,8 @@ export function ReleveTemperatures() {
                 value: tempValue.toString(),
                 status: isAlert ? 'alert' : 'ok',
                 user: 'Admin',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             });
             if (isAlert) {
                 addNotification({ type: 'critical', title: 'Température Anormale', message: `Alerte de température sur ${recordingEq.label}.` });

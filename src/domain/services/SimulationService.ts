@@ -108,7 +108,9 @@ export const SimulationService = {
                 items: [],
                 totalInCents: revenue,
                 status: 'paid',
-                customerName: 'Simulated'
+                customerName: 'Simulated',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             };
 
             await Nexus.adapter.set(Nexus.getTenantPath(`orders/${orderId}`), order);

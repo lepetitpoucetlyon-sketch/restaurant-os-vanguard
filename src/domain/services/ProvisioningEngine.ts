@@ -31,6 +31,7 @@ export const ProvisioningEngine = {
                 tier: dna.tier,
                 version: '4.5.0-empire',
                 createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
                 lastHeartbeat: new Date().toISOString(),
                 
                 metrics: {

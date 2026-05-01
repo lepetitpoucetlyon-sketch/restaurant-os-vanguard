@@ -23,6 +23,7 @@ export class InvoiceEngine {
 
     return {
       id: `inv_${order.id}`,
+      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       orderId: order.id,
       invoiceNumber: `FACT-${new Date().getFullYear()}-${order.id.slice(-6).toUpperCase()}`,
@@ -61,8 +62,8 @@ export class InvoiceEngine {
   static toJournalEntry(invoice: LegalInvoice, tenantId: string): any {
     return {
       id: `ledger_${invoice.id}`,
-      updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       type: 'revenue',
       category: 'REVENUE',
       amountInCents: invoice.totalInCents,

@@ -198,7 +198,7 @@ export function useFloorPlanControls({
             
             const x = (pointer.x - stage.x()) / stage.scaleX();
             const y = (pointer.y - stage.y()) / stage.scaleY();
-            const newTableNumber = (Math.max(0, ...floorTables.map((t: any) => parseInt(String(t.number || '')) || 0)) + 1).toString();
+            const newTableNumber = (Math.max(0, ...floorTables.map((t: import("@nexus/contracts").Table) => parseInt(String(t.number || '')) || 0)) + 1).toString();
 
             await addTable({
                 number: newTableNumber,

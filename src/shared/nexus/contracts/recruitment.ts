@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import { SovereignNode } from "../../nexus-contract";
 
 export type CandidateStatus = 'new' | 'interview' | 'trial' | 'refused' | 'hired';
 
@@ -8,26 +8,26 @@ export interface GDPRConsent {
     method: 'written' | 'digital' | 'verbal_logged';
 }
 
-export interface Candidate {
-    id: string;
+/**
+ * 👤 CANDIDATE CONTRACT - Recruitment Domain
+ * Grade X Sovereign Alignment
+ */
+export interface Candidate extends SovereignNode {
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
     status: CandidateStatus;
     appliedRole: string;
-    cvUrl?: string; // Local storage or Dexie Blob
-    cvText?: string; // Extracted text for search
+    cvUrl?: string;
+    cvText?: string;
     notes?: string;
     gdpr: GDPRConsent;
-    createdAt: string;
-    updatedAt: string;
     lastContactDate?: string;
     interviewDate?: string;
 }
 
-export interface RecruitmentLog {
-    id: string;
+export interface RecruitmentLog extends SovereignNode {
     candidateId: string;
     action: string;
     performedBy: string;

@@ -28,6 +28,8 @@ export interface GlobalComplianceCertificate {
  */
 export const FleetComplianceService = {
   private_COLLECTION: 'fleet-compliance',
+  isNF525Valid: true,
+  lastSealHash: '0x00000000000000000000000000000000',
 
   /**
    * 🔍 Verifies the fiscal chain of a specific site.

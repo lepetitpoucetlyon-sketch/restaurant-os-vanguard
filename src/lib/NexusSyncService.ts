@@ -10,12 +10,12 @@ import {
 } from '@/store/operationalAtoms';
 
 // Import Sovereign Modular sub-services
-import { OpsSyncService as SyncOrders } from '@modules/ops.sync';
-import { InventorySyncService as SyncStocks } from '@modules/logistics.sync';
-import { FinanceSyncService as SyncFinance } from '@modules/finance.sync';
-import { HACCPSyncService as SyncHACCP } from '@modules/compliance.sync';
-import { MarketingSyncService as SyncMarketing } from '@modules/commerce.sync';
-import { HRSyncService as SyncStaff } from '@modules/human.sync';
+import { OpsSyncService as SyncOrders } from '@/modules/ops/engine/ops.sync';
+import { InventorySyncService as SyncStocks } from '@/modules/logistics/inventory/inventory.sync';
+import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
+import { HACCPSyncService as SyncHACCP } from '@/modules/compliance/haccp/haccp.sync';
+import { MarketingSyncService as SyncMarketing } from '@/modules/commerce/marketing/marketing.sync';
+import { HRSyncService as SyncStaff } from '@/modules/human/hr/hr.sync';
 
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';

@@ -14,22 +14,22 @@ import {
     Crosshair
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
-import { HermesEngine } from '@/infrastructure/adapters/HermesAdapter';
-import { HermesPulseResult, VanguardAgentConfig } from '@domain/agency/hermes.types';
+import { ZeusEngine } from '@/infrastructure/adapters/ZeusAdapter';
+import { ZeusPulseResult, VanguardAgentConfig } from '@domain/agency/hermes.types';
 
 /**
- * 🏺 Hermes Dashboard - Grade X Command Center
+ * 🏺 Zeus Dashboard - Grade X Command Center
  * Visualizes the heartbeat of the multi-agent system.
  */
-export function HermesDashboard({ tenantId }: { tenantId: string }) {
-    const [pulseResult, setPulseResult] = useState<HermesPulseResult | null>(null);
+export function ZeusDashboard({ tenantId }: { tenantId: string }) {
+    const [pulseResult, setPulseResult] = useState<ZeusPulseResult | null>(null);
     const [isPulsing, setIsPulsing] = useState(false);
-    const manifest = HermesEngine.getManifest();
+    const manifest = ZeusEngine.getManifest();
 
     const triggerPulse = async () => {
         setIsPulsing(true);
         try {
-            const result = await HermesEngine.pulse(tenantId);
+            const result = await ZeusEngine.pulse(tenantId);
             setPulseResult(result);
         } finally {
             // Artificial delay for "Wow effect" and sensory feedback
@@ -49,7 +49,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                 <div>
                     <h3 className="text-2xl font-serif italic mb-2 flex items-center gap-4">
                         <Zap className={cn("w-6 h-6 text-accent", isPulsing && "animate-ping")} />
-                        Hermes Vanguard Engine
+                        Zeus Vanguard Engine
                     </h3>
                     <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-[0.3em]">
                         Autonomous Multi-Agent Orchestration • Grade X

@@ -18,6 +18,21 @@ import {
     DEFAULT_STORAGE_LOCATIONS
 } from '@nexus/contracts/logistics';
 
+export type { 
+    StorageType, 
+    StorageLocation, 
+    IngredientCategory, 
+    IngredientUnit, 
+    Ingredient, 
+    StockItem, 
+    SupplierOrderStatus, 
+    SupplierOrderItem, 
+    SupplierOrder, 
+    InventoryMovementType, 
+    InventoryMovement,
+    DEFAULT_STORAGE_LOCATIONS
+};
+
 
 // Preparation - Mise en place and prepared items
 export type PreparationType =

@@ -276,11 +276,53 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             return pin === '9999';
         },
         switchProfile: (uid: string) => console.log('Profile switch', uid),
-        updateUser: async (id: string, data: Partial<User>) => console.log('Update user', id, data),
-        updateUserStatus: async (id: string, status: 'active' | 'suspended' | 'on_leave') => console.log('Update user status', id, status),
-        addUser: async (data: Partial<User>) => console.log('Add user', data),
-        deleteUser: async (id: string) => console.log('Delete user', id),
-        logAction: (action: string, metadata?: SovereignData) => console.log('Log action', action, metadata)
+        updateUser: async (id: string, data: Partial<User>) => {
+            if (!activeTenantId) return;
+            const path = `tenants/${activeTenantId}/users/${id}`;
+            await Nexus.adapter.update(path, {
+                ...data,
+                updatedAt: new Date().toISOString()
+            });
+        },
+        updateUserStatus: async (id: string, status: 'active' | 'suspended' | 'on_leave') => {
+            if (!activeTenantId) return;
+            const path = `tenants/${activeTenantId}/users/${id}`;
+            await Nexus.adapter.update(path, {
+                status,
+                updatedAt: new Date().toISOString()
+            });
+        },
+        addUser: async (data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => {
+            if (!activeTenantId) return;
+            const path = `tenants/${activeTenantId}/users`;
+            const id = Nexus.adapter.generateId(path);
+            const now = new Date().toISOString();
+            await Nexus.adapter.set(`${path}/${id}`, {
+                ...data,
+                id,
+                createdAt: now,
+                updatedAt: now
+            } as User);
+        },
+        deleteUser: async (id: string) => {
+            if (!activeTenantId) return;
+            await Nexus.adapter.delete(`tenants/${activeTenantId}/users/${id}`);
+        },
+        logAction: async (action: string, metadata?: SovereignData) => {
+            if (!activeTenantId || !currentUser) return;
+            const path = `tenants/${activeTenantId}/audit_logs`;
+            const id = Nexus.adapter.generateId(path);
+            const now = new Date().toISOString();
+            await Nexus.adapter.set(`${path}/${id}`, {
+                id,
+                action,
+                performedBy: currentUser.id,
+                metadata: metadata || {},
+                timestamp: now,
+                createdAt: now,
+                updatedAt: now
+            } as any); // Audit log mapping to be refined
+        }
 
     }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.hasAccess, access.canDo, access.updateRolePermissions, access.getAccessibleCategories, login, logout]);
 

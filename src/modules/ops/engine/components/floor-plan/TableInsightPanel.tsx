@@ -22,8 +22,10 @@ import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";
 import { ScrollArea } from "@ui/scroll-area";
 
+import { Table, Order, Reservation } from "@nexus/contracts";
+
 interface TableInsightPanelProps {
-    selectedTable: import('@nexus/contracts').Table | null;
+    selectedTable: Table | null;
     onClose: () => void;
     onCheckout?: (total: number) => void;
 }
@@ -35,12 +37,12 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
     const data = useMemo(() => {
         if (!selectedTable || !orders || !reservations) return null;
 
-        const tableOrders = (orders || []).filter((o: import('@nexus/contracts').Order) => o.tableId === selectedTable.id && o.status !== 'paid' && o.status !== 'cancelled');
+        const tableOrders = (orders || []).filter((o: Order) => o.tableId === selectedTable.id && o.status !== 'paid' && o.status !== 'cancelled');
         const activeOrder = tableOrders[0];
         
-        const tableReservations = (reservations || []).filter((r: import('@nexus/contracts').Reservation) => r.tableId === selectedTable.id);
+        const tableReservations = (reservations || []).filter((r: Reservation) => r.tableId === selectedTable.id);
         const today = new Date();
-        const activeReservation = tableReservations?.find((r: import('@nexus/contracts').Reservation) => {
+        const activeReservation = tableReservations?.find((r: Reservation) => {
             const rDate = new Date(r.date);
             const diff = Math.abs(today.getTime() - rDate.getTime());
             return diff < (2 * 60 * 60 * 1000);

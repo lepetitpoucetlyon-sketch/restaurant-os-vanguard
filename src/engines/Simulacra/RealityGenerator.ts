@@ -67,6 +67,7 @@ export class RealityGenerator {
         logger.info(`🔥 [SIMULACRA] COMMENCING SALES RUSH: ${count} orders incoming...`);
         for (let i = 0; i < count; i++) {
             const items = ['Burger', 'Frites', 'Soda', 'Salade'];
+            const now = new Date().toISOString();
             const order: Partial<Order> = {
                 id: `sim_${uuidv4().substring(0, 8)}`,
                 items: [{
@@ -75,10 +76,14 @@ export class RealityGenerator {
                     name: items[Math.floor(Math.random() * items.length)],
                     quantity: 1,
                     priceInCents: 1500,
-                    status: 'pending'
+                    status: 'pending',
+                    createdAt: now,
+                    updatedAt: now
                 }],
                 totalInCents: 1500,
-                timestamp: new Date().toISOString(),
+                timestamp: now,
+                createdAt: now,
+                updatedAt: now,
                 nodeIdentifier: String(Math.floor(Math.random() * 20) + 1)
             };
             

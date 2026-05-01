@@ -52,7 +52,8 @@ export function GestionHuiles() {
             await createLog({
                 ...formData,
                 id: `oil_${Date.now()}`,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             } as import('@nexus/contracts').OilLog);
             addNotification({ 
                 type: formData.status === 'ok' ? 'success' : 'warning', 

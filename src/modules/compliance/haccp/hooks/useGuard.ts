@@ -22,7 +22,8 @@ import {
     deliveriesAtom
 } from "@/store/operationalAtoms";
 import { tenantIdAtom } from '@/store/fleetAtoms';
-import { HygieneLabel, HygieneLog, ReceptionLog, OilLog, HACCPContextType } from "../types";
+import { HygieneLabel, HygieneLog, ReceptionLog, OilLog } from "@nexus/contracts";
+import { HACCPContextType } from "../types/domain";
 
 /**
  * 🛡️ useGuard - Grade VI Atomic Bridge

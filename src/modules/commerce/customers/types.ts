@@ -3,6 +3,7 @@
  */
 
 import { Customer, CRM_Record } from '@nexus/contracts';
+export type { Customer, CRM_Record };
 
 export interface CRMGroup {
     id: string;

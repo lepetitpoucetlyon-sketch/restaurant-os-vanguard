@@ -16,7 +16,7 @@ interface LogEntry {
 }
 
 
-export default function MCCAuditStream() {
+export function MCCAuditStream() {
     const [logs, setLogs] = useState<LogEntry[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
 

@@ -44,6 +44,7 @@
       "@store/*": ["./src/store/*"],
       "@nexus/*": ["./src/shared/nexus/*"],
       "@shared/*": ["./src/shared/*"],
+      "@ui": ["./src/components/ui/index"],
       "@ui/*": ["./src/components/ui/*"],
       "@/*": ["./src/*"]
     }

@@ -1,4 +1,4 @@
-import { SovereignField } from '@shared/nexus-contract';
+import { SovereignField, SovereignNode } from '@shared/nexus-contract';
 
 /**
  * 🏛️ LOGISTICS CORE TYPES - Sovereign Shared Contract
@@ -65,6 +65,8 @@ export interface Ingredient {
     origin?: string;
     certifications?: string[];
     tags?: string[];
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface StockItem {
@@ -139,4 +141,57 @@ export interface InventoryMovement {
     performedAt: string;
     performedBy: string;
     unitCostInCents?: number;
+}
+
+export type PreparationType =
+    | 'mise_en_place' // General prep
+    | 'sauce' // Sauces
+    | 'fond' // Stocks/Fonds
+    | 'marinade'
+    | 'bouillon'
+    | 'pate' // Pastry dough
+    | 'garniture' // Garnishes
+    | 'decoupe' // Cut/portioned items
+    | 'assemblage' // Assembled items ready to cook
+    | 'dessert_base' // Dessert bases (crèmes, ganaches)
+    | 'other';
+
+export interface Preparation extends SovereignNode {
+    id: string;
+    name: string;
+    type: PreparationType;
+    recipeId?: string; // Link to recipe if applicable
+
+    // Quantities
+    quantity: number;
+    unit: IngredientUnit;
+    portions?: number; // Number of portions
+
+    // Storage
+    storageLocationId: string;
+    containerId?: string; // Container reference (e.g., "Bac GN 1/3")
+
+    // Dates
+    preparationDate: string; // When it was made
+    preparedBy: string; // Who made it
+    dlc: string; // Date Limite de Consommation
+    expirationDate?: string; // Grade X Alias for dlc
+
+    // Ingredients used (for traceability & costing)
+    ingredients: {
+        stockItemId: string;
+        ingredientName: string;
+        quantityUsed: number;
+        unit: IngredientUnit;
+    }[];
+
+    // Status & Tracking
+    status: 'fresh' | 'ok' | 'use_today' | 'expired' | 'discarded';
+    temperature?: number; // Last recorded temperature
+    lastCheckedAt?: string;
+    lastCheckedBy?: string;
+
+    notes: string;
+    costInCents?: number; // Total cost in cents
+    isCompleted?: boolean; // Grade X Task Tracking
 }

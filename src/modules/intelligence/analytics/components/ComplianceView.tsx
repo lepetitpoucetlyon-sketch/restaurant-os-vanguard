@@ -6,14 +6,11 @@ import { AlertTriangle, Thermometer, Activity } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 import { useRouter } from 'next/navigation';
+import { ComplianceAlert, IoTMetric } from '../types';
 
 // --- Compliance View ---
 
-export interface ComplianceAlert {
-    id: string;
-    userName: string;
-    message: string;
-}
+
 
 export const ComplianceView: React.FC<{ alerts: ComplianceAlert[] }> = ({ alerts }) => {
     const router = useRouter();
@@ -52,18 +49,7 @@ export const ComplianceView: React.FC<{ alerts: ComplianceAlert[] }> = ({ alerts
     );
 };
 
-// --- IoT View ---
 
-export interface IoTMetric {
-    id: string;
-    name: string;
-    value: number;
-    type: 'temperature' | 'hz' | 'humidity' | 'pressure';
-    status: 'normal' | 'alert' | 'critical';
-    trend: 'up' | 'down' | 'stable';
-    anomalous: boolean;
-    timestamp: string;
-}
 
 export const IoTView: React.FC<{ metrics: IoTMetric[] }> = ({ metrics }) => {
     return (

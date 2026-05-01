@@ -3,7 +3,7 @@
  * Version Grade X - Sovereign Alignment
  */
 
-export * from '../../nexus-contract';
+export type { SovereignField, SovereignNode } from '../../nexus-contract';
 export * from '../../genome.types';
 
 // --- 🏛️ DOMAIN AUTHORITIES ---
@@ -21,19 +21,26 @@ export type {
 
 // 2. Physical Models (Neutral Ground)
 export type {
-    Ingredient,
+    Table,
     Order,
+    Reservation,
+    OrderItem,
+    OrderItemModification,
+    TableStatus,
+    OrderStatus,
+    GroupEventStatus,
+    TableShape
+} from './ops.types';
+
+export type {
     Product,
     Recipe,
     Customer,
-    Table,
     ModuleId,
-    Reservation,
-    OrderStatus,
-    OrderItem,
-    OrderItemModification,
+    RecipeIngredient,
     Floor,
     Zone,
+    Quote,
     Order as LegacyOrder
 } from './nexus-internal-mapper';
 
@@ -42,10 +49,13 @@ export { NexusInternalMapper, canAccessModule } from './nexus-internal-mapper';
 // 3. Specialized Domains
 export * from './fleet.types';
 export * from './finance.types';
+export * from './hr.types';
 export * from './logistics';
 export * from './oracle.types';
 export * from './customer.types';
 export * from './settings';
+export * from './ops.types';
+export * from './recruitment';
 
 // 4. Operations Bridge (POS & Groups)
 export type { CartItem } from '@/modules/ops/engine/types';
@@ -80,7 +90,7 @@ export type {
 
 // --- 🌿 HYGIENE & COMPLIANCE (HACCP) ---
 export * from './settings/haccp';
-export * from '@/modules/compliance/haccp/types';
+export * from '../../../modules/compliance/haccp/types';
 
 // --- ⚙️ SETTINGS REGISTRY ---
 export * from './settings/accounting';
@@ -104,3 +114,7 @@ export * from './settings/theme';
 export * from './nexus.types';
 export * from './errors.types';
 export type { GlobalSettings } from './settings';
+export type { TenantConfig, SovereignData } from '@shared/nexus-contract';
+export type { InventoryMovement } from './logistics';
+export * from './marketing.types';
+export type { Delivery, DeliveryItem } from '@/domain/types/delivery';

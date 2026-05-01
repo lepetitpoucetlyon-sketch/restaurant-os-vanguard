@@ -1,4 +1,7 @@
+/**
+ * 📅 Reservations Module
+ * Grade X - Sovereign Suture
+ */
 export * from './components';
-export * from './hooks';
-export * from './store';
+export * from './store/reservationAtoms';
 export * from './types';

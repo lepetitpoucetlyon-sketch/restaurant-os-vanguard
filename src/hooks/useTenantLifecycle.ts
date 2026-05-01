@@ -35,6 +35,7 @@ export function useTenantLifecycle(tenantId: string | null) {
                     tier: 'STANDARD',
                     version: '1.0.0',
                     createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
                     lastHeartbeat: new Date().toISOString(),
                     metrics: { activeUsers: 0, dailyRevenue: 0, revenue24h: 0, aiUsageCost: 0, healthScore: 100, complianceScore: 100, lowStockAlerts: 0, expiringItemsCount: 0 },
                     branding: { primaryColor: '#6366f1' },

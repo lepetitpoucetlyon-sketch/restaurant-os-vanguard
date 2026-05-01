@@ -2,22 +2,22 @@ import { AgentEngine } from '@/lib/ai/AgentEngine';
 import { AgentDomain, AgentRole } from '@domain/agency/types';
 import { 
     VanguardAgentConfig, 
-    HermesPulseResult, 
-    HermesAnomaly, 
-    HermesManifest 
+    ZeusPulseResult, 
+    ZeusAnomaly, 
+    ZeusManifest 
 } from '@domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalHACCPMapper } from '@modules/finance';
 
 /**
- * 📡 HermesEngine - Grade X Autonomous Orchestrator
+ * ⚡ ZeusEngine - Grade X Autonomous Orchestrator
  * Coordinates the Vanguard Agents and enforces business sovereignty.
  * DNA: "Fast, Reliable, Sovereign".
  */
-export class HermesEngine {
-    private static manifest: HermesManifest = {
-        version: "1.0.0-hermes",
+export class ZeusEngine {
+    private static manifest: ZeusManifest = {
+        version: "1.0.0-zeus",
         lastPulse: null,
         currentFocus: 'synthesis',
         activeAgents: [
@@ -50,11 +50,11 @@ export class HermesEngine {
      * The heartbeat of the autonomous system.
      * Checks for domain anomalies and triggers cross-domain bridges.
      */
-    static async pulse(tenantId: string): Promise<HermesPulseResult> {
-        logger.info(`📡 [HERMES] Heartbeat Pulse for Tenant: ${tenantId}`);
+    static async pulse(tenantId: string): Promise<ZeusPulseResult> {
+        logger.info(`⚡ [ZEUS] Heartbeat Pulse for Tenant: ${tenantId}`);
         
         const startTime = Date.now();
-        const anomalies: HermesAnomaly[] = [];
+        const anomalies: ZeusAnomaly[] = [];
         const actionsTaken: string[] = [];
 
         // 1. SCAN: HACCP -> Finance Anomaly Detection
@@ -70,7 +70,7 @@ export class HermesEngine {
             });
 
             if (haccpResults.length > 0) {
-                logger.warn(`🔥 [HERMES] Detected ${haccpResults.length} unprocessed HACCP anomalies.`);
+                logger.warn(`🔥 [ZEUS] Detected ${haccpResults.length} unprocessed HACCP anomalies.`);
                 
                 for (const reading of haccpResults) {
                     anomalies.push({
@@ -90,7 +90,7 @@ export class HermesEngine {
                 }
             }
         } catch (err) {
-            logger.error('[HERMES] Pulse Scan (HACCP) failed:', err);
+            logger.error('[ZEUS] Pulse Scan (HACCP) failed:', err);
         }
 
         // 2. SCAN: Accounting Unmatched Invoices
@@ -119,7 +119,7 @@ export class HermesEngine {
         this.manifest.lastPulse = new Date().toISOString();
         
         const duration = Date.now() - startTime;
-        logger.info(`✅ [HERMES] Pulse cycle completed in ${duration}ms. ${anomalies.length} issues found.`);
+        logger.info(`✅ [ZEUS] Pulse cycle completed in ${duration}ms. ${anomalies.length} issues found.`);
 
         return {
             timestamp: this.manifest.lastPulse as string,
@@ -132,7 +132,7 @@ export class HermesEngine {
     /**
      * 📜 Get Manifest
      */
-    static getManifest(): HermesManifest {
+    static getManifest(): ZeusManifest {
         return this.manifest;
     }
 
@@ -144,7 +144,7 @@ export class HermesEngine {
 
         const agent = this.manifest.activeAgents.find(a => a.domain === domain) || this.manifest.activeAgents[0];
         
-        logger.info(`🤝 [HERMES] Delegating to Vanguard Agent: ${agent.id.toUpperCase()} (${domain})`);
+        logger.info(`🤝 [ZEUS] Delegating to Vanguard Agent: ${agent.id.toUpperCase()} (${domain})`);
         
         return AgentEngine.query({
             domain: agent.domain,

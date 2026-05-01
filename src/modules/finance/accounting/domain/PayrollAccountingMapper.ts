@@ -24,6 +24,8 @@ export class PayrollAccountingMapper {
         
         const description = `Paie ${payrollData.period} - ${payrollData.employeeName}`;
         
+        const now = new Date().toISOString();
+        const pieceNumber = `PAY-${Date.now()}`;
         const lines: JournalLine[] = [
             {
                 accountId: this.ACCOUNT_PAYROLL_EXPENSE,
@@ -31,7 +33,12 @@ export class PayrollAccountingMapper {
                 accountName: 'Rémunérations du personnel',
                 description: `Salaire brut + Charges`,
                 side: 'debit',
-                amountInCents: payrollData.grossAmount + payrollData.chargesSociales
+                amountInCents: payrollData.grossAmount + payrollData.chargesSociales,
+                date: now,
+                pieceNumber,
+                debitInCents: payrollData.grossAmount + payrollData.chargesSociales,
+                creditInCents: 0,
+                runningBalanceInCents: 0
             },
             {
                 accountId: this.ACCOUNT_PAYROLL_LIABILITY,
@@ -39,7 +46,12 @@ export class PayrollAccountingMapper {
                 accountName: 'Personnel - Rémunérations dues',
                 description: `Net à payer`,
                 side: 'credit',
-                amountInCents: payrollData.netAmount
+                amountInCents: payrollData.netAmount,
+                date: now,
+                pieceNumber,
+                debitInCents: 0,
+                creditInCents: payrollData.netAmount,
+                runningBalanceInCents: 0
             }
         ];
 

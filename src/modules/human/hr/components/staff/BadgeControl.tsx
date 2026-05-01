@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useAtomValue } from 'jotai';
-import { activeShiftsAtom, hrLoadingAtom } from '../../store/hrAtoms';
+import { activeShiftsAtom } from '../../store/staffAtoms';
+import { hrLoadingAtom } from '../../store/hrAtoms';
 import { NexusPayrollEngine } from '@domain/services/NexusPayrollEngine';
 import { ShiftEntry } from '@domain/schemas/hr';
 import { Button } from '@ui/button';
@@ -130,7 +131,7 @@ export const BadgeControl: React.FC = () => {
                         <p className="text-[9px] font-black uppercase tracking-tighter text-text-muted">Début de Session</p>
                         <p className="text-xs font-mono font-bold text-text-primary">
                             {(() => {
-                                    const ts = currentShift.startTime;
+                                    const ts = currentShift.timestamp;
                                     if (typeof ts === 'string') return new Date(ts).toLocaleTimeString('fr-FR');
                                     if ((ts as any) instanceof Date) return (ts as any).toLocaleTimeString('fr-FR');
                                     
@@ -147,7 +148,7 @@ export const BadgeControl: React.FC = () => {
                     <div className="space-y-1 text-right">
                         <p className="text-[9px] font-black uppercase tracking-tighter text-text-muted">ID Séquence Scellé</p>
                         <p className="text-[10px] font-mono font-bold text-accent truncate max-w-[120px] ml-auto">
-                            {(currentShift as any).fiscalSeal?.hash || "PENDING_SYNC"}
+                            {currentShift.fiscalSeal?.hash || "PENDING_SYNC"}
                         </p>
                     </div>
                 </div>
