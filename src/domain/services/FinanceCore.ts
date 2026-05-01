@@ -131,7 +131,8 @@ export class FinanceCore {
             previousHash: '0',
             sequence: 1,
             signedPayload: seal.latticeSignature,
-            algorithm: 'SLH-DSA-SHAKE-256'
+            algorithm: 'SLH-DSA-SHAKE-256',
+            updatedAt: new Date().toISOString()
         };
     }
 

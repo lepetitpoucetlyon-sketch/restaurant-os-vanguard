@@ -1,11 +1,17 @@
-/**
- * 📝 REGISTRE TYPES - Grade X Sovereignty
- */
+import { SovereignNode } from "../../nexus-contract";
 
 export type RegisterDocStatus = 'certified' | 'attention' | 'expired' | 'pending';
 
-export interface InterventionLog {
-    id: string;
+export interface RegistreEntry extends SovereignNode {
+    title: string;
+    description: string;
+    status: RegisterDocStatus;
+    lastUpdated: string;
+    nextReview: string;
+    documentUrl?: string;
+}
+
+export interface InterventionLog extends SovereignNode {
     prestataire: string;
     type: string;
     description: string;

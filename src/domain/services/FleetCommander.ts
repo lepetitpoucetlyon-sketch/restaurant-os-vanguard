@@ -43,7 +43,7 @@ export const FleetCommander = {
    * Generates a sync payload for global configuration push
    */
   generateGlobalSyncPayload(baseConfig: Record<string, unknown>, overrides: Record<string, unknown>): Record<string, unknown> {
-    logger.info('FleetCommander: Generating global sync payload', { overrideKeys: Object.keys(overrides) as any });
+    logger.info('FleetCommander: Generating global sync payload', { overrideKeys: Object.keys(overrides) });
     return {
       ...baseConfig,
       ...overrides,

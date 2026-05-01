@@ -60,7 +60,8 @@ export class StatementIngestionService {
                     label,
                     amountInCents: Math.round(Math.abs(amount) * 100),
                     type: amount >= 0 ? 'credit' : 'debit',
-                    isReconciled: false
+                    isReconciled: false,
+                    updatedAt: new Date().toISOString()
                 };
 
                 transaction.signature = await this.generateSignature(transaction);
@@ -98,14 +99,16 @@ export class StatementIngestionService {
                 label: 'VIREMENT STRIPE PAYOUT',
                 amountInCents: 1250000,
                 type: 'credit',
-                isReconciled: false
+                isReconciled: false,
+                updatedAt: new Date().toISOString()
             },
             {
                 date: new Date(),
                 label: 'ACHAT METRO PARIS',
                 amountInCents: 45020,
                 type: 'debit',
-                isReconciled: false
+                isReconciled: false,
+                updatedAt: new Date().toISOString()
             }
         ];
     }

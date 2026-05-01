@@ -153,4 +153,4 @@ const ContextSlot: React.FC<{ label: string, status: string, complexity: number 
     </div>
 );
 
-export default PerformanceMonitor;
+

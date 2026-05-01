@@ -157,7 +157,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         compliance: {
             seals: (fiscalSeals.data as unknown as FiscalSeal[]) || [],
             runAudit: runFiscalAudit,
-            documents: [] 
+            documents: [] as ComplianceDocument[] 
         },
         finance: {
             treasury

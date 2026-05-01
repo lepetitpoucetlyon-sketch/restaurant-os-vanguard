@@ -44,7 +44,7 @@ import { User, UserPermissions } from './auth.types';
  */
 export function canAccessModule(permissions: UserPermissions, moduleId: string): boolean {
     if (permissions.isSovereignAdmin) return true;
-    if (!SOVEREIGN_MODULE_IDS.has(moduleId as any)) return false;
+    if (!SOVEREIGN_MODULE_IDS.has(moduleId as import('../../genome.types').ModuleId)) return false;
     return permissions.allowedModules.includes(moduleId);
 }
 
@@ -140,6 +140,7 @@ export interface Reservation extends SovereignNode {
 }
 
 export interface Option {
+    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
     id: string;
     name: string;
     priceModifierInCents: number;
@@ -165,6 +166,7 @@ export interface Product extends SovereignNode {
     color?: string; // Suture for UI compatibility
     sku?: string;
     ingredients?: Array<{
+        [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
         ingredientId: string;
         quantity: number;
     }>;
@@ -192,10 +194,23 @@ export interface Recipe extends SovereignNode {
     isGlutenFree?: boolean;
     allergens?: string[];
     recipeSteps?: Array<{
+        [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
         order: number;
         instruction: string;
         duration?: number;
     }>;
+    // --- Grade X Extensions ---
+    category?: string;
+    prepTime?: number;
+    cookTime?: number;
+    portions?: number;
+    steps?: import('./common.types').RecipeStep[];
+    dietaryInfo?: string[];
+    costPriceInCents?: number;
+    sellingPriceInCents?: number;
+    marginInCents?: number;
+    color?: string;
+    isActive?: boolean;
 }
 
 export type OrderStatus =
@@ -359,7 +374,7 @@ export function isIngredient(node: SovereignNode): node is import('./logistics')
         node !== null &&
         typeof node.id === 'string' &&
         typeof node.name === 'string' &&
-        typeof (node as any).unit === 'string'
+        typeof (node as import('./logistics').Ingredient).unit === 'string'
     );
 }
 

@@ -54,7 +54,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
                 ingredients: [{ cost: 2.10 }, { cost: 1.00 }] 
             };
             
-            const sanitized = SharedKernel.sync('test', rawData, schemaFields);
+            const sanitized = SharedKernel.sync('test', rawData, schemaFields) as any;
             
             expect(sanitized.price).toBe(1050);
             expect(sanitized.ingredients[0].cost).toBe(210);

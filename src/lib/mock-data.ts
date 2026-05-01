@@ -3,10 +3,13 @@
  * Infrastructure de données de secours purges et souveraines.
  */
 
-export const mockOrders = [];
-export const mockInventory = [];
-export const mockStaff = [];
-export const mockCustomers = [];
+import { Order, User, Customer } from '@nexus/contracts';
+import { Ingredient } from '@nexus/contracts/logistics';
+
+export const mockOrders: Order[] = [];
+export const mockInventory: Ingredient[] = [];
+export const mockStaff: User[] = [];
+export const mockCustomers: Customer[] = [];
 
 export interface MockProduct {
     id: string;

@@ -25,9 +25,9 @@ export class TransactionService {
             // 1. DATA GATHERING (Parallelized for Performance)
             const orderPath = `${getTenantPath('orders', tenantId)}/${orderId}`;
             const [order, recipes, allStock] = await Promise.all([
-                Nexus.adapter.get(orderPath) as Promise<Order>,
-                Nexus.adapter.query(getTenantPath('recipes', tenantId)),
-                Nexus.adapter.query(getTenantPath('stockItems', tenantId))
+                Nexus.adapter.get<Order>(orderPath),
+                Nexus.adapter.query<Recipe>(getTenantPath('recipes', tenantId)),
+                Nexus.adapter.query<StockItem>(getTenantPath('stockItems', tenantId))
             ]);
 
             if (!order) throw new Error(`Order ${orderId} not found.`);
@@ -35,17 +35,17 @@ export class TransactionService {
 
             // 2. NF525 FISCAL SEALING
             const fiscalPath = getTenantPath('fiscalLedger', tenantId);
-            const lastSeals = await Nexus.adapter.query(fiscalPath, {
+            const lastSeals = await Nexus.adapter.query<FiscalSeal>(fiscalPath, {
                 orderBy: { field: 'timestamp', direction: 'desc' },
                 limit: 1
             });
-            const lastHash = lastSeals.length > 0 ? (lastSeals[0] as any as FiscalSeal).hash : null;
+            const lastHash = lastSeals.length > 0 ? lastSeals[0].hash : null;
 
             const seal = await FiscalEngine.sealEntry(order.id, {
                 amount: order.totalInCents, // Correction: changed from totalInCents to amount to match FiscalEngine expected data
                 timestamp: timestamp.toISOString()
             }, { 
-                lastSeal: lastHash ? { hash: lastHash } as FiscalSeal : undefined, 
+                lastSeal: lastHash ? { hash: lastHash } as any : undefined, 
                 instanceId: tenantId,
                 isTrainingMode: options.isTrainingMode 
             });
@@ -56,8 +56,8 @@ export class TransactionService {
             // 3. STOCK DEDUCTION (Powered by StockEngine)
             const stockImpact = await StockEngine.calculateOrderStockImpact(
                 order, 
-                recipes as any[] as Recipe[], 
-                allStock as StockItem[], 
+                recipes, 
+                allStock, 
                 orderId
             );
 

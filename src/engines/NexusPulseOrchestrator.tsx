@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger";
  * 🛰️ NexusPulseOrchestrator - Grade X+++
  * Central point where all cross-domain reflexes are initialized and monitored.
  */
-export function NexusPulseOrchestrator() {
+export function NexusPulseOrchestrator(): null {
     const tenantId = useAtomValue(tenantIdAtom);
 
     // 🧬 DOMAIN REFLEXES

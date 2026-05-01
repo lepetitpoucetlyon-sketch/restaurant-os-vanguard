@@ -32,10 +32,10 @@ export function useInventory() {
 
     return { 
         stockItems, 
-        ingredients: [], // To be expanded with domain filtering
-        preparations: [],
-        supplierOrders: [],
-        storageLocations: [],
+        ingredients: [] as import('@nexus/contracts').Ingredient[], // To be expanded with domain filtering
+        preparations: [] as any[],
+        supplierOrders: [] as any[],
+        storageLocations: [] as any[],
         lowStockItems, 
         isLoading: node.loading, 
         error: node.error,

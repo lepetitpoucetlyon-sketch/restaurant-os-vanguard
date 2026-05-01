@@ -23,8 +23,8 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
     const handleApprove = async () => {
         setIsResponding(true);
         await respondToModification(
-            modification.orderId,
-            modification.orderItemId,
+            String(modification.orderId || ''),
+            String(modification.orderItemId || ''),
             true,
             currentUser?.name || 'Chef',
             responseNote || undefined
@@ -35,8 +35,8 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
     const handleReject = async () => {
         setIsResponding(true);
         await respondToModification(
-            modification.orderId,
-            modification.orderItemId,
+            String(modification.orderId || ''),
+            String(modification.orderItemId || ''),
             false,
             currentUser?.name || 'Chef',
             responseNote || 'Modification non réalisable'
@@ -50,7 +50,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
     let newNotes = '';
 
     try {
-        const newValue = JSON.parse(modification.newValue || '{}');
+        const newValue = JSON.parse(String(modification.newValue || '{}'));
         removedIngredients = newValue.removed || [];
         addedIngredients = newValue.added || [];
         newNotes = newValue.notes || '';
@@ -87,9 +87,9 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                             </div>
                             <div className="flex items-center gap-2 text-neutral-500 text-xs font-bold uppercase tracking-wider">
                                 <Clock className="w-3.5 h-3.5" />
-                                <span>Il y a {timeSinceRequest} min</span>
+                                <span>Il y a {String(timeSinceRequest)} min</span>
                                 <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
-                                <span className="text-amber-600 dark:text-amber-400">{modification.requestedBy}</span>
+                                <span className="text-amber-600 dark:text-amber-400">{String(modification.requestedBy || 'Chef')}</span>
                             </div>
                         </div>
                     </div>

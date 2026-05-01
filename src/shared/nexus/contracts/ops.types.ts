@@ -31,6 +31,8 @@ export interface Table extends SovereignNode {
 
 export interface OrderItemModification extends SovereignMap {
     id: string;
+    orderId: string;
+    orderItemId: string;
     type: string;
     description: string;
     requestedAt: string;
@@ -89,11 +91,14 @@ export interface Order extends SovereignNode {
 
 export interface Reservation extends SovereignNode {
     customerId: string;
+    customerName: string;
     tableId?: string;
     date: string; // ISO
     time: string; // HH:mm
     partySize: number;
+    covers?: number; // Alias for UI compatibility
     status: 'pending' | 'confirmed' | 'arrived' | 'seated' | 'cancelled' | 'no_show';
+    duration?: number; // Estimated duration in minutes
     notes?: string;
 }
 

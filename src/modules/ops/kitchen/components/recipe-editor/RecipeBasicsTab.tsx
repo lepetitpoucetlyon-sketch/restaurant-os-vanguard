@@ -28,8 +28,8 @@ export function RecipeBasicsTab({
                     <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Dénomination Commerciale</label>
                     <input
                         type="text"
-                        value={formData.name}
-                        onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), name: e.target.value }))}
+                        value={formData.name as string}
+                        onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), name: e.target.value } as Partial<Recipe>))}
                         className="w-full h-16 px-8 bg-white rounded-3xl border-2 border-border focus:border-accent font-serif font-black text-xl outline-none transition-all placeholder:text-text-muted/30"
                         placeholder="Ex: Risotto aux Morilles & Truffe..."
                     />
@@ -37,8 +37,8 @@ export function RecipeBasicsTab({
                 <div>
                     <PremiumSelect
                         label="Catégorie du Menu"
-                        value={formData.category || ''}
-                        onChange={(val) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), category: val }))}
+                        value={(formData.category as string) || ''}
+                        onChange={(val) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), category: val } as Partial<Recipe>))}
                         options={categories.map(cat => ({ value: cat, label: cat.toUpperCase() }))}
                     />
                 </div>
@@ -47,8 +47,8 @@ export function RecipeBasicsTab({
             <div>
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Description Gastronomique</label>
                 <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), description: e.target.value }))}
+                    value={String(formData.description || '')}
+                    onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), description: e.target.value } as Partial<Recipe>))}
                     className="w-full h-32 px-8 py-6 bg-white rounded-[2rem] border-2 border-border focus:border-accent font-bold text-sm outline-none resize-none transition-all placeholder:text-text-muted/30"
                     placeholder="Texte court pour le menu ou le personnel de salle..."
                 />
@@ -68,8 +68,8 @@ export function RecipeBasicsTab({
                         <div className="flex items-center gap-3">
                             <input
                                 type="number"
-                                value={item.value}
-                                onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), [item.key]: parseInt(e.target.value) || 0 }))}
+                                value={Number(item.value || 0)}
+                                onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), [item.key]: parseInt(e.target.value) || 0 } as Partial<Recipe>))}
                                 className="w-full h-12 px-4 bg-bg-tertiary rounded-xl font-black text-lg outline-none"
                             />
                             <span className="text-[10px] font-black text-text-muted">{item.unit}</span>
@@ -80,7 +80,7 @@ export function RecipeBasicsTab({
                 <div className="bg-white p-6 rounded-[2rem] border border-border/50">
                     <PremiumSelect
                         label="Expertise"
-                        value={formData.difficulty || 'medium'}
+                        value={(formData.difficulty as any) || 'medium'}
                         onChange={(val) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), difficulty: val as Recipe["difficulty"] }))}
                         options={[
                             { value: 'easy', label: 'FACILE' },
@@ -97,7 +97,7 @@ export function RecipeBasicsTab({
                     {colors.map(color => (
                         <button
                             key={color}
-                            onClick={() => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), color }))}
+                            onClick={() => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), color } as Partial<Recipe>))}
                             className={cn(
                                 "w-12 h-12 rounded-2xl transition-all shrink-0 border-4",
                                 formData.color === color ? "border-accent scale-110 shadow-lg shadow-black/10" : "border-transparent opacity-60 hover:opacity-100"

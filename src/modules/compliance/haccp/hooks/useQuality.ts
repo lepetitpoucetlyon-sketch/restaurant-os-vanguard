@@ -61,10 +61,11 @@ export const useQuality = () => {
                 id: deliveryId,
                 reference: delivery.id || 'UNKNOWN' // Grade X Suture: Using ID as primary reference if manual reference is missing
             },
+            duration_minutes: 0,
             color_aspect: true,
             texture_aspect: true,
             odor_aspect: true,
-            items: (delivery.items || []).map((item: import('@domain/types/delivery').DeliveryItem) => {
+            items: (delivery.items || []).map((item: import('@domain/types/delivery').DeliveryItem): import('@domain/types/quality').ActiveQualityControlItem => {
                 if (!item.unit || !item.productName) {
                     import('@/lib/nexus/TelemetryService').then(({ TelemetryService }) => 
                         TelemetryService.reportIssue('FALLBACK_VALUE', 'QualityEngine', { field: 'productMetadata' })
@@ -83,7 +84,6 @@ export const useQuality = () => {
                     days_until_expiry: 0,
                     is_short_dlc: false,
                     unit: item.unit || 'pc',
-                    status: 'pass',
                     is_rejected: false,
                     decision: 'accepted',
                     corrective_action: 'none',
@@ -92,16 +92,26 @@ export const useQuality = () => {
                         temperature: { required: true, performed: false, target: { min: 0, max: 4 }, status: 'pass', warning_threshold: 4 },
                         weight: { required: false, performed: false, unit: item.unit || 'kg', status: 'pass', tolerance_percent: 5 },
                         freshness: { required: true, performed: false, score: 5 }
-                    }
+                    },
+                    batch_number: '',
+                    lot_number: '',
+                    origin: 'France', // Default Grade X Origin
+                    production_date: new Date().toISOString(),
+                    expiry_date: new Date(Date.now() + 86400000 * 3).toISOString(), // +3 days default
+                    decision_reason: 'N/A'
                 };
             }),
             delivery_conditions: {
                 vehicle_type: 'unknown',
                 vehicle_temperature: { compliant: true, measured: 0 },
-
                 vehicle_cleanliness: 'not_checked',
                 packaging_integrity: 'intact',
                 delivery_time_compliant: true
+            },
+            signature: {
+                captured: false,
+                data: '',
+                signer_name: ''
             },
             summary: {
                 total_items: delivery.items?.length || 0,
@@ -120,13 +130,13 @@ export const useQuality = () => {
             }
         };
         
-        setActiveControl(newControl as any);
+        setActiveControl(newControl as unknown as import('@domain/types/quality').ActiveQualityControl);
     };
 
     /**
      * Updates an item in the active control
      */
-    const updateControlItem = (item: QualityControlItem) => {
+    const updateControlItem = (item: import('@domain/types/quality').ActiveQualityControlItem) => {
         const existingItems = activeControl?.items || [];
         const index = existingItems.findIndex(i => i.id === item.id);
         
@@ -141,7 +151,7 @@ export const useQuality = () => {
         setActiveControl({
             ...activeControl,
             items: newItems
-        } as any);
+        } as import('@domain/types/quality').ActiveQualityControl);
     };
 
     /**
@@ -179,21 +189,25 @@ export const useQuality = () => {
                 id: IDService.generateId('qc'),
                 control_number: 'PENDING',
                 type: 'reception',
+                delivery: { id: 'manual', reference: 'manual' },
+                duration_minutes: 0,
                 supplier_id: '',
                 supplier_name: '',
                 controlled_at: new Date().toISOString(),
                 controlled_by: '',
                 controller_name: '',
+                color_aspect: true,
+                texture_aspect: true,
+                odor_aspect: true,
                 items: [],
                 delivery_conditions: {
                     vehicle_type: 'unknown',
                     vehicle_temperature: { compliant: true, measured: 0 },
-
                     vehicle_cleanliness: 'not_checked',
                     packaging_integrity: 'intact',
                     delivery_time_compliant: true
                 },
-                signature: { captured: false, data: undefined, signer_name: undefined },
+                signature: { captured: false, data: '', signer_name: '' },
                 summary: {
                     total_items: 0,
                     items_accepted: 0,
@@ -209,7 +223,7 @@ export const useQuality = () => {
                     synced: false,
                     fingerprint: ''
                 }
-            } as any);
+            } as import('@domain/types/quality').ActiveQualityControl);
             setSelectedDeliveryId(null);
             setStep(1);
             

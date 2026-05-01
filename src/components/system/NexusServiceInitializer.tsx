@@ -12,7 +12,7 @@ import { logger } from '@/lib/axiom';
  * Centralizes all root-level side effects and background services.
  * Eradicates the need for multiple logic-less context providers.
  */
-export function NexusServiceInitializer() {
+export function NexusServiceInitializer(): null {
     const tenantId = useAtomValue(tenantIdAtom);
     const store = useStore();
 

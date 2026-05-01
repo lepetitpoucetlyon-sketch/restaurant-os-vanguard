@@ -38,6 +38,7 @@ export interface Notification {
 // ============================================
 
 export interface Option {
+    [key: string]: SovereignField | undefined;
     id: string;
     name: string;
     priceModifierInCents: number;
@@ -60,6 +61,7 @@ export interface ProductIngredient {
 }
 
 export interface RecipeStep {
+    [key: string]: SovereignField;
     order: number;
     instruction: string;
     duration?: number; // In minutes
@@ -208,14 +210,14 @@ export interface MenuAnalysis {
 // SYSTEM & SYNC
 // ============================================
 
-export interface AuditLog {
-    id: string;
-    timestamp: Date;
+export interface AuditLog extends SovereignNode {
+    timestamp: string;
     userId: string;
-    userName: string;
+    userName?: string;
     action: string;
-    module: string;
+    module?: string;
     details?: string;
+    metadata?: SovereignData;
 }
 
 // ============================================

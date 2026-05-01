@@ -23,7 +23,7 @@ const GroupFilters = (props: {
     setSelectedType: (v: string) => void;
     selectedStatus: string;
     setSelectedStatus: (v: string) => void;
-}) => null;
+}): null => null;
 
 // Constants
 import { useGroups } from '@/engines/ops/NexusOpsProvider';

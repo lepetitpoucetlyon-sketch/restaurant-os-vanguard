@@ -39,14 +39,15 @@ export const FiscalEngine = {
             id, transactionId, timestamp, dataSnapshot,
             hash: FISCAL_CONSTANTS.TRAINING_MODE_HASH,
             previousHash,
-            signature: 'VTC_SCHOOL_TRAINING_SIGNATURE'
+            signature: 'VTC_SCHOOL_TRAINING_SIGNATURE',
+            updatedAt: new Date().toISOString()
         };
     }
 
     const hash = await CryptoService.generateHash(dataSnapshot, previousHash);
     const signature = await CryptoService.signFiscalData(hash, options.instanceId || 'default_instance');
 
-    const seal: FiscalSeal = { id, transactionId, previousHash, hash, dataSnapshot, timestamp, signature };
+    const seal: FiscalSeal = { id, transactionId, previousHash, hash, dataSnapshot, timestamp, signature, updatedAt: new Date().toISOString() };
 
     empireAudit.log({
         module: 'accounting',

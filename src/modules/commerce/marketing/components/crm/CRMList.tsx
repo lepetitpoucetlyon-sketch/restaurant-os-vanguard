@@ -37,9 +37,9 @@ export function CRMList() {
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             return (
-                cName.toLowerCase().includes(query) ||
-                cEmail.toLowerCase().includes(query) ||
-                cPhone.includes(query)
+                String(cName).toLowerCase().includes(query) ||
+                String(cEmail).toLowerCase().includes(query) ||
+                String(cPhone).includes(query)
             );
         }
         return true;

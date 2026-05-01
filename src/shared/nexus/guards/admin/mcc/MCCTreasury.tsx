@@ -22,7 +22,7 @@ export function MCCTreasury() {
     const { instances } = useFleet();
     
     const report = useMemo(() => {
-        return TreasuryEngine.generateFleetReport(instances as any);
+        return TreasuryEngine.generateFleetReport(instances);
     }, [instances]);
 
     return (

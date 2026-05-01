@@ -76,7 +76,7 @@ export function useRecruitment() {
             updatedAt: now,
         } as Candidate);
 
-        await logAction(candidateId, "Candidat ajouté au système", candidate.gdpr.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant");
+        await logAction(candidateId, "Candidat ajouté au système", (candidate.gdpr as any)?.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant");
         return candidateId;
     }, [activeTenantId, logAction]);
 

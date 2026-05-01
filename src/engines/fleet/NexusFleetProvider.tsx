@@ -278,8 +278,6 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         isUpdateAvailable,
         updateInfo,
         priceMultiplier,
-        isTrainingMode: false,
-        toggleTrainingMode: () => {},
         refreshFleet,
         syncFleet,
         selectInstance,
@@ -289,7 +287,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         complianceService: FleetComplianceService,
         haccpBridge: HACCPTelemetryBridge as unknown as import('@shared/nexus-contract').SovereignMap,
         fleet: globalMetrics, 
-        customer: { customers: [] },
+        customer: { customers: [] as import('@shared/nexus-contract').SovereignData[] },
         intelligence: { 
             globalInflationRate,
             setGlobalInflationRate,
@@ -299,6 +297,11 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             predictSignatureChance: () => 0.5,
             predictLaborCost: () => 0.0
         },
+        isTrainingMode: false,
+        toggleTrainingMode: () => { console.log('[Fleet] Toggling training mode...'); },
+        triggerRebalancing: async () => { console.log('[Fleet] Triggering rebalancing...'); },
+        nodes: [] as import('@shared/nexus-contract').SovereignData[],
+        health: 'stable',
         tutorial: {
             isActive: false,
             step: 0,
@@ -312,7 +315,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             prevStep: () => {},
             currentSection: {
                 id: 'nexus_core',
-                points: []
+                points: [] as import('@nexus/contracts/nexus.types').NexusTutorialStep[]
             },
             currentPointIndex: 0
         }

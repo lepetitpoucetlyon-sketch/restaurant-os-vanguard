@@ -39,9 +39,9 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                             initial={{ scale: 1.2 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 1.5 }}
-                            src={recipe.image || recipe.imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop"}
+                            src={String(recipe.image || recipe.imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop")}
                             className="w-full h-full object-cover opacity-80"
-                            alt={recipe.name}
+                            alt={String(recipe.name)}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent transition-colors from-neutral-50" />
 
@@ -78,9 +78,9 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                             transition={{ delay: 0.3 }}
                         >
                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent mb-4 block">SIGNATURE</span>
-                            <h1 className="text-4xl font-serif font-black leading-[1.1] mb-6 tracking-tight transition-colors text-black">{recipe.name}</h1>
+                            <h1 className="text-4xl font-serif font-black leading-[1.1] mb-6 tracking-tight transition-colors text-black">{String(recipe.name)}</h1>
                             <p className="text-[15px] leading-relaxed font-serif italic mb-10 opacity-80 border-l-2 border-accent/30 pl-4 py-1 transition-colors text-zinc-600">
-                                "{recipe.description || "Une création culinaire d'exception pour sublimer votre carte, alliant technique ancestrale et modernité."}"
+                                "{String(recipe.description || "Une création culinaire d'exception pour sublimer votre carte, alliant technique ancestrale et modernité.")}"
                             </p>
                         </motion.div>
 
@@ -219,7 +219,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                             className="relative h-[600px] rounded-[4rem] overflow-hidden shadow-[0_64px_128px_-32px_rgba(0,0,0,0.5)] border transition-colors border-black/5"
                                         >
                                             <img
-                                                src={recipe.imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop"}
+                                                src={String(recipe.imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop")}
                                                 className="w-full h-full object-cover"
                                                 alt="Final dish"
                                             />

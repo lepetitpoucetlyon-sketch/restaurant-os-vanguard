@@ -33,7 +33,7 @@ export class Slayer {
                 ? raw[config.fields.total] as number
                 : parseFloat(DataDigester.decontaminate(String(raw[config.fields.total]))),
             timestamp: new Date(String(raw[config.fields.date])).toISOString(),
-            items: Array.isArray(raw[config.fields.items || 'items']) ? raw[config.fields.items || 'items'] as import('@modules/ops').OrderItem[] : [],
+            items: Array.isArray(raw[config.fields.items || 'items']) ? raw[config.fields.items || 'items'] as import('@nexus/contracts').OrderItem[] : [],
             customerName: config.fields.customerName ? String(raw[config.fields.customerName]) : undefined
         };
     }

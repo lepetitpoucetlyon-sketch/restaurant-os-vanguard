@@ -37,6 +37,7 @@ export function useFiscal() {
                 category: expenseData.category as import("@nexus/contracts/finance.types").TransactionCategory || 'other',
                 description: expenseData.description || 'Frais sans description',
                 receiptImage: expenseData.receiptUrl,
+                updatedAt: new Date().toISOString()
             });
             return result.id;
         } catch (error) {
@@ -53,7 +54,8 @@ export function useFiscal() {
                 hash: e.fiscalSealHash!,
                 previousHash: 'root_genesis',
                 timestamp: typeof e.date === 'string' ? e.date : e.date.toISOString(),
-                signature: 'sovereign_v1'
+                signature: 'sovereign_v1',
+                updatedAt: new Date().toISOString()
             }));
             
         return await FiscalEngine.runAudit(seals, activeTenantId || 'default_instance');

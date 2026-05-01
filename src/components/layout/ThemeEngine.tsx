@@ -7,7 +7,7 @@ import { tenantConfigAtom } from '@/store/operationalAtoms';
  * 🎨 ThemeEngine - Grade X Stub
  * Applique les variables CSS dynamiques du Tenant configuré.
  */
-export function ThemeEngine() {
+export function ThemeEngine(): null {
     const config = useAtomValue(tenantConfigAtom);
 
     useEffect(() => {

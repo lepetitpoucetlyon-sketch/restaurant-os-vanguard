@@ -72,7 +72,15 @@ export const ProvisioningEngine = {
 
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
-            await fleetTelemetry.pushSiteTelemetry(newInstance.id as any, newInstance as any);
+            await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@domain/types/brands').TenantID, {
+                ...newInstance,
+                healthScore: newInstance.metrics.healthScore,
+                complianceScore: newInstance.metrics.complianceScore,
+                activeUsers: newInstance.metrics.activeUsers,
+                lowStockAlerts: newInstance.metrics.lowStockAlerts,
+                dailyRevenue: newInstance.metrics.dailyRevenue,
+                status: newInstance.status as any // Mapping status enum
+            });
 
             logger.info('ProvisioningEngine: Instance registered in Master Registry', { 
                 instanceId: newInstance.id, 

@@ -30,7 +30,8 @@ export function useRegistre() {
         status,
         description: `Registre de conformité pour ${title}.`,
         lastUpdated: new Date().toLocaleDateString('fr-FR'),
-        nextReview: '15/06/2026'
+        nextReview: '15/06/2026',
+        updatedAt: new Date().toISOString()
     });
 
     return {
@@ -69,7 +70,7 @@ export function useRegistre() {
             }
         ],
         getOverallStatus: () => ({ conforme: 5, attention: 1, non_conforme: 0 }),
-        registreEntries: [],
+        registreEntries: [] as import('@nexus/contracts/registre.types').RegistreEntry[],
         interventions: [
             {
                 id: 'INT-001',
@@ -78,7 +79,8 @@ export function useRegistre() {
                 description: 'Dégraissage annuel complet du système d\'extraction.',
                 date: '15/04/2026',
                 status: 'realise' as const,
-                documentUrl: '#'
+                documentUrl: '#',
+                updatedAt: new Date().toISOString()
             },
             {
                 id: 'INT-002',
@@ -87,7 +89,8 @@ export function useRegistre() {
                 description: 'Vérification périodique des 5 extincteurs CO2.',
                 date: '10/04/2026',
                 status: 'realise' as const,
-                documentUrl: '#'
+                documentUrl: '#',
+                updatedAt: new Date().toISOString()
             }
         ] as import('@nexus/contracts/registre.types').InterventionLog[],
     };
