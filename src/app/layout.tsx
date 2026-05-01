@@ -38,11 +38,13 @@ import { ContextualSettingsProvider } from "@/components/settings/ContextualSett
 import { ErrorBoundary } from "@/components/system/ErrorBoundary";
 
 // Gates & Orchestrators
-import { InstanceGuardGate } from "@nexus/guards";
-import { AuthGate } from "@nexus/guards";
-import { SaaSBillingGate } from "@nexus/guards";
-import { ComplianceGate } from "@nexus/guards";
-import { RoleGate } from "@nexus/guards";
+import { 
+  InstanceGuardGate, 
+  AuthGate, 
+  SaaSBillingGate, 
+  ComplianceGate, 
+  RoleGate 
+} from "@nexus/guards";
 import { AlertSync } from "@/components/system/AlertSync";
 import { ClientComponents } from "@/components/layout/ClientComponents";
 import { TrainingOverlay } from "@/components/layout/TrainingOverlay";

@@ -10,7 +10,6 @@ import { PaymentDialog } from "@modules/ops";
 import { SplitBillDialog } from "@modules/ops";
 import { useKitchen } from "@/engines/ops/NexusOpsProvider";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
-import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@ui/Toast";
 import { LucideIcon, ShoppingCart, Plus, ArrowLeft, MoreHorizontal, LayoutGrid, Star, Pizza, UtensilsCrossed, GlassWater, Beef, Coffee, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks";
