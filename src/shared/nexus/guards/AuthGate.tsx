@@ -21,8 +21,8 @@ interface AuthGateProps {
  * Only handles PIN Authentication and 2FA Challenges.
  */
 export function AuthGate({ children }: AuthGateProps) {
-    const { isAuthenticated, require2FAChallenge, currentUser } = useAuth();
-    const { isSidebarCollapsed, isMobileMenuOpen, closeMobileMenu } = useUI();
+    const { isAuthenticated, require2FAChallenge } = useAuth();
+    const { isMobileMenuOpen, closeMobileMenu } = useUI();
     const { activeTenantId, isTenantLoading } = useTenant();
     const tenantConfig = useAtomValue(tenantConfigAtom);
     const pathname = usePathname();
@@ -42,9 +42,6 @@ export function AuthGate({ children }: AuthGateProps) {
     if (isPublicArea) {
         return <>{children}</>;
     }
-
-    // 1. MASTER RESCUE & MCC BYPASS
-    // (Already handled via isMccArea logic below)
 
     // 2. PIN ENFORCEMENT
     if (!isAuthenticated) {
