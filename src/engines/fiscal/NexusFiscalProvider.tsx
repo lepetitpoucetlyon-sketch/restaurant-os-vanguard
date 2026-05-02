@@ -147,18 +147,18 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     const contextValue: NexusFiscalState = useMemo(() => ({
         accounting: {
-            entries: journalEntries.data || [],
-            accounts,
-            bankTransactions,
-            expenseClaims,
+            entries: (journalEntries.data as any) || [],
+            accounts: accounts as any,
+            bankTransactions: bankTransactions as any,
+            expenseClaims: expenseClaims as any,
             isLoading: journalEntries.loading,
             metrics: { netProfitInCents },
             submitExpense
         },
         compliance: {
-            seals: (fiscalSeals.data as FiscalSeal[]) || [],
+            seals: (fiscalSeals.data as any) || [],
             runAudit: runFiscalAudit,
-            documents: [] as ComplianceDocument[] 
+            documents: [] as any[] 
         },
         finance: {
             treasury

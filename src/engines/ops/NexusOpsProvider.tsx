@@ -170,9 +170,9 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
         switchTenant, 
         tenantId,
         floorOps: {
-            operationalNodes: ((operationalNodes.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable) as any as any,
-            allocations: ((allocations.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable) as any as any,
-            areas: (areas || []) as import("@/shared/nexus-contract").SovereignData[],
+            operationalNodes: ((operationalNodes.data || []) as any[]).map(toTable) as any,
+            allocations: ((allocations.data || []) as any[]).map(toTable) as any,
+            areas: (areas || []) as any,
             isLoading: operationalNodes.loading || allocations.loading,
             updateNodeStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
                 await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, { 

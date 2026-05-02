@@ -82,12 +82,11 @@ export function VoiceAssistantOverlay() {
             return;
         }
 
-        const SpeechRecognition = (window).SpeechRecognition || (window).webkitSpeechRecognition;
-
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
         if (!SpeechRecognition) return;
 
-        const recognition = new SpeechRecognition();
+        const recognition = new (SpeechRecognition as any)();
         recognitionRef.current = recognition;
         recognition.lang = 'fr-FR';
         recognition.onstart = () => setIsDictating(true);
@@ -135,7 +134,7 @@ export function VoiceAssistantOverlay() {
     const toggleHistory = async () => {
         if (!showHistory) {
             const hist = await (fetchAllSessions)();
-            setSessions(hist);
+            setSessions(hist as any);
         }
         setShowHistory(!showHistory);
     };
