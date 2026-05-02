@@ -10,3 +10,5 @@ export * from './hr';
 export * from './inventory';
 export * from './orders';
 export * from './quality';
+export * from './users';
+export * from './modules';

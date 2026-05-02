@@ -90,7 +90,7 @@ export default function ProfileSettings() {
                 name: formData.name,
                 avatar: formData.avatar,
                 ...(formData.pin ? { pin: formData.pin } : {})
-            } as any);
+            });
 
             setSaveSuccess(true);
             setTimeout(() => setSaveSuccess(false), 2000);

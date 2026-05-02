@@ -12,7 +12,7 @@ import {
     currentUserAtom
 } from '@/store/operationalAtoms';
 import { SovereignMath } from '@shared/services/SovereignMath';
-import { SovereignNode, OperationalIdentity } from '@shared/nexus-contract';
+import { SovereignNode, OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
@@ -48,7 +48,7 @@ export interface ComplianceDocument {
     status: 'VALID' | 'EXPIRED' | 'PENDING';
     issuedAt: string;
     expiresAt: string;
-    metadata: Record<string, unknown>;
+    metadata: Record<string, import("@/shared/nexus-contract").SovereignValue>;
 }
 
 export interface NexusFiscalState {
@@ -143,7 +143,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         pendingReceivablesInCents: 0,
         pendingPayablesInCents: 0,
         netCashPositionInCents: 0
-    } as unknown as TreasuryMetrics;
+    } as TreasuryMetrics;
 
     const contextValue: NexusFiscalState = useMemo(() => ({
         accounting: {
@@ -156,7 +156,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
             submitExpense
         },
         compliance: {
-            seals: (fiscalSeals.data as unknown as FiscalSeal[]) || [],
+            seals: (fiscalSeals.data as FiscalSeal[]) || [],
             runAudit: runFiscalAudit,
             documents: [] as ComplianceDocument[] 
         },

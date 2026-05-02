@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode } from '@shared/nexus-contract';
+import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { 
   Table, Order, Product, Recipe, Reservation, Quote, Campaign,
@@ -88,13 +88,13 @@ async function guardedAction<T>(
  */
 function sanitizeToSovereign<T>(data: T): T {
     if (data === null || typeof data !== 'object') {
-        if (typeof data === 'bigint') return Number(data) as unknown as T;
+        if (typeof data === 'bigint') return Number(data) as T;
         return data;
     }
     if (Array.isArray(data)) return data.map(val => sanitizeToSovereign(val)) as T;
 
     const PROTECTED_KEYS = ['id', 'tenantId', 'createdAt', 'updatedAt', 'identifier', 'date'];
-    const sanitized: Record<string, unknown> = { ...data } as any;
+    const sanitized: Record<string, import("@/shared/nexus-contract").SovereignValue> = { ...data } as any;
 
     for (const key in sanitized) {
         if (PROTECTED_KEYS.includes(key)) continue;
@@ -170,9 +170,9 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
         switchTenant, 
         tenantId,
         floorOps: {
-            operationalNodes: ((operationalNodes.data || []) as unknown as SovereignNode[]).map(toTable),
-            allocations: ((allocations.data || []) as unknown as SovereignNode[]).map(toTable),
-            areas: (areas || []) as unknown as SovereignNode[],
+            operationalNodes: ((operationalNodes.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable),
+            allocations: ((allocations.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable),
+            areas: (areas || []) as import("@/shared/nexus-contract").SovereignData[],
             isLoading: operationalNodes.loading || allocations.loading,
             updateNodeStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
                 await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, { 
@@ -210,7 +210,7 @@ const createSovereignHook = (atom: any, identity: OperationalIdentity, mapper: (
         const node = useAtomValue(atom);
         const tenantId = useAtomValue(tenantIdAtom);
         return {
-            data: (((node as any).data || []) as unknown as SovereignNode[]).map(mapper),
+            data: (((node as any).data || []) as import("@/shared/nexus-contract").SovereignData[]).map(mapper),
             isLoading: (node as any).loading,
             error: (node as any).error,
             add: async (data: Partial<SovereignNode>) => {
@@ -263,9 +263,9 @@ export const useReservations = useAllocations;
 
 export const useOperationalNodes = () => {
     const node = useAtomValue(tablesNodeAtom);
-    const nodes = (((node as any).data || []) as unknown as SovereignNode[]).map(toTable);
-    const layouts = ((useAtomValue(floorsAtom) || []) as unknown as SovereignNode[]).map(toFloor);
-    const zones = ((useAtomValue(zonesAtom) || []) as unknown as SovereignNode[]).map(toZone);
+    const nodes = (((node as any).data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable);
+    const layouts = ((useAtomValue(floorsAtom) || []) as import("@/shared/nexus-contract").SovereignData[]).map(toFloor);
+    const zones = ((useAtomValue(zonesAtom) || []) as import("@/shared/nexus-contract").SovereignData[]).map(toZone);
     const isZonesLocked = useAtomValue(zonesLockedAtom);
     const setZonesLocked = useSetAtom(zonesLockedAtom);
     const currentLayoutId = useAtomValue(currentFloorIdAtom);
@@ -485,8 +485,8 @@ export const useKitchen = () => {
     const ordersNode = useAtomValue(ordersNodeAtom);
     const tasksNode = useAtomValue(prepTasksNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
-    const orders = ((ordersNode.data || []) as unknown as SovereignNode[]).map(toOrder);
-    const tasks = (tasksNode.data || []) as unknown as SovereignNode[];
+    const orders = ((ordersNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toOrder);
+    const tasks = (tasksNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
 
     return {
         data: orders,
@@ -517,12 +517,12 @@ export const usePOSController = () => {
     const ordersNode = useAtomValue(ordersNodeAtom);
     const productsNode = useAtomValue(productsNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
-    const products = ((productsNode.data || []) as unknown as SovereignNode[]).map(toProduct);
+    const products = ((productsNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toProduct);
     const recipesNode = useAtomValue(recipesNodeAtom);
 
     return {
         products,
-        recipes: ((recipesNode.data || []) as unknown as SovereignNode[]).map(toRecipe),
+        recipes: ((recipesNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toRecipe),
         isLoading: ordersNode.loading || productsNode.loading,
         error: ordersNode.error || productsNode.error,
         createOrder: async (order: any) => {
@@ -547,11 +547,11 @@ export const useInventory = () => {
     const wasteNode = useAtomValue(wasteLogsNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
 
-    const stockItems = (stockNode.data || []) as unknown as SovereignNode[];
-    const ingredients = (ingredientsNode.data || []) as unknown as SovereignNode[];
-    const preparations = (preparationsNode.data || []) as unknown as SovereignNode[];
-    const storageLocations = (storageNode.data || []) as unknown as SovereignNode[];
-    const wasteLogs = (wasteNode.data || []) as unknown as SovereignNode[];
+    const stockItems = (stockNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
+    const ingredients = (ingredientsNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
+    const preparations = (preparationsNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
+    const storageLocations = (storageNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
+    const wasteLogs = (wasteNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
 
     return {
         data: stockItems.map(toIngredient),
@@ -631,7 +631,7 @@ export const useIntelligence = () => {
 
 export const useManagement = () => ({
     quotes: createSovereignHook(quotesNodeAtom, OperationalIdentity.RELATIONS)(),
-    reports: [] as unknown[]
+    reports: [] as import("@/shared/nexus-contract").SovereignValue[]
 });
 
 export const useQuotes = () => {

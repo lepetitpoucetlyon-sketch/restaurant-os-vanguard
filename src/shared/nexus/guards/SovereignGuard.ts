@@ -3,7 +3,7 @@ import { tenantIdAtom } from '@/store/fleetAtoms';
 import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { CryptoService } from '@domain/services/CryptoService';
-import type { SignedSovereignData, SovereignData, SovereignWriteSignature } from '@shared/nexus-contract';
+import type { SignedSovereignData, SovereignData, SovereignWriteSignature } from '@/shared/nexus-contract';
 
 /**
  * 🛡️ SovereignGuard - Restaurant OS (Shadow Context 5.4)

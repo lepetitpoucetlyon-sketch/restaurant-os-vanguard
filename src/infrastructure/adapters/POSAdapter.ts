@@ -50,7 +50,7 @@ export class POSService {
     static formatForKitchen(items: (OrderItem | CartItem)[]): OrderItem[] {
         const now = new Date().toISOString();
         return items.map(item => ({
-            id: (item as any).id || `item_${Math.random().toString(36).substring(2, 11)}`,
+            id: (item).id || `item_${Math.random().toString(36).substring(2, 11)}`,
             productId: (item as CartItem).productId || (item as OrderItem).productId,
             categoryId: (item as CartItem).categoryId || (item as OrderItem).categoryId,
             name: item.name,
@@ -59,8 +59,8 @@ export class POSService {
             notes: item.notes || "",
             modifiers: item.modifiers || [],
             status: 'pending',
-            createdAt: (item as any).createdAt || now,
-            updatedAt: (item as any).updatedAt || now
+            createdAt: (item).createdAt || now,
+            updatedAt: (item).updatedAt || now
         }));
     }
 }

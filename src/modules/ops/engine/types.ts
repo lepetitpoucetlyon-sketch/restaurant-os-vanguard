@@ -1,4 +1,4 @@
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 import type { Order, OrderItem, OrderStatus } from '@nexus/contracts/nexus-internal-mapper';
 export type { Order, OrderItem, OrderStatus };
@@ -7,7 +7,7 @@ export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';
 
 export interface OrderItemModification {
-    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     id: string;
     orderId: string;
     orderItemId: string;

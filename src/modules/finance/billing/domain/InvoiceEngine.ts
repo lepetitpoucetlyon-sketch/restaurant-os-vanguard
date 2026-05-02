@@ -1,5 +1,5 @@
 import { Order, LegalInvoice, NexusInternalMapper } from '@nexus/contracts/nexus-internal-mapper';
-import { SovereignNode } from '@shared/nexus-contract';
+import { SovereignNode } from '@/shared/nexus-contract';
 
 /**
  * 🏛️ InvoiceEngine - NF525 Fiscal Intelligence

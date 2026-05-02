@@ -18,7 +18,7 @@ export interface AgentInsight {
     description: string;
     suggestedAction?: {
         label: string;
-        payload: Record<string, unknown>;
+        payload: Record<string, import("@/shared/nexus-contract").SovereignValue>;
     };
     reasoning: AgentReasoningStep[];
 }

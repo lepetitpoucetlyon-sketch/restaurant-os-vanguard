@@ -1,5 +1,5 @@
 import { atom, WritableAtom } from 'jotai';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 export interface NexusPulse {
     id: string;
@@ -13,7 +13,7 @@ export interface NexusPulse {
  * 🛰️ nexusPulseAtom
  * Shared event stream for cross-domain communication.
  */
-export const nexusPulseAtom = atom<NexusPulse | null>(null) as unknown as WritableAtom<NexusPulse | null, [NexusPulse | null], void>;
+export const nexusPulseAtom = atom<NexusPulse | null>(null) as WritableAtom<NexusPulse | null, [NexusPulse | null], void>;
 
 /**
  * 📢 emitPulseAtom (Write-only)

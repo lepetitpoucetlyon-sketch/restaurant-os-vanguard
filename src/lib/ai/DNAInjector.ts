@@ -18,7 +18,7 @@ export class DNAInjector {
             let dynamicRules: string[] = [];
             
             try {
-                const results = await Nexus.adapter.query<import('@shared/nexus-contract').SovereignData>('tenant_knowledge', {
+                const results = await Nexus.adapter.query<import('@/shared/nexus-contract').SovereignData>('tenant_knowledge', {
                     where: [{ field: 'tenantId', operator: '==', value: tenantId }]
                 });
                 dynamicRules = results.map(doc => String(doc.rule || ""));
@@ -29,7 +29,7 @@ export class DNAInjector {
 
             // 2. Recherche dans la config statique (Fichiers .ts dans /instances)
             const staticConfig = getTenantConfig(tenantId);
-            const staticRules = (staticConfig as import('@shared/nexus-contract').TenantConfig)?.metadata?.description || staticConfig?.name || "";
+            const staticRules = (staticConfig as import('@/shared/nexus-contract').TenantConfig)?.metadata?.description || staticConfig?.name || "";
 
             // 3. Fusion et formatage pour l'IA
             const finalDNA = `

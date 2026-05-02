@@ -3,7 +3,7 @@
  * Unified representation of a person within the Restaurant OS.
  */
 
-import { SovereignNode } from '@shared/nexus-contract';
+import { SovereignNode } from '@/shared/nexus-contract';
 
 export interface Customer extends SovereignNode {
   firstName: string;

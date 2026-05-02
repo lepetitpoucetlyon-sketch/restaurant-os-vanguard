@@ -26,6 +26,18 @@ service cloud.firestore {
       return isSignedIn() && getTenantId() == tenantId;
     }
 
+    // --- 🏛️ USERS & DEVICES CORE (Phase 2.1) ---
+    match /users/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isFleetAdmin();
+
+      match /certifiedDevices/{fingerprint} {
+        allow read: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId; // Allow auto-certification for SUPER_ADMIN
+        allow update, delete: if isFleetAdmin();
+      }
+    }
+
     // --- 🏛️ TENANT ISOLATION CORE ---
 
     match /tenants/{tenantId} {

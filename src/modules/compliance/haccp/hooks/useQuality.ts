@@ -12,7 +12,7 @@ import {
 } from '@modules/compliance/haccp/store/qualityAtoms';
 import { deliveriesAtom } from '@/store/operationalAtoms';
 import { tenantIdAtom } from '@/store/fleetAtoms';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 import { QualityEngine } from '@domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@domain/types/quality';
 import { Delivery } from '@domain/types/delivery';
@@ -42,7 +42,7 @@ export const useQuality = () => {
      * Starts a new reception control session for a specific delivery
      */
     const selectDeliveryForControl = (deliveryId: string) => {
-        const delivery = (deliveries as unknown as Delivery[]).find((d: Delivery) => d.id === deliveryId);
+        const delivery = (deliveries as import("@domain/types/quality").Delivery[]).find((d: Delivery) => d.id === deliveryId);
         if (!delivery) return;
 
         setSelectedDeliveryId(deliveryId);
@@ -130,7 +130,7 @@ export const useQuality = () => {
             }
         };
         
-        setActiveControl(newControl as unknown as import('@domain/types/quality').ActiveQualityControl);
+        setActiveControl(newControl as import('@domain/types/quality').ActiveQualityControl);
     };
 
     /**

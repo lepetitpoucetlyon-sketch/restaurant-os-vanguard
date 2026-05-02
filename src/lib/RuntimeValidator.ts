@@ -11,7 +11,7 @@ export const RuntimeValidator = {
    * Asserts that the data matches the expected Branded Schema.
    * If failure: Quarantine and return null (Safe-Fail).
    */
-  validate<T>(data: import('@shared/nexus-contract').SovereignValue, schema: 'Cents' | 'Quantity' | 'Rate'): T | null {
+  validate<T>(data: import('@/shared/nexus-contract').SovereignValue, schema: 'Cents' | 'Quantity' | 'Rate'): T | null {
 
     try {
       switch (schema) {
@@ -40,17 +40,17 @@ export const RuntimeValidator = {
   /**
    * Batch validation for whole entities
    */
-  validateOrder(orderData: import('@shared/nexus-contract').SovereignData) {
+  validateOrder(orderData: import('@/shared/nexus-contract').SovereignData) {
 
     const items = Array.isArray(orderData.items) ? orderData.items : [];
     return {
       ...orderData,
-      totalInCents: RuntimeValidator.validate<Cents>(orderData.totalInCents as import('@shared/nexus-contract').SovereignValue, 'Cents'),
-      items: items.map((item: import('@shared/nexus-contract').SovereignData) => ({
+      totalInCents: RuntimeValidator.validate<Cents>(orderData.totalInCents as import('@/shared/nexus-contract').SovereignValue, 'Cents'),
+      items: items.map((item: import('@/shared/nexus-contract').SovereignData) => ({
 
         ...item,
-        priceInCents: RuntimeValidator.validate<Cents>(item.priceInCents as import('@shared/nexus-contract').SovereignValue, 'Cents'),
-        quantity: RuntimeValidator.validate<Quantity>(item.quantity as import('@shared/nexus-contract').SovereignValue, 'Quantity')
+        priceInCents: RuntimeValidator.validate<Cents>(item.priceInCents as import('@/shared/nexus-contract').SovereignValue, 'Cents'),
+        quantity: RuntimeValidator.validate<Quantity>(item.quantity as import('@/shared/nexus-contract').SovereignValue, 'Quantity')
       }))
     };
   }

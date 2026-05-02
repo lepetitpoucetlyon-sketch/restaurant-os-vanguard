@@ -17,12 +17,14 @@ import {
     limit,
     Firestore
 } from 'firebase/firestore';
+import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
 import { app } from '@/lib/firebase';
 import * as Sentry from "@sentry/nextjs";
 import { z } from 'zod';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { logger } from '@/lib/logger';
-import { INexusAdapter, INexusQueryOptions, INexusBatch } from '@/lib/nexus/NexusAdapter';
+import { INexusAdapter, INexusQueryOptions, INexusBatch, Nexus } from '@/lib/nexus/NexusAdapter';
+import { withTenantScope } from '@/lib/sovereign/withTenantScope';
 
 /**
  * 🏛️ FirestoreBatch - Grade X+++
@@ -38,12 +40,12 @@ class FirestoreBatch implements INexusBatch {
 
     set<T = any>(path: string, data: T): void {
         const docRef = doc(this.db, path);
-        this.batch.set(docRef, data as any);
+        this.batch.set(docRef, data as import('firebase/firestore').DocumentData);
     }
 
     update<T = any>(path: string, data: Partial<T>): void {
         const docRef = doc(this.db, path);
-        this.batch.update(docRef, data as any);
+        this.batch.update(docRef, data as import('firebase/firestore').DocumentData);
     }
 
     increment(path: string, field: string, amount: number): void {
@@ -65,6 +67,15 @@ class FirestoreBatch implements INexusBatch {
  * 🏛️ FirestoreAdapter - Grade X+++
  * Sovereign Class compliant with INexusAdapter.
  */
+
+function hydrateBasedOnPath(pathOrCollection: string, data: import("@/shared/nexus-contract").SovereignData) {
+    if (!data) return data;
+    if (pathOrCollection.includes('users')) return FirestoreHydrator.hydrateUser(data);
+    if (pathOrCollection.includes('orders')) return FirestoreHydrator.hydrateOrder(data);
+    if (pathOrCollection.includes('modules')) return FirestoreHydrator.hydrateModule(data);
+    return data;
+}
+
 export class FirestoreAdapter implements INexusAdapter {
     private db: Firestore;
 
@@ -77,7 +88,8 @@ export class FirestoreAdapter implements INexusAdapter {
             const docRef = doc(this.db, path);
             const snap = await getDoc(docRef);
             if (!snap.exists()) return null;
-            return { id: snap.id, ...snap.data() } as T;
+            const rawData = { id: snap.id, ...snap.data() };
+            return hydrateBasedOnPath(path, rawData) as T;
         } catch (error) {
             Sentry.captureException(error);
             throw error;
@@ -87,10 +99,16 @@ export class FirestoreAdapter implements INexusAdapter {
     async query<T = any>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
         try {
             let q = query(collection(this.db, collectionPath));
+            
+            // Phase 2 Vanguard: Apply organizationId filter automatically
+            const organizationId = Nexus.activeTenant;
+            if (organizationId && organizationId !== 'restaurant-os' && organizationId !== 'main') {
+                q = withTenantScope(q, organizationId);
+            }
 
             if (options?.where) {
                 options.where.forEach(w => {
-                    q = query(q, where(w.field, w.operator as any, w.value));
+                    q = query(q, where(w.field, w.operator as import('firebase/firestore').WhereFilterOp, w.value));
                 });
             }
 
@@ -103,7 +121,7 @@ export class FirestoreAdapter implements INexusAdapter {
             }
 
             const snap = await getDocs(q);
-            return snap.docs.map(d => ({ id: d.id, ...d.data() } as T));
+            return snap.docs.map(d => hydrateBasedOnPath(collectionPath, { id: d.id, ...d.data() }) as T);
         } catch (error) {
             Sentry.captureException(error);
             throw error;
@@ -116,17 +134,30 @@ export class FirestoreAdapter implements INexusAdapter {
         options?: INexusQueryOptions & { onError?: (error: Error) => void }
     ): () => void {
         const isCollection = path.split('/').length % 2 !== 0;
-        const ref = isCollection ? collection(this.db, path) : doc(this.db, path);
         
-        return onSnapshot(ref as any, (snap: any) => {
-            if (isCollection) {
-                const data = snap.docs.map((d: any) => ({ id: d.id, ...d.data() }));
-                callback(data as any);
-            } else {
-                const data = snap.exists() ? { id: snap.id, ...snap.data() } : null;
-                callback(data as T);
+        if (isCollection) {
+            let q = query(collection(this.db, path));
+            const organizationId = Nexus.activeTenant;
+            if (organizationId && organizationId !== 'restaurant-os' && organizationId !== 'main') {
+                q = withTenantScope(q, organizationId);
             }
-        }, options?.onError);
+            if (options?.where) {
+                options.where.forEach(w => {
+                    q = query(q, where(w.field, w.operator as import('firebase/firestore').WhereFilterOp, w.value));
+                });
+            }
+            return onSnapshot(q, (snap: import('firebase/firestore').QuerySnapshot | import('firebase/firestore').DocumentSnapshot) => {
+                const data = snap.docs.map((d: import('firebase/firestore').QueryDocumentSnapshot) => hydrateBasedOnPath(path, { id: d.id, ...d.data() }));
+                callback(data as import('firebase/firestore').DocumentData);
+            }, options?.onError);
+        } else {
+            const ref = doc(this.db, path);
+            return onSnapshot(ref, (snap: import('firebase/firestore').QuerySnapshot | import('firebase/firestore').DocumentSnapshot) => {
+                const rawData = snap.exists() ? { id: snap.id, ...snap.data() } : null;
+                const data = rawData ? hydrateBasedOnPath(path, rawData) : null;
+                callback(data as T);
+            }, options?.onError);
+        }
     }
 
     batch(): INexusBatch {
@@ -135,12 +166,12 @@ export class FirestoreAdapter implements INexusAdapter {
 
     async set<T = any>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
         const docRef = doc(this.db, path);
-        await setDoc(docRef, data as any, options);
+        await setDoc(docRef, data as import('firebase/firestore').DocumentData, options);
     }
 
     async update<T = any>(path: string, data: Partial<T>): Promise<void> {
         const docRef = doc(this.db, path);
-        await updateDoc(docRef, data as any);
+        await updateDoc(docRef, data as import('firebase/firestore').DocumentData);
     }
 
     async increment(path: string, field: string, amount: number): Promise<void> {
@@ -150,7 +181,7 @@ export class FirestoreAdapter implements INexusAdapter {
 
     async create<T = any>(path: string, data: T): Promise<void> {
         const colRef = collection(this.db, path);
-        await addDoc(colRef, data as any);
+        await addDoc(colRef, data as import('firebase/firestore').DocumentData);
     }
 
     async delete(path: string): Promise<void> {

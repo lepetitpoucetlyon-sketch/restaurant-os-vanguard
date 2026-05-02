@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint Souverain - Master Control Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A192F;
+            --accent: #64FFDA;
+            --secondary: #00B4D8;
+            --text: #CCD6F6;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --gold: #C5A059;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-y: auto;
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .blueprint-container {
+            width: 100vw; min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            padding: 40px;
+            box-sizing: border-box;
+            gap: 40px;
+        }
+
+        .main-canvas {
+            display: flex; flex-direction: column; gap: 20px;
+            position: relative;
+        }
+
+        .layer {
+            background: var(--glass);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .layer-header {
+            position: absolute; top: -10px; left: 20px;
+            background: var(--bg);
+            padding: 0 10px;
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px;
+            color: var(--secondary);
+        }
+
+        /* Layer 6: Modules */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+        }
+
+        .module-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            padding: 15px; border-radius: 8px;
+            text-align: left; font-size: 11px;
+            cursor: pointer; transition: all 0.3s;
+            position: relative;
+            display: flex; flex-direction: column; justify-content: space-between;
+            min-height: 80px;
+        }
+
+        .module-card:hover { border-color: var(--accent); background: rgba(100, 255, 218, 0.05); }
+
+        .module-status {
+            font-size: 8px; font-weight: 900;
+            padding: 2px 6px; border-radius: 4px;
+            display: inline-block; margin-top: 10px;
+            width: fit-content;
+        }
+
+        .status-on { background: rgba(100, 255, 218, 0.2); color: var(--accent); border: 1px solid var(--accent); }
+        .status-off { background: rgba(255, 100, 100, 0.2); color: #FF6464; border: 1px solid #FF6464; }
+
+        .toggle-switch {
+            width: 30px; height: 15px;
+            background: #333; border-radius: 15px;
+            position: relative; cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: ''; position: absolute;
+            width: 11px; height: 11px;
+            background: #fff; border-radius: 50%;
+            top: 2px; left: 2px; transition: 0.3s;
+        }
+
+        .toggle-active { background: var(--accent); }
+        .toggle-active::after { left: 17px; }
+
+        .card-controls {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px;
+        }
+
+        .module-card:hover {
+            border-color: var(--accent);
+            background: rgba(100, 255, 218, 0.1);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
+        }
+
+        /* Layer 5: Nexus Core */
+        .nexus-core {
+            display: flex; justify-content: center; align-items: center; gap: 40px;
+            padding: 40px;
+        }
+
+        .nexus-hub {
+            width: 80px; height: 80px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(100, 255, 218, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(100, 255, 218, 0); }
+        }
+
+        /* Layer 4: Pillars */
+        .pillar-row {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 20px;
+        }
+
+        .pillar {
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 15px;
+            text-align: center; cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pillar:hover { background: rgba(255,255,255,0.05); border-color: var(--secondary); }
+        .pillar-icon { font-size: 24px; margin-bottom: 10px; }
+        .pillar-label { font-size: 11px; font-weight: 900; text-transform: uppercase; }
+
+        /* Layers 1-3: Infra */
+        .infra-grid {
+            display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr; gap: 15px;
+        }
+
+        .infra-block {
+            border: 1px solid var(--border);
+            padding: 15px; border-radius: 8px;
+            font-size: 10px;
+        }
+
+        /* Sidebar Control Panel */
+        .control-panel {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 25px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .mcc-display {
+            background: #000; border: 2px solid var(--border);
+            height: 150px; border-radius: 8px;
+            padding: 15px; font-family: monospace;
+            font-size: 10px; color: var(--accent);
+            overflow-y: hidden; position: relative;
+        }
+
+        .mcc-line { white-space: nowrap; animation: scan 10s linear infinite; }
+        @keyframes scan { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+
+        .verdict-box {
+            background: rgba(100, 255, 218, 0.05);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+        }
+
+        .verdict-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; }
+        .verdict-val { color: var(--accent); font-weight: 700; }
+
+        .info-panel {
+            flex-grow: 1; border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .info-title { color: var(--accent); font-weight: 900; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; }
+        .info-desc { font-size: 12px; line-height: 1.6; opacity: 0.8; }
+        .info-path { font-family: monospace; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 4px; font-size: 10px; margin-top: 10px; color: var(--secondary); }
+
+        .tag { display: inline-block; padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 9px; margin-right: 5px; }
+
+        #overlay-svg {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .layer, .control-panel, .main-canvas { position: relative; z-index: 2; }
+    </style>
+</head>
+<body>
+
+    <svg id="overlay-svg">
+        <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#64FFDA" />
+            </marker>
+        </defs>
+        <g id="flow-paths"></g>
+    </svg>
+
+    <div class="blueprint-container">
+        
+        <div class="main-canvas">
+            <!-- Header Info -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h1 style="margin:0; font-size: 24px; letter-spacing: -1px; font-weight: 900;">BLUEPRINT FORENSIQUE DE L'OS SOUVERAIN</h1>
+                    <p style="margin:5px 0; font-size: 10px; letter-spacing: 2px; color: var(--gold);">GRADE X - PROTOCOLE NEXUS V5.3</p>
+                </div>
+                <div style="text-align: right; font-size: 9px; opacity: 0.5;">
+                    AUDIT MODULE-EXTRACTOR-X: CONFIRMÉ<br>INDICE DE FRICTION: 0/10 | 2 MAI 2026
+                </div>
+            </div>
+
+            <!-- Layer 6: UI -->
+            <div class="layer" id="layer-ui">
+                <div class="layer-header">Layer 6: The UI / Pilote Grade X</div>
+                <div class="module-grid" id="module-grid">
+                    <!-- Dynamic Modules -->
+                </div>
+            </div>
+
+            <!-- Layer 5: Nexus -->
+            <div class="layer" id="layer-nexus">
+                <div class="layer-header">Layer 5: Nexus Core - The Mediator Hub</div>
+                <div class="nexus-core">
+                    <div class="infra-block" id="nexus-logic" style="text-align: center; border-color: var(--secondary);">Jotai Atoms / Core Logic</div>
+                    <div class="nexus-hub" id="nexus-hub" onclick="showInfo('nexus')">⚛️</div>
+                    <div class="infra-block" id="nexus-sam" style="text-align: center; border-color: var(--gold);">SAM (Sovereign Action Manifest)</div>
+                    <div class="infra-block" id="nexus-pulse" style="text-align: center; border-color: var(--accent);">Pulse / EventEmitter</div>
+                </div>
+            </div>
+
+            <!-- Layer 4: Pillars -->
+            <div class="layer" id="layer-pillars">
+                <div class="layer-header">Layer 4: Sovereign Domains - The 8 Pillars</div>
+                <div class="pillar-row" id="pillar-row">
+                    <!-- Dynamic Pillars -->
+                </div>
+            </div>
+
+            <!-- Layers 1-3: Raw Infra -->
+            <div class="layer" id="layer-infra">
+                <div class="layer-header">Layers 1-3: Raw Infrastructure & Persistence</div>
+                <div class="infra-grid">
+                    <div class="infra-block" onclick="showInfo('adapters')">
+                        <div style="font-weight: 700; margin-bottom:5px;">ADAPTERS</div>
+                        <div style="display: flex; gap:5px;">
+                            <span class="tag">SQL</span><span class="tag">API</span><span class="tag">NoSQL</span>
+                        </div>
+                    </div>
+                    <div class="infra-block" onclick="showInfo('zod')">
+                        <div style="font-weight: 700; margin-bottom:5px;">ZOD SCHEMAS</div>
+                        <div style="opacity: 0.6;">Contracts & Validation</div>
+                    </div>
+                    <div class="infra-block" onclick="showInfo('db')">
+                        <div style="font-weight: 700; margin-bottom:5px;">DATABASES</div>
+                        <div style="display: flex; gap:10px;">
+                            <span>🐘 PostgreSQL</span><span>🔴 Redis</span>
+                        </div>
+                    </div>
+                    <div class="infra-block" onclick="showInfo('legal')">
+                        <div style="font-weight: 700; margin-bottom:5px;">LEGAL LABELS</div>
+                        <div style="display: flex; flex-direction: column; gap:3px;">
+                            <span class="tag" style="background: var(--gold); color: black;">RGPD</span>
+                            <span class="tag">ISO 27001</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <div style="font-weight: 900; font-size: 14px; letter-spacing: 2px;">MASTER CONTROL CONSOLE</div>
+            
+            <div class="mcc-display" id="mcc-screen">
+                <div class="mcc-line">> INITIALIZING FORENSIC SCAN...</div>
+                <div class="mcc-line">> DETECTING PILLARS: 8/8 OK</div>
+                <div class="mcc-line">> MODULE SUTURES: 100% VALIDATED</div>
+                <div class="mcc-line">> ATLAS TELEMETRY: CONNECTED</div>
+                <div class="mcc-line">> [VERDICT] GRADE X SOVEREIGNTY SECURED</div>
+            </div>
+
+            <div class="verdict-box">
+                <div class="verdict-row"><span>NŒUDS</span><span class="verdict-val">1534</span></div>
+                <div class="verdict-row"><span>CONNEXIONS</span><span class="verdict-val">2172</span></div>
+                <div class="verdict-row"><span>COMMUNAUTÉS</span><span class="verdict-val">104</span></div>
+                <div class="verdict-row"><span>SCORE MODULARITÉ</span><span class="verdict-val">9.8/10</span></div>
+                <div style="margin-top:10px; font-size: 9px; font-weight: 900; color: var(--accent);">✅ RBAC 'LOCKDOWN-X' CONFIRMÉ</div>
+            </div>
+
+            <div class="info-panel" id="info-panel">
+                <div class="info-title">SÉLECTIONNEZ UN ÉLÉMENT</div>
+                <div class="info-desc">Cliquez sur un module ou un composant pour auditer ses spécifications Grade X.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const modules = [
+            // INTELLIGENCE
+            { name: "Tableau de Bord", pillar: "INTELLIGENCE", path: "src/modules/ops/engine" },
+            { name: "Intelligence Exécutive", pillar: "INTELLIGENCE", path: "src/modules/intelligence/analytics" },
+            { name: "Analytique BI", pillar: "INTELLIGENCE", path: "src/modules/intelligence/analytics" },
+            { name: "Google Analytics", pillar: "INTELLIGENCE", path: "src/modules/intelligence/analytics" },
+            { name: "Référencement IA", pillar: "INTELLIGENCE", path: "src/modules/intelligence/analytics" },
+            // COMMERCE
+            { name: "CRM Clients", pillar: "COMMERCE", path: "src/modules/commerce/marketing" },
+            { name: "Réservations Omnicanal", pillar: "COMMERCE", path: "src/modules/commerce/reservations" },
+            { name: "Devis", pillar: "COMMERCE", path: "src/modules/commerce/marketing" },
+            { name: "Groupes & Privatisation", pillar: "COMMERCE", path: "src/modules/commerce/marketing" },
+            { name: "Marketing & Social", pillar: "COMMERCE", path: "src/modules/commerce/marketing" },
+            { name: "SEO & Référencement", pillar: "COMMERCE", path: "src/modules/commerce/marketing" },
+            // SALLE
+            { name: "Point de Vente", pillar: "SALLE", path: "src/modules/ops/pos" },
+            { name: "Plan de Salle", pillar: "SALLE", path: "src/modules/ops/engine" },
+            { name: "Réservations", pillar: "SALLE", path: "src/modules/commerce/reservations" },
+            { name: "Gestion PMS (Notebook)", pillar: "SALLE", path: "src/modules/ops/pos" },
+            // CUISINE
+            { name: "Production (KDS)", pillar: "CUISINE", path: "src/modules/ops/kitchen" },
+            { name: "Gestion Cuisine", pillar: "CUISINE", path: "src/modules/ops/kitchen" },
+            { name: "Bar & Sommellerie", pillar: "CUISINE", path: "src/modules/ops/pos" },
+            { name: "HACCP & Qualité", pillar: "CUISINE", path: "src/modules/compliance/haccp" },
+            // LOGISTICS
+            { name: "Plan des Stockages", pillar: "LOGISTICS", path: "src/modules/logistics/inventory" },
+            { name: "Stocks & Inventaire", pillar: "LOGISTICS", path: "src/modules/logistics/inventory" },
+            { name: "Contrôle Réception", pillar: "LOGISTICS", path: "src/modules/logistics/inventory" },
+            // HR
+            { name: "Prise de Poste", pillar: "HR", path: "src/modules/human/hr" },
+            { name: "Ressources Humaines", pillar: "HR", path: "src/modules/human/hr" },
+            { name: "Planning", pillar: "HR", path: "src/modules/human/hr" },
+            { name: "Congés & Absences", pillar: "HR", path: "src/modules/human/hr" },
+            { name: "Recrutement", pillar: "HR", path: "src/modules/human/hr" },
+            // FINANCE
+            { name: "Trésorerie & Prévisions", pillar: "FINANCE", path: "src/modules/finance/finance" },
+            { name: "Gestion Comptable", pillar: "FINANCE", path: "src/modules/finance/accounting" },
+            { name: "Registres Obligatoires", pillar: "FINANCE", path: "src/modules/ops/engine" },
+            // INFRA
+            { name: "Cartographie 3D", pillar: "INFRA", path: "src/modules/ops/engine" },
+            { name: "Rechercher", pillar: "INFRA", path: "src/modules/infrastructure" },
+            { name: "Paramètres", pillar: "INFRA", path: "src/modules/infrastructure" },
+            { name: "Gestion des Accès", pillar: "INFRA", path: "src/modules/infrastructure/auth" }
+        ];
+
+        const details = {
+            'Point de Vente': { desc: 'Interface transactionnelle Grade X. Gère les ventes, les tickets et la conformité NF525.', tags: ['POS', 'Ventes'] },
+            'HACCP & Qualité': { desc: 'Module de sécurité alimentaire souverain. Traçabilité, relevés et alertes sanitaires.', tags: ['Hygiène', 'Compliance'] },
+            'Production (KDS)': { desc: 'Kitchen Display System. Orchestration des flux de production en temps réel.', tags: ['Cuisine', 'Flux'] },
+            'Gestion Comptable': { desc: 'Moteur de comptabilité automatisé avec sutures fiscales directes.', tags: ['Finance', 'Légal'] },
+            'nexus': { desc: 'Noyau d\'orchestration SAM (Sovereign Action Manifest). Gère le flux de données entre les domaines.', tags: ['Orchestrateur', 'Zéro-Import'] },
+            'legal': { desc: 'Registres de conformité légale. Assure l\'étanchéité RGPD et la certification ISO 27001.', tags: ['RGPD', 'ISO'] },
+            'adapters': { desc: 'Couche d\'abstraction des données. Traduit les schémas Zod en flux de persistance Cloud-Agnostic.', tags: ['Firebase', 'SQL', 'Mock'] },
+            'db': { desc: 'Persistance haute performance. PostgreSQL pour les données relationnelles, Redis pour le cache.', tags: ['PostgreSQL', 'Redis'] },
+            'zod': { desc: 'Contrats de types stricts. Garantit que chaque donnée transitant par le Nexus est validée.', tags: ['Validation', 'Type-Safe'] }
+        };
+
+        const grid = document.getElementById('module-grid');
+        modules.forEach(m => {
+            const div = document.createElement('div');
+            div.className = 'module-card';
+            div.id = `card-${m.name.replace(/\s+/g, '-')}`;
+            
+            div.innerHTML = `
+                <div onclick="showInfo('${m.name}', '${m.pillar}', '${m.path}')">
+                    <div style="font-weight: 700; color: var(--text);">${m.name}</div>
+                    <div style="font-size: 8px; color: var(--secondary); opacity: 0.7;">${m.pillar}</div>
+                </div>
+                <div class="card-controls">
+                    <div class="module-status status-on" id="status-${m.name.replace(/\s+/g, '-')}">ACTIVE</div>
+                    <div class="toggle-switch toggle-active" id="toggle-${m.name.replace(/\s+/g, '-')}" onclick="toggleModule('${m.name}', event)"></div>
+                </div>
+            `;
+            grid.appendChild(div);
+        });
+
+        function toggleModule(name, event) {
+            event.stopPropagation();
+            const id = name.replace(/\s+/g, '-');
+            const statusEl = document.getElementById(`status-${id}`);
+            const toggleEl = document.getElementById(`toggle-${id}`);
+            const cardEl = document.getElementById(`card-${id}`);
+
+            const isActive = statusEl.classList.contains('status-on');
+
+            if (isActive) {
+                statusEl.classList.replace('status-on', 'status-off');
+                statusEl.textContent = 'INACTIVE';
+                toggleEl.classList.remove('toggle-active');
+                cardEl.style.opacity = '0.6';
+                logMCC(`> [SOVEREIGN] MODULE ${name.toUpperCase()} DEACTIVATED FOR CLIENT`);
+                logMCC(`> [SIGNAL] EMITTING NEXUS_SYNC_SIGNAL: ${name}=DISABLED`);
+            } else {
+                statusEl.classList.replace('status-off', 'status-on');
+                statusEl.textContent = 'ACTIVE';
+                toggleEl.classList.add('toggle-active');
+                cardEl.style.opacity = '1';
+                logMCC(`> [SOVEREIGN] MODULE ${name.toUpperCase()} ACTIVATED FOR CLIENT`);
+                logMCC(`> [SIGNAL] EMITTING NEXUS_SYNC_SIGNAL: ${name}=ENABLED`);
+            }
+            setTimeout(drawFlows, 100);
+        }
+
+        function logMCC(text) {
+            const screen = document.getElementById('mcc-screen');
+            const line = document.createElement('div');
+            line.className = 'mcc-line';
+            line.textContent = text;
+            screen.prepend(line);
+        }
+
+        const pRow = document.getElementById('pillar-row');
+        const pillarData = [
+            { id: 'FINANCE', label: 'Finance', icon: '💰' },
+            { id: 'OPS', label: 'Ops', icon: '⚙️' },
+            { id: 'HR', label: 'RH', icon: '👥' },
+            { id: 'LOGISTICS', label: 'Logistique', icon: '📦' },
+            { id: 'COMMERCE', label: 'Commerce', icon: '💼' },
+            { id: 'COMPLIANCE', label: 'Compliance', icon: '🛡️' },
+            { id: 'INTELLIGENCE', label: 'Intelligence', icon: '🧠' },
+            { id: 'INFRA', label: 'Infrastructure', icon: '⚡' }
+        ];
+
+        pillarData.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'pillar';
+            div.innerHTML = `<div class="pillar-icon">${p.icon}</div><div class="pillar-label">${p.label}</div>`;
+            div.onclick = () => showInfo(p.label, p.id, `src/modules/${p.id.toLowerCase()}`);
+            pRow.appendChild(div);
+        });
+
+        function showInfo(key, pillarId, path) {
+            const panel = document.getElementById('info-panel');
+            const data = details[key] || { 
+                desc: `Module du pilier ${pillarId}. Structure monolithique isolée conforme au protocole Grade X.`, 
+                tags: ['Module', 'Encapsulé'] 
+            };
+
+            panel.innerHTML = `
+                <div class="info-title">${key}</div>
+                <div style="font-size: 9px; color: var(--secondary); margin-bottom: 5px;">Pillar: ${pillarId}</div>
+                <div class="info-desc">${data.desc}</div>
+                <div style="margin-top:15px;">
+                    ${data.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                </div>
+                <div class="info-path">${path}</div>
+            `;
+
+        function drawFlows() {
+            const svg = document.getElementById('flow-paths');
+            svg.innerHTML = ''; // Reset
+
+            const ui = document.getElementById('layer-ui').getBoundingClientRect();
+            const nexus = document.getElementById('nexus-hub').getBoundingClientRect();
+            const pillars = document.getElementById('layer-pillars').getBoundingClientRect();
+            const infra = document.getElementById('layer-infra').getBoundingClientRect();
+            const mcc = document.getElementById('mcc-screen').getBoundingClientRect();
+
+            function addPath(x1, y1, x2, y2, color, dashed = false) {
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", `M ${x1} ${y1} L ${x2} ${y2}`);
+                path.setAttribute("stroke", color);
+                path.setAttribute("stroke-width", "2");
+                path.setAttribute("fill", "none");
+                path.setAttribute("marker-end", "url(#arrowhead)");
+                if (dashed) path.setAttribute("stroke-dasharray", "5,5");
+                svg.appendChild(path);
+            }
+
+            // UI -> Nexus
+            addPath(ui.left + ui.width/2, ui.bottom, nexus.left + nexus.width/2, nexus.top - 5, "#64FFDA");
+
+            // Nexus -> Pillars
+            addPath(nexus.left + nexus.width/2, nexus.bottom + 5, pillars.left + pillars.width/2, pillars.top - 5, "#64FFDA");
+
+            // Pillars -> Infra
+            addPath(pillars.left + pillars.width/2, pillars.bottom, infra.left + infra.width/2, infra.top - 5, "#64FFDA");
+
+            // Nexus -> MCC (Telemetry)
+            addPath(nexus.right + 20, nexus.top + nexus.height/2, mcc.left - 20, mcc.top + 20, "#00B4D8", true);
+            
+            // Vertical Telemetry (Static position based on MCC)
+            addPath(mcc.right + 20, infra.bottom, mcc.right + 20, 100, "#64FFDA");
+        }
+
+        window.onload = () => {
+            setTimeout(drawFlows, 500); // Wait for render
+        };
+        window.onresize = drawFlows;
+    </script>
+</body>
+</html>

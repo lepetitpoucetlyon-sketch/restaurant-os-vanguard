@@ -16,9 +16,9 @@ export interface TutorialSection {
 }
 
 // State Atoms
-export const tutorialActiveAtom = atom<boolean>(false) as unknown as WritableAtom<boolean, [boolean], void>;
-export const tutorialSectionAtom = atom<TutorialSection | null>(null) as unknown as WritableAtom<TutorialSection | null, [TutorialSection | null], void>;
-export const tutorialPointIndexAtom = atom<number>(0) as unknown as WritableAtom<number, [number], void>;
+export const tutorialActiveAtom = atom<boolean>(false) as WritableAtom<boolean, [boolean], void>;
+export const tutorialSectionAtom = atom<TutorialSection | null>(null) as WritableAtom<TutorialSection | null, [TutorialSection | null], void>;
+export const tutorialPointIndexAtom = atom<number>(0) as WritableAtom<number, [number], void>;
 
 // Computed Atoms
 export const currentTutorialPointAtom = atom((get) => {

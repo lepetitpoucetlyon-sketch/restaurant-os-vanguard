@@ -1,7 +1,7 @@
-import { SovereignNode } from '@shared/nexus-contract';
+import { SovereignNode } from '@/shared/nexus-contract';
 
 export interface SEOScore {
-    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     overall: number;
     breakdown: {
         titleLength: 'good' | 'warning' | 'error';
@@ -11,7 +11,7 @@ export interface SEOScore {
         hasStructuredData: boolean;
         mobileFriendly: boolean;
         pageSpeed: number;
-        [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+        [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     };
     issues: string[];
     recommendations: string[];

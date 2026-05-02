@@ -61,7 +61,7 @@ export const TenantOrchestrator: React.FC = () => {
             branding: { primaryColor: '#C5A059' },
             security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
         }
-    ] as unknown as EmpireInstance[]).map(inst => {
+    ] as EmpireInstance[]).map(inst => {
         const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(
             Number((metrics as any).alerts || 0), 

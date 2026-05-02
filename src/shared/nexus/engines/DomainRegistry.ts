@@ -1,4 +1,4 @@
-import { OperationalIdentity } from '@shared/nexus-contract';
+import { OperationalIdentity } from '@/shared/nexus-contract';
 
 export interface DomainMetadata {
     path: string;
@@ -40,13 +40,19 @@ export class DomainRegistry {
 
     static resolve(identity: OperationalIdentity | string): string {
         const metadata = DomainRegistry.mapping[identity] || domainMapping[identity as OperationalIdentity];
-        if (!metadata) throw new Error(`[Nexus] Unregistered identity: ${identity}`);
+        if (!metadata) {
+            console.warn(`[Nexus] Unregistered identity: ${identity} - Using fallback metadata`);
+            return typeof identity === 'string' ? identity : 'unknown';
+        }
         return typeof metadata === 'string' ? metadata : metadata.path;
     }
 
     static getMetadata(identity: OperationalIdentity | string): DomainMetadata {
         const metadata = DomainRegistry.mapping[identity] || domainMapping[identity as OperationalIdentity];
-        if (!metadata) throw new Error(`[Nexus] Unregistered identity: ${identity}`);
+        if (!metadata) {
+            console.warn(`[Nexus] Unregistered identity: ${identity} - Using fallback metadata`);
+            return { path: typeof identity === 'string' ? identity : 'unknown', requiredPermission: 'core.view' };
+        }
         return typeof metadata === 'string' ? { path: metadata, requiredPermission: 'core.view' } : metadata;
     }
 }

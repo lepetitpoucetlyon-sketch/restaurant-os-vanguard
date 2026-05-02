@@ -1,5 +1,5 @@
 import { User } from '@nexus/contracts';
-import { SovereignData, SovereignValue } from '@shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 export interface ToolDefinition {
     name: string;

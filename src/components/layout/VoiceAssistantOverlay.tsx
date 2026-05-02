@@ -82,7 +82,7 @@ export function VoiceAssistantOverlay() {
             return;
         }
 
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const SpeechRecognition = (window).SpeechRecognition || (window).webkitSpeechRecognition;
 
 
         if (!SpeechRecognition) return;
@@ -134,7 +134,7 @@ export function VoiceAssistantOverlay() {
 
     const toggleHistory = async () => {
         if (!showHistory) {
-            const hist = await (fetchAllSessions as any)();
+            const hist = await (fetchAllSessions)();
             setSessions(hist);
         }
         setShowHistory(!showHistory);
@@ -198,7 +198,7 @@ export function VoiceAssistantOverlay() {
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages as any[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread messages={messages} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
                         )}
 
                         {pendingAction && (

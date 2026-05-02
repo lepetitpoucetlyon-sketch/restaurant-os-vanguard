@@ -37,7 +37,7 @@ export const TimeSync = {
         }
     };
 
-    this.private_unsub = Nexus.adapter.onSnapshot<import('@shared/nexus-contract').SovereignData>(syncPath, (data) => {
+    this.private_unsub = Nexus.adapter.onSnapshot<import('@/shared/nexus-contract').SovereignData>(syncPath, (data) => {
         if (data && data.heartbeat) {
             const h = data.heartbeat;
             let serverDate: Date | null = null;
@@ -45,7 +45,7 @@ export const TimeSync = {
             if (h instanceof Date) {
                 serverDate = h;
             } else if (h && typeof h === 'object' && 'toDate' in h && typeof (h as { toDate: unknown }).toDate === 'function') {
-                serverDate = (h as unknown as { toDate: () => Date }).toDate();
+                serverDate = (h as { toDate: () => Date }).toDate();
             } else if (typeof h === 'string' || typeof h === 'number') {
                 serverDate = new Date(h);
             }

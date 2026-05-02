@@ -26,7 +26,7 @@ export class Slayer {
     /**
      * Traduit un objet brut (CSV/JSON) en structure compatible Nexus via une config.
      */
-    static mapLegacy(raw: Record<string, unknown>, config: SlayerMappingConfig): Partial<Order> {
+    static mapLegacy(raw: Record<string, any>, config: SlayerMappingConfig): Partial<Order> {
         return {
             id: String(raw[config.fields.id]),
             totalInCents: typeof raw[config.fields.total] === 'number' 
@@ -66,16 +66,16 @@ export class Slayer {
                         for (const legacy of chunk) {
                             try {
                                 // 1. NORMALISATION & DÉCONTAMINATION
-                                const rawOrder: Record<string, unknown> = {
+                                const rawOrder: Record<string, any> = {
                                     ...legacy,
-                                    source: (legacy as Record<string, unknown>).source || 'SLAYER_LEGACY',
-                                    tenantId: (legacy as Record<string, unknown>).tenantId || tenantId,
+                                    source: (legacy as Record<string, any>).source || 'SLAYER_LEGACY',
+                                    tenantId: (legacy as Record<string, any>).tenantId || tenantId,
                                     createdAt: legacy.timestamp || new Date().toISOString(),
                                     status: 'PAID', // Archives scellées par défaut
-                                    customer: (legacy as Record<string, unknown>).customer || { firstName: 'Legacy', lastName: 'Customer' }
+                                    customer: (legacy as Record<string, any>).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
-                                const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@shared/nexus-contract').SovereignMap, { isLegacy: true });
+                                const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@/shared/nexus-contract').SovereignMap, { isLegacy: true });
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
                                 // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum)

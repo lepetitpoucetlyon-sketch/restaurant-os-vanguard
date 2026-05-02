@@ -43,6 +43,7 @@ const PerformanceMonitor = dynamic(() => import('@nexus/guards/admin/mcc/Perform
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
+import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
 
 /**
  * 👑 Master Command Control (MCC) Dashboard
@@ -55,6 +56,8 @@ export default function MCCDashboard() {
     isLoading, 
     refreshFleet 
   } = useNexusFleet();
+
+  const { state: switchboard, toggleModule } = useSovereignSwitchboard();
 
   const [showCloneModal, setShowCloneModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury'>('fleet');
@@ -268,8 +271,8 @@ export default function MCCDashboard() {
               <MCCInsights />
               <MCCAuditStream />
               
-              {/* System Status Panel */}
-              <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl">
+              {/* System Status Panel & Sovereign Switchboard */}
+              <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl mb-8">
                   <div className="flex items-center gap-3 mb-6">
                       <Cpu className="w-5 h-5 text-indigo-400 mt-0.5" />
                       <h3 className="text-sm font-bold uppercase tracking-widest text-gray-300">MCC Core Status</h3>
@@ -279,6 +282,35 @@ export default function MCCDashboard() {
                       <StatusItem label="Axiom Log Ingest" status="Streaming" color="bg-green-500" />
                       <StatusItem label="NF525 Seal Engine" status="Secured" color="bg-indigo-500" />
                       <StatusItem label="Fleet Intelligence" status="Aggregating" color="bg-violet-500" />
+                  </div>
+              </div>
+
+              <div className="p-6 bg-[#161618] border border-indigo-500/20 rounded-3xl">
+                  <div className="flex items-center gap-3 mb-6">
+                      <Zap className="w-5 h-5 text-indigo-400 mt-0.5" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-indigo-400">Sovereign Switchboard</h3>
+                  </div>
+                  <div className="space-y-4">
+                      <SwitchboardItem 
+                          label="Telemetry & Sentinel" 
+                          active={switchboard.telemetryActive} 
+                          onToggle={() => toggleModule('telemetryActive', 'Manual MCC override')} 
+                      />
+                      <SwitchboardItem 
+                          label="SAM Automations" 
+                          active={switchboard.samActive} 
+                          onToggle={() => toggleModule('samActive', 'Manual MCC override')} 
+                      />
+                      <SwitchboardItem 
+                          label="Nexus Sync Engine" 
+                          active={switchboard.nexusSyncActive} 
+                          onToggle={() => toggleModule('nexusSyncActive', 'Manual MCC override')} 
+                      />
+                      <SwitchboardItem 
+                          label="Client Interface" 
+                          active={switchboard.clientInterfaceActive} 
+                          onToggle={() => toggleModule('clientInterfaceActive', 'Manual MCC override')} 
+                      />
                   </div>
               </div>
           </div>
@@ -500,6 +532,25 @@ function StatusItem({ label, status, color }: { label: string, status: string, c
             <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black text-white uppercase tracking-tighter">{status}</span>
                 <div className={`w-1.5 h-1.5 rounded-full ${color}`} />
+            </div>
+        </div>
+    );
+}
+
+function SwitchboardItem({ label, active, onToggle }: { label: string, active: boolean, onToggle: () => void }) {
+    return (
+        <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{label}</span>
+            <div className="flex items-center gap-3">
+                <span className={`text-[10px] font-black uppercase tracking-tighter ${active ? 'text-emerald-500' : 'text-red-500'}`}>
+                    {active ? 'ONLINE' : 'OFFLINE'}
+                </span>
+                <button 
+                    onClick={onToggle}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${active ? 'bg-emerald-500/20 border border-emerald-500/50' : 'bg-red-500/20 border border-red-500/50'}`}
+                >
+                    <span className={`inline-block h-3 w-3 transform rounded-full transition-transform ${active ? 'translate-x-5 bg-emerald-400' : 'translate-x-1 bg-red-400'}`} />
+                </button>
             </div>
         </div>
     );

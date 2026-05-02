@@ -54,7 +54,7 @@ export const SelfHealingEngine = {
   /**
    * Polynomial CRC Calculation for the state heap.
    */
-  calculateCRC(data: import('@shared/nexus-contract').SovereignData | import('@shared/nexus-contract').SovereignValue): string {
+  calculateCRC(data: import('@/shared/nexus-contract').SovereignData | import('@/shared/nexus-contract').SovereignValue): string {
 
     const str = JSON.stringify(data || {});
     if (!str) return '0';

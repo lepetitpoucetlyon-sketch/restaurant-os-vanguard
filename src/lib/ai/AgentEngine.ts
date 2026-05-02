@@ -5,12 +5,12 @@ export interface AgentRequest {
     domain: AgentDomain;
     userRole: AgentRole;
     userPrompt: string;
-    contextData?: import('@shared/nexus-contract').SovereignValue;
+    contextData?: import('@/shared/nexus-contract').SovereignValue;
     
     // Grade X: DNA Injection
     dna?: {
         tenantId: string;
-        businessLaws: import('@shared/nexus-contract').BusinessLaws;
+        businessLaws: import('@/shared/nexus-contract').BusinessLaws;
     };
 
     apiKey: string;

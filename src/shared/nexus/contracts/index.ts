@@ -115,7 +115,7 @@ export * from './settings/theme';
 export * from './nexus.types';
 export * from './errors.types';
 export type { GlobalSettings } from './settings';
-export type { TenantConfig, SovereignData } from '@shared/nexus-contract';
+export type { TenantConfig, SovereignData } from '@/shared/nexus-contract';
 export type { InventoryMovement } from './logistics';
 export * from './marketing.types';
 export type { Delivery, DeliveryItem } from '@/domain/types/delivery';

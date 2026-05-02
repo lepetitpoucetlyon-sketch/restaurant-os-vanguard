@@ -135,7 +135,7 @@ export interface InventoryContextType {
     triggerRebalancing: () => Promise<void>;
     
     expert: {
-        queryExpert: (prompt: string, contextData?: import('@shared/nexus-contract').SovereignData) => Promise<{
+        queryExpert: (prompt: string, contextData?: import('@/shared/nexus-contract').SovereignData) => Promise<{
             response: string;
             suggestions?: string[];
         }>;
@@ -147,7 +147,7 @@ export interface InventoryContextType {
     };
     
     agent?: {
-        query: (prompt: string, context?: import('@shared/nexus-contract').SovereignData) => Promise<{
+        query: (prompt: string, context?: import('@/shared/nexus-contract').SovereignData) => Promise<{
             answer: string;
 
             confidence: number;

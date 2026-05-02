@@ -53,7 +53,7 @@ export function useTenantLifecycle(tenantId: string | null) {
             if (entry) {
                 // We set loading to true to trigger re-fetch in components
                 store.set(entry.atom as any, (prev: any) => {
-                    const node = prev as import('@/store/nexusNodeFactory').NexusNode<import('@shared/nexus-contract').SovereignValue>;
+                    const node = prev as import('@/store/nexusNodeFactory').NexusNode<import('@/shared/nexus-contract').SovereignValue>;
                     return {
 
                         ...node,

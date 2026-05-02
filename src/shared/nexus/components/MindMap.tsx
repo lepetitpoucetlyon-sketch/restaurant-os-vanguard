@@ -141,7 +141,7 @@ export function MindMap() {
             .force('collision', d3.forceCollide<Node>().radius(d => d.size + 120)); // Buffer territory expansion
 
         // Interaction handlers
-        const zoom = d3.zoom<SVGSVGElement, import('@shared/nexus-contract').SovereignValue>()
+        const zoom = d3.zoom<SVGSVGElement, import('@/shared/nexus-contract').SovereignValue>()
 
             .scaleExtent([0.5, 4])
             .on('zoom', (event) => {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SovereignData, SovereignValue } from '@shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import { 
   JournalEntry as KernelJournalEntry, 
   JournalLine as KernelJournalLine,

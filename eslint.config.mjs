@@ -1,12 +1,17 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import { murDeChinePlugin } from "./eslint-plugins/mur-de-chine.mjs";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
+    plugins: {
+      "vanguard": murDeChinePlugin
+    },
     rules: {
+      "vanguard/no-cross-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
       "@typescript-eslint/no-unused-vars": "off",

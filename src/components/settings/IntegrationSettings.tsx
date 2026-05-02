@@ -53,8 +53,8 @@ export default function IntegrationSettings() {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            await updateConfig('integrationsConfig', localConfig as any);
-            await updateList('integrations', localIntegrations as any);
+            await updateConfig('integrationsConfig', localConfig);
+            await updateList('integrations', localIntegrations);
         } catch (error) {
             console.error(error);
         } finally {

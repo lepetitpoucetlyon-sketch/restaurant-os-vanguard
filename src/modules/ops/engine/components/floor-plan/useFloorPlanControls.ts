@@ -150,14 +150,14 @@ export function useFloorPlanControls({
         }
     }, [centerPlan, dimensions.width, floorTables.length, isManualPan]);
 
-    const handleDragStart = useCallback((e: { target: { setAttrs: (attrs: Record<string, unknown>) => void } }) => {
+    const handleDragStart = useCallback((e: { target: { setAttrs: (attrs: Record<string, import("@/shared/nexus-contract").SovereignValue>) => void } }) => {
         e.target.setAttrs({
             shadowBlur: 15,
             shadowOpacity: 0.15
         });
     }, []);
 
-    const handleDragEnd = useCallback(async (e: { target: { setAttrs: (attrs: Record<string, unknown>) => void; x: () => number; y: () => number } }, id: string) => {
+    const handleDragEnd = useCallback(async (e: { target: { setAttrs: (attrs: Record<string, import("@/shared/nexus-contract").SovereignValue>) => void; x: () => number; y: () => number } }, id: string) => {
         e.target.setAttrs({
             shadowBlur: 8,
             shadowOpacity: 0.08

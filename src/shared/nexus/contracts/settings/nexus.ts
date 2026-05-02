@@ -6,7 +6,7 @@
 export type GeminiVoiceId = 'aoede' | 'fenrir' | 'puck' | 'charon' | 'kore';
 
 export interface NexusMacro {
-    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     id: string;
     trigger: string;      // The phrase used to trigger the macro
     instruction: string;  // The complex operation described to the AI
@@ -14,7 +14,7 @@ export interface NexusMacro {
 }
 
 export interface NexusConfig {
-    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     aiName: string;       // Custom name for the assistant (e.g., Albert, Étienne)
     voiceId: GeminiVoiceId; // Selected voice
     personality: 'expert' | 'concise' | 'friendly' | 'protective';

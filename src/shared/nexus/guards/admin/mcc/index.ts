@@ -7,3 +7,5 @@ export * from './MCCAuditStream';
 export * from './MCCInsights';
 export * from './FiscalChainExplorer';
 export * from './StrategyOracle';
+
+export * from './DeviceManager';

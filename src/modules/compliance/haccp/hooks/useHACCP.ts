@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 import { 
     hygieneLabelsAtom, 
     hygieneLogsAtom,
@@ -27,20 +27,20 @@ import {
  * Orchestre la sécurité alimentaire via la Forge de Souveraineté (Module HACCP).
  */
 export function useHACCP() {
-    const hygieneLabels = useAtomValue(hygieneLabelsAtom) as unknown as SovereignData[];
+    const hygieneLabels = useAtomValue(hygieneLabelsAtom) as import("@/shared/nexus-contract").SovereignData[];
     const hygieneLogs = useAtomValue(hygieneLogsAtom) as HygieneLog[];
     const receptionLogs = useAtomValue(receptionLogsAtom) as ReceptionLog[];
-    const oilLogs = useAtomValue(oilLogsAtom) as unknown as SovereignData[];
-    const wasteLogs = useAtomValue(wasteLogsAtom) as unknown as SovereignData[];
+    const oilLogs = useAtomValue(oilLogsAtom) as import("@/shared/nexus-contract").SovereignData[];
+    const wasteLogs = useAtomValue(wasteLogsAtom) as import("@/shared/nexus-contract").SovereignData[];
     const maintenanceLogs = useAtomValue(maintenanceLogsAtom) as MaintenanceLog[];
     const isLoading = useAtomValue(guardLoadingAtom);
 
     // --- 🔨 LA FORGE DU MODULE ---
     type NexusNodeAtom = import('jotai').WritableAtom<import('@/store/base').NexusNode<{ id: string }>, [import('jotai').SetStateAction<import('@/store/base').NexusNode<{ id: string }>>], void>;
-    const hygieneForge = useNexusMutation(hygieneLogsNodeAtom as unknown as NexusNodeAtom, 'hygieneLogs', 'HACCP');
-    const labelForge = useNexusMutation(hygieneLabelsNodeAtom as unknown as NexusNodeAtom, 'hygieneLabels', 'HACCP');
-    const receptionForge = useNexusMutation(receptionLogsNodeAtom as unknown as NexusNodeAtom, 'receptionLogs', 'HACCP');
-    const maintenanceForge = useNexusMutation(maintenanceLogsNodeAtom as unknown as NexusNodeAtom, 'maintenanceLogs', 'HACCP');
+    const hygieneForge = useNexusMutation(hygieneLogsNodeAtom as any, 'hygieneLogs', 'HACCP');
+    const labelForge = useNexusMutation(hygieneLabelsNodeAtom as any, 'hygieneLabels', 'HACCP');
+    const receptionForge = useNexusMutation(receptionLogsNodeAtom as any, 'receptionLogs', 'HACCP');
+    const maintenanceForge = useNexusMutation(maintenanceLogsNodeAtom as any, 'maintenanceLogs', 'HACCP');
 
     /**
      * 🛰️ SIMULACRA : Capteurs Fantômes
@@ -72,7 +72,7 @@ export function useHACCP() {
 
         const failedChecks = [
             ...hygieneLogs.filter(l => l.status === 'alert'),
-            ...receptionLogs.filter(l => (l as unknown as Record<string, string>).integrityStatus === 'non-conforme'),
+            ...receptionLogs.filter(l => (l as Record<string, string>).integrityStatus === 'non-conforme'),
             ...maintenanceLogs.filter(l => l.status === 'pending')
         ].length;
 

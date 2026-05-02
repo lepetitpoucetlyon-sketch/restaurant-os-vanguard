@@ -3,7 +3,7 @@
  * Version Grade X - Sovereign Alignment
  */
 
-import { SovereignNode, SovereignField } from '@shared/nexus-contract';
+import { SovereignNode, SovereignField } from '@/shared/nexus-contract';
 
 export interface EmpireInstance extends SovereignNode {
     id: string;

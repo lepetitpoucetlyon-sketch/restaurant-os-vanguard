@@ -48,16 +48,16 @@ export const useSettings = () => {
         return updateConfig(key, data);
     }, [updateConfig]);
 
-    const updateSLM = useCallback(async (data: import('@shared/nexus-contract').SovereignData) => {
+    const updateSLM = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
         if (!settings) return;
         return updateSettings({ ...settings, ...data } as GlobalSettings);
     }, [settings, updateSettings]);
 
-    const updateReservationConfig = useCallback(async (data: import('@shared/nexus-contract').SovereignData) => {
+    const updateReservationConfig = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
         return updateConfig('reservations' as any, data);
     }, [updateConfig]);
 
-    const updateReservationSlots = useCallback(async (data: import('@shared/nexus-contract').SovereignData) => {
+    const updateReservationSlots = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
         return updateConfig('reservationSlots' as any, data);
     }, [updateConfig]);
     

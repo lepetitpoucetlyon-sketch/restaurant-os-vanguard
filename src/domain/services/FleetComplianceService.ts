@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getAllTenants } from '@/instances';
 
-import { SovereignNode } from '@shared/nexus-contract';
+import { SovereignNode } from '@/shared/nexus-contract';
 
 export interface SiteIntegrityReport extends SovereignNode {
   tenantId: string;
@@ -43,7 +43,7 @@ export const FleetComplianceService = {
       const ledgerPath = getTenantPath('fiscal_ledger', tenantId);
       const entriesRaw = await Nexus.adapter.query(ledgerPath);
       
-      const entries = entriesRaw.map(e => e as unknown as import('@nexus/contracts').FiscalSeal).sort((a, b) => (a.sequence || 0) - (b.sequence || 0));
+      const entries = entriesRaw.map(e => e as import('@nexus/contracts').FiscalSeal).sort((a, b) => (a.sequence || 0) - (b.sequence || 0));
       
       let isChainValid = true;
       let sequenceError: number | null = null;

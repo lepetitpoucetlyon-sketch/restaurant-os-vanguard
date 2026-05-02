@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🔐 CryptoService - Restaurant OS (The Imperial Safe)

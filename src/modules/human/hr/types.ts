@@ -69,7 +69,7 @@ export interface PayrollCalculation {
     createdAt?: string;
     updatedAt?: string;
     fiscalSeal?: any;
-    metadata?: import('@shared/nexus-contract').SovereignData;
+    metadata?: import('@/shared/nexus-contract').SovereignData;
 }
 
 
@@ -86,7 +86,7 @@ export interface AuditLog {
     userName: string;
     action: string;
     timestamp: number | string | Date;
-    metadata?: import('@shared/nexus-contract').SovereignData;
+    metadata?: import('@/shared/nexus-contract').SovereignData;
 }
 
 

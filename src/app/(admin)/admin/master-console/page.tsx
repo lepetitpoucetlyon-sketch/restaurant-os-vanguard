@@ -413,7 +413,7 @@ export default function MasterConsolePage() {
                     const sovereignInstance = {
                         ...newInstance,
                         updatedAt: new Date().toISOString()
-                    } as unknown as EmpireInstance;
+                    } as EmpireInstance;
                     registerInstance(sovereignInstance);
                     setIsWizardOpen(false);
                     selectInstance(String(newInstance.id));

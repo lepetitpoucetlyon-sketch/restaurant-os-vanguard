@@ -223,7 +223,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                             {setting.type === "select" && (
                                 <PremiumSelect
-                                    value={(localValues[setting.key] as any) || ""}
+                                    value={(localValues[setting.key]) || ""}
                                     onChange={(val) => updateValue(setting.key, val)}
                                     options={setting.options || []}
                                 />
@@ -231,7 +231,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                             {setting.type === "number" && (
                                 <PremiumNumberInput
-                                    value={(localValues[setting.key] as any) || setting.min || 0}
+                                    value={(localValues[setting.key]) || setting.min || 0}
                                     onChange={(val) => updateValue(setting.key, val)}
                                     min={setting.min}
                                     max={setting.max}

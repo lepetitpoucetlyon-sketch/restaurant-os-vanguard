@@ -15,7 +15,7 @@ export const ALL_CATEGORIES = [
 export type CategoryKey = string; // Generic string for dynamic injection
 export type RolePermissions = Record<UserRole | string, CategoryKey[]>;
 
-import { SovereignValue, SovereignData } from '@shared/nexus-contract';
+import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 /**
  * AccessPolicyManager
@@ -73,7 +73,20 @@ function canDo(user: User | null, action: string, actionPermissions: Record<stri
     return userLevel >= requiredLevel;
 }
 
+
+function canAccessDocument(user: User | null, documentOwnerId: string): boolean {
+    if (!user) return false;
+    // Social Shield: Un utilisateur RESTRICTED ne peut accéder qu'à ses documents personnels
+    if (user.status === 'RESTRICTED') {
+        return user.id === documentOwnerId;
+    }
+    // Admin has super-user bypass
+    if (user.role === 'admin') return true;
+    return true; // For ACTIVE users
+}
+
 export const AccessPolicyManager = {
+    canAccessDocument,
     normalizeCategoryList,
     sanitizeRolePermissions,
     getAccessibleCategories,

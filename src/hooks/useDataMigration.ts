@@ -113,7 +113,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
     }
 
     // INJECTION IN DATABASE
-    const injectToDB = async (entity: 'staff' | 'menu' | 'crm', data: import('@shared/nexus-contract').SovereignField) => {
+    const injectToDB = async (entity: 'staff' | 'menu' | 'crm', data: import('@/shared/nexus-contract').SovereignField) => {
 
         setIsMigrating(true);
         setProgress(10);
@@ -121,7 +121,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
         
         try {
             if (entity === 'menu') {
-                const { categories, products } = data as unknown as MenuMigration;
+                const { categories, products } = data as MenuMigration;
                 const categoryIdMap: Record<string, string> = {};
 
                 // Add Categories to Batch

@@ -76,7 +76,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsVegetarian(editProduct?.isVegetarian || false);
             setIsVegan(editProduct?.isVegan || false);
             setIsGlutenFree(editProduct?.isGlutenFree || false);
-            setRecipeIngredients((editProduct?.ingredients || []).map(i => ({ ingredientId: i.ingredientId || (i as any).id, quantity: i.quantity })));
+            setRecipeIngredients((editProduct?.ingredients || []).map(i => ({ ingredientId: i.ingredientId || (i).id, quantity: i.quantity })));
             setRecipeSteps(editProduct?.recipeSteps || []);
         } else if (!editProduct && isOpen) {
             setName("");
@@ -243,7 +243,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                         </div>
                     </div>
 
-                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients as any} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
+                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
                     <ProductSteps recipeSteps={recipeSteps} addStep={addStep} updateStep={updateStep} removeStep={removeStep} />
                 </div>
 

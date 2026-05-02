@@ -1,4 +1,4 @@
-import { SovereignValue, SovereignData } from '@shared/nexus-contract';
+import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 
