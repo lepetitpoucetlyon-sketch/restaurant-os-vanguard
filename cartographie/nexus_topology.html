@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Nebula - Tactical Command</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: #050505;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw; height: 100vh;
+            position: absolute; top: 0; left: 0;
+        }
+
+        svg { width: 100%; height: 100%; }
+
+        .node-circle { stroke-width: 2px; cursor: pointer; transition: all 0.5s ease; }
+        .node-circle:hover { filter: brightness(1.5); }
+        .link { fill: none; stroke-opacity: 0.2; stroke-width: 1px; transition: all 0.5s ease; }
+        .node-text { font-size: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em; pointer-events: none; opacity: 0.7; fill: white; }
+        .central-node { font-weight: 900; font-size: 14px; letter-spacing: 0.2em; fill: white; opacity: 1 !important; }
+        
+        .suture-line.active {
+            stroke-width: 2px;
+            stroke-opacity: 1;
+            stroke-dasharray: 6;
+            animation: flow 2s linear infinite;
+        }
+
+        @keyframes flow { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
+
+        .overlay { position: absolute; top: 40px; left: 40px; pointer-events: none; z-index: 10; }
+        .title { font-weight: 900; font-size: 2rem; letter-spacing: -0.05em; font-style: italic; margin: 0; }
+        .subtitle { color: #C5A059; font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase; margin-top: 5px; }
+
+        .tooltip {
+            position: absolute; background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(10px); border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 12px; padding: 15px; color: white; font-size: 11px;
+            z-index: 200; display: none; pointer-events: none; width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .tooltip-title { font-weight: 900; color: #C5A059; text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .tooltip-action { margin-top: 5px; display: flex; align-items: center; gap: 8px; opacity: 0.8; }
+
+        .menu-btn {
+            position: absolute; top: 40px; right: 40px; width: 50px; height: 50px;
+            background: rgba(255,255,255,0.05); border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px;
+            cursor: pointer; z-index: 100; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .menu-btn span { width: 24px; height: 2px; background: white; border-radius: 2px; }
+
+        .sidebar {
+            position: fixed; top: 0; right: -400px; width: 400px; height: 100vh;
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px);
+            z-index: 90; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 100px 40px 40px; box-sizing: border-box;
+            border-left: 1px solid rgba(255,255,255,0.05); overflow-y: auto;
+        }
+        .sidebar.active { right: 0; }
+
+        .action-accordion { margin-bottom: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; }
+        .action-header { padding: 12px 15px; cursor: pointer; font-weight: 700; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .action-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: all 0.4s ease; font-size: 11px; color: #94A3B8; }
+        .action-accordion.open .action-content { padding: 15px; max-height: 200px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .impact-tag { display: inline-block; background: rgba(197, 160, 89, 0.1); padding: 2px 6px; border-radius: 4px; margin-top: 5px; color: #C5A059; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <div class="overlay">
+        <div class="title">NEXUS NEBULA</div>
+        <div class="subtitle">Souveraineté Grade X - Vision Métier</div>
+    </div>
+
+    <div class="menu-btn" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div id="category-container"></div>
+    </div>
+
+    <div id="canvas-container">
+        <svg id="nebula-svg">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <!-- 🏹 ARROW MARKER - HIGH PRECISION -->
+                <marker id="arrowhead" 
+                    viewBox="0 0 10 10" 
+                    refX="10" refY="5" 
+                    markerWidth="6" markerHeight="6" 
+                    orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#C5A059" />
+                </marker>
+            </defs>
+            <g id="main-group">
+                <g id="links-group"></g>
+                <g id="nodes-group"></g>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        const pillarColors = {
+            CORE: '#6366F1', COMMERCE: '#06B6D4', FINANCE: '#10B981', OPS: '#F59E0B',
+            LOGISTICS: '#EF4444', HR: '#EC4899', COMPLIANCE: '#64748B', INTELLIGENCE: '#8B5CF6', INFRA: '#94A3B8'
+        };
+
+        const data = {
+            CORE: { label: 'RESTAURANT OS (CORE)', modules: [] },
+            COMMERCE: { label: 'Commerce', color: pillarColors.COMMERCE, modules: ['CRM Clients', 'Marketing Digital', 'Réservations Engine', 'Point de Vente (POS)', 'Ventes Analytics', 'Devis & Groupes'] },
+            FINANCE: { label: 'Finance', color: pillarColors.FINANCE, modules: ['Fiscal Ledger (NF525)', 'Billing & Invoicing', 'Gestion des Dépenses', 'Trésorerie & Prév.'] },
+            OPS: { label: 'Opérations', color: pillarColors.OPS, modules: ['Hardware Nodes', 'Zones & Storage', 'Resource Registry', 'Operational Flows', 'Domain Relations', 'Resource Allocations', 'Operating Protocols', '3D Structures'] },
+            LOGISTICS: { label: 'Logistique', color: pillarColors.LOGISTICS, modules: ['Real-time Inventory', 'Procurement', 'Production Management', 'Wastage Tracking'] },
+            HR: { label: 'Human Resources', color: pillarColors.HR, modules: ['Staff Records', 'Shift Planning', 'Leave Management', 'Recruitment', 'Payroll Sync'] },
+            COMPLIANCE: { label: 'Compliance', color: pillarColors.COMPLIANCE, modules: ['Compliance Hub', 'HACCP Logs', 'Traceability', 'Security Audit'] },
+            INTELLIGENCE: { label: 'Intelligence', color: pillarColors.INTELLIGENCE, modules: ['AI Intelligence', 'AI Insights', 'Predictive Analysis', 'BI Analytics'] },
+            INFRA: { label: 'Infrastructure', color: pillarColors.INFRA, modules: ['Cloud Engine', 'Auth Gate', 'Network Mesh', 'Data Vault'] }
+        };
+
+        const actionsRegistry = [
+            { id: 'ACT_RES_INV', origin: 'COMMERCE_2', label: 'Sync Expected Covers', definition: 'Impact des réservations sur les stocks.', impacts: ['LOGISTICS_0'] },
+            { id: 'ACT_POS_LEDGER', origin: 'COMMERCE_3', label: 'NF525 Fiscal Signature', definition: 'Archivage transactionnel fiscal.', impacts: ['FINANCE_1'] },
+            { id: 'ACT_HACCP_INV', origin: 'COMPLIANCE_1', label: 'Inventory Quarantine', definition: 'Mise en quarantaine sanitaire.', impacts: ['LOGISTICS_0'] },
+            { id: 'ACT_POS_CRM', origin: 'COMMERCE_3', label: 'Loyalty Points Update', definition: 'Mise à jour fidélité client.', impacts: ['COMMERCE_0'] },
+            { id: 'ACT_PAYROLL_ACC', origin: 'HR_4', label: 'Payroll Accounting Sync', definition: 'Détecté Atlas : Synchronisation Compta Paie.', impacts: ['FINANCE_0'] },
+            { id: 'ACT_HACCP_FISCAL', origin: 'COMPLIANCE_1', label: 'HACCP Fiscal Audit', definition: 'Détecté Atlas : Pertes sanitaires vs Déductions.', impacts: ['FINANCE_1'] },
+            { id: 'ACT_KDS_STOCK', origin: 'OPS_3', label: 'KDS Stock Consumption', definition: 'Détecté Atlas : Déduction ingrédients en cuisine.', impacts: ['LOGISTICS_0'] }
+        ];
+
+        let nodes = []; let links = []; let activeSutures = [];
+        let scale = 0.8; let translateX = window.innerWidth / 2; let translateY = window.innerHeight / 2;
+        let isDragging = false; let startX, startY;
+
+        const mainGroup = document.getElementById('main-group');
+        const linksGroup = document.getElementById('links-group');
+        const nodesGroup = document.getElementById('nodes-group');
+        const tooltip = document.getElementById('tooltip');
+
+        function generateTopology() {
+            nodes = [{ id: 'CORE', label: 'RESTAURANT OS (CORE)', x: 0, y: 0, color: '#fff', type: 'central' }];
+            const pillarIds = Object.keys(data).filter(id => id !== 'CORE');
+            const R_PILLAR = 300;
+            pillarIds.forEach((pId, i) => {
+                const angle = (i / pillarIds.length) * Math.PI * 2;
+                const px = Math.cos(angle) * R_PILLAR; const py = Math.sin(angle) * R_PILLAR;
+                nodes.push({ id: pId, label: data[pId].label, x: px, y: py, color: data[pId].color, type: 'pillar' });
+                links.push({ source: 'CORE', target: pId });
+                data[pId].modules.forEach((mLabel, j) => {
+                    const mId = `${pId}_${j}`;
+                    const level = (j % 2 === 0) ? 140 : 220;
+                    const subAngle = angle + (j - (data[pId].modules.length - 1) / 2) * (0.8 / data[pId].modules.length);
+                    const isAtlasActive = (mId === 'HR_4' || mId === 'COMPLIANCE_1' || mId === 'OPS_3' || mId.startsWith('COMMERCE'));
+                    nodes.push({ id: mId, label: mLabel, x: Math.cos(subAngle)*(R_PILLAR+level), y: Math.sin(subAngle)*(R_PILLAR+level), color: data[pId].color, type: 'module', status: isAtlasActive ? 'active' : 'dormant' });
+                    links.push({ source: pId, target: mId });
+                });
+            });
+        }
+
+        function buildSidebar() {
+            const container = document.getElementById('category-container');
+            container.innerHTML = '<h3 style="margin-bottom:20px; font-size:14px; letter-spacing:2px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">EXPLORATEUR DE DOMAINES</h3>';
+            
+            // Icon mapping for pillars
+            const pillarIcons = {
+                COMMERCE: '💼', FINANCE: '💰', OPS: '🍳', LOGISTICS: '📦', HR: '👥', COMPLIANCE: '🛡️', INTELLIGENCE: '🧠', INFRA: '⚡'
+            };
+
+            const pillars = Object.keys(data).filter(id => id !== 'CORE');
+            
+            pillars.forEach(pId => {
+                const pillar = data[pId];
+                const pillarDiv = document.createElement('div');
+                pillarDiv.style.marginBottom = '25px';
+                pillarDiv.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                        <div style="width:24px; height:24px; background:${pillar.color}22; border:1px solid ${pillar.color}; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px;">${pillarIcons[pId]}</div>
+                        <div style="font-weight:900; font-size:12px; letter-spacing:1px; text-transform:uppercase;">${pillar.label}</div>
+                    </div>
+                `;
+
+                pillar.modules.forEach((mLabel, mIdx) => {
+                    const mId = `${pId}_${mIdx}`;
+                    const moduleActions = actionsRegistry.filter(a => a.origin === mId);
+                    
+                    const moduleDiv = document.createElement('div');
+                    moduleDiv.style.marginLeft = '34px';
+                    moduleDiv.style.marginBottom = '8px';
+                    
+                    let actionsHtml = moduleActions.map(act => `
+                        <div class="action-accordion" id="acc-${act.id}">
+                            <div class="action-header" onclick="event.stopPropagation(); toggleAction('${act.id}', '${mId}')">
+                                <span>⚡ ${act.label}</span>
+                                <span style="font-size:8px; opacity:0.5;">ACTION</span>
+                            </div>
+                            <div class="action-content">
+                                <p style="margin-top:0;">${act.definition}</p>
+                                <div style="font-weight:700; font-size:9px; color:#C5A059; text-transform:uppercase; margin-top:10px;">Impacts Systémique :</div>
+                                <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:5px;">
+                                    ${act.impacts.map(impId => `<span class="impact-tag">${nodes.find(n => n.id === impId)?.label || impId}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    moduleDiv.innerHTML = `
+                        <div style="font-size:11px; color:#94A3B8; display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.03);">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span style="opacity:0.6; font-size:10px;">•</span>
+                                <span>${mLabel}</span>
+                            </div>
+                            ${moduleActions.length > 0 ? `<span style="font-size:9px; background:${pillar.color}33; color:${pillar.color}; padding:1px 5px; border-radius:4px; font-weight:700;">${moduleActions.length} ACT</span>` : ''}
+                        </div>
+                        <div style="margin-top:5px;">${actionsHtml}</div>
+                    `;
+                    pillarDiv.appendChild(moduleDiv);
+                });
+                container.appendChild(pillarDiv);
+            });
+        }
+
+        function toggleAction(actId, originId) {
+            const acc = document.getElementById(`acc-${actId}`);
+            const isOpen = acc.classList.contains('open');
+            document.querySelectorAll('.action-accordion').forEach(a => a.classList.remove('open'));
+            if (!isOpen) {
+                acc.classList.add('open');
+                activeSutures = actionsRegistry.find(a => a.id === actId).impacts.map(id => ({ source: originId, target: id }));
+            } else {
+                activeSutures = [];
+            }
+            draw();
+        }
+
+        function draw() {
+            linksGroup.innerHTML = ''; nodesGroup.innerHTML = '';
+            links.forEach(l => {
+                const s = nodes.find(n => n.id === l.source); const t = nodes.find(n => n.id === l.target);
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                const dx = t.x - s.x; path.setAttribute("d", `M${s.x},${s.y} C${s.x+dx/2},${s.y} ${s.x+dx/2},${t.y} ${t.x},${t.y}`);
+                path.setAttribute("class", "link"); path.setAttribute("stroke", t.color); linksGroup.appendChild(path);
+            });
+            activeSutures.forEach(suture => {
+                const s = nodes.find(n => n.id === suture.source); const t = nodes.find(n => n.id === suture.target);
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                const dx = t.x - s.x; path.setAttribute("d", `M${s.x},${s.y} C${s.x+dx/2},${s.y} ${s.x+dx/2},${t.y} ${t.x},${t.y}`);
+                path.setAttribute("class", "link suture-line active"); path.setAttribute("stroke", "#C5A059"); path.setAttribute("marker-end", "url(#arrowhead)"); linksGroup.appendChild(path);
+            });
+
+            // --- FOCUS MODE LOGIC ---
+            const activeNodeIds = activeSutures.length > 0 ? 
+                new Set([...activeSutures.map(s => s.source), ...activeSutures.map(s => s.target)]) : null;
+
+            nodes.forEach(n => {
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                
+                // Dim if not part of active focus
+                if (activeNodeIds && !activeNodeIds.has(n.id) && n.type !== 'central') {
+                    g.style.opacity = "0.1";
+                    g.style.filter = "blur(1px)";
+                } else {
+                    g.style.opacity = "1";
+                    g.style.filter = "none";
+                }
+
+                let shape;
+                if (n.type === 'pillar') { shape = document.createElementNS("http://www.w3.org/2000/svg", "rect"); shape.setAttribute("x", n.x - 8); shape.setAttribute("y", n.y - 8); shape.setAttribute("width", 16); shape.setAttribute("height", 16); shape.setAttribute("rx", 2); }
+                else { shape = document.createElementNS("http://www.w3.org/2000/svg", "circle"); shape.setAttribute("cx", n.x); shape.setAttribute("cy", n.y); shape.setAttribute("r", n.type === 'central' ? 12 : 4); }
+                
+                shape.setAttribute("class", "node-circle"); 
+                shape.setAttribute("fill", n.status === 'active' || n.type === 'central' ? n.color : 'transparent');
+                shape.setAttribute("stroke", n.color); shape.setAttribute("filter", "url(#glow)");
+                
+                shape.onmouseenter = (e) => {
+                    const acts = actionsRegistry.filter(a => a.origin === n.id);
+                    if (acts.length) { tooltip.style.display = 'block'; tooltip.style.left = (e.clientX + 15) + 'px'; tooltip.style.top = (e.clientY + 15) + 'px'; tooltip.innerHTML = `<div class="tooltip-title">${n.label}</div>${acts.map(a => `<div class="tooltip-action">⚡ ${a.label}</div>`).join('')}`; }
+                };
+                shape.onmouseleave = () => tooltip.style.display = 'none';
+
+                const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                t.setAttribute("x", n.x + (n.x >= 0 ? 15 : -15)); t.setAttribute("y", n.y + 4);
+                t.setAttribute("text-anchor", n.x >= 0 ? "start" : "end"); t.setAttribute("class", "node-text");
+                if (n.type === 'central') { t.setAttribute("x", n.x); t.setAttribute("y", n.y + 45); t.setAttribute("text-anchor", "middle"); t.classList.add('central-node'); }
+                t.textContent = n.label; g.appendChild(shape); g.appendChild(t); nodesGroup.appendChild(g);
+            });
+            updateTransform();
+        }
+
+        function updateTransform() { mainGroup.setAttribute("transform", `translate(${translateX}, ${translateY}) scale(${scale})`); }
+        window.addEventListener('mousedown', (e) => { if (e.target.tagName === 'svg') { isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; } });
+        window.addEventListener('mousemove', (e) => { if (isDragging) { translateX = e.clientX - startX; translateY = e.clientY - startY; updateTransform(); } });
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('wheel', (e) => { 
+            if (e.target.closest('.sidebar')) return; // STOP ZOOM IN SIDEBAR
+            e.preventDefault(); 
+            scale *= (e.deltaY > 0 ? 0.9 : 1.1); 
+            updateTransform(); 
+        }, { passive: false });
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+
+        generateTopology(); buildSidebar(); draw();
+    </script>
+</body>
+</html>
