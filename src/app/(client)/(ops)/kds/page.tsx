@@ -32,7 +32,7 @@ export default function KDSPage() {
     const { floorOps } = useNexusOps();
     const tables = floorOps.operationalNodes;
     
-    const activeOrders = orders.filter(o => o?.status !== 'delivered');
+    const activeOrders = orders.filter(o: any => o?.status !== 'delivered');
     const { data: recipes } = useRecipes();
     
     // Core State
@@ -107,7 +107,7 @@ export default function KDSPage() {
         });
     }, [orders, activeStation, searchQuery]);
 
-    const preparingOrdersCount = orders.filter(o => o?.status === 'preparing' || o?.status === 'new').length;
+    const preparingOrdersCount = orders.filter(o: any => o?.status === 'preparing' || o?.status === 'new').length;
     const pendingModificationsCount = getPendingModifications().length;
 
     return (
