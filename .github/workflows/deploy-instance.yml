@@ -2,7 +2,7 @@ name: Deploy Private Instance
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "grade-x-vanguard" ]
   workflow_dispatch:
     inputs:
       instance_name:
