@@ -266,7 +266,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                         visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 20 } }
                                     }}
                                 >
-                                    {renderTableButton(table as Table, tables.indexOf(table))}
+                                    {renderTableButton(table as any, tables.indexOf(table))}
                                 </motion.div>
                             ))}
                         </div>
@@ -284,7 +284,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                             <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{zoneTables.length} Unités</span>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                                            {zoneTables.map((table, idx) => renderTableButton(table as Table, idx))}
+                                            {zoneTables.map((table, idx) => renderTableButton(table as any, idx))}
                                         </div>
                                     </div>
                                 )

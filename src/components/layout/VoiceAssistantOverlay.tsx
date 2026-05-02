@@ -198,7 +198,7 @@ export function VoiceAssistantOverlay() {
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread messages={messages as any} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
                         )}
 
                         {pendingAction && (

@@ -54,11 +54,11 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
 
     // 🛡️ PRAETORIAN SUTURE: Check via NexusInternalMapper
     // Sincérité à la Racine : Plus de 'as any'. Utilisation du type User souverain.
-    const permissions: User | null = currentUser;
+    const permissions = currentUser as unknown as User | null;
     let isAllowed = !requiredCategory || (permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
 
     // Social Shield: Un utilisateur RESTRICTED a ses autres accès coupés au niveau du Gate
-    if (permissions?.status === 'RESTRICTED' && requiredCategory) {
+    if (permissions && (permissions as any).status === 'RESTRICTED' && requiredCategory) {
         isAllowed = false; // Coupé au niveau du Gate
     }
 

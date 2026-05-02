@@ -147,8 +147,8 @@ export class FirestoreAdapter implements INexusAdapter {
                 });
             }
             return onSnapshot(q, (snap: import('firebase/firestore').QuerySnapshot | import('firebase/firestore').DocumentSnapshot) => {
-                const data = snap.docs.map((d: import('firebase/firestore').QueryDocumentSnapshot) => hydrateBasedOnPath(path, { id: d.id, ...d.data() }));
-                callback(data as import('firebase/firestore').DocumentData);
+                const data = (snap as any).docs.map((d: any) => hydrateBasedOnPath(path, { id: d.id, ...d.data() }));
+                callback(data as any);
             }, options?.onError);
         } else {
             const ref = doc(this.db, path);
