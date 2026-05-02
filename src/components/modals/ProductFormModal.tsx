@@ -44,8 +44,8 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
     const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
         // Ensure we pass a properly structured recipe-like object to the hook
         return calculateRecipeCostHook({
-            ingredients: ings.map(ri => {
-                const ing = ingredients.find(i => i.id === ri.ingredientId);
+            ingredients: ings.map((ri: any) => {
+                const ing = ingredients.find((i: any) => i.id === ri.ingredientId);
                 return { ...ing, quantity: ri.quantity };
             })
         });
@@ -76,7 +76,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsVegetarian(editProduct?.isVegetarian || false);
             setIsVegan(editProduct?.isVegan || false);
             setIsGlutenFree(editProduct?.isGlutenFree || false);
-            setRecipeIngredients((editProduct?.ingredients || []).map(i => ({ ingredientId: i.ingredientId || (i).id, quantity: i.quantity })));
+            setRecipeIngredients((editProduct?.ingredients || []).map((i: any) => ({ ingredientId: i.ingredientId || (i as any).id, quantity: i.quantity })));
             setRecipeSteps(editProduct?.recipeSteps || []);
         } else if (!editProduct && isOpen) {
             setName("");
@@ -141,8 +141,8 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 isVegetarian,
                 isVegan,
                 isGlutenFree,
-                ingredients: recipeIngredients.map((ri, idx) => {
-                    const ing = ingredients.find(i => i.id === ri.ingredientId);
+                ingredients: recipeIngredients.map((ri: any, idx: number) => {
+                    const ing = ingredients.find((i: any) => i.id === ri.ingredientId);
                     return {
                         id: `ing_${idx}`,
                         ingredientId: ri.ingredientId,

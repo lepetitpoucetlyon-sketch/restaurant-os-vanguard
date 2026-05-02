@@ -51,13 +51,13 @@ export function useFloorPlanControls({
     // Filter tables and zones by current floor
     const floorTables = getTablesForFloor(currentFloorId);
     const floorZones = getZonesForFloor(currentFloorId);
-    const selectedTable = useMemo(() => floorTables.find(t => t.id === selectedId), [floorTables, selectedId]);
+    const selectedTable = useMemo(() => floorTables.find(t: any => t.id === selectedId), [floorTables, selectedId]);
 
     const centerPlan = useCallback((forceScale?: number) => {
         if (!floorTables || floorTables.length === 0 || dimensions.width === 0) return;
 
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-        floorTables.forEach(t => {
+        floorTables.forEach(t: any => {
             const tableW = Number(t.width) || (t.radius ? Number(t.radius) * 2 : 80);
             const tableH = Number(t.height) || (t.radius ? Number(t.radius) * 2 : 80);
             const halfW = tableW / 2;

@@ -278,7 +278,7 @@ export const useOperationalNodes = () => {
 
     const toggleZonesLock = useCallback(() => setZonesLocked(prev => !prev), [setZonesLocked]);
     const setCurrentFloor = useCallback((id: string) => setCurrentFloorId(id), [setCurrentFloorId]);
-    const getTablesForFloor = useCallback((floorId: string) => nodes.filter(t => t.floorId === floorId), [nodes]);
+    const getTablesForFloor = useCallback((floorId: string) => nodes.filter(t: any => t.floorId === floorId), [nodes]);
     const getZonesForFloor = useCallback((floorId: string) => zones.filter(z => z.floorId === floorId || !z.floorId), [zones]);
     const updateTablePosition = useCallback(async (id: string, x: number, y: number) => {
         await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
@@ -359,7 +359,7 @@ export const useOperationalNodes = () => {
     const resetToTemplate = useCallback(async (templateId: string) => {
         await guardedAction('FLOOR_PLAN', 'POWER_USER', async () => {
             // 🛡️ PURGE CURRENT FLOOR NODES
-            const currentFloorNodes = nodes.filter(n => (n.attributes as any)?.floorId === currentLayoutId);
+            const currentFloorNodes = nodes.filter(n: any => (n.attributes as any)?.floorId === currentLayoutId);
             for (const node of currentFloorNodes) {
                 await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${node.id}`);
             }
@@ -398,8 +398,8 @@ export const useOperationalNodes = () => {
         currentLayoutId,
         currentFloorId: currentLayoutId,
         setCurrentFloor,
-        getNodesForLayout: (layoutId: string) => nodes.filter((n) => (n.attributes as any)?.floorId === layoutId),
-        getTablesForFloor: (floorId: string) => nodes.filter((n) => (n.attributes as any)?.floorId === floorId),
+        getNodesForLayout: (layoutId: string) => nodes.filter((n: any) => (n.attributes as any)?.floorId === layoutId),
+        getTablesForFloor: (floorId: string) => nodes.filter((n: any) => (n.attributes as any)?.floorId === floorId),
         getZonesForFloor,
         updateTablePosition,
         addNode,
@@ -513,7 +513,7 @@ export const useKitchen = () => {
                 });
             });
         },
-        getPendingModifications: () => orders.filter(o => o.status === 'pending_modification'),
+        getPendingModifications: () => orders.filter(o: any => o.status === 'pending_modification'),
     };
 };
 

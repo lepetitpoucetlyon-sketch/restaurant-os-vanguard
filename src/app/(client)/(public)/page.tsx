@@ -182,7 +182,7 @@ export default function Home() {
   }, [todayOrders]);
 
   // C3 FIX: Real service activity from tables
-  const activeTables = tables.filter(t => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length;
+  const activeTables = tables.filter(t: any => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length;
   const totalTables = tables.length;
   const serviceRate = totalTables > 0 ? Math.round((activeTables / totalTables) * 100) : 0;
   const occupancyRate = serviceRate;

@@ -201,7 +201,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                         >
                             <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                             <p className="text-[11px] font-black uppercase tracking-widest whitespace-nowrap">
-                                {tables.filter(t => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length} / {tables.length} Actives
+                                {tables.filter(t: any => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length} / {tables.length} Actives
                             </p>
                         </motion.div>
 
@@ -258,7 +258,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                 >
                     {viewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                            {tables.map(table => (
+                            {tables.map(table: any => (
                                 <motion.div
                                     key={table.id}
                                     variants={{
@@ -273,7 +273,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     ) : (
                         <div className="space-y-20">
                             {zones.map(zone => {
-                                const zoneTables = tables.filter(t => t.zoneId === zone.id);
+                                const zoneTables = tables.filter(t: any => t.zoneId === zone.id);
                                 if (zoneTables.length === 0) return null;
 
                                 return (
@@ -284,7 +284,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                             <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{zoneTables.length} Unités</span>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                                            {zoneTables.map((table, idx) => renderTableButton(table as any, idx))}
+                                            {zoneTables.map((table: any, idx: any) => renderTableButton(table as any, idx))}
                                         </div>
                                     </div>
                                 )
