@@ -60,7 +60,7 @@ export function Sidebar() {
     const accessibleSections = useMemo(() => {
         const features = tenantConfig?.features || {};
         
-        const pmsEnabled = !!(settings)?.pmsEnabled;
+        const pmsEnabled = !!(settings as any)?.pmsEnabled;
         
         return (NAV_SECTIONS || []).map(section => ({
             ...section,

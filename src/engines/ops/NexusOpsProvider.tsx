@@ -125,7 +125,7 @@ export interface NexusOpsState {
         allocations: SovereignNode[];
         areas: SovereignNode[];
         isLoading: boolean;
-        updateNodeStatus: (id: string, status: string | Partial<SovereignNode>) => Promise<void>;
+        updateNodeStatus: (id: string, status: Partial<SovereignNode>) => Promise<void>;
         updateAreaStatus: (id: string, status: Partial<SovereignNode>) => Promise<void>;
     };
 }
@@ -170,8 +170,8 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
         switchTenant, 
         tenantId,
         floorOps: {
-            operationalNodes: ((operationalNodes.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable),
-            allocations: ((allocations.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable),
+            operationalNodes: ((operationalNodes.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable) as any as any,
+            allocations: ((allocations.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable) as any as any,
             areas: (areas || []) as import("@/shared/nexus-contract").SovereignData[],
             isLoading: operationalNodes.loading || allocations.loading,
             updateNodeStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
@@ -242,7 +242,11 @@ export const useOrders = () => {
             (base.data || []).forEach((order) => {
                 (order.items || []).forEach((item: import('@nexus/contracts').OrderItem) => {
                     if (item.modification && !item.modification.respondedAt) {
-                        mods.push({ ...item.modification, orderId: order.id, orderItemId: item.id });
+                        mods.push({ 
+                            ...item.modification, 
+                            orderId: String(order.id), 
+                            orderItemId: String(item.id) 
+                        });
                     }
                 });
             });
@@ -263,7 +267,7 @@ export const useReservations = useAllocations;
 
 export const useOperationalNodes = () => {
     const node = useAtomValue(tablesNodeAtom);
-    const nodes = (((node as any).data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable);
+    const nodes = (((node as any).data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable) as any as any;
     const layouts = ((useAtomValue(floorsAtom) || []) as import("@/shared/nexus-contract").SovereignData[]).map(toFloor);
     const zones = ((useAtomValue(zonesAtom) || []) as import("@/shared/nexus-contract").SovereignData[]).map(toZone);
     const isZonesLocked = useAtomValue(zonesLockedAtom);
@@ -485,7 +489,7 @@ export const useKitchen = () => {
     const ordersNode = useAtomValue(ordersNodeAtom);
     const tasksNode = useAtomValue(prepTasksNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
-    const orders = ((ordersNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toOrder);
+    const orders = ((ordersNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toOrder) as any;
     const tasks = (tasksNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
 
     return {
@@ -517,12 +521,12 @@ export const usePOSController = () => {
     const ordersNode = useAtomValue(ordersNodeAtom);
     const productsNode = useAtomValue(productsNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
-    const products = ((productsNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toProduct);
+    const products = ((productsNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toProduct) as any;
     const recipesNode = useAtomValue(recipesNodeAtom);
 
     return {
         products,
-        recipes: ((recipesNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toRecipe),
+        recipes: ((recipesNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toRecipe) as any,
         isLoading: ordersNode.loading || productsNode.loading,
         error: ordersNode.error || productsNode.error,
         createOrder: async (order: any) => {
