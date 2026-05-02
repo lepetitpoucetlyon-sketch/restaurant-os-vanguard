@@ -26,7 +26,7 @@ export interface ZeusAnomaly {
     severity: 'low' | 'medium' | 'high' | 'critical';
     message: string;
     detectedAt: string;
-    metadata?: Record<string, unknown>;
+    metadata?: Record<string, import("@/shared/nexus-contract").SovereignValue>;
 }
 
 export interface ZeusManifest {

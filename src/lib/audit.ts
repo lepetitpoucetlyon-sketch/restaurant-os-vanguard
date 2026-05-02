@@ -12,7 +12,7 @@ export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'ha
 export interface AuditEvent {
     module: AuditModule;
     action: string;
-    details?: import('@shared/nexus-contract').SovereignData;
+    details?: import('@/shared/nexus-contract').SovereignData;
     severity?: AuditSeverity;
     userId?: string;
     timestamp: Date;
@@ -70,7 +70,7 @@ class EmpireAuditLogger {
 
                 // 1. Axiom Integration (Long-term Observability)
                 try {
-                    logger.info(event.action, payload as import('@shared/nexus-contract').SovereignMap);
+                    logger.info(event.action, payload as import('@/shared/nexus-contract').SovereignMap);
                 } catch (e) {
                     // Silently fail if axiom is not configured
                 }
@@ -116,14 +116,14 @@ class EmpireAuditLogger {
     /**
      * Report an error to the observability stack.
      */
-    public error(error: Error | string, module: AuditModule, context?: import('@shared/nexus-contract').SovereignData) {
+    public error(error: Error | string, module: AuditModule, context?: import('@/shared/nexus-contract').SovereignData) {
         this.log({
             module,
             action: typeof error === 'string' ? error : error.message,
             severity: 'critical',
             details: {
                 stack: typeof error === 'string' ? null : error.stack,
-                ...(context as import('@shared/nexus-contract').SovereignData)
+                ...(context as import('@/shared/nexus-contract').SovereignData)
             },
             timestamp: new Date()
         });

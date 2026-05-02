@@ -33,7 +33,7 @@ export default function MigrationSettings() {
     const handleInjectMenu = async () => {
         if (!parsedMenuData) return;
         try {
-            await injectToDB('menu', parsedMenuData as any);
+            await injectToDB('menu', parsedMenuData);
             showToast("Menu injecté dans la base de données !", "success");
             setParsedMenuData(null);
             setRawMenuText("");
@@ -52,7 +52,7 @@ export default function MigrationSettings() {
         try {
             const data = await parseCSV(file);
             if (data && data.length > 0) {
-                await injectToDB(entity, data as any);
+                await injectToDB(entity, data);
                 showToast(`Import réussi : ${data.length} enregistrements ajoutés.`, "success");
             } else {
                 showToast("Fichier vide ou mal formaté.", "warning");

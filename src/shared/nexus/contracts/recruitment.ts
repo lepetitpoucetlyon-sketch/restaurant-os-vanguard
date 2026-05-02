@@ -3,7 +3,7 @@ import { SovereignNode } from "../../nexus-contract";
 export type CandidateStatus = 'new' | 'interview' | 'trial' | 'refused' | 'hired';
 
 export interface GDPRConsent {
-    [key: string]: import('@shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
     consented: boolean;
     date: string;
     method: 'written' | 'digital' | 'verbal_logged';

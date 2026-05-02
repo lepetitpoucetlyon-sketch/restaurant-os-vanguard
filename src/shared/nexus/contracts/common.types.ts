@@ -7,7 +7,7 @@
 // ============================================
 
 import { User } from '@nexus/contracts/auth.types';
-import { SovereignNode, SovereignField, SovereignData } from '@shared/nexus-contract';
+import { SovereignNode, SovereignField, SovereignData } from '@/shared/nexus-contract';
 import { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone } from './nexus-internal-mapper';
 export type { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone };
 import { OptionGroup as NexusOptionGroup } from './nexus-internal-mapper';

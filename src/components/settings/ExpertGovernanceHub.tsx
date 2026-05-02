@@ -78,7 +78,7 @@ export default function ExpertGovernanceHub() {
 
     const handleUpdateExpert = (domain: AgentDomain, updates: Partial<SLMExpert>) => {
         const newExperts = experts.map(e => e.domain === domain ? { ...e, ...updates } : e);
-        updateSLM({ experts: newExperts } as any);
+        updateSLM({ experts: newExperts });
     };
 
     const handleSaveGlobal = async () => {

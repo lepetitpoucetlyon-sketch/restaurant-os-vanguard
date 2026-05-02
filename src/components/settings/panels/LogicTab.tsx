@@ -82,7 +82,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
 
                     {setting.type === "select" && (
                         <PremiumSelect
-                            value={(localValues[setting.key] as any) || ""}
+                            value={(localValues[setting.key]) || ""}
                             onChange={(val) => updateValue(setting.key, val)}
                             options={setting.options || []}
                         />
@@ -90,7 +90,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
 
                     {setting.type === "number" && (
                         <PremiumNumberInput
-                            value={(localValues[setting.key] as any) || setting.min || 0}
+                            value={(localValues[setting.key]) || setting.min || 0}
                             onChange={(val) => updateValue(setting.key, val)}
                             min={setting.min}
                             max={setting.max}
@@ -100,7 +100,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                     {setting.type === "text" && (
                         <input
                             type="text"
-                            value={(localValues[setting.key] as any) || ""}
+                            value={(localValues[setting.key]) || ""}
                             onChange={(e) => updateValue(setting.key, e.target.value)}
                             className="w-full p-4 rounded-2xl bg-bg-tertiary/20 border-2 border-border/50 text-text-primary font-serif focus:border-accent focus:outline-none focus:shadow-[0_0_20px_rgba(197,160,89,0.15)] transition-all duration-300"
                         />

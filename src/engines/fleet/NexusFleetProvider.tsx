@@ -12,7 +12,7 @@ import { SiteTelemetry, EmpireInstance, EmpireGlobalMetrics } from '@nexus/contr
 import { FleetInsight, ConsolidatedMetrics } from '@domain/services/MacroBrain';
 import { tenantConfigAtom } from '@/store/fleetAtoms';
 import { whiteLabelInstanceConfig } from '@/config/instance';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 import { NexusFleetState } from '@nexus/contracts/nexus.types';
@@ -268,9 +268,9 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         launchPreview,
         broadcastConfiguration,
         complianceService: FleetComplianceService,
-        haccpBridge: HACCPTelemetryBridge as unknown as import('@shared/nexus-contract').SovereignMap,
+        haccpBridge: HACCPTelemetryBridge as import("@/shared/nexus-contract").SovereignMap,
         fleet: globalMetrics, 
-        customer: { customers: [] as import('@shared/nexus-contract').SovereignData[] },
+        customer: { customers: [] as import('@/shared/nexus-contract').SovereignData[] },
         intelligence: { 
             globalInflationRate,
             setGlobalInflationRate,
@@ -283,7 +283,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         isTrainingMode: false,
         toggleTrainingMode: () => { console.log('[Fleet] Toggling training mode...'); },
         triggerRebalancing: async () => { console.log('[Fleet] Triggering rebalancing...'); },
-        nodes: [] as import('@shared/nexus-contract').SovereignData[],
+        nodes: [] as import('@/shared/nexus-contract').SovereignData[],
         health: 'stable',
         tutorial: {
             isActive: false,

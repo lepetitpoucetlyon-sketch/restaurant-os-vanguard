@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { SovereignData, SovereignValue } from '@shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 import { Volume2, VolumeX, Radio } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,7 +24,7 @@ export const AmbientAudio: React.FC = () => {
     const initializeAudio = useCallback(() => {
         if (ctxRef.current) return;
         
-        const AudioContextClass = (window.AudioContext || (window as unknown as Window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
+        const AudioContextClass = (window.AudioContext || (window as Window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
 
         const ctx = new AudioContextClass();
         ctxRef.current = ctx;

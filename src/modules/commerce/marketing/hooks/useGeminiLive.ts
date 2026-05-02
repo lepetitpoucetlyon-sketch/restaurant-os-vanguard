@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
 import { useSettings } from '@/context/SettingsContext';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 interface WebkitWindow extends Window {
     webkitAudioContext: typeof AudioContext;
@@ -57,7 +57,7 @@ export function useGeminiLive() {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
             
-            const audioContext = new (window.AudioContext || (window as unknown as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
+            const audioContext = new (window.AudioContext || (window as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
             audioContextRef.current = audioContext;
             
             const source = audioContext.createMediaStreamSource(stream);

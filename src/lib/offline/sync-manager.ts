@@ -88,7 +88,7 @@ export class SyncManager {
             const batch = Nexus.adapter.batch();
             
             // Le payload contient une liste d'instructions { path, data, method }
-            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: import('@shared/nexus-contract').SovereignData }> };
+            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: import('@/shared/nexus-contract').SovereignData }> };
             const instructions = payload.instructions;
             for (const ins of instructions) {
                 if (ins.method === 'SET') batch.set(ins.path, ins.data);
@@ -101,7 +101,7 @@ export class SyncManager {
             // Logique générique pour les opérations simples
             const fullPath = `${op.collection}/${op.targetId}`;
             if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
-            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@shared/nexus-contract').SovereignData>);
+            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
         }
     }
 }

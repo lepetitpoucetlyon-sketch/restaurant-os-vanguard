@@ -12,7 +12,7 @@ import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 import { usePathname, useRouter } from 'next/navigation';
 
 export function TutorialBubble() {
-    const { isActive, currentSection, currentPointIndex, nextStep, prevStep, stopTutorial } = useTutorial() as unknown as NexusTutorialState;
+    const { isActive, currentSection, currentPointIndex, nextStep, prevStep, stopTutorial } = useTutorial() as NexusTutorialState;
     const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, height: 0 });
     const isMounted = useHasMounted();
     const bubbleRef = useRef<HTMLDivElement>(null);

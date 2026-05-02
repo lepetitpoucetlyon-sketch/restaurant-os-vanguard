@@ -1,7 +1,7 @@
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
 import { fiscalLedgerAtom } from '@modules/compliance';
-import { TelemetryPulse } from '@shared/nexus-contract';
+import { TelemetryPulse } from '@/shared/nexus-contract';
 import { FiscalSeal } from '@nexus/contracts';
 
 interface BatteryManager {

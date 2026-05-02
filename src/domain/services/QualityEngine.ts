@@ -19,7 +19,7 @@ import {
     OilCheckData
 } from '../schemas/haccp';
 
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 🏺 QualityEngine - Restaurant OS Guard

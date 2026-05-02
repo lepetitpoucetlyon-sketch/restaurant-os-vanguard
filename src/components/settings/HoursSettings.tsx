@@ -69,7 +69,7 @@ export default function HoursSettings() {
     };
 
     const handleAddClosedPeriod = async (period: Omit<ClosedPeriod, 'id' | 'isAnnual'>) => {
-        await addClosedPeriod({ ...period, isAnnual: false } as any);
+        await addClosedPeriod({ ...period, isAnnual: false });
     };
 
     return (

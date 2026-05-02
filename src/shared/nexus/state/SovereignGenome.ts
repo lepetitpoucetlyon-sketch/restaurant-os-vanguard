@@ -1,9 +1,9 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { DEFAULT_TENANT_CONFIG } from '@shared/nexus-contract';
+import { DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import type { 
   TenantConfig
-} from '@shared/nexus-contract';
+} from '@/shared/nexus-contract';
 import { EmpireInstance } from '@domain/types/empire';
 import { FleetBloomFilter } from '@/lib/bloom-filter';
 import type { Notification as AppNotification, Floor, Zone, User } from '@nexus/contracts';

@@ -105,7 +105,7 @@ export default function TablesSettings() {
                     <ZoneService 
                         zones={zones}
                         floors={floors}
-                        tables={tables as any}
+                        tables={tables}
                         addZone={addZone}
                         updateZone={updateZone}
                         deleteZone={deleteZone}
@@ -116,7 +116,7 @@ export default function TablesSettings() {
 
                 {activeTab === 'tables' && (
                     <MobilierConfig 
-                        tables={tables as any}
+                        tables={tables}
                         zones={zones}
                         floors={floors}
                         addTable={addTable}

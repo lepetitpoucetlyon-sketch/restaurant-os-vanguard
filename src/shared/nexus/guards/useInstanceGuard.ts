@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export interface InstanceGuardResult {
-    result: import('@shared/nexus-contract').SovereignData;
+    result: import('@/shared/nexus-contract').SovereignData;
     isAuthorized: boolean;
 
     verdict: 'AUTHORIZED' | 'DENIED' | 'PENDING';

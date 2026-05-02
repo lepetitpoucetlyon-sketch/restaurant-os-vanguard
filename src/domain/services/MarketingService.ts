@@ -60,7 +60,7 @@ export class MarketingService {
                 isActive: true,
                 startDate: new Date().toISOString(),
                 endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            } as unknown as PromoCode
+            } as PromoCode
         };
     }
 

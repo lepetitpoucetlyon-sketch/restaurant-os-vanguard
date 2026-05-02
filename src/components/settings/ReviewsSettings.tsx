@@ -19,7 +19,7 @@ import {
     PenTool
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-const stubAction = async (...args: any[]) => ({ success: true, id: "STUB_ID" });
+const stubAction = async (...args: import("@/shared/nexus-contract").SovereignValue[]) => ({ success: true, id: "STUB_ID" });
 const saveMarketingSettingsAction = stubAction;
 const updateReviewSettingsAction = stubAction;
 import { toast } from "sonner";
@@ -59,7 +59,7 @@ export default function ReviewsSettings() {
                 sources,
                 autoReply,
                 templates
-            } as any);
+            });
             toast.success("Reputation state committed to the industrial core.");
         } catch (error) {
             toast.error("Failed to commit reputation state.");

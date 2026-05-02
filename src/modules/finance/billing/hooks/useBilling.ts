@@ -6,7 +6,7 @@ import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';
 import { fiscalLedgerNodeAtom, tenantIdAtom } from '@/store/operationalAtoms';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { OperationalIdentity } from '@shared/nexus-contract';
+import { OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { logger } from '@/lib/logger';
 

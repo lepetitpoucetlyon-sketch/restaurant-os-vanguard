@@ -11,7 +11,7 @@ import {
 } from '../store/staffAtoms';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "@nexus/contracts";
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * 👨‍💼 useHumanResources - Grade X Atomic Mapper
@@ -62,7 +62,7 @@ export function useHumanResources() {
             shiftForge.mutate('UPDATE', id, { 
                 status: 'published',
                 updatedAt: now 
-            } as unknown as Partial<Shift>)
+            } as Partial<Shift>)
         ));
     }, [shiftForge]);
 
@@ -73,7 +73,7 @@ export function useHumanResources() {
         return leaveForge.mutate('UPDATE', id, { 
             status: 'approved',
             updatedAt: now
-        } as unknown as Partial<LeaveRequest>);
+        } as Partial<LeaveRequest>);
     }, [leaveForge]);
 
     const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, details?: string) => {
@@ -82,7 +82,7 @@ export function useHumanResources() {
             status: 'rejected',
             rejectionReason: reason,
             updatedAt: now
-        } as unknown as Partial<LeaveRequest>);
+        } as Partial<LeaveRequest>);
     }, [leaveForge]);
 
     const createLeaveRequest = useCallback(async (request: Omit<LeaveRequest, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -94,7 +94,7 @@ export function useHumanResources() {
             status: 'pending_approval' as any,
             createdAt: now,
             updatedAt: now
-        } as unknown as LeaveRequest;
+        } as LeaveRequest;
         return leaveForge.mutate('SET', id, newRequest);
     }, [leaveForge]);
 

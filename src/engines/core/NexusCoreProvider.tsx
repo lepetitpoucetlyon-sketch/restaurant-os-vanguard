@@ -33,7 +33,7 @@ import {
     borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
 } from '@/store/themeAtoms';
 import { User, UserRole, GlobalSettings, EmpireInstance, FleetInsight } from '@nexus/contracts';
-import { TenantConfig, SovereignData, SovereignValue } from '@shared/nexus-contract';
+import { TenantConfig, SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import {
     NexusCoreState, 
     NexusAuthState, 
@@ -378,7 +378,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         selectedInstanceId: null,
         isUpdateAvailable: false,
         updateInfo: null,
-        nodes: [] as import('@shared/nexus-contract').SovereignData[],
+        nodes: [] as import('@/shared/nexus-contract').SovereignData[],
         health: 'EXCELLENT',
         isTrainingMode: false,
         toggleTrainingMode: () => {},
@@ -392,13 +392,13 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         complianceService: {
             isNF525Valid: true,
             lastSealHash: '0x000',
-            verifySiteIntegrity: async () => ({}) as import('@shared/nexus-contract').SovereignNode,
-            issueGlobalCertificate: async () => ({}) as import('@shared/nexus-contract').SovereignNode
+            verifySiteIntegrity: async () => ({}) as import('@/shared/nexus-contract').SovereignNode,
+            issueGlobalCertificate: async () => ({}) as import('@/shared/nexus-contract').SovereignNode
         },
-        haccpBridge: {} as import('@shared/nexus-contract').SovereignData,
+        haccpBridge: {} as import('@/shared/nexus-contract').SovereignData,
         fleet: null,
         customer: {
-            customers: [] as import('@shared/nexus-contract').SovereignData[]
+            customers: [] as import('@/shared/nexus-contract').SovereignData[]
         },
         intelligence: {
             globalInflationRate: 0.0,

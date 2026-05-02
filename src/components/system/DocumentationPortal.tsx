@@ -12,7 +12,7 @@ import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 export function DocumentationPortal({ isPage = false, categoryOverride }: { isPage?: boolean; categoryOverride?: string }) {
     const { isDocumentationOpen, documentationCategory, closeDocumentation } = useUI();
-    const { startTutorial } = useTutorial() as unknown as NexusTutorialState;
+    const { startTutorial } = useTutorial() as NexusTutorialState;
     const [showFullTutorial, setShowFullTutorial] = React.useState(true);
 
     const activeCategory = categoryOverride || documentationCategory;

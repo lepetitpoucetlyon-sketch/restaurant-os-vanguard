@@ -37,7 +37,7 @@ export class GeminiLiveService {
         this.rolePermissions = rolePermissions;
         this.onTranscript = callbacks?.onTranscript || null;
         this.onToolCall = callbacks?.onToolCall || null;
-        const win = window as unknown as WebkitWindow;
+        const win = window as WebkitWindow;
         const AudioCtx = window.AudioContext || win.webkitAudioContext;
         this.audioContext = new AudioCtx({ sampleRate: 16000 });
     }

@@ -4,7 +4,7 @@
  * Centralized registry for Orders, Tables, and Reservations.
  */
 
-import { SovereignNode, SovereignMap } from '@shared/nexus-contract';
+import { SovereignNode, SovereignMap } from '@/shared/nexus-contract';
 
 export type TableStatus =
     | 'free'

@@ -2,7 +2,7 @@ import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { ToolDefinition } from './FinanceTool';
-import { SovereignData } from '@shared/nexus-contract';
+import { SovereignData } from '@/shared/nexus-contract';
 
 /**
  * MENU TOOL

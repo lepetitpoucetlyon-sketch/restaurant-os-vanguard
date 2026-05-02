@@ -11,7 +11,7 @@ export interface SovereignError {
   message: string;
   severity: ErrorSeverity;
   timestamp: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, import("@/shared/nexus-contract").SovereignValue>;
 }
 
 export type PillarId = 

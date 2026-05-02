@@ -1,4 +1,4 @@
-import { SovereignField, SovereignNode } from '@shared/nexus-contract';
+import { SovereignField, SovereignNode } from '@/shared/nexus-contract';
 
 /**
  * 🏛️ LOGISTICS CORE TYPES - Sovereign Shared Contract
