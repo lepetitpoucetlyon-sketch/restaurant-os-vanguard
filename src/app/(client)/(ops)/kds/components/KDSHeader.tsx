@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Utensils, Table as TableIcon, Search, LayoutGrid, Zap, Bell } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { STATION_CONFIG, KitchenStation } from "@/app/(client)/(ops)/kds/constants";
+import { STATION_CONFIG, KitchenStation } from "@modules/kds";
 
 interface KDSHeaderProps {
     activeStation: KitchenStation;

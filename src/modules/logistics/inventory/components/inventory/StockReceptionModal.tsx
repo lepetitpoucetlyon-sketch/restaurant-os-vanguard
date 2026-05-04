@@ -6,7 +6,7 @@ import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X } f
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 // import { receiveStockAction } from "@/app/actions/inventory";
 import { useAtomValue } from "jotai";
-import { tenantIdAtom } from "@/store/operationalAtoms";
+import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { IngredientCategory, IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";;
 
@@ -161,7 +161,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                     value={selectedIngredient}
                                     onChange={handleIngredientChange}
                                     options={ingredients.map(ing => ({
-                                        value: ing.id,
+                                        value: String(ing.id),
                                         label: String(ing.name || '').toUpperCase(),
                                         description: String(CATEGORY_LABELS[ing.category as IngredientCategory] || ing.category || 'Autre').toUpperCase()
                                     }))}
@@ -208,7 +208,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                     value={storageLocation}
                                     onChange={setStorageLocation}
                                     options={activeLocations.filter(l => l.isActive).map(loc => ({
-                                        value: loc.id,
+                                        value: String(loc.id),
                                         label: String(loc.name || '').toUpperCase(),
                                         description: loc.temperature !== undefined ? `${loc.temperature}°C` : undefined
                                     }))}

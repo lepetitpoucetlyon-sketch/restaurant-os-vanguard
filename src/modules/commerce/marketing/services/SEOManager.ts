@@ -1,6 +1,6 @@
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom } from '@/store/fleetAtoms';
-import { fleetSnapshotAtom } from '@/store/operationalAtoms';
+import { tenantIdAtom } from '@nexus/state/SovereignGenome';
+import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 
 /**
  * 🔍 SEOManager - Restaurant OS

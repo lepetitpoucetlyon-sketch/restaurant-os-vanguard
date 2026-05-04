@@ -49,3 +49,14 @@ export interface SupplierSettings {
     products?: string[];
     notes?: string;
 }
+export interface InventoryLocation {
+    id: string;
+    name: string;
+    type: 'cold' | 'dry' | 'liquid';
+}
+
+export interface InventoryConfig {
+    lowStockThreshold: number;
+    autoReorder: boolean;
+    locations: InventoryLocation[];
+}

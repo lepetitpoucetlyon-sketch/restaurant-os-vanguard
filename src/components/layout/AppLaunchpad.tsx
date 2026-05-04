@@ -7,11 +7,11 @@ import { cn } from "@/lib/ui.foundations";;
 import { NavSection } from "@/config/navigation";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useUI } from "@/context/UIContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useUI } from "@/hooks";
+import { useLanguage } from "@/hooks";
 import { useRouter } from "next/navigation";
 import { LaunchpadStatusHub } from "@/components/layout/LaunchpadStatusHub";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { useHasMounted } from "@/hooks";
 
 

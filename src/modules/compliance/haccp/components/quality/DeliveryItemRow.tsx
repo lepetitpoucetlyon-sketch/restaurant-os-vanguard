@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { qualityActiveControlAtom } from '@modules/compliance/haccp/store/qualityAtoms';
-import { QualityControlItem, DecisionType } from '@domain/types/quality';
+import { QualityControlItem, DecisionType } from '@nexus/contracts';
 import { cn } from "@/lib/ui.foundations";
 import { CheckCircle2, AlertTriangle, XOctagon, Thermometer, Box } from 'lucide-react';
 import { Button } from "@ui/button";

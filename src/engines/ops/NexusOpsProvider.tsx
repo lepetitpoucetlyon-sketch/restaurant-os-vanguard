@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { NexusNode } from '@/store/base';
+import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
 import { 
   Table, Order, Product, Recipe, Reservation, Quote, Campaign,
   isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign,
@@ -22,45 +23,59 @@ import { ImmunityAuditLogger } from '@/lib/services/ImmunityAuditLogger';
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { EmpireInstance } from '@domain/types/empire';
 
+import { ordersNodeAtom, tablesNodeAtom } from '@/store/pillars/ops';
 import { 
-  ordersNodeAtom,
-  tablesNodeAtom,
-  stockItemsNodeAtom,
-  recipesNodeAtom,
+  stockItemsNodeAtom, 
+  recipesNodeAtom, 
   prepTasksNodeAtom,
-  quotesNodeAtom,
-  deliveriesNodeAtom,
-  seoProfileAtom,
-  marketingCampaignsNodeAtom,
-  socialAccountsNodeAtom,
-  tenantIdAtom,
-  reservationsNodeAtom,
-  groupsNodeAtom,
-  leaveRequestsNodeAtom,
-  leaveBalancesNodeAtom,
-  fleetSnapshotAtom,
   categoriesNodeAtom,
   productsNodeAtom,
-  fiscalLedgerNodeAtom,
-  wasteLogsNodeAtom,
-  ingredientsNodeAtom,
-  preparationsNodeAtom,
-  storageLocationsNodeAtom,
-  crmsNodeAtom,
-  floorsAtom,
-  zonesAtom,
-  zonesLockedAtom,
-  currentFloorIdAtom,
-  marketingSegmentsNodeAtom,
-  scheduledPostsNodeAtom,
-  isMarketingSyncingAtom,
-  isReservationSyncingAtom,
+  miseEnPlaceTargetSelector
+} from '@/store/pillars/logistics';
+import { 
+  quotesNodeAtom, 
+  reservationsNodeAtom, 
+  groupsNodeAtom 
+} from '@/store/pillars/commerce';
+import { 
+  deliveriesNodeAtom, 
+  fiscalLedgerNodeAtom, 
+  wasteLogsNodeAtom 
+} from '@/store/pillars/compliance';
+import { 
+  seoProfileAtom, 
+  marketingCampaignsNodeAtom, 
+  socialAccountsNodeAtom 
+} from '@/store/pillars/marketing';
+import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
+import { leaveRequestsNodeAtom, leaveBalancesNodeAtom } from '@/store/pillars/human';
+
+import { 
+  ingredientsNodeAtom, 
+  preparationsNodeAtom, 
+  storageLocationsNodeAtom 
+} from '@/store/pillars/logistics';
+import { 
+  crmsNodeAtom, 
+  marketingSegmentsNodeAtom, 
+  scheduledPostsNodeAtom, 
+  isMarketingSyncingAtom, 
+  selectedCRMAtom 
+} from '@/store/pillars/marketing';
+import { 
+  floorsAtom, 
+  zonesAtom, 
+  zonesLockedAtom, 
+  currentFloorIdAtom 
+} from '@/store/pillars/ops';
+import { 
+  isReservationSyncingAtom, 
   reservationStatsAtom,
-  selectedCRMAtom,
   menuAnalysisSelector,
   staffPerformanceSelector,
   laborCostRatioSelector
-} from '@/store/operationalAtoms';
+} from '@/store/pillars/commerce';
+
 
 /**
  * 🛡️ Grade IX: Guarded Action Wrapper
@@ -86,27 +101,25 @@ async function guardedAction<T>(
 /**
  * 🏛️ sanitizeToSovereign - Molecular Scanner Grade X
  */
-function sanitizeToSovereign<T>(data: T): T {
+function sanitizeToSovereign<T extends object>(data: T): T {
     if (data === null || typeof data !== 'object') {
-        if (typeof data === 'bigint') return Number(data) as T;
+        if (typeof data === 'bigint') return Number(data) as unknown as T;
         return data;
     }
-    if (Array.isArray(data)) return data.map(val => sanitizeToSovereign(val)) as T;
+    if (Array.isArray(data)) return data.map(val => sanitizeToSovereign(val)) as unknown as T;
 
     const PROTECTED_KEYS = ['id', 'tenantId', 'createdAt', 'updatedAt', 'identifier', 'date'];
-    const sanitized: Record<string, import("@/shared/nexus-contract").SovereignValue> = { ...data } as any;
+    const sanitized = { ...data } as Record<string, unknown>;
 
     for (const key in sanitized) {
         if (PROTECTED_KEYS.includes(key)) continue;
-        const val = (sanitized as any)[key];
+        const val = sanitized[key];
         if (typeof val === 'number') {
-            // Convert to microunits (bigint) then back to number for storage compatibility
-            // This ensures the input was validated via SovereignMath
-            (sanitized as any)[key] = Number(SovereignMath.toMicrounits(val));
+            sanitized[key] = Number(SovereignMath.toMicrounits(val));
         } else if (typeof val === 'bigint') {
-            (sanitized as any)[key] = Number(val);
+            sanitized[key] = Number(val);
         } else if (typeof val === 'object' && val !== null) {
-            (sanitized as any)[key] = sanitizeToSovereign(val);
+            sanitized[key] = sanitizeToSovereign(val as object);
         }
     }
     return sanitized as T;
@@ -170,9 +183,9 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
         switchTenant, 
         tenantId,
         floorOps: {
-            operationalNodes: ((operationalNodes.data || []) as any[]).map(toTable) as any,
-            allocations: ((allocations.data || []) as any[]).map(toTable) as any,
-            areas: (areas || []) as any,
+            operationalNodes: (operationalNodes.data || []).map(toTable),
+            allocations: (allocations.data || []).map(toReservation),
+            areas: (areas || []),
             isLoading: operationalNodes.loading || allocations.loading,
             updateNodeStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
                 await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, { 
@@ -205,16 +218,21 @@ export const useNexusOps = (): NexusOpsState => {
 export const useFloorOps = () => useNexusOps().floorOps;
 
 // Generic Data Hook Generator
-const createSovereignHook = (atom: any, identity: OperationalIdentity, mapper: (n: SovereignNode) => any = (n) => n) => {
+const createSovereignHook = <T,>(
+    atom: import('jotai').Atom<NexusNode<any>>, 
+    identity: OperationalIdentity, 
+    mapper: (n: SovereignNode) => T = (n) => n as unknown as T
+) => {
     return () => {
         const node = useAtomValue(atom);
         const tenantId = useAtomValue(tenantIdAtom);
+        const rawData = (node.data || []) as any[];
         return {
-            data: (((node as any).data || []) as import("@/shared/nexus-contract").SovereignData[]).map(mapper),
-            isLoading: (node as any).loading,
-            error: (node as any).error,
-            add: async (data: Partial<SovereignNode>) => {
-                const sanitized = sanitizeToSovereign(data);
+            data: rawData.map(mapper),
+            isLoading: node.loading,
+            error: node.error,
+            add: async (dataToAdd: Partial<SovereignNode>) => {
+                const sanitized = sanitizeToSovereign(dataToAdd as object);
                 const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}`;
                 await Nexus.adapter.create(path, { ...sanitized, updatedAt: new Date().toISOString() });
             }
@@ -239,7 +257,7 @@ export const useOrders = () => {
         },
         getPendingModifications: () => {
             const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string, orderItemId: string }> = [];
-            (base.data || []).forEach((order) => {
+            (base.data || []).forEach((order: Order) => {
                 (order.items || []).forEach((item: import('@nexus/contracts').OrderItem) => {
                     if (item.modification && !item.modification.respondedAt) {
                         mods.push({ 
@@ -259,7 +277,7 @@ export const useAllocations = () => {
     return {
         ...base,
         getReservationsForTable: (tableId: string) => {
-            return (base.data || []).filter((r: any) => r.tableId === tableId || r.assignedTableId === tableId);
+            return (base.data || []).filter((r) => r.tableId === tableId || r.assignedTableId === tableId);
         }
     };
 };
@@ -267,9 +285,9 @@ export const useReservations = useAllocations;
 
 export const useOperationalNodes = () => {
     const node = useAtomValue(tablesNodeAtom);
-    const nodes = (((node as any).data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toTable) as any as any;
-    const layouts = ((useAtomValue(floorsAtom) || []) as import("@/shared/nexus-contract").SovereignData[]).map(toFloor);
-    const zones = ((useAtomValue(zonesAtom) || []) as import("@/shared/nexus-contract").SovereignData[]).map(toZone);
+    const nodes = (node.data || []).map(toTable);
+    const layouts = (useAtomValue(floorsAtom) || []).map(toFloor);
+    const zones = (useAtomValue(zonesAtom) || []).map(toZone);
     const isZonesLocked = useAtomValue(zonesLockedAtom);
     const setZonesLocked = useSetAtom(zonesLockedAtom);
     const currentLayoutId = useAtomValue(currentFloorIdAtom);
@@ -278,7 +296,7 @@ export const useOperationalNodes = () => {
 
     const toggleZonesLock = useCallback(() => setZonesLocked(prev => !prev), [setZonesLocked]);
     const setCurrentFloor = useCallback((id: string) => setCurrentFloorId(id), [setCurrentFloorId]);
-    const getTablesForFloor = useCallback((floorId: string) => nodes.filter(t: any => t.floorId === floorId), [nodes]);
+    const getTablesForFloor = useCallback((floorId: string) => nodes.filter((t: any) => t.floorId === floorId), [nodes]);
     const getZonesForFloor = useCallback((floorId: string) => zones.filter(z => z.floorId === floorId || !z.floorId), [zones]);
     const updateTablePosition = useCallback(async (id: string, x: number, y: number) => {
         await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
@@ -359,7 +377,7 @@ export const useOperationalNodes = () => {
     const resetToTemplate = useCallback(async (templateId: string) => {
         await guardedAction('FLOOR_PLAN', 'POWER_USER', async () => {
             // 🛡️ PURGE CURRENT FLOOR NODES
-            const currentFloorNodes = nodes.filter(n: any => (n.attributes as any)?.floorId === currentLayoutId);
+            const currentFloorNodes = nodes.filter((n: any) => (n.attributes as any)?.floorId === currentLayoutId);
             for (const node of currentFloorNodes) {
                 await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${node.id}`);
             }
@@ -398,8 +416,8 @@ export const useOperationalNodes = () => {
         currentLayoutId,
         currentFloorId: currentLayoutId,
         setCurrentFloor,
-        getNodesForLayout: (layoutId: string) => nodes.filter((n: any) => (n.attributes as any)?.floorId === layoutId),
-        getTablesForFloor: (floorId: string) => nodes.filter((n: any) => (n.attributes as any)?.floorId === floorId),
+        getNodesForLayout: (layoutId: string) => nodes.filter((n) => (n.attributes as any)?.floorId === layoutId),
+        getTablesForFloor: (floorId: string) => nodes.filter((n) => (n.attributes as any)?.floorId === floorId),
         getZonesForFloor,
         updateTablePosition,
         addNode,
@@ -423,14 +441,15 @@ export const useRecipes = () => {
     const tenantId = useAtomValue(tenantIdAtom);
     return {
         ...base,
-        addRecipe: async (data: any) => base.add(data),
-        updateRecipe: async (id: string, data: any) => {
+        addRecipe: async (data: Partial<Recipe>) => base.add(data as Partial<SovereignNode>),
+        updateRecipe: async (id: string, data: Partial<Recipe>) => {
             await guardedAction('KITCHEN', 'MANAGE_RECIPES', async () => {
                 await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, data);
             });
         },
-        calculateRecipeCost: (recipe: any) => {
-            return (recipe.ingredients || []).reduce((acc: number, ing: any) => acc + (Number(ing.cost || 0) * Number(ing.quantity || 0)), 0);
+        deleteRecipe: async (id: string) => base.remove(id),
+        calculateRecipeCost: (recipe: Recipe) => {
+            return (recipe.ingredients || []).reduce((acc: number, ing) => acc + (Number(ing.cost || 0) * Number(ing.quantity || 0)), 0);
         }
     };
 };
@@ -440,16 +459,16 @@ export const useMarketing = () => {
     const tenantId = useAtomValue(tenantIdAtom);
     return {
         ...base,
-        upsertCampaign: async (data: any) => {
+        upsertCampaign: async (data: Partial<Campaign>) => {
             await guardedAction('MARKETING', 'MANAGE_CAMPAIGNS', async () => {
                 if (data.id) {
                     await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RELATIONS)}/${data.id}`, data);
                 } else {
-                    await base.add(data);
+                    await base.add(data as Partial<SovereignNode>);
                 }
             });
         },
-        upsertPost: async (data: any) => {
+        upsertPost: async (data: Partial<SovereignNode> & { id?: string }) => {
             await guardedAction('MARKETING', 'MANAGE_CAMPAIGNS', async () => {
                 const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RELATIONS)}`;
                 if (data.id) {
@@ -469,7 +488,7 @@ export const useCRM = () => {
     return {
         ...base,
         selectedCRM,
-        upsertCustomer: async (data: any) => {
+        upsertCustomer: async (data: Partial<SovereignNode> & { id?: string }) => {
             await guardedAction('CRM', 'MANAGE_CRM', async () => {
                 const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RELATIONS)}`;
                 if (data.id) {
@@ -489,22 +508,45 @@ export const useKitchen = () => {
     const ordersNode = useAtomValue(ordersNodeAtom);
     const tasksNode = useAtomValue(prepTasksNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
-    const orders = ((ordersNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toOrder) as any;
-    const tasks = (tasksNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
+    const miseEnPlaceTarget = useAtomValue(miseEnPlaceTargetSelector);
+    
+    // 🏛️ SUTURE: Conversion vers types business Grade X
+    const orders = useMemo(() => 
+        ((ordersNode?.data || []) as SovereignNode[]).map(toOrder),
+    [ordersNode?.data]);
+
+    const tasks = useMemo(() => 
+        (tasksNode?.data || []) as unknown as SovereignNode[],
+    [tasksNode?.data]);
 
     return {
-        data: orders,
+        nodes: orders,
         orders,
-        tasks,
+        prepTasks: tasks,
+        miseEnPlaceTarget,
         isLoading: ordersNode.loading || tasksNode.loading,
         error: ordersNode.error || tasksNode.error,
-        submitOrder: async (order: Partial<SovereignNode>) => {
-            const sanitized = sanitizeToSovereign(order);
-            await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`, {
-                ...sanitized,
+        
+        togglePrepTask: async (id: string) => {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+            const currentStatus = (task.attributes as any)?.status === 'completed';
+            await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, {
+                attributes: { status: currentStatus ? 'pending' : 'completed' },
                 updatedAt: new Date().toISOString()
             });
         },
+        
+        submitOrder: async (order: Partial<Order>) => {
+            await guardedAction('KITCHEN', 'FIRE_KDS', async () => {
+                const sanitized = sanitizeToSovereign(order);
+                await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`, {
+                    ...sanitized,
+                    updatedAt: new Date().toISOString()
+                });
+            });
+        },
+        
         updateOrderStatus: async (id: string, status: string) => {
             await guardedAction('KITCHEN', 'FIRE_KDS', async () => {
                 await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}/${id}`, {
@@ -513,110 +555,19 @@ export const useKitchen = () => {
                 });
             });
         },
-        getPendingModifications: () => orders.filter(o: any => o.status === 'pending_modification'),
+        
+        getPendingModifications: () => orders.filter((o) => o.status === 'pending_modification'),
     };
 };
 
-export const usePOSController = () => {
-    const ordersNode = useAtomValue(ordersNodeAtom);
-    const productsNode = useAtomValue(productsNodeAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
-    const products = ((productsNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toProduct) as any;
-    const recipesNode = useAtomValue(recipesNodeAtom);
-
-    return {
-        products,
-        recipes: ((recipesNode.data || []) as import("@/shared/nexus-contract").SovereignData[]).map(toRecipe) as any,
-        isLoading: ordersNode.loading || productsNode.loading,
-        error: ordersNode.error || productsNode.error,
-        createOrder: async (order: any) => {
-            const sanitized = sanitizeToSovereign(order);
-            await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`, sanitized);
-        },
-        expert: {
-            processPayment: async () => { /* 🏛️ SUTURE FUTURE */ }
-        }
-    };
-};
+// 🛒 usePOSController is now imported from @modules/ops/pos
 
 export const useProducts = createSovereignHook(productsNodeAtom, OperationalIdentity.RESOURCES, toProduct);
 export const useCategories = createSovereignHook(categoriesNodeAtom, OperationalIdentity.RESOURCES);
 export const useFiscal = createSovereignHook(fiscalLedgerNodeAtom, OperationalIdentity.COMPLIANCE);
 
-export const useInventory = () => {
-    const stockNode = useAtomValue(stockItemsNodeAtom);
-    const ingredientsNode = useAtomValue(ingredientsNodeAtom);
-    const preparationsNode = useAtomValue(preparationsNodeAtom);
-    const storageNode = useAtomValue(storageLocationsNodeAtom);
-    const wasteNode = useAtomValue(wasteLogsNodeAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
-
-    const stockItems = (stockNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
-    const ingredients = (ingredientsNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
-    const preparations = (preparationsNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
-    const storageLocations = (storageNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
-    const wasteLogs = (wasteNode.data || []) as import("@/shared/nexus-contract").SovereignData[];
-
-    return {
-        data: stockItems.map(toIngredient),
-        stockItems: stockItems.map(toIngredient),
-        ingredients: ingredients.map(toIngredient),
-        preparations: preparations,
-        storageLocations,
-        wasteLogs,
-        lowStockItems: stockItems.map(toIngredient).filter(s => {
-            const qty = Number(s.quantity || 0);
-            const min = Number(s.minQuantity || 0);
-            return qty <= min;
-        }),
-        isLoading: stockNode.loading || ingredientsNode.loading || storageNode.loading,
-        error: stockNode.error,
-        add: async (data: Partial<SovereignNode>) => {
-            const sanitized = sanitizeToSovereign(data);
-            await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`, {
-                ...sanitized,
-                updatedAt: new Date().toISOString()
-            });
-        },
-        addPreparation: async (data: any) => {
-            await guardedAction('INVENTORY', 'MANAGE_INVENTORY', async () => {
-                await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`, {
-                    ...data,
-                    type: 'preparation',
-                    updatedAt: new Date().toISOString()
-                });
-            });
-        },
-        addStockItem: async (data: any) => {
-            await guardedAction('INVENTORY', 'MANAGE_INVENTORY', async () => {
-                await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`, {
-                    ...data,
-                    type: 'stock_item',
-                    updatedAt: new Date().toISOString()
-                });
-            });
-        },
-        transferStock: async (id: string, locationId: string, qty: number) => {
-            await guardedAction('INVENTORY', 'MANAGE_INVENTORY', async () => {
-                await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, {
-                    locationId,
-                    updatedAt: new Date().toISOString()
-                });
-            });
-        },
-        consumeStock: async (id: string, qty: number, reason?: string) => {
-            await guardedAction('INVENTORY', 'MANAGE_INVENTORY', async () => {
-                // In a real system, this would involve a complex atomic deduction.
-                // For Grade X, we update the metadata log.
-                await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, {
-                    lastConsumption: qty,
-                    lastReason: reason,
-                    updatedAt: new Date().toISOString()
-                });
-            });
-        }
-    };
-};
+// 🥫 useInventory is now imported from @modules/logistics
+export { useInventory };
 
 export const useIntelligence = () => {
     const menuAnalysis = useAtomValue(menuAnalysisSelector);
@@ -642,9 +593,9 @@ export const useQuotes = () => {
     const base = createSovereignHook(quotesNodeAtom, OperationalIdentity.RELATIONS, toQuote)();
     return {
         ...base,
-        createQuote: async (data: any) => {
+        createQuote: async (data: Partial<Quote>) => {
             await guardedAction('QUOTES', 'CREATE_TRANSACTION', async () => {
-                await base.add(data);
+                await base.add(data as Partial<SovereignNode>);
             });
         }
     };

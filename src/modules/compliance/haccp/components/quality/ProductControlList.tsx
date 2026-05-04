@@ -2,7 +2,7 @@ import React from 'react';
 import { Package, Check, X, Thermometer, Info, Calendar, PackageSearch } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useQuality } from '@modules/compliance/haccp';
-import { QualityControlItem } from '@domain/types/quality';
+import { QualityControlItem, DecisionType } from '@nexus/contracts';
 import { FreshnessRating } from './FreshnessRating';
 import { DLCAlertBadge } from './DLCAlertBadge';
 
@@ -10,7 +10,7 @@ export const ProductControlList: React.FC = () => {
     const { activeControl, updateControlItem } = useQuality();
     const items = activeControl?.items || [];
 
-    const handleToggleStatus = (item: QualityControlItem, decision: import('@domain/types/quality').DecisionType) => {
+    const handleToggleStatus = (item: QualityControlItem, decision: DecisionType) => {
         updateControlItem({
             ...item,
             decision: decision,

@@ -4,8 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import { useUI } from "@/context/UIContext";
+import { useAuth, useUI } from "@/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { NAV_SECTIONS } from "@/config/navigation";
 
@@ -23,7 +22,7 @@ import { Map3DOverlay } from "./Map3DOverlay";
 import { empireAudit } from "@/lib/audit";
 
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from "@/store/fleetAtoms";
+import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 
 const sidebarReveal: Variants = {
     hidden: { opacity: 0, x: -20 },

@@ -37,6 +37,11 @@ vi.mock('firebase/storage', () => ({
     getStorage: vi.fn(() => ({ id: 'mock-storage' })),
 }));
 
+vi.mock('firebase/functions', () => ({
+    getFunctions: vi.fn(() => ({ id: 'mock-functions' })),
+    httpsCallable: vi.fn(() => vi.fn(async () => ({ data: {} }))),
+}));
+
 vi.mock('firebase/firestore', () => ({
     getFirestore: vi.fn(() => ({ id: 'mock-db' })),
     initializeFirestore: vi.fn(() => ({ id: 'mock-db' })),

@@ -37,18 +37,18 @@ interface ProductFormModalProps {
 }
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
-    const { data: ingredients } = useInventory();
+    const { ingredients } = useInventory();
     const { data: recipes, add: addRecipe, updateRecipe, calculateRecipeCost: calculateRecipeCostHook } = useRecipes();
     const { showToast } = useToast();
 
     const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
         // Ensure we pass a properly structured recipe-like object to the hook
         return calculateRecipeCostHook({
-            ingredients: ings.map((ri: any) => {
-                const ing = ingredients.find((i: any) => i.id === ri.ingredientId);
+            ingredients: ings.map((ri) => {
+                const ing = ingredients.find((i) => i.id === ri.ingredientId);
                 return { ...ing, quantity: ri.quantity };
             })
-        });
+        } as any); // Hook expects full Recipe, we pass partial
     };
 
     // Form State
@@ -76,7 +76,10 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsVegetarian(editProduct?.isVegetarian || false);
             setIsVegan(editProduct?.isVegan || false);
             setIsGlutenFree(editProduct?.isGlutenFree || false);
-            setRecipeIngredients((editProduct?.ingredients || []).map((i: any) => ({ ingredientId: i.ingredientId || (i as any).id, quantity: i.quantity })));
+            setRecipeIngredients((editProduct?.ingredients || []).map((i) => ({ 
+                ingredientId: (i as any).ingredientId || (i as any).id, 
+                quantity: i.quantity 
+            })));
             setRecipeSteps(editProduct?.recipeSteps || []);
         } else if (!editProduct && isOpen) {
             setName("");
@@ -141,15 +144,15 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 isVegetarian,
                 isVegan,
                 isGlutenFree,
-                ingredients: recipeIngredients.map((ri: any, idx: number) => {
-                    const ing = ingredients.find((i: any) => i.id === ri.ingredientId);
+                ingredients: recipeIngredients.map((ri, idx) => {
+                    const ing = ingredients.find((i) => i.id === ri.ingredientId);
                     return {
                         id: `ing_${idx}`,
                         ingredientId: ri.ingredientId,
                         name: ing?.name || '',
                         quantity: ri.quantity,
                         unit: ing?.unit || 'unit',
-                        costInCents: Math.round(Number(ing?.costInCents || 0) * ri.quantity),
+                        costInCents: Math.round(Number((ing as any)?.costInCents || 0) * ri.quantity),
                     };
                 }),
                 recipeSteps,

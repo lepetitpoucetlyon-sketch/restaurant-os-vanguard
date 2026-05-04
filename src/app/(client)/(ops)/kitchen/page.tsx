@@ -42,32 +42,37 @@ type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'was
 
 export default function KitchenPage() {
     const router = useRouter();
-    const orders: any[] = (typeof window !== 'undefined' ? ((window as any).mockOrders || []) : []);
+    const ordersData: any[] = []; // Real orders should come from useKitchen
     const [activeTab, setActiveTab] = useState<KitchenTab>('mise-en-place');
     
-    // Nexus Grade VI Hooks
-    const kitchen = useKitchen() as any;
-    const management = useManagement() as any;
-    const inventory = useInventory() as any;
+    // Nexus Grade X Hooks
+    const kitchen = useKitchen();
+    const recipesHook = useRecipes();
+    const management = useManagement();
+    const inventory = useInventory();
     const { openDocumentation } = useUI();
     const performanceMode = useAtomValue(performanceModeAtom);
 
-    // Mapping legacy destructuring to NexusNode
+    // Mapping to NexusNode (Grade X)
     const { 
-        prepTasks, 
+        prepTasks: rawPrepTasks, 
         togglePrepTask, 
-        data: recipes, 
-        miseEnPlaceTarget, 
-        addRecipe, 
-        updateRecipe, 
-        deleteRecipe 
+        miseEnPlaceTarget 
     } = kitchen;
+
+    const prepTasks = (rawPrepTasks || []) as unknown as import("@nexus/contracts").MiseEnPlaceTask[];
+
+    const {
+        data: recipes,
+        addRecipe,
+        updateRecipe,
+        deleteRecipe
+    } = recipesHook;
     
-    const { waste: wasteDomain } = management;
-    const wasteLogs = wasteDomain.data;
+    const wasteLogs = [] as any[]; // Suture required for waste
     
-    const { data: ingredients } = inventory;
-    const { data: products } = inventory;
+    const ingredients = (inventory.stockItems || []) as unknown as import("@nexus/contracts").Ingredient[];
+    const products = inventory.stockItems;
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
     const [selectedPrepTask, setSelectedPrepTask] = useState<PrepTask | null>(null);

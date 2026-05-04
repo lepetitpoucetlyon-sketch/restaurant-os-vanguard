@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { groupsNodeAtom } from "@/store/operationalAtoms";
+import { groupsNodeAtom } from "@/store/pillars/commerce";
 
 /**
  * 👥 useGroups - Grade VI Atomic Mapper

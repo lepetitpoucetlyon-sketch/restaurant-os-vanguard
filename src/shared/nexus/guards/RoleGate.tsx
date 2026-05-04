@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { ShieldAlert, Lock, Home } from 'lucide-react';
 import { Button } from '@ui/button';
 import { motion } from 'framer-motion';
@@ -49,7 +49,7 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     const category = Object.keys(PATH_TO_CATEGORY).find(path => pathname.startsWith(path));
     const requiredCategory = category ? PATH_TO_CATEGORY[category] : null;
 
-    const isPublicPath = pathname === '/welcome' || pathname === '/onboarding/setup';
+    const isPublicPath = pathname === '/' || pathname === '/welcome' || pathname === '/onboarding/setup';
     if (isPublicPath) return <>{children}</>;
 
     // 🛡️ PRAETORIAN SUTURE: Check via NexusInternalMapper

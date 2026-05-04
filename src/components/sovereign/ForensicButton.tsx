@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import { useStore } from 'jotai';
 import { z } from 'zod';
 import { TicketSchema_v1 } from '@/shared/validation/TicketSchema';
+import { toast } from 'sonner';
 
 export function ForensicButton() {
   const store = useStore();
@@ -48,7 +49,8 @@ export function ForensicButton() {
 
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error("[NEXUS BRIDGE] Zod Validation Failed:", error.errors);
+        console.error("[NEXUS BRIDGE] Zod Validation Failed:", error.issues);
+        toast.error(`Validation Failed: ${error.issues.map((e: any) => e.message).join(", ")}`);
       } else {
         console.error("[NEXUS BRIDGE] Unexpected error:", error);
       }

@@ -1,5 +1,5 @@
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom } from '@/store/fleetAtoms';
+import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { CryptoService } from '@domain/services/CryptoService';

@@ -2,20 +2,24 @@ import { z } from 'zod';
 
 /** 📦 Reception Control Schema */
 export const ReceptionSchema = z.object({
-  deliveryId: z.string().min(1),
-  supplierName: z.string().min(1),
-  truckTemp: z.number(),
-  hygieneStatus: z.enum(['clean', 'acceptable', 'dirty']),
+  deliveryId: z.string().min(1, "L'ID de livraison est obligatoire."),
+  supplierName: z.string().min(1, "Le nom du fournisseur est requis."),
+  truckTemp: z.number({
+    message: "La température du camion est obligatoire et doit être un nombre."
+  }),
+  hygieneStatus: z.enum(['clean', 'acceptable', 'dirty'], {
+    message: "L'état d'hygiène doit être 'clean', 'acceptable' ou 'dirty'."
+  }),
   itemsChecked: z.array(z.object({
     id: z.string(),
     name: z.string(),
     status: z.enum(['ok', 'warning', 'rejected']),
     temp: z.number().optional(),
-    quantity: z.number(),
-  })),
+    quantity: z.number().positive("La quantité reçue doit être supérieure à zéro."),
+  })).min(1, "Au moins un article doit être contrôlé."),
   rejectionReason: z.string().optional(),
   photos: z.array(z.string()).optional(),
-  validatedBy: z.string(),
+  validatedBy: z.string().min(1, "La signature du contrôleur est obligatoire."),
 });
 
 /** 🧽 Cleaning Control Schema */

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useSetAtom, useStore } from 'jotai';
-import { activeTenantSlotsAtom, activeFleetTenantAtom } from '@/store/fleetAtoms';
+import { activeTenantSlotsAtom, activeFleetTenantAtom } from '@nexus/state/SovereignGenome';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { logger } from '@/lib/logger';
 

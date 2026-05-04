@@ -4,7 +4,7 @@ import {
   Unsubscribe
 } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
-import { tenantConfigAtom } from '@/store/masterAtoms';
+import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
@@ -32,12 +32,10 @@ export class NexusBridge {
   static async init(tenantId: string) {
     if (!tenantId) return;
     
-    console.log(`[NexusBridge] Initialisation de la suture pour ${tenantId}...`);
 
     // 1. Local-First Boot: Load from Dexie
     const localConfig = await db.config.get(tenantId) as (TenantConfig & LegacyTenantConfig) | undefined;
     if (localConfig) {
-      console.log(`[NexusBridge] Config chargée depuis Dexie (Offline Resilience)`);
       this.store.set(tenantConfigAtom, {
         ...localConfig,
         // Ensure keys from Phase 1 exist if migrating from Grade VI
@@ -49,7 +47,6 @@ export class NexusBridge {
         }
       } as TenantConfig);
     } else {
-      console.log(`[NexusBridge] Suture du Golden Seed de base (Empire OS Core (Sovereign))`);
       this.store.set(tenantConfigAtom, { ...RESTAURANT_FULL_DNA, id: tenantId });
     }
 
@@ -84,7 +81,6 @@ export class NexusBridge {
           metadata: { ...RESTAURANT_FULL_DNA.metadata, ...remoteData.metadata },
         };
 
-        console.log(`[NexusBridge] Signal Grade VIII reçu.`);
         this.store.set(tenantConfigAtom, nextConfig);
         db.config.put(nextConfig);
       }

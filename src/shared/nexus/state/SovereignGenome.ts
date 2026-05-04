@@ -62,7 +62,7 @@ export const addToastAtom = atom(
  * 🧬 FLEET_GENOME - Multi-Tenancy & Topology
  */
 const _tenantIdBase = atom<string>(
-    typeof window !== 'undefined' ? (localStorage.getItem('nexus_tenant_id') || 'lepetitpoucet') : 'lepetitpoucet'
+    typeof window !== 'undefined' ? (localStorage.getItem('nexus_tenant_id')?.replace(/['"]+/g, '') || 'lepetitpoucet') : 'lepetitpoucet'
 );
 
 export const FLEET_GENOME = {

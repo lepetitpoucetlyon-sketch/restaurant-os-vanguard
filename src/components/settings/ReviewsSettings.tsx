@@ -26,19 +26,22 @@ import { toast } from "sonner";
 
 interface ReviewSource {
     id: string;
+    platform: string;
+    url: string;
     name: string;
     logo: string;
     rating: number;
     reviewCount: number;
     connected: boolean;
     color: string;
+    [key: string]: any;
 }
 
 const REVIEW_SOURCES: ReviewSource[] = [
-    { id: 'google', name: 'Google Maps', logo: '🌐', rating: 4.6, reviewCount: 234, connected: true, color: '#4285F4' },
-    { id: 'tripadvisor', name: 'TripAdvisor', logo: '🦉', rating: 4.5, reviewCount: 89, connected: true, color: '#00AF87' },
-    { id: 'thefork', name: 'TheFork', logo: '🍴', rating: 8.9, reviewCount: 156, connected: true, color: '#00A97F' },
-    { id: 'yelp', name: 'Yelp', logo: '📍', rating: 4.4, reviewCount: 45, connected: false, color: '#D32323' },
+    { id: 'google', platform: 'google', url: 'https://google.com', name: 'Google Maps', logo: '🌐', rating: 4.6, reviewCount: 234, connected: true, color: '#4285F4' },
+    { id: 'tripadvisor', platform: 'tripadvisor', url: 'https://tripadvisor.com', name: 'TripAdvisor', logo: '🦉', rating: 4.5, reviewCount: 89, connected: true, color: '#00AF87' },
+    { id: 'thefork', platform: 'thefork', url: 'https://thefork.com', name: 'TheFork', logo: '🍴', rating: 8.9, reviewCount: 156, connected: true, color: '#00A97F' },
+    { id: 'yelp', platform: 'yelp', url: 'https://yelp.com', name: 'Yelp', logo: '📍', rating: 4.4, reviewCount: 45, connected: false, color: '#D32323' },
 ];
 
 export default function ReviewsSettings() {

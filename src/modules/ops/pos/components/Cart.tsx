@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useOrders, useIntelligence } from "@/engines/ops/NexusOpsProvider";
 import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/hooks";
 import { POSService } from "@/infrastructure/adapters/POSAdapter";

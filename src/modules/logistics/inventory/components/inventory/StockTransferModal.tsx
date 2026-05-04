@@ -116,7 +116,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 value={selectedItem}
                                 onChange={setSelectedItem}
                                 options={availableStock.map(s => ({
-                                    value: s.id,
+                                    value: String(s.id),
                                     label: String(s.ingredientName || ''),
                                     description: `${s.quantity} ${String(s.unit || '').toUpperCase()}`
                                 }))}
@@ -168,7 +168,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 options={activeLocations
                                     .filter(l => l.isActive && l.id !== currentItem?.storageLocationId)
                                     .map(loc => ({
-                                        value: loc.id,
+                                        value: String(loc.id),
                                         label: String(loc.name || ''),
                                         description: loc.temperature !== undefined ? `${loc.temperature}°C` : ''
                                     }))

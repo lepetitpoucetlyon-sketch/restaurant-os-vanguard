@@ -71,9 +71,17 @@ export interface MarketingCampaign extends SovereignNode {
 
 export interface PromoCode extends SovereignNode {
     code: string;
+    type: 'fixed' | 'percentage' | 'bogo';
+    value: number;
     discountPercent?: number;
     discountAmountInCents?: number;
+    minOrderAmountInCents?: number;
+    maxDiscountInCents?: number;
+    startDate: string;
+    endDate: string;
     expiryDate?: string;
+    usageLimit?: number;
+    currentUsage: number;
     isActive: boolean;
 }
 

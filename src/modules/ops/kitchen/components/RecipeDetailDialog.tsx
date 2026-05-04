@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { staggerContainer, staggerItem } from "@/lib/motion";
 import { Modal } from "@ui/Modal";
-import { useUI } from "@/context/UIContext";
+import { useUI } from "@/hooks";
 import { Recipe, RecipeIngredient, RecipeStep } from "@nexus/contracts";
 
 interface RecipeDetailDialogProps {

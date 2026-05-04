@@ -1,13 +1,19 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
 import { useSettings } from '@/context/SettingsContext';
 import { SovereignData } from '@/shared/nexus-contract';
 
 interface WebkitWindow extends Window {
     webkitAudioContext: typeof AudioContext;
+}
+
+declare global {
+    interface Window {
+        webkitAudioContext: typeof AudioContext;
+    }
 }
 
 interface PerformanceMemory {
@@ -57,18 +63,18 @@ export function useGeminiLive() {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
             
-            const audioContext = new (window.AudioContext || (window as WebkitWindow).webkitAudioContext)({ sampleRate: 16000 });
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
             audioContextRef.current = audioContext;
             
             const source = audioContext.createMediaStreamSource(stream);
             const processor = audioContext.createScriptProcessor(4096, 1, 1);
             
-            processor.onaudioprocess = (e) => {
+            processor.onaudioprocess = (e: AudioProcessingEvent) => {
                 if (serviceRef.current) {
                     const inputData = e.inputBuffer.getChannelData(0);
                     
                     // VOICE ACTIVITY DETECTION (VAD) / INTERRUPT
-                    const volume = inputData.reduce((acc, val) => acc + Math.abs(val), 0) / inputData.length;
+                    const volume = inputData.reduce((acc: number, val: number) => acc + Math.abs(val), 0) / inputData.length;
                     if (volume > 0.1) {
                         serviceRef.current.stopPlayback();
                     }
@@ -85,7 +91,7 @@ export function useGeminiLive() {
             processor.connect(audioContext.destination);
 
             // 3. Connecter le service central avec l'ADN injecté
-            const service = new GeminiLiveService(currentUser, rolePermissions as any, {
+            const service = new GeminiLiveService(currentUser, rolePermissions, {
                 onTranscript: (text, isUser) => {
                     setTranscripts(prev => [...prev, { text, isUser, timestamp: Date.now() }]);
                 },

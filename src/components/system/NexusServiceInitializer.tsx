@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
-import { tenantIdAtom } from '@/store/operationalAtoms';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { logger } from '@/lib/axiom';

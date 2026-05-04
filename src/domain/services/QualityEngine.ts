@@ -9,17 +9,19 @@ import { SovereignLedger } from './SovereignLedger';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 
-    ReceptionSchema, 
     ReceptionData, 
-    CleaningSchema, 
     CleaningData,
-    WasteSchema,
     WasteData,
-    OilCheckSchema,
-    OilCheckData
-} from '../schemas/haccp';
+    OilCheckData,
+    SovereignData
+} from '@nexus/contracts';
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { 
+    ReceptionSchema, 
+    CleaningSchema, 
+    WasteSchema, 
+    OilCheckSchema 
+} from '../schemas/haccp';
 
 /**
  * 🏺 QualityEngine - Restaurant OS Guard

@@ -4,14 +4,14 @@ export const ModuleSchema_v1 = z.object({
   id: z.string(),
   name: z.string(),
   isActive: z.boolean(),
-  config: z.record(z.unknown()).optional(),
+  config: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const ModuleSchema_v2 = z.object({
   id: z.string(),
   name: z.string(),
   isActive: z.boolean(),
-  config: z.record(z.unknown()).optional(),
+  config: z.record(z.string(), z.unknown()).optional(),
   schemaVersion: z.literal(2).default(2),
   updatedAt: z.string().datetime().optional(),
 });

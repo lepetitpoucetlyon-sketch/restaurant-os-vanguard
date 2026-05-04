@@ -1,9 +1,9 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { fiscalLedgerNodeAtom } from "@/store/operationalAtoms";
+import { fiscalLedgerNodeAtom } from "@/store/pillars/compliance";
 import { useCallback, useMemo } from "react";
-import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
+import { useAuth, useTenant } from "@/hooks";
 // import { submitExpenseAction } from "@/app/(admin)/actions/accounting";
 const stubAction = async (...args: any[]) => ({ success: true, id: "STUB_ID" });
 const submitExpenseAction = stubAction as any;

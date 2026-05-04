@@ -4,7 +4,7 @@ import React from 'react';
 import { CATEGORY_DOCS } from '@/lib/docs-data';
 import { RecipeTechnicalSheet } from './RecipeTechnicalSheet';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useUI } from '@/context/UIContext';
+import { useUI } from '@/hooks';
 import { useTutorial } from '@/context/TutorialContext';
 import { cn } from "@/lib/ui.foundations";;
 import { X, ChevronRight, BookOpen, Zap } from 'lucide-react';

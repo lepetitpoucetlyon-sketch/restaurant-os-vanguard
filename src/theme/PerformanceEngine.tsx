@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAtom } from 'jotai';
-import { performanceModeAtom } from '@/store/operationalAtoms';
+import { performanceModeAtom } from '@/store/pillars/sovereign';
 import { useToast } from '@ui/Toast';
 import { logger } from '@/lib/logger';
 

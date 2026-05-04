@@ -17,13 +17,13 @@ import { Table, TableStatus } from "@nexus/contracts";
 import { FloorPlanEditorRef } from "@modules/ops";
 
 
-const FloorPlanEditor = dynamic(
+const FloorPlanEditor = dynamic<any>(
     () => import("@modules/ops/engine/components/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
     { 
         ssr: false,
         loading: () => <div className="absolute inset-0 bg-bg-primary flex items-center justify-center animate-pulse"><div className="w-20 h-20 bg-accent/10 rounded-full border border-accent/20" /></div>
     }
-) as any;
+);
 
 
 // Floor icons mapping
@@ -69,7 +69,7 @@ export default function FloorPlanPage() {
 
     const currentFloor = floors?.find(f => f.id === currentFloorId) || floors?.[0];
     const tablesOnCurrentFloor = getTablesForFloor(currentFloorId);
-    const selectedTable = tables.find(t: any => t.id === selectedTableId);
+    const selectedTable = (tables as Table[]).find(t => t.id === selectedTableId);
 
     const handleSave = () => {
         showToast("Plan homologué", "success");
@@ -91,7 +91,7 @@ export default function FloorPlanPage() {
     };
 
     const FloorIcon = currentFloor?.icon ? FLOOR_ICONS[String(currentFloor.icon)] || Layers : Layers;
-    const totalSeatsOnFloor = tablesOnCurrentFloor.reduce((acc: any, t: any) => acc + Number(t.seats || 0), 0);
+    const totalSeatsOnFloor = (tablesOnCurrentFloor as Table[]).reduce((acc, t) => acc + Number(t.seats || 0), 0);
 
     return (
         <div className="flex h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 flex-col overflow-hidden bg-bg-primary pb-24 lg:pb-0">

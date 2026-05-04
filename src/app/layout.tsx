@@ -65,11 +65,11 @@ export default function RootLayout({
           <Suspense fallback={<div className="flex h-screen items-center justify-center bg-black text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
             <NexusCoreProvider>
               <InstanceGuardGate>
-                <ThemeEngine />
-                <PerformanceEngine />
-                <NexusPulseOrchestrator />
-                <SovereignLockout />
                 <ToastProvider>
+                  <ThemeEngine />
+                  <PerformanceEngine />
+                  <NexusPulseOrchestrator />
+                  <SovereignLockout />
                   <ContextualSettingsProvider>
                     <NexusOpsProvider>
                       <NexusFiscalProvider>

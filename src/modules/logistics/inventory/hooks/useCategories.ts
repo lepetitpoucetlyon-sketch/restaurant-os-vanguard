@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { categoriesNodeAtom } from "@/store/operationalAtoms";
+import { categoriesNodeAtom } from "@/store/pillars/logistics";
 
 export function useCategories() {
     const node = useAtomValue(categoriesNodeAtom);

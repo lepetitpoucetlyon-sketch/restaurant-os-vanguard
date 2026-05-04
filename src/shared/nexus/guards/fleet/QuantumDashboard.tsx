@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
-import { activeTenantSlotsAtom, fleetSnapshotAtom } from '@/store/fleetAtoms';
+import { activeTenantSlotsAtom, fleetSnapshotAtom } from '@nexus/state/SovereignGenome';
 import { MacroBrain } from '@domain/services/MacroBrain';
 import { QuantumOrchestrator } from '@domain/services/QuantumOrchestrator';
 import { logger } from '@/lib/logger';

@@ -8,6 +8,7 @@ export * from './agency';
 export * from './agent';
 export * from './agents';
 export * from './constants';
+export * from './repositories';
 export * from './schemas';
 export * from './services';
 export * from './types';

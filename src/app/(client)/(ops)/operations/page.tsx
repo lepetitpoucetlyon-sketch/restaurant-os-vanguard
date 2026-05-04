@@ -25,7 +25,7 @@ import { NewReservationDialog } from "@modules/commerce";
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import { useFloorOps as useOMS } from '@/context/FloorContext';
 import { cn } from "@/lib/ui.foundations";
-import { useTenant } from '@/context/AuthContext';
+import { useTenant } from '@/hooks';
 // import { arrivalAreaAction } from '@/app/actions/operations';
 import { toast } from 'sonner';
 

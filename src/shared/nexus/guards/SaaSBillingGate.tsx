@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CreditCard, Lock } from "lucide-react";
 import { Button } from "@ui/button";
-import { useTenant } from "@/context/TenantContext";
+import { useTenant } from "@/hooks";
 
 interface SaaSBillingGateProps {
     children: React.ReactNode;

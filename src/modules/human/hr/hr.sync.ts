@@ -7,7 +7,8 @@ import {
   leaveRequestsNodeAtom, 
   leaveBalancesNodeAtom, 
   staffMembersNodeAtom 
-} from '@/store/operationalAtoms';
+} from '@/store/pillars/human';
+
 
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { NAV_SECTIONS } from "@/config/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
-import { useNexusCore } from "@/engines/core/NexusCoreProvider";
+import { useNexusCore } from "@/hooks";
 
 export function DesktopTopbar() {
     const pathname = usePathname();

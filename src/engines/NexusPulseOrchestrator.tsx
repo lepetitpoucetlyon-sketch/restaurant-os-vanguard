@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { useAtomValue } from "jotai";
-import { tenantIdAtom } from "@/store/operationalAtoms";
+import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { useFinanceReflex } from "@modules/finance";
 import { logger } from "@/lib/logger";
 

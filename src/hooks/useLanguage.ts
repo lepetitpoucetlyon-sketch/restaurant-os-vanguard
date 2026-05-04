@@ -1,38 +1,21 @@
-import { useAtom } from 'jotai';
-import { currentLanguageAtom, Language } from '@/store/languageAtoms';
-import { translations } from '@/i18n/translations';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+"use client";
+
+import { useNexusCore } from '@/engines/core/NexusCoreProvider';
+
+const fallbackT = (key: string) => key;
+const fallbackLang = {
+  t: fallbackT,
+  currentLanguage: 'fr',
+  language: 'fr', // Heritage alias
+  setLanguage: () => {},
+  availableLanguages: ['fr']
+};
 
 /**
- * 🌍 useLanguage - Grade VI
- * Pilotage de la localisation atomique.
+ * 🌍 useLanguage - Grade X
+ * Direct bridge to the Nexus Core Language/i18n context.
  */
 export function useLanguage() {
-    const [language, setLanguage] = useAtom(currentLanguageAtom);
-
-    const toggleLanguage = () => {
-        setLanguage(prev => prev === 'fr' ? 'en' : 'fr');
-    };
-
-    const isRTL = false; // Not needed for FR/EN but ready for extension
-
-    const t = (key: string) => {
-        const keys = key.split('.');
-        let value: any = translations[language as keyof typeof translations];
-        
-        for (const k of keys) {
-            value = (value as any)?.[k];
-        }
-
-
-        return typeof value === 'string' ? value : key;
-    };
-
-    return {
-        language,
-        setLanguage,
-        toggleLanguage,
-        isRTL,
-        t
-    };
+    const core = useNexusCore();
+    return core?.lang || fallbackLang;
 }

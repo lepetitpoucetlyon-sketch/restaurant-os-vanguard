@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X, Check, AlertTriangle, ChefHat, Clock, User, Minus, Plus, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { Order, OrderItem, OrderItemModification } from "@nexus/contracts";
 

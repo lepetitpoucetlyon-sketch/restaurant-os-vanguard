@@ -56,10 +56,13 @@ export class MarketingService {
                 ...promo,
                 id: `promo_${normalizedCode}`,
                 code: normalizedCode,
+                type: 'percentage', // Default for this registry
+                value: promo.discountPercent,
                 currentUsage: 0,
                 isActive: true,
                 startDate: new Date().toISOString(),
                 endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                updatedAt: new Date().toISOString()
             } as PromoCode
         };
     }

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useTheme } from "@/context/ThemeContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { PAGE_SETTINGS } from "./config-registry";
 import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";

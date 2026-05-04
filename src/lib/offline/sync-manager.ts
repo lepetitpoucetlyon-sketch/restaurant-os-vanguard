@@ -107,8 +107,10 @@ export class SyncManager {
 }
 
 // Lancement automatique du manager lors du chargement (si en ligne)
-if (typeof window !== 'undefined') {
-    window.addEventListener('online', () => SyncManager.processQueue());
-    // On lance immédiatement la synchro au chargement
-    SyncManager.processQueue();
+export function bootSyncManager() {
+    if (typeof window !== 'undefined') {
+        window.addEventListener('online', () => SyncManager.processQueue());
+        // On lance immédiatement la synchro au chargement
+        SyncManager.processQueue();
+    }
 }

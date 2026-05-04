@@ -7,7 +7,7 @@ import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { Product, OptionGroup, Option } from "@nexus/contracts";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
 
 // Standard EU allergens list

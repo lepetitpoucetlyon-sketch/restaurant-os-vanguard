@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 import { ShieldAlert, LogOut, Terminal, Lock } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { useAtomValue } from "jotai";
-import { tenantConfigAtom } from "@/store/fleetAtoms";
+import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 
 /**
  * 🔐 SovereignLockout - The Final Security Gate.
@@ -66,7 +66,7 @@ export function SovereignLockout() {
                         <div className="text-[10px] uppercase text-gray-500 mb-1 flex items-center gap-1">
                             <Lock className="w-3 h-3" /> Tenant ID
                         </div>
-                        <div className="font-mono text-sm text-primary-gold uppercase">{tenantConfig.id}</div>
+                        <div className="font-mono text-sm text-primary-gold uppercase">{tenantConfig?.id || 'REVOKED'}</div>
                     </div>
                 </div>
 

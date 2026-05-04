@@ -1,6 +1,6 @@
 import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
-import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
+import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 import { SovereignValue } from '@/shared/nexus-contract';

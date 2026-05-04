@@ -93,7 +93,7 @@ export class TelemetryService {
         },
         security: {
           nf525Sealed: isSealed,
-          lastSealHash: lastHash,
+          lastSealHash: lastHash || null,
           integrityGrade: 'IX'
         }
       };

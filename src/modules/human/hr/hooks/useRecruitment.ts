@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { Candidate, CandidateStatus, RecruitmentLog } from '@nexus/contracts';
-import { useAuth, useTenant } from '@/context/AuthContext';
-const stubAction = async (...args: any[]) => ({ success: true, id: "STUB_ID" });
+import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
+import { useAuth, useTenant } from '@/hooks';
+const stubAction = async (tenantId: string, candidate: Candidate): Promise<{ success: boolean; id: string }> => ({ success: true, id: "STUB_ID" });
 const hiredCandidateAction = stubAction;
 
 export function useRecruitment() {
@@ -76,7 +76,8 @@ export function useRecruitment() {
             updatedAt: now,
         } as Candidate);
 
-        await logAction(candidateId, "Candidat ajouté au système", (candidate.gdpr as any)?.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant");
+        const gdpr = candidate.gdpr as unknown as GDPRConsent;
+        await logAction(candidateId, "Candidat ajouté au système", gdpr?.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant");
         return candidateId;
     }, [activeTenantId, logAction]);
 
@@ -132,7 +133,7 @@ export function useRecruitment() {
     return {
         candidates,
         logs,
-        addCandidate: addCandidate as (candidate: Partial<Candidate>) => Promise<string>,
+        addCandidate,
         updateCandidateStatus,
         deleteOldCandidates
     };

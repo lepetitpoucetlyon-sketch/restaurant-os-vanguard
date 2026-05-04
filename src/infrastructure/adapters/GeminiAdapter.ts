@@ -1,7 +1,7 @@
 import { AccessPolicyManager, CategoryKey, RolePermissions } from "@domain/services/AccessPolicyManager";
 import { User } from '@nexus/contracts';
 import { AGENT_TOOLS } from '@domain/agent/tools';
-import { ToolDefinition } from '@domain/agent/tools/FinanceTool';
+import { ToolDefinition } from '@domain/agent/tools/types';
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 
 export type GeminiLiveEvent = 
@@ -37,9 +37,10 @@ export class GeminiLiveService {
         this.rolePermissions = rolePermissions;
         this.onTranscript = callbacks?.onTranscript || null;
         this.onToolCall = callbacks?.onToolCall || null;
-        const win = window as WebkitWindow;
-        const AudioCtx = window.AudioContext || win.webkitAudioContext;
-        this.audioContext = new AudioCtx({ sampleRate: 16000 });
+        const AudioCtx = (typeof window !== 'undefined') ? ((window as any).AudioContext || (window as any).webkitAudioContext) : null;
+        if (AudioCtx) {
+            this.audioContext = new AudioCtx({ sampleRate: 16000 });
+        }
     }
 
 
@@ -122,13 +123,27 @@ export class GeminiLiveService {
     }
 
     private async handleToolCall(event: { name: string, args: SovereignData, callId: string }) {
-
         const tool = AGENT_TOOLS[event.name];
         
         if (!tool) {
             this.sendToolResult(event.callId, { error: `Tool ${event.name} not found` });
             return;
         }
+
+        // --- 🛡️ ZOD ANTI-HALLUCINATION FILTER ---
+        const validation = tool.schema.safeParse(event.args);
+        if (!validation.success) {
+            const errorMessages = validation.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ');
+            console.warn(`[GeminiLive] Hallucination/Validation Error on ${tool.name}: ${errorMessages}`);
+            
+            // FEEDBACK LOOP: Send error to Gemini so it can self-correct
+            this.sendToolResult(event.callId, { 
+                error: `Arguments invalides pour ${tool.name}. Erreurs: ${errorMessages}. Veuillez corriger et réessayer.` 
+            });
+            return;
+        }
+
+        const validatedArgs = validation.data;
 
         // --- RBAC SENTINEL ---
         const hasAccess = AccessPolicyManager.hasAccess(
@@ -147,9 +162,7 @@ export class GeminiLiveService {
 
         try {
             // Injecting Engines/State as context for the tool
-            const result = await (tool as ToolDefinition).execute(event.args, this.user!, {
-                // Here we can inject real engine instances if we have access to them
-                // For now, we provide the metadata needed for strategic analysis
+            const result = await (tool as ToolDefinition).execute(validatedArgs, this.user!, {
                 timestamp: new Date().toISOString()
             });
             this.sendToolResult(event.callId, result as SovereignData);

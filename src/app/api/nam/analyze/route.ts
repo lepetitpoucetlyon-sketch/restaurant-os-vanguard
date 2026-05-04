@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       const errorResponse = AnalysisResponseSchema.parse({
         success: false,
-        errors: error.errors,
+        errors: error.issues,
         metadata: {
           version: 'v1',
           timestamp: new Date().toISOString()

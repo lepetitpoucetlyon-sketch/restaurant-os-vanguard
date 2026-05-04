@@ -85,6 +85,12 @@ export class FirestoreAdapter implements INexusAdapter {
 
     async get<T = any>(path: string): Promise<T | null> {
         try {
+            const isCollection = path.split('/').length % 2 !== 0;
+            if (isCollection) {
+                const results = await this.query(path);
+                return results as any;
+            }
+
             const docRef = doc(this.db, path);
             const snap = await getDoc(docRef);
             if (!snap.exists()) return null;
@@ -146,14 +152,16 @@ export class FirestoreAdapter implements INexusAdapter {
                     q = query(q, where(w.field, w.operator as import('firebase/firestore').WhereFilterOp, w.value));
                 });
             }
-            return onSnapshot(q, (snap: import('firebase/firestore').QuerySnapshot | import('firebase/firestore').DocumentSnapshot) => {
-                const data = (snap as any).docs.map((d: any) => hydrateBasedOnPath(path, { id: d.id, ...d.data() }));
+            return onSnapshot(q, (snap) => {
+                const qSnap = snap as import('firebase/firestore').QuerySnapshot;
+                const data = qSnap.docs.map((d) => hydrateBasedOnPath(path, { id: d.id, ...d.data() }));
                 callback(data as any);
             }, options?.onError);
         } else {
             const ref = doc(this.db, path);
-            return onSnapshot(ref, (snap: import('firebase/firestore').QuerySnapshot | import('firebase/firestore').DocumentSnapshot) => {
-                const rawData = snap.exists() ? { id: snap.id, ...snap.data() } : null;
+            return onSnapshot(ref, (snap) => {
+                const dSnap = snap as import('firebase/firestore').DocumentSnapshot;
+                const rawData = dSnap.exists() ? { id: dSnap.id, ...dSnap.data() } : null;
                 const data = rawData ? hydrateBasedOnPath(path, rawData) : null;
                 callback(data as T);
             }, options?.onError);

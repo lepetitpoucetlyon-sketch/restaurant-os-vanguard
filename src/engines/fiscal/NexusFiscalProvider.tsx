@@ -6,11 +6,11 @@ import {
     journalEntriesNodeAtom, 
     accountsAtom, 
     bankTransactionsAtom, 
-    expenseClaimsAtom, 
-    fiscalLedgerNodeAtom,
-    tenantIdAtom,
-    currentUserAtom
-} from '@/store/operationalAtoms';
+    expenseClaimsAtom 
+} from '@/store/pillars/finance';
+import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
+import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
+
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { SovereignNode, OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
@@ -84,8 +84,8 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     // 🛡️ SOVEREIGN MATH: Total elimination of native operators
     const netProfitInCents = useMemo(() => {
-        const entries = (journalEntries.data || []) as any[];
-        const total = entries.reduce((acc: bigint, entry: any) => {
+        const entries = (journalEntries.data || []);
+        const total = entries.reduce((acc: bigint, entry) => {
             const amount = BigInt(entry.amountInCents || 0);
             return SovereignMath.add(acc, amount);
         }, BigInt(0));
@@ -138,27 +138,33 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     // 🛡️ SINCERE TREASURY MAPPING (Zero-Cast)
     const treasury: TreasuryMetrics = {
+        totalCashInCents: 0,
+        totalPendingInCents: 0,
+        totalOwedInCents: 0,
+        forecastedCashFlowInCents: 0,
+        burnRateInCents: 0,
+        runwayInDays: 0,
         cashOnHandInCents: 0,
         bankBalanceInCents: 0,
         pendingReceivablesInCents: 0,
         pendingPayablesInCents: 0,
         netCashPositionInCents: 0
-    } as TreasuryMetrics;
+    };
 
     const contextValue: NexusFiscalState = useMemo(() => ({
         accounting: {
-            entries: (journalEntries.data as any) || [],
-            accounts: accounts as any,
-            bankTransactions: bankTransactions as any,
-            expenseClaims: expenseClaims as any,
-            isLoading: journalEntries.loading,
+            entries: (journalEntries.data || []) as JournalEntry[],
+            accounts: (accounts || []) as Account[],
+            bankTransactions: (bankTransactions || []) as BankTransaction[],
+            expenseClaims: (expenseClaims || []) as ExpenseClaim[],
+            isLoading: journalEntries.loading || false,
             metrics: { netProfitInCents },
             submitExpense
         },
         compliance: {
-            seals: (fiscalSeals.data as any) || [],
+            seals: (fiscalSeals.data || []) as unknown as FiscalSeal[],
             runAudit: runFiscalAudit,
-            documents: [] as any[] 
+            documents: [] as ComplianceDocument[] 
         },
         finance: {
             treasury

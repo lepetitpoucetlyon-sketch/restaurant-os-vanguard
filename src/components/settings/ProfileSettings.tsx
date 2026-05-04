@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { ROLE_LABELS, ROLE_COLORS } from "@/lib/constants";
 import { useToast } from "@ui/Toast";
 import { getDefaultStaffEmail } from "@/config/instance";
@@ -40,7 +40,7 @@ interface ProfileData {
 }
 
 export default function ProfileSettings() {
-    const { currentUser, users, updateUserStatus } = useAuth();
+    const { currentUser, users, updateUser } = useAuth();
     const { showToast } = useToast();
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -86,7 +86,7 @@ export default function ProfileSettings() {
 
         setIsSaving(true);
         try {
-            await updateUserStatus(selectedUser.id, {
+            await updateUser(selectedUser.id, {
                 name: formData.name,
                 avatar: formData.avatar,
                 ...(formData.pin ? { pin: formData.pin } : {})

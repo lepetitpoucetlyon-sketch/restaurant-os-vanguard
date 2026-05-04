@@ -4,7 +4,9 @@ import { useEffect, useCallback } from 'react';
 import { useOrders } from '@/engines/ops/NexusOpsProvider';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';
-import { fiscalLedgerNodeAtom, tenantIdAtom } from '@/store/operationalAtoms';
+import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
+
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';

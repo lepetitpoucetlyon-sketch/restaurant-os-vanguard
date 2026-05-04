@@ -5,10 +5,13 @@ import {
     ordersNodeAtom, 
     tablesNodeAtom,
     zonesAtom,
-    floorsAtom,
+    floorsAtom
+} from '@/store/pillars/ops';
+import { 
     reservationsNodeAtom, 
     groupsNodeAtom
-} from '@/store/operationalAtoms';
+} from '@/store/pillars/commerce';
+
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';

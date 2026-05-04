@@ -7,7 +7,6 @@
 export * from './commerce';
 export * from './compliance';
 export * from './finance';
-
 export * from './human';
 export * from './intelligence';
 export * from './logistics';
