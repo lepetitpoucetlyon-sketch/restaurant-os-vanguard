@@ -29,7 +29,7 @@
     "@emnapi/core": "1.9.2",
     "@emnapi/runtime": "1.9.2",
     "@google/generative-ai": "^0.24.1",
-    "@hono/node-server": "^1.19.13",
+    "@hono/node-server": "^2.0.1",
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.4",
     "@sentry/nextjs": "^10.47.0",
