@@ -1,4 +1,4 @@
-import { SovereignField, SovereignNode } from '@/shared/nexus-contract';
+import { SovereignField, SovereignNode, SovereignMap } from '@/shared/nexus-contract';
 
 /**
  * 🏛️ LOGISTICS CORE TYPES - Sovereign Shared Contract
@@ -195,4 +195,42 @@ export interface Preparation extends SovereignNode {
     notes: string;
     costInCents?: number; // Total cost in cents
     isCompleted?: boolean; // Grade X Task Tracking
+}
+
+export interface RecipeIngredient extends SovereignMap {
+    id: string; // Add id for UI/Store compatibility
+    ingredientId: string;
+    name: string;
+    quantity: number;
+    unit: string;
+    costInCents: number;
+    cost?: number; // Alias for UI compatibility
+}
+
+export interface Recipe extends SovereignNode {
+    name: string;
+    description?: string;
+    image?: string;
+    imageUrl?: string;
+    ingredients: RecipeIngredient[];
+    preparationTimeMinutes: number;
+    prepTime?: number; // Alias for UI compatibility
+    difficulty: 'easy' | 'medium' | 'hard' | string;
+    isVegetarian?: boolean;
+    isVegan?: boolean;
+    isGlutenFree?: boolean;
+    allergens?: string[];
+    dietaryInfo?: string[]; // Added for UI compatibility
+    recipeSteps?: Array<{
+        order: number;
+        instruction: string;
+        duration?: number;
+        tip?: string;
+    }>;
+    steps?: any[]; // Alias for UI compatibility
+    category?: string;
+    portions?: number;
+    costPriceInCents?: number;
+    sellingPriceInCents?: number;
+    isActive?: boolean;
 }

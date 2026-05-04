@@ -20,7 +20,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 const useLanguage = () => ({ t: (s: string) => s });
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
-import { usePOSController } from "../hooks/usePos";
+import { usePOSController } from "@modules/ops";
 import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 

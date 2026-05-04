@@ -56,7 +56,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
         setCustomAllergen("");
         setShowAllergenInput(false);
         const initialSelections: Record<string, string[]> = {};
-        product.optionGroups?.forEach(group => {
+        (product.optionGroups as OptionGroup[] | undefined)?.forEach(group => {
             const defaults = group.options.filter(opt => opt.isDefault).map(opt => opt.id);
             if (defaults.length > 0) {
                 initialSelections[group.id] = defaults;
@@ -114,7 +114,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
     const calculateTotal = () => {
         let total = product.priceInCents;
-        product.optionGroups?.forEach(group => {
+        (product.optionGroups as OptionGroup[] | undefined)?.forEach(group => {
             const selectedIds = selections[group.id] || [];
             selectedIds.forEach(id => {
                 const option = group.options.find(opt => opt.id === id);
@@ -128,7 +128,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
     const isValid = () => {
         if (!product.optionGroups) return true;
-        return product.optionGroups.every(group => {
+        return (product.optionGroups as OptionGroup[]).every(group => {
             if (group.required) {
                 const selected = selections[group.id];
                 return selected && selected.length >= (group.minSelections || 1);
@@ -139,7 +139,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
     const handleAdd = () => {
         const selectedOptionsMap: Record<string, Option[]> = {};
-        product.optionGroups?.forEach(group => {
+        (product.optionGroups as OptionGroup[] | undefined)?.forEach(group => {
             const selectedIds = selections[group.id] || [];
             if (selectedIds.length > 0) {
                 selectedOptionsMap[group.name] = group.options.filter(opt => selectedIds.includes(opt.id));
@@ -228,7 +228,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
                         {/* Options Section */}
                         <div className="lg:col-span-12 space-y-12">
-                            {product.optionGroups?.map(group => (
+                            {(product.optionGroups as OptionGroup[] | undefined)?.map(group => (
                                 <div key={group.id} className="space-y-6">
                                     <div className="flex items-center justify-between px-2 border-b border-border/50 pb-4">
                                         <div className="flex items-center gap-4">

@@ -265,3 +265,20 @@ export interface AccountingContextType {
         isProcessing: boolean;
     };
 }
+
+export interface LegalInvoice extends SovereignNode {
+    orderId: string;
+    invoiceNumber: string;
+    customerName?: string;
+    subTotalInCents: number;
+    taxTotalInCents: number;
+    totalInCents: number;
+    taxDetails: Array<{
+        rate: number;
+        amountInCents: number;
+        baseInCents: number;
+    }>;
+    status: 'draft' | 'issued' | 'paid' | 'cancelled';
+    issuedAt: string;
+    seal?: string;
+}

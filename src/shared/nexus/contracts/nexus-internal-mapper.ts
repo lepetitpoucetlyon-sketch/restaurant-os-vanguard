@@ -5,61 +5,41 @@
  */
 
 import { SovereignNode } from '@/shared/nexus-contract';
-import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId } from './nexus-business.types';
+import type { Table, Order, Reservation, OrderStatus, TableStatus, OrderItem, OrderItemModification, Floor, Zone } from './ops.types';
+import type { Product, Quote, Group } from './commerce.types';
+import type { Campaign } from './marketing.types';
+import type { LegalInvoice, JournalEntry } from './finance.types';
+import type { Option, OptionGroup, Category } from './common.types';
+import { ModuleId } from '@shared/genome.types';
 import type { Customer, CRM_Record } from './customer.types';
-import type { Ingredient } from './logistics';
+import type { Ingredient, Recipe, RecipeIngredient } from './logistics';
 import { translateError } from './nexus-error-mapper';
 import { canAccessModule } from './nexus-auth-mapper';
-import { toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup } from './nexus-type-converters';
-import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord, isGroup } from './nexus-type-guards';
+import { toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup, toJournalEntry, toCategory } from './nexus-type-converters';
+import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord, isGroup, isJournalEntry, isCategory } from './nexus-type-guards';
 
 // --- Re-exports to maintain backward compatibility ---
-export type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId, Customer, CRM_Record };
-export { translateError, canAccessModule, toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup, isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord, isGroup };
+export type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId, Customer, CRM_Record, JournalEntry, Category };
+export { translateError, canAccessModule, toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup, toJournalEntry, toCategory, isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord, isGroup, isJournalEntry, isCategory };
 
 /**
  * 🏛️ NEXUS INTERNAL MAPPER - Static Interface
  * Unified class for type-safe mapping.
  */
 export class NexusInternalMapper {
-    static mapToTable(node: SovereignNode): Table {
-        return toTable(node);
-    }
-    static mapToOrder(node: SovereignNode): Order {
-        return toOrder(node);
-    }
-    static mapToProduct(node: SovereignNode): Product {
-        return toProduct(node);
-    }
-    static mapToRecipe(node: SovereignNode): Recipe {
-        return toRecipe(node);
-    }
-    static mapToIngredient(node: SovereignNode): Ingredient {
-        return toIngredient(node);
-    }
-    static mapToReservation(node: SovereignNode): Reservation {
-        return toReservation(node);
-    }
-    static mapToQuote(node: SovereignNode): Quote {
-        return toQuote(node);
-    }
-    static mapToCampaign(node: SovereignNode): Campaign {
-        return toCampaign(node);
-    }
-    static mapToFloor(node: SovereignNode): Floor {
-        return toFloor(node);
-    }
-    static mapToZone(node: SovereignNode): Zone {
-        return toZone(node);
-    }
-    static mapToLegalInvoice(node: SovereignNode): LegalInvoice {
-        return toLegalInvoice(node);
-    }
-    static mapToCustomer(node: SovereignNode): Customer {
-        return toCustomer(node);
-    }
-    static mapToGroup(node: SovereignNode): Group {
-        return toGroup(node);
-    }
+    static mapToTable = toTable;
+    static mapToOrder = toOrder;
+    static mapToProduct = toProduct;
+    static mapToRecipe = toRecipe;
+    static mapToIngredient = toIngredient;
+    static mapToReservation = toReservation;
+    static mapToQuote = toQuote;
+    static mapToCampaign = toCampaign;
+    static mapToFloor = toFloor;
+    static mapToZone = toZone;
+    static mapToLegalInvoice = toLegalInvoice;
+    static mapToCustomer = toCustomer;
+    static mapToGroup = toGroup;
+    static mapToJournalEntry = toJournalEntry;
     static translateError = translateError;
 }

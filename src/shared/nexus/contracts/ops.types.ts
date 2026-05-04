@@ -119,3 +119,22 @@ export interface GroupEvent extends SovereignNode {
 }
 
 export type TableShape = 'rect' | 'circle' | string;
+
+export interface Floor extends SovereignNode {
+    name: string;
+    level: number;
+    isActive: boolean;
+    icon?: string;
+    description?: string;
+}
+
+export interface Zone extends SovereignNode {
+    name: string;
+    color: string;
+    description?: string;
+    floorId?: string;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+}

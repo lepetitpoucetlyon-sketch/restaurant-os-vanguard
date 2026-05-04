@@ -1,8 +1,17 @@
 import { SovereignNode } from '@/shared/nexus-contract';
-import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isGroup } from './nexus-type-guards';
-import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group } from './nexus-business.types';
+import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isGroup, isJournalEntry, isCategory } from './nexus-type-guards';
+import type { Table, Order, Reservation, Floor, Zone } from './ops.types';
+import type { Product, Quote, Group } from './commerce.types';
+import type { Campaign } from './marketing.types';
+import type { LegalInvoice, JournalEntry } from './finance.types';
 import type { Customer } from './customer.types';
-import type { Ingredient } from './logistics';
+import type { Ingredient, Recipe } from './logistics';
+import type { Category } from './common.types';
+
+export function toCategory(node: SovereignNode): Category {
+    if (!isCategory(node)) throw new Error(`Cannot convert SovereignNode to Category`);
+    return node;
+}
 
 export function toTable(node: SovereignNode): Table {
     if (!isTable(node)) throw new Error(`Cannot convert SovereignNode to Table`);
@@ -66,5 +75,10 @@ export function toCustomer(node: SovereignNode): Customer {
 
 export function toGroup(node: SovereignNode): Group {
     if (!isGroup(node)) throw new Error(`Cannot convert SovereignNode to Group`);
+    return node;
+}
+
+export function toJournalEntry(node: SovereignNode): JournalEntry {
+    if (!isJournalEntry(node)) throw new Error(`Cannot convert SovereignNode to JournalEntry`);
     return node;
 }

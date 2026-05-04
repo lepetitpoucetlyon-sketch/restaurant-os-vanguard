@@ -4,19 +4,9 @@ import { motion } from "framer-motion";
 import { Users, Calendar, Clock, Euro, ArrowUpRight } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 
-interface GroupEvent {
-    id: string;
-    status: string;
-    type: string;
-    name: string;
-    date: string;
-    time: string;
-    pax: number;
-    budget: number;
-    tags: string[];
-}
+import { Group } from "@nexus/contracts";
 
-export function EventCard({ group }: { group: GroupEvent }) {
+export function EventCard({ group }: { group: Group }) {
     return (
         <motion.div
             layout
@@ -39,15 +29,15 @@ export function EventCard({ group }: { group: GroupEvent }) {
                     <div className="flex flex-wrap items-center gap-6">
                         <div className="flex items-center gap-2 text-text-muted">
                             <Calendar className="w-4 h-4" />
-                            <span className="text-sm font-bold">{new Date(group.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
+                            <span className="text-sm font-bold">{group.date ? new Date(group.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) : 'Date à confirmer'}</span>
                         </div>
                         <div className="flex items-center gap-2 text-text-muted">
                             <Clock className="w-4 h-4" />
-                            <span className="text-sm font-bold">{group.time}</span>
+                            <span className="text-sm font-bold">{group.time || '--:--'}</span>
                         </div>
                         <div className="flex items-center gap-2 text-text-primary">
                             <Users className="w-4 h-4 text-purple-500" />
-                            <span className="text-sm font-black">{group.pax} Personnes</span>
+                            <span className="text-sm font-black">{group.pax || 0} Personnes</span>
                         </div>
                         <div className="flex items-center gap-2 text-emerald-500">
                             <Euro className="w-4 h-4" />
@@ -57,7 +47,7 @@ export function EventCard({ group }: { group: GroupEvent }) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                    {group.tags.map((tag: string, tid: number) => (
+                    {(group.tags || []).map((tag: string, tid: number) => (
                         <span key={tid} className="text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-xl bg-purple-500/5 text-purple-600 dark:text-purple-400 border border-purple-500/10">
                             {tag}
                         </span>
