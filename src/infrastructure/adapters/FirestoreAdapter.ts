@@ -1,3 +1,4 @@
+import { SovereignSecurityViolation } from '@/shared/nexus/contracts/security.errors';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
 import { 
     getFirestore, 
@@ -56,9 +57,9 @@ class FirestoreBatch implements INexusBatch {
 
     delete(path: string): void {
         if (!SovereignGuard.canDelete(path)) {
-            const error = `TENTATIVE DE VIOLATION DE SOUVERAINETÉ : Suppression interdite sur les registres scellés (Loi NF525) à [${path}]. Session verrouillée.`;
-            logger.error(`🚨 [SovereignSecurityViolation] ${error}`);
-            throw new Error(error);
+            throw new SovereignSecurityViolation(
+                "TENTATIVE DE VIOLATION DE SOUVERAINETÉ : Suppression interdite sur les registres scellés (Loi NF525). Session verrouillée."
+            );
         }
         const docRef = doc(this.db, path);
         this.batch.delete(docRef);
@@ -200,9 +201,9 @@ export class FirestoreAdapter implements INexusAdapter {
 
     async delete(path: string): Promise<void> {
         if (!SovereignGuard.canDelete(path)) {
-            const error = `TENTATIVE DE VIOLATION DE SOUVERAINETÉ : Suppression interdite sur les registres scellés (Loi NF525) à [${path}]. Session verrouillée.`;
-            logger.error(`🚨 [SovereignSecurityViolation] ${error}`);
-            throw new Error(error);
+            throw new SovereignSecurityViolation(
+                "TENTATIVE DE VIOLATION DE SOUVERAINETÉ : Suppression interdite sur les registres scellés (Loi NF525). Session verrouillée."
+            );
         }
         const docRef = doc(this.db, path);
         await deleteDoc(docRef);

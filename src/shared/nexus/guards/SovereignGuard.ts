@@ -27,16 +27,14 @@ export const SovereignGuard = {
     'paymentMethods'
   ]),
 
-  IMMUTABLE_COLLECTIONS: new Set([
-    'ledger',
-    'fiscalSeals',
-    'journalEntries',
+  IMMUTABLE_COLLECTIONS: new Set<string>([
+    'fiscalLedger',
     'haccpLogs',
-    'hygieneLogs',
-    'audit',
     'auditTrails',
-    'config',
-    'tenantConfig'
+    'tenantConfig',
+    'ledger',      // Legacy mapping
+    'fiscalSeals',
+    'journalEntries'
   ]),
 
   /**
@@ -45,13 +43,19 @@ export const SovereignGuard = {
    */
   canDelete(path: string): boolean {
     const collection = this.extractCollectionName(path);
-    if (this.IMMUTABLE_COLLECTIONS.has(collection)) {
+    
+    // Exact match or partial path match for sacred zones
+    const isImmutable = Array.from(this.IMMUTABLE_COLLECTIONS).some((col: string) => 
+        path.includes(col) || collection === col
+    );
+
+    if (isImmutable) return false;
+
+    // Deep path safety (Hard-coded safety stops)
+    if (path.includes('ledger/') || path.includes('config/master') || path.includes('fiscal/')) {
         return false;
     }
-    // Deep path check for sub-collections (e.g., ledger/entries)
-    if (path.includes('ledger/') || path.includes('config/master')) {
-        return false;
-    }
+
     return true;
   },
   
