@@ -1,16 +1,4 @@
 /**
- * ORDERS TYPES
- */
-
-export type OrderStatus = 'draft' | 'new' | 'ordered' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | 'paid';
-export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
-export type ModificationStatus = 'pending' | 'approved' | 'rejected';
-
-export interface OrderItemModification {
-    id: string;
-    orderId: string;
-    orderItemId: string;
-    type: 'ingredient_remove' | 'ingredient_add' | 'replace_dish' | 'quantity_change' | 'note_update';
     description: string;
     oldValue?: string;
     newValue?: string;
@@ -86,8 +74,13 @@ export interface OrdersContextType {
     expert?: {
         queryExpert: (prompt: string, contextData?: unknown) => Promise<unknown>;
         isConfigured: boolean;
-        isAuthorized: boolean;
-        role: string;
-        modelId: string;
-    };
+
+export interface CartItem {
+    cartId: string;
+    productId: string;
+    categoryId: string;
+    name: string;
+    priceInCents: number;
+    quantity: number;
+    modifiers: string[];
 }
