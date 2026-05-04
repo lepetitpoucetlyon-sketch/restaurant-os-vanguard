@@ -92,6 +92,7 @@ test-results/
 .mempalace/
 .staging-mcc/
 .nexus/
+!.nexus/scripts/
 src_VANGUARD_AUDIT/
 src_OLD_VIBE_BACKUP/
 

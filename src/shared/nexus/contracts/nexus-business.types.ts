@@ -249,3 +249,11 @@ export interface LegalInvoice extends SovereignNode {
     issuedAt: string;
     seal?: string;
 }
+
+export interface Group extends SovereignNode {
+    name: string;
+    contact: string;
+    type: string;
+    status: 'pending' | 'confirmed' | 'cancelled' | string;
+    budget?: number;
+}

@@ -17,9 +17,9 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { useKitchen, useManagement, useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useKitchen, useManagement, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
 import { Recipe, PrepTask, Product, Order } from "@nexus/contracts";
-import { useUI } from "@/context/UIContext";
+import { useUI } from "@/hooks/useUI";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { PrepTaskDetailDialog } from "@modules/ops";
 import { RecipeDetailDialog } from "@modules/ops";
@@ -36,7 +36,7 @@ import { AllergensTab } from "@modules/ops";
 import { CookingTimesTab } from "@modules/ops";
 import { IngredientsTab } from "@modules/ops";
 import { useAtomValue } from "jotai";
-import { performanceModeAtom } from "@/store/operationalAtoms";
+import { performanceModeAtom } from "@/store/pillars/sovereign";
 
 type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'waste' | 'suppliers' | 'allergens' | 'cooking-times';
 

@@ -9,8 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@ui/button';
-import { Table as CustomerTable } from '@nexus/contracts'; // Suture Nexus
-import { GroupEventStatus } from '@nexus/contracts';
+import { Table as CustomerTable, GroupEventStatus, Group } from '@nexus/contracts'; // Suture Nexus
 
 // Extracted Components (Sutured for Grade X Stability)
 import { GroupStatCard } from './components/GroupStatCard';
@@ -113,7 +112,7 @@ export default function GroupsPage() {
                         <div className="grid grid-cols-1 gap-6" id="groups-list">
                             <AnimatePresence mode="popLayout">
                                 {filteredGroups.map(group => (
-                                    <EventCard key={group.id} group={group as any} />
+                                    <EventCard key={group.id} group={group} />
                                 ))}
                             </AnimatePresence>
                         </div>

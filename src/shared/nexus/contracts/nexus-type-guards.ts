@@ -1,5 +1,5 @@
 import { SovereignNode } from '@/shared/nexus-contract';
-import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice } from './nexus-business.types';
+import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group } from './nexus-business.types';
 import type { Customer, CRM_Record } from './customer.types';
 import type { Ingredient } from './logistics';
 
@@ -53,4 +53,8 @@ export function isCustomer(node: SovereignNode): node is Customer {
 
 export function isCRMRecord(node: SovereignNode): node is CRM_Record {
     return isCustomer(node);
+}
+
+export function isGroup(node: SovereignNode): node is Group {
+    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.name === 'string';
 }

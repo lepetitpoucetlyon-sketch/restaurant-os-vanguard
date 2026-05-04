@@ -1,6 +1,6 @@
 import { SovereignNode } from '@/shared/nexus-contract';
-import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer } from './nexus-type-guards';
-import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice } from './nexus-business.types';
+import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isGroup } from './nexus-type-guards';
+import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group } from './nexus-business.types';
 import type { Customer } from './customer.types';
 import type { Ingredient } from './logistics';
 
@@ -61,5 +61,10 @@ export function toLegalInvoice(node: SovereignNode): LegalInvoice {
 
 export function toCustomer(node: SovereignNode): Customer {
     if (!isCustomer(node)) throw new Error(`Cannot convert SovereignNode to Customer`);
+    return node;
+}
+
+export function toGroup(node: SovereignNode): Group {
+    if (!isGroup(node)) throw new Error(`Cannot convert SovereignNode to Group`);
     return node;
 }
