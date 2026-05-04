@@ -26,6 +26,34 @@ export const SovereignGuard = {
     'coupons',
     'paymentMethods'
   ]),
+
+  IMMUTABLE_COLLECTIONS: new Set([
+    'ledger',
+    'fiscalSeals',
+    'journalEntries',
+    'haccpLogs',
+    'hygieneLogs',
+    'audit',
+    'auditTrails',
+    'config',
+    'tenantConfig'
+  ]),
+
+  /**
+   * ⚖️ NF525: Check if a path can be deleted.
+   * Grade X : Total Interdiction on Immutable Collections.
+   */
+  canDelete(path: string): boolean {
+    const collection = this.extractCollectionName(path);
+    if (this.IMMUTABLE_COLLECTIONS.has(collection)) {
+        return false;
+    }
+    // Deep path check for sub-collections (e.g., ledger/entries)
+    if (path.includes('ledger/') || path.includes('config/master')) {
+        return false;
+    }
+    return true;
+  },
   
   /**
    * Shadow Channel for Suzerain/Vassal isolation.
