@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@/tests/vanguard/mocks';
 import { QualityEngine } from './QualityEngine';
 import { QualityControl } from '@domain/types/quality';
-import { updateNexusNode } from '@/store/operationalAtoms';
+import { updateNexusNode } from '@/store/pillars';
 
 // Mock dependencies
-vi.mock('@/store/operationalAtoms', () => ({
+vi.mock('@/store/pillars', () => ({
   updateNexusNode: vi.fn((prev, updates) => ({ ...prev, ...updates, lastUpdated: Date.now() })),
   stockItemsNodeAtom: { key: 'stockItems' },
   deliveriesNodeAtom: { key: 'deliveries' },

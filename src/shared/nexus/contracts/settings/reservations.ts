@@ -4,6 +4,7 @@ export interface ReservationSlotsConfig {
     intervalBetweenSlots: number;
     maxCoversPerSlot: number;
     maxReservationsPerSlot?: number;
+    [key: string]: any;
 }
 
 export interface ReservationSettings {
@@ -25,4 +26,5 @@ export interface ReservationSettings {
     cancellationMessage: string;
     cancellationPolicy: string;
     terms: string;
+    [key: string]: any;
 }

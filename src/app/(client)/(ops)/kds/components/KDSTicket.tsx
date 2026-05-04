@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ChefHat, Book, AlertTriangle, MessageSquare, CheckCircle2, Flame, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderStatus, Recipe } from "@nexus/contracts";
-import { ITEM_STATION_MAP } from "@/app/(client)/(ops)/kds/constants";
+import { ITEM_STATION_MAP } from "@modules/kds";
 
 interface AuditTicket {
     id: string;

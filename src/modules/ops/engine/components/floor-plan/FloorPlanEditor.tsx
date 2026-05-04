@@ -133,7 +133,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                                 const reservations = getReservationsForTable(table.id);
                                 const hasReservation = reservations && reservations.length > 0;
                                 const isSelected = selectedId === table.id;
-                                const statusColor = (STATUS_COLORS as any)[table.status] || STATUS_COLORS['free'];
+                                const statusColor = (STATUS_COLORS as Record<string, string>)[table.status] || STATUS_COLORS['free'];
 
                                 const tableBaseColor = isDarkMode ? "#FFFFFF" : "#FFFFFF";
                                 const tableTextColor = isDarkMode ? "#000000" : "#1A1A1A";

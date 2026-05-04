@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Lightbulb, TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
 import { useAtomValue } from 'jotai';
-import { fleetSnapshotAtom } from '@/store/operationalAtoms';
+import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { useFleet } from '@/context/FleetContext';
 import { FleetInsight } from '@domain/services/MacroBrain';
 

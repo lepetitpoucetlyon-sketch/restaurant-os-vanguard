@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Bot, Sparkles } from "lucide-react";
-import { useUI } from "@/context/UIContext";
+import { useUI } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";;
 
 export function GlobalFAB() {

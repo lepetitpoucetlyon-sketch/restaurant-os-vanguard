@@ -1,5 +1,7 @@
 import { atom } from 'jotai';
-import { ordersNodeAtom, stockItemsNodeAtom } from './operationalAtoms';
+import { ordersNodeAtom } from './pillars/ops';
+import { stockItemsNodeAtom } from './pillars/logistics';
+
 
 /**
  * ⚛️ DASHBOARD ATOMS - Grade VI

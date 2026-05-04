@@ -21,4 +21,13 @@ export { useVirtualizedList, useInfiniteScroll } from "./useVirtualization";
 
 
 // 🏛️ Sovereign Core Hooks (Grade X)
-// Note: Modular hooks must be imported directly from their respective pillars (@modules/*).
+export { 
+    useNexusCore,
+    useAuth,
+    useUI,
+    useTenant,
+    useSettings,
+    useLanguage,
+    useNotifications
+} from "@/engines/core/NexusCoreProvider";
+export { useTheme } from "@/theme/ZestryThemeProvider";

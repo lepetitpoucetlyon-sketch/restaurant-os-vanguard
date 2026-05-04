@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from '@/store/fleetAtoms';
+import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { Construction, Lock, ExternalLink } from 'lucide-react';
 
 /**

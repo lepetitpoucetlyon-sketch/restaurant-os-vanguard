@@ -31,7 +31,7 @@ export const DEFAULT_SECURITY_CONFIG: InstanceSecurityConfig = {
         'bistrolyon': 'bistrolyon-prod',
         'urbanburger': 'urbanburger-prod',
         'restaurant-os': 'restaurant-os-web',
-        '__dev__': 'restaurant-os-dev'
+        '__dev__': 'kitchen-os-gastro'
     },
     allowDevMode: process.env.NODE_ENV === 'development',
 };

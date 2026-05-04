@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Maximize2, ExternalLink, RefreshCw } from 'lucide-react';
-import { useUI } from '@/context/UIContext';
+import { useUI } from '@/hooks';
 import { cn } from "@/lib/ui.foundations";;
 
 export function Map3DOverlay() {

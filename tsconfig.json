@@ -38,7 +38,10 @@
       "@app/*": ["./src/app/*"],
       "@components/*": ["./src/components/*"],
       "@modules/*": ["./src/modules/*"],
+      "@infrastructure": ["./src/infrastructure/index"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
       "@domain/*": ["./src/domain/*"],
+
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],
       "@store/*": ["./src/store/*"],

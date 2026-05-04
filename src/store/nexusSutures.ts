@@ -1,8 +1,11 @@
 import { getDefaultStore } from 'jotai';
 import { 
-    reservationStatsAtom, 
-    nexusPulseAtom,
-} from './operationalAtoms';
+    reservationStatsAtom 
+} from './pillars/commerce';
+import { 
+    nexusPulseAtom 
+} from './pillars/core';
+
 import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
 
@@ -16,7 +19,6 @@ export const NexusSutures = {
 
     init() {
         const store = getDefaultStore();
-        console.log('[NexusSutures] Activation de la suture Grade X...');
 
         // 1. 📈 SUTURE : COMMERCE -> LOGISTICS (Forecasting)
         // Subscribes to reservation stats to update expected covers automatically.

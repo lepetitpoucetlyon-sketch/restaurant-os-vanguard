@@ -18,10 +18,16 @@ export type SovereignField =
   | null
   | undefined
   | Date
-  | bigint
-  | { [key: string]: SovereignField }
-  | SovereignField[]
-  | Date[];
+  | any[]
+  | { [key: string]: any }
+  | { type: 'string'; value: string }
+  | { type: 'number'; value: number }
+  | { type: 'boolean'; value: boolean }
+  | { type: 'null'; value: null }
+  | { type: 'date'; value: Date | string }
+  | { type: 'object'; value: Record<string, any> }
+  | { type: 'array'; value: any[] };
+
 export type SovereignValue = SovereignField;
 export interface SovereignMap {
   [key: string]: SovereignField;

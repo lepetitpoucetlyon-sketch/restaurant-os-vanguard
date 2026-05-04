@@ -28,7 +28,7 @@ import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuality } from '../../hooks/useQuality';
 import { useRouter } from 'next/navigation';
-import { QualityControl } from '@domain/types/quality';
+import { QualityControl, CleanlinessStatus } from '@nexus/contracts';
 
 /**
  * 🛰️ ReceptionWizard - Orchestrator
@@ -71,7 +71,7 @@ export function ReceptionWizard() {
     setSession({
       ...session,
       delivery_conditions: { ...session.delivery_conditions, ...updates }
-    } as any);
+    });
   };
 
   return (
@@ -132,7 +132,7 @@ export function ReceptionWizard() {
                             {['clean', 'acceptable', 'dirty'].map((status) => (
                                 <button
                                     key={status}
-                                    onClick={() => updateConditions({ vehicle_cleanliness: status as import('@domain/types/quality').CleanlinessStatus })}
+                                    onClick={() => updateConditions({ vehicle_cleanliness: status as CleanlinessStatus })}
                                     className={cn(
                                         "flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all",
                                         session.delivery_conditions?.vehicle_cleanliness === status 

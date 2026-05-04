@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { Modal } from "@ui/Modal";
 import { cn } from "@/lib/ui.foundations";;

@@ -4,9 +4,43 @@
  */
 
 import { IdGenerator } from './utils/IdGenerator';
-import type { SovereignData, SovereignSchemaField } from '@/shared/nexus-contract';
+import type { SovereignData, SovereignSchemaField, SovereignField, SovereignValue } from '@/shared/nexus-contract';
 
 export const SharedKernel = {
+    // --- SOVEREIGN FIELD HANDLERS (GRADE X) ---
+
+    Sovereign: {
+        wrap: (value: any): SovereignField => {
+            if (value === null || value === undefined) return { type: 'null', value: null };
+            if (typeof value === 'string') return { type: 'string', value };
+            if (typeof value === 'number') return { type: 'number', value };
+            if (typeof value === 'boolean') return { type: 'boolean', value };
+            if (value instanceof Date) return { type: 'date', value };
+            if (Array.isArray(value)) return { type: 'array', value };
+            if (typeof value === 'object') return { type: 'object', value };
+            return { type: 'string', value: String(value) };
+        },
+        unwrap: (field: SovereignField): any => {
+            if (!field || typeof field !== 'object' || !('type' in field)) return field;
+            return field.value;
+        },
+        isString: (field: SovereignField): field is { type: 'string'; value: string } => 
+            !!field && typeof field === 'object' && 'type' in field && field.type === 'string',
+        isNumber: (field: SovereignField): field is { type: 'number'; value: number } => 
+            !!field && typeof field === 'object' && 'type' in field && field.type === 'number',
+        isBoolean: (field: SovereignField): field is { type: 'boolean'; value: boolean } => 
+            !!field && typeof field === 'object' && 'type' in field && field.type === 'boolean',
+        cleanNumber: (val: any): number => {
+            if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                const cleaned = parseFloat(val.replace(',', '.').replace(/[^\d.-]/g, ''));
+                return isNaN(cleaned) ? 0 : cleaned;
+            }
+            return 0;
+        },
+        cleanString: (val: any): string => (val || '').toString().trim().replace(/\s+/g, ' ')
+    },
+
     // --- FINANCE & CALCULS (BASE CENTIMES / INTEGER ONLY) ---
     
     /** Convertit les Euros (float) en Centimes (int) en sécurisant l'arrondi */
@@ -84,21 +118,25 @@ export const SharedKernel = {
         const sanitized = { ...rawData };
 
         schemaFields.forEach(field => {
-            const value = sanitized[field.id];
-            if (value === undefined || value === null) return;
+            const valueField = sanitized[field.id];
+            if (valueField === undefined || valueField === null) return;
+            
+            const value = SharedKernel.Sovereign.unwrap(valueField);
 
             // Conversion automatique basée sur les unités du registre
             if (field.unit === 'cents' && typeof value === 'number') {
-                sanitized[field.id] = SharedKernel.eurosToCents(value);
+                sanitized[field.id] = SharedKernel.Sovereign.wrap(SharedKernel.eurosToCents(value));
             } else if (field.unit === 'grams' && typeof value === 'number') {
-                sanitized[field.id] = SharedKernel.kilogramsToGrams(value);
+                sanitized[field.id] = SharedKernel.Sovereign.wrap(SharedKernel.kilogramsToGrams(value));
+            } else {
+                sanitized[field.id] = SharedKernel.Sovereign.wrap(value);
             }
 
             // Gestion récursive pour les listes
             if (field.type === 'list' && Array.isArray(value) && field.subFields) {
-                sanitized[field.id] = value.map(item => 
+                sanitized[field.id] = SharedKernel.Sovereign.wrap(value.map(item => 
                     SharedKernel.sync(schemaKey, item as SovereignData, field.subFields as SovereignSchemaField[])
-                );
+                ));
             }
         });
 
@@ -107,15 +145,17 @@ export const SharedKernel = {
     },
 
     /** Force le cast d'un SovereignField en string (Grade X Compliance) */
-    castString: (value: any): string => {
-        if (typeof value === 'string') return value;
-        return String(value ?? '');
+    castString: (field: SovereignField): string => {
+        if (SharedKernel.Sovereign.isString(field)) return field.value;
+        const val = SharedKernel.Sovereign.unwrap(field);
+        return String(val ?? '');
     },
 
     /** Force le cast d'un SovereignField en nombre (Grade X Compliance) */
-    castNumber: (value: any): number => {
-        if (typeof value === 'number') return value;
-        return Number(value ?? 0);
+    castNumber: (field: SovereignField): number => {
+        if (SharedKernel.Sovereign.isNumber(field)) return field.value;
+        const val = SharedKernel.Sovereign.unwrap(field);
+        return Number(val ?? 0);
     }
 };
 
@@ -131,6 +171,7 @@ export interface YieldState {
     salesVelocity: number; // units/hour
     stockLevel: number; // grams or units
     isCritical: boolean;
+    [key: string]: any;
 }
 
 /**
@@ -145,6 +186,7 @@ export interface ProcurementOrder {
     estimatedCostCents: number;
     status: 'draft' | 'sent' | 'received';
     createdAt: string;
+    [key: string]: any;
 }
 
 /**
@@ -159,6 +201,7 @@ export interface StaffingProposal {
     predictedVelocity: number;
     status: 'pending' | 'approved' | 'rejected';
     createdAt: string;
+    [key: string]: any;
 }
 
 /**
@@ -173,6 +216,7 @@ export interface LedgerEntry {
     referenceId: string; // e.g. Order ID, PO ID, Salary ID
     description: string;
     scelledAt: string;
+    [key: string]: any;
 }
 
 /**

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
 import { FinanceCore } from '@domain/services/FinanceCore';
-import { useTenant } from '@/engines/core/NexusCoreProvider';
+import { useTenant } from '@/hooks';
 import { useToast } from '@ui/Toast';
 import { 
     CheckCircle2, 

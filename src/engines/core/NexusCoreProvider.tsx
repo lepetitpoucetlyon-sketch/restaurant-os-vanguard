@@ -22,11 +22,22 @@ import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { 
     tenantConfigAtom,
-    isSidebarCollapsedAtom, isLaunchpadOpenAtom, 
-    isCommandOpenAtom, isMobileMenuOpenAtom, isDocsOpenAtom, isMap3DOpenAtom,
-    notificationsAtom, unreadNotificationsCountAtom, addToastAtom,
-    reservationStatsAtom
-} from '@/store/operationalAtoms';
+    themeAtom,
+    performanceModeAtom
+} from '@/store/pillars/sovereign';
+import { reservationStatsAtom } from '@/store/pillars/commerce';
+import { 
+    isSidebarCollapsedAtom, 
+    isLaunchpadOpenAtom, 
+    isCommandOpenAtom, 
+    isMobileMenuOpenAtom, 
+    isDocsOpenAtom, 
+    isMap3DOpenAtom,
+    notificationsAtom, 
+    unreadNotificationsCountAtom, 
+    addToastAtom 
+} from '@nexus/state/SovereignGenome';
+
 import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
 import { 
     themeModeAtom, accentColorAtom, uiDensityAtom, 
@@ -54,7 +65,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     const searchParams = useSearchParams();
     const hasInitialized = useRef(false);
-    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom as import('jotai').WritableAtom<TenantConfig | null, [import('jotai').SetStateAction<TenantConfig | null>], void>); // Forge Grade X Write
+    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom); // Forge Grade X Write
     
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
@@ -82,7 +93,8 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         };
     }, []);
 
-    const switchTenant = useCallback((tenantId: string) => {
+    const switchTenant = useCallback((tenantIdRaw: string) => {
+        const tenantId = tenantIdRaw.replace(/['"]+/g, '');
         logger.info('NexusCore: Switching Digital Twin context', { tenantId });
         const config = getTenantConfig(tenantId);
         if (!config) {
@@ -288,7 +300,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
                 id,
                 createdAt: now,
                 updatedAt: now
-            } as any as User);
+            } as unknown as User);
         },
         deleteUser: async (id: string) => {
             if (!activeTenantId) return;
@@ -341,12 +353,18 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     const notifValue: NexusNotifState = useMemo(() => ({
         unreadCount,
         notifications: notifications as import('@nexus/contracts').Notification[],
-        addNotification: (n: any) => addToast({ ...n, duration: 3000 } as any),
+        addNotification: (n: { 
+            type: import('@nexus/contracts/common.types').NotificationType; 
+            title: string; 
+            message: string; 
+            module?: string;
+            action?: { label: string; href: string };
+        }) => addToast({ ...n, duration: 3000 } as any),
         markAsRead: (id: string) => console.log('Mark as read', id),
         markAllAsRead: () => console.log('Mark all read'),
         removeNotification: (id: string) => console.log('Remove notification', id),
         clearAll: () => console.log('Clear all notifications')
-    }) as any, [unreadCount, notifications, addToast]);
+    }), [unreadCount, notifications, addToast]);
 
     const themeValue: NexusTheme = useMemo(() => ({
         mode: themeMode,
@@ -428,29 +446,21 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     );
 };
 
-// Hooks de compatibilité (alias)
+// Hooks de compatibilité (alias Grade X)
 export const useNexusCore = () => {
     const context = useContext(NexusCoreContext);
     if (!context) throw new Error("useNexusCore must be used within NexusCoreProvider");
     return context;
 };
 
-export const useAuth = () => {
-    const core = useNexusCore();
-    return core.auth;
-};
+export const useAuth = () => useNexusCore().auth;
+export const useTenant = () => useNexusCore().tenant;
+export const useUI = () => useNexusCore().ui;
+export const useSettings = () => useNexusCore().settings;
+export const useLang = () => useNexusCore().lang;
+export const useLanguage = () => useNexusCore().lang;
+export const useNotif = () => useNexusCore().notif;
+export const useNotifications = () => useNexusCore().notif;
+export const useFleet = () => useNexusCore().fleet;
 
-export const useTenant = () => {
-    const core = useNexusCore();
-    return core.tenant;
-};
 
-export const useUI = () => {
-    const core = useNexusCore();
-    return core.ui;
-};
-
-export const useSettings = () => {
-    const core = useNexusCore();
-    return core.settings;
-};

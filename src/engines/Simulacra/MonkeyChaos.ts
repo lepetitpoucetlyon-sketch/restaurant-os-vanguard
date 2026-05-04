@@ -1,7 +1,10 @@
 "use client";
 
 import { getDefaultStore } from 'jotai';
-import { ordersNodeAtom, journalEntriesNodeAtom, hygieneLogsNodeAtom } from '@/store/operationalAtoms';
+import { ordersNodeAtom } from '@/store/pillars/ops';
+import { journalEntriesNodeAtom } from '@/store/pillars/finance';
+import { hygieneLogsNodeAtom } from '@/store/pillars/compliance';
+
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
 

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from '@/store/operationalAtoms';
+import { tenantConfigAtom } from '@/store/pillars/sovereign';
 
 /**
  * 🎨 ThemeEngine - Grade X Stub

@@ -11,9 +11,9 @@ const DEFAULT_CONFIG = whiteLabelInstanceConfig.firebase;
 // --- 🏛️ EMPIRE CORE ENGINE (Grade VI - Local-First Indestructible) ---
 function getStableApp() {
     const apps = getApps();
-    const existing = apps.find(a => a.name === 'EMPIRE_CORE');
+    const existing = apps.find(a => a.name === '[DEFAULT]');
     if (existing) return existing;
-    return initializeApp(DEFAULT_CONFIG, 'EMPIRE_CORE');
+    return initializeApp(DEFAULT_CONFIG);
 }
 
 export const firebaseApp = getStableApp();

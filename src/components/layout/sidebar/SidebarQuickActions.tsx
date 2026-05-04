@@ -3,7 +3,7 @@
 import { motion, Variants } from "framer-motion";
 import { ReceiptEuro, Sparkles, Flame, Moon } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { AmbianceService, RestaurantAmbiance } from "@domain/services/AmbianceService";
 import { useState, useEffect } from "react";
 

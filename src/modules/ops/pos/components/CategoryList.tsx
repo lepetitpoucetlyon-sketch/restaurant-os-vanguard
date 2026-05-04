@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { categoriesAtom } from "@/store/operationalAtoms";
+import { categoriesAtom } from "@/store/pillars/logistics";
 import { cn } from "@/lib/ui.foundations";;
 import { Store, Pizza, Coffee, GlassWater, Beef, UtensilsCrossed, Star, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,7 +13,7 @@ interface CategoryListProps {
     onBack: () => void;
 }
 
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 
 const ICON_MAP: Record<string, import('lucide-react').LucideIcon> = {
     all: Star,

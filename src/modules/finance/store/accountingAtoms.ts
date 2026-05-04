@@ -25,12 +25,13 @@ export const expenseClaimsAtom = _expenseClaims.data;
 // UI States
 export const accountingViewModeAtom = atom<'simple' | 'expert'>('simple');
 export const isAccountingSyncingAtom = atom(false);
-export const accountingLoadingAtom = atom((get) => 
-    get(journalEntriesNodeAtom).loading || 
-    get(accountsNodeAtom).loading || 
-    get(bankTransactionsNodeAtom).loading
+export const accountingLoadingAtom = atom(
+    (get) =>
+        get(journalEntriesNodeAtom).loading ||
+        get(accountsNodeAtom).loading ||
+        get(bankTransactionsNodeAtom).loading,
 );
 
 // Grade X Anchors
 export { nexusPulseAtom } from '@/store/pulseAtoms';
-export { tenantIdAtom } from '@/store/operationalAtoms';
+export { tenantIdAtom } from '@/store/pillars/sovereign';

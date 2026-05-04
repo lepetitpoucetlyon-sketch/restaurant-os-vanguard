@@ -47,7 +47,7 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
       if (ref === 'deviceDocRef') {
         return Promise.resolve({
           exists: () => false,
-          data: () => null
+          data: () => null as any
         });
       }
       return Promise.resolve({
@@ -70,7 +70,7 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
       if (ref === 'deviceDocRef') {
         return Promise.resolve({
           exists: () => false,
-          data: () => null
+          data: () => null as any
         });
       }
       return Promise.resolve({
@@ -119,7 +119,7 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
       if (ref === 'deviceDocRef') {
         return Promise.resolve({
           exists: () => false,
-          data: () => null
+          data: () => null as any
         });
       }
       return Promise.resolve({
@@ -143,7 +143,7 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
       if (ref === 'deviceDocRef') {
         return Promise.resolve({
           exists: () => false,
-          data: () => null
+          data: () => null as any
         });
       }
       return Promise.resolve({

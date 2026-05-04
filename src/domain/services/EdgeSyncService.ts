@@ -1,4 +1,4 @@
-import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
+import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
 import { SyncMessage } from '@nexus/contracts/domain.types';
 import { Order } from '@nexus/contracts';
 import { getDefaultStore } from 'jotai';

@@ -52,6 +52,14 @@ export const defaultSettings: GlobalSettings = {
     recipeIngredients: [],
     ingredients: [],
     suppliers: [],
+    inventory: {
+        lowStockThreshold: 1000,
+        autoReorder: false,
+        locations: [
+            { id: 'loc-1', name: 'Cuisine', type: 'dry' },
+            { id: 'loc-2', name: 'Chambre Froide', type: 'cold' }
+        ]
+    },
     employees: [],
     positions: [],
     staffConfig: {
@@ -112,6 +120,10 @@ export const defaultSettings: GlobalSettings = {
     },
     clients: [],
     loyaltyPrograms: [],
+    customer: {
+        loyaltyEnabled: false,
+        pointsPerEuro: 1
+    },
     posSettings: {
         currency: "EUR",
         priceFormat: "with_cents",
@@ -284,6 +296,11 @@ export const defaultSettings: GlobalSettings = {
         stripeSecretKey: "",
         stripeWebhookSecret: "",
         webhooks: []
+    },
+    legal: {
+        legalEntityName: "",
+        siret: "",
+        registrationCity: ""
     },
     nexusConfig: {
         aiName: "NEXUS",

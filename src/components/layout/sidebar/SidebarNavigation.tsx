@@ -4,7 +4,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { accordionContent } from "@/lib/motion";
 import { NavSection } from "@/config/navigation";
 import { useState } from "react";

@@ -3,11 +3,14 @@
 import { useAtomValue } from "jotai";
 import { 
     wasteLogsNodeAtom,
-    wasteLogsAtom, 
+    wasteLogsAtom 
+} from "@/store/pillars/compliance";
+import { 
     menuAnalysisSelector, 
     staffPerformanceSelector, 
     laborCostRatioSelector 
-} from "@/store/operationalAtoms";
+} from "@/store/pillars/commerce";
+
 
 /**
  * 📊 useManagement - Grade VI Atomic Bridge

@@ -2,14 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/ui.foundations";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { PinLogin } from "./PinLogin";
-import { useUI } from "@/context/UIContext";
-import { useTenant } from "@/context/TenantContext";
+import { useUI } from "@/hooks";
+import { useTenant } from "@/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwoFactorChallenge } from "./TwoFactorChallenge";
 import { useAtomValue } from "jotai";
-import { tenantConfigAtom } from "@/store/fleetAtoms";
+import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 import { SovereignLockout } from "./SovereignLockout";
 
 interface AuthGateProps {
@@ -28,7 +28,7 @@ export function AuthGate({ children }: AuthGateProps) {
     const pathname = usePathname();
 
     // 0. SOVEREIGN KILL SWITCH (Highest Priority)
-    const isKillSwitchActive = tenantConfig.status?.killSwitch === true;
+    const isKillSwitchActive = tenantConfig?.status?.killSwitch === true;
     
     // Bypass for MCC area to allow admin recovery if needed
     const isMccArea = pathname?.startsWith('/admin');

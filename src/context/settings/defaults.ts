@@ -22,7 +22,10 @@ import {
     HACCPConfig,
     SecurityConfig,
     NotificationsConfig,
-    IntegrationsConfig
+    IntegrationsConfig,
+    InventoryConfig,
+    LegalConfig,
+    CustomerConfig
 } from '@nexus/contracts';
 
 export const defaultIdentity: RestaurantIdentity = {
@@ -267,6 +270,26 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
 
 import { NexusAIConfig } from '@nexus/contracts/settings/nexus';
 
+export const defaultInventory: InventoryConfig = {
+    lowStockThreshold: 1000,
+    autoReorder: false,
+    locations: [
+        { id: 'loc-1', name: 'Cuisine', type: 'dry' },
+        { id: 'loc-2', name: 'Chambre Froide', type: 'cold' }
+    ]
+};
+
+export const defaultCustomer: CustomerConfig = {
+    loyaltyEnabled: false,
+    pointsPerEuro: 1
+};
+
+export const defaultLegal: LegalConfig = {
+    legalEntityName: '',
+    siret: '',
+    registrationCity: ''
+};
+
 export const defaultNexusConfig: NexusAIConfig = {
     aiName: 'NEXUS',
     voiceId: 'aoede',
@@ -298,6 +321,7 @@ export const defaultSettings: GlobalSettings = {
 
     ingredients: [],
     suppliers: [],
+    inventory: defaultInventory,
 
     employees: [],
     positions: [],
@@ -311,6 +335,7 @@ export const defaultSettings: GlobalSettings = {
 
     clients: [],
     loyaltyPrograms: [],
+    customer: defaultCustomer,
 
     posSettings: defaultPOS,
     pos: defaultPOS,
@@ -345,6 +370,8 @@ export const defaultSettings: GlobalSettings = {
 
     integrations: [],
     integrationsConfig: defaultIntegrationsConfig,
+
+    legal: defaultLegal,
 
     legalEntityName: '',
     legalForm: '',

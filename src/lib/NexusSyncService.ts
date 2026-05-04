@@ -2,12 +2,11 @@ import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { db } from './offline/offline-store';
-import { 
-  ordersNodeAtom, 
-  stockItemsNodeAtom, 
-  fiscalLedgerNodeAtom,
-  updateNexusNode
-} from '@/store/operationalAtoms';
+import { ordersNodeAtom } from '@/store/pillars/ops';
+import { stockItemsNodeAtom } from '@/store/pillars/logistics';
+import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
+import { updateNexusNode } from '@/store/pillars/core';
+
 
 // Import Sovereign Modular sub-services
 import { OpsSyncService as SyncOrders } from '@/modules/ops/engine/ops.sync';
@@ -73,7 +72,7 @@ export const NexusSyncService = {
         }, 60000);
 
         // --- PRIVACY SHIELD GATE ---
-        const { fleetSnapshotAtom } = await import('@/store/operationalAtoms');
+        const { fleetSnapshotAtom } = await import('@/store/pillars/sovereign');
         const instances = store.get(fleetSnapshotAtom) || [];
         const instance = instances.find(i => i.key === tenantId);
 

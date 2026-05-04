@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useKitchen, useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useKDSController } from "@modules/kds";
 import { useNexusOps } from "@modules/ops";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
@@ -18,8 +19,8 @@ import { ModificationAlertsPanel } from "@modules/ops";
 import { RecipeDetailDialog } from "@modules/ops";
 import { PlateAuditWizard } from "@modules/ops";
 
-// Constants
-import { ITEM_STATION_MAP, KitchenStation } from "./constants";
+// Constants (Now from domain module)
+import { KitchenStation } from "@modules/kds";
 
 interface AuditTicket {
     id: string;
@@ -28,18 +29,27 @@ interface AuditTicket {
 }
 
 export default function KDSPage() {
-    const { orders, updateOrderStatus, getPendingModifications } = useKitchen();
+    const { 
+        orders: filteredOrders, 
+        allOrders: orders,
+        updateOrderStatus, 
+        getPendingModifications,
+        isLoading,
+        activeStation,
+        setActiveStation,
+        rushMode,
+        setRushMode,
+        searchQuery,
+        setSearchQuery,
+        preparingOrdersCount,
+        pendingModificationsCount
+    } = useKDSController();
+
     const { floorOps } = useNexusOps();
-    const tables = floorOps.operationalNodes;
-    
-    const activeOrders = orders.filter(o: any => o?.status !== 'delivered');
     const { data: recipes } = useRecipes();
     
     // Core State
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [activeStation, setActiveStation] = useState<KitchenStation>('all');
-    const [rushMode, setRushMode] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
     
     // UI State
     const [showModificationAlerts, setShowModificationAlerts] = useState(false);
@@ -76,39 +86,6 @@ export default function KDSPage() {
         }
         setLastOrderCount(orders.length);
     }, [orders.length, lastOrderCount]);
-
-    // Filtering & Sorting Logic
-    const filteredOrders = useMemo(() => {
-        const activeOrders = (orders as Order[]).filter(o => o?.status !== 'delivered');
-        let result = activeOrders;
-
-        if (activeStation !== 'all') {
-            result = result.filter(order =>
-                order.items.some(item => (ITEM_STATION_MAP[item.name] || 'hot') === activeStation)
-            ).map(order => ({
-                ...order,
-                items: order.items.filter(item => (ITEM_STATION_MAP[item.name] || 'hot') === activeStation)
-            }));
-        }
-
-        if (searchQuery) {
-            result = result.filter(o =>
-                o.tableNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (o.serverName || "").toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        }
-
-        return result.sort((a, b) => {
-            const isAReady = a?.status === 'ready';
-            const isBReady = b?.status === 'ready';
-            if (isAReady && !isBReady) return 1;
-            if (!isAReady && isBReady) return -1;
-            return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
-        });
-    }, [orders, activeStation, searchQuery]);
-
-    const preparingOrdersCount = orders.filter(o: any => o?.status === 'preparing' || o?.status === 'new').length;
-    const pendingModificationsCount = getPendingModifications().length;
 
     return (
         <div className={cn(

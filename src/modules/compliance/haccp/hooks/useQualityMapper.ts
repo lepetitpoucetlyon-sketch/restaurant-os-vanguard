@@ -10,7 +10,7 @@ import { QualityEngine } from '@domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@domain/types/quality';
 import { logger } from '@/lib/logger';
 import { useSettings } from '@/hooks/useSettings';
-import { useTenant } from '@/engines/core/NexusCoreProvider';
+import { useTenant } from '@/hooks';
 
 /**
  * 🛰️ useQualityMapper - Grade VI
@@ -78,7 +78,7 @@ export const useQualityMapper = () => {
                     
                     return {
                         id: item.product_id,
-                        name: item.product_name,
+                        name: item.product_name || 'PRODUIT_INCONNU',
                         status: (isOk ? 'ok' : (isWarning ? 'warning' : 'rejected')) as 'warning' | 'rejected' | 'ok',
                         quantity: item.quantity_delivered,
                         temp: item.checks?.temperature?.measured

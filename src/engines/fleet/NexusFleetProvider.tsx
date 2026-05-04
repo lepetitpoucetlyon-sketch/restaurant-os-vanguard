@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { useAtom, useSetAtom, useAtomValue } from 'jotai';
-import { fleetSnapshotAtom } from '@/store/operationalAtoms';
+import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { fleetTelemetry } from '@domain/services/FleetTelemetryService';
 import { FleetComplianceService } from '@domain/services/FleetComplianceService';
 import { HACCPTelemetryBridge } from '@domain/services/HACCPTelemetryBridge';
@@ -10,9 +10,9 @@ import { TenantID } from '@domain/types/brands';
 import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
 import { SiteTelemetry, EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight, ConsolidatedMetrics } from '@domain/services/MacroBrain';
-import { tenantConfigAtom } from '@/store/fleetAtoms';
+import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { whiteLabelInstanceConfig } from '@/config/instance';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 import { NexusFleetState } from '@nexus/contracts/nexus.types';
@@ -111,6 +111,15 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                 const branding = f.branding;
                 const security = f.security;
                 
+                const lastSeenDate = (() => {
+                    const ls = f.lastSeen;
+                    if (typeof ls === 'string') return ls;
+                    if (typeof ls === 'number') return new Date(ls).toISOString();
+                    const seconds = (ls as { seconds?: number })?.seconds;
+                    if (typeof seconds === 'number') return new Date(seconds * 1000).toISOString();
+                    return new Date().toISOString();
+                })();
+                
                 return {
                     id: f.id || f.key || `node-${Math.random().toString(36).substring(7)}`,
                     key: f.key || f.id || `key-${Math.random().toString(36).substring(7)}`,
@@ -120,7 +129,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                     version: f.engineVersion || '1.0.0',
                     createdAt: f.createdAt || new Date().toISOString(),
                     updatedAt: (f as any).updatedAt || new Date().toISOString(),
-                    lastHeartbeat: (typeof f.lastSeen === 'string' ? f.lastSeen : (typeof f.lastSeen === 'number' ? new Date(f.lastSeen).toISOString() : new Date((f.lastSeen as any)?.seconds * 1000).toISOString())) || new Date().toISOString(),
+                    lastHeartbeat: lastSeenDate,
                     metrics: {
                         activeUsers: Number(f.activeUsers) || 0,
                         dailyRevenue: Number(f.dailyRevenue) || 0,
@@ -129,7 +138,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                         healthScore: (() => {
                             if (!f.healthScore) {
                                 import('@/lib/nexus/TelemetryService').then(({ TelemetryService }) => 
-                                    TelemetryService.reportIssue('FALLBACK_VALUE', 'FleetEngine', { field: 'healthScore', instanceId: f.id } as any)
+                                    TelemetryService.reportIssue('FALLBACK_VALUE', 'FleetEngine', { field: 'healthScore' })
                                 );
                             }
                             return Number(f.healthScore) || 100;
@@ -221,7 +230,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     }) => {
         console.log('[Fleet] Broadcasting global configuration via stream:', config);
         
-        const patch: Record<string, any> = {};
+        const patch: Record<string, SovereignValue> = {};
         if (config.priceMultiplier !== undefined) patch['status.priceMultiplier'] = config.priceMultiplier;
         if (config.targetVersion !== undefined) patch['status.targetVersion'] = config.targetVersion;
         if (config.maintenanceMode !== undefined) patch['status.maintenance'] = config.maintenanceMode;
@@ -268,7 +277,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         launchPreview,
         broadcastConfiguration,
         complianceService: FleetComplianceService,
-        haccpBridge: HACCPTelemetryBridge as import("@/shared/nexus-contract").SovereignMap,
+        haccpBridge: HACCPTelemetryBridge as any,
         fleet: globalMetrics, 
         customer: { customers: [] as import('@/shared/nexus-contract').SovereignData[] },
         intelligence: { 

@@ -49,18 +49,31 @@ export class POSService {
      */
     static formatForKitchen(items: (OrderItem | CartItem)[]): OrderItem[] {
         const now = new Date().toISOString();
-        return items.map(item => ({
-            id: (item).id || `item_${Math.random().toString(36).substring(2, 11)}`,
-            productId: (item as CartItem).productId || (item as OrderItem).productId,
-            categoryId: (item as CartItem).categoryId || (item as OrderItem).categoryId,
-            name: item.name,
-            priceInCents: item.priceInCents,
-            quantity: item.quantity,
-            notes: item.notes || "",
-            modifiers: item.modifiers || [],
-            status: 'pending',
-            createdAt: (item).createdAt || now,
-            updatedAt: (item).updatedAt || now
-        }));
+        return items.map(item => {
+            if ('id' in item) {
+                // Already an OrderItem
+                return {
+                    ...item,
+                    status: item.status || 'pending',
+                    createdAt: item.createdAt || now,
+                    updatedAt: item.updatedAt || now
+                };
+            } else {
+                // It's a CartItem, convert to OrderItem
+                return {
+                    id: item.cartId,
+                    productId: item.productId,
+                    categoryId: item.categoryId,
+                    name: item.name,
+                    priceInCents: item.priceInCents,
+                    quantity: item.quantity,
+                    notes: item.notes || "",
+                    modifiers: item.modifiers || [],
+                    status: 'pending',
+                    createdAt: now,
+                    updatedAt: now
+                };
+            }
+        });
     }
 }

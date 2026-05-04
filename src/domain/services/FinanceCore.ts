@@ -12,6 +12,7 @@ export interface TaxBreakdown {
     ht: number;
     totalTax: number;
     rates: Record<number, number>;
+    [key: string]: any;
 }
 
 export interface ZReport {
@@ -24,6 +25,7 @@ export interface ZReport {
     taxBreakdown: TaxBreakdown;
     timestamp: string;
     _fiscalSeal?: FiscalSeal;
+    [key: string]: any;
 }
 
 export class FinanceCore {

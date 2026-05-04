@@ -40,7 +40,20 @@ export const SelfHealingEngine = {
           const startTime = Date.now();
           const freshData = await Nexus.adapter.get(persistencePath);
           if (freshData) {
-            store.set(atom, freshData as T);
+            // Grade X: Check if the atom is a NexusNode or a primitive
+            const rawState = currentState as unknown;
+            
+            if (rawState && typeof rawState === 'object' && 'data' in rawState && 'loading' in rawState) {
+              const nodeState = rawState as import('@/store/base').NexusNode<unknown>;
+              store.set(atom, {
+                ...nodeState,
+                data: Array.isArray(freshData) ? freshData : [freshData],
+                loading: false,
+                error: null
+              } as T);
+            } else {
+              store.set(atom, freshData as T);
+            }
             const duration = Date.now() - startTime;
             logger.info(`[Self-Healing] Atomic Burst SUCCESSFUL: ${persistencePath} (${duration}ms)`);
           }

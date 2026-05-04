@@ -58,8 +58,8 @@ export default function SimulationPage() {
                 currentMode, 
                 'DEFAULT', 
                 { 
-                    ingredients: ingredients as import('@nexus/contracts').Ingredient[], 
-                    stockItems: stockItems as import('@nexus/contracts').StockItem[] 
+                    ingredients, 
+                    stockItems 
                 }
             );
             

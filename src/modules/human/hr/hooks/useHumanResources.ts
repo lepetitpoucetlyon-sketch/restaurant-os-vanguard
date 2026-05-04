@@ -22,12 +22,12 @@ export function useHumanResources() {
     
     // Grade X Atomic Data
     const leaveRequestsNode = useAtomValue(leaveRequestsNodeAtom);
-    const leaveRequests = (leaveRequestsNode.data || []) as LeaveRequest[];
+    const leaveRequests = (leaveRequestsNode.data || []);
     
-    const leaveBalances = (useAtomValue(leaveBalancesAtom) || []) as LeaveBalance[];
+    const leaveBalances = (useAtomValue(leaveBalancesAtom) || []);
     const isLoading = useAtomValue(hrLoadingAtom);
     const shiftsNode = useAtomValue(shiftsNodeAtom);
-    const shifts = (shiftsNode.data || []) as Shift[];
+    const shifts = (shiftsNode.data || []);
 
     // --- 🔨 LA FORGE ---
     const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom, 'leaveRequests', 'HR');
@@ -41,8 +41,8 @@ export function useHumanResources() {
             id,
             createdAt: now,
             updatedAt: now
-        } as Shift;
-        return shiftForge.mutate('SET', id, newShift);
+        } as unknown as Shift;
+        return shiftForge.mutate('SET', id, newShift as unknown as SovereignData);
     }, [shiftForge]);
 
     const updateShift = useCallback((id: string, data: Partial<Shift>) => {
@@ -53,7 +53,7 @@ export function useHumanResources() {
     }, [shiftForge]);
 
     const deleteShift = useCallback((id: string) => {
-        return shiftForge.mutate('DELETE', id, {} as SovereignData);
+        return shiftForge.mutate('DELETE', id, {} as unknown as SovereignData);
     }, [shiftForge]);
 
     const publishShifts = useCallback(async (ids: string[]) => {
@@ -62,7 +62,7 @@ export function useHumanResources() {
             shiftForge.mutate('UPDATE', id, { 
                 status: 'published',
                 updatedAt: now 
-            } as Partial<Shift>)
+            } as unknown as SovereignData)
         ));
     }, [shiftForge]);
 
@@ -73,7 +73,7 @@ export function useHumanResources() {
         return leaveForge.mutate('UPDATE', id, { 
             status: 'approved',
             updatedAt: now
-        } as Partial<LeaveRequest>);
+        } as unknown as SovereignData);
     }, [leaveForge]);
 
     const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, details?: string) => {
@@ -82,7 +82,7 @@ export function useHumanResources() {
             status: 'rejected',
             rejectionReason: reason,
             updatedAt: now
-        } as Partial<LeaveRequest>);
+        } as unknown as SovereignData);
     }, [leaveForge]);
 
     const createLeaveRequest = useCallback(async (request: Omit<LeaveRequest, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -91,11 +91,11 @@ export function useHumanResources() {
         const newRequest: LeaveRequest = { 
             ...request, 
             id,
-            status: 'pending_approval' as any,
+            status: 'pending', // Align with contract
             createdAt: now,
             updatedAt: now
-        } as LeaveRequest;
-        return leaveForge.mutate('SET', id, newRequest);
+        } as unknown as LeaveRequest;
+        return leaveForge.mutate('SET', id, newRequest as unknown as SovereignData);
     }, [leaveForge]);
 
     return {

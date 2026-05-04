@@ -6,7 +6,7 @@ import { RestaurantIdentity, RestaurantContact, SocialMedia } from './settings/i
 import { DaySchedule, ServiceSettings, ReservationSlotSettings, ClosedPeriod } from './settings/schedule';
 import { MenuCategory, ProductSettings, Supplement, MenuFormule } from './settings/catalog';
 import { RecipesConfig, RecipeSettings, RecipeStep, RecipeIngredient } from './settings/recipes';
-import { IngredientSettings, SupplierSettings } from './settings/inventory';
+import { IngredientSettings, SupplierSettings, InventoryConfig } from './settings/inventory';
 import { EmployeeSettings, PositionSettings, StaffConfig, ShiftTemplate, AbsenceSettings, PlanningConfig } from './settings/hr';
 import { ReservationSettings } from './settings/reservations';
 import { ClientSettings, LoyaltyProgram } from './settings/customer';
@@ -39,6 +39,22 @@ export * from './settings/theme';
 export * from './settings/performance';
 export * from './settings/integrations';
 
+export interface LegalConfig {
+    legalEntityName?: string;
+    legalForm?: string;
+    siret?: string;
+    vatNumber?: string;
+    registrationCity?: string;
+    capital?: string;
+    insuranceDetails?: string;
+    licenseIV?: string;
+}
+
+export interface CustomerConfig {
+    loyaltyEnabled: boolean;
+    pointsPerEuro: number;
+}
+
 // ============ GLOBAL SETTINGS CONTAINER ============
 
 export interface GlobalSettings {
@@ -67,6 +83,7 @@ export interface GlobalSettings {
     // 5. Inventory
     ingredients: IngredientSettings[];
     suppliers: SupplierSettings[];
+    inventory: InventoryConfig;
 
     // 6. Staff & HR
     employees: EmployeeSettings[];
@@ -83,6 +100,7 @@ export interface GlobalSettings {
     // 8. Customer & Clients
     clients: ClientSettings[];
     loyaltyPrograms: LoyaltyProgram[];
+    customer: CustomerConfig;
 
     // 9. POS & Accounting
     posSettings: POSSettings;
@@ -127,6 +145,7 @@ export interface GlobalSettings {
     integrationsConfig: IntegrationsConfig;
     
     // 17. Legal & Fiscal
+    legal: LegalConfig;
     legalEntityName?: string;
     legalForm?: string;
     siret?: string;
@@ -153,6 +172,7 @@ export interface SLMExpert {
     enabled: boolean;
     minRole: string;
     modelId?: string;
+    [key: string]: any;
 }
 
 export interface SLMConfig {
@@ -164,4 +184,5 @@ export interface SLMConfig {
     fallbackThreshold?: number;
     fallbackTriggerWord?: string;
     experts?: SLMExpert[];
+    [key: string]: any;
 }

@@ -1,17 +1,12 @@
 "use client";
 
-import { useUI as useNexusUI } from '@/engines/core/NexusCoreProvider';
+import { useNexusCore } from '@/engines/core/NexusCoreProvider';
 
 /**
- * 🎨 useUI - Grade VI
- * Pilotage de l'interface via le Nexus Core (Context Central).
+ * 🎨 useUI - Grade X
+ * Direct bridge to the Nexus Core UI state.
  */
 export function useUI() {
-    const ui = useNexusUI();
-
-    if (!ui) {
-        throw new Error("useUI must be used within a NexusCoreProvider");
-    }
-
-    return ui;
+    const core = useNexusCore();
+    return core.ui;
 }

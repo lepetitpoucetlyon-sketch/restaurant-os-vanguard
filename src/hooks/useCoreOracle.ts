@@ -3,7 +3,7 @@ import { getDefaultStore } from 'jotai';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { logger } from '@/lib/logger';
 import { checkOnlineStatus } from '@/lib/offline/status';
-import { commanderSignatureAtom } from '@/store/masterAtoms';
+import { commanderSignatureAtom } from '@nexus/state/SovereignGenome';
 
 /**
  * 👁️ useCoreOracle - Restaurant OS

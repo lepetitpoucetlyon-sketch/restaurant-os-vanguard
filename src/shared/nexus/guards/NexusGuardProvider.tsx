@@ -18,9 +18,10 @@ import {
     oilLogsNodeAtom,
     wasteLogsAtom,
     wasteLogsNodeAtom,
-    guardLoadingAtom,
-    updateNexusNode
-} from '@/store/operationalAtoms';
+    guardLoadingAtom
+} from '@/store/pillars/compliance';
+import { updateNexusNode } from '@/store/pillars/core';
+
 import { 
     HygieneLabel, 
     HygieneLog, 

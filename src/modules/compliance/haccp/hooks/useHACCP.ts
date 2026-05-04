@@ -27,20 +27,19 @@ import {
  * Orchestre la sécurité alimentaire via la Forge de Souveraineté (Module HACCP).
  */
 export function useHACCP() {
-    const hygieneLabels = useAtomValue(hygieneLabelsAtom) as import("@/shared/nexus-contract").SovereignData[];
-    const hygieneLogs = useAtomValue(hygieneLogsAtom) as HygieneLog[];
-    const receptionLogs = useAtomValue(receptionLogsAtom) as ReceptionLog[];
-    const oilLogs = useAtomValue(oilLogsAtom) as import("@/shared/nexus-contract").SovereignData[];
-    const wasteLogs = useAtomValue(wasteLogsAtom) as import("@/shared/nexus-contract").SovereignData[];
-    const maintenanceLogs = useAtomValue(maintenanceLogsAtom) as MaintenanceLog[];
+    const hygieneLabels = useAtomValue(hygieneLabelsAtom); 
+    const hygieneLogs = useAtomValue(hygieneLogsAtom);
+    const receptionLogs = useAtomValue(receptionLogsAtom);
+    const oilLogs = useAtomValue(oilLogsAtom);
+    const wasteLogs = useAtomValue(wasteLogsAtom);
+    const maintenanceLogs = useAtomValue(maintenanceLogsAtom);
     const isLoading = useAtomValue(guardLoadingAtom);
 
     // --- 🔨 LA FORGE DU MODULE ---
-    type NexusNodeAtom = import('jotai').WritableAtom<import('@/store/base').NexusNode<{ id: string }>, [import('jotai').SetStateAction<import('@/store/base').NexusNode<{ id: string }>>], void>;
-    const hygieneForge = useNexusMutation(hygieneLogsNodeAtom as any, 'hygieneLogs', 'HACCP');
-    const labelForge = useNexusMutation(hygieneLabelsNodeAtom as any, 'hygieneLabels', 'HACCP');
-    const receptionForge = useNexusMutation(receptionLogsNodeAtom as any, 'receptionLogs', 'HACCP');
-    const maintenanceForge = useNexusMutation(maintenanceLogsNodeAtom as any, 'maintenanceLogs', 'HACCP');
+    const hygieneForge = useNexusMutation<HygieneLog>(hygieneLogsNodeAtom, 'hygieneLogs', 'HACCP');
+    const labelForge = useNexusMutation<SovereignData & { id: string }>(hygieneLabelsNodeAtom, 'hygieneLabels', 'HACCP');
+    const receptionForge = useNexusMutation<ReceptionLog>(receptionLogsNodeAtom, 'receptionLogs', 'HACCP');
+    const maintenanceForge = useNexusMutation<MaintenanceLog>(maintenanceLogsNodeAtom, 'maintenanceLogs', 'HACCP');
 
     /**
      * 🛰️ SIMULACRA : Capteurs Fantômes
@@ -72,7 +71,7 @@ export function useHACCP() {
 
         const failedChecks = [
             ...hygieneLogs.filter(l => l.status === 'alert'),
-            ...receptionLogs.filter(l => (l as Record<string, string>).integrityStatus === 'non-conforme'),
+            ...receptionLogs.filter(l => l.status === 'alert' || (l as any).integrityStatus === 'non-conforme'),
             ...maintenanceLogs.filter(l => l.status === 'pending')
         ].length;
 
@@ -81,13 +80,13 @@ export function useHACCP() {
 
     const criticalAlerts = useMemo(() => {
         return [
-            ...hygieneLogs,
-            ...receptionLogs,
-            ...maintenanceLogs
-        ].filter((log: any) => 
+            ...(hygieneLogs as (HygieneLog | ReceptionLog | MaintenanceLog)[]),
+            ...(receptionLogs as (HygieneLog | ReceptionLog | MaintenanceLog)[]),
+            ...(maintenanceLogs as (HygieneLog | ReceptionLog | MaintenanceLog)[])
+        ].filter((log) => 
             log.status === 'critical' || 
-            ('critical_issue' in log && (log as { critical_issue?: boolean }).critical_issue) || 
-            ('integrityStatus' in log && log.integrityStatus === 'non-conforme')
+            ('critical_issue' in log && (log as any).critical_issue) || 
+            ('integrityStatus' in log && (log as any).integrityStatus === 'non-conforme')
         );
     }, [hygieneLogs, receptionLogs, maintenanceLogs]);
 
@@ -109,9 +108,9 @@ export function useHACCP() {
         temperatureHistory,
 
         // --- 🔨 Forge Actions ---
-        addHygieneLog: (data: Partial<HygieneLog>) => hygieneForge.mutate('SET', `log_${Date.now()}`, data as SovereignData),
+        addHygieneLog: (data: Partial<HygieneLog>) => hygieneForge.mutate('SET', `log_${Date.now()}`, data as unknown as SovereignData),
         addLabel: (data: SovereignData) => labelForge.mutate('SET', `lab_${Date.now()}`, data),
-        addReception: (data: Partial<ReceptionLog>) => receptionForge.mutate('SET', `rec_${Date.now()}`, data as SovereignData),
-        addMaintenance: (data: Partial<MaintenanceLog>) => maintenanceForge.mutate('SET', `maint_${Date.now()}`, data as SovereignData)
+        addReception: (data: Partial<ReceptionLog>) => receptionForge.mutate('SET', `rec_${Date.now()}`, data as unknown as SovereignData),
+        addMaintenance: (data: Partial<MaintenanceLog>) => maintenanceForge.mutate('SET', `maint_${Date.now()}`, data as unknown as SovereignData)
     };
 }

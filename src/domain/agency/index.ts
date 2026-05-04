@@ -4,6 +4,6 @@
  * Manual changes will be overwritten unless you remove this header.
  */
 
-export * from './hermes.types';
+export * from './Zeus';
 export * from './types';
 export * from './useExpert';

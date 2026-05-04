@@ -4,7 +4,7 @@ import {
     ordersNodeAtom, 
     stockItemsNodeAtom, 
     journalEntriesNodeAtom 
-} from '@/store/operationalAtoms';
+} from '@/store/pillars';
 import { qualityActiveControlAtom } from '@modules/compliance';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

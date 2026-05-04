@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNexusCore } from "@/engines/core/NexusCoreProvider";
+import { useNexusCore } from "@/hooks";
 import { NAV_SECTIONS, NavSection } from "@/config/navigation";
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
@@ -11,7 +11,7 @@ import { SidebarProfile } from "./sidebar/SidebarProfile";
 import { SidebarQuickActions } from "./sidebar/SidebarQuickActions";
 import { cn } from "@/lib/ui.foundations";
 import { useAtom } from 'jotai';
-import { isSidebarCollapsedAtom } from '@/store/operationalAtoms';
+import { isSidebarCollapsedAtom } from '@/store/pillars/sovereign';
 
 export function DesktopSidebar() {
     const pathname = usePathname();

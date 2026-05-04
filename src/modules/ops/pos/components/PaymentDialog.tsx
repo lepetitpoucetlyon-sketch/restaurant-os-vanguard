@@ -13,7 +13,7 @@ interface PaymentDialogProps {
     onPaymentComplete: () => Promise<string | void>;
 }
 
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";;
 
 type PaymentMethod = "card" | "cash" | "mobile";

@@ -10,7 +10,7 @@ import {
     Truck
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useQuality } from '@modules/compliance/haccp/hooks/useQuality';
+import { useQuality } from '@modules/compliance';
 import { QualityControl } from '@domain/types/quality';
 
 export const VisualInspection: React.FC = () => {

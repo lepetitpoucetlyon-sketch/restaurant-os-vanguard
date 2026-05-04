@@ -4,7 +4,7 @@ import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ChefHat, X, Check, MapPin, Package, RefreshCw, Plus, Minus, Calendar } from "lucide-react";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";;
 
@@ -216,7 +216,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                         value={type}
                                         onChange={(val) => setType(val as PreparationType)}
                                         options={PREPARATION_TYPES.map(t => ({
-                                            value: t.value,
+                                            value: String(t.value),
                                             label: t.label?.toUpperCase() || ''
                                         }))}
                                     />
@@ -242,7 +242,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                         value={unit}
                                         onChange={(val) => setUnit(val as IngredientUnit)}
                                         options={UNIT_OPTIONS.map(u => ({
-                                            value: u,
+                                            value: String(u),
                                             label: u?.toUpperCase() || ''
                                         }))}
                                     />
@@ -270,7 +270,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                         value={storageLocation}
                                         onChange={setStorageLocation}
                                         options={activeLocations.filter(l => l.isActive).map(loc => ({
-                                            value: loc.id,
+                                            value: String(loc.id),
                                             label: String(loc.name || '').toUpperCase()
                                         }))}
                                     />
@@ -283,7 +283,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                         value={containerId}
                                         onChange={setContainerId}
                                         options={CONTAINER_OPTIONS.map(c => ({
-                                            value: c,
+                                            value: String(c),
                                             label: c?.toUpperCase() || ''
                                         }))}
                                     />
@@ -305,7 +305,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                             value={selectedStockItem}
                                             onChange={setSelectedStockItem}
                                             options={availableStock.map(s => ({
-                                                value: s.id,
+                                                value: String(s.id),
                                                 label: String(s.ingredientName || '').toUpperCase(),
                                                 description: `${s.quantity} ${String(s.unit || '').toUpperCase()} EN ARCHIVE`
                                             }))}

@@ -1,21 +1,27 @@
 import { useAtom, useAtomValue } from 'jotai';
-import { 
-    qualityControlsAtom, 
-    qualityLoadingAtom, 
+import {
+    qualityControlsAtom,
+    qualityLoadingAtom,
     qualityActiveControlAtom,
     qualityControlStepAtom,
     qualitySelectedDeliveryIdAtom,
     qualityAlertsAtom,
     todayReceptionStatsAtom,
     productQualityConfigsAtom,
-    supplierScoresAtom
+    supplierScoresAtom,
 } from '@modules/compliance/haccp/store/qualityAtoms';
-import { deliveriesAtom } from '@/store/operationalAtoms';
-import { tenantIdAtom } from '@/store/fleetAtoms';
+import { deliveriesAtom } from '@/store/pillars/compliance';
+import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { SovereignData } from '@/shared/nexus-contract';
 import { QualityEngine } from '@domain/services/QualityEngine';
-import { QualityControl, QualityControlItem } from '@domain/types/quality';
-import { Delivery } from '@domain/types/delivery';
+import { 
+    Delivery, 
+    DeliveryItem, 
+    QualityControl, 
+    ActiveQualityControl, 
+    ActiveQualityControlItem, 
+    ReceptionData 
+} from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { IDService } from '@/infrastructure/adapters/IDAdapter';
 
@@ -29,25 +35,28 @@ export const useQuality = () => {
     const [activeControl, setActiveControl] = useAtom(qualityActiveControlAtom);
     const [step, setStep] = useAtom(qualityControlStepAtom);
     const [selectedDeliveryId, setSelectedDeliveryId] = useAtom(qualitySelectedDeliveryIdAtom);
-    
+
     const alerts = useAtomValue(qualityAlertsAtom);
     const todayStats = useAtomValue(todayReceptionStatsAtom);
     const productConfigs = useAtomValue(productQualityConfigsAtom);
     const supplierScores = useAtomValue(supplierScoresAtom);
     const deliveries = useAtomValue(deliveriesAtom);
-    
+
     const tenantId = useAtomValue(tenantIdAtom);
 
     /**
      * Starts a new reception control session for a specific delivery
      */
     const selectDeliveryForControl = (deliveryId: string) => {
-        const delivery = (deliveries as import("@domain/types/quality").Delivery[]).find((d: Delivery) => d.id === deliveryId);
+        const delivery = deliveries.find(
+            (d) => d.id === deliveryId,
+        );
+
         if (!delivery) return;
 
         setSelectedDeliveryId(deliveryId);
         setStep(1);
-        
+
         const newControl: QualityControl = {
             id: IDService.generateId('qc'),
             control_number: `QC-${Date.now()}`,
@@ -59,59 +68,77 @@ export const useQuality = () => {
             controller_name: 'Antigravity',
             delivery: {
                 id: deliveryId,
-                reference: delivery.id || 'UNKNOWN' // Grade X Suture: Using ID as primary reference if manual reference is missing
+                reference: delivery.id || 'UNKNOWN', // Grade X Suture: Using ID as primary reference if manual reference is missing
             },
             duration_minutes: 0,
             color_aspect: true,
             texture_aspect: true,
             odor_aspect: true,
-            items: (delivery.items || []).map((item: import('@domain/types/delivery').DeliveryItem): import('@domain/types/quality').ActiveQualityControlItem => {
-                if (!item.unit || !item.productName) {
-                    import('@/lib/nexus/TelemetryService').then(({ TelemetryService }) => 
-                        TelemetryService.reportIssue('FALLBACK_VALUE', 'QualityEngine', { field: 'productMetadata' })
-                    );
-                }
-                return {
-                    id: IDService.generateId('qci'),
-                    product_id: item.productId,
-                    product_name: item.productName || 'PRODUIT_INCONNU',
-                    product_category: 'other',
-                    quantity_ordered: item.quantity,
-                    quantity_delivered: item.quantity,
-                    quantity_accepted: item.quantity,
-                    quantity_rejected: 0,
-                    expiry_type: 'dlc',
-                    days_until_expiry: 0,
-                    is_short_dlc: false,
-                    unit: item.unit || 'pc',
-                    is_rejected: false,
-                    decision: 'accepted',
-                    corrective_action: 'none',
-                    checks: {
-                        visual: { performed: false, status: 'pass', aspects: [], photos: [] },
-                        temperature: { required: true, performed: false, target: { min: 0, max: 4 }, status: 'pass', warning_threshold: 4 },
-                        weight: { required: false, performed: false, unit: item.unit || 'kg', status: 'pass', tolerance_percent: 5 },
-                        freshness: { required: true, performed: false, score: 5 }
-                    },
-                    batch_number: '',
-                    lot_number: '',
-                    origin: 'France', // Default Grade X Origin
-                    production_date: new Date().toISOString(),
-                    expiry_date: new Date(Date.now() + 86400000 * 3).toISOString(), // +3 days default
-                    decision_reason: 'N/A'
-                };
-            }),
+            items: (delivery.items || []).map(
+                (
+                    item: DeliveryItem,
+                ): ActiveQualityControlItem => {
+                    if (!item.unit || !item.productName) {
+                        import('@/lib/nexus/TelemetryService').then(({ TelemetryService }) =>
+                            TelemetryService.reportIssue('FALLBACK_VALUE', 'QualityEngine', {
+                                field: 'productMetadata',
+                            }),
+                        );
+                    }
+                    return {
+                        id: IDService.generateId('qci'),
+                        product_id: item.productId,
+                        product_name: item.productName || 'PRODUIT_INCONNU',
+                        product_category: 'other',
+                        quantity_ordered: item.quantity,
+                        quantity_delivered: item.quantity,
+                        quantity_accepted: item.quantity,
+                        quantity_rejected: 0,
+                        expiry_type: 'dlc',
+                        days_until_expiry: 0,
+                        is_short_dlc: false,
+                        unit: item.unit || 'pc',
+                        is_rejected: false,
+                        decision: 'accepted',
+                        corrective_action: 'none',
+                        checks: {
+                            visual: { performed: false, status: 'pass', aspects: [], photos: [] },
+                            temperature: {
+                                required: true,
+                                performed: false,
+                                target: { min: 0, max: 4 },
+                                status: 'pass',
+                                warning_threshold: 4,
+                            },
+                            weight: {
+                                required: false,
+                                performed: false,
+                                unit: item.unit || 'kg',
+                                status: 'pass',
+                                tolerance_percent: 5,
+                            },
+                            freshness: { required: true, performed: false, score: 5 },
+                        },
+                        batch_number: '',
+                        lot_number: '',
+                        origin: 'France', // Default Grade X Origin
+                        production_date: new Date().toISOString(),
+                        expiry_date: new Date(Date.now() + 86400000 * 3).toISOString(), // +3 days default
+                        decision_reason: 'N/A',
+                    };
+                },
+            ),
             delivery_conditions: {
                 vehicle_type: 'unknown',
                 vehicle_temperature: { compliant: true, measured: 0 },
                 vehicle_cleanliness: 'not_checked',
                 packaging_integrity: 'intact',
-                delivery_time_compliant: true
+                delivery_time_compliant: true,
             },
             signature: {
                 captured: false,
                 data: '',
-                signer_name: ''
+                signer_name: '',
             },
             summary: {
                 total_items: delivery.items?.length || 0,
@@ -120,26 +147,26 @@ export const useQuality = () => {
                 temperature_issues: 0,
                 visual_issues: 0,
                 overall_status: 'pass',
-                supplier_score_impact: 0
+                supplier_score_impact: 0,
             },
             metadata: {
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
                 synced: false,
-                fingerprint: 'pending'
-            }
+                fingerprint: 'pending',
+            },
         };
-        
-        setActiveControl(newControl as import('@domain/types/quality').ActiveQualityControl);
+
+        setActiveControl(newControl as ActiveQualityControl);
     };
 
     /**
      * Updates an item in the active control
      */
-    const updateControlItem = (item: import('@domain/types/quality').ActiveQualityControlItem) => {
+    const updateControlItem = (item: ActiveQualityControlItem) => {
         const existingItems = activeControl?.items || [];
-        const index = existingItems.findIndex(i => i.id === item.id);
-        
+        const index = existingItems.findIndex((i) => i.id === item.id);
+
         let newItems;
         if (index > -1) {
             newItems = [...existingItems];
@@ -147,11 +174,11 @@ export const useQuality = () => {
         } else {
             newItems = [...existingItems, item];
         }
-        
+
         setActiveControl({
             ...activeControl,
-            items: newItems
-        } as import('@domain/types/quality').ActiveQualityControl);
+            items: newItems,
+        });
     };
 
     /**
@@ -159,31 +186,43 @@ export const useQuality = () => {
      */
     const submitControl = async () => {
         if (!activeControl) return null;
-        
+
         try {
             // 👑 Transform QualityControl into Sovereign ReceptionData Contract
-            const receptionData: import('@domain/schemas/haccp').ReceptionData = {
+            const receptionData: ReceptionData = {
                 deliveryId: activeControl.delivery?.id || 'manual',
                 supplierName: activeControl.supplier_name,
                 truckTemp: activeControl.delivery_conditions.vehicle_temperature.measured,
-                hygieneStatus: (activeControl.delivery_conditions.vehicle_cleanliness === 'not_checked' ? 'acceptable' : activeControl.delivery_conditions.vehicle_cleanliness) as 'dirty' | 'clean' | 'acceptable',
-                itemsChecked: activeControl.items.map(item => {
-                    const isOk = item.decision === 'accepted' || item.decision === 'accepted_reservation';
+                hygieneStatus: (activeControl.delivery_conditions.vehicle_cleanliness ===
+                'not_checked'
+                    ? 'acceptable'
+                    : activeControl.delivery_conditions.vehicle_cleanliness) as
+                    | 'dirty'
+                    | 'clean'
+                    | 'acceptable',
+                itemsChecked: activeControl.items.map((item) => {
+                    const isOk =
+                        item.decision === 'accepted' || item.decision === 'accepted_reservation';
                     const isWarning = item.decision === 'partially_accepted';
-                    
+
                     return {
                         id: item.product_id,
-                        name: item.product_name,
-                        status: (isOk ? 'ok' : (isWarning ? 'warning' : 'rejected')) as 'warning' | 'rejected' | 'ok',
+                        name: item.product_name || 'PRODUIT_INCONNU',
+                        status: (isOk ? 'ok' : isWarning ? 'warning' : 'rejected') as
+                            | 'warning'
+                            | 'rejected'
+                            | 'ok',
                         quantity: item.quantity_delivered,
-                        temp: item.checks.temperature.performed ? item.checks.temperature.measured : undefined
+                        temp: item.checks.temperature.performed
+                            ? item.checks.temperature.measured
+                            : undefined,
                     };
                 }),
-                validatedBy: activeControl.controller_name || 'unknown'
+                validatedBy: activeControl.controller_name || 'unknown',
             };
 
             const result = await QualityEngine.validateReception(receptionData, tenantId);
-            
+
             // 🏛️ Sovereign Session Cleanup (Zero Debt)
             setActiveControl({
                 id: IDService.generateId('qc'),
@@ -205,7 +244,7 @@ export const useQuality = () => {
                     vehicle_temperature: { compliant: true, measured: 0 },
                     vehicle_cleanliness: 'not_checked',
                     packaging_integrity: 'intact',
-                    delivery_time_compliant: true
+                    delivery_time_compliant: true,
                 },
                 signature: { captured: false, data: '', signer_name: '' },
                 summary: {
@@ -215,18 +254,18 @@ export const useQuality = () => {
                     temperature_issues: 0,
                     visual_issues: 0,
                     overall_status: 'pass',
-                    supplier_score_impact: 0
+                    supplier_score_impact: 0,
                 },
                 metadata: {
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString(),
                     synced: false,
-                    fingerprint: ''
-                }
-            } as import('@domain/types/quality').ActiveQualityControl);
+                    fingerprint: '',
+                },
+            });
             setSelectedDeliveryId(null);
             setStep(1);
-            
+
             return result;
         } catch (error) {
             logger.error(`[useQuality] Submission failed:`, error);
@@ -245,12 +284,12 @@ export const useQuality = () => {
         deliveries,
         selectedDeliveryId,
         step,
-        
+
         // Actions
         selectDeliveryForControl,
         updateControlItem,
         submitControl,
         setStep,
-        setActiveControl
+        setActiveControl,
     };
 };

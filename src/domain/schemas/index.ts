@@ -8,7 +8,7 @@ export * from './accounting';
 export * from './haccp';
 export * from './hr';
 export * from './inventory';
+export * from './modules';
 export * from './orders';
 export * from './quality';
 export * from './users';
-export * from './modules';

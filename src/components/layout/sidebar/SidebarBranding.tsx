@@ -3,9 +3,9 @@
 import { motion, Variants } from "framer-motion";
 import { ChevronRight, ChevronLeft, X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from "@/store/fleetAtoms";
+import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 
 interface SidebarBrandingProps {
     isSidebarCollapsed: boolean;

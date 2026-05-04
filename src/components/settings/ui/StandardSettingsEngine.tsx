@@ -10,7 +10,8 @@ import { GlassInput } from '@/components/shared/atomic/GlassInput';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue, SovereignField } from '@/shared/nexus-contract';
+import { GlobalSettings } from '@/shared/nexus/contracts/settings';
 
 
 export interface SettingsOption {
@@ -31,17 +32,17 @@ export interface SettingsField {
 
 }
 
-export interface SettingsSchema {
-    id: string;
+export interface SettingsSchema<K extends keyof GlobalSettings = keyof GlobalSettings> {
+    id: K;
     title?: string;
     fields: SettingsField[];
 }
 
-interface StandardSettingsEngineProps {
-    schema: SettingsSchema; 
+interface StandardSettingsEngineProps<K extends keyof GlobalSettings> {
+    schema: SettingsSchema<K>; 
 }
 
-export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ schema }) => {
+export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema }: StandardSettingsEngineProps<K>) => {
     const { settings, updateConfig } = useSettings();
     const schemaKey = schema.id;
     
@@ -64,11 +65,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
         return original !== current;
     }, [localData, settings, schemaKey]);
 
-    const handleChange = (fieldId: string, value: SovereignValue) => {
-
-        setLocalData((prev) => ({
+    const handleChange = (id: string, value: any) => {
+        setLocalData(prev => ({
             ...prev,
-            [fieldId]: value
+            [id]: SharedKernel.Sovereign.wrap(value)
         }));
     };
 
@@ -79,10 +79,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             // Pour l'instant on se concentre sur le sync
             
             // 2. Synchronisation via le Kernel (Assainissement + Persistence)
-            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as import('@/shared/nexus-contract').SovereignSchemaField[]);
+            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as unknown as import('@/shared/nexus-contract').SovereignSchemaField[]);
             
             // 3. Mise à jour via le Context (Global State + Firestore)
-            await updateConfig(schemaKey, sanitizedData);
+            await updateConfig(schemaKey, sanitizedData as GlobalSettings[K]);
             
             toast.success("Synchronisation Nexus-Sync réussie");
         } catch (error) {
@@ -117,7 +117,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                 return (
                     <GlassInput
                         label={field.label}
-                        value={(value as string) || ''}
+                        value={SharedKernel.castString(value)}
                         onChange={(e) => onChange(e.target.value)}
                         placeholder={`Saisir ${field.label.toLowerCase()}...`}
                     />
@@ -128,7 +128,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <span className="text-sm font-medium text-slate-300">{field.label}</span>
                         <textarea
                             className="w-full bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-3 text-slate-100 outline-none transition-all focus:border-amber-500/50 min-h-[100px]"
-                            value={(value as string) || ''}
+                            value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         />
                     </div>
@@ -143,7 +143,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                     <GlassInput
                         type="number"
                         label={field.label}
-                        value={(displayValue as number) || 0}
+                        value={SharedKernel.castNumber(value)}
                         onChange={(e) => onChange(parseFloat(e.target.value))}
                         icon={field.type === 'percentage' ? <span className="text-xs text-amber-500 font-bold">%</span> : null}
                     />
@@ -154,12 +154,12 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <span className="text-sm font-medium text-slate-300">{field.label}</span>
                         <select
                             className="w-full bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-amber-500/50"
-                            value={(value as string) || ''}
+                            value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         >
                             <option value="" className="bg-slate-900">Sélectionner...</option>
                             {field.options?.map((opt: SettingsOption) => (
-                                <option key={(opt.value as string)} value={(opt.value as string)} className="bg-slate-900">{opt.label}</option>
+                                <option key={SharedKernel.castString(opt.value)} value={SharedKernel.castString(opt.value)} className="bg-slate-900">{opt.label}</option>
                             ))}
                         </select>
                     </div>
@@ -170,7 +170,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         <span className="text-sm font-medium text-slate-300">{field.label}</span>
                         <input 
                             type="color" 
-                            value={(value as string) || '#ffffff'} 
+                            value={SharedKernel.castString(value)} 
                             onChange={(e) => onChange(e.target.value)}
                             className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-none"
                         />
@@ -288,7 +288,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >
-                            {renderField(field, (localData as Record<string, SovereignValue>)[field.id || field.key!], (val: SovereignValue) => handleChange(field.id || field.key!, val))}
+                            {renderField(field, (localData as Record<string, SovereignField>)[field.id], (val: any) => handleChange(field.id, val))}
 
                         </motion.div>
                     ))}

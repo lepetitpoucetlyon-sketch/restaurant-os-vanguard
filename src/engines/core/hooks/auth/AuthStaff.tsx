@@ -10,13 +10,12 @@ import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
 
-const firebaseFunctions = getFunctions(firebaseApp);
-const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
-    firebaseFunctions,
-    'listLoginProfiles',
-);
-
 export function useAuthStaff(firebaseUserId: string | null, sessionUserId: string | null) {
+    const firebaseFunctions = getFunctions(firebaseApp);
+    const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
+        firebaseFunctions,
+        'listLoginProfiles',
+    );
     const [users, setUsers] = useState<User[]>([]);
     const [isUsersLoaded, setIsUsersLoaded] = useState(false);
 

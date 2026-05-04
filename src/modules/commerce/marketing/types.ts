@@ -2,19 +2,7 @@
  * MARKETING & REPUTATION TYPES
  */
 
-export interface PromoCode {
-    id: string;
-    code: string;
-    type: 'fixed' | 'percentage' | 'bogo';
-    value: number;
-    minOrderAmountInCents?: number;
-    maxDiscountInCents?: number;
-    startDate: string;
-    endDate: string;
-    usageLimit?: number;
-    currentUsage: number;
-    isActive: boolean;
-}
+export type PromoCode = import('@nexus/contracts/marketing.types').PromoCode;
 
 export interface MarketingCampaign {
     id: string;

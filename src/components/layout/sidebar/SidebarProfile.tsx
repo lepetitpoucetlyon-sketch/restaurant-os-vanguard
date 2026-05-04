@@ -3,7 +3,7 @@
 import { motion, Variants } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { empireAudit } from "@/lib/audit";
 

@@ -25,11 +25,15 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { useFleet } from "@/context/FleetContext";
-import { ProvisioningWizard } from '@modules/infrastructure';
-import { TenantOrchestrator } from '@modules/infrastructure';
+import { 
+    MCCTreasury, 
+    DeploymentEngine, 
+    ZeusDashboard,
+    TenantOrchestrator,
+    ProvisioningWizard
+} from '@infrastructure';
 import { EmpireInstance } from '@domain/types/empire';
 import { FleetInsight } from '@domain/services/MacroBrain';
-import { ZeusDashboard } from '@modules/infrastructure';
 
 export default function MasterConsolePage() {
   const { 
@@ -409,7 +413,7 @@ export default function MasterConsolePage() {
         {isWizardOpen && (
             <ProvisioningWizard 
                 onClose={() => setIsWizardOpen(false)} 
-                onSuccess={(newInstance) => {
+                onSuccess={(newInstance: EmpireInstance) => {
                     const sovereignInstance = {
                         ...newInstance,
                         updatedAt: new Date().toISOString()

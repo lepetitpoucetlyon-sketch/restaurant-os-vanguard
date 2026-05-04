@@ -68,8 +68,12 @@ export default function HoursSettings() {
         setServiceDraft(null);
     };
 
-    const handleAddClosedPeriod = async (period: Omit<ClosedPeriod, 'id' | 'isAnnual'>) => {
-        await addClosedPeriod({ ...period, isAnnual: false });
+    const handleAddClosedPeriod = async (period: Omit<ClosedPeriod, 'id'>) => {
+        await addClosedPeriod({ 
+            ...period, 
+            id: `CP-${Date.now()}`,
+            isAnnual: (period as any).isAnnual ?? false 
+        } as ClosedPeriod);
     };
 
     return (

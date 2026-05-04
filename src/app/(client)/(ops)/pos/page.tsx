@@ -15,7 +15,7 @@ import { LucideIcon, ShoppingCart, Plus, ArrowLeft, MoreHorizontal, LayoutGrid, 
 import { useIsMobile } from "@/hooks";
 import { fabVariants, mobileSpring } from "@/lib/motion";
 import { BottomSheet } from "@ui/BottomSheet";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { usePOSController } from "@modules/ops";
@@ -62,7 +62,7 @@ export default function POSPage() {
         handleAddToCart, handleUpdateQuantity, handleClearCart,
         handleSendToKitchen, handlePaymentComplete,
         handleCheckout, handlePaySplit
-    } = (usePOSController() as any);
+    } = usePOSController();
 
     const isRushMode = ambiance === 'RUSH_SPEED';
 

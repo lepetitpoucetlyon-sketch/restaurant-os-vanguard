@@ -29,10 +29,10 @@ import { Button } from "@ui/button";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useIsMobile } from "@/hooks";
 import { kpiContainerVariants, kpiCardVariants, fadeInUp, staggerContainer } from "@/lib/motion";
@@ -182,7 +182,7 @@ export default function Home() {
   }, [todayOrders]);
 
   // C3 FIX: Real service activity from tables
-  const activeTables = tables.filter(t: any => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length;
+  const activeTables = tables.filter((t: any) => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length;
   const totalTables = tables.length;
   const serviceRate = totalTables > 0 ? Math.round((activeTables / totalTables) * 100) : 0;
   const occupancyRate = serviceRate;

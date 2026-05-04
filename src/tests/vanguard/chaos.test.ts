@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import './mocks';
 import { ChaosMonkey } from '@domain/services/ChaosMonkey';
 import { createStore } from 'jotai';
-import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
+import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
 import { type Order } from '@nexus/contracts';
 import { type NexusNode } from '@/store/nexusNodeFactory';
 
