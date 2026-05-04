@@ -22,6 +22,7 @@ import { genomeValidator } from '@domain/services/GenomeValidator';
 import { ImmunityAuditLogger } from '@/lib/services/ImmunityAuditLogger';
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { EmpireInstance } from '@domain/types/empire';
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 
 import { ordersNodeAtom, tablesNodeAtom } from '@/store/pillars/ops';
 import { 
