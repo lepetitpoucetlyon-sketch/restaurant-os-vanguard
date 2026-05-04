@@ -62,11 +62,16 @@ export interface CRM extends SovereignNode {
 
 // Quote moved to master nexus-internal-mapper.ts
 
-export interface MarketingCampaign extends SovereignNode {
-    name: string;
-    status: 'active' | 'paused' | 'scheduled' | 'completed';
-    budgetInCents: number;
+export interface Campaign extends SovereignNode {
+    title: string;
+    status: 'draft' | 'active' | 'paused' | 'completed' | 'archived' | 'scheduled';
+    budget: number;
+    budgetInCents?: number;
     spentInCents: number;
+    startDate?: string;
+    endDate?: string;
+    targetAudience?: string;
+    channels?: string[];
 }
 
 export interface PromoCode extends SovereignNode {

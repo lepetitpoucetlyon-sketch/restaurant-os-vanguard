@@ -5,9 +5,9 @@ import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode } fro
 import { NexusNode } from '@/store/base';
 import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
 import { 
-  Table, Order, Product, Recipe, Reservation, Quote, Campaign,
-  isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign,
-  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup
+  Table, Order, Product, Recipe, Reservation, Quote, Campaign, JournalEntry, Category,
+  isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isCategory,
+  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup, toJournalEntry, toCategory
 } from '@nexus/contracts/nexus-internal-mapper';
 import type { Ingredient } from '@nexus/contracts/logistics';
 import { SovereignMath } from '@shared/services/SovereignMath';
@@ -236,6 +236,14 @@ const createSovereignHook = <T,>(
                 const sanitized = sanitizeToSovereign(dataToAdd as object);
                 const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}`;
                 await Nexus.adapter.create(path, { ...sanitized, updatedAt: new Date().toISOString() });
+            },
+            update: async (id: string, dataToUpdate: Partial<SovereignNode>) => {
+                const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}/${id}`;
+                await Nexus.adapter.update(path, { ...dataToUpdate, updatedAt: new Date().toISOString() });
+            },
+            remove: async (id: string) => {
+                const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}/${id}`;
+                await Nexus.adapter.delete(path);
             }
         };
     };
@@ -564,8 +572,8 @@ export const useKitchen = () => {
 // 🛒 usePOSController is now imported from @modules/ops/pos
 
 export const useProducts = createSovereignHook(productsNodeAtom, OperationalIdentity.RESOURCES, toProduct);
-export const useCategories = createSovereignHook(categoriesNodeAtom, OperationalIdentity.RESOURCES);
-export const useFiscal = createSovereignHook(fiscalLedgerNodeAtom, OperationalIdentity.COMPLIANCE);
+export const useCategories = createSovereignHook(categoriesNodeAtom, OperationalIdentity.RESOURCES, toCategory);
+export const useFiscal = createSovereignHook(fiscalLedgerNodeAtom, OperationalIdentity.COMPLIANCE, toJournalEntry);
 
 // 🥫 useInventory is now imported from @modules/logistics
 export { useInventory };

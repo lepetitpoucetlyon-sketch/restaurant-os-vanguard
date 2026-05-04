@@ -89,14 +89,14 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                 <span className="text-[11px] font-black uppercase text-zinc-500 tracking-[0.3em] block mb-2">Prép.</span>
                                 <div className="flex items-center gap-3">
                                     <Clock className="w-5 h-5 text-accent" />
-                                    <span className="text-xl font-serif font-black transition-colors text-black">{recipe.prepTime || 20} MIN</span>
+                                    <span className="text-xl font-serif font-black transition-colors text-black">{recipe.preparationTimeMinutes || recipe.prepTime || 20} MIN</span>
                                 </div>
                             </div>
                             <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-black/5 border-black/5">
                                 <span className="text-[11px] font-black uppercase text-zinc-500 tracking-[0.3em] block mb-2">Service</span>
                                 <div className="flex items-center gap-3">
                                     <Flame className="w-5 h-5 text-error" />
-                                    <span className="text-xl font-serif font-black uppercase text-[15px] transition-colors text-black">{recipe.difficulty || 'MOYEN'}</span>
+                                    <span className="text-xl font-serif font-black uppercase text-[15px] transition-colors text-black">{String(recipe.difficulty || 'MOYEN')}</span>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +182,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                 viewport={{ once: true, margin: "-100px" }}
                                 className="space-y-16"
                             >
-                                {(recipe.steps || []).map((step: RecipeStep, idx: number) => (
+                                {(recipe.recipeSteps || recipe.steps || []).map((step: any, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         variants={staggerItem}

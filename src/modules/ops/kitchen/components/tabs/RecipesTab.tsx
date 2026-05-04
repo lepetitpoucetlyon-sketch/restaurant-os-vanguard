@@ -129,7 +129,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                 <div className="h-32 w-full flex items-center justify-center bg-gradient-to-br from-bg-tertiary/30 to-bg-tertiary/10 relative">
                                     <div
                                         className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
-                                        style={{ backgroundColor: recipe.color || '#C5A059' }}
+                                        style={{ backgroundColor: (recipe.color as any) || '#C5A059' }}
                                     >
                                         <Book strokeWidth={1.5} className="w-8 h-8 text-white" />
                                     </div>

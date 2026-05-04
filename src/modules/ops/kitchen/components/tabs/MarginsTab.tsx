@@ -150,7 +150,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                                 <div>
                                                     <p className="font-serif font-black text-lg text-text-primary group-hover:text-accent transition-colors tracking-tight">{recipe.name}</p>
                                                     <div className="flex items-center gap-2 mt-1">
-                                                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: recipe.color }}></span>
+                                                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: recipe.color as any }}></span>
                                                         <p className="text-[9px] text-text-muted uppercase tracking-[0.2em] font-bold">{recipe.prepTime} MIN PREP</p>
                                                     </div>
                                                 </div>

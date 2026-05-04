@@ -150,7 +150,7 @@ export interface RecipeContextType {
 
 }
 
-export interface Category {
+export interface Category extends SovereignNode {
     id: string;
     name: string;
     color: string;

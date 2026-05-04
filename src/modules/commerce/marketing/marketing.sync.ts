@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { 
     SEOProfile, 
-    MarketingCampaign, 
+    Campaign, 
     SocialAccount, 
     Quote, 
     Delivery 
@@ -104,7 +104,7 @@ export const MarketingSyncService = {
     // 2. CAMPAIGNS SYNC
     this.private_listeners.marketing = Nexus.adapter.onSnapshot(
         path('marketingCampaigns'),
-        (data: MarketingCampaign[]) => {
+        (data: Campaign[]) => {
         },
         {
           onError: (error) => logger.error('[MarketingSync] Marketing Sync Failed', error)

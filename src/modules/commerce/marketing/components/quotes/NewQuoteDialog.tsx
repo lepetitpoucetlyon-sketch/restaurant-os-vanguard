@@ -23,7 +23,7 @@ import { Modal } from '@ui/Modal';
 import { PremiumSelect } from '@ui/PremiumSelect';
 import { useInventory, useQuotes, useCRM } from '@/engines/ops/NexusOpsProvider';
 import { QuoteLine, QuoteLineType } from '@modules/commerce/marketing/types';
-import { Product } from '@nexus/contracts';
+import { Product, Quote, Customer } from '@nexus/contracts';
 import { StockItem } from '@nexus/contracts/logistics';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
@@ -127,20 +127,25 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
         setIsSaving(true);
         try {
-            const quoteData = {
-                crmId: selectedCRM?.id || 'ORPHAN', // CRM LINKAGE ESTABLISHED
-                crmName,
-                crmEmail,
-                subject,
+            const quoteData: Partial<Quote> = {
+                customerId: selectedCRM?.id || 'ORPHAN',
+                customerName: crmName,
+                title: subject,
                 items: lines.map(l => ({
                     id: l.id!,
                     name: l.designation!,
                     quantity: l.quantity || 1,
-                    price: l.unitPriceHTInCents || 0
+                    priceInCents: l.unitPriceHTInCents || 0
                 })),
-                total: totals.totalTTCInCents,
-                validTo: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                notes: `Devis généré via Nexus B2B Engine. Objet: ${subject}`
+                amountInCents: totals.totalTTCInCents,
+                validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                status: 'draft',
+                totals: {
+                    totalHTInCents: totals.totalHTInCents,
+                    totalTTCInCents: totals.totalTTCInCents,
+                    totalTaxInCents: totals.totalVATInCents,
+                    totalDiscountInCents: 0
+                }
             };
 
             await createQuote(quoteData);

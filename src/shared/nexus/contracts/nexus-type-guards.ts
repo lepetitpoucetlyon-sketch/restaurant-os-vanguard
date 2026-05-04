@@ -1,7 +1,15 @@
 import { SovereignNode } from '@/shared/nexus-contract';
-import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group } from './nexus-business.types';
+import type { Table, Order, Reservation, Floor, Zone } from './ops.types';
+import type { Product, Quote, Group } from './commerce.types';
+import type { Campaign } from './marketing.types';
+import type { LegalInvoice, JournalEntry } from './finance.types';
 import type { Customer, CRM_Record } from './customer.types';
-import type { Ingredient } from './logistics';
+import type { Ingredient, Recipe } from './logistics';
+import type { Category } from './common.types';
+
+export function isCategory(node: SovereignNode): node is Category {
+    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.name === 'string';
+}
 
 export function isTable(node: SovereignNode): node is Table {
     return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.status === 'string' && typeof node.number === 'string' && typeof node.seats === 'number';
@@ -57,4 +65,8 @@ export function isCRMRecord(node: SovereignNode): node is CRM_Record {
 
 export function isGroup(node: SovereignNode): node is Group {
     return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.name === 'string';
+}
+
+export function isJournalEntry(node: SovereignNode): node is JournalEntry {
+    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof (node as JournalEntry).pieceNumber === 'string';
 }
