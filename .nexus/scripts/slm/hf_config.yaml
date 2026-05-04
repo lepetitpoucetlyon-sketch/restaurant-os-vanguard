@@ -1,0 +1,19 @@
+# Configuration de fine-tuning Hugging Face (LoRA) pour Restaurant OS SLM
+
+dataset: scripts/slm/dataset.jsonl
+model_id: "microsoft/Phi-3-mini-4k-instruct" # Suggéré pour sa légèreté et performance sur le code
+learning_rate: 2e-4
+num_epochs: 3
+batch_size: 4
+block_size: 1024
+trainer: "sft" # Supervised Fine-Tuning
+peft: true
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+# Hugging Face Hub (remplacer par votre compte)
+push_to_hub: true
+repo_id: "votre-username/restaurant-os-slm"
+private: true

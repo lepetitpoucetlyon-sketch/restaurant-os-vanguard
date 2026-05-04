@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "Restaurant OS",
+    "tagline": "Premium Intelligence",
+    "description": "The next generation operating system for modern restaurants",
+    "supportEmail": "contact@restaurant-os.app",
+    "supportPhone": "+33 1 23 45 67 89",
+    "defaultDomain": "restaurant-os-web.web.app"
+  },
+  "restaurant": {
+    "name": "Le Restaurant OS",
+    "slogan": "Excellence Opérationnelle",
+    "cuisine": "Française",
+    "category": "bistrot",
+    "headChef": "Paul",
+    "owner": "Mohammed"
+  },
+  "theme": {
+    "primaryColor": "#C5A059",
+    "secondaryColor": "#1C1C1C"
+  },
+  "firebase": {
+    "projectId": "kitchen-os-gastro",
+    "appId": "1:751200716315:web:14f411b2cf6a36a9795abe",
+    "storageBucket": "kitchen-os-gastro.firebasestorage.app",
+    "apiKey": "AIzaSyCbHj4syb-2mpv8SxUEp5TkBv2kGvPdOf0",
+    "authDomain": "kitchen-os-gastro.firebaseapp.com",
+    "messagingSenderId": "751200716315"
+  },
+  "ai": {
+    "geminiApiKey": "PLACEHOLDER_MASTER_GEMINI_KEY"
+  }
+}

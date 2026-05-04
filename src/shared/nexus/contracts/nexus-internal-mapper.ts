@@ -5,17 +5,17 @@
  */
 
 import { SovereignNode } from '@/shared/nexus-contract';
-import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId } from './nexus-business.types';
+import type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId } from './nexus-business.types';
 import type { Customer, CRM_Record } from './customer.types';
 import type { Ingredient } from './logistics';
 import { translateError } from './nexus-error-mapper';
 import { canAccessModule } from './nexus-auth-mapper';
-import { toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer } from './nexus-type-converters';
-import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord } from './nexus-type-guards';
+import { toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup } from './nexus-type-converters';
+import { isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord, isGroup } from './nexus-type-guards';
 
 // --- Re-exports to maintain backward compatibility ---
-export type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId, Customer, CRM_Record };
-export { translateError, canAccessModule, toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord };
+export type { Table, Order, Product, Recipe, Reservation, Quote, Campaign, Floor, Zone, LegalInvoice, Group, OrderStatus, TableStatus, OrderItem, OrderItemModification, Option, OptionGroup, RecipeIngredient, ModuleId, Customer, CRM_Record };
+export { translateError, canAccessModule, toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup, isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isFloor, isZone, isLegalInvoice, isCustomer, isCRMRecord, isGroup };
 
 /**
  * 🏛️ NEXUS INTERNAL MAPPER - Static Interface
@@ -57,6 +57,9 @@ export class NexusInternalMapper {
     }
     static mapToCustomer(node: SovereignNode): Customer {
         return toCustomer(node);
+    }
+    static mapToGroup(node: SovereignNode): Group {
+        return toGroup(node);
     }
     static translateError = translateError;
 }

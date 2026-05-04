@@ -7,7 +7,7 @@ import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
 import { 
   Table, Order, Product, Recipe, Reservation, Quote, Campaign,
   isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign,
-  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone
+  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup
 } from '@nexus/contracts/nexus-internal-mapper';
 import type { Ingredient } from '@nexus/contracts/logistics';
 import { SovereignMath } from '@shared/services/SovereignMath';
@@ -453,7 +453,7 @@ export const useRecipes = () => {
         }
     };
 };
-export const useGroups = createSovereignHook(groupsNodeAtom, OperationalIdentity.RELATIONS);
+export const useGroups = createSovereignHook(groupsNodeAtom, OperationalIdentity.RELATIONS, toGroup);
 export const useMarketing = () => {
     const base = createSovereignHook(marketingCampaignsNodeAtom, OperationalIdentity.RELATIONS, toCampaign)();
     const tenantId = useAtomValue(tenantIdAtom);
