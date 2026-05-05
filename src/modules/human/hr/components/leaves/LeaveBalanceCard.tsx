@@ -64,7 +64,7 @@ export function LeaveBalanceCard({ balance }: LeaveBalanceCardProps) {
                         percentage > 50 ? 'bg-emerald-500' : percentage > 25 ? 'bg-amber-500' : 'bg-rose-500'
                     )}
                 >
-                    <div className="absolute inset-0 bg-white/20 w-full h-full animate-shimmer" />
+                    <div className="absolute inset-0 bg-[--color-surface-primary]/20 w-full h-full animate-shimmer" />
                 </motion.div>
             </div>
         </motion.div>

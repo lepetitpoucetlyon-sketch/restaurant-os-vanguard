@@ -99,7 +99,7 @@ export function NewRequestModal({
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-10 h-10 rounded-full bg-white border border-border hover:bg-bg-secondary transition-colors flex items-center justify-center text-text-primary shadow-sm"
+                            className="w-10 h-10 rounded-full bg-[--color-surface-primary] border border-border hover:bg-bg-secondary transition-colors flex items-center justify-center text-text-primary shadow-sm"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -139,7 +139,7 @@ export function NewRequestModal({
                                                     "p-5 rounded-[2rem] border text-left transition-all relative overflow-hidden group h-full flex flex-col justify-between",
                                                     isSelected
                                                         ? "border-accent bg-bg-secondary shadow-lg scale-[1.02]"
-                                                        : "border-border bg-white hover:border-accent/30 hover:bg-bg-secondary/50"
+                                                        : "border-border bg-[--color-surface-primary] hover:border-accent/30 hover:bg-bg-secondary/50"
                                                 )}
                                             >
                                                 {/* Selected Indicator */}
@@ -152,7 +152,7 @@ export function NewRequestModal({
                                                 <div className="relative z-10 space-y-4">
                                                     <div className={cn(
                                                         "w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-500",
-                                                        isSelected ? "bg-white text-accent shadow-premium scale-110" : "bg-bg-secondary text-text-muted group-hover:scale-105"
+                                                        isSelected ? "bg-[--color-surface-primary] text-accent shadow-premium scale-110" : "bg-bg-secondary text-text-muted group-hover:scale-105"
                                                     )}>
                                                         {icon}
                                                     </div>
@@ -267,7 +267,7 @@ export function NewRequestModal({
                                         onChange={e => setReason(e.target.value)}
                                         placeholder="Précisez le contexte de votre demande..."
                                         rows={4}
-                                        className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border text-text-primary font-serif placeholder:font-sans placeholder:text-text-muted/50 focus:bg-white focus:border-accent focus:ring-4 focus:ring-accent/5 transition-all outline-none resize-none shadow-inner"
+                                        className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border text-text-primary font-serif placeholder:font-sans placeholder:text-text-muted/50 focus:bg-[--color-surface-primary] focus:border-accent focus:ring-4 focus:ring-accent/5 transition-all outline-none resize-none shadow-inner"
                                     />
                                 </div>
 
@@ -290,7 +290,7 @@ export function NewRequestModal({
                                         </div>
                                         <div className="flex justify-between items-center text-sm">
                                             <span className="text-text-muted">Volume</span>
-                                            <span className="text-text-primary font-bold bg-white px-2 py-0.5 rounded border border-border shadow-sm">{workingDays} jours</span>
+                                            <span className="text-text-primary font-bold bg-[--color-surface-primary] px-2 py-0.5 rounded border border-border shadow-sm">{workingDays} jours</span>
                                         </div>
                                     </div>
                                 </div>

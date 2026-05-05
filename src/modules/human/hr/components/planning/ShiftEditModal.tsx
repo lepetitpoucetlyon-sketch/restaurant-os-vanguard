@@ -105,7 +105,7 @@ export function ShiftEditModal({
                 <div className="bg-[#111] p-10 text-white relative overflow-hidden">
                     <div className="flex items-center justify-between relative z-10">
                         <div className="flex items-center gap-6">
-                            <div className="w-20 h-20 rounded-[2rem] bg-white/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
+                            <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary]/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
                                 {user.avatar ? (
                                     <img
                                         src={user.avatar}
@@ -129,7 +129,7 @@ export function ShiftEditModal({
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all"
+                            className="w-12 h-12 rounded-full bg-[--color-surface-primary]/5 hover:bg-[--color-surface-primary]/10 flex items-center justify-center transition-all"
                         >
                             <X className="w-5 h-5 text-white/50" />
                         </button>
@@ -156,7 +156,7 @@ export function ShiftEditModal({
                                         "p-6 rounded-[2rem] border transition-all group flex flex-col items-center",
                                         formData.type === type.id
                                             ? "border-accent bg-accent text-bg-primary shadow-2xl"
-                                            : "border-white/5 bg-white/5 text-white hover:border-accent/30"
+                                            : "border-white/5 bg-[--color-surface-primary]/5 text-white hover:border-accent/30"
                                     )}
                                 >
                                     <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">
@@ -186,7 +186,7 @@ export function ShiftEditModal({
                                             startTime: e.target.value,
                                         }))
                                     }
-                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-white/5 border border-white/10 text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
+                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-white/10 text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -205,7 +205,7 @@ export function ShiftEditModal({
                                             endTime: e.target.value,
                                         }))
                                     }
-                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-white/5 border border-white/10 text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
+                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-white/10 text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -224,7 +224,7 @@ export function ShiftEditModal({
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-10 bg-white border-t border-neutral-50 flex items-center justify-between gap-6">
+                <div className="p-10 bg-[--color-surface-primary] border-t border-neutral-50 flex items-center justify-between gap-6">
                     {!isNew ? (
                         <button
                             onClick={() => {

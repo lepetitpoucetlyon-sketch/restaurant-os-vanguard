@@ -244,7 +244,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                                 <Button 
                                     variant="outline" 
                                     size="sm" 
-                                    className="bg-white/10 text-white border-white/20 hover:bg-white/20"
+                                    className="bg-[--color-surface-primary]/10 text-white border-white/20 hover:bg-[--color-surface-primary]/20"
                                     onClick={() => setCvFileDraft(null)}
                                 >
                                     Remplacer
@@ -354,7 +354,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                         <CameraCapture onCapture={handleCapture} />
                         <button 
                             onClick={() => setIsCameraOpen(false)}
-                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all backdrop-blur-md z-10"
+                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 text-white flex items-center justify-center transition-all backdrop-blur-md z-10"
                         >
                             <X className="w-6 h-6" />
                         </button>

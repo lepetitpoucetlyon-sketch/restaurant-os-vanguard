@@ -50,7 +50,7 @@ export const BadgeControl: React.FC = () => {
     if (!user) return null;
 
     return (
-        <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-xl relative overflow-hidden group">
+        <div className="bg-[--color-surface-primary] dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-xl relative overflow-hidden group">
             {/* Background Aesthetic */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-accent/10 transition-colors" />
             
@@ -87,7 +87,7 @@ export const BadgeControl: React.FC = () => {
                         className={cn(
                             "h-14 px-8 rounded-xl font-bold uppercase tracking-widest text-[11px] transition-all duration-500 shadow-lg relative overflow-hidden",
                             isClockedIn 
-                                ? "bg-red-500 hover:bg-black text-white shadow-red-500/20" 
+                                ? "bg-[--color-status-error] hover:bg-black text-white shadow-red-500/20" 
                                 : "bg-accent hover:bg-black text-white shadow-accent/20"
                         )}
                     >
