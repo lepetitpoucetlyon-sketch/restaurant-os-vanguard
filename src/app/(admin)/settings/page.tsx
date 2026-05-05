@@ -80,10 +80,10 @@ const SETTINGS_CATEGORIES = [
 function SettingsLoading() {
     return (
         <div className="space-y-8 animate-pulse">
-            <div className="h-64 rounded-[2.5rem] bg-white/5" />
+            <div className="h-64 rounded-[2.5rem] bg-surface-card" />
             <div className="grid grid-cols-2 gap-8">
-                <div className="h-48 rounded-[2.5rem] bg-white/5" />
-                <div className="h-48 rounded-[2.5rem] bg-white/5" />
+                <div className="h-48 rounded-[2.5rem] bg-surface-card" />
+                <div className="h-48 rounded-[2.5rem] bg-surface-card" />
             </div>
         </div>
     );
@@ -96,7 +96,7 @@ function SettingsPlaceholder({ category }: { category: typeof SETTINGS_CATEGORIE
             <div className="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 bg-bg-tertiary border border-border">
                 <Icon className="w-12 h-12 text-text-muted" />
             </div>
-            <h3 className="text-2xl font-serif text-text-primary mb-2 italic">{category.label}</h3>
+            <h3 className="text-2xl font-brand text-text-primary mb-2 italic">{category.label}</h3>
             <p className="text-text-muted text-center max-w-sm font-medium">
                 Configuration du module bientôt disponible.<br />Implémentation en cours.
             </p>
@@ -176,7 +176,7 @@ export default function SettingsPage() {
     return (
         <div className="flex h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary overflow-hidden">
             {isMobile && !isNavCollapsed && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-20" onClick={() => setIsNavCollapsed(true)} />
+                <div className="fixed inset-0 bg-surface-bg backdrop-blur-sm z-20" onClick={() => setIsNavCollapsed(true)} />
             )}
 
             <main className="flex-1 flex overflow-hidden">
@@ -189,10 +189,10 @@ export default function SettingsPage() {
                         <AnimatePresence mode="wait">
                             {!isNavCollapsed && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+                                    <div className="w-10 h-10 rounded-xl bg-action-primary flex items-center justify-center shadow-lg shadow-accent/20">
                                         <LayoutGrid className="w-5 h-5 text-bg-primary" />
                                     </div>
-                                    <h2 className="text-xl font-serif text-text-primary tracking-tight italic">Paramètres</h2>
+                                    <h2 className="text-xl font-brand text-text-primary tracking-tight italic">Paramètres</h2>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -211,7 +211,7 @@ export default function SettingsPage() {
                                     onClick={() => { setActiveCategory(category.id); if (isMobile) setIsNavCollapsed(true); }}
                                     className={cn("w-full flex items-center gap-4 py-4 rounded-xl transition-all group", isNavCollapsed ? "justify-center px-0" : "px-5", isActive ? "bg-text-primary text-bg-primary shadow-xl" : "text-text-muted hover:bg-bg-tertiary")}
                                 >
-                                    <Icon className={cn("w-5 h-5", isActive ? "text-accent-gold" : "text-text-muted group-hover:text-text-primary")} strokeWidth={isActive ? 2 : 1.5} />
+                                    <Icon className={cn("w-5 h-5", isActive ? "text-action-primary" : "text-text-muted group-hover:text-text-primary")} strokeWidth={isActive ? 2 : 1.5} />
                                     {!isNavCollapsed && <span className="text-xs font-black uppercase tracking-widest">{category.label}</span>}
                                 </button>
                             );
@@ -223,8 +223,8 @@ export default function SettingsPage() {
                     <div className="p-6 md:p-10 pb-0 flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <p className="text-text-muted text-[10px] font-black uppercase tracking-widest mb-2">Intelligence Système</p>
-                            <PageHeaderWithDocs categoryId="settings" title="" className="text-2xl md:text-4xl font-serif text-text-primary uppercase italic">
-                                PARAMÈTRES <span className="text-border">/</span> <span className="text-accent">{activeConfig.label.toUpperCase()}</span>
+                            <PageHeaderWithDocs categoryId="settings" title="" className="text-2xl md:text-4xl font-brand text-text-primary uppercase italic">
+                                PARAMÈTRES <span className="text-border">/</span> <span className="text-action-primary">{activeConfig.label.toUpperCase()}</span>
                             </PageHeaderWithDocs>
                         </div>
                         <div className="flex items-center gap-4">
