@@ -61,7 +61,7 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                         <div className="absolute inset-0 bg-gradient-to-br from-text-primary/10 to-transparent opacity-20" />
                     </div>
                     <div>
-                        <h3 className="text-3xl font-serif italic text-text-primary tracking-tight mb-2">{section.title}</h3>
+                        <h3 className="text-3xl font-brand italic text-text-primary tracking-tight mb-2">{section.title}</h3>
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">{section.axes.length} Axes Stratégiques</p>
                     </div>
                 </div>
@@ -88,12 +88,12 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
 
                             <div className="grid gap-6">
                                 {section.axes.map((axis) => (
-                                    <div key={axis.id} className="p-8 bg-bg-primary/50 rounded-[2.5rem] border border-border/20 group hover:border-accent-gold/20 transition-all">
+                                    <div key={axis.id} className="p-8 bg-bg-primary/50 rounded-[2.5rem] border border-border/20 group hover:border-action-primary transition-all">
                                         <div className="flex items-start justify-between mb-6">
                                             <div>
                                                 <div className="flex items-center gap-4 mb-3">
-                                                    <span className="text-[10px] font-mono font-black text-accent-gold/60">{axis.id}</span>
-                                                    <h4 className="text-xl font-serif italic text-text-primary">{axis.title}</h4>
+                                                    <span className="text-[10px] font-mono font-black text-action-primary">{axis.id}</span>
+                                                    <h4 className="text-xl font-brand italic text-text-primary">{axis.title}</h4>
                                                 </div>
                                                 <p className="text-xs text-text-muted font-medium uppercase tracking-widest flex items-center gap-3">
                                                     <AlertTriangle className="w-4 h-4 text-error/40" />
@@ -106,10 +106,10 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                                                 onClick={() => copyPrompt(axis.prompt, axis.id)}
                                                 className="w-12 h-12 rounded-2xl bg-bg-secondary hover:bg-bg-tertiary shadow-soft border border-border/50"
                                             >
-                                                <Copy className="w-4 h-4 text-accent-gold/60" />
+                                                <Copy className="w-4 h-4 text-action-primary" />
                                             </Button>
                                         </div>
-                                        <div className="relative group/prompt overflow-hidden rounded-2xl bg-black/5 dark:bg-black/40 p-6 border border-border/10">
+                                        <div className="relative group/prompt overflow-hidden rounded-2xl bg-surface-bg dark:bg-surface-bg p-6 border border-border/10">
                                             <pre className="text-[11px] font-mono leading-relaxed text-text-muted/80 whitespace-pre-wrap">
                                                 {axis.prompt}
                                             </pre>
