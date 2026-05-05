@@ -7,6 +7,8 @@ import { TestimonialsSection } from './components/TestimonialsSection';
 import { CTASection } from './components/CTASection';
 import { LandingFooter } from './components/LandingFooter';
 
+import { getBrandAsset } from '@/shared/nexus/tokens/assets';
+
 export const metadata: Metadata = {
     title: "Restaurant OS | Le Système d'Exploitation Souverain pour la Restauration",
     description: "Le premier OS Local-First, Stateless et Grade X pour les restaurateurs exigeants. Automatisation, Intelligence Artificielle et Souveraineté totale.",
@@ -14,13 +16,16 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Restaurant OS - L'Empire Technologique",
         description: "Reprenez le contrôle total de votre restaurant avec une technologie indestructible.",
-        images: ['/images/vanguard-banner.jpg'],
+        images: [getBrandAsset('banner')],
+    },
+    icons: {
+        icon: getBrandAsset('favicon'),
     },
 };
 
 export default function LandingPage() {
     return (
-        <main className="bg-[#0a0a0a] min-h-screen overflow-x-hidden">
+        <main className="bg-surface-bg min-h-screen overflow-x-hidden">
             <LandingNavbar />
             <HeroSection />
             <FeaturesSection />

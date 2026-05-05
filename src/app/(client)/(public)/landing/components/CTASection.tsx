@@ -17,7 +17,7 @@ export function CTASection() {
                 transition={{ duration: 0.8 }}
                 className="relative z-10 max-w-4xl mx-auto text-center"
             >
-                <h2 className="text-4xl md:text-6xl font-serif font-semibold text-white mb-6">
+                <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
                     Prêt à transformer<br />votre établissement ?
                 </h2>
                 <p className="text-xl text-white/50 max-w-2xl mx-auto mb-12">

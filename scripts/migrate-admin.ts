@@ -6,17 +6,17 @@ import fs from 'fs';
  * 🛠️ MIGRATION SCRIPT - OPÉRATION DÉCAPAGE ADMIN
  */
 
-const TARGET_MODULE = process.argv[2];
+const TARGET_PATH = process.argv[2];
 
-if (!TARGET_MODULE) {
-    console.error("❌ Veuillez spécifier un module cible (ex: dashboard)");
+if (!TARGET_PATH) {
+    console.error("❌ Veuillez spécifier un chemin cible (ex: src/app/(admin)/dashboard)");
     process.exit(1);
 }
 
 const project = new Project();
-const searchPath = path.join(process.cwd(), 'src/app/(admin)', TARGET_MODULE);
+const searchPath = path.isAbsolute(TARGET_PATH) ? TARGET_PATH : path.join(process.cwd(), TARGET_PATH);
 
-console.log(`🔍 Scan du module : ${TARGET_MODULE} dans ${searchPath}`);
+console.log(`🔍 Scan du chemin : ${searchPath}`);
 
 function getAllFiles(dir: string, fileList: string[] = []): string[] {
     if (!fs.existsSync(dir)) return [];
@@ -142,5 +142,5 @@ project.getSourceFiles().forEach(sourceFile => {
     }
 });
 
-console.log(`\n🎉 Migration terminée pour le module ${TARGET_MODULE} !`);
+console.log(`\n🎉 Migration terminée pour le chemin ${TARGET_PATH} !`);
 console.log(`📊 Total remplacements : ${totalReplacements}`);

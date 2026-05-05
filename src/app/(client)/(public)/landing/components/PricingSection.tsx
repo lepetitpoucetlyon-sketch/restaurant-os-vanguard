@@ -21,7 +21,7 @@ export function PricingSection() {
                     className="text-center mb-20"
                 >
                     <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Tarifs</span>
-                    <h2 className="text-4xl md:text-6xl font-serif font-semibold text-white mb-6">
+                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
                         Investissez dans l'excellence
                     </h2>
                     <p className="text-xl text-white/50 max-w-2xl mx-auto">
@@ -43,7 +43,7 @@ export function PricingSection() {
                                 "relative rounded-3xl p-8 border transition-all duration-500",
                                 plan.highlighted
                                     ? "bg-gradient-to-b from-[#C9A227]/20 to-[#C9A227]/5 border-[#C9A227]/30 shadow-2xl shadow-[#C9A227]/10"
-                                    : "bg-white/5 border-white/10 hover:border-white/20"
+                                    : "bg-surface-card border-border-default hover:border-white/20"
                             )}
                         >
                             {plan.highlighted && (
@@ -78,7 +78,7 @@ export function PricingSection() {
                                     "w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all",
                                     plan.highlighted
                                         ? "bg-[#C9A227] text-black shadow-lg shadow-[#C9A227]/30"
-                                        : "bg-white/10 text-white hover:bg-white/20"
+                                        : "bg-surface-card text-white hover:bg-surface-card"
                                 )}
                             >
                                 {plan.cta}
