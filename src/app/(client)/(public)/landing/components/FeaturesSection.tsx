@@ -19,7 +19,7 @@ export function FeaturesSection() {
                     className="text-center mb-20"
                 >
                     <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Fonctionnalités</span>
-                    <h2 className="text-4xl md:text-6xl font-serif font-semibold text-white mb-6">
+                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
                         Tout ce dont vous avez besoin
                     </h2>
                     <p className="text-xl text-white/50 max-w-2xl mx-auto">
@@ -38,7 +38,7 @@ export function FeaturesSection() {
                             transition={{ duration: 0.6, delay: idx * 0.1 }}
                             whileHover={{ y: -10, scale: 1.02 }}
                             className={cn(
-                                "group relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-white/5 to-transparent cursor-pointer",
+                                "group relative rounded-3xl overflow-hidden border border-border-default bg-gradient-to-b from-white/5 to-transparent cursor-pointer",
                                 feature.size === "large" ? "md:col-span-2 md:row-span-2" : "",
                                 feature.size === "medium" ? "md:row-span-2" : ""
                             )}
@@ -57,12 +57,12 @@ export function FeaturesSection() {
                             {/* Content */}
                             <div className="relative z-10 p-8 h-full flex flex-col justify-end min-h-[300px]">
                                 <div
-                                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border border-white/10 backdrop-blur-sm transition-all duration-300 group-hover:scale-110"
+                                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border border-border-default backdrop-blur-sm transition-all duration-300 group-hover:scale-110"
                                     style={{ backgroundColor: `${feature.color}20` }}
                                 >
                                     <feature.icon className="w-7 h-7" style={{ color: feature.color }} />
                                 </div>
-                                <h3 className="text-2xl font-serif font-semibold text-white mb-3">{feature.title}</h3>
+                                <h3 className="text-2xl font-brand font-semibold text-white mb-3">{feature.title}</h3>
                                 <p className="text-white/50 leading-relaxed">{feature.description}</p>
 
                                 <div className="mt-6 flex items-center gap-2 text-[#C9A227] opacity-0 group-hover:opacity-100 transition-opacity">

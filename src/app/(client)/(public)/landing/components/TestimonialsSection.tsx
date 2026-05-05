@@ -18,7 +18,7 @@ export function TestimonialsSection() {
                     className="text-center mb-20"
                 >
                     <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Témoignages</span>
-                    <h2 className="text-4xl md:text-6xl font-serif font-semibold text-white mb-6">
+                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
                         Ils nous font confiance
                     </h2>
                 </motion.div>
@@ -32,7 +32,7 @@ export function TestimonialsSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: idx * 0.1 }}
-                            className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-[#C9A227]/30 transition-all duration-500"
+                            className="p-8 rounded-3xl bg-surface-card border border-border-default hover:border-[#C9A227]/30 transition-all duration-500"
                         >
                             {/* Stars */}
                             <div className="flex gap-1 mb-6">
