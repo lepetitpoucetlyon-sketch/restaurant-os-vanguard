@@ -57,8 +57,8 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
         setCustomAllergen("");
         setShowAllergenInput(false);
         const initialSelections: Record<string, string[]> = {};
-        product.optionGroups?.forEach(group => {
-            const defaults = group.options.filter(opt => opt.isDefault).map(opt => opt.id);
+        product.optionGroups?.forEach((group: OptionGroup) => {
+            const defaults = group.options.filter((opt: Option) => opt.isDefault).map((opt: Option) => opt.id);
             if (defaults.length > 0) {
                 initialSelections[group.id] = defaults;
             }
@@ -114,8 +114,8 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
     };
 
     const calculateTotal = () => {
-        let total = product.priceInCents;
-        product.optionGroups?.forEach(group => {
+        let total = (product as any).priceInMicrounits || (product as any).priceInCents * 10000;
+        product.optionGroups?.forEach((group: OptionGroup) => {
             const selectedIds = selections[group.id] || [];
             selectedIds.forEach(id => {
                 const option = group.options.find(opt => opt.id === id);
@@ -129,7 +129,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
     const isValid = () => {
         if (!product.optionGroups) return true;
-        return product.optionGroups.every(group => {
+        return product.optionGroups.every((group: OptionGroup) => {
             if (group.required) {
                 const selected = selections[group.id];
                 return selected && selected.length >= (group.minSelections || 1);
@@ -140,7 +140,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
     const handleAdd = () => {
         const selectedOptionsMap: Record<string, Option[]> = {};
-        product.optionGroups?.forEach(group => {
+        product.optionGroups?.forEach((group: OptionGroup) => {
             const selectedIds = selections[group.id] || [];
             if (selectedIds.length > 0) {
                 selectedOptionsMap[group.name] = group.options.filter(opt => selectedIds.includes(opt.id));
@@ -209,7 +209,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                         </div>
                         <div className="flex items-center gap-4">
                             <span className="text-3xl md:text-3xl font-serif font-black text-accent-gold italic drop-shadow-sm">
-                                {((product.priceInCents * priceMultiplier) / 100).toFixed(2)}€
+                                {(calculateTotal() / 1000000).toFixed(2)}€
                             </span>
                             <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/10">
                                 <button
@@ -229,7 +229,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
                         {/* Options Section */}
                         <div className="lg:col-span-12 space-y-12">
-                            {product.optionGroups?.map(group => (
+                            {product.optionGroups?.map((group: OptionGroup) => (
                                 <div key={group.id} className="space-y-6">
                                     <div className="flex items-center justify-between px-2 border-b border-border/50 pb-4">
                                         <div className="flex items-center gap-4">
@@ -249,7 +249,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                     </div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                                        {group.options.map(option => {
+                                        {group.options.map((option: Option) => {
                                             const isSelected = (selections[group.id] || []).includes(option.id);
                                             return (
                                                 <button
@@ -413,7 +413,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                         <div className="flex items-center gap-8 h-full">
                             <div className="w-px h-8 bg-white/10 dark:bg-black/10" />
                             <span className="text-2xl font-sans font-black tracking-tight text-white dark:text-black">
-                                {calculateTotal() / 100}€
+                                {calculateTotal() / 1000000}€
                             </span>
                         </div>
                     </button>

@@ -10,11 +10,12 @@ import {
 } from "../store/inventoryAtoms";
 import { wasteLogsNodeAtom } from "@/modules/compliance/haccp/store/complianceAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
-import { StockItem } from "../types";
-import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
+import { SovereignNode, SovereignData, OperationalIdentity, SovereignField } from "@shared/nexus-contract";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { Ingredient, StockItem, Preparation, StorageLocation, IngredientUnit, IngredientCategory } from "@shared/nexus/contracts/logistics";
+import { WasteLog } from "@shared/nexus/contracts/common.types";
 
 /**
  * 🥫 useInventory - Grade X Atomic Bridge (Source of Truth)
@@ -32,30 +33,27 @@ export function useInventory() {
     const wasteNode = useAtomValue(wasteLogsNodeAtom);
 
     // 🛡️ SOVEREIGN MAPPING (Grade X)
-    const toIngredient = (n: SovereignNode): import('@nexus/contracts').Ingredient => {
-        const attr = (n.attributes || {}) as Record<string, any>;
+    const toIngredient = (n: SovereignNode): Ingredient => {
+        const attr = (n.attributes || {}) as Record<string, SovereignField>;
         return {
             id: String(n.id),
             name: String(attr.name || ''),
-            unit: (attr.unit || 'u') as import('@nexus/contracts').IngredientUnit,
-            quantity: Number(attr.quantity || 0),
+            unit: (attr.unit || 'unit') as IngredientUnit,
             minQuantity: Number(attr.minQuantity || 0),
-            categoryId: String(attr.categoryId || ''),
-            pricePerUnitInCents: Number(attr.pricePerUnitInCents || 0),
             costInCents: Number(attr.costInCents || 0),
-            category: (attr.category || 'other') as any,
-            supplier: (attr.supplier || '') as any,
-            defaultStorageLocation: (attr.defaultStorageLocation || '') as any,
+            category: (attr.category || 'other') as IngredientCategory,
+            supplier: String(attr.supplier || ''),
+            defaultStorageLocation: String(attr.defaultStorageLocation || ''),
             createdAt: typeof n.createdAt === 'string' ? n.createdAt : now,
             updatedAt: now
-        } as unknown as any;
+        } as Ingredient;
     };
 
-    const stockItems = (stockNode.data || []) as any[];
-    const ingredients = (ingredientsNode.data || []) as any[];
-    const preparations = (preparationsNode.data || []) as any[];
-    const storageLocations = (storageNode.data || []) as any[];
-    const wasteLogs = (wasteNode.data || []) as any[];
+    const stockItems = (stockNode.data || []) as StockItem[];
+    const ingredients = (ingredientsNode.data || []) as Ingredient[];
+    const preparations = (preparationsNode.data || []) as Preparation[];
+    const storageLocations = (storageNode.data || []) as StorageLocation[];
+    const wasteLogs = (wasteNode.data || []) as unknown[]; // WasteLog mapping later
 
     const lowStockItems = useMemo(() => 
         stockItems.filter((i: StockItem) => i.quantity <= (i.minQuantity || 0)), 
@@ -103,18 +101,17 @@ export function useInventory() {
         await Nexus.adapter.update(path, {
             lastConsumption: qty,
             lastReason: reason,
-            createdAt: now,
             updatedAt: now
-        } as unknown as any);
+        });
     };
 
     return { 
-        data: stockItems as StockItem[], 
-        stockItems: stockItems as StockItem[],
-        ingredients: ingredients.map(i => toIngredient(i as SovereignNode)),
-        preparations: preparations as SovereignNode[],
-        storageLocations: storageLocations as SovereignNode[],
-        wasteLogs: wasteLogs as unknown as any[],
+        data: stockItems, 
+        stockItems,
+        ingredients: ingredients.map(i => toIngredient(i as unknown as SovereignNode)),
+        preparations,
+        storageLocations,
+        wasteLogs,
         lowStockItems, 
         isLoading: stockNode.loading || ingredientsNode.loading, 
         error: stockNode.error || ingredientsNode.error,

@@ -33,7 +33,7 @@ export class TelemetryService {
    * Commence l'envoi périodique du heartbeat (chaque 5 minutes).
    */
   static start(tenantId: string) {
-    this.stop(); // Cleanup previous if any
+    this.stop(); // Cleanup previous if unknown
 
     console.log(`[TelemetryService] Heartbeat démarré pour ${tenantId} (Intervalle: 5min).`);
 

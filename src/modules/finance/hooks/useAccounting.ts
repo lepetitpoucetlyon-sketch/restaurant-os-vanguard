@@ -12,7 +12,10 @@ import { fiscalLedgerAtom } from '@/store/pillars/compliance';
 import { 
     AccountingMetrics, 
     FinancialMetrics,
-    JournalEntry 
+    JournalEntry,
+    BankTransaction,
+    ExpenseClaim,
+    Account
 } from '../types';
 import { useCallback, useMemo } from 'react';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
@@ -24,55 +27,51 @@ import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 export function useAccounting() {
     const [viewMode, setViewMode] = useAtom(accountingViewModeAtom);
     const journalEntriesNode = useAtomValue(journalEntriesNodeAtom);
-    const journalEntries = (journalEntriesNode.data || []) as JournalEntry[];
+    const journalEntries = (journalEntriesNode.data || []) as unknown as JournalEntry[];
     const isLoading = journalEntriesNode.loading;
     const accounts = useAtomValue(accountsAtom);
-    const bankTransactions = useAtomValue(bankTransactionsAtom);
-    const expenseClaims = useAtomValue(expenseClaimsAtom);
+    const bankTransactions = (useAtomValue(bankTransactionsAtom) || []) as unknown as BankTransaction[];
+    const expenseClaims = (useAtomValue(expenseClaimsAtom) || []) as unknown as ExpenseClaim[];
     const ledgerData = useAtomValue(fiscalLedgerAtom);
 
     // --- 🔨 LA FORGE ---
-    const accountingForge = useNexusMutation<JournalEntry>(journalEntriesNodeAtom, 'journalEntries', 'ACCOUNTING');
+    const accountingForge = useNexusMutation<JournalEntry>(journalEntriesNodeAtom as any, 'journalEntries', 'ACCOUNTING');
 
     const toggleViewMode = useCallback(() => {
         setViewMode(prev => prev === 'simple' ? 'expert' : 'simple');
     }, [setViewMode]);
 
     // Computed Metrics (Grade X logic)
-    const metrics = useMemo<AccountingMetrics>(() => {
-        const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' ? (tx.amountInCents || 0) : 0), 0);
-        const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' ? (tx.amountInCents || 0) : 0), 0);
+    const metrics = useMemo<FinancialMetrics>(() => {
+        const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' ? Number(tx.amountInMicrounits) : 0), 0);
+        const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' ? Number(tx.amountInMicrounits) : 0), 0);
+        const netProfit = revenue - expenses;
         
         return {
-            totalRevenueInCents: revenue,
-            totalExpensesInCents: expenses,
-            grossMarginInCents: revenue - expenses,
-            grossMarginPercent: revenue > 0 ? ((revenue - expenses) / revenue) * 100 : 0,
-            foodCostPercent: 0, 
-            laborCostPercent: 0, 
-            operatingExpensesInCents: expenses * 0.4,
-            ebitdaInCents: revenue - expenses - (expenses * 0.1),
-            netProfitInCents: revenue - expenses - (expenses * 0.2)
-        };
+            totalRevenue: revenue,
+            totalExpenses: expenses,
+            netProfit: netProfit,
+            margin: revenue > 0 ? (netProfit / revenue) * 100 : 0,
+            period: 'current'
+        } as FinancialMetrics;
     }, [journalEntries]);
 
-    const legacyMetrics = useMemo<FinancialMetrics>(() => ({
-        ...metrics,
-        cashOnHandInCents: metrics.totalExpensesInCents * 1.5,
-        foodCostInCents: metrics.totalExpensesInCents * 0.3,
-        laborCostInCents: metrics.totalExpensesInCents * 0.35,
-        opExInCents: metrics.totalExpensesInCents * 0.15,
-    }), [metrics]);
+    const accountingMetrics = useMemo<AccountingMetrics>(() => ({
+        unreconciledCount: bankTransactions.filter(tx => !tx.journalEntryId).length,
+        pendingClaimsCount: expenseClaims.filter(c => c.status === 'pending').length,
+        lastClosureDate: null,
+        fiscalHealthScore: 100
+    }), [bankTransactions, expenseClaims]);
 
     return {
         // State
         viewMode,
-        journalEntries,
-        accounts,
-        bankTransactions,
-        expenseClaims,
+        journalEntries: journalEntries as JournalEntry[],
+        accounts: accounts as Account[],
+        bankTransactions: bankTransactions as BankTransaction[],
+        expenseClaims: expenseClaims as ExpenseClaim[],
         metrics,
-        legacyMetrics,
+        accountingMetrics,
         isLoading,
         ledgerData,
         

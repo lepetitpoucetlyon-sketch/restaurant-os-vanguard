@@ -10,6 +10,7 @@ export {
     canDoAtom,                // SOVEREIGN
     tenantIdAtom,             // SOVEREIGN
     tenantConfigAtom,         // SOVEREIGN
+    tenantBrandTokensAtom,    // SOVEREIGN
     fleetSnapshotAtom,        // SOVEREIGN
 } from '@nexus/state/SovereignGenome';
 

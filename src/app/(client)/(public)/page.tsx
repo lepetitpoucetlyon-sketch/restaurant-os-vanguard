@@ -35,6 +35,7 @@ import { useToast } from "@ui/Toast";
 import { useLanguage } from "@/hooks";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useIsMobile } from "@/hooks";
+import { SovereignMath } from "@/shared/services/SovereignMath";
 import { kpiContainerVariants, kpiCardVariants, fadeInUp, staggerContainer } from "@/lib/motion";
 
 interface KpiCardProps {
@@ -144,7 +145,10 @@ export default function Home() {
   const router = useRouter();
   const { tables } = useTables();
   const { data: orders } = useOrders();
-  const totalRevenue = orders.reduce((acc: number, o: any) => acc + Number(o.totalInCents || 0), 0);
+  const totalRevenue = orders.reduce((acc, o) => {
+    const amountInMicrounits = (o.totalInCents || 0) * 10_000;
+    return SovereignMath.add(acc, amountInMicrounits);
+  }, 0);
   const { lowStockItems } = useInventory();
   const { currentUser } = useAuth();
   const { showToast } = useToast();
@@ -161,28 +165,36 @@ export default function Home() {
   // C3 FIX: 100% DATA-DRIVEN KPIs from real Firestore data
   const todayOrders = useMemo(() => {
     return orders.filter(o => {
-      const orderDate = new Date(o.timestamp);
+      const orderDate = new Date(o.createdAt);
       return isToday(orderDate);
     });
   }, [orders]);
 
   const todayRevenue = useMemo(() => {
-    return todayOrders
+    const revenueInMicrounits = todayOrders
       .filter(o => o.status === 'paid' || o.status === 'delivered')
-      .reduce((acc, o) => acc + (o.totalInCents / 100 || 0), 0);
+      .reduce((acc, o) => {
+        return SovereignMath.add(acc, (o.totalInCents || 0) * 10_000);
+      }, 0);
+    return SovereignMath.fromMicrounits(revenueInMicrounits);
   }, [todayOrders]);
 
   const todayTickets = useMemo(() => todayOrders.length, [todayOrders]);
 
   const avgTicket = useMemo(() => {
     const paidOrders = todayOrders.filter(o => o.status === 'paid' || o.status === 'delivered');
-    return paidOrders.length > 0
-      ? Math.round(paidOrders.reduce((acc, o) => acc + (o.totalInCents / 100 || 0), 0) / paidOrders.length)
-      : 0;
+    if (paidOrders.length === 0) return 0;
+    
+    const totalInMicrounits = paidOrders.reduce((acc, o) => {
+      return SovereignMath.add(acc, (o.totalInCents || 0) * 10_000);
+    }, 0);
+    
+    const averageInMicrounits = SovereignMath.divide(totalInMicrounits, paidOrders.length);
+    return Math.round(SovereignMath.fromMicrounits(averageInMicrounits));
   }, [todayOrders]);
 
   // C3 FIX: Real service activity from tables
-  const activeTables = tables.filter((t: any) => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length;
+  const activeTables = tables.filter((t) => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length;
   const totalTables = tables.length;
   const serviceRate = totalTables > 0 ? Math.round((activeTables / totalTables) * 100) : 0;
   const occupancyRate = serviceRate;
@@ -198,24 +210,31 @@ export default function Home() {
     const dailyRevenues = last7Days.map(day => {
       const dayStart = startOfDay(day);
       const dayOrders = orders.filter(o => {
-        const orderDate = new Date(o.timestamp);
+        const orderDate = new Date(o.createdAt);
         return startOfDay(orderDate).getTime() === dayStart.getTime()
           && (o.status === 'paid' || o.status === 'delivered');
       });
-      return dayOrders.reduce((acc, o) => acc + (o.totalInCents / 100 || 0), 0);
+      const dayRevenueInMicrounits = dayOrders.reduce((acc, o) => {
+          return SovereignMath.add(acc, (o.totalInCents || 0) * 10_000);
+      }, 0);
+      return SovereignMath.fromMicrounits(dayRevenueInMicrounits);
     });
 
-    const maxRevenue = Math.max(...dailyRevenues, 1); // avoid division by 0
+    const maxRevenue = Math.max(...dailyRevenues, 1);
     const width = 800;
     const height = 300;
     const padding = 20;
     const usableWidth = width - padding * 2;
     const usableHeight = height - padding * 2;
 
-    const points = dailyRevenues.map((rev, i) => ({
-      x: padding + (i / (dailyRevenues.length - 1 || 1)) * usableWidth,
-      y: padding + usableHeight - (rev / maxRevenue) * usableHeight
-    }));
+    const points = dailyRevenues.map((rev, i) => {
+      // Direct division here is okay for SVG scaling (floating point space) 
+      // but the source 'rev' is now derived from SovereignMath.
+      return {
+        x: padding + (i / (dailyRevenues.length - 1 || 1)) * usableWidth,
+        y: padding + usableHeight - (rev / maxRevenue) * usableHeight
+      };
+    });
 
     if (points.length < 2) return `M${padding},${height / 2} L${width - padding},${height / 2}`;
 

@@ -5,8 +5,9 @@ import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/
 import { useAuth } from "@/engines/core/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Table, Category, Product, OrderItem } from "@nexus/contracts";
+import { toMicrounits } from "@/domain/schemas/primitives";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { CartItem } from "../../engine/types";
+import { CartItem, SovereignProduct } from "../../engine/types";
 
 import { POSService } from "../domain";
 
@@ -50,17 +51,19 @@ export function usePOSController() {
 
     // --- ACTIONS ---
 
-    const handleAddToCart = useCallback((product: Product, quantity: number, selectedOptions: Record<string, { name: string }[]>, note?: string) => {
+    const handleAddToCart = useCallback((product: SovereignProduct, quantity: number, selectedOptions: Record<string, { name: string }[]>, note?: string) => {
         const cartId = `${product.id}-${Date.now()}`;
         const newItem: CartItem = {
             cartId,
             productId: product.id,
             categoryId: product.categoryId || 'other',
             name: product.name,
-            priceInCents: product.priceInCents || 0,
+            unitPriceInMicrounits: product.priceInMicrounits || toMicrounits((product.priceInCents || 0) * 10000),
+            discountInMicrounits: toMicrounits(0),
+            taxRate: product.taxRate || "0.10",
             quantity,
             modifiers: selectedOptions ? Object.values(selectedOptions).flat().map((opt) => opt.name) : [],
-            notes: note
+            notes: note || ""
         };
         setCartItems(prev => [...prev, newItem]);
         showToast(`${product.name} ajouté`, "success");

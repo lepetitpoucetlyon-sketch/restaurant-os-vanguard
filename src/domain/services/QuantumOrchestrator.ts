@@ -29,7 +29,7 @@ export class QuantumOrchestrator {
             for (const tenantId of chunk) {
                 try {
                     const configPath = getTenantPath('config/pricing', tenantId);
-                    batch.update(configPath, { globalMultiplier: multiplier, updatedAt: new Date().toISOString() });
+                    batch.update(configPath, { globalMultiplier: multiplier, updatedAt: Date.now() });
                     success++;
                 } catch (err) {
                     logger.error(`[QuantumOrchestrator] Failed to queue tenant ${tenantId}:`, err);
@@ -59,7 +59,7 @@ export class QuantumOrchestrator {
             const signal: Partial<OrchestratorSignal> = {
                 targetVersion: version,
                 otaUrl: otaUrl,
-                updatedAt: new Date().toISOString()
+                updatedAt: Date.now()
             };
             
             batch.update(signalPath, signal);

@@ -86,7 +86,7 @@ export default function ProfileSettings() {
 
         setIsSaving(true);
         try {
-            await updateUser(selectedUser.id, {
+            await updateUser?.(selectedUser.id, {
                 name: formData.name,
                 avatar: formData.avatar,
                 ...(formData.pin ? { pin: formData.pin } : {})

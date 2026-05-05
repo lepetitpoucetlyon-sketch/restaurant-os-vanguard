@@ -34,8 +34,8 @@ export default function ReservationSettingsComponent() {
     }, [settings]);
 
     const handleSave = async () => {
-        await updateReservationConfig(config);
-        await updateReservationSlots(slots);
+        if (config) await updateReservationConfig?.(config as any);
+        if (slots) await updateReservationSlots?.(slots);
     };
 
     const cinematicContainer: Variants = {

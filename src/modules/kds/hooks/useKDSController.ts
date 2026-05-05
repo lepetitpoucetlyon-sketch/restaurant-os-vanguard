@@ -30,7 +30,7 @@ export const useKDSController = () => {
 
         if (searchQuery) {
             result = result.filter(o =>
-                o.tableNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (o.tableNumber || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (o.serverName || "").toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
@@ -40,7 +40,7 @@ export const useKDSController = () => {
             const isBReady = b?.status === 'ready';
             if (isAReady && !isBReady) return 1;
             if (!isAReady && isBReady) return -1;
-            return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+            return new Date(a.timestamp ?? 0).getTime() - new Date(b.timestamp ?? 0).getTime();
         });
     }, [orders, activeStation, searchQuery]);
 

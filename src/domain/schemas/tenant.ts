@@ -1,0 +1,80 @@
+import { z } from 'zod';
+import { SanitizedStringSchema, TimestampSchema, UUIDSchema } from './primitives';
+
+export const TenantThemeSchema = z.object({
+  primaryColor: z.string(),
+  secondaryColor: z.string(),
+  logoUrl: z.string(),
+  borderRadius: z.string(),
+  appearance: z.enum(['light', 'dark']),
+});
+
+export const OrchestratorSignalSchema = z.object({
+  maintenanceMode: z.boolean(),
+  killSwitch: z.boolean(),
+  licenceStatus: z.enum(['ACTIVE', 'LOCKED', 'TRIAL']),
+  layoutType: z.enum(['default', 'kiosk', 'hud', 'admin', 'sidebar', 'topbar']),
+  updatedAt: TimestampSchema,
+  economy: z.object({
+    basePrice: z.number(),
+    currency: z.string(),
+    billingStatus: z.string(),
+    discountMultiplier: z.number().optional(),
+  }),
+  businessLaws: z.object({
+    node_capacity: z.number(),
+    fiscal_coefficient: z.number(),
+    currency: z.string(),
+    pmsEnabled: z.boolean(),
+  }).catchall(z.any()),
+  expert: z.object({
+    role: z.string(),
+    modelId: z.string(),
+    isConfigured: z.boolean(),
+    isAuthorized: z.boolean(),
+  }).optional(),
+  targetVersion: z.string().optional(),
+  otaUrl: z.string().optional(),
+  targetState: z.enum(['stable', 'beta', 'bleeding-edge']).optional(),
+  priceMultiplier: z.number().optional(),
+  lastSignalId: z.string().optional(),
+}).catchall(z.any());
+
+export const TenantConfigSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  tier: z.string().optional(),
+  billing: z.object({
+    status: z.string(),
+    plan: z.string(),
+    nextBillingDate: z.string().optional(),
+  }).catchall(z.any()).optional(),
+  marketplace: z.object({
+    enabledModules: z.array(z.string()),
+  }).catchall(z.any()).optional(),
+  ai: z.object({
+    enabled: z.boolean(),
+    model: z.string().optional(),
+    quota: z.number().optional(),
+    geminiApiKey: z.string().optional(),
+  }).optional(),
+  branding: TenantThemeSchema.optional(),
+  capabilities: z.record(z.string(), z.boolean()).optional(),
+  features: z.record(z.string(), z.boolean()).optional(),
+  theme: TenantThemeSchema.optional(),
+  status: OrchestratorSignalSchema.optional(),
+  metadata: z.object({
+    name: z.string(),
+    version: z.string(),
+    description: z.string().optional(),
+    ownerId: z.string().optional(),
+    createdAt: TimestampSchema.optional(),
+    subscriptionTier: z.string().optional(),
+  }).optional(),
+  customFeatures: z.record(z.string(), z.boolean()).optional(),
+  firebase: z.record(z.string(), z.string().optional()).optional(),
+}).catchall(z.any());
+
+export type TenantConfig = z.infer<typeof TenantConfigSchema>;
+export type OrchestratorSignal = z.infer<typeof OrchestratorSignalSchema>;
+export type TenantTheme = z.infer<typeof TenantThemeSchema>;

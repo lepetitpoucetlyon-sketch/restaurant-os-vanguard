@@ -20,7 +20,7 @@ export default function ProspectingDashboard() {
     const newTheme = BrandingUI.generateThemeFromBrand(input);
     await updateConfig('theme', newTheme as any);
     if (updateIdentity) await updateIdentity({ name: input.name, id: 'identity_suture', updatedAt: new Date().toISOString() } as any);
-    setLastGenerated(newTheme);
+    setLastGenerated(newTheme as any);
   };
 
     const handleMagicScan = async () => {

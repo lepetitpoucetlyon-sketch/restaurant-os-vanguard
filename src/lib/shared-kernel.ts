@@ -10,7 +10,7 @@ export const SharedKernel = {
     // --- SOVEREIGN FIELD HANDLERS (GRADE X) ---
 
     Sovereign: {
-        wrap: (value: any): SovereignField => {
+        wrap: (value: unknown): SovereignField => {
             if (value === null || value === undefined) return { type: 'null', value: null };
             if (typeof value === 'string') return { type: 'string', value };
             if (typeof value === 'number') return { type: 'number', value };
@@ -20,7 +20,7 @@ export const SharedKernel = {
             if (typeof value === 'object') return { type: 'object', value };
             return { type: 'string', value: String(value) };
         },
-        unwrap: (field: SovereignField): any => {
+        unwrap: (field: SovereignField): unknown => {
             if (!field || typeof field !== 'object' || !('type' in field)) return field;
             return field.value;
         },
@@ -30,7 +30,7 @@ export const SharedKernel = {
             !!field && typeof field === 'object' && 'type' in field && field.type === 'number',
         isBoolean: (field: SovereignField): field is { type: 'boolean'; value: boolean } => 
             !!field && typeof field === 'object' && 'type' in field && field.type === 'boolean',
-        cleanNumber: (val: any): number => {
+        cleanNumber: (val: unknown): number => {
             if (typeof val === 'number') return val;
             if (typeof val === 'string') {
                 const cleaned = parseFloat(val.replace(',', '.').replace(/[^\d.-]/g, ''));
@@ -38,7 +38,7 @@ export const SharedKernel = {
             }
             return 0;
         },
-        cleanString: (val: any): string => (val || '').toString().trim().replace(/\s+/g, ' ')
+        cleanString: (val: unknown): string => (val || '').toString().trim().replace(/\s+/g, ' ')
     },
 
     // --- FINANCE & CALCULS (BASE CENTIMES / INTEGER ONLY) ---
@@ -115,7 +115,7 @@ export const SharedKernel = {
      */
     sync: (schemaKey: string, rawData: SovereignData, schemaFields: SovereignSchemaField[]): SovereignData => {
 
-        const sanitized = { ...rawData };
+        const sanitized = { ...rawData } as Record<string, any>;
 
         schemaFields.forEach(field => {
             const valueField = sanitized[field.id];
@@ -135,7 +135,7 @@ export const SharedKernel = {
             // Gestion récursive pour les listes
             if (field.type === 'list' && Array.isArray(value) && field.subFields) {
                 sanitized[field.id] = SharedKernel.Sovereign.wrap(value.map(item => 
-                    SharedKernel.sync(schemaKey, item as SovereignData, field.subFields as SovereignSchemaField[])
+                    SharedKernel.sync(schemaKey, item as unknown as SovereignData, field.subFields as SovereignSchemaField[])
                 ));
             }
         });
@@ -171,7 +171,7 @@ export interface YieldState {
     salesVelocity: number; // units/hour
     stockLevel: number; // grams or units
     isCritical: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**
@@ -186,7 +186,7 @@ export interface ProcurementOrder {
     estimatedCostCents: number;
     status: 'draft' | 'sent' | 'received';
     createdAt: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**
@@ -201,7 +201,7 @@ export interface StaffingProposal {
     predictedVelocity: number;
     status: 'pending' | 'approved' | 'rejected';
     createdAt: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**
@@ -216,7 +216,7 @@ export interface LedgerEntry {
     referenceId: string; // e.g. Order ID, PO ID, Salary ID
     description: string;
     scelledAt: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**

@@ -68,7 +68,7 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
     killSwitch: false,
     licenceStatus: 'ACTIVE',
     lastSignalId: 'GOLDEN_SEED_V2_INIT',
-    updatedAt: new Date().toISOString(),
+    updatedAt: Date.now(),
     layoutType: 'sidebar',
     businessLaws: {
       'table_count': 50,
@@ -89,6 +89,6 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
     name: 'Full Complete Matrix (34+ Modules)',
     version: '1.0.0-gold',
     ownerId: 'suzerain_root',
-    createdAt: new Date().toISOString()
+    createdAt: Date.now()
   }
 };

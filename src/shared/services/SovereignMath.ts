@@ -11,10 +11,10 @@ export const SovereignMath = {
     EPSILON: 1e-10, // Kept for float input validation
 
     /**
-     * Converts a float value to microunits (bigint) with Epsilon safety.
+     * Converts a float value to microunits (number) with Epsilon safety.
      * Use this at the PhysicalNode / Input layer.
      */
-    toMicrounits: (value: number): bigint => {
+    toMicrounits: (value: number): number => {
         const rawValue = value * Number(SovereignMath.PRECISION);
         const roundedValue = Math.round(rawValue);
         
@@ -28,51 +28,65 @@ export const SovereignMath = {
             });
         }
         
-        return BigInt(roundedValue);
+        return roundedValue;
     },
 
     /**
      * Converts microunits back to a display/fiscal value (number).
      */
-    fromMicrounits: (microunits: bigint): number => {
-        return Number(microunits) / Number(SovereignMath.PRECISION);
+    fromMicrounits: (microunits: number): number => {
+        return microunits / Number(SovereignMath.PRECISION);
     },
 
     /**
-     * Performs a multiplication with full BigInt precision.
+     * Converts cents to microunits.
      */
-    multiply: (valA: bigint, valB: bigint): bigint => {
-        return (valA * valB) / SovereignMath.PRECISION;
+    fromCents: (cents: number): number => {
+        return cents * 10_000;
     },
 
     /**
-     * Adds two microunit values (bigint).
+     * Converts microunits to cents (integer) for legacy formatters.
      */
-    add: (a: bigint, b: bigint): bigint => {
+    toCents: (microunits: bigint): number => {
+        return Math.round(Number(microunits) / 10000);
+    },
+
+    /**
+     * Performs a multiplication with full precision.
+     */
+    multiply: (valA: number, valB: number): number => {
+        return Math.round((valA * valB) / Number(SovereignMath.PRECISION));
+    },
+
+    /**
+     * Adds two microunit values (number).
+     */
+    add: (a: number, b: number): number => {
         return a + b;
     },
 
     /**
-     * Subtracts two microunit values (bigint).
+     * Subtracts two microunit values (number).
      */
-    subtract: (a: bigint, b: bigint): bigint => {
+    subtract: (a: number, b: number): number => {
         return a - b;
     },
 
     /**
-     * Divides two microunit values, returning microunits (bigint).
+     * Divides two microunit values, returning microunits (number).
      */
-    divide: (numerator: bigint, denominator: bigint): bigint => {
-        if (denominator === BigInt(0)) {
+    divide: (numerator: number, denominator: number): number => {
+        if (denominator === 0) {
             throw new Error('FISCAL_DIVISION_BY_ZERO: Sovereign arithmetic violation.');
         }
-        return (numerator * SovereignMath.PRECISION) / denominator;
+        return Math.round((numerator * Number(SovereignMath.PRECISION)) / denominator);
     },
 
     /**
-     * Suture check: Ensures a value is a valid BigInt.
+     * Suture check: Ensures a value is a valid microunit integer.
      */
-    isSovereignInteger: (value: any): value is bigint => {
-        return typeof value === 'bigint';
+    isSovereignInteger: (value: unknown): value is number => {
+        return typeof value === 'number' && Number.isInteger(value);
     }
 };

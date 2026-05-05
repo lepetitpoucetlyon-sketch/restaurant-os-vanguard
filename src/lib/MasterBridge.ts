@@ -1,3 +1,4 @@
+import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';
 import { TimeSync } from './TimeSync';
 import { logger } from './logger';
 import { firestore } from './firebase';
@@ -69,7 +70,7 @@ export const MasterBridge = {
   isMasterMode(): boolean {
     try {
       const store = getDefaultStore();
-      const { tenantIdAtom } = require('@nexus/state/SovereignGenome'); // Breaking circular dependency via direct shard import
+      
       return store.get(tenantIdAtom) === this.MASTER_TENANT_ID;
     } catch {
       return false;

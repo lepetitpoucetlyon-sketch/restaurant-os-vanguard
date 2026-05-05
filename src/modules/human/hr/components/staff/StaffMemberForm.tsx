@@ -65,22 +65,22 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
         
         try {
             if (editingUser) {
-                await updateUser!(editingUser.id, {
+                await updateUser?.(editingUser.id, {
                     name: formData.name,
                     role: formData.role,
                     avatar: formData.avatar,
                     hourlyRate: formData.hourlyRate,
                     ...(formData.pin ? { pin: formData.pin } : {}),
                 });
-                await logAction('modify_employee', { name: formData.name });
+                await logAction?.('modify_employee', { name: formData.name });
                 showToast("Collaborateur mis à jour", "success");
             } else {
-                await addUser({
+                await addUser?.({
                     ...formData,
                     performanceScore: 5.0,
                     accessLevel: 3,
                 });
-                await logAction('create_employee', { name: formData.name });
+                await logAction?.('create_employee', { name: formData.name });
                 showToast("Nouveau collaborateur ajouté", "success");
             }
             onClose();
@@ -88,11 +88,11 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
             showToast("Erreur lors de l'enregistrement", "error");
         }
     };
-
+ 
     const confirmDeleteStaff = async () => {
         if (editingUser) {
-            await deleteUser(editingUser.id);
-            await logAction('delete_employee', { name: editingUser.name });
+            await deleteUser?.(editingUser.id);
+            await logAction?.('delete_employee', { name: editingUser.name });
             showToast("Profil supprimé", "success");
             onClose();
         }

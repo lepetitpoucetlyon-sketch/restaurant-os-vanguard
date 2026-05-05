@@ -30,5 +30,5 @@ export const posCartCountSelector = atom((get) => {
 export const posCartTotalSelector = atom((get) => {
     const cart = get(activeCartAtom);
     if (!cart) return 0;
-    return cart.items.reduce((sum, item) => sum + (item.priceInCents * item.quantity), 0);
+    return cart.items.reduce((sum, item) => sum + (item.unitPriceInMicrounits * item.quantity), 0);
 });

@@ -25,7 +25,7 @@ export const AmbientAudio: React.FC = () => {
         if (ctxRef.current) return;
         
         const AudioContextClass = (window as any).AudioContext || (window as any).webkitAudioContext;
-        const ctx = new AudioContextClass();
+        const ctx = new AudioContextClass() as AudioContext;
         ctxRef.current = ctx;
 
         // Master Gain

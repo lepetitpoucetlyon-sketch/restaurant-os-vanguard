@@ -11,6 +11,7 @@ interface FloorPlanControlsOptions {
     onPositionChange: (pos: { x: number; y: number }) => void;
     mode: 'select' | 'add';
     currentFloorId: string;
+    onTableSelect?: (id: string) => void;
 }
 
 import Konva from 'konva';
@@ -22,6 +23,7 @@ export function useFloorPlanControls({
     onPositionChange,
     mode,
     currentFloorId,
+    onTableSelect,
 }: FloorPlanControlsOptions) {
     const stageRef = useRef<Konva.Stage | null>(null);
     const [isManualPan, setIsManualPan] = useState(false);
@@ -243,13 +245,20 @@ export function useFloorPlanControls({
         }
     }, []);
 
+    const setSelectedIdWithCallback = useCallback((id: string | null) => {
+        setSelectedId(id);
+        if (id && onTableSelect) {
+            onTableSelect(id);
+        }
+    }, [onTableSelect]);
+
     return {
         // Refs
         stageRef,
         // State
         dimensions,
         selectedId,
-        setSelectedId,
+        setSelectedId: setSelectedIdWithCallback,
         selectedTable,
         isDarkMode,
         isPaymentOpen,

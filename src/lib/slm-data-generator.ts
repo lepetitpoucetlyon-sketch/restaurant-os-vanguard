@@ -115,7 +115,7 @@ export class SLMDataGenerator {
             pairs.push({
                 instruction: `Quel est le solde du compte ${acc.code} (${acc.name}) ?`,
                 input: `Consultation compte compta ${acc.code}`,
-                output: `Le compte ${acc.code} (${acc.name}) est un compte de type ${acc.type} (Classe ${acc.class}). Statut : ${acc.isActive ? "Actif" : "Inactif"}.`,
+                output: `Le compte ${acc.code} (${acc.name}) est un compte de type ${acc.type} (Classe ${acc.code.substring(0, 1)}). Statut : ${acc.isActive ? "Actif" : "Inactif"}.`,
                 category: 'accounting'
             });
         });

@@ -21,8 +21,8 @@ const MenuMigrationSchema = z.object({
 
 type MenuMigration = z.infer<typeof MenuMigrationSchema>;
 
-const preprocessData = (data: unknown): MenuMigration => {
-    const raw = data as Record<string, unknown>;
+const preprocessData = (data: any): MenuMigration => {
+    const raw = data as Record<string, any>;
     if (!raw || typeof raw !== 'object') return { categories: [], products: [] };
     
     const clean: MenuMigration = {

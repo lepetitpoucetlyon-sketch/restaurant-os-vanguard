@@ -17,6 +17,8 @@ import { StyleTab } from "./panels/StyleTab";
 import { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
+import { SovereignStorage } from "@/shared/services/SovereignStorage";
+import { PageSettingsSchema } from "@/domain/schemas/ui";
 
 
 // ============ CONTEXT & PROVIDER ============
@@ -41,13 +43,7 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
     const [allSettings, setAllSettings] = useState<Record<string, SovereignData>>(() => {
 
         if (typeof window === 'undefined') return {};
-        try {
-            const saved = localStorage.getItem("restaurant_os_page_settings");
-            return saved ? JSON.parse(saved) : {};
-        } catch (e) {
-            console.error("Failed to parse settings", e);
-            return {};
-        }
+        return SovereignStorage.get("restaurant_os_page_settings", PageSettingsSchema, {}).data as Record<string, SovereignData>;
     });
 
     const openSettings = (page: PageKey) => {
@@ -63,7 +59,7 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
 
         const updated = { ...allSettings, [page]: newSettings };
         setAllSettings(updated);
-        localStorage.setItem("restaurant_os_page_settings", JSON.stringify(updated));
+        SovereignStorage.set("restaurant_os_page_settings", updated, PageSettingsSchema);
         
         // 🏛️ Empire Audit Logging
         logger.info(`Configuration updated for domain: ${page}`, {

@@ -48,7 +48,7 @@ export class ResilienceSlayer {
         ] as const;
 
         targets.forEach(target => {
-            const node = this.store.get(target.atom as any) as import('@/store/base').NexusNode<any>;
+            const node = this.store.get(target.atom as any) as import('@/store/base').NexusNode<unknown>;
             if (node.loading || !node.data) return;
 
             // Audit the current heap against the calculated CRC
@@ -77,11 +77,11 @@ export class ResilienceSlayer {
      * 🛡️ EXCEPTION LISTENER: Reality Restoration
      * Triggered when an Atomic Burst fails or a transaction is rejected by the database.
      */
-    static handleTransactionFailure(atomPath: string, error: any) {
-        logger.error(`[Slayer] TRANSACTION_REJECTED for ${atomPath}. Reason: ${error?.message || 'Unknown Conflict'}`);
+    static handleTransactionFailure(atomPath: string, error: unknown) {
+        logger.error(`[Slayer] TRANSACTION_REJECTED for ${atomPath}. Reason: ${(error as any)?.message || 'Unknown Conflict'}`);
         
         // Map path to atom
-        const map: Record<string, any> = {
+        const map: Record<string, unknown> = {
             'operational/stock': stockItemsNodeAtom,
             'operational/orders': ordersNodeAtom,
             'finance/ledger': journalEntriesNodeAtom

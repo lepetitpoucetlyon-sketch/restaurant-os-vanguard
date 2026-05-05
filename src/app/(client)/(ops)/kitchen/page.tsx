@@ -42,7 +42,7 @@ type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'was
 
 export default function KitchenPage() {
     const router = useRouter();
-    const ordersData: any[] = []; // Real orders should come from useKitchen
+    const ordersData: unknown[] = []; // Real orders should come from useKitchen
     const [activeTab, setActiveTab] = useState<KitchenTab>('mise-en-place');
     
     // Nexus Grade X Hooks
@@ -69,7 +69,7 @@ export default function KitchenPage() {
         deleteRecipe
     } = recipesHook;
     
-    const wasteLogs = [] as any[]; // Suture required for waste
+    const wasteLogs = [] as import("@nexus/contracts").RegulatoryWasteLog[]; // Suture required for waste
     
     const ingredients = (inventory.stockItems || []) as unknown as import("@nexus/contracts").Ingredient[];
     const products = inventory.stockItems;
@@ -106,10 +106,10 @@ export default function KitchenPage() {
             <AnimatePresence initial={false}>
                 {isSideNavOpen && (
                     <motion.div
-                        initial={performanceMode ? (false as any) : { opacity: 0, x: -320 }}
-                        animate={performanceMode ? (false as any) : { opacity: 1, x: 0 }}
-                        exit={performanceMode ? (false as any) : { opacity: 0, x: -320 }}
-                        transition={performanceMode ? { duration: 0 } as any : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        initial={performanceMode ? undefined : { opacity: 0, x: -320 }}
+                        animate={performanceMode ? undefined : { opacity: 1, x: 0 }}
+                        exit={performanceMode ? undefined : { opacity: 0, x: -320 }}
+                        transition={performanceMode ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         className={cn(
                             "hidden md:flex w-[320px] bg-bg-secondary border-r border-border flex-col p-8 elegant-scrollbar overflow-hidden shrink-0",
                             performanceMode ? "" : "backdrop-blur-xl"
@@ -284,11 +284,13 @@ export default function KitchenPage() {
             </div>
 
             {/* Recipe Details Modal */}
-            <RecipeDetailDialog
-                recipe={selectedRecipe}
-                isOpen={!!selectedRecipe}
-                onClose={() => setSelectedRecipe(null)}
-            />
+            {selectedRecipe && (
+                <RecipeDetailDialog
+                    recipe={selectedRecipe}
+                    isOpen={true}
+                    onClose={() => setSelectedRecipe(null)}
+                />
+            )}
 
             {/* Prep Task Detail Modal */}
             <PrepTaskDetailDialog

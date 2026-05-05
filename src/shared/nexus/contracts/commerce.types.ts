@@ -2,24 +2,8 @@ import { SovereignNode, SovereignMap } from '@/shared/nexus-contract';
 import { OrderItem } from './ops.types';
 import { OptionGroup } from './common.types';
 
-export interface Product extends SovereignNode {
-    name: string;
-    description?: string;
-    priceInCents: number;
-    categoryId: string;
-    imageUrl?: string;
-    image?: string; 
-    color?: string; 
-    sku?: string;
-    optionGroups?: OptionGroup[];
-    ingredients?: Array<{
-        ingredientId: string;
-        quantity: number;
-    }>;
-    allergens?: string[];
-    isAvailable?: boolean;
-    stockQuantity?: number;
-}
+import { Product } from '@/domain/schemas/commerce';
+export type { Product };
 
 export interface Quote extends SovereignNode {
     title: string;

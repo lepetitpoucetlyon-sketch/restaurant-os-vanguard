@@ -16,16 +16,8 @@ import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/hooks";
 import { POSService } from "../hooks/usePos";
 
-interface CartItem {
-    cartId: string;
-    productId: string;
-    categoryId: string;
-    name: string;
-    priceInCents: number;
-    quantity: number;
-    notes?: string;
-    modifiers?: string[];
-}
+import { CartItem } from "@modules/ops";
+import { Microunits, toMicrounits } from "@/domain/schemas/primitives";
 
 interface CartProps {
     items: CartItem[];
@@ -48,13 +40,13 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
     const globalInflationRate = (config as any)?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
 
-    const { totalInCents, htInCents, tvaByRateInCents } = useMemo(() => {
+    const { totalInMicrounits, htInMicrounits, tvaByRateInMicrounits } = useMemo(() => {
         let total = 0;
         let ht = 0;
         const rates: Record<number, number> = {};
 
         items.forEach(item => {
-            const itemTotal = (item.priceInCents * priceMultiplier) * item.quantity;
+            const itemTotal = (item.unitPriceInMicrounits * priceMultiplier) * item.quantity;
             total += itemTotal;
             const rate = item.categoryId === 'cocktails' ? 0.20 : 0.10;
             const itemHt = Math.round(itemTotal / (1 + rate));
@@ -63,7 +55,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
             rates[rate * 100] = (rates[rate * 100] || 0) + itemTva;
         });
 
-        return { totalInCents: total, htInCents: ht, tvaByRateInCents: rates };
+        return { totalInMicrounits: total, htInMicrounits: ht, tvaByRateInMicrounits: rates };
     }, [items, priceMultiplier]);
 
 
@@ -130,8 +122,8 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end">
-                                            <span className="text-sm font-serif font-black italic">{formatCurrency(item.priceInCents * priceMultiplier * item.quantity)}</span>
-                                            <span className="text-[10px] opacity-40 font-mono">{formatCurrency(item.priceInCents * priceMultiplier)} unit</span>
+                                            <span className="text-sm font-serif font-black italic">{formatCurrency(item.unitPriceInMicrounits * priceMultiplier * item.quantity / 1000000)}</span>
+                                            <span className="text-[10px] opacity-40 font-mono">{formatCurrency(item.unitPriceInMicrounits * priceMultiplier / 1000000)} unit</span>
                                         </div>
                                     </div>
 
@@ -157,22 +149,22 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
                     <div className="flex justify-between items-center text-[10px] font-black text-text-muted uppercase tracking-widest">
                         <span>{t('pos.cart.subtotal')}</span>
                         <div className="flex items-center gap-4">
-                            {totalInCents > 0 && (
+                            {totalInMicrounits > 0 && (
                                 <div className="flex items-center gap-1.5 px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/20">
                                     <Sparkles className="w-3 h-3 text-accent-gold" />
-                                    <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInCents / 100, globalInflationRate).toFixed(1)}%</span>
+                                    <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInMicrounits / 1000000, globalInflationRate).toFixed(1)}%</span>
                                 </div>
                             )}
                         </div>
                     </div>
                     <div className="flex justify-between text-text-muted mt-1 px-1">
                         <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
-                        <span className="font-mono text-sm">{formatCurrency(htInCents)}</span>
+                        <span className="font-mono text-sm">{formatCurrency(htInMicrounits / 1000000)}</span>
                     </div>
                     <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-white/10 px-1">
                         <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
                         <span className="text-4xl font-serif font-black italic text-white tracking-tighter drop-shadow-glow">
-                            {formatCurrency(totalInCents)}
+                            {formatCurrency(totalInMicrounits / 1000000)}
                         </span>
                     </div>
                 </div>

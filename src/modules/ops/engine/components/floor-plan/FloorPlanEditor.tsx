@@ -23,6 +23,7 @@ interface FloorPlanEditorProps {
     mode: 'select' | 'add';
     viewMode?: '2d' | '3d';
     currentFloorId?: string;
+    onTableSelect?: (id: string) => void;
 }
 
 export interface FloorPlanEditorRef {
@@ -39,7 +40,8 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
     onPositionChange,
     mode,
     viewMode = '2d',
-    currentFloorId = 'rdc'
+    currentFloorId = 'rdc',
+    onTableSelect
 }, ref) => {
     const {
         centerPlan,
@@ -76,6 +78,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
         onPositionChange,
         mode,
         currentFloorId,
+        onTableSelect
     });
 
     useImperativeHandle(ref, () => ({

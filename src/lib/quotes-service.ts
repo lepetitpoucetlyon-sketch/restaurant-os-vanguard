@@ -9,7 +9,7 @@ export const QuotesService = {
      */
     calculateStats: (quotes: Quote[]) => {
         const thisMonth = quotes.filter(q => {
-            const date = new Date(q.createdAt);
+            const date = new Date(q.createdAt ?? 0);
             const now = new Date();
             return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
         });
@@ -60,7 +60,7 @@ export const QuotesService = {
         if (quote.status === 'viewed') score += 10;
         
         // 4. Client Type
-        if (quote.customer.type === 'company') score += 5;
+        if (quote.customer?.type === 'company') score += 5;
 
         return Math.min(Math.max(score, 5), 99);
     }

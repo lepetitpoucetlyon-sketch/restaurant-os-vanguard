@@ -12,15 +12,15 @@ interface RegisteredAtom<T> {
 type NexusStoreSetter = { set: <T>(atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>, value: NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)) => void };
 
 
-const registry = new Map<string, RegisteredAtom<any>>();
+const registry = new Map<string, RegisteredAtom<unknown>>();
 
 /**
  * 🧛 Orphan Registry (Grade VI)
  * Uses WeakRef to track temporary nodes that should not block GC.
  */
-const orphanNodesRegistry = new Map<string, /* @ts-ignore */ WeakRef<import('@/shared/nexus-contract').SovereignData>>();
+const orphanNodesRegistry = new Map<string, WeakRef<import('@/shared/nexus-contract').SovereignData>>();
 
-const cleanupRegistry = /* @ts-ignore */ new FinalizationRegistry((id: string) => {
+const cleanupRegistry = new FinalizationRegistry((id: string) => {
     logger.debug(`[Registry] GC collected orphan node: ${id}`);
     orphanNodesRegistry.delete(id);
 });
@@ -33,7 +33,7 @@ export const GlobalRegistryService = {
 
         if (!registry.has(id)) {
             registry.set(id, {
-                atom: atom as RegisteredAtom<any>['atom'],
+                atom: atom as RegisteredAtom<unknown>['atom'],
                 lastAccessed: Date.now(),
                 usageCount: 0
             });
@@ -48,8 +48,8 @@ export const GlobalRegistryService = {
     registerOrphan(id: string, atom: import('@/shared/nexus-contract').SovereignData) {
 
         if (!orphanNodesRegistry.has(id)) {
-            orphanNodesRegistry.set(id, /* @ts-ignore */ new WeakRef(atom));
-            /* @ts-ignore */ cleanupRegistry.register(atom, id);
+            orphanNodesRegistry.set(id, new WeakRef(atom));
+            cleanupRegistry.register(atom, id);
         }
     },
 
@@ -95,7 +95,7 @@ export const GlobalRegistryService = {
 
             if (isIdle && isExpired) {
                 logger.info(`[Registry] Purging idle atom: ${id}`);
-                store.set(entry.atom, (prev: NexusNode<any>) => updateNexusNode(prev, { 
+                store.set(entry.atom, (prev: NexusNode<unknown>) => updateNexusNode(prev, { 
                     data: [], 
                     loading: true 
                 }));

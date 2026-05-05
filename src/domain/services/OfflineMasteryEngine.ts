@@ -19,7 +19,7 @@ export const OfflineMasteryEngine = {
     await db.orders.add(order);
     
     // Mark as pending sync with high-resolution timestamp
-    // (order as any)._syncTimestamp = Date.now();
+    // (order as unknown)._syncTimestamp = Date.now();
   },
 
   /**

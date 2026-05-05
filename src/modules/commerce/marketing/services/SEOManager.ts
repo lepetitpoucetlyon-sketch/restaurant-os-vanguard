@@ -15,11 +15,11 @@ export const SEOManager = {
     const store = getDefaultStore();
     const tenantId = store.get(tenantIdAtom);
     const instances = store.get(fleetSnapshotAtom) as any[];
-    const instance = instances.find(i => i.key === tenantId) || { name: 'Restaurant OS' };
+    const instance = instances.find(i => i.id === tenantId) || { name: 'Restaurant OS' };
 
     const baseUrl = `https://${tenantId}.restaurant-os.app`;
     const title = `${instance.name} | Réservez en ligne | Cuisine d'Exception`;
-    const description = `Découvrez la carte et réservez votre table chez ${instance.name}. Experience gastronomique unique à ${(instance as import('@domain/types/empire').EmpireInstance & { city?: string }).city || 'Paris'}.`;
+    const description = `Découvrez la carte et réservez votre table chez ${instance.name}. Experience gastronomique unique à ${instance.city || 'Paris'}.`;
 
     return {
       title,

@@ -1,43 +1,57 @@
 @import "tailwindcss";
 
 @theme {
-  /* SILENT LUXURY PALETTE - NOW DYNAMICALLY INJECTED */
-  --color-bg-primary: var(--color-background, #F8F7F2);
-  --color-bg-secondary: #FFFFFF;
-  --color-bg-tertiary: #F1F0EA;
+  /* ── ACTIONS ── */
+  --color-action-primary: var(--action-primary, #C5A059);
+  --color-action-primary-hover: var(--action-primary-hover, #000000);
+  --color-action-primary-fg: var(--action-primary-fg, #FFFFFF);
+  --color-action-danger: var(--action-danger, #ef4444);
+  --color-action-accent: var(--action-accent, #C5A059);
 
-  --color-text-primary: var(--color-text-primary, #1C1C1C);
-  --color-text-secondary: #525252;
-  --color-text-muted: #A3A3A3;
+  /* ── SURFACES ── */
+  --color-surface-bg: var(--surface-bg, #F8F7F2);
+  --color-surface-card: var(--surface-card, #ffffff);
+  --color-surface-modal: var(--surface-modal, #ffffff);
+  --color-surface-modal-dark: var(--surface-modal-dark, #0B0B0C);
+  --color-surface-sidebar: var(--surface-sidebar, #111827);
 
-  --color-border: #E5E4DA;
-  --color-accent: var(--color-primary, #C5A059);
-  --color-accent-gold: var(--color-primary, #C5A059);
+  /* ── STATUS ── */
+  --color-status-success: var(--status-success, #059669);
+  --color-status-warning: var(--status-warning, #f59e0b);
+  --color-status-danger: var(--status-danger, #dc2626);
+  --color-status-info: var(--status-info, #6366f1);
 
-  /* STATUS COLORS */
-  --color-success: #2A5A3A;
-  --color-success-soft: #ECF3EF;
-  --color-error: #9B2C2C;
-  --color-error-soft: #FDF2F2;
-  --color-warning: #B7791F;
-  --color-warning-soft: #FFFAF0;
-  --color-info: #0EA5E9;
-  --color-info-soft: #E0F2FE;
+  /* ── TABLES / FLOOR PLAN ── */
+  --color-table-available: var(--status-table-available, #e5e7eb);
+  --color-table-occupied: var(--status-table-occupied, #6366f1);
+  --color-table-reserved: var(--status-table-reserved, #fbbf24);
 
-  /* CATEGORY COLORS */
-  --color-cat-cuisine: #8B7355;
-  --color-cat-bar: #6B4C3A;
-  --color-cat-clients: #7A6F5D;
-  --color-cat-ops: #5C5C5C;
-  --color-cat-finance: #3D4F3D;
-  --color-cat-rh: #4A5568;
+  /* ── TEXT ── */
+  --color-text-primary: var(--text-primary, #111827);
+  --color-text-secondary: var(--text-secondary, #6b7280);
+  --color-text-muted: var(--text-muted, #9ca3af);
+  --color-text-brand: var(--text-brand, #C5A059);
 
-  /* FONTS */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-mono: var(--font-mono), monospace;
+  /* ── BORDERS ── */
+  --color-border-default: var(--border-default, #E5E4DA);
+  --color-border-focus: var(--border-focus, #C5A059);
+  --color-border-subtle: var(--border-subtle, rgba(0, 0, 0, 0.04));
 
-  /* RADIUS */
+  /* ── LEGACY FALLBACKS (for migration safety) ── */
+  --color-bg-primary: var(--surface-bg, #F8F7F2);
+  --color-bg-secondary: var(--surface-card, #FFFFFF);
+  --color-bg-tertiary: var(--surface-bg, #F1F0EA);
+  --color-accent: var(--action-primary, #C5A059);
+  --color-border: var(--border-default, #E5E4DA);
+
+  /* ── FONTS ── */
+  --font-sans: var(--font-ui, 'Inter', system-ui, sans-serif);
+  --font-serif: var(--font-brand, 'Playfair Display', Georgia, serif);
+  --font-mono: var(--font-mono, monospace);
+  --font-brand: var(--font-brand, 'Playfair Display', Georgia, serif);
+  --font-ui: var(--font-ui, 'Inter', system-ui, sans-serif);
+
+  /* ── RADIUS ── */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 12px;
@@ -45,25 +59,19 @@
   --radius-2xl: 20px;
   --radius-3xl: 24px;
 
-  /* DYNAMIC SPACING FALLBACKS */
-  --spacing-ui-padding: var(--ui-padding, 1rem);
-  --spacing-ui-gap: var(--ui-gap, 1rem);
-
-  /* MOTION TIMING FUNCTIONS */
+  /* ── MOTION ── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
   --ease-spring: cubic-bezier(0.4, 0.5, 0.3, 1.4);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-  /* MOTION DURATIONS */
   --duration-instant: 100ms;
   --duration-fast: 200ms;
   --duration-normal: 350ms;
   --duration-slow: 500ms;
   --duration-dramatic: 700ms;
 
-  /* PREMIUM SHADOWS */
+  /* ── PREMIUM SHADOWS ── */
   --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-glow-accent: 0 0 20px 4px var(--accent-muted, rgba(197, 160, 89, 0.3));
 }

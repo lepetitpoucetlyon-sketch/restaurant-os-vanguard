@@ -13,7 +13,7 @@ interface ChatThreadProps {
     messages: Message[];
     isProcessing: boolean;
     formatText: (text: string) => string;
-    scrollRef: React.RefObject<HTMLDivElement>;
+    scrollRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function ChatThread({ messages, isProcessing, formatText, scrollRef }: ChatThreadProps) {

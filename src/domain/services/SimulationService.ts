@@ -3,6 +3,7 @@ import { FiscalEngine } from './FiscalEngine';
 import { StockEngine } from './StockEngine';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 /**
  * 🌀 SimulationEngine - Grade X "Quantique"
@@ -98,20 +99,19 @@ export const SimulationService = {
             metrics.totalRevenue += revenue;
             metrics.totalFoodCost += Math.round(revenue * 0.28); // 28% food cost baseline
 
+            const now = Date.now();
             // Record virtual order
             const order: Order = {
                 id: orderId,
                 tableId: 'T1',
                 tableNumber: '1',
                 serverName: 'Virtual Agent',
-                timestamp: date,
                 items: [],
-                totalInCents: revenue,
+                totalInMicrounits: toMicrounits(revenue),
                 status: 'paid',
-                customerName: 'Simulated',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
+                createdAt: now,
+                updatedAt: now
+            } as any;
 
             await Nexus.adapter.set(Nexus.getTenantPath(`orders/${orderId}`), order);
             orders.push(order);

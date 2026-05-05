@@ -4,7 +4,7 @@ import type { TenantConfig } from '@/shared/nexus-contract';
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X
  * Instance-as-a-Code : Isolation Totale & Module Rôtisserie Activé.
  */
-export const lepetitpoucetConfig: any = {
+export const lepetitpoucetConfig: TenantConfig = {
     id: 'lepetitpoucet',
     capabilities: {
         haccpGuardEnabled: true,
@@ -24,16 +24,26 @@ export const lepetitpoucetConfig: any = {
     status: {
         maintenanceMode: false,
         killSwitch: false,
-        licenceStatus: 'active',
+        licenceStatus: 'ACTIVE',
         layoutType: 'default',
-        updatedAt: new Date().toISOString(),
+        updatedAt: Date.now(),
         economy: {
             basePrice: 149.00,
             currency: 'EUR',
             billingStatus: 'active'
         },
-        businessLaws: {},
-        expert: {}
+        businessLaws: {
+            node_capacity: 50,
+            fiscal_coefficient: 0.1,
+            currency: 'EUR',
+            pmsEnabled: true
+        },
+        expert: {
+            role: 'butcher',
+            modelId: 'gemini-1.5-flash',
+            isConfigured: true,
+            isAuthorized: true
+        }
     },
     metadata: {
         name: 'Le Petit Poucet (Lyon)',

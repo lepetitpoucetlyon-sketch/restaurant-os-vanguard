@@ -72,7 +72,10 @@ export const FiscalEngine = {
           // Chain Continuity
           if (i > 0 && current.previousHash !== seals[i - 1].hash) return false;
           // Content Integrity
-          const computedHash = await CryptoService.generateHash(current.dataSnapshot, current.previousHash);
+          const computedHash = await CryptoService.generateHash(
+              current.dataSnapshot ?? "", 
+              current.previousHash ?? FISCAL_CONSTANTS.GENESIS_ROOT
+          );
           if (computedHash !== current.hash) return false;
       }
       return true;

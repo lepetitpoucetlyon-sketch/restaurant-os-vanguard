@@ -38,11 +38,9 @@ export const SplitBillDomainService = {
         const conviveItems = selectedItems[conviveIndex] || [];
         const itemsForConvive = items.filter(item => conviveItems.includes(item.cartId));
         
-        let sumMicro = BigInt(0);
+        let sumMicro = 0;
         for (const item of itemsForConvive) {
-            const priceMicro = SovereignMath.toMicrounits(item.priceInCents);
-            const qtyMicro = SovereignMath.toMicrounits(item.quantity);
-            const lineTotalMicro = SovereignMath.multiply(priceMicro, qtyMicro);
+            const lineTotalMicro = ((item as any).unitPriceInMicrounits || 0) * item.quantity;
             sumMicro = SovereignMath.add(sumMicro, lineTotalMicro);
         }
         
@@ -50,7 +48,7 @@ export const SplitBillDomainService = {
     },
 
     calculateRemaining(totalInCents: number, payments: ConvivePayment[]): number {
-        let paidMicro = BigInt(0);
+        let paidMicro = 0;
         for (const p of payments) {
             if (p.paid) {
                 paidMicro = SovereignMath.add(paidMicro, SovereignMath.toMicrounits(p.amount));

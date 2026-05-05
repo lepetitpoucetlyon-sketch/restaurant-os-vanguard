@@ -5,8 +5,10 @@ import { fiscalLedgerNodeAtom } from "@/store/pillars/compliance";
 import { useCallback, useMemo } from "react";
 import { useAuth, useTenant } from "@/hooks";
 // import { submitExpenseAction } from "@/app/(admin)/actions/accounting";
-const stubAction = async (...args: any[]) => ({ success: true, id: "STUB_ID" });
-const submitExpenseAction = stubAction as any;
+import { JournalEntry } from "../types";
+
+const stubAction = async (...args: unknown[]) => ({ success: true, id: "STUB_ID" });
+const submitExpenseAction = stubAction as (...args: unknown[]) => Promise<{success: boolean, id: string}>;
 import { FiscalEngine } from "@/infrastructure/adapters/FiscalAdapter";
 
 /**
@@ -18,7 +20,7 @@ export function useFiscal() {
     const { currentUser } = useAuth();
     const { activeTenantId } = useTenant();
 
-    const ledgerEntries = node.data || [];
+    const ledgerEntries = (node.data || []) as unknown as JournalEntry[];
     const isLoading = node.loading;
 
     // The ledger entries are the seals themselves in Grade X
@@ -33,8 +35,8 @@ export function useFiscal() {
             const result = await submitExpenseAction(activeTenantId, {
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'System User',
-                amountInCents: expenseData.amountInCents || 0,
-                category: expenseData.category as import("@nexus/contracts/finance.types").TransactionCategory || 'other',
+                amountInMicrounits: Number(expenseData.amountInMicrounits || 0),
+                category: expenseData.category || 'other',
                 description: expenseData.description || 'Frais sans description',
                 receiptImage: expenseData.receiptUrl,
                 updatedAt: new Date().toISOString()
@@ -48,12 +50,12 @@ export function useFiscal() {
 
     // Action: Run Audit
     const runFiscalAudit = useCallback(async () => {
-        const seals: import('@nexus/contracts/finance.types').FiscalSeal[] = ledgerEntries
-            .filter(e => e.fiscalSealHash)
+        const seals = ledgerEntries
+            .filter(e => e.hash)
             .map(e => ({
-                hash: e.fiscalSealHash!,
-                previousHash: 'root_genesis',
-                timestamp: typeof e.date === 'string' ? e.date : e.date.toISOString(),
+                hash: e.hash!,
+                previousHash: e.hashPrecedent || 'root_genesis',
+                timestamp: typeof e.serverTimestamp === 'number' ? new Date(e.serverTimestamp).toISOString() : e.serverTimestamp,
                 signature: 'sovereign_v1',
                 updatedAt: new Date().toISOString()
             }));

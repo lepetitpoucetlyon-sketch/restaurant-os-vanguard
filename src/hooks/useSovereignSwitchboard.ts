@@ -27,7 +27,7 @@ export function useSovereignSwitchboard() {
             if (snapshot.exists()) {
                 setState(snapshot.data() as SwitchboardState);
             } else {
-                // Sincérité à la Racine: If document doesn't exist, we don't assume `as any`.
+                // Sincérité à la Racine: If document doesn't exist, we don't assume `as unknown`.
                 // We fallback to DEFAULT_STATE visually.
             }
             setLoading(false);

@@ -163,7 +163,7 @@ export class SimulacraAdapter implements INexusAdapter {
 
     async increment(path: string, field: string, amount: number): Promise<void> {
         logger.warn("[Simulacra] Increment is mocked and not fully implemented.");
-        const existing = await this.get<any>(path) || {};
+        const existing = await this.get<any>(path) || {} as Record<string, any>;
         existing[field] = (existing[field] || 0) + amount;
         await this.set(path, existing);
     }

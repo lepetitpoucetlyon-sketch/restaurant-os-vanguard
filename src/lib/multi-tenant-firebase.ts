@@ -18,8 +18,9 @@ const initializedTenants = new Map<string, TenantFirebaseContext>();
  * @param tenantId Cible de l'instance
  */
 export function getTenantFirebase(tenantId: string): TenantFirebaseContext {
-    if (initializedTenants.has(tenantId)) {
-        return initializedTenants.get(tenantId)!;
+    const existing = initializedTenants.get(tenantId);
+    if (existing) {
+        return existing;
     }
 
     const config = getTenantConfig(tenantId);
@@ -63,7 +64,7 @@ export function getTenantFirebase(tenantId: string): TenantFirebaseContext {
         app = getApp(tenantId);
     } catch (e) {
         try {
-            app = initializeApp(config.firebase, tenantId);
+            app = initializeApp(config.firebase as import('firebase/app').FirebaseOptions, tenantId);
         } catch (initErr) {
             console.error(`[EmpireMode] Échec initialisation Firebase pour ${tenantId}. Repli sur MOCK.`, initErr);
             return getTenantFirebase(tenantId + '_mock_fallback'); // Recursion safe if we handle it

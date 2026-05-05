@@ -158,7 +158,7 @@ export function TwoFactorChallenge() {
                             <h4 className="text-[11px] font-black text-text-primary uppercase tracking-widest mb-4">Canaux Emergences</h4>
                             
                             <div className="space-y-3">
-                                {phones.map((p, idx) => (
+                                {phones.map((p: string, idx: number) => (
                                     <button 
                                         key={idx}
                                         onClick={() => {

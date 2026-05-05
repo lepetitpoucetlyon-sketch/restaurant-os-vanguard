@@ -186,7 +186,7 @@ export function Sidebar() {
                 <SidebarProfile 
                     currentUser={currentUser}
                     isSidebarCollapsed={isSidebarCollapsed}
-                    canSwitchProfiles={canSwitchProfiles}
+                    canSwitchProfiles={!!canSwitchProfiles}
                     setIsProfileSwitcherOpen={setIsProfileSwitcherOpen}
                     logout={logout}
                 />

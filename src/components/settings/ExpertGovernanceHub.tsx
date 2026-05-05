@@ -74,11 +74,11 @@ export default function ExpertGovernanceHub() {
     const { showToast } = useToast();
     const [isSaving, setIsSaving] = useState(false);
 
-    const experts = settings.slmConfig?.experts || [];
+    const experts = settings?.slmConfig?.experts || [];
 
     const handleUpdateExpert = (domain: AgentDomain, updates: Partial<SLMExpert>) => {
         const newExperts = experts.map(e => e.domain === domain ? { ...e, ...updates } : e);
-        updateSLM({ experts: newExperts });
+        updateSLM?.({ experts: newExperts });
     };
 
     const handleSaveGlobal = async () => {
@@ -86,7 +86,7 @@ export default function ExpertGovernanceHub() {
         // REAL SYNC (Industrial Soudure)
         // Since we are using production local persistence, feedback is immediate.
         setIsSaving(false);
-        showToast("Gouvernance des experts synchronisée", "success");
+        showToast?.("Gouvernance des experts synchronisée", "success");
     };
 
     return (

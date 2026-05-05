@@ -129,11 +129,13 @@ export default function BarPage() {
             />
 
             {/* Modals & Dialogs */}
-            <RecipeDetailDialog
-                recipe={selectedRecipe}
-                isOpen={!!selectedRecipe}
-                onClose={() => setSelectedRecipe(null)}
-            />
+            {selectedRecipe && (
+                <RecipeDetailDialog
+                    recipe={selectedRecipe}
+                    isOpen={true}
+                    onClose={() => setSelectedRecipe(null)}
+                />
+            )}
 
             <ProductFormModal
                 isOpen={showCocktailModal}

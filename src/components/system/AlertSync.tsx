@@ -61,7 +61,7 @@ export function AlertSync(): null {
 
             // Check if notification already exists using the Set
             const messagePart = sensor.name;
-            // Simple check if any message contains the sensor name
+            // Simple check if unknown message contains the sensor name
             // This is still partly O(N) on the Set keys but much faster than array.some
             // For true O(1), we would need unique IDs on notifications that match sensor IDs.
             // But this optimization avoids N * M loop where M is all notifications.

@@ -1,6 +1,7 @@
 import { OrderItem } from "@nexus/contracts";
 import { CartItem } from "@modules/ops";
-import { MasterBridge } from "@/lib/MasterBridge"; // For master-level context if needed
+import { MasterBridge } from "@/lib/MasterBridge";
+import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
 
 export class POSService {
     /**
@@ -19,9 +20,9 @@ export class POSService {
     static analyzeProfitability(items: CartItem[]): { name: string; alert: string }[] {
         const alerts: { name: string; alert: string }[] = [];
         items.forEach(item => {
-            // Simulated cost calculation (In Grade VI, this would pull from Inventory)
-            const simulatedCost = item.priceInCents * 0.42; 
-            const margin = ((item.priceInCents - simulatedCost) / item.priceInCents) * 100;
+            // Simulated cost calculation
+            const simulatedCost = item.unitPriceInMicrounits * 0.42; 
+            const margin = ((item.unitPriceInMicrounits - simulatedCost) / item.unitPriceInMicrounits) * 100;
             
             if (margin < 60) {
                 alerts.push({ name: item.name, alert: 'Low Margin' });
@@ -40,18 +41,18 @@ export class POSService {
     /**
      * Calculates the total for a set of items (Cart or Order).
      */
-    static calculateCartTotal(items: (OrderItem | CartItem)[]): number {
-        return items.reduce((acc, item) => acc + (item.priceInCents * item.quantity), 0);
+    static calculateCartTotal(items: (OrderItem | CartItem)[]): Microunits {
+        return toMicrounits(items.reduce((acc, item) => acc + ((item as any).unitPriceInMicrounits * item.quantity), 0));
     }
 
     /**
      * Formats items for the Kitchen Display System (KDS).
      */
     static formatForKitchen(items: (OrderItem | CartItem)[]): OrderItem[] {
-        const now = new Date().toISOString();
+        const now = Date.now();
         return items.map(item => {
-            if ('id' in item) {
-                // Already an OrderItem
+            if (!('cartId' in item)) {
+                // It's an OrderItem (no cartId)
                 return {
                     ...item,
                     status: item.status || 'pending',
@@ -63,16 +64,16 @@ export class POSService {
                 return {
                     id: item.cartId,
                     productId: item.productId,
-                    categoryId: item.categoryId,
                     name: item.name,
-                    priceInCents: item.priceInCents,
+                    unitPriceInMicrounits: item.unitPriceInMicrounits,
+                    taxRate: item.taxRate,
                     quantity: item.quantity,
                     notes: item.notes || "",
-                    modifiers: item.modifiers || [],
                     status: 'pending',
                     createdAt: now,
-                    updatedAt: now
-                };
+                    updatedAt: now,
+                    discountInMicrounits: toMicrounits(0)
+                } as OrderItem;
             }
         });
     }

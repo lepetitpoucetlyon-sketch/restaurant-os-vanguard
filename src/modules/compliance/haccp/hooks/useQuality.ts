@@ -175,9 +175,14 @@ export const useQuality = () => {
             newItems = [...existingItems, item];
         }
 
+        if (!activeControl) return;
+ 
         setActiveControl({
             ...activeControl,
             items: newItems,
+            color_aspect: activeControl.color_aspect ?? true,
+            texture_aspect: activeControl.texture_aspect ?? true,
+            odor_aspect: activeControl.odor_aspect ?? true,
         });
     };
 

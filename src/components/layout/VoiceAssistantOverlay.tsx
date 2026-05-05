@@ -83,16 +83,15 @@ export function VoiceAssistantOverlay() {
         }
 
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
         if (!SpeechRecognition) return;
 
         const recognition = new (SpeechRecognition as any)();
         recognitionRef.current = recognition;
         recognition.lang = 'fr-FR';
         recognition.onstart = () => setIsDictating(true);
-        recognition.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
+        recognition.onresult = (event: any) => {
             const transcript = event.results[0][0].transcript;
-            if (transcript.trim()) sendMessage(transcript, pageContextRef.current);
+            if (transcript.trim()) sendMessage(transcript, pageContextRef.current ?? undefined);
         };
         recognition.onerror = () => setIsDictating(false);
         recognition.onend = () => setIsDictating(false);
@@ -110,7 +109,7 @@ export function VoiceAssistantOverlay() {
     }, [isVoiceMode, toggleDictation]);
 
     useEffect(() => {
-        const lastMsg = (messages as { role: string; content?: string; text?: string }[])[messages.length - 1];
+        const lastMsg = (messages as any[])[messages.length - 1];
         if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text);
     }, [messages, isProcessing, speakMessage]);
 
@@ -190,7 +189,7 @@ export function VoiceAssistantOverlay() {
                                     {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                                 </button>
                                 <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-primary"><Minus className="w-4 h-4" /></button>
-                                <button onClick={() => { handleClose(); (startNewSession as () => void)(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+                                <button onClick={() => { handleClose(); startNewSession?.(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
                             </div>
                         </div>
 
@@ -210,7 +209,7 @@ export function VoiceAssistantOverlay() {
                             </div>
                         )}
 
-                        <ChatInput textInput={textInput} setTextInput={setTextInput} isDictating={isDictating} isProcessing={isProcessing} pendingAction={!!pendingAction} onSend={(e) => { e.preventDefault(); if (textInput.trim()) { sendMessage(textInput, pageContextRef.current); setTextInput(""); } }} onToggleDictation={toggleDictation} />
+                        <ChatInput textInput={textInput} setTextInput={setTextInput} isDictating={isDictating} isProcessing={isProcessing} pendingAction={!!pendingAction} onSend={(e) => { e.preventDefault(); if (textInput.trim()) { sendMessage(textInput, pageContextRef.current ?? undefined); setTextInput(""); } }} onToggleDictation={toggleDictation} />
                     </motion.div>
                 )}
             </AnimatePresence>

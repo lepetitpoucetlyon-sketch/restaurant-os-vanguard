@@ -1,5 +1,5 @@
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
+import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '../types';
 import { atom } from 'jotai';
 
 /**

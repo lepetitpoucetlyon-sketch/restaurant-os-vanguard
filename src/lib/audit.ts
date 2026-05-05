@@ -53,7 +53,7 @@ class EmpireAuditLogger {
         setTimeout(() => {
             const payload = {
                 ...event,
-                timestamp: event.timestamp.toISOString() as any, // Cast temporaire pour le bridge Axiom
+                timestamp: event.timestamp.toISOString() as unknown, // Cast temporaire pour le bridge Axiom
                 env: process.env.NODE_ENV || 'development',
                 context: 'RESTAURANT-OS-EMPIRE'
             };

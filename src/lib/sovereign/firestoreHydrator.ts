@@ -1,59 +1,55 @@
-import { z } from 'zod';
-import { UserSchema_v1, UserSchema_v2, ValidatedUser } from '../../domain/schemas/users';
-import { OrderSchema_v1, OrderSchema_v2, ValidatedOrder } from '../../domain/schemas/orders';
-import { ModuleSchema_v1, ModuleSchema_v2, ValidatedModule } from '../../domain/schemas/modules';
+import { z, ZodSchema } from 'zod';
+import { UserSchema } from '../../domain/schemas/users';
+import { OrderSchema } from '../../domain/schemas/orders';
+import { StockItemSchema } from '../../domain/schemas/inventory';
+import { TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '../../domain/schemas/ops';
+import { ModuleSchema } from '../../domain/schemas/modules';
+import { logger } from '../axiom';
 
 /**
  * 🏛️ NEXUS SMART SEAL - Grade X Hydrator
- * Assure la migration à la volée des schémas Firestore _v1 vers _v2.
+ * Assure la migration et la validation atomique des schémas Firestore.
  */
 
-type AnyRecord = Record<string, import("@/shared/nexus-contract").SovereignValue>;
+type AnyRecord = Record<string, unknown>;
+
+function hydrateDocument<T>(
+  data: AnyRecord,
+  schema: ZodSchema<T>,
+  collection: string
+): T | null {
+  if (!data) return null;
+
+  const result = schema.safeParse(data);
+
+  if (result.success) return result.data;
+
+  // Échec de validation → audit + retour null (jamais de crash)
+  logger.error(`[FirestoreHydrator] Data corruption in ${collection}`, {
+    errors: result.error.issues.map(i => `${i.path.join('.')}: ${i.message}`),
+    data: JSON.stringify(data).slice(0, 500)
+  });
+
+  return null;
+}
 
 export const FirestoreHydrator = {
-  hydrateUser(data: AnyRecord): ValidatedUser {
-    if (data.schemaVersion === 2) {
-      return UserSchema_v2.parse(data);
-    }
-    
-    // Migration from v1 to v2
-    const v1Data = UserSchema_v1.parse(data);
-    return UserSchema_v2.parse({
-      ...v1Data,
-      schemaVersion: 2,
-      updatedAt: new Date().toISOString(),
-    });
-  },
+  hydrateUser: (data: AnyRecord) => hydrateDocument(data, UserSchema, 'users'),
+  hydrateOrder: (data: AnyRecord) => hydrateDocument(data, OrderSchema, 'orders'),
+  hydrateStockItem: (data: AnyRecord) => hydrateDocument(data, StockItemSchema, 'inventory'),
+  hydrateTable: (data: AnyRecord) => hydrateDocument(data, TableSchema, 'tables'),
+  hydrateReservation: (data: AnyRecord) => hydrateDocument(data, ReservationSchema, 'reservations'),
+  hydrateFloor: (data: AnyRecord) => hydrateDocument(data, FloorSchema, 'floors'),
+  hydrateZone: (data: AnyRecord) => hydrateDocument(data, ZoneSchema, 'zones'),
+  hydrateModule: (data: AnyRecord) => hydrateDocument(data, ModuleSchema, 'modules'),
 
-  hydrateOrder(data: AnyRecord): ValidatedOrder {
-    if (data.schemaVersion === 2) {
-      return OrderSchema_v2.parse(data);
-    }
-
-    // Migration from v1 to v2
-    const v1Data = OrderSchema_v1.parse(data);
-    return OrderSchema_v2.parse({
-      ...v1Data,
-      items: v1Data.items.map(item => ({
-        ...item,
-        schemaVersion: 2
-      })),
-      schemaVersion: 2,
-      updatedAt: new Date().toISOString(),
-    });
-  },
-
-  hydrateModule(data: AnyRecord): ValidatedModule {
-    if (data.schemaVersion === 2) {
-      return ModuleSchema_v2.parse(data);
-    }
-
-    // Migration from v1 to v2
-    const v1Data = ModuleSchema_v1.parse(data);
-    return ModuleSchema_v2.parse({
-      ...v1Data,
-      schemaVersion: 2,
-      updatedAt: new Date().toISOString(),
-    });
+  // Collection hydrator helper
+  hydrateCollection: <T>(
+    docs: AnyRecord[],
+    schema: ZodSchema<T>,
+    collection: string
+  ): T[] => {
+    const results = docs.map(doc => hydrateDocument<T>(doc, schema, collection));
+    return results.filter((r): r is T => r !== null);
   }
 };

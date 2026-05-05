@@ -22,12 +22,12 @@ export function useHumanResources() {
     
     // Grade X Atomic Data
     const leaveRequestsNode = useAtomValue(leaveRequestsNodeAtom);
-    const leaveRequests = (leaveRequestsNode.data || []);
+    const leaveRequests = (leaveRequestsNode.data || []) as LeaveRequest[];
     
-    const leaveBalances = (useAtomValue(leaveBalancesAtom) || []);
+    const leaveBalances = (useAtomValue(leaveBalancesAtom) || []) as LeaveBalance[];
     const isLoading = useAtomValue(hrLoadingAtom);
     const shiftsNode = useAtomValue(shiftsNodeAtom);
-    const shifts = (shiftsNode.data || []);
+    const shifts = (shiftsNode.data || []) as Shift[];
 
     // --- 🔨 LA FORGE ---
     const leaveForge = useNexusMutation<LeaveRequest>(leaveRequestsNodeAtom, 'leaveRequests', 'HR');

@@ -12,7 +12,7 @@ interface LogEntry {
     action: string;
     severity: string;
     timestamp: Date;
-    details?: any;
+    details?: unknown;
 }
 
 

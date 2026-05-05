@@ -1,3 +1,4 @@
+import { NexusSutures } from '@/store/nexusSutures';
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode, useRef } from 'react';
@@ -71,7 +72,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
 
     // Initialisation de l'adaptateur Nexus (Grade VI)
-    useMemo(() => {
+    useEffect(() => {
         try {
             Nexus.adapter = new FirestoreAdapter();
         } catch (e) {
@@ -84,7 +85,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         NexusTelemetryEngine.mountChaosMonkeys();
         
         // 🛰️ INITIALIZE HEADLESS SUTURES (L5)
-        const { NexusSutures } = require('@/store/nexusSutures');
+        
         NexusSutures.init();
 
         return () => {
@@ -131,7 +132,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     const session = useAuthSession();
     const staff = useAuthStaff(session.firebaseUserId, session.sessionUserId);
     
-    const [lastActive] = useState(() => Date.now().toString());
+    const [lastActive] = useState(() => Date.now());
 
     const currentUser = useMemo(() => {
         const activeUserId = session.sessionUserId || session.firebaseUserId;
@@ -295,12 +296,12 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             const path = `tenants/${activeTenantId}/users`;
             const id = Nexus.adapter.generateId(path);
             const now = new Date().toISOString();
-            await Nexus.adapter.set(`${path}/${id}`, {
+            await Nexus.adapter.set(`${path}/${id}`, ({
                 ...data,
                 id,
                 createdAt: now,
                 updatedAt: now
-            } as unknown as User);
+            } as unknown) as User);
         },
         deleteUser: async (id: string) => {
             if (!activeTenantId) return;
@@ -359,7 +360,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             message: string; 
             module?: string;
             action?: { label: string; href: string };
-        }) => addToast({ ...n, duration: 3000 } as any),
+        }) => addToast({ ...n, duration: 3000 }),
         markAsRead: (id: string) => console.log('Mark as read', id),
         markAllAsRead: () => console.log('Mark all read'),
         removeNotification: (id: string) => console.log('Remove notification', id),

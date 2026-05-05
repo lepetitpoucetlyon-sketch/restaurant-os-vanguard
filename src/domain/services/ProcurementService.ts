@@ -47,7 +47,7 @@ export class ProcurementService {
     static getRecentCostForIngredient(ingredientId: string, stockItems: StockItem[]): number {
         const batches = stockItems
             .filter(item => item.ingredientId === ingredientId)
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
         
         return batches.length > 0 ? batches[0].unitCostInCents : 0;
     }

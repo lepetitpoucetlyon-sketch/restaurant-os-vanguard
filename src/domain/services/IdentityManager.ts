@@ -24,11 +24,15 @@ function getRootAdminPin(): string {
 
 export const ROOT_ADMIN: User = {
     id: 'user_root',
+    type: 'user',
     name: 'administrateur',
     role: 'admin',
+    status: 'active',
     avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80',
     performanceScore: 5.0,
     accessLevel: 100,
+    schemaVersion: 2,
+    updatedAt: Date.now(),
 };
 
 function stripSensitiveFields(user: User): User {
@@ -36,11 +40,11 @@ function stripSensitiveFields(user: User): User {
     return safeUser;
 }
 
-function buildSessionUser(user: User, lastActive?: string): User {
+function buildSessionUser(user: User, lastActive?: number): User {
     return stripSensitiveFields({
         ...user,
-        lastActive: lastActive ?? new Date().toISOString(),
-    });
+        lastActive: lastActive ?? Date.now(),
+    } as any);
 }
 
 function sameSessionUser(previous: User | null, next: User): boolean {

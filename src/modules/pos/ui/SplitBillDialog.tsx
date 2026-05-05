@@ -10,15 +10,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const useLanguage = () => ({ t: (s: string) => s });
 import { formatCurrency } from "@/lib/formatters";;
 
-interface CartItem {
-    cartId: string;
-    productId: string;
-    name: string;
-    priceInCents: number;
-    quantity: number;
-    notes?: string;
-    modifiers?: string[];
-}
+import { CartItem } from "@modules/ops";
+import { Microunits, toMicrounits } from "@/domain/schemas/primitives";
 
 interface SplitBillDialogProps {
     isOpen: boolean;
@@ -105,7 +98,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
         const conviveItems = selectedItems[conviveIndex] || [];
         return items
             .filter(item => conviveItems.includes(item.cartId))
-            .reduce((sum, item) => sum + (item.priceInCents * item.quantity), 0);
+            .reduce((sum, item) => sum + (item.unitPriceInMicrounits * item.quantity), 0);
     };
 
     const handlePayConvive = (conviveIndex: number) => {
@@ -151,9 +144,9 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                 <span className="text-[11px] font-black uppercase tracking-[0.5em] text-accent-gold">{t('pos.split.subtitle')}</span>
                             </div>
                             <h1 className="text-4xl font-serif font-black text-white italic tracking-tight leading-none">{t('pos.split.title')}</h1>
-                            <p className="text-[11px] font-black text-white/30 uppercase tracking-[0.4em] mt-4">
+                             <p className="text-[11px] font-black text-white/30 uppercase tracking-[0.4em] mt-4">
                                 <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
-                                Total TTC: <span className="text-white">{formatCurrency(total)}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
+                                Total TTC: <span className="text-white">{formatCurrency(total / 1000000)}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
                             </p>
                         </div>
                     </div>
@@ -171,7 +164,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             </div>
                             <h2 className="text-3xl font-serif font-black text-white italic tracking-tighter">{t('pos.split.convive_signature_title')}<br />{t('pos.split.convive')} {payingConvive + 1}</h2>
                             <div className="relative">
-                                <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(getConviveTotal(payingConvive || 0))}</p>
+                                <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(getConviveTotal(payingConvive || 0) / 1000000)}</p>
                                 <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-accent-gold/20 rounded-full blur-sm" />
                             </div>
                         </div>
@@ -283,7 +276,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             </div>
                                             <span className="text-[11px] font-black text-white/60 uppercase tracking-[0.4em]">{t('pos.split.investment_per_seat')}</span>
                                         </div>
-                                        <span className="text-5xl font-serif font-black italic text-accent-gold drop-shadow-glow">{formatCurrency(amountPerPerson)}</span>
+                                        <span className="text-5xl font-serif font-black italic text-accent-gold drop-shadow-glow">{formatCurrency(amountPerPerson / 1000000)}</span>
                                     </div>
                                 </div>
                             )}
@@ -319,7 +312,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             </div>
 
                                             <div className="text-4xl font-serif font-black italic text-white mb-8 transition-colors group-hover/card:text-accent-gold group-hover/card:translate-x-2 duration-500">
-                                                {formatCurrency(getConviveTotal(index))}
+                                                {formatCurrency(getConviveTotal(index) / 1000000)}
                                             </div>
 
                                             {!convive.paid && (
@@ -355,7 +348,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.6em] mb-2">{t('pos.split.remaining')}</span>
                                 <div className="flex items-end gap-3">
-                                    <span className="text-5xl font-serif font-black italic text-white leading-none tracking-tighter">{formatCurrency(remainingAmount)}</span>
+                                    <span className="text-5xl font-serif font-black italic text-white leading-none tracking-tighter">{formatCurrency(remainingAmount / 1000000)}</span>
                                     <span className="text-xs font-black text-white/20 uppercase tracking-widest mb-1 pb-1">Restant</span>
                                 </div>
                             </div>
@@ -371,7 +364,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             ) : (
                                 <div className="flex flex-col items-center">
                                     <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.5em] mb-4">À encaisser maintenant</span>
-                                    <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(remainingAmount)}</p>
+                                    <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(remainingAmount / 1000000)}</p>
                                 </div>
                             )}
                         </div>

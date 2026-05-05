@@ -1,3 +1,6 @@
+import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
+import { CycleGuard } from '@/shared/nexus/guards/CycleGuard';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 import { getDefaultStore } from 'jotai';
 import { 
     ordersNodeAtom, 
@@ -70,7 +73,7 @@ export const ChaosMonkey = {
     // 1. Attempt Float Injection via Mock PhysicalNode
     try {
         const corruptedValue = 10.5523; // Floats are prohibited
-        const { SovereignMath } = require('@shared/services/SovereignMath');
+        
         SovereignMath.toMicrounits(corruptedValue); 
     } catch (e) {
         logger.info("[Chaos-Monkey] Float Injection BLOCKED by SovereignMath.");
@@ -78,7 +81,7 @@ export const ChaosMonkey = {
 
     // 2. Attempt DAG Cycle Injection
     try {
-        const { CycleGuard } = require('@shared/nexus/guards/CycleGuard');
+        
         CycleGuard.validateRecipe("CHAOS_RECIPE", ["CHAOS_RECIPE"]); // Self-referencing cycle
     } catch (e) {
         logger.info("[Chaos-Monkey] DAG Cycle Injection BLOCKED by CycleGuard.");
@@ -101,7 +104,7 @@ export const ChaosMonkey = {
         // Optimistic decrement
         store.set(stockItemsNodeAtom, (prev: any) => ({
             ...prev,
-            data: prev.data.map((item: any, idx: number) => idx === 0 ? { ...item, quantity: item.quantity - 1 } : item)
+            data: (prev.data || []).map((item: any, idx: number) => idx === 0 ? { ...item, quantity: item.quantity - 1 } : item)
         }));
 
         // Simulate DB Latency and potential reject
@@ -114,7 +117,7 @@ export const ChaosMonkey = {
     logger.info(`[Chaos-Monkey] Rush Completed. Rejects: ${rejects}/50. Triggering Slayer Recovery.`);
     
     // Trigger Slayer explicitly for the crash test
-    const { ResilienceSlayer } = require('@domain/services/ResilienceSlayer');
+    
     ResilienceSlayer.handleTransactionFailure('operational/stock', new Error("CONCURRENCY_VIOLATION"));
   },
 
@@ -159,7 +162,7 @@ export const ChaosMonkey = {
         // 🛡️ RECOVERY TRIGGER
         const persistencePath = Nexus.getTenantPath(choice.path);
         setTimeout(() => {
-            // @ts-ignore - SelfHealingEngine needs a generic WritableAtom which matches the signature
+             // - SelfHealingEngine needs a generic WritableAtom which matches the signature
             SelfHealingEngine.auditAndHeal(choice.atom as any, validHash, persistencePath);
         }, 1500);
 

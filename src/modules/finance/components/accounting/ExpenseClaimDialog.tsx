@@ -70,7 +70,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                 category: formData.category,
                 description: formData.description,
                 receiptImage: formData.receiptImage || undefined,
-            } as any);
+            } as unknown);
             showToast("Note de frais scannée et transmise au coffre-fort fiscal", "success");
             reset();
             onClose();

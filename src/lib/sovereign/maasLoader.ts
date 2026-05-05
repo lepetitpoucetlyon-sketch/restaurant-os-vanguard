@@ -85,9 +85,9 @@ export async function loadMaasModule<T>(
 interface MaasGuardProps {
     moduleName: string;
     claims: MaasClaims;
-    importFn: () => Promise<{ default: React.ComponentType<any> }>;
+    importFn: () => Promise<{ default: React.ComponentType<unknown> }>;
     fallback?: React.ReactNode;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**
@@ -95,7 +95,7 @@ interface MaasGuardProps {
  * Only triggers the importFn if the user has the required plan.
  */
 export function MaasComponentGuard({ moduleName, claims, importFn, fallback, ...props }: MaasGuardProps) {
-    const [Component, setComponent] = useState<React.ComponentType<any> | null>(null);
+    const [Component, setComponent] = useState<React.ComponentType<unknown> | null>(null);
     const [isAllowed, setIsAllowed] = useState<boolean | null>(null);
 
     useEffect(() => {

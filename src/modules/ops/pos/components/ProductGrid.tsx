@@ -38,7 +38,7 @@ interface ProductCardProps {
  * Uses layout="position" for efficient GPU-accelerated transitions during filtering.
  */
 const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, disabledReason, t, onClick, multiplier, performanceMode }: ProductCardProps) => {
-    const finalPrice = (product.priceInCents * multiplier) / 100;
+    const finalPrice = ((product.priceInCents ?? 0) * multiplier) / 100;
 
     return (
     <motion.div
@@ -129,7 +129,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                     </span>
                     {multiplier !== 1 && (
                         <span className="text-xs text-text-muted line-through opacity-50">
-                            {(product.priceInCents / 100).toFixed(2)}€
+                            {((product.priceInCents ?? 0) / 100).toFixed(2)}€
                         </span>
                     )}
                     <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/10">
@@ -187,7 +187,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
             return matchesSearch && matchesCategory;
         }).map(product => {
             // COMPLIANCE GUARD LOGIC
-            // Check if any required ingredient is completely unavailable or expired
+            // Check if unknown required ingredient is completely unavailable or expired
             let isDisabled = false;
             let disabledReason: 'expired' | 'stockout' | undefined;
 

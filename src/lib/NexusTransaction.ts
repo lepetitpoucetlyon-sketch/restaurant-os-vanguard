@@ -7,7 +7,7 @@ import { logger } from '@/lib/logger';
 /**
  * 🛡️ NexusTransaction - Higher-Order Transaction Wrapper
  * The "Great Wall" of Restaurant OS operations.
- * Enforces mandatory data validation before any bit touches the database.
+ * Enforces mandatory data validation before unknown bit touches the database.
  */
 export class NexusTransaction {
   /**

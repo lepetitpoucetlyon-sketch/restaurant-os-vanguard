@@ -160,11 +160,13 @@ export default function KDSPage() {
                 onClose={() => setShowModificationAlerts(false)}
             />
 
-            <RecipeDetailDialog
-                recipe={selectedRecipe}
-                isOpen={!!selectedRecipe}
-                onClose={() => setSelectedRecipe(null)}
-            />
+            {selectedRecipe && (
+                <RecipeDetailDialog
+                    recipe={selectedRecipe}
+                    isOpen={true}
+                    onClose={() => setSelectedRecipe(null)}
+                />
+            )}
 
             <AnimatePresence>
                 {isAuditOpen && auditTicket && (

@@ -42,7 +42,7 @@ export default function SimulatorPage() {
     const handleRunSimulation = async () => {
         setIsSimulating(true);
         try {
-            await runSimulation({
+            await runSimulation?.({
                 name: newSimConfig.name,
                 description: `Simulation manuelle: Prix ${newSimConfig.priceChange > 0 ? '+' : ''}${newSimConfig.priceChange}%, Main d'œuvre ${newSimConfig.laborChange}%`,
                 inputs: {
@@ -136,7 +136,7 @@ export default function SimulatorPage() {
                                         max="20" 
                                         step="1"
                                         value={(globalInflationRate as number) || 0}
-                                        onChange={(e) => setGlobalInflationRate(parseInt(e.target.value))}
+                                        onChange={(e) => setGlobalInflationRate?.(parseInt(e.target.value))}
                                         className="w-full h-1.5 bg-neutral-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-accent-gold"
                                     />
                                     
@@ -171,14 +171,14 @@ export default function SimulatorPage() {
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-8 space-y-4">
-                            {scenarios.length === 0 ? (
+                            {(scenarios ?? []).length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
                                     <Cpu className="w-20 h-20 mb-4" strokeWidth={1} />
                                     <p className="font-serif italic text-xl">Aucune simulation active</p>
                                     <p className="text-sm">Lancez votre première simulation pour voir l'avenir.</p>
                                 </div>
                             ) : (
-                                scenarios.map((scenario) => (
+                                (scenarios ?? []).map((scenario) => (
                                     <motion.div
                                         key={scenario.id}
                                         initial={{ opacity: 0, y: 20 }}

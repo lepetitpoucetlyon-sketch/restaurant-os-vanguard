@@ -91,13 +91,13 @@ export function SidebarBranding({
                                     ? "bg-transparent border-transparent" 
                                     : "bg-text-primary dark:bg-accent-gold/10 text-accent-gold border-accent-gold/20 shadow-premium"
                             )}
-                            style={!hasDynamicLogo && config.theme.primaryColor ? { 
+                            style={!hasDynamicLogo && config?.theme?.primaryColor ? { 
                                 color: config.theme.primaryColor,
                                 borderColor: `${config.theme.primaryColor}33`,
                                 backgroundColor: `${config.theme.primaryColor}1a`
                             } : undefined}
                         >
-                            {hasDynamicLogo ? (
+                            {hasDynamicLogo && config?.theme?.logoUrl ? (
                                 <img 
                                     src={config.theme.logoUrl} 
                                     alt="Logo" 
@@ -108,7 +108,7 @@ export function SidebarBranding({
                                     <ChevronLeft strokeWidth={2} className="w-5 h-5" />
                                     <div 
                                         className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent-gold border-2 border-bg-secondary shadow-glow transition-colors duration-500" 
-                                        style={config.theme.primaryColor ? { backgroundColor: config.theme.primaryColor } : undefined}
+                                        style={config?.theme?.primaryColor ? { backgroundColor: config.theme.primaryColor } : undefined}
                                     />
                                 </>
                             )}
@@ -120,9 +120,9 @@ export function SidebarBranding({
                             className="overflow-hidden flex-1 min-w-0"
                         >
                             <h1 className="font-serif font-black text-lg text-text-primary tracking-tight leading-none italic">
-                                {t('sidebar.resto')} <span className="text-accent-gold not-italic transition-colors duration-500" style={config.theme.primaryColor ? { color: config.theme.primaryColor } : undefined}>{t('sidebar.os')}</span>
+                                {t('sidebar.resto')} <span className="text-accent-gold not-italic transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>{t('sidebar.os')}</span>
                             </h1>
-                            <p className="text-[7px] uppercase tracking-[0.4em] text-accent-gold font-black mt-1.5 whitespace-nowrap overflow-hidden text-ellipsis leading-none opacity-60 transition-colors duration-500" style={config.theme.primaryColor ? { color: config.theme.primaryColor } : undefined}>
+                            <p className="text-[7px] uppercase tracking-[0.4em] text-accent-gold font-black mt-1.5 whitespace-nowrap overflow-hidden text-ellipsis leading-none opacity-60 transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>
                                 {t('nav.executive_intelligence')}
                             </p>
                         </motion.div>

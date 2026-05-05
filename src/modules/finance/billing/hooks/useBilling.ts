@@ -2,6 +2,8 @@
 
 import { useEffect, useCallback } from 'react';
 import { useOrders } from '@/engines/ops/NexusOpsProvider';
+import type { Order } from '@modules/ops';
+import type { JournalEntry } from '@modules/finance';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
@@ -25,7 +27,7 @@ export function useBilling() {
     /**
      * Fiscal Suture: Process a single order into a LegalInvoice and seal it.
      */
-    const billOrder = useCallback(async (order: any) => {
+    const billOrder = useCallback(async (order: Order) => {
         try {
             // 1. Transform SovereignOrder -> LegalInvoice
             const invoice = InvoiceEngine.transform(order);
@@ -56,12 +58,12 @@ export function useBilling() {
         if (isLoading || !orders) return;
 
         const processOrders = async () => {
-            const completedOrders = orders.filter((o: any) => o.status === 'completed' || o.status === 'paid');
-            const ledgerData = fiscalLedgerNode.data || [];
+            const completedOrders = (orders as Order[]).filter((o: Order) => o.status === 'paid' || (o as any).status === 'served');
+            const ledgerData = (fiscalLedgerNode.data || []) as unknown as JournalEntry[];
 
             for (const order of completedOrders) {
                 // Check if already billed (avoid double billing in this session)
-                const isAlreadyBilled = ledgerData.some((entry: any) => entry.metadata?.orderId === order.id);
+                const isAlreadyBilled = ledgerData.some((entry: JournalEntry) => (entry as any).metadata?.orderId === order.id);
                 
                 if (!isAlreadyBilled) {
                     await billOrder(order);
