@@ -25,7 +25,7 @@ export const StaffAuditLog = ({ logs }: StaffAuditLogProps) => {
             initial="hidden"
             animate="visible"
             variants={cinematicContainer}
-            className="bg-white dark:bg-bg-secondary rounded-xl border border-border shadow-sm overflow-hidden"
+            className="bg-[--color-surface-primary] dark:bg-bg-secondary rounded-xl border border-border shadow-sm overflow-hidden"
         >
             <div className="p-8 border-b border-border/50 flex items-center justify-between">
                 <h3 className="text-xl font-serif font-semibold text-text-primary tracking-tight flex items-center gap-3">

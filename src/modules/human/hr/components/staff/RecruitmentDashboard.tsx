@@ -32,7 +32,7 @@ import { CandidateModal } from "./CandidateModal";
 import { useToast } from "@ui/Toast";
 
 const STATUS_CONFIG: Record<CandidateStatus, { label: string; icon: import('lucide-react').LucideIcon; color: string; bg: string }> = {
-    new: { label: "Nouveau", icon: UserPlus, color: "text-blue-500", bg: "bg-blue-50" },
+    new: { label: "Nouveau", icon: UserPlus, color: "text-blue-500", bg: "bg-[--color-surface-form]" },
     interview: { label: "Entretien", icon: Clock, color: "text-purple-500", bg: "bg-purple-50" },
     trial: { label: "Essai", icon: CheckCircle2, color: "text-amber-500", bg: "bg-amber-50" },
     hired: { label: "Embauché", icon: CheckCircle2, color: "text-green-500", bg: "bg-green-50" },

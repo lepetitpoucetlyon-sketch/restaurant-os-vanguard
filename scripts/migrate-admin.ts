@@ -3,13 +3,14 @@ import path from 'path';
 import fs from 'fs';
 
 /**
- * 🛠️ MIGRATION SCRIPT - OPÉRATION DÉCAPAGE ADMIN
+ * 🛠️ MIGRATION SCRIPT - EXTENSION REPORTS & BILLING
+ * Parcourt les fichiers et remplace les styles statiques par des tokens sémantiques.
  */
 
 const TARGET_PATH = process.argv[2];
 
 if (!TARGET_PATH) {
-    console.error("❌ Veuillez spécifier un chemin cible (ex: src/app/(admin)/dashboard)");
+    console.error("❌ Veuillez spécifier un chemin cible (ex: src/app/admin/reports)");
     process.exit(1);
 }
 
@@ -36,60 +37,40 @@ const allFiles = getAllFiles(searchPath);
 allFiles.forEach(f => project.addSourceFileAtPath(f));
 console.log(`📄 Fichiers trouvés : ${project.getSourceFiles().length}`);
 
-const MAPPINGS: Record<string, string> = {
-    'bg-slate-': 'bg-surface-bg',
-    'bg-gray-': 'bg-surface-bg',
-    'bg-neutral-': 'bg-surface-bg',
-    'bg-zinc-': 'bg-surface-bg',
-    'bg-white': 'bg-surface-card',
-    'bg-black': 'bg-surface-bg',
-    'bg-blue-': 'bg-action-primary',
-    'bg-indigo-': 'bg-action-primary',
-    'bg-emerald-': 'bg-status-success',
-    'bg-green-': 'bg-status-success',
-    'bg-amber-': 'bg-status-warning',
-    'bg-yellow-': 'bg-status-warning',
-    'bg-red-': 'bg-status-danger',
-    'bg-rose-': 'bg-status-danger',
-    'bg-accent': 'bg-action-primary',
-    'text-slate-': 'text-text-primary',
-    'text-gray-': 'text-text-secondary',
-    'text-neutral-': 'text-text-primary',
-    'text-zinc-': 'text-text-primary',
-    'text-blue-': 'text-action-primary',
-    'text-indigo-': 'text-action-primary',
-    'text-emerald-': 'text-status-success',
-    'text-green-': 'text-status-success',
-    'text-amber-': 'text-status-warning',
-    'text-yellow-': 'text-status-warning',
-    'text-red-': 'text-status-danger',
-    'text-rose-': 'text-status-danger',
-    'text-accent': 'text-action-primary',
-    'border-slate-': 'border-border-default',
-    'border-gray-': 'border-border-default',
-    'border-neutral-': 'border-border-default',
-    'border-white/5': 'border-border-subtle',
-    'border-white/10': 'border-border-default',
-    'border-accent': 'border-action-primary',
-    'font-serif': 'font-brand',
-    'font-sans': 'font-ui',
-};
-
-const HEX_MAP: Record<string, string> = {
-    '#C5A059': 'var(--action-primary)',
-    '#0B0B0C': 'var(--surface-card)',
-    '#F8F7F2': 'var(--surface-bg)',
-    '#050505': 'var(--surface-bg)',
-    '#080808': 'var(--surface-bg)',
-    '#0A0A0A': 'var(--surface-card)',
+const STATIC_TO_SEMANTIC_MAP: Record<string, string> = {
+    // Backgrounds
+    'bg-white': 'bg-[--color-surface-primary]',
+    'bg-gray-50': 'bg-[--color-surface-secondary]',
+    'bg-gray-100': 'bg-[--color-surface-tertiary]',
+    'bg-gray-900': 'bg-[--color-surface-inverse]',
+    // Text
+    'text-gray-900': 'text-[--color-text-primary]',
+    'text-gray-600': 'text-[--color-text-secondary]',
+    'text-gray-400': 'text-[--color-text-disabled]',
+    // Borders
+    'border-gray-200': 'border-[--color-border-default]',
+    'border-gray-300': 'border-[--color-border-strong]',
+    // Brand accents
+    'bg-blue-600': 'bg-[--color-brand-primary]',
+    'text-blue-600': 'text-[--color-brand-primary]',
+    'bg-red-500': 'bg-[--color-status-error]',
+    'bg-yellow-400': 'bg-[--color-status-warning]',
+    // RH & Finance Specifique
+    'bg-green-100': 'bg-[--color-status-success-subtle]',
+    'text-green-800': 'text-[--color-status-success-dark]',
+    'bg-red-100': 'bg-[--color-status-error-subtle]',
+    'text-red-800': 'text-[--color-status-error-dark]',
+    'bg-blue-50': 'bg-[--color-surface-form]',
+    'bg-indigo-50': 'bg-[--color-surface-form-accent]',
 };
 
 let totalReplacements = 0;
+const migrationLog: any[] = [];
 
 project.getSourceFiles().forEach(sourceFile => {
     let fileModified = false;
 
-    // 1. Remplacement dans les classes
+    // Remplacement dans les classes
     const stringNodes = [
         ...sourceFile.getDescendantsOfKind(SyntaxKind.StringLiteral),
         ...sourceFile.getDescendantsOfKind(SyntaxKind.NoSubstitutionTemplateLiteral)
@@ -101,36 +82,21 @@ project.getSourceFiles().forEach(sourceFile => {
         let text = node.getLiteralText();
         let originalText = text;
 
-        Object.entries(MAPPINGS).forEach(([legacy, semantic]) => {
-            const regex = new RegExp(`\\b${legacy}[^\\s"']*`, 'g');
+        Object.entries(STATIC_TO_SEMANTIC_MAP).forEach(([legacy, semantic]) => {
+            const regex = new RegExp(`\\b${legacy}\\b`, 'g');
             if (regex.test(text)) {
                 text = text.replace(regex, semantic);
+                migrationLog.push({
+                    file: sourceFile.getBaseName(),
+                    line: node.getStartLineNumber(),
+                    original: legacy,
+                    replaced: semantic
+                });
             }
         });
 
         if (text !== originalText) {
-            node.setLiteralValue(text);
-            fileModified = true;
-            totalReplacements++;
-        }
-    }
-
-    // 2. Remplacement des codes Hex
-    const jsxExprs = sourceFile.getDescendantsOfKind(SyntaxKind.JsxExpression);
-    for (const expr of jsxExprs) {
-        if (expr.wasForgotten()) continue;
-
-        const text = expr.getText();
-        let newText = text;
-
-        Object.entries(HEX_MAP).forEach(([hex, variable]) => {
-            if (newText.includes(hex)) {
-                newText = newText.replace(new RegExp(hex, 'g'), variable);
-            }
-        });
-
-        if (newText !== text) {
-            expr.replaceWithText(newText);
+            (node as any).setLiteralValue(text);
             fileModified = true;
             totalReplacements++;
         }
@@ -142,5 +108,9 @@ project.getSourceFiles().forEach(sourceFile => {
     }
 });
 
-console.log(`\n🎉 Migration terminée pour le chemin ${TARGET_PATH} !`);
+const reportPath = path.join(process.cwd(), 'migration-reports-billing.json');
+fs.writeFileSync(reportPath, JSON.stringify(migrationLog, null, 2));
+
+console.log(`\n🎉 Migration terminée !`);
 console.log(`📊 Total remplacements : ${totalReplacements}`);
+console.log(`📄 Rapport : ${reportPath}`);

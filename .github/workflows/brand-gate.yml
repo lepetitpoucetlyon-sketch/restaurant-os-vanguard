@@ -1,0 +1,28 @@
+name: Brand Semantic Gate
+
+on:
+  pull_request:
+    branches: [ main, master, grade-x-vanguard ]
+  push:
+    branches: [ grade-x-vanguard ]
+
+jobs:
+  check-semantic-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm install ts-morph zod jotai
+        
+      - name: Run Brand Audit
+        run: npx ts-node scripts/audit-grade-x.ts
+        
+      - name: Run Anti-Regression Gate
+        run: ./scripts/check-brand-compliance.sh
+        
+      - name: Upload Audit Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: brand-audit-report
+          path: audit-report.json

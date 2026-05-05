@@ -24,7 +24,7 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
         whileHover={{ scale: 1.02, y: -4 }}
         whileTap={{ scale: 0.98 }}
         onClick={onClick}
-        className="group bg-white dark:bg-bg-secondary rounded-xl border border-border shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden relative"
+        className="group bg-[--color-surface-primary] dark:bg-bg-secondary rounded-xl border border-border shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden relative"
     >
         <div className="absolute top-0 right-0 w-24 h-24 bg-bg-tertiary -mr-12 -mt-12 rounded-full opacity-50 group-hover:scale-150 transition-all duration-700" />
 
@@ -73,10 +73,10 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                 <span className="text-[10px] font-bold text-text-primary uppercase tracking-[0.2em]">En Service</span>
             </div>
             <div className="flex gap-2">
-                <button className="w-9 h-9 rounded-lg bg-white dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
+                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
                     <Mail strokeWidth={1.5} className="w-4 h-4" />
                 </button>
-                <button className="w-9 h-9 rounded-lg bg-white dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
+                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
                     <Phone strokeWidth={1.5} className="w-4 h-4" />
                 </button>
             </div>
@@ -107,7 +107,7 @@ export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
                 onClick={() => onOpenModal()}
                 className="h-full min-h-[300px] border-2 border-dashed border-border/60 bg-bg-tertiary/20 rounded-xl flex flex-col items-center justify-center p-10 group hover:border-accent hover:bg-bg-tertiary transition-all duration-500"
             >
-                <div className="w-16 h-16 rounded-2xl bg-white dark:bg-bg-tertiary border border-border flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
+                <div className="w-16 h-16 rounded-2xl bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
                     <Plus strokeWidth={1.5} className="w-8 h-8 text-text-muted group-hover:text-white" />
                 </div>
                 <h4 className="text-xl font-serif font-semibold text-text-primary">Nouveau Profil</h4>

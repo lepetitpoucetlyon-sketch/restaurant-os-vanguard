@@ -130,7 +130,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-all"
+                            className="w-12 h-12 rounded-2xl bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 border border-white/10 flex items-center justify-center transition-all"
                         >
                             <X className="w-6 h-6 text-white/50" />
                         </button>
@@ -153,7 +153,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     step="0.01"
                                     value={formData.amount}
                                     onChange={e => setFormData(prev => ({ ...prev, amount: e.target.value }))}
-                                    className="w-full h-20 bg-white dark:bg-bg-secondary border-2 border-neutral-100 dark:border-border rounded-[2rem] pl-16 pr-8 text-3xl font-mono font-black text-text-primary focus:outline-none focus:border-accent transition-all shadow-soft"
+                                    className="w-full h-20 bg-[--color-surface-primary] dark:bg-bg-secondary border-2 border-neutral-100 dark:border-border rounded-[2rem] pl-16 pr-8 text-3xl font-mono font-black text-text-primary focus:outline-none focus:border-accent transition-all shadow-soft"
                                     placeholder="0.00"
                                 />
                             </div>
@@ -179,7 +179,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                             required
                             value={formData.description}
                             onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                            className="w-full h-40 bg-white dark:bg-bg-secondary border-2 border-neutral-100 dark:border-border rounded-[2.5rem] px-10 py-8 text-base font-serif italic text-neutral-800 dark:text-text-muted focus:outline-none focus:border-accent transition-all shadow-soft outline-none resize-none"
+                            className="w-full h-40 bg-[--color-surface-primary] dark:bg-bg-secondary border-2 border-neutral-100 dark:border-border rounded-[2.5rem] px-10 py-8 text-base font-serif italic text-neutral-800 dark:text-text-muted focus:outline-none focus:border-accent transition-all shadow-soft outline-none resize-none"
                             placeholder="Veuillez détailler le contexte professionnel de cette dépense engagée pour l'établissement..."
                         />
                     </div>
@@ -215,7 +215,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     onClick={() => fileInputRef.current?.click()}
                                     className="aspect-[21/9] rounded-[3rem] border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center gap-6 hover:border-accent hover:bg-accent/5 transition-all cursor-pointer group bg-bg-tertiary/20"
                                 >
-                                    <div className="w-20 h-20 rounded-[2rem] bg-white dark:bg-bg-secondary flex items-center justify-center text-text-muted group-hover:text-accent shadow-soft border border-neutral-100 dark:border-border group-hover:-translate-y-2 transition-all duration-500">
+                                    <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary] dark:bg-bg-secondary flex items-center justify-center text-text-muted group-hover:text-accent shadow-soft border border-neutral-100 dark:border-border group-hover:-translate-y-2 transition-all duration-500">
                                         <Camera strokeWidth={1.5} className="w-8 h-8" />
                                     </div>
                                     <div className="text-center space-y-2">
@@ -237,7 +237,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
                     <div className="p-8 bg-accent/5 border border-accent/10 rounded-[2.5rem] flex items-start gap-6 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -mr-16 -mt-16 group-hover:bg-accent/10 transition-colors" />
-                        <div className="w-12 h-12 rounded-2xl bg-white dark:bg-bg-tertiary flex items-center justify-center shrink-0 border border-accent/10 shadow-sm relative z-10">
+                        <div className="w-12 h-12 rounded-2xl bg-[--color-surface-primary] dark:bg-bg-tertiary flex items-center justify-center shrink-0 border border-accent/10 shadow-sm relative z-10">
                             <ShieldCheck className="w-6 h-6 text-accent" />
                         </div>
                         <div className="space-y-2 relative z-10">
@@ -250,7 +250,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                 </form>
 
                 {/* Footer Actions */}
-                <div className="px-12 py-10 bg-white dark:bg-bg-secondary border-t border-neutral-100 dark:border-border flex items-center justify-between shrink-0">
+                <div className="px-12 py-10 bg-[--color-surface-primary] dark:bg-bg-secondary border-t border-neutral-100 dark:border-border flex items-center justify-between shrink-0">
                     <button
                         type="button"
                         onClick={onClose}
