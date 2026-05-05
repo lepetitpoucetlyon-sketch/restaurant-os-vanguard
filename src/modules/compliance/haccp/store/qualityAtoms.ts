@@ -197,7 +197,7 @@ export const todayReceptionStatsAtom = atom((get) => {
 // Selector for current session summary
 export const qualityCurrentSessionStatsSelector = atom((get) => {
     const session = get(qualityActiveControlAtom);
-    const items = session.items || [];
+    const items = session?.items || [];
 
     const accepted = items.filter((i: QualityControlItem) => i.quantity_accepted > 0).length;
     const rejected = items.filter((i: QualityControlItem) => i.is_rejected).length;

@@ -2,7 +2,7 @@ import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 
-    | 'array-contains' | 'array-contains-any' 
+    | 'array-contains' | 'array-contains-unknown' 
     | 'in' | 'not-in';
 
 export interface INexusQueryOptions {

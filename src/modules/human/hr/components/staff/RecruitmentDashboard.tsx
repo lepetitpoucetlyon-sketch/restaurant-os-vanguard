@@ -186,7 +186,7 @@ export const RecruitmentDashboard = () => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-5 font-mono text-[13px] text-text-muted">
-                                            {format(new Date(candidate.createdAt), 'dd MMM yyyy', { locale: fr })}
+                                            {format(new Date(candidate.createdAt || 0), 'dd MMM yyyy', { locale: fr })}
                                         </td>
                                         <td className="px-6 py-5">
                                             <select
@@ -205,7 +205,7 @@ export const RecruitmentDashboard = () => {
                                             </select>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <div className="flex items-center gap-2" title={`Consenti le ${format(new Date(candidate.gdpr.date), 'dd/MM/yyyy')}`}>
+                                            <div className="flex items-center gap-2" title={`Consenti le ${format(new Date(candidate.gdpr.date || 0), 'dd/MM/yyyy')}`}>
                                                 {candidate.gdpr.consented ? (
                                                     <div className="flex items-center gap-1.5 text-success">
                                                         <CheckCircle2 className="w-4 h-4" />

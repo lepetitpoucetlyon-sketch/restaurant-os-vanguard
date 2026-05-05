@@ -5,7 +5,7 @@ import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { cn } from "@/lib/ui.foundations";
 import { Users, AlertCircle, LayoutGrid, Layers, ChevronUp, ChevronDown, MousePointer2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Table } from "@modules/ops/engine/tables.types";
+import { Table } from "@/domain/schemas/ops";
 
 interface TableSelectorProps {
     onSelectTable: (tableId: string) => void;
@@ -258,7 +258,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                 >
                     {viewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                            {tables.map((table: any) => (
+                            {tables.map((table: Table) => (
                                 <motion.div
                                     key={table.id}
                                     variants={{
@@ -266,14 +266,14 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                         visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 20 } }
                                     }}
                                 >
-                                    {renderTableButton(table as any, tables.indexOf(table))}
+                                    {renderTableButton(table, tables.indexOf(table))}
                                 </motion.div>
                             ))}
                         </div>
                     ) : (
                         <div className="space-y-20">
                             {zones.map(zone => {
-                                const zoneTables = tables.filter((t: any) => t.zoneId === zone.id);
+                                const zoneTables = (tables as Table[]).filter((t: Table) => (t as any).zoneId === zone.id);
                                 if (zoneTables.length === 0) return null;
 
                                 return (
@@ -284,7 +284,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                             <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{zoneTables.length} Unités</span>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                                            {zoneTables.map((table: any, idx: any) => renderTableButton(table as any, idx))}
+                                            {zoneTables.map((table: Table, idx: number) => renderTableButton(table, idx))}
                                         </div>
                                     </div>
                                 )

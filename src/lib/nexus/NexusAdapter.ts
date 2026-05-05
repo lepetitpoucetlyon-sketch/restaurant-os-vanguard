@@ -1,5 +1,7 @@
 import { logger } from '@/lib/logger';
 import { SovereignGuard } from '@nexus/guards/SovereignGuard';
+import { SovereignStorage } from '@/shared/services/SovereignStorage';
+import { TenantIdSchema } from '@/domain/schemas/ui';
 
 /**
  * 🛰️ INexusAdapter - Restaurant OS (Grade VI)
@@ -8,7 +10,7 @@ import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 
-    | 'array-contains' | 'array-contains-any' 
+    | 'array-contains' | 'array-contains-unknown' 
     | 'in' | 'not-in';
 
 export interface INexusQueryOptions {
@@ -119,7 +121,7 @@ class NexusManager {
         const tenantId = tenantIdOverride || 
                          this._tenantOverride || 
                          (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('tenant') : null) ||
-                         (typeof window !== 'undefined' ? localStorage.getItem('nexus_tenant_id') : null);
+                         SovereignStorage.get('nexus_tenant_id', TenantIdSchema, 'restaurant-os').data;
 
         let resolvedPath = relativePath;
         if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {

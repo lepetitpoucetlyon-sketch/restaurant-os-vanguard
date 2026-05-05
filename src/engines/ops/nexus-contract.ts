@@ -150,7 +150,7 @@ export interface TenantConfig {
 
 /**
  * 🏛️ SovereignNode - Universal Entity Contract
- * Any business object MUST implement this to be handled by the Core.
+ * unknown business object MUST implement this to be handled by the Core.
  */
 export interface SovereignNode {
   id: string;

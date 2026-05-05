@@ -12,7 +12,7 @@ export interface TaxBreakdown {
     ht: number;
     totalTax: number;
     rates: Record<number, number>;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface ZReport {
@@ -21,11 +21,11 @@ export interface ZReport {
     date: string;
     tenantId: string;
     ordersCount: number;
-    totalInCents: number;
+    totalInMicrounits: number;
     taxBreakdown: TaxBreakdown;
-    timestamp: string;
+    timestamp: number;
     _fiscalSeal?: FiscalSeal;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export class FinanceCore {
@@ -42,7 +42,7 @@ export class FinanceCore {
         const rates: Record<number, number> = {};
 
         items.forEach(item => {
-            const itemTotal = item.priceInCents * item.quantity;
+            const itemTotal = (item as any).unitPriceInMicrounits * item.quantity;
             total += itemTotal;
 
             // Business Rule Grade VI: Cocktails & Alcohol at 20%, Food at 10%
@@ -95,7 +95,7 @@ export class FinanceCore {
             ]
         }) as Order[];
 
-        const totalInCents = dayOrders.reduce((sum, o) => sum + (o.totalInCents || 0), 0);
+        const totalInMicrounits = dayOrders.reduce((sum, o) => sum + ((o as any).totalInMicrounits || (o as any).totalInCents * 10000 || 0), 0);
         const taxBreakdown = this.calculateTaxBreakdown(dayOrders.flatMap(o => o.items || []));
 
         const zReport: ZReport = {
@@ -104,9 +104,9 @@ export class FinanceCore {
             date,
             tenantId,
             ordersCount: dayOrders.length,
-            totalInCents,
+            totalInMicrounits,
             taxBreakdown,
-            timestamp: new Date().toISOString()
+            timestamp: Date.now()
         };
 
         // 2. SEAL THE REPORT

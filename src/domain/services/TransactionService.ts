@@ -54,7 +54,7 @@ export class TransactionService {
                 amount: order.totalInCents,
                 timestamp: timestamp.toISOString()
             }, { 
-                lastSeal: lastHash ? { hash: lastHash } as any : undefined, 
+                lastSeal: lastSeals.length > 0 ? lastSeals[0] : undefined, 
                 instanceId: tenantId,
                 isTrainingMode: options.isTrainingMode 
             });

@@ -66,7 +66,7 @@ export default function RegistrePage() {
     const [isCerfaOpen, setIsCerfaOpen] = useState(false);
     const { duerp, cerfa, pmrDoc, incendieDoc, hottesDoc, certHalal, agrementBoucher, prestataires, getOverallStatus } = useRegistre();
 
-    const overall = (getOverallStatus() as any);
+    const overall = getOverallStatus() as { conforme: number; attention: number; non_conforme: number };
     const allDocs = [
         { doc: duerp, tab: 'duerp' as TabType, icon: FileText, color: '#3B82F6' },
         { doc: incendieDoc, tab: 'incendie' as TabType, icon: Flame, color: '#EF4444' },

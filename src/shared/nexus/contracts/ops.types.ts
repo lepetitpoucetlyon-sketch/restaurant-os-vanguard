@@ -1,110 +1,41 @@
 /**
  * 🍱 OPERATIONS DOMAIN - Shared Kernel
  * Version Grade X - Sovereign Alignment
- * Centralized registry for Orders, Tables, and Reservations.
+ * Derived from Zod Schemas - Single Source of Truth.
  */
 
-import { SovereignNode, SovereignMap } from '@/shared/nexus-contract';
+import { z } from 'zod';
+import { 
+  TableSchema, 
+  ReservationSchema, 
+  FloorSchema, 
+  ZoneSchema 
+} from '@/domain/schemas/ops';
+import { 
+  OrderSchema, 
+  OrderLineSchema,
+  OrderItemModificationSchema
+} from '@/domain/schemas/orders';
 
-export type TableStatus =
-    | 'free'
-    | 'available'
-    | 'occupied'
-    | 'reserved'
-    | 'cleaning'
-    | 'locked'
-    | string;
+export type Table = z.infer<typeof TableSchema>;
+export type Reservation = z.infer<typeof ReservationSchema>;
+export type Floor = z.infer<typeof FloorSchema>;
+export type Zone = z.infer<typeof ZoneSchema>;
 
-export interface Table extends SovereignNode {
-    number: string;
-    seats: number;
-    status: TableStatus;
-    x: number;
-    y: number;
-    width?: number;
-    height?: number;
-    radius?: number;
-    zoneId: string;
-    floorId?: string;
-    shape: TableShape;
-}
+export type Order = z.infer<typeof OrderSchema>;
+export type OrderItem = z.infer<typeof OrderLineSchema>;
+export type OrderItemModification = z.infer<typeof OrderItemModificationSchema>;
 
-export interface OrderItemModification extends SovereignMap {
-    id: string;
-    orderId: string;
-    orderItemId: string;
-    type: string;
-    description: string;
-    requestedAt: string;
-    approved: boolean;
-    respondedAt?: string;
-    respondedBy?: string;
-    responseNote?: string;
-}
-
-export interface OrderItem extends SovereignNode {
-    productId: string;
-    categoryId?: string;
-    name: string;
-    quantity: number;
-    priceInCents: number;
-    modifiers?: string[];
-    notes?: string;
-    status?: 'pending' | 'cooking' | 'ready' | 'served';
-    removedIngredients?: string[];
-    addedIngredients?: string[];
-    allergens?: string[];
-    modification?: OrderItemModification;
-}
-
-export type OrderStatus =
-    | 'draft'
-    | 'new'
-    | 'ordered'
-    | 'preparing'
-    | 'ready'
-    | 'delivered'
-    | 'cancelled'
-    | 'paid'
-    | string;
-
-export interface Order extends SovereignNode {
-    status: OrderStatus;
-    tableId?: string;
-    tableNumber: string;
-    serverName?: string;
-    timestamp: string;
-    items: OrderItem[];
-    totalInCents: number;
-    paymentMethod?: 'card' | 'cash' | 'mobile';
-    isUrgent?: boolean;
-    customerName?: string;
-    customerId?: string;
-    blockchainProof?: {
-        hash: string;
-        timestamp: string;
-        blockNumber: number;
-        status: 'pending' | 'confirmed' | 'failed';
-        maticTxId?: string;
-    };
-}
-
-export interface Reservation extends SovereignNode {
-    customerId: string;
-    customerName: string;
-    tableId?: string;
-    date: string; // ISO
-    time: string; // HH:mm
-    partySize: number;
-    covers?: number; // Alias for UI compatibility
-    status: 'pending' | 'confirmed' | 'arrived' | 'seated' | 'cancelled' | 'no_show';
-    duration?: number; // Estimated duration in minutes
-    notes?: string;
-}
-
+export type TableStatus = Table['status'];
+export type TableShape = 'rect' | 'circle' | string;
+export type OrderStatus = Order['status'];
 export type GroupEventStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
-export interface GroupEvent extends SovereignNode {
+// Keep essential legacy structures if not yet migrated to Zod
+// OrderItemModification is now inferred from Zod
+
+export interface GroupEvent {
+    id: string;
     title: string;
     date: string;
     startTime: string;
@@ -116,25 +47,4 @@ export interface GroupEvent extends SovereignNode {
     depositInCents?: number;
     isDepositPaid: boolean;
     notes?: string;
-}
-
-export type TableShape = 'rect' | 'circle' | string;
-
-export interface Floor extends SovereignNode {
-    name: string;
-    level: number;
-    isActive: boolean;
-    icon?: string;
-    description?: string;
-}
-
-export interface Zone extends SovereignNode {
-    name: string;
-    color: string;
-    description?: string;
-    floorId?: string;
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
 }

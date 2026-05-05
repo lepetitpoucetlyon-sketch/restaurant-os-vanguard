@@ -2,6 +2,7 @@ import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
 import { SensorReading } from '@nexus/contracts';
 import { Order } from '@nexus/contracts';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 /**
  * 🌀 RealityGenerator - The Vital Heart of the Simulacra
@@ -67,7 +68,7 @@ export class RealityGenerator {
         logger.info(`🔥 [SIMULACRA] COMMENCING SALES RUSH: ${count} orders incoming...`);
         for (let i = 0; i < count; i++) {
             const items = ['Burger', 'Frites', 'Soda', 'Salade'];
-            const now = new Date().toISOString();
+            const now = Date.now();
             const order: Partial<Order> = {
                 id: `sim_${uuidv4().substring(0, 8)}`,
                 items: [{
@@ -75,16 +76,16 @@ export class RealityGenerator {
                     productId: 'sim_prod',
                     name: items[Math.floor(Math.random() * items.length)],
                     quantity: 1,
-                    priceInCents: 1500,
+                    unitPriceInMicrounits: toMicrounits(1500),
+                    taxRate: "0.10",
                     status: 'pending',
                     createdAt: now,
                     updatedAt: now
-                }],
-                totalInCents: 1500,
-                timestamp: now,
+                }] as any,
+                totalInMicrounits: toMicrounits(1500),
                 createdAt: now,
                 updatedAt: now,
-                nodeIdentifier: String(Math.floor(Math.random() * 20) + 1)
+                tableNumber: String(Math.floor(Math.random() * 20) + 1)
             };
             
             // Random delay to simulate real customers

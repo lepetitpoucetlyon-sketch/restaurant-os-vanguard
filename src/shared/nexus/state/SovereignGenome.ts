@@ -1,12 +1,13 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
-import type { 
-  TenantConfig
-} from '@/shared/nexus-contract';
+import { TenantConfigSchema, type TenantConfig } from '@/domain/schemas/tenant';
+import { UserSchema, type User } from '@/domain/schemas/users';
 import { EmpireInstance } from '@domain/types/empire';
 import { FleetBloomFilter } from '@/lib/bloom-filter';
-import type { Notification as AppNotification, Floor, Zone, User } from '@nexus/contracts';
+import type { Notification as AppNotification, Floor, Zone } from '@nexus/contracts';
+import { SovereignStorage } from '@/shared/services/SovereignStorage';
+import { z } from 'zod';
 
 const notifications = atom<AppNotification[]>([]);
 
@@ -31,18 +32,21 @@ export const expectedCoversAtom = FORECAST_GENOME.expectedCovers;
 /**
  * 🏛️ UI_GENOME - Visual & Interactive Surface
  */
+const ThemeSchema = z.enum(['light', 'dark']).default('dark');
+const BooleanSchema = z.boolean();
+
 export const UI_GENOME = {
-    isSidebarCollapsed: atomWithStorage('nexus_sidebar_collapsed', false),
+    isSidebarCollapsed: SovereignStorage.atomWithSovereignStorage('nexus_sidebar_collapsed', BooleanSchema, false),
     isLaunchpadOpen: atom(false),
-    theme: atomWithStorage<'light' | 'dark'>('nexus_theme', 'dark'),
-    isTrainingMode: atomWithStorage('nexus_training_mode', false),
+    theme: SovereignStorage.atomWithSovereignStorage<'light' | 'dark'>('nexus_theme', ThemeSchema, 'dark'),
+    isTrainingMode: SovereignStorage.atomWithSovereignStorage('nexus_training_mode', BooleanSchema, false),
     notifications: notifications,
     unreadCount: atom((get) => get(notifications).filter(n => !n.read).length || 0),
     isCommandOpen: atom(false),
     isMobileMenuOpen: atom(false),
     isDocsOpen: atom(false),
     isMap3DOpen: atom(false),
-    performanceMode: atomWithStorage('nexus_performance_mode', false),
+    performanceMode: SovereignStorage.atomWithSovereignStorage('nexus_performance_mode', BooleanSchema, false),
 };
 
 // 🏛️ TOAST SYSTEM (Sovereign Helper)
@@ -61,22 +65,24 @@ export const addToastAtom = atom(
 /**
  * 🧬 FLEET_GENOME - Multi-Tenancy & Topology
  */
-const _tenantIdBase = atom<string>(
-    typeof window !== 'undefined' ? (localStorage.getItem('nexus_tenant_id')?.replace(/['"]+/g, '') || 'lepetitpoucet') : 'lepetitpoucet'
-);
+// Storage import moved to top
+
+const TenantIdSchema = z.string().min(1).default('lepetitpoucet');
+
+const _tenantIdBase = atom(SovereignStorage.get('nexus_tenant_id', TenantIdSchema, 'lepetitpoucet').data);
 
 export const FLEET_GENOME = {
     tenantId: atom(
         (get) => get(_tenantIdBase),
         (get, set, next: string) => {
-            if (typeof window !== 'undefined') localStorage.setItem('nexus_tenant_id', next);
+            SovereignStorage.set('nexus_tenant_id', next, TenantIdSchema);
             set(_tenantIdBase, next);
         }
     ),
-    tenantConfig: atomWithStorage<TenantConfig>('nexus_tenant_config', {
+    tenantConfig: SovereignStorage.atomWithSovereignStorage<TenantConfig>('nexus_tenant_config', TenantConfigSchema, {
         id: 'default_node',
         ...DEFAULT_TENANT_CONFIG
-    }),
+    } as TenantConfig),
     snapshot: atom<EmpireInstance[]>([]),
     bloomFilter: atom(new FleetBloomFilter()),
     activeSlots: atom<Map<string, EmpireInstance>>(new Map()),
@@ -85,12 +91,16 @@ export const FLEET_GENOME = {
     zones: atom<Zone[]>([]),
     zonesLocked: atom(false),
     currentFloorId: atom<string>('rdc'),
+    brandTokens: atom((get) => {
+        const config = get(FLEET_GENOME.tenantConfig);
+        return (config.branding || config.theme || {}) as any;
+    }),
 };
 
 /**
  * 🛡️ AUTH_GENOME - Security & Identity
  */
-const _currentUserBase = atomWithStorage<User | null>('nexus_user_session', null);
+const _currentUserBase = SovereignStorage.atomWithSovereignStorage<User | null>('nexus_user_session', UserSchema.nullable(), null);
 
 export const AUTH_GENOME = {
     currentUser: atom(
@@ -102,7 +112,7 @@ export const AUTH_GENOME = {
         (get, set, next: User | null) => set(_currentUserBase, next)
     ),
     isAuthenticated: atom((get) => !!get(_currentUserBase)),
-    rolePermissions: atomWithStorage<Record<string, string[]>>('nexus_role_permissions', {
+    rolePermissions: SovereignStorage.atomWithSovereignStorage<Record<string, string[]>>('nexus_role_permissions', z.record(z.string(), z.array(z.string())), {
         admin: ['*'],
         manager: ['*'], // Manager access all
         staff: ['orders.view', 'orders.edit', 'inventory.view'],
@@ -174,6 +184,7 @@ export const floorsAtom = FLEET_GENOME.floors;
 export const zonesAtom = FLEET_GENOME.zones;
 export const zonesLockedAtom = FLEET_GENOME.zonesLocked;
 export const currentFloorIdAtom = FLEET_GENOME.currentFloorId;
+export const tenantBrandTokensAtom = FLEET_GENOME.brandTokens;
 
 // Auth
 export const currentUserAtom = AUTH_GENOME.currentUser;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { NexusNode } from '@/store/base';
 import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
 import { 
@@ -23,6 +23,8 @@ import { ImmunityAuditLogger } from '@/lib/services/ImmunityAuditLogger';
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { EmpireInstance } from '@domain/types/empire';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { SovereignStorage } from '@/shared/services/SovereignStorage';
+import { TenantIdSchema } from '@/domain/schemas/ui';
 
 import { ordersNodeAtom, tablesNodeAtom } from '@/store/pillars/ops';
 import { 
@@ -169,7 +171,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
             const { initializeTenantFirebase } = await import('@/lib/firebase');
             await initializeTenantFirebase(targetInstance?.firebaseConfig);
             setTenantId(newTenantId);
-            localStorage.setItem('nexus_tenant_id', newTenantId);
+            SovereignStorage.set('nexus_tenant_id', newTenantId, TenantIdSchema);
             await NexusSyncService.init(newTenantId);
         } catch (error) {
             logger.error('[NexusOpsProvider] SaaS Switch failed', error);
@@ -220,14 +222,14 @@ export const useFloorOps = () => useNexusOps().floorOps;
 
 // Generic Data Hook Generator
 const createSovereignHook = <T,>(
-    atom: import('jotai').Atom<NexusNode<any>>, 
+    atom: import('jotai').Atom<NexusNode<unknown>>, 
     identity: OperationalIdentity, 
     mapper: (n: SovereignNode) => T = (n) => n as unknown as T
 ) => {
     return () => {
         const node = useAtomValue(atom);
         const tenantId = useAtomValue(tenantIdAtom);
-        const rawData = (node.data || []) as any[];
+        const rawData = (node.data || []) as SovereignNode[];
         return {
             data: rawData.map(mapper),
             isLoading: node.loading,
@@ -305,7 +307,7 @@ export const useOperationalNodes = () => {
 
     const toggleZonesLock = useCallback(() => setZonesLocked(prev => !prev), [setZonesLocked]);
     const setCurrentFloor = useCallback((id: string) => setCurrentFloorId(id), [setCurrentFloorId]);
-    const getTablesForFloor = useCallback((floorId: string) => nodes.filter((t: any) => t.floorId === floorId), [nodes]);
+    const getTablesForFloor = useCallback((floorId: string) => nodes.filter((t: Table) => t.floorId === floorId), [nodes]);
     const getZonesForFloor = useCallback((floorId: string) => zones.filter(z => z.floorId === floorId || !z.floorId), [zones]);
     const updateTablePosition = useCallback(async (id: string, x: number, y: number) => {
         await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
@@ -348,7 +350,7 @@ export const useOperationalNodes = () => {
         const sanitized = sanitizeToSovereign(data);
         await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}`, {
             ...sanitized,
-            attributes: { ...(sanitized.attributes as any), type: 'floor' },
+            attributes: { ...(sanitized.attributes as Record<string, SovereignField>), type: 'floor' },
             updatedAt: new Date().toISOString()
         });
     }, [tenantId]);
@@ -372,7 +374,7 @@ export const useOperationalNodes = () => {
         const sanitized = sanitizeToSovereign(data);
         await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}`, {
             ...sanitized,
-            attributes: { ...(sanitized.attributes as any), type: 'zone' },
+            attributes: { ...(sanitized.attributes as Record<string, SovereignField>), type: 'zone' },
             updatedAt: new Date().toISOString()
         });
     }, [tenantId]);
@@ -386,7 +388,7 @@ export const useOperationalNodes = () => {
     const resetToTemplate = useCallback(async (templateId: string) => {
         await guardedAction('FLOOR_PLAN', 'POWER_USER', async () => {
             // 🛡️ PURGE CURRENT FLOOR NODES
-            const currentFloorNodes = nodes.filter((n: any) => (n.attributes as any)?.floorId === currentLayoutId);
+            const currentFloorNodes = nodes.filter((n) => (n.attributes as Record<string, SovereignField>)?.floorId === currentLayoutId);
             for (const node of currentFloorNodes) {
                 await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${node.id}`);
             }
@@ -425,8 +427,8 @@ export const useOperationalNodes = () => {
         currentLayoutId,
         currentFloorId: currentLayoutId,
         setCurrentFloor,
-        getNodesForLayout: (layoutId: string) => nodes.filter((n) => (n.attributes as any)?.floorId === layoutId),
-        getTablesForFloor: (floorId: string) => nodes.filter((n) => (n.attributes as any)?.floorId === floorId),
+        getNodesForLayout: (layoutId: string) => nodes.filter((n) => (n.attributes as Record<string, SovereignField>)?.floorId === layoutId),
+        getTablesForFloor: (floorId: string) => nodes.filter((n) => (n.attributes as Record<string, SovereignField>)?.floorId === floorId),
         getZonesForFloor,
         updateTablePosition,
         addNode,
@@ -539,7 +541,7 @@ export const useKitchen = () => {
         togglePrepTask: async (id: string) => {
             const task = tasks.find(t => t.id === id);
             if (!task) return;
-            const currentStatus = (task.attributes as any)?.status === 'completed';
+            const currentStatus = (task.attributes as Record<string, SovereignField>)?.status === 'completed';
             await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, {
                 attributes: { status: currentStatus ? 'pending' : 'completed' },
                 updatedAt: new Date().toISOString()

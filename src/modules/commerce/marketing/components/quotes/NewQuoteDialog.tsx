@@ -160,7 +160,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
         }
     };
 
-    const filteredProducts = (inventoryProducts || []).filter(p =>
+    const filteredProducts = (inventoryProducts || []).filter((p: any) =>
         String(p.name || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 

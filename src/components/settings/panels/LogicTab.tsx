@@ -14,7 +14,7 @@ import { SharedKernel } from "@/lib/shared-kernel";
 interface LogicTabProps {
     filteredSettings: PageSettingConfig[];
     localValues: SovereignData;
-    updateValue: (key: string, value: any) => void;
+    updateValue: (key: string, value: unknown) => void;
 }
 
 

@@ -116,7 +116,7 @@ export function ReceptionWizard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <HACCPGauge 
                         label="Température Camion"
-                        value={session.delivery_conditions?.vehicle_temperature?.measured || 0}
+                        value={session?.delivery_conditions?.vehicle_temperature?.measured || 0}
                         min={0}
                         max={4}
                         unit="°C"
@@ -135,7 +135,7 @@ export function ReceptionWizard() {
                                     onClick={() => updateConditions({ vehicle_cleanliness: status as CleanlinessStatus })}
                                     className={cn(
                                         "flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all",
-                                        session.delivery_conditions?.vehicle_cleanliness === status 
+                                        session?.delivery_conditions?.vehicle_cleanliness === status 
                                             ? "bg-slate-900 text-white border-transparent shadow-lg"
                                             : "bg-white border-slate-200 hover:border-emerald-500/40 text-slate-400"
                                     )}
@@ -176,7 +176,7 @@ export function ReceptionWizard() {
                 </div>
 
                 <div className="space-y-4">
-                    {session.items?.length === 0 ? (
+                    {!session || (session.items || []).length === 0 ? (
                         <div className="py-20 flex flex-col items-center justify-center opacity-30 text-center">
                             <AlertIcon className="w-12 h-12 mb-4" />
                             <p className="font-black text-sm uppercase tracking-widest">Aucun article chargé</p>

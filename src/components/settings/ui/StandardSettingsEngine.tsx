@@ -65,7 +65,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
         return original !== current;
     }, [localData, settings, schemaKey]);
 
-    const handleChange = (id: string, value: any) => {
+    const handleChange = (id: string, value: unknown) => {
         setLocalData(prev => ({
             ...prev,
             [id]: SharedKernel.Sovereign.wrap(value)
@@ -288,7 +288,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >
-                            {renderField(field, (localData as Record<string, SovereignField>)[field.id], (val: any) => handleChange(field.id, val))}
+                            {renderField(field, (localData as Record<string, SovereignField>)[field.id], (val: unknown) => handleChange(field.id, val))}
 
                         </motion.div>
                     ))}

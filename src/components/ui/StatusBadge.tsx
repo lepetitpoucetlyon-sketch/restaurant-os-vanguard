@@ -17,34 +17,34 @@ interface StatusBadgeProps {
 
 const statusColors = {
     success: {
-        solid: "bg-emerald-500 text-white",
-        outline: "border-emerald-500 text-emerald-500",
-        soft: "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20",
+        solid: "bg-status-success text-white",
+        outline: "border-status-success text-status-success",
+        soft: "bg-status-success/10 text-status-success border-status-success/20",
     },
     warning: {
-        solid: "bg-amber-500 text-white",
-        outline: "border-amber-500 text-amber-500",
-        soft: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20",
+        solid: "bg-status-warning text-white",
+        outline: "border-status-warning text-status-warning",
+        soft: "bg-status-warning/10 text-status-warning border-status-warning/20",
     },
     error: {
-        solid: "bg-rose-500 text-white",
-        outline: "border-rose-500 text-rose-500",
-        soft: "bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20",
+        solid: "bg-status-danger text-white",
+        outline: "border-status-danger text-status-danger",
+        soft: "bg-status-danger/10 text-status-danger border-status-danger/20",
     },
     info: {
-        solid: "bg-blue-500 text-white",
-        outline: "border-blue-500 text-blue-500",
-        soft: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20",
+        solid: "bg-action-primary text-action-primary-fg",
+        outline: "border-action-primary text-action-primary",
+        soft: "bg-action-primary/10 text-action-primary border-action-primary/20",
     },
     neutral: {
         solid: "bg-neutral-500 text-white",
-        outline: "border-neutral-400 text-neutral-500",
-        soft: "bg-neutral-100 text-neutral-600 border-neutral-200 dark:bg-white/5 dark:text-neutral-400 dark:border-white/10",
+        outline: "border-border-default text-text-secondary",
+        soft: "bg-surface-card text-text-secondary border-border-default",
     },
     accent: {
-        solid: "bg-accent text-bg-primary",
-        outline: "border-accent text-accent",
-        soft: "bg-accent/10 text-accent border-accent/20",
+        solid: "bg-action-accent text-action-primary-fg",
+        outline: "border-action-accent text-action-accent",
+        soft: "bg-action-accent/10 text-action-accent border-action-accent/20",
     },
 };
 
@@ -77,23 +77,23 @@ export function StatusBadge({
                     <span
                         className={cn(
                             "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
-                            status === "success" && "bg-emerald-400",
-                            status === "warning" && "bg-amber-400",
-                            status === "error" && "bg-rose-400",
-                            status === "info" && "bg-blue-400",
+                            status === "success" && "bg-status-success",
+                            status === "warning" && "bg-status-warning",
+                            status === "error" && "bg-status-danger",
+                            status === "info" && "bg-action-primary",
                             status === "neutral" && "bg-neutral-400",
-                            status === "accent" && "bg-accent"
+                            status === "accent" && "bg-action-accent"
                         )}
                     />
                     <span
                         className={cn(
                             "relative inline-flex rounded-full h-2 w-2",
-                            status === "success" && "bg-emerald-500",
-                            status === "warning" && "bg-amber-500",
-                            status === "error" && "bg-rose-500",
-                            status === "info" && "bg-blue-500",
+                            status === "success" && "bg-status-success",
+                            status === "warning" && "bg-status-warning",
+                            status === "error" && "bg-status-danger",
+                            status === "info" && "bg-action-primary",
                             status === "neutral" && "bg-neutral-500",
-                            status === "accent" && "bg-accent"
+                            status === "accent" && "bg-action-accent"
                         )}
                     />
                 </span>

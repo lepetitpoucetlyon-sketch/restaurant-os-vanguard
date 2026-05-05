@@ -34,7 +34,7 @@ interface ReviewSource {
     reviewCount: number;
     connected: boolean;
     color: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 const REVIEW_SOURCES: ReviewSource[] = [

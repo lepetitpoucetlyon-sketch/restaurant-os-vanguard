@@ -63,28 +63,28 @@ export class AmbianceService {
         
         const tokens = {
             SERENITY: {
-                primary: '#6366f1', // Indigo
-                background: '#0a0a0b',
-                surface: '#161618',
-                accent: '#818cf8',
+                primary: 'var(--status-info)',
+                background: 'var(--surface-bg)',
+                surface: 'var(--surface-card)',
+                accent: 'var(--action-accent)',
                 blur: 'backdrop-blur-xl',
                 animationMultiplier: 1.0,
                 name: 'Serenity'
             },
             RUSH_SPEED: {
-                primary: '#10b981', // Emerald (Speed & Clarity)
-                background: '#000000',
-                surface: '#0f172a',
-                accent: '#34d399',
+                primary: 'var(--status-success)',
+                background: 'var(--surface-bg)',
+                surface: 'var(--surface-card)',
+                accent: 'var(--status-success)',
                 blur: 'none', // Max performance, no expensive blurs
                 animationMultiplier: 0.5, // Animations are 2x faster
                 name: 'Rush Mode'
             },
             ELEGANCE_NIGHT: {
-                primary: '#f59e0b', // Amber/Honey
-                background: '#050505',
-                surface: '#121212',
-                accent: '#fbbf24',
+                primary: 'var(--action-primary)',
+                background: 'var(--surface-bg)',
+                surface: 'var(--surface-card)',
+                accent: 'var(--status-warning)',
                 blur: 'backdrop-blur-2xl',
                 animationMultiplier: 1.2, // Smoother, slower transitions
                 name: 'Elegance'

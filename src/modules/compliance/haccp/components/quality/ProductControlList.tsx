@@ -2,23 +2,23 @@ import React from 'react';
 import { Package, Check, X, Thermometer, Info, Calendar, PackageSearch } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useQuality } from '@modules/compliance/haccp';
-import { QualityControlItem, DecisionType } from '@nexus/contracts';
+import { ActiveQualityControlItem, DecisionType } from '@nexus/contracts';
 import { FreshnessRating } from './FreshnessRating';
 import { DLCAlertBadge } from './DLCAlertBadge';
 
 export const ProductControlList: React.FC = () => {
     const { activeControl, updateControlItem } = useQuality();
-    const items = activeControl?.items || [];
+    const items = (activeControl?.items || []) as ActiveQualityControlItem[];
 
-    const handleToggleStatus = (item: QualityControlItem, decision: DecisionType) => {
+    const handleToggleStatus = (item: ActiveQualityControlItem, decision: DecisionType) => {
         updateControlItem({
             ...item,
             decision: decision,
             is_rejected: decision === 'rejected',
-        } as any);
+        });
     };
 
-    const handleFreshnessChange = (item: QualityControlItem, score: number) => {
+    const handleFreshnessChange = (item: ActiveQualityControlItem, score: number) => {
         updateControlItem({
             ...item,
             checks: {
@@ -29,7 +29,7 @@ export const ProductControlList: React.FC = () => {
                     performed: true
                 }
             }
-        } as any);
+        });
     };
 
     return (

@@ -18,7 +18,7 @@ import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
-import { usePOSController } from "@modules/ops";
+import { usePOSController, CartItem } from "@modules/ops";
 import { AmbianceService, RestaurantAmbiance } from "@domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 
@@ -127,7 +127,7 @@ export default function POSPage() {
                         <Star className="w-3.5 h-3.5" />
                         Favoris
                     </button>
-                    {categories.map((cat: any) => {
+                    {categories.map((cat) => {
                         const Icon = ICON_MAP[cat.id] || UtensilsCrossed;
                         return (
                             <button

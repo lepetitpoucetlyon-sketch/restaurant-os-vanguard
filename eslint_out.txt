@@ -1,0 +1,1667 @@
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/__tests__/lockdown.test.ts
+    3:10  warning  'getFirestore' is defined but never used  @typescript-eslint/no-unused-vars
+   36:90  warning  'subId' is defined but never used         @typescript-eslint/no-unused-vars
+   59:90  warning  'subId' is defined but never used         @typescript-eslint/no-unused-vars
+   85:90  warning  'subId' is defined but never used         @typescript-eslint/no-unused-vars
+  108:90  warning  'subId' is defined but never used         @typescript-eslint/no-unused-vars
+  131:90  warning  'subId' is defined but never used         @typescript-eslint/no-unused-vars
+  158:90  warning  'subId' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/account-settings/page.tsx
+  29:13  warning  'currentUser' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/admin/agent/page.tsx
+   7:3   warning  'Activity' is defined but never used      @typescript-eslint/no-unused-vars
+  12:3   warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+  21:20  warning  'StatsGrid' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/admin/inventory/reception/page.tsx
+  18:10  warning  'NewReservationDialog' is defined but never used              @typescript-eslint/no-unused-vars
+  20:7   warning  'upsertReservationAction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  20:43  warning  'args' is defined but never used                              @typescript-eslint/no-unused-vars
+  21:7   warning  'deleteReservationAction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  21:43  warning  'args' is defined but never used                              @typescript-eslint/no-unused-vars
+  22:7   warning  'cancelReservationAction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  22:43  warning  'args' is defined but never used                              @typescript-eslint/no-unused-vars
+  25:38  warning  'args' is defined but never used                              @typescript-eslint/no-unused-vars
+  26:43  warning  'args' is defined but never used                              @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/admin/master-console/page.tsx
+   3:20  warning  'useEffect' is defined but never used                   @typescript-eslint/no-unused-vars
+  14:3   warning  'ChevronRight' is defined but never used                @typescript-eslint/no-unused-vars
+  20:3   warning  'ArrowUpRight' is defined but never used                @typescript-eslint/no-unused-vars
+  29:5   warning  'MCCTreasury' is defined but never used                 @typescript-eslint/no-unused-vars
+  30:5   warning  'DeploymentEngine' is defined but never used            @typescript-eslint/no-unused-vars
+  62:9   warning  'filteredInstances' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/admin/mcc/page.tsx
+    9:3   warning  'Settings' is defined but never used                 @typescript-eslint/no-unused-vars
+   12:3   warning  'Search' is defined but never used                   @typescript-eslint/no-unused-vars
+   13:3   warning  'Bell' is defined but never used                     @typescript-eslint/no-unused-vars
+   21:3   warning  'Thermometer' is defined but never used              @typescript-eslint/no-unused-vars
+   69:10  warning  'searchQuery' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   69:23  warning  'setSearchQuery' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   76:13  warning  'newInst' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   94:14  warning  'err' is defined but never used                      @typescript-eslint/no-unused-vars
+  434:10  warning  'InstanceRow' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/admin/prospecting/page.tsx
+  11:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/admin/simulation/page.tsx
+   3:27  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  21:10  warning  'useExpert' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/audit-portal/AuditPortalController.tsx
+   9:5  warning  'Sparkles' is defined but never used    @typescript-eslint/no-unused-vars
+  10:5  warning  'Code2' is defined but never used       @typescript-eslint/no-unused-vars
+  11:5  warning  'Layers' is defined but never used      @typescript-eslint/no-unused-vars
+  12:5  warning  'Cpu' is defined but never used         @typescript-eslint/no-unused-vars
+  13:5  warning  'Shield' is defined but never used      @typescript-eslint/no-unused-vars
+  14:5  warning  'ArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/audit-portal/page.tsx
+  11:12  warning  'AiIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  14:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/blueprint/page.tsx
+  11:34  warning  'Palette' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/settings/page.tsx
+  3:41  warning  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/simulator/page.tsx
+   8:66  warning  'SimulationMode' is defined but never used  @typescript-eslint/no-unused-vars
+  10:74  warning  'Activity' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(admin)/system-map/page.tsx
+  3:10  warning  'MindMap' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/bar/page.tsx
+  4:10  warning  'cn' is defined but never used        @typescript-eslint/no-unused-vars
+  8:10  warning  'PRODUCTS' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/floor-plan/page.tsx
+   5:10   warning  'ZoomIn' is defined but never used                   @typescript-eslint/no-unused-vars
+   5:18   warning  'ZoomOut' is defined but never used                  @typescript-eslint/no-unused-vars
+   5:27   warning  'Maximize' is defined but never used                 @typescript-eslint/no-unused-vars
+   5:37   warning  'Move' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:43   warning  'Grid' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:65   warning  'Plus' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:71   warning  'MousePointer2' is defined but never used            @typescript-eslint/no-unused-vars
+   5:86   warning  'Camera' is defined but never used                   @typescript-eslint/no-unused-vars
+   5:94   warning  'RefreshCw' is defined but never used                @typescript-eslint/no-unused-vars
+   5:112  warning  'Heart' is defined but never used                    @typescript-eslint/no-unused-vars
+   5:119  warning  'AlertTriangle' is defined but never used            @typescript-eslint/no-unused-vars
+   5:134  warning  'Square' is defined but never used                   @typescript-eslint/no-unused-vars
+   5:142  warning  'Box' is defined but never used                      @typescript-eslint/no-unused-vars
+   5:155  warning  'Home' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:190  warning  'X' is defined but never used                        @typescript-eslint/no-unused-vars
+   5:193  warning  'Sparkles' is defined but never used                 @typescript-eslint/no-unused-vars
+   5:203  warning  'Minus' is defined but never used                    @typescript-eslint/no-unused-vars
+   5:225  warning  'ChefHat' is defined but never used                  @typescript-eslint/no-unused-vars
+   6:10   warning  'Button' is defined but never used                   @typescript-eslint/no-unused-vars
+  11:35   warning  'Variants' is defined but never used                 @typescript-eslint/no-unused-vars
+  12:10   warning  'fadeInUp' is defined but never used                 @typescript-eslint/no-unused-vars
+  12:20   warning  'easing' is defined but never used                   @typescript-eslint/no-unused-vars
+  46:22   warning  'setViewMode' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  47:22   warning  'setShowGrid' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  49:12   warning  'showFloorModal' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  78:11   warning  'handleAddFloor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/kds/components/KDSHeader.tsx
+  3:10  warning  'Utensils' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/kds/page.tsx
+   3:31  warning  'useMemo' is defined but never used                           @typescript-eslint/no-unused-vars
+   4:10  warning  'useKitchen' is defined but never used                        @typescript-eslint/no-unused-vars
+  10:10  warning  'Order' is defined but never used                             @typescript-eslint/no-unused-vars
+  23:10  warning  'KitchenStation' is defined but never used                    @typescript-eslint/no-unused-vars
+  36:9   warning  'getPendingModifications' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  37:9   warning  'isLoading' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  48:13  warning  'floorOps' is assigned a value but never used                 @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/kitchen/page.tsx
+  14:5   warning  'ChevronRight' is defined but never used                @typescript-eslint/no-unused-vars
+  21:37  warning  'Order' is defined but never used                       @typescript-eslint/no-unused-vars
+  44:11  warning  'router' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  45:11  warning  'ordersData' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  51:11  warning  'management' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  53:13  warning  'openDocumentation' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  67:9   warning  'addRecipe' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  68:9   warning  'updateRecipe' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  75:11  warning  'products' is assigned a value but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/operations/page.tsx
+   3:27  warning  'useEffect' is defined but never used             @typescript-eslint/no-unused-vars
+  11:5   warning  'Settings' is defined but never used              @typescript-eslint/no-unused-vars
+  12:5   warning  'Search' is defined but never used                @typescript-eslint/no-unused-vars
+  15:5   warning  'MapPin' is defined but never used                @typescript-eslint/no-unused-vars
+  20:5   warning  'Info' is defined but never used                  @typescript-eslint/no-unused-vars
+  24:10  warning  'NewReservationDialog' is defined but never used  @typescript-eslint/no-unused-vars
+  79:34  warning  'area' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/pos/page.tsx
+   5:10  warning  'CategoryList' is defined but never used     @typescript-eslint/no-unused-vars
+  12:10  warning  'useTables' is defined but never used        @typescript-eslint/no-unused-vars
+  13:10  warning  'useToast' is defined but never used         @typescript-eslint/no-unused-vars
+  14:22  warning  'ShoppingCart' is defined but never used     @typescript-eslint/no-unused-vars
+  14:69  warning  'LayoutGrid' is defined but never used       @typescript-eslint/no-unused-vars
+  16:10  warning  'fabVariants' is defined but never used      @typescript-eslint/no-unused-vars
+  16:23  warning  'mobileSpring' is defined but never used     @typescript-eslint/no-unused-vars
+  36:13  warning  't' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  38:13  warning  'orders' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/registre/page.tsx
+  67:70  warning  'agrementBoucher' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(ops)/reservations/page.tsx
+   9:10  warning  'NewReservationDialog' is defined but never used          @typescript-eslint/no-unused-vars
+  11:10  warning  'NewCustomerDialog' is defined but never used             @typescript-eslint/no-unused-vars
+  20:30  warning  'setIsSidebarVisible' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  21:12  warning  'isNewResOpen' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  24:49  warning  'resLoading' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  25:46  warning  'crmLoading' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  25:58  warning  'upsertCustomer' is assigned a value but never used       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(public)/auth/logout/page.tsx
+  30:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(public)/groups/page.tsx
+  12:19  warning  'CustomerTable' is defined but never used       @typescript-eslint/no-unused-vars
+  12:34  warning  'GroupEventStatus' is defined but never used    @typescript-eslint/no-unused-vars
+  12:52  warning  'Group' is defined but never used               @typescript-eslint/no-unused-vars
+  18:23  warning  'props' is defined but never used               @typescript-eslint/no-unused-vars
+  32:27  warning  'isLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(public)/page.tsx
+    3:10  warning  'useState' is defined but never used                    @typescript-eslint/no-unused-vars
+    3:20  warning  'useEffect' is defined but never used                   @typescript-eslint/no-unused-vars
+    8:3   warning  'TrendingDown' is defined but never used                @typescript-eslint/no-unused-vars
+   10:3   warning  'Clock' is defined but never used                       @typescript-eslint/no-unused-vars
+   11:3   warning  'AlertCircle' is defined but never used                 @typescript-eslint/no-unused-vars
+   12:3   warning  'ArrowRight' is defined but never used                  @typescript-eslint/no-unused-vars
+   13:3   warning  'ChevronRight' is defined but never used                @typescript-eslint/no-unused-vars
+   14:3   warning  'Download' is defined but never used                    @typescript-eslint/no-unused-vars
+   17:3   warning  'Star' is defined but never used                        @typescript-eslint/no-unused-vars
+   22:3   warning  'Sun' is defined but never used                         @typescript-eslint/no-unused-vars
+   23:3   warning  'HandMetal' is defined but never used                   @typescript-eslint/no-unused-vars
+   28:10  warning  'Button' is defined but never used                      @typescript-eslint/no-unused-vars
+   39:59  warning  'staggerContainer' is defined but never used            @typescript-eslint/no-unused-vars
+   52:65  warning  'delay' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  148:9   warning  'totalRevenue' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  155:11  warning  'showToast' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  160:9   warning  'showStaffMetrics' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  161:9   warning  'showWeatherWidget' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(public)/vanguard-simulator/page.tsx
+  10:5   warning  'Percent' is defined but never used          @typescript-eslint/no-unused-vars
+  14:5   warning  'ArrowRight' is defined but never used       @typescript-eslint/no-unused-vars
+  15:5   warning  'Save' is defined but never used             @typescript-eslint/no-unused-vars
+  20:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/app/(client)/(public)/welcome/page.tsx
+   5:8  warning  'Image' is defined but never used         @typescript-eslint/no-unused-vars
+  28:9  warning  'yBg' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/blueprint/ActionImpactMap.tsx
+  7:5  warning  'TrendingUp' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/blueprint/BrandPromptGuide.tsx
+  3:10  warning  'motion' is defined but never used    @typescript-eslint/no-unused-vars
+  4:10  warning  'fadeInUp' is defined but never used  @typescript-eslint/no-unused-vars
+  6:25  warning  'Sparkles' is defined but never used  @typescript-eslint/no-unused-vars
+  7:5   warning  'Terminal' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/blueprint/StructureOverview.tsx
+   6:13  warning  'FileCode' is defined but never used  @typescript-eslint/no-unused-vars
+   7:14  warning  'Server' is defined but never used    @typescript-eslint/no-unused-vars
+  46:39  warning  'i' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/AmbientAudio.tsx
+  4:10  warning  'SovereignData' is defined but never used   @typescript-eslint/no-unused-vars
+  4:25  warning  'SovereignValue' is defined but never used  @typescript-eslint/no-unused-vars
+  6:28  warning  'Radio' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/AppLaunchpad.tsx
+   5:8   warning  'Link' is defined but never used                 @typescript-eslint/no-unused-vars
+  26:13  warning  'theme' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  32:12  warning  'isScrolled' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/DesktopSidebar.tsx
+   5:10  warning  'motion' is defined but never used                          @typescript-eslint/no-unused-vars
+   5:18  warning  'AnimatePresence' is defined but never used                 @typescript-eslint/no-unused-vars
+   7:24  warning  'NavSection' is defined but never used                      @typescript-eslint/no-unused-vars
+  22:12  warning  'isExpenseModalOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  23:12  warning  'isProfileSwitcherOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  26:12  warning  'isInteracting' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/DesktopTopbar.tsx
+  5:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/GlobalFAB.tsx
+  4:15  warning  'Sparkles' is defined but never used                     @typescript-eslint/no-unused-vars
+  6:10  warning  'cn' is defined but never used                           @typescript-eslint/no-unused-vars
+  9:13  warning  'openCommandPalette' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  9:33  warning  'toggleLaunchpad' is assigned a value but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/Header.tsx
+   6:24  warning  'Wifi' is defined but never used                        @typescript-eslint/no-unused-vars
+   6:40  warning  'HelpCircle' is defined but never used                  @typescript-eslint/no-unused-vars
+   6:52  warning  'ChevronRight' is defined but never used                @typescript-eslint/no-unused-vars
+   6:66  warning  'Globe' is defined but never used                       @typescript-eslint/no-unused-vars
+   6:73  warning  'Command' is defined but never used                     @typescript-eslint/no-unused-vars
+   6:82  warning  'Sparkles' is defined but never used                    @typescript-eslint/no-unused-vars
+   6:98  warning  'BookOpen' is defined but never used                    @typescript-eslint/no-unused-vars
+   9:10  warning  'ROLE_LABELS' is defined but never used                 @typescript-eslint/no-unused-vars
+  11:18  warning  'AnimatePresence' is defined but never used             @typescript-eslint/no-unused-vars
+  24:11  warning  'router' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  25:13  warning  'currentUser' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  27:13  warning  'theme' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  27:20  warning  'toggleTheme' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  27:51  warning  'openDocumentation' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  73:26  warning  'setLanguage' is assigned a value but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/LaunchpadStatusHub.tsx
+   5:36  warning  'MoreHorizontal' is defined but never used                @typescript-eslint/no-unused-vars
+   5:52  warning  'X' is defined but never used                             @typescript-eslint/no-unused-vars
+  14:10  warning  'cn' is defined but never used                            @typescript-eslint/no-unused-vars
+  15:26  warning  'LanguageCode' is defined but never used                  @typescript-eslint/no-unused-vars
+  24:38  warning  'isScrolled' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  25:13  warning  'toggleTheme' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  36:11  warning  'pathname' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  41:11  warning  'getPageKeyFromPath' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  47:11  warning  'handleSettingsClick' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/Map3DOverlay.tsx
+  7:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/MobileHeader.tsx
+  4:22  warning  'Bell' is defined but never used      @typescript-eslint/no-unused-vars
+  4:36  warning  'Settings' is defined but never used  @typescript-eslint/no-unused-vars
+  5:10  warning  'motion' is defined but never used    @typescript-eslint/no-unused-vars
+  6:10  warning  'cn' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/MobileNavBar.tsx
+  16:5   warning  'ChefHat' is defined but never used                      @typescript-eslint/no-unused-vars
+  22:5   warning  'BarChart3' is defined but never used                    @typescript-eslint/no-unused-vars
+  52:13  warning  'toggleTheme' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  52:26  warning  'openCommandPalette' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/NeuralShield.tsx
+  69:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/PageLayout.tsx
+  5:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/SovereignLockout.tsx
+  19:9  warning  'getLockReason' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  26:9  warning  'getLockDescription' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/TrainingOverlay.tsx
+  5:47  warning  'RotateCcw' is defined but never used  @typescript-eslint/no-unused-vars
+  7:10  warning  'cn' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/VoiceAssistantOverlay.tsx
+   4:25  warning  'SovereignValue' is defined but never used             @typescript-eslint/no-unused-vars
+   7:40  warning  'Zap' is defined but never used                        @typescript-eslint/no-unused-vars
+   7:82  warning  'CheckCircle2' is defined but never used               @typescript-eslint/no-unused-vars
+  13:10  warning  'useRouter' is defined but never used                  @typescript-eslint/no-unused-vars
+  60:9   warning  'clearError' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  68:23  warning  'isLiveConnecting' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  70:22  warning  'liveTranscripts' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  71:23  warning  'startLiveSession' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  72:22  warning  'stopLiveSession' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  73:19  warning  'sendLiveText' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  76:11  warning  'error' is assigned a value but never used             @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/sidebar/SidebarNavigation.tsx
+  4:23  warning  'LucideIcon' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/sidebar/SidebarProfile.tsx
+  3:18  warning  'Variants' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/sidebar/SidebarQuickActions.tsx
+  32:39  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/layout/voice/SessionHistory.tsx
+  3:10  warning  'History' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/modals/ProductFormModal.tsx
+   20:10  warning  'AnimatePresence' is defined but never used   @typescript-eslint/no-unused-vars
+   41:19  warning  'recipes' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  172:18  warning  'error' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/ContextualSettings.tsx
+   3:54  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  12:10  warning  'useTheme' is defined but never used   @typescript-eslint/no-unused-vars
+  80:31  warning  'setting' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/ExpertGovernanceHub.tsx
+   9:5  warning  'Settings' is defined but never used  @typescript-eslint/no-unused-vars
+  11:5  warning  'Search' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/GoalsSettings.tsx
+   4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+   8:5   warning  'Save' is defined but never used             @typescript-eslint/no-unused-vars
+  21:5   warning  'Circle' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/IntegrationSettings.tsx
+   6:5   warning  'Plug' is defined but never used                      @typescript-eslint/no-unused-vars
+   7:5   warning  'Save' is defined but never used                      @typescript-eslint/no-unused-vars
+  16:5   warning  'Check' is defined but never used                     @typescript-eslint/no-unused-vars
+  19:5   warning  'Cpu' is defined but never used                       @typescript-eslint/no-unused-vars
+  24:5   warning  'Network' is defined but never used                   @typescript-eslint/no-unused-vars
+  42:59  warning  'contextIsSaving' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/MenuSettings.tsx
+   4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+   6:5   warning  'UtensilsCrossed' is defined but never used  @typescript-eslint/no-unused-vars
+   7:5   warning  'Save' is defined but never used             @typescript-eslint/no-unused-vars
+  12:5   warning  'ImageIcon' is defined but never used        @typescript-eslint/no-unused-vars
+  17:5   warning  'Zap' is defined but never used              @typescript-eslint/no-unused-vars
+  20:5   warning  'Activity' is defined but never used         @typescript-eslint/no-unused-vars
+  23:5   warning  'CheckCircle2' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/MigrationSettings.tsx
+  4:42  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/NexusSettings.tsx
+   6:5   warning  'Cpu' is defined but never used                   @typescript-eslint/no-unused-vars
+  10:5   warning  'Save' is defined but never used                  @typescript-eslint/no-unused-vars
+  11:5   warning  'ShieldCheck' is defined but never used           @typescript-eslint/no-unused-vars
+  15:5   warning  'History' is defined but never used               @typescript-eslint/no-unused-vars
+  26:12  warning  'isSaving' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  26:22  warning  'setIsSaving' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/ProfileSettings.tsx
+  18:5   warning  'Check' is defined but never used                 @typescript-eslint/no-unused-vars
+  26:5   warning  'Fingerprint' is defined but never used           @typescript-eslint/no-unused-vars
+  49:12  warning  'saveSuccess' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/ReservationSettings.tsx
+   7:5  warning  'BookOpen' is defined but never used  @typescript-eslint/no-unused-vars
+  10:5  warning  'Clock' is defined but never used     @typescript-eslint/no-unused-vars
+  13:5  warning  'Mail' is defined but never used      @typescript-eslint/no-unused-vars
+  16:5  warning  'Bell' is defined but never used      @typescript-eslint/no-unused-vars
+  17:5  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/ReviewsSettings.tsx
+   7:5   warning  'Save' is defined but never used                                 @typescript-eslint/no-unused-vars
+  15:5   warning  'Zap' is defined but never used                                  @typescript-eslint/no-unused-vars
+  22:30  warning  'args' is defined but never used                                 @typescript-eslint/no-unused-vars
+  24:7   warning  'updateReviewSettingsAction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  67:18  warning  'error' is defined but never used                                @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/StaffSettings.tsx
+   4:18  warning  'AnimatePresence' is defined but never used            @typescript-eslint/no-unused-vars
+   7:5   warning  'Save' is defined but never used                       @typescript-eslint/no-unused-vars
+  10:5   warning  'Calendar' is defined but never used                   @typescript-eslint/no-unused-vars
+  11:5   warning  'GraduationCap' is defined but never used              @typescript-eslint/no-unused-vars
+  12:5   warning  'Briefcase' is defined but never used                  @typescript-eslint/no-unused-vars
+  13:5   warning  'AlertTriangle' is defined but never used              @typescript-eslint/no-unused-vars
+  15:5   warning  'HeartPulse' is defined but never used                 @typescript-eslint/no-unused-vars
+  40:7   warning  'defaultPositions' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  50:59  warning  'contextIsSaving' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/TablesSettings.tsx
+  4:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+  6:10  warning  'Floor' is defined but never used   @typescript-eslint/no-unused-vars
+  6:17  warning  'Table' is defined but never used   @typescript-eslint/no-unused-vars
+  6:24  warning  'Zone' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/panels/LogicTab.tsx
+  11:25  warning  'SovereignValue' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/panels/StyleTab.tsx
+   5:22  warning  'Paintbrush' is defined but never used      @typescript-eslint/no-unused-vars
+  12:25  warning  'SovereignValue' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/settings/ui/StandardSettingsEngine.tsx
+    5:16  warning  'AlertCircle' is defined but never used            @typescript-eslint/no-unused-vars
+  103:15  warning  'fieldId' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  140:74  warning  'displayValue' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/shared/VisionScanner.tsx
+  5:10  warning  'Camera' is defined but never used        @typescript-eslint/no-unused-vars
+  5:18  warning  'Upload' is defined but never used        @typescript-eslint/no-unused-vars
+  5:35  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+  5:49  warning  'XCircle' is defined but never used       @typescript-eslint/no-unused-vars
+  6:10  warning  'Button' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/system/AlertSync.tsx
+  52:15  warning  'existingAlertKeys' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  63:19  warning  'messagePart' is assigned a value but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/system/DocumentationPortal.tsx
+  10:13  warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/system/NexusServiceInitializer.tsx
+  41:57  warning  'data' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/system/RecipeTechnicalSheet.tsx
+  4:39  warning  'AlertCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  5:10  warning  'motion' is defined but never used       @typescript-eslint/no-unused-vars
+  6:10  warning  'cn' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/system/TutorialBubble.tsx
+   7:10  warning  'ChevronLeft' is defined but never used        @typescript-eslint/no-unused-vars
+  15:68  warning  'prevStep' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/BottomSheet.tsx
+  7:42  warning  'sheetHandleVariants' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/CameraCapture.tsx
+   4:10  warning  'Camera' is defined but never used           @typescript-eslint/no-unused-vars
+  16:12  warning  'stream' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/CommandModal.tsx
+    7:5   warning  'Command' is defined but never used             @typescript-eslint/no-unused-vars
+    9:5   warning  'Store' is defined but never used               @typescript-eslint/no-unused-vars
+   10:5   warning  'Map' is defined but never used                 @typescript-eslint/no-unused-vars
+   12:5   warning  'ChefHat' is defined but never used             @typescript-eslint/no-unused-vars
+   15:5   warning  'ClipboardCheck' is defined but never used      @typescript-eslint/no-unused-vars
+   19:5   warning  'CalendarRange' is defined but never used       @typescript-eslint/no-unused-vars
+   20:5   warning  'X' is defined but never used                   @typescript-eslint/no-unused-vars
+   22:5   warning  'Plus' is defined but never used                @typescript-eslint/no-unused-vars
+   44:7   warning  'NAV_ITEMS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   74:13  warning  'theme' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  186:77  warning  'sectionIndex' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/GlassCard.tsx
+  76:13  warning  'whileHover' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  76:25  warning  'whileTap' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  76:35  warning  'whileDrag' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  76:46  warning  'whileFocus' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  76:58  warning  'whileInView' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  77:13  warning  'initial' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  77:22  warning  'animate' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  77:31  warning  'transition' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  77:43  warning  'variants' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  78:13  warning  'onAnimationStart' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  78:31  warning  'onAnimationComplete' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  78:52  warning  'onUpdate' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  79:13  warning  'onDragStart' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  79:26  warning  'onDragEnd' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  79:37  warning  'onDrag' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  79:45  warning  'onDirectionLock' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  80:13  warning  'onDragTransitionEnd' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  80:34  warning  'layout' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  80:42  warning  'layoutId' is assigned a value but never used             @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/LoadingState.tsx
+  6:42  warning  'AlertCircle' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/Modal.tsx
+  3:28  warning  'useState' is defined but never used      @typescript-eslint/no-unused-vars
+  8:81  warning  'mobileSpring' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/NotificationPanel.tsx
+   8:5   warning  'AlertCircle' is defined but never used   @typescript-eslint/no-unused-vars
+  14:5   warning  'Clock' is defined but never used         @typescript-eslint/no-unused-vars
+  16:5   warning  'Package' is defined but never used       @typescript-eslint/no-unused-vars
+  17:5   warning  'Users' is defined but never used         @typescript-eslint/no-unused-vars
+  18:5   warning  'ChefHat' is defined but never used       @typescript-eslint/no-unused-vars
+  19:17  warning  'CalendarIcon' is defined but never used  @typescript-eslint/no-unused-vars
+  20:5   warning  'BarChart3' is defined but never used     @typescript-eslint/no-unused-vars
+  21:5   warning  'Settings' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/SecurityPinModal.tsx
+  24:5  warning  'requiredLevel' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/Skeleton.tsx
+  3:10  warning  'motion' is defined but never used     @typescript-eslint/no-unused-vars
+  5:10  warning  'ReactNode' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/components/ui/TimePicker.tsx
+  5:37  warning  'Calendar' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/context/IntelligenceContext.tsx
+  3:10  warning  'NexusFleetState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/context/settings/defaults.ts
+  17:5  warning  'SLMConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agency/Zeus.ts
+  2:10  warning  'AgentDomain' is defined but never used    @typescript-eslint/no-unused-vars
+  2:23  warning  'AgentRole' is defined but never used      @typescript-eslint/no-unused-vars
+  2:34  warning  'AgentResponse' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agent/tools/FinanceTool.ts
+   2:10  warning  'User' is defined but never used           @typescript-eslint/no-unused-vars
+   3:10  warning  'SovereignData' is defined but never used  @typescript-eslint/no-unused-vars
+  34:27  warning  'user' is defined but never used           @typescript-eslint/no-unused-vars
+  53:22  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agent/tools/FiscalAuditTool.ts
+   2:10  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+  30:27  warning  'user' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agent/tools/FleetTool.ts
+   3:10  warning  'EmpireInstance' is defined but never used  @typescript-eslint/no-unused-vars
+  34:21  warning  'args' is defined but never used            @typescript-eslint/no-unused-vars
+  34:27  warning  'user' is defined but never used            @typescript-eslint/no-unused-vars
+  61:27  warning  'user' is defined but never used            @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agent/tools/MenuTool.ts
+   7:10  warning  'SharedKernel' is defined but never used  @typescript-eslint/no-unused-vars
+  37:27  warning  'user' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agent/tools/ReservationTool.ts
+   2:10  warning  'User' is defined but never used           @typescript-eslint/no-unused-vars
+   4:10  warning  'SovereignData' is defined but never used  @typescript-eslint/no-unused-vars
+  29:27  warning  'user' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agent/tools/StockTool.ts
+   2:10  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+  30:27  warning  'user' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/agents/MonkeyChaosAgent.ts
+   3:10  warning  'Nexus' is defined but never used  @typescript-eslint/no-unused-vars
+  71:18  warning  'e' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/constants/bar-data.ts
+  1:38  warning  'BarOrderItem' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/AmbianceService.ts
+  1:10  warning  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/ChaosMonkey.ts
+  16:10  warning  'WritableAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  78:14  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  86:14  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/CryptoService.ts
+  1:10  warning  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/FiscalEngine.ts
+   1:10  warning  'logger' is defined but never used               @typescript-eslint/no-unused-vars
+  81:39  warning  'instanceId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/GenomeValidator.ts
+  17:68  warning  'ModuleConnection' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/GroupService.ts
+  1:10  warning  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/HumanResources.test.ts
+  1:32  warning  'vi' is defined but never used       @typescript-eslint/no-unused-vars
+  4:10  warning  'addDays' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/HumanResources.ts
+   2:10  warning  'User' is defined but never used                @typescript-eslint/no-unused-vars
+  34:15  warning  'breakTime' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/IdentityManager.ts
+  35:18  warning  '_pin' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  35:33  warning  '_pinHash' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/InventoryVisionService.ts
+  3:10  warning  'calculatePriceEvolution' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/KitchenService.ts
+  1:10  warning  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/MaintenanceAgent.ts
+  146:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/NexusPayrollEngine.ts
+  8:10  warning  'ZodInterceptor' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/NexusStaffingOracle.ts
+  26:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/NexusTelemetryService.ts
+  93:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/NexusYieldEngine.ts
+  1:22  warning  'ProcurementOrder' is defined but never used   @typescript-eslint/no-unused-vars
+  2:10  warning  'SimulationService' is defined but never used  @typescript-eslint/no-unused-vars
+  3:10  warning  'StockEngine' is defined but never used        @typescript-eslint/no-unused-vars
+  7:10  warning  'Nexus' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/OracleEngine.ts
+  1:10  warning  'StockItem' is defined but never used   @typescript-eslint/no-unused-vars
+  2:20  warning  'toQuantity' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/QualityEngine.test.ts
+  4:10  warning  'QualityControl' is defined but never used   @typescript-eslint/no-unused-vars
+  5:10  warning  'updateNexusNode' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/QualityEngine.ts
+   8:10  warning  'SovereignLedger' is defined but never used  @typescript-eslint/no-unused-vars
+  13:5   warning  'CleaningData' is defined but never used     @typescript-eslint/no-unused-vars
+  14:5   warning  'WasteData' is defined but never used        @typescript-eslint/no-unused-vars
+  15:5   warning  'OilCheckData' is defined but never used     @typescript-eslint/no-unused-vars
+  23:5   warning  'OilCheckSchema' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/ReservationService.ts
+  1:10  warning  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/ResilienceSlayer.ts
+  55:19  warning  'currentCRC' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/SimulationService.ts
+   1:40  warning  'InventoryMovement' is defined but never used         @typescript-eslint/no-unused-vars
+   1:71  warning  'User' is defined but never used                      @typescript-eslint/no-unused-vars
+   2:10  warning  'FiscalEngine' is defined but never used              @typescript-eslint/no-unused-vars
+   3:10  warning  'StockEngine' is defined but never used               @typescript-eslint/no-unused-vars
+   4:10  warning  'logger' is defined but never used                    @typescript-eslint/no-unused-vars
+  89:15  warning  'currentLastSeal' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/SovereignLedger.ts
+  177:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/Storage.ts
+  6:24  warning  'path' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/TreasuryEngine.ts
+  22:7  warning  'AI_TOKEN_COST_MODEL' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/services/VisionService.ts
+  45:26  warning  'base64Image' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/domain/types/brands.ts
+  19:10  warning  'SovereignData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/Simulacra/MonkeyChaos.ts
+   4:10  warning  'ordersNodeAtom' is defined but never used          @typescript-eslint/no-unused-vars
+   5:10  warning  'journalEntriesNodeAtom' is defined but never used  @typescript-eslint/no-unused-vars
+   6:10  warning  'hygieneLogsNodeAtom' is defined but never used     @typescript-eslint/no-unused-vars
+   9:16  warning  'uuidv4' is defined but never used                  @typescript-eslint/no-unused-vars
+  27:15  warning  'store' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  42:44  warning  'reading' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/Simulacra/RealityGenerator.ts
+  3:10  warning  'SensorReading' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/Simulacra/SinfoniaGradeXProof.ts
+  2:10  warning  'RealityGenerator' is defined but never used  @typescript-eslint/no-unused-vars
+  5:10  warning  'SensorReading' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/core/NexusCoreProvider.tsx
+    2:1   warning  Expected an assignment or function call and instead saw an expression                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-expressions
+    8:10  warning  'FleetComplianceService' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   26:5   warning  'themeAtom' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   27:5   warning  'performanceModeAtom' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   29:10  warning  'reservationStatsAtom' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   42:10  warning  'expectedCoversAtom' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   47:16  warning  'UserRole' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   47:26  warning  'GlobalSettings' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   54:5   warning  'NexusSettingsState' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   57:5   warning  'NexusFleetState' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   77:13  error    Error: This value cannot be modified
+
+Modifying a variable defined outside a component or hook is not allowed. Consider using an effect.
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/core/NexusCoreProvider.tsx:77:13
+  75 |     useMemo(() => {
+  76 |         try {
+> 77 |             Nexus.adapter = new FirestoreAdapter();
+     |             ^^^^^ value cannot be modified
+  78 |         } catch (e) {
+  79 |             console.warn('[NexusCore] Adapter already registered or failed', e);
+  80 |         }  react-hooks/immutability
+  162:26  warning  'cloudError' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  187:11  warning  'updateUser' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  212:27  warning  'setNotifications' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/core/hooks/auth/AuthSession.tsx
+   3:39  warning  'useCallback' is defined but never used      @typescript-eslint/no-unused-vars
+   7:10  warning  'logger' is defined but never used           @typescript-eslint/no-unused-vars
+   8:10  warning  'IdentityManager' is defined but never used  @typescript-eslint/no-unused-vars
+   8:27  warning  'ROOT_ADMIN' is defined but never used       @typescript-eslint/no-unused-vars
+  36:26  warning  'e' is defined but never used                @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/core/hooks/auth/AuthStaff.tsx
+    9:10  warning  'logger' is defined but never used         @typescript-eslint/no-unused-vars
+   13:61  warning  'sessionUserId' is defined but never used  @typescript-eslint/no-unused-vars
+  102:22  warning  '_p' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  102:35  warning  '_ph' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/fiscal/NexusFiscalProvider.tsx
+  15:10  warning  'SovereignNode' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/fleet/NexusFleetProvider.tsx
+   3:10  warning  'useAtom' is defined but never used                       @typescript-eslint/no-unused-vars
+  12:24  warning  'ConsolidatedMetrics' is defined but never used           @typescript-eslint/no-unused-vars
+  15:10  warning  'SovereignData' is defined but never used                 @typescript-eslint/no-unused-vars
+  16:10  warning  'Nexus' is defined but never used                         @typescript-eslint/no-unused-vars
+  41:30  warning  'setFinancialInsight' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/engines/ops/NexusOpsProvider.tsx
+    4:10  warning  'SovereignData' is defined but never used               @typescript-eslint/no-unused-vars
+    4:25  warning  'SovereignValue' is defined but never used              @typescript-eslint/no-unused-vars
+    8:3   warning  'Table' is defined but never used                       @typescript-eslint/no-unused-vars
+    8:17  warning  'Product' is defined but never used                     @typescript-eslint/no-unused-vars
+    8:34  warning  'Reservation' is defined but never used                 @typescript-eslint/no-unused-vars
+    8:64  warning  'JournalEntry' is defined but never used                @typescript-eslint/no-unused-vars
+    8:78  warning  'Category' is defined but never used                    @typescript-eslint/no-unused-vars
+    9:3   warning  'isTable' is defined but never used                     @typescript-eslint/no-unused-vars
+    9:12  warning  'isOrder' is defined but never used                     @typescript-eslint/no-unused-vars
+    9:21  warning  'isProduct' is defined but never used                   @typescript-eslint/no-unused-vars
+    9:32  warning  'isRecipe' is defined but never used                    @typescript-eslint/no-unused-vars
+    9:42  warning  'isIngredient' is defined but never used                @typescript-eslint/no-unused-vars
+    9:56  warning  'isReservation' is defined but never used               @typescript-eslint/no-unused-vars
+    9:71  warning  'isQuote' is defined but never used                     @typescript-eslint/no-unused-vars
+    9:80  warning  'isCampaign' is defined but never used                  @typescript-eslint/no-unused-vars
+    9:92  warning  'isCategory' is defined but never used                  @typescript-eslint/no-unused-vars
+   10:42  warning  'toIngredient' is defined but never used                @typescript-eslint/no-unused-vars
+   12:15  warning  'Ingredient' is defined but never used                  @typescript-eslint/no-unused-vars
+   18:10  warning  'useVisibilityPurge' is defined but never used          @typescript-eslint/no-unused-vars
+   29:3   warning  'stockItemsNodeAtom' is defined but never used          @typescript-eslint/no-unused-vars
+   42:3   warning  'deliveriesNodeAtom' is defined but never used          @typescript-eslint/no-unused-vars
+   44:3   warning  'wasteLogsNodeAtom' is defined but never used           @typescript-eslint/no-unused-vars
+   47:3   warning  'seoProfileAtom' is defined but never used              @typescript-eslint/no-unused-vars
+   49:3   warning  'socialAccountsNodeAtom' is defined but never used      @typescript-eslint/no-unused-vars
+   52:33  warning  'leaveBalancesNodeAtom' is defined but never used       @typescript-eslint/no-unused-vars
+   55:3   warning  'ingredientsNodeAtom' is defined but never used         @typescript-eslint/no-unused-vars
+   56:3   warning  'preparationsNodeAtom' is defined but never used        @typescript-eslint/no-unused-vars
+   57:3   warning  'storageLocationsNodeAtom' is defined but never used    @typescript-eslint/no-unused-vars
+   61:3   warning  'marketingSegmentsNodeAtom' is defined but never used   @typescript-eslint/no-unused-vars
+   62:3   warning  'scheduledPostsNodeAtom' is defined but never used      @typescript-eslint/no-unused-vars
+   63:3   warning  'isMarketingSyncingAtom' is defined but never used      @typescript-eslint/no-unused-vars
+   73:3   warning  'isReservationSyncingAtom' is defined but never used    @typescript-eslint/no-unused-vars
+   74:3   warning  'reservationStatsAtom' is defined but never used        @typescript-eslint/no-unused-vars
+  308:11  warning  'getTablesForFloor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useCoreOracle.ts
+  28:19  warning  'health' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  39:22  warning  'err' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useDataMigration.ts
+   96:11  warning  'performMigration' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  187:29  warning  'categoryName' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useDebounce.ts
+  4:26  warning  'SovereignData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useInteractions.ts
+  3:21  warning  'useRef' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useIntersectionObserver.ts
+  3:21  warning  'useRef' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useManagement.ts
+  6:5  warning  'wasteLogsAtom' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/usePerformance.ts
+  41:32  warning  'componentName' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useStorage.ts
+  17:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  30:22  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  41:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  59:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  72:22  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/hooks/useStrategicOracle.ts
+  13:24  warning  'refreshFleet' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/FirestoreAdapter.ts
+  25:10  warning  'z' is defined but never used              @typescript-eslint/no-unused-vars
+  26:10  warning  'SovereignMath' is defined but never used  @typescript-eslint/no-unused-vars
+  27:10  warning  'logger' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/FiscalAdapter.ts
+   1:10  warning  'logger' is defined but never used               @typescript-eslint/no-unused-vars
+  84:39  warning  'instanceId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/FleetAdapter.ts
+  1:10  warning  'Nexus' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/GeminiAdapter.ts
+  13:11  warning  'WebkitWindow' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/POSAdapter.ts
+  3:10  warning  'MasterBridge' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/SovereignLedgerAdapter.ts
+  177:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/adapters/ZeusAdapter.ts
+    2:23  warning  'AgentRole' is defined but never used            @typescript-eslint/no-unused-vars
+    4:5   warning  'VanguardAgentConfig' is defined but never used  @typescript-eslint/no-unused-vars
+  122:18  warning  'err' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/components/ProvisioningWizard.tsx
+   5:18  warning  'ShieldCheck' is defined but never used         @typescript-eslint/no-unused-vars
+   5:43  warning  'Palette' is defined but never used             @typescript-eslint/no-unused-vars
+   9:10  warning  'cn' is defined but never used                  @typescript-eslint/no-unused-vars
+  21:12  warning  'isLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/infrastructure/components/TenantOrchestrator.tsx
+   11:5   warning  'ChevronRight' is defined but never used            @typescript-eslint/no-unused-vars
+   13:5   warning  'Lock' is defined but never used                    @typescript-eslint/no-unused-vars
+   16:5   warning  'CheckCircle2' is defined but never used            @typescript-eslint/no-unused-vars
+  113:27  warning  'isMaintenance' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/instances/bistrolyon.ts
+  1:15  warning  'TenantConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/instances/lepetitpoucet.ts
+  1:15  warning  'TenantConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/instances/urbanburger.ts
+  1:15  warning  'TenantConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/MasterBridge.ts
+  109:25  warning  'payloadHash' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  109:38  warning  'signature' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  109:49  warning  'signatureVersion' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  123:37  warning  'signatureVersion' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/QuantumCrypto.ts
+   1:10  warning  'logger' is defined but never used        @typescript-eslint/no-unused-vars
+  53:81  warning  'originalData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/RuntimeValidator.ts
+  2:27  warning  'Rate' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/TimeSync.ts
+  35:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/ai/AgentEngine.ts
+  32:15  warning  'systemPrompt' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  33:15  warning  'dataContext' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/ai/DNAInjector.ts
+  25:22  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/audit.ts
+  74:26  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  92:30  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/axiom.ts
+  20:7   warning  'isProd' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  24:11  warning  'structuredLog' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  33:11  warning  'AXIOM_DATASET' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/firebase.ts
+  1:34  warning  'getApp' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/logger.ts
+  18:11  warning  'LoggerOptions' is defined but never used       @typescript-eslint/no-unused-vars
+  26:11  warning  'timestamp' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/marketing-engine.ts
+  15:24  warning  'text' is defined but never used     @typescript-eslint/no-unused-vars
+  16:27  warning  'profile' is defined but never used  @typescript-eslint/no-unused-vars
+  33:27  warning  'score' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/multi-tenant-firebase.ts
+   1:25  warning  'getApps' is defined but never used  @typescript-eslint/no-unused-vars
+  64:14  warning  'e' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/nexus/StripeBridge.ts
+  40:64  warning  'returnUrl' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/nexus/TelemetryService.ts
+    5:10  warning  'FiscalSeal' is defined but never used  @typescript-eslint/no-unused-vars
+   69:18  warning  'e' is defined but never used           @typescript-eslint/no-unused-vars
+  129:14  warning  'e' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/nexus/adapters/SimulacraAdapter.ts
+   75:113  warning  'options' is defined but never used         @typescript-eslint/no-unused-vars
+  160:16   warning  'collectionPath' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/offline/offline-store.ts
+  3:24  warning  'SovereignValue' is defined but never used  @typescript-eslint/no-unused-vars
+  3:40  warning  'SovereignData' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/shared-kernel.ts
+  7:68  warning  'SovereignValue' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/simulator/Simulation.worker.ts
+  25:26  warning  'staffCount' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/simulator/TemporalSimulator.ts
+  1:10  warning  'IdGenerator' is defined but never used       @typescript-eslint/no-unused-vars
+  3:10  warning  'simulatorDb' is defined but never used       @typescript-eslint/no-unused-vars
+  5:10  warning  'SimulacraAdapter' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/sovereign/firestoreHydrator.ts
+  1:10  warning  'z' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/customers/components/NewCustomerDialog.tsx
+  4:32  warning  'Calendar' is defined but never used  @typescript-eslint/no-unused-vars
+  7:10  warning  'cn' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/agency/InsightsConsole.tsx
+  5:10  warning  'Search' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/crm/CRMContactForm.tsx
+  7:10  warning  'User' is defined but never used     @typescript-eslint/no-unused-vars
+  7:16  warning  'Mail' is defined but never used     @typescript-eslint/no-unused-vars
+  7:22  warning  'Phone' is defined but never used    @typescript-eslint/no-unused-vars
+  7:29  warning  'MapPin' is defined but never used   @typescript-eslint/no-unused-vars
+  7:37  warning  'Tag' is defined but never used      @typescript-eslint/no-unused-vars
+  7:42  warning  'Plus' is defined but never used     @typescript-eslint/no-unused-vars
+  7:48  warning  'Loader2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/crm/CRMDetailView.tsx
+  5:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/crm/CRMList.tsx
+  12:10  warning  'cn' is defined but never used                    @typescript-eslint/no-unused-vars
+  28:12  warning  'selectedCRM' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/marketing/ScheduledPostItem.tsx
+  4:10  warning  'LucideIcon' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/marketing/SocialAccountCard.tsx
+  3:10  warning  'motion' is defined but never used      @typescript-eslint/no-unused-vars
+  5:10  warning  'LucideIcon' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/components/quotes/NewQuoteDialog.tsx
+  12:5   warning  'Euro' is defined but never used             @typescript-eslint/no-unused-vars
+  15:5   warning  'ChevronRight' is defined but never used     @typescript-eslint/no-unused-vars
+  16:5   warning  'UtensilsCrossed' is defined but never used  @typescript-eslint/no-unused-vars
+  18:5   warning  'Settings' is defined but never used         @typescript-eslint/no-unused-vars
+  19:5   warning  'Clock' is defined but never used            @typescript-eslint/no-unused-vars
+  25:21  warning  'QuoteLineType' is defined but never used    @typescript-eslint/no-unused-vars
+  26:10  warning  'Product' is defined but never used          @typescript-eslint/no-unused-vars
+  26:26  warning  'Customer' is defined but never used         @typescript-eslint/no-unused-vars
+  27:10  warning  'StockItem' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/hooks/useGeminiLive.ts
+   3:8   warning  'React' is defined but never used              @typescript-eslint/no-unused-vars
+   9:11  warning  'WebkitWindow' is defined but never used       @typescript-eslint/no-unused-vars
+  19:11  warning  'PerformanceMemory' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/marketing.sync.ts
+    2:10  warning  'updateNexusNode' is defined but never used             @typescript-eslint/no-unused-vars
+    8:5   warning  'Delivery' is defined but never used                    @typescript-eslint/no-unused-vars
+   12:5   warning  'marketingCampaignsNodeAtom' is defined but never used  @typescript-eslint/no-unused-vars
+   13:5   warning  'socialAccountsNodeAtom' is defined but never used      @typescript-eslint/no-unused-vars
+   14:5   warning  'quotesNodeAtom' is defined but never used              @typescript-eslint/no-unused-vars
+  107:10  warning  'data' is defined but never used                        @typescript-eslint/no-unused-vars
+  117:10  warning  'data' is defined but never used                        @typescript-eslint/no-unused-vars
+  127:8   warning  'data' is defined but never used                        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/store/analyticsAtoms.ts
+  9:10  warning  'Order' is defined but never used        @typescript-eslint/no-unused-vars
+  9:17  warning  'Product' is defined but never used      @typescript-eslint/no-unused-vars
+  9:26  warning  'Recipe' is defined but never used       @typescript-eslint/no-unused-vars
+  9:42  warning  'StaffMember' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/store/crmAtoms.ts
+  41:43  warning  'get' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/marketing/store/marketingAtoms.ts
+  1:21  warning  'PrimitiveAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  3:29  warning  'CRMFeedback' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/reservations/components/CustomerDetailPanel.tsx
+  3:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  3:35  warning  'Variants' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/reservations/components/NewCustomerDialog.tsx
+  4:32  warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+  4:42  warning  'Heart' is defined but never used         @typescript-eslint/no-unused-vars
+  4:61  warning  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+  7:10  warning  'cn' is defined but never used            @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/reservations/components/NewReservationDialog.tsx
+  4:119  warning  'Gem' is defined but never used  @typescript-eslint/no-unused-vars
+  9:10   warning  'fr' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/reservations/components/TableGrid.tsx
+  1:18  warning  'Variants' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/reservations/domain/AutomaticAssigner.ts
+   2:10  warning  'format' is defined but never used                @typescript-eslint/no-unused-vars
+   2:37  warning  'isBefore' is defined but never used              @typescript-eslint/no-unused-vars
+   2:47  warning  'isAfter' is defined but never used               @typescript-eslint/no-unused-vars
+  52:5   warning  'covers' is defined but never used                @typescript-eslint/no-unused-vars
+  53:5   warning  'date' is defined but never used                  @typescript-eslint/no-unused-vars
+  54:5   warning  'time' is defined but never used                  @typescript-eslint/no-unused-vars
+  55:5   warning  'tables' is defined but never used                @typescript-eslint/no-unused-vars
+  56:5   warning  'existingReservations' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/commerce/reservations/domain/AvailabilityEngine.ts
+  1:10  warning  'DaySchedule' is defined but never used       @typescript-eslint/no-unused-vars
+  3:37  warning  'isWithinInterval' is defined but never used  @typescript-eslint/no-unused-vars
+  3:65  warning  'isAfter' is defined but never used           @typescript-eslint/no-unused-vars
+  3:74  warning  'startOfDay' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/CameraCapture.tsx
+  4:10  warning  'Camera' is defined but never used           @typescript-eslint/no-unused-vars
+  5:10  warning  'motion' is defined but never used           @typescript-eslint/no-unused-vars
+  5:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  7:10  warning  'cn' is defined but never used               @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/GestionHuiles.tsx
+   4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  10:5   warning  'CheckCircle2' is defined but never used     @typescript-eslint/no-unused-vars
+  11:5   warning  'AlertCircle' is defined but never used      @typescript-eslint/no-unused-vars
+  12:5   warning  'Trash2' is defined but never used           @typescript-eslint/no-unused-vars
+  13:5   warning  'Calendar' is defined but never used         @typescript-eslint/no-unused-vars
+  14:5   warning  'User' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/HACCPVisionScanner.tsx
+  5:58  warning  'CheckSquare' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/ReceptionMarchandises.tsx
+   9:5  warning  'History' is defined but never used        @typescript-eslint/no-unused-vars
+  12:5  warning  'CalendarClock' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/ReleveTemperatures.tsx
+   9:5  warning  'History' is defined but never used       @typescript-eslint/no-unused-vars
+  10:5  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/TracabiliteEtiquettes.tsx
+   8:5   warning  'Plus' is defined but never used         @typescript-eslint/no-unused-vars
+  19:10  warning  'StatusBadge' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/haccp/WasteManagementHACCP.tsx
+  11:5   warning  'Plus' is defined but never used                   @typescript-eslint/no-unused-vars
+  13:5   warning  'Calendar' is defined but never used               @typescript-eslint/no-unused-vars
+  15:5   warning  'Scale' is defined but never used                  @typescript-eslint/no-unused-vars
+  20:10  warning  'motion' is defined but never used                 @typescript-eslint/no-unused-vars
+  23:13  warning  'logWaste' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  24:24  warning  'prestataires' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/DeliveryItemRow.tsx
+  49:9  warning  'statusColor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/ProductControlCard.tsx
+  5:25  warning  'Badge' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/ProductControlList.tsx
+  2:42  warning  'Info' is defined but never used      @typescript-eslint/no-unused-vars
+  2:48  warning  'Calendar' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/QualityModuleLayout.tsx
+  2:10  warning  'cn' is defined but never used      @typescript-eslint/no-unused-vars
+  3:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/ReceptionSummary.tsx
+  3:5  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+  8:5  warning  'Activity' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/ReceptionWizard.tsx
+  6:5  warning  'qualityActiveControlAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  7:5  warning  'qualityControlStepAtom' is defined but never used    @typescript-eslint/no-unused-vars
+  8:5  warning  'qualityControlsAtom' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/SanitaryReport.tsx
+  2:10  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/TemperatureCard.tsx
+  2:10  warning  'Thermometer' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/components/quality/VisualCheckGrid.tsx
+  7:11  warning  'CheckItem' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/haccp.sync.ts
+   2:10  warning  'updateNexusNode' is defined but never used          @typescript-eslint/no-unused-vars
+   5:5   warning  'hygieneLabelsNodeAtom' is defined but never used    @typescript-eslint/no-unused-vars
+   6:5   warning  'maintenanceLogsNodeAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  20:26  warning  'store' is defined but never used                    @typescript-eslint/no-unused-vars
+  26:8   warning  'data' is defined but never used                     @typescript-eslint/no-unused-vars
+  40:8   warning  'data' is defined but never used                     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/hooks/useAuditMapper.ts
+  8:23  warning  'msg' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/hooks/useQuality.ts
+  15:10  warning  'SovereignData' is defined but never used         @typescript-eslint/no-unused-vars
+  18:5   warning  'Delivery' is defined but never used              @typescript-eslint/no-unused-vars
+  33:22  warning  'setControls' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/hooks/useQualityMapper.ts
+  10:26  warning  'QualityControlItem' is defined but never used  @typescript-eslint/no-unused-vars
+  12:10  warning  'useSettings' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/store/complianceAtoms.ts
+  10:5  warning  'SupplierOrder' is defined but never used  @typescript-eslint/no-unused-vars
+  13:5  warning  'FiscalSeal' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/store/qualityAtoms.ts
+  2:27  warning  'updateNexusNode' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/compliance/haccp/types/domain.ts
+  1:10  warning  'SupplierOrder' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/accounting/domain/AccountingService.ts
+  1:45  warning  'AccountSide' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/accounting/domain/PowensService.ts
+  66:53  warning  'userToken' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/billing/hooks/useBilling.ts
+  23:11  warning  'store' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/components/accounting/ExpenseClaimDialog.tsx
+   4:21  warning  'Upload' is defined but never used                @typescript-eslint/no-unused-vars
+   4:48  warning  'AlertCircle' is defined but never used           @typescript-eslint/no-unused-vars
+   4:71  warning  'Gem' is defined but never used                   @typescript-eslint/no-unused-vars
+   4:89  warning  'FileText' is defined but never used              @typescript-eslint/no-unused-vars
+   4:99  warning  'CheckCircle2' is defined but never used          @typescript-eslint/no-unused-vars
+   6:18  warning  'AnimatePresence' is defined but never used       @typescript-eslint/no-unused-vars
+  44:12  warning  'isAnalyzing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  77:18  warning  'error' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/components/accounting/FiscalAuditView.tsx
+   5:10  warning  'FiscalSeal' is defined but never used             @typescript-eslint/no-unused-vars
+   7:10  warning  'Card' is defined but never used                   @typescript-eslint/no-unused-vars
+   7:16  warning  'CardHeader' is defined but never used             @typescript-eslint/no-unused-vars
+   7:28  warning  'CardTitle' is defined but never used              @typescript-eslint/no-unused-vars
+   7:39  warning  'CardContent' is defined but never used            @typescript-eslint/no-unused-vars
+   8:23  warning  'ShieldAlert' is defined but never used            @typescript-eslint/no-unused-vars
+  12:42  warning  'sealsLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  28:18  warning  'error' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/finance.sync.ts
+   2:10  warning  'updateNexusNode' is defined but never used       @typescript-eslint/no-unused-vars
+   3:22  warning  'JournalEntry' is defined but never used          @typescript-eslint/no-unused-vars
+   5:5   warning  'fiscalLedgerNodeAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  45:17  warning  'store' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/hooks/useFiscal.ts
+  5:23  warning  'useMemo' is defined but never used  @typescript-eslint/no-unused-vars
+  8:30  warning  'args' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/services/FiscalHACCPMapper.ts
+  19:9  warning  'tenantId' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/finance/services/NF525Service.ts
+    2:10   warning  'Table' is defined but never used     @typescript-eslint/no-unused-vars
+  133:111  warning  'tenantId' is defined but never used  @typescript-eslint/no-unused-vars
+  144:22   warning  'err' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/floor-plan/ui/FloorPlanEditor.tsx
+  5:10  warning  'Table' is defined but never used  @typescript-eslint/no-unused-vars
+  5:17  warning  'Zone' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/floor-plan/ui/TableInsightPanel.tsx
+   8:5  warning  'ArrowDown' is defined but never used        @typescript-eslint/no-unused-vars
+   9:5  warning  'Info' is defined but never used             @typescript-eslint/no-unused-vars
+  10:5  warning  'ChevronLeft' is defined but never used      @typescript-eslint/no-unused-vars
+  14:5  warning  'AlertCircle' is defined but never used      @typescript-eslint/no-unused-vars
+  16:5  warning  'UtensilsCrossed' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/floor-plan/ui/page.tsx
+   5:10   warning  'ZoomIn' is defined but never used                   @typescript-eslint/no-unused-vars
+   5:18   warning  'ZoomOut' is defined but never used                  @typescript-eslint/no-unused-vars
+   5:27   warning  'Maximize' is defined but never used                 @typescript-eslint/no-unused-vars
+   5:37   warning  'Move' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:43   warning  'Grid' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:65   warning  'Plus' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:71   warning  'MousePointer2' is defined but never used            @typescript-eslint/no-unused-vars
+   5:86   warning  'Camera' is defined but never used                   @typescript-eslint/no-unused-vars
+   5:94   warning  'RefreshCw' is defined but never used                @typescript-eslint/no-unused-vars
+   5:112  warning  'Heart' is defined but never used                    @typescript-eslint/no-unused-vars
+   5:119  warning  'AlertTriangle' is defined but never used            @typescript-eslint/no-unused-vars
+   5:134  warning  'Square' is defined but never used                   @typescript-eslint/no-unused-vars
+   5:142  warning  'Box' is defined but never used                      @typescript-eslint/no-unused-vars
+   5:155  warning  'Home' is defined but never used                     @typescript-eslint/no-unused-vars
+   5:190  warning  'X' is defined but never used                        @typescript-eslint/no-unused-vars
+   5:193  warning  'Sparkles' is defined but never used                 @typescript-eslint/no-unused-vars
+   5:203  warning  'Minus' is defined but never used                    @typescript-eslint/no-unused-vars
+   5:225  warning  'ChefHat' is defined but never used                  @typescript-eslint/no-unused-vars
+   6:10   warning  'Button' is defined but never used                   @typescript-eslint/no-unused-vars
+  11:35   warning  'Variants' is defined but never used                 @typescript-eslint/no-unused-vars
+  12:10   warning  'fadeInUp' is defined but never used                 @typescript-eslint/no-unused-vars
+  12:20   warning  'easing' is defined but never used                   @typescript-eslint/no-unused-vars
+  38:22   warning  'setViewMode' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  39:22   warning  'setShowGrid' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  41:12   warning  'showFloorModal' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  70:11   warning  'handleAddFloor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/floor-plan/ui/useFloorPlanControls.ts
+  5:10  warning  'Table' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/components/staff/BadgeControl.tsx
+   3:27  warning  'useEffect' is defined but never used      @typescript-eslint/no-unused-vars
+   9:10  warning  'ShiftEntry' is defined but never used     @typescript-eslint/no-unused-vars
+  11:25  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/components/staff/CandidateModal.tsx
+   13:5   warning  'Briefcase' is defined but never used  @typescript-eslint/no-unused-vars
+  144:18  warning  'error' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/components/staff/RecruitmentDashboard.tsx
+  18:5   warning  'Phone' is defined but never used  @typescript-eslint/no-unused-vars
+  65:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/components/staff/StaffList.tsx
+  5:5  warning  'Users' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/components/staff/StaffMemberForm.tsx
+  87:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/hooks/useHumanResources.ts
+  13:31  warning  'LeaveBalance' is defined but never used  @typescript-eslint/no-unused-vars
+  79:88  warning  'details' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/hooks/useRecruitment.ts
+  7:27  warning  'tenantId' is defined but never used   @typescript-eslint/no-unused-vars
+  7:45  warning  'candidate' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/human/hr/hr.sync.ts
+  5:3  warning  'activeShiftsNodeAtom' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/intelligence/analytics/components/ProfitabilityView.tsx
+  4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  8:10  warning  'IoTMetric' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/kds/hooks/useKDSController.ts
+  1:29  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/logistics/inventory/components/inventory/InvoiceReviewModal.tsx
+   5:17  warning  'AlertCircle' is defined but never used           @typescript-eslint/no-unused-vars
+   8:28  warning  'ExtractedInvoiceItem' is defined but never used  @typescript-eslint/no-unused-vars
+  20:21  warning  'setMatches' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/logistics/inventory/components/inventory/StockReceptionModal.tsx
+   2:18  warning  'AnimatePresence' is defined but never used           @typescript-eslint/no-unused-vars
+  47:12  warning  'batchNumber' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  48:12  warning  'lotNumber' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  48:23  warning  'setLotNumber' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  49:12  warning  'supplierName' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  50:12  warning  'unitCostInCents' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/logistics/inventory/components/storage-map/StorageTypeConfig.ts
+   3:5  warning  'Thermometer' is defined but never used    @typescript-eslint/no-unused-vars
+   5:5  warning  'Package' is defined but never used        @typescript-eslint/no-unused-vars
+   8:5  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+   9:5  warning  'Calendar' is defined but never used       @typescript-eslint/no-unused-vars
+  10:5  warning  'Clock' is defined but never used          @typescript-eslint/no-unused-vars
+  11:5  warning  'X' is defined but never used              @typescript-eslint/no-unused-vars
+  12:5  warning  'ArrowRight' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/logistics/inventory/hooks/useInventory.ts
+  18:10  warning  'WasteLog' is defined but never used  @typescript-eslint/no-unused-vars
+  89:66  warning  'qty' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/logistics/inventory/hooks/useStockMapper.ts
+  13:13  warning  'tenantId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/logistics/inventory/hooks/useStorage.ts
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  3:44  warning  'useRef' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/dashboard/EmpireCockpit.tsx
+  13:5  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/dashboard/EndOfDayWizard.tsx
+  50:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/floor-plan/FloorPlanEditor.tsx
+  5:17  warning  'TableStatus' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/floor-plan/TableInsightPanel.tsx
+   8:5  warning  'ArrowDown' is defined but never used        @typescript-eslint/no-unused-vars
+   9:5  warning  'Info' is defined but never used             @typescript-eslint/no-unused-vars
+  10:5  warning  'ChevronLeft' is defined but never used      @typescript-eslint/no-unused-vars
+  14:5  warning  'AlertCircle' is defined but never used      @typescript-eslint/no-unused-vars
+  16:5  warning  'UtensilsCrossed' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/registre/InterventionLogSection.tsx
+  5:5  warning  'Clock' is defined but never used         @typescript-eslint/no-unused-vars
+  9:5  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/registre/PMRSection.tsx
+  5:10  warning  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/registre/PrestatairesSection.tsx
+  4:46  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+  4:61  warning  'CheckCircle2' is defined but never used   @typescript-eslint/no-unused-vars
+  4:75  warning  'XCircle' is defined but never used        @typescript-eslint/no-unused-vars
+  4:90  warning  'User' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/components/registre/SanitaryComplianceSection.tsx
+   5:5  warning  'BadgeCheck' is defined but never used       @typescript-eslint/no-unused-vars
+  10:5  warning  'XCircle' is defined but never used          @typescript-eslint/no-unused-vars
+  11:5  warning  'FileText' is defined but never used         @typescript-eslint/no-unused-vars
+  13:5  warning  'UtensilsCrossed' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/hooks/useRegistre.ts
+  4:33  warning  'useMemo' is defined but never used         @typescript-eslint/no-unused-vars
+  5:10  warning  'QualityControl' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/services/Imperial3DView.ts
+  28:21  warning  'tenantId' is defined but never used          @typescript-eslint/no-unused-vars
+  28:39  warning  'transactionPulse' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/engine/types.ts
+  1:10  warning  'SovereignData' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/ModificationAlerts.tsx
+  4:51  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+  5:10  warning  'cn' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/PlateAuditWizard.tsx
+  3:27  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  5:66  warning  'Gauge' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/PrepTaskDetailDialog.tsx
+    3:86  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
+  123:50  warning  'idx' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/RecipeDetailDialog.tsx
+   6:10  warning  'cn' is defined but never used          @typescript-eslint/no-unused-vars
+   9:10  warning  'useUI' is defined but never used       @typescript-eslint/no-unused-vars
+  10:36  warning  'RecipeStep' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/recipe-editor/RecipeAnalyticTab.tsx
+  3:10  warning  'motion' is defined but never used      @typescript-eslint/no-unused-vars
+  4:10  warning  'DollarSign' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/recipe-editor/RecipeBasicsTab.tsx
+  3:10  warning  'motion' is defined but never used   @typescript-eslint/no-unused-vars
+  4:31  warning  'ChefHat' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/recipe-editor/RecipeCompositionTab.tsx
+  7:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/recipe-editor/RecipeProtocolTab.tsx
+   6:10  warning  'cn' is defined but never used                @typescript-eslint/no-unused-vars
+   7:30  warning  'RecipeIngredient' is defined but never used  @typescript-eslint/no-unused-vars
+  69:61  warning  'idx' is defined but never used               @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/tabs/IngredientsTab.tsx
+  4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  5:53  warning  'User' is defined but never used             @typescript-eslint/no-unused-vars
+  5:66  warning  'Filter' is defined but never used           @typescript-eslint/no-unused-vars
+  6:10  warning  'Button' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/tabs/RecipesTab.tsx
+  6:63  warning  'MoreVertical' is defined but never used  @typescript-eslint/no-unused-vars
+  6:77  warning  'Eye' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/kitchen/components/tabs/WasteTab.tsx
+   5:10  warning  'History' is defined but never used    @typescript-eslint/no-unused-vars
+  20:41  warning  'wasteLogs' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/Cart.tsx
+    4:10  warning  'Trash2' is defined but never used                     @typescript-eslint/no-unused-vars
+    4:59  warning  'Clock' is defined but never used                      @typescript-eslint/no-unused-vars
+    4:66  warning  'MoreVertical' is defined but never used               @typescript-eslint/no-unused-vars
+    4:80  warning  'Split' is defined but never used                      @typescript-eslint/no-unused-vars
+    4:87  warning  'Zap' is defined but never used                        @typescript-eslint/no-unused-vars
+    5:10  warning  'Button' is defined but never used                     @typescript-eslint/no-unused-vars
+   11:10  warning  'useOrders' is defined but never used                  @typescript-eslint/no-unused-vars
+   42:49  warning  'onClearCart' is defined but never used                @typescript-eslint/no-unused-vars
+   42:91  warning  'onSplitBill' is defined but never used                @typescript-eslint/no-unused-vars
+   45:11  warning  'splitBillEnabled' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   50:38  warning  'tvaByRateInCents' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  110:47  warning  'idx' is defined but never used                        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/CategoryList.tsx
+  6:10  warning  'Store' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/PaymentDialog.tsx
+   5:10  warning  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+  41:18  warning  'error' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/ProductDetailsDialog.tsx
+   5:10  warning  'Button' is defined but never used                         @typescript-eslint/no-unused-vars
+   6:10  warning  'ScrollArea' is defined but never used                     @typescript-eslint/no-unused-vars
+  88:11  warning  'removeCustomAllergen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/SplitBillDialog.tsx
+   5:10  warning  'Button' is defined but never used                     @typescript-eslint/no-unused-vars
+   8:18  warning  'AnimatePresence' is defined but never used            @typescript-eslint/no-unused-vars
+  45:12  warning  'selectedConvive' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  75:11  warning  'handleSelectItem' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/TableSelector.tsx
+  6:17  warning  'AlertCircle' is defined but never used      @typescript-eslint/no-unused-vars
+  6:50  warning  'ChevronUp' is defined but never used        @typescript-eslint/no-unused-vars
+  6:61  warning  'ChevronDown' is defined but never used      @typescript-eslint/no-unused-vars
+  6:74  warning  'MousePointer2' is defined but never used    @typescript-eslint/no-unused-vars
+  7:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/components/bar/KdsTab.tsx
+  17:10  warning  'Recipe' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/hooks/usePos.ts
+    3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+    7:17  warning  'Category' is defined but never used   @typescript-eslint/no-unused-vars
+    8:10  warning  'Nexus' is defined but never used      @typescript-eslint/no-unused-vars
+   94:18  warning  'error' is defined but never used      @typescript-eslint/no-unused-vars
+  108:18  warning  'error' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/ops/pos/store/orderAtoms.ts
+  2:24  warning  'Reservation' is defined but never used  @typescript-eslint/no-unused-vars
+  2:37  warning  'GroupEvent' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/hooks/usePos.ts
+    3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+    7:17  warning  'Category' is defined but never used   @typescript-eslint/no-unused-vars
+    8:10  warning  'Nexus' is defined but never used      @typescript-eslint/no-unused-vars
+  124:18  warning  'error' is defined but never used      @typescript-eslint/no-unused-vars
+  138:18  warning  'error' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/Cart.tsx
+    4:10  warning  'Trash2' is defined but never used                     @typescript-eslint/no-unused-vars
+    4:59  warning  'Clock' is defined but never used                      @typescript-eslint/no-unused-vars
+    4:66  warning  'MoreVertical' is defined but never used               @typescript-eslint/no-unused-vars
+    4:80  warning  'Split' is defined but never used                      @typescript-eslint/no-unused-vars
+    4:87  warning  'Zap' is defined but never used                        @typescript-eslint/no-unused-vars
+    5:10  warning  'Button' is defined but never used                     @typescript-eslint/no-unused-vars
+   11:10  warning  'useOrders' is defined but never used                  @typescript-eslint/no-unused-vars
+   43:49  warning  'onClearCart' is defined but never used                @typescript-eslint/no-unused-vars
+   43:91  warning  'onSplitBill' is defined but never used                @typescript-eslint/no-unused-vars
+   46:11  warning  'splitBillEnabled' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   51:38  warning  'tvaByRateInCents' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  111:47  warning  'idx' is defined but never used                        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/CategoryList.tsx
+  7:10  warning  'Store' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/PaymentDialog.tsx
+   5:10  warning  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+  42:18  warning  'error' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/ProductDetailsDialog.tsx
+   5:10  warning  'Button' is defined but never used                         @typescript-eslint/no-unused-vars
+   6:10  warning  'ScrollArea' is defined but never used                     @typescript-eslint/no-unused-vars
+  89:11  warning  'removeCustomAllergen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/ProductGrid.tsx
+  4:10  warning  'useAtom' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/SplitBillDialog.tsx
+   5:10  warning  'Button' is defined but never used                     @typescript-eslint/no-unused-vars
+   8:18  warning  'AnimatePresence' is defined but never used            @typescript-eslint/no-unused-vars
+  55:12  warning  'selectedConvive' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  85:11  warning  'handleSelectItem' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/TableSelector.tsx
+  5:17  warning  'Zone' is defined but never used             @typescript-eslint/no-unused-vars
+  7:17  warning  'AlertCircle' is defined but never used      @typescript-eslint/no-unused-vars
+  7:50  warning  'ChevronUp' is defined but never used        @typescript-eslint/no-unused-vars
+  7:61  warning  'ChevronDown' is defined but never used      @typescript-eslint/no-unused-vars
+  7:74  warning  'MousePointer2' is defined but never used    @typescript-eslint/no-unused-vars
+  8:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/modules/pos/ui/page.tsx
+   5:10  warning  'CategoryList' is defined but never used     @typescript-eslint/no-unused-vars
+  12:10  warning  'useTables' is defined but never used        @typescript-eslint/no-unused-vars
+  13:10  warning  'useAuth' is defined but never used          @typescript-eslint/no-unused-vars
+  14:10  warning  'useToast' is defined but never used         @typescript-eslint/no-unused-vars
+  15:10  warning  'ShoppingCart' is defined but never used     @typescript-eslint/no-unused-vars
+  15:57  warning  'LayoutGrid' is defined but never used       @typescript-eslint/no-unused-vars
+  17:10  warning  'fabVariants' is defined but never used      @typescript-eslint/no-unused-vars
+  17:23  warning  'mobileSpring' is defined but never used     @typescript-eslint/no-unused-vars
+  38:13  warning  't' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  40:19  warning  'orders' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/components/MindMap.tsx
+  14:5   warning  'ChevronRight' is defined but never used            @typescript-eslint/no-unused-vars
+  18:10  warning  'FleetCommander' is defined but never used          @typescript-eslint/no-unused-vars
+  19:10  warning  'calculateLowStock' is defined but never used       @typescript-eslint/no-unused-vars
+  96:12  warning  'searchTerm' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  96:24  warning  'setSearchTerm' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/contracts/commerce.types.ts
+  1:25  warning  'SovereignMap' is defined but never used  @typescript-eslint/no-unused-vars
+  2:10  warning  'OrderItem' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/contracts/common.types.ts
+   9:10  warning  'User' is defined but never used              @typescript-eslint/no-unused-vars
+  13:25  warning  'NexusOptionGroup' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/contracts/finance.types.ts
+  1:10  warning  'SovereignField' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/contracts/nexus-internal-mapper.ts
+   7:10  warning  'SovereignNode' is defined but never used  @typescript-eslint/no-unused-vars
+  15:15  warning  'Ingredient' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/contracts/nexus.types.ts
+  1:26  warning  'UserStatus' is defined but never used           @typescript-eslint/no-unused-vars
+  3:24  warning  'BusinessLaws' is defined but never used         @typescript-eslint/no-unused-vars
+  3:38  warning  'ExpertConfig' is defined but never used         @typescript-eslint/no-unused-vars
+  8:61  warning  'ConsolidatedMetrics' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/ComplianceGate.tsx
+  24:19  warning  'isMccArea' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  27:19  warning  'isPilotMode' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/NexusGuardProvider.tsx
+   4:10  warning  'useAtom' is defined but never used                  @typescript-eslint/no-unused-vars
+   5:10  warning  'logger' is defined but never used                   @typescript-eslint/no-unused-vars
+  10:5   warning  'maintenanceLogsNodeAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  12:5   warning  'deliveriesNodeAtom' is defined but never used       @typescript-eslint/no-unused-vars
+  19:5   warning  'wasteLogsAtom' is defined but never used            @typescript-eslint/no-unused-vars
+  20:5   warning  'wasteLogsNodeAtom' is defined but never used        @typescript-eslint/no-unused-vars
+  62:11  warning  'deliveries' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/RoleGate.tsx
+  3:17  warning  'useEffect' is defined but never used    @typescript-eslint/no-unused-vars
+  6:10  warning  'ShieldAlert' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/SovereignGuard.ts
+   90:13  warning  '__nf525' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  226:14  warning  'e' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/TwoFactorChallenge.tsx
+  11:5   warning  'ArrowRight' is defined but never used          @typescript-eslint/no-unused-vars
+  12:5   warning  'RefreshCcw' is defined but never used          @typescript-eslint/no-unused-vars
+  13:5   warning  'AlertCircle' is defined but never used         @typescript-eslint/no-unused-vars
+  14:5   warning  'CheckCircle2' is defined but never used        @typescript-eslint/no-unused-vars
+  15:5   warning  'Key' is defined but never used                 @typescript-eslint/no-unused-vars
+  16:5   warning  'Lock' is defined but never used                @typescript-eslint/no-unused-vars
+  18:10  warning  'Button' is defined but never used              @typescript-eslint/no-unused-vars
+  28:12  warning  'isLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  45:18  warning  'error' is defined but never used               @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/ProposalPanel.tsx
+  5:54  warning  'DollarSign' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/ZeusDashboard.tsx
+  18:27  warning  'VanguardAgentConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/CertificationCenter.tsx
+  5:37   warning  'Printer' is defined but never used   @typescript-eslint/no-unused-vars
+  5:72   warning  'User' is defined but never used      @typescript-eslint/no-unused-vars
+  5:106  warning  'Sparkles' is defined but never used  @typescript-eslint/no-unused-vars
+  5:116  warning  'Zap' is defined but never used       @typescript-eslint/no-unused-vars
+  5:121  warning  'Lock' is defined but never used      @typescript-eslint/no-unused-vars
+  5:127  warning  'Clock' is defined but never used     @typescript-eslint/no-unused-vars
+  8:10   warning  'cn' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/DeploymentEngine.tsx
+   5:69  warning  'Loader2' is defined but never used  @typescript-eslint/no-unused-vars
+  28:18  warning  'error' is defined but never used    @typescript-eslint/no-unused-vars
+  58:18  warning  'error' is defined but never used    @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/FiscalChainExplorer.tsx
+  5:47  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+  8:10  warning  'fr' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/FleetCommandTable.tsx
+  7:3  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/MCCInsights.tsx
+   5:10  warning  'Lightbulb' is defined but never used            @typescript-eslint/no-unused-vars
+  18:11  warning  'fleetState' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/PerformanceMonitor.tsx
+    5:43  warning  'Gauge' is defined but never used   @typescript-eslint/no-unused-vars
+  143:96  warning  'status' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/mcc/StrategyOracle.tsx
+   4:18  warning  'AnimatePresence' is defined but never used              @typescript-eslint/no-unused-vars
+   6:5   warning  'Zap' is defined but never used                          @typescript-eslint/no-unused-vars
+   8:5   warning  'ShieldCheck' is defined but never used                  @typescript-eslint/no-unused-vars
+  16:5   warning  'Eye' is defined but never used                          @typescript-eslint/no-unused-vars
+  25:12  warning  'selectedInsight' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  25:29  warning  'setSelectedInsight' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/settings/SingularitySettings.tsx
+  4:10  warning  'motion' is defined but never used    @typescript-eslint/no-unused-vars
+  5:10  warning  'Settings' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/admin/simulator/SimulatorConsole.tsx
+   3:38  warning  'useRef' is defined but never used      @typescript-eslint/no-unused-vars
+   5:19  warning  'useSetAtom' is defined but never used  @typescript-eslint/no-unused-vars
+  37:22  warning  'e' is defined but never used           @typescript-eslint/no-unused-vars
+  77:18  warning  'e' is defined but never used           @typescript-eslint/no-unused-vars
+  90:17  warning  'e' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/fleet/QuantumDashboard.tsx
+   6:10  warning  'logger' is defined but never used          @typescript-eslint/no-unused-vars
+  14:11  warning  'slots' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/nexus/guards/useInstanceGuard.ts
+  3:10  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  3:21  warning  'useState' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/services/SelfHealingEngine.ts
+  80:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/shared/services/SovereignMath.ts
+  1:10  warning  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/store/tenantAtoms.ts
+  9:10  warning  'TenantConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/store/themeAtoms.ts
+  1:10  warning  'atom' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/store/tutorialAtoms.ts
+  2:10  warning  'atomWithStorage' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/benchmarks/BlackFriday.test.ts
+  1:32  warning  'vi' is defined but never used               @typescript-eslint/no-unused-vars
+  4:10  warning  'ordersNodeAtom' is defined but never used   @typescript-eslint/no-unused-vars
+  5:10  warning  'getDefaultStore' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/benchmarks/BlackFridaySimulation.ts
+  6:10  warning  'SovereignValue' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/benchmarks/stress_test_omega.ts
+  2:10  warning  'LegacyOrder' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/vanguard/chaos.test.ts
+  3:10  warning  'ChaosMonkey' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/vanguard/domain.test.ts
+  1:36  warning  'beforeEach' is defined but never used  @typescript-eslint/no-unused-vars
+  8:42  warning  'args' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/vanguard/mocks.ts
+  126:34  warning  'algo' is defined but never used  @typescript-eslint/no-unused-vars
+  126:40  warning  'data' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/tests/vanguard/nexus.test.ts
+    8:5   warning  'ordersNodeAtom' is defined but never used            @typescript-eslint/no-unused-vars
+   10:5   warning  'fleetSnapshotAtom' is defined but never used         @typescript-eslint/no-unused-vars
+   11:5   warning  'isMarketingSyncingAtom' is defined but never used    @typescript-eslint/no-unused-vars
+   12:5   warning  'isReservationSyncingAtom' is defined but never used  @typescript-eslint/no-unused-vars
+   13:5   warning  'reservationStatsAtom' is defined but never used      @typescript-eslint/no-unused-vars
+  161:18  warning  'e' is defined but never used                         @typescript-eslint/no-unused-vars
+
+/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/theme/PerformanceEngine.tsx
+  14:29  warning  'setPerformanceMode' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  18:12  warning  'fps' is assigned a value but never used                 @typescript-eslint/no-unused-vars
+
+✖ 1017 problems (1 error, 1016 warnings)
+

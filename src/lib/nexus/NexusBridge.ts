@@ -71,14 +71,27 @@ export class NexusBridge {
         const nextConfig: TenantConfig = {
           id: tenantId,
           capabilities: remoteData.capabilities || remoteData.features || RESTAURANT_FULL_DNA.capabilities,
-          theme: { ...RESTAURANT_FULL_DNA.theme, ...remoteData.theme },
-          status: { 
-            ...RESTAURANT_FULL_DNA.status, 
-            ...remoteData.status,
-            layoutType: (remoteData.status?.layoutType || remoteData.layout || RESTAURANT_FULL_DNA.status.layoutType) as import('@/shared/nexus-contract').TenantConfig['status']['layoutType'],
-            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || RESTAURANT_FULL_DNA.status.businessLaws) as import('@/shared/nexus-contract').TenantConfig['status']['businessLaws']
+          theme: { 
+            primaryColor: remoteData.theme?.primaryColor || RESTAURANT_FULL_DNA.theme.primaryColor,
+            secondaryColor: remoteData.theme?.secondaryColor || RESTAURANT_FULL_DNA.theme.secondaryColor,
+            logoUrl: remoteData.theme?.logoUrl || RESTAURANT_FULL_DNA.theme.logoUrl,
+            borderRadius: remoteData.theme?.borderRadius || RESTAURANT_FULL_DNA.theme.borderRadius,
+            appearance: remoteData.theme?.appearance || RESTAURANT_FULL_DNA.theme.appearance
           },
-          metadata: { ...RESTAURANT_FULL_DNA.metadata, ...remoteData.metadata },
+          status: { 
+            ...(RESTAURANT_FULL_DNA.status || DEFAULT_TENANT_CONFIG.status), 
+            ...(remoteData.status || {}),
+            layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as import('@/shared/nexus-contract').TenantConfig['status']['layoutType'],
+            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as import('@/shared/nexus-contract').TenantConfig['status']['businessLaws']
+          },
+          metadata: { 
+            name: remoteData.metadata?.name || RESTAURANT_FULL_DNA.metadata.name,
+            version: remoteData.metadata?.version || RESTAURANT_FULL_DNA.metadata.version,
+            description: remoteData.metadata?.description || RESTAURANT_FULL_DNA.metadata.description,
+            ownerId: remoteData.metadata?.ownerId || RESTAURANT_FULL_DNA.metadata.ownerId,
+            createdAt: remoteData.metadata?.createdAt || RESTAURANT_FULL_DNA.metadata.createdAt,
+            subscriptionTier: remoteData.metadata?.subscriptionTier || RESTAURANT_FULL_DNA.metadata.subscriptionTier
+          },
         };
 
         this.store.set(tenantConfigAtom, nextConfig);

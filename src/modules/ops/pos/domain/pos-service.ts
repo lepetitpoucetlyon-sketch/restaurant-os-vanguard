@@ -1,7 +1,7 @@
-import { CartItem } from "@nexus/contracts";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { Category, Product } from "@nexus/contracts";
+import { Category, Product, CartItem } from "@nexus/contracts";
 import { SharedKernel } from "@/lib/shared-kernel";
+import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
 
 /**
  * POS Business Logic Service - The "Translator" between UI and Reality
@@ -11,8 +11,8 @@ export const POSService = {
     /**
      * Calculates the total price of a cart.
      */
-    calculateCartTotal: (items: CartItem[]): number => {
-        return items.reduce((acc, item) => acc + (item.priceInCents * item.quantity), 0);
+    calculateCartTotal: (items: CartItem[]): Microunits => {
+        return toMicrounits(items.reduce((acc, item) => acc + (item.unitPriceInMicrounits * item.quantity), 0));
     },
 
     /**
@@ -23,11 +23,13 @@ export const POSService = {
             id: item.cartId,
             productId: item.productId,
             name: item.name,
-            priceInCents: item.priceInCents,
+            unitPriceInMicrounits: item.unitPriceInMicrounits,
+            taxRate: item.taxRate,
             quantity: item.quantity,
             status: 'pending' as const,
             notes: item.notes,
-            modifiers: item.modifiers
+            modifiers: item.modifiers,
+            discountInMicrounits: toMicrounits(0)
         }));
     },
 
@@ -36,8 +38,9 @@ export const POSService = {
      */
     analyzeProfitability: (items: CartItem[]) => {
         return items.map(item => {
-            const cost = (item as CartItem & { costInCents?: number }).costInCents || 0;
-            const margin = SharedKernel.calculateMargin(item.priceInCents, cost || 0);
+            const cost = (item as any).costInMicrounits || 0;
+            const price = item.unitPriceInMicrounits || 0;
+            const margin = SharedKernel.calculateMargin(price / 10000, cost / 10000 || 0);
             if (margin < 60) return { name: item.name, alert: 'Low Margin' };
             return null;
         }).filter(Boolean);

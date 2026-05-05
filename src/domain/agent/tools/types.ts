@@ -5,12 +5,12 @@ import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 /**
  * 🏛️ AGENT TOOL DEFINITION - Grade X Contract
  */
-export interface ToolDefinition<TArgs = any> {
+export interface ToolDefinition<TArgs = unknown> {
     name: string;
     description: string;
     parameters: {
         type: 'object';
-        properties: Record<string, any>;
+        properties: Record<string, unknown>;
         required?: string[];
     };
     schema: z.ZodTypeAny; // Grade X : Strict Validation (Supports Transformations)

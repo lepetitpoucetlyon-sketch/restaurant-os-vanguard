@@ -22,8 +22,8 @@ const deleteReservationAction = async (...args: any[]) => ({ success: true });
 const cancelReservationAction = async (...args: any[]) => ({ success: true });
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 // import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
-const receiveStockAction = async (...args: any[]) => ({ success: true });
-const searchIngredientsAction = async (...args: any[]): Promise<any[]> => ([]);
+const receiveStockAction = async (tenantId: string, ingredient: import('@nexus/contracts').Ingredient, data: any) => ({ success: true });
+const searchIngredientsAction = async (tenantId: string, query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
 import { toast } from 'sonner';
 
 interface ScannedItem {
@@ -49,23 +49,20 @@ export default function ReceptionDashboard() {
     setIsScanning(true);
     
     try {
-        // --- REAL INDUSTRIAL LOOKUP ---
-        // Instead of hardcoded data, we simulate the OCR detection by searching for common keywords
-        // This validates the IA-Persistence bridge
         const keywords = ['Saumon', 'Aneth', 'Sel'];
         const results: ScannedItem[] = [];
         
         for (const word of keywords) {
             const matches = await searchIngredientsAction(tenantId, word);
             if (matches.length > 0) {
-                const match = matches[0];
+                const match = matches[0] as import('@nexus/contracts').Ingredient;
                 results.push({
-                    id: match.id,
-                    name: match.name,
+                    id: String(match.id),
+                    name: String(match.name),
                     qty: word === 'Saumon' ? 5 : word === 'Aneth' ? 10 : 25,
-                    unit: match.unit,
+                    unit: String(match.unit),
                     price: word === 'Saumon' ? 125.00 : word === 'Aneth' ? 15.00 : 45.00,
-                    dlc: new Date(Date.now() + (match.shelfLifeDays || 3) * 86400000).toISOString().split('T')[0],
+                    dlc: new Date(Date.now() + (Number(match.shelfLifeDays) || 3) * 86400000).toISOString().split('T')[0],
                     forceScan: word === 'Saumon',
                     ingredient: match
                 });
@@ -100,7 +97,7 @@ export default function ReceptionDashboard() {
         await receiveStockAction(tenantId, (item.ingredient || {
             id: item.id,
             name: item.name,
-            unit: item.unit as any,
+            unit: item.unit as unknown,
             category: 'other',
             costInCents: Math.round(item.price * 100),
             minQuantity: 0,

@@ -36,11 +36,11 @@ export const FiscalEngine = {
 
     if (options.isTrainingMode) {
         return {
-            id, transactionId, timestamp, dataSnapshot,
-            hash: FISCAL_CONSTANTS.TRAINING_MODE_HASH,
-            previousHash,
-            signature: 'VTC_SCHOOL_TRAINING_SIGNATURE',
-            updatedAt: new Date().toISOString()
+                id, transactionId, timestamp, dataSnapshot,
+                hash: FISCAL_CONSTANTS.TRAINING_MODE_HASH,
+                previousHash,
+                signature: 'VTC_SCHOOL_TRAINING_SIGNATURE',
+                updatedAt: new Date().toISOString()
         };
     }
 
@@ -69,7 +69,7 @@ export const FiscalEngine = {
           // Chain Continuity
           if (i > 0 && current.previousHash !== seals[i - 1].hash) return false;
           // Content Integrity
-          const computedHash = await CryptoService.generateHash(current.dataSnapshot, current.previousHash);
+          const computedHash = await CryptoService.generateHash(current.dataSnapshot ?? "", current.previousHash ?? "");
           if (computedHash !== current.hash) return false;
       }
       return true;

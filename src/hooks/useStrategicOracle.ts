@@ -10,7 +10,7 @@ import { logger } from '@/lib/axiom';
  * Manages fleet-wide strategy and autonomous action execution.
  */
 export function useStrategicOracle() {
-    const { instances, refreshFleet } = useFleet();
+    const { instances, refreshFleet } = useFleet() as any;
     const agent = useGeminiAgent();
 
     // 1. Analyze Fleet - Get strategic insights from MacroBrain

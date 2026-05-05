@@ -40,12 +40,12 @@ class FirestoreBatch implements INexusBatch {
         this.batch = writeBatch(db);
     }
 
-    set<T = any>(path: string, data: T): void {
+    set<T = unknown>(path: string, data: T): void {
         const docRef = doc(this.db, path);
         this.batch.set(docRef, data as import('firebase/firestore').DocumentData);
     }
 
-    update<T = any>(path: string, data: Partial<T>): void {
+    update<T = unknown>(path: string, data: Partial<T>): void {
         const docRef = doc(this.db, path);
         this.batch.update(docRef, data as import('firebase/firestore').DocumentData);
     }
@@ -75,7 +75,7 @@ class FirestoreBatch implements INexusBatch {
  * Sovereign Class compliant with INexusAdapter.
  */
 
-function hydrateBasedOnPath(pathOrCollection: string, data: import("@/shared/nexus-contract").SovereignData) {
+function hydrateBasedOnPath(pathOrCollection: string, data: Record<string, unknown>) {
     if (!data) return data;
     if (pathOrCollection.includes('users')) return FirestoreHydrator.hydrateUser(data);
     if (pathOrCollection.includes('orders')) return FirestoreHydrator.hydrateOrder(data);
@@ -90,26 +90,26 @@ export class FirestoreAdapter implements INexusAdapter {
         this.db = getFirestore(app);
     }
 
-    async get<T = any>(path: string): Promise<T | null> {
+    async get<T = unknown>(path: string): Promise<T | null> {
         try {
             const isCollection = path.split('/').length % 2 !== 0;
             if (isCollection) {
                 const results = await this.query(path);
-                return results as any;
+                return results as any as T;
             }
 
             const docRef = doc(this.db, path);
             const snap = await getDoc(docRef);
             if (!snap.exists()) return null;
-            const rawData = { id: snap.id, ...snap.data() };
-            return hydrateBasedOnPath(path, rawData) as T;
+            const rawData = { id: snap.id, ...snap.data() } as Record<string, unknown>;
+            return hydrateBasedOnPath(path, rawData) as any as T;
         } catch (error) {
             Sentry.captureException(error);
             throw error;
         }
     }
 
-    async query<T = any>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
+    async query<T = unknown>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
         try {
             let q = query(collection(this.db, collectionPath));
             
@@ -134,14 +134,14 @@ export class FirestoreAdapter implements INexusAdapter {
             }
 
             const snap = await getDocs(q);
-            return snap.docs.map(d => hydrateBasedOnPath(collectionPath, { id: d.id, ...d.data() }) as T);
+            return snap.docs.map(d => hydrateBasedOnPath(collectionPath, { id: d.id, ...d.data() } as Record<string, unknown>) as any as T);
         } catch (error) {
             Sentry.captureException(error);
             throw error;
         }
     }
 
-    onSnapshot<T = any>(
+    onSnapshot<T = unknown>(
         path: string, 
         callback: (data: T) => void, 
         options?: INexusQueryOptions & { onError?: (error: Error) => void }
@@ -161,8 +161,8 @@ export class FirestoreAdapter implements INexusAdapter {
             }
             return onSnapshot(q, (snap) => {
                 const qSnap = snap as import('firebase/firestore').QuerySnapshot;
-                const data = qSnap.docs.map((d) => hydrateBasedOnPath(path, { id: d.id, ...d.data() }));
-                callback(data as any);
+                const data = qSnap.docs.map((d) => hydrateBasedOnPath(path, { id: d.id, ...d.data() } as Record<string, unknown>));
+                callback(data as any as T);
             }, options?.onError);
         } else {
             const ref = doc(this.db, path);
@@ -179,12 +179,12 @@ export class FirestoreAdapter implements INexusAdapter {
         return new FirestoreBatch(this.db);
     }
 
-    async set<T = any>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
+    async set<T = unknown>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
         const docRef = doc(this.db, path);
-        await setDoc(docRef, data as import('firebase/firestore').DocumentData, options);
+        await setDoc(docRef, data as import('firebase/firestore').DocumentData, options ?? {});
     }
 
-    async update<T = any>(path: string, data: Partial<T>): Promise<void> {
+    async update<T = unknown>(path: string, data: Partial<T>): Promise<void> {
         const docRef = doc(this.db, path);
         await updateDoc(docRef, data as import('firebase/firestore').DocumentData);
     }
@@ -194,7 +194,7 @@ export class FirestoreAdapter implements INexusAdapter {
         await updateDoc(docRef, { [field]: increment(amount) });
     }
 
-    async create<T = any>(path: string, data: T): Promise<void> {
+    async create<T = unknown>(path: string, data: T): Promise<void> {
         const colRef = collection(this.db, path);
         await addDoc(colRef, data as import('firebase/firestore').DocumentData);
     }

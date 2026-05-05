@@ -143,12 +143,12 @@ export function ReservationSidebar({
                                             <div className="flex items-center gap-2">
                                                 <Users strokeWidth={1.5} className="h-4 w-4 text-accent" />
                                                 <span className="text-[13px] font-mono font-light italic text-text-muted">
-                                                    {res.covers}p
+                                                    {res.covers ?? 0}p
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-xl bg-bg-primary flex items-center justify-center text-[10px] font-mono font-bold text-text-primary border border-border">
-                                                    {res.tableId.replace(/^t/, "")}
+                                                    {(res.tableId ?? '').replace(/^t/, "")}
                                                 </div>
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-text-muted/50 italic">
                                                     Unité
@@ -171,7 +171,7 @@ export function ReservationSidebar({
                             SERVICES ENGAGÉS
                         </span>
                         <p className="text-3xl font-mono font-light text-accent italic leading-none mt-2">
-                            {reservations.reduce((acc, r) => acc + r.covers, 0)}
+                            {reservations.reduce((acc, r) => acc + (r.covers ?? 0), 0)}
                         </p>
                     </div>
                     <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center text-bg-primary shadow-lg shadow-amber-500/10 group-hover:scale-110 transition-transform">

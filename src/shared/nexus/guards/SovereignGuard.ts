@@ -226,7 +226,9 @@ export const SovereignGuard = {
     } catch (e) {}
 
     if (typeof window !== 'undefined') {
-      localStorage.clear();
+      import('@/shared/services/SovereignStorage').then(({ SovereignStorage }) => {
+        SovereignStorage.clearAppStorage();
+      });
       window.location.href = '/auth/logout?reason=shadow_drift_block';
     }
 

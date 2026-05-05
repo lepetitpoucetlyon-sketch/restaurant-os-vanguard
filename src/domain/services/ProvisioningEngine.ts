@@ -28,7 +28,7 @@ export const ProvisioningEngine = {
                 key: dna.key,
                 name: dna.name.toUpperCase(),
                 status: 'ONLINE', // Ready for single-core bridge
-                tier: dna.tier,
+                tier: dna.tier || 'STANDARD',
                 version: '4.5.0-empire',
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -49,7 +49,7 @@ export const ProvisioningEngine = {
                 },
 
                 branding: {
-                    primaryColor: dna.initialPrimaryColor,
+                    primaryColor: dna.initialPrimaryColor || '#C5A059',
                     tagline: "Powered by Restaurant OS Empire"
                 },
 

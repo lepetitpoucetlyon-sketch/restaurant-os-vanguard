@@ -49,7 +49,7 @@ export const menuAnalysisSelector = atom((get) => {
             (recipe?.ingredients || []).reduce((sum: number, ri) => {
                 const stockItem = stockItems.find((si) => si.id === ri.id);
                 return sum + ri.quantity * (stockItem?.unitCostInCents || 0);
-            }, 0) || item.priceInCents * 0.3; // Default 30% food cost fallback if no recipe
+            }, 0) || (item.priceInCents ?? 0) * 0.3; // Default 30% food cost fallback if no recipe
 
         return {
             productId: item.id,

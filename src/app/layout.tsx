@@ -49,7 +49,7 @@ import { AlertSync } from "@/components/system/AlertSync";
 import { ClientComponents } from "@/components/layout/ClientComponents";
 import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
 import { SovereignLockout } from "@/components/layout/SovereignLockout";
-import { ThemeEngine } from "@/components/layout/ThemeEngine";
+import { BrandingProvider } from "@/infrastructure/components/BrandingProvider";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
 import { NexusPulseOrchestrator } from "@/engines/NexusPulseOrchestrator";
 
@@ -60,13 +60,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" suppressHydrationWarning className={`${inter.variable} ${cormorant.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-bg-primary font-sans antialiased selection:bg-primary/20 text-text-primary transition-colors duration-500">
+      <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
         <ErrorBoundary>
           <Suspense fallback={<div className="flex h-screen items-center justify-center bg-black text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
             <NexusCoreProvider>
               <InstanceGuardGate>
                 <ToastProvider>
-                  <ThemeEngine />
+                  <BrandingProvider />
                   <PerformanceEngine />
                   <NexusPulseOrchestrator />
                   <SovereignLockout />

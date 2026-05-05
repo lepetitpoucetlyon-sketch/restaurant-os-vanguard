@@ -39,7 +39,7 @@ interface ProductCardProps {
  * Uses layout="position" for efficient GPU-accelerated transitions during filtering.
  */
 const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, disabledReason, t, onClick, multiplier, performanceMode }: ProductCardProps) => {
-    const finalPrice = (product.priceInCents * multiplier) / 100;
+    const finalPrice = ((product.priceInCents ?? 0) * multiplier) / 100;
 
     return (
     <motion.div
@@ -58,8 +58,8 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
             performanceMode ? "duration-0" : "duration-700",
             !performanceMode && "backdrop-blur-xl",
             isDisabled 
-                ? "bg-black/5 grayscale cursor-not-allowed border-red-500/20 shadow-none opacity-60" 
-                : "bg-white dark:bg-white/[0.02] cursor-pointer hover:border-accent-gold/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
+                ? "bg-black/5 grayscale cursor-not-allowed border-status-danger/20 shadow-none opacity-60" 
+                : "bg-surface-card dark:bg-white/[0.02] cursor-pointer hover:border-action-primary/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
         )}
     >
         {/* Compliance Overlays */}
@@ -70,14 +70,14 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                     animate={{ opacity: 1, scale: 1 }}
                     className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm p-6 text-center"
                 >
-                    <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full bg-status-danger/20 flex items-center justify-center mb-4">
                         {disabledReason === 'expired' ? (
-                            <Clock className="w-8 h-8 text-red-500 animate-pulse" />
+                            <Clock className="w-8 h-8 text-status-danger animate-pulse" />
                         ) : (
-                            <AlertTriangle className="w-8 h-8 text-red-500" />
+                            <AlertTriangle className="w-8 h-8 text-status-danger" />
                         )}
                     </div>
-                    <span className="text-white font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg">
+                    <span className="text-white font-brand italic text-xl font-bold uppercase tracking-widest drop-shadow-lg">
                         {disabledReason === 'expired' ? 'DLC CRITIQUE' : 'RUPTURE STOCK'}
                     </span>
                     <p className="text-white/70 text-sm mt-2 font-medium">
@@ -89,7 +89,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
             )}
         </AnimatePresence>
         {/* Categorical Glow Aura */}
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-action-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
         {/* Product Image Holder - Museum Frame */}
         <div className="h-60 md:h-72 bg-bg-tertiary relative overflow-hidden m-4 rounded-[32px] border border-black/5 dark:border-white/5">
@@ -105,7 +105,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                     />
                 </div>
             ) : (
-                <div className={cn("absolute inset-0 flex items-center justify-center opacity-40 bg-gradient-to-br from-bg-tertiary to-border")}>
+                <div className={cn("absolute inset-0 flex items-center justify-center opacity-40 bg-gradient-to-br from-surface-bg to-border-default")}>
                     <Plus strokeWidth={0.5} className="w-20 h-20 text-text-muted opacity-20" />
                 </div>
             )}
@@ -115,7 +115,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
         </div>
 
         <div className="px-8 pb-8 flex flex-col flex-1">
-            <h3 className="text-2xl md:text-2xl font-serif font-black text-text-primary mb-3 group-hover:text-accent-gold transition-colors leading-tight italic decoration-accent-gold/20 decoration-2 underline-offset-8 group-hover:underline">
+            <h3 className="text-2xl md:text-2xl font-brand font-black text-text-primary mb-3 group-hover:text-action-primary transition-colors leading-tight italic decoration-action-primary/20 decoration-2 underline-offset-8 group-hover:underline">
                 {product.name}
             </h3>
 
@@ -123,14 +123,14 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                 {product.description || t('pos.fallback_description')}
             </p>
 
-            <div className="flex items-center justify-between border-t border-border/30 pt-6">
+            <div className="flex items-center justify-between border-t border-border-default/30 pt-6">
                 <div className="flex items-center gap-4">
-                    <span className="text-3xl md:text-3xl font-serif font-black text-text-primary mb-3 group-hover:text-accent-gold transition-colors leading-tight italic decoration-accent-gold/20 decoration-2 underline-offset-8 group-hover:underline">
+                    <span className="text-3xl md:text-3xl font-brand font-black text-text-primary mb-3 group-hover:text-action-primary transition-colors leading-tight italic decoration-action-primary/20 decoration-2 underline-offset-8 group-hover:underline">
                         {finalPrice.toFixed(2)}€
                     </span>
                     {multiplier !== 1 && (
                         <span className="text-xs text-text-muted line-through opacity-50">
-                            {(product.priceInCents / 100).toFixed(2)}€
+                            {((product.priceInCents ?? 0) / 100).toFixed(2)}€
                         </span>
                     )}
                     <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/10">
@@ -138,7 +138,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                             whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}
                             className={cn(
-                                "rounded-full bg-text-primary text-white dark:bg-white dark:text-black flex items-center justify-center shadow-premium hover:bg-accent-gold hover:text-white transition-all duration-500",
+                                "rounded-full bg-text-primary text-white dark:bg-white dark:text-black flex items-center justify-center shadow-premium hover:bg-action-primary hover:text-action-primary-fg transition-all duration-500",
                                 buttonSize === 'small' ? 'w-10 h-10' :
                                 buttonSize === 'large' ? 'w-14 h-14' : 'w-12 h-12'
                             )}
@@ -191,13 +191,13 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
             return matchesSearch && matchesCategory;
         }).map(product => {
             // COMPLIANCE GUARD LOGIC
-            // Check if any required ingredient is completely unavailable or expired
+            // Check if unknown required ingredient is completely unavailable or expired
             let isDisabled = false;
             let disabledReason: 'expired' | 'stockout' | undefined;
 
             if (product.ingredients && product.ingredients.length > 0) {
                 for (const req of product.ingredients) {
-                    const relatedStock = (stockItems as unknown as StockItem[]).filter(s => s.ingredientId === req.ingredientId);
+                    const relatedStock = (stockItems as any as StockItem[]).filter(s => s.ingredientId === req.ingredientId);
                     
                     const nonExpiredStock = relatedStock.filter(s => {
                         const dlc = new Date(s.dlc);
@@ -231,20 +231,20 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
     }, [onAddToCart]);
 
     return (
-        <div className="flex-1 flex flex-col h-full bg-bg-primary transition-colors duration-700 overflow-hidden relative">
+        <div className="flex-1 flex flex-col h-full bg-surface-bg transition-colors duration-700 overflow-hidden relative">
             {/* Visual Background Glow */}
-            <div className="absolute top-1/4 right-0 w-[40%] h-[40%] rounded-full bg-accent-gold/5 blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/4 right-0 w-[40%] h-[40%] rounded-full bg-action-primary/5 blur-[120px] pointer-events-none" />
 
             {/* Top Toolbar - Precision Nav Tier */}
             <div className="px-8 md:px-14 py-8 md:py-8 flex flex-col md:flex-row items-stretch md:items-center justify-center gap-8 md:gap-14 transition-all duration-700 relative z-20">
                 <div className="relative flex-1 md:max-w-2xl group">
-                    <Search strokeWidth={1} className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-hover:text-accent-gold transition-all duration-500" />
+                    <Search strokeWidth={1} className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-hover:text-action-primary transition-all duration-500" />
                     <input
                         type="text"
                         placeholder={t('pos.search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white dark:bg-white/5 border border-border/50 rounded-[28px] md:rounded-[32px] pl-16 pr-8 py-4 md:py-5 text-base text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent-gold/50 focus:ring-4 focus:ring-accent-gold/5 transition-all duration-700 font-serif italic shadow-premium hover:border-accent-gold/30"
+                        className="w-full bg-surface-card dark:bg-white/5 border border-border-default/50 rounded-[28px] md:rounded-[32px] pl-16 pr-8 py-4 md:py-5 text-base text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-action-primary/50 focus:ring-4 focus:ring-action-primary/5 transition-all duration-700 font-brand italic shadow-premium hover:border-action-primary/30"
                     />
                 </div>
             </div>
@@ -255,7 +255,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                     <AnimatePresence mode="wait">
                         {isLoading ? (
                             <div className="col-span-full flex items-center justify-center py-20">
-                                <div className="w-12 h-12 border-4 border-accent-gold/20 border-t-accent-gold rounded-full animate-spin" />
+                                <div className="w-12 h-12 border-4 border-action-primary/20 border-t-action-primary rounded-full animate-spin" />
                             </div>
                         ) : filteredProductsWithStatus.length > 0 ? (
                             filteredProductsWithStatus.map((p, idx) => (
@@ -275,7 +275,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                             ))
                         ) : (
                             <div className="col-span-full text-center py-20">
-                                <p className="text-text-muted font-serif italic">Aucun produit trouvé dans cette catégorie</p>
+                                <p className="text-text-muted font-brand italic">Aucun produit trouvé dans cette catégorie</p>
                             </div>
                         )}
                     </AnimatePresence>

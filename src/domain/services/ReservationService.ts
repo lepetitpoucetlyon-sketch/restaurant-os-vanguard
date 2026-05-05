@@ -48,8 +48,8 @@ export class ReservationService {
             ...data,
             id: generatedId,
             status: data.status || 'pending',
-            updatedAt: new Date().toISOString(),
-            createdAt: data.createdAt || new Date().toISOString(),
+            updatedAt: Date.now(),
+            createdAt: (data as any).createdAt || Date.now(),
         } as Reservation;
     }
 }

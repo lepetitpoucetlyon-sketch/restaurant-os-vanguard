@@ -49,10 +49,25 @@ export function ZoneService({
 
     const handleSaveZone = () => {
         if (!editingZone?.name.trim()) return;
+        const now = Date.now();
         if (editingZone.id) {
-            updateZone(editingZone.id, { name: editingZone.name, color: editingZone.color, description: editingZone.description, floorId: editingZone.floorId });
+            updateZone(editingZone.id, { 
+                name: editingZone.name, 
+                color: editingZone.color, 
+                description: editingZone.description, 
+                floorId: editingZone.floorId,
+                updatedAt: now
+            });
         } else {
-            addZone({ name: editingZone.name, color: editingZone.color, description: editingZone.description, floorId: editingZone.floorId });
+            addZone({ 
+                name: editingZone.name, 
+                color: editingZone.color, 
+                description: editingZone.description, 
+                floorId: editingZone.floorId,
+                type: 'zone',
+                schemaVersion: 2,
+                updatedAt: now
+            } as any);
         }
         setIsEditingZone(false);
         setEditingZone(null);

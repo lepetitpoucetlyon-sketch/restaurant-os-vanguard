@@ -193,8 +193,10 @@ export interface NexusFleetState {
     registerInstance: (instance: EmpireInstance) => Promise<void>;
     launchPreview: (key: string) => void;
     broadcastConfiguration: (config: {
+        priceMultiplier?: number;
         targetVersion?: string;
         maintenanceMode?: boolean;
+        licenceStatus?: 'ACTIVE' | 'LOCKED';
     }) => Promise<void>;
     // 🛡️ SUTURE GRADE X: Pure Contract Resolution
     complianceService: {

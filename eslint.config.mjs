@@ -14,11 +14,11 @@ const eslintConfig = defineConfig([
       "vanguard/no-cross-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "error",
       "@next/next/no-img-element": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/ban-ts-comment": "error",
+      "@typescript-eslint/no-require-imports": "error",
       "react/no-unescaped-entities": "off",
       "@typescript-eslint/prefer-as-const": "off",
       "react-hooks/exhaustive-deps": "off",

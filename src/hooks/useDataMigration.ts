@@ -78,7 +78,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
             const result = await response.json();
             let jsonText = result.content;
             
-            // Clean markdown code blocks if any
+            // Clean markdown code blocks if unknown
             jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
 
             const parsedData = JSON.parse(jsonText);

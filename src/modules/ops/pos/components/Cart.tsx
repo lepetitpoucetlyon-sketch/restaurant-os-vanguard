@@ -14,17 +14,8 @@ import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/hooks";
 import { POSService } from "@/infrastructure/adapters/POSAdapter";
-
-interface CartItem {
-    cartId: string;
-    productId: string;
-    categoryId: string;
-    name: string;
-    priceInCents: number;
-    quantity: number;
-    notes?: string;
-    modifiers?: string[];
-}
+import { CartItem } from "@modules/ops";
+import { SovereignMath } from "@/shared/services/SovereignMath";
 
 interface CartProps {
     items: CartItem[];
@@ -47,22 +38,27 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
     const globalInflationRate = config?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
 
-    const { totalInCents, htInCents, tvaByRateInCents } = useMemo(() => {
-        let total = 0;
-        let ht = 0;
-        const rates: Record<number, number> = {};
+    const { totalInCents, htInCents } = useMemo(() => {
+        let totalMicro = BigInt(0);
+        let htMicro = BigInt(0);
 
         items.forEach(item => {
-            const itemTotal = (item.priceInCents * priceMultiplier) * item.quantity;
-            total += itemTotal;
-            const rate = item.categoryId === 'cocktails' ? 0.20 : 0.10;
-            const itemHt = Math.round(itemTotal / (1 + rate));
-            const itemTva = itemTotal - itemHt;
-            ht += itemHt;
-            rates[rate * 100] = (rates[rate * 100] || 0) + itemTva;
+            // Application du multiplicateur de flotte sur les Microunités
+            const basePriceMicro = BigInt(item.unitPriceInMicrounits);
+            const multipliedPriceMicro = BigInt(Math.round(Number(basePriceMicro) * priceMultiplier));
+            const itemTotalMicro = multipliedPriceMicro * BigInt(item.quantity);
+            
+            totalMicro = SovereignMath.add(totalMicro as any, itemTotalMicro as any) as any;
+            
+            const rate = item.taxRate ? parseFloat(item.taxRate) : (item.categoryId === 'cocktails' ? 0.20 : 0.10);
+            const itemHtMicro = BigInt(Math.round(Number(itemTotalMicro) / (1 + rate)));
+            htMicro = SovereignMath.add(htMicro as any, itemHtMicro as any) as any;
         });
 
-        return { totalInCents: total, htInCents: ht, tvaByRateInCents: rates };
+        return { 
+            totalInCents: SovereignMath.toCents(totalMicro), 
+            htInCents: SovereignMath.toCents(htMicro) 
+        };
     }, [items, priceMultiplier]);
 
 
@@ -129,8 +125,8 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end">
-                                            <span className="text-sm font-serif font-black italic">{formatCurrency(item.priceInCents * priceMultiplier * item.quantity)}</span>
-                                            <span className="text-[10px] opacity-40 font-mono">{formatCurrency(item.priceInCents * priceMultiplier)} unit</span>
+                                            <span className="text-sm font-serif font-black italic">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}</span>
+                                            <span className="text-[10px] opacity-40 font-mono">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))))} unit</span>
                                         </div>
                                     </div>
 

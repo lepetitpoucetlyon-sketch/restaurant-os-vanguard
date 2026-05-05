@@ -77,7 +77,7 @@ export class AvailabilityEngine {
       // But a better version would check duration overlaps.
       const bookedCovers = existingReservations
         .filter(r => r.date === format(date, 'yyyy-MM-dd') && r.time === timeStr)
-        .reduce((sum, r) => sum + r.covers, 0);
+        .reduce((sum, r) => sum + (r.covers ?? 0), 0);
 
       const remainingCovers = totalCap - bookedCovers;
 

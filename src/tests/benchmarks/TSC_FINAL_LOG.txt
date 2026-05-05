@@ -1,0 +1,50 @@
+src/components/settings/ReservationSettings.tsx(37,39): error TS2345: Argument of type 'ReservationSettings' is not assignable to parameter of type 'SovereignMap'.
+  'string' index signatures are incompatible.
+    Type 'unknown' is not assignable to type 'SovereignField'.
+src/hooks/useSettings.ts(25,37): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(atom: WritableAtom<Date, unknown[], unknown>, options?: Options): SetAtom<unknown[], unknown>', gave the following error.
+    Argument of type 'Atom<Date>' is not assignable to parameter of type 'WritableAtom<Date, unknown[], unknown>'.
+      Property 'write' is missing in type 'Atom<Date>' but required in type 'WritableAtom<Date, unknown[], unknown>'.
+  Overload 2 of 2, '(atom: WritableAtom<unknown, never[], unknown>, options?: Options): SetAtom<never[], unknown>', gave the following error.
+    Argument of type 'Atom<Date>' is not assignable to parameter of type 'WritableAtom<unknown, never[], unknown>'.
+      Property 'write' is missing in type 'Atom<Date>' but required in type 'WritableAtom<unknown, never[], unknown>'.
+src/hooks/useStrategicOracle.ts(13,13): error TS2339: Property 'instances' does not exist on type '{}'.
+src/hooks/useStrategicOracle.ts(13,24): error TS2339: Property 'refreshFleet' does not exist on type '{}'.
+src/modules/commerce/customers/domain/NexusCustomer.ts(22,78): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'SovereignField'.
+src/modules/commerce/reservations/components/NewReservationDialog.tsx(38,16): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ [x: string]: any; id: string; type: "reservation"; customerId: string; date: string; time: string; partySize: number; status: "pending" | "cancelled" | "confirmed" | "arrived" | "seated" | "no_show"; ... 6 more ...; notes?: string; }'.
+  Type '{}' is missing the following properties from type '{ [x: string]: any; id: string; type: "reservation"; customerId: string; date: string; time: string; partySize: number; status: "pending" | "cancelled" | "confirmed" | "arrived" | "seated" | "no_show"; ... 6 more ...; notes?: string; }': id, type, customerId, date, and 5 more.
+src/modules/compliance/haccp/hooks/useHACCP.ts(39,43): error TS2344: Type 'HygieneLog' does not satisfy the constraint '{ id: string; } & SovereignMap'.
+  Type 'HygieneLog' is not assignable to type 'SovereignMap'.
+    'string' index signatures are incompatible.
+      Type 'unknown' is not assignable to type 'SovereignField'.
+src/modules/compliance/haccp/hooks/useHACCP.ts(41,45): error TS2344: Type 'ReceptionLog' does not satisfy the constraint '{ id: string; } & SovereignMap'.
+  Type 'ReceptionLog' is not assignable to type 'SovereignMap'.
+    'string' index signatures are incompatible.
+      Type 'unknown' is not assignable to type 'SovereignField'.
+src/modules/compliance/haccp/hooks/useHACCP.ts(42,47): error TS2344: Type 'MaintenanceLog' does not satisfy the constraint '{ id: string; } & SovereignMap'.
+  Type 'MaintenanceLog' is not assignable to type 'SovereignMap'.
+    'string' index signatures are incompatible.
+      Type 'unknown' is not assignable to type 'SovereignField'.
+src/modules/logistics/inventory/components/inventory/InvoiceReviewModal.tsx(21,75): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Ingredient[]'.
+  Type '{}' is missing the following properties from type 'Ingredient[]': length, pop, push, concat, and 35 more.
+src/modules/ops/engine/ops.sync.ts(149,71): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+src/modules/ops/kitchen/components/recipe-editor/RecipeBasicsTab.tsx(83,25): error TS2322: Type 'unknown' is not assignable to type 'string'.
+src/modules/ops/kitchen/components/tabs/MarginsTab.tsx(153,109): error TS2322: Type 'unknown' is not assignable to type 'BackgroundColor'.
+src/modules/ops/kitchen/components/tabs/RecipesTab.tsx(132,50): error TS2322: Type 'unknown' is not assignable to type 'BackgroundColor'.
+src/modules/ops/pos/components/bar/KdsTab.tsx(196,84): error TS2339: Property 'name' does not exist on type 'unknown'.
+src/modules/ops/pos/components/SplitBillDialog.tsx(84,72): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
+src/modules/ops/pos/components/TableSelector.tsx(204,117): error TS2339: Property 'status' does not exist on type 'unknown'.
+src/shared/nexus/engines/NexusTelemetryEngine.ts(26,33): error TS2339: Property 'awakenTheMonkey' does not exist on type 'unknown'.
+src/shared/nexus/engines/NexusTelemetryEngine.ts(30,33): error TS2339: Property 'silenceTheMonkey' does not exist on type 'unknown'.
+src/shared/nexus/guards/RoleGate.tsx(61,49): error TS2339: Property 'status' does not exist on type 'unknown'.
+src/store/nexusNodeFactory.ts(34,40): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'WritableAtom<NexusNode<unknown>, [SetStateAction<NexusNode<unknown>>], void>'.
+  Type '{}' is missing the following properties from type 'WritableAtom<NexusNode<unknown>, [SetStateAction<NexusNode<unknown>>], void>': read, write
+src/tests/benchmarks/CertificationRunner.test.ts(65,19): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'WritableAtom<unknown, [(prev: unknown) => any], unknown>'.
+  Type '{}' is missing the following properties from type 'WritableAtom<unknown, [(prev: unknown) => any], unknown>': read, write
+src/tests/benchmarks/CertificationRunner.test.ts(65,68): error TS2698: Spread types may only be created from object types.
+src/tests/benchmarks/stress_test_omega.ts(22,48): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ [x: string]: any; id: string; type: "order"; items: { productId: string; modifiers: string[]; quantity: number; unitPriceInMicrounits: number & $brand<"Microunits">; taxRate: "0.055" | "0.10" | "0.20"; ... 8 more ...; modification?: { ...; }; }[]; ... 14 more ...; notes?: string; }[]'.
+  Type '{}' is missing the following properties from type '{ [x: string]: any; id: string; type: "order"; items: { productId: string; modifiers: string[]; quantity: number; unitPriceInMicrounits: number & $brand<"Microunits">; taxRate: "0.055" | "0.10" | "0.20"; ... 8 more ...; modification?: { ...; }; }[]; ... 14 more ...; notes?: string; }[]': length, pop, push, concat, and 35 more.
+src/tests/vanguard/sovereign-math.test.ts(14,45): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
+src/tests/vanguard/sovereign-math.test.ts(15,45): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
+src/tests/vanguard/sovereign-math.test.ts(48,43): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.

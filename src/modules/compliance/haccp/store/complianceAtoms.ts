@@ -53,15 +53,18 @@ export const wasteLogsNodeAtom = _wasteLogs.node;
 export const wasteLogsAtom = _wasteLogs.data;
 
 // GUARD LOADING AGGREGATOR
-export const guardLoadingAtom = atom((get) => 
-    get(hygieneLabelsNodeAtom).loading || 
-    get(maintenanceLogsNodeAtom).loading || 
-    get(deliveriesNodeAtom).loading ||
-    get(hygieneLogsNodeAtom).loading ||
-    get(receptionLogsNodeAtom).loading ||
-    get(oilLogsNodeAtom).loading ||
-    get(wasteLogsNodeAtom).loading
-);
+export const guardLoadingAtom = atom((get) => {
+    const nodes = [
+        hygieneLabelsNodeAtom,
+        maintenanceLogsNodeAtom,
+        deliveriesNodeAtom,
+        hygieneLogsNodeAtom,
+        receptionLogsNodeAtom,
+        oilLogsNodeAtom,
+        wasteLogsNodeAtom
+    ];
+    return nodes.some(node => (get(node as any) as any).loading);
+});
 // ⚡ HARDWARE SIMULATION (Electrification)
 // SensorReading moved to central types.ts
 

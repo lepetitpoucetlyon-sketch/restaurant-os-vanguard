@@ -71,7 +71,8 @@ const HandDrawnBorder = ({ children, className }: { children: React.ReactNode, c
     </div>
 );
 export default function OperationsPage() {
-    const { areas, updateAreaStatus } = useOMS() as any;
+    const { tables: areas } = useOMS() as any;
+    const updateAreaStatus = (id: string, status: string) => console.log('Update area', id, status);
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();
@@ -189,7 +190,7 @@ export default function OperationsPage() {
                     <div className="col-span-9">
                         {view === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {areas?.map((area: any, idx: number) => (
+                                {areas?.map((area: OperationalArea, idx: number) => (
                                     <motion.div
                                         key={area.id}
                                         initial={{ opacity: 0, scale: 0.9 }}
@@ -212,9 +213,9 @@ export default function OperationsPage() {
                                                 <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-neutral-50 border border-neutral-100 italic">No. {area.number}</span>
                                                 <div className={cn(
                                                     "w-2 h-2 rounded-full",
-                                                    area?.status === 'vacant' ? "bg-green-400" :
-                                                        area?.status === 'busy' ? "bg-blue-400" :
-                                                            area?.status === 'maintenance' ? "bg-red-400" : "bg-amber-400"
+                                                    area.status === 'vacant' ? "bg-green-400" :
+                                                        area.status === 'busy' ? "bg-blue-400" :
+                                                            area.status === 'maintenance' ? "bg-red-400" : "bg-amber-400"
                                                 )} />
                                             </div>
                                             <h3 className="text-2xl font-black text-neutral-900 mb-1 capitalize group-hover:italic transition-all">{area.type}</h3>

@@ -10,7 +10,7 @@ export type TelemetryPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'CRITICAL';
 
 export interface TelemetryEvent {
     type: 'METRIC' | 'ALERT' | 'HEARTBEAT' | 'SECURITY' | 'COMMAND' | 'BROADCAST';
-    payload: Partial<SiteTelemetry> | Record<string, any>;
+    payload: Partial<SiteTelemetry> | Record<string, unknown>;
     timestamp: number;
     priority: TelemetryPriority;
     tenantId: string;

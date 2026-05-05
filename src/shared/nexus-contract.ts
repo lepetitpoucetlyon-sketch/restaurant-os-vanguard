@@ -18,15 +18,15 @@ export type SovereignField =
   | null
   | undefined
   | Date
-  | any[]
-  | { [key: string]: any }
+  | unknown[]
+  | { [key: string]: unknown }
   | { type: 'string'; value: string }
   | { type: 'number'; value: number }
   | { type: 'boolean'; value: boolean }
   | { type: 'null'; value: null }
   | { type: 'date'; value: Date | string }
-  | { type: 'object'; value: Record<string, any> }
-  | { type: 'array'; value: any[] };
+  | { type: 'object'; value: Record<string, unknown> }
+  | { type: 'array'; value: unknown[] };
 
 export type SovereignValue = SovereignField;
 export interface SovereignMap {
@@ -63,35 +63,8 @@ export interface ExpertConfig {
   isAuthorized: boolean;
 }
 
-export interface TenantTheme {
-  primaryColor: string;
-  secondaryColor: string;
-  logoUrl: string;
-  borderRadius: string;
-  appearance: 'light' | 'dark';
-}
+// TenantTheme is now imported from schemas
 
-export interface OrchestratorSignal {
-  maintenanceMode: boolean;
-  killSwitch: boolean;
-  licenceStatus: 'ACTIVE' | 'LOCKED' | 'TRIAL';
-  layoutType: 'default' | 'kiosk' | 'hud' | 'admin' | 'sidebar' | 'topbar';
-  updatedAt: string;
-  economy: {
-    basePrice: number;
-    currency: string;
-    billingStatus: string;
-    discountMultiplier?: number;
-  };
-  businessLaws: BusinessLaws;
-  expert?: ExpertConfig;
-  // --- Grade X OTA & Fleet Extensions ---
-  targetVersion?: string;
-  otaUrl?: string;
-  targetState?: 'stable' | 'beta' | 'bleeding-edge';
-  priceMultiplier?: number;
-  lastSignalId?: string; // Suture Grade X
-}
 
 export interface TelemetryPulse {
   version: string;
@@ -127,50 +100,17 @@ export interface TenantFirebaseConfig {
   [key: string]: string | undefined;
 }
 
-export interface TenantConfig {
-  id: string;
-  name?: string; 
-  tier?: string; 
-  billing?: {
-    status: string;
-    plan: string;
-    nextBillingDate?: string;
-  };
-  marketplace?: {
-    enabledModules: string[];
-    [key: string]: string[] | undefined;
-  };
-  ai?: {
-    enabled: boolean;
-    model?: string;
-    quota?: number;
-    geminiApiKey?: string;
-  };
-  branding?: TenantTheme;
-  capabilities?: Record<string, boolean>;
-  features?: Record<string, boolean>; 
-  theme?: TenantTheme;
-  status?: OrchestratorSignal;
-  metadata?: {
-    name: string;
-    version: string;
-    description?: string;
-    ownerId?: string;
-    createdAt?: string;
-    subscriptionTier?: string;
-  };
-  customFeatures?: Record<string, boolean>;
-  firebase?: TenantFirebaseConfig;
-}
+import type { TenantConfig, OrchestratorSignal, TenantTheme } from '@/domain/schemas/tenant';
+export type { TenantConfig, OrchestratorSignal, TenantTheme };
 
 /**
  * 🏛️ SovereignNode - Universal Entity Contract
- * Any business object MUST implement this to be handled by the Core.
+ * unknown business object MUST implement this to be handled by the Core.
  */
 export interface SovereignNode {
   id: string;
-  updatedAt: string | Date;
-  createdAt?: string | Date;
+  updatedAt: string | Date | number;
+  createdAt?: string | Date | number;
   [key: string]: SovereignField;
 }
 

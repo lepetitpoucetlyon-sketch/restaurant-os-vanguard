@@ -1,37 +1,26 @@
 import { SovereignData } from '@/shared/nexus-contract';
-
-import type { Order, OrderItem, OrderStatus } from '@nexus/contracts/nexus-internal-mapper';
+import { Microunits, TaxRate } from '@/domain/schemas/primitives';
+import type { Order, OrderItem, OrderStatus, Product } from '@nexus/contracts/nexus-internal-mapper';
 export type { Order, OrderItem, OrderStatus };
 
 export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';
 
-export interface OrderItemModification {
-    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
-    id: string;
-    orderId: string;
-    orderItemId: string;
-    type: 'ingredient_remove' | 'ingredient_add' | 'replace_dish' | 'quantity_change' | 'note_update';
-    description: string;
-    oldValue?: string;
-    newValue?: string;
-    requestedBy: string;
-    requestedAt: string;
-    status: ModificationStatus;
-    respondedBy?: string;
-    respondedAt?: string;
-    responseNote?: string;
+import { OrderItemModification } from '@nexus/contracts';
+export type { OrderItemModification };
+
+export interface SovereignProduct extends Product {
+    priceInMicrounits: Microunits;
+    priceInCents?: number;
+    taxRate: TaxRate;
 }
 
-export interface CartItem {
+import { CartLineSchema, CartLine, PosTicket, PosTicketSchema } from '@/domain/schemas/pos';
+export { CartLineSchema, PosTicketSchema };
+export type { CartLine, PosTicket };
+
+export interface CartItem extends Omit<CartLine, 'id'> {
     cartId: string;
-    productId: string;
-    categoryId: string;
-    name: string;
-    priceInCents: number;
-    quantity: number;
-    modifiers?: string[];
-    notes?: string;
 }
 
 export interface OrdersContextType {

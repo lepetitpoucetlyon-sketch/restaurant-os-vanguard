@@ -227,7 +227,7 @@ export interface Recipe extends SovereignNode {
         duration?: number;
         tip?: string;
     }>;
-    steps?: any[]; // Alias for UI compatibility
+    steps?: unknown[]; // Alias for UI compatibility
     category?: string;
     portions?: number;
     costPriceInCents?: number;

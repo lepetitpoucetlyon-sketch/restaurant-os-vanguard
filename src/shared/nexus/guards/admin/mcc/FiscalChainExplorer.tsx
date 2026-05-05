@@ -7,7 +7,7 @@ import { useCompliance } from '@/engines/fiscal/NexusFiscalProvider';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-import { FiscalSeal } from '@nexus/contracts';
+import { FiscalSeal } from '@modules/finance/types';
 
 interface HashNode {
   index: number;
@@ -24,8 +24,8 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
   const nodes = useMemo(() => {
     // Filter by instance if provided
     const filteredSeals = instanceId 
-      ? (fiscalSeals as FiscalSeal[]).filter(s => s.instanceId === instanceId)
-      : (fiscalSeals as FiscalSeal[]);
+      ? (fiscalSeals as unknown as FiscalSeal[]).filter(s => s.instanceId === instanceId)
+      : (fiscalSeals as unknown as FiscalSeal[]);
 
     return filteredSeals
       .sort((a, b) => (b.sequence || 0) - (a.sequence || 0)) // Most recent first

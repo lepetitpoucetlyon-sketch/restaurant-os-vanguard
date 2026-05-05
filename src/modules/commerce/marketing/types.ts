@@ -59,7 +59,7 @@ export interface SocialAccount {
     engagement: number;
     trend: string;
     gradient: string;
-    icon?: any;
+    icon?: unknown;
     connectedAt: string;
     accessToken?: string;
     refreshToken?: string;

@@ -112,7 +112,7 @@ export interface TreasuryMetrics {
     forecastedCashFlowInCents: number;
     burnRateInCents: number;
     runwayInDays: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface FinancialMetrics {
@@ -125,7 +125,7 @@ export interface FinancialMetrics {
     operatingExpensesInCents: number;
     ebitdaInCents: number;
     netProfitInCents: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface LedgerAccount extends Account {

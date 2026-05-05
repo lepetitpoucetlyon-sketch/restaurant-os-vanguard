@@ -1,0 +1,181 @@
+import { z } from 'zod';
+import { MicrounitsSchema, TimestampSchema, UUIDSchema, SanitizedStringSchema, sanitized } from './primitives';
+
+// ── Taux TVA légaux France ─────────────────────────────────────────────────
+export const TaxRateSchema = z.enum(['0.055', '0.10', '0.20'])
+  .describe('Taux TVA légaux France : 5.5% / 10% / 20%');
+
+export type TaxRate = z.infer<typeof TaxRateSchema>;
+
+// ── Journal Entry NF525 ────────────────────────────────────────────────────
+export const JournalEntrySchema = z.object({
+  id:                 UUIDSchema,
+  receiptNumber:      z.string()
+    .regex(/^[0-9]{4}-[0-9]{6,}$/, 'Format numéro NF525 invalide'),
+  hashPrecedent:      z.string()
+    .length(64, 'Hash SHA256 doit faire 64 caractères'),
+  hash:               z.string()
+    .length(64, 'Hash SHA256 doit faire 64 caractères'),
+  amountInMicrounits: MicrounitsSchema,
+  taxRate:            TaxRateSchema,
+  taxAmountInMicrounits: MicrounitsSchema,
+  operatorId:         UUIDSchema,
+  deviceId:           z.string().min(1),
+  serverTimestamp:    TimestampSchema,
+  correlationId:      UUIDSchema,
+  type:               z.enum(['revenue', 'expense', 'tax', 'other']),
+  status:             z.enum(['validated', 'cancelled', 'refunded']),
+  cancellationRef:    UUIDSchema.nullable().default(null),
+}).refine(
+  data => data.hash !== data.hashPrecedent,
+  { message: 'Hash et hashPrecedent ne peuvent pas être identiques', path: ['hash'] }
+).refine(
+  data => data.taxAmountInMicrounits <= data.amountInMicrounits,
+  { message: 'La TVA ne peut pas dépasser le montant total', path: ['taxAmountInMicrounits'] }
+);
+
+export type JournalEntry = z.infer<typeof JournalEntrySchema>;
+
+// ── Account / Ledger ───────────────────────────────────────────────────────
+export const AccountSchema = z.object({
+  id:            UUIDSchema,
+  code:          z.string().regex(/^[0-9]{3,6}$/, 'Code comptable PCG invalide'),
+  name:          sanitized(1, 100),
+  type:          z.enum(['asset', 'liability', 'equity', 'revenue', 'expense']),
+  balanceInMicrounits: z.number().int(),  // Peut être négatif (dette)
+  currency:      z.literal('EUR').default('EUR'),
+  isActive:      z.boolean().default(true),
+  parentCode:    z.string().nullable().default(null),
+  siteId:        UUIDSchema,
+  updatedAt:     TimestampSchema,
+});
+
+export type Account = z.infer<typeof AccountSchema>;
+
+export const LedgerAccountSchema = AccountSchema.extend({
+  entries:       z.array(JournalEntrySchema).default([]),
+  totalDebit:    MicrounitsSchema,
+  totalCredit:   MicrounitsSchema,
+}).refine(
+  data => data.totalDebit >= 0 && data.totalCredit >= 0,
+  { message: 'Les totaux débit/crédit ne peuvent pas être négatifs' }
+);
+
+export type LedgerAccount = z.infer<typeof LedgerAccountSchema>;
+
+// ── Bank Transaction ───────────────────────────────────────────────────────
+export const BankTransactionSchema = z.object({
+  id:             UUIDSchema,
+  externalRef:    sanitized(1, 50),
+  amountInMicrounits: z.number().int(), // Peut être négatif (débit)
+  direction:      z.enum(['credit', 'debit']),
+  description:    sanitized(0, 200),
+  executedAt:     TimestampSchema,
+  reconciledAt:   TimestampSchema.nullable().default(null),
+  journalEntryId: UUIDSchema.nullable().default(null),
+  bankRef:        sanitized(0, 50),
+  siteId:         UUIDSchema,
+}).refine(
+  data => {
+    if (data.direction === 'debit')  return data.amountInMicrounits < 0;
+    if (data.direction === 'credit') return data.amountInMicrounits > 0;
+    return true;
+  },
+  { message: 'Le signe du montant doit correspondre à la direction', path: ['amountInMicrounits'] }
+);
+
+export type BankTransaction = z.infer<typeof BankTransactionSchema>;
+
+// ── Expense Claim ──────────────────────────────────────────────────────────
+export const ExpenseClaimSchema = z.object({
+  id:              UUIDSchema,
+  submittedBy:     UUIDSchema,
+  approvedBy:      UUIDSchema.nullable().default(null),
+  amountInMicrounits: MicrounitsSchema,
+  category:        z.enum([
+    'food', 'equipment', 'maintenance', 'utilities',
+    'marketing', 'training', 'travel', 'other'
+  ]),
+  description:     sanitized(1, 300),
+  receiptUrl:      z.string().url().nullable().optional(),
+  status:          z.enum(['pending', 'approved', 'rejected', 'reimbursed']),
+  submittedAt:     TimestampSchema,
+  processedAt:     TimestampSchema.nullable().default(null),
+}).refine(
+  data => !(data.status === 'approved' && data.approvedBy === null),
+  { message: 'Une note de frais approuvée doit avoir un approbateur', path: ['approvedBy'] }
+).refine(
+  data => !(data.status !== 'pending' && data.processedAt === null),
+  { message: 'Une note de frais traitée doit avoir une date de traitement', path: ['processedAt'] }
+);
+
+export type ExpenseClaim = z.infer<typeof ExpenseClaimSchema>;
+
+// ── Financial Metrics ──────────────────────────────────────────────────────
+export const FinancialMetricsSchema = z.object({
+  totalRevenue:    z.number().int(),
+  totalExpenses:   z.number().int(),
+  netProfit:       z.number().int(),
+  margin:          z.number(),
+  period:          z.string(),
+});
+
+export const AccountingMetricsSchema = z.object({
+  unreconciledCount: z.number().int(),
+  pendingClaimsCount: z.number().int(),
+  lastClosureDate:    TimestampSchema.nullable(),
+  fiscalHealthScore:  z.number().min(0).max(100),
+});
+
+export type FinancialMetrics = z.infer<typeof FinancialMetricsSchema>;
+export type AccountingMetrics = z.infer<typeof AccountingMetricsSchema>;
+
+// ── Treasury Metrics ───────────────────────────────────────────────────────
+export const TreasuryMetricsSchema = z.object({
+  totalRevenueInMicrounits:   MicrounitsSchema,
+  totalExpensesInMicrounits:  MicrounitsSchema,
+  netProfitInMicrounits:      z.number().int(), // Peut être négatif
+  marginRate:                 z.number().min(-1).max(1), // -100% à +100%
+  forecastedRevenueInMicrounits: MicrounitsSchema,
+  cashPositionInMicrounits:   z.number().int(),
+  periodStart:                TimestampSchema,
+  periodEnd:                  TimestampSchema,
+}).refine(
+  data => data.periodEnd > data.periodStart,
+  { message: 'periodEnd doit être postérieur à periodStart', path: ['periodEnd'] }
+).refine(
+  data => {
+    const computed = data.totalRevenueInMicrounits - data.totalExpensesInMicrounits;
+    return Math.abs(computed - data.netProfitInMicrounits) < 1000; // Tolérance 1 microunité
+  },
+  { message: 'netProfit ne correspond pas à revenue - expenses', path: ['netProfitInMicrounits'] }
+);
+
+export type TreasuryMetrics = z.infer<typeof TreasuryMetricsSchema>;
+
+// ── Accounting Context State (Data only) ───────────────────────────────────
+export const AccountingContextSchema = z.object({
+  journalEntries:   z.array(JournalEntrySchema),
+  accounts:         z.array(AccountSchema),
+  bankTransactions: z.array(BankTransactionSchema),
+  expenseClaims:    z.array(ExpenseClaimSchema),
+  treasury:         TreasuryMetricsSchema.nullable(),
+  isLoading:        z.boolean(),
+  error:            z.string().nullable(),
+  viewMode:         z.enum(['simple', 'expert']),
+});
+
+export type AccountingContextData = z.infer<typeof AccountingContextSchema>;
+
+// ── Fiscal Seal ────────────────────────────────────────────────────────────
+export const FiscalSealSchema = z.object({
+  hash:          z.string().length(64),
+  previousHash:  z.string().length(64),
+  timestamp:     z.string(), // ISO String
+  signature:     z.string(),
+  sequence:      z.number().int().optional(),
+  instanceId:    z.string().optional(),
+  updatedAt:     TimestampSchema,
+});
+
+export type FiscalSeal = z.infer<typeof FiscalSealSchema>;

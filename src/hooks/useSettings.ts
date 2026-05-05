@@ -54,11 +54,11 @@ export const useSettings = () => {
     }, [settings, updateSettings]);
 
     const updateReservationConfig = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
-        return updateConfig('reservations' as any, data);
+        return updateConfig('reservationConfig', data as any);
     }, [updateConfig]);
 
     const updateReservationSlots = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
-        return updateConfig('reservationSlots' as any, data);
+        return updateConfig('reservationSlots', data as any);
     }, [updateConfig]);
     
     const updateSchedule = useCallback(async (data: import('@nexus/contracts').DaySchedule[]) => {
@@ -86,7 +86,7 @@ export const useSettings = () => {
     }, [updateConfig]);
 
     const updateGoals = useCallback(async (data: any) => {
-        return updateConfig('goals' as any, data);
+        return updateConfig('goals', data);
     }, [updateConfig]);
 
     return {

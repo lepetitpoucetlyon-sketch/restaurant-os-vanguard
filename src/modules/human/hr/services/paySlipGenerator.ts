@@ -66,7 +66,7 @@ export const generatePaySlip = (user: User) => {
         ['CSG / CRDS', '2 850.25', '9.70 %', '276.47 €', '-'],
     ];
 
-    // @ts-ignore
+    
     autoTable(doc, {
         startY: 95,
         head: head,
@@ -82,8 +82,8 @@ export const generatePaySlip = (user: User) => {
     });
 
     // --- Footer Totals ---
-    // @ts-ignore
-    let finalY = doc.lastAutoTable.finalY + 15;
+    
+    let finalY = (doc as any).lastAutoTable.finalY + 15;
 
     // Check if we need a new page for totals to avoid "crowding"
     if (finalY > 220) {

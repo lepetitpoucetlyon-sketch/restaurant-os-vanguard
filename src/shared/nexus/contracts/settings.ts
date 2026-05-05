@@ -172,7 +172,7 @@ export interface SLMExpert {
     enabled: boolean;
     minRole: string;
     modelId?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface SLMConfig {
@@ -184,5 +184,5 @@ export interface SLMConfig {
     fallbackThreshold?: number;
     fallbackTriggerWord?: string;
     experts?: SLMExpert[];
-    [key: string]: any;
+    [key: string]: unknown;
 }

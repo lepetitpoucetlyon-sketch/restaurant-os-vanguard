@@ -23,6 +23,7 @@ import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
 import { usePOSController } from "@modules/ops";
 import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
+import { CartItem } from "@modules/ops";
 
 const ICON_MAP: Record<string, any> = {
     all: Star,
