@@ -57,7 +57,7 @@ export const BrandTokensSchema = z.object({
 }).strict();
 
 export type BrandConfig = z.infer<typeof BrandTokensSchema>;
-export type PartialBrandConfig = z.infer<typeof BrandTokensSchema.partial()>;
+// export type PartialBrandConfig = z.infer<typeof BrandTokensSchema.partial()>;
 
 // Tokens par défaut — Restaurant OS Vanguard Branding
 export const defaultBrandTokens: BrandConfig = {

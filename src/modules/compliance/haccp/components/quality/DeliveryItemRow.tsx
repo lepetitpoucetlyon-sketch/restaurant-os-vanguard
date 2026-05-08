@@ -68,7 +68,7 @@ export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
 
       {/* Temperature Control */}
       {item.checks.temperature.required && (
-        <div className="flex items-center gap-3 px-4 py-2 bg-white dark:bg-black/20 rounded-xl border border-border">
+        <div className="flex items-center gap-3 px-4 py-2 bg-surface-card dark:bg-surface-sidebar/20 rounded-xl border border-border">
           <Thermometer className={cn("w-4 h-4", item.checks.temperature.status === 'fail' ? "text-error" : "text-success")} />
           <div className="flex items-end gap-1">
             <input 
@@ -84,7 +84,7 @@ export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
       )}
 
       {/* Quantity Display */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-white dark:bg-black/20 rounded-xl border border-border">
+      <div className="flex items-center gap-3 px-4 py-2 bg-surface-card dark:bg-surface-sidebar/20 rounded-xl border border-border">
         <Box className="w-4 h-4 text-text-muted" />
         <p className="text-sm font-mono font-bold">{item.quantity_delivered} {item.unit}</p>
       </div>

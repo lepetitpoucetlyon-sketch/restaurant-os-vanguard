@@ -40,7 +40,7 @@ export function QualityDashboardHeader() {
       value: `${metrics.averageFreshness}/5`, 
       sub: "Grade Excellence",
       icon: TrendingUp,
-      color: "text-blue-500"
+      color: "text-brand"
     }
   ];
 

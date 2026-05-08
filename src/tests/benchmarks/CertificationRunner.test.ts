@@ -62,7 +62,7 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         
         // We run the test logic directly to avoid the internal setTimeout in Simulation
         // 1. Corrupt
-        store.set(ordersNodeAtom as any, (prev: any) => ({ ...prev, data: [{ id: 'corrupt' }] }));
+        store.set(ordersNodeAtom as any, (prev: unknown) => ({ ...prev, data: [{ id: 'corrupt' }] }));
 
         
         // 2. Heal

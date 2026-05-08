@@ -240,11 +240,11 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                                     <p className="text-[10px] text-text-muted mt-2">Le document a été chargé avec succès</p>
                                 </div>
                             )}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 transition-all scale-110 group-hover:scale-100">
+                            <div className="absolute inset-0 bg-surface-sidebar/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 transition-all scale-110 group-hover:scale-100">
                                 <Button 
                                     variant="outline" 
                                     size="sm" 
-                                    className="bg-[--color-surface-primary]/10 text-white border-white/20 hover:bg-[--color-surface-primary]/20"
+                                    className="bg-[--color-surface-primary]/10 text-white border-default hover:bg-[--color-surface-primary]/20"
                                     onClick={() => setCvFileDraft(null)}
                                 >
                                     Remplacer
@@ -336,7 +336,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                         className={cn(
                             "w-full h-14 rounded-2xl font-black uppercase text-[11px] tracking-[0.25em] transition-all",
                             formData.gdpr?.consented 
-                                ? "bg-accent hover:bg-black text-white shadow-xl shadow-accent/10" 
+                                ? "bg-accent hover:bg-surface-sidebar text-white shadow-xl shadow-accent/10" 
                                 : "bg-bg-tertiary text-text-muted cursor-not-allowed border border-border"
                         )}
                         onClick={handleSave}
@@ -349,7 +349,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
             </div>
 
             {isCameraOpen && (
-                <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[100] bg-surface-sidebar/95 flex items-center justify-center p-4">
                     <div className="w-full max-w-2xl bg-bg-secondary rounded-[2.5rem] overflow-hidden border border-white/5 relative shadow-2xl">
                         <CameraCapture onCapture={handleCapture} />
                         <button 

@@ -92,11 +92,11 @@ export function CRMContactForm() {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 md:p-12">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowModal(false)} />
+            <div className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-sm" onClick={() => setShowModal(false)} />
             <motion.div 
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-bg-secondary w-full max-w-lg rounded-[3rem] p-12 relative z-10 shadow-3xl border border-white/10"
+                className="bg-bg-secondary w-full max-w-lg rounded-[3rem] p-12 relative z-10 shadow-3xl border border-subtle"
             >
                 <h2 className="text-4xl font-serif italic text-text-primary mb-8 tracking-tight">
                     {t('crm.new_profile') || 'Nouveau Profil'}

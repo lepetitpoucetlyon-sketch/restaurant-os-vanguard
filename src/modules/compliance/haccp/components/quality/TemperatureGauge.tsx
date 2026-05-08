@@ -49,10 +49,10 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
   }, [currentValue, target]);
 
   const colors = {
-    idle: 'text-slate-400 bg-slate-100',
-    ok: 'text-emerald-500 bg-emerald-50 border-emerald-200',
-    warning: 'text-amber-500 bg-amber-50 border-amber-200',
-    critical: 'text-rose-500 bg-rose-50 border-rose-200',
+    idle: 'text-muted bg-surface-tertiary',
+    ok: 'text-status-success bg-status-success border-emerald-200',
+    warning: 'text-status-warning bg-status-warning border-amber-200',
+    critical: 'text-status-danger bg-status-danger border-rose-200',
   };
 
   return (
@@ -62,13 +62,13 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.05, 0.15, 0.05] }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="absolute inset-0 bg-blue-400 pointer-events-none"
+          className="absolute inset-0 bg-action-primary pointer-events-none"
         />
       )}
 
       <div className="flex items-center justify-between mb-4 relative z-10">
         <div className="flex items-center gap-2">
-          <div className={`p-2 rounded-xl ${status === 'idle' ? 'bg-slate-200' : 'bg-white/80 shadow-sm'}`}>
+          <div className={`p-2 rounded-xl ${status === 'idle' ? 'bg-surface-bg' : 'bg-surface-card/80 shadow-sm'}`}>
             <Thermometer className="w-5 h-5" />
           </div>
           <span className="font-black text-[10px] tracking-widest uppercase opacity-70">
@@ -77,7 +77,7 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
         </div>
         
         {isSensing && (
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-blue-100 text-blue-600 text-[10px] font-black tracking-tighter shadow-sm border border-blue-200">
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-action-primary text-brand text-[10px] font-black tracking-tighter shadow-sm border border-focus">
             <Bluetooth className="w-3 h-3 animate-pulse" />
             LIVE
           </div>
@@ -92,14 +92,14 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
       </div>
 
       <div className="mt-4 flex flex-col gap-2 relative z-10">
-        <div className="h-2 w-full bg-black/5 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-surface-sidebar/5 rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: currentValue !== undefined ? '100%' : '0%' }}
             className={`h-full ${
-              status === 'ok' ? 'bg-emerald-500' : 
-              status === 'warning' ? 'bg-amber-500' : 
-              status === 'critical' ? 'bg-rose-500' : 'bg-slate-300'
+              status === 'ok' ? 'bg-status-success' : 
+              status === 'warning' ? 'bg-status-warning' : 
+              status === 'critical' ? 'bg-status-danger' : 'bg-surface-tertiary'
             }`}
           />
         </div>
@@ -117,9 +117,9 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
           className="mt-4 flex items-center gap-2 text-[10px] font-black tracking-widest relative z-10"
         >
           {status === 'ok' ? (
-            <><CheckCircle2 className="w-4 h-4 text-emerald-500" /> CONFORME</>
+            <><CheckCircle2 className="w-4 h-4 text-status-success" /> CONFORME</>
           ) : (
-            <><AlertTriangle className="w-4 h-4 text-rose-500" /> HORS SEUIL</>
+            <><AlertTriangle className="w-4 h-4 text-status-danger" /> HORS SEUIL</>
           )}
         </motion.div>
       )}

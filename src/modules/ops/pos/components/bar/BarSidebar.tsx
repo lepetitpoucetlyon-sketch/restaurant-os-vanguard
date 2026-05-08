@@ -67,7 +67,7 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
 
         {/* Quick Stats Overlay */}
         <div className="mt-auto p-5 bg-gradient-to-br from-accent/90 to-bg-tertiary dark:to-accent/30 rounded-[2rem] text-white shadow-lg relative overflow-hidden group">
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-surface-card/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
             
             <div className="flex items-center gap-3 mb-3 relative z-10">
                 <Wine className="w-5 h-5 text-white/60" />

@@ -75,7 +75,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                                 <motion.div
                                     animate={{ x: SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField) ? 24 : 4 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                    className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-lg"
+                                    className="absolute top-1 w-4 h-4 rounded-full bg-surface-card shadow-lg"
                                 />
                             </div>
                         </button>

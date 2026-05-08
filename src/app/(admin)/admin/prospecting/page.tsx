@@ -89,7 +89,7 @@ export default function ProspectingDashboard() {
         {/* Manual Tweak */}
         <div className="bg-bg-secondary border border-border/40 rounded-[2rem] p-8 space-y-6 shadow-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+            <div className="w-10 h-10 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
               <Palette className="w-5 h-5" />
             </div>
             <h2 className="text-lg font-bold">Sauce Manuelle</h2>
@@ -119,10 +119,10 @@ export default function ProspectingDashboard() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-emerald-500/10 border border-emerald-500/20 rounded-[2rem] p-6 flex items-center justify-between"
+          className="bg-status-success/10 border border-emerald-500/20 rounded-[2rem] p-6 flex items-center justify-between"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+            <div className="w-12 h-12 rounded-full bg-status-success flex items-center justify-center text-white">
               <Check className="w-6 h-6" />
             </div>
             <div>

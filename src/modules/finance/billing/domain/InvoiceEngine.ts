@@ -61,7 +61,14 @@ export class InvoiceEngine {
       correlationId: invoice.orderId,
       type: 'revenue',
       status: 'validated',
-      cancellationRef: null
+      date: Date.now(),
+      pieceNumber: invoice.invoiceNumber,
+      description: `Facture client ${invoice.invoiceNumber}`,
+      lines: [],
+      isValidated: true,
+      isSystemGenerated: true,
+      updatedAt: Date.now(),
+      cancellationRef: undefined
     };
   }
 }

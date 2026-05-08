@@ -191,7 +191,7 @@ export function MobilierConfig({
                             transition={{ delay: idx * 0.02 }}
                             className="p-4 bg-bg-primary rounded-2xl border border-border group hover:shadow-lg hover:scale-105 transition-all cursor-pointer hover:border-accent/40"
                         >
-                            <div className="flex items-center justify-between mb-3 text-neutral-900">
+                            <div className="flex items-center justify-between mb-3 text-primary">
                                 <div className={cn(
                                     "w-12 h-12 flex items-center justify-center font-serif text-lg font-medium",
                                     table.shape === 'circle' ? 'rounded-full' : 'rounded-xl'
@@ -202,8 +202,8 @@ export function MobilierConfig({
                                     <button onClick={() => handleEditTable(table)} className="p-1.5 hover:bg-bg-tertiary rounded-lg">
                                         <Edit3 className="w-3.5 h-3.5 text-text-muted" />
                                     </button>
-                                    <button onClick={() => deleteTable(table.id)} className="p-1.5 hover:bg-red-500/10 rounded-lg">
-                                        <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                                    <button onClick={() => deleteTable(table.id)} className="p-1.5 hover:bg-status-danger/10 rounded-lg">
+                                        <Trash2 className="w-3.5 h-3.5 text-status-danger" />
                                     </button>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@ export function MobilierConfig({
                                     <Users className="w-3.5 h-3.5" />
                                     {table.seats} PAX
                                 </span>
-                                <span className="px-2 py-0.5 rounded-lg text-[9px] font-bold text-neutral-600 truncate max-w-[80px]" style={{ backgroundColor: zone?.color }}>
+                                <span className="px-2 py-0.5 rounded-lg text-[9px] font-bold text-secondary truncate max-w-[80px]" style={{ backgroundColor: zone?.color }}>
                                     {zone?.name || 'N/A'}
                                 </span>
                             </div>

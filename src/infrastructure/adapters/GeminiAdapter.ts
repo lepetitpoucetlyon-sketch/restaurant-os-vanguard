@@ -37,9 +37,11 @@ export class GeminiLiveService {
         this.rolePermissions = rolePermissions;
         this.onTranscript = callbacks?.onTranscript || null;
         this.onToolCall = callbacks?.onToolCall || null;
-        const AudioCtx = (typeof window !== 'undefined') ? ((window as any).AudioContext || (window as any).webkitAudioContext) : null;
-        if (AudioCtx) {
-            this.audioContext = new AudioCtx({ sampleRate: 16000 });
+        const AudioContextClass = (typeof window !== 'undefined') 
+            ? ((window as unknown as Record<string, unknown>).AudioContext || (window as unknown as Record<string, unknown>).webkitAudioContext) as { new(options?: AudioContextOptions): AudioContext }
+            : null;
+        if (AudioContextClass) {
+            this.audioContext = new AudioContextClass({ sampleRate: 16000 });
         }
     }
 

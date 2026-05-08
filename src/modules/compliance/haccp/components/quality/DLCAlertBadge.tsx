@@ -19,22 +19,22 @@ export const DLCAlertBadge: React.FC<DLCAlertBadgeProps> = ({ expiryDate, classN
 
     const config = {
         safe: {
-            color: 'text-emerald-500 bg-emerald-50',
+            color: 'text-status-success bg-status-success',
             icon: <CheckCircle className="w-3 h-3" />,
             label: `J+${daysRemaining}`
         },
         warning: {
-            color: 'text-amber-500 bg-amber-50',
+            color: 'text-status-warning bg-status-warning',
             icon: <Clock className="w-3 h-3" />,
             label: `J+${daysRemaining}`
         },
         critical: {
-            color: 'text-rose-500 bg-rose-50 animate-pulse',
+            color: 'text-status-danger bg-status-danger animate-pulse',
             icon: <AlertCircle className="w-3 h-3" />,
             label: `URGENT (J+${daysRemaining})`
         },
         expired: {
-            color: 'text-slate-100 bg-slate-900',
+            color: 'text-muted bg-surface-sidebar',
             icon: <AlertCircle className="w-3 h-3" />,
             label: 'EXPIRÉ'
         }

@@ -37,9 +37,9 @@ export function SidebarQuickActions({
     }, []);
 
     const ambiences: { key: RestaurantAmbiance; icon: React.ElementType; label: string; color: string }[] = [
-        { key: 'SERENITY', icon: Sparkles, label: 'Serenity', color: 'text-indigo-400' },
-        { key: 'RUSH_SPEED', icon: Flame, label: 'Rush', color: 'text-emerald-400' },
-        { key: 'ELEGANCE_NIGHT', icon: Moon, label: 'Elegance', color: 'text-amber-400' },
+        { key: 'SERENITY', icon: Sparkles, label: 'Serenity', color: 'text-brand' },
+        { key: 'RUSH_SPEED', icon: Flame, label: 'Rush', color: 'text-status-success' },
+        { key: 'ELEGANCE_NIGHT', icon: Moon, label: 'Elegance', color: 'text-status-warning' },
     ];
 
     return (

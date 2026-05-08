@@ -164,7 +164,7 @@ function ContextualSettingsPanelContent({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={closeSettings}
-                className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]"
+                className="fixed inset-0 bg-surface-sidebar/30 backdrop-blur-sm z-[100]"
             />
 
             {/* Panel */}
@@ -193,7 +193,7 @@ function ContextualSettingsPanelContent({
                         </div>
                         <button
                             onClick={closeSettings}
-                            className="w-10 h-10 rounded-xl bg-bg-tertiary hover:bg-red-500/10 hover:text-red-500 flex items-center justify-center transition-all"
+                            className="w-10 h-10 rounded-xl bg-bg-tertiary hover:bg-status-danger/10 hover:text-status-danger flex items-center justify-center transition-all"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -261,7 +261,7 @@ function ContextualSettingsPanelContent({
                         </button>
                         <button
                             onClick={handleSave}
-                            className="flex-2 flex items-center justify-center gap-2 py-4 px-8 rounded-2xl bg-accent text-black font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent/90 transition-all shadow-lg hover:shadow-accent/20"
+                            className="flex-2 flex items-center justify-center gap-2 py-4 px-8 rounded-2xl bg-accent text-primary font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent/90 transition-all shadow-lg hover:shadow-accent/20"
                         >
                             <Check className="w-4 h-4" />
                             {t('settings.apply')}

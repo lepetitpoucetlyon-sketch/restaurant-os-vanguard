@@ -22,26 +22,26 @@ export function InterventionLogSection() {
     return (
         <div className="max-w-5xl mx-auto space-y-8 pb-12">
             {/* Legal Warning Header */}
-            <div className="bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-500/20 rounded-[2.5rem] p-10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 -mr-32 -mt-32 rounded-full blur-3xl" />
+            <div className="bg-status-warning dark:bg-status-warning/5 border border-amber-200 dark:border-amber-500/20 rounded-[2.5rem] p-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-status-warning/5 -mr-32 -mt-32 rounded-full blur-3xl" />
                 <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                    <div className="w-20 h-20 rounded-3xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 shrink-0">
-                        <AlertTriangle strokeWidth={1.5} className="w-10 h-10 text-amber-600" />
+                    <div className="w-20 h-20 rounded-3xl bg-status-warning/10 flex items-center justify-center border border-amber-500/20 shrink-0">
+                        <AlertTriangle strokeWidth={1.5} className="w-10 h-10 text-status-warning" />
                     </div>
                     <div className="space-y-2 text-center md:text-left">
-                        <h2 className="text-2xl font-serif font-black italic text-amber-900 dark:text-amber-200">Obligation de Conservation</h2>
-                        <p className="text-sm text-amber-800/80 dark:text-amber-200/60 max-w-2xl leading-relaxed">
+                        <h2 className="text-2xl font-serif font-black italic text-status-warning dark:text-status-warning">Obligation de Conservation</h2>
+                        <p className="text-sm text-status-warning/80 dark:text-status-warning/60 max-w-2xl leading-relaxed">
                             Le restaurateur est **légalement tenu** de conserver tous les avis de passage et bons d'intervention des entreprises spécialisées (Hottes, Dératisation, Maintenance, Déchets). Ces documents sont indispensables en cas de contrôle sanitaire ou de sinistre assurance.
                         </p>
                     </div>
-                    <Button className="md:ml-auto h-14 px-8 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-amber-600/20">
+                    <Button className="md:ml-auto h-14 px-8 bg-status-warning hover:bg-status-warning text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-amber-600/20">
                         <Plus className="w-4 h-4 mr-2" /> Numériser un bon
                     </Button>
                 </div>
             </div>
 
             {/* toolbar */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-white dark:bg-bg-secondary p-4 rounded-3xl border border-border shadow-sm">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-surface-card dark:bg-bg-secondary p-4 rounded-3xl border border-border shadow-sm">
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                     <input 
@@ -64,7 +64,7 @@ export function InterventionLogSection() {
                 </div>
 
                 {(interventions || []).map((int: any) => (
-                    <div key={int.id} className="group bg-white dark:bg-bg-secondary border border-border rounded-3xl p-6 hover:shadow-2xl hover:border-accent/30 transition-all duration-500 relative overflow-hidden">
+                    <div key={int.id} className="group bg-surface-card dark:bg-bg-secondary border border-border rounded-3xl p-6 hover:shadow-2xl hover:border-accent/30 transition-all duration-500 relative overflow-hidden">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="flex items-center gap-6">
                                 <div className={cn(

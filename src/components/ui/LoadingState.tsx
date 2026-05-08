@@ -72,10 +72,10 @@ export function LoadingState({
                                     animate={{ scale: 1 }}
                                     className="flex flex-col items-center gap-3"
                                 >
-                                    <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                                        <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                                    <div className="w-12 h-12 rounded-full bg-status-success/10 flex items-center justify-center">
+                                        <CheckCircle2 className="w-6 h-6 text-status-success" />
                                     </div>
-                                    <p className="text-sm font-medium text-emerald-600">
+                                    <p className="text-sm font-medium text-status-success">
                                         {successText}
                                     </p>
                                 </motion.div>
@@ -86,10 +86,10 @@ export function LoadingState({
                                     animate={{ scale: 1 }}
                                     className="flex flex-col items-center gap-3"
                                 >
-                                    <div className="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
-                                        <XCircle className="w-6 h-6 text-rose-500" />
+                                    <div className="w-12 h-12 rounded-full bg-status-danger/10 flex items-center justify-center">
+                                        <XCircle className="w-6 h-6 text-status-danger" />
                                     </div>
-                                    <p className="text-sm font-medium text-rose-600">
+                                    <p className="text-sm font-medium text-status-danger">
                                         {errorText}
                                     </p>
                                     {onRetry && (

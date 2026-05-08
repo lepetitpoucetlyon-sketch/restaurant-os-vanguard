@@ -101,18 +101,18 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
     };
 
     return (
-        <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-xl space-y-6">
+        <div className="bg-surface-card p-8 rounded-[3rem] border border-subtle shadow-xl space-y-6">
             <div className="flex justify-between items-center mb-2">
                 <div>
-                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                        <PenTool className="w-4 h-4 text-emerald-500" />
+                    <h3 className="text-sm font-black text-primary uppercase tracking-widest flex items-center gap-2">
+                        <PenTool className="w-4 h-4 text-status-success" />
                         Signature Mobile
                     </h3>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1">Certification HACCP • Nexus-Darwin 5</p>
+                    <p className="text-[10px] font-bold text-muted uppercase tracking-tighter mt-1">Certification HACCP • Nexus-Darwin 5</p>
                 </div>
                 <button 
                     onClick={clear}
-                    className="p-3 rounded-full hover:bg-slate-50 text-slate-400 hover:text-rose-500 transition-all active:rotate-180 duration-500"
+                    className="p-3 rounded-full hover:bg-surface-bg text-muted hover:text-status-danger transition-all active:rotate-180 duration-500"
                 >
                     <RotateCcw className="w-4 h-4" />
                 </button>
@@ -128,18 +128,18 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                     onTouchStart={startDrawing}
                     onTouchMove={draw}
                     onTouchEnd={stopDrawing}
-                    className="w-full h-48 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 cursor-crosshair touch-none group-hover:border-emerald-200 transition-colors"
+                    className="w-full h-48 bg-surface-bg rounded-[2rem] border-2 border-dashed border-default cursor-crosshair touch-none group-hover:border-emerald-200 transition-colors"
                 />
                 {!hasSigned && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">Signer ici</p>
+                        <p className="text-[10px] font-black text-muted uppercase tracking-widest italic">Signer ici</p>
                     </div>
                 )}
             </div>
 
             <div className="space-y-4">
                 <div className="relative">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                         <User className="w-4 h-4" />
                     </div>
                     <input 
@@ -147,7 +147,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                         placeholder="Nom du signataire"
                         value={signerName}
                         onChange={(e) => setSignerName(e.target.value)}
-                        className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-bold outline-none ring-2 ring-transparent focus:ring-emerald-500/20 transition-all"
+                        className="w-full bg-surface-bg border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-bold outline-none ring-2 ring-transparent focus:ring-emerald-500/20 transition-all"
                     />
                 </div>
 
@@ -156,7 +156,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                     disabled={!hasSigned || !signerName || isSaved}
                     className={cn(
                         "w-full py-6 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all",
-                        isSaved ? "bg-emerald-500 text-white" : "bg-slate-900 text-white hover:bg-black"
+                        isSaved ? "bg-status-success text-white" : "bg-surface-sidebar text-white hover:bg-surface-sidebar"
                     )}
                 >
                     {isSaved ? (
@@ -167,7 +167,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                 </Button>
             </div>
             
-            <p className="text-[9px] text-center text-slate-400 font-bold leading-relaxed px-4 italic">
+            <p className="text-[9px] text-center text-muted font-bold leading-relaxed px-4 italic">
                 La signature électronique apposée certifie la conformité de l'agréage et des relevés de température enregistrés.
             </p>
         </div>

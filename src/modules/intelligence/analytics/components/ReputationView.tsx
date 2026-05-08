@@ -31,11 +31,11 @@ export const ReputationView: React.FC<ReputationViewProps> = ({ reviews }) => {
             className="space-y-6"
         >
             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
+                <div className="bg-surface-card dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
                     <h4 className="text-[8px] font-black uppercase tracking-widest text-text-muted mb-2">Score Global</h4>
                     <div className="text-4xl font-serif font-black italic">4.8<span className="text-lg opacity-40">/5</span></div>
                 </div>
-                <div className="bg-white dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
+                <div className="bg-surface-card dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
                     <h4 className="text-[8px] font-black uppercase tracking-widest text-text-muted mb-2">Avis Noirs</h4>
                     <div className="text-4xl font-serif font-black italic text-error">{reviews.filter(r => !r.replied).length}</div>
                 </div>
@@ -43,7 +43,7 @@ export const ReputationView: React.FC<ReputationViewProps> = ({ reviews }) => {
             
             <div className="space-y-4">
                 {reviews.map(review => (
-                    <div key={review.id} className="bg-white dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
+                    <div key={review.id} className="bg-surface-card dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center font-bold text-accent-gold">{review.author[0]}</div>
                             <div>
@@ -60,7 +60,7 @@ export const ReputationView: React.FC<ReputationViewProps> = ({ reviews }) => {
                             <div className="bg-bg-tertiary/50 p-4 rounded-2xl border border-accent-gold/10">
                                 <p className="text-[10px] uppercase font-black tracking-widest text-accent-gold mb-2">Oracle Brain :</p>
                                 <p className="text-xs italic opacity-70 mb-3 text-text-muted">{review.suggestedReply}</p>
-                                <Button size="sm" className="h-9 w-full bg-text-primary text-white rounded-xl text-[8px] font-black uppercase tracking-widest hover:bg-black transition-colors">
+                                <Button size="sm" className="h-9 w-full bg-text-primary text-white rounded-xl text-[8px] font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">
                                     Approuver la Réponse
                                 </Button>
                             </div>

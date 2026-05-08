@@ -29,7 +29,7 @@ export function NexusSphere({ isActive, isProcessing, className }: NexusSpherePr
                         ? "border-success shadow-[0_0_15px_rgba(34,197,94,0.5)]" 
                         : isProcessing 
                             ? "border-accent shadow-[0_0_15px_rgba(197,160,89,0.5)]" 
-                            : "border-white/20"
+                            : "border-default"
                 )}
             />
             {isActive ? (
@@ -37,7 +37,7 @@ export function NexusSphere({ isActive, isProcessing, className }: NexusSpherePr
             ) : (
                 <div className={cn(
                     "w-3 h-3 rounded-full",
-                    isProcessing ? "bg-accent animate-ping" : "bg-white/40"
+                    isProcessing ? "bg-accent animate-ping" : "bg-surface-card/40"
                 )} />
             )}
         </div>

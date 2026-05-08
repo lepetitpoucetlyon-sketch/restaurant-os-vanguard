@@ -31,9 +31,9 @@ export function WasteManagementHACCP() {
     ];
 
     const stats = [
-        { label: 'Bio-déchets / Mois', value: '184 kg', icon: Trash2, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-        { label: 'Huiles récupérées', value: '45 L', icon: Droplets, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-        { label: 'Dernier curage bac', value: '10 Jan.', icon: Shield, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+        { label: 'Bio-déchets / Mois', value: '184 kg', icon: Trash2, color: 'text-status-success', bg: 'bg-status-success/10' },
+        { label: 'Huiles récupérées', value: '45 L', icon: Droplets, color: 'text-status-warning', bg: 'bg-status-warning/10' },
+        { label: 'Dernier curage bac', value: '10 Jan.', icon: Shield, color: 'text-brand', bg: 'bg-action-primary/10' },
     ];
 
     return (
@@ -41,7 +41,7 @@ export function WasteManagementHACCP() {
             {/* Header Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {stats.map((stat, i) => (
-                    <div key={i} className="bg-white dark:bg-bg-secondary p-8 rounded-[2.5rem] border border-border shadow-sm group hover:shadow-xl transition-all duration-500">
+                    <div key={i} className="bg-surface-card dark:bg-bg-secondary p-8 rounded-[2.5rem] border border-border shadow-sm group hover:shadow-xl transition-all duration-500">
                         <div className="flex items-center justify-between mb-4">
                             <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center border border-transparent", stat.bg, stat.color)}>
                                 <stat.icon strokeWidth={1.5} className="w-6 h-6" />
@@ -56,7 +56,7 @@ export function WasteManagementHACCP() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 {/* Main Action Forms */}
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white dark:bg-bg-secondary rounded-[3rem] border border-border p-10 shadow-sm relative overflow-hidden">
+                    <div className="bg-surface-card dark:bg-bg-secondary rounded-[3rem] border border-border p-10 shadow-sm relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 -mr-32 -mt-32 rounded-full blur-3xl" />
                         
                         <div className="relative z-10 space-y-8">
@@ -66,7 +66,7 @@ export function WasteManagementHACCP() {
                                     {['Bio-déchets', 'Huiles', 'Bac à Graisse'].map((t, i) => (
                                         <button key={i} className={cn(
                                             "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
-                                            i === 0 ? "bg-white dark:bg-bg-secondary text-accent-gold shadow-sm" : "text-text-muted hover:text-text-primary"
+                                            i === 0 ? "bg-surface-card dark:bg-bg-secondary text-accent-gold shadow-sm" : "text-text-muted hover:text-text-primary"
                                         )}>{t}</button>
                                     ))}
                                 </div>
@@ -88,7 +88,7 @@ export function WasteManagementHACCP() {
                                 </div>
                             </div>
 
-                            <Button className="w-full h-16 bg-text-primary text-white rounded-[20px] font-black uppercase text-[10px] tracking-widest hover:bg-black shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
+                            <Button className="w-full h-16 bg-text-primary text-white rounded-[20px] font-black uppercase text-[10px] tracking-widest hover:bg-surface-sidebar shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
                                 Enregistrer le relevé HACCP
                             </Button>
                         </div>
@@ -97,17 +97,17 @@ export function WasteManagementHACCP() {
                     {/* Technical Summary Sync from Registre */}
                     <div className="bg-bg-tertiary/50 rounded-[2.5rem] border border-dashed border-border p-10">
                         <div className="flex items-start gap-6">
-                            <div className="w-16 h-16 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/10 shrink-0 shadow-sm">
-                                <Wind strokeWidth={1.5} className="w-8 h-8 text-orange-500" />
+                            <div className="w-16 h-16 rounded-2xl bg-status-warning/10 flex items-center justify-center border border-orange-500/10 shrink-0 shadow-sm">
+                                <Wind strokeWidth={1.5} className="w-8 h-8 text-status-warning" />
                             </div>
                             <div className="space-y-3 flex-1">
                                 <div className="flex items-center justify-between">
                                     <h4 className="text-xl font-serif font-bold text-text-primary">Maintenance Hottes (Registre Sync)</h4>
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                    <CheckCircle2 className="w-5 h-5 text-status-success" />
                                 </div>
                                 <p className="text-sm text-text-muted leading-relaxed">
-                                    Dernière maintenance certifiée par **Extraction Lyon Expert** le **{String(hottesDoc?.lastUpdated || 'N/A')}**. 
-                                    Prochaine intervention réglementaire conseillée avant le **{String(hottesDoc?.nextReview || 'N/A')}**.
+                                    Dernière maintenance certifiée par **Extraction Lyon Expert** le **{String(hottesDoc?.updatedAt || 'N/A')}**. 
+                                    Prochaine intervention réglementaire conseillée avant le **{String(hottesDoc?.validUntil || 'N/A')}**.
                                 </p>
                                 <div className="pt-2">
                                     <button className="text-[10px] font-black text-accent-gold uppercase tracking-[0.2em] flex items-center gap-2 hover:gap-3 transition-all">
@@ -121,7 +121,7 @@ export function WasteManagementHACCP() {
 
                 {/* Right Sidebar: History & Alerts */}
                 <div className="space-y-8">
-                    <div className="bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border p-8 shadow-sm">
+                    <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-8 shadow-sm">
                         <div className="flex items-center gap-3 mb-8">
                             <History className="w-5 h-5 text-text-muted" />
                             <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Passages Récents</h3>
@@ -132,7 +132,7 @@ export function WasteManagementHACCP() {
                                 <div key={log.id} className="flex items-start gap-4 group">
                                     <div className={cn(
                                         "w-2 h-12 rounded-full shrink-0",
-                                        log.type === 'biodechets' ? "bg-emerald-500/20 group-hover:bg-emerald-500 transition-colors" : "bg-amber-500/20 group-hover:bg-amber-500 transition-colors"
+                                        log.type === 'biodechets' ? "bg-status-success/20 group-hover:bg-status-success transition-colors" : "bg-status-warning/20 group-hover:bg-status-warning transition-colors"
                                     )} />
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between">
@@ -146,15 +146,15 @@ export function WasteManagementHACCP() {
                         </div>
                     </div>
 
-                    <div className="bg-rose-500/5 border border-rose-500/20 rounded-[2.5rem] p-8 space-y-4">
+                    <div className="bg-status-danger/5 border border-rose-500/20 rounded-[2.5rem] p-8 space-y-4">
                         <div className="flex items-center gap-3">
-                            <AlertTriangle className="w-5 h-5 text-rose-500" />
-                            <h3 className="text-[10px] font-black text-rose-500 uppercase tracking-[0.3em]">Alerte Bac à Graisse</h3>
+                            <AlertTriangle className="w-5 h-5 text-status-danger" />
+                            <h3 className="text-[10px] font-black text-status-danger uppercase tracking-[0.3em]">Alerte Bac à Graisse</h3>
                         </div>
-                        <p className="text-[11px] text-rose-800/80 dark:text-rose-200/60 font-medium leading-relaxed italic">
+                        <p className="text-[11px] text-status-danger/80 dark:text-status-danger/60 font-medium leading-relaxed italic">
                             « Le bac à graisse n'a pas été inspecté visuellement cette semaine. Risque d'engorgement et de mauvaises odeurs. »
                         </p>
-                        <Button variant="outline" className="w-full h-10 rounded-xl border-rose-500/20 text-rose-500 font-black uppercase text-[8px] tracking-[0.2em] bg-rose-500/5 hover:bg-rose-500/10">
+                        <Button variant="outline" className="w-full h-10 rounded-xl border-rose-500/20 text-status-danger font-black uppercase text-[8px] tracking-[0.2em] bg-status-danger/5 hover:bg-status-danger/10">
                             Effectuer le contrôle maintenant
                         </Button>
                     </div>

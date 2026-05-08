@@ -1,17 +1,19 @@
 import { IFinanceRepository } from '@domain/repositories/IFinanceRepository';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
-import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
+import { INexusAdapter, Nexus } from '@/lib/nexus/NexusAdapter';
+import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
 
 /**
  * 🏛️ FirestoreFinanceRepository - Grade X Adapter
  * Implements IFinanceRepository using the Firestore database.
+ * Handles domain-specific hydration for financial records.
  */
 export class FirestoreFinanceRepository implements IFinanceRepository {
-    private adapter: FirestoreAdapter;
+    private adapter: INexusAdapter;
     private tenantId: string;
 
     constructor(tenantId: string) {
-        this.adapter = new FirestoreAdapter();
+        this.adapter = Nexus.adapter;
         this.tenantId = tenantId;
     }
 
@@ -20,7 +22,8 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     }
 
     async getJournalEntries(): Promise<JournalEntry[]> {
-        return await this.adapter.query<JournalEntry>(this.getPath('journalEntries'));
+        const raw = await this.adapter.query<any>(this.getPath('journalEntries'));
+        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateJournalEntry);
     }
 
     async saveJournalEntry(entry: JournalEntry): Promise<void> {
@@ -28,7 +31,8 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     }
 
     async getAccounts(): Promise<Account[]> {
-        return await this.adapter.query<Account>(this.getPath('accounts'));
+        const raw = await this.adapter.query<any>(this.getPath('accounts'));
+        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateAccount);
     }
 
     async saveAccount(account: Account): Promise<void> {
@@ -36,11 +40,13 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     }
 
     async getBankTransactions(): Promise<BankTransaction[]> {
-        return await this.adapter.query<BankTransaction>(this.getPath('bankTransactions'));
+        const raw = await this.adapter.query<any>(this.getPath('bankTransactions'));
+        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateBankTransaction);
     }
 
     async getExpenseClaims(): Promise<ExpenseClaim[]> {
-        return await this.adapter.query<ExpenseClaim>(this.getPath('expenseClaims'));
+        const raw = await this.adapter.query<any>(this.getPath('expenseClaims'));
+        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateExpenseClaim);
     }
 
     async saveExpenseClaim(claim: ExpenseClaim): Promise<void> {

@@ -149,13 +149,13 @@ export interface NexusOpsState {
 const NexusOpsContext = createContext<NexusOpsState | undefined>(undefined);
 
 export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
     const setTenantId = useSetAtom(tenantIdAtom);
     const store = useStore();
 
     useEffect(() => {
-        NexusSyncService.init(tenantId);
-        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusOpsProvider', tenantId });
+        NexusSyncService.init(tenantId as string);
+        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusOpsProvider', tenantId: tenantId as string });
         const purgeInterval = setInterval(() => GlobalRegistryService.purgeInactive(store), 120000);
         return () => {
             NexusSyncService.stopAll();
@@ -180,7 +180,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const operationalNodes = useAtomValue(tablesNodeAtom);
     const allocations = useAtomValue(reservationsNodeAtom);
-    const areas = useAtomValue(zonesAtom);
+    const areas = useAtomValue(zonesAtom) || [];
 
     const contextValue = useMemo(() => ({ 
         switchTenant, 
@@ -228,7 +228,7 @@ const createSovereignHook = <T,>(
 ) => {
     return () => {
         const node = useAtomValue(atom);
-        const tenantId = useAtomValue(tenantIdAtom);
+        const tenantId = useAtomValue(tenantIdAtom) as string;
         const rawData = (node.data || []) as SovereignNode[];
         return {
             data: rawData.map(mapper),
@@ -253,7 +253,7 @@ const createSovereignHook = <T,>(
 
 export const useOrders = () => {
     const base = createSovereignHook(ordersNodeAtom, OperationalIdentity.FLOWS, toOrder)();
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
     return {
         ...base,
         respondToModification: async (orderId: string, itemId: string, approved: boolean, responder: string, note?: string) => {
@@ -301,9 +301,9 @@ export const useOperationalNodes = () => {
     const zones = (useAtomValue(zonesAtom) || []).map(toZone);
     const isZonesLocked = useAtomValue(zonesLockedAtom);
     const setZonesLocked = useSetAtom(zonesLockedAtom);
-    const currentLayoutId = useAtomValue(currentFloorIdAtom);
+    const currentLayoutId = useAtomValue(currentFloorIdAtom) as string;
     const setCurrentFloorId = useSetAtom(currentFloorIdAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
 
     const toggleZonesLock = useCallback(() => setZonesLocked(prev => !prev), [setZonesLocked]);
     const setCurrentFloor = useCallback((id: string) => setCurrentFloorId(id), [setCurrentFloorId]);
@@ -449,7 +449,7 @@ export const useOperationalNodes = () => {
 
 export const useRecipes = () => {
     const base = createSovereignHook(recipesNodeAtom, OperationalIdentity.RESOURCES, toRecipe)();
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
     return {
         ...base,
         addRecipe: async (data: Partial<Recipe>) => base.add(data as Partial<SovereignNode>),
@@ -467,7 +467,7 @@ export const useRecipes = () => {
 export const useGroups = createSovereignHook(groupsNodeAtom, OperationalIdentity.RELATIONS, toGroup);
 export const useMarketing = () => {
     const base = createSovereignHook(marketingCampaignsNodeAtom, OperationalIdentity.RELATIONS, toCampaign)();
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
     return {
         ...base,
         upsertCampaign: async (data: Partial<Campaign>) => {
@@ -495,7 +495,7 @@ export const useHR = createSovereignHook(leaveRequestsNodeAtom, OperationalIdent
 export const useCRM = () => {
     const base = createSovereignHook(crmsNodeAtom, OperationalIdentity.RELATIONS, (n) => n)();
     const selectedCRM = useAtomValue(selectedCRMAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
     return {
         ...base,
         selectedCRM,
@@ -518,7 +518,7 @@ export const useTables = useOperationalNodes;
 export const useKitchen = () => {
     const ordersNode = useAtomValue(ordersNodeAtom);
     const tasksNode = useAtomValue(prepTasksNodeAtom);
-    const tenantId = useAtomValue(tenantIdAtom);
+    const tenantId = useAtomValue(tenantIdAtom) as string;
     const miseEnPlaceTarget = useAtomValue(miseEnPlaceTargetSelector);
     
     // 🏛️ SUTURE: Conversion vers types business Grade X

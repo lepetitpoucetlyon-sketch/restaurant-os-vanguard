@@ -84,12 +84,12 @@ export function NeuralShield() {
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-red-600 text-white rounded-full shadow-[0_0_30px_rgba(220,38,38,0.5)] flex items-center justify-center border-2 border-white/20 hover:bg-red-700 transition-colors group"
+                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-status-danger text-white rounded-full shadow-[0_0_30px_rgba(220,38,38,0.5)] flex items-center justify-center border-2 border-default hover:bg-status-danger transition-colors group"
             >
                 <ShieldAlert className="w-7 h-7 group-hover:animate-pulse" />
                 <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-white"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-surface-card opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-4 w-4 bg-surface-card"></span>
                 </span>
             </motion.button>
 
@@ -101,7 +101,7 @@ export function NeuralShield() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                            className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-xl"
                         />
 
                         <motion.div
@@ -111,17 +111,17 @@ export function NeuralShield() {
                             className="relative w-full max-w-2xl bg-[#0A0A0A] border border-red-900/50 rounded-[2.5rem] shadow-2xl overflow-hidden"
                         >
                             {/* Emergency Header */}
-                            <div className="bg-red-600 p-8 flex justify-between items-center">
+                            <div className="bg-status-danger p-8 flex justify-between items-center">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white/20 rounded-2xl">
+                                    <div className="p-3 bg-surface-card/20 rounded-2xl">
                                         <AlertOctagon className="text-white w-8 h-8" />
                                     </div>
                                     <div>
-                                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Neural Shield SOS<span className="text-red-200">.</span></h2>
-                                        <p className="text-red-100 text-[10px] font-bold uppercase tracking-[0.3em]">Protocole de Maintenance Prioritaire</p>
+                                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Neural Shield SOS<span className="text-status-danger">.</span></h2>
+                                        <p className="text-status-danger text-[10px] font-bold uppercase tracking-[0.3em]">Protocole de Maintenance Prioritaire</p>
                                     </div>
                                 </div>
-                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-surface-card/10 rounded-full transition-colors">
                                     <X className="text-white w-6 h-6" />
                                 </button>
                             </div>
@@ -157,24 +157,24 @@ export function NeuralShield() {
 
                                 {/* Description Field */}
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                                    <label className="text-[10px] font-black text-secondary uppercase tracking-widest flex items-center gap-2">
                                         <Info size={14} /> Description de l'incident
                                     </label>
                                     <textarea
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
                                         placeholder="Que se passe-t-il ? Soyez le plus précis possible..."
-                                        className="w-full h-32 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all outline-none resize-none"
+                                        className="w-full h-32 bg-surface-sidebar/50 border border-default rounded-2xl p-4 text-white placeholder:text-secondary focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all outline-none resize-none"
                                     />
                                 </div>
 
                                 {/* Diagnostic Snapshot Info */}
-                                <div className="p-4 bg-zinc-900/30 border border-zinc-800/50 rounded-2xl flex items-center justify-between">
+                                <div className="p-4 bg-surface-sidebar/30 border border-default/50 rounded-2xl flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Diagnostic Snapshot Prêt</span>
+                                        <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                                        <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Diagnostic Snapshot Prêt</span>
                                     </div>
-                                    <span className="text-[9px] text-zinc-600 font-mono uppercase tracking-tighter">Tenant: {window.location.hostname}</span>
+                                    <span className="text-[9px] text-secondary font-mono uppercase tracking-tighter">Tenant: {window.location.hostname}</span>
                                 </div>
 
                                 {/* Submit Button */}
@@ -184,8 +184,8 @@ export function NeuralShield() {
                                     className={cn(
                                         "w-full py-5 rounded-2xl flex items-center justify-center gap-4 transition-all font-black text-sm uppercase tracking-[0.3em] shadow-xl",
                                         isSubmitting || !description.trim() 
-                                            ? "bg-zinc-800 text-zinc-500 cursor-not-allowed" 
-                                            : "bg-red-600 text-white hover:bg-red-700 shadow-red-900/20"
+                                            ? "bg-surface-sidebar text-secondary cursor-not-allowed" 
+                                            : "bg-status-danger text-white hover:bg-status-danger shadow-red-900/20"
                                     )}
                                 >
                                     <Send size={18} className={isSubmitting ? 'animate-bounce' : ''} />
@@ -207,8 +207,8 @@ function TypeButton({ active, onClick, label, icon }: { active: boolean, onClick
             className={cn(
                 "flex items-center gap-3 p-4 rounded-xl border transition-all text-xs font-bold uppercase tracking-widest",
                 active 
-                    ? "bg-red-600 border-red-500 text-white shadow-lg" 
-                    : "bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-white"
+                    ? "bg-status-danger border-red-500 text-white shadow-lg" 
+                    : "bg-surface-sidebar/50 border-default text-secondary hover:border-default hover:text-white"
             )}
         >
             {icon}

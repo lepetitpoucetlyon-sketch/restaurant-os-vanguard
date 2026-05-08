@@ -45,7 +45,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                     zone === "VIP"
                                         ? "text-accent"
                                         : zone === "TERRACE"
-                                            ? "text-emerald-500"
+                                            ? "text-status-success"
                                             : "text-text-muted/60"
                                 )}
                             >
@@ -68,7 +68,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                     className={cn(
                                         "relative min-h-[180px] rounded-[24px] p-6 flex flex-col justify-between transition-all duration-700 cursor-pointer group shadow-lg border",
                                         table.status === "web-reserved"
-                                            ? "bg-bg-tertiary border-blue-500/40 hover:border-blue-500 hover:shadow-blue-500/10"
+                                            ? "bg-bg-tertiary border-focus/40 hover:border-focus hover:shadow-blue-500/10"
                                             : table.type === "vip"
                                                 ? "bg-bg-tertiary border-accent/20 hover:border-accent hover:shadow-accent/10"
                                                 : table.type === "terrace"
@@ -90,19 +90,19 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                                                 : table.type === "terrace"
                                                                     ? "bg-[#00D9A6]"
                                                                     : "bg-text-muted/40"
-                                                            : "bg-white/5"
+                                                            : "bg-surface-card/5"
                                                     )}
                                                 />
                                             ))}
                                         </div>
                                         {table.status === "occupied" && (
-                                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)] animate-pulse" />
+                                            <div className="w-1.5 h-1.5 rounded-full bg-status-danger shadow-[0_0_10px_rgba(239,68,68,0.5)] animate-pulse" />
                                         )}
                                         {table.status === "reserved" && (
-                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
+                                            <div className="w-1.5 h-1.5 rounded-full bg-status-warning shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
                                         )}
                                         {table.status === "web-reserved" && (
-                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)] animate-pulse" />
+                                            <div className="w-1.5 h-1.5 rounded-full bg-action-primary shadow-[0_0_10px_rgba(59,130,246,0.5)] animate-pulse" />
                                         )}
                                         {table.type === "terrace" && table.status === "available" && (
                                             <div className="w-1.5 h-1.5 rounded-full bg-[#00D9A6] shadow-[0_0_10px_rgba(0,217,166,0.5)]" />
@@ -117,7 +117,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                                 table.type === "vip"
                                                     ? "border-accent/30 text-accent"
                                                     : table.type === "terrace"
-                                                        ? "border-emerald-500/30 text-emerald-500"
+                                                        ? "border-emerald-500/30 text-status-success"
                                                         : "border-border text-text-muted"
                                             )}
                                         >
@@ -150,7 +150,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
 
                                     {/* Hover Glow Effect */}
                                     {table.type === "vip" && (
-                                        <div className="absolute inset-0 rounded-[24px] bg-gradient-to-tr from-[#C5A059]/0 via-[#C5A059]/5 to-[#C5A059]/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                        <div className="absolute inset-0 rounded-[24px] bg-gradient-to-tr from-action-primary/0 via-action-primary/5 to-action-primary/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                                     )}
                                 </motion.div>
                             ))}

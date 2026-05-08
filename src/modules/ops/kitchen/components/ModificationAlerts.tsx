@@ -66,42 +66,42 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-            className="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 dark:ring-white/5 group"
+            className="w-full bg-surface-card dark:bg-surface-sidebar border border-subtle dark:border-default rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 dark:ring-white/5 group"
         >
             {/* Ticket Header */}
-            <div className="relative h-2 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 w-full" />
+            <div className="relative h-2 bg-gradient-to-r from-status-warning via-status-warning to-status-warning w-full" />
 
             <div className="p-6 md:p-8">
                 {/* Header Row */}
                 <div className="flex items-start justify-between mb-8">
                     <div className="flex items-center gap-5">
-                        <div className="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center border border-amber-200 dark:border-amber-500/20 shadow-inner">
-                            <AlertTriangle className="w-8 h-8 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
+                        <div className="w-16 h-16 rounded-2xl bg-status-warning dark:bg-status-warning/20 flex items-center justify-center border border-amber-200 dark:border-amber-500/20 shadow-inner">
+                            <AlertTriangle className="w-8 h-8 text-status-warning dark:text-status-warning" strokeWidth={1.5} />
                         </div>
                         <div>
                             <div className="flex items-center gap-3 mb-1">
-                                <span className="font-serif font-black italic text-2xl md:text-3xl text-neutral-900 dark:text-white tracking-tight">Table {tableNumber}</span>
-                                <span className="px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-black uppercase tracking-widest border border-red-200 dark:border-red-800 animate-pulse">
+                                <span className="font-serif font-black italic text-2xl md:text-3xl text-primary dark:text-white tracking-tight">Table {tableNumber}</span>
+                                <span className="px-2 py-0.5 rounded-full bg-status-danger dark:bg-status-danger/30 text-status-danger dark:text-status-danger text-[10px] font-black uppercase tracking-widest border border-red-200 dark:border-red-800 animate-pulse">
                                     Prioritaire
                                 </span>
                             </div>
-                            <div className="flex items-center gap-2 text-neutral-500 text-xs font-bold uppercase tracking-wider">
+                            <div className="flex items-center gap-2 text-secondary text-xs font-bold uppercase tracking-wider">
                                 <Clock className="w-3.5 h-3.5" />
                                 <span>Il y a {String(timeSinceRequest)} min</span>
-                                <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
-                                <span className="text-amber-600 dark:text-amber-400">{String(modification.requestedBy || 'Chef')}</span>
+                                <span className="w-1 h-1 rounded-full bg-surface-tertiary dark:bg-surface-sidebar" />
+                                <span className="text-status-warning dark:text-status-warning">{String(modification.requestedBy || 'Chef')}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Main Content Card */}
-                <div className="bg-neutral-50 dark:bg-black/20 rounded-3xl p-6 border border-neutral-100 dark:border-white/5 mb-8">
-                    <div className="flex items-center gap-4 mb-6 pb-6 border-b border-neutral-200 dark:border-white/10">
-                        <div className="w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center shrink-0">
-                            <ChefHat className="w-5 h-5 text-neutral-600 dark:text-neutral-400" strokeWidth={1.5} />
+                <div className="bg-surface-bg dark:bg-surface-sidebar/20 rounded-3xl p-6 border border-subtle dark:border-white/5 mb-8">
+                    <div className="flex items-center gap-4 mb-6 pb-6 border-b border-subtle dark:border-subtle">
+                        <div className="w-10 h-10 rounded-full bg-surface-bg dark:bg-surface-sidebar flex items-center justify-center shrink-0">
+                            <ChefHat className="w-5 h-5 text-secondary dark:text-muted" strokeWidth={1.5} />
                         </div>
-                        <span className="font-serif font-medium text-xl md:text-2xl text-neutral-900 dark:text-white leading-none">
+                        <span className="font-serif font-medium text-xl md:text-2xl text-primary dark:text-white leading-none">
                             {itemName}
                         </span>
                     </div>
@@ -109,12 +109,12 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                     <div className="space-y-4">
                         {removedIngredients.length > 0 && (
                             <div className="flex items-start gap-4">
-                                <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center shrink-0 border border-red-200 dark:border-red-800/30">
-                                    <Minus className="w-4 h-4 text-red-600 dark:text-red-400" />
+                                <div className="w-8 h-8 rounded-full bg-status-danger dark:bg-status-danger/20 flex items-center justify-center shrink-0 border border-red-200 dark:border-red-800/30">
+                                    <Minus className="w-4 h-4 text-status-danger dark:text-status-danger" />
                                 </div>
                                 <div className="pt-1.5">
-                                    <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Retirer</p>
-                                    <p className="font-medium text-neutral-900 dark:text-neutral-200 text-lg leading-tight line-through decoration-red-500/50 decoration-2">
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Retirer</p>
+                                    <p className="font-medium text-primary dark:text-muted text-lg leading-tight line-through decoration-red-500/50 decoration-2">
                                         {removedIngredients.join(', ')}
                                     </p>
                                 </div>
@@ -123,12 +123,12 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
 
                         {addedIngredients.length > 0 && (
                             <div className="flex items-start gap-4">
-                                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center shrink-0 border border-green-200 dark:border-green-800/30">
-                                    <Plus className="w-4 h-4 text-green-600 dark:text-green-400" />
+                                <div className="w-8 h-8 rounded-full bg-status-success dark:bg-status-success/20 flex items-center justify-center shrink-0 border border-green-200 dark:border-green-800/30">
+                                    <Plus className="w-4 h-4 text-status-success dark:text-status-success" />
                                 </div>
                                 <div className="pt-1.5">
-                                    <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Ajouter</p>
-                                    <p className="font-medium text-neutral-900 dark:text-neutral-200 text-lg leading-tight">
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Ajouter</p>
+                                    <p className="font-medium text-primary dark:text-muted text-lg leading-tight">
                                         {addedIngredients.join(', ')}
                                     </p>
                                 </div>
@@ -136,11 +136,11 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                         )}
 
                         {newNotes && (
-                            <div className="flex items-start gap-4 p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30">
-                                <MessageSquare className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                            <div className="flex items-start gap-4 p-4 rounded-2xl bg-surface-tertiary dark:bg-action-primary/10 border border-focus dark:border-focus/30">
+                                <MessageSquare className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1 opacity-70">Note Client</p>
-                                    <p className="font-serif italic text-blue-900 dark:text-blue-100 text-lg leading-snug">
+                                    <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-1 opacity-70">Note Client</p>
+                                    <p className="font-serif italic text-brand dark:text-brand text-lg leading-snug">
                                         "{newNotes}"
                                     </p>
                                 </div>
@@ -149,7 +149,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
 
                         {/* Fallback */}
                         {!removedIngredients.length && !addedIngredients.length && !newNotes && (
-                            <div className="p-4 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 italic">
+                            <div className="p-4 rounded-xl bg-surface-bg dark:bg-surface-sidebar text-secondary dark:text-muted italic">
                                 "{modification.description}"
                             </div>
                         )}
@@ -163,7 +163,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                         placeholder="Ajouter une note de cuisine (optionnel)..."
                         value={responseNote}
                         onChange={(e) => setResponseNote(e.target.value)}
-                        className="w-full px-6 py-4 bg-neutral-50 dark:bg-black/40 border border-neutral-200 dark:border-neutral-800 rounded-2xl text-base text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all font-medium"
+                        className="w-full px-6 py-4 bg-surface-bg dark:bg-surface-sidebar/40 border border-subtle dark:border-default rounded-2xl text-base text-primary dark:text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all font-medium"
                     />
                 </div>
 
@@ -172,7 +172,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                     <button
                         onClick={handleReject}
                         disabled={isResponding}
-                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl border-2 border-transparent bg-neutral-100 dark:bg-white/5 text-neutral-500 hover:bg-red-50 hover:text-red-600 hover:border-red-100 dark:hover:bg-red-900/20 dark:hover:text-red-400 dark:hover:border-red-900/30 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50"
+                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl border-2 border-transparent bg-surface-bg dark:bg-surface-card/5 text-secondary hover:bg-surface-bg hover:text-status-danger hover:border-red-100 dark:hover:bg-status-danger/20 dark:hover:text-status-danger dark:hover:border-red-900/30 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50"
                     >
                         <X className="w-5 h-5" />
                         <span>Refuser</span>
@@ -180,7 +180,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                     <button
                         onClick={handleApprove}
                         disabled={isResponding}
-                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-black hover:bg-green-600 dark:hover:bg-green-400 hover:text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-green-500/25 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50 disabled:scale-100"
+                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-surface-sidebar dark:bg-surface-card text-white dark:text-primary hover:bg-status-success dark:hover:bg-status-success hover:text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-green-500/25 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50 disabled:scale-100"
                     >
                         <Check className="w-5 h-5" />
                         <span>Approuver</span>
@@ -221,7 +221,7 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-[200] bg-neutral-900/60 backdrop-blur-xl"
+                        className="fixed inset-0 z-[200] bg-surface-sidebar/60 backdrop-blur-xl"
                     />
 
                     {/* Floating Panel Container */}
@@ -231,28 +231,28 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -40, scale: 0.95 }}
                             transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-                            className="bg-white/90 dark:bg-black/90 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden border border-white/20 dark:border-white/10 ring-1 ring-black/5 pointer-events-auto"
+                            className="bg-surface-card/90 dark:bg-surface-sidebar/90 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden border border-default dark:border-subtle ring-1 ring-black/5 pointer-events-auto"
                         >
                             {/* Panel Header */}
-                            <div className="relative shrink-0 px-8 py-6 border-b border-neutral-200/50 dark:border-white/5 flex items-center justify-between">
+                            <div className="relative shrink-0 px-8 py-6 border-b border-subtle/50 dark:border-white/5 flex items-center justify-between">
                                 <div>
-                                    <h2 className="font-serif font-bold text-2xl text-neutral-900 dark:text-white tracking-tight">
+                                    <h2 className="font-serif font-bold text-2xl text-primary dark:text-white tracking-tight">
                                         Modifications
                                     </h2>
-                                    <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium mt-0.5">
+                                    <p className="text-secondary dark:text-muted text-sm font-medium mt-0.5">
                                         Gérez les demandes spéciales
                                     </p>
                                 </div>
 
                                 <button
                                     onClick={onClose}
-                                    className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-white/10 flex items-center justify-center text-neutral-500 hover:bg-neutral-200 dark:hover:bg-white/20 transition-all active:scale-95"
+                                    className="w-10 h-10 rounded-full bg-surface-bg dark:bg-surface-card/10 flex items-center justify-center text-secondary hover:bg-surface-bg dark:hover:bg-surface-card/20 transition-all active:scale-95"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
 
                                 {/* Decoration */}
-                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neutral-200 dark:via-white/10 to-transparent" />
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-surface-bg dark:via-white/10 to-transparent" />
                             </div>
 
                             {/* Panel Content - Scrollable */}
@@ -264,13 +264,13 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                                             animate={{ opacity: 1, scale: 1 }}
                                             className="flex flex-col items-center justify-center py-20 text-center"
                                         >
-                                            <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-green-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/30 mb-8 animate-in fade-in zoom-in duration-500">
+                                            <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-status-success to-status-success flex items-center justify-center shadow-lg shadow-green-500/30 mb-8 animate-in fade-in zoom-in duration-500">
                                                 <Check className="w-10 h-10 text-white" strokeWidth={3} />
                                             </div>
-                                            <h3 className="font-serif font-medium text-2xl text-neutral-900 dark:text-white mb-2">
+                                            <h3 className="font-serif font-medium text-2xl text-primary dark:text-white mb-2">
                                                 Tout est en ordre
                                             </h3>
-                                            <p className="text-neutral-500 max-w-[200px] leading-relaxed">
+                                            <p className="text-secondary max-w-[200px] leading-relaxed">
                                                 Aucune demande de modification en attente pour le moment.
                                             </p>
                                         </motion.div>
@@ -287,9 +287,9 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
 
                             {/* Footer Status Bar */}
                             {modificationsWithDetails.length > 0 && (
-                                <div className="shrink-0 px-8 py-4 bg-neutral-50 dark:bg-white/5 border-t border-neutral-200 dark:border-white/5 flex items-center justify-between text-xs font-bold uppercase tracking-widest text-neutral-500">
+                                <div className="shrink-0 px-8 py-4 bg-surface-bg dark:bg-surface-card/5 border-t border-subtle dark:border-white/5 flex items-center justify-between text-xs font-bold uppercase tracking-widest text-secondary">
                                     <span>En attente</span>
-                                    <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-2 py-1 rounded-md">
+                                    <span className="bg-status-warning dark:bg-status-warning/30 text-status-warning dark:text-status-warning px-2 py-1 rounded-md">
                                         {modificationsWithDetails.length} Ticket{modificationsWithDetails.length > 1 ? 's' : ''}
                                     </span>
                                 </div>

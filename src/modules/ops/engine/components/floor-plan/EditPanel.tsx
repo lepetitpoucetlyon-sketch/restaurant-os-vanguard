@@ -60,7 +60,7 @@ export const EditPanel = ({
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={onClose}
-                    className="w-8 h-8 flex items-center justify-center bg-white dark:bg-bg-secondary border border-border rounded-full text-text-muted hover:text-text-primary transition-all shadow-premium"
+                    className="w-8 h-8 flex items-center justify-center bg-surface-card dark:bg-bg-secondary border border-border rounded-full text-text-muted hover:text-text-primary transition-all shadow-premium"
                 >
                     <X className="w-4 h-4" />
                 </motion.button>
@@ -82,7 +82,7 @@ export const EditPanel = ({
                                 className={cn(
                                     "flex flex-col items-center justify-center p-4 rounded-2xl border transition-all relative overflow-hidden",
                                     selectedTable.status === status
-                                        ? "bg-white dark:bg-bg-secondary border-accent-gold shadow-glow"
+                                        ? "bg-surface-card dark:bg-bg-secondary border-accent-gold shadow-glow"
                                         : "bg-bg-tertiary/50 border-border opacity-60 hover:opacity-100"
                                 )}
                             >
@@ -111,8 +111,8 @@ export const EditPanel = ({
                                 className={cn(
                                     "flex items-center justify-between p-5 rounded-2xl border transition-all group",
                                     selectedTable.zoneId === zone.id
-                                        ? "bg-white dark:bg-bg-secondary border-accent-gold shadow-glow text-text-primary"
-                                        : "bg-bg-tertiary/50 border-border text-text-muted hover:border-text-primary hover:bg-white dark:hover:bg-bg-secondary"
+                                        ? "bg-surface-card dark:bg-bg-secondary border-accent-gold shadow-glow text-text-primary"
+                                        : "bg-bg-tertiary/50 border-border text-text-muted hover:border-text-primary hover:bg-surface-card dark:hover:bg-bg-secondary"
                                 )}
                             >
                                 <div className="flex items-center gap-4">
@@ -139,7 +139,7 @@ export const EditPanel = ({
                         className={cn(
                             "flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 transition-all group",
                             selectedTable.shape === 'rect'
-                                ? "border-accent-gold bg-white dark:bg-bg-secondary shadow-glow text-accent-gold"
+                                ? "border-accent-gold bg-surface-card dark:bg-bg-secondary shadow-glow text-accent-gold"
                                 : "border-border bg-bg-tertiary/50 text-text-muted hover:border-text-primary"
                         )}
                     >
@@ -153,7 +153,7 @@ export const EditPanel = ({
                         className={cn(
                             "flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 transition-all group",
                             selectedTable.shape === 'circle'
-                                ? "border-accent-gold bg-white dark:bg-bg-secondary shadow-glow text-accent-gold"
+                                ? "border-accent-gold bg-surface-card dark:bg-bg-secondary shadow-glow text-accent-gold"
                                 : "border-border bg-bg-tertiary/50 text-text-muted hover:border-text-primary"
                         )}
                     >
@@ -196,14 +196,14 @@ export const EditPanel = ({
                         <motion.button
                             whileTap={{ scale: 0.9 }}
                             onClick={async () => await updateTable(selectedTable.id, { seats: Math.min(20, selectedTable.seats + 1) })}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-text-primary hover:bg-black text-white transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-text-primary hover:bg-surface-sidebar text-white transition-colors"
                         >
                             <Plus className="w-4 h-4" />
                         </motion.button>
                     </div>
                 </div>
 
-                <div className="pt-6 border-t border-neutral-100 dark:border-border">
+                <div className="pt-6 border-t border-subtle dark:border-border">
                     <motion.button
                         whileHover={{ scale: 1.02, backgroundColor: "rgb(254 226 226 / 0.1)", color: "#EF4444" }}
                         whileTap={{ scale: 0.98 }}
@@ -213,7 +213,7 @@ export const EditPanel = ({
                                 onClose();
                             }
                         }}
-                        className="w-full flex items-center justify-center gap-2 text-red-500 bg-red-500/10 dark:bg-red-500/20 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all"
+                        className="w-full flex items-center justify-center gap-2 text-status-danger bg-status-danger/10 dark:bg-status-danger/20 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all"
                     >
                         <Trash2 className="w-4 h-4" />
                         Supprimer la table

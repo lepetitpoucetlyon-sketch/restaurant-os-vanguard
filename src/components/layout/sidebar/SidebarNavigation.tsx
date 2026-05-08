@@ -149,7 +149,7 @@ export function SidebarNavigation({
                                                         className={cn(
                                                             "flex items-center rounded-2xl text-[13px] font-medium transition-all duration-700 relative overflow-hidden outline-none",
                                                             isActive
-                                                                ? "text-text-primary bg-bg-secondary dark:bg-white/10 border border-border/50 shadow-premium font-bold"
+                                                                ? "text-text-primary bg-bg-secondary dark:bg-surface-card/10 border border-border/50 shadow-premium font-bold"
                                                                 : "text-text-secondary dark:text-text-primary/80 hover:text-text-primary hover:bg-bg-tertiary/50",
                                                             isReallyCollapsed ? "justify-center h-12 w-12 mx-auto" : "px-5 py-3.5 gap-4 mx-0"
                                                         )}

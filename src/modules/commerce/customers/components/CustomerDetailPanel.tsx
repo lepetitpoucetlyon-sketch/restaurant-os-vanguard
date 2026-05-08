@@ -19,19 +19,19 @@ export function CustomerDetailPanel({
 }: CustomerDetailPanelProps) {
     return (
         <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-[100] p-4 md:p-8 animate-in fade-in duration-500"
+            className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl flex items-center justify-center z-[100] p-4 md:p-8 animate-in fade-in duration-500"
             onClick={onClose}
         >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.6)] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden border border-white/10"
+                className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.6)] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden border border-subtle"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
                 <div className="bg-[#121212] p-6 md:p-10 relative overflow-hidden text-white border-b border-white/5">
                     <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 relative z-10">
-                        <div className="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-2xl md:text-4xl font-serif font-light italic shadow-2xl text-accent">
+                        <div className="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] bg-surface-card/5 backdrop-blur-md border border-subtle flex items-center justify-center text-2xl md:text-4xl font-serif font-light italic shadow-2xl text-accent">
                             {(customer.firstName || '').charAt(0)}
                             {(customer.lastName || '').charAt(0)}
                         </div>
@@ -90,12 +90,12 @@ export function CustomerDetailPanel({
                         {/* Contact Info */}
                         <div className="p-10 space-y-12">
                             <div className="grid grid-cols-2 gap-8">
-                                <div className="p-8 rounded-3xl bg-white/5 border border-white/10 shadow-sm group hover:border-accent/40 transition-all">
+                                <div className="p-8 rounded-3xl bg-surface-card/5 border border-subtle shadow-sm group hover:border-accent/40 transition-all">
                                     <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-4">
                                         Ligne Directe
                                     </p>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+                                        <div className="w-12 h-12 rounded-2xl bg-surface-card/5 flex items-center justify-center">
                                             <Phone strokeWidth={1.5} className="w-5 h-5 text-accent" />
                                         </div>
                                         <span className="text-base font-mono font-bold text-white tracking-tight">
@@ -103,12 +103,12 @@ export function CustomerDetailPanel({
                                         </span>
                                     </div>
                                 </div>
-                                <div className="p-8 rounded-3xl bg-white/5 border border-white/10 shadow-sm group hover:border-accent/40 transition-all">
+                                <div className="p-8 rounded-3xl bg-surface-card/5 border border-subtle shadow-sm group hover:border-accent/40 transition-all">
                                     <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-4">
                                         Canal Privilégié
                                     </p>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+                                        <div className="w-12 h-12 rounded-2xl bg-surface-card/5 flex items-center justify-center">
                                             <Mail strokeWidth={1.5} className="w-5 h-5 text-accent" />
                                         </div>
                                         <span className="text-base font-bold text-white truncate italic">
@@ -128,7 +128,7 @@ export function CustomerDetailPanel({
                                     {customer.preferences.map((pref, i) => (
                                         <span
                                             key={i}
-                                            className="px-6 py-3 bg-white/5 rounded-2xl text-[12px] font-bold text-white border border-white/10 shadow-sm italic group-hover:border-accent/40 transition-all"
+                                            className="px-6 py-3 bg-surface-card/5 rounded-2xl text-[12px] font-bold text-white border border-subtle shadow-sm italic group-hover:border-accent/40 transition-all"
                                         >
                                             {pref}
                                         </span>
@@ -144,13 +144,13 @@ export function CustomerDetailPanel({
                     <Button
                         variant="ghost"
                         onClick={onClose}
-                        className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white border border-white/10 transition-all"
+                        className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white border border-subtle transition-all"
                     >
                         Fermer le Profil
                     </Button>
                     <Button
                         onClick={onNewReservation}
-                        className="flex-1 h-16 bg-accent hover:bg-white text-bg-primary rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-amber-500/10 transition-all flex items-center justify-center gap-4"
+                        className="flex-1 h-16 bg-accent hover:bg-surface-card text-bg-primary rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-amber-500/10 transition-all flex items-center justify-center gap-4"
                     >
                         <Calendar strokeWidth={1.5} className="w-5 h-5" />
                         Programmer une Nouvelle Table

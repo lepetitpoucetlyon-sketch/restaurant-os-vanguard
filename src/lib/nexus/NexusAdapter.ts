@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { NexusInterceptor } from './NexusInterceptor';
 import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
 import { TenantIdSchema } from '@/domain/schemas/ui';
@@ -8,41 +9,9 @@ import { TenantIdSchema } from '@/domain/schemas/ui';
  * Data Abstraction Layer for total portability and high-speed testing.
  */
 
-export type NexusQueryOperator = 
-    | '==' | '!=' | '<' | '<=' | '>' | '>=' 
-    | 'array-contains' | 'array-contains-unknown' 
-    | 'in' | 'not-in';
+import { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext } from './types';
+export type { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext };
 
-export interface INexusQueryOptions {
-    orderBy?: { field: string; direction: 'asc' | 'desc' };
-    limit?: number;
-    where?: { field: string; operator: NexusQueryOperator; value: string | number | boolean | string[] | number[] }[];
-}
-
-export interface INexusBatch {
-    set<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): void;
-    update<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): void;
-    increment(path: string, field: string, amount: number): void;
-    delete(path: string): void;
-    commit(): Promise<void>;
-}
-
-export interface INexusAdapter {
-    get<T = import('@/shared/nexus-contract').SovereignData>(path: string): Promise<T | null>;
-    query<T = import('@/shared/nexus-contract').SovereignData>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]>;
-    onSnapshot<T = import('@/shared/nexus-contract').SovereignData>(
-        path: string, 
-        callback: (data: T) => void, 
-        options?: INexusQueryOptions & { onError?: (error: Error) => void }
-    ): () => void;
-    batch(): INexusBatch;
-    set<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T, options?: { merge?: boolean }): Promise<void>;
-    update<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: Partial<T>): Promise<void>;
-    increment(path: string, field: string, amount: number): Promise<void>;
-    create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void>;
-    delete(path: string): Promise<void>;
-    generateId(collectionPath: string): string;
-}
 
 /**
  * 🏛️ Nexus Singleton Manager
@@ -54,11 +23,13 @@ class NexusManager {
     private _tenantOverride: string | null = null;
 
     set adapter(adapter: INexusAdapter) {
-        this._adapter = adapter;
+        // 🛡️ SHIELD: Automatically wrap any adapter with the Sovereign Interceptor
+        this._adapter = new NexusInterceptor(adapter, SovereignGuard, () => this.activeTenant);
+        
         if (!this._isSimulacraActive) {
             this._realAdapter = adapter;
         }
-        logger.info(`[Nexus] Adapter registered: ${adapter.constructor.name}`);
+        logger.info(`[Nexus] Adapter registered and shielded: ${adapter.constructor.name}`);
     }
 
     get adapter(): INexusAdapter {
@@ -84,7 +55,9 @@ class NexusManager {
         }
 
         const { SimulacraAdapter } = await import('@/lib/nexus/adapters/SimulacraAdapter');
-        this._adapter = new SimulacraAdapter(this._realAdapter, forkId);
+        
+        const simulacra = new SimulacraAdapter(this._realAdapter, forkId);
+        this._adapter = new NexusInterceptor(simulacra, SovereignGuard, () => this.activeTenant);
         this._isSimulacraActive = true;
         
         logger.warn(`[Nexus] ⚠️ FORK ACTIVE: System entered Parallel Reality [${forkId}]. Firestore is now Read-Only.`);
@@ -93,7 +66,8 @@ class NexusManager {
     deactivateSimulacraMode() {
         if (!this._isSimulacraActive || !this._realAdapter) return;
         
-        this._adapter = this._realAdapter;
+        // Restore the shielded version
+        this._adapter = new NexusInterceptor(this._realAdapter, SovereignGuard, () => this.activeTenant);
         this._isSimulacraActive = false;
         
         logger.info("[Nexus] Reality Restored: System returned to Firestore production stream.");
@@ -128,9 +102,9 @@ class NexusManager {
             resolvedPath = `tenants/${tenantId}/${relativePath}`;
         }
 
-        // 🛡️ SOVEREIGN GUARD - Final Barrier
-        // Ensures that the resulting path is compatible with the current anchored session.
-        SovereignGuard.validateAccess(resolvedPath, this._tenantOverride || undefined);
+        // 🛡️ NOTE: Access validation is handled by NexusInterceptor.intercept()
+        // which properly awaits the async SovereignGuard. Calling it here (sync context)
+        // would cause unhandled promise rejections on tenant mismatches.
 
         return resolvedPath;
     }

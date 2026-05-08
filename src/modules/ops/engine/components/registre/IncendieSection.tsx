@@ -11,23 +11,23 @@ export function IncendieSection() {
     return (
         <div className="max-w-5xl mx-auto space-y-8">
             {/* Header */}
-            <div className="bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/5 -mr-24 -mt-24 rounded-full blur-3xl" />
+            <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-status-danger/5 -mr-24 -mt-24 rounded-full blur-3xl" />
                 <div className="relative z-10 flex items-start gap-6">
-                    <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/10 shadow-sm">
-                        <Flame strokeWidth={1.5} className="w-8 h-8 text-red-500" />
+                    <div className="w-16 h-16 rounded-2xl bg-status-danger/10 flex items-center justify-center border border-red-500/10 shadow-sm">
+                        <Flame strokeWidth={1.5} className="w-8 h-8 text-status-danger" />
                     </div>
                     <div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Registre de Sécurité Incendie</h2>
-                        <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{String(incendieDoc?.description || 'Registre de sécurité incendie en attente de synchronisation.')}</p>
+                        <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{String(incendieDoc?.name || 'Registre de sécurité incendie en attente de synchronisation.')}</p>
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">MAJ : {String(incendieDoc?.lastUpdated || 'N/A')}</span>
+                                <span className="text-[10px] font-mono font-bold">MAJ : {String(incendieDoc?.updatedAt || 'N/A')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">Révision : {String(incendieDoc?.nextReview || 'N/A')}</span>
+                                <span className="text-[10px] font-mono font-bold">Révision : {String(incendieDoc?.validUntil || 'N/A')}</span>
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@ export function IncendieSection() {
                     </h3>
                     <span className="text-[10px] font-mono font-bold text-text-muted">{(extincteurs)?.length || 0} équipements</span>
                 </div>
-                <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
+                <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
                     <table className="w-full text-sm text-left">
                         <thead>
                             <tr className="bg-bg-tertiary/30 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
@@ -92,7 +92,7 @@ export function IncendieSection() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {(exercices || []).map((ex: any) => (
                         <div key={ex.id} className={cn(
-                            "bg-white dark:bg-bg-secondary rounded-2xl border p-8 shadow-sm relative overflow-hidden",
+                            "bg-surface-card dark:bg-bg-secondary rounded-2xl border p-8 shadow-sm relative overflow-hidden",
                             ex.status === 'planifie' ? 'border-dashed border-accent/30' : 'border-border'
                         )}>
                             {ex.status === 'planifie' && (
@@ -125,12 +125,12 @@ export function IncendieSection() {
             </div>
 
             {/* Consignes */}
-            <div className="bg-red-50 dark:bg-red-500/5 rounded-2xl border border-red-200 dark:border-red-500/10 p-8">
+            <div className="bg-surface-bg dark:bg-status-danger/5 rounded-2xl border border-red-200 dark:border-red-500/10 p-8">
                 <div className="flex items-start gap-4">
-                    <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                    <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-status-danger mt-0.5 shrink-0" />
                     <div>
-                        <h4 className="font-serif font-bold text-red-900 dark:text-red-300 mb-2">Consignes de Sécurité</h4>
-                        <ul className="text-sm text-red-800 dark:text-red-200/80 space-y-2 leading-relaxed">
+                        <h4 className="font-serif font-bold text-status-danger dark:text-status-danger mb-2">Consignes de Sécurité</h4>
+                        <ul className="text-sm text-status-danger dark:text-status-danger/80 space-y-2 leading-relaxed">
                             <li>• Les issues de secours doivent rester dégagées en permanence</li>
                             <li>• Exercice d'évacuation obligatoire tous les 6 mois</li>
                             <li>• Vérification annuelle des extincteurs par un organisme agréé</li>

@@ -44,16 +44,16 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                 {/* Waste Form */}
                 <motion.div variants={fadeInUp} className="lg:col-span-8">
-                    <div className="bg-white/80 dark:bg-neutral-900/60 backdrop-blur-xl rounded-[2rem] p-8 md:p-10 border border-neutral-200/50 dark:border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none">
+                    <div className="bg-surface-card/80 dark:bg-surface-sidebar/60 backdrop-blur-xl rounded-[2rem] p-8 md:p-10 border border-subtle/50 dark:border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none">
                         <div className="flex items-center gap-4 mb-10">
                             <div className="w-12 h-12 rounded-2xl bg-error/10 dark:bg-error/20 flex items-center justify-center border border-error/20">
                                 <Trash2 className="w-6 h-6 text-error" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-serif font-black text-neutral-900 dark:text-white tracking-tight italic">
+                                <h3 className="text-2xl font-serif font-black text-primary dark:text-white tracking-tight italic">
                                     Déclarer une <span className="text-secondary">Perte</span>
                                 </h3>
-                                <p className="text-[10px] uppercase tracking-[0.3em] font-black text-neutral-400 mt-1">
+                                <p className="text-[10px] uppercase tracking-[0.3em] font-black text-muted mt-1">
                                     Saisie rapide des écarts de stock
                                 </p>
                             </div>
@@ -72,7 +72,7 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                                 </div>
 
                                 <div className="lg:col-span-5 space-y-3 group">
-                                    <label className="text-[10px] font-black uppercase text-neutral-400 tracking-[0.25em] ml-1 group-focus-within:text-error transition-all flex justify-between items-center">
+                                    <label className="text-[10px] font-black uppercase text-muted tracking-[0.25em] ml-1 group-focus-within:text-error transition-all flex justify-between items-center">
                                         <span>Quantité à déduire</span>
                                         <span className="text-[9px] lowercase font-serif italic normal-case tracking-normal text-error opacity-0 group-focus-within:opacity-100 transition-opacity">champ obligatoire</span>
                                     </label>
@@ -80,9 +80,9 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                                         <input
                                             type="number"
                                             placeholder="0.00"
-                                            className="w-full h-[60px] pl-6 pr-20 bg-neutral-50 dark:bg-white/[0.03] border border-neutral-200 dark:border-white/10 rounded-[1.25rem] font-mono font-black text-xl focus:ring-4 focus:ring-error/10 focus:border-error outline-none transition-all shadow-inner placeholder:text-neutral-300 dark:placeholder:text-white/10"
+                                            className="w-full h-[60px] pl-6 pr-20 bg-surface-bg dark:bg-surface-card/[0.03] border border-subtle dark:border-subtle rounded-[1.25rem] font-mono font-black text-xl focus:ring-4 focus:ring-error/10 focus:border-error outline-none transition-all shadow-inner placeholder:text-muted dark:placeholder:text-white/10"
                                         />
-                                        <div className="absolute right-2 top-2 bottom-2 w-14 bg-neutral-900 dark:bg-white dark:text-neutral-900 rounded-xl flex items-center justify-center font-black text-white text-[11px] uppercase tracking-widest shadow-xl pointer-events-none">
+                                        <div className="absolute right-2 top-2 bottom-2 w-14 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-xl flex items-center justify-center font-black text-white text-[11px] uppercase tracking-widest shadow-xl pointer-events-none">
                                             KG
                                         </div>
                                     </div>
@@ -91,9 +91,9 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
 
                             <div className="space-y-6 pt-2">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-100 dark:via-white/5 to-transparent" />
-                                    <label className="text-[10px] font-black uppercase text-neutral-300 dark:text-neutral-600 tracking-[0.4em] whitespace-nowrap">Motif de la Saisie</label>
-                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-100 dark:via-white/5 to-transparent" />
+                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-surface-bg dark:via-white/5 to-transparent" />
+                                    <label className="text-[10px] font-black uppercase text-muted dark:text-secondary tracking-[0.4em] whitespace-nowrap">Motif de la Saisie</label>
+                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-surface-bg dark:via-white/5 to-transparent" />
                                 </div>
                                 
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -108,7 +108,7 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                                             whileTap={{ scale: 0.98 }}
                                             type="button"
                                             key={reason.label}
-                                            className="h-24 flex flex-col items-center justify-center gap-3 border border-neutral-200 dark:border-white/5 bg-white dark:bg-white/[0.02] hover:bg-neutral-900 dark:hover:bg-white hover:border-transparent hover:text-white dark:hover:text-neutral-900 rounded-[2rem] font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm"
+                                            className="h-24 flex flex-col items-center justify-center gap-3 border border-subtle dark:border-white/5 bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-sidebar dark:hover:bg-surface-card hover:border-transparent hover:text-white dark:hover:text-primary rounded-[2rem] font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm"
                                         >
                                             <span className="text-2xl opacity-40 group-hover/btn:opacity-100 group-hover/btn:scale-125 transition-all duration-300">{reason.icon}</span>
                                             {reason.label}
@@ -122,7 +122,7 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                                 whileHover={{ scale: 1.01 }}
                                 whileTap={{ scale: 0.99 }}
                             >
-                                <Button className="w-full h-[72px] bg-neutral-900 dark:bg-white dark:text-neutral-900 text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:shadow-error/20 dark:hover:shadow-white/20 transition-all flex items-center justify-center gap-4 overflow-hidden relative group">
+                                <Button className="w-full h-[72px] bg-surface-sidebar dark:bg-surface-card dark:text-primary text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:shadow-error/20 dark:hover:shadow-white/20 transition-all flex items-center justify-center gap-4 overflow-hidden relative group">
                                     <div className="absolute inset-x-0 bottom-0 h-1 bg-error translate-y-full group-hover:translate-y-0 transition-transform" />
                                     Enregistrer la Perte <Trash2 className="w-5 h-5 ml-1 opacity-30 group-hover:opacity-100 group-hover:rotate-12 transition-all" />
                                 </Button>
@@ -136,7 +136,7 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                     <motion.div
                         variants={fadeInUp}
                         whileHover={{ y: -5 }}
-                        className="p-10 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black dark:from-white dark:via-neutral-100 dark:to-neutral-200 rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_70px_rgba(255,255,255,0.1)] relative overflow-hidden group"
+                        className="p-10 bg-gradient-to-br from-surface-sidebar via-neutral-950 to-black dark:from-white dark:via-surface-bg dark:to-surface-bg rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_70px_rgba(255,255,255,0.1)] relative overflow-hidden group"
                     >
                         {/* Decorative background element */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-error/10 rounded-full blur-[100px] -mr-32 -mt-32 group-hover:bg-error/20 transition-all duration-700" />
@@ -144,7 +144,7 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-8">
                                 <div className="w-2 h-2 rounded-full bg-error shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
-                                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-400 dark:text-neutral-500">
+                                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted dark:text-secondary">
                                     Impact Financier
                                 </h4>
                             </div>
@@ -153,7 +153,7 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.5 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="text-5xl font-mono font-black text-white dark:text-neutral-900 flex items-baseline gap-1"
+                                    className="text-5xl font-mono font-black text-white dark:text-primary flex items-baseline gap-1"
                                 >
                                     <span className="text-error text-[0.6em] font-black">-</span>
                                     {formatCurrency(124.50)}
@@ -163,14 +163,14 @@ export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
                                 </p>
                             </div>
 
-                            <div className="mt-12 pt-8 border-t border-white/10 dark:border-black/5">
-                                <p className="text-[13px] text-neutral-300 dark:text-neutral-600 font-medium leading-relaxed">
+                            <div className="mt-12 pt-8 border-t border-subtle dark:border-black/5">
+                                <p className="text-[13px] text-muted dark:text-secondary font-medium leading-relaxed">
                                     Ce mois-ci, les pertes représentent
                                     <span className="block text-2xl font-serif font-black text-error mt-2 italic tracking-tighter">
                                         2.4% du CA Total
                                     </span>
                                 </p>
-                                <div className="mt-6 w-full h-1.5 bg-white/5 dark:bg-black/5 rounded-full overflow-hidden">
+                                <div className="mt-6 w-full h-1.5 bg-surface-card/5 dark:bg-surface-sidebar/5 rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: '2.4%' }}

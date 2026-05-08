@@ -102,9 +102,15 @@ export const ChaosMonkey = {
         if (currentStock <= 0) throw new Error("OUT_OF_STOCK");
         
         // Optimistic decrement
-        store.set(stockItemsNodeAtom, (prev: any) => ({
-            ...prev,
-            data: (prev.data || []).map((item: any, idx: number) => idx === 0 ? { ...item, quantity: item.quantity - 1 } : item)
+        store.set(stockItemsNodeAtom, (prev: unknown) => ({
+            ...(prev as object),
+            data: ((prev as Record<string, unknown[]>).data || []).map((item: unknown, idx: number) => {
+                if (idx === 0) {
+                    const typedItem = item as Record<string, unknown> & { quantity: number };
+                    return { ...typedItem, quantity: typedItem.quantity - 1 };
+                }
+                return item;
+            })
         }));
 
         // Simulate DB Latency and potential reject
@@ -136,7 +142,7 @@ export const ChaosMonkey = {
     const choice = targets[Math.floor(Math.random() * targets.length)];
     
     if (choice.type === 'node') {
-        const node = store.get(choice.atom as any) as NexusNode<any>;
+        const node = store.get(choice.atom as unknown as WritableAtom<unknown, unknown[], unknown>) as NexusNode<unknown>;
         const nodeData = node.data || [];
         if (nodeData.length === 0) return;
 
@@ -157,13 +163,13 @@ export const ChaosMonkey = {
         logger.debug(`[Chaos-Monkey] NODE_DRIFT_INJECTED: ${choice.path}`);
         
         // Use functional update to bypass read-only issues
-        store.set(choice.atom as any, (prev: any) => updateNexusNode(prev, { data: corruptedData }));
+        store.set(choice.atom as unknown as WritableAtom<unknown, unknown[], unknown>, (prev: unknown) => updateNexusNode(prev, { data: corruptedData }));
 
         // 🛡️ RECOVERY TRIGGER
         const persistencePath = Nexus.getTenantPath(choice.path);
         setTimeout(() => {
              // - SelfHealingEngine needs a generic WritableAtom which matches the signature
-            SelfHealingEngine.auditAndHeal(choice.atom as any, validHash, persistencePath);
+            SelfHealingEngine.auditAndHeal(choice.atom as unknown as WritableAtom<unknown, unknown[], unknown>, validHash, persistencePath);
         }, 1500);
 
     } else if (choice.type === 'direct' && choice.path === 'haccp/active_session') {

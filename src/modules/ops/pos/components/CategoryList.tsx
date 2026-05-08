@@ -40,7 +40,7 @@ export function CategoryList({ selectedCategory, onSelectCategory, onBack }: Cat
                     onClick={onBack}
                     className="w-full flex flex-col items-center gap-3 p-4 md:p-6 rounded-[24px] text-text-muted hover:bg-bg-tertiary/60 transition-all duration-500 group relative overflow-hidden mb-2"
                 >
-                    <div className="w-8 h-8 rounded-full bg-white dark:bg-white/5 flex items-center justify-center border border-border/50 shadow-sm group-hover:bg-accent-gold group-hover:text-white transition-all">
+                    <div className="w-8 h-8 rounded-full bg-surface-card dark:bg-surface-card/5 flex items-center justify-center border border-border/50 shadow-sm group-hover:bg-accent-gold group-hover:text-white transition-all">
                         <ArrowLeft strokeWidth={1.5} className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
                     </div>
                     <span className="hidden md:block text-[9px] font-black uppercase tracking-[0.3em] group-hover:text-accent-gold transition-colors">{t('pos.back')}</span>
@@ -53,7 +53,7 @@ export function CategoryList({ selectedCategory, onSelectCategory, onBack }: Cat
                     className={cn(
                         "w-full flex flex-col items-center gap-3 p-4 md:p-6 rounded-[24px] transition-all duration-500 group relative overflow-hidden",
                         selectedCategory === "all"
-                            ? "bg-white dark:bg-white/5 text-text-primary shadow-premium border border-accent-gold/20"
+                            ? "bg-surface-card dark:bg-surface-card/5 text-text-primary shadow-premium border border-accent-gold/20"
                             : "text-text-muted hover:bg-bg-tertiary/60"
                     )}
                 >
@@ -75,7 +75,7 @@ export function CategoryList({ selectedCategory, onSelectCategory, onBack }: Cat
                             className={cn(
                                 "w-full flex flex-col items-center gap-3 p-4 md:p-6 rounded-[24px] transition-all duration-500 group relative overflow-hidden",
                                 isActive
-                                    ? "bg-white dark:bg-white/5 text-text-primary shadow-premium border border-accent-gold/30"
+                                    ? "bg-surface-card dark:bg-surface-card/5 text-text-primary shadow-premium border border-accent-gold/30"
                                     : "text-text-muted hover:bg-bg-tertiary/60"
                             )}
                         >

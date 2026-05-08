@@ -70,12 +70,12 @@ export function GestionHuiles() {
         <div className="space-y-8 pb-12">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-[22px] bg-amber-500/10 text-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/5">
+                    <div className="w-12 h-12 rounded-[22px] bg-status-warning/10 text-status-warning flex items-center justify-center shadow-lg shadow-amber-500/5">
                         <Droplet size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Gestion des Huiles</h2>
-                        <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">Suivi des composés polaires (TPOM)</p>
+                        <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Gestion des Huiles</h2>
+                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Suivi des composés polaires (TPOM)</p>
                     </div>
                 </div>
 
@@ -99,11 +99,11 @@ export function GestionHuiles() {
                             whileHover={{ y: -5 }}
                             className="bg-bg-primary rounded-[32px] border border-border p-6 shadow-sm overflow-hidden relative group"
                         >
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-[30px] -mr-12 -mt-12 group-hover:bg-amber-500/10 transition-colors" />
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-status-warning/5 rounded-full blur-[30px] -mr-12 -mt-12 group-hover:bg-status-warning/10 transition-colors" />
                             
                             <div className="flex justify-between items-start mb-4">
                                 <div className="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center border border-border">
-                                    <Droplet size={18} className="text-amber-500" />
+                                    <Droplet size={18} className="text-status-warning" />
                                 </div>
                                 {lastLog ? (
                                     <StatusBadge status={lastLog.status === 'ok' ? 'success' : lastLog.status === 'warning' ? 'warning' : 'error'} label={lastLog.status} />
@@ -157,16 +157,16 @@ export function GestionHuiles() {
                                     <td className="px-8 py-5">
                                         <span className={cn(
                                             "text-xs font-black px-2 py-1 rounded-lg",
-                                            log.status === 'ok' ? "bg-emerald-500/10 text-emerald-600" :
-                                            log.status === 'warning' ? "bg-amber-500/10 text-amber-600" :
-                                            "bg-rose-500/10 text-rose-600"
+                                            log.status === 'ok' ? "bg-status-success/10 text-status-success" :
+                                            log.status === 'warning' ? "bg-status-warning/10 text-status-warning" :
+                                            "bg-status-danger/10 text-status-danger"
                                         )}>
                                             {log.tpomValue}%
                                         </span>
                                     </td>
                                     <td className="px-8 py-5">
                                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-text-muted">
-                                            {log.action === 'changing' && <RefreshCcw size={12} className="text-blue-500" />}
+                                            {log.action === 'changing' && <RefreshCcw size={12} className="text-brand" />}
                                             {log.action === 'changing' ? 'Renouvellement' : log.action === 'fitering' ? 'Filtration' : 'Contrôle Simple'}
                                         </div>
                                     </td>
@@ -211,9 +211,9 @@ export function GestionHuiles() {
                             <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Taux de Composés Polaires (%)</label>
                             <span className={cn(
                                 "text-2xl font-black italic font-serif",
-                                formData.status === 'ok' ? "text-emerald-500" :
-                                formData.status === 'warning' ? "text-amber-500" :
-                                "text-rose-500"
+                                formData.status === 'ok' ? "text-status-success" :
+                                formData.status === 'warning' ? "text-status-warning" :
+                                "text-status-danger"
                             )}>
                                 {formData.tpomValue}%
                             </span>
@@ -228,9 +228,9 @@ export function GestionHuiles() {
                             className="w-full h-2 bg-bg-tertiary rounded-lg appearance-none cursor-pointer accent-accent-gold"
                         />
                         <div className="flex justify-between text-[8px] font-black text-text-muted uppercase tracking-tighter">
-                            <span className="text-emerald-500">CONFORME (&lt;19%)</span>
-                            <span className="text-amber-500">LIMITE (19-25%)</span>
-                            <span className="text-rose-500">CRITIQUE (&gt;25%)</span>
+                            <span className="text-status-success">CONFORME (&lt;19%)</span>
+                            <span className="text-status-warning">LIMITE (19-25%)</span>
+                            <span className="text-status-danger">CRITIQUE (&gt;25%)</span>
                         </div>
                     </div>
 
@@ -259,7 +259,7 @@ export function GestionHuiles() {
 
                     <Button
                         onClick={handleSubmit}
-                        className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-amber-500 text-white hover:bg-amber-600 border border-amber-500/20"
+                        className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-status-warning text-white hover:bg-status-warning border border-amber-500/20"
                     >
                         Valider l'Intervention
                     </Button>

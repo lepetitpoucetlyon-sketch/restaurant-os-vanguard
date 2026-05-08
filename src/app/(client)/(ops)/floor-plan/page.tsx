@@ -67,8 +67,8 @@ export default function FloorPlanPage() {
         updateTable
     } = useTables();
 
-    const currentFloor = floors?.find(f => f.id === currentFloorId) || floors?.[0];
-    const tablesOnCurrentFloor = getTablesForFloor(currentFloorId);
+    const currentFloor = floors?.find((f: any) => f.id === currentFloorId) || floors?.[0];
+    const tablesOnCurrentFloor = getTablesForFloor(currentFloorId as string);
     const selectedTable = (tables as Table[]).find(t => t.id === selectedTableId);
 
     const handleSave = () => {
@@ -100,7 +100,7 @@ export default function FloorPlanPage() {
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="w-full bg-white/80 dark:bg-bg-primary/80 backdrop-blur-2xl p-1.5 rounded-full shadow-2xl border border-border flex items-center justify-between relative z-40"
+                    className="w-full bg-surface-card/80 dark:bg-bg-primary/80 backdrop-blur-2xl p-1.5 rounded-full shadow-2xl border border-border flex items-center justify-between relative z-40"
                 >
                     {/* Floor Selector */}
                     <div className="relative">
@@ -127,9 +127,9 @@ export default function FloorPlanPage() {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 10 }}
-                                    className="absolute top-full left-0 mt-3 w-[240px] bg-white/95 dark:bg-bg-secondary/95 backdrop-blur-3xl border border-border rounded-[2rem] shadow-2xl z-50 p-2 overflow-hidden"
+                                    className="absolute top-full left-0 mt-3 w-[240px] bg-surface-card/95 dark:bg-bg-secondary/95 backdrop-blur-3xl border border-border rounded-[2rem] shadow-2xl z-50 p-2 overflow-hidden"
                                 >
-                                    {floors.map(f => (
+                                    {floors.map((f: any) => (
                                         <button
                                             key={f.id}
                                             onClick={() => { setCurrentFloor(f.id); setShowFloorSelector(false); }}

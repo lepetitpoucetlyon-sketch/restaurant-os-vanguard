@@ -32,7 +32,7 @@ export function StrategyOracle() {
                 
                 <div className="absolute top-6 left-8 z-10">
                     <h3 className="text-xs font-black text-white/40 uppercase tracking-[0.3em] mb-1">Fleet Constellation</h3>
-                    <p className="text-[10px] text-gray-500 font-medium tracking-tight">Real-time Node Distribution ({instances.length} units)</p>
+                    <p className="text-[10px] text-secondary font-medium tracking-tight">Real-time Node Distribution ({instances.length} units)</p>
                 </div>
 
                 {/* Simulated Constellation Grid */}
@@ -51,9 +51,9 @@ export function StrategyOracle() {
                                 }}
                                 className="group/node"
                             >
-                                <div className={`w-3 h-3 rounded-full blur-[1px] ${inst.metrics.healthScore > 90 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]'}`} />
+                                <div className={`w-3 h-3 rounded-full blur-[1px] ${inst.metrics.healthScore > 90 ? 'bg-status-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]'}`} />
                                 <div className="absolute top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover/node:opacity-100 transition-all pointer-events-none whitespace-nowrap z-20">
-                                    <div className="bg-black/90 border border-white/10 px-2 py-1 rounded text-[8px] font-bold text-white uppercase tracking-tighter">
+                                    <div className="bg-surface-sidebar/90 border border-subtle px-2 py-1 rounded text-[8px] font-bold text-white uppercase tracking-tighter">
                                         {inst.name} • {inst.metrics.healthScore}%
                                     </div>
                                 </div>
@@ -70,12 +70,12 @@ export function StrategyOracle() {
 
                 <div className="absolute bottom-6 right-8 flex gap-4">
                     <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Normal Ops</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-status-success" />
+                        <span className="text-[9px] font-black text-muted uppercase tracking-widest">Normal Ops</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Drift Detected</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-status-warning" />
+                        <span className="text-[9px] font-black text-muted uppercase tracking-widest">Drift Detected</span>
                     </div>
                 </div>
             </div>
@@ -85,10 +85,10 @@ export function StrategyOracle() {
                 <div className="col-span-12 lg:col-span-7 space-y-4">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-3">
-                            <BrainCircuit className="w-5 h-5 text-indigo-400" />
+                            <BrainCircuit className="w-5 h-5 text-brand" />
                             <h3 className="text-sm font-black uppercase tracking-widest">Oracle Predictions</h3>
                         </div>
-                        <div className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[8px] font-black text-indigo-400 uppercase tracking-widest">
+                        <div className="px-2 py-0.5 rounded-full bg-action-primary/10 border border-focus/20 text-[8px] font-black text-brand uppercase tracking-widest">
                             Autonomous Ready
                         </div>
                     </div>
@@ -109,15 +109,15 @@ export function StrategyOracle() {
                     <div className="bg-[#161618] border border-white/5 rounded-3xl p-8 flex flex-col h-[500px]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="flex items-center gap-3">
-                                <Terminal className="w-4 h-4 text-gray-500" />
-                                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Strategy Briefing</span>
+                                <Terminal className="w-4 h-4 text-secondary" />
+                                <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Strategy Briefing</span>
                             </div>
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={getExecutiveBriefing}
                                 disabled={isProcessing}
-                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                                className="px-4 py-2 bg-action-primary hover:bg-action-primary disabled:opacity-50 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
                             >
                                 <Sparkles className="w-3 h-3" />
                                 {isProcessing ? 'Analyzing...' : 'Refresh Briefing'}
@@ -134,8 +134,8 @@ export function StrategyOracle() {
                                 </div>
                             ) : (
                                 messages.map((msg, idx) => (
-                                    <div key={idx} className={`p-4 rounded-2xl ${msg.role === 'user' ? 'bg-white/5 border border-white/5 hidden' : 'bg-indigo-500/5 border border-indigo-500/10'}`}>
-                                        <p className="text-[11px] text-gray-300 leading-relaxed font-medium">
+                                    <div key={idx} className={`p-4 rounded-2xl ${msg.role === 'user' ? 'bg-surface-card/5 border border-white/5 hidden' : 'bg-action-primary/5 border border-focus/10'}`}>
+                                        <p className="text-[11px] text-muted leading-relaxed font-medium">
                                             {msg.content}
                                         </p>
                                     </div>
@@ -145,10 +145,10 @@ export function StrategyOracle() {
 
                         <div className="mt-6 pt-6 border-t border-white/5">
                             <div className="flex items-center gap-4">
-                                <TrendingUp className="w-4 h-4 text-emerald-400 opacity-50" />
+                                <TrendingUp className="w-4 h-4 text-status-success opacity-50" />
                                 <div>
                                     <div className="text-[10px] font-black text-white uppercase tracking-tight">Projected Collective Gain</div>
-                                    <div className="text-xl font-black text-emerald-400 tracking-tighter">€14,200 <span className="text-[10px] text-emerald-400/50">/ mo</span></div>
+                                    <div className="text-xl font-black text-status-success tracking-tighter">€14,200 <span className="text-[10px] text-status-success/50">/ mo</span></div>
                                 </div>
                             </div>
                         </div>
@@ -172,9 +172,9 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
         <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`p-6 rounded-2xl border transition-all ${insight.impact === 'CRITICAL' ? 'bg-red-500/5 border-red-500/10' : 'bg-[#161618] border-white/5'} flex gap-6 group hover:border-white/10`}
+            className={`p-6 rounded-2xl border transition-all ${insight.impact === 'CRITICAL' ? 'bg-status-danger/5 border-red-500/10' : 'bg-[#161618] border-white/5'} flex gap-6 group hover:border-white/10`}
         >
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${insight.impact === 'CRITICAL' ? 'bg-red-500/20 text-red-400' : 'bg-indigo-500/10 text-indigo-400'}`}>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${insight.impact === 'CRITICAL' ? 'bg-status-danger/20 text-status-danger' : 'bg-action-primary/10 text-brand'}`}>
                 {insight.type === 'anomaly' ? <AlertTriangle className="w-6 h-6" /> : <Target className="w-6 h-6" />}
             </div>
 
@@ -184,24 +184,24 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
                         {insight.title}
                     </h4>
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-emerald-500">+{insight.confidence}% CONFIDENCE</span>
-                        <div className="px-2 py-0.5 rounded bg-white/5 text-[8px] font-bold text-gray-500 uppercase tracking-widest">{insight.impact} IMPACT</div>
+                        <span className="text-[10px] font-black text-status-success">+{insight.confidence}% CONFIDENCE</span>
+                        <div className="px-2 py-0.5 rounded bg-surface-card/5 text-[8px] font-bold text-secondary uppercase tracking-widest">{insight.impact} IMPACT</div>
                     </div>
                 </div>
                 
-                <p className="text-[11px] text-gray-500 leading-relaxed font-medium mb-6">
+                <p className="text-[11px] text-secondary leading-relaxed font-medium mb-6">
                     {insight.description}
                 </p>
 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                          <div className="flex flex-col">
-                             <span className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Potential RoI</span>
+                             <span className="text-[8px] font-black text-secondary uppercase tracking-widest">Potential RoI</span>
                              <span className="text-xs font-black text-white">€{insight.potentialRoI.toLocaleString()}</span>
                          </div>
-                         <div className="w-px h-6 bg-white/5" />
+                         <div className="w-px h-6 bg-surface-card/5" />
                          <div className="flex flex-col">
-                             <span className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Target Nodes</span>
+                             <span className="text-[8px] font-black text-secondary uppercase tracking-widest">Target Nodes</span>
                              <span className="text-xs font-black text-white">{insight.affectedInstances.length} Units</span>
                          </div>
                     </div>
@@ -211,8 +211,8 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
                         disabled={status !== 'idle'}
                         className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                             status === 'done' 
-                            ? 'bg-emerald-500/20 text-emerald-400' 
-                            : 'bg-white hover:bg-white/90 text-black shadow-[0_10px_20px_rgba(255,255,255,0.05)]'
+                            ? 'bg-status-success/20 text-status-success' 
+                            : 'bg-surface-card hover:bg-surface-card/90 text-primary shadow-[0_10px_20px_rgba(255,255,255,0.05)]'
                         }`}
                     >
                         {status === 'idle' && (

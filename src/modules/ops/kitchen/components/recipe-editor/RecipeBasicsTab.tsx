@@ -30,7 +30,7 @@ export function RecipeBasicsTab({
                         type="text"
                         value={formData.name as string}
                         onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), name: e.target.value } as Partial<Recipe>))}
-                        className="w-full h-16 px-8 bg-white rounded-3xl border-2 border-border focus:border-accent font-serif font-black text-xl outline-none transition-all placeholder:text-text-muted/30"
+                        className="w-full h-16 px-8 bg-surface-card rounded-3xl border-2 border-border focus:border-accent font-serif font-black text-xl outline-none transition-all placeholder:text-text-muted/30"
                         placeholder="Ex: Risotto aux Morilles & Truffe..."
                     />
                 </div>
@@ -49,7 +49,7 @@ export function RecipeBasicsTab({
                 <textarea
                     value={String(formData.description || '')}
                     onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), description: e.target.value } as Partial<Recipe>))}
-                    className="w-full h-32 px-8 py-6 bg-white rounded-[2rem] border-2 border-border focus:border-accent font-bold text-sm outline-none resize-none transition-all placeholder:text-text-muted/30"
+                    className="w-full h-32 px-8 py-6 bg-surface-card rounded-[2rem] border-2 border-border focus:border-accent font-bold text-sm outline-none resize-none transition-all placeholder:text-text-muted/30"
                     placeholder="Texte court pour le menu ou le personnel de salle..."
                 />
             </div>
@@ -60,7 +60,7 @@ export function RecipeBasicsTab({
                     { label: 'Cuisson', value: formData.cookTime, key: 'cookTime' as const, icon: Timer, unit: 'MIN' },
                     { label: 'Portions', value: formData.portions, key: 'portions' as const, icon: Users, unit: 'PAX' },
                 ].map(item => (
-                    <div key={item.key} className="bg-white p-6 rounded-[2rem] border border-border/50">
+                    <div key={item.key} className="bg-surface-card p-6 rounded-[2rem] border border-border/50">
                         <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 block flex items-center gap-2">
                             <item.icon className="w-3.5 h-3.5" />
                             {item.label}
@@ -77,7 +77,7 @@ export function RecipeBasicsTab({
                     </div>
                 ))}
 
-                <div className="bg-white p-6 rounded-[2rem] border border-border/50">
+                <div className="bg-surface-card p-6 rounded-[2rem] border border-border/50">
                     <PremiumSelect
                         label="Expertise"
                         value={(formData.difficulty as any) || 'medium'}
@@ -93,7 +93,7 @@ export function RecipeBasicsTab({
 
             <div>
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Code Couleur Visuel</label>
-                <div className="flex gap-4 p-4 bg-white rounded-3xl border border-border/50 overflow-x-auto no-scrollbar">
+                <div className="flex gap-4 p-4 bg-surface-card rounded-3xl border border-border/50 overflow-x-auto no-scrollbar">
                     {colors.map(color => (
                         <button
                             key={color}

@@ -104,7 +104,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
     }));
 
     return (
-        <div className="relative w-full h-full bg-[#fcfcfc] dark:bg-black border-4 border-transparent dark:border-white rounded-3xl overflow-hidden transition-colors duration-500">
+        <div className="relative w-full h-full bg-[#fcfcfc] dark:bg-surface-sidebar border-4 border-transparent dark:border-white rounded-3xl overflow-hidden transition-colors duration-500">
             <div id="canvas-container" className="absolute inset-0 w-full h-full z-0">
                 {dimensions.width > 0 && (
                     <Stage
@@ -126,7 +126,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                             <ZoneRenderer
                                 tables={floorTables as Table[]}
                                 zones={floorZones as Zone[]}
-                                isLocked={isZonesLocked}
+                                isLocked={isZonesLocked as boolean}
                                 onUpdateTablePosition={updateTablePosition}
                                 onUpdateZone={updateZone}
                                 isDarkMode={isDarkMode}

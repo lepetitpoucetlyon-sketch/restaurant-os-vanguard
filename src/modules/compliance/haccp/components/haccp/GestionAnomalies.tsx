@@ -38,20 +38,20 @@ export function GestionAnomalies() {
         <div className="space-y-8 pb-12">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-[22px] bg-rose-500/10 text-rose-600 flex items-center justify-center shadow-lg shadow-rose-500/5 relative">
+                    <div className="w-12 h-12 rounded-[22px] bg-status-danger/10 text-status-danger flex items-center justify-center shadow-lg shadow-rose-500/5 relative">
                         <ShieldAlert size={24} />
                         {activeAlerts.length > 0 && (
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 rounded-full border-2 border-white dark:border-bg-primary animate-pulse" />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-status-danger rounded-full border-2 border-white dark:border-bg-primary animate-pulse" />
                         )}
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Registre des Anomalies</h2>
-                        <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">Actions Correctives & Déviations</p>
+                        <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Registre des Anomalies</h2>
+                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Actions Correctives & Déviations</p>
                     </div>
                 </div>
 
                 <div className="flex bg-bg-tertiary rounded-full p-1 border border-border">
-                    <div className="px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest bg-white dark:bg-bg-secondary shadow-sm text-text-primary flex items-center gap-2">
+                    <div className="px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest bg-surface-card dark:bg-bg-secondary shadow-sm text-text-primary flex items-center gap-2">
                         <Filter size={12} />
                         Tous les Incidents
                     </div>
@@ -60,8 +60,8 @@ export function GestionAnomalies() {
 
             {activeAlerts.length > 0 && (
                 <div className="space-y-4 mb-10">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-rose-500 px-2 flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                    <h3 className="text-xs font-black uppercase tracking-widest text-status-danger px-2 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-status-danger animate-pulse" />
                         Incidents Actifs ({activeAlerts.length})
                     </h3>
                     <AnimatePresence>
@@ -72,17 +72,17 @@ export function GestionAnomalies() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="bg-rose-500/5 rounded-[32px] border border-rose-500/20 p-6 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center group"
+                                className="bg-status-danger/5 rounded-[32px] border border-rose-500/20 p-6 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center group"
                             >
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-[20px] bg-rose-500/10 flex items-center justify-center text-rose-500 shrink-0">
+                                    <div className="w-12 h-12 rounded-[20px] bg-status-danger/10 flex items-center justify-center text-status-danger shrink-0">
                                         <AlertTriangle size={24} />
                                     </div>
                                     <div>
-                                        <h4 className="text-lg font-serif italic font-black text-rose-500">{incident.item}</h4>
+                                        <h4 className="text-lg font-serif italic font-black text-status-danger">{incident.item}</h4>
                                         <p className="text-sm font-medium text-text-primary mt-1">{incident.notes || 'Déviation détectée sans description.'}</p>
                                         <div className="flex items-center gap-3 mt-3">
-                                            <span className="text-[9px] font-black uppercase text-rose-500 flex items-center gap-1 bg-white dark:bg-bg-primary px-2 py-0.5 rounded border border-rose-500/20">
+                                            <span className="text-[9px] font-black uppercase text-status-danger flex items-center gap-1 bg-surface-card dark:bg-bg-primary px-2 py-0.5 rounded border border-rose-500/20">
                                                 <AlertTriangle size={10} /> {incident.zone}
                                             </span>
                                             <span className="text-[9px] font-black uppercase text-text-muted flex items-center gap-1">
@@ -96,7 +96,7 @@ export function GestionAnomalies() {
                                 </div>
                                 <button
                                     onClick={() => handleResolve(incident.id)}
-                                    className="w-full md:w-auto h-12 px-6 rounded-[20px] bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                                    className="w-full md:w-auto h-12 px-6 rounded-[20px] bg-status-success text-white font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all flex items-center justify-center gap-2"
                                 >
                                     <CheckCircle2 size={16} />
                                     Signaler comme Résolu
@@ -113,8 +113,8 @@ export function GestionAnomalies() {
                 </h3>
                 {resolvedAlerts.length === 0 ? (
                     <div className="py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-[32px] bg-bg-primary/50 text-center px-4">
-                        <CheckCircle2 size={48} className="text-emerald-500/30 mb-4" />
-                        <h3 className="text-xl font-serif italic text-emerald-500 mb-1">Aucune anomalie enregistrée</h3>
+                        <CheckCircle2 size={48} className="text-status-success/30 mb-4" />
+                        <h3 className="text-xl font-serif italic text-status-success mb-1">Aucune anomalie enregistrée</h3>
                         <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">L'intégrité de vos processus est de 100%.</p>
                     </div>
                 ) : (
@@ -128,7 +128,7 @@ export function GestionAnomalies() {
                                 )}
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                                    <div className="w-10 h-10 rounded-full bg-status-success/10 text-status-success flex items-center justify-center">
                                         <CheckCircle2 size={18} />
                                     </div>
                                     <div>

@@ -17,7 +17,7 @@ export const StockItemSchema = z.object({
   expiryTimestamp:   TimestampSchema.nullable().optional(),
   locationXYZ:       z.tuple([z.number(), z.number(), z.number()]).nullable().optional(),
   schemaVersion:     z.literal(2).default(2),
-  updatedAt:         TimestampSchema.default(Date.now() as any),
+  updatedAt:         TimestampSchema.default(Date.now() as unknown),
 }).catchall(z.any()).refine(
   data => {
     if (data.criticalThreshold !== undefined && data.threshold !== undefined) {

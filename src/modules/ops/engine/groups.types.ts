@@ -101,17 +101,17 @@ export type GroupEventStatus =
     | 'cancelled';      // Annulé
 
 export const GROUP_EVENT_STATUS_CONFIG: Record<GroupEventStatus, { label: string; color: string; bgColor: string }> = {
-    inquiry: { label: 'Demande', color: 'text-slate-600', bgColor: 'bg-slate-100' },
-    quote_pending: { label: 'Devis en cours', color: 'text-amber-600', bgColor: 'bg-amber-100' },
-    quote_sent: { label: 'Devis envoyé', color: 'text-blue-600', bgColor: 'bg-blue-100' },
-    confirmed: { label: 'Confirmé', color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
-    deposit_paid: { label: 'Acompte versé', color: 'text-green-600', bgColor: 'bg-green-100' },
+    inquiry: { label: 'Demande', color: 'text-secondary', bgColor: 'bg-surface-tertiary' },
+    quote_pending: { label: 'Devis en cours', color: 'text-status-warning', bgColor: 'bg-status-warning' },
+    quote_sent: { label: 'Devis envoyé', color: 'text-brand', bgColor: 'bg-action-primary' },
+    confirmed: { label: 'Confirmé', color: 'text-status-success', bgColor: 'bg-status-success' },
+    deposit_paid: { label: 'Acompte versé', color: 'text-status-success', bgColor: 'bg-status-success' },
     preparation: { label: 'Préparation', color: 'text-purple-600', bgColor: 'bg-purple-100' },
-    in_progress: { label: 'En cours', color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
-    completed: { label: 'Terminé', color: 'text-slate-600', bgColor: 'bg-slate-100' },
-    invoiced: { label: 'Facturé', color: 'text-blue-600', bgColor: 'bg-blue-100' },
-    paid: { label: 'Payé', color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
-    cancelled: { label: 'Annulé', color: 'text-red-600', bgColor: 'bg-red-100' }
+    in_progress: { label: 'En cours', color: 'text-brand', bgColor: 'bg-action-primary' },
+    completed: { label: 'Terminé', color: 'text-secondary', bgColor: 'bg-surface-tertiary' },
+    invoiced: { label: 'Facturé', color: 'text-brand', bgColor: 'bg-action-primary' },
+    paid: { label: 'Payé', color: 'text-status-success', bgColor: 'bg-status-success' },
+    cancelled: { label: 'Annulé', color: 'text-status-danger', bgColor: 'bg-status-danger' }
 };
 
 export interface GroupEvent {

@@ -109,7 +109,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                     <div className="absolute top-4 left-4 flex gap-2 z-20">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onEditRecipe(recipe); }}
-                                            className="w-8 h-8 rounded-lg bg-bg-primary/20 backdrop-blur-md flex items-center justify-center border border-white/20 hover:bg-accent hover:text-white transition-all shadow-xl"
+                                            className="w-8 h-8 rounded-lg bg-bg-primary/20 backdrop-blur-md flex items-center justify-center border border-default hover:bg-accent hover:text-white transition-all shadow-xl"
                                         >
                                             <Edit2 className="w-4 h-4" />
                                         </button>

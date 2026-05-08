@@ -63,18 +63,18 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-neutral-900/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-md"
                     />
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-2xl bg-white dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-white/10"
+                        className="relative w-full max-w-2xl bg-surface-card dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-subtle"
                     >
                         {/* Header */}
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-action-primary to-purple-600 text-white flex items-center justify-center shadow-lg">
                                     <Megaphone size={24} />
                                 </div>
                                 <div>
@@ -82,7 +82,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">Marketing Automation</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors">
+                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
@@ -97,7 +97,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Ex: Offre de Printemps 2026"
-                                    className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-indigo-500/50 transition-all"
+                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-focus/50 transition-all"
                                 />
                             </div>
 
@@ -111,11 +111,11 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                             onClick={() => setType(ct.id as any)}
                                             className={`group flex flex-col items-center gap-2 p-5 rounded-2xl border transition-all ${
                                                 type === ct.id
-                                                    ? 'border-indigo-500 bg-indigo-500/5 shadow-lg'
-                                                    : 'border-border/50 hover:border-indigo-500/30'
+                                                    ? 'border-focus bg-action-primary/5 shadow-lg'
+                                                    : 'border-border/50 hover:border-focus/30'
                                             }`}
                                         >
-                                            <ct.icon className={`w-6 h-6 ${type === ct.id ? 'text-indigo-500' : 'text-text-muted'}`} />
+                                            <ct.icon className={`w-6 h-6 ${type === ct.id ? 'text-brand' : 'text-text-muted'}`} />
                                             <span className="text-[10px] font-black uppercase tracking-widest">{ct.label}</span>
                                         </button>
                                     ))}
@@ -130,7 +130,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     value={subject}
                                     onChange={(e) => setSubject(e.target.value)}
                                     placeholder="Découvrez nos nouvelles saveurs..."
-                                    className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-indigo-500/50 transition-all"
+                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-focus/50 transition-all"
                                 />
                             </div>
 
@@ -142,7 +142,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     onChange={(e) => setContent(e.target.value)}
                                     placeholder="Rédigez votre message ici..."
                                     rows={4}
-                                    className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-indigo-500/50 transition-all resize-none"
+                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-focus/50 transition-all resize-none"
                                 />
                             </div>
 
@@ -156,7 +156,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     value={targetSegment}
                                     onChange={(e) => setTargetSegment(e.target.value)}
                                     placeholder="Tous les clients (ou nom du segment)"
-                                    className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-indigo-500/50 transition-all"
+                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-focus/50 transition-all"
                                 />
                             </div>
 
@@ -170,7 +170,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                         type="date"
                                         value={scheduledDate}
                                         onChange={(e) => setScheduledDate(e.target.value)}
-                                        className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-bold outline-none"
+                                        className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-bold outline-none"
                                     />
                                 </div>
                                 <div>
@@ -181,19 +181,19 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                         type="time"
                                         value={scheduledTime}
                                         onChange={(e) => setScheduledTime(e.target.value)}
-                                        className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-bold outline-none"
+                                        className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-bold outline-none"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* Actions */}
-                        <div className="p-8 bg-white dark:bg-[#111] border-t border-border flex gap-4">
+                        <div className="p-8 bg-surface-card dark:bg-[#111] border-t border-border flex gap-4">
                             <Button variant="ghost" className="flex-1 h-16 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs" onClick={onClose}>
                                 Annuler
                             </Button>
                             <Button
-                                className="flex-[2] h-16 bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
+                                className="flex-[2] h-16 bg-gradient-to-r from-action-primary to-purple-600 text-white hover:from-action-primary hover:to-purple-700 rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
                                 onClick={handleSubmit}
                                 disabled={!name.trim()}
                             >

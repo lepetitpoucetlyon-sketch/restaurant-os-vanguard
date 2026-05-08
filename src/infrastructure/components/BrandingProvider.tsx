@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useAtomValue } from 'jotai';
 import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
 import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
@@ -12,7 +13,7 @@ export function BrandingProvider() {
   const rawBrandTokens = useAtomValue(tenantBrandTokensAtom);
 
   // Synchronisation temps réel Google Stitch
-  useFirestoreBrand(tenantId || '');
+  useFirestoreBrand((tenantId as any) || '');
 
   useEffect(() => {
     // Valider les tokens tenant via Zod avant injection

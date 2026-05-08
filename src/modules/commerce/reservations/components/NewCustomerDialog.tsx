@@ -109,7 +109,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
                                     <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Enregistrement Customer Certifié</span>
-                                    <div className="h-1 w-1 rounded-full bg-white/10" />
+                                    <div className="h-1 w-1 rounded-full bg-surface-card/10" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
                                         <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">Client Integrity Protocol</span>
@@ -247,7 +247,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                     <div className="flex gap-6">
                         <Button
                             onClick={handleSubmit}
-                            className="h-16 px-16 bg-accent hover:bg-white text-bg-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-amber-500/30 transform hover:scale-[1.05] flex items-center gap-4"
+                            className="h-16 px-16 bg-accent hover:bg-surface-card text-bg-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-amber-500/30 transform hover:scale-[1.05] flex items-center gap-4"
                         >
                             <Save className="w-5 h-5 text-bg-primary" />
                             Finaliser le Profil

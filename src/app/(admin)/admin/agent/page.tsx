@@ -149,7 +149,7 @@ export default function AgentIntelligencePage() {
                 Nexus: {report?.metrics.knowledgeSync ?? 'Syncing...'}
               </div>
               <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                (report?.metrics.typeSafety ?? 0) >= 100 ? 'bg-status-success border-emerald-500/20 text-status-success' : 'bg-action-primary border-blue-500/20 text-action-primary'
+                (report?.metrics.typeSafety ?? 0) >= 100 ? 'bg-status-success border-emerald-500/20 text-status-success' : 'bg-action-primary border-focus/20 text-action-primary'
               }`}>
                 <ShieldCheck className="w-3 h-3" />
                 Type Safety: {report?.metrics.typeSafety ?? '--'}%

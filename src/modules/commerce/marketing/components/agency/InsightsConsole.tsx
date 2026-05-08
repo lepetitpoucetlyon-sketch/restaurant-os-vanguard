@@ -14,7 +14,7 @@ interface InsightsConsoleProps {
 
 export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isAnalyzing, domain, modelId = 'GEMINI-1.5-FLASH' }) => {
     return (
-        <div className="bg-black/90 rounded-3xl p-6 border border-white/10 backdrop-blur-3xl shadow-2xl overflow-hidden min-h-[300px] flex flex-col">
+        <div className="bg-surface-sidebar/90 rounded-3xl p-6 border border-subtle backdrop-blur-3xl shadow-2xl overflow-hidden min-h-[300px] flex flex-col">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-accent-gold/20 flex items-center justify-center border border-accent-gold/30">
@@ -45,7 +45,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: idx * 0.1 }}
-                            className="relative pl-6 border-l border-white/10"
+                            className="relative pl-6 border-l border-subtle"
                         >
                             <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-accent-gold shadow-[0_0_10px_rgba(197,160,89,0.8)]" />
                             <div className="flex items-center gap-2 mb-1">
@@ -53,7 +53,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                                 <span className="text-white/20 text-[8px] font-mono">{new Date(step.timestamp).toLocaleTimeString()}</span>
                             </div>
                             <p className="text-white/80 text-[11px] font-serif leading-relaxed mb-1">{step.thought}</p>
-                            <div className="p-2 bg-white/5 rounded-lg border border-white/5">
+                            <div className="p-2 bg-surface-card/5 rounded-lg border border-white/5">
                                 <p className="text-white/40 text-[9px] italic flex items-center gap-2">
                                     <Database className="w-3 h-3" />
                                     {step.observation}
@@ -71,7 +71,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                 )}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+            <div className="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
                 <div className="flex items-center gap-2 text-success/60">
                     <ShieldCheck className="w-4 h-4" />
                     <span className="text-[9px] font-black uppercase tracking-widest">Expertise Sécurisée</span>

@@ -229,7 +229,7 @@ export default function MigrationSettings() {
                                 className="hidden" 
                                 onChange={(e) => handleFileUpload(e, activeTab)}
                             />
-                            <div className="bg-text-primary hover:bg-black dark:hover:bg-neutral-800 text-bg-secondary dark:text-bg-primary h-14 px-10 rounded-xl font-bold text-[13px] uppercase tracking-[0.2em] shadow-xl transition-all flex items-center gap-3">
+                            <div className="bg-text-primary hover:bg-surface-sidebar dark:hover:bg-surface-sidebar text-bg-secondary dark:text-bg-primary h-14 px-10 rounded-xl font-bold text-[13px] uppercase tracking-[0.2em] shadow-xl transition-all flex items-center gap-3">
                                 <Upload strokeWidth={2} className="w-4 h-4" />
                                 Sélectionner un fichier
                             </div>

@@ -27,7 +27,7 @@ export function DraggableIngredient({ ingredient, stockCount, highlightQuery, on
             <span>
                 {parts.map((part, i) =>
                     part.toLowerCase() === query.toLowerCase()
-                        ? <span key={i} className="bg-emerald-100 text-emerald-700 rounded-sm px-0.5">{part}</span>
+                        ? <span key={i} className="bg-status-success text-status-success rounded-sm px-0.5">{part}</span>
                         : part
                 )}
             </span>
@@ -52,7 +52,7 @@ export function DraggableIngredient({ ingredient, stockCount, highlightQuery, on
                     ? "opacity-50 border-dashed border-accent bg-accent/5 scale-105 shadow-2xl z-50"
                     : isSelected
                         ? "bg-bg-secondary border-accent shadow-premium shadow-accent/10 lg:pl-5"
-                        : "bg-bg-primary border-border hover:border-accent/30 hover:shadow-lg dark:hover:bg-white/5 cursor-grab active:cursor-grabbing"
+                        : "bg-bg-primary border-border hover:border-accent/30 hover:shadow-lg dark:hover:bg-surface-card/5 cursor-grab active:cursor-grabbing"
             )}
         >
             {isSelected && <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent" />}

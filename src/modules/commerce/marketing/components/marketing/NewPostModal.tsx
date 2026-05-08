@@ -56,13 +56,13 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-neutral-900/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-md"
                     />
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-3xl bg-white dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-white/10"
+                        className="relative w-full max-w-3xl bg-surface-card dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-subtle"
                     >
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -74,7 +74,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                     <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">Créez votre contenu</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors">
+                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
                                 <Trash2 size={20} />
                             </button>
                         </div>
@@ -92,18 +92,18 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                                 onClick={() => togglePlatform(account.id)}
                                                 className={`group flex flex-1 items-center justify-center gap-3 px-6 py-5 rounded-2xl border transition-all shadow-sm hover:shadow-md hover:-translate-y-1 ${
                                                     isSelected
-                                                        ? 'border-emerald-500 bg-emerald-500/5 shadow-emerald-500/10'
-                                                        : 'border-border bg-white hover:border-black/10 dark:bg-white/5 dark:hover:border-white/20'
+                                                        ? 'border-emerald-500 bg-status-success/5 shadow-emerald-500/10'
+                                                        : 'border-border bg-surface-card hover:border-black/10 dark:bg-surface-card/5 dark:hover:border-default'
                                                 }`}
                                             >
-                                                <div className={`p-2 rounded-lg transition-colors ${isSelected ? 'bg-emerald-500/10' : 'bg-black/5 group-hover:bg-white'}`}>
+                                                <div className={`p-2 rounded-lg transition-colors ${isSelected ? 'bg-status-success/10' : 'bg-surface-sidebar/5 group-hover:bg-surface-card'}`}>
                                                     <Icon className="w-5 h-5" style={{ color: account.color }} />
                                                 </div>
                                                 <span className="font-bold text-sm text-text-primary">{account.platform}</span>
                                                 <div className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                                                     isSelected
-                                                        ? 'border-emerald-500 bg-emerald-500'
-                                                        : 'border-border group-hover:border-emerald-500 group-hover:bg-emerald-500'
+                                                        ? 'border-emerald-500 bg-status-success'
+                                                        : 'border-border group-hover:border-emerald-500 group-hover:bg-status-success'
                                                 }`}>
                                                     <Check size={12} className={`text-white ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
                                                 </div>
@@ -119,14 +119,14 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                     <textarea
                                         value={caption}
                                         onChange={(e) => setCaption(e.target.value)}
-                                        className="w-full h-40 p-6 bg-white dark:bg-white/5 rounded-[2rem] border border-border/50 focus:border-text-primary/20 focus:ring-4 focus:ring-text-primary/5 outline-none resize-none text-text-primary dark:text-white placeholder:text-text-muted/50 text-base font-medium shadow-sm transition-all"
+                                        className="w-full h-40 p-6 bg-surface-card dark:bg-surface-card/5 rounded-[2rem] border border-border/50 focus:border-text-primary/20 focus:ring-4 focus:ring-text-primary/5 outline-none resize-none text-text-primary dark:text-white placeholder:text-text-muted/50 text-base font-medium shadow-sm transition-all"
                                         placeholder="Écrivez une légende captivante..."
                                     />
                                     <div className="absolute bottom-4 left-4 flex gap-2">
-                                        <button className="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 text-text-muted hover:text-text-primary transition-colors">
+                                        <button className="p-2 rounded-xl hover:bg-surface-sidebar/5 dark:hover:bg-surface-card/10 text-text-muted hover:text-text-primary transition-colors">
                                             <ImageIcon size={20} />
                                         </button>
-                                        <button className="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 text-text-muted hover:text-text-primary transition-colors">
+                                        <button className="p-2 rounded-xl hover:bg-surface-sidebar/5 dark:hover:bg-surface-card/10 text-text-muted hover:text-text-primary transition-colors">
                                             <Settings size={20} />
                                         </button>
                                     </div>
@@ -145,7 +145,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                             type="date"
                                             value={scheduledDate}
                                             onChange={(e) => setScheduledDate(e.target.value)}
-                                            className="w-full h-14 pl-12 pr-4 bg-white dark:bg-white/5 rounded-2xl border border-border/50 outline-none text-text-primary font-bold shadow-sm"
+                                            className="w-full h-14 pl-12 pr-4 bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 outline-none text-text-primary font-bold shadow-sm"
                                         />
                                     </div>
                                 </div>
@@ -157,17 +157,17 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                             type="time"
                                             value={scheduledTime}
                                             onChange={(e) => setScheduledTime(e.target.value)}
-                                            className="w-full h-14 pl-12 pr-4 bg-white dark:bg-white/5 rounded-2xl border border-border/50 outline-none text-text-primary font-bold shadow-sm"
+                                            className="w-full h-14 pl-12 pr-4 bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 outline-none text-text-primary font-bold shadow-sm"
                                         />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="p-8 bg-white dark:bg-[#111] border-t border-border flex gap-4">
+                        <div className="p-8 bg-surface-card dark:bg-[#111] border-t border-border flex gap-4">
                             <Button variant="ghost" className="flex-1 h-16 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs" onClick={onClose}>Annuler</Button>
                             <Button
-                                className="flex-[2] h-16 bg-text-primary text-bg-primary hover:bg-black dark:bg-white dark:text-black rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="flex-[2] h-16 bg-text-primary text-bg-primary hover:bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl disabled:opacity-40 disabled:cursor-not-allowed"
                                 onClick={handleSchedule}
                                 disabled={!isValid}
                             >

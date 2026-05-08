@@ -37,7 +37,7 @@ export default function WelcomePage() {
            Restaurant <span className="italic opacity-80">OS</span>
         </div>
         <Link href="/">
-           <Button variant="ghost" className="uppercase tracking-widest text-xs font-bold hover:bg-white/10">Passer le guide</Button>
+           <Button variant="ghost" className="uppercase tracking-widest text-xs font-bold hover:bg-surface-card/10">Passer le guide</Button>
         </Link>
       </nav>
 
@@ -154,8 +154,8 @@ export default function WelcomePage() {
 
              <div className="grid lg:grid-cols-3 gap-8">
                  {/* Step A */}
-                 <div className="bg-white/5 border border-white/10 p-10 rounded-3xl backdrop-blur-md">
-                     <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-8">
+                 <div className="bg-surface-card/5 border border-subtle p-10 rounded-3xl backdrop-blur-md">
+                     <div className="w-12 h-12 bg-surface-card/10 rounded-xl flex items-center justify-center mb-8">
                          <FileText className="w-6 h-6 text-white" />
                      </div>
                      <h3 className="text-2xl font-serif mb-4">1. Uploadez votre PDF</h3>
@@ -164,7 +164,7 @@ export default function WelcomePage() {
                      </p>
                  </div>
                  {/* Step B */}
-                 <div className="bg-white/5 border border-accent/30 p-10 rounded-3xl backdrop-blur-md relative transform lg:-translate-y-6 shadow-2xl shadow-accent/20">
+                 <div className="bg-surface-card/5 border border-accent/30 p-10 rounded-3xl backdrop-blur-md relative transform lg:-translate-y-6 shadow-2xl shadow-accent/20">
                      <div className="absolute top-0 right-10 -translate-y-1/2 bg-accent text-bg-primary px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                          L'Oracle Intervient
                      </div>
@@ -177,7 +177,7 @@ export default function WelcomePage() {
                      </p>
                  </div>
                  {/* Step C */}
-                 <div className="bg-white/5 border border-white/10 p-10 rounded-3xl backdrop-blur-md">
+                 <div className="bg-surface-card/5 border border-subtle p-10 rounded-3xl backdrop-blur-md">
                      <div className="w-12 h-12 bg-success/20 rounded-xl flex items-center justify-center mb-8">
                          <Database className="w-6 h-6 text-success" />
                      </div>
@@ -268,7 +268,7 @@ export default function WelcomePage() {
                       Simulez un service complet avec des fausses commandes générées par notre IA pour former vos équipes avant le grand jour.
                   </p>
                   <Link href="/" className="inline-block mt-8">
-                      <Button className="bg-white text-black w-64 h-16 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-white/90 transition-all shadow-2xl">
+                      <Button className="bg-surface-card text-primary w-64 h-16 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-surface-card/90 transition-all shadow-2xl">
                           Aller au Dashboard
                       </Button>
                   </Link>

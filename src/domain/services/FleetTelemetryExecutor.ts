@@ -24,7 +24,7 @@ export async function executeAdministrativeAction(event: TelemetryEvent): Promis
         };
         await Nexus.adapter.update(path, patch);
         console.log(`[Fleet] Administrative ${event.type} successful for: ${event.tenantId}`);
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(`[Fleet] Administrative action failed for ${event.tenantId}`, error);
         throw error;
     }
@@ -45,7 +45,7 @@ export async function executeCloudSync(tenantId: TenantID, data: Partial<SiteTel
       };
       await Nexus.adapter.set(telemetryPath, payload, { merge: true });
       console.log(`[Fleet] Nexus-Stream Sync Successful for site: ${tenantId}`);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`[Fleet] Stream sync failed for ${tenantId}.`, error);
       throw error;
     }

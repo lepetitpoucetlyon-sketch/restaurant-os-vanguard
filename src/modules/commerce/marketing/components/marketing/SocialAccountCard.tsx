@@ -21,7 +21,7 @@ interface SocialAccountCardProps {
 export function SocialAccountCard({ account }: SocialAccountCardProps) {
     const Icon = account.icon;
     return (
-        <div className="group relative overflow-hidden bg-white/40 dark:bg-neutral-900/40 backdrop-blur-xl border border-white/20 dark:border-white/5 rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl transition-all duration-500">
+        <div className="group relative overflow-hidden bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-xl border border-default dark:border-white/5 rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl transition-all duration-500">
             <div className={cn(
                 "absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br rounded-full blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity",
                 account.gradient
@@ -49,14 +49,14 @@ export function SocialAccountCard({ account }: SocialAccountCardProps) {
                         { label: 'Publications', value: account.posts, trend: null },
                         { label: 'Engagement', value: account.engagement + '%', trend: '+0.4%' }
                     ].map((stat, idx) => (
-                        <div key={idx} className="p-5 bg-white/50 dark:bg-black/20 rounded-2xl border border-white/10 backdrop-blur-sm hover:bg-white/80 dark:hover:bg-white/5 transition-colors">
+                        <div key={idx} className="p-5 bg-surface-card/50 dark:bg-surface-sidebar/20 rounded-2xl border border-subtle backdrop-blur-sm hover:bg-surface-card/80 dark:hover:bg-surface-card/5 transition-colors">
                             <p className="text-3xl font-serif font-medium text-text-primary tracking-tighter tabular-nums">
                                 {stat.value}
                             </p>
                             <div className="flex items-center gap-2 mt-2">
                                 <p className="text-[9px] font-black text-text-muted uppercase tracking-widest">{stat.label}</p>
                                 {stat.trend && (
-                                    <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">{stat.trend}</span>
+                                    <span className="text-[9px] font-bold text-status-success bg-status-success/10 px-1.5 py-0.5 rounded-full">{stat.trend}</span>
                                 )}
                             </div>
                         </div>

@@ -4,7 +4,7 @@ import { Button } from '@ui/button';
 
 export const BatchLabelGenerator: React.FC = () => {
     return (
-        <div className="p-6 bg-white dark:bg-bg-secondary rounded-[2rem] border border-border">
+        <div className="p-6 bg-surface-card dark:bg-bg-secondary rounded-[2rem] border border-border">
             <div className="flex items-center gap-3 mb-6">
                 <Tag className="w-5 h-5 text-accent-gold" />
                 <h3 className="font-bold font-serif italic">Générateur d'Étiquettes Traçabilité</h3>

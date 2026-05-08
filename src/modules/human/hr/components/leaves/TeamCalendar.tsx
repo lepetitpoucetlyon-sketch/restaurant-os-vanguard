@@ -124,8 +124,8 @@ export function TeamCalendar() {
                                                     key={j}
                                                     className={cn(
                                                         "h-1.5 flex-1 rounded-full",
-                                                        a.type === 'paid' ? 'bg-blue-400' :
-                                                            a.type === 'sick' ? 'bg-rose-400' : 'bg-amber-400'
+                                                        a.type === 'paid' ? 'bg-action-primary' :
+                                                            a.type === 'sick' ? 'bg-status-danger' : 'bg-status-warning'
                                                     )}
                                                     title={a.employeeName}
                                                 />
@@ -142,15 +142,15 @@ export function TeamCalendar() {
             {/* Legend */}
             <div className="mt-8 pt-6 border-t border-border flex items-center justify-center gap-8">
                 <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-400 ring-2 ring-blue-400/20" />
+                    <div className="w-3 h-3 rounded-full bg-action-primary ring-2 ring-focus/20" />
                     <span className="text-xs font-bold text-text-muted uppercase tracking-wide">Congés Payés</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-amber-400 ring-2 ring-amber-400/20" />
+                    <div className="w-3 h-3 rounded-full bg-status-warning ring-2 ring-amber-400/20" />
                     <span className="text-xs font-bold text-text-muted uppercase tracking-wide">RTT</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-rose-400 ring-2 ring-rose-400/20" />
+                    <div className="w-3 h-3 rounded-full bg-status-danger ring-2 ring-rose-400/20" />
                     <span className="text-xs font-bold text-text-muted uppercase tracking-wide">Maladie</span>
                 </div>
             </div>

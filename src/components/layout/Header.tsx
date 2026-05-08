@@ -95,7 +95,7 @@ export function Header() {
 
     return (
         <>
-            <header className="hidden md:flex h-[100px] bg-white/40 dark:bg-black/40 backdrop-blur-[40px] border-b border-white/10 dark:border-white/5 sticky top-0 z-[40] px-16 items-center justify-between transition-all duration-700 shadow-sm">
+            <header className="hidden md:flex h-[100px] bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-[40px] border-b border-subtle dark:border-white/5 sticky top-0 z-[40] px-16 items-center justify-between transition-all duration-700 shadow-sm">
                 {/* Visual Architecture Background */}
                 <div className="absolute top-0 right-1/4 w-[40%] h-full bg-accent-gold/5 blur-[100px] pointer-events-none opacity-50" />
                 <div className="absolute top-0 left-1/4 w-[30%] h-full bg-accent/5 blur-[80px] pointer-events-none opacity-30" />
@@ -127,7 +127,7 @@ export function Header() {
                 {/* Unified Status Hub Gallery */}
                 <div className="flex items-center gap-2 md:gap-4 relative z-10">
                     {/* Status Hub Gallery */}
-                    <div className="hidden md:flex items-center gap-3 bg-white/40 dark:bg-white/5 backdrop-blur-2xl p-2 rounded-full border border-white/20 dark:border-white/5 shadow-2xl ring-1 ring-black/5 dark:ring-white/5">
+                    <div className="hidden md:flex items-center gap-3 bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-2xl p-2 rounded-full border border-default dark:border-white/5 shadow-2xl ring-1 ring-black/5 dark:ring-white/5">
 
                         {/* 1. Search Button */}
                         <motion.button
@@ -136,11 +136,11 @@ export function Header() {
                             onClick={openCommandPalette}
                             className="relative w-11 h-11 flex items-center justify-center group"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-white/10 group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
                             <Search strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold transition-colors duration-300" />
                         </motion.button>
 
-                        <div className="w-px h-6 bg-neutral-200 dark:bg-white/10 mx-1" />
+                        <div className="w-px h-6 bg-surface-bg dark:bg-surface-card/10 mx-1" />
 
                         {/* 2. Language Button */}
                         <motion.button
@@ -149,7 +149,7 @@ export function Header() {
                             onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                             className="relative w-11 h-11 flex items-center justify-center group overflow-hidden rounded-full"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-white/10 group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
                             <span className="text-lg relative z-10 grayscale group-hover:grayscale-0 transition-all duration-300 transform scale-110">{selectedLanguage?.flag}</span>
                         </motion.button>
 
@@ -160,16 +160,16 @@ export function Header() {
                             onClick={() => setIsNotificationsOpen(true)}
                             className="relative w-11 h-11 flex items-center justify-center group"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-white/10 group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
                             <Bell strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold group-hover:rotate-12 transition-all duration-300" />
                             {unreadCount > 0 && (
-                                <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 px-1.5 py-0.5 min-w-[20px] bg-red-600 text-white flex items-center justify-center text-[9px] font-black rounded-full border-2 border-white dark:border-bg-primary shadow-sm z-20">
+                                <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 px-1.5 py-0.5 min-w-[20px] bg-status-danger text-white flex items-center justify-center text-[9px] font-black rounded-full border-2 border-white dark:border-bg-primary shadow-sm z-20">
                                     {unreadCount > 99 ? '99' : unreadCount}
                                 </div>
                             )}
                         </motion.button>
 
-                        <div className="w-px h-6 bg-neutral-200 dark:bg-white/10 mx-1" />
+                        <div className="w-px h-6 bg-surface-bg dark:bg-surface-card/10 mx-1" />
 
 
                         {/* 6. Launchpad Button - Desktop Only */}
@@ -179,7 +179,7 @@ export function Header() {
                             onClick={toggleLaunchpad}
                             className="relative w-11 h-11 flex items-center justify-center group"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-white/10 group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
                             <div className="relative z-10 flex flex-wrap gap-0.5 w-4 h-4 items-center justify-center text-accent-gold opacity-70 group-hover:opacity-100 transition-opacity">
                                 <div className="w-1.5 h-1.5 rounded-[1px] bg-current" />
                                 <div className="w-1.5 h-1.5 rounded-[1px] bg-current" />
@@ -188,7 +188,7 @@ export function Header() {
                             </div>
                         </motion.button>
 
-                        <div className="w-px h-6 bg-neutral-200 dark:bg-white/10 mx-1" />
+                        <div className="w-px h-6 bg-surface-bg dark:bg-surface-card/10 mx-1" />
 
 
                         {/* 8. Settings Button */}
@@ -201,7 +201,7 @@ export function Header() {
                                     !hasAccessToSettings && "opacity-50 cursor-not-allowed"
                                 )}
                             >
-                                <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-white/10 group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                                <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
                                 <Settings strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold transition-colors duration-300" />
                             </motion.button>
                         )}

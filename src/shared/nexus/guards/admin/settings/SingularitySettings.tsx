@@ -16,7 +16,7 @@ import { logger } from '@/lib/logger';
  * Permet d'ajuster l'intelligence de l'Oracle et la profondeur comptable.
  */
 export function SingularitySettings() {
-    const [settings, setSettings] = useState<import('@nexus/contracts').GlobalSettings | null>(null);
+    const [settings, setSettings] = useState<any>(null); // SOVEREIGN_OVERRIDE: legacy typings
     const [saving, setSaving] = useState(false);
     const [rbacLevel, setRbacLevel] = useState<'ADMIN' | 'MANAGER' | 'DENIED'>('DENIED');
 
@@ -47,7 +47,7 @@ export function SingularitySettings() {
     const handleSave = async () => {
         setSaving(true);
         try {
-            await SettingsManager.saveSettings(settings);
+            await SettingsManager.saveSettings(settings as any); // SOVEREIGN_OVERRIDE
             logger.info('SingularitySettings: Intelligence updated.');
         } catch (e) {
             console.error("Failed to save", e);
@@ -75,14 +75,14 @@ export function SingularitySettings() {
                     className="bg-accent hover:bg-accent/90 text-white gap-2 px-6"
                     disabled={saving}
                 >
-                    {saving ? <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" /> : <Save size={16} />}
+                    {saving ? <div className="w-4 h-4 rounded-full border-2 border-default border-t-white animate-spin" /> : <Save size={16} />}
                     Sauvegarder les Protocoles
                 </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Section RH : Ratio de Staffing */}
-                <GlassCard className="p-6 flex flex-col gap-6 border-white/5 bg-white/5">
+                <GlassCard className="p-6 flex flex-col gap-6 border-white/5 bg-surface-card/5">
                     <div className="flex items-center gap-3">
                         <Users size={18} className="text-info" />
                         <span className="text-sm font-black uppercase tracking-tight">Intelligence RH (Oracle)</span>
@@ -98,7 +98,7 @@ export function SingularitySettings() {
                                     ...settings!,
                                     planningConfig: { ...settings?.planningConfig, staffToCoversRatio: parseInt(e.target.value) } as import('@nexus/contracts').PlanningConfig
                                 })}
-                                className="bg-black/40 border border-white/10 rounded-lg p-3 text-sm font-mono focus:border-accent outline-none transition-colors"
+                                className="bg-surface-sidebar/40 border border-subtle rounded-lg p-3 text-sm font-mono focus:border-accent outline-none transition-colors"
                             />
                         </div>
                         <p className="text-[10px] text-text-muted italic leading-relaxed">
@@ -108,7 +108,7 @@ export function SingularitySettings() {
                 </GlassCard>
 
                 {/* Section Finance : Mode Comptable */}
-                <GlassCard className="p-6 flex flex-col gap-6 border-white/5 bg-white/5">
+                <GlassCard className="p-6 flex flex-col gap-6 border-white/5 bg-surface-card/5">
                     <div className="flex items-center gap-3">
                         <Calculator size={18} className="text-success" />
                         <span className="text-sm font-black uppercase tracking-tight">Souveraineté Financière</span>
@@ -117,7 +117,7 @@ export function SingularitySettings() {
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Mode de Complexité</label>
-                            <div className="grid grid-cols-2 gap-2 bg-black/40 p-1 rounded-xl border border-white/10">
+                            <div className="grid grid-cols-2 gap-2 bg-surface-sidebar/40 p-1 rounded-xl border border-subtle">
                                 {['SIMPLE', 'EXPERT'].map((mode) => (
                                     <button
                                         key={mode}

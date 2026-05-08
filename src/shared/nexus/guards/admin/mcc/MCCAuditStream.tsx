@@ -47,17 +47,17 @@ export function MCCAuditStream() {
             {/* Header */}
             <div className="px-6 py-4 bg-[#161618] border-b border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                        <Terminal className="w-4 h-4 text-indigo-400" />
+                    <div className="w-8 h-8 rounded-lg bg-action-primary/10 flex items-center justify-center">
+                        <Terminal className="w-4 h-4 text-brand" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-gray-300">Empire Audit Stream</h3>
-                        <p className="text-[10px] text-gray-500 font-medium">Real-time Telemetry • Secure Channel</p>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Empire Audit Stream</h3>
+                        <p className="text-[10px] text-secondary font-medium">Real-time Telemetry • Secure Channel</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Live Connection</span>
+                    <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                    <span className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Live Connection</span>
                 </div>
             </div>
 
@@ -68,7 +68,7 @@ export function MCCAuditStream() {
             >
                 <AnimatePresence initial={false}>
                     {logs.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-600 opacity-50">
+                        <div className="h-full flex flex-col items-center justify-center text-secondary opacity-50">
                             <Database className="w-8 h-8 mb-2 stroke-1" />
                             <p className="text-[10px] uppercase tracking-widest">Waiting for telemetry data...</p>
                         </div>
@@ -87,8 +87,8 @@ export function MCCAuditStream() {
                                     borderLeftColor: { repeat: Infinity, duration: 2 }
                                 }}
                                 className={cn(
-                                    "flex items-start gap-4 p-2.5 rounded-xl hover:bg-white/[0.02] transition-all group border-l-2 border-transparent hover:border-white/5",
-                                    (log.severity === 'critical' || log.severity === 'high') && "bg-red-500/[0.02]"
+                                    "flex items-start gap-4 p-2.5 rounded-xl hover:bg-surface-card/[0.02] transition-all group border-l-2 border-transparent hover:border-white/5",
+                                    (log.severity === 'critical' || log.severity === 'high') && "bg-status-danger/[0.02]"
                                 )}
                             >
                                 <div className="mt-1">
@@ -99,18 +99,18 @@ export function MCCAuditStream() {
                                         <motion.span 
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="text-[9px] font-bold text-indigo-500/80 uppercase"
+                                            className="text-[9px] font-bold text-brand/80 uppercase"
                                         >
                                             [{log.module}]
                                         </motion.span>
-                                        <span className="text-[10px] font-medium text-gray-300 group-hover:text-white transition-colors">{log.action}</span>
-                                        <span className="text-[9px] text-gray-600 ml-auto">{log.timestamp.toLocaleTimeString()}</span>
+                                        <span className="text-[10px] font-medium text-muted group-hover:text-white transition-colors">{log.action}</span>
+                                        <span className="text-[9px] text-secondary ml-auto">{log.timestamp.toLocaleTimeString()}</span>
                                     </div>
-                                    {log.details && (
-                                        <p className="text-[9px] text-gray-500 truncate opacity-60 group-hover:opacity-100 transition-opacity">
+                                    {log.details ? (
+                                        <p className="text-[9px] text-secondary truncate opacity-60 group-hover:opacity-100 transition-opacity">
                                             {JSON.stringify(log.details)}
                                         </p>
-                                    )}
+                                    ) : null}
                                 </div>
                             </motion.div>
                         ))
@@ -126,11 +126,11 @@ export function MCCAuditStream() {
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent"
                 />
                 <div className="flex items-center gap-2 relative z-10">
-                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">GTM-7X2A9</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-action-primary" />
+                    <span className="text-[8px] font-bold text-secondary uppercase tracking-widest">GTM-7X2A9</span>
                 </div>
-                <div className="w-px h-3 bg-white/5 ml-auto relative z-10" />
-                <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest relative z-10">Buffer Status: {logs.length}/50</span>
+                <div className="w-px h-3 bg-surface-card/5 ml-auto relative z-10" />
+                <span className="text-[8px] font-bold text-secondary uppercase tracking-widest relative z-10">Buffer Status: {logs.length}/50</span>
             </div>
         </div>
     );
@@ -139,10 +139,10 @@ export function MCCAuditStream() {
 function SeverityIcon({ severity }: { severity: string }) {
     switch (severity) {
         case 'critical':
-            return <AlertCircle className="w-3.5 h-3.5 text-red-500" />;
+            return <AlertCircle className="w-3.5 h-3.5 text-status-danger" />;
         case 'high':
-            return <Shield className="w-3.5 h-3.5 text-amber-500" />;
+            return <Shield className="w-3.5 h-3.5 text-status-warning" />;
         default:
-            return <Info className="w-3.5 h-3.5 text-blue-400 opacity-60" />;
+            return <Info className="w-3.5 h-3.5 text-brand opacity-60" />;
     }
 }

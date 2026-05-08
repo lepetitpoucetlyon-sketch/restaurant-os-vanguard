@@ -65,18 +65,18 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-neutral-900/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-md"
                     />
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-2xl bg-white dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-white/10"
+                        className="relative w-full max-w-2xl bg-surface-card dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-subtle"
                     >
                         {/* Header */}
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-status-success to-status-success text-white flex items-center justify-center shadow-lg">
                                     <Filter size={24} />
                                 </div>
                                 <div>
@@ -84,7 +84,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">Audience CRM</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors">
+                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
@@ -99,7 +99,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Ex: Clients fidèles premium"
-                                    className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all"
+                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all"
                                 />
                             </div>
 
@@ -111,7 +111,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Décrivez l'audience de ce segment..."
                                     rows={2}
-                                    className="w-full bg-white dark:bg-white/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all resize-none"
+                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all resize-none"
                                 />
                             </div>
 
@@ -122,7 +122,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     {CRITERIA_OPTIONS.map((criterion) => (
                                         <div key={criterion.id}>
                                             <div className="flex items-center gap-2 mb-3">
-                                                <criterion.icon className="w-4 h-4 text-emerald-500" />
+                                                <criterion.icon className="w-4 h-4 text-status-success" />
                                                 <span className="text-xs font-black uppercase tracking-widest text-text-primary">{criterion.label}</span>
                                             </div>
                                             <div className="flex flex-wrap gap-2">
@@ -132,8 +132,8 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                                         onClick={() => toggleCriteria(criterion.id, opt)}
                                                         className={`px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider border transition-all ${
                                                             criteria[criterion.id] === opt
-                                                                ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20'
-                                                                : 'border-border/50 text-text-muted hover:border-emerald-500/30 hover:text-emerald-500'
+                                                                ? 'bg-status-success text-white border-emerald-500 shadow-lg shadow-emerald-500/20'
+                                                                : 'border-border/50 text-text-muted hover:border-emerald-500/30 hover:text-status-success'
                                                         }`}
                                                     >
                                                         {opt}
@@ -150,24 +150,24 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
-                                    className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6 flex items-center justify-between"
+                                    className="bg-status-success/5 border border-emerald-500/20 rounded-2xl p-6 flex items-center justify-between"
                                 >
                                     <div className="flex items-center gap-3">
-                                        <Users className="w-5 h-5 text-emerald-500" />
+                                        <Users className="w-5 h-5 text-status-success" />
                                         <span className="text-xs font-black uppercase tracking-widest text-text-primary">Audience estimée</span>
                                     </div>
-                                    <span className="text-3xl font-serif font-bold text-emerald-500">~{estimatedSize}</span>
+                                    <span className="text-3xl font-serif font-bold text-status-success">~{estimatedSize}</span>
                                 </motion.div>
                             )}
                         </div>
 
                         {/* Actions */}
-                        <div className="p-8 bg-white dark:bg-[#111] border-t border-border flex gap-4">
+                        <div className="p-8 bg-surface-card dark:bg-[#111] border-t border-border flex gap-4">
                             <Button variant="ghost" className="flex-1 h-16 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs" onClick={onClose}>
                                 Annuler
                             </Button>
                             <Button
-                                className="flex-[2] h-16 bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
+                                className="flex-[2] h-16 bg-gradient-to-r from-status-success to-status-success text-white hover:from-status-success hover:to-status-success rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
                                 onClick={handleSubmit}
                                 disabled={!name.trim()}
                             >

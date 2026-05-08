@@ -74,12 +74,12 @@ export function ReleveTemperatures() {
     return (
         <div className="space-y-8 pb-12">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-[22px] bg-blue-500/10 text-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/5">
+                <div className="w-12 h-12 rounded-[22px] bg-action-primary/10 text-brand flex items-center justify-center shadow-lg shadow-blue-500/5">
                     <Thermometer size={24} />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Relevé de Température</h2>
-                    <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">Surveillance continue des enceintes thermiques</p>
+                    <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Relevé de Température</h2>
+                    <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Surveillance continue des enceintes thermiques</p>
                 </div>
             </div>
 
@@ -94,7 +94,7 @@ export function ReleveTemperatures() {
                             <div className="flex justify-between items-start mb-6">
                                 <div className={cn(
                                     "w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm",
-                                    eq.max < 0 ? "bg-cyan-500/10 text-cyan-500" : eq.min > 10 ? "bg-orange-500/10 text-orange-500" : "bg-blue-500/10 text-blue-500"
+                                    eq.max < 0 ? "bg-action-primary/10 text-brand" : eq.min > 10 ? "bg-status-warning/10 text-status-warning" : "bg-action-primary/10 text-brand"
                                 )}>
                                     {eq.max < 0 ? <Snowflake size={24} /> : eq.min > 10 ? <Flame size={24} /> : <Thermometer size={24} />}
                                 </div>
@@ -102,7 +102,7 @@ export function ReleveTemperatures() {
                                     <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-1">Dernier Relevé</div>
                                     <div className={cn(
                                         "text-2xl font-serif italic font-black",
-                                        !lastLog ? "text-text-muted" : isAlert ? "text-rose-500" : "text-emerald-500"
+                                        !lastLog ? "text-text-muted" : isAlert ? "text-status-danger" : "text-status-success"
                                     )}>
                                         {lastLog ? `${lastLog.value}°C` : '--'}
                                     </div>
@@ -133,7 +133,7 @@ export function ReleveTemperatures() {
 
                             {/* Alert Indicator */}
                             {isAlert && (
-                                <div className="absolute top-0 right-0 w-2 h-full bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.5)]" />
+                                <div className="absolute top-0 right-0 w-2 h-full bg-status-danger shadow-[0_0_20px_rgba(244,63,94,0.5)]" />
                             )}
                         </div>
                     );
@@ -150,7 +150,7 @@ export function ReleveTemperatures() {
                     <div className="space-y-8 pt-4 pb-6">
                         <div className="flex justify-between items-center px-4">
                             <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">Plage Conforme</span>
-                            <span className="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full">{recordingEq.min}°C à {recordingEq.max}°C</span>
+                            <span className="text-[10px] font-black text-status-success bg-status-success/10 px-3 py-1 rounded-full">{recordingEq.min}°C à {recordingEq.max}°C</span>
                         </div>
 
                         <div className="flex items-center justify-center gap-8 py-8">
@@ -163,7 +163,7 @@ export function ReleveTemperatures() {
                             <div className="text-center w-32 relative">
                                 <span className={cn(
                                     "text-6xl font-serif font-black italic tracking-tighter transition-colors",
-                                    (tempValue < recordingEq.min || tempValue > recordingEq.max) ? "text-rose-500" : "text-text-primary"
+                                    (tempValue < recordingEq.min || tempValue > recordingEq.max) ? "text-status-danger" : "text-text-primary"
                                 )}>
                                     {tempValue.toFixed(1)}
                                 </span>
@@ -180,12 +180,12 @@ export function ReleveTemperatures() {
                         {(tempValue < recordingEq.min || tempValue > recordingEq.max) && (
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                                className="bg-rose-500/10 border border-rose-500/20 p-4 rounded-2xl flex items-start gap-3"
+                                className="bg-status-danger/10 border border-rose-500/20 p-4 rounded-2xl flex items-start gap-3"
                             >
-                                <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" />
+                                <AlertTriangle className="w-5 h-5 text-status-danger shrink-0" />
                                 <div>
-                                    <h4 className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Alerte de Non-Conformité</h4>
-                                    <p className="text-xs font-medium text-rose-500/80 mt-1">La température saisie est hors des limites acceptables. Cet incident nécessitera une action corrective.</p>
+                                    <h4 className="text-[10px] font-black text-status-danger uppercase tracking-widest">Alerte de Non-Conformité</h4>
+                                    <p className="text-xs font-medium text-status-danger/80 mt-1">La température saisie est hors des limites acceptables. Cet incident nécessitera une action corrective.</p>
                                 </div>
                             </motion.div>
                         )}
@@ -195,7 +195,7 @@ export function ReleveTemperatures() {
                             className={cn(
                                 "w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-2xl transition-all",
                                 (tempValue < recordingEq.min || tempValue > recordingEq.max)
-                                    ? "bg-rose-500 text-white shadow-rose-500/20 hover:bg-rose-600"
+                                    ? "bg-status-danger text-white shadow-rose-500/20 hover:bg-status-danger"
                                     : "bg-text-primary text-bg-primary"
                             )}
                         >

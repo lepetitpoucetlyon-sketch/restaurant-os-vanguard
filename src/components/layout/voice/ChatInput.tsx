@@ -46,7 +46,7 @@ export function ChatInput({
                         "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 transition-all",
                         isDictating 
                             ? "bg-accent text-white animate-pulse shadow-lg shadow-accent/20" 
-                            : "bg-bg-tertiary text-text-primary hover:bg-neutral-800 hover:text-white disabled:opacity-50"
+                            : "bg-bg-tertiary text-text-primary hover:bg-surface-sidebar hover:text-white disabled:opacity-50"
                     )}
                 >
                     <Mic className="w-5 h-5" />

@@ -23,14 +23,14 @@ export function RecipeProtocolTab({
 }: RecipeProtocolTabProps) {
     return (
         <div className="space-y-10">
-            <div className="bg-bg-tertiary p-8 rounded-[3rem] border-2 border-dashed border-border text-neutral-900">
+            <div className="bg-bg-tertiary p-8 rounded-[3rem] border-2 border-dashed border-border text-primary">
                 <h3 className="font-serif font-black text-xl mb-6">Nouvelle Étape Opérationnelle</h3>
                 <div className="space-y-4">
                     <textarea
                         placeholder="Instruction technique détaillée..."
                         value={newStep.instruction}
                         onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, instruction: e.target.value }))}
-                        className="w-full h-24 px-6 py-4 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold text-sm outline-none resize-none"
+                        className="w-full h-24 px-6 py-4 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold text-sm outline-none resize-none"
                     />
                     <div className="grid grid-cols-2 gap-4">
                         <div className="relative">
@@ -40,7 +40,7 @@ export function RecipeProtocolTab({
                                 placeholder="Temps requis (min)"
                                 value={newStep.duration}
                                 onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, duration: parseInt(e.target.value) || 5 }))}
-                                className="w-full h-14 pl-10 pr-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
+                                className="w-full h-14 pl-10 pr-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                             />
                         </div>
                         <input
@@ -48,16 +48,16 @@ export function RecipeProtocolTab({
                             placeholder="URL Illustration (Visuel)"
                             value={newStep.imageUrl}
                             onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, imageUrl: e.target.value }))}
-                            className="w-full h-14 px-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
+                            className="w-full h-14 px-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
                     <textarea
                         placeholder="Le conseil du Chef (Astuces de dressage, points de vigilance...)"
                         value={newStep.tip}
                         onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, tip: e.target.value }))}
-                        className="w-full h-20 px-6 py-4 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold italic text-sm outline-none resize-none"
+                        className="w-full h-20 px-6 py-4 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold italic text-sm outline-none resize-none"
                     />
-                    <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-black text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                    <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
                         <Plus className="w-4 h-4 mr-2" /> Intégrer cette étape au protocole
                     </Button>
                 </div>
@@ -72,7 +72,7 @@ export function RecipeProtocolTab({
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="group bg-white p-8 rounded-[3rem] border border-border shadow-sm relative overflow-hidden"
+                            className="group bg-surface-card p-8 rounded-[3rem] border border-border shadow-sm relative overflow-hidden"
                         >
                             <div className="absolute top-0 left-0 w-2 h-full bg-accent opacity-20" />
                             <div className="flex items-start gap-8">

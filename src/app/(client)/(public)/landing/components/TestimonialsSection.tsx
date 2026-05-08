@@ -32,7 +32,7 @@ export function TestimonialsSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: idx * 0.1 }}
-                            className="p-8 rounded-3xl bg-surface-card border border-border-default hover:border-[#C9A227]/30 transition-all duration-500"
+                            className="p-8 rounded-3xl bg-surface-card border border-border-default hover:border-focus/30 transition-all duration-500"
                         >
                             {/* Stars */}
                             <div className="flex gap-1 mb-6">
@@ -53,7 +53,7 @@ export function TestimonialsSection() {
                                     alt={testimonial.author}
                                     width={48}
                                     height={48}
-                                    className="w-12 h-12 rounded-full object-cover border-2 border-[#C9A227]/30"
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-focus/30"
                                 />
                                 {testimonial.author && (
                                     <div>

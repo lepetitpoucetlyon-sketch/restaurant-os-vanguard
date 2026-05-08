@@ -37,7 +37,7 @@ export function TwoFactorChallenge() {
         if (code.length < 6) return;
         setIsLoading(true);
         try {
-            const success = await verifyTwoFactor(code);
+            const success = await verifyTwoFactor!(code);
             if (!success) {
                 showToast("Code de vérification invalide", "error");
                 setCode("");

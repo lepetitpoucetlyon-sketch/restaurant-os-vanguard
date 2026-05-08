@@ -41,22 +41,22 @@ export class ResilienceSlayer {
      * Hunts for "Zombies" (stale, corrupted, or out-of-sync states).
      */
     private static huntZombies() {
-        const targets = [
+        const targets: { atom: import('jotai').PrimitiveAtom<any>, path: string }[] = [
             { atom: ordersNodeAtom, path: 'operational/orders' },
             { atom: stockItemsNodeAtom, path: 'operational/stock' },
             { atom: journalEntriesNodeAtom, path: 'finance/ledger' }
-        ] as const;
+        ];
 
         targets.forEach(target => {
-            const node = this.store.get(target.atom as any) as import('@/store/base').NexusNode<unknown>;
+            const node = this.store.get(target.atom) as import('@/store/base').NexusNode<unknown> & { version?: number, remoteVersion?: number };
             if (node.loading || !node.data) return;
 
             // Audit the current heap against the calculated CRC
             const currentCRC = SelfHealingEngine.calculateCRC(node.data);
             
             // 🛡️ ATOMIC BURST: Anti-Latency Reconciliation & Rollback Engine
-            if ((node as any).version && (node as any).remoteVersion && (node as any).version !== (node as any).remoteVersion) {
-                logger.warn(`[Slayer] DRIFT DETECTED in ${target.path}. Version mismatch: Local ${(node as any).version} vs Remote ${(node as any).remoteVersion}`);
+            if (node.version && node.remoteVersion && node.version !== node.remoteVersion) {
+                logger.warn(`[Slayer] DRIFT DETECTED in ${target.path}. Version mismatch: Local ${node.version} vs Remote ${node.remoteVersion}`);
                 
                 // 🔄 ROLLBACK ENGINE: If remote version is behind or conflicted, we force restore
                 const persistencePath = Nexus.getTenantPath(target.path);
@@ -78,7 +78,7 @@ export class ResilienceSlayer {
      * Triggered when an Atomic Burst fails or a transaction is rejected by the database.
      */
     static handleTransactionFailure(atomPath: string, error: unknown) {
-        logger.error(`[Slayer] TRANSACTION_REJECTED for ${atomPath}. Reason: ${(error as any)?.message || 'Unknown Conflict'}`);
+        logger.error(`[Slayer] TRANSACTION_REJECTED for ${atomPath}. Reason: ${error instanceof Error ? error.message : String(error)}`);
         
         // Map path to atom
         const map: Record<string, unknown> = {

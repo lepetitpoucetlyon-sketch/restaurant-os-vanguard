@@ -47,7 +47,7 @@ export function PerformanceMonitor() {
 
   const getStatusColor = () => {
     if (fps < 30 || latency > 16) return "bg-error text-white";
-    if (fps < 50 || latency > 8) return "bg-warning text-black";
+    if (fps < 50 || latency > 8) return "bg-warning text-primary";
     return "bg-success text-white";
   };
 
@@ -59,14 +59,14 @@ export function PerformanceMonitor() {
           <span className="text-sm font-serif italic font-black">{fps} FPS</span>
         </div>
         
-        <div className="w-px h-6 bg-white/20" />
+        <div className="w-px h-6 bg-surface-card/20" />
         
         <div className="flex flex-col">
           <span className="text-[8px] font-black uppercase tracking-widest opacity-70">Latence Atome</span>
           <span className="text-sm font-serif italic font-black">{latency}ms</span>
         </div>
 
-        <div className="w-px h-6 bg-white/20" />
+        <div className="w-px h-6 bg-surface-card/20" />
 
         <div className="flex flex-col">
           <span className="text-[8px] font-black uppercase tracking-widest opacity-70">RAM Grade</span>

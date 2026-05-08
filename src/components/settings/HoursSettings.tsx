@@ -119,7 +119,7 @@ export default function HoursSettings() {
                     ) : (
                         <div className="relative">
                             <Save className="w-5 h-5 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Synchroniser les Protocoles

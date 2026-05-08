@@ -3,7 +3,7 @@ import { History, Search } from 'lucide-react';
 
 export const TraceabilityLog: React.FC = () => {
     return (
-        <div className="p-6 bg-white dark:bg-bg-secondary rounded-[2rem] border border-border shadow-soft">
+        <div className="p-6 bg-surface-card dark:bg-bg-secondary rounded-[2rem] border border-border shadow-soft">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-serif font-bold italic flex items-center gap-3">
                     <History className="w-5 h-5 text-accent-gold" />

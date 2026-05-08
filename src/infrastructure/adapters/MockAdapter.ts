@@ -1,31 +1,32 @@
-import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
+import { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext } from "@/lib/nexus/types";
 import { logger } from '@/lib/logger';
-import { SovereignGuard } from '@nexus/guards/SovereignGuard';
-import type { SovereignData } from '@/shared/nexus-contract';
+import { 
+    IDocumentStore, 
+    IQueryEngine, 
+    IRealtimeSubscriber, 
+    IQueryOptions 
+} from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
 /**
- * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI)
+ * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI - Pure I/O)
  */
-export class MockAdapter implements INexusAdapter {
-    private storage: import('@/shared/nexus-contract').SovereignData = {};
+export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine, IRealtimeSubscriber {
+    private storage: Record<string, unknown> = {};
     
-    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
+    async get<T = unknown>(path: string, context?: NexusContext): Promise<T | null> {
         return (this.storage[path] as T) || null;
     }
 
-
-    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
-
+    async query<T = unknown>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
-            .map(([, data]) => data as SovereignData);
+            .map(([, data]) => data as Record<string, unknown>);
         
-        // Grade VI: Basic Mock Ordering
         if (options?.orderBy) {
             const { field, direction } = options.orderBy;
             results.sort((a, b) => {
-                const valA = a[field];
-                const valB = b[field];
+                const valA = a[field] as any; // Cast for comparison
+                const valB = b[field] as any;
                 if (valA === null || valA === undefined) return direction === 'asc' ? 1 : -1;
                 if (valB === null || valB === undefined) return direction === 'asc' ? -1 : 1;
                 if (valA < valB) return direction === 'asc' ? -1 : 1;
@@ -34,31 +35,29 @@ export class MockAdapter implements INexusAdapter {
             });
         }
 
-        // Basic Mock Limit
         if (options?.limit) {
             results = results.slice(0, options.limit);
         }
 
-        return results as T[];
+        return results as unknown as T[];
     }
 
-    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void): () => void {
-
+    onSnapshot<T = unknown>(path: string, callback: (data: T) => void, options?: IQueryOptions, context?: NexusContext): () => void {
         callback(this.storage[path] as T);
-        return () => {}; // No-op for mock
+        return () => {}; 
     }
 
-    batch(): INexusBatch {
+    batch(context?: NexusContext): INexusBatch {
         const operations: Array<() => Promise<void>> = [];
         return {
-            set: (path, data) => operations.push(async () => { await this.set(path, data); }),
-            update: (path, data) => operations.push(async () => { 
+            set: (path: string, data: unknown) => operations.push(async () => { await this.set(path, data); }),
+            update: (path: string, data: Record<string, unknown>) => operations.push(async () => { 
                 await this.update(path, data); 
             }),
-            increment: (path, field, amount) => operations.push(async () => {
+            increment: (path: string, field: string, amount: number) => operations.push(async () => {
                 await this.increment(path, field, amount);
             }),
-            delete: (path) => operations.push(async () => { delete this.storage[path]; }),
+            delete: (path: string) => operations.push(async () => { delete this.storage[path]; }),
             commit: async () => {
                 for (const op of operations) {
                     await op();
@@ -68,30 +67,26 @@ export class MockAdapter implements INexusAdapter {
         };
     }
 
-    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
-        this.storage[path] = await SovereignGuard.protectWrite(path, data as SovereignData);
+    async set<T = unknown>(path: string, data: T, options?: { merge?: boolean }, context?: NexusContext): Promise<void> {
+        this.storage[path] = data;
     }
 
-    async create<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T): Promise<void> {
+    async create<T = unknown>(path: string, data: T, context?: NexusContext): Promise<void> {
         return this.set(path, data);
     }
 
-    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
-        const existingData = this.storage[path];
-        const baseData = existingData && typeof existingData === 'object' && !Array.isArray(existingData)
-            ? existingData as SovereignData
-            : {};
-        const mergedData = { ...baseData, ...(data as Record<string, import('@/shared/nexus-contract').SovereignField>) } as SovereignData;
-        this.storage[path] = await SovereignGuard.protectWrite(path, mergedData);
+    async update<T = unknown>(path: string, data: Partial<T>, context?: NexusContext): Promise<void> {
+        const existingData = (this.storage[path] || {}) as Record<string, unknown>;
+        this.storage[path] = { ...existingData, ...data };
     }
 
-    async increment(path: string, field: string, amount: number): Promise<void> {
-        const existingData = (this.storage[path] || {}) as Record<string, import("@/shared/nexus-contract").SovereignValue>;
-        const currentValue = typeof existingData[field] === 'number' ? existingData[field] : 0;
-        await this.update(path, { [field]: currentValue + amount });
+    async increment(path: string, field: string, amount: number, context?: NexusContext): Promise<void> {
+        const existingData = (this.storage[path] || {}) as Record<string, unknown>;
+        const currentValue = typeof existingData[field] === 'number' ? existingData[field] as number : 0;
+        await this.update(path, { [field]: currentValue + amount } as Record<string, unknown>);
     }
 
-    async delete(path: string): Promise<void> {
+    async delete(path: string, context?: NexusContext): Promise<void> {
         delete this.storage[path];
     }
 

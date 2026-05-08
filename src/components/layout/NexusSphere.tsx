@@ -39,8 +39,8 @@ export const NexusSphere: React.FC<NexusSphereProps> = ({ isActive, isProcessing
           scale: { duration: 0.5, repeat: Infinity, ease: "linear" }
         }}
         className={cn(
-          "relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-lg",
-          "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
+          "relative w-8 h-8 rounded-full overflow-hidden border border-default shadow-lg",
+          "bg-gradient-to-br from-action-primary via-purple-500 to-status-danger"
         )}
       >
         {/* Shimmer Effect */}
@@ -58,7 +58,7 @@ export const NexusSphere: React.FC<NexusSphereProps> = ({ isActive, isProcessing
               rotate: [0, 90, 180]
             }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-1 bg-white/20 backdrop-blur-sm"
+            className="absolute inset-1 bg-surface-card/20 backdrop-blur-sm"
           />
         )}
       </motion.div>

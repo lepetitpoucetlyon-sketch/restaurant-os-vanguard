@@ -30,7 +30,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
             showClose={false}
             noPadding
         >
-            <div className="flex flex-col h-[85vh] transition-colors duration-500 bg-white">
+            <div className="flex flex-col h-[85vh] transition-colors duration-500 bg-surface-card">
                 {/* Modal Header */}
                 <div className="relative p-10 overflow-hidden transition-colors duration-500 bg-gradient-to-br from-[#F1F0EA] via-white to-[#F1F0EA]">
                     <div className="absolute inset-0 opacity-[0.05] transition-opacity" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")` }} />
@@ -38,7 +38,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                     <button
                         type="button"
                         onClick={onClose}
-                        className="absolute top-8 right-8 w-12 h-12 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-300 z-10 border cursor-pointer bg-black/5 hover:bg-black/10 text-black border-black/10"
+                        className="absolute top-8 right-8 w-12 h-12 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-300 z-10 border cursor-pointer bg-surface-sidebar/5 hover:bg-surface-sidebar/10 text-primary border-black/10"
                     >
                         <X className="w-6 h-6" />
                     </button>
@@ -62,7 +62,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                     {task.isCompleted ? "Protocol Terminé" : "Opération en cours"}
                                 </span>
                             </div>
-                            <h1 className="text-4xl font-serif font-black tracking-tight leading-tight transition-colors text-black">{task.name}</h1>
+                            <h1 className="text-4xl font-serif font-black tracking-tight leading-tight transition-colors text-primary">{task.name}</h1>
                         </div>
                     </div>
                 </div>
@@ -128,7 +128,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                                 "flex items-center gap-6 p-4 rounded-[1.5rem] border transition-all duration-300",
                                                 item.done
                                                     ? "bg-success/5 border-success/20"
-                                                    : "bg-white border-black/5 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
+                                                    : "bg-surface-card border-black/5 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
                                             )}
                                         >
                                             <div className={cn(
@@ -196,7 +196,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                     <Button
                         type="button"
                         variant="outline"
-                        className="flex-1 md:flex-none rounded-2xl font-black h-14 border-border px-8 bg-white hover:bg-bg-tertiary transition-all text-[11px] uppercase tracking-widest"
+                        className="flex-1 md:flex-none rounded-2xl font-black h-14 border-border px-8 bg-surface-card hover:bg-bg-tertiary transition-all text-[11px] uppercase tracking-widest"
                         onClick={onClose}
                     >
                         Fermer

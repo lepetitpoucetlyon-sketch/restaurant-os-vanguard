@@ -104,8 +104,8 @@ export function TracabiliteEtiquettes() {
                         <Tags size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Traçabilité & DLC</h2>
-                        <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">Numérisation des étiquettes sanitaires</p>
+                        <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Traçabilité & DLC</h2>
+                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Numérisation des étiquettes sanitaires</p>
                     </div>
                 </div>
 
@@ -144,7 +144,7 @@ export function TracabiliteEtiquettes() {
                                     </div>
                                     <button
                                         onClick={() => handleDelete(label.id)}
-                                        className="w-8 h-8 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-500 hover:text-white"
+                                        className="w-8 h-8 rounded-full bg-status-danger/10 text-status-danger flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-status-danger hover:text-white"
                                     >
                                         <Trash2 size={14} />
                                     </button>
@@ -172,14 +172,14 @@ export function TracabiliteEtiquettes() {
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                            <div className="w-8 h-8 rounded-full bg-status-warning/10 flex items-center justify-center text-status-warning">
                                                 <CalendarClock size={14} />
                                             </div>
                                             <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">DLC</span>
                                         </div>
                                         <span className={cn(
                                             "text-xs font-black uppercase tracking-widest",
-                                            new Date(label.expirationDate).getTime() < nowTimestamp ? "text-rose-500" : "text-amber-500"
+                                            new Date(label.expirationDate).getTime() < nowTimestamp ? "text-status-danger" : "text-status-warning"
                                         )}>
                                             {new Date(label.expirationDate).toLocaleDateString('fr-FR')}
                                         </span>
@@ -187,7 +187,7 @@ export function TracabiliteEtiquettes() {
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                            <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                                 <Box size={14} />
                                             </div>
                                             <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">ZONE</span>
@@ -233,7 +233,7 @@ export function TracabiliteEtiquettes() {
                                             <span className="text-[8px] font-black uppercase tracking-widest">Scanner OCR / Photo</span>
                                         </>
                                     )}
-                                    {formData.imageUrl && <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-white" /></div>}
+                                    {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-white" /></div>}
                                 </button>
                             </div>
 

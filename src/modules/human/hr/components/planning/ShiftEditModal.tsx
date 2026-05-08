@@ -95,11 +95,11 @@ export function ShiftEditModal({
     if (!user || !date) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500">
+        <div className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-white/10"
+                className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-subtle"
             >
                 {/* Modal Header */}
                 <div className="bg-[#111] p-10 text-white relative overflow-hidden">
@@ -140,7 +140,7 @@ export function ShiftEditModal({
                 <div className="p-10 space-y-10 bg-[#050505]">
                     {/* Service Type Selector */}
                     <div>
-                        <label className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.3em] mb-4 block italic">
+                        <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mb-4 block italic">
                             Assignation du Service
                         </label>
                         <div className="grid grid-cols-3 gap-4">
@@ -186,7 +186,7 @@ export function ShiftEditModal({
                                             startTime: e.target.value,
                                         }))
                                     }
-                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-white/10 text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
+                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-subtle text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -205,7 +205,7 @@ export function ShiftEditModal({
                                             endTime: e.target.value,
                                         }))
                                     }
-                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-white/10 text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
+                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-subtle text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -224,14 +224,14 @@ export function ShiftEditModal({
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-10 bg-[--color-surface-primary] border-t border-neutral-50 flex items-center justify-between gap-6">
+                <div className="p-10 bg-[--color-surface-primary] border-t border-subtle flex items-center justify-between gap-6">
                     {!isNew ? (
                         <button
                             onClick={() => {
                                 onDelete(shift!.id);
                                 onClose();
                             }}
-                            className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all flex items-center gap-3"
+                            className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-status-danger hover:bg-surface-bg transition-all flex items-center gap-3"
                         >
                             <Trash2 className="w-4 h-4" />
                             AUTORISER DESTRUCTION
@@ -242,13 +242,13 @@ export function ShiftEditModal({
                     <div className="flex gap-4">
                         <button
                             onClick={onClose}
-                            className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-all"
+                            className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-muted hover:text-primary transition-all"
                         >
                             ANNULER
                         </button>
                         <button
                             onClick={handleSave}
-                            className="h-16 px-12 bg-black text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
+                            className="h-16 px-12 bg-surface-sidebar text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
                         >
                             <Save className="w-4 h-4 text-accent" />
                             {isNew ? "SCELLER SHIFT" : "MAINTENIR MODIFICATIONS"}

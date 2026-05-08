@@ -110,11 +110,11 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                         else setIsSearchActive(false);
                                                     }
                                                 }}
-                                                className="w-full h-20 pl-20 pr-16 bg-black/5 border border-accent-gold/30 rounded-[2.5rem] text-2xl font-serif font-black italic text-neutral-900 outline-none focus:border-accent-gold focus:bg-black/10 transition-all tracking-tighter"
+                                                className="w-full h-20 pl-20 pr-16 bg-surface-sidebar/5 border border-accent-gold/30 rounded-[2.5rem] text-2xl font-serif font-black italic text-primary outline-none focus:border-accent-gold focus:bg-surface-sidebar/10 transition-all tracking-tighter"
                                             />
                                             <button
                                                 onClick={() => { setIsSearchActive(false); setSearchQuery(""); }}
-                                                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-black hover:text-accent-gold transition-all group/close"
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-primary hover:text-accent-gold transition-all group/close"
                                             >
                                                 <X className="w-6 h-6 group-hover/close:rotate-90 transition-transform duration-500" />
                                             </button>
@@ -162,7 +162,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                             className="group flex flex-col items-center gap-6 transition-all duration-700 active:scale-95"
                                         >
                                             <div className="relative w-14 h-14 md:w-16 md:h-16 flex items-center justify-center group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-700">
-                                                <div className="absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-black/5 border-2 transition-all duration-700"
+                                                <div className="absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-surface-sidebar/5 border-2 transition-all duration-700"
                                                     style={{
                                                         borderColor: hoveredIndex === -1 ? 'var(--color-accent-gold)' : 'rgba(0,0,0,0.05)',
                                                         boxShadow: hoveredIndex === -1
@@ -172,12 +172,12 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                 />
                                                 <div className="absolute inset-[3px] rounded-[1.8rem] md:rounded-[2.2rem] bg-transparent border border-black/5" />
                                                 <Search
-                                                    className={cn("relative z-10 w-6 h-6 md:w-7 md:h-7 transition-all duration-700", hoveredIndex === -1 ? "text-accent-gold rotate-12 scale-110" : "text-neutral-400")}
+                                                    className={cn("relative z-10 w-6 h-6 md:w-7 md:h-7 transition-all duration-700", hoveredIndex === -1 ? "text-accent-gold rotate-12 scale-110" : "text-muted")}
                                                     strokeWidth={1.5}
                                                 />
                                             </div>
                                             <div className="flex flex-col items-center text-center">
-                                                <span className="font-black text-[11px] md:text-[13px] uppercase tracking-[0.2em] group-hover:text-accent-gold transition-colors duration-500 text-black/40">
+                                                <span className="font-black text-[11px] md:text-[13px] uppercase tracking-[0.2em] group-hover:text-accent-gold transition-colors duration-500 text-primary/40">
                                                     {t('common.search')}
                                                 </span>
                                                 <div className="w-0 group-hover:w-10 h-0.5 bg-accent-gold transition-all duration-700 mt-2 rounded-full" />
@@ -217,7 +217,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                 >
                                                     {/* Museum Exhibit Card - Full Categorical Contour */}
                                                     <div
-                                                        className="absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-black/5 border-2 transition-all duration-300"
+                                                        className="absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-surface-sidebar/5 border-2 transition-all duration-300"
                                                         style={{
                                                             borderColor: hoveredIndex === actualIdx ? item.sectionColor : `${item.sectionColor}80`,
                                                             boxShadow: hoveredIndex === actualIdx
@@ -236,7 +236,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                     <Icon
                                                         className={cn(
                                                             "relative z-10 w-6 h-6 md:w-7 md:h-7 transition-all duration-300",
-                                                            hoveredIndex !== actualIdx && "text-black opacity-60"
+                                                            hoveredIndex !== actualIdx && "text-primary opacity-60"
                                                         )}
                                                         style={{
                                                             color: hoveredIndex === actualIdx ? item.sectionColor : undefined,
@@ -255,7 +255,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                 </div>
 
                                                 <div className="flex flex-col items-center text-center px-2">
-                                                    <span className="font-serif font-black italic text-[13px] md:text-[15px] uppercase tracking-wider group-hover:text-accent-gold transition-all duration-300 line-clamp-2 max-w-[110px] md:max-w-[140px] leading-tight opacity-95 group-hover:opacity-100 text-black">
+                                                    <span className="font-serif font-black italic text-[13px] md:text-[15px] uppercase tracking-wider group-hover:text-accent-gold transition-all duration-300 line-clamp-2 max-w-[110px] md:max-w-[140px] leading-tight opacity-95 group-hover:opacity-100 text-primary">
                                                         {t(`nav.${item.key}`)}
                                                     </span>
                                                     <motion.div

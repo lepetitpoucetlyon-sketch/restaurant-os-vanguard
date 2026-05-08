@@ -84,6 +84,21 @@ export const SovereignMath = {
     },
 
     /**
+     * Calculates tax amount for a given microunit value and tax rate.
+     */
+    calculateTax: (microunits: number, rate: number | string): number => {
+        const rateNum = typeof rate === 'string' ? parseFloat(rate) : rate;
+        return Math.round(microunits * rateNum);
+    },
+
+    /**
+     * Formats microunits to a currency string (EUR).
+     */
+    format: (microunits: number): string => {
+        return `${SovereignMath.fromMicrounits(microunits).toFixed(2)}€`;
+    },
+
+    /**
      * Suture check: Ensures a value is a valid microunit integer.
      */
     isSovereignInteger: (value: unknown): value is number => {

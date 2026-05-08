@@ -92,10 +92,10 @@ export function LeaveRequestCard({
                 <div className="flex flex-col items-end gap-3">
                     <span className={cn(
                         "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm",
-                        request.status === 'approved' && "bg-emerald-100 text-emerald-700 border border-emerald-200",
-                        request.status === 'pending_approval' && "bg-amber-100 text-amber-700 border border-amber-200",
-                        request.status === 'rejected' && "bg-rose-100 text-rose-700 border border-rose-200",
-                        request.status === 'in_progress' && "bg-blue-100 text-blue-700 border border-blue-200",
+                        request.status === 'approved' && "bg-status-success text-status-success border border-emerald-200",
+                        request.status === 'pending_approval' && "bg-status-warning text-status-warning border border-amber-200",
+                        request.status === 'rejected' && "bg-status-danger text-status-danger border border-rose-200",
+                        request.status === 'in_progress' && "bg-action-primary text-brand border border-focus",
                     )}>
                         {statusConfig.label}
                     </span>
@@ -115,9 +115,9 @@ export function LeaveRequestCard({
                         Couverture équipe : {request.teamCoverage.percent}%
                     </span>
                     {request.teamCoverage.compliant ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        <CheckCircle2 className="w-4 h-4 text-status-success" />
                     ) : (
-                        <AlertCircle className="w-4 h-4 text-amber-500" />
+                        <AlertCircle className="w-4 h-4 text-status-warning" />
                     )}
                 </div>
             )}
@@ -136,7 +136,7 @@ export function LeaveRequestCard({
                     <div className="flex items-center gap-3">
                         <button
                             onClick={onReject}
-                            className="px-4 py-2 rounded-xl bg-bg-secondary border border-border text-rose-600 text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-colors flex items-center gap-2"
+                            className="px-4 py-2 rounded-xl bg-bg-secondary border border-border text-status-danger text-xs font-bold uppercase tracking-wider hover:bg-status-danger transition-colors flex items-center gap-2"
                         >
                             <XCircle className="w-4 h-4" />
                             Refuser

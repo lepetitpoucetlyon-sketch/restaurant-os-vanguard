@@ -103,7 +103,7 @@ export function Modal({
                             animate="visible"
                             exit="exit"
                             onClick={onClose}
-                            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                            className="absolute inset-0 bg-surface-sidebar/50 backdrop-blur-sm"
                         />
 
                         {/* Sheet */}
@@ -174,7 +174,7 @@ export function Modal({
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/40 backdrop-blur-xl"
+                        className="absolute inset-0 bg-surface-sidebar/40 backdrop-blur-xl"
                     />
 
                     {/* Modal Content */}

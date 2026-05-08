@@ -68,7 +68,7 @@ export const FleetComplianceService = {
         entryCount: entries.length,
         verifiedAt: new Date().toISOString()
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[Compliance] Integrity check failed for ${tenantId}:`, error);
       throw error;
     }

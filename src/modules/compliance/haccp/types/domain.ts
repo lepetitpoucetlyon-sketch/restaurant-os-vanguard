@@ -103,7 +103,7 @@ export interface HygieneLog {
     createdAt: string; 
     updatedAt: string;
     critical_issue?: boolean;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface HygieneLabel {
@@ -116,7 +116,7 @@ export interface HygieneLabel {
     imageUrl?: string;
     createdAt: string;
     updatedAt: string;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface ReceptionLog {
@@ -133,7 +133,7 @@ export interface ReceptionLog {
     createdAt: string;
     updatedAt: string;
     status?: string;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface MaintenanceLog {
@@ -147,7 +147,7 @@ export interface MaintenanceLog {
     status: 'completed' | 'pending';
     createdAt: string;
     updatedAt: string;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface OilLog {
@@ -159,7 +159,7 @@ export interface OilLog {
     user: string;
     createdAt: string; 
     updatedAt: string;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface RegulatoryWasteLog {
@@ -173,7 +173,7 @@ export interface RegulatoryWasteLog {
     timestamp: string | Date;
     createdAt: string;
     updatedAt: string;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface EquipmentAuditLog {
@@ -196,7 +196,7 @@ export interface SensorReading {
     unit: string;
     status: 'ok' | 'warning' | 'alert';
     lastUpdated: Date | string;
-    [key: string]: unknown;
+    [key: string]: import('@/shared/nexus-contract').SovereignField;
 }
 
 export interface HACCPChecklistItem {

@@ -132,12 +132,12 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
         if (!raw || typeof raw !== 'object') return { categories: [], products: [] };
         
         const clean: MenuMigration = {
-            categories: Array.isArray(raw.categories) ? raw.categories.map((c: any) => ({
+            categories: Array.isArray(raw.categories) ? (raw.categories as Record<string, any>[]).map((c) => ({
                 name: SharedKernel.Sovereign.cleanString(c?.name || ''),
                 type: String(c?.type || 'food'),
                 sortOrder: Number(c?.sortOrder || 1)
             })) : [],
-            products: Array.isArray(raw.products) ? raw.products.map((p: any) => ({
+            products: Array.isArray(raw.products) ? (raw.products as Record<string, any>[]).map((p) => ({
                 name: SharedKernel.Sovereign.cleanString(p?.name || ''),
                 description: String(p?.description || ''),
                 price: SharedKernel.Sovereign.cleanNumber(p?.price || 0),

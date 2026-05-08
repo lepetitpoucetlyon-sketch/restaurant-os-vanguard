@@ -14,15 +14,15 @@ export type QuoteStatus =
     | 'converted';      // Converti en facture
 
 export const QUOTE_STATUS_CONFIG: Record<QuoteStatus, { label: string; color: string; bgColor: string }> = {
-    draft: { label: 'Brouillon', color: 'text-slate-600', bgColor: 'bg-slate-100' },
-    pending_approval: { label: 'En validation', color: 'text-amber-600', bgColor: 'bg-amber-100' },
-    approved: { label: 'Validé', color: 'text-blue-600', bgColor: 'bg-blue-100' },
+    draft: { label: 'Brouillon', color: 'text-secondary', bgColor: 'bg-surface-tertiary' },
+    pending_approval: { label: 'En validation', color: 'text-status-warning', bgColor: 'bg-status-warning' },
+    approved: { label: 'Validé', color: 'text-brand', bgColor: 'bg-action-primary' },
     sent: { label: 'Envoyé', color: 'text-purple-600', bgColor: 'bg-purple-100' },
-    viewed: { label: 'Consulté', color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
-    accepted: { label: 'Accepté', color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
-    rejected: { label: 'Refusé', color: 'text-red-600', bgColor: 'bg-red-100' },
-    expired: { label: 'Expiré', color: 'text-slate-500', bgColor: 'bg-slate-100' },
-    converted: { label: 'Facturé', color: 'text-green-600', bgColor: 'bg-green-100' }
+    viewed: { label: 'Consulté', color: 'text-brand', bgColor: 'bg-action-primary' },
+    accepted: { label: 'Accepté', color: 'text-status-success', bgColor: 'bg-status-success' },
+    rejected: { label: 'Refusé', color: 'text-status-danger', bgColor: 'bg-status-danger' },
+    expired: { label: 'Expiré', color: 'text-secondary', bgColor: 'bg-surface-tertiary' },
+    converted: { label: 'Facturé', color: 'text-status-success', bgColor: 'bg-status-success' }
 };
 
 export type QuoteLineType = 'product' | 'service' | 'package' | 'custom' | 'discount';

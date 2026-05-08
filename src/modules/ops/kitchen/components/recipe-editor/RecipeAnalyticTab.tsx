@@ -27,16 +27,16 @@ export function RecipeAnalyticTab({
     toggleDietary
 }: RecipeAnalyticTabProps) {
     return (
-        <div className="space-y-12 text-neutral-900">
+        <div className="space-y-12 text-primary">
             <div className="grid grid-cols-3 gap-8">
-                <div className="bg-white p-10 rounded-[3rem] border border-border shadow-soft">
+                <div className="bg-surface-card p-10 rounded-[3rem] border border-border shadow-soft">
                     <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Coût de Revient HT</label>
                     <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-serif font-black text-text-primary">{((formData.costPriceInCents || 0) / 100).toFixed(2)}</span>
                         <span className="text-xl font-black text-text-muted">€</span>
                     </div>
                 </div>
-                <div className="bg-white p-10 rounded-[3rem] border-2 border-accent shadow-xl shadow-accent/5 relative overflow-hidden">
+                <div className="bg-surface-card p-10 rounded-[3rem] border-2 border-accent shadow-xl shadow-accent/5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-accent/10 rounded-full blur-3xl -mr-12 -mt-12 pointer-events-none" />
                     <label className="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-4 block">Prix de Vente Conseillé</label>
                     <div className="flex items-center gap-2 relative z-10">
@@ -82,7 +82,7 @@ export function RecipeAnalyticTab({
                                     "px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border-2",
                                     formData.allergens?.includes(a)
                                         ? "bg-error text-white border-error shadow-lg shadow-error/20"
-                                        : "bg-white text-text-muted border-border hover:border-text-muted/30"
+                                        : "bg-surface-card text-text-muted border-border hover:border-text-muted/30"
                                 )}
                             >
                                 {a}
@@ -101,7 +101,7 @@ export function RecipeAnalyticTab({
                                     "px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border-2",
                                     formData.dietaryInfo?.includes(d)
                                         ? "bg-success text-white border-success shadow-lg shadow-success/20"
-                                        : "bg-white text-text-muted border-border hover:border-text-muted/30"
+                                        : "bg-surface-card text-text-muted border-border hover:border-text-muted/30"
                                 )}
                             >
                                 {d}

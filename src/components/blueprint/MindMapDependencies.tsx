@@ -9,13 +9,13 @@ import {
 export function MindMapDependencies() {
     const nodes = [
         { id: 'core', label: 'Next.js 16', sub: 'Le Moteur', icon: Zap, color: 'text-accent-gold', bg: 'bg-accent/10', x: 0, y: 0 },
-        { id: 'data', label: 'Firestore', sub: 'La Mémoire', icon: Database, color: 'text-emerald-400', bg: 'bg-emerald-500/10', x: -180, y: -120 },
-        { id: 'ai', label: 'Gemini 3.1', sub: "L'Oracle", icon: Cpu, color: 'text-blue-400', bg: 'bg-blue-500/10', x: 180, y: -120 },
-        { id: 'ux', label: 'Motion 12', sub: 'Le Ressenti', icon: Sparkles, color: 'text-amber-400', bg: 'bg-amber-500/10', x: 220, y: 120 },
-        { id: 'ui', label: 'Tailwind 4', sub: 'L\'Apparence', icon: Layout, color: 'text-cyan-400', bg: 'bg-cyan-500/10', x: -220, y: 120 },
+        { id: 'data', label: 'Firestore', sub: 'La Mémoire', icon: Database, color: 'text-status-success', bg: 'bg-status-success/10', x: -180, y: -120 },
+        { id: 'ai', label: 'Gemini 3.1', sub: "L'Oracle", icon: Cpu, color: 'text-brand', bg: 'bg-action-primary/10', x: 180, y: -120 },
+        { id: 'ux', label: 'Motion 12', sub: 'Le Ressenti', icon: Sparkles, color: 'text-status-warning', bg: 'bg-status-warning/10', x: 220, y: 120 },
+        { id: 'ui', label: 'Tailwind 4', sub: 'L\'Apparence', icon: Layout, color: 'text-brand', bg: 'bg-action-primary/10', x: -220, y: 120 },
         { id: 'sec', label: 'Auth RBAC', sub: 'Le Bouclier', icon: ShieldCheck, color: 'text-purple-400', bg: 'bg-purple-500/10', x: 0, y: -240 },
-        { id: 'lib', label: 'Utilitaire Lib', sub: 'Les Outils', icon: Box, color: 'text-rose-400', bg: 'bg-rose-500/10', x: 0, y: 240 },
-        { id: 'workflow', label: 'Agent Edge', sub: 'La Logique', icon: Workflow, color: 'text-indigo-400', bg: 'bg-indigo-500/10', x: 320, y: 0 }
+        { id: 'lib', label: 'Utilitaire Lib', sub: 'Les Outils', icon: Box, color: 'text-status-danger', bg: 'bg-status-danger/10', x: 0, y: 240 },
+        { id: 'workflow', label: 'Agent Edge', sub: 'La Logique', icon: Workflow, color: 'text-brand', bg: 'bg-action-primary/10', x: 320, y: 0 }
     ];
 
     return (
@@ -77,7 +77,7 @@ export function MindMapDependencies() {
             <div className="absolute bottom-10 right-10 flex gap-10">
                 <div className="flex flex-col items-end gap-2">
                     <span className="text-[9px] uppercase font-black text-accent-gold tracking-[0.2em] mb-1">État de l'Architecture</span>
-                    <span className="text-xs font-mono text-emerald-400">&bull; 100% Cloud-Native</span>
+                    <span className="text-xs font-mono text-status-success">&bull; 100% Cloud-Native</span>
                 </div>
             </div>
         </div>

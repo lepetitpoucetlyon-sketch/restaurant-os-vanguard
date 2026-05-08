@@ -65,7 +65,7 @@ export const PremiumCard = forwardRef<HTMLDivElement, PremiumCardProps>(
                 glowClasses[glowColor]
             ),
             glass: cn(
-                "bg-white/40 dark:bg-white/5 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-lg",
+                "bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-xl border border-white/50 dark:border-subtle shadow-lg",
                 hoverEffect && "hover:shadow-2xl hover:-translate-y-1"
             ),
             elevated: cn(

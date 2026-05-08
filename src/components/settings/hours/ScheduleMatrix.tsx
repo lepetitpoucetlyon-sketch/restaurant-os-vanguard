@@ -31,7 +31,7 @@ export function ScheduleMatrix({ schedule, onDayChange }: ScheduleMatrixProps) {
                 <div className="flex items-center gap-4">
                     <motion.div
                         whileHover={{ scale: 1.1, rotate: 10 }}
-                        className="w-14 h-14 rounded-2xl bg-white dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/10 text-accent shadow-premium"
+                        className="w-14 h-14 rounded-2xl bg-surface-card dark:bg-surface-card/5 flex items-center justify-center border border-black/5 dark:border-subtle text-accent shadow-premium"
                     >
                         <Clock className="w-7 h-7" />
                     </motion.div>

@@ -216,7 +216,7 @@ export default function IntegrationSettings() {
                                                 className={cn(
                                                     "flex-1 py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all duration-500 border",
                                                     integration.isActive
-                                                        ? "bg-bg-tertiary border-border text-text-muted hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20"
+                                                        ? "bg-bg-tertiary border-border text-text-muted hover:bg-status-danger/10 hover:text-status-danger hover:border-rose-500/20"
                                                         : "bg-accent text-bg-primary border-accent hover:brightness-110 shadow-lg"
                                                 )}
                                             >
@@ -282,7 +282,7 @@ export default function IntegrationSettings() {
                             >
                                 <motion.div
                                     animate={{ x: webhook.isActive ? 28 : 2 }}
-                                    className={cn("absolute top-1 left-1 w-4.5 h-4.5 rounded-full shadow-md bg-white")}
+                                    className={cn("absolute top-1 left-1 w-4.5 h-4.5 rounded-full shadow-md bg-surface-card")}
                                 />
                             </button>
                         </div>
@@ -304,7 +304,7 @@ export default function IntegrationSettings() {
                     ) : (
                         <div className="relative">
                             <Zap className="w-6 h-6 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Commit Signal Matrix

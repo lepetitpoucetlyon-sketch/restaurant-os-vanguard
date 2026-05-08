@@ -19,9 +19,9 @@ export function useBrandAsset(key: BrandAssetKey): string {
   const brandTokens = useAtomValue(tenantBrandTokensAtom);
 
   const tenantAssets: Partial<Record<BrandAssetKey, string | null | undefined>> = {
-    logo:    brandTokens?.logoUrl,
-    favicon: brandTokens?.faviconUrl,
-    banner:  brandTokens?.bannerUrl,
+    logo:    (brandTokens as unknown as {logoUrl?: string})?.logoUrl,
+    favicon: (brandTokens as unknown as {faviconUrl?: string})?.faviconUrl,
+    banner:  (brandTokens as unknown as {bannerUrl?: string})?.bannerUrl,
   };
 
   return tenantAssets[key] || defaultAssets[key];

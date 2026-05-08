@@ -14,7 +14,7 @@ export const SEOManager = {
   generateConfig() {
     const store = getDefaultStore();
     const tenantId = store.get(tenantIdAtom);
-    const instances = store.get(fleetSnapshotAtom) as any[];
+    const instances = store.get(fleetSnapshotAtom) as unknown[];
     const instance = instances.find(i => i.id === tenantId) || { name: 'Restaurant OS' };
 
     const baseUrl = `https://${tenantId}.restaurant-os.app`;

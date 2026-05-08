@@ -25,10 +25,10 @@ interface StockTransferModalProps {
 export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransferModalProps) {
     const { stockItems, transferStock, storageLocations } = useInventory();
 
-    const [selectedItem, setSelectedItem] = useAtom(stockTransferSelectedItemAtom) as any;
-    const [targetLocation, setTargetLocation] = useAtom(stockTransferTargetLocationAtom) as any;
-    const [isSubmitting, setIsSubmitting] = useAtom(stockTransferIsSubmittingAtom) as any;
-    const [success, setSuccess] = useAtom(stockTransferSuccessAtom) as any;
+    const [selectedItem, setSelectedItem] = useAtom(stockTransferSelectedItemAtom);
+    const [targetLocation, setTargetLocation] = useAtom(stockTransferTargetLocationAtom);
+    const [isSubmitting, setIsSubmitting] = useAtom(stockTransferIsSubmittingAtom);
+    const [success, setSuccess] = useAtom(stockTransferSuccessAtom);
 
     // Sync selectedItem if stockItem prop changes
     useEffect(() => {
@@ -74,7 +74,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 blur-[100px] pointer-events-none opacity-50" />
 
                 {/* Header */}
-                <div className="p-10 border-b border-border/50 relative z-10 bg-white/50 backdrop-blur-md">
+                <div className="p-10 border-b border-border/50 relative z-10 bg-surface-card/50 backdrop-blur-md">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
                             <div className="w-14 h-14 rounded-2xl bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20 shadow-glow-accent/10">
@@ -87,7 +87,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 rounded-2xl bg-bg-tertiary/50 hover:bg-white flex items-center justify-center transition-all border border-border/50 hover:rotate-90 hover:text-error duration-500"
+                            className="w-12 h-12 rounded-2xl bg-bg-tertiary/50 hover:bg-surface-card flex items-center justify-center transition-all border border-border/50 hover:rotate-90 hover:text-error duration-500"
                         >
                             <X className="w-5 h-5 opacity-40 hover:opacity-100" />
                         </button>
@@ -130,7 +130,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                         initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
                                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                                         exit={{ opacity: 0, y: -10, filter: "blur(10px)" }}
-                                        className="p-8 bg-white/50 border border-border/40 rounded-[2.5rem] flex items-center justify-between shadow-premium"
+                                        className="p-8 bg-surface-card/50 border border-border/40 rounded-[2.5rem] flex items-center justify-between shadow-premium"
                                     >
                                         <div className="flex items-center gap-6">
                                             <div className="w-14 h-14 rounded-2xl bg-accent-gold/5 flex items-center justify-center border border-accent-gold/10 text-accent-gold">
@@ -153,7 +153,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 <motion.div
                                     animate={{ y: [0, 5, 0] }}
                                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    className="w-16 h-16 rounded-full bg-white text-accent-gold shadow-premium flex items-center justify-center border-4 border-[#F8F7F2] relative group-hover/modal:scale-110 transition-transform duration-700"
+                                    className="w-16 h-16 rounded-full bg-surface-card text-accent-gold shadow-premium flex items-center justify-center border-4 border-[#F8F7F2] relative group-hover/modal:scale-110 transition-transform duration-700"
                                 >
                                     <ArrowRight className="w-8 h-8 rotate-90" strokeWidth={2.5} />
                                     <div className="absolute inset-0 rounded-full bg-accent-gold/10 animate-pulse" />
@@ -181,7 +181,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
 
                 {/* Footer */}
                 {!success && (
-                    <div className="p-10 border-t border-border/50 bg-white/50 backdrop-blur-md flex items-center justify-between gap-6 relative z-10">
+                    <div className="p-10 border-t border-border/50 bg-surface-card/50 backdrop-blur-md flex items-center justify-between gap-6 relative z-10">
                         <button
                             onClick={onClose}
                             className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.4em] text-text-muted hover:text-text-primary transition-all duration-300"

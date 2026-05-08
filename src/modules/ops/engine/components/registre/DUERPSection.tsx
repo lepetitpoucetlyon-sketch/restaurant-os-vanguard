@@ -20,24 +20,24 @@ export function DUERPSection() {
     return (
         <div className="max-w-5xl mx-auto space-y-8">
             {/* Header */}
-            <div className="bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 -mr-24 -mt-24 rounded-full blur-3xl" />
+            <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-action-primary/5 -mr-24 -mt-24 rounded-full blur-3xl" />
                 <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-6">
                     <div className="flex items-start gap-6">
-                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/10 shadow-sm">
-                            <FileText strokeWidth={1.5} className="w-8 h-8 text-blue-500" />
+                        <div className="w-16 h-16 rounded-2xl bg-action-primary/10 flex items-center justify-center border border-focus/10 shadow-sm">
+                            <FileText strokeWidth={1.5} className="w-8 h-8 text-brand" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">{String(duerp?.title || 'Document Unique (DUERP)')}</h2>
-                            <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{String(duerp?.description || 'Évaluation des risques professionnels en attente.')}</p>
+                            <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">{String(duerp?.name || 'Document Unique (DUERP)')}</h2>
+                            <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(duerp?.name || 'Évaluation des risques professionnels en attente.')}</p>
                             <div className="flex items-center gap-6 mt-4">
                                 <div className="flex items-center gap-2 text-text-muted">
                                     <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Dernière MAJ : {String(duerp?.lastUpdated || 'N/A')}</span>
+                                    <span className="text-[10px] font-mono font-bold">MAJ : {String(duerp?.updatedAt || 'N/A')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-text-muted">
                                     <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Prochaine révision : {String(duerp?.nextReview || 'N/A')}</span>
+                                    <span className="text-[10px] font-mono font-bold">Révision : {String(duerp?.validUntil || 'N/A')}</span>
                                 </div>
                             </div>
                         </div>
@@ -54,12 +54,15 @@ export function DUERPSection() {
             </div>
 
             {/* Status + Notes */}
-            {duerp.notes && (
-                <div className="bg-blue-50 dark:bg-blue-500/5 rounded-2xl border border-blue-200 dark:border-blue-500/10 p-6 flex items-start gap-4">
-                    <CheckCircle2 strokeWidth={1.5} className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
-                    <p className="text-sm text-blue-900 dark:text-blue-300 leading-relaxed">{String(duerp?.notes || '')}</p>
+            <div className="bg-action-primary dark:bg-action-primary/5 rounded-2xl border border-focus dark:border-focus/10 p-8">
+                <div className="flex items-start gap-4">
+                    <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-brand mt-0.5 shrink-0" />
+                    <div className="bg-bg-tertiary/30 rounded-2xl p-6 border border-border/50">
+                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-2">Note de conformité</p>
+                        <p className="text-sm text-brand dark:text-brand leading-relaxed">Document validé et archivé dans le coffre-fort numérique Nexus.</p>
+                    </div>
                 </div>
-            )}
+            </div>
 
             {/* Risk Evaluation by Zone */}
             <div className="space-y-4">
@@ -67,7 +70,7 @@ export function DUERPSection() {
                     <AlertTriangle strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Évaluation des Risques par Zone
                 </h3>
-                <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
+                <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
                     <table className="w-full text-sm text-left">
                         <thead>
                             <tr className="bg-bg-tertiary/30 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
@@ -112,7 +115,7 @@ export function DUERPSection() {
                     <History strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Historique des Révisions
                 </h3>
-                <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 space-y-6 shadow-sm">
+                <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 space-y-6 shadow-sm">
                     {[
                         { date: '15 Sep 2025', version: 'v4.2', author: 'Direction', changes: 'Ajout risques psychosociaux + mise à jour poste plonge' },
                         { date: '01 Mar 2025', version: 'v4.1', author: 'Direction', changes: 'Révision annuelle complète — audit CARSAT' },

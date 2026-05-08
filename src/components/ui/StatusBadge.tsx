@@ -37,7 +37,7 @@ const statusColors = {
         soft: "bg-action-primary/10 text-action-primary border-action-primary/20",
     },
     neutral: {
-        solid: "bg-neutral-500 text-white",
+        solid: "bg-surface-tertiary text-white",
         outline: "border-border-default text-text-secondary",
         soft: "bg-surface-card text-text-secondary border-border-default",
     },
@@ -81,7 +81,7 @@ export function StatusBadge({
                             status === "warning" && "bg-status-warning",
                             status === "error" && "bg-status-danger",
                             status === "info" && "bg-action-primary",
-                            status === "neutral" && "bg-neutral-400",
+                            status === "neutral" && "bg-surface-tertiary",
                             status === "accent" && "bg-action-accent"
                         )}
                     />
@@ -92,7 +92,7 @@ export function StatusBadge({
                             status === "warning" && "bg-status-warning",
                             status === "error" && "bg-status-danger",
                             status === "info" && "bg-action-primary",
-                            status === "neutral" && "bg-neutral-500",
+                            status === "neutral" && "bg-surface-tertiary",
                             status === "accent" && "bg-action-accent"
                         )}
                     />

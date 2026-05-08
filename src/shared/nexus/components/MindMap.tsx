@@ -340,14 +340,14 @@ export function MindMap() {
                             ))}
 
                             {!selectedNode.metrics && (
-                                <div className="p-8 border-2 border-dashed border-neutral-100 rounded-[2.5rem] flex flex-col items-center justify-center text-center">
+                                <div className="p-8 border-2 border-dashed border-subtle rounded-[2.5rem] flex flex-col items-center justify-center text-center">
                                     <Database className="w-8 h-8 text-[#CED4DA] mb-4" />
                                     <p className="text-sm font-bold text-[#ADB5BD]">Aucun KPI en temps réel disponible pour ce module.</p>
                                 </div>
                             )}
                         </div>
 
-                        <button className="w-full h-16 bg-text-primary rounded-[2rem] text-white font-black flex items-center justify-center gap-3 hover:bg-black transition-all shadow-2xl group">
+                        <button className="w-full h-16 bg-text-primary rounded-[2rem] text-white font-black flex items-center justify-center gap-3 hover:bg-surface-sidebar transition-all shadow-2xl group">
                             Dépendances Profondes
                             <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
                         </button>

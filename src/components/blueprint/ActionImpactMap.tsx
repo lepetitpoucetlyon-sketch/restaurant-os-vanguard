@@ -100,7 +100,7 @@ export function ActionImpactMap() {
                     </p>
                 </div>
                 <div className="flex gap-4">
-                    <div className="px-5 py-3 bg-bg-tertiary rounded-2xl border border-border font-mono text-[10px] uppercase tracking-widest text-emerald-400">
+                    <div className="px-5 py-3 bg-bg-tertiary rounded-2xl border border-border font-mono text-[10px] uppercase tracking-widest text-status-success">
                         Propagation: ~150ms
                     </div>
                 </div>

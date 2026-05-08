@@ -137,7 +137,7 @@ export default function AccountSettingsPage() {
                                                 <div className="flex items-center gap-4">
                                                     <div className={cn(
                                                         "w-12 h-12 rounded-2xl flex items-center justify-center text-white dark:text-bg-primary font-black text-lg",
-                                                        isAdmin ? "bg-gradient-to-br from-amber-500 to-orange-600" : "bg-text-primary"
+                                                        isAdmin ? "bg-gradient-to-br from-status-warning to-status-warning" : "bg-text-primary"
                                                     )}>
                                                         {(ROLE_LABELS[role] || '').charAt(0)}
                                                     </div>

@@ -33,14 +33,14 @@ export function useBilling() {
             const invoice = InvoiceEngine.transform(order);
             
             // 2. Map to JournalEntry for the Ledger
-            const journalEntry = InvoiceEngine.toJournalEntry(invoice, tenantId);
+            const journalEntry = InvoiceEngine.toJournalEntry(invoice, tenantId as string);
 
             // 3. Save Invoice to Finance Domain
-            const invoicePath = `tenants/${tenantId}/finance/billing`;
+            const invoicePath = `tenants/${tenantId as string}/finance/billing`;
             await Nexus.adapter.create(invoicePath, invoice);
 
             // 4. Seal to Fiscal Ledger (STX_LAMBDA)
-            const ledgerPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.COMPLIANCE)}`;
+            const ledgerPath = `tenants/${tenantId as string}/${DomainRegistry.resolve(OperationalIdentity.COMPLIANCE)}`;
             await Nexus.adapter.create(ledgerPath, journalEntry);
 
             logger.info(`[Billing] Order ${order.id} billed and sealed successfully as ${invoice.invoiceNumber}`);

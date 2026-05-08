@@ -12,14 +12,14 @@ export async function runGradeXProof() {
     logger.info('🚀 [SINFONIA_PROOF] Starting Ultra-Complex Multi-Domain Task...');
 
     // 1. Simulate a Critical Anomaly
-    const anomalyReading: any = {
+    const anomalyReading: Record<string, unknown> = {
         id: 'read_999',
         name: 'Fridge Main Sensor',
         sensorId: 'fridge_main_01',
-        type: 'temperature' as any,
+        type: 'temperature' as const,
         value: 12.5,
         unit: '°C',
-        status: 'alert' as any,
+        status: 'alert' as const,
         lastUpdated: new Date().toISOString(),
         isAnomaly: true
     };
@@ -27,7 +27,7 @@ export async function runGradeXProof() {
     // 2. Mock some impacted stock
     const impactedStock: Partial<StockItem>[] = [
         { id: 'stock_1', name: 'Filet de Bœuf', quantity: 15, unit: 'kg', costInCents: 4500 },
-        { id: 'stock_2', name: 'Homard Bleu', quantity: 8, unit: 'unit' as any, costInCents: 3500 }
+        { id: 'stock_2', name: 'Homard Bleu', quantity: 8, unit: 'unit' as const, costInCents: 3500 }
     ];
 
     logger.info('🧠 [PROOF] Antigravity is now analyzing the fiscal impact of this sensor anomaly...');
@@ -42,7 +42,7 @@ export async function runGradeXProof() {
     if (result) {
         logger.info('✅ [PROOF] Task Complete in sub-microsecond pulse.');
         logger.info(`✨ [PROOF] Digital Signature: ${result.digitalSignature}`);
-        logger.info(`📊 [PROOF] Ledger Impact: ${(result.fiscalEntry as any).amountInCents / 100}€ PROVISIONED.`);
+        logger.info(`📊 [PROOF] Ledger Impact: ${(result.fiscalEntry as { amountInCents: number }).amountInCents / 100}€ PROVISIONED.`);
     }
 
     return result;

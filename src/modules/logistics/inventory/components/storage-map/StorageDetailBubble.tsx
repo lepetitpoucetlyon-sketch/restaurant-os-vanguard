@@ -39,10 +39,10 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
         const today = new Date();
         const dlcDate = new Date(dlc);
         const daysUntil = Math.ceil((dlcDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-        if (daysUntil < 0) return { label: 'Expiré', color: 'text-red-600 bg-red-50 border-red-200', badge: 'bg-red-500' };
-        if (daysUntil === 0) return { label: "Aujourd'hui", color: 'text-orange-600 bg-orange-50 border-orange-200', badge: 'bg-orange-500' };
-        if (daysUntil <= 2) return { label: `J+${daysUntil}`, color: 'text-amber-600 bg-amber-50 border-amber-200', badge: 'bg-amber-500' };
-        return { label: `J+${daysUntil}`, color: 'text-green-600 bg-green-50 border-green-200', badge: 'bg-green-500' };
+        if (daysUntil < 0) return { label: 'Expiré', color: 'text-status-danger bg-surface-bg border-red-200', badge: 'bg-status-danger' };
+        if (daysUntil === 0) return { label: "Aujourd'hui", color: 'text-status-warning bg-status-warning border-orange-200', badge: 'bg-status-warning' };
+        if (daysUntil <= 2) return { label: `J+${daysUntil}`, color: 'text-status-warning bg-status-warning border-amber-200', badge: 'bg-status-warning' };
+        return { label: `J+${daysUntil}`, color: 'text-status-success bg-surface-bg border-green-200', badge: 'bg-status-success' };
     };
 
     const formatDate = (date: string) => new Date(date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
@@ -55,7 +55,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+                className="fixed inset-0 bg-surface-sidebar/20 backdrop-blur-sm z-40"
             />
 
             {/* Bubble Popup */}
@@ -75,17 +75,17 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                     <div className="relative z-10">
                         <div className="flex items-start justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 rounded-xl bg-white/80 dark:bg-black/20 backdrop-blur flex items-center justify-center shadow-lg border border-white/20">
+                                <div className="w-16 h-16 rounded-xl bg-surface-card/80 dark:bg-surface-sidebar/20 backdrop-blur flex items-center justify-center shadow-lg border border-default">
                                     <Icon className="w-8 h-8" style={{ color: config.color }} />
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-serif font-light text-text-primary italic">{location.name}</h2>
                                     <div className="flex items-center gap-2 mt-2">
-                                        <span className="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-white/60 backdrop-blur" style={{ color: config.color }}>
+                                        <span className="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-surface-card/60 backdrop-blur" style={{ color: config.color }}>
                                             {config.label}
                                         </span>
                                         {location.zone && (
-                                            <span className="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-white/40 dark:bg-black/10 text-text-muted">
+                                            <span className="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-surface-card/40 dark:bg-surface-sidebar/10 text-text-muted">
                                                 {location.zone}
                                             </span>
                                         )}
@@ -94,7 +94,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                             </div>
                             <button
                                 onClick={onClose}
-                                className="w-10 h-10 rounded-xl bg-white/60 dark:bg-black/20 backdrop-blur hover:bg-white dark:hover:bg-white/10 flex items-center justify-center transition-all hover:scale-110 border border-white/20"
+                                className="w-10 h-10 rounded-xl bg-surface-card/60 dark:bg-surface-sidebar/20 backdrop-blur hover:bg-surface-card dark:hover:bg-surface-card/10 flex items-center justify-center transition-all hover:scale-110 border border-default"
                             >
                                 <X className="w-5 h-5 text-text-primary" />
                             </button>
@@ -103,7 +103,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                         {/* Temperature & Stats Row */}
                         <div className="flex items-center gap-3 mt-6">
                             {location.temperature !== undefined && (
-                                <div className="flex items-center gap-2 px-4 py-2.5 bg-white/70 dark:bg-black/20 backdrop-blur rounded-xl shadow-sm border border-white/20">
+                                <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-card/70 dark:bg-surface-sidebar/20 backdrop-blur rounded-xl shadow-sm border border-default">
                                     <Thermometer className="w-4 h-4" style={{ color: config.color }} />
                                     <span className="text-2xl font-mono font-light text-text-primary">{location.temperature}°C</span>
                                     {location.temperatureMin !== undefined && location.temperatureMax !== undefined && (
@@ -113,7 +113,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                                     )}
                                 </div>
                             )}
-                            <div className="flex items-center gap-2 px-4 py-2.5 bg-white/70 dark:bg-black/20 backdrop-blur rounded-xl shadow-sm border border-white/20">
+                            <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-card/70 dark:bg-surface-sidebar/20 backdrop-blur rounded-xl shadow-sm border border-default">
                                 <Package className="w-4 h-4 text-text-muted" />
                                 <span className="text-lg font-mono font-light text-text-primary">{stockItems.length}</span>
                                 <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">ARTICLES</span>
@@ -140,8 +140,8 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                         className={cn(
                             "flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
                             activeTab === 'preparations'
-                                ? "bg-white dark:bg-white/10 shadow-md text-neutral-900 dark:text-white"
-                                : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-white/50 dark:hover:bg-white/5"
+                                ? "bg-surface-card dark:bg-surface-card/10 shadow-md text-primary dark:text-white"
+                                : "text-secondary dark:text-muted hover:text-primary dark:hover:text-muted hover:bg-surface-card/50 dark:hover:bg-surface-card/5"
                         )}
                     >
                         Préparations ({preparations.length})
@@ -300,7 +300,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                                                                 </div>
                                                             </div>
                                                             <div className={cn("px-2.5 py-1 rounded-lg text-[9px] font-black uppercase border shadow-sm",
-                                                                prep.status === 'use_today' ? 'text-orange-600 bg-orange-50 border-orange-200' : dlcStatus.color
+                                                                prep.status === 'use_today' ? 'text-status-warning bg-status-warning border-orange-200' : dlcStatus.color
                                                             )}>
                                                                 {prep.status === 'use_today' ? "À utiliser" : dlcStatus.label}
                                                             </div>

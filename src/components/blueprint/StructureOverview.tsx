@@ -65,7 +65,7 @@ export function StructureOverview() {
             </div>
 
             {/* Aperçu de l'Arborescence */}
-            <div className="pt-10 border-t border-border/50 font-mono text-[11px] text-text-muted/60 bg-black/20 p-6 rounded-2xl">
+            <div className="pt-10 border-t border-border/50 font-mono text-[11px] text-text-muted/60 bg-surface-sidebar/20 p-6 rounded-2xl">
                 <div className="flex items-center gap-2 mb-4 text-accent-gold uppercase tracking-[0.2em] font-black">
                     <Folder className="w-3 h-3" /> Structure Racine
                 </div>

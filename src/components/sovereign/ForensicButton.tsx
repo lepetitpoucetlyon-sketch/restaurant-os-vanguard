@@ -60,7 +60,7 @@ export function ForensicButton() {
   return (
     <button 
       onClick={handleForensicCapture}
-      className="fixed bottom-4 right-4 z-50 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow-lg flex items-center gap-2 transition-colors"
+      className="fixed bottom-4 right-4 z-50 bg-status-danger hover:bg-status-danger text-white font-bold py-2 px-4 rounded shadow-lg flex items-center gap-2 transition-colors"
       aria-label="Capture Forensic"
     >
       <span>📸 Forensic Capture (NEXUS)</span>

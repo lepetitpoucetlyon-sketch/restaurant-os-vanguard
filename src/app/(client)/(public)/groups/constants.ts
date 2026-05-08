@@ -63,6 +63,6 @@ export const STATUS_TYPES = ["Tous", "Confirmed", "Pending", "Inquiry", "Cancell
 export const ACCENT = "#A855F7"; // Purple accent for Groups
 export const BG_GRADIENTS = {
     purple: "from-purple-500/5 to-transparent",
-    blue: "from-blue-500/5 to-transparent",
-    amber: "from-amber-500/5 to-transparent"
+    blue: "from-action-primary/5 to-transparent",
+    amber: "from-status-warning/5 to-transparent"
 };

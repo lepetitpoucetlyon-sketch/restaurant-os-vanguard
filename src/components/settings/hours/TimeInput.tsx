@@ -35,7 +35,7 @@ export function TimeInput({ value, onChange, disabled, label, icon: Icon }: Time
             {label && (
                 <div className="absolute -top-7 left-1 flex items-center gap-1.5 opacity-60 group-hover/time:opacity-100 transition-opacity">
                     <div className="w-1 h-1 rounded-full bg-accent" />
-                    <span className="text-[9px] font-black text-text-muted dark:text-neutral-400 uppercase tracking-[0.25em]">
+                    <span className="text-[9px] font-black text-text-muted dark:text-muted uppercase tracking-[0.25em]">
                         {label}
                     </span>
                 </div>
@@ -45,8 +45,8 @@ export function TimeInput({ value, onChange, disabled, label, icon: Icon }: Time
                 onClick={() => !disabled && setIsPickerOpen(!isPickerOpen)}
                 disabled={disabled}
                 className={cn(
-                    "flex items-center gap-3 px-4 md:px-6 w-full h-16 bg-white dark:bg-white/[0.03] backdrop-blur-md border border-neutral-200 dark:border-white/10 rounded-[2.5rem] transition-all duration-500 text-left outline-none",
-                    !disabled && "hover:bg-white dark:hover:bg-white/[0.08] hover:border-accent/40 group-focus-within/time:border-accent",
+                    "flex items-center gap-3 px-4 md:px-6 w-full h-16 bg-surface-card dark:bg-surface-card/[0.03] backdrop-blur-md border border-subtle dark:border-subtle rounded-[2.5rem] transition-all duration-500 text-left outline-none",
+                    !disabled && "hover:bg-surface-card dark:hover:bg-surface-card/[0.08] hover:border-accent/40 group-focus-within/time:border-accent",
                     isPickerOpen && "border-accent ring-4 ring-accent/10 shadow-2xl",
                     disabled && "opacity-20 grayscale cursor-not-allowed"
                 )}
@@ -57,7 +57,7 @@ export function TimeInput({ value, onChange, disabled, label, icon: Icon }: Time
                         {value || '--:--'}
                     </span>
                 </div>
-                <div className="w-6 h-6 rounded-full bg-neutral-100 dark:bg-white/5 flex items-center justify-center transition-all opacity-40 group-hover/time:opacity-100 group-hover/time:rotate-180">
+                <div className="w-6 h-6 rounded-full bg-surface-bg dark:bg-surface-card/5 flex items-center justify-center transition-all opacity-40 group-hover/time:opacity-100 group-hover/time:rotate-180">
                     <Clock className="w-3 h-3 text-text-muted transition-colors group-hover/time:text-accent" />
                 </div>
             </button>

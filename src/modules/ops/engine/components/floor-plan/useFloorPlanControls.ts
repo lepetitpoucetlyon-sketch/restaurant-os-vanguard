@@ -167,11 +167,13 @@ export function useFloorPlanControls({
         updateTablePosition(id, e.target.x(), e.target.y());
     }, [updateTablePosition]);
 
-    const handleWheel = useCallback((e: { evt: WheelEvent & { preventDefault: () => void }; target: { getStage: () => { scaleX: () => number; getPointerPosition: () => { x: number; y: number }; x: () => number; y: () => number } } }) => {
+    const handleWheel = useCallback((e: React.ChangeEvent<any>) => {
         e.evt.preventDefault();
         const stage = e.target.getStage();
+        if (!stage) return;
         const oldScale = stage.scaleX();
         const pointer = stage.getPointerPosition();
+        if (!pointer) return;
 
         const mousePointTo = {
             x: (pointer.x - stage.x()) / oldScale,

@@ -19,7 +19,7 @@ export const SelfHealingEngine = {
     const currentState = store.get(atom);
     
     // 🧬 CRC CALCULATION
-    const currentHash = this.calculateCRC(currentState);
+    const currentHash = this.calculateCRC(currentState as any);
 
     if (currentHash !== expectedHash || expectedHash === 'FORCE_SYNC') {
       logger.warn(`[Self-Healing] State Drift Detected (CRC Mismatch or FORCE_SYNC). Path: ${persistencePath}`);

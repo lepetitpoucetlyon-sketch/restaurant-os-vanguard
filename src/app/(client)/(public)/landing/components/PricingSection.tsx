@@ -9,7 +9,7 @@ export function PricingSection() {
     return (
         <section id="pricing" className="relative py-32 px-6 bg-[#0a0a0a]">
             {/* Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#C9A227]/5 rounded-full blur-[150px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-action-primary/5 rounded-full blur-[150px]" />
 
             <div className="relative z-10 max-w-6xl mx-auto">
                 {/* Section Header */}
@@ -42,12 +42,12 @@ export function PricingSection() {
                             className={cn(
                                 "relative rounded-3xl p-8 border transition-all duration-500",
                                 plan.highlighted
-                                    ? "bg-gradient-to-b from-[#C9A227]/20 to-[#C9A227]/5 border-[#C9A227]/30 shadow-2xl shadow-[#C9A227]/10"
-                                    : "bg-surface-card border-border-default hover:border-white/20"
+                                    ? "bg-gradient-to-b from-action-primary/20 to-action-primary/5 border-focus/30 shadow-2xl shadow-[#C9A227]/10"
+                                    : "bg-surface-card border-border-default hover:border-default"
                             )}
                         >
                             {plan.highlighted && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-[#C9A227] text-black text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-[#C9A227] text-primary text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
                                     Populaire
                                 </div>
                             )}
@@ -77,7 +77,7 @@ export function PricingSection() {
                                 className={cn(
                                     "w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all",
                                     plan.highlighted
-                                        ? "bg-[#C9A227] text-black shadow-lg shadow-[#C9A227]/30"
+                                        ? "bg-[#C9A227] text-primary shadow-lg shadow-[#C9A227]/30"
                                         : "bg-surface-card text-white hover:bg-surface-card"
                                 )}
                             >

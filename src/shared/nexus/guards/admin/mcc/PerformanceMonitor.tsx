@@ -45,26 +45,26 @@ export const PerformanceMonitor: React.FC = () => {
     return (
         <div className="bg-[#111113] border border-white/5 rounded-3xl p-6 overflow-hidden relative">
             {/* Ambient background glow */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-action-primary/10 blur-[100px] rounded-full pointer-events-none" />
             
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
-                        <Activity className="w-5 h-5 text-indigo-400" />
+                    <div className="w-10 h-10 bg-action-primary/10 rounded-xl flex items-center justify-center border border-focus/20">
+                        <Activity className="w-5 h-5 text-brand" />
                     </div>
                     <div>
-                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Nexus Heartbeat</h4>
+                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Nexus Heartbeat</h4>
                         <div className="flex items-center gap-2">
                             <span className="text-lg font-bold">Diag. v5.0</span>
-                            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/20 uppercase">Zero-Lag Active</span>
+                            <span className="px-2 py-0.5 bg-status-success/10 text-status-success text-[10px] font-bold rounded-lg border border-emerald-500/20 uppercase">Zero-Lag Active</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex flex-col items-end">
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Build Status</span>
+                    <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Build Status</span>
                     <span className="text-sm font-bold text-white flex items-center gap-2">
-                        <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-brand" />
                         PROD_READY
                     </span>
                 </div>
@@ -90,12 +90,12 @@ export const PerformanceMonitor: React.FC = () => {
             <div className="mt-8 pt-6 border-t border-white/5">
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Atomic Domains Health</span>
-                        <span className="text-[10px] font-bold text-indigo-400">{stats.activeDomains} Domains Registered</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Atomic Domains Health</span>
+                        <span className="text-[10px] font-bold text-brand">{stats.activeDomains} Domains Registered</span>
                     </div>
                     <button 
                         onClick={handleNuclearPurge}
-                        className="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl border border-rose-500/20 transition-all group flex items-center gap-2"
+                        className="p-2 bg-status-danger/10 hover:bg-status-danger/20 text-status-danger rounded-xl border border-rose-500/20 transition-all group flex items-center gap-2"
                         title="Nuclear Purge (Zero Leak)"
                     >
                         <Trash2 className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
@@ -121,14 +121,14 @@ const MetricGauge: React.FC<{
     icon: React.ReactNode,
     color: 'indigo' | 'violet' 
 }> = ({ label, value, percentage, icon, color }) => (
-    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
+    <div className="bg-surface-card/[0.02] border border-white/5 rounded-2xl p-4">
         <div className="flex items-center gap-2 mb-3">
             <div className={`p-1.5 rounded-lg bg-${color}-500/10 border border-${color}-500/20 text-${color}-400`}>
                 {icon}
             </div>
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{label}</span>
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
         </div>
-        <div className="relative h-1 bg-white/5 rounded-full overflow-hidden mb-2">
+        <div className="relative h-1 bg-surface-card/5 rounded-full overflow-hidden mb-2">
             <motion.div 
                 className={`absolute left-0 top-0 h-full bg-gradient-to-r from-${color}-600 to-${color}-400`}
                 initial={{ width: 0 }}
@@ -143,12 +143,12 @@ const MetricGauge: React.FC<{
 const ContextSlot: React.FC<{ label: string, status: string, complexity: number }> = ({ label, status, complexity }) => (
     <div className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover:animate-pulse" />
-            <span className="text-xs font-medium text-gray-400 group-hover:text-white transition-colors">{label}</span>
+            <div className="w-2 h-2 rounded-full bg-status-success group-hover:animate-pulse" />
+            <span className="text-xs font-medium text-muted group-hover:text-white transition-colors">{label}</span>
         </div>
         <div className="flex items-center gap-3">
-            <div className="text-[10px] font-mono text-gray-600">MEM: {complexity}kb</div>
-            <div className="px-1.5 py-0.5 rounded bg-indigo-500/5 border border-indigo-500/10 text-[8px] font-black text-indigo-400 uppercase tracking-tighter">Isolated</div>
+            <div className="text-[10px] font-mono text-secondary">MEM: {complexity}kb</div>
+            <div className="px-1.5 py-0.5 rounded bg-action-primary/5 border border-focus/10 text-[8px] font-black text-brand uppercase tracking-tighter">Isolated</div>
         </div>
     </div>
 );

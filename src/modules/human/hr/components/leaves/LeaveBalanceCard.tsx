@@ -30,7 +30,7 @@ export function LeaveBalanceCard({ balance }: LeaveBalanceCardProps) {
                     <span className="font-serif italic text-text-primary text-xl">{label}</span>
                 </div>
                 {balance.pending > 0 && (
-                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 text-[10px] uppercase font-bold tracking-wider">
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-status-warning/10 border border-amber-500/20 text-status-warning text-[10px] uppercase font-bold tracking-wider">
                         <Clock className="w-3 h-3" />
                         {balance.pending} en attente
                     </span>
@@ -47,7 +47,7 @@ export function LeaveBalanceCard({ balance }: LeaveBalanceCardProps) {
                     {balance.carriedOver > 0 && (
                         <>
                             <span className="w-1 h-1 rounded-full bg-border" />
-                            <span className="text-emerald-600/80 text-xs font-bold uppercase tracking-widest">Dont {balance.carriedOver}j reportés</span>
+                            <span className="text-status-success/80 text-xs font-bold uppercase tracking-widest">Dont {balance.carriedOver}j reportés</span>
                         </>
                     )}
                 </div>
@@ -61,7 +61,7 @@ export function LeaveBalanceCard({ balance }: LeaveBalanceCardProps) {
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     className={cn(
                         "h-full rounded-full shadow-lg relative overflow-hidden",
-                        percentage > 50 ? 'bg-emerald-500' : percentage > 25 ? 'bg-amber-500' : 'bg-rose-500'
+                        percentage > 50 ? 'bg-status-success' : percentage > 25 ? 'bg-status-warning' : 'bg-status-danger'
                     )}
                 >
                     <div className="absolute inset-0 bg-[--color-surface-primary]/20 w-full h-full animate-shimmer" />
