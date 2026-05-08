@@ -1,5 +1,14 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.8.0] - 2026-05-08 - SOVEREIGN RAG & OMNI-REFACTOR 🧠🏛️
+### 🧠 SOVEREIGN RAG & FAST BRAIN (ATLAS-X)
+- **Fast Brain Architecture** : Déploiement de l'ingestion de données structurées et de la distillation des connaissances via les Sovereign Knowledge Items (KIs).
+- **LightRAG & GraphRAG** : Intégration de Docker et des pipelines de requêtage sémantique hybride (Graphes + Vecteurs) pour une latence sub-500ms sur les données fiscales NF525.
+- **Benchmarks & Stress Tests** : Finalisation du `benchmark_rag.py` et des simulations de données "dirty" pour garantir 100% de fiabilité juridique.
+
+### 🏛️ OMNI-REFACTOR & GRADE X
+- **Sécurisation Admin & Ops** : Refonte massive et durcissement des modules `src/app/(admin)` et `src/app/(client)/(ops)`.
+- **Infrastructure SaaS Multi-Tenant** : Clarification de l'isolation des données et du déploiement via DNA Injector.
 ## [1.7.0] - 2026-05-02 - DÉCOMPOSITION ATOMIQUE & RBAC-X ⚛️🛡️
 ### ⚛️ DÉCOMPOSITION ATOMIQUE (ATOMIC-DECOMPOSITION-X)
 - **Scission des God Files** : Extraction de `MutationValidator`, `DomainRegistry` et `NexusTelemetryEngine` depuis le `NexusManager` et `NexusCoreProvider`.

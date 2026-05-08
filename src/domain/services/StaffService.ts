@@ -63,7 +63,7 @@ export class StaffService {
                     hourlyRate: estimatedHourlyRate
                 }
             };
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error(`[StaffService] Failed to calculate provision for shift ${shift.id}`, { error });
             return null;
         }

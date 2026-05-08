@@ -16,12 +16,12 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-    nettoyage: 'bg-blue-500/10 text-blue-500 border-blue-500/10',
-    maintenance: 'bg-amber-500/10 text-amber-600 border-amber-500/10',
-    deratisation: 'bg-green-500/10 text-green-500 border-green-500/10',
-    securite: 'bg-red-500/10 text-red-500 border-red-500/10',
-    hottes: 'bg-orange-500/10 text-orange-500 border-orange-500/10',
-    laboratoire: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/10',
+    nettoyage: 'bg-action-primary/10 text-brand border-focus/10',
+    maintenance: 'bg-status-warning/10 text-status-warning border-amber-500/10',
+    deratisation: 'bg-status-success/10 text-status-success border-green-500/10',
+    securite: 'bg-status-danger/10 text-status-danger border-red-500/10',
+    hottes: 'bg-status-warning/10 text-status-warning border-orange-500/10',
+    laboratoire: 'bg-action-primary/10 text-brand border-focus/10',
     autre: 'bg-bg-tertiary text-text-muted border-border',
 };
 
@@ -32,8 +32,8 @@ export function PrestatairesSection() {
         <div className="max-w-5xl mx-auto space-y-8">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/10">
-                        <BadgeCheck strokeWidth={1.5} className="w-6 h-6 text-amber-600" />
+                    <div className="w-12 h-12 rounded-2xl bg-status-warning/10 flex items-center justify-center border border-amber-500/10">
+                        <BadgeCheck strokeWidth={1.5} className="w-6 h-6 text-status-warning" />
                     </div>
                     <div>
                         <h2 className="text-2xl font-serif font-black italic text-text-primary tracking-tight">Certifications Prestataires</h2>
@@ -47,7 +47,7 @@ export function PrestatairesSection() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {(prestataires || []).map((p: any) => (
-                    <div key={p.id} className="group bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm hover:shadow-2xl transition-all duration-500">
+                    <div key={p.id} className="group bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm hover:shadow-2xl transition-all duration-500">
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex items-center gap-4">
                                 <div className="w-14 h-14 rounded-xl bg-bg-tertiary border border-border flex items-center justify-center font-serif text-xl font-black text-text-primary">

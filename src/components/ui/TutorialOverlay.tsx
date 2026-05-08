@@ -40,7 +40,7 @@ export function TutorialOverlay({ categoryId, isOpen, onClose }: TutorialOverlay
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-sm"
                     />
 
                     {/* Drawer (Sliding from Right) */}
@@ -49,10 +49,10 @@ export function TutorialOverlay({ categoryId, isOpen, onClose }: TutorialOverlay
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="relative w-full max-w-md h-full bg-white dark:bg-bg-secondary shadow-2xl overflow-y-auto flex flex-col border-l border-border dark:border-white/10"
+                        className="relative w-full max-w-md h-full bg-surface-card dark:bg-bg-secondary shadow-2xl overflow-y-auto flex flex-col border-l border-border dark:border-subtle"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between p-6 border-b border-border dark:border-white/10 sticky top-0 bg-white/90 dark:bg-bg-secondary/90 backdrop-blur-md z-10">
+                        <div className="flex items-center justify-between p-6 border-b border-border dark:border-subtle sticky top-0 bg-surface-card/90 dark:bg-bg-secondary/90 backdrop-blur-md z-10">
                             <h2 className="text-xl font-serif font-black italic text-text-primary tracking-tight">
                                 {data.title}
                                 <span className="text-accent-gold not-italic">.</span>
@@ -86,7 +86,7 @@ export function TutorialOverlay({ categoryId, isOpen, onClose }: TutorialOverlay
                         <div className="mt-auto p-6">
                             <button
                                 onClick={onClose}
-                                className="w-full py-3 px-4 bg-bg-tertiary text-text-primary font-medium rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
+                                className="w-full py-3 px-4 bg-bg-tertiary text-text-primary font-medium rounded-xl hover:bg-surface-bg dark:hover:bg-surface-sidebar transition-colors"
                             >
                                 J'ai compris
                             </button>

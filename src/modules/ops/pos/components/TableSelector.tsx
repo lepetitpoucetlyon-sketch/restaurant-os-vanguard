@@ -38,7 +38,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
             switch (table.status) {
                 case 'free':
                     return {
-                        container: "bg-white/80 dark:bg-white/[0.03] border-white/20 dark:border-white/5 hover:border-accent-gold/50 hover:-translate-y-2 backdrop-blur-xl",
+                        container: "bg-surface-card/80 dark:bg-surface-card/[0.03] border-default dark:border-white/5 hover:border-accent-gold/50 hover:-translate-y-2 backdrop-blur-xl",
                         circle: "bg-bg-primary text-text-primary border-accent-gold/20 group-hover:bg-accent-gold group-hover:text-white",
                         icon: "text-accent-gold",
                         indicator: "bg-accent-gold",
@@ -56,30 +56,30 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     };
                 case 'ordered':
                     return {
-                        container: "bg-blue-500/5 border-blue-500 shadow-inner",
-                        circle: "bg-blue-500/20 text-blue-500 border-blue-500/30",
-                        icon: "text-blue-500",
-                        indicator: "bg-blue-500",
-                        bar: "bg-blue-500",
-                        spotlight: "bg-gradient-to-br from-blue-500/10 to-transparent"
+                        container: "bg-action-primary/5 border-focus shadow-inner",
+                        circle: "bg-action-primary/20 text-brand border-focus/30",
+                        icon: "text-brand",
+                        indicator: "bg-action-primary",
+                        bar: "bg-action-primary",
+                        spotlight: "bg-gradient-to-br from-action-primary/10 to-transparent"
                     };
                 case 'eating':
                     return {
-                        container: "bg-orange-500/5 border-orange-500 shadow-inner",
-                        circle: "bg-orange-500/20 text-orange-500 border-orange-500/30",
-                        icon: "text-orange-500",
-                        indicator: "bg-orange-500",
-                        bar: "bg-orange-500",
-                        spotlight: "bg-gradient-to-br from-orange-500/10 to-transparent"
+                        container: "bg-status-warning/5 border-orange-500 shadow-inner",
+                        circle: "bg-status-warning/20 text-status-warning border-orange-500/30",
+                        icon: "text-status-warning",
+                        indicator: "bg-status-warning",
+                        bar: "bg-status-warning",
+                        spotlight: "bg-gradient-to-br from-status-warning/10 to-transparent"
                     };
                 case 'paying':
                     return {
-                        container: "bg-emerald-500/5 border-emerald-500 shadow-inner animate-pulse-subtle",
-                        circle: "bg-emerald-500/20 text-emerald-500 border-emerald-500/30",
-                        icon: "text-emerald-500",
-                        indicator: "bg-emerald-500",
-                        bar: "bg-emerald-500",
-                        spotlight: "bg-gradient-to-br from-emerald-500/10 to-transparent"
+                        container: "bg-status-success/5 border-emerald-500 shadow-inner animate-pulse-subtle",
+                        circle: "bg-status-success/20 text-status-success border-emerald-500/30",
+                        icon: "text-status-success",
+                        indicator: "bg-status-success",
+                        bar: "bg-status-success",
+                        spotlight: "bg-gradient-to-br from-status-success/10 to-transparent"
                     };
                 case 'reserved':
                     return {
@@ -92,11 +92,11 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     };
                 default:
                     return {
-                        container: "bg-neutral-100 dark:bg-white/[0.01] border-border opacity-60 grayscale cursor-not-allowed",
-                        circle: "bg-neutral-200 text-neutral-400 border-neutral-300",
-                        icon: "text-neutral-400",
-                        indicator: "bg-neutral-400",
-                        bar: "bg-neutral-400",
+                        container: "bg-surface-bg dark:bg-surface-card/[0.01] border-border opacity-60 grayscale cursor-not-allowed",
+                        circle: "bg-surface-bg text-muted border-default",
+                        icon: "text-muted",
+                        indicator: "bg-surface-tertiary",
+                        bar: "bg-surface-tertiary",
                         spotlight: "bg-transparent"
                     };
             }
@@ -217,7 +217,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                 className={cn(
                                     "flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
                                     viewMode === 'grid'
-                                        ? "bg-white dark:bg-white text-black dark:text-black shadow-xl"
+                                        ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
                                         : "text-text-muted dark:text-white/60 hover:text-text-primary dark:hover:text-white"
                                 )}
                             >
@@ -229,7 +229,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                 className={cn(
                                     "flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
                                     viewMode === 'zones'
-                                        ? "bg-white dark:bg-white text-black dark:text-black shadow-xl"
+                                        ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
                                         : "text-text-muted dark:text-white/60 hover:text-text-primary dark:hover:text-white"
                                 )}
                             >
@@ -307,15 +307,15 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Installés</span>
                             </div>
                             <div className="flex items-center gap-4 group">
-                                <div className="w-3 h-3 rounded-full bg-blue-500 shadow-glow shadow-blue-500/40 transition-all group-hover:scale-125" />
+                                <div className="w-3 h-3 rounded-full bg-action-primary shadow-glow shadow-blue-500/40 transition-all group-hover:scale-125" />
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Commandé</span>
                             </div>
                             <div className="flex items-center gap-4 group">
-                                <div className="w-3 h-3 rounded-full bg-orange-500 shadow-glow shadow-orange-500/40 transition-all group-hover:scale-125" />
+                                <div className="w-3 h-3 rounded-full bg-status-warning shadow-glow shadow-orange-500/40 transition-all group-hover:scale-125" />
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">En Cours</span>
                             </div>
                             <div className="flex items-center gap-4 group">
-                                <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-glow shadow-emerald-500/40 transition-all group-hover:scale-125 animate-pulse" />
+                                <div className="w-3 h-3 rounded-full bg-status-success shadow-glow shadow-emerald-500/40 transition-all group-hover:scale-125 animate-pulse" />
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Encaissement</span>
                             </div>
                             <div className="flex items-center gap-4 group">

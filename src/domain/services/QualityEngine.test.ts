@@ -40,8 +40,10 @@ describe('QualityEngine - Grade VI HACCP Validation', () => {
     validatedBy: 'agent_007'
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    const { getDefaultStore } = await import('jotai');
+    vi.spyOn(getDefaultStore(), 'get').mockReturnValue(mockTenantId);
   });
 
   it('should validate a compliant reception and update stock', async () => {

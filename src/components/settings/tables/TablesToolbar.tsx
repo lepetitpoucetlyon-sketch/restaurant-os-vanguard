@@ -116,9 +116,9 @@ export function TablesToolbar({
                 <div className="hidden 2xl:block w-px h-8 bg-border" />
 
                 <div className="flex items-center gap-3 hidden md:flex">
-                    <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[9px] font-bold text-emerald-600 tracking-wider uppercase">SYNC ACTIVE</span>
+                    <div className="px-4 py-2 bg-status-success/10 border border-emerald-500/20 rounded-full flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
+                        <span className="text-[9px] font-bold text-status-success tracking-wider uppercase">SYNC ACTIVE</span>
                     </div>
 
                     <button className="w-10 h-10 rounded-full bg-bg-primary border border-border flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-all">

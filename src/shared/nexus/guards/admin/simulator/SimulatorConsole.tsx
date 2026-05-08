@@ -130,7 +130,7 @@ export function SimulatorConsole() {
     return (
         <div className="flex flex-col gap-6 w-full animate-in fade-in duration-700">
             {/* Control Bar */}
-            <GlassCard className="p-4 flex items-center justify-between border-white/10 hover:border-accent/30 transition-colors duration-500 shadow-2xl shadow-black/20">
+            <GlassCard className="p-4 flex items-center justify-between border-subtle hover:border-accent/30 transition-colors duration-500 shadow-2xl shadow-black/20">
                 <div className="flex items-center gap-6">
                     <div className="flex flex-col gap-1">
                         <span className="text-[10px] font-black uppercase tracking-widest text-text-muted opacity-70">Temporal Speed</span>
@@ -148,7 +148,7 @@ export function SimulatorConsole() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col gap-1 px-4 border-l border-white/10 ml-2">
+                    <div className="flex flex-col gap-1 px-4 border-l border-subtle ml-2">
                         <span className="text-[10px] font-black uppercase tracking-widest text-accent opacity-70 flex items-center gap-2">
                             <Cpu size={10} />
                             Singularity Status
@@ -177,7 +177,7 @@ export function SimulatorConsole() {
                                 exit={{ opacity: 0, x: -20 }}
                             >
                                 <Button onClick={handleStart} className="bg-success hover:bg-success/90 text-white gap-2 px-8 shadow-xl shadow-success/20 group overflow-hidden relative">
-                                    <motion.div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                                    <motion.div className="absolute inset-0 bg-surface-card/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                     <Play size={16} className="relative z-10" /> 
                                     <span className="relative z-10">Initier l'Oracle</span>
                                 </Button>
@@ -250,7 +250,7 @@ export function SimulatorConsole() {
                         </motion.div>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <div className="h-2 bg-black/20 rounded-full overflow-hidden border border-white/5 relative">
+                        <div className="h-2 bg-surface-sidebar/20 rounded-full overflow-hidden border border-white/5 relative">
                             <motion.div 
                                 initial={{ width: 0 }} 
                                 animate={{ 
@@ -303,7 +303,7 @@ export function SimulatorConsole() {
                         exit={{ opacity: 0, x: 300 }}
                         className="fixed top-24 right-8 z-50 w-72"
                     >
-                        <GlassCard className="p-6 border-accent/30 bg-black/80 backdrop-blur-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                        <GlassCard className="p-6 border-accent/30 bg-surface-sidebar/80 backdrop-blur-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-1">
                                 <Button variant="ghost" size="sm" onClick={() => setIsOverridesOpen(false)} className="h-6 w-6 p-0 text-text-muted hover:text-white">
                                     <ChevronRight size={14} />
@@ -311,7 +311,7 @@ export function SimulatorConsole() {
                             </div>
                             
                             <div className="flex flex-col gap-8 relative z-10">
-                                <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                                <div className="flex items-center gap-3 border-b border-subtle pb-4">
                                     <Cpu size={18} className="text-accent animate-pulse" />
                                     <span className="text-sm font-black uppercase tracking-widest text-white">Singularity Overrides</span>
                                 </div>
@@ -329,7 +329,7 @@ export function SimulatorConsole() {
                                         step="1"
                                         value={staffRatio}
                                         onChange={(e) => updateStaffRatio(parseInt(e.target.value))}
-                                        className="w-full accent-accent bg-white/10 rounded-lg appearance-none h-1.5"
+                                        className="w-full accent-accent bg-surface-card/10 rounded-lg appearance-none h-1.5"
                                     />
                                     <div className="flex justify-between text-[8px] font-mono text-text-muted uppercase">
                                         <span>Palace</span>
@@ -341,7 +341,7 @@ export function SimulatorConsole() {
                                 {/* Finance Toggle */}
                                 <div className="flex flex-col gap-3">
                                     <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Financial Complexity</span>
-                                    <div className="grid grid-cols-2 gap-2 bg-black/40 p-1 rounded-xl border border-white/10">
+                                    <div className="grid grid-cols-2 gap-2 bg-surface-sidebar/40 p-1 rounded-xl border border-subtle">
                                         {['SIMPLE', 'EXPERT'].map((mode) => (
                                             <button
                                                 key={mode}
@@ -361,7 +361,7 @@ export function SimulatorConsole() {
                                             "flex items-center gap-2 px-2 py-1.5 rounded border transition-all duration-500",
                                             integrityStatus === 'SECURE' ? "bg-success/10 border-success/30" : 
                                             integrityStatus === 'BREACH' ? "bg-error/20 border-error/50 animate-pulse" :
-                                            "bg-white/5 border-white/10"
+                                            "bg-surface-card/5 border-subtle"
                                         )}>
                                             <Calculator size={10} className={cn(
                                                 integrityStatus === 'SECURE' ? "text-success" : 
@@ -380,7 +380,7 @@ export function SimulatorConsole() {
                                     )}
                                 </div>
 
-                                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                                <div className="p-3 rounded-lg bg-surface-card/5 border border-subtle">
                                     <p className="text-[9px] leading-relaxed text-text-muted italic">
                                         "Les réglages appliqués ici modifient la résonance de l'Oracle en temps réel."
                                     </p>
@@ -394,8 +394,8 @@ export function SimulatorConsole() {
             {/* Binary Terminal (Gastro-Code Architecture) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 min-h-[300px]">
                 {/* Yield Management Dashboard */}
-                <GlassCard className={`flex flex-col overflow-hidden transition-all duration-700 ${metrics.burnoutIndex > 75 ? 'border-error/50 shadow-[0_0_40px_rgba(239,68,68,0.2)] bg-error/5' : 'bg-black/40 border-white/5'} backdrop-blur-2xl relative group`}>
-                    <div className="border-b border-white/10 p-4 flex items-center justify-between bg-white/5">
+                <GlassCard className={`flex flex-col overflow-hidden transition-all duration-700 ${metrics.burnoutIndex > 75 ? 'border-error/50 shadow-[0_0_40px_rgba(239,68,68,0.2)] bg-error/5' : 'bg-surface-sidebar/40 border-white/5'} backdrop-blur-2xl relative group`}>
+                    <div className="border-b border-subtle p-4 flex items-center justify-between bg-surface-card/5">
                         <div className="flex items-center gap-2">
                              <TrendingUp size={16} className="text-success animate-pulse" />
                              <span className="text-[10px] font-black uppercase tracking-widest text-success/80">Nexus Yield Engine (Live)</span>
@@ -476,8 +476,8 @@ export function SimulatorConsole() {
                     </div>
                 </GlassCard>
 
-                <GlassCard className="flex flex-col overflow-hidden bg-black/60 backdrop-blur-2xl border-white/5">
-                    <div className="border-b border-white/10 p-3 flex items-center justify-between bg-white/5">
+                <GlassCard className="flex flex-col overflow-hidden bg-surface-sidebar/60 backdrop-blur-2xl border-white/5">
+                    <div className="border-b border-subtle p-3 flex items-center justify-between bg-surface-card/5">
                         <div className="flex items-center gap-2">
                              <div className="flex gap-1.5 mr-2">
                                 <div className="w-2.5 h-2.5 rounded-full bg-error/50" />

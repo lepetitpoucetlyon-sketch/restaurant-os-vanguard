@@ -133,7 +133,7 @@ export default function RegistrePage() {
                                         <button
                                             key={doc.id}
                                             onClick={() => isModal ? setIsCerfaOpen(true) : setActiveTab(tab)}
-                                            className="group bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 text-left hover:shadow-2xl hover:border-accent/30 transition-all duration-500 relative overflow-hidden"
+                                            className="group bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 text-left hover:shadow-2xl hover:border-accent/30 transition-all duration-500 relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 rounded-full opacity-5 group-hover:opacity-10 transition-opacity" style={{ backgroundColor: color }} />
 
@@ -165,11 +165,11 @@ export default function RegistrePage() {
                             {/* Prestataires summary */}
                             <button
                                 onClick={() => setActiveTab('prestataires')}
-                                className="w-full group bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 text-left hover:shadow-2xl hover:border-accent/30 transition-all duration-500"
+                                className="w-full group bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 text-left hover:shadow-2xl hover:border-accent/30 transition-all duration-500"
                             >
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center border border-amber-500/10">
+                                        <div className="w-12 h-12 rounded-xl bg-status-warning/10 text-status-warning flex items-center justify-center border border-amber-500/10">
                                             <BadgeCheck strokeWidth={1.5} className="w-6 h-6" />
                                         </div>
                                         <div>

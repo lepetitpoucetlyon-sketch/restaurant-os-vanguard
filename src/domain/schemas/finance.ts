@@ -24,8 +24,15 @@ export const JournalEntrySchema = z.object({
   serverTimestamp:    TimestampSchema,
   correlationId:      UUIDSchema,
   type:               z.enum(['revenue', 'expense', 'tax', 'other']),
-  status:             z.enum(['validated', 'cancelled', 'refunded']),
-  cancellationRef:    UUIDSchema.nullable().default(null),
+  status:             z.enum(['draft', 'pending', 'validated', 'closed', 'cancelled', 'refunded']).optional(),
+  date:               TimestampSchema.optional(), // Added for interface parity
+  pieceNumber:        z.string().optional(),       // Added for interface parity
+  description:        z.string().default(''),      // Added for interface parity
+  lines:              z.array(z.any()).default([]), // Added for interface parity
+  isValidated:        z.boolean().default(true),    // NF525 Requirement
+  isSystemGenerated:  z.boolean().default(false),   // Audit requirement
+  updatedAt:          TimestampSchema.optional(),   // Interface parity
+  cancellationRef:    UUIDSchema.optional(),
 }).refine(
   data => data.hash !== data.hashPrecedent,
   { message: 'Hash et hashPrecedent ne peuvent pas être identiques', path: ['hash'] }
@@ -42,10 +49,12 @@ export const AccountSchema = z.object({
   code:          z.string().regex(/^[0-9]{3,6}$/, 'Code comptable PCG invalide'),
   name:          sanitized(1, 100),
   type:          z.enum(['asset', 'liability', 'equity', 'revenue', 'expense']),
+  class:         z.enum(['1', '2', '3', '4', '5', '6', '7']).default('1'), // Added for interface parity
   balanceInMicrounits: z.number().int(),  // Peut être négatif (dette)
+  balanceInCents: z.number().int().optional(), // Added for interface parity
   currency:      z.literal('EUR').default('EUR'),
   isActive:      z.boolean().default(true),
-  parentCode:    z.string().nullable().default(null),
+  parentCode:    z.string().optional(),
   siteId:        UUIDSchema,
   updatedAt:     TimestampSchema,
 });
@@ -71,8 +80,12 @@ export const BankTransactionSchema = z.object({
   direction:      z.enum(['credit', 'debit']),
   description:    sanitized(0, 200),
   executedAt:     TimestampSchema,
-  reconciledAt:   TimestampSchema.nullable().default(null),
-  journalEntryId: UUIDSchema.nullable().default(null),
+  date:           TimestampSchema.optional(), // Interface parity
+  label:          sanitized(0, 200).default(''), // Interface parity
+  amountInCents:  z.number().int().optional(), // Interface parity
+  type:           z.enum(['credit', 'debit']).optional(), // Interface parity
+  reconciledAt:   TimestampSchema.optional(),
+  journalEntryId: UUIDSchema.optional(),
   bankRef:        sanitized(0, 50),
   siteId:         UUIDSchema,
 }).refine(
@@ -90,17 +103,22 @@ export type BankTransaction = z.infer<typeof BankTransactionSchema>;
 export const ExpenseClaimSchema = z.object({
   id:              UUIDSchema,
   submittedBy:     UUIDSchema,
-  approvedBy:      UUIDSchema.nullable().default(null),
+  approvedBy:      UUIDSchema.optional(),
   amountInMicrounits: MicrounitsSchema,
   category:        z.enum([
     'food', 'equipment', 'maintenance', 'utilities',
     'marketing', 'training', 'travel', 'other'
   ]),
   description:     sanitized(1, 300),
-  receiptUrl:      z.string().url().nullable().optional(),
+  receiptUrl:      z.string().url().optional(),
   status:          z.enum(['pending', 'approved', 'rejected', 'reimbursed']),
   submittedAt:     TimestampSchema,
-  processedAt:     TimestampSchema.nullable().default(null),
+  date:            TimestampSchema.optional(), // Interface parity
+  userId:          UUIDSchema.optional(),      // Interface parity
+  userName:        z.string().default('Unknown'), // Interface parity
+  userRole:        z.string().default('employee'), // Interface parity
+  amountInCents:   z.number().int().optional(), // Interface parity
+  processedAt:     TimestampSchema.optional(),
 }).refine(
   data => !(data.status === 'approved' && data.approvedBy === null),
   { message: 'Une note de frais approuvée doit avoir un approbateur', path: ['approvedBy'] }

@@ -58,8 +58,8 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
             performanceMode ? "duration-0" : "duration-700",
             !performanceMode && "backdrop-blur-xl",
             isDisabled 
-                ? "bg-black/5 grayscale cursor-not-allowed border-status-danger/20 shadow-none opacity-60" 
-                : "bg-surface-card dark:bg-white/[0.02] cursor-pointer hover:border-action-primary/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
+                ? "bg-surface-sidebar/5 grayscale cursor-not-allowed border-status-danger/20 shadow-none opacity-60" 
+                : "bg-surface-card dark:bg-surface-card/[0.02] cursor-pointer hover:border-action-primary/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
         )}
     >
         {/* Compliance Overlays */}
@@ -68,7 +68,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm p-6 text-center"
+                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-surface-sidebar/40 backdrop-blur-sm p-6 text-center"
                 >
                     <div className="w-16 h-16 rounded-full bg-status-danger/20 flex items-center justify-center mb-4">
                         {disabledReason === 'expired' ? (
@@ -133,12 +133,12 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                             {((product.priceInCents ?? 0) / 100).toFixed(2)}€
                         </span>
                     )}
-                    <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/10">
+                    <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}
                             className={cn(
-                                "rounded-full bg-text-primary text-white dark:bg-white dark:text-black flex items-center justify-center shadow-premium hover:bg-action-primary hover:text-action-primary-fg transition-all duration-500",
+                                "rounded-full bg-text-primary text-white dark:bg-surface-card dark:text-primary flex items-center justify-center shadow-premium hover:bg-action-primary hover:text-action-primary-fg transition-all duration-500",
                                 buttonSize === 'small' ? 'w-10 h-10' :
                                 buttonSize === 'large' ? 'w-14 h-14' : 'w-12 h-12'
                             )}
@@ -166,7 +166,7 @@ interface ProductGridProps {
 
 export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }: ProductGridProps) {
     const selectedProduct = useAtomValue(posSelectedProductAtom);
-    const setSelectedProduct = useSetAtom(posSelectedProductAtom as any);
+    const setSelectedProduct = useSetAtom(posSelectedProductAtom);
     const isDialogOpen = useAtomValue(posProductDetailsOpenAtom);
     const setIsDialogOpen = useSetAtom(posProductDetailsOpenAtom);
     const searchQuery = useAtomValue(posSearchQueryAtom);
@@ -187,7 +187,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
 
         return products.filter(p => {
             const matchesSearch = p.name.toLowerCase().includes(query);
-            const matchesCategory = categoryFilter === "all" || (p as any).category === categoryFilter || (p as any).categoryId === categoryFilter;
+            const matchesCategory = categoryFilter === "all" || (p as Record<string, unknown>).category === categoryFilter || (p as Record<string, unknown>).categoryId === categoryFilter;
             return matchesSearch && matchesCategory;
         }).map(product => {
             // COMPLIANCE GUARD LOGIC
@@ -197,7 +197,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
 
             if (product.ingredients && product.ingredients.length > 0) {
                 for (const req of product.ingredients) {
-                    const relatedStock = (stockItems as any as StockItem[]).filter(s => s.ingredientId === req.ingredientId);
+                    const relatedStock = (stockItems as unknown as StockItem[]).filter(s => s.ingredientId === req.ingredientId);
                     
                     const nonExpiredStock = relatedStock.filter(s => {
                         const dlc = new Date(s.dlc);
@@ -244,7 +244,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                         placeholder={t('pos.search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-surface-card dark:bg-white/5 border border-border-default/50 rounded-[28px] md:rounded-[32px] pl-16 pr-8 py-4 md:py-5 text-base text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-action-primary/50 focus:ring-4 focus:ring-action-primary/5 transition-all duration-700 font-brand italic shadow-premium hover:border-action-primary/30"
+                        className="w-full bg-surface-card dark:bg-surface-card/5 border border-border-default/50 rounded-[28px] md:rounded-[32px] pl-16 pr-8 py-4 md:py-5 text-base text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-action-primary/50 focus:ring-4 focus:ring-action-primary/5 transition-all duration-700 font-brand italic shadow-premium hover:border-action-primary/30"
                     />
                 </div>
             </div>

@@ -33,9 +33,11 @@ export interface JournalLine extends SovereignMap {
     runningBalanceInCents: number;
 }
 
+export type JournalEntryStatus = 'draft' | 'validated' | 'closed' | 'pending' | 'cancelled' | 'refunded';
+
 export interface JournalEntry extends SovereignNode {
     id: string;
-    date: string | Date;
+    date: number | string | Date;
     pieceNumber: string;
     description: string;
     lines: JournalLine[];
@@ -47,8 +49,9 @@ export interface JournalEntry extends SovereignNode {
     sealedAt?: string;
     type?: TransactionCategory;
     amountInCents?: number;
-    status?: 'draft' | 'validated' | 'closed' | 'pending';
-    updatedAt: string;
+    status?: JournalEntryStatus;
+    updatedAt: number | string | Date;
+    cancellationRef?: string;
 }
 
 export interface Account extends SovereignMap {
@@ -61,21 +64,21 @@ export interface Account extends SovereignMap {
     isActive: boolean;
     description?: string;
     balanceInCents?: number;
-    updatedAt: string;
+    updatedAt: number | string | Date;
 }
 
 export interface BankTransaction {
     id: string;
-    date: Date | string;
+    date: number | string | Date;
     label: string;
     amountInCents: number;
     amount?: number; 
     type: 'credit' | 'debit';
     isReconciled: boolean;
     reconciledWith?: string; 
-    reconciledAt?: Date | string;
+    reconciledAt?: Date | string | number;
     signature?: string;    
-    updatedAt: string;
+    updatedAt: number | string | Date;
 }
 
 export interface BankConnection {
@@ -91,18 +94,19 @@ export interface ExpenseClaim {
     userId: string;
     userName: string;
     userRole: string; 
-    date: string;
+    date: number | string | Date;
     amountInCents: number;
     category: string;
     description: string;
     invoiceId?: string;
     receiptUrl?: string; 
     receiptImage?: string; 
-    status: 'pending' | 'approved' | 'rejected';
+    status: 'pending' | 'approved' | 'rejected' | 'reimbursed';
     approvedBy?: string;
-    approvedAt?: string;
+    approvedAt?: string | Date;
+    processedAt?: string | Date | number;
     journalEntryId?: string;
-    updatedAt: string;
+    updatedAt: number | string | Date;
 }
 
 export interface TreasuryMetrics {

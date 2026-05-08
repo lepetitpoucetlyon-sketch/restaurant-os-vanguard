@@ -32,7 +32,7 @@ export function isIngredient(node: SovereignNode): node is Ingredient {
 }
 
 export function isReservation(node: SovereignNode): node is Reservation {
-    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.date === 'string' && typeof node.time === 'string' && typeof node.partySize === 'number' && typeof node.status === 'string';
+    return typeof node === 'object' && node !== null && typeof node.id === 'string' && (typeof node.date === 'string' || typeof node.date === 'number') && typeof node.time === 'string' && typeof node.partySize === 'number' && typeof node.status === 'string';
 }
 
 export function isQuote(node: SovereignNode): node is Quote {
@@ -40,7 +40,7 @@ export function isQuote(node: SovereignNode): node is Quote {
 }
 
 export function isCampaign(node: SovereignNode): node is Campaign {
-    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.title === 'string' && typeof node.status === 'string' && typeof node.budget === 'number' && typeof node.startDate === 'string' && typeof node.endDate === 'string';
+    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.title === 'string' && typeof node.status === 'string' && typeof node.budget === 'number' && (typeof node.startDate === 'string' || typeof node.startDate === 'number') && (typeof node.endDate === 'string' || typeof node.endDate === 'number');
 }
 
 export function isFloor(node: SovereignNode): node is Floor {

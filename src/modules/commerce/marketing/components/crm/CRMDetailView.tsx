@@ -90,7 +90,7 @@ export function CRMDetailView() {
                 
                 <button 
                     onClick={() => setSelectedCRM(null)} 
-                    className="absolute top-6 right-6 w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-all z-20"
+                    className="absolute top-6 right-6 w-10 h-10 rounded-full hover:bg-surface-card/10 flex items-center justify-center transition-all z-20"
                 >
                     <X className="w-6 h-6" />
                 </button>
@@ -99,7 +99,7 @@ export function CRMDetailView() {
                     <motion.div 
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="w-24 h-24 rounded-[2.5rem] bg-white/10 flex items-center justify-center mb-8 border border-white/20 shadow-2xl backdrop-blur-md"
+                        className="w-24 h-24 rounded-[2.5rem] bg-surface-card/10 flex items-center justify-center mb-8 border border-default shadow-2xl backdrop-blur-md"
                     >
                         <span className="text-4xl font-serif italic">
                             {getInitial(getFirstName(selectedCRM))}{getInitial(getLastName(selectedCRM))}

@@ -56,13 +56,13 @@ export const EndOfDayWizard: React.FC = () => {
 
     if (isClosed) {
         return (
-            <div className="p-8 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-center">
-                <CheckCircle2 className="mx-auto text-emerald-400 mb-4" size={48} />
+            <div className="p-8 bg-status-success/10 border border-emerald-500/20 rounded-2xl text-center">
+                <CheckCircle2 className="mx-auto text-status-success mb-4" size={48} />
                 <h2 className="text-xl font-bold text-white mb-2">Journée Clôturée</h2>
-                <p className="text-emerald-400/70 text-sm mb-6">
+                <p className="text-status-success/70 text-sm mb-6">
                     Tous les registres fiscaux ont été scellés et archivés (NF525).
                 </p>
-                <button className="px-6 py-2 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors">
+                <button className="px-6 py-2 bg-status-success text-white rounded-xl font-bold hover:bg-status-success transition-colors">
                     Télécharger le Rapport Z
                 </button>
             </div>
@@ -70,32 +70,32 @@ export const EndOfDayWizard: React.FC = () => {
     }
 
     return (
-        <div className="p-8 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl">
+        <div className="p-8 bg-surface-sidebar border border-default rounded-2xl shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-amber-500/10 text-amber-500 rounded-xl">
+                <div className="p-3 bg-status-warning/10 text-status-warning rounded-xl">
                     <Lock size={24} />
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-white">Clôture de Journée</h2>
-                    <p className="text-slate-400 text-sm">Certification NF525 & HACCP</p>
+                    <p className="text-muted text-sm">Certification NF525 & HACCP</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="p-4 bg-slate-800/50 rounded-xl border border-slate-700">
-                    <p className="text-xs text-slate-500 uppercase font-bold mb-1">CA à Sceller</p>
+                <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
+                    <p className="text-xs text-secondary uppercase font-bold mb-1">CA à Sceller</p>
                     <p className="text-lg font-bold text-white">{(revenue / 100).toFixed(2)} €</p>
                 </div>
-                <div className="p-4 bg-slate-800/50 rounded-xl border border-slate-700">
-                    <p className="text-xs text-slate-500 uppercase font-bold mb-1">État Tables</p>
-                    <p className={`text-lg font-bold ${activeTables > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
+                    <p className="text-xs text-secondary uppercase font-bold mb-1">État Tables</p>
+                    <p className={`text-lg font-bold ${activeTables > 0 ? 'text-status-warning' : 'text-status-success'}`}>
                         {activeTables > 0 ? `${activeTables} Active(s)` : 'Toutes closes'}
                     </p>
                 </div>
             </div>
 
             {activeTables > 0 && (
-                <div className="flex items-center gap-2 p-3 bg-rose-500/10 text-rose-400 rounded-lg text-xs mb-6">
+                <div className="flex items-center gap-2 p-3 bg-status-danger/10 text-status-danger rounded-lg text-xs mb-6">
                     <AlertCircle size={16} />
                     <span>Attention : Vous ne pouvez pas clôturer avec des tables ouvertes.</span>
                 </div>
@@ -104,13 +104,13 @@ export const EndOfDayWizard: React.FC = () => {
             <button 
                 onClick={handleClosure}
                 disabled={isClosing || activeTables > 0}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-white text-slate-900 rounded-xl font-black text-lg hover:bg-slate-200 transition-all disabled:opacity-50 disabled:grayscale"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-surface-card text-primary rounded-xl font-black text-lg hover:bg-surface-bg transition-all disabled:opacity-50 disabled:grayscale"
             >
                 {isClosing ? <Loader2 className="animate-spin" /> : <FileText size={20} />}
                 GÉNÉRER LE Z DE CAISSE
             </button>
 
-            <p className="mt-4 text-[10px] text-slate-500 text-center uppercase tracking-widest leading-relaxed">
+            <p className="mt-4 text-[10px] text-secondary text-center uppercase tracking-widest leading-relaxed">
                 En cliquant, vous certifiez l'exactitude des données de vente <br/> conformément à la norme NF525.
             </p>
         </div>

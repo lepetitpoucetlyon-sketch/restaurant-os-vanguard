@@ -44,7 +44,7 @@ export class BlockchainLedgerService {
             this.lastSealCache = results.length > 0 ? (results[0] as FiscalSeal) : undefined;
             return this.lastSealCache;
         } catch (error) {
-            logger.warn('BlockchainLedgerService: Remote fetch failed, falling back to local', error);
+            logger.warn('BlockchainLedgerService: Remote fetch failed, falling back to local', { error: error instanceof Error ? error.message : String(error) });
             const fallback = await db.fiscalSeals.orderBy('timestamp').reverse().first();
             this.lastSealCache = fallback;
             return fallback;

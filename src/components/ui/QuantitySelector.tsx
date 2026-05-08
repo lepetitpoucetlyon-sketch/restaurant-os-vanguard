@@ -56,8 +56,8 @@ export function QuantitySelector({
                 disabled={value <= min}
                 className={cn(
                     "flex items-center justify-center w-10 h-10 rounded-full transition-all",
-                    "hover:bg-black/5 dark:hover:bg-white/5",
-                    "text-neutral-600 dark:text-neutral-400 disabled:opacity-30",
+                    "hover:bg-surface-sidebar/5 dark:hover:bg-surface-card/5",
+                    "text-secondary dark:text-muted disabled:opacity-30",
                     "border border-transparent dark:border-white/5"
                 )}
             >
@@ -65,7 +65,7 @@ export function QuantitySelector({
             </motion.button>
 
             {/* Value Display */}
-            <div className="flex-1 text-center font-bold text-lg text-neutral-900 dark:text-white">
+            <div className="flex-1 text-center font-bold text-lg text-primary dark:text-white">
                 <AnimatePresence mode="wait">
                     <motion.span
                         key={value}
@@ -91,7 +91,7 @@ export function QuantitySelector({
                     "bg-accent text-white shadow-[0_0_15px_-3px_#C5A059]",
                     "hover:shadow-[0_0_20px_-2px_#C5A059]",
                     // Liquid glass highlight on the button itself
-                    "after:absolute after:top-1 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[1px] after:bg-white/40 after:rounded-full after:blur-[0.5px]"
+                    "after:absolute after:top-1 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[1px] after:bg-surface-card/40 after:rounded-full after:blur-[0.5px]"
                 )}
             >
                 <Plus size={22} strokeWidth={3} />

@@ -46,23 +46,23 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
     };
 
     return (
-        <div className="fixed inset-0 z-[150] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-[150] bg-surface-sidebar/95 backdrop-blur-xl flex items-center justify-center p-6">
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-lg bg-[#0B0B0C] border border-white/10 rounded-[3rem] p-10 text-center relative overflow-hidden shadow-2xl"
+                className="w-full max-w-lg bg-[#0B0B0C] border border-subtle rounded-[3rem] p-10 text-center relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
-                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-neutral-500 hover:text-white transition-colors">
+                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-secondary hover:text-white transition-colors">
                     <X size={20} />
                 </button>
 
                 <div className="flex flex-col items-center space-y-8">
                     <div className={cn(
                         "w-24 h-24 rounded-3xl flex items-center justify-center transition-all duration-700",
-                        isProcessing ? "bg-amber-500 text-black animate-pulse" : 
-                        result?.isCompliant ? "bg-emerald-500 text-white shadow-2xl shadow-emerald-500/20" :
-                        result ? "bg-red-500 text-white" : "bg-white/5 text-neutral-400"
+                        isProcessing ? "bg-status-warning text-primary animate-pulse" : 
+                        result?.isCompliant ? "bg-status-success text-white shadow-2xl shadow-emerald-500/20" :
+                        result ? "bg-status-danger text-white" : "bg-surface-card/5 text-muted"
                     )}>
                         {isProcessing ? <Loader2 size={40} className="animate-spin" /> : 
                          result?.isCompliant ? <ShieldCheck size={40} /> :
@@ -71,7 +71,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
 
                     <div>
                         <h3 className="text-2xl font-serif italic text-white mb-2 uppercase tracking-tighter">Audit Sanitaire</h3>
-                        <p className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.4em] mb-4">{taskName}</p>
+                        <p className="text-[10px] font-black text-secondary uppercase tracking-[0.4em] mb-4">{taskName}</p>
                         
                         <AnimatePresence>
                             {result && (
@@ -80,7 +80,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                                     animate={{ opacity: 1, y: 0 }}
                                     className={cn(
                                         "p-4 rounded-2xl border text-[11px] font-bold",
-                                        result.isCompliant ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500" : "bg-red-500/5 border-red-500/20 text-red-500"
+                                        result.isCompliant ? "bg-status-success/5 border-emerald-500/20 text-status-success" : "bg-status-danger/5 border-red-500/20 text-status-danger"
                                     )}
                                 >
                                     {result.observation}
@@ -102,12 +102,12 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                             <Button 
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={isProcessing}
-                                className="w-full py-8 bg-white text-black text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
+                                className="w-full py-8 bg-surface-card text-primary text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
                             >
                                 <Camera size={18} className="mr-2" />
                                 Capturer la Preuve
                             </Button>
-                            <p className="text-[9px] font-bold text-neutral-600 uppercase tracking-widest leading-relaxed">
+                            <p className="text-[9px] font-bold text-secondary uppercase tracking-widest leading-relaxed">
                                 L'IA analysera la propreté et la conformité <br />pour valider la tâche automatiquement.
                             </p>
                         </div>

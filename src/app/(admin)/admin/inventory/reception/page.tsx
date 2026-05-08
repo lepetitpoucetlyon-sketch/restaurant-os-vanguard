@@ -17,12 +17,12 @@ import {
 
 import { NewReservationDialog } from "@modules/commerce";
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
-const upsertReservationAction = async (...args: any[]) => ({ success: true });
-const deleteReservationAction = async (...args: any[]) => ({ success: true });
-const cancelReservationAction = async (...args: any[]) => ({ success: true });
+const upsertReservationAction = async (...args: unknown[]) => ({ success: true });
+const deleteReservationAction = async (...args: unknown[]) => ({ success: true });
+const cancelReservationAction = async (...args: unknown[]) => ({ success: true });
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 // import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
-const receiveStockAction = async (tenantId: string, ingredient: import('@nexus/contracts').Ingredient, data: any) => ({ success: true });
+const receiveStockAction = async (tenantId: string, ingredient: import('@nexus/contracts').Ingredient, data: unknown) => ({ success: true });
 const searchIngredientsAction = async (tenantId: string, query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
 import { toast } from 'sonner';
 
@@ -161,7 +161,7 @@ export default function ReceptionDashboard() {
                     <motion.div 
                       animate={{ top: ['0%', '100%', '0%'] }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                      className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent z-10 shadow-[0_0_20px_rgba(52,211,153,0.5)]"
+                      className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-status-success to-transparent z-10 shadow-[0_0_20px_rgba(52,211,153,0.5)]"
                     />
                     <ScanLine className="w-20 h-20 text-status-success animate-pulse mb-4" />
                     <span className="text-status-success font-black tracking-[0.3em] uppercase animate-pulse">Analyse Empire Vision...</span>
@@ -172,7 +172,7 @@ export default function ReceptionDashboard() {
                     <p className="text-text-secondary font-bold mb-8 text-center max-w-xs uppercase tracking-tighter">Posez le bon de livraison sous l'objectif ou importez un PDF</p>
                     <button 
                       onClick={handleScan}
-                      className="bg-surface-card text-black font-black py-5 px-12 rounded-2xl hover:bg-status-success transition-all active:scale-95 text-lg uppercase shadow-xl shadow-emerald-500/10"
+                      className="bg-surface-card text-primary font-black py-5 px-12 rounded-2xl hover:bg-status-success transition-all active:scale-95 text-lg uppercase shadow-xl shadow-emerald-500/10"
                     >
                       Scanner le Bon
                     </button>
@@ -252,7 +252,7 @@ export default function ReceptionDashboard() {
                         </div>
                         
                         <div className="space-y-8">
-                            <div className="p-6 bg-action-primary border border-indigo-500/20 rounded-2xl">
+                            <div className="p-6 bg-action-primary border border-focus/20 rounded-2xl">
                                 <h3 className="text-action-primary text-xs font-black uppercase mb-4 flex items-center gap-2">
                                     <AlertCircle className="w-4 h-4" />
                                     Conseil de Conservation (ANETH)
@@ -278,9 +278,9 @@ export default function ReceptionDashboard() {
                 </div>
 
                 <div className="space-y-6">
-                    <div className="bg-status-success text-black p-8 rounded-3xl shadow-2xl shadow-emerald-500/20">
+                    <div className="bg-status-success text-primary p-8 rounded-3xl shadow-2xl shadow-emerald-500/20">
                         <h3 className="font-black text-2xl mb-4 leading-tight uppercase">Fin de Réception</h3>
-                        <p className="text-black/70 font-bold text-xs uppercase mb-10 tracking-tighter leading-snug">
+                        <p className="text-primary/70 font-bold text-xs uppercase mb-10 tracking-tighter leading-snug">
                             En validant, les stocks seront déduits via FIFO, les alertes DLC activées et les calculs de marge mis à jour.
                         </p>
                         <button 

@@ -125,7 +125,7 @@ export default function KDSPage() {
             <div className="flex-1 p-4 md:p-10 overflow-auto relative custom-scrollbar bg-bg-primary">
                 {/* Immersive Background Decor */}
                 <div className="absolute top-[10%] left-[5%] w-[60%] h-[60%] blur-[250px] pointer-events-none rounded-full bg-success-soft/30" />
-                <div className="absolute bottom-[10%] right-[5%] w-[50%] h-[50%] blur-[200px] pointer-events-none rounded-full bg-blue-500/5" />
+                <div className="absolute bottom-[10%] right-[5%] w-[50%] h-[50%] blur-[200px] pointer-events-none rounded-full bg-action-primary/5" />
 
                 <AnimatePresence mode="popLayout">
                     {filteredOrders.length === 0 ? (

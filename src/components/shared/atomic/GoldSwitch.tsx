@@ -23,14 +23,14 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
         <div className="flex items-center justify-between group cursor-pointer" onClick={() => !disabled && onChange(!checked)}>
             {(label || description) && (
                 <div className="flex flex-col mr-4">
-                    {label && <span className="text-sm font-medium text-slate-200 group-hover:text-amber-400 transition-colors">{label}</span>}
-                    {description && <span className="text-xs text-slate-400">{description}</span>}
+                    {label && <span className="text-sm font-medium text-muted group-hover:text-status-warning transition-colors">{label}</span>}
+                    {description && <span className="text-xs text-muted">{description}</span>}
                 </div>
             )}
             
             <div className={cn(
                 "relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out",
-                checked ? "bg-amber-500/20 ring-1 ring-amber-500/50" : "bg-slate-800 ring-1 ring-slate-700",
+                checked ? "bg-status-warning/20 ring-1 ring-amber-500/50" : "bg-surface-sidebar ring-1 ring-default",
                 disabled && "opacity-50 cursor-not-allowed"
             )}>
                 <motion.div
@@ -39,7 +39,7 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
                         backgroundColor: checked ? "#F59E0B" : "#475569"
                     }}
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    className="absolute top-[2px] w-5 h-5 rounded-full shadow-lg border border-white/10"
+                    className="absolute top-[2px] w-5 h-5 rounded-full shadow-lg border border-subtle"
                 />
             </div>
         </div>

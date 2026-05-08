@@ -79,7 +79,7 @@ export const BrandingService = {
                 primaryColor: data.primaryColor,
                 atmosphere: data.atmosphere as BrandInput['atmosphere'],
             };
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error(`[Nexus Branding] AI Extraction failed:`, { error });
             // Fallback to minimal branding
             return {

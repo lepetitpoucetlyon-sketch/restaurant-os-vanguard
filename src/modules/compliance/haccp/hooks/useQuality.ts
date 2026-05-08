@@ -197,7 +197,7 @@ export const useQuality = () => {
             const receptionData: ReceptionData = {
                 deliveryId: activeControl.delivery?.id || 'manual',
                 supplierName: activeControl.supplier_name,
-                truckTemp: activeControl.delivery_conditions.vehicle_temperature.measured,
+                truckTemp: activeControl.delivery_conditions.vehicle_temperature.measured || 0,
                 hygieneStatus: (activeControl.delivery_conditions.vehicle_cleanliness ===
                 'not_checked'
                     ? 'acceptable'
@@ -226,7 +226,7 @@ export const useQuality = () => {
                 validatedBy: activeControl.controller_name || 'unknown',
             };
 
-            const result = await QualityEngine.validateReception(receptionData, tenantId);
+            const result = await QualityEngine.validateReception(receptionData, tenantId as string);
 
             // 🏛️ Sovereign Session Cleanup (Zero Debt)
             setActiveControl({

@@ -26,14 +26,14 @@ export const OTABanner: React.FC = () => {
                     exit={{ y: -100, opacity: 0 }}
                     className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-2xl"
                 >
-                    <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4">
+                    <div className="bg-surface-card/10 backdrop-blur-xl border border-default rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                                 <RefreshCw className="w-5 h-5 text-primary animate-spin-slow" />
                             </div>
                             <div>
                                 <h4 className="text-white font-semibold text-sm">Mise à jour disponible (v{updateInfo?.version || '?.?.?'})</h4>
-                                <p className="text-zinc-400 text-xs">Une mise à jour Over-the-Air a été déployée par le Suzerain.</p>
+                                <p className="text-muted text-xs">Une mise à jour Over-the-Air a été déployée par le Suzerain.</p>
                             </div>
                         </div>
                         

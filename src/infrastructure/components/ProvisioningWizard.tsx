@@ -56,15 +56,15 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl"
+            className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-surface-sidebar/80 backdrop-blur-xl"
         >
             <motion.div 
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                className="w-full max-w-2xl bg-[#0B0B0C] border border-white/10 rounded-[3rem] p-12 relative overflow-hidden shadow-2xl"
+                className="w-full max-w-2xl bg-[#0B0B0C] border border-subtle rounded-[3rem] p-12 relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
-                <button onClick={onClose} className="absolute top-8 right-8 text-neutral-500 hover:text-white transition-colors">
+                <button onClick={onClose} className="absolute top-8 right-8 text-secondary hover:text-white transition-colors">
                     <X size={24} />
                 </button>
 
@@ -83,42 +83,42 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 </div>
                                 <div>
                                     <h2 className="text-3xl font-serif text-white uppercase italic tracking-tight">Provisioning Target</h2>
-                                    <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold">Identité du nouveau nœud</p>
+                                    <p className="text-xs text-secondary uppercase tracking-widest font-bold">Identité du nouveau nœud</p>
                                 </div>
                             </div>
 
                             <form onSubmit={handleIdentitySubmit} className="space-y-6 pt-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Nom du Restaurant</label>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest">Nom du Restaurant</label>
                                     <input 
                                         type="text" 
                                         value={formData.name}
                                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                                         placeholder="EX: LE PETIT POUCET"
-                                        className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none focus:border-amber-500/50 transition-all font-serif italic text-lg"
+                                        className="w-full bg-surface-card/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none focus:border-amber-500/50 transition-all font-serif italic text-lg"
                                         required
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Clé Technique (ID Unique)</label>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest">Clé Technique (ID Unique)</label>
                                     <input 
                                         type="text" 
                                         value={formData.key}
                                         onChange={(e) => setFormData({...formData, key: e.target.value.toLowerCase()})}
                                         placeholder="ex: le-petit-poucet-lyon"
-                                        className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none focus:border-amber-500/50 transition-all font-mono text-sm"
+                                        className="w-full bg-surface-card/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none focus:border-amber-500/50 transition-all font-mono text-sm"
                                         required
                                     />
                                 </div>
 
                                 {error && (
-                                    <div className="flex items-center gap-2 text-red-500 text-[10px] font-black uppercase tracking-widest">
+                                    <div className="flex items-center gap-2 text-status-danger text-[10px] font-black uppercase tracking-widest">
                                         <AlertCircle size={14} /> {error}
                                     </div>
                                 )}
 
-                                <Button type="submit" className="w-full py-8 text-[11px] font-black uppercase tracking-[0.3em] bg-white text-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all">
+                                <Button type="submit" className="w-full py-8 text-[11px] font-black uppercase tracking-[0.3em] bg-surface-card text-primary rounded-2xl hover:scale-[1.02] active:scale-95 transition-all">
                                     Passer à la Configuration Infrastructure
                                 </Button>
                             </form>
@@ -134,22 +134,22 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                             className="space-y-8"
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-amber-500 text-bg-primary rounded-2xl flex items-center justify-center shadow-xl">
+                                <div className="w-14 h-14 bg-status-warning text-bg-primary rounded-2xl flex items-center justify-center shadow-xl">
                                     <Zap size={28} />
                                 </div>
                                 <div>
                                     <h2 className="text-3xl font-serif text-white uppercase italic tracking-tight">System Specs</h2>
-                                    <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold">Puissance & Géo-localité</p>
+                                    <p className="text-xs text-secondary uppercase tracking-widest font-bold">Puissance & Géo-localité</p>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-6 pt-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Tier de Service</label>
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest">Tier de Service</label>
                                     <select 
                                         value={formData.tier}
                                         onChange={(e) => setFormData({...formData, tier: e.target.value as 'STANDARD' | 'PREMIUM' | 'ENTERPRISE'})}
-                                        className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none appearance-none cursor-pointer"
+                                        className="w-full bg-surface-card/[0.03] border border-white/5 rounded-2xl p-6 text-white focus:outline-none appearance-none cursor-pointer"
                                     >
                                         <option value="STANDARD">Standard Node</option>
                                         <option value="PREMIUM">Premium Pro</option>
@@ -158,8 +158,8 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Accent Branding</label>
-                                    <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 rounded-2xl p-4">
+                                    <label className="text-[10px] font-black text-muted uppercase tracking-widest">Accent Branding</label>
+                                    <div className="flex items-center gap-4 bg-surface-card/[0.03] border border-white/5 rounded-2xl p-4">
                                         <input 
                                             type="color" 
                                             value={formData.initialPrimaryColor}
@@ -171,17 +171,17 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 </div>
                             </div>
 
-                            <div className="p-8 bg-blue-500/5 border border-blue-500/10 rounded-3xl flex items-start gap-4">
-                                <Globe className="text-blue-500 shrink-0 mt-1" size={20} />
+                            <div className="p-8 bg-action-primary/5 border border-focus/10 rounded-3xl flex items-start gap-4">
+                                <Globe className="text-brand shrink-0 mt-1" size={20} />
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest leading-none">Global Deployment</p>
-                                    <p className="text-xs text-blue-500/60">L'instance sera propagée sur la région <span className="font-bold">europe-west9 (Paris)</span> avec isolation de base de données 100% dédiée.</p>
+                                    <p className="text-[10px] font-black text-brand uppercase tracking-widest leading-none">Global Deployment</p>
+                                    <p className="text-xs text-brand/60">L'instance sera propagée sur la région <span className="font-bold">europe-west9 (Paris)</span> avec isolation de base de données 100% dédiée.</p>
                                 </div>
                             </div>
 
                             <div className="flex gap-4">
                                 <Button onClick={() => setStep('identity')} variant="ghost" className="flex-1 py-8 text-[11px] font-black border border-white/5 uppercase tracking-widest">Retour</Button>
-                                <Button onClick={handleLaunch} className="flex-[2] py-8 bg-amber-500 text-bg-primary text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-[1.02] shadow-xl shadow-amber-500/20">Lancer le Déploiement</Button>
+                                <Button onClick={handleLaunch} className="flex-[2] py-8 bg-status-warning text-bg-primary text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-[1.02] shadow-xl shadow-amber-500/20">Lancer le Déploiement</Button>
                             </div>
                         </motion.div>
                     )}
@@ -195,26 +195,26 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                         >
                             <div className="relative">
                                 <div className="w-32 h-32 rounded-full border-4 border-amber-500/20 flex items-center justify-center">
-                                    <Loader2 className="w-16 h-16 text-amber-500 animate-spin" />
+                                    <Loader2 className="w-16 h-16 text-status-warning animate-spin" />
                                 </div>
-                                <div className="absolute -top-2 -right-2 w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center animate-bounce shadow-2xl">
+                                <div className="absolute -top-2 -right-2 w-10 h-10 bg-status-warning rounded-xl flex items-center justify-center animate-bounce shadow-2xl">
                                     <Rocket size={20} className="text-bg-primary" />
                                 </div>
                             </div>
 
                             <div className="space-y-3">
                                 <h3 className="text-4xl font-serif text-white uppercase italic tracking-tighter animate-pulse">Neural Expansion...</h3>
-                                <p className="text-xs text-neutral-500 uppercase tracking-[0.4em] font-bold">Allocating Cloud Resources & Generating Twins</p>
+                                <p className="text-xs text-secondary uppercase tracking-[0.4em] font-bold">Allocating Cloud Resources & Generating Twins</p>
                             </div>
 
                             <div className="w-full max-w-sm space-y-4 pt-8">
-                                <div className="flex items-center gap-3 text-emerald-500/60 text-[9px] font-black uppercase tracking-widest">
+                                <div className="flex items-center gap-3 text-status-success/60 text-[9px] font-black uppercase tracking-widest">
                                     <CheckCircle2 size={12} /> Firebase Node ID: ros-{formData.key}
                                 </div>
-                                <div className="flex items-center gap-3 text-emerald-500/60 text-[9px] font-black uppercase tracking-widest">
+                                <div className="flex items-center gap-3 text-status-success/60 text-[9px] font-black uppercase tracking-widest">
                                     <CheckCircle2 size={12} /> DNS Routing Table: {formData.key}.restaurant-os.app
                                 </div>
-                                <div className="flex items-center gap-3 text-emerald-500 text-[9px] font-black uppercase tracking-widest animate-breath">
+                                <div className="flex items-center gap-3 text-status-success text-[9px] font-black uppercase tracking-widest animate-breath">
                                     <Loader2 size={12} className="animate-spin" /> Sealing Fiscal Chains (Audit Ready)
                                 </div>
                             </div>

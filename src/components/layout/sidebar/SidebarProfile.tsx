@@ -48,7 +48,7 @@ export function SidebarProfile({
         <motion.div
             variants={navItemReveal}
             className={cn(
-                "p-6 border-t border-border/40 bg-bg-tertiary/20 dark:bg-black/40 backdrop-blur-md",
+                "p-6 border-t border-border/40 bg-bg-tertiary/20 dark:bg-surface-sidebar/40 backdrop-blur-md",
                 isSidebarCollapsed ? "px-2" : "p-8"
             )}
         >

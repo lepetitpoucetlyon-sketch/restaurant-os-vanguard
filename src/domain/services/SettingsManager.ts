@@ -10,7 +10,7 @@ export class SettingsManager {
             await Nexus.adapter.set(settingsPath, newSettings);
             logger.info('SettingsManager: Configuration saved successfully');
             return new Date();
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('SettingsManager: Failed to save settings', { error });
             throw error;
         }
@@ -24,7 +24,7 @@ export class SettingsManager {
         try {
             const imported = JSON.parse(json);
             return { ...defaults, ...imported };
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('SettingsManager: Import failed', { error });
             throw new Error('Format de fichier invalide');
         }

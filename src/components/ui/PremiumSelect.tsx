@@ -62,10 +62,10 @@ export function PremiumSelect({
                     onClick={() => setIsOpen(!isOpen)}
                     className={cn(
                         "w-full h-16 px-8 flex items-center justify-between transition-all duration-500 rounded-2xl border-2 outline-none",
-                        "bg-white dark:bg-white/5 backdrop-blur-md shadow-sm",
+                        "bg-surface-card dark:bg-surface-card/5 backdrop-blur-md shadow-sm",
                         isOpen
                             ? "border-accent-gold ring-4 ring-accent-gold/5 shadow-premium"
-                            : "border-border/60 dark:border-white/10 hover:border-accent-gold/40 hover:shadow-md",
+                            : "border-border/60 dark:border-subtle hover:border-accent-gold/40 hover:shadow-md",
                         disabled && "opacity-50 cursor-not-allowed grayscale"
                     )}
                 >
@@ -101,7 +101,7 @@ export function PremiumSelect({
                             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                             exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(10px)" }}
                             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                            className="absolute z-[100] w-full mt-3 py-3 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-2xl border-2 border-accent-gold/20 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
+                            className="absolute z-[100] w-full mt-3 py-3 bg-surface-card/95 dark:bg-surface-sidebar/95 backdrop-blur-2xl border-2 border-accent-gold/20 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
                         >
                             <div className="max-h-[300px] overflow-y-auto elegant-scrollbar px-2 space-y-1">
                                 {options.map((option) => {
@@ -125,7 +125,7 @@ export function PremiumSelect({
                                                 {option.icon && (
                                                     <div className={cn(
                                                         "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
-                                                        isActive ? "bg-white/20" : "bg-accent-gold/5 text-accent-gold"
+                                                        isActive ? "bg-surface-card/20" : "bg-accent-gold/5 text-accent-gold"
                                                     )}>
                                                         {option.icon}
                                                     </div>
@@ -133,7 +133,7 @@ export function PremiumSelect({
                                                 <div className="flex flex-col items-start leading-tight">
                                                     <span className={cn(
                                                         "text-[13px] font-black tracking-widest",
-                                                        isActive ? "text-white" : "text-text-primary dark:text-neutral-200"
+                                                        isActive ? "text-white" : "text-text-primary dark:text-muted"
                                                     )}>
                                                         {option.label?.toUpperCase() || ''}
                                                     </span>
@@ -151,7 +151,7 @@ export function PremiumSelect({
                                                 <motion.div
                                                     initial={{ scale: 0 }}
                                                     animate={{ scale: 1 }}
-                                                    className="w-5 h-5 rounded-full bg-white flex items-center justify-center"
+                                                    className="w-5 h-5 rounded-full bg-surface-card flex items-center justify-center"
                                                 >
                                                     <Check className="w-3 h-3 text-accent-gold" strokeWidth={4} />
                                                 </motion.div>

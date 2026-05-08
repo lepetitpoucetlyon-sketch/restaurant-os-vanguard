@@ -109,7 +109,7 @@ export function ReservationSidebar({
                                 >
                                     <div className="flex justify-between items-start mb-6">
                                         <div className="flex items-center gap-5">
-                                            <div className="w-14 h-14 rounded-2xl bg-accent flex flex-col items-center justify-center shadow-lg shadow-amber-500/10 group-hover:bg-white transition-all">
+                                            <div className="w-14 h-14 rounded-2xl bg-accent flex flex-col items-center justify-center shadow-lg shadow-amber-500/10 group-hover:bg-surface-card transition-all">
                                                 <span className="text-[14px] font-mono font-light text-bg-primary italic tracking-tighter group-hover:text-bg-primary transition-colors">
                                                     {res.time}
                                                 </span>
@@ -123,8 +123,8 @@ export function ReservationSidebar({
                                                         className={cn(
                                                             "w-1.5 h-1.5 rounded-full",
                                                             res.status === "seated"
-                                                                ? "bg-emerald-500"
-                                                                : "bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.3)]"
+                                                                ? "bg-status-success"
+                                                                : "bg-status-warning shadow-[0_0_10px_rgba(251,191,36,0.3)]"
                                                         )}
                                                     />
                                                     <span className="text-[8px] font-black text-text-muted uppercase tracking-[0.2em]">
@@ -133,7 +133,7 @@ export function ReservationSidebar({
                                                 </div>
                                             </div>
                                         </div>
-                                        <button className="p-2 text-neutral-400 hover:text-accent transition-all">
+                                        <button className="p-2 text-muted hover:text-accent transition-all">
                                             <MoreHorizontal strokeWidth={1.5} className="w-4 h-4" />
                                         </button>
                                     </div>

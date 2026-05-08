@@ -78,7 +78,7 @@ export function NewRequestModal({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex items-center justify-center p-4"
+                className="fixed inset-0 bg-surface-sidebar/40 backdrop-blur-md z-50 flex items-center justify-center p-4"
                 onClick={onClose}
             >
                 <motion.div
@@ -240,8 +240,8 @@ export function NewRequestModal({
                                                 <span className={cn(
                                                     "font-bold font-mono px-2 py-0.5 rounded",
                                                     selectedBalance.remaining - workingDays >= 0
-                                                        ? "bg-emerald-100 text-emerald-700"
-                                                        : "bg-rose-100 text-rose-700"
+                                                        ? "bg-status-success text-status-success"
+                                                        : "bg-status-danger text-status-danger"
                                                 )}>
                                                     {(selectedBalance.remaining - workingDays).toFixed(1)} j
                                                 </span>

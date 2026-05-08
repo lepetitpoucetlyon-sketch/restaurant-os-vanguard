@@ -94,12 +94,12 @@ export function ReceptionMarchandises() {
         <div className="space-y-8 pb-12">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-[22px] bg-blue-500/10 text-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/5">
+                    <div className="w-12 h-12 rounded-[22px] bg-action-primary/10 text-brand flex items-center justify-center shadow-lg shadow-blue-500/5">
                         <Truck size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Réception Marchandises</h2>
-                        <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">Contrôle sanitaire à l'arrivée</p>
+                        <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Réception Marchandises</h2>
+                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Contrôle sanitaire à l'arrivée</p>
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@ export function ReceptionMarchandises() {
                             transition={{ delay: idx * 0.05 }}
                             className="bg-bg-primary rounded-[32px] border border-border p-6 relative group overflow-hidden shadow-sm"
                         >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none" />
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-action-primary/5 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none" />
                             
                             {log.imageUrl && (
                                 <div className="absolute top-4 right-4 w-12 h-12 rounded-xl overflow-hidden border border-border/50 shadow-sm z-20">
@@ -139,7 +139,7 @@ export function ReceptionMarchandises() {
                                 </div>
                                 <button
                                     onClick={() => deleteLog(log.id)}
-                                    className="w-8 h-8 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-500 hover:text-white"
+                                    className="w-8 h-8 rounded-full bg-status-danger/10 text-status-danger flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-status-danger hover:text-white"
                                 >
                                     <Trash2 size={14} />
                                 </button>
@@ -155,14 +155,14 @@ export function ReceptionMarchandises() {
                             <div className="space-y-4 relative z-10">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                        <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                             <Thermometer size={14} />
                                         </div>
                                         <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">TEMP.</span>
                                     </div>
                                     <span className={cn(
                                         "text-sm font-black",
-                                        log.temperature > 4 ? "text-rose-500" : "text-emerald-500"
+                                        log.temperature > 4 ? "text-status-danger" : "text-status-success"
                                     )}>
                                         {log.temperature}°C
                                     </span>
@@ -221,7 +221,7 @@ export function ReceptionMarchandises() {
                                             <span className="text-[9px] font-black uppercase tracking-widest">Photo du Bon / Étiquette</span>
                                         </>
                                     )}
-                                    {formData.imageUrl && <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-white" /></div>}
+                                    {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-white" /></div>}
                                 </button>
                             </div>
 
@@ -278,7 +278,7 @@ export function ReceptionMarchandises() {
                                         className={cn(
                                             "h-14 rounded-2xl border transition-all text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2",
                                             formData.integrityStatus === 'conforme' 
-                                                ? "bg-emerald-500/10 border-emerald-500 text-emerald-600" 
+                                                ? "bg-status-success/10 border-emerald-500 text-status-success" 
                                                 : "bg-bg-tertiary border-border text-text-muted"
                                         )}
                                     >
@@ -289,7 +289,7 @@ export function ReceptionMarchandises() {
                                         className={cn(
                                             "h-14 rounded-2xl border transition-all text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2",
                                             formData.integrityStatus === 'non-conforme' 
-                                                ? "bg-rose-500/10 border-rose-500 text-rose-600" 
+                                                ? "bg-status-danger/10 border-rose-500 text-status-danger" 
                                                 : "bg-bg-tertiary border-border text-text-muted"
                                         )}
                                     >
@@ -301,7 +301,7 @@ export function ReceptionMarchandises() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={isUploading}
-                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-blue-500 text-white hover:bg-blue-600 border border-blue-500/20"
+                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-action-primary text-white hover:bg-action-primary border border-focus/20"
                             >
                                 {isUploading ? (
                                     <>

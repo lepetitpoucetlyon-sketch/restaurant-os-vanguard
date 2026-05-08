@@ -64,7 +64,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
 
     <div className={cn(
         "animate-in fade-in duration-150 h-full flex flex-col relative",
-        rushMode && "bg-red-500/5"
+        rushMode && "bg-status-danger/5"
     )}>
         {/* Rush Mode Atmospheric Overlay */}
         <AnimatePresence>
@@ -84,7 +84,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                     <h2 className="text-3xl font-black text-text-primary tracking-tighter">Production Bar</h2>
                     <div className={cn(
                         "px-3 py-1 rounded-full border text-[10px] font-black tracking-widest",
-                        rushMode ? "bg-red-500 text-white border-red-500" : "bg-accent/10 text-accent border-accent/20"
+                        rushMode ? "bg-status-danger text-white border-red-500" : "bg-accent/10 text-accent border-accent/20"
                     )}>
                         {rushMode ? "MODE RUSH ACTIF" : "SERVICE STANDARD"}
                     </div>
@@ -110,7 +110,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                         onClick={() => setRushMode(!rushMode)}
                         className={cn(
                             "h-10 px-4 rounded-xl flex items-center gap-2 transition-all font-black text-[10px] tracking-widest",
-                            rushMode ? "bg-red-500 text-white" : "bg-bg-tertiary text-text-muted hover:text-red-500"
+                            rushMode ? "bg-status-danger text-white" : "bg-bg-tertiary text-text-muted hover:text-status-danger"
                         )}
                     >
                         <Flame className={cn("w-3.5 h-3.5", rushMode && "fill-current")} />
@@ -138,20 +138,20 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         className={cn(
                             "flex flex-col rounded-[2.5rem] overflow-hidden border transition-all duration-500 h-fit",
-                            "bg-white dark:bg-bg-secondary",
+                            "bg-surface-card dark:bg-bg-secondary",
                             isReady 
                                 ? "border-border bg-bg-secondary/30 grayscale-[0.5]" 
                                 : isUrgent 
                                     ? "border-red-500 shadow-[0_20px_50px_-15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/20" 
                                     : isWarning
                                         ? "border-amber-500 shadow-xl shadow-amber-500/5"
-                                        : "border-black dark:border-white/10 shadow-2xl shadow-neutral-200/50 dark:shadow-none"
+                                        : "border-black dark:border-subtle shadow-2xl shadow-neutral-200/50 dark:shadow-none"
                         )}
                     >
                         {/* Ticket Header - Serif Style */}
                         <div className={cn(
                             "p-6 border-b transition-colors duration-500 relative",
-                            isUrgent ? "bg-red-500/5" : "bg-bg-tertiary/50"
+                            isUrgent ? "bg-status-danger/5" : "bg-bg-tertiary/50"
                         )}>
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent-gold/30 to-transparent" />
                             
@@ -163,8 +163,8 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                         </h3>
                                         {(isUrgent || rushMode) && (
                                             <span className="relative flex h-2.5 w-2.5">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-danger opacity-75"></span>
+                                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-danger"></span>
                                             </span>
                                         )}
                                     </div>
@@ -175,9 +175,9 @@ export const KdsTab: React.FC<KdsTabProps> = ({
 
                                 <div className={cn(
                                     "px-3 py-2 rounded-xl font-mono text-sm font-black border flex items-center gap-2 shadow-sm transition-all",
-                                    isUrgent ? "bg-red-500 text-white border-red-500" :
-                                    isWarning ? "bg-amber-500 text-white border-amber-500" :
-                                    "bg-white dark:bg-bg-tertiary text-text-primary border-border"
+                                    isUrgent ? "bg-status-danger text-white border-red-500" :
+                                    isWarning ? "bg-status-warning text-white border-amber-500" :
+                                    "bg-surface-card dark:bg-bg-tertiary text-text-primary border-border"
                                 )}>
                                     <Clock className={cn("w-3.5 h-3.5", (isUrgent || rushMode) && "animate-spin-slow")} />
                                     {elapsed}<span className="text-[9px] opacity-70 ml-0.5">MIN</span>
@@ -198,7 +198,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
 
                                 return (
                                     <div key={i} className={cn(
-                                        "group/item relative flex flex-col overflow-hidden rounded-[24px] bg-white dark:bg-bg-primary border transition-all duration-500",
+                                        "group/item relative flex flex-col overflow-hidden rounded-[24px] bg-surface-card dark:bg-bg-primary border transition-all duration-500",
                                         hasMods ? "border-amber-500/50 shadow-lg shadow-amber-500/5" : "border-border shadow-sm"
                                     )}>
                                         <div className="relative aspect-[16/9] w-full overflow-hidden">
@@ -223,7 +223,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                                     e.stopPropagation();
                                                     setSelectedRecipe(product || (item as any));
                                                 }}
-                                                className="absolute bottom-3 right-3 w-9 h-9 rounded-xl bg-black/40 hover:bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white transition-all scale-0 group-hover/item:scale-100"
+                                                className="absolute bottom-3 right-3 w-9 h-9 rounded-xl bg-surface-sidebar/40 hover:bg-surface-sidebar/60 backdrop-blur-xl border border-default flex items-center justify-center text-white transition-all scale-0 group-hover/item:scale-100"
                                             >
                                                 <BookOpen className="w-4 h-4" />
                                             </button>
@@ -237,8 +237,8 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                             {item.modifiers && item.modifiers.length > 0 && (
                                                 <div className="flex flex-col gap-1 mt-3">
                                                     {item.modifiers.map((m, mi) => (
-                                                        <span key={mi} className="text-xs font-bold text-amber-600 flex items-center gap-2">
-                                                            <span className="w-1 h-1 rounded-full bg-amber-500" />
+                                                        <span key={mi} className="text-xs font-bold text-status-warning flex items-center gap-2">
+                                                            <span className="w-1 h-1 rounded-full bg-status-warning" />
                                                             {m}
                                                         </span>
                                                     ))}
@@ -246,7 +246,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                             )}
 
                                             {item.notes && (
-                                                <div className="mt-3 p-2 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-xs font-bold text-amber-700 italic">
+                                                <div className="mt-3 p-2 rounded-xl bg-status-warning dark:bg-status-warning/10 border border-amber-200 dark:border-amber-500/20 text-xs font-bold text-status-warning italic">
                                                     "{ item.notes }"
                                                 </div>
                                             )}
@@ -269,16 +269,16 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                             <div className="h-px w-full bg-border/50 mb-6" />
                             {ticket.status === 'new' && (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-surface-sidebar dark:bg-surface-card text-white dark:text-primary hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'preparing')}
                                 >
-                                    <Flame className="w-4 h-4 text-orange-500 fill-current" />
+                                    <Flame className="w-4 h-4 text-status-warning fill-current" />
                                     LANCER PRODUCTION
                                 </button>
                             )}
                             {ticket.status === 'preparing' && (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-emerald-500 text-white hover:bg-emerald-600 hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-status-success text-white hover:bg-status-success hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'ready')}
                                 >
                                     MARQUER PRÊT <ArrowRight className="w-4 h-4" />
@@ -286,10 +286,10 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                             )}
                             {ticket.status === 'ready' && (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-bg-tertiary border-2 border-border text-text-primary hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-bg-tertiary border-2 border-border text-text-primary hover:bg-surface-bg dark:hover:bg-surface-sidebar flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'delivered')}
                                 >
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                    <CheckCircle2 className="w-4 h-4 text-status-success" />
                                     CLÔTURER BON
                                 </button>
                             )}

@@ -38,7 +38,7 @@ export function ProductIngredients({
                     type="button"
                     variant="outline"
                     onClick={addIngredient}
-                    className="h-10 rounded-xl bg-white font-black text-[10px] tracking-widest uppercase border-border hover:bg-bg-tertiary"
+                    className="h-10 rounded-xl bg-surface-card font-black text-[10px] tracking-widest uppercase border-border hover:bg-bg-tertiary"
                 >
                     <Plus className="w-3 h-3 mr-2" /> Injecter Composant
                 </Button>
@@ -50,7 +50,7 @@ export function ProductIngredients({
                     </div>
                 ) : (
                     recipeIngredients.map((ing, i) => (
-                        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} key={i} className="flex items-center gap-4 p-4 bg-white dark:bg-bg-secondary rounded-3xl border border-border">
+                        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} key={i} className="flex items-center gap-4 p-4 bg-surface-card dark:bg-bg-secondary rounded-3xl border border-border">
                             <div className="flex-1">
                                 <PremiumSelect
                                     value={ing.ingredientId}

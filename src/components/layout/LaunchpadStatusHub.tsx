@@ -59,12 +59,12 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                 transition={{ duration: 0 }}
                 className="flex flex-col items-center justify-end relative z-50 my-8 md:my-16 origin-top"
             >
-                <div className="bg-white/40 dark:bg-white/5 backdrop-blur-[40px] rounded-full border border-white/20 dark:border-white/5 shadow-2xl p-2 md:p-3 flex items-center gap-3 md:gap-6 scale-90 md:scale-100 origin-center ring-1 ring-black/5 dark:ring-white/5">
+                <div className="bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-[40px] rounded-full border border-default dark:border-white/5 shadow-2xl p-2 md:p-3 flex items-center gap-3 md:gap-6 scale-90 md:scale-100 origin-center ring-1 ring-black/5 dark:ring-white/5">
                     {/* Language */}
                     <div className="relative">
                         <button
                             onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                            className="w-12 h-12 flex items-center justify-center text-xl rounded-full transition-all duration-300 group border border-accent-gold/30 hover:bg-white/5 hover:scale-105 overflow-hidden"
+                            className="w-12 h-12 flex items-center justify-center text-xl rounded-full transition-all duration-300 group border border-accent-gold/30 hover:bg-surface-card/5 hover:scale-105 overflow-hidden"
                         >
                             <span className="scale-110 grayscale group-hover:grayscale-0 transition-all duration-300">{LANGUAGES.find(l => l.code === language)?.flag || '🇫🇷'}</span>
                         </button>
@@ -75,7 +75,7 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 min-w-[160px] bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl rounded-2xl shadow-premium border border-white/20 dark:border-white/10 overflow-hidden z-[60]"
+                                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 min-w-[160px] bg-surface-card/90 dark:bg-surface-sidebar/90 backdrop-blur-xl rounded-2xl shadow-premium border border-default dark:border-subtle overflow-hidden z-[60]"
                                 >
                                     {LANGUAGES.map((lang) => (
                                         <button
@@ -84,7 +84,7 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                                                 setLanguage(lang.code);
                                                 setIsLangMenuOpen(false);
                                             }}
-                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-neutral-100/50 dark:hover:bg-white/5 transition-colors text-left"
+                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-bg/50 dark:hover:bg-surface-card/5 transition-colors text-left"
                                         >
                                             <span className="text-xl">{lang.flag}</span>
                                             <span className="text-xs font-bold uppercase tracking-wider text-text-primary">{lang.nativeName}</span>
@@ -102,7 +102,7 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                             onClose?.();
                             setTimeout(() => setIsNotificationsOpen(true), 100);
                         }}
-                        className="w-12 h-12 flex items-center justify-center text-accent-gold rounded-full transition-all duration-300 relative group border border-accent-gold/30 hover:bg-white/5 hover:scale-105"
+                        className="w-12 h-12 flex items-center justify-center text-accent-gold rounded-full transition-all duration-300 relative group border border-accent-gold/30 hover:bg-surface-card/5 hover:scale-105"
                     >
                         <Bell strokeWidth={1.5} className="w-6 h-6 group-hover:rotate-12 transition-transform" />
                         {unreadCount > 0 && (
@@ -118,7 +118,7 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                             onClose?.();
                             setTimeout(() => setIsCommandOpen(true), 100);
                         }}
-                        className="w-12 h-12 flex items-center justify-center text-accent-gold rounded-full transition-all duration-300 group border border-accent-gold/30 hover:bg-white/5 hover:scale-105"
+                        className="w-12 h-12 flex items-center justify-center text-accent-gold rounded-full transition-all duration-300 group border border-accent-gold/30 hover:bg-surface-card/5 hover:scale-105"
                     >
                         <Sparkles strokeWidth={1.5} className="w-6 h-6 group-hover:scale-110 group-hover:rotate-12 transition-all" />
                     </button>
@@ -130,7 +130,7 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
                                 onClose?.();
                                 setTimeout(() => openSettings('dashboard'), 100);
                             }}
-                            className="w-12 h-12 flex items-center justify-center text-accent-gold rounded-full transition-all duration-300 group border border-accent-gold/30 hover:bg-white/5 hover:scale-105"
+                            className="w-12 h-12 flex items-center justify-center text-accent-gold rounded-full transition-all duration-300 group border border-accent-gold/30 hover:bg-surface-card/5 hover:scale-105"
                         >
                             <Settings strokeWidth={1.5} className="w-6 h-6 group-hover:rotate-90 transition-transform" />
                         </button>

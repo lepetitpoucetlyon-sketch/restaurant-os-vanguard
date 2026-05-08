@@ -26,7 +26,7 @@ export function Map3DOverlay() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsMap3DOpen(false)}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[100]"
+                        className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl z-[100]"
                     />
 
                     {/* Window Container */}
@@ -52,7 +52,7 @@ export function Map3DOverlay() {
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleRefresh}
-                                    className="p-3 text-[#525252] hover:text-[#1C1C1C] hover:bg-black/5 rounded-xl transition-all"
+                                    className="p-3 text-[#525252] hover:text-[#1C1C1C] hover:bg-surface-sidebar/5 rounded-xl transition-all"
                                     title="Actualiser la vue"
                                 >
                                     <RefreshCw className="w-5 h-5" />
@@ -61,15 +61,15 @@ export function Map3DOverlay() {
                                     href="/blueprint/index.html"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="p-3 text-[#525252] hover:text-[#1C1C1C] hover:bg-black/5 rounded-xl transition-all"
+                                    className="p-3 text-[#525252] hover:text-[#1C1C1C] hover:bg-surface-sidebar/5 rounded-xl transition-all"
                                     title="Ouvrir plein écran"
                                 >
                                     <ExternalLink className="w-5 h-5" />
                                 </a>
-                                <div className="w-px h-6 bg-black/10 mx-2" />
+                                <div className="w-px h-6 bg-surface-sidebar/10 mx-2" />
                                 <button
                                     onClick={() => setIsMap3DOpen(false)}
-                                    className="p-3 bg-black/5 hover:bg-black/10 text-[#1C1C1C] rounded-xl transition-all group"
+                                    className="p-3 bg-surface-sidebar/5 hover:bg-surface-sidebar/10 text-[#1C1C1C] rounded-xl transition-all group"
                                 >
                                     <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
                                 </button>
@@ -77,7 +77,7 @@ export function Map3DOverlay() {
                         </div>
 
                         {/* Content (Iframe) */}
-                        <div className="flex-1 bg-black/40 relative">
+                        <div className="flex-1 bg-surface-sidebar/40 relative">
                             <iframe
                                 id="map-3d-iframe"
                                 src="/blueprint/index.html"
@@ -95,8 +95,8 @@ export function Map3DOverlay() {
                         <div className="px-8 py-3 bg-[#F8F7F2] border-t border-black/5 flex items-center justify-between">
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600">Système Connecté</span>
+                                    <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-status-success">Système Connecté</span>
                                 </div>
                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#A3A3A3]">Rendu GPU Accéléré</span>
                             </div>

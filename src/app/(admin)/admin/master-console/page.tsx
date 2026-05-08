@@ -72,7 +72,7 @@ export default function MasterConsolePage() {
         <div className="p-8 border-b border-border-subtle bg-[#0A0A0A]">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-surface-card text-black flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                <div className="w-10 h-10 rounded-xl bg-surface-card text-primary flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                 <Database className="w-5 h-5" />
                 </div>
                 <div>
@@ -99,7 +99,7 @@ export default function MasterConsolePage() {
               placeholder="SEARCH NODE..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 bg-surface-card border border-border-subtle rounded-xl pl-12 pr-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-white/20 transition-all"
+              className="w-full h-12 bg-surface-card border border-border-subtle rounded-xl pl-12 pr-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-default transition-all"
             />
           </div>
         </div>
@@ -284,7 +284,7 @@ export default function MasterConsolePage() {
                                                   </div>
                                               </div>
 
-                                              <button className="w-full h-16 bg-surface-card text-black rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] font-ui hover:scale-105 transition-all mt-10 shadow-2xl">
+                                              <button className="w-full h-16 bg-surface-card text-primary rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] font-ui hover:scale-105 transition-all mt-10 shadow-2xl">
                                                    Export Consolidated FEC
                                               </button>
                                           </div>
@@ -359,7 +359,7 @@ export default function MasterConsolePage() {
                                         <div className="flex gap-4 relative z-10">
                                           <button 
                                             onClick={() => launchPreview(selectedInstance.key)}
-                                            className="px-10 py-5 bg-surface-card text-black rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                                            className="px-10 py-5 bg-surface-card text-primary rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
                                           >
                                             <Zap size={16} fill="currentColor" />
                                             Digital Twin Launch

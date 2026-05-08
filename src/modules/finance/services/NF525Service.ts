@@ -34,7 +34,7 @@ export class NF525Service {
     static async executeAtomicPayment(orderId: string, options: { isTrainingMode?: boolean } = {}): Promise<void> {
         // 🛡️ ANCHORING: Capture tenantId at the exact start of transaction
         const store = getDefaultStore();
-        const anchoredTenantId = store.get(tenantIdAtom);
+        const anchoredTenantId = store.get(tenantIdAtom) as string;
         const isOnline = checkOnlineStatus();
 
         try {

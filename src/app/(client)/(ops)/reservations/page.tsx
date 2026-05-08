@@ -24,7 +24,7 @@ export default function ReservationsPage() {
     const { data: reservations = [], isLoading: resLoading } = useReservations();
     const { data: customers = [], isLoading: crmLoading, upsertCustomer } = useCRM();
     const { tables = [] } = useTables();
-    const tablesByZone = tables.reduce((acc: Record<string, any[]>, table: any) => {
+    const tablesByZone = tables.reduce((acc: Record<string, unknown[]>, table: Record<string, unknown>) => {
         const zone = table.zoneId || 'STANDARD';
         if (!acc[zone]) acc[zone] = [];
         acc[zone].push({
@@ -64,7 +64,7 @@ export default function ReservationsPage() {
                         >
                             <ReservationSidebar
                                 isVisible={isSidebarVisible}
-                                reservations={reservations as any[]}
+                                reservations={reservations as unknown[]}
                             />
                             <div className="flex-1 overflow-auto p-8 bg-bg-primary relative">
                                 <TableGrid
@@ -82,7 +82,7 @@ export default function ReservationsPage() {
                             className="flex-1 overflow-hidden"
                         >
                             <CustomerCustomerView
-                                customers={customers as any[]}
+                                customers={customers as unknown[]}
                                 onCustomerClick={(c) => setSelectedCustomer(c)}
                             />
                         </motion.div>
@@ -92,7 +92,7 @@ export default function ReservationsPage() {
 
             {selectedCustomer && (
                 <CustomerDetailPanel
-                    customer={selectedCustomer as any}
+                    customer={selectedCustomer as unknown}
                     onClose={() => setSelectedCustomer(null)}
                     onNewReservation={() => setIsNewResOpen(true)}
                 />

@@ -73,7 +73,7 @@ export const NexusSyncService = {
 
         // --- PRIVACY SHIELD GATE ---
         const { fleetSnapshotAtom } = await import('@/store/pillars/sovereign');
-        const instances = store.get(fleetSnapshotAtom) || [];
+        const instances = (store.get(fleetSnapshotAtom) || []) as any[];
         const instance = instances.find(i => i.key === tenantId);
 
         // Grade X: Allow access if it's the master tenant OR if specifically granted

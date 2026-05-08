@@ -58,7 +58,7 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({
     const submitPin = async (candidatePin: string) => {
         const isValid = await verifyPin?.(candidatePin);
         if (isValid) {
-            await logAction('pin_validated', { title });
+            await logAction?.('pin_validated', { title });
             onSuccess();
             onClose();
         } else {

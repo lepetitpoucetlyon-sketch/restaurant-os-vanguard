@@ -44,7 +44,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-24 right-8 z-50 w-16 h-16 rounded-[2rem] bg-black text-accent-gold flex items-center justify-center shadow-2xl border border-white/20 group overflow-hidden"
+                className="fixed bottom-24 right-8 z-50 w-16 h-16 rounded-[2rem] bg-surface-sidebar text-accent-gold flex items-center justify-center shadow-2xl border border-default group overflow-hidden"
             >
                 <div className="absolute inset-0 bg-gradient-to-br from-accent-gold/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
                 <Activity className="w-8 h-8 relative z-10" />
@@ -59,14 +59,14 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
+                            className="fixed inset-0 bg-surface-sidebar/40 backdrop-blur-sm z-[60]"
                         />
                         <motion.div
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed top-0 right-0 h-full w-full max-w-md bg-white/95 dark:bg-black/95 backdrop-blur-xl z-[70] shadow-[-20px_0_50px_rgba(0,0,0,0.3)] border-l border-white/10 flex flex-col"
+                            className="fixed top-0 right-0 h-full w-full max-w-md bg-surface-card/95 dark:bg-surface-sidebar/95 backdrop-blur-xl z-[70] shadow-[-20px_0_50px_rgba(0,0,0,0.3)] border-l border-subtle flex flex-col"
                         >
                             {/* Header */}
                             <div className="p-8 flex items-center justify-between">

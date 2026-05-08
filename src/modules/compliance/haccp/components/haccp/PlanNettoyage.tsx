@@ -82,12 +82,12 @@ export function PlanNettoyage() {
     return (
         <div className="space-y-8 pb-12">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-[22px] bg-emerald-500/10 text-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/5">
+                <div className="w-12 h-12 rounded-[22px] bg-status-success/10 text-status-success flex items-center justify-center shadow-lg shadow-emerald-500/5">
                     <ClipboardCheck size={24} />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Plan de Nettoyage</h2>
-                    <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">Maintenance sanitaire des zones de production</p>
+                    <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Plan de Nettoyage</h2>
+                    <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Maintenance sanitaire des zones de production</p>
                 </div>
             </div>
 
@@ -105,7 +105,7 @@ export function PlanNettoyage() {
                             className={cn(
                                 "p-6 rounded-[32px] border transition-all text-left flex flex-col items-center gap-4 group relative overflow-hidden",
                                 isSelected
-                                    ? "bg-white dark:bg-bg-secondary border-accent-gold shadow-glow text-accent-gold"
+                                    ? "bg-surface-card dark:bg-bg-secondary border-accent-gold shadow-glow text-accent-gold"
                                     : "bg-bg-primary border-border hover:border-text-primary text-text-muted hover:text-text-primary"
                             )}
                         >
@@ -131,7 +131,7 @@ export function PlanNettoyage() {
                                 </svg>
                                 <div className={cn(
                                     "relative z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
-                                    isSelected ? "bg-emerald-500/10 text-emerald-500" : "bg-bg-tertiary text-current"
+                                    isSelected ? "bg-status-success/10 text-status-success" : "bg-bg-tertiary text-current"
                                 )}>
                                     <zone.icon size={20} />
                                 </div>
@@ -163,9 +163,9 @@ export function PlanNettoyage() {
                                 className={cn(
                                     "group p-4 rounded-2xl border transition-all flex items-center justify-between mb-2 cursor-pointer",
                                     isDone
-                                        ? "bg-emerald-500/5 border-emerald-500/10"
+                                        ? "bg-status-success/5 border-emerald-500/10"
                                         : hasIncident
-                                            ? "bg-rose-500/5 border-rose-500/20"
+                                            ? "bg-status-danger/5 border-rose-500/20"
                                             : "bg-bg-tertiary border-border hover:border-text-primary"
                                 )}
                             >
@@ -173,29 +173,29 @@ export function PlanNettoyage() {
                                     <div className={cn(
                                         "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
                                         isDone
-                                            ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
-                                            : "bg-white dark:bg-bg-secondary border border-border text-text-muted group-hover:border-emerald-500/30"
+                                            ? "bg-status-success text-white shadow-lg shadow-emerald-500/20"
+                                            : "bg-surface-card dark:bg-bg-secondary border border-border text-text-muted group-hover:border-emerald-500/30"
                                     )}>
                                         {isDone ? <CheckCircle2 size={20} /> : <div className="w-5 h-5 rounded-md border-2 border-current opacity-20" />}
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <h4 className={cn("text-sm font-black transition-colors", isDone ? "text-emerald-500" : "text-text-primary")}>
+                                            <h4 className={cn("text-sm font-black transition-colors", isDone ? "text-status-success" : "text-text-primary")}>
                                                 {task.label}
                                             </h4>
                                             {isDone && (
-                                                <div className="flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                                                    <ShieldCheck size={10} className="text-emerald-500" />
-                                                    <span className="text-[8px] font-black text-emerald-500 uppercase">Audit IA</span>
+                                                <div className="flex items-center gap-1 bg-status-success/10 px-2 py-0.5 rounded-full">
+                                                    <ShieldCheck size={10} className="text-status-success" />
+                                                    <span className="text-[8px] font-black text-status-success uppercase">Audit IA</span>
                                                 </div>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-3 mt-1">
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2 py-0.5 rounded-lg border border-border bg-white dark:bg-bg-secondary">
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2 py-0.5 rounded-lg border border-border bg-surface-card dark:bg-bg-secondary">
                                                 {task.frequency}
                                             </span>
                                             {isDone && (
-                                                <span className="text-[9px] font-black uppercase text-emerald-500/70 flex items-center gap-1">
+                                                <span className="text-[9px] font-black uppercase text-status-success/70 flex items-center gap-1">
                                                     <Clock size={10} /> Complété
                                                 </span>
                                             )}
@@ -210,13 +210,13 @@ export function PlanNettoyage() {
                                                 e.stopPropagation();
                                                 setActiveVisionTask({ id: task.id, name: task.label });
                                             }}
-                                            className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all shadow-lg shadow-amber-500/5 group/vision"
+                                            className="w-10 h-10 rounded-xl bg-status-warning/10 text-status-warning flex items-center justify-center hover:bg-status-warning hover:text-white transition-all shadow-lg shadow-amber-500/5 group/vision"
                                         >
                                             <Camera size={18} className="group-hover/vision:scale-110 transition-transform" />
                                         </button>
                                     )}
                                     {hasIncident ? (
-                                        <div className="px-3 py-1.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-[10px] font-black text-rose-500 flex items-center gap-2">
+                                        <div className="px-3 py-1.5 bg-status-danger/10 border border-rose-500/20 rounded-xl text-[10px] font-black text-status-danger flex items-center gap-2">
                                             <AlertTriangle size={12} />
                                             ANOMALIE SIGNALÉE
                                         </div>
@@ -226,7 +226,7 @@ export function PlanNettoyage() {
                                                 e.stopPropagation();
                                                 setReportingTask({ task, zoneId: selectedZoneId });
                                             }}
-                                            className="w-10 h-10 rounded-full border-2 border-rose-500/30 flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                                            className="w-10 h-10 rounded-full border-2 border-rose-500/30 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-white transition-all opacity-0 group-hover:opacity-100"
                                         >
                                             <AlertTriangle size={18} />
                                         </button>
@@ -257,7 +257,7 @@ export function PlanNettoyage() {
                     <Button
                         onClick={submitReport}
                         disabled={!reportNote.trim()}
-                        className="w-full h-14 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl shadow-xl shadow-rose-500/20 font-black tracking-widest uppercase text-[10px] transition-all"
+                        className="w-full h-14 bg-status-danger hover:bg-status-danger text-white rounded-2xl shadow-xl shadow-rose-500/20 font-black tracking-widest uppercase text-[10px] transition-all"
                     >
                         Enregistrer l'anomalie
                     </Button>

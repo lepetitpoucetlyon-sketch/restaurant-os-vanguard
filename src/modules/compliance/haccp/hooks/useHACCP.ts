@@ -36,10 +36,10 @@ export function useHACCP() {
     const isLoading = useAtomValue(guardLoadingAtom);
 
     // --- 🔨 LA FORGE DU MODULE ---
-    const hygieneForge = useNexusMutation<any>(hygieneLogsNodeAtom as any, 'hygieneLogs', 'HACCP');
-    const labelForge = useNexusMutation<SovereignData & { id: string }>(hygieneLabelsNodeAtom as any, 'hygieneLabels', 'HACCP');
-    const receptionForge = useNexusMutation<any>(receptionLogsNodeAtom as any, 'receptionLogs', 'HACCP');
-    const maintenanceForge = useNexusMutation<any>(maintenanceLogsNodeAtom as any, 'maintenanceLogs', 'HACCP');
+    const hygieneForge = useNexusMutation<HygieneLog>(hygieneLogsNodeAtom, 'hygieneLogs', 'HACCP');
+    const labelForge = useNexusMutation<SovereignData & { id: string }>(hygieneLabelsNodeAtom, 'hygieneLabels', 'HACCP');
+    const receptionForge = useNexusMutation<ReceptionLog>(receptionLogsNodeAtom, 'receptionLogs', 'HACCP');
+    const maintenanceForge = useNexusMutation<MaintenanceLog>(maintenanceLogsNodeAtom, 'maintenanceLogs', 'HACCP');
 
     /**
      * 🛰️ SIMULACRA : Capteurs Fantômes
@@ -71,8 +71,8 @@ export function useHACCP() {
 
         const failedChecks = [
             ...hygieneLogs.filter(l => l.status === 'alert'),
-            ...receptionLogs.filter(l => (l as any).status === 'alert' || (l as any).integrityStatus === 'non-conforme'),
-            ...maintenanceLogs.filter(l => (l as any).status === 'pending')
+            ...receptionLogs.filter(l => l.status === 'alert' || l.integrityStatus === 'non-conforme'),
+            ...maintenanceLogs.filter(l => l.status === 'pending')
         ].length;
 
         return Math.max(0, Math.min(100, 100 - (failedChecks * 5)));
@@ -80,13 +80,13 @@ export function useHACCP() {
 
     const criticalAlerts = useMemo(() => {
         return [
-            ...(hygieneLogs as any[]),
-            ...(receptionLogs as any[]),
-            ...(maintenanceLogs as any[])
+            ...hygieneLogs,
+            ...receptionLogs,
+            ...maintenanceLogs
         ].filter((log) => 
             log.status === 'critical' || 
-            log.critical_issue || 
-            log.integrityStatus === 'non-conforme'
+            (log as any).critical_issue || 
+            (log as any).integrityStatus === 'non-conforme'
         );
     }, [hygieneLogs, receptionLogs, maintenanceLogs]);
 
@@ -108,9 +108,9 @@ export function useHACCP() {
         temperatureHistory,
 
         // --- 🔨 Forge Actions ---
-        addHygieneLog: (data: Partial<HygieneLog>) => hygieneForge.mutate('SET', `log_${Date.now()}`, data as any as SovereignData),
+        addHygieneLog: (data: Partial<HygieneLog>) => hygieneForge.mutate('SET', `log_${Date.now()}`, data as SovereignData),
         addLabel: (data: SovereignData) => labelForge.mutate('SET', `lab_${Date.now()}`, data),
-        addReception: (data: Partial<ReceptionLog>) => receptionForge.mutate('SET', `rec_${Date.now()}`, data as any as SovereignData),
-        addMaintenance: (data: Partial<MaintenanceLog>) => maintenanceForge.mutate('SET', `maint_${Date.now()}`, data as any as SovereignData)
+        addReception: (data: Partial<ReceptionLog>) => receptionForge.mutate('SET', `rec_${Date.now()}`, data as SovereignData),
+        addMaintenance: (data: Partial<MaintenanceLog>) => maintenanceForge.mutate('SET', `maint_${Date.now()}`, data as SovereignData)
     };
 }

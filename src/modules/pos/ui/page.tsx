@@ -76,7 +76,7 @@ export default function POSPage() {
                 animate={{ opacity: 1, scale: 1 }} 
                 exit={{ opacity: 0, scale: 1.02 }}
                 transition={{ duration: 0.4 * tokens.animationMultiplier, ease: [0.16, 1, 0.3, 1] }}
-                className={cn("h-full overflow-hidden transition-colors duration-700", isRushMode ? "bg-black" : "bg-bg-primary")}
+                className={cn("h-full overflow-hidden transition-colors duration-700", isRushMode ? "bg-surface-sidebar" : "bg-bg-primary")}
             >
                 <TableSelector onSelectTable={setSelectedTableId} />
             </motion.div>
@@ -86,12 +86,12 @@ export default function POSPage() {
     return (
         <div className={cn(
             "flex flex-1 flex-col h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 overflow-hidden relative pb-24 lg:pb-0 transition-colors duration-1000",
-            isRushMode ? "bg-black" : "bg-bg-primary"
+            isRushMode ? "bg-surface-sidebar" : "bg-bg-primary"
         )}>
             {/* Header & Categories Swiper */}
             <div className={cn(
                 "px-ui py-ui border-b border-border/50 sticky top-0 z-40 transition-all",
-                isRushMode ? "bg-black/90" : "bg-white/80 dark:bg-bg-primary/80",
+                isRushMode ? "bg-surface-sidebar/90" : "bg-surface-card/80 dark:bg-bg-primary/80",
                 tokens.blur
             )}>
                 <div className="flex items-center justify-between mb-4">
@@ -107,9 +107,9 @@ export default function POSPage() {
                             <span className="text-accent-gold ml-1">.</span>
                         </PageHeaderWithDocs>
                         {isRushMode && (
-                            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
-                                <Zap className="w-3 h-3 text-emerald-400 fill-emerald-400" />
-                                <span className="text-[9px] font-black uppercase text-emerald-400 tracking-widest">Rush Active</span>
+                            <div className="flex items-center gap-2 bg-status-success/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+                                <Zap className="w-3 h-3 text-status-success fill-emerald-400" />
+                                <span className="text-[9px] font-black uppercase text-status-success tracking-widest">Rush Active</span>
                             </div>
                         )}
                     </div>
@@ -154,7 +154,7 @@ export default function POSPage() {
                 {/* Product Grid */}
                 <div className={cn(
                     "flex-1 overflow-auto p-ui lg:p-ui elegant-scrollbar transition-all",
-                    isRushMode ? "bg-black" : "bg-bg-primary/50"
+                    isRushMode ? "bg-surface-sidebar" : "bg-bg-primary/50"
                 )}>
                     <ProductGrid 
                         categoryFilter={selectedCategory} 
@@ -168,7 +168,7 @@ export default function POSPage() {
                 {!isMobile && (
                     <div className={cn(
                         "h-full hidden xl:block w-[400px] shrink-0 border-l border-border/30 transition-all",
-                        isRushMode ? "bg-[#0f172a]" : "bg-white"
+                        isRushMode ? "bg-[#0f172a]" : "bg-surface-card"
                     )}>
                         <Cart
                             items={cartItems}
@@ -197,12 +197,12 @@ export default function POSPage() {
                             onClick={() => setIsMobileCartOpen(true)}
                             className={cn(
                                 "pointer-events-auto w-full h-16 rounded-[2rem] px-8 flex items-center justify-between shadow-2xl border transition-all relative overflow-hidden group",
-                                isRushMode ? "bg-emerald-600 border-emerald-400" : "bg-text-primary dark:bg-accent-gold border-white/10"
+                                isRushMode ? "bg-status-success border-emerald-400" : "bg-text-primary dark:bg-accent-gold border-subtle"
                             )}
                         >
-                            <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/5 opacity-0 group-active:opacity-100 transition-opacity" />
                             <div className="flex items-center gap-4 relative z-10">
-                                <div className="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center font-black text-xs text-white">
+                                <div className="w-10 h-10 bg-surface-card/20 rounded-2xl flex items-center justify-center font-black text-xs text-white">
                                     {cartCount}
                                 </div>
                                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Ouvrir le Panier</span>

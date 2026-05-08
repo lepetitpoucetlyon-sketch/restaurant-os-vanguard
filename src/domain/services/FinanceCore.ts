@@ -42,7 +42,7 @@ export class FinanceCore {
         const rates: Record<number, number> = {};
 
         items.forEach(item => {
-            const itemTotal = (item as any).unitPriceInMicrounits * item.quantity;
+            const itemTotal = ('unitPriceInMicrounits' in item ? Number((item as Record<string, unknown>).unitPriceInMicrounits) : 0) * item.quantity;
             total += itemTotal;
 
             // Business Rule Grade VI: Cocktails & Alcohol at 20%, Food at 10%
@@ -95,7 +95,7 @@ export class FinanceCore {
             ]
         }) as Order[];
 
-        const totalInMicrounits = dayOrders.reduce((sum, o) => sum + ((o as any).totalInMicrounits || (o as any).totalInCents * 10000 || 0), 0);
+        const totalInMicrounits = dayOrders.reduce((sum, o) => sum + ('totalInMicrounits' in o ? Number((o as Record<string, unknown>).totalInMicrounits) : ('totalInCents' in o ? Number((o as Record<string, unknown>).totalInCents) * 10000 : 0)), 0);
         const taxBreakdown = this.calculateTaxBreakdown(dayOrders.flatMap(o => o.items || []));
 
         const zReport: ZReport = {

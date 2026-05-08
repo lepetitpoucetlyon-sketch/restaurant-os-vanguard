@@ -258,12 +258,12 @@ export default function StaffSettings() {
                         onClick={() => setLocalConfig(s => ({ ...s, paidBreaks: !s.paidBreaks }))}
                         className={cn(
                             "w-16 h-8 rounded-full relative transition-all duration-500",
-                            localConfig.paidBreaks ? "bg-emerald-500" : "bg-bg-tertiary border border-border"
+                            localConfig.paidBreaks ? "bg-status-success" : "bg-bg-tertiary border border-border"
                         )}
                     >
                         <motion.div
                             animate={{ x: localConfig.paidBreaks ? 34 : 6 }}
-                            className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all"
+                            className="absolute top-1 w-6 h-6 rounded-full bg-surface-card shadow-md transition-all"
                         />
                     </button>
                 </div>
@@ -371,7 +371,7 @@ export default function StaffSettings() {
                     ) : (
                         <div className="relative">
                             <Activity className="w-6 h-6 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Sauvegarder Configuration

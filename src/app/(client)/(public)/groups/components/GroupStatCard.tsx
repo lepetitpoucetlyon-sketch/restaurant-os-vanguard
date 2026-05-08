@@ -23,7 +23,7 @@ export function GroupStatCard({ stat }: { stat: Stat }) {
                 </div>
                 <div className="text-right">
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Evolution</p>
-                    <p className="text-sm font-bold text-emerald-500">+{stat.change}%</p>
+                    <p className="text-sm font-bold text-status-success">+{stat.change}%</p>
                 </div>
             </div>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mb-1">{stat.label}</p>

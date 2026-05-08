@@ -98,13 +98,13 @@ export default function SimulatorPage() {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-4 bg-white dark:bg-bg-secondary rounded-2xl border border-border">
+                                    <div className="p-4 bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border">
                                         <p className="text-[10px] font-black text-text-muted uppercase tracking-wider">Food Cost</p>
                                         <div className={cn("text-2xl font-bold mt-2", (financialInsight?.foodCostPercent || 0) > 30 ? "text-error" : "text-success")}>
                                             {Math.round(financialInsight?.foodCostPercent || 0)}%
                                         </div>
                                     </div>
-                                    <div className="p-4 bg-white dark:bg-bg-secondary rounded-2xl border border-border">
+                                    <div className="p-4 bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border">
                                         <p className="text-[10px] font-black text-text-muted uppercase tracking-wider">Labor Cost</p>
                                         <div className={cn("text-2xl font-bold mt-2", (financialInsight?.laborCostPercent || 0) > 35 ? "text-error" : "text-success")}>
                                             {Math.round(financialInsight?.laborCostPercent || 0)}%
@@ -122,7 +122,7 @@ export default function SimulatorPage() {
                                 </div>
 
                                 {/* Master Inflation Controller */}
-                                <div className="p-6 bg-neutral-900/5 dark:bg-white/5 rounded-[2rem] border border-border backdrop-blur-xl">
+                                <div className="p-6 bg-surface-sidebar/5 dark:bg-surface-card/5 rounded-[2rem] border border-border backdrop-blur-xl">
                                     <div className="flex justify-between items-center mb-6">
                                         <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Master Inflation Simulation</h4>
                                         <div className="px-3 py-1 bg-accent-gold/20 rounded-full text-[10px] font-black text-accent-gold italic">
@@ -137,7 +137,7 @@ export default function SimulatorPage() {
                                         step="1"
                                         value={(globalInflationRate as number) || 0}
                                         onChange={(e) => setGlobalInflationRate?.(parseInt(e.target.value))}
-                                        className="w-full h-1.5 bg-neutral-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-accent-gold"
+                                        className="w-full h-1.5 bg-surface-bg dark:bg-surface-card/10 rounded-lg appearance-none cursor-pointer accent-accent-gold"
                                     />
                                     
                                     <div className="flex justify-between mt-3 text-[8px] font-black text-text-muted tracking-widest uppercase">
@@ -152,20 +152,20 @@ export default function SimulatorPage() {
                             </div>
                         </div>
 
-                        <div className="p-6 rounded-[2rem] bg-gradient-to-br from-neutral-900 to-neutral-800 text-white relative overflow-hidden">
+                        <div className="p-6 rounded-[2rem] bg-gradient-to-br from-surface-sidebar to-surface-sidebar text-white relative overflow-hidden">
                             <Cpu className="w-32 h-32 absolute -right-6 -bottom-6 text-white/5 rotate-12" />
                             <h3 className="text-xl font-serif font-bold italic z-10 relative">I.A. Insights</h3>
                             <p className="text-sm text-white/70 mt-2 z-10 relative leading-relaxed">
                                 "Augmenter vos prix de 5% sur la gamme 'Vins' pourrait générer +1,2k€ de marge nette sans impacter la demande, selon les tendances actuelles."
                             </p>
-                            <Button variant="outline" className="mt-6 border-white/20 text-white hover:bg-white/10 z-10 relative h-10 rounded-xl text-[9px] font-black uppercase tracking-wider">
+                            <Button variant="outline" className="mt-6 border-default text-white hover:bg-surface-card/10 z-10 relative h-10 rounded-xl text-[9px] font-black uppercase tracking-wider">
                                 Appliquer ce scénario
                             </Button>
                         </div>
                     </div>
 
                     {/* Right: Scenarios List & Details */}
-                    <div className="lg:col-span-2 flex flex-col h-full bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border shadow-2xl overflow-hidden">
+                    <div className="lg:col-span-2 flex flex-col h-full bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border shadow-2xl overflow-hidden">
                         <div className="p-8 border-b border-border bg-bg-tertiary/10">
                             <h2 className="text-2xl font-serif font-light text-text-primary italic">Bibliothèque de <span className="font-black">Scénarios</span></h2>
                         </div>
@@ -249,7 +249,7 @@ export default function SimulatorPage() {
                             value={newSimConfig.name}
                             onChange={e => setNewSimConfig({ ...newSimConfig, name: e.target.value })}
                             placeholder="ex: Hausse Prix Été 2026"
-                            className="w-full h-14 px-6 bg-neutral-100 dark:bg-white/5 border-2 border-transparent focus:border-accent-gold rounded-xl text-lg text-text-primary focus:outline-none transition-all"
+                            className="w-full h-14 px-6 bg-surface-bg dark:bg-surface-card/5 border-2 border-transparent focus:border-accent-gold rounded-xl text-lg text-text-primary focus:outline-none transition-all"
                         />
                     </div>
 
@@ -262,7 +262,7 @@ export default function SimulatorPage() {
                                     type="number"
                                     value={newSimConfig.priceChange}
                                     onChange={e => setNewSimConfig({ ...newSimConfig, priceChange: parseFloat(e.target.value) })}
-                                    className="w-full h-14 px-6 bg-neutral-100 dark:bg-white/5 rounded-xl font-mono text-xl"
+                                    className="w-full h-14 px-6 bg-surface-bg dark:bg-surface-card/5 rounded-xl font-mono text-xl"
                                 />
                             </div>
                         </div>
@@ -274,7 +274,7 @@ export default function SimulatorPage() {
                                     type="number"
                                     value={newSimConfig.laborChange}
                                     onChange={e => setNewSimConfig({ ...newSimConfig, laborChange: parseFloat(e.target.value) })}
-                                    className="w-full h-14 px-6 bg-neutral-100 dark:bg-white/5 rounded-xl font-mono text-xl"
+                                    className="w-full h-14 px-6 bg-surface-bg dark:bg-surface-card/5 rounded-xl font-mono text-xl"
                                 />
                             </div>
                         </div>

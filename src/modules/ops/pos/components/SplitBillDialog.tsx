@@ -111,7 +111,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
             showClose={false}
             noPadding
         >
-            <div className="bg-black border border-accent-gold/20 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.8),0_0_50px_rgba(197,160,89,0.1)] w-full overflow-hidden relative flex flex-col h-[85vh]">
+            <div className="bg-surface-sidebar border border-accent-gold/20 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.8),0_0_50px_rgba(197,160,89,0.1)] w-full overflow-hidden relative flex flex-col h-[85vh]">
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-accent-gold/5 blur-[120px] pointer-events-none" />
 
                 <div className="p-12 border-b border-white/5 flex items-center justify-between relative z-10 shrink-0">
@@ -131,7 +131,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             </p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-14 h-14 bg-white/5 hover:bg-white/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-white/40 hover:text-white transition-all duration-500 border border-white/10 group">
+                    <button onClick={onClose} className="w-14 h-14 bg-surface-card/5 hover:bg-surface-card/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-white/40 hover:text-white transition-all duration-500 border border-subtle group">
                         <X className="w-6 h-6" />
                     </button>
                 </div>
@@ -162,12 +162,12 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                         "flex flex-col items-center gap-6 p-8 rounded-[40px] border transition-all duration-500 group",
                                         selectedPaymentMethod === method.id
                                             ? "border-accent-gold bg-accent-gold/10 shadow-glow translate-y-[-8px]"
-                                            : "border-white/5 bg-white/[0.02] hover:border-accent-gold/30 hover:bg-white/[0.05]"
+                                            : "border-white/5 bg-surface-card/[0.02] hover:border-accent-gold/30 hover:bg-surface-card/[0.05]"
                                     )}
                                 >
                                     <div className={cn(
                                         "w-16 h-16 rounded-[22px] flex items-center justify-center transition-all duration-700 shadow-sm",
-                                        selectedPaymentMethod === method.id ? "bg-accent-gold text-black rotate-6" : "bg-black/40 text-accent-gold border border-accent-gold/20 group-hover:scale-110"
+                                        selectedPaymentMethod === method.id ? "bg-accent-gold text-primary rotate-6" : "bg-surface-sidebar/40 text-accent-gold border border-accent-gold/20 group-hover:scale-110"
                                     )}>
                                         <method.icon className="w-7 h-7" strokeWidth={1.5} />
                                     </div>
@@ -181,14 +181,14 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                         <div className="flex gap-6 w-full max-w-2xl pb-10">
                             <button
                                 onClick={() => setPayingConvive(null)}
-                                className="flex-1 h-16 rounded-[28px] bg-white/5 text-white/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-white/10 hover:text-white transition-all duration-500 border border-white/10"
+                                className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-white/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-white transition-all duration-500 border border-subtle"
                             >
                                 {t('pos.split.back')}
                             </button>
                             <button
                                 onClick={handleConfirmPayment}
                                 disabled={!selectedPaymentMethod}
-                                className="flex-[2] h-16 rounded-[28px] bg-accent-gold text-black font-black text-[12px] uppercase tracking-[0.5em] shadow-glow transition-all duration-500 disabled:opacity-20 disabled:grayscale group relative overflow-hidden"
+                                className="flex-[2] h-16 rounded-[28px] bg-accent-gold text-primary font-black text-[12px] uppercase tracking-[0.5em] shadow-glow transition-all duration-500 disabled:opacity-20 disabled:grayscale group relative overflow-hidden"
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-4">
                                     <CheckCircle2 className="w-5 h-5" />
@@ -199,7 +199,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                     </div>
                 ) : (
                     <>
-                        <div className="p-8 border-b border-white/5 bg-white/[0.02] relative z-10 shrink-0">
+                        <div className="p-8 border-b border-white/5 bg-surface-card/[0.02] relative z-10 shrink-0">
                             <div className="flex gap-4">
                                 {[
                                     { id: 'equal', label: t('pos.split.modes.equal'), icon: Users },
@@ -212,11 +212,11 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                         className={cn(
                                             "flex-1 flex items-center justify-center gap-4 py-5 px-8 rounded-[28px] font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-700 border",
                                             mode === m.id
-                                                ? "bg-accent-gold text-black border-accent-gold shadow-glow"
-                                                : "bg-white/[0.02] text-white/40 hover:border-accent-gold/30 hover:text-accent-gold border-white/5"
+                                                ? "bg-accent-gold text-primary border-accent-gold shadow-glow"
+                                                : "bg-surface-card/[0.02] text-white/40 hover:border-accent-gold/30 hover:text-accent-gold border-white/5"
                                         )}
                                     >
-                                        <m.icon className={cn("w-4 h-4", mode === m.id ? "text-black" : "text-accent-gold")} strokeWidth={2} />
+                                        <m.icon className={cn("w-4 h-4", mode === m.id ? "text-primary" : "text-accent-gold")} strokeWidth={2} />
                                         {m.label}
                                     </button>
                                 ))}
@@ -231,17 +231,17 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.5em] mb-3">{t('pos.split.seats_control')}</span>
                                             <span className="text-2xl font-serif italic font-black text-white">{t('pos.split.convive_count')}</span>
                                         </div>
-                                        <div className="flex items-center gap-8 bg-white/[0.02] rounded-[32px] p-3 border border-white/5 shadow-inner">
+                                        <div className="flex items-center gap-8 bg-surface-card/[0.02] rounded-[32px] p-3 border border-white/5 shadow-inner">
                                             <button
                                                 onClick={() => syncSplitState(Math.max(2, splitCount - 1))}
-                                                className="w-14 h-14 rounded-[22px] bg-black/40 border border-white/10 shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
+                                                className="w-14 h-14 rounded-[22px] bg-surface-sidebar/40 border border-subtle shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
                                             >
                                                 <Minus className="w-6 h-6" />
                                             </button>
                                             <span className="w-16 text-center text-5xl font-serif font-black italic text-accent-gold drop-shadow-glow">{splitCount}</span>
                                             <button
                                                 onClick={() => syncSplitState(splitCount + 1)}
-                                                className="w-14 h-14 rounded-[22px] bg-black/40 border border-white/10 shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
+                                                className="w-14 h-14 rounded-[22px] bg-surface-sidebar/40 border border-subtle shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
                                             >
                                                 <Plus className="w-6 h-6" />
                                             </button>
@@ -269,7 +269,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                                 "group/card p-8 rounded-[40px] border transition-all duration-700 relative overflow-hidden",
                                                 convive.paid
                                                     ? "bg-accent-gold/10 border-accent-gold/30 shadow-glow"
-                                                    : "bg-white/[0.02] border-white/5 hover:border-accent-gold/20 hover:bg-white/[0.05]"
+                                                    : "bg-surface-card/[0.02] border-white/5 hover:border-accent-gold/20 hover:bg-surface-card/[0.05]"
                                             )}
                                         >
                                             <div className="flex items-center justify-between mb-8">
@@ -278,7 +278,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                                 </div>
                                                 <div className={cn(
                                                     "w-12 h-12 rounded-[20px] flex items-center justify-center font-serif font-black italic text-xl shadow-sm transition-all duration-700",
-                                                    convive.paid ? "bg-accent-gold text-black rotate-12" : "bg-black/40 text-white/40 border border-white/5 group-hover/card:scale-110"
+                                                    convive.paid ? "bg-accent-gold text-primary rotate-12" : "bg-surface-sidebar/40 text-white/40 border border-white/5 group-hover/card:scale-110"
                                                 )}>
                                                     {convive.paid ? <Check className="w-6 h-6" /> : index + 1}
                                                 </div>
@@ -295,7 +295,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             {!convive.paid && (
                                                 <button
                                                     onClick={() => handlePayConvive(index)}
-                                                    className="w-full h-14 rounded-[24px] bg-accent-gold text-black hover:bg-white font-black text-[11px] uppercase tracking-[0.4em] transition-all duration-500 shadow-glow flex items-center justify-center gap-4 active:scale-95 group/btn"
+                                                    className="w-full h-14 rounded-[24px] bg-accent-gold text-primary hover:bg-surface-card font-black text-[11px] uppercase tracking-[0.4em] transition-all duration-500 shadow-glow flex items-center justify-center gap-4 active:scale-95 group/btn"
                                                 >
                                                     {t('pos.split.collect')}
                                                     <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" strokeWidth={2.5} />
@@ -318,7 +318,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             </div>
                         </div>
 
-                        <div className="p-12 bg-white/[0.03] backdrop-blur-3xl border-t border-white/5 flex items-center justify-between relative z-10 h-32 shrink-0">
+                        <div className="p-12 bg-surface-card/[0.03] backdrop-blur-3xl border-t border-white/5 flex items-center justify-between relative z-10 h-32 shrink-0">
                             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent" />
 
                             <div className="flex flex-col">
@@ -332,7 +332,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             {allPaid ? (
                                 <button
                                     onClick={onClose}
-                                    className="h-16 px-12 rounded-[28px] bg-accent-gold text-black font-black text-[12px] uppercase tracking-[0.4em] hover:bg-white shadow-glow transition-all duration-700 flex items-center gap-5 group relative overflow-hidden"
+                                    className="h-16 px-12 rounded-[28px] bg-accent-gold text-primary font-black text-[12px] uppercase tracking-[0.4em] hover:bg-surface-card shadow-glow transition-all duration-700 flex items-center gap-5 group relative overflow-hidden"
                                 >
                                     <CheckCircle2 className="w-6 h-6 group-hover:scale-125 transition-transform duration-500" />
                                     {t('pos.split.close_archive')}

@@ -39,15 +39,15 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
           key={item.id}
           className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-300 ${
             item.ok 
-              ? 'bg-emerald-50 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
-              : 'bg-white border-slate-100'
+              ? 'bg-status-success border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+              : 'bg-surface-card border-subtle'
           }`}
         >
-          <div className={`p-3 rounded-xl mb-2 ${item.ok ? 'bg-emerald-500 text-white' : 'bg-slate-50 text-slate-400'}`}>
+          <div className={`p-3 rounded-xl mb-2 ${item.ok ? 'bg-status-success text-white' : 'bg-surface-bg text-muted'}`}>
             {item.icon}
           </div>
           
-          <span className={`text-[10px] font-black tracking-widest uppercase mb-4 ${item.ok ? 'text-emerald-700' : 'text-slate-500'}`}>
+          <span className={`text-[10px] font-black tracking-widest uppercase mb-4 ${item.ok ? 'text-status-success' : 'text-secondary'}`}>
             {item.label}
           </span>
 
@@ -56,8 +56,8 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
               onClick={() => onChange(item.id, true)}
               className={`p-2 rounded-lg transition-all ${
                 item.ok 
-                  ? 'bg-emerald-600 text-white scale-110 shadow-lg' 
-                  : 'bg-slate-100 text-slate-400 hover:bg-emerald-100 hover:text-emerald-600'
+                  ? 'bg-status-success text-white scale-110 shadow-lg' 
+                  : 'bg-surface-tertiary text-muted hover:bg-status-success hover:text-status-success'
               }`}
             >
               <Check className="w-4 h-4" />
@@ -66,8 +66,8 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
               onClick={() => onChange(item.id, false)}
               className={`p-2 rounded-lg transition-all ${
                 !item.ok 
-                  ? 'bg-rose-500 text-white scale-110 shadow-lg' 
-                  : 'bg-slate-100 text-slate-400 hover:bg-rose-100 hover:text-rose-600'
+                  ? 'bg-status-danger text-white scale-110 shadow-lg' 
+                  : 'bg-surface-tertiary text-muted hover:bg-status-danger hover:text-status-danger'
               }`}
             >
               <X className="w-4 h-4" />
@@ -78,7 +78,7 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center border-2 border-white shadow-sm"
+              className="absolute -top-1 -right-1 w-5 h-5 bg-status-success rounded-full flex items-center justify-center border-2 border-white shadow-sm"
             >
               <Check className="w-3 h-3 text-white" />
             </motion.div>

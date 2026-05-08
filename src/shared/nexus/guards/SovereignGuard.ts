@@ -3,6 +3,7 @@ import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { CryptoService } from '@domain/services/CryptoService';
+import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import type { SignedSovereignData, SovereignData, SovereignWriteSignature } from '@/shared/nexus-contract';
 
 /**
@@ -57,6 +58,14 @@ export const SovereignGuard = {
     }
 
     return true;
+  },
+
+  /**
+   * ⚖️ Grade X NF525: Check if a path is fiscally sealed.
+   */
+  async isFiscallySealed(path: string, context: { vassalId: string }): Promise<boolean> {
+    const collection = this.extractCollectionName(path);
+    return this.IMMUTABLE_COLLECTIONS.has(collection) || path.includes('fiscal/');
   },
   
   /**
@@ -157,7 +166,7 @@ export const SovereignGuard = {
   },
 
   async protectWrite(path: string, data: SovereignData, anchoredTenantId?: string): Promise<SignedSovereignData> {
-    this.validateAccess(path, anchoredTenantId);
+    await this.validateAccess(path, anchoredTenantId);
 
     if (!this.requiresSignedWrite(path)) {
       return data;
@@ -183,9 +192,9 @@ export const SovereignGuard = {
    * Validates if the path being accessed matches the current anchored session.
    * TRIGGER: Global Logout Fail-Safe if mismatch is detected.
    */
-  validateAccess(path: string, anchoredTenantId?: string) {
+  async validateAccess(path: string, anchoredTenantId?: string) {
     const store = getDefaultStore();
-    const currentTenant = anchoredTenantId || store.get(tenantIdAtom);
+    const currentTenant = anchoredTenantId || store.get(tenantIdAtom) || 'main';
 
     const pathParts = path.split('/');
     const pathTenantId = pathParts[0] === 'tenants' ? pathParts[1] : 'main';
@@ -194,19 +203,35 @@ export const SovereignGuard = {
     // Also allow specific whitelisted 'main' operations.
     const WHITELIST = ['heartbeat', 'telemetry', 'config', 'health', 'system', 'time_sync', 'auth'];
     const isWhitelisted = WHITELIST.some(w => path.includes(w));
-
     if (pathTenantId !== currentTenant && currentTenant !== 'restaurant-os' && !isWhitelisted) {
-      if (process.env.NODE_ENV === 'test') {
-        logger.warn(`[SovereignGuard] Test Mode: Skipping isolation breach for ${path}`);
+      if (process.env.NODE_ENV === 'test' && !process.env.STRICT_ISOLATION_TEST) {
         return;
       }
-      this.triggerFailSafe(pathTenantId, currentTenant, path);
+      await this.triggerFailSafe(pathTenantId, currentTenant, path);
     }
 
     // 🔬 SHADOW CONTEXT PROTECTION
     // If we are in Master Mode, we only allow access via the Shadow Port
     if (MasterBridge.isMasterMode() && !path.startsWith('tenants/')) {
         // Suzerain is allowed to see the Root, but Vassals are blocked from it.
+    }
+  },
+
+  /**
+   * 🛡️ Grade X Validation Entry Point
+   */
+  async validateAccessGradeX(
+    operation: 'READ' | 'WRITE' | 'DELETE',
+    path: string,
+    context: { vassalId: string; actorId: string }
+  ): Promise<{ granted: boolean; reason?: string }> {
+    try {
+      await this.validateAccess(path, context.vassalId);
+      
+      return { granted: true };
+    } catch (error: unknown) {
+      const errCode = error instanceof Error && 'code' in error ? (error as { code?: string }).code : 'ACCESS_DENIED';
+      return { granted: false, reason: `SECURITY_VIOLATION_${errCode || 'ACCESS_DENIED'}` };
     }
   },
 
@@ -232,6 +257,6 @@ export const SovereignGuard = {
       window.location.href = '/auth/logout?reason=shadow_drift_block';
     }
 
-    throw new Error("SHADOW_ISOLATION_BREACH: Execution Terminated.");
+    throw new NexusError(NexusErrorCode.ACCESS_DENIED, "SHADOW_ISOLATION_BREACH: Execution Terminated.");
   }
 };

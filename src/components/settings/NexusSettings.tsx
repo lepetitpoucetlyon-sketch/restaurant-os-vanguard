@@ -149,7 +149,7 @@ export default function NexusSettings() {
                                             className={cn(
                                                 "px-4 py-3 rounded-xl border transition-all text-[11px] font-bold uppercase tracking-widest",
                                                 config.personality === p 
-                                                    ? "bg-accent text-black border-accent" 
+                                                    ? "bg-accent text-primary border-accent" 
                                                     : "bg-bg-tertiary border-border text-text-muted hover:border-accent/40"
                                             )}
                                         >
@@ -176,7 +176,7 @@ export default function NexusSettings() {
                                     )}
                                 >
                                     <div className={cn(
-                                        "absolute top-1 w-4 h-4 rounded-full bg-white transition-all",
+                                        "absolute top-1 w-4 h-4 rounded-full bg-surface-card transition-all",
                                         config.historyEnabled ? "right-1" : "left-1"
                                     )} />
                                 </button>
@@ -212,7 +212,7 @@ export default function NexusSettings() {
                                 >
                                     <div className={cn(
                                         "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
-                                        config.voiceId === v.id ? "bg-accent text-black" : "bg-bg-primary text-text-muted"
+                                        config.voiceId === v.id ? "bg-accent text-primary" : "bg-bg-primary text-text-muted"
                                     )}>
                                         <Mic className="w-5 h-5" />
                                     </div>
@@ -227,7 +227,7 @@ export default function NexusSettings() {
                                     </div>
                                     {config.voiceId === v.id && (
                                         <div className="w-6 h-6 rounded-full bg-accent flex items-center justify-center">
-                                            <Check className="w-3 h-3 text-black" />
+                                            <Check className="w-3 h-3 text-primary" />
                                         </div>
                                     )}
                                 </button>
@@ -296,7 +296,7 @@ export default function NexusSettings() {
                                                     />
                                                     <button 
                                                         onClick={() => removeMacro(macro.id)}
-                                                        className="opacity-0 group-hover:opacity-100 p-2 text-text-muted hover:text-red-500 transition-all rounded-lg hover:bg-red-500/5"
+                                                        className="opacity-0 group-hover:opacity-100 p-2 text-text-muted hover:text-status-danger transition-all rounded-lg hover:bg-status-danger/5"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>

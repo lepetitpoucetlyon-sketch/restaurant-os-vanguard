@@ -18,10 +18,10 @@ interface SectionHeaderProps {
 
 const colorClasses = {
     accent: "bg-accent text-bg-primary",
-    success: "bg-emerald-500 text-white",
-    warning: "bg-amber-500 text-white",
-    error: "bg-rose-500 text-white",
-    info: "bg-blue-500 text-white",
+    success: "bg-status-success text-white",
+    warning: "bg-status-warning text-white",
+    error: "bg-status-danger text-white",
+    info: "bg-action-primary text-white",
 };
 
 export function SectionHeader({

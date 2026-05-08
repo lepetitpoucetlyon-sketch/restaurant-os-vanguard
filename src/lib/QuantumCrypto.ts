@@ -50,6 +50,17 @@ export const QuantumCrypto = {
   /**
    * Verifies a quantum seal.
    */
+  
+  /**
+   * 🖋️ Suture GRADE X+++: Signature for NF525
+   */
+  async sign(data: string, previousHash: string = ''): Promise<string> {
+    const secretKey = process.env.NEXUS_TENANT_SECRET || 'fallback-quantum-secret-key-001';
+    const payload = previousHash + data;
+    const seal = await this.generateQuantumSeal(payload, secretKey);
+    return seal.hash;
+  },
+
   verifySeal(seal: { version: string, hash: string, latticeSignature: string }, originalData: string): boolean {
     if (seal.version !== 'V5.5-PQ') return false;
     // ... validation logic

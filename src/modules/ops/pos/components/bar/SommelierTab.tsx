@@ -88,7 +88,7 @@ export const SommelierTab: React.FC<SommelierTabProps> = ({ regions }) => {
                     { type: 'Rouge léger', temp: '12-14°C', icon: '🍷' },
                     { type: 'Rouge corsé', temp: '16-18°C', icon: '🍷' },
                 ].map((item, i) => (
-                    <div key={i} className="p-4 bg-white/10 rounded-xl text-center">
+                    <div key={i} className="p-4 bg-surface-card/10 rounded-xl text-center">
                         <span className="text-2xl">{item.icon}</span>
                         <p className="font-bold mt-2">{item.type}</p>
                         <p className="text-2xl font-black mt-1">{item.temp}</p>

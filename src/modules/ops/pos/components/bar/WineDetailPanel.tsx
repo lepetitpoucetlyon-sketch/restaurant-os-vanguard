@@ -26,14 +26,14 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
   const region = regions.find(r => r.id === selectedWine.region);
 
   return (
-    <div className="w-96 bg-white dark:bg-bg-secondary border-l border-neutral-100 dark:border-border overflow-auto h-full fixed right-0 top-[80px] md:top-[100px] z-30 shadow-2xl animate-in slide-in-from-right duration-300">
+    <div className="w-96 bg-surface-card dark:bg-bg-secondary border-l border-subtle dark:border-border overflow-auto h-full fixed right-0 top-[80px] md:top-[100px] z-30 shadow-2xl animate-in slide-in-from-right duration-300">
         <div
             className="p-6 text-white relative"
             style={{ backgroundColor: region?.color || '#722F37' }}
         >
             <button
                 onClick={onClose}
-                className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg text-white text-2xl leading-none"
+                className="absolute top-4 right-4 p-2 hover:bg-surface-card/10 rounded-lg text-white text-2xl leading-none"
             >
                 &times;
             </button>
@@ -46,7 +46,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
             {/* Rating & Price */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
+                    <Star className="w-6 h-6 text-status-warning fill-amber-500" />
                     <span className="text-2xl font-black">{selectedWine.rating}/100</span>
                 </div>
                 <div className="text-right">
@@ -84,12 +84,12 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
             </div>
 
             {/* Notes */}
-            <div className="p-4 bg-amber-50 dark:bg-amber-500/10 rounded-xl border border-amber-100 dark:border-amber-500/30">
+            <div className="p-4 bg-status-warning dark:bg-status-warning/10 rounded-xl border border-amber-100 dark:border-amber-500/30">
                 <p className="text-sm text-text-primary italic">"{selectedWine.notes}"</p>
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 pt-4 border-t border-neutral-100 dark:border-border">
+            <div className="flex gap-3 pt-4 border-t border-subtle dark:border-border">
                 <Button variant="outline" className="flex-1 h-11 rounded-xl">
                     <Edit3 className="w-4 h-4 mr-2" />
                     Modifier

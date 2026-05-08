@@ -115,7 +115,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                 <div className="absolute bottom-0 left-0 w-60 h-60 bg-accent/5 blur-[80px] pointer-events-none rounded-full" />
 
                 {/* Header */}
-                <div className="p-10 border-b border-border/40 bg-white/40 backdrop-blur-md relative z-10">
+                <div className="p-10 border-b border-border/40 bg-surface-card/40 backdrop-blur-md relative z-10">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
                             <div className="w-16 h-16 rounded-[22px] bg-text-primary flex items-center justify-center shadow-premium">
@@ -128,7 +128,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 rounded-2xl bg-white/60 hover:bg-white flex items-center justify-center transition-all border border-border/40 hover:rotate-90 hover:scale-110 shadow-soft"
+                            className="w-12 h-12 rounded-2xl bg-surface-card/60 hover:bg-surface-card flex items-center justify-center transition-all border border-border/40 hover:rotate-90 hover:scale-110 shadow-soft"
                         >
                             <X className="w-5 h-5 text-text-muted" />
                         </button>
@@ -180,7 +180,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                         value={quantity}
                                         onChange={(e) => setQuantity(e.target.value)}
                                         placeholder="0.00"
-                                        className="w-full px-8 py-5 bg-white border border-border/40 rounded-2xl text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
+                                        className="w-full px-8 py-5 bg-surface-card border border-border/40 rounded-2xl text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
                                     />
                                 </div>
                                 <div className="space-y-4">
@@ -226,7 +226,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                         type="date"
                                         value={receptionDate}
                                         onChange={(e) => setReceptionDate(e.target.value)}
-                                        className="w-full px-8 py-5 bg-white/60 border border-border/40 rounded-2xl text-[14px] font-black text-text-primary focus:outline-none focus:border-accent-gold transition-all shadow-soft"
+                                        className="w-full px-8 py-5 bg-surface-card/60 border border-border/40 rounded-2xl text-[14px] font-black text-text-primary focus:outline-none focus:border-accent-gold transition-all shadow-soft"
                                     />
                                 </div>
                                 <div className="space-y-4">
@@ -248,7 +248,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
 
                 {/* Footer */}
                 {!success && (
-                    <div className="p-10 border-t border-border/40 bg-white/40 backdrop-blur-md flex items-center justify-between gap-6 relative z-10">
+                    <div className="p-10 border-t border-border/40 bg-surface-card/40 backdrop-blur-md flex items-center justify-between gap-6 relative z-10">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

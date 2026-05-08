@@ -1,12 +1,12 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { 
-    SEOProfile, 
     Campaign, 
     SocialAccount, 
     Quote, 
     Delivery 
 } from '@nexus/contracts';
+import { SEOProfile } from './seo.types';
 import { 
     seoProfileAtom, 
     marketingCampaignsNodeAtom, 
@@ -36,7 +36,7 @@ export const MarketingSyncService = {
       (data: SEOProfile[]) => {
         const seoData = Array.isArray(data) ? data : [];
         if (seoData.length > 0) {
-          store.set(seoProfileAtom as any, seoData[0] as any);
+          store.set(seoProfileAtom, seoData[0]);
         } else {
           // Fallback to defaults defined in config
           const { identityDefaults } = whiteLabelInstanceConfig;
@@ -53,7 +53,7 @@ export const MarketingSyncService = {
                 clicks: 342, 
                 ctr: 27.5, 
                 avgPosition: 3.2, 
-                topKeywords: (MarketingEngine as any).getKeywords ? (MarketingEngine as any).getKeywords() : [],
+                topKeywords: MarketingEngine.getKeywords ? MarketingEngine.getKeywords() : [],
                 conversions: 0
             },
             site: {
@@ -81,23 +81,27 @@ export const MarketingSyncService = {
                 openingHours: [],
                 services: { dineIn: true, takeaway: true, delivery: false, outdoorSeating: false, wifi: true, parking: false, wheelchairAccessible: true }
             },
-            integrations: {},
             technical: {
                 canonicalDomain: '',
                 trailingSlash: true,
                 robots: { index: true, follow: true },
                 sitemap: { enabled: true, frequency: 'weekly' }
             },
+            integrations: {
+                googleAnalytics: { measurementId: '' },
+                googleTagManager: { containerId: '' },
+                googleSearchConsole: { verified: false },
+                googleBusinessProfile: { linked: false },
+                facebookPixel: { pixelId: '' }
+            },
             createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            keywords: [],
-            competitors: []
+            updatedAt: new Date().toISOString()
           };
-          store.set(seoProfileAtom as any, fallback as any);
+          store.set(seoProfileAtom, fallback);
         }
       },
       {
-        onError: (error) => logger.error('[MarketingSync] SEO Sync Failed', error)
+        onError: (error: Error) => logger.error('[MarketingSync] SEO Sync Failed', error)
       }
     );
 
@@ -107,7 +111,7 @@ export const MarketingSyncService = {
         (data: Campaign[]) => {
         },
         {
-          onError: (error) => logger.error('[MarketingSync] Marketing Sync Failed', error)
+          onError: (error: Error) => logger.error('[MarketingSync] Marketing Sync Failed', error)
         }
     );
 
@@ -117,7 +121,7 @@ export const MarketingSyncService = {
         (data: SocialAccount[]) => {
         },
         {
-          onError: (error) => logger.error('[MarketingSync] Social Sync Failed', error)
+          onError: (error: Error) => logger.error('[MarketingSync] Social Sync Failed', error)
         }
     );
 

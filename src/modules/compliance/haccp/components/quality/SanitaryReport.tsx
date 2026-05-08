@@ -30,7 +30,7 @@ export const SanitaryReport: React.FC = () => {
                 </div>
             </div>
 
-            <Button className="w-full bg-slate-900 text-white rounded-xl py-6 font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">
+            <Button className="w-full bg-surface-sidebar text-white rounded-xl py-6 font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">
                 <Download className="w-4 h-4" /> Télécharger le PDF Certifié
             </Button>
         </div>

@@ -1,0 +1,10 @@
+#!/bin/bash
+WORKSPACE="test-legifrance"
+ENDPOINT="http://localhost:9621/query"
+RESULTS_DIR="results/validation_hardcore"
+mkdir -p "$RESULTS_DIR"
+echo "Test 1"
+curl -s -X POST "$ENDPOINT" -H "X-Workspace: $WORKSPACE" -H "Content-Type: application/json" -d '{"query": "Quelles sont les sanctions pour une pratique commerciale trompeuse ?"}' > "$RESULTS_DIR/test_1.json"
+echo "Test 2"
+curl -s -X POST "$ENDPOINT" -H "X-Workspace: $WORKSPACE" -H "Content-Type: application/json" -d '{"query": "Comment faire une tarte au citron ?"}' > "$RESULTS_DIR/test_2.json"
+echo "Tests fait"

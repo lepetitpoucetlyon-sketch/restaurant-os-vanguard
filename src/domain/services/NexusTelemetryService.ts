@@ -41,6 +41,15 @@ class TelemetryService {
   /**
    * Collects current system telemetry and mirrors it to the Suzerain.
    */
+  
+  /**
+   * 🖋️ Suture GRADE X+++: Emission d'Audit Pulse
+   */
+  public emitAuditPulse(pillar: string, action: string, data: Record<string, any>) {
+      console.log(`[AuditPulse|${pillar}] ${action}`, data);
+      // Implémentation réelle vers le MCC
+  }
+
   private async sendPulse(tenantId: string) {
     try {
       const pulse: TelemetryPulse = await this.collectPulse();
@@ -55,7 +64,7 @@ class TelemetryService {
         status: pulse.status
       }));
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("[NexusTelemetry] Pulse failure:", error);
     }
   }

@@ -10,7 +10,7 @@ export function Cerfa13984Section() {
     return (
         <div className="max-w-5xl mx-auto space-y-8">
             {/* Header */}
-            <div className="bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
+            <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/5 -mr-24 -mt-24 rounded-full blur-3xl" />
                 <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-6">
                     <div className="flex items-start gap-6">
@@ -20,15 +20,15 @@ export function Cerfa13984Section() {
                         <div>
                             <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Cerfa 13984</h2>
                             <p className="text-[10px] font-black text-purple-500 uppercase tracking-[0.3em] mt-1">Déclaration de manipulation de denrées alimentaires d'origine animale</p>
-                            <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(cerfa?.description || 'Détails réglementaires en attente de synchronisation.')}</p>
+                            <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(cerfa?.name || 'Détails réglementaires en attente de synchronisation.')}</p>
                                 <div className="flex items-center gap-6 mt-4">
                                     <div className="flex items-center gap-2 text-text-muted">
                                         <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] font-mono font-bold">Déclaration : {String(cerfa?.lastUpdated || 'N/A')}</span>
+                                        <span className="text-[10px] font-mono font-bold">Déclaration : {String(cerfa?.updatedAt || 'N/A')}</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-text-muted">
                                         <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] font-mono font-bold">Prochaine vérification : {String(cerfa?.nextReview || 'N/A')}</span>
+                                        <span className="text-[10px] font-mono font-bold">Prochaine vérification : {String(cerfa?.validUntil || 'N/A')}</span>
                                     </div>
                                 </div>
                         </div>
@@ -42,7 +42,7 @@ export function Cerfa13984Section() {
             </div>
 
             {/* Informations de l'établissement */}
-            <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm space-y-6">
+            <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm space-y-6">
                 <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                     <Building2 strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Informations de l'Établissement (pré-remplies)
@@ -67,7 +67,7 @@ export function Cerfa13984Section() {
             </div>
 
             {/* Catégories de denrées */}
-            <div className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm space-y-6">
+            <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm space-y-6">
                 <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                     <FileText strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Catégories de Denrées Manipulées
@@ -112,7 +112,7 @@ export function Cerfa13984Section() {
 
             {/* Actions */}
             <div className="flex gap-4">
-                <Button className="h-14 flex-1 bg-text-primary hover:bg-black text-white rounded-xl font-bold uppercase text-[10px] tracking-widest">
+                <Button className="h-14 flex-1 bg-text-primary hover:bg-surface-sidebar text-white rounded-xl font-bold uppercase text-[10px] tracking-widest">
                     <Send strokeWidth={1.5} className="w-4 h-4 mr-3" />
                     Envoyer à la DD(CS)PP
                 </Button>

@@ -11,7 +11,7 @@ export const CartLineSchema = z.object({
   quantity:              z.number().int().min(1),
   unitPriceInMicrounits: MicrounitsSchema,
   taxRate:               TaxRateSchema,
-  discountInMicrounits:  MicrounitsSchema.default(0n as any),
+  discountInMicrounits:  MicrounitsSchema.default(0n as unknown),
   modifiers:             z.array(z.string()).default([]),
   notes:                 sanitized(0, 200).optional(),
 });

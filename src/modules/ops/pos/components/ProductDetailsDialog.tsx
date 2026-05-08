@@ -210,10 +210,10 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                             <span className="text-3xl md:text-3xl font-serif font-black text-accent-gold italic drop-shadow-sm">
                                 {(((product.priceInCents ?? 0) * priceMultiplier) / 100).toFixed(2)}€
                             </span>
-                            <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/10">
+                            <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
                                 <button
                                     onClick={onClose}
-                                    className="w-12 h-12 bg-white/10 dark:bg-black/20 hover:bg-accent-gold hover:text-white backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-white/10 shadow-premium group"
+                                    className="w-12 h-12 bg-surface-card/10 dark:bg-surface-sidebar/20 hover:bg-accent-gold hover:text-white backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-subtle shadow-premium group"
                                 >
                                     <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
                                 </button>
@@ -257,7 +257,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                                     className={cn(
                                                         "group relative flex items-center justify-between p-5 md:p-6 rounded-[24px] md:rounded-[32px] border transition-all duration-500",
                                                         isSelected
-                                                            ? "border-accent-gold bg-white dark:bg-white/5 shadow-premium ring-4 ring-accent-gold/5"
+                                                            ? "border-accent-gold bg-surface-card dark:bg-surface-card/5 shadow-premium ring-4 ring-accent-gold/5"
                                                             : "border-border/60 bg-bg-tertiary/40 hover:border-accent-gold/40 hover:bg-bg-tertiary/60"
                                                     )}
                                                 >
@@ -266,7 +266,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                                             "w-6 h-6 rounded-xl border flex items-center justify-center transition-all duration-500",
                                                             isSelected
                                                                 ? "bg-accent-gold border-accent-gold scale-110 shadow-premium"
-                                                                : "border-border/80 bg-white dark:bg-black group-hover:scale-105"
+                                                                : "border-border/80 bg-surface-card dark:bg-surface-sidebar group-hover:scale-105"
                                                         )}>
                                                             {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
                                                         </div>
@@ -309,13 +309,13 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                                 className={cn(
                                                     "flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all text-left group",
                                                     isSelected
-                                                        ? "border-red-500/50 bg-red-500/5 text-red-600 dark:text-red-400 shadow-sm"
+                                                        ? "border-red-500/50 bg-status-danger/5 text-status-danger dark:text-status-danger shadow-sm"
                                                         : "border-border bg-bg-tertiary/40 hover:border-red-500/30 text-text-secondary"
                                                 )}
                                             >
                                                 <span className="text-xl group-hover:scale-125 transition-transform">{allergen.icon}</span>
                                                 <span className="text-[12px] font-black uppercase tracking-tight truncate">{t(`allergens.${allergen.id}`)}</span>
-                                                {isSelected && <Check className="w-3.5 h-3.5 ml-auto text-red-500 shrink-0" />}
+                                                {isSelected && <Check className="w-3.5 h-3.5 ml-auto text-status-danger shrink-0" />}
                                             </button>
                                         );
                                     })}
@@ -375,11 +375,11 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
 
 
                 {/* Footer Controls - Execution Tier */}
-                <div className="p-10 border-t border-border/40 bg-white dark:bg-black/40 backdrop-blur-xl flex items-center justify-between gap-10 transition-colors relative flex-shrink-0">
+                <div className="p-10 border-t border-border/40 bg-surface-card dark:bg-surface-sidebar/40 backdrop-blur-xl flex items-center justify-between gap-10 transition-colors relative flex-shrink-0">
                     <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/20 to-transparent" />
 
                     {/* Quality Selective Counter */}
-                    <div className="flex items-center gap-6 bg-white dark:bg-white/5 px-6 py-2.5 rounded-full border border-border/40 shadow-sm">
+                    <div className="flex items-center gap-6 bg-surface-card dark:bg-surface-card/5 px-6 py-2.5 rounded-full border border-border/40 shadow-sm">
                         <button
                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
                             className="w-10 h-10 flex items-center justify-center text-text-muted hover:text-accent-gold transition-all"
@@ -399,19 +399,19 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                     <button
                         disabled={!isValid()}
                         onClick={handleAdd}
-                        className="flex-1 h-20 bg-black dark:bg-white dark:text-black rounded-full shadow-premium flex items-center justify-between px-10 transition-all active:scale-[0.98] group relative overflow-hidden"
+                        className="flex-1 h-20 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-full shadow-premium flex items-center justify-between px-10 transition-all active:scale-[0.98] group relative overflow-hidden"
                     >
                         <div className="flex items-center gap-8">
-                            <ShoppingCart className="w-6 h-6 text-white dark:text-black" strokeWidth={1.5} />
+                            <ShoppingCart className="w-6 h-6 text-white dark:text-primary" strokeWidth={1.5} />
                             <div className="flex flex-col items-start translate-y-[1px]">
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 dark:text-black/40 leading-none mb-1">{t('pos.details.add_to')}</span>
-                                <span className="text-[13px] font-black uppercase tracking-[0.3em] text-white dark:text-black leading-none">{t('pos.details.archive')}</span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 dark:text-primary/40 leading-none mb-1">{t('pos.details.add_to')}</span>
+                                <span className="text-[13px] font-black uppercase tracking-[0.3em] text-white dark:text-primary leading-none">{t('pos.details.archive')}</span>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-8 h-full">
-                            <div className="w-px h-8 bg-white/10 dark:bg-black/10" />
-                            <span className="text-2xl font-sans font-black tracking-tight text-white dark:text-black">
+                            <div className="w-px h-8 bg-surface-card/10 dark:bg-surface-sidebar/10" />
+                            <span className="text-2xl font-sans font-black tracking-tight text-white dark:text-primary">
                                 {calculateTotal() / 100}€
                             </span>
                         </div>

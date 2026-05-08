@@ -42,7 +42,7 @@ export interface SovereignSchemaField {
   [key: string]: SovereignField;
 }
 
-export interface SovereignWriteSignature {
+export interface SovereignWriteSignature extends SovereignMap {
   scope: 'NF525_WRITE';
   version: 'NF525_WRITE_V1';
   tenantId: string;

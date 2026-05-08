@@ -39,7 +39,7 @@ export function EventCard({ group }: { group: Group }) {
                             <Users className="w-4 h-4 text-purple-500" />
                             <span className="text-sm font-black">{group.pax || 0} Personnes</span>
                         </div>
-                        <div className="flex items-center gap-2 text-emerald-500">
+                        <div className="flex items-center gap-2 text-status-success">
                             <Euro className="w-4 h-4" />
                             <span className="text-sm font-black">{group.budget}</span>
                         </div>

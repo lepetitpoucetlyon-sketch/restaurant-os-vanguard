@@ -28,7 +28,7 @@ export function AuthGate({ children }: AuthGateProps) {
     const pathname = usePathname();
 
     // 0. SOVEREIGN KILL SWITCH (Highest Priority)
-    const isKillSwitchActive = tenantConfig?.status?.killSwitch === true;
+    const isKillSwitchActive = (tenantConfig as any)?.status?.killSwitch === true;
     
     // Bypass for MCC area to allow admin recovery if needed
     const isMccArea = pathname?.startsWith('/admin');
@@ -77,7 +77,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeMobileMenu}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] lg:hidden"
+                        className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-sm z-[45] lg:hidden"
                     />
                 )}
             </AnimatePresence>

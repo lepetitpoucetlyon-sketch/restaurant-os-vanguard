@@ -64,7 +64,7 @@ export function CRMList() {
                     initial={{ opacity: 0, scale: 0.98, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     transition={{ delay: i * 0.03, duration: 0.3 }}
-                    className="bg-white dark:bg-bg-secondary p-4 md:p-6 rounded-[2rem] md:rounded-[3rem] flex items-center justify-between group cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all border border-neutral-100 dark:border-border/50 h-28 md:h-36 relative overflow-hidden"
+                    className="bg-surface-card dark:bg-bg-secondary p-4 md:p-6 rounded-[2rem] md:rounded-[3rem] flex items-center justify-between group cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all border border-subtle dark:border-border/50 h-28 md:h-36 relative overflow-hidden"
                     onClick={() => setSelectedCRM(crm)}
                 >
                     {/* Subtle aesthetic backdrop */}

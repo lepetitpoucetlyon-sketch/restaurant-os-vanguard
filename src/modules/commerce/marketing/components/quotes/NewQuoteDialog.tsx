@@ -212,7 +212,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                         onClick={() => setCRMType('company')}
                                         className={cn(
                                             "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-[10px] font-black uppercase tracking-widest transition-all",
-                                            crmType === 'company' ? "bg-white dark:bg-white/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
+                                            crmType === 'company' ? "bg-surface-card dark:bg-surface-card/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
                                         )}
                                     >
                                         <Building2 className="w-4 h-4" />
@@ -222,7 +222,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                         onClick={() => setCRMType('individual')}
                                         className={cn(
                                             "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-[10px] font-black uppercase tracking-widest transition-all",
-                                            crmType === 'individual' ? "bg-white dark:bg-white/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
+                                            crmType === 'individual' ? "bg-surface-card dark:bg-surface-card/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
                                         )}
                                     >
                                         <User className="w-4 h-4" />
@@ -289,7 +289,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                 </button>
                                 <button
                                     onClick={() => addNewLine()}
-                                    className="px-6 py-2.5 bg-accent-gold text-black rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2 shadow-premium hover:bg-white transition-all"
+                                    className="px-6 py-2.5 bg-accent-gold text-primary rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2 shadow-premium hover:bg-surface-card transition-all"
                                 >
                                     <Plus className="w-3.5 h-3.5" />
                                     Ligne Manuelle
@@ -415,7 +415,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                 isSaving && "opacity-50 grayscale cursor-not-allowed"
                             )}
                         >
-                            <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
+                            <div className="absolute inset-0 bg-surface-card translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
                             {isSaving ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin relative z-10" />
@@ -423,8 +423,8 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                 </>
                             ) : (
                                 <>
-                                    <Sparkles className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform group-hover:text-black" />
-                                    <span className="relative z-10 group-hover:text-black">Générer le Devis</span>
+                                    <Sparkles className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform group-hover:text-primary" />
+                                    <span className="relative z-10 group-hover:text-primary">Générer le Devis</span>
                                 </>
                             )}
                         </motion.button>

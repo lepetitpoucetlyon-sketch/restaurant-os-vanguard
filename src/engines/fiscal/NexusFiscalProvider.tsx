@@ -26,7 +26,7 @@ import {
 } from '@modules/finance/types';
 import { useBilling } from '@modules/finance/billing/hooks/useBilling';
 
-import Sentry from "@sentry/nextjs";
+// import Sentry from "@sentry/nextjs";
 
 /**
  * 🏛️ SovereignSignable
@@ -116,8 +116,8 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         const businessSignature = generateBusinessSignature(finalData);
         const idempotencyKey = `FISCAL_${tenantId}_${businessSignature}`;
 
-        Sentry.setTag("fiscal.idempotency_key", idempotencyKey);
-        Sentry.setTag("nexus.grade", "X+++");
+        // Sentry.setTag("fiscal.idempotency_key", idempotencyKey);
+        // Sentry.setTag("nexus.grade", "X+++");
 
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`;
         const id = Nexus.adapter.generateId(path);

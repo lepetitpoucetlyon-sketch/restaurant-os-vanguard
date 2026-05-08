@@ -10,32 +10,32 @@ export function PMRSection() {
 
     const amenagementsArray = (pmrAmenagements || []);
     const stats = {
-        conforme: amenagementsArray.filter((a: any) => a.status === 'conforme').length,
-        en_cours: amenagementsArray.filter((a: any) => a.status === 'en_cours').length,
-        a_faire: amenagementsArray.filter((a: any) => a.status === 'a_faire').length,
+        conforme: amenagementsArray.filter((a: Record<string, unknown>) => a.status === 'conforme').length,
+        en_cours: amenagementsArray.filter((a: Record<string, unknown>) => a.status === 'en_cours').length,
+        a_faire: amenagementsArray.filter((a: Record<string, unknown>) => a.status === 'a_faire').length,
     };
 
     return (
         <div className="max-w-5xl mx-auto space-y-8">
             {/* Header */}
-            <div className="bg-white dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-sky-500/5 -mr-24 -mt-24 rounded-full blur-3xl" />
+            <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-action-primary/5 -mr-24 -mt-24 rounded-full blur-3xl" />
                 <div className="relative z-10 flex items-start gap-6">
-                    <div className="w-16 h-16 rounded-2xl bg-sky-500/10 flex items-center justify-center border border-sky-500/10 shadow-sm">
-                        <Accessibility strokeWidth={1.5} className="w-8 h-8 text-sky-500" />
+                    <div className="w-16 h-16 rounded-2xl bg-action-primary/10 flex items-center justify-center border border-focus/10 shadow-sm">
+                        <Accessibility strokeWidth={1.5} className="w-8 h-8 text-brand" />
                     </div>
                     <div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Accessibilité PMR</h2>
-                        <p className="text-[10px] font-black text-sky-500 uppercase tracking-[0.3em] mt-1">Registre Public d'Accessibilité</p>
-                        <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(pmrDoc?.description || 'Diagnostic accessibilité PMR en attente de synchronisation.')}</p>
+                        <p className="text-[10px] font-black text-brand uppercase tracking-[0.3em] mt-1">Registre Public d'Accessibilité</p>
+                        <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(pmrDoc?.name || 'Diagnostic accessibilité PMR en attente de synchronisation.')}</p>
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">MAJ : {String(pmrDoc?.lastUpdated || 'N/A')}</span>
+                                <span className="text-[10px] font-mono font-bold">MAJ : {String(pmrDoc?.updatedAt || 'N/A')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">Révision : {String(pmrDoc?.nextReview || 'N/A')}</span>
+                                <span className="text-[10px] font-mono font-bold">Révision : {String(pmrDoc?.validUntil || 'N/A')}</span>
                             </div>
                         </div>
                     </div>
@@ -66,8 +66,8 @@ export function PMRSection() {
                     Diagnostic par Zone
                 </h3>
                 <div className="space-y-4">
-                    {amenagementsArray.map((am: any) => (
-                        <div key={am.id} className="bg-white dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-sm flex items-center justify-between hover:shadow-lg transition-all">
+                    {amenagementsArray.map((am: Record<string, unknown>) => (
+                        <div key={am.id} className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-sm flex items-center justify-between hover:shadow-lg transition-all">
                             <div className="flex items-center gap-5">
                                 <div className={cn(
                                     "w-10 h-10 rounded-xl flex items-center justify-center border",
@@ -103,17 +103,15 @@ export function PMRSection() {
             </div>
 
             {/* Info */}
-            {pmrDoc.notes && (
-                <div className="bg-sky-50 dark:bg-sky-500/5 rounded-2xl border border-sky-200 dark:border-sky-500/10 p-8">
-                    <div className="flex items-start gap-4">
-                        <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-sky-500 mt-0.5 shrink-0" />
-                        <div>
-                            <h4 className="font-serif font-bold text-sky-900 dark:text-sky-300 mb-2">Notes</h4>
-                            <p className="text-sm text-sky-800 dark:text-sky-200/80 leading-relaxed">{String(pmrDoc?.notes || '')}</p>
-                        </div>
+            <div className="bg-action-primary dark:bg-action-primary/5 rounded-2xl border border-focus dark:border-focus/10 p-8">
+                <div className="flex items-start gap-4">
+                    <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-brand mt-0.5 shrink-0" />
+                    <div className="bg-bg-tertiary/30 rounded-2xl p-6 border border-border/50">
+                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-2">Note de conformité</p>
+                        <p className="text-sm text-brand dark:text-brand/80 leading-relaxed">Document validé et archivé dans le coffre-fort numérique Nexus.</p>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 }

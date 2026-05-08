@@ -20,35 +20,35 @@ interface FeedbackBannerProps {
 const feedbackConfig = {
     success: {
         icon: CheckCircle2,
-        bg: "bg-emerald-50 dark:bg-emerald-500/10",
+        bg: "bg-status-success dark:bg-status-success/10",
         border: "border-emerald-200 dark:border-emerald-500/20",
-        iconColor: "text-emerald-500",
-        titleColor: "text-emerald-700 dark:text-emerald-400",
-        textColor: "text-emerald-600 dark:text-emerald-300",
+        iconColor: "text-status-success",
+        titleColor: "text-status-success dark:text-status-success",
+        textColor: "text-status-success dark:text-status-success",
     },
     error: {
         icon: XCircle,
-        bg: "bg-rose-50 dark:bg-rose-500/10",
+        bg: "bg-status-danger dark:bg-status-danger/10",
         border: "border-rose-200 dark:border-rose-500/20",
-        iconColor: "text-rose-500",
-        titleColor: "text-rose-700 dark:text-rose-400",
-        textColor: "text-rose-600 dark:text-rose-300",
+        iconColor: "text-status-danger",
+        titleColor: "text-status-danger dark:text-status-danger",
+        textColor: "text-status-danger dark:text-status-danger",
     },
     warning: {
         icon: AlertCircle,
-        bg: "bg-amber-50 dark:bg-amber-500/10",
+        bg: "bg-status-warning dark:bg-status-warning/10",
         border: "border-amber-200 dark:border-amber-500/20",
-        iconColor: "text-amber-500",
-        titleColor: "text-amber-700 dark:text-amber-400",
-        textColor: "text-amber-600 dark:text-amber-300",
+        iconColor: "text-status-warning",
+        titleColor: "text-status-warning dark:text-status-warning",
+        textColor: "text-status-warning dark:text-status-warning",
     },
     info: {
         icon: Info,
-        bg: "bg-blue-50 dark:bg-blue-500/10",
-        border: "border-blue-200 dark:border-blue-500/20",
-        iconColor: "text-blue-500",
-        titleColor: "text-blue-700 dark:text-blue-400",
-        textColor: "text-blue-600 dark:text-blue-300",
+        bg: "bg-surface-tertiary dark:bg-action-primary/10",
+        border: "border-focus dark:border-focus/20",
+        iconColor: "text-brand",
+        titleColor: "text-brand dark:text-brand",
+        textColor: "text-brand dark:text-brand",
     },
 };
 
@@ -99,7 +99,7 @@ export function FeedbackBanner({
                 <button
                     onClick={onDismiss}
                     className={cn(
-                        "p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors shrink-0",
+                        "p-1 rounded-lg hover:bg-surface-sidebar/5 dark:hover:bg-surface-card/5 transition-colors shrink-0",
                         config.iconColor
                     )}
                 >
@@ -175,8 +175,8 @@ export function ConfirmationDialog({
     loading = false,
 }: ConfirmationDialogProps) {
     const variantClasses = {
-        danger: "bg-rose-500 hover:bg-rose-600 text-white",
-        warning: "bg-amber-500 hover:bg-amber-600 text-white",
+        danger: "bg-status-danger hover:bg-status-danger text-white",
+        warning: "bg-status-warning hover:bg-status-warning text-white",
         default: "bg-accent hover:bg-accent/90 text-[#0A0A0A]",
     };
 
@@ -189,7 +189,7 @@ export function ConfirmationDialog({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-sm"
                         onClick={onCancel}
                     />
 

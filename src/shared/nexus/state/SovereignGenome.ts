@@ -11,10 +11,18 @@ import { z } from 'zod';
 
 const notifications = atom<AppNotification[]>([]);
 
+export interface Toast {
+    id: string;
+    title?: string;
+    message?: string;
+    type: string;
+    duration: number;
+}
+
 export interface MasterConfig {
     maintenanceMode?: boolean;
     targetVersion?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export const globalPolicyAtom = atom<MasterConfig>({});
@@ -50,7 +58,7 @@ export const UI_GENOME = {
 };
 
 // 🏛️ TOAST SYSTEM (Sovereign Helper)
-export const toastsAtom = atom<any[]>([]);
+export const toastsAtom = atom<Toast[]>([]);
 export const addToastAtom = atom(
     null,
     (get, set, toast: { title?: string, message?: string, type: string, duration: number }) => {
@@ -71,6 +79,11 @@ const TenantIdSchema = z.string().min(1).default('lepetitpoucet');
 
 const _tenantIdBase = atom(SovereignStorage.get('nexus_tenant_id', TenantIdSchema, 'lepetitpoucet').data);
 
+export const tenantConfigAtom = SovereignStorage.atomWithSovereignStorage<TenantConfig>('nexus_tenant_config', TenantConfigSchema, {
+    id: 'default_node',
+    ...DEFAULT_TENANT_CONFIG
+} as TenantConfig);
+
 export const FLEET_GENOME = {
     tenantId: atom(
         (get) => get(_tenantIdBase),
@@ -79,10 +92,7 @@ export const FLEET_GENOME = {
             set(_tenantIdBase, next);
         }
     ),
-    tenantConfig: SovereignStorage.atomWithSovereignStorage<TenantConfig>('nexus_tenant_config', TenantConfigSchema, {
-        id: 'default_node',
-        ...DEFAULT_TENANT_CONFIG
-    } as TenantConfig),
+    tenantConfig: tenantConfigAtom,
     snapshot: atom<EmpireInstance[]>([]),
     bloomFilter: atom(new FleetBloomFilter()),
     activeSlots: atom<Map<string, EmpireInstance>>(new Map()),
@@ -91,10 +101,20 @@ export const FLEET_GENOME = {
     zones: atom<Zone[]>([]),
     zonesLocked: atom(false),
     currentFloorId: atom<string>('rdc'),
-    brandTokens: atom((get) => {
-        const config = get(FLEET_GENOME.tenantConfig);
-        return (config.branding || config.theme || {}) as any;
-    }),
+    brandTokens: atom(
+        (get) => {
+            const config = get(tenantConfigAtom);
+            // On fallback sur un objet minimal si branding n'existe pas
+            return (config.branding || {}) as unknown as import('../tokens/brand').BrandConfig;
+        },
+        (get, set, next: import('../tokens/brand').BrandConfig) => {
+            const config = get(tenantConfigAtom);
+            set(tenantConfigAtom, {
+                ...config,
+                branding: next as any // On cast en any ici car branding dans TenantConfig attend un TenantTheme strict, mais on veut stocker le BrandConfig complet
+            });
+        }
+    ),
 };
 
 /**
@@ -130,33 +150,35 @@ export const AUTH_GENOME = {
 /**
  * 🛰️ DERIVED_GENOME - Computed Sovereign States
  */
-export const DERIVED_GENOME = {
-    userRole: atom<string>((get) => get(AUTH_GENOME.currentUser)?.role || 'client'),
-    userPermissions: atom<string[]>((get) => {
-        const role = get(DERIVED_GENOME.userRole) as string;
-        const perms = get(AUTH_GENOME.rolePermissions) as Record<string, string[]>;
-        return perms[role] || [];
-    }),
-    canDo: atom((get) => (permission: string) => {
-        const role = get(DERIVED_GENOME.userRole) as string;
-        const permissions = get(DERIVED_GENOME.userPermissions) as string[];
-        return role === 'admin' || permissions.includes('*') || permissions.includes(permission);
-    }),
-    focusedTenantDetails: atom((get) => {
-        const tenantId = get(FLEET_GENOME.activeFleetTenant);
-        const slots = get(FLEET_GENOME.activeSlots);
-        if (!tenantId) return null;
-        return slots.get(tenantId) || { id: tenantId, status: 'synced', isVirtual: true };
-    })
-};
+export const userRoleAtom = atom<string>((get) => get(AUTH_GENOME.currentUser)?.role || 'client');
+
+export const userPermissionsAtom = atom<string[]>((get) => {
+    const role = get(userRoleAtom);
+    const perms = get(AUTH_GENOME.rolePermissions);
+    return (perms && perms[role]) || [];
+});
+
+export const canDoAtom = atom<(permission: string) => boolean>((get) => (permission: string): boolean => {
+    const role = get(userRoleAtom);
+    const permissions = get(userPermissionsAtom);
+    return role === 'admin' || permissions.includes('*') || permissions.includes(permission);
+});
+
+export const focusedTenantDetailsAtom = atom((get) => {
+    const tenantId = get(FLEET_GENOME.activeFleetTenant);
+    const slots = get(FLEET_GENOME.activeSlots);
+    if (!tenantId) return null;
+    return slots.get(tenantId) || { id: tenantId, status: 'synced', isVirtual: true };
+});
 
 /**
  * 🚨 EMERGENCY_GENOME - System Criticality
  */
-export const EMERGENCY_GENOME = {
-    lockout: atom<boolean>(false),
-    maintenanceMode: atom((get) => get(FLEET_GENOME.tenantConfig).status?.maintenanceMode || false),
-};
+export const emergencyLockoutAtom = atom<boolean>(false);
+export const maintenanceModeAtom = atom((get) => { 
+    const config = get(tenantConfigAtom); 
+    return config?.status?.maintenanceMode || false; 
+});
 
 // --- 🏛️ SOVEREIGN EXPORTS (Grade X) ---
 
@@ -175,11 +197,10 @@ export const performanceModeAtom = UI_GENOME.performanceMode;
 
 // Fleet
 export const tenantIdAtom = FLEET_GENOME.tenantId;
-export const tenantConfigAtom = FLEET_GENOME.tenantConfig;
 export const fleetSnapshotAtom = FLEET_GENOME.snapshot;
 export const activeFleetTenantAtom = FLEET_GENOME.activeFleetTenant;
 export const activeTenantSlotsAtom = FLEET_GENOME.activeSlots;
-export const focusedTenantDetailsAtom = DERIVED_GENOME.focusedTenantDetails;
+// Fleet
 export const floorsAtom = FLEET_GENOME.floors;
 export const zonesAtom = FLEET_GENOME.zones;
 export const zonesLockedAtom = FLEET_GENOME.zonesLocked;
@@ -189,10 +210,4 @@ export const tenantBrandTokensAtom = FLEET_GENOME.brandTokens;
 // Auth
 export const currentUserAtom = AUTH_GENOME.currentUser;
 export const isAuthenticatedAtom = AUTH_GENOME.isAuthenticated;
-export const userRoleAtom = DERIVED_GENOME.userRole;
-export const userPermissionsAtom = DERIVED_GENOME.userPermissions;
-export const canDoAtom = DERIVED_GENOME.canDo;
 export const rolePermissionsAtom = AUTH_GENOME.rolePermissions;
-
-// Emergency
-export const emergencyLockoutAtom = EMERGENCY_GENOME.lockout;

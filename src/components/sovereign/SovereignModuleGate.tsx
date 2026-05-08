@@ -58,7 +58,7 @@ export function SovereignModuleGate({ requiredRole, requiredPlan, moduleFactory 
 
     if (isAuthorized === null) {
         return (
-            <div className="flex items-center justify-center min-h-[50vh] bg-black text-white font-mono text-xs tracking-widest">
+            <div className="flex items-center justify-center min-h-[50vh] bg-surface-sidebar text-white font-mono text-xs tracking-widest">
                 [ VERIFYING_SOVEREIGN_CLAIMS... ]
             </div>
         );
@@ -76,7 +76,7 @@ export function SovereignModuleGate({ requiredRole, requiredPlan, moduleFactory 
 
     return (
         <Suspense fallback={
-            <div className="flex items-center justify-center min-h-[50vh] bg-black text-white font-mono text-xs tracking-widest">
+            <div className="flex items-center justify-center min-h-[50vh] bg-surface-sidebar text-white font-mono text-xs tracking-widest">
                 [ DOWNLOADING_SECURE_PAYLOAD... ]
             </div>
         }>

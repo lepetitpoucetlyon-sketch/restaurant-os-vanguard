@@ -1,5 +1,5 @@
-import { NexusSutures } from '@/store/nexusSutures';
 "use client";
+import { NexusSutures } from '@/store/nexusSutures';
 
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode, useRef } from 'react';
 
@@ -271,7 +271,6 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         require2FAChallenge: false,
         verifyTwoFactor: async () => true,
         verifyPin: async (pin: string, userId?: string) => {
-            console.log('Verify PIN', pin, userId);
             return pin === '9999';
         },
         switchProfile: (uid: string) => console.log('Profile switch', uid),

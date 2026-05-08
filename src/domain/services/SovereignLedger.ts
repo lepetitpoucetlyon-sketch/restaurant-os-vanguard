@@ -112,6 +112,33 @@ export class SovereignLedger {
     /**
      * Records a sale (Cash In / Sales Revenue)
      */
+    
+    /**
+     * 🖋️ Suture GRADE X+++: Convert Engagement to Debt
+     */
+    static async convertEngagementToDebt(deliveryNoteId: string, amountInCents: number): Promise<void> {
+        // 1. Contre-passation de l'engagement (Hors-bilan)
+        await this.recordTransfer({
+            debitAccount: 'ENGAGEMENT_CREDIT_801',
+            creditAccount: 'ENGAGEMENT_DEBIT_800',
+            amountInCents,
+            referenceId: `ENG-REV-${deliveryNoteId}`,
+            description: `Annulation Engagement pour BL #${deliveryNoteId}`
+        });
+
+        // 2. Création de la dette réelle (Bilan)
+        await this.recordTransfer({
+            debitAccount: 'PURCHASES_607',
+            creditAccount: 'SUPPLIER_DEBT_401',
+            amountInCents,
+            referenceId: `DEBT-${deliveryNoteId}`,
+            description: `Dette fournisseur suite BL #${deliveryNoteId}`
+        });
+    }
+
+    /**
+     * Records a sale (Cash In / Sales Revenue)
+     */
     static async recordSale(orderId: string, amountInCents: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'CASH',

@@ -15,7 +15,7 @@ export default function DocCategoryClient() {
     if (!CATEGORY_DOCS[category]) {
         return (
             <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-20 h-20 rounded-3xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center mb-8">
+                <div className="w-20 h-20 rounded-3xl bg-surface-bg dark:bg-status-danger/10 flex items-center justify-center mb-8">
                     <span className="text-4xl">⚠️</span>
                 </div>
                 <h1 className="text-3xl font-serif font-light text-text-primary mb-4 italic">Fiche introuvable</h1>
@@ -24,7 +24,7 @@ export default function DocCategoryClient() {
                 </p>
                 <Link
                     href="/dashboard"
-                    className="px-10 py-4 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-transform"
+                    className="px-10 py-4 bg-surface-sidebar dark:bg-surface-card text-white dark:text-primary rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-transform"
                 >
                     Retour au Dashboard
                 </Link>
@@ -35,7 +35,7 @@ export default function DocCategoryClient() {
     return (
         <main className="h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary flex flex-col overflow-hidden">
             {/* Minimal Sticky Nav */}
-            <nav className="sticky top-0 z-50 bg-white/80 dark:bg-bg-primary/80 backdrop-blur-md border-b border-neutral-100 dark:border-border px-8 py-4 flex items-center justify-between">
+            <nav className="sticky top-0 z-50 bg-surface-card/80 dark:bg-bg-primary/80 backdrop-blur-md border-b border-subtle dark:border-border px-8 py-4 flex items-center justify-between">
                 <button
                     onClick={() => router.back()}
                     className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-text-primary transition-colors group"

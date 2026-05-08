@@ -29,7 +29,7 @@ export function SovereignLockout() {
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative z-10 max-w-lg w-full p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl text-center"
+                className="relative z-10 max-w-lg w-full p-8 rounded-3xl border border-subtle bg-surface-card/5 backdrop-blur-2xl shadow-2xl text-center"
             >
                 {/* Status Indicator */}
                 <div className="flex justify-center mb-8">
@@ -49,31 +49,31 @@ export function SovereignLockout() {
                     COMMANDE SOUVERAINE : <span className="text-status-error">ACCÈS RÉVOQUÉ</span>
                 </h1>
                 
-                <p className="text-gray-400 mb-8 leading-relaxed">
+                <p className="text-muted mb-8 leading-relaxed">
                     Le Suzerain (Master Control Center) a suspendu l'exploitation technique de ce Vassal. 
                     Toutes les fonctions locales sont verrouillées pour garantir l'intégrité de l'Empire.
                 </p>
 
                 {/* Diagnostics Grid */}
                 <div className="grid grid-cols-2 gap-4 mb-8 text-left">
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                        <div className="text-[10px] uppercase text-gray-500 mb-1 flex items-center gap-1">
+                    <div className="p-4 rounded-xl bg-surface-card/5 border border-subtle">
+                        <div className="text-[10px] uppercase text-secondary mb-1 flex items-center gap-1">
                             <Terminal className="w-3 h-3" /> Status
                         </div>
                         <div className="font-mono text-sm text-status-error">TERMINATED</div>
                     </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                        <div className="text-[10px] uppercase text-gray-500 mb-1 flex items-center gap-1">
+                    <div className="p-4 rounded-xl bg-surface-card/5 border border-subtle">
+                        <div className="text-[10px] uppercase text-secondary mb-1 flex items-center gap-1">
                             <Lock className="w-3 h-3" /> Tenant ID
                         </div>
-                        <div className="font-mono text-sm text-primary-gold uppercase">{tenantConfig?.id || 'REVOKED'}</div>
+                        <div className="font-mono text-sm text-primary-gold uppercase">{(tenantConfig as any)?.id || 'REVOKED'}</div>
                     </div>
                 </div>
 
                 {/* Action Button */}
                 <button
                     onClick={() => logout()}
-                    className="group relative w-full py-4 bg-white text-black font-bold rounded-2xl overflow-hidden active:scale-95 transition-all"
+                    className="group relative w-full py-4 bg-surface-card text-primary font-bold rounded-2xl overflow-hidden active:scale-95 transition-all"
                 >
                     <div className="absolute inset-0 bg-status-error translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                     <span className="relative flex items-center justify-center gap-2 group-hover:text-white transition-colors">
@@ -83,7 +83,7 @@ export function SovereignLockout() {
                 </button>
 
                 <div className="mt-8 pt-8 border-t border-white/5">
-                    <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">
+                    <p className="text-[10px] font-mono text-secondary uppercase tracking-widest">
                         Protocol Nexus-Darwin 5.2.0-Grade VI
                     </p>
                 </div>

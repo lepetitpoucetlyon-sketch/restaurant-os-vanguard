@@ -30,9 +30,9 @@ const roundedMap = {
 };
 
 const variantMap = {
-    default: 'bg-white/40 dark:bg-bg-secondary/40 border-white/50 dark:border-border/50 shadow-xl',
-    elevated: 'bg-white/50 dark:bg-bg-secondary/50 border-white/60 dark:border-border/60 shadow-2xl shadow-neutral-200/30 dark:shadow-black/40',
-    inset: 'bg-neutral-50/50 dark:bg-white/5 border-neutral-100 dark:border-border shadow-inner',
+    default: 'bg-surface-card/40 dark:bg-bg-secondary/40 border-white/50 dark:border-border/50 shadow-xl',
+    elevated: 'bg-surface-card/50 dark:bg-bg-secondary/50 border-white/60 dark:border-border/60 shadow-2xl shadow-neutral-200/30 dark:shadow-black/40',
+    inset: 'bg-surface-bg/50 dark:bg-surface-card/5 border-subtle dark:border-border shadow-inner',
 };
 
 export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(

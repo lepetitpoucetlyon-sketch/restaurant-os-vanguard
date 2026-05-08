@@ -61,12 +61,12 @@ export const TenantOrchestrator: React.FC = () => {
             branding: { primaryColor: '#C5A059' },
             security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
         }
-    ] as EmpireInstance[]).map(inst => {
+    ]).map(inst => {
         const metrics = inst.metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(
-            Number((metrics as any).alerts || 0), 
-            Number((metrics as any).errorRate || 0), 
-            Number((metrics as any).uptime || 0)
+            Number(metrics.alerts || 0), 
+            Number(metrics.errorRate || 0), 
+            Number(metrics.uptime || 0)
         );
         return {
             ...inst,
@@ -83,7 +83,7 @@ export const TenantOrchestrator: React.FC = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-bg-secondary rounded-[3rem] border border-border/50 shadow-2xl overflow-hidden relative">
+        <div className="bg-surface-card dark:bg-bg-secondary rounded-[3rem] border border-border/50 shadow-2xl overflow-hidden relative">
             {/* Header / HUD Style */}
             <div className="px-8 py-8 border-b border-border/50 bg-bg-tertiary/30 backdrop-blur-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 blur-[80px] -mr-32 -mt-32 rounded-full" />
@@ -143,7 +143,7 @@ export const TenantOrchestrator: React.FC = () => {
                             <div className="flex items-start gap-5 relative z-10">
                                 <div className={cn(
                                     "w-12 h-12 rounded-2xl flex items-center justify-center transition-colors shadow-sm",
-                                    isActive ? "bg-white/10 text-white" : "bg-bg-tertiary text-text-muted",
+                                    isActive ? "bg-surface-card/10 text-white" : "bg-bg-tertiary text-text-muted",
                                     isError && !isActive && "bg-error/10 text-error"
                                 )}>
                                     <Building2 className="w-6 h-6" />

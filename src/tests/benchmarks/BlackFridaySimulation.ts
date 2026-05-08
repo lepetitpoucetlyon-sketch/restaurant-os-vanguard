@@ -66,7 +66,7 @@ export const BlackFridaySimulation = {
     const store = getDefaultStore();
     
     // 1. Force a drift (Corruption)
-    store.set(ordersNodeAtom as any, (prev: any) => updateNexusNode(prev, { data: [{ id: 'corrupt', totalInCents: 0 }] as any }));
+    store.set(ordersNodeAtom as any, (prev: unknown) => updateNexusNode(prev, { data: [{ id: 'corrupt', totalInCents: 0 }] as any }));
 
     const expectedHash = 'correct_state_crc'; 
 

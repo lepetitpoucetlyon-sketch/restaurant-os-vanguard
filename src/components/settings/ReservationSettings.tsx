@@ -216,7 +216,7 @@ export default function ReservationSettingsComponent() {
                             <motion.div
                                 animate={{ x: config.overbookingAllowed ? 34 : 2 }}
                                 transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md z-10"
+                                className="absolute top-1 left-1 w-6 h-6 bg-surface-card rounded-full shadow-md z-10"
                             />
                         </button>
                     </div>
@@ -290,14 +290,14 @@ export default function ReservationSettingsComponent() {
                                         onClick={() => setConfig(c => ({ ...c, [toggle.id]: !c[toggle.id as keyof typeof c] }))}
                                         className={cn(
                                             "w-12 h-6 rounded-full relative transition-all duration-300",
-                                            config[toggle.id as keyof typeof config] ? "bg-emerald-500" : "bg-bg-tertiary border border-border"
+                                            config[toggle.id as keyof typeof config] ? "bg-status-success" : "bg-bg-tertiary border border-border"
                                         )}
                                         data-tutorial={toggle.id === 'requireDeposit' ? 'settings-5-5' : undefined}
                                     >
                                         <motion.div
                                             animate={{ x: config[toggle.id as keyof typeof config] ? 26 : 2 }}
                                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                            className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                                            className="absolute top-1 left-1 w-4 h-4 bg-surface-card rounded-full shadow-sm"
                                         />
                                     </button>
                                 </div>
@@ -472,7 +472,7 @@ export default function ReservationSettingsComponent() {
                     ) : (
                         <div className="relative">
                             <Save className="w-6 h-6 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Commit Matrix Calibration

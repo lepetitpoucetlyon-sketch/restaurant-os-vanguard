@@ -48,7 +48,7 @@ export const MaintenanceAgent = {
             this.runAutoMaintenance(ticketId, data);
 
             return ticketId;
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('MaintenanceAgent: SOS submission failed', { error });
             throw error;
         }
@@ -82,7 +82,7 @@ export const MaintenanceAgent = {
             logger.info('MaintenanceAgent: [Step 5] PR Ready for Admin Review', { ticketId, diagnostic: analysis.summary });
 
             // Note: Steps 6 & 7 (Application & Vérification) sont manuelles/semi-auto via l'UI.
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error });
         }
     },

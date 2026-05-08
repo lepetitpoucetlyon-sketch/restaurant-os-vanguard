@@ -96,7 +96,7 @@ export default function KitchenPage() {
                     damping: 40,
                 }}
                 onClick={() => setIsSideNavOpen(!isSideNavOpen)}
-                className="hidden md:flex absolute top-8 z-[100] w-10 h-10 rounded-2xl bg-white text-accent items-center justify-center shadow-xl shadow-black/10 border border-neutral-200/60 group focus:outline-none"
+                className="hidden md:flex absolute top-8 z-[100] w-10 h-10 rounded-2xl bg-surface-card text-accent items-center justify-center shadow-xl shadow-black/10 border border-subtle/60 group focus:outline-none"
                 title={isSideNavOpen ? "Réduire le menu" : "Développer le menu"}
             >
                 <ChevronLeft strokeWidth={2.5} className="w-5 h-5" />

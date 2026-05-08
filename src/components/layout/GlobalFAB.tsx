@@ -21,12 +21,12 @@ export function GlobalFAB() {
                     className="relative pointer-events-auto"
                 >
                     {/* Shadow for the composite effect */}
-                    <div className="absolute inset-x-2 -bottom-2 h-4 bg-black/40 blur-xl rounded-full" />
+                    <div className="absolute inset-x-2 -bottom-2 h-4 bg-surface-sidebar/40 blur-xl rounded-full" />
                     
                     {/* The "Black Base" the user mentioned */}
                     <button
                         onClick={triggerOracle}
-                        className="w-16 h-16 rounded-[1.8rem] bg-neutral-900 border border-white/5 shadow-2xl flex items-center justify-center group relative overflow-hidden active:scale-95 transition-all"
+                        className="w-16 h-16 rounded-[1.8rem] bg-surface-sidebar border border-white/5 shadow-2xl flex items-center justify-center group relative overflow-hidden active:scale-95 transition-all"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
                         
@@ -35,8 +35,8 @@ export function GlobalFAB() {
                             <Bot className="w-8 h-8" strokeWidth={1.5} />
                             
                             {/* Oracle Status Pulse */}
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-neutral-900 flex items-center justify-center">
-                                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-default flex items-center justify-center">
+                                <div className="w-1.5 h-1.5 rounded-full bg-surface-card animate-pulse" />
                             </div>
                         </div>
                     </button>

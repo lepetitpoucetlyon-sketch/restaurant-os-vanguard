@@ -168,18 +168,18 @@ export function ZoneService({
                         className="p-5 rounded-2xl border border-border group hover:shadow-lg transition-all relative overflow-hidden"
                         style={{ backgroundColor: zone.color }}
                     >
-                        <div className="relative z-10 text-neutral-900">
+                        <div className="relative z-10 text-primary">
                             <div className="flex items-center justify-between mb-2">
                                 <div className="w-4 h-4 rounded-full border border-black/10" style={{ backgroundColor: zone.color }} />
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button onClick={() => handleEditZone(zone)} className="p-1.5 hover:bg-black/5 rounded-lg"><Edit3 className="w-3.5 h-3.5 text-neutral-600" /></button>
-                                    <button onClick={() => deleteZone(zone.id)} className="p-1.5 hover:bg-red-500/10 rounded-lg"><Trash2 className="w-3.5 h-3.5 text-red-500" /></button>
+                                    <button onClick={() => handleEditZone(zone)} className="p-1.5 hover:bg-surface-sidebar/5 rounded-lg"><Edit3 className="w-3.5 h-3.5 text-secondary" /></button>
+                                    <button onClick={() => deleteZone(zone.id)} className="p-1.5 hover:bg-status-danger/10 rounded-lg"><Trash2 className="w-3.5 h-3.5 text-status-danger" /></button>
                                 </div>
                             </div>
                             <p className="font-serif text-lg italic">{zone.name}</p>
-                            <p className="text-xs text-neutral-500 font-bold uppercase tracking-wider">{zone.description || 'Zone Active'}</p>
+                            <p className="text-xs text-secondary font-bold uppercase tracking-wider">{zone.description || 'Zone Active'}</p>
                             <div className="mt-3 flex items-center gap-2">
-                                <span className="px-2 py-1 bg-white/40 rounded-lg text-[10px] font-bold">
+                                <span className="px-2 py-1 bg-surface-card/40 rounded-lg text-[10px] font-bold">
                                     {tables.filter(t => t.zoneId === zone.id).length} tables
                                 </span>
                             </div>

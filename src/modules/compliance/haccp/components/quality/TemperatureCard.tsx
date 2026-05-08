@@ -29,16 +29,16 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
 
     return (
         <div className={cn(
-            "bg-white p-6 rounded-[2rem] border transition-all duration-300 shadow-sm",
-            isCompliant ? "border-slate-100" : "border-rose-200 bg-rose-50/20 shadow-lg shadow-rose-500/5"
+            "bg-surface-card p-6 rounded-[2rem] border transition-all duration-300 shadow-sm",
+            isCompliant ? "border-subtle" : "border-rose-200 bg-status-danger/20 shadow-lg shadow-rose-500/5"
         )}>
             <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{label}</p>
+                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">{label}</p>
                     <div className="flex items-center gap-4">
                         <h4 className={cn(
                             "text-3xl font-black font-mono tracking-tighter",
-                            !isCompliant && "text-rose-600"
+                            !isCompliant && "text-status-danger"
                         )}>
                             {current > 0 ? '+' : ''}{current.toFixed(1)}<span className="text-sm font-normal ml-0.5 opacity-40">°C</span>
                         </h4>
@@ -47,13 +47,13 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
                             <div className="flex flex-col gap-1">
                                 <button 
                                     onClick={handleIncrement}
-                                    className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-900 transition-colors"
+                                    className="p-1 hover:bg-surface-tertiary rounded-lg text-muted hover:text-primary transition-colors"
                                 >
                                     <ChevronUp className="w-4 h-4" />
                                 </button>
                                 <button 
                                     onClick={handleDecrement}
-                                    className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-900 transition-colors"
+                                    className="p-1 hover:bg-surface-tertiary rounded-lg text-muted hover:text-primary transition-colors"
                                 >
                                     <ChevronDown className="w-4 h-4" />
                                 </button>
@@ -64,34 +64,34 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
                 
                 <div className={cn(
                     "w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm",
-                    isCompliant ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-500 text-white shadow-lg shadow-rose-500/20"
+                    isCompliant ? "bg-status-success text-status-success border border-emerald-100" : "bg-status-danger text-white shadow-lg shadow-rose-500/20"
                 )}>
                     {isCompliant ? <CheckCircle2 className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
                 </div>
             </div>
             
-            <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden relative mb-4">
+            <div className="h-3 w-full bg-surface-tertiary rounded-full overflow-hidden relative mb-4">
                 {/* Target Range Indicator */}
                 <div 
-                    className="absolute h-full bg-slate-200/50"
+                    className="absolute h-full bg-surface-bg/50"
                     style={{ 
                         left: `${((target.min - rangeMin) / (rangeMax - rangeMin)) * 100}%`,
                         width: `${((target.max - target.min) / (rangeMax - rangeMin)) * 100}%`
                     }}
                 />
                 <div 
-                    className={cn("h-full transition-all duration-500 relative z-10", isCompliant ? "bg-emerald-500" : "bg-rose-500")}
+                    className={cn("h-full transition-all duration-500 relative z-10", isCompliant ? "bg-status-success" : "bg-status-danger")}
                     style={{ width: `${progress}%` }}
                 />
             </div>
 
-            <div className="flex justify-between items-center text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">
+            <div className="flex justify-between items-center text-[9px] font-black text-muted uppercase tracking-widest px-1">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-surface-tertiary" />
                     Target: {target.min}°C à {target.max}°C
                 </div>
                 {!isCompliant && (
-                    <span className="text-rose-600 animate-pulse">Hors Seuil HACCP</span>
+                    <span className="text-status-danger animate-pulse">Hors Seuil HACCP</span>
                 )}
             </div>
         </div>

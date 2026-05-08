@@ -95,7 +95,7 @@ export function CameraCapture({ onCapture, onClose, title = "Capturer une Photo"
                 </button>
             </div>
 
-            <div className="relative aspect-[4/3] bg-black rounded-[32px] overflow-hidden border border-border shadow-2xl">
+            <div className="relative aspect-[4/3] bg-surface-sidebar rounded-[32px] overflow-hidden border border-border shadow-2xl">
                 {!capturedImage ? (
                     <>
                         <video 
@@ -123,9 +123,9 @@ export function CameraCapture({ onCapture, onClose, title = "Capturer une Photo"
                         )}
                         {error && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-6">
-                                <X size={48} className="text-rose-500" />
-                                <p className="text-xs font-black uppercase text-rose-500 tracking-wider leading-relaxed">{error}</p>
-                                <Button onClick={startCamera} variant="outline" className="border-rose-500/20 text-rose-500">Réessayer</Button>
+                                <X size={48} className="text-status-danger" />
+                                <p className="text-xs font-black uppercase text-status-danger tracking-wider leading-relaxed">{error}</p>
+                                <Button onClick={startCamera} variant="outline" className="border-rose-500/20 text-status-danger">Réessayer</Button>
                             </div>
                         )}
                         {stream && (
@@ -133,7 +133,7 @@ export function CameraCapture({ onCapture, onClose, title = "Capturer une Photo"
                                 onClick={capturePhoto}
                                 className="absolute bottom-6 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full border-4 border-white flex items-center justify-center group"
                             >
-                                <div className="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md group-hover:scale-95 transition-transform" />
+                                <div className="w-16 h-16 rounded-full bg-surface-card/30 backdrop-blur-md group-hover:scale-95 transition-transform" />
                             </button>
                         )}
                     </>
@@ -159,7 +159,7 @@ export function CameraCapture({ onCapture, onClose, title = "Capturer une Photo"
                             Recommencer
                         </Button>
                         <Button 
-                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] bg-emerald-500 text-white hover:bg-emerald-600"
+                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] bg-status-success text-white hover:bg-status-success"
                             onClick={confirmCapture}
                         >
                             <Check size={16} className="mr-2" />

@@ -119,7 +119,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10">
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-surface-card/10">
                         <motion.div
                             className="h-full bg-accent shadow-[0_0_15px_rgba(197,160,89,0.5)]"
                             initial={{ width: "50%" }}
@@ -189,7 +189,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                                         <div className="flex items-center gap-6 relative z-10">
                                                             <div className={cn(
                                                                 "w-14 h-14 rounded-2xl flex items-center justify-center font-serif text-xl italic shadow-sm transition-all",
-                                                                selectedCustomer?.id === customer.id ? "bg-white/10 text-bg-primary" : "bg-bg-tertiary text-text-primary"
+                                                                selectedCustomer?.id === customer.id ? "bg-surface-card/10 text-bg-primary" : "bg-bg-tertiary text-text-primary"
                                                             )}>
                                                                 {(customer.firstName || ' ').trim().charAt(0)}{(customer.lastName || ' ').trim().charAt(0)}
                                                             </div>
@@ -321,14 +321,14 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                         </p>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedCustomer.preferences.map((pref: string, i: number) => (
-                                                <span key={i} className="px-4 py-2 bg-white dark:bg-white/5 text-[10px] font-black text-text-primary dark:text-white rounded-xl border border-border dark:border-white/5 uppercase tracking-widest shadow-sm">
+                                                <span key={i} className="px-4 py-2 bg-surface-card dark:bg-surface-card/5 text-[10px] font-black text-text-primary dark:text-white rounded-xl border border-border dark:border-white/5 uppercase tracking-widest shadow-sm">
                                                     {pref}
                                                 </span>
                                             ))}
                                         </div>
                                     </div>
 
-                                    <div className="p-8 rounded-[2.5rem] bg-white dark:bg-white/5 border border-accent/20 relative overflow-hidden group shadow-sm">
+                                    <div className="p-8 rounded-[2.5rem] bg-surface-card dark:bg-surface-card/5 border border-accent/20 relative overflow-hidden group shadow-sm">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 rounded-full -mr-12 -mt-12 group-hover:bg-accent/10 transition-colors" />
                                         <p className="text-[9px] font-black text-accent uppercase tracking-[0.2em] mb-4 flex items-center gap-2 italic">
                                             <Sparkles className="w-3.5 h-3.5" /> Note de Service
@@ -343,14 +343,14 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                             <span>Score Fidélité</span>
                                             <span className="text-accent">Gold Member</span>
                                         </div>
-                                        <div className="h-1.5 w-full bg-border dark:bg-white/5 rounded-full overflow-hidden">
+                                        <div className="h-1.5 w-full bg-border dark:bg-surface-card/5 rounded-full overflow-hidden">
                                             <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} className="h-full bg-accent" />
                                         </div>
                                     </div>
                                 </motion.div>
                             ) : (
                                 <div className="py-12 text-center space-y-6">
-                                    <div className="w-20 h-20 rounded-full bg-white dark:bg-white/5 flex items-center justify-center mx-auto border border-dashed border-border dark:border-white/10 shadow-sm">
+                                    <div className="w-20 h-20 rounded-full bg-surface-card dark:bg-surface-card/5 flex items-center justify-center mx-auto border border-dashed border-border dark:border-subtle shadow-sm">
                                         <UserCheck strokeWidth={1} className="w-10 h-10 text-text-muted/50" />
                                     </div>
                                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-text-muted max-w-[200px] mx-auto leading-relaxed italic">
@@ -373,7 +373,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                 disabled={!selectedCustomer}
                                 onClick={handleSubmit}
                                 data-tutorial="reservations-0-0-2"
-                                className="w-full h-20 bg-accent hover:bg-white text-bg-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-amber-500/30 disabled:opacity-20 transform hover:scale-[1.02] flex items-center justify-center gap-3"
+                                className="w-full h-20 bg-accent hover:bg-surface-card text-bg-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-amber-500/30 disabled:opacity-20 transform hover:scale-[1.02] flex items-center justify-center gap-3"
                             >
                                 <ArrowRight className="w-5 h-5" />
                                 Confirmer la Réservation

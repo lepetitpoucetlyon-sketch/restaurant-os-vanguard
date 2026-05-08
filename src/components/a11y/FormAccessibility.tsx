@@ -36,7 +36,7 @@ export function FormField({
             >
                 {label}
                 {required && (
-                    <span className="text-rose-500 ml-1" aria-label="requis">
+                    <span className="text-status-danger ml-1" aria-label="requis">
                         *
                     </span>
                 )}
@@ -58,7 +58,7 @@ export function FormField({
             {error && (
                 <p
                     id={errorId}
-                    className="text-xs text-rose-500 flex items-center gap-1"
+                    className="text-xs text-status-danger flex items-center gap-1"
                     role="alert"
                     aria-live="polite"
                 >
@@ -94,7 +94,7 @@ export const AccessibleInput = forwardRef<HTMLInputElement, AccessibleInputProps
                 >
                     {label}
                     {required && (
-                        <span className="text-rose-500 ml-1" aria-label="requis">
+                        <span className="text-status-danger ml-1" aria-label="requis">
                             *
                         </span>
                     )}
@@ -123,7 +123,7 @@ export const AccessibleInput = forwardRef<HTMLInputElement, AccessibleInputProps
                 {error && (
                     <p
                         id={errorId}
-                        className="text-xs text-rose-500 flex items-center gap-1"
+                        className="text-xs text-status-danger flex items-center gap-1"
                         role="alert"
                     >
                         <span aria-hidden="true">⚠</span>

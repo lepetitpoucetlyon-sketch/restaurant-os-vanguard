@@ -1,15 +1,11 @@
 import { logger } from '@/lib/axiom';
+import { InvoiceExtractionService } from './InvoiceExtractionService';
+import { IdentityGuardService } from './IdentityGuardService';
+import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
 
-export interface ExtractedInvoiceItem {
-    name: string;
-    quantity: number;
-    unit: string;
-    unitPriceHT: number;
-    totalHT: number;
-    taxRate?: number;
-    expirationDate?: string;
-    batchNumber?: string;
-}
+// ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
+
+export type { ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
 
 export interface ExtractedInvoice {
     supplierName: string;
@@ -36,55 +32,64 @@ export interface HACCPVerification {
 
 /**
  * VisionService - Core service for Multimodal AI interactions
- * Handles image processing and structured data extraction
+ * Handles image processing and structured data extraction.
+ *
+ * analyzeInvoice now delegates to InvoiceExtractionService (Gemini Vision + Zod).
  */
 export const VisionService = {
     /**
-     * Processes an image (base64) to extract invoice data
+     * Processes an image (base64) to extract invoice data.
+     * Delegates to InvoiceExtractionService and converts result to legacy format.
      */
     async analyzeInvoice(base64Image: string): Promise<ExtractedInvoice> {
         logger.info('VisionService: Starting invoice analysis...');
 
-        try {
-            // AI INJECTION POINT (Gemini 1.5 Flash)
-            // The system now executes without simulated high latency
-            return {
-                supplierName: "Metro Lyon",
-                invoiceNumber: `INV-${Date.now()}`,
-                date: new Date().toISOString().split('T')[0],
-                currency: "EUR",
-                totalHT: 425.50,
-                totalTTC: 510.60,
-                items: [
-                    {
-                        name: "Tomate Grappe",
-                        quantity: 10,
-                        unit: "kg",
-                        unitPriceHT: 2.50,
-                        totalHT: 25.00,
-                        expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-                    },
-                    {
-                        name: "Saumon Frais",
-                        quantity: 5,
-                        unit: "kg",
-                        unitPriceHT: 18.00,
-                        totalHT: 90.00,
-                        expirationDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-                    },
-                    {
-                        name: "Huile Olive Extra",
-                        quantity: 2,
-                        unit: "L",
-                        unitPriceHT: 12.00,
-                        totalHT: 24.00
-                    }
-                ]
-            };
-        } catch (error) {
-            logger.error('VisionService: Extraction failed', { error });
-            throw new Error('Échec de la lecture visuelle de la facture.');
+        if (typeof window !== 'undefined') {
+            const response = await fetch('/api/admin/intelligence/vision', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'ANALYZE_INVOICE', payload: { base64Image } })
+            });
+            const result = await response.json();
+            if (result.success) return toLegacyInvoice(result.data);
+            throw new Error(`Extraction failed: ${result.error?.reason || 'Unknown error'}`);
         }
+
+        const result = await InvoiceExtractionService.extractFromImage(base64Image);
+        if (result.success) {
+            return toLegacyInvoice(result.data);
+        }
+
+        // Extraction failed — log and throw
+        const reason = 'reason' in result.error ? result.error.reason : 'Unknown extraction error';
+        logger.error(`VisionService: Extraction failed — ${reason}`);
+        throw new Error(`Échec de la lecture visuelle de la facture: ${reason}`);
+    },
+
+    /**
+     * Full extraction with the new schema (no legacy conversion).
+     * Use this for new code paths.
+     */
+    async analyzeInvoiceFull(base64Image: string, options?: { model?: 'flash' | 'pro'; tenantId?: string }) {
+        return InvoiceExtractionService.extractFromImage(base64Image, options);
+    },
+
+    /**
+     * Performs a GDPR/Compliance scan on a document.
+     */
+    async analyzeComplianceDocument(base64Image: string, options: { tenantId: string; trustedContext: boolean }) {
+        logger.info(`VisionService: Starting compliance scan...`);
+
+        if (typeof window !== 'undefined') {
+            const response = await fetch('/api/admin/intelligence/vision', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'COMPLIANCE_SCAN', payload: { base64Image, ...options } })
+            });
+            return response.json();
+        }
+
+        return IdentityGuardService.scanDocument(base64Image, options);
     },
 
     /**
@@ -107,9 +112,9 @@ export const VisionService = {
                     "Manque un léger filet d'huile sur le bord droit"
                 ]
             };
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('VisionService: Plate audit failed', { error });
-            throw new Error('Échec de l’audit visuel de l’assiette.');
+            throw new Error('Échec de l\'audit visuel de l\'assiette.');
         }
     },
 
@@ -126,7 +131,7 @@ export const VisionService = {
                 confidence: 0.98,
                 observation: "Le plan de travail est dégagé, propre et désinfecté. Aucun résidu visible."
             };
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('VisionService: HACCP verification failed', { error });
             throw new Error('Échec de la vérification visuelle HACCP.');
         }

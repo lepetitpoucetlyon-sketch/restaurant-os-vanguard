@@ -33,7 +33,7 @@ export function RecipeCompositionTab({
                             placeholder="Nom du composant..."
                             value={newIngredient.name}
                             onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, name: e.target.value }))}
-                            className="w-full h-14 px-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
+                            className="w-full h-14 px-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
                     <div className="col-span-2">
@@ -42,7 +42,7 @@ export function RecipeCompositionTab({
                             placeholder="Qté"
                             value={newIngredient.quantity || ''}
                             onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, quantity: parseFloat(e.target.value) || 0 }))}
-                            className="w-full h-14 px-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
+                            className="w-full h-14 px-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
                     <div className="col-span-2">
@@ -60,12 +60,12 @@ export function RecipeCompositionTab({
                                 placeholder="Coût Unitaire"
                                 value={newIngredient.costInCents ? (newIngredient.costInCents / 100) : ''}
                                 onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, costInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
-                                className="w-full h-14 pl-10 pr-6 bg-white rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
+                                className="w-full h-14 pl-10 pr-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                             />
                         </div>
                     </div>
                     <div className="col-span-8">
-                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-black text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
                             <Plus className="w-4 h-4 mr-2" /> Valider l'Ingrédient
                         </Button>
                     </div>
@@ -81,7 +81,7 @@ export function RecipeCompositionTab({
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 20 }}
-                            className="group flex items-center justify-between p-6 bg-white rounded-[2rem] border border-border shadow-sm hover:shadow-md transition-all text-neutral-900"
+                            className="group flex items-center justify-between p-6 bg-surface-card rounded-[2rem] border border-border shadow-sm hover:shadow-md transition-all text-primary"
                         >
                             <div className="flex items-center gap-6">
                                 <div className="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center font-black text-[10px] text-text-muted">

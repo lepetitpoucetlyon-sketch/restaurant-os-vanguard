@@ -92,9 +92,9 @@ export class Slayer {
                                 batch.set(path, sealedOrder);
                                 
                                 ingested++;
-                            } catch (itemError) {
+                            } catch (itemError: unknown) {
                                 errors++;
-                                logger.warn(`[Slayer] Item skip: ${legacy.id}`, itemError);
+                                logger.warn(`[Slayer] Item skip: ${legacy.id}`, { error: itemError instanceof Error ? itemError.message : String(itemError) });
                             }
                         }
                     }
@@ -102,8 +102,8 @@ export class Slayer {
 
                 if (onProgress) onProgress(ingested);
                 
-            } catch (batchError) {
-                logger.error(`[Slayer] Batch Failure (i=${i})`, batchError);
+            } catch (batchError: unknown) {
+                logger.error(`[Slayer] Batch Failure (i=${i})`, { error: batchError instanceof Error ? batchError.message : String(batchError) });
             }
         }
 

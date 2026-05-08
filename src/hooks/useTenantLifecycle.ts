@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
  */
 export function useTenantLifecycle(tenantId: string | null) {
     const setSlots = useSetAtom(activeTenantSlotsAtom);
-    const setActiveTenant = useSetAtom(activeFleetTenantAtom as any);
+    const setActiveTenant = useSetAtom(activeFleetTenantAtom);
     const store = useStore();
 
     useEffect(() => {
@@ -24,8 +24,8 @@ export function useTenantLifecycle(tenantId: string | null) {
         setActiveTenant(tenantId);
         
         // Add to active slots
-        setSlots(prev => {
-            const next = new Map(prev);
+        setSlots((prev) => {
+            const next = new Map<string, import('@domain/types/empire').EmpireInstance>(prev);
             if (!next.has(tenantId)) {
                 next.set(tenantId, { 
                     id: tenantId, 
@@ -41,7 +41,7 @@ export function useTenantLifecycle(tenantId: string | null) {
                     branding: { primaryColor: '#6366f1' },
                     featureFlags: {},
                     security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
-                } as any);
+                } as import('@domain/types/empire').EmpireInstance);
             }
             return next;
         });
@@ -52,8 +52,8 @@ export function useTenantLifecycle(tenantId: string | null) {
             const entry = GlobalRegistryService.getEntry(domainId);
             if (entry) {
                 // We set loading to true to trigger re-fetch in components
-                store.set(entry.atom as any, (prev: any) => {
-                    const node = prev || {};
+                store.set(entry.atom as import('jotai').PrimitiveAtom<import('@/store/base').NexusNode<unknown>>, (prev) => {
+                    const node = prev || { data: [], loading: true, lastUpdated: 0, id: 'unknown', error: null };
                     return {
                         ...node,
                         data: [],
@@ -69,8 +69,8 @@ export function useTenantLifecycle(tenantId: string | null) {
             logger.info(`[Lifecycle] Unmounting tenant slot: ${tenantId}`);
             
             // Remove from active slots to free memory
-            setSlots(prev => {
-                const next = new Map(prev);
+            setSlots((prev) => {
+                const next = new Map<string, import('@domain/types/empire').EmpireInstance>(prev);
                 next.delete(tenantId);
                 return next;
             });

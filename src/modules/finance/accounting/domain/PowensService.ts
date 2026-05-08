@@ -26,7 +26,7 @@ export class PowensService {
     }
 
     public static isDemoMode(): boolean {
-        return this.CLIENT_ID.includes('placeholder') || this.CLIENT_ID === 'restaurant-os-master';
+        return !this.CLIENT_ID || this.CLIENT_ID.includes('placeholder') || this.CLIENT_ID === 'restaurant-os-master';
     }
 
     /**
@@ -39,7 +39,7 @@ export class PowensService {
             // Simulation of token generation
             return `temp-token-${Math.random().toString(36).slice(2, 11)}`;
         } catch (error) {
-            logger.error('PowensService: Failed to create connection token', { error });
+            logger.error('PowensService: Failed to create connection token', { error: error instanceof Error ? error.message : String(error) });
             throw new Error('Impossible d\'initialiser la connexion bancaire.');
         }
     }
@@ -55,7 +55,7 @@ export class PowensService {
             // Mock data eradication complete — Awaiting full PSD2 logic implementation.
             return [];
         } catch (error) {
-            logger.error('PowensService: Failed to fetch accounts', { userToken, error });
+            logger.error('PowensService: Failed to fetch accounts', { userToken, error: error instanceof Error ? error.message : String(error) });
             return [];
         }
     }
@@ -70,7 +70,7 @@ export class PowensService {
             // Transaction mock data eradication complete.
             return [];
         } catch (error) {
-            logger.error('PowensService: Failed to fetch transactions', { accountId, error });
+            logger.error('PowensService: Failed to fetch transactions', { accountId, error: error instanceof Error ? error.message : String(error) });
             return [];
         }
     }

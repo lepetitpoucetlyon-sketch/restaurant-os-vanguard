@@ -32,7 +32,7 @@ export const StocksTab: React.FC<StocksTabProps> = ({
 
         {/* Stock Alerts */}
         {lowStockWines > 0 && (
-            <div className="p-4 mb-6 bg-red-500/10 rounded-2xl border border-[#FF4D4D]/30 flex items-center gap-4">
+            <div className="p-4 mb-6 bg-status-danger/10 rounded-2xl border border-[#FF4D4D]/30 flex items-center gap-4">
                 <AlertCircle className="w-6 h-6 text-[#FF4D4D]" />
                 <div>
                     <p className="font-bold text-[#FF4D4D]">{lowStockWines} références en stock critique</p>
@@ -54,7 +54,7 @@ export const StocksTab: React.FC<StocksTabProps> = ({
             ].map((cat, i) => {
                 const Icon = cat.icon;
                 return (
-                    <div key={i} className="bg-white dark:bg-bg-secondary rounded-2xl p-6 border border-neutral-100 dark:border-border shadow-sm">
+                    <div key={i} className="bg-surface-card dark:bg-bg-secondary rounded-2xl p-6 border border-subtle dark:border-border shadow-sm">
                         <div
                             className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
                             style={{ backgroundColor: `${cat.color}15` }}

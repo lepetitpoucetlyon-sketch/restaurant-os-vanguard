@@ -65,7 +65,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
             !isMobile ? "border-l border-border w-[400px]" : "w-full"
         )}>
             {/* Cart Header */}
-            <div className="p-6 lg:p-8 border-b border-border flex items-center justify-between bg-white/50 dark:bg-bg-secondary/50 backdrop-blur-md">
+            <div className="p-6 lg:p-8 border-b border-border flex items-center justify-between bg-surface-card/50 dark:bg-bg-secondary/50 backdrop-blur-md">
                 <div>
                     <h2 className="text-2xl lg:text-3xl font-serif font-black text-text-primary tracking-tight leading-none italic">
                         {t('pos.table')} <span className="text-accent-gold not-italic">{tableNumber || '--'}</span>.
@@ -144,7 +144,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
             </ScrollArea>
 
             {/* Bottom Panel */}
-            <div className="p-6 lg:p-10 border-t border-border/50 bg-white/50 dark:bg-black/20 backdrop-blur-3xl">
+            <div className="p-6 lg:p-10 border-t border-border/50 bg-surface-card/50 dark:bg-surface-sidebar/20 backdrop-blur-3xl">
                 <div className="space-y-4 mb-8">
                     <div className="flex justify-between items-center text-[10px] font-black text-text-muted uppercase tracking-widest">
                         <span>{t('pos.cart.subtotal')}</span>
@@ -161,7 +161,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
                         <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
                         <span className="font-mono text-sm">{formatCurrency(htInMicrounits / 1000000)}</span>
                     </div>
-                    <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-white/10 px-1">
+                    <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
                         <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
                         <span className="text-4xl font-serif font-black italic text-white tracking-tighter drop-shadow-glow">
                             {formatCurrency(totalInMicrounits / 1000000)}

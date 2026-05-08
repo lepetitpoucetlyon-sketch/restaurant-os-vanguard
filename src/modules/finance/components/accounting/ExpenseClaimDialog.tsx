@@ -18,11 +18,15 @@ interface ExpenseClaimDialogProps {
     onClose: () => void;
 }
 
-const CATEGORIES: { id: TransactionCategory; label: string }[] = [
-    { id: 'purchases', label: 'Achats Marchandises' },
-    { id: 'fixed', label: 'Charges Fixes (Loyer/Energie)' },
-    { id: 'other', label: 'Fournitures & Divers' },
-    { id: 'payroll', label: 'Primes & Personnel' },
+const CATEGORIES: { id: string; label: string }[] = [
+    { id: 'food', label: 'Alimentaire' },
+    { id: 'equipment', label: 'Petit Matériel' },
+    { id: 'maintenance', label: 'Maintenance & Réparations' },
+    { id: 'utilities', label: 'Energie & Fluides' },
+    { id: 'marketing', label: 'Marketing & Pub' },
+    { id: 'training', label: 'Formation' },
+    { id: 'travel', label: 'Déplacements' },
+    { id: 'other', label: 'Divers' },
 ];
 
 export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps) {
@@ -35,7 +39,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
     const [formData, setFormData] = useState({
         amount: "",
-        category: 'other' as TransactionCategory,
+        category: 'other' as string,
         description: "",
         receiptImage: null as string | null,
     });
@@ -66,11 +70,11 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
         try {
             await submitExpense({
-                amountInCents: Math.round(parseFloat(formData.amount) * 100),
+                amountInMicrounits: Math.round(parseFloat(formData.amount) * 1000000), // Convert to Microunits
                 category: formData.category,
                 description: formData.description,
-                receiptImage: formData.receiptImage || undefined,
-            } as unknown);
+                receiptUrl: formData.receiptImage || undefined,
+            });
             showToast("Note de frais scannée et transmise au coffre-fort fiscal", "success");
             reset();
             onClose();
@@ -95,7 +99,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
             showClose={false}
             noPadding
         >
-            <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.4)] border border-white/20">
+            <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.4)] border border-default">
                 {/* Premium Accounting Header */}
                 <div className={cn(
                     "px-12 py-10 text-white relative overflow-hidden shrink-0 transition-all duration-500",
@@ -130,7 +134,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 rounded-2xl bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 border border-white/10 flex items-center justify-center transition-all"
+                            className="w-12 h-12 rounded-2xl bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 border border-subtle flex items-center justify-center transition-all"
                         >
                             <X className="w-6 h-6 text-white/50" />
                         </button>
@@ -153,7 +157,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     step="0.01"
                                     value={formData.amount}
                                     onChange={e => setFormData(prev => ({ ...prev, amount: e.target.value }))}
-                                    className="w-full h-20 bg-[--color-surface-primary] dark:bg-bg-secondary border-2 border-neutral-100 dark:border-border rounded-[2rem] pl-16 pr-8 text-3xl font-mono font-black text-text-primary focus:outline-none focus:border-accent transition-all shadow-soft"
+                                    className="w-full h-20 bg-[--color-surface-primary] dark:bg-bg-secondary border-2 border-subtle dark:border-border rounded-[2rem] pl-16 pr-8 text-3xl font-mono font-black text-text-primary focus:outline-none focus:border-accent transition-all shadow-soft"
                                     placeholder="0.00"
                                 />
                             </div>
@@ -162,7 +166,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         <PremiumSelect
                             label="Classification Transact."
                             value={formData.category}
-                            onChange={(val) => setFormData(prev => ({ ...prev, category: val as TransactionCategory }))}
+                            onChange={(val) => setFormData(prev => ({ ...prev, category: val as string }))}
                             options={CATEGORIES.map(cat => ({
                                 value: cat.id,
                                 label: cat.label,
@@ -179,7 +183,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                             required
                             value={formData.description}
                             onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                            className="w-full h-40 bg-[--color-surface-primary] dark:bg-bg-secondary border-2 border-neutral-100 dark:border-border rounded-[2.5rem] px-10 py-8 text-base font-serif italic text-neutral-800 dark:text-text-muted focus:outline-none focus:border-accent transition-all shadow-soft outline-none resize-none"
+                            className="w-full h-40 bg-[--color-surface-primary] dark:bg-bg-secondary border-2 border-subtle dark:border-border rounded-[2.5rem] px-10 py-8 text-base font-serif italic text-primary dark:text-text-muted focus:outline-none focus:border-accent transition-all shadow-soft outline-none resize-none"
                             placeholder="Veuillez détailler le contexte professionnel de cette dépense engagée pour l'établissement..."
                         />
                     </div>
@@ -213,9 +217,9 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                             ) : (
                                 <div
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="aspect-[21/9] rounded-[3rem] border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center gap-6 hover:border-accent hover:bg-accent/5 transition-all cursor-pointer group bg-bg-tertiary/20"
+                                    className="aspect-[21/9] rounded-[3rem] border-2 border-dashed border-subtle flex flex-col items-center justify-center gap-6 hover:border-accent hover:bg-accent/5 transition-all cursor-pointer group bg-bg-tertiary/20"
                                 >
-                                    <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary] dark:bg-bg-secondary flex items-center justify-center text-text-muted group-hover:text-accent shadow-soft border border-neutral-100 dark:border-border group-hover:-translate-y-2 transition-all duration-500">
+                                    <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary] dark:bg-bg-secondary flex items-center justify-center text-text-muted group-hover:text-accent shadow-soft border border-subtle dark:border-border group-hover:-translate-y-2 transition-all duration-500">
                                         <Camera strokeWidth={1.5} className="w-8 h-8" />
                                     </div>
                                     <div className="text-center space-y-2">
@@ -250,7 +254,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                 </form>
 
                 {/* Footer Actions */}
-                <div className="px-12 py-10 bg-[--color-surface-primary] dark:bg-bg-secondary border-t border-neutral-100 dark:border-border flex items-center justify-between shrink-0">
+                <div className="px-12 py-10 bg-[--color-surface-primary] dark:bg-bg-secondary border-t border-subtle dark:border-border flex items-center justify-between shrink-0">
                     <button
                         type="button"
                         onClick={onClose}
@@ -262,7 +266,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         <Button
                             disabled={isSubmitting}
                             onClick={handleSubmit}
-                            className="h-16 px-16 bg-accent hover:bg-black text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
+                            className="h-16 px-16 bg-accent hover:bg-surface-sidebar text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
                         >
                             {isSubmitting ? (
                                 <Sparkles className="w-5 h-5 animate-spin" />

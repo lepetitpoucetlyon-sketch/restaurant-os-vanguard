@@ -60,7 +60,7 @@ export function CustomerCustomerView({ customers, onCustomerClick }: CustomerCus
                         />
                     </div>
                     <div className="flex items-center gap-10 pr-4">
-                        <div className="h-10 w-px bg-white/5" />
+                        <div className="h-10 w-px bg-surface-card/5" />
                         <div>
                             <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.4em] mb-1 italic">
                                 REGISTRE
@@ -85,12 +85,12 @@ export function CustomerCustomerView({ customers, onCustomerClick }: CustomerCus
                             variants={cinematicItem}
                             onClick={() => onCustomerClick(customer)}
                             whileHover={{ y: -10, transition: { duration: 0.4 } }}
-                            className="bg-white/40 dark:bg-white/5 backdrop-blur-2xl rounded-[3.5rem] p-12 group relative overflow-hidden transition-all duration-700 border border-white/20 dark:border-white/5 shadow-2xl hover:border-accent/40 hover:shadow-accent/5 cursor-pointer"
+                            className="bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-2xl rounded-[3.5rem] p-12 group relative overflow-hidden transition-all duration-700 border border-default dark:border-white/5 shadow-2xl hover:border-accent/40 hover:shadow-accent/5 cursor-pointer"
                         >
                             <div className="flex items-start gap-10 relative z-10">
                                 <motion.div
                                     whileHover={{ rotate: 5, scale: 1.1 }}
-                                    className="w-20 h-20 rounded-[2rem] bg-accent flex items-center justify-center text-3xl font-serif font-light text-bg-primary italic group-hover:bg-white transition-all duration-500 shadow-xl shadow-amber-500/10"
+                                    className="w-20 h-20 rounded-[2rem] bg-accent flex items-center justify-center text-3xl font-serif font-light text-bg-primary italic group-hover:bg-surface-card transition-all duration-500 shadow-xl shadow-amber-500/10"
                                 >
                                     {getInitial(getFirstName(customer))}
                                     {getInitial(getLastName(customer))}

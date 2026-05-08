@@ -3,6 +3,8 @@ import { User, FiscalSeal } from '@nexus/contracts';
 import { SovereignData, SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { SovereignMath } from '@/shared/services/SovereignMath';
+import { Microunits } from '@/domain/schemas/primitives';
 
 import { ToolDefinition } from './types';
 
@@ -40,14 +42,17 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
             limit: 100 // Cap for speed, could be optimized with date range
         });
 
-        let totalRevenueInCents = 0;
+        let totalRevenueInMicrounits = 0 as Microunits;
         let count = 0;
 
         seals.forEach(seal => {
             try {
                 const data = JSON.parse(seal.dataSnapshot || '{}');
-                if (data.amount) {
-                    totalRevenueInCents += (data.amount as number);
+                // Use amountInMicrounits if available, fallback to converting amount
+                const microunits = data.amountInMicrounits || (data.amount ? SovereignMath.toMicrounits(data.amount) : 0);
+                
+                if (microunits > 0) {
+                    totalRevenueInMicrounits = (totalRevenueInMicrounits + microunits) as Microunits;
                     count++;
                 }
             } catch (e) {
@@ -55,10 +60,12 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
             }
         });
 
+        const totalInCents = SovereignMath.toCents(BigInt(totalRevenueInMicrounits));
+
         return {
             period: args.period,
-            totalRevenueInCents,
-            formattedRevenue: `${(totalRevenueInCents / 100).toFixed(2)}€`,
+            totalRevenueInCents: totalInCents,
+            formattedRevenue: `${(totalInCents / 100).toFixed(2)}€`,
             transactionCount: count,
             currency: 'EUR',
             status: 'validated_nf525',

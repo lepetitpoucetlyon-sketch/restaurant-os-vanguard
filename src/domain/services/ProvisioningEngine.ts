@@ -97,7 +97,7 @@ export const ProvisioningEngine = {
 
             return newInstance;
 
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error('ProvisioningEngine: Registry entry failed', { error });
             throw new Error("Échec critique lors de l'enregistrement de l'instance. Vérifiez le Master Registry.");
         }

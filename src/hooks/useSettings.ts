@@ -22,13 +22,13 @@ export const useSettings = () => {
     
     const setSettings = useSetAtom(globalSettingsAtom);
     const setSaving = useSetAtom(settingsSavingAtom);
-    const setLastSaved = useSetAtom(settingsLastSavedAtom as any);
+    const setLastSaved = useSetAtom(settingsLastSavedAtom);
 
     const updateSettings = useCallback(async (newSettings: GlobalSettings) => {
         setSaving(true);
         try {
             const savedAt = await SettingsManager.saveSettings(newSettings);
-            if (savedAt) setLastSaved(savedAt instanceof Date ? savedAt.toISOString() : savedAt);
+            if (savedAt) setLastSaved(savedAt instanceof Date ? savedAt : new Date(savedAt));
             setSettings(newSettings);
         } finally {
             setSaving(false);
@@ -53,12 +53,12 @@ export const useSettings = () => {
         return updateSettings({ ...settings, ...data } as GlobalSettings);
     }, [settings, updateSettings]);
 
-    const updateReservationConfig = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
-        return updateConfig('reservationConfig', data as any);
+    const updateReservationConfig = useCallback(async (data: Partial<import('@nexus/contracts').ReservationSettings>) => {
+        return updateConfig('reservationConfig', data as GlobalSettings['reservationConfig']);
     }, [updateConfig]);
 
-    const updateReservationSlots = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
-        return updateConfig('reservationSlots', data as any);
+    const updateReservationSlots = useCallback(async (data: Partial<import('@nexus/contracts').ReservationSlotSettings>) => {
+        return updateConfig('reservationSlots', data as GlobalSettings['reservationSlots']);
     }, [updateConfig]);
     
     const updateSchedule = useCallback(async (data: import('@nexus/contracts').DaySchedule[]) => {
@@ -85,7 +85,7 @@ export const useSettings = () => {
         return updateConfig('identity', data);
     }, [updateConfig]);
 
-    const updateGoals = useCallback(async (data: any) => {
+    const updateGoals = useCallback(async (data: GlobalSettings['goals']) => {
         return updateConfig('goals', data);
     }, [updateConfig]);
 

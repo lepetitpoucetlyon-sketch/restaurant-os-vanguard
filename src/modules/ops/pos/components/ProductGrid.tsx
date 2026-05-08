@@ -57,8 +57,8 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
             performanceMode ? "duration-0" : "duration-700",
             !performanceMode && "backdrop-blur-xl",
             isDisabled 
-                ? "bg-black/5 grayscale cursor-not-allowed border-red-500/20 shadow-none opacity-60" 
-                : "bg-white dark:bg-white/[0.02] cursor-pointer hover:border-accent-gold/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
+                ? "bg-surface-sidebar/5 grayscale cursor-not-allowed border-red-500/20 shadow-none opacity-60" 
+                : "bg-surface-card dark:bg-surface-card/[0.02] cursor-pointer hover:border-accent-gold/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
         )}
     >
         {/* Compliance Overlays */}
@@ -67,13 +67,13 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm p-6 text-center"
+                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-surface-sidebar/40 backdrop-blur-sm p-6 text-center"
                 >
-                    <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full bg-status-danger/20 flex items-center justify-center mb-4">
                         {disabledReason === 'expired' ? (
-                            <Clock className="w-8 h-8 text-red-500 animate-pulse" />
+                            <Clock className="w-8 h-8 text-status-danger animate-pulse" />
                         ) : (
-                            <AlertTriangle className="w-8 h-8 text-red-500" />
+                            <AlertTriangle className="w-8 h-8 text-status-danger" />
                         )}
                     </div>
                     <span className="text-white font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg">
@@ -132,12 +132,12 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                             {((product.priceInCents ?? 0) / 100).toFixed(2)}€
                         </span>
                     )}
-                    <div className="flex items-center gap-3 bg-white/5 rounded-full p-1 border border-white/10">
+                    <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}
                             className={cn(
-                                "rounded-full bg-text-primary text-white dark:bg-white dark:text-black flex items-center justify-center shadow-premium hover:bg-accent-gold hover:text-white transition-all duration-500",
+                                "rounded-full bg-text-primary text-white dark:bg-surface-card dark:text-primary flex items-center justify-center shadow-premium hover:bg-accent-gold hover:text-white transition-all duration-500",
                                 buttonSize === 'small' ? 'w-10 h-10' :
                                 buttonSize === 'large' ? 'w-14 h-14' : 'w-12 h-12'
                             )}
@@ -240,7 +240,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                         placeholder={t('pos.search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white dark:bg-white/5 border border-border/50 rounded-[28px] md:rounded-[32px] pl-16 pr-8 py-4 md:py-5 text-base text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent-gold/50 focus:ring-4 focus:ring-accent-gold/5 transition-all duration-700 font-serif italic shadow-premium hover:border-accent-gold/30"
+                        className="w-full bg-surface-card dark:bg-surface-card/5 border border-border/50 rounded-[28px] md:rounded-[32px] pl-16 pr-8 py-4 md:py-5 text-base text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent-gold/50 focus:ring-4 focus:ring-accent-gold/5 transition-all duration-700 font-serif italic shadow-premium hover:border-accent-gold/30"
                     />
                 </div>
             </div>

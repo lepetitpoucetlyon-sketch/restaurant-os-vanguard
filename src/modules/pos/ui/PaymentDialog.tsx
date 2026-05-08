@@ -73,7 +73,7 @@ export function PaymentDialog({ isOpen, total, onClose, onPaymentComplete }: Pay
                             <h2 className="text-4xl font-serif font-black text-text-primary tracking-tighter italic">{t('pos.payment.transaction_success')}</h2>
                             <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{t('pos.payment.archive_updated')}</p>
                             
-                            <div className="mt-6 p-4 bg-black/40 rounded-2xl border border-accent-gold/20 backdrop-blur-md">
+                            <div className="mt-6 p-4 bg-surface-sidebar/40 rounded-2xl border border-accent-gold/20 backdrop-blur-md">
                                 <p className="text-[8px] font-black text-accent-gold/60 uppercase tracking-widest mb-1">NF525 Certified Seal</p>
                                 <p className="text-[10px] font-mono text-accent-gold break-all font-bold">
                                     SHA256: {certifiedHash?.substring(0, 32) || 'NOT_AVAILABLE'}...CERTIFIED
@@ -132,7 +132,7 @@ export function PaymentDialog({ isOpen, total, onClose, onPaymentComplete }: Pay
                                         className={cn(
                                             "flex flex-col items-center justify-center gap-5 p-6 md:p-8 rounded-[32px] md:rounded-[40px] border transition-all duration-700 group relative overflow-hidden",
                                             method === meth.id
-                                                ? "border-accent-gold bg-white dark:bg-white/5 shadow-premium ring-4 ring-accent-gold/5 -translate-y-2"
+                                                ? "border-accent-gold bg-surface-card dark:bg-surface-card/5 shadow-premium ring-4 ring-accent-gold/5 -translate-y-2"
                                                 : "border-border/60 bg-bg-tertiary/40 hover:border-accent-gold/40 hover:bg-bg-tertiary/60"
                                         )}
                                     >
@@ -140,7 +140,7 @@ export function PaymentDialog({ isOpen, total, onClose, onPaymentComplete }: Pay
                                             "w-12 h-12 md:w-16 md:h-16 rounded-[24px] flex items-center justify-center transition-all duration-700 shadow-sm",
                                             method === meth.id
                                                 ? "bg-accent-gold text-white"
-                                                : "bg-white dark:bg-black text-text-muted group-hover:scale-110"
+                                                : "bg-surface-card dark:bg-surface-sidebar text-text-muted group-hover:scale-110"
                                         )}>
                                             <meth.icon className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1} />
                                         </div>
@@ -159,7 +159,7 @@ export function PaymentDialog({ isOpen, total, onClose, onPaymentComplete }: Pay
                                     className={cn(
                                         "w-full h-16 md:h-20 rounded-[32px] md:rounded-[40px] font-black text-lg md:text-xl transition-all duration-700 flex items-center justify-center gap-6 relative overflow-hidden shadow-premium active:scale-95 group uppercase tracking-[0.3em]",
                                         method
-                                            ? "bg-text-primary text-white hover:bg-black dark:hover:bg-white dark:hover:text-black"
+                                            ? "bg-text-primary text-white hover:bg-surface-sidebar dark:hover:bg-surface-card dark:hover:text-primary"
                                             : "bg-bg-tertiary text-text-muted/40 cursor-not-allowed border border-border/50"
                                     )}
                                 >

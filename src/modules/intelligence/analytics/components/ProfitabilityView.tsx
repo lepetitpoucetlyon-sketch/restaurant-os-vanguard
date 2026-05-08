@@ -22,7 +22,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
             className="space-y-4"
         >
             {alerts.map(alert => (
-                <div key={alert.productId} className="bg-gray-50 dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
+                <div key={alert.productId} className="bg-surface-bg dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
                     <div className="flex justify-between items-start mb-6">
                         <div>
                             <h4 className="text-xl font-serif font-black italic text-text-primary">{alert.productName}</h4>
@@ -39,7 +39,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                                 {(alert.suggestedPriceInCents / 100).toFixed(2)}€
                             </div>
                         </div>
-                        <Button className="h-11 px-8 bg-text-primary text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-black transition-colors">
+                        <Button className="h-11 px-8 bg-text-primary text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">
                             Appliquer
                         </Button>
                     </div>

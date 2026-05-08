@@ -167,7 +167,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                     >
                         <motion.div
                             animate={{ x: theme.animations ? 26 : 2 }}
-                            className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                            className="absolute top-1 left-1 w-4 h-4 bg-surface-card rounded-full shadow-sm"
                         />
                     </button>
                 </div>
@@ -216,7 +216,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                                         <motion.div
                                             animate={{ x: SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField) ? 24 : 4 }}
                                             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                            className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-lg"
+                                            className="absolute top-1 w-4 h-4 rounded-full bg-surface-card shadow-lg"
                                         />
                                     </div>
                                 </button>
