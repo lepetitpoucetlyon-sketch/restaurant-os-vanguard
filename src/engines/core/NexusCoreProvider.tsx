@@ -413,7 +413,9 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
             verifySiteIntegrity: async () => ({}) as import('@/shared/nexus-contract').SovereignNode,
             issueGlobalCertificate: async () => ({}) as import('@/shared/nexus-contract').SovereignNode
         },
-        haccpBridge: {} as import('@/shared/nexus-contract').SovereignData,
+        haccpBridge: {
+            reportHygieneHealth: async () => 100
+        },
         fleet: null,
         customer: {
             customers: [] as import('@/shared/nexus-contract').SovereignData[]

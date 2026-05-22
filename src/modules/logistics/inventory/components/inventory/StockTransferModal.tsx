@@ -113,8 +113,8 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                             {/* Item Selection */}
                             <PremiumSelect
                                 label="ARTEFACT A DEPLACER"
-                                value={selectedItem}
-                                onChange={setSelectedItem}
+                                value={selectedItem || ''}
+                                onChange={(val) => setSelectedItem(val || null)}
                                 options={availableStock.map(s => ({
                                     value: String(s.id),
                                     label: String(s.ingredientName || ''),

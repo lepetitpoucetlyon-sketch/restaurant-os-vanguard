@@ -204,8 +204,10 @@ export interface NexusFleetState {
         lastSealHash: string;
         verifySiteIntegrity: (tenantId: string) => Promise<SovereignNode>;
         issueGlobalCertificate: (commanderId: string) => Promise<SovereignNode>;
-    }; 
-    haccpBridge: SovereignData;
+    };
+    haccpBridge: {
+        reportHygieneHealth: (tenantId: string) => Promise<number>;
+    };
     fleet: EmpireGlobalMetrics | null;
     customer: {
         customers: SovereignData[];

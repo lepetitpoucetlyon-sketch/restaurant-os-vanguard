@@ -9,7 +9,7 @@ import { LogisticsErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/erro
  */
 export async function POST(
     request: NextRequest,
-    context: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
         // 🛡️ HIDDEN DOOR PATTERN
@@ -25,7 +25,8 @@ export async function POST(
         const body = await request.json();
         const deliveryNote = body as DeliveryNote;
 
-        if (!deliveryNote || deliveryNote.id !== context.params.id) {
+        const { id } = await context.params;
+        if (!deliveryNote || deliveryNote.id !== id) {
             return NextResponse.json({
                 success: false,
                 error: LogisticsErrorCode.INVENTORY_DRIFT,

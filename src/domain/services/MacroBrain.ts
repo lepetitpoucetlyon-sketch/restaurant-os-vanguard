@@ -151,7 +151,7 @@ export const MacroBrain = {
             const data = await response.json();
             return data.content || "Analyse indisponible.";
         } catch (error: unknown) {
-            logger.error('[MacroBrain] Oracle Audit Failed', error);
+            logger.error('[MacroBrain] Oracle Audit Failed', { error: String(error) });
             return "Échec de la connexion à l'Oracle.";
         }
     }

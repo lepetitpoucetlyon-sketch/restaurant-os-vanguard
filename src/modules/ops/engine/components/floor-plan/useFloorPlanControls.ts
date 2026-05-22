@@ -167,7 +167,7 @@ export function useFloorPlanControls({
         updateTablePosition(id, e.target.x(), e.target.y());
     }, [updateTablePosition]);
 
-    const handleWheel = useCallback((e: React.ChangeEvent<any>) => {
+    const handleWheel = useCallback((e: Konva.KonvaEventObject<WheelEvent>) => {
         e.evt.preventDefault();
         const stage = e.target.getStage();
         if (!stage) return;

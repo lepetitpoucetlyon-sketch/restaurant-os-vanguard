@@ -5,7 +5,7 @@ import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, History, X, Zap, Maximize2, Minimize2, AlertTriangle, CheckCircle2, Minus, Bot } from 'lucide-react';
-import { useGeminiAgent } from "@/hooks/useGeminiAgent";
+import { useGeminiAgent, AgentSession } from "@/hooks/useGeminiAgent";
 import { useGeminiLive } from '@modules/commerce';
 import { useSettings } from "@/context/SettingsContext";
 
@@ -110,7 +110,7 @@ export function VoiceAssistantOverlay() {
 
     useEffect(() => {
         const lastMsg = messages[messages.length - 1] as { role?: string; content?: string; text?: string } | undefined;
-        if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text);
+        if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text || '');
     }, [messages, isProcessing, speakMessage]);
 
     useEffect(() => {
@@ -132,8 +132,13 @@ export function VoiceAssistantOverlay() {
 
     const toggleHistory = async () => {
         if (!showHistory) {
-            const hist = await (fetchAllSessions)();
-            setSessions(hist as typeof sessions);
+            const hist = await fetchAllSessions();
+            const mappedSessions = hist.map(h => ({
+                id: h.id,
+                timestamp: h.createdAt ? new Date(h.createdAt) : new Date(),
+                lastMessage: h.name || "Conversation"
+            }));
+            setSessions(mappedSessions);
         }
         setShowHistory(!showHistory);
     };
@@ -196,7 +201,16 @@ export function VoiceAssistantOverlay() {
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages as unknown as Record<string, unknown>[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread 
+                                messages={messages.map(msg => ({
+                                    id: msg.id,
+                                    role: msg.role === 'assistant' ? ('model' as const) : msg.role,
+                                    text: msg.content
+                                }))} 
+                                isProcessing={isProcessing} 
+                                formatText={formatAssistantText} 
+                                scrollRef={scrollRef} 
+                            />
                         )}
 
                         {pendingAction && (

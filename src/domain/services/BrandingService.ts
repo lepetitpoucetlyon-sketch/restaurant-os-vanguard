@@ -80,7 +80,7 @@ export const BrandingService = {
                 atmosphere: data.atmosphere as BrandInput['atmosphere'],
             };
         } catch (error: unknown) {
-            logger.error(`[Nexus Branding] AI Extraction failed:`, { error });
+            logger.error(`[Nexus Branding] AI Extraction failed:`, { error: String(error) });
             // Fallback to minimal branding
             return {
                 name: "New Partner",

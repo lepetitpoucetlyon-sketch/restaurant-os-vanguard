@@ -16,12 +16,12 @@ export class FirestoreBatch implements INexusBatch {
         this.batch = writeBatch(db);
     }
 
-    set(path: string, data: Record<string, unknown>): void {
-        this.batch.set(doc(this.db, path), data);
+    set<T>(path: string, data: T): void {
+        this.batch.set(doc(this.db, path), data as import('firebase/firestore').DocumentData);
     }
 
-    update(path: string, data: Record<string, unknown>): void {
-        this.batch.update(doc(this.db, path), data);
+    update<T>(path: string, data: Partial<T>): void {
+        this.batch.update(doc(this.db, path), data as import('firebase/firestore').DocumentData);
     }
 
     increment(path: string, field: string, amount: number): void {

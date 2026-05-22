@@ -113,7 +113,7 @@ export const VisionService = {
                 ]
             };
         } catch (error: unknown) {
-            logger.error('VisionService: Plate audit failed', { error });
+            logger.error('VisionService: Plate audit failed', { error: String(error) });
             throw new Error('Échec de l\'audit visuel de l\'assiette.');
         }
     },
@@ -132,7 +132,7 @@ export const VisionService = {
                 observation: "Le plan de travail est dégagé, propre et désinfecté. Aucun résidu visible."
             };
         } catch (error: unknown) {
-            logger.error('VisionService: HACCP verification failed', { error });
+            logger.error('VisionService: HACCP verification failed', { error: String(error) });
             throw new Error('Échec de la vérification visuelle HACCP.');
         }
     },

@@ -12,6 +12,15 @@ import { NewCustomerDialog } from "@modules/commerce";
 import { AnimatePresence, motion } from "framer-motion";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { Table, Customer } from "@nexus/contracts";
+
+interface ZoneTable {
+    id: string;
+    seats: number;
+    type: 'vip' | 'terrace' | 'standard';
+    status: 'available' | 'occupied' | 'reserved';
+    number: string;
+}
 
 export default function ReservationsPage() {
     const [activeSection, setActiveSection] = useState<"reservations" | "customers">("reservations");
@@ -19,12 +28,12 @@ export default function ReservationsPage() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     const [isNewResOpen, setIsNewResOpen] = useState(false);
-    const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
     const { data: reservations = [], isLoading: resLoading } = useReservations();
     const { data: customers = [], isLoading: crmLoading, upsertCustomer } = useCRM();
     const { tables = [] } = useTables();
-    const tablesByZone = tables.reduce((acc: Record<string, unknown[]>, table: Record<string, unknown>) => {
+    const tablesByZone = tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
         const zone = table.zoneId || 'STANDARD';
         if (!acc[zone]) acc[zone] = [];
         acc[zone].push({
@@ -64,7 +73,7 @@ export default function ReservationsPage() {
                         >
                             <ReservationSidebar
                                 isVisible={isSidebarVisible}
-                                reservations={reservations as unknown[]}
+                                reservations={reservations}
                             />
                             <div className="flex-1 overflow-auto p-8 bg-bg-primary relative">
                                 <TableGrid
@@ -82,7 +91,7 @@ export default function ReservationsPage() {
                             className="flex-1 overflow-hidden"
                         >
                             <CustomerCustomerView
-                                customers={customers as unknown[]}
+                                customers={customers}
                                 onCustomerClick={(c) => setSelectedCustomer(c)}
                             />
                         </motion.div>
@@ -92,7 +101,7 @@ export default function ReservationsPage() {
 
             {selectedCustomer && (
                 <CustomerDetailPanel
-                    customer={selectedCustomer as unknown}
+                    customer={selectedCustomer}
                     onClose={() => setSelectedCustomer(null)}
                     onNewReservation={() => setIsNewResOpen(true)}
                 />

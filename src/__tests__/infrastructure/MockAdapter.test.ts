@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { MockAdapter } from '../../../infrastructure/adapters/MockAdapter';
+import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
 
 describe('MockAdapter - Storage Strict Types & Batches', () => {
     let adapter: MockAdapter;

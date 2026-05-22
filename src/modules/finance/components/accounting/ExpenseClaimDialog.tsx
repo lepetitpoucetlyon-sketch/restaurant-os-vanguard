@@ -9,9 +9,10 @@ import { useToast } from "@ui/Toast";
 import { TransactionCategory } from "@nexus/contracts";
 import { Modal } from "@ui/Modal";
 import { useUI } from "@/hooks";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ListFilter } from "lucide-react";
+import { toMicrounits } from "@/domain/schemas/primitives";
 
 interface ExpenseClaimDialogProps {
     isOpen: boolean;
@@ -39,7 +40,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
     const [formData, setFormData] = useState({
         amount: "",
-        category: 'other' as string,
+        category: 'other' as 'other' | 'food' | 'equipment' | 'maintenance' | 'utilities' | 'marketing' | 'training' | 'travel' | undefined,
         description: "",
         receiptImage: null as string | null,
     });
@@ -70,7 +71,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
         try {
             await submitExpense({
-                amountInMicrounits: Math.round(parseFloat(formData.amount) * 1000000), // Convert to Microunits
+                amountInMicrounits: toMicrounits(Math.round(parseFloat(formData.amount) * 1000000)), // Convert to Microunits
                 category: formData.category,
                 description: formData.description,
                 receiptUrl: formData.receiptImage || undefined,
@@ -165,8 +166,8 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
                         <PremiumSelect
                             label="Classification Transact."
-                            value={formData.category}
-                            onChange={(val) => setFormData(prev => ({ ...prev, category: val as string }))}
+                            value={formData.category || ''}
+                            onChange={(val) => setFormData(prev => ({ ...prev, category: val as any }))}
                             options={CATEGORIES.map(cat => ({
                                 value: cat.id,
                                 label: cat.label,

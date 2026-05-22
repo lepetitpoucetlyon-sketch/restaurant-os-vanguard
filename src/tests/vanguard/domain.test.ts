@@ -61,8 +61,8 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
             const data = sanitized as Record<string, any>;
             
             expect(data.price.value).toBe(1050);
-            expect(data.ingredients[0].cost.value).toBe(210);
-            expect(data.ingredients[1].cost.value).toBe(100);
+            expect(data.ingredients.value[0].cost.value).toBe(210);
+            expect(data.ingredients.value[1].cost.value).toBe(100);
         });
     });
 

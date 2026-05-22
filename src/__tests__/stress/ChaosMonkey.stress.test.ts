@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChaosMonkey } from '../../../domain/services/ChaosMonkey';
+import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
-import { SelfHealingEngine } from '../../../lib/SelfHealingEngine';
-import { ResilienceSlayer } from '../../../domain/services/ResilienceSlayer';
+import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
+import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
 
 // Mocks
 vi.mock('jotai', () => ({
     getDefaultStore: vi.fn()
 }));
 
-vi.mock('../../../store/pillars', () => ({
+vi.mock('@/store/pillars', () => ({
     ordersNodeAtom: { toString: () => 'ordersNodeAtom' },
     stockItemsNodeAtom: { toString: () => 'stockItemsNodeAtom' },
     journalEntriesNodeAtom: { toString: () => 'journalEntriesNodeAtom' },
@@ -20,20 +20,20 @@ vi.mock('@modules/compliance', () => ({
     qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
 }));
 
-vi.mock('../../../lib/SelfHealingEngine', () => ({
+vi.mock('@/lib/SelfHealingEngine', () => ({
     SelfHealingEngine: {
         calculateCRC: vi.fn().mockReturnValue('mock-crc'),
         auditAndHeal: vi.fn()
     }
 }));
 
-vi.mock('../../../domain/services/ResilienceSlayer', () => ({
+vi.mock('@/domain/services/ResilienceSlayer', () => ({
     ResilienceSlayer: {
         handleTransactionFailure: vi.fn()
     }
 }));
 
-vi.mock('../../../lib/nexus/NexusAdapter', () => ({
+vi.mock('@/lib/nexus/NexusAdapter', () => ({
     Nexus: {
         getTenantPath: vi.fn().mockReturnValue('mock/tenant/path'),
         adapter: {

@@ -30,12 +30,8 @@ const cinematicItem: Variants = {
 const getFirstName = (c: Customer): string => (c?.firstName as string) || (c?.name ? String(c.name).split(' ')[0] : '') || '';
 const getLastName = (c: Customer): string => (c?.lastName as string) || (c?.name ? String(c.name).split(' ').slice(1).join(' ') : '') || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s.charAt(0) : '?');
-const getVisitCount = (c: Customer): number => {
-    const flexible = (c as any);
-
-    return flexible?.visitCount ?? flexible?.totalVisits ?? 0;
-};
-const getTotalSpent = (c: Customer): number => Number((c as any)?.totalSpent ?? c?.totalSpentInCents ?? 0) / 100;
+const getVisitCount = (c: Customer): number => c?.visitCount ?? 0;
+const getTotalSpent = (c: Customer): number => Number(c?.totalSpentInCents ?? 0) / 100;
 
 interface CustomerCustomerViewProps {
     customers: Customer[];
