@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { FirestoreBatch } from '../../../infrastructure/adapters/FirestoreBatch';
+import { FirestoreBatch } from '@/infrastructure/adapters/FirestoreBatch';
 
 // Mock Firebase Firestore functions
 vi.mock('firebase/firestore', () => ({
@@ -18,6 +18,7 @@ describe('FirestoreBatch - Grade X Strict Typing Audit', () => {
     let batchAdapter: FirestoreBatch;
 
     beforeEach(() => {
+        vi.clearAllMocks();
         mockDb = { _type: 'firestoreInstance' };
         batchAdapter = new FirestoreBatch(mockDb);
     });

@@ -128,7 +128,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
                     tier: f.tier || 'STANDARD',
                     version: f.engineVersion || '1.0.0',
                     createdAt: f.createdAt || new Date().toISOString(),
-                    updatedAt: (f as Record<string, unknown>).updatedAt as string || new Date().toISOString(),
+                    updatedAt: f.updatedAt || new Date().toISOString(),
                     lastHeartbeat: lastSeenDate,
                     metrics: {
                         activeUsers: Number(f.activeUsers) || 0,
@@ -277,7 +277,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         launchPreview,
         broadcastConfiguration,
         complianceService: FleetComplianceService,
-        haccpBridge: HACCPTelemetryBridge as unknown as typeof HACCPTelemetryBridge, // TECH_DEBT: Bridge interface mismatch — refacto compliance module
+        haccpBridge: HACCPTelemetryBridge,
         fleet: globalMetrics, 
         customer: { customers: [] as import('@/shared/nexus-contract').SovereignData[] },
         intelligence: { 

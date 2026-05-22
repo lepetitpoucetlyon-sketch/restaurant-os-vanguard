@@ -49,7 +49,7 @@ export const MaintenanceAgent = {
 
             return ticketId;
         } catch (error: unknown) {
-            logger.error('MaintenanceAgent: SOS submission failed', { error });
+            logger.error('MaintenanceAgent: SOS submission failed', { error: String(error) });
             throw error;
         }
     },
@@ -83,7 +83,7 @@ export const MaintenanceAgent = {
 
             // Note: Steps 6 & 7 (Application & Vérification) sont manuelles/semi-auto via l'UI.
         } catch (error: unknown) {
-            logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error });
+            logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error: String(error) });
         }
     },
 

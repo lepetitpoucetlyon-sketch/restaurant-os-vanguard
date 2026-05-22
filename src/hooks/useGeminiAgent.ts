@@ -21,6 +21,13 @@ export interface PendingAction {
     args: SovereignData;
 }
 
+export interface AgentSession {
+    id: string;
+    name: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 /**
  * useGeminiAgent
  * Classic Oracle hook for non-realtime text interactions with Gemini.
@@ -90,16 +97,15 @@ export function useGeminiAgent() {
         setPendingAction(null);
         setError(null);
     }, []);
-
-    const fetchAllSessions = useCallback(async (): Promise<Array<{ id: string; name: string }>> => {
+    const fetchAllSessions = useCallback(async (): Promise<AgentSession[]> => {
         const stored = localStorage.getItem('nexus_agent_sessions');
-        return stored ? JSON.parse(stored) : [];
+        return stored ? JSON.parse(stored) as AgentSession[] : [];
     }, []);
 
     const loadSession = useCallback(async (sessionId: string) => {
         const stored = localStorage.getItem('nexus_agent_sessions');
         if (stored) {
-            const sessions = JSON.parse(stored) as Array<{ id: string }>;
+            const sessions = JSON.parse(stored) as AgentSession[];
             const found = sessions.find((s) => s.id === sessionId);
             if (found) {
                 // To keep it simple for now, we just notify
@@ -107,7 +113,6 @@ export function useGeminiAgent() {
             }
         }
     }, []);
-
     const confirmAction = useCallback(async () => {
         // Implementation for human-in-the-loop tool calls
         setPendingAction(null);

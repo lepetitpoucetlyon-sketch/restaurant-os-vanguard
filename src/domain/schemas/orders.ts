@@ -48,7 +48,7 @@ export const OrderSchema = z.object({
   totalInMicrounits: MicrounitsSchema.optional(),
   totalInCents:  z.number().int().min(0).optional(),
   createdAt:     TimestampSchema,
-  updatedAt:     TimestampSchema.default(Date.now() as unknown),
+  updatedAt:     TimestampSchema.default(() => Date.now() as any),
   paidAt:        TimestampSchema.nullable().optional(),
   covers:        z.number().int().min(1).max(50).optional(),
   notes:         z.string().max(500).pipe(SanitizedStringSchema).optional(),

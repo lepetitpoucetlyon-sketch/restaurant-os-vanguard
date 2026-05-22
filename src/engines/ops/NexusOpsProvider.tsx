@@ -5,9 +5,9 @@ import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode, Sove
 import { NexusNode } from '@/store/base';
 import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
 import { 
-  Table, Order, Product, Recipe, Reservation, Quote, Campaign, JournalEntry, Category,
+  Table, Order, Product, Recipe, Reservation, Quote, Campaign, JournalEntry, Category, Customer,
   isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isCategory,
-  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup, toJournalEntry, toCategory
+  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup, toJournalEntry, toCategory, toCustomer
 } from '@nexus/contracts/nexus-internal-mapper';
 import type { Ingredient } from '@nexus/contracts/logistics';
 import { SovereignMath } from '@shared/services/SovereignMath';
@@ -493,7 +493,7 @@ export const useMarketing = () => {
 };
 export const useHR = createSovereignHook(leaveRequestsNodeAtom, OperationalIdentity.RESOURCES);
 export const useCRM = () => {
-    const base = createSovereignHook(crmsNodeAtom, OperationalIdentity.RELATIONS, (n) => n)();
+    const base = createSovereignHook(crmsNodeAtom, OperationalIdentity.RELATIONS, toCustomer)();
     const selectedCRM = useAtomValue(selectedCRMAtom);
     const tenantId = useAtomValue(tenantIdAtom) as string;
     return {

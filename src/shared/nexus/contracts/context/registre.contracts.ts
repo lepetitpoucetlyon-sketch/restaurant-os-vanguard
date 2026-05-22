@@ -33,6 +33,14 @@ export interface ComplianceDocument {
   updatedAt: string;
 }
 
+export interface PMRAmenagement {
+  id: string;
+  status: 'conforme' | 'en_cours' | 'a_faire';
+  zone: string;
+  description: string;
+  deadline?: string;
+}
+
 export interface RegistreContextValue {
   cerfa?: ComplianceDocument;
   duerp?: ComplianceDocument;
@@ -41,7 +49,7 @@ export interface RegistreContextValue {
   exercices?: ComplianceDocument[];
   interventions?: ComplianceDocument[];
   pmrDoc?: ComplianceDocument;
-  pmrAmenagements?: ComplianceDocument[];
+  pmrAmenagements?: PMRAmenagement[];
   prestataires?: any[]; // Keep any for now as it's complex, but mark as list
   certHalal?: ComplianceDocument;
   agrementBoucher?: ComplianceDocument;

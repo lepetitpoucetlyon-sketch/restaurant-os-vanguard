@@ -123,10 +123,11 @@ export const InvoiceExtractionService = {
             return { success: true, data: invoice, rawResponse };
 
         } catch (error: unknown) {
-            logger.error(`[InvoiceExtraction] Pipeline error: ${error.message}`);
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            logger.error(`[InvoiceExtraction] Pipeline error: ${errorMsg}`);
             return {
                 success: false,
-                error: { error: 'NON_PROCESSABLE', reason: error.message, flags: [] },
+                error: { error: 'NON_PROCESSABLE', reason: errorMsg, flags: [] },
                 rawResponse,
             };
         }

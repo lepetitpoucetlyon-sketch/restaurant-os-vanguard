@@ -12,22 +12,48 @@ export async function runGradeXProof() {
     logger.info('🚀 [SINFONIA_PROOF] Starting Ultra-Complex Multi-Domain Task...');
 
     // 1. Simulate a Critical Anomaly
-    const anomalyReading: Record<string, unknown> = {
+    const anomalyReading: SensorReading = {
         id: 'read_999',
         name: 'Fridge Main Sensor',
         sensorId: 'fridge_main_01',
-        type: 'temperature' as const,
+        type: 'temperature',
         value: 12.5,
         unit: '°C',
-        status: 'alert' as const,
+        status: 'alert',
         lastUpdated: new Date().toISOString(),
         isAnomaly: true
     };
 
     // 2. Mock some impacted stock
-    const impactedStock: Partial<StockItem>[] = [
-        { id: 'stock_1', name: 'Filet de Bœuf', quantity: 15, unit: 'kg', costInCents: 4500 },
-        { id: 'stock_2', name: 'Homard Bleu', quantity: 8, unit: 'unit' as const, costInCents: 3500 }
+    const impactedStock: StockItem[] = [
+        {
+            id: 'stock_1',
+            ingredientId: 'ing_boeuf',
+            ingredientName: 'Filet de Bœuf',
+            category: 'produce',
+            quantity: 15,
+            unit: 'kg',
+            storageLocationId: 'frigo_3',
+            receptionDate: new Date().toISOString(),
+            dlc: new Date(Date.now() + 5*24*60*60*1000).toISOString(),
+            unitCostInCents: 300,
+            costInCents: 4500,
+            status: 'available'
+        },
+        {
+            id: 'stock_2',
+            ingredientId: 'ing_homard',
+            ingredientName: 'Homard Bleu',
+            category: 'produce',
+            quantity: 8,
+            unit: 'unit',
+            storageLocationId: 'frigo_4',
+            receptionDate: new Date().toISOString(),
+            dlc: new Date(Date.now() + 2*24*60*60*1000).toISOString(),
+            unitCostInCents: 437,
+            costInCents: 3500,
+            status: 'available'
+        }
     ];
 
     logger.info('🧠 [PROOF] Antigravity is now analyzing the fiscal impact of this sensor anomaly...');
@@ -35,7 +61,7 @@ export async function runGradeXProof() {
     // 3. Trigger the Mapper
     const result = await FiscalHACCPMapper.processCriticalWaste(
         anomalyReading,
-        impactedStock as StockItem[],
+        impactedStock,
         'tenant_demo_grade_x'
     );
 

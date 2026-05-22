@@ -1,6 +1,7 @@
 "use client";
 
 import { useRegistre } from "@/context/RegistreContext";
+import { PMRAmenagement } from "@/shared/nexus/contracts/context/registre.contracts";
 import { Accessibility, Calendar, Clock, CheckCircle2, AlertTriangle, Wrench, MapPin } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
@@ -8,11 +9,11 @@ import { cn } from "@/lib/ui.foundations";;
 export function PMRSection() {
     const { pmrDoc, pmrAmenagements } = useRegistre();
 
-    const amenagementsArray = (pmrAmenagements || []);
+    const amenagementsArray = (pmrAmenagements || []) as PMRAmenagement[];
     const stats = {
-        conforme: amenagementsArray.filter((a: Record<string, unknown>) => a.status === 'conforme').length,
-        en_cours: amenagementsArray.filter((a: Record<string, unknown>) => a.status === 'en_cours').length,
-        a_faire: amenagementsArray.filter((a: Record<string, unknown>) => a.status === 'a_faire').length,
+        conforme: amenagementsArray.filter((a: PMRAmenagement) => a.status === 'conforme').length,
+        en_cours: amenagementsArray.filter((a: PMRAmenagement) => a.status === 'en_cours').length,
+        a_faire: amenagementsArray.filter((a: PMRAmenagement) => a.status === 'a_faire').length,
     };
 
     return (
@@ -66,7 +67,7 @@ export function PMRSection() {
                     Diagnostic par Zone
                 </h3>
                 <div className="space-y-4">
-                    {amenagementsArray.map((am: Record<string, unknown>) => (
+                    {amenagementsArray.map((am: PMRAmenagement) => (
                         <div key={am.id} className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-6 shadow-sm flex items-center justify-between hover:shadow-lg transition-all">
                             <div className="flex items-center gap-5">
                                 <div className={cn(

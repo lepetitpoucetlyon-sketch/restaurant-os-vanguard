@@ -26,7 +26,7 @@ export const UserSchema = z.object({
   permissions:       UserPermissionsSchema.optional(),
   schemaVersion:     z.literal(2).default(2),
   createdAt:         TimestampSchema.optional(),
-  updatedAt:         TimestampSchema.default(Date.now() as unknown),
+  updatedAt:         TimestampSchema.default(() => Date.now() as any),
 }).catchall(z.any());
 
 export type User = z.infer<typeof UserSchema>;

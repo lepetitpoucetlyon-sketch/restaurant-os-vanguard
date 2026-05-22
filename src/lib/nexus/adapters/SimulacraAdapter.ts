@@ -81,7 +81,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
                 ops.push(() => this.set(path, data, undefined, context));
             },
             update: (path: string, data: unknown) => {
-                ops.push(() => this.update(path, data, context));
+                ops.push(() => this.update(path, data as any, context));
             },
             delete: (path: string) => {
                 ops.push(() => this.delete(path, context));
@@ -105,7 +105,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
 
         await simulatorDb.virtualStore.put({
             path,
-            data: finalData as unknown,
+            data: finalData as any,
             isDeleted: false,
             forkId: this.forkId,
             updatedAt: new Date().toISOString()
@@ -118,7 +118,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
 
         await simulatorDb.virtualStore.put({
             path,
-            data: finalData as unknown,
+            data: finalData as any,
             isDeleted: false,
             forkId: this.forkId,
             updatedAt: new Date().toISOString()
