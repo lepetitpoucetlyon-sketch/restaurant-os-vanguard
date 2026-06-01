@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/NexusOpsProvider";
-import { useAuth } from "@/engines/core/NexusCoreProvider";
+import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Table, Category, Product, OrderItem } from "@nexus/contracts";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
+import { toMicrounits } from "@/domain/schemas/primitives";
 
 export interface CartItem {
     cartId: string;
@@ -48,6 +50,7 @@ export const POSService = {
 
 export function usePOSController() {
     const { currentUser } = useAuth();
+    const { activeTenantId } = useTenant();
     const { nodes: tables, updateTable } = useTables();
     const { add: addOrder } = useOrders();
     const { data: products, isLoading: productsLoading } = useProducts();
@@ -130,15 +133,35 @@ export function usePOSController() {
         if (!currentTable) return;
 
         try {
-            // TODO: Integrate FinancialNexusBridge here
-            showToast("Paiement simulé - Suture FinancialBridge requise", "success");
+            const tenantId = activeTenantId ?? 'restaurant-os';
+            // Convert legacy cents-based CartItem to microunits for the bridge
+            const bridgeItems = cartItems.map(item => ({
+                cartId: item.cartId,
+                productId: item.productId,
+                categoryId: item.categoryId,
+                name: item.name,
+                quantity: item.quantity,
+                unitPriceInMicrounits: toMicrounits(item.priceInCents * 10000),
+                discountInMicrounits: toMicrounits(0),
+                taxRate: '0.10' as const,
+                modifiers: item.modifiers ?? [],
+                notes: item.notes,
+            }));
+            await FinancialNexusBridge.processOrder({
+                cartItems: bridgeItems,
+                operatorId: currentUser?.id ?? 'unknown',
+                tableId: selectedTableId,
+                tenantId,
+            });
+            showToast(`Table ${currentTable.number} — Paiement validé & scellé NF525`, "success");
             handleClearCart();
             setSelectedTableId(null);
             setIsPaymentOpen(false);
+            await updateTable(currentTable.id, { status: 'dirty' });
         } catch (error) {
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, handleClearCart, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, handleClearCart, updateTable, showToast]);
 
     const handleCheckout = useCallback(() => {
         if (cartItems.length === 0) return;

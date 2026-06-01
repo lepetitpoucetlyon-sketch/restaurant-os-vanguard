@@ -25,6 +25,7 @@ import { EmpireInstance } from '@domain/types/empire';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
 import { TenantIdSchema } from '@/domain/schemas/ui';
+import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { ordersNodeAtom, tablesNodeAtom } from '@/store/pillars/ops';
 import { 
@@ -152,16 +153,17 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
     const tenantId = useAtomValue(tenantIdAtom) as string;
     const setTenantId = useSetAtom(tenantIdAtom);
     const store = useStore();
+    const taskContext = useTaskContext();
 
     useEffect(() => {
-        NexusSyncService.init(tenantId as string);
-        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusOpsProvider', tenantId: tenantId as string });
+        NexusSyncService.init(tenantId as string, taskContext);
+        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusOpsProvider', tenantId: tenantId as string, task: taskContext.taskId });
         const purgeInterval = setInterval(() => GlobalRegistryService.purgeInactive(store), 120000);
         return () => {
             NexusSyncService.stopAll();
             clearInterval(purgeInterval);
         };
-    }, [tenantId, store]);
+    }, [tenantId, taskContext, store]);
 
     const switchTenant = useCallback(async (newTenantId: string) => {
         try {
@@ -172,7 +174,7 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
             await initializeTenantFirebase(targetInstance?.firebaseConfig);
             setTenantId(newTenantId);
             SovereignStorage.set('nexus_tenant_id', newTenantId, TenantIdSchema);
-            await NexusSyncService.init(newTenantId);
+            await NexusSyncService.init(newTenantId, taskContext);
         } catch (error) {
             logger.error('[NexusOpsProvider] SaaS Switch failed', error);
         }
