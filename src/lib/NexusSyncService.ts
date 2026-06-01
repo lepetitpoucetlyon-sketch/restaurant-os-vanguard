@@ -22,6 +22,8 @@ import { TimeSync } from './TimeSync';
 import { MasterBridge } from './MasterBridge';
 
 import { Mutex } from './utils/Mutex';
+import { TaskContext, TASK_MAPS, shouldEagerLoad } from './icm/TaskContext';
+import { registerNexusHandlers, unregisterNexusHandlers } from './events/registerHandlers';
 
 // Grade IX: Genome Immunity
 import { genomeValidator } from '@domain/services/GenomeValidator';
@@ -41,10 +43,12 @@ export const NexusSyncService = {
   master_unsub: null as (() => void) | null,
 
   /**
-   * Initializes all operational listeners in parallel.
+   * Initializes operational listeners in parallel.
+   * Avec ICM-lite : seuls les modules déclarés HIGH/MEDIUM dans le TaskContext sont initialisés.
    * Target switch time: < 180ms.
    */
-  async init(tenantId: string) {
+  async init(tenantId: string, task?: TaskContext) {
+    const icm = task ?? TASK_MAPS.default;
     const result = await syncMutex.run(async () => {
         const store = getDefaultStore();
         
@@ -59,6 +63,9 @@ export const NexusSyncService = {
         // --- OMPHALOS SUTURE (Mission 1 & 3) ---
         await NexusBridge.init(tenantId);
         TelemetryService.start(tenantId);
+
+        // --- EVENT BUS HANDLERS ---
+        registerNexusHandlers();
 
         // --- MASTER BRIDGE SUTURE ---
         if (tenantId !== 'restaurant-os' && tenantId !== 'lepetitpoucet' && tenantId !== 'vanguard') {
@@ -108,17 +115,19 @@ export const NexusSyncService = {
             return;
         }
 
-        // 2. PARALLEL INITIALIZATION (NEXUS-BOOST)
+        // 2. PARALLEL INITIALIZATION — ICM-lite selective sync
+        const imp = icm.importance;
+        logger.info(`[NexusSyncService][ICM] Task="${icm.taskId}" — chargement sélectif activé.`);
         const initStart = performance.now();
         try {
             await Promise.all([
                 TimeSync.init(),
-                SyncOrders.init(tenantId, store),
-                SyncStocks.init(tenantId, store),
-                SyncFinance.init(tenantId, store),
-                SyncHACCP.init(tenantId, store),
-                SyncMarketing.init(tenantId, store),
-                SyncStaff.init(tenantId, store)
+                shouldEagerLoad(imp.orders)     ? SyncOrders.init(tenantId, store)   : Promise.resolve(),
+                shouldEagerLoad(imp.stocks)     ? SyncStocks.init(tenantId, store)   : Promise.resolve(),
+                shouldEagerLoad(imp.finance)    ? SyncFinance.init(tenantId, store)  : Promise.resolve(),
+                shouldEagerLoad(imp.compliance) ? SyncHACCP.init(tenantId, store)    : Promise.resolve(),
+                shouldEagerLoad(imp.marketing)  ? SyncMarketing.init(tenantId, store): Promise.resolve(),
+                shouldEagerLoad(imp.staff)      ? SyncStaff.init(tenantId, store)    : Promise.resolve(),
             ]);
             
             const duration = performance.now() - initStart;
@@ -168,6 +177,7 @@ export const NexusSyncService = {
     }
     NexusBridge.stop();
     TelemetryService.stop();
+    unregisterNexusHandlers();
 
     try {
         await db.clearAll();

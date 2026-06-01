@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/NexusOpsProvider";
-import { useAuth } from "@/engines/core/NexusCoreProvider";
+import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Table, Category, Product, OrderItem } from "@nexus/contracts";
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { CartItem, SovereignProduct } from "../../engine/types";
+import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
 
 import { POSService } from "../domain";
 
@@ -19,6 +20,7 @@ import { POSService } from "../domain";
 
 export function usePOSController() {
     const { currentUser } = useAuth();
+    const { activeTenantId } = useTenant();
     const { nodes: tables, updateTable } = useTables();
     const { add: addOrder } = useOrders();
     const { data: products, isLoading: productsLoading } = useProducts();
@@ -103,15 +105,22 @@ export function usePOSController() {
         if (!currentTable) return;
 
         try {
-            // TODO: Integrate FinancialNexusBridge here
-            showToast("Paiement simulé - Suture FinancialBridge requise", "success");
+            const tenantId = activeTenantId ?? 'restaurant-os';
+            await FinancialNexusBridge.processOrder({
+                cartItems,
+                operatorId: currentUser?.id ?? 'unknown',
+                tableId: selectedTableId,
+                tenantId,
+            });
+            showToast(`Table ${currentTable.number} — Paiement validé & scellé NF525`, "success");
             handleClearCart();
             setSelectedTableId(null);
             setIsPaymentOpen(false);
+            await updateTable(currentTable.id, { status: 'dirty' });
         } catch (error) {
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, handleClearCart, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, handleClearCart, updateTable, showToast]);
 
     const handleCheckout = useCallback(() => {
         if (cartItems.length === 0) return;

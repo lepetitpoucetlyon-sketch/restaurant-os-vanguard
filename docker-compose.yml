@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - LIGHTRAG_SERVER_URL=http://lightrag:9621
+    env_file:
+      - .env.local
+    depends_on:
+      lightrag:
+        condition: service_healthy
+    restart: unless-stopped
+
+  lightrag:
+    build:
+      context: ./docker/lightrag
+      dockerfile: Dockerfile
+    ports:
+      - "9621:9621"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    volumes:
+      - lightrag_storage:/app/rag_storage
+      - lightrag_models:/app/mineru_models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9621/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  lightrag_storage:
+  lightrag_models:
