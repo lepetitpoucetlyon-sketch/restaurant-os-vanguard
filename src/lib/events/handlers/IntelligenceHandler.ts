@@ -30,11 +30,11 @@ async function analyzeStockTrend(tenantId: string, items: any[]): Promise<void> 
     if (highVelocityItems.length === 0) return;
 
     logger.info(
-      `[Intelligence] Stock trend — articles haute vélocité : ${highVelocityItems.map(i => i.name).join(', ')}`
+      `[Intelligence] Stock trend — articles haute vélocité : ${highVelocityItems.map((i: any) => i.name).join(', ')}`
     );
     // TODO: appel HermesKnowledgeManager.query() pour prédiction réappro
   } catch (err) {
-    logger.warn('[Intelligence] analyzeStockTrend failed', err);
+    logger.warn('[Intelligence] analyzeStockTrend failed', String(err));
   }
 }
 
@@ -45,7 +45,7 @@ async function analyzeRevenueSignal(tenantId: string, totalInMicrounits: number)
     );
     // TODO: comparer avec moyenne glissante, émettre alerte si écart > 2σ
   } catch (err) {
-    logger.warn('[Intelligence] analyzeRevenueSignal failed', err);
+    logger.warn('[Intelligence] analyzeRevenueSignal failed', String(err));
   }
 }
 
