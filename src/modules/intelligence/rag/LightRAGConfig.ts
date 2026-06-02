@@ -34,7 +34,11 @@ export interface LightRAGConfig {
 }
 
 export const DEFAULT_LIGHTRAG_CONFIG: LightRAGConfig = {
-    baseUrl: 'http://localhost:9621',
+    // Server URL is environment-driven so the same build runs in dev (localhost),
+    // docker-compose (http://lightrag:9621) and prod without code changes.
+    baseUrl:
+        (typeof process !== 'undefined' && process.env?.LIGHTRAG_SERVER_URL) ||
+        'http://localhost:9621',
     workspace: '',
     timeoutMs: 30_000,
     maxRetries: 3,
