@@ -38,6 +38,9 @@ export const InventorySyncService = {
         }));
       },
       {
+        // Bound the real-time listener: protects against runaway collections.
+        // 2000 covers any realistic single-site warehouse.
+        limit: 2000,
         onError: (error: Error) => {
           logger.error('[InventorySync] Stock Sync Failed', error);
         }
@@ -55,6 +58,7 @@ export const InventorySyncService = {
         }));
       },
       {
+        limit: 500,
         onError: (error: Error) => {
           logger.error('[InventorySync] Categories Sync Failed', error);
         }
@@ -85,6 +89,7 @@ export const InventorySyncService = {
         }
       },
       {
+        limit: 2000,
         onError: (error: Error) => {
           logger.error('[InventorySync] Recipes Sync Failed', error);
         }

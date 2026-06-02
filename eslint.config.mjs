@@ -34,6 +34,13 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-require-imports": "off",
     },
   },
+  {
+    // Test files legitimately use `any` for mocks/fixtures/stubs — not shipped code.
+    files: ["**/*.test.{ts,tsx}", "tests/**", "src/tests/**", "src/__tests__/**"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     ".next/**",
@@ -43,6 +50,8 @@ const eslintConfig = defineConfig([
     "src_VANGUARD_AUDIT/**",
     "src_OLD_VIBE_BACKUP/**",
     ".nexus/agents/**",
+    ".nexus/scripts/**",
+    ".nexus/hooks/**",
     ".staging-mcc/**",
     ".mempalace/**",
     "graphify_tool/**",
