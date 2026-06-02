@@ -13,7 +13,7 @@ export function registerTicketZHandler(): () => void {
       const today = new Date().toISOString().split('T')[0];
       const path = `tenants/${tenantId}/ticketZ/${today}`;
 
-      const existing = await Nexus.adapter.get<any>(path) ?? {
+      const existing = await Nexus.adapter.get<{ id: string; date: string; tenantId: string; ordersCount: number; totalInMicrounits: number; taxBreakdown: Record<string, number>; updatedAt: string }>(path) ?? {
         id: today,
         date: today,
         tenantId,

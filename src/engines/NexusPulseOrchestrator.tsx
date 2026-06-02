@@ -20,7 +20,7 @@ export function NexusPulseOrchestrator(): null {
     useEffect(() => {
         // 🛰️ SENTRY HEARTBEAT (Grade X)
         Sentry.setTag("nexus.grade", "X+++");
-        Sentry.setTag("tenant_id", tenantId as any);
+        Sentry.setTag("tenant_id", tenantId as string);
 
         logger.info(`[PulseOrchestrator] System Pulse Activated for tenant: ${tenantId}`);
 

@@ -17,7 +17,10 @@ export const dashboardRevenueSelector = atom((get) => {
         o.updatedAt && String(new Date(o.updatedAt).toISOString()).startsWith(today)
     );
     
-    return paidToday.reduce((sum, o) => sum + ((o as any).totalInMicrounits || (o as any).totalInCents * 10000 || 0), 0);
+    return paidToday.reduce((sum, o) => {
+        const order = o as unknown as { totalInMicrounits?: number; totalInCents?: number };
+        return sum + (order.totalInMicrounits ?? (order.totalInCents ? order.totalInCents * 10000 : 0));
+    }, 0);
 });
 
 // 2. KPI: HACCP Alerts (Produits périmés ou proches)

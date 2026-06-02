@@ -66,7 +66,7 @@ export function SovereignLockout() {
                         <div className="text-[10px] uppercase text-secondary mb-1 flex items-center gap-1">
                             <Lock className="w-3 h-3" /> Tenant ID
                         </div>
-                        <div className="font-mono text-sm text-primary-gold uppercase">{(tenantConfig as any)?.id || 'REVOKED'}</div>
+                        <div className="font-mono text-sm text-primary-gold uppercase">{(tenantConfig as { id?: string })?.id || 'REVOKED'}</div>
                     </div>
                 </div>
 

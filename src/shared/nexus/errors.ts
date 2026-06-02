@@ -10,7 +10,7 @@ export class NexusError extends Error {
     public isNexusError = true;
     public code: NexusErrorCode;
 
-    constructor(code: NexusErrorCode, message: string, public payload?: any) {
+    constructor(code: NexusErrorCode, message: string, public payload?: unknown) {
         super(`[${code}] ${message}`);
         this.code = code;
         this.name = 'NexusError';

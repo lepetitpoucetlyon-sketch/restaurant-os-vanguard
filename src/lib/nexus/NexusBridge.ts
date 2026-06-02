@@ -81,8 +81,8 @@ export class NexusBridge {
           status: { 
             ...(RESTAURANT_FULL_DNA.status || DEFAULT_TENANT_CONFIG.status), 
             ...(remoteData.status || {}),
-            layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as any,
-            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as any
+            layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as unknown as string,
+            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as unknown as Record<string, unknown>
           },
           metadata: { 
             name: remoteData.metadata?.name || RESTAURANT_FULL_DNA.metadata?.name || DEFAULT_TENANT_CONFIG.metadata.name,
@@ -90,7 +90,7 @@ export class NexusBridge {
             description: remoteData.metadata?.description || RESTAURANT_FULL_DNA.metadata?.description || '',
             ownerId: remoteData.metadata?.ownerId || RESTAURANT_FULL_DNA.metadata?.ownerId || '',
             createdAt: remoteData.metadata?.createdAt || RESTAURANT_FULL_DNA.metadata?.createdAt || Date.now(),
-            subscriptionTier: (remoteData.metadata?.subscriptionTier || RESTAURANT_FULL_DNA.metadata?.subscriptionTier || 'FREE') as any
+            subscriptionTier: (remoteData.metadata?.subscriptionTier || RESTAURANT_FULL_DNA.metadata?.subscriptionTier || 'FREE') as string
           },
         };
 
