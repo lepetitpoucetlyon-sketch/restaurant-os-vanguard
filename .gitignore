@@ -126,3 +126,10 @@ imperial_*.txt
 suture_*.txt
 phase_*.txt
 *.txt.bak
+
+# Generated knowledge-graph / analysis artifacts (understand-anything, Ki tree)
+.understand-anything/
+04_ki_tree/
+05_vectors/
+99_quarantine/
+Ki_Map.md
