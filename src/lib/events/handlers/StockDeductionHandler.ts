@@ -16,7 +16,7 @@ export function registerStockDeductionHandler(): () => void {
 
       for (const item of items) {
         // Résolution product → stockItem
-        const product = await Nexus.adapter.get<any>(
+        const product = await Nexus.adapter.get<{ linkedStockItemId?: string; quantity?: number; reorderThreshold?: number }>(
           `tenants/${tenantId}/products/${item.productId}`
         );
         if (!product?.linkedStockItemId) continue;
@@ -34,7 +34,7 @@ export function registerStockDeductionHandler(): () => void {
       await Promise.allSettled(
         deductions.map(async ({ itemId, delta, name }) => {
           const path = `tenants/${tenantId}/stockItems/${itemId}`;
-          const stockItem = await Nexus.adapter.get<any>(path);
+          const stockItem = await Nexus.adapter.get<{ quantity?: number; reorderThreshold?: number }>(path);
           if (!stockItem) return;
 
           const newQty = Math.max(0, (stockItem.quantity ?? 0) - delta);

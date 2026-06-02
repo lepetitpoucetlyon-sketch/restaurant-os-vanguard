@@ -57,7 +57,7 @@ interface RegisteredHandler<E extends NexusEventName> {
 // ── Bus ───────────────────────────────────────────────────────────────────────
 
 class NexusEventBusClass {
-  private handlers = new Map<NexusEventName, RegisteredHandler<any>[]>();
+  private handlers = new Map<NexusEventName, RegisteredHandler<NexusEventName>[]>();
 
   /**
    * Souscrit à un événement.

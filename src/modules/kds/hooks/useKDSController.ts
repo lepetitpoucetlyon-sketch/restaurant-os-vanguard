@@ -45,7 +45,7 @@ export const useKDSController = () => {
     }, [orders, activeStation, searchQuery]);
 
     const preparingOrdersCount = useMemo(() => 
-        orders.filter((o: any) => o?.status === 'preparing' || o?.status === 'new').length,
+        orders.filter((o) => (o as { status?: string })?.status === 'preparing' || o?.status === 'new').length,
     [orders]);
 
     const pendingModificationsCount = useMemo(() => 

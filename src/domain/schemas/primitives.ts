@@ -52,8 +52,8 @@ export const TimestampSchema = z.union([
   if (typeof val === 'number') return val;
   if (typeof val === 'string') return new Date(val).getTime();
   // Firestore Timestamp object
-  if (val && typeof (val as any).toMillis === 'function') {
-    return (val as any).toMillis();
+  if (val && typeof (val as { toMillis?: () => number }).toMillis === 'function') {
+    return (val as { toMillis: () => number }).toMillis();
   }
   return Date.now();
 });

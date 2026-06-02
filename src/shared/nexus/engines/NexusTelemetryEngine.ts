@@ -23,11 +23,11 @@ export class NexusTelemetryEngine {
 
     static mountChaosMonkeys() {
         if (typeof window !== 'undefined') {
-            (window as any).awakenTheMonkey = (intensity?: number) => {
+            (window as unknown as Record<string, unknown>).awakenTheMonkey = (intensity?: number) => {
                 ChaosMonkey.start(intensity);
                 ResilienceSlayer.start();
             };
-            (window as any).silenceTheMonkey = () => {
+            (window as unknown as Record<string, unknown>).silenceTheMonkey = () => {
                 ChaosMonkey.stop();
                 ResilienceSlayer.stop();
             };

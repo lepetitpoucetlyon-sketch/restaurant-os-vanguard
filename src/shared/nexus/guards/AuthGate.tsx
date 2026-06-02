@@ -28,7 +28,7 @@ export function AuthGate({ children }: AuthGateProps) {
     const pathname = usePathname();
 
     // 0. SOVEREIGN KILL SWITCH (Highest Priority)
-    const isKillSwitchActive = (tenantConfig as any)?.status?.killSwitch === true;
+    const isKillSwitchActive = (tenantConfig as { status?: { killSwitch?: boolean } })?.status?.killSwitch === true;
     
     // Bypass for MCC area to allow admin recovery if needed
     const isMccArea = pathname?.startsWith('/admin');

@@ -20,7 +20,7 @@ export function registerIntelligenceHandler(): () => void {
   );
 }
 
-async function analyzeStockTrend(tenantId: string, items: any[]): Promise<void> {
+async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops/engine/types").CartItem[]): Promise<void> {
   try {
     // Lecture ZCPO state pour savoir si on peut faire une inférence lourde
     const zcpoState = await readZcpoState();
@@ -30,7 +30,7 @@ async function analyzeStockTrend(tenantId: string, items: any[]): Promise<void> 
     if (highVelocityItems.length === 0) return;
 
     logger.info(
-      `[Intelligence] Stock trend — articles haute vélocité : ${highVelocityItems.map((i: any) => i.name).join(', ')}`
+      `[Intelligence] Stock trend — articles haute vélocité : ${highVelocityItems.map((i) => i.name).join(', ')}`
     );
     // TODO: appel HermesKnowledgeManager.query() pour prédiction réappro
   } catch (err) {

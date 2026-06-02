@@ -97,7 +97,7 @@ export type SemanticTokens = typeof semanticTokens;
 // CSS Custom Properties générées depuis les tokens
 // Injectées par BrandingProvider dans :root
 export function generateCSSVariables(
-  tokens: any = semanticTokens
+  tokens: Partial<SemanticTokens> = semanticTokens
 ): Record<string, string> {
   return {
     '--action-primary':           tokens.action?.primary ?? semanticTokens.action.primary,
