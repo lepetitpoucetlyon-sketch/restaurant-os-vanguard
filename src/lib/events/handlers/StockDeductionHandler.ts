@@ -59,7 +59,7 @@ export function registerStockDeductionHandler(): () => void {
       );
 
       empireAudit.log({
-        module: 'logistics',
+        module: 'inventory',
         action: 'STOCK_DEDUCTED',
         details: { orderId, deductions: deductions.map(d => d.name) },
         severity: 'low',
