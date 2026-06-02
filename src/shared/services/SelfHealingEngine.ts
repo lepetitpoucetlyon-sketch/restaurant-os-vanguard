@@ -19,7 +19,7 @@ export const SelfHealingEngine = {
     const currentState = store.get(atom);
     
     // 🧬 CRC CALCULATION
-    const currentHash = this.calculateCRC(currentState as any);
+    const currentHash = this.calculateCRC(currentState as unknown as import('@/shared/nexus-contract').SovereignData);
 
     if (currentHash !== expectedHash || expectedHash === 'FORCE_SYNC') {
       logger.warn(`[Self-Healing] State Drift Detected (Merkle Mismatch or FORCE_SYNC). Path: ${persistencePath}`);
@@ -40,19 +40,20 @@ export const SelfHealingEngine = {
           const startTime = Date.now();
           const freshData = await Nexus.adapter.get(persistencePath);
           if (freshData) {
-            const rawState = currentState as any;
+            type HealItem = { id?: string;[k: string]: unknown };
+            const rawState = currentState as Record<string, unknown>;
             
             if (rawState && typeof rawState === 'object' && 'data' in rawState && 'loading' in rawState) {
               const currentList = Array.isArray(rawState.data) ? rawState.data : [];
-              const freshList = Array.isArray(freshData) ? freshData : (Array.isArray((freshData as any).data) ? (freshData as any).data : [freshData]);
+              const freshList = Array.isArray(freshData) ? freshData : (Array.isArray((freshData as { data?: unknown[] }).data) ? (freshData as { data: unknown[] }).data : [freshData]);
               
-              const currentMap = new Map<string, any>();
-              currentList.forEach((item: any) => {
+              const currentMap = new Map<string, HealItem>();
+              currentList.forEach((item: HealItem) => {
                 if (item && item.id) currentMap.set(item.id, item);
               });
 
               let healedCount = 0;
-              const mergedList = freshList.map((freshItem: any) => {
+              const mergedList = freshList.map((freshItem: HealItem) => {
                 if (freshItem && freshItem.id) {
                   const currentItem = currentMap.get(freshItem.id);
                   if (!currentItem || JSON.stringify(currentItem) !== JSON.stringify(freshItem)) {
@@ -65,10 +66,10 @@ export const SelfHealingEngine = {
                 return freshItem;
               });
 
-              const freshIds = new Set(freshList.map((item: any) => item && item.id).filter(Boolean));
+              const freshIds = new Set(freshList.map((item: HealItem) => item && item.id).filter(Boolean));
               const finalMergedList = [
                 ...mergedList,
-                ...currentList.filter((item: any) => item && item.id && !freshIds.has(item.id))
+                ...currentList.filter((item: HealItem) => item && item.id && !freshIds.has(item.id))
               ];
 
               store.set(atom, {
@@ -103,16 +104,17 @@ export const SelfHealingEngine = {
   /**
    * Hierarchical Merkle Tree calculation.
    */
-  calculateMerkleTree(data: any): { root: string; leaves: string[] } {
+  calculateMerkleTree(data: unknown): { root: string; leaves: string[] } {
     let leaves: string[] = [];
     if (Array.isArray(data)) {
         leaves = data.map(item => this.hashString(JSON.stringify(item || {})));
     } else if (data && typeof data === 'object') {
-        if ('data' in data && Array.isArray(data.data)) {
-            leaves = data.data.map((item: any) => this.hashString(JSON.stringify(item || {})));
+        const obj = data as Record<string, unknown>;
+        if (Array.isArray(obj.data)) {
+            leaves = (obj.data as unknown[]).map((item: unknown) => this.hashString(JSON.stringify(item || {})));
         } else {
-            const keys = Object.keys(data).sort();
-            leaves = keys.map(k => this.hashString(`${k}:${JSON.stringify(data[k] || {})}`));
+            const keys = Object.keys(obj).sort();
+            leaves = keys.map(k => this.hashString(`${k}:${JSON.stringify(obj[k] || {})}`));
         }
     } else {
         leaves = [this.hashString(JSON.stringify(data || {}))];
