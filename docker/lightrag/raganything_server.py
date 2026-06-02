@@ -28,7 +28,12 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 VISION_MODEL = os.environ.get("VISION_MODEL", "gemini-1.5-pro")
 NEO4J_URI = os.environ.get("NEO4J_URI", "neo4j://neo4j:7687")
 NEO4J_USER = os.environ.get("NEO4J_USERNAME", "neo4j")
-NEO4J_PASS = os.environ.get("NEO4J_PASSWORD", "restaurant_os_2026")
+NEO4J_PASS = os.environ.get("NEO4J_PASSWORD")
+if not NEO4J_PASS:
+    raise RuntimeError(
+        "[SECURITY] NEO4J_PASSWORD is not set. Refusing to start with a default password. "
+        "Set NEO4J_PASSWORD in the environment (see .env.example / docker-compose.yml)."
+    )
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 

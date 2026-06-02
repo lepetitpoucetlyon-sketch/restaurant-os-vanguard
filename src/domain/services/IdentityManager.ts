@@ -13,11 +13,12 @@ export interface PersistedSession {
 function getRootAdminPin(): string {
     const pin = process.env.NEXT_PUBLIC_ROOT_ADMIN_PIN || process.env.ROOT_ADMIN_PIN;
     if (!pin || pin.trim().length !== 4) {
-        if (process.env.NODE_ENV === 'development') {
-            console.warn('[SECURITY] ROOT_ADMIN_PIN non configuré. Utilisation du PIN par défaut 9999 en mode DEV.');
-            return '9999';
-        }
-        throw new Error('[SECURITY] ROOT_ADMIN_PIN is not configured. Set it in .env.local');
+        // No default PIN — ever. An unconfigured PIN must block admin access,
+        // not silently open a well-known credential (dev or prod).
+        throw new Error(
+            '[SECURITY] ROOT_ADMIN_PIN is not configured (must be a 4-digit value). ' +
+            'Set ROOT_ADMIN_PIN in .env.local — no default is provided.'
+        );
     }
     return pin.trim();
 }
