@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { logger } from '@/lib/axiom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import { 
   Zap, 
   TrendingUp, 
@@ -52,7 +53,7 @@ export default function MasterConsolePage() {
 
   const triggerRebalancing = (insight: FleetInsight) => {
     logger.info('[MCC] Rebalancing Triggered', { insight: insight as unknown as Record<string, unknown> });
-    alert(`[Nexus Intelligence] Action Executed: ${insight.message}\nLogic: ${insight.recommendation}`);
+    toast.success(`${insight.message} — ${insight.recommendation}`);
   };
 
   const [searchQuery, setSearchQuery] = useState("");
