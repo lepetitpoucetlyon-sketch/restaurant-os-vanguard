@@ -8,6 +8,15 @@ export default defineConfig({
         setupFiles: ['tests/setup.ts'],
         include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
         exclude: ['tests/e2e/**'],
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'lcov'],
+            include: ['src/**/*.{ts,tsx}'],
+            exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/tests/**'],
+            thresholds: {
+                lines: 70,
+            },
+        },
     },
     resolve: {
         alias: {
