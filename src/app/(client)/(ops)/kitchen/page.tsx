@@ -296,7 +296,7 @@ export default function KitchenPage() {
             <PrepTaskDetailDialog
                 isOpen={!!selectedPrepTask}
                 onClose={() => setSelectedPrepTask(null)}
-                task={selectedPrepTask as any}
+                task={selectedPrepTask as unknown as import("@nexus/contracts").MiseEnPlaceTask}
                 onToggleStatus={(id) => {
                     togglePrepTask(id);
                     setSelectedPrepTask((prev) => prev ? { ...prev, isCompleted: !prev.isCompleted } : null);
@@ -311,7 +311,7 @@ export default function KitchenPage() {
                     setEditingProduct(null);
                 }}
                 productType="dish"
-                editProduct={editingProduct as any}
+                editProduct={editingProduct as import("@nexus/contracts").Recipe ?? undefined}
             />
 
             {/* Diagnostic & Expertise Center */}

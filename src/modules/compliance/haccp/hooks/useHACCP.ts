@@ -85,8 +85,8 @@ export function useHACCP() {
             ...maintenanceLogs
         ].filter((log) => 
             log.status === 'critical' || 
-            (log as any).critical_issue || 
-            (log as any).integrityStatus === 'non-conforme'
+            (log as { critical_issue?: boolean }).critical_issue || 
+            (log as { integrityStatus?: string }).integrityStatus === 'non-conforme'
         );
     }, [hygieneLogs, receptionLogs, maintenanceLogs]);
 

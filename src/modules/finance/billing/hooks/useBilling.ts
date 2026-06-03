@@ -58,12 +58,12 @@ export function useBilling() {
         if (isLoading || !orders) return;
 
         const processOrders = async () => {
-            const completedOrders = (orders as Order[]).filter((o: Order) => o.status === 'paid' || (o as any).status === 'served');
+            const completedOrders = (orders as Order[]).filter((o: Order) => o.status === 'paid' || (o as { status?: string }).status === 'served');
             const ledgerData = (fiscalLedgerNode.data || []) as unknown as JournalEntry[];
 
             for (const order of completedOrders) {
                 // Check if already billed (avoid double billing in this session)
-                const isAlreadyBilled = ledgerData.some((entry: JournalEntry) => (entry as any).metadata?.orderId === order.id);
+                const isAlreadyBilled = ledgerData.some((entry: JournalEntry) => (entry as { metadata?: { orderId?: string } }).metadata?.orderId === order.id);
                 
                 if (!isAlreadyBilled) {
                     await billOrder(order);

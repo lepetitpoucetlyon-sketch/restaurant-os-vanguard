@@ -71,7 +71,7 @@ const HandDrawnBorder = ({ children, className }: { children: React.ReactNode, c
     </div>
 );
 export default function OperationsPage() {
-    const { tables: areas } = useOMS() as any;
+    const floorOps = useOMS(); const areas = floorOps?.areas ?? [];
     const updateAreaStatus = (id: string, status: string) => console.log('Update area', id, status);
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
@@ -190,7 +190,7 @@ export default function OperationsPage() {
                     <div className="col-span-9">
                         {view === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {areas?.map((area: OperationalArea, idx: number) => (
+                                {(areas as unknown as OperationalArea[])?.map((area: OperationalArea, idx: number) => (
                                     <motion.div
                                         key={area.id}
                                         initial={{ opacity: 0, scale: 0.9 }}

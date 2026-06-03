@@ -106,7 +106,7 @@ project.getSourceFiles().forEach(sourceFile => {
         if (node.wasForgotten()) continue;
         
         let text = node.getLiteralText();
-        let originalText = text;
+        const originalText = text;
 
         // 1. Standard Tailwind Classes
         text = text.replace(STATIC_TW_REGEX, (match, prefix, color, shade) => {

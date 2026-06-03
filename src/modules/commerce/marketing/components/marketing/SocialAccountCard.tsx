@@ -10,7 +10,7 @@ interface SocialAccountCardProps {
         platform: string;
         handle: string;
         followers: number;
-        icon?: any;
+        icon?: import("react").ComponentType<{ size?: number; strokeWidth?: number }>;
         gradient: string;
         posts: number;
         engagement: number;
@@ -19,7 +19,7 @@ interface SocialAccountCardProps {
 }
 
 export function SocialAccountCard({ account }: SocialAccountCardProps) {
-    const Icon = account.icon;
+    const Icon = account.icon as import("react").FC<{ size?: number; strokeWidth?: number }> | undefined;
     return (
         <div className="group relative overflow-hidden bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-xl border border-default dark:border-white/5 rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl transition-all duration-500">
             <div className={cn(
@@ -34,7 +34,7 @@ export function SocialAccountCard({ account }: SocialAccountCardProps) {
                             "w-20 h-20 rounded-[2rem] flex items-center justify-center text-white shadow-lg bg-gradient-to-br transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500",
                             account.gradient
                         )}>
-                            <Icon size={40} strokeWidth={1.5} />
+                            { Icon ? <Icon size={40} strokeWidth={1.5} /> : null }
                         </div>
                         <div>
                             <h3 className="font-serif font-bold text-3xl text-text-primary tracking-tight mb-1">{account.platform}</h3>

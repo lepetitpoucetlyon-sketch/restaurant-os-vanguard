@@ -80,7 +80,7 @@ export function RecipeBasicsTab({
                 <div className="bg-surface-card p-6 rounded-[2rem] border border-border/50">
                     <PremiumSelect
                         label="Expertise"
-                        value={(formData.difficulty as any) || 'medium'}
+                        value={(formData.difficulty as unknown as string) ?? "medium"}
                         onChange={(val) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), difficulty: val as Recipe["difficulty"] }))}
                         options={[
                             { value: 'easy', label: 'FACILE' },

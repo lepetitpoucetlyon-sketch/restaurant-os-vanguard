@@ -111,7 +111,7 @@ export const SimulationService = {
                 status: 'paid',
                 createdAt: now,
                 updatedAt: now
-            } as any;
+            } as unknown as import("@nexus/contracts").Order;
 
             await Nexus.adapter.set(Nexus.getTenantPath(`orders/${orderId}`), order);
             orders.push(order);

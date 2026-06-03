@@ -63,7 +63,7 @@ export const guardLoadingAtom = atom((get) => {
         oilLogsNodeAtom,
         wasteLogsNodeAtom
     ];
-    return nodes.some(node => (get(node as any) as any).loading);
+    return nodes.some(node => (get(node as import("jotai").Atom<{ loading: boolean }>)).loading);
 });
 // ⚡ HARDWARE SIMULATION (Electrification)
 // SensorReading moved to central types.ts

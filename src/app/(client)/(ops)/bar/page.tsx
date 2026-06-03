@@ -39,7 +39,7 @@ export default function BarPage() {
     // Data State
     const [orders, setOrders] = useState<BarOrder[]>(BAR_ORDERS.map(o => ({ 
       ...o, 
-      status: (o.items?.[0]?.status === 'done' ? 'ready' : (o.items?.[0]?.status === 'preparing' ? 'preparing' : 'new')) as any
+      status: (o.items?.[0]?.status === 'done' ? 'ready' : (o.items?.[0]?.status === 'preparing' ? 'preparing' : 'new')) as 'ready' | 'preparing' | 'new'
     })) as BarOrder[]);
     
     // Selection State
@@ -144,7 +144,7 @@ export default function BarPage() {
                     setEditingCocktail(null);
                 }}
                 productType="cocktail"
-                editProduct={editingCocktail as any}
+                editProduct={editingCocktail as unknown as import("@nexus/contracts").Recipe}
             />
         </div>
     );

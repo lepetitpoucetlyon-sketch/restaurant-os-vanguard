@@ -45,7 +45,7 @@ function buildSessionUser(user: User, lastActive?: number): User {
     return stripSensitiveFields({
         ...user,
         lastActive: lastActive ?? Date.now(),
-    } as any);
+    } as User);
 }
 
 function sameSessionUser(previous: User | null, next: User): boolean {

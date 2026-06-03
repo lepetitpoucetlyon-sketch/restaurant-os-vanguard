@@ -41,7 +41,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
             scheduledTime,
             content: content.trim(),
             status: (scheduledDate ? 'scheduled' : 'draft'),
-        } as any);
+        } as unknown as Parameters<typeof upsertCampaign>[0]);
 
         // Reset
         setName('');
@@ -108,7 +108,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     {CAMPAIGN_TYPES.map((ct) => (
                                         <button
                                             key={ct.id}
-                                            onClick={() => setType(ct.id as any)}
+                                            onClick={() => setType(ct.id as 'email' | 'social' | 'sms')}
                                             className={`group flex flex-col items-center gap-2 p-5 rounded-2xl border transition-all ${
                                                 type === ct.id
                                                     ? 'border-focus bg-action-primary/5 shadow-lg'

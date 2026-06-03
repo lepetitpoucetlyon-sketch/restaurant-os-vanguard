@@ -85,7 +85,7 @@ export class TransactionService {
             // 4. Customer & LOYALTY
             if (order.customerId) {
                 const customerFullPath = `${crmPath}/${order.customerId}`;
-                const customer = await Nexus.adapter.get(customerFullPath) as any;
+                const customer = await Nexus.adapter.get<{ loyaltyPoints?: number; totalRevenue?: number; totalVisits?: number }>(customerFullPath);
                 if (customer) {
                     const pointsToAdd = Math.floor((order.totalInCents || 0) / 100);
                     batch.update(customerFullPath, {

@@ -72,7 +72,7 @@ export default function HoursSettings() {
         await addClosedPeriod({ 
             ...period, 
             id: `CP-${Date.now()}`,
-            isAnnual: (period as any).isAnnual ?? false 
+            isAnnual: (period as { isAnnual?: boolean }).isAnnual ?? false 
         } as ClosedPeriod);
     };
 

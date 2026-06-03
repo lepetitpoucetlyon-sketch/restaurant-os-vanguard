@@ -27,7 +27,7 @@ function scanDirectory(dir: string, fileList: string[] = []): string[] {
 }
 
 let silentCount = 0;
-let silentFiles: string[] = [];
+const silentFiles: string[] = [];
 
 for (const pattern of CRITICAL_PATTERNS) {
     const files = scanDirectory(pattern);

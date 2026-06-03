@@ -32,7 +32,7 @@ export function NexusServiceInitializer(): null {
         logger.info(`[NexusInitializer] Initializing Service Layer for Tenant: ${tenantId}`);
         
         // 1. Initialize Sync Engine
-        NexusSyncService.init(tenantId as any);
+        NexusSyncService.init(tenantId);
         
         // 2. Initial Fleet Discover
         if (typeof window !== 'undefined') {

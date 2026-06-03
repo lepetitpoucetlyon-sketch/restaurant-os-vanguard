@@ -67,7 +67,7 @@ export function ZoneService({
                 type: 'zone',
                 schemaVersion: 2,
                 updatedAt: now
-            } as any);
+            } as Omit<Zone, "id">);
         }
         setIsEditingZone(false);
         setEditingZone(null);

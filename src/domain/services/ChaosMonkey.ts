@@ -102,9 +102,9 @@ export const ChaosMonkey = {
         if (currentStock <= 0) throw new Error("OUT_OF_STOCK");
         
         // Optimistic decrement
-        store.set(stockItemsNodeAtom as any, (prev: any) => ({
+        store.set(stockItemsNodeAtom, (prev) => ({
             ...prev,
-            data: (prev?.data || []).map((item: any, idx: number) => {
+            data: (prev?.data || []).map((item: import('@nexus/contracts').StockItem, idx: number) => {
                 if (idx === 0) {
                     return { ...item, quantity: (item.quantity || 0) - 1 };
                 }

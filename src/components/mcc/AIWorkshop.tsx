@@ -9,7 +9,7 @@ interface AIWorkshopProps {
 
 export function AIWorkshop({ initialTicket }: AIWorkshopProps) {
   const [ticketStatus, setTicketStatus] = useState<string>('En attente de patch');
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [analysisResult, setAnalysisResult] = useState<{ confidenceScore: number; suggestedPatch: string } | null>(null);
 
   const handleDeployPatch = () => {
     console.log("[AI WORKSHOP] Déploiement du patch NAM en cours...");

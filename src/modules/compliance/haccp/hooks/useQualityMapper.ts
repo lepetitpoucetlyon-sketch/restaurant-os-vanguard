@@ -8,6 +8,7 @@ import {
 } from '@modules/compliance/haccp/store/qualityAtoms';
 import { QualityEngine } from '@domain/services/QualityEngine';
 import { QualityControl, QualityControlItem } from '@domain/types/quality';
+import type { ActiveQualityControl } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { useSettings } from '@/hooks/useSettings';
 import { useTenant } from '@/hooks';
@@ -59,7 +60,7 @@ export const useQualityMapper = () => {
                 fingerprint: 'pending'
             }
         };
-        setActiveControl(newControl as any);
+        setActiveControl(newControl as unknown as ActiveQualityControl);
     };
 
     const commitReception = async () => {

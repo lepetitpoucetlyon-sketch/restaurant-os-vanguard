@@ -47,7 +47,7 @@ export class FirestoreAdapter implements INexusAdapter {
 
     async query<T = any>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
         try {
-            let constraints: QueryConstraint[] = [];
+            const constraints: QueryConstraint[] = [];
             if (options?.where) {
                 options.where.forEach((w: { field: string; operator: string; value: unknown }) => {
                     constraints.push(where(w.field, w.operator as WhereFilterOp, w.value));

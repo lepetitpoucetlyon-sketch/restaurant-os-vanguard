@@ -215,7 +215,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         <p className="text-[11px] font-black uppercase tracking-widest text-text-muted dark:text-white/30">Intelligence Financière</p>
                                     </div>
                                     <div className="text-right">
-                                        <span className="block text-4xl font-mono font-light text-status-success dark:text-[#00D9A6] tracking-tighter shadow-glow-accent">{formatCurrency(((activeOrder as any).totalInMicrounits || (activeOrder as any).totalInCents * 10000) / 1000000)}</span>
+                                        <span className="block text-4xl font-mono font-light text-status-success dark:text-[#00D9A6] tracking-tighter shadow-glow-accent">{formatCurrency(((activeOrder as { totalInMicrounits?: number; totalInCents?: number }).totalInMicrounits || ((activeOrder as { totalInCents?: number }).totalInCents ?? 0) * 10000) / 1000000)}</span>
                                         <span className="text-[9px] font-black text-text-muted dark:text-white/20 uppercase tracking-widest mt-1">Total TTC Direct</span>
                                     </div>
                                 </div>
@@ -235,7 +235,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                                     </div>
                                                 )}
                                             </div>
-                                            <span className="text-[13px] font-mono font-bold text-text-muted dark:text-white/40 mt-1">{formatCurrency(((item as any).unitPriceInMicrounits * item.quantity) / 1000000)}</span>
+                                            <span className="text-[13px] font-mono font-bold text-text-muted dark:text-white/40 mt-1">{formatCurrency(((item as { unitPriceInMicrounits?: number }).unitPriceInMicrounits! * item.quantity) / 1000000)}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -251,7 +251,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => onCheckout?.(((activeOrder as any).totalInMicrounits || (activeOrder as any).totalInCents * 10000) / 1000000)}
+                                        onClick={() => onCheckout?.(((activeOrder as { totalInMicrounits?: number; totalInCents?: number }).totalInMicrounits || ((activeOrder as { totalInCents?: number }).totalInCents ?? 0) * 10000) / 1000000)}
                                         className="h-14 px-8 rounded-2xl bg-accent hover:bg-surface-sidebar dark:hover:bg-surface-card text-bg-primary dark:text-bg-primary hover:text-white dark:hover:text-primary text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/10 active:scale-95"
                                     >
                                         Encaisser

@@ -50,7 +50,7 @@ export function ForensicButton() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error("[NEXUS BRIDGE] Zod Validation Failed:", error.issues);
-        toast.error(`Validation Failed: ${error.issues.map((e: any) => e.message).join(", ")}`);
+        toast.error(`Validation Failed: ${error.issues.map((e: { message: string }) => e.message).join(", ")}`);
       } else {
         console.error("[NEXUS BRIDGE] Unexpected error:", error);
       }
