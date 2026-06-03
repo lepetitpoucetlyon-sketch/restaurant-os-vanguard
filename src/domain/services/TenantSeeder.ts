@@ -54,7 +54,7 @@ export const TenantSeeder = {
         },
         theme: {
           ...RESTAURANT_FULL_DNA.theme,
-          primaryColor: primaryColor ?? RESTAURANT_FULL_DNA.theme.primaryColor,
+          primaryColor: primaryColor ?? RESTAURANT_FULL_DNA.theme?.primaryColor ?? '#C5A059',
         },
         status: {
           ...RESTAURANT_FULL_DNA.status,
