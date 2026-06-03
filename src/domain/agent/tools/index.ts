@@ -19,9 +19,9 @@ export const AGENT_TOOLS: Record<string, ToolDefinition> = {
 
 
 export const TOOL_SCHEMAS = Object.values(AGENT_TOOLS).map(tool => {
-    const jsonSchema = zodToJsonSchema(tool.schema as any, tool.name) as any;
+    const jsonSchema = zodToJsonSchema(tool.schema as unknown as Parameters<typeof zodToJsonSchema>[0], tool.name) as Record<string, unknown>;
     // Extract the actual schema from the definition wrapper
-    const parameters = jsonSchema.definitions?.[tool.name] || jsonSchema;
+    const definitions = jsonSchema.definitions as Record<string, unknown> | undefined; const parameters = definitions?.[tool.name] ?? jsonSchema;
 
     return {
         name: tool.name,

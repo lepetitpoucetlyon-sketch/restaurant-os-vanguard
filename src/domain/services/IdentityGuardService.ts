@@ -105,7 +105,7 @@ export const IdentityGuardService = {
         return res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
     },
 
-    extractJson(text: string): any {
+    extractJson(text: string): unknown {
         try {
             const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
             return JSON.parse(cleaned);

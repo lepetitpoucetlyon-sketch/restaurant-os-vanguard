@@ -49,7 +49,7 @@ export class ReservationService {
             id: generatedId,
             status: data.status || 'pending',
             updatedAt: Date.now(),
-            createdAt: (data as any).createdAt || Date.now(),
+            createdAt: (data as { createdAt?: number }).createdAt || Date.now(),
         } as Reservation;
     }
 }

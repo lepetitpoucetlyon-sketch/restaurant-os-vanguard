@@ -81,7 +81,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
         const conviveItems = selectedItems[conviveIndex] || [];
         return items
             .filter(item => conviveItems.includes(item.cartId))
-            .reduce((sum, item) => sum + Number(SovereignMath.multiply(item.unitPriceInMicrounits as any, item.quantity as any)), 0);
+            .reduce((sum, item) => sum + Number(SovereignMath.multiply(item.unitPriceInMicrounits, item.quantity)), 0);
     };
 
     const handlePayConvive = (conviveIndex: number) => {

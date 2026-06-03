@@ -26,7 +26,7 @@ export class NexusInterceptor implements INexusAdapter {
     async query<T = unknown>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
         const ctx = this.ensureContext(context);
         return this.intercept('READ', collectionPath, ctx, () => {
-            let finalOptions = options || {};
+            const finalOptions = options || {};
             const organizationId = ctx.vassalId;
             
             if (organizationId && organizationId !== 'restaurant-os' && organizationId !== 'main') {
@@ -73,7 +73,7 @@ export class NexusInterceptor implements INexusAdapter {
             if (isUnsubscribed) return;
 
             // Step 4: Access granted — NOW start the real listener
-            let finalOptions = options || {};
+            const finalOptions = options || {};
             if (ctx.vassalId && ctx.vassalId !== 'restaurant-os' && ctx.vassalId !== 'main') {
                 const tenantFilter = { field: 'organizationId', operator: '==' as const, value: ctx.vassalId };
                 finalOptions.where = [...(finalOptions.where || []), tenantFilter];

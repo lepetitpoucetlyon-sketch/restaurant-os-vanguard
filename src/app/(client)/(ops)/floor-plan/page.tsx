@@ -67,7 +67,7 @@ export default function FloorPlanPage() {
         updateTable
     } = useTables();
 
-    const currentFloor = floors?.find((f: any) => f.id === currentFloorId) || floors?.[0];
+    const currentFloor = floors?.find((f: import("@nexus/contracts").Floor) => f.id === currentFloorId) || floors?.[0];
     const tablesOnCurrentFloor = getTablesForFloor(currentFloorId as string);
     const selectedTable = (tables as Table[]).find(t => t.id === selectedTableId);
 
@@ -129,7 +129,7 @@ export default function FloorPlanPage() {
                                     exit={{ opacity: 0, y: 10 }}
                                     className="absolute top-full left-0 mt-3 w-[240px] bg-surface-card/95 dark:bg-bg-secondary/95 backdrop-blur-3xl border border-border rounded-[2rem] shadow-2xl z-50 p-2 overflow-hidden"
                                 >
-                                    {floors.map((f: any) => (
+                                    {floors.map((f: import("@nexus/contracts").Floor) => (
                                         <button
                                             key={f.id}
                                             onClick={() => { setCurrentFloor(f.id); setShowFloorSelector(false); }}

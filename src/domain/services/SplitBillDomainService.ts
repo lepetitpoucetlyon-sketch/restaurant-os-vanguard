@@ -40,7 +40,7 @@ export const SplitBillDomainService = {
         
         let sumMicro = 0;
         for (const item of itemsForConvive) {
-            const lineTotalMicro = ((item as any).unitPriceInMicrounits || 0) * item.quantity;
+            const lineTotalMicro = ((item as { unitPriceInMicrounits?: number }).unitPriceInMicrounits ?? 0) * item.quantity;
             sumMicro = SovereignMath.add(sumMicro, lineTotalMicro);
         }
         

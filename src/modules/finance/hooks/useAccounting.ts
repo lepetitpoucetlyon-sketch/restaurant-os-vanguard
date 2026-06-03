@@ -35,7 +35,7 @@ export function useAccounting() {
     const ledgerData = useAtomValue(fiscalLedgerAtom);
 
     // --- 🔨 LA FORGE ---
-    const accountingForge = useNexusMutation<JournalEntry>(journalEntriesNodeAtom as any, 'journalEntries', 'ACCOUNTING');
+    const accountingForge = useNexusMutation<JournalEntry>(journalEntriesNodeAtom, 'journalEntries', 'ACCOUNTING');
 
     const toggleViewMode = useCallback(() => {
         setViewMode(prev => prev === 'simple' ? 'expert' : 'simple');

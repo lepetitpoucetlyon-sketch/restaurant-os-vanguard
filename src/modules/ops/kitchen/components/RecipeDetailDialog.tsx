@@ -182,7 +182,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                 viewport={{ once: true, margin: "-100px" }}
                                 className="space-y-16"
                             >
-                                {(recipe.recipeSteps || recipe.steps || []).map((step: any, idx: number) => (
+                                {(recipe.recipeSteps || recipe.steps || []).map((step: { id?: string; instruction?: string; duration?: number; tip?: string; tools?: string[]; [k: string]: unknown }, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         variants={staggerItem}

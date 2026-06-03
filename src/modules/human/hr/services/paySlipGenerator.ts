@@ -83,7 +83,7 @@ export const generatePaySlip = (user: User) => {
 
     // --- Footer Totals ---
     
-    let finalY = (doc as any).lastAutoTable.finalY + 15;
+    let finalY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
     // Check if we need a new page for totals to avoid "crowding"
     if (finalY > 220) {

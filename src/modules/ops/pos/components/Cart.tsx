@@ -48,11 +48,11 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
             const multipliedPriceMicro = BigInt(Math.round(Number(basePriceMicro) * priceMultiplier));
             const itemTotalMicro = multipliedPriceMicro * BigInt(item.quantity);
             
-            totalMicro = SovereignMath.add(totalMicro as any, itemTotalMicro as any) as any;
+            totalMicro = BigInt(SovereignMath.add(Number(totalMicro), Number(itemTotalMicro)));
             
             const rate = item.taxRate ? parseFloat(item.taxRate) : (item.categoryId === 'cocktails' ? 0.20 : 0.10);
             const itemHtMicro = BigInt(Math.round(Number(itemTotalMicro) / (1 + rate)));
-            htMicro = SovereignMath.add(htMicro as any, itemHtMicro as any) as any;
+            htMicro = BigInt(SovereignMath.add(Number(htMicro), Number(itemHtMicro)));
         });
 
         return { 

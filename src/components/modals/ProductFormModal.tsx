@@ -77,7 +77,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsVegan(editProduct?.isVegan || false);
             setIsGlutenFree(editProduct?.isGlutenFree || false);
             setRecipeIngredients((editProduct?.ingredients || []).map((i) => ({ 
-                ingredientId: (i as any).ingredientId || (i as any).id, 
+                ingredientId: (i as { ingredientId?: string; id?: string }).ingredientId ?? (i as { id?: string }).id ?? "", 
                 quantity: i.quantity 
             })));
             setRecipeSteps(editProduct?.recipeSteps || []);
@@ -152,7 +152,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                         name: ing?.name || '',
                         quantity: ri.quantity,
                         unit: ing?.unit || 'unit',
-                        costInCents: Math.round(Number((ing as any)?.costInCents || 0) * ri.quantity),
+                        costInCents: Math.round(Number((ing as { costInCents?: number })?.costInCents || 0) * ri.quantity),
                     };
                 }),
                 recipeSteps,

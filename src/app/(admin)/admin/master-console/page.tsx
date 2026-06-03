@@ -51,7 +51,7 @@ export default function MasterConsolePage() {
   } = useFleet();
 
   const triggerRebalancing = (insight: FleetInsight) => {
-    logger.info('[MCC] Rebalancing Triggered', { insight: insight as any });
+    logger.info('[MCC] Rebalancing Triggered', { insight: insight as unknown as Record<string, unknown> });
     alert(`[Nexus Intelligence] Action Executed: ${insight.message}\nLogic: ${insight.recommendation}`);
   };
 

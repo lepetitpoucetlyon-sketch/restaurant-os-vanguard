@@ -46,7 +46,7 @@ export default function TablesSettings() {
     };
 
     const tablesCount = tables.length;
-    const totalSeats = tables.reduce((acc: any, t: any) => acc + t.seats, 0);
+    const totalSeats = tables.reduce((acc: number, t: { seats: number }) => acc + t.seats, 0);
 
     const isEditing = isEditingZone || isEditingTable || isEditingFloor;
 

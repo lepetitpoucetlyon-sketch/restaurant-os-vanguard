@@ -38,7 +38,7 @@ export function useFinanceReflex() {
                 status: 'validated',
                 hash: '1'.repeat(64),
                 hashPrecedent: '0'.repeat(64),
-            } as any);
+            } as unknown as Parameters<typeof addJournalEntry>[0]);
         }
 
     }, [pulse, addJournalEntry]);

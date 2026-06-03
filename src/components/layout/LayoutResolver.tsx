@@ -17,7 +17,7 @@ import { cn } from "@/lib/ui.foundations";
  */
 export function LayoutResolver({ children }: { children: React.ReactNode }) {
     const config = useAtomValue(tenantConfigAtom);
-    const layout = (config as any)?.status?.layoutType || 'default';
+    const layout = (config as { status?: { layoutType?: string } })?.status?.layoutType || 'default';
 
     // Morphing Logic
     switch (layout) {

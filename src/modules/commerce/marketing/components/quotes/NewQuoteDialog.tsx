@@ -34,18 +34,20 @@ interface NewQuoteDialogProps {
     onClose: () => void;
 }
 
-function createQuoteLine(product?: any): Partial<QuoteLine> {
+type QuoteProduct = { name?: string; priceInCents?: number; unitCostInCents?: number };
+function createQuoteLine(product?: QuoteProduct): Partial<QuoteLine> {
+    const price = product?.priceInCents ?? product?.unitCostInCents ?? 0;
     return {
         id: crypto.randomUUID(),
         type: product ? 'product' : 'service',
-        designation: product ? product.name : '',
+        designation: product?.name ?? '',
         quantity: 1,
-        unitPriceHTInCents: product ? (product.priceInCents || product.unitCostInCents || 0) : 0,
+        unitPriceHTInCents: price,
         vatRate: 20,
         unit: 'unité',
-        totalHTInCents: product ? product.priceInCents : 0,
-        totalTTCInCents: product ? Math.round(product.priceInCents * 1.2) : 0,
-        vatAmountInCents: product ? Math.round(product.priceInCents * 0.2) : 0
+        totalHTInCents: price,
+        totalTTCInCents: Math.round(price * 1.2),
+        vatAmountInCents: Math.round(price * 0.2)
     };
 }
 
@@ -59,7 +61,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [showCatalog, setShowCatalog] = useState(false);
 
-    const addNewLine = (product?: any) => {
+    const addNewLine = (product?: QuoteProduct) => {
         setLines([...lines, createQuoteLine(product)]);
         setShowCatalog(false);
     };
@@ -160,7 +162,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
         }
     };
 
-    const filteredProducts = (inventoryProducts || []).filter((p: any) =>
+    const filteredProducts = (inventoryProducts || []).filter((p: QuoteProduct) =>
         String(p.name || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 

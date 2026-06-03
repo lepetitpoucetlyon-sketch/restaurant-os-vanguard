@@ -41,7 +41,7 @@ export class ResilienceSlayer {
      * Hunts for "Zombies" (stale, corrupted, or out-of-sync states).
      */
     private static huntZombies() {
-        const targets: { atom: import('jotai').PrimitiveAtom<any>, path: string }[] = [
+        const targets: { atom: import('jotai').PrimitiveAtom<import('@/store/base').NexusNode<unknown>>, path: string }[] = [
             { atom: ordersNodeAtom, path: 'operational/orders' },
             { atom: stockItemsNodeAtom, path: 'operational/stock' },
             { atom: journalEntriesNodeAtom, path: 'finance/ledger' }
@@ -60,7 +60,7 @@ export class ResilienceSlayer {
                 
                 // 🔄 ROLLBACK ENGINE: If remote version is behind or conflicted, we force restore
                 const persistencePath = Nexus.getTenantPath(target.path);
-                SelfHealingEngine.auditAndHeal(target.atom as any, "FORCE_SYNC", persistencePath);
+                SelfHealingEngine.auditAndHeal(target.atom, "FORCE_SYNC", persistencePath);
                 
                 logger.info(`[Slayer] Rollback executed for ${target.path}. Reality restored in <50ms.`);
             }

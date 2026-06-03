@@ -273,7 +273,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     ) : (
                         <div className="space-y-20">
                             {zones.map(zone => {
-                                const zoneTables = (tables as Table[]).filter((t: Table) => (t as any).zoneId === zone.id);
+                                const zoneTables = (tables as Table[]).filter((t: Table) => t.zoneId === zone.id);
                                 if (zoneTables.length === 0) return null;
 
                                 return (
