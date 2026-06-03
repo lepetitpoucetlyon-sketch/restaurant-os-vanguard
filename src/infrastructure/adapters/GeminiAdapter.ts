@@ -3,6 +3,7 @@ import { User } from '@nexus/contracts';
 import { AGENT_TOOLS } from '@domain/agent/tools';
 import { ToolDefinition } from '@domain/agent/tools/types';
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
+import { ShieldedContext } from '../../lib/ai/ShieldedContext';
 
 export type GeminiLiveEvent = 
     | { type: 'audio', data: Int16Array }
@@ -75,10 +76,20 @@ export class GeminiLiveService {
 
         this.socket.onopen = () => {
             console.log("Connected to Gemini Live Secure Relay");
+            
+            // 🛡️ DYNAMIC TOOL MASKING: Declare only permitted tools to the chatbot
+            let safeTools = config?.tools;
+            if (safeTools && this.user && this.rolePermissions) {
+                safeTools = safeTools.filter((t: any) => {
+                    if (!t.category) return true;
+                    return AccessPolicyManager.hasAccess(this.user!, this.rolePermissions!, t.category);
+                });
+            }
+
             this.socket?.send(JSON.stringify({
                 type: 'setup',
                 user: { id: this.user?.id, role: this.user?.role, name: this.user?.name },
-                config: config // Transmit DNA and Tools to the bridge
+                config: { ...config, tools: safeTools } // Transmit only safe tools to the bridge
             }));
         };
     }
@@ -163,9 +174,12 @@ export class GeminiLiveService {
         }
 
         try {
-            // Injecting Engines/State as context for the tool
-            const result = await (tool as ToolDefinition).execute(validatedArgs, this.user!, {
-                timestamp: new Date().toISOString()
+            // 🛡️ SHIELDED SANDBOX EXECUTION: Prevent cross-tenant data leakages
+            const tenantId = this.user?.tenantId || 'anonymous-vassal';
+            const result = await ShieldedContext.run(tenantId, async () => {
+                return await (tool as ToolDefinition).execute(validatedArgs, this.user!, {
+                    timestamp: new Date().toISOString()
+                });
             });
             this.sendToolResult(event.callId, result as SovereignData);
         } catch (error) {

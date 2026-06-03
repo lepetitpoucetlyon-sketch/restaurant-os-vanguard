@@ -31,7 +31,7 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
         orphanNodesRegistry.set(id, new WeakRef(nodeAtom));
     }
 
-    GlobalRegistryService.register(id, nodeAtom as any);
+    GlobalRegistryService.register(id, nodeAtom);
     return nodeAtom;
 }
 

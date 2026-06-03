@@ -46,7 +46,7 @@ export class FiscalTransmitter {
             });
 
             // 5. Suture Financière: Provisionnement de la TVA à décaisser
-            await SovereignLedger.recordTransfer({
+            await SovereignLedger.getInstance(tenantId).recordTransfer({
                 debitAccount: 'TAX_COLLECTED_4457',
                 creditAccount: 'TAX_TO_PAY_4455',
                 amountInCents: breakdown.netTaxToPayInCents,

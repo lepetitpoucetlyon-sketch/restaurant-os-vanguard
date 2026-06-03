@@ -30,14 +30,29 @@ interface IBroadcastAdapter extends INexusAdapter {
  * Grade X : Double-Entry Immutability.
  */
 export class SovereignLedger {
-    
-    public static currentMode: string = 'EXPERT';
+    private static instances = new Map<string, SovereignLedger>();
 
-    private static handleCorruptionDetected() {
+    public static getInstance(tenantId: string): SovereignLedger {
+        let instance = this.instances.get(tenantId);
+        if (!instance) {
+            instance = new SovereignLedger(tenantId);
+            this.instances.set(tenantId, instance);
+        }
+        return instance;
+    }
+
+    // --- Instance Implementation ---
+    public currentMode: string = 'EXPERT';
+    private readonly tenantId: string;
+
+    private constructor(tenantId: string) {
+        this.tenantId = tenantId;
+    }
+
+    private handleCorruptionDetected() {
         logger.error('🚨 [Oracle] FATAL CORRUPTION DETECTED. Emergency LOCAL_LOCK activated.');
         this.currentMode = 'LOCAL_LOCK';
         // Notification immédiate à l'UI pour bloquer toute transaction asymétrique
-        // Note: Adaptation si broadcast n'existe pas nativement sur l'adapter
         if (Nexus.adapter && 'broadcast' in Nexus.adapter) {
             const adapter = Nexus.adapter as IBroadcastAdapter;
             adapter.broadcast('SYSTEM_LOCKDOWN', { reason: 'Data Integrity Breach' });
@@ -48,7 +63,7 @@ export class SovereignLedger {
      * Records a balanced economic movement between two accounts.
      * Principle: Every DEBIT must have a matching CREDIT.
      */
-    static async recordTransfer(params: {
+    async recordTransfer(params: {
         debitAccount: LedgerEntry['accountName'],
         creditAccount: LedgerEntry['accountName'],
         amountInCents: number,
@@ -66,7 +81,7 @@ export class SovereignLedger {
         const date = new Date().toISOString();
         let mode: AccountingMode = 'EXPERT';
         try {
-            const settings = await Nexus.adapter.get<GlobalSettings>(Nexus.getTenantPath('settings/global'));
+            const settings = await Nexus.adapter.get<GlobalSettings>(Nexus.getTenantPath('settings/global', this.tenantId));
             mode = settings?.accounting?.complexityMode || 'EXPERT';
         } catch { 
             mode = 'LOCAL_LOCK' as AccountingMode; 
@@ -85,8 +100,8 @@ export class SovereignLedger {
         logger.info(`[SovereignLedger] [${mode}] Balanced: ${params.amountInCents/100}€ [${params.debitAccount}/${params.creditAccount}]`);
 
         await Promise.all([
-            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debit.id}`), debit),
-            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${credit.id}`), credit)
+            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debit.id}`, this.tenantId), debit),
+            Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${credit.id}`, this.tenantId), credit)
         ]);
     }
 
@@ -94,7 +109,7 @@ export class SovereignLedger {
      * ⚖️ Inquisiteur QA Validation
      * Ensures Debit matches Credit with absolute precision.
      */
-    private static validateIntegrity(debit: LedgerEntry, credit: LedgerEntry, mode: AccountingMode): void {
+    private validateIntegrity(debit: LedgerEntry, credit: LedgerEntry, mode: AccountingMode): void {
         const diff = Math.abs(debit.amountInCents - credit.amountInCents);
         const tolerance = 0.01;
 
@@ -110,13 +125,9 @@ export class SovereignLedger {
     }
 
     /**
-     * Records a sale (Cash In / Sales Revenue)
-     */
-    
-    /**
      * 🖋️ Suture GRADE X+++: Convert Engagement to Debt
      */
-    static async convertEngagementToDebt(deliveryNoteId: string, amountInCents: number): Promise<void> {
+    async convertEngagementToDebt(deliveryNoteId: string, amountInCents: number): Promise<void> {
         // 1. Contre-passation de l'engagement (Hors-bilan)
         await this.recordTransfer({
             debitAccount: 'ENGAGEMENT_CREDIT_801',
@@ -139,7 +150,7 @@ export class SovereignLedger {
     /**
      * Records a sale (Cash In / Sales Revenue)
      */
-    static async recordSale(orderId: string, amountInCents: number): Promise<void> {
+    async recordSale(orderId: string, amountInCents: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'CASH',
             creditAccount: 'SALES',
@@ -152,7 +163,7 @@ export class SovereignLedger {
     /**
      * Records an expense (Purchases / Cash Out)
      */
-    static async recordPurchase(poId: string, amountInCents: number): Promise<void> {
+    async recordPurchase(poId: string, amountInCents: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'PURCHASES',
             creditAccount: 'CASH',
@@ -165,7 +176,7 @@ export class SovereignLedger {
     /**
      * Records a payroll expense (Payroll / Cash Out)
      */
-    static async recordPayroll(staffId: string, amountInCents: number): Promise<void> {
+    async recordPayroll(staffId: string, amountInCents: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'PAYROLL',
             creditAccount: 'CASH',
@@ -179,9 +190,9 @@ export class SovereignLedger {
      * Returns the Real-Time EBITDA estimation based on ledger balances.
      * EBITDA = Revenue - (COGS + Labor)
      */
-    static async getRealTimeEBITDA(): Promise<number> {
+    async getRealTimeEBITDA(): Promise<number> {
         try {
-            const entries = await Nexus.adapter.query<LedgerEntry>(Nexus.getTenantPath('ledger/entries'));
+            const entries = await Nexus.adapter.query<LedgerEntry>(Nexus.getTenantPath('ledger/entries', this.tenantId));
             
             if (!entries || entries.length === 0) return 0;
 
@@ -211,9 +222,9 @@ export class SovereignLedger {
      * ⚖️ Inquisiteur QA: Omniscient Ledger Audit
      * Performs a full binary scan of all economic movements to detect asymmetry.
      */
-    static async runInquisiteurQA(): Promise<{ secure: boolean; expected: number; actual: number; discrepancies: InquisiteurDiscrepancy[] }> {
+    async runInquisiteurQA(): Promise<{ secure: boolean; expected: number; actual: number; discrepancies: InquisiteurDiscrepancy[] }> {
         logger.info('[SovereignLedger] 👁️ INQUISITEUR QA: Initiating Full Binary Reconciliation.');
-        const entries = await Nexus.adapter.query<LedgerEntry>(Nexus.getTenantPath('ledger/entries'));
+        const entries = await Nexus.adapter.query<LedgerEntry>(Nexus.getTenantPath('ledger/entries', this.tenantId));
         
         let totalDebit = 0;
         let totalCredit = 0;

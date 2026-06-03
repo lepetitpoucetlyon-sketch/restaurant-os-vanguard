@@ -126,7 +126,7 @@ export async function suggestChickenProcurement(qty: number): Promise<void> {
   
   // Inject into SovereignLedger PROPOSALS account
   const { SovereignLedger } = await import('./SovereignLedger');
-  await SovereignLedger.recordTransfer({
+  await SovereignLedger.getInstance('restaurant-os').recordTransfer({
     debitAccount: 'PURCHASES',
     creditAccount: 'PROPOSALS', // Awaiting human signing
     amountInCents: cost,

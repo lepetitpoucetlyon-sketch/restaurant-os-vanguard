@@ -59,7 +59,7 @@ export class MonkeyChaosAgent {
     private static async corruptLedger() {
         try {
             // Tentative d'injection asymétrique (Sabotage)
-            await SovereignLedger.recordTransfer({
+            await SovereignLedger.getInstance('restaurant-os').recordTransfer({
                 debitAccount: 'CASH',
                 creditAccount: 'SALES',
                 amountInCents: 10000,

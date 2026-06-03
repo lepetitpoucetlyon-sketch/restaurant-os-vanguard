@@ -105,7 +105,38 @@ export class NexusBridge {
    * 🖋️ Suture GRADE X+++: Emission CommunicationPulse (Email/SMS)
    */
   static async sendCommunicationPulse(pulse: import('@/domain/finance/collection/types').CommunicationPulse) {
-      console.log(`[CommunicationPulse] Sent ${pulse.type} to ${pulse.recipient}`, pulse);
+      const { sendEmail } = await import('@/lib/services/email-service');
+
+      // Handle EMAIL and MIXED types (SMS would need separate provider)
+      if (pulse.type === 'EMAIL' || pulse.type === 'MIXED') {
+          try {
+              const result = await sendEmail({
+                  to: pulse.recipient,
+                  subject: pulse.subject,
+                  html: pulse.content
+              });
+
+              if (result.success) {
+                  // Track successful send in local audit log
+                  await import('@/lib/logger').then(({ logger }) => {
+                      logger.info('[CommunicationPulse] Email sent', {
+                          recipient: pulse.recipient,
+                          type: pulse.type,
+                          messageId: result.messageId
+                      });
+                  });
+              } else {
+                  throw new Error(result.error || 'Email send failed');
+              }
+          } catch (error) {
+              const { logger } = await import('@/lib/logger');
+              logger.error('[CommunicationPulse] Failed to send email', {
+                  recipient: pulse.recipient,
+                  type: pulse.type,
+                  error: error instanceof Error ? error.message : String(error)
+              });
+          }
+      }
   }
 
   static stop() {
