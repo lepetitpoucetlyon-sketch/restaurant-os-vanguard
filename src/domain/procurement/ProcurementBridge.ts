@@ -12,13 +12,13 @@ export class ProcurementBridge {
     /**
      * Etape 1 : Création du Bon de Commande -> Engagement Hors-Bilan
      */
-    static async engagePurchaseOrder(po: PurchaseOrder): Promise<void> {
+    static async engagePurchaseOrder(po: PurchaseOrder, tenantId: string = 'global'): Promise<void> {
         if (po.status !== 'submitted') {
             throw new Error('PROCUREMENT_001: Only submitted orders can be engaged.');
         }
 
         // Création de l'engagement hors-bilan
-        await SovereignLedger.recordTransfer({
+        await SovereignLedger.getInstance(tenantId).recordTransfer({
             debitAccount: 'ENGAGEMENT_DEBIT_800',
             creditAccount: 'ENGAGEMENT_CREDIT_801',
             amountInCents: po.totalAmountInCents,
@@ -28,7 +28,8 @@ export class ProcurementBridge {
 
         NexusTelemetryService.emitAuditPulse('LOGISTICS', 'PO_ENGAGED', {
             poId: po.id,
-            amountInCents: po.totalAmountInCents
+            amountInCents: po.totalAmountInCents,
+            tenantId
         });
     }
 
@@ -52,7 +53,7 @@ export class ProcurementBridge {
         });
 
         // 3. Réaction Automatique : Contre-passation de l'engagement et création de la dette réelle
-        await SovereignLedger.convertEngagementToDebt(deliveryNote.id, deliveryNote.totalAmountInCents);
+        await SovereignLedger.getInstance(tenantId).convertEngagementToDebt(deliveryNote.id, deliveryNote.totalAmountInCents);
 
         NexusTelemetryService.emitAuditPulse('LOGISTICS', 'DELIVERY_NOTE_SIGNED', {
             deliveryNoteId: deliveryNote.id,

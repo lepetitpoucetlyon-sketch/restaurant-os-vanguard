@@ -5,7 +5,6 @@ import { HACCPTelemetryBridge } from './HACCPTelemetryBridge';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine } from './FiscalEngine';
-import { SovereignLedger } from './SovereignLedger';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 

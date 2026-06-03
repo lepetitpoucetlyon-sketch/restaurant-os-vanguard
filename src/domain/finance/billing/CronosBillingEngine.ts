@@ -28,7 +28,7 @@ export class CronosBillingEngine {
                 await this.chargeSubscription(sub);
 
                 // 2. Suture Financière: Reconnaissance du revenu et entrée en trésorerie
-                await SovereignLedger.recordTransfer({
+                await SovereignLedger.getInstance(sub.tenantId).recordTransfer({
                     debitAccount: 'CASH',
                     creditAccount: 'SALES',
                     amountInCents: sub.amountInCents,

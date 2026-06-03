@@ -16,7 +16,7 @@ export const MonkeyChaos = {
         try {
             // We bypass the standard recordTransfer to test the internal validation if possible,
             // or we send a clearly broken request to verify the financier blocks it.
-            await SovereignLedger.recordTransfer({
+            await SovereignLedger.getInstance('restaurant-os').recordTransfer({
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',
                 amountInCents: 10000, 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { ApiVersion, StandardResponseSchema } from '@/shared/nexus/contracts/api/api.contracts';
-import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
+import { GatewayErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 const TicketSchema_v1 = z.object({
@@ -21,8 +21,30 @@ const TicketSchema_v2 = TicketSchema_v1.extend({
   userStatus: z.enum(['ACTIVE', 'RESTRICTED', 'ADMIN']).optional()
 });
 
+export type StandardResponse<T> = {
+  success: boolean;
+  data?: T;
+  error?: string;
+  metadata?: {
+    version: 'v1' | 'v2';
+    timestamp: string;
+    latency?: number;
+  };
+};
+
 export async function POST(request: Request) {
   try {
+    // 🛡️ HIDDEN DOOR PATTERN: Security Lockdown
+    const tenantId = request.headers.get('x-nexus-tenant-id');
+    if (!tenantId) {
+      const errorResponse: StandardResponse<never> = {
+        success: false,
+        error: GatewayErrorCode.ACCESS_DENIED,
+        metadata: { version: 'v1', timestamp: new Date().toISOString() }
+      };
+      return NextResponse.json(errorResponse, { status: 401 });
+    }
+
     const url = new URL(request.url);
     const version = url.searchParams.get('v') === 'v2' ? 'v2' : 'v1';
     
@@ -44,29 +66,34 @@ export async function POST(request: Request) {
     };
 
     NexusTelemetryService.emitAuditPulse('INTELLIGENCE', 'NAM_ANALYSIS_COMPLETED', {
-      ticketId: parsedData.id
+      ticketId: parsedData.id,
+      tenantId
     });
 
-    return NextResponse.json({
+    const successResponse: StandardResponse<typeof resultData> = {
       success: true,
       data: resultData,
       metadata: {
         version: version as 'v1' | 'v2',
         timestamp: new Date().toISOString()
       }
-    });
+    };
+
+    return NextResponse.json(successResponse);
   } catch (error) {
     NexusTelemetryService.emitAuditPulse('INTELLIGENCE', 'NAM_ANALYSIS_FAILED', {
       error: error instanceof Error ? error.message : 'Unknown validation error'
     });
 
-    return NextResponse.json({
+    const errorResponse: StandardResponse<never> = {
       success: false,
       error: CoreErrorCode.MAPPING_FAILURE,
       metadata: {
         version: 'v1',
         timestamp: new Date().toISOString()
       }
-    }, { status: 400 });
+    };
+
+    return NextResponse.json(errorResponse, { status: 400 });
   }
 }

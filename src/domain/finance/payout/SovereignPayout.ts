@@ -14,7 +14,7 @@ export class SovereignPayout {
     /**
      * Initie une demande de paiement fournisseur.
      */
-    static async initiatePayout(invoice: PayoutInvoice, initiatorAdminId: string): Promise<PayoutRequest> {
+    static async initiatePayout(invoice: PayoutInvoice, initiatorAdminId: string, tenantId: string = 'restaurant-os'): Promise<PayoutRequest> {
         if (invoice.status !== 'validated') {
             throw new Error('PAYOUT_001: Invoice must be validated before payout.');
         }
@@ -43,7 +43,7 @@ export class SovereignPayout {
         });
 
         if (!isHighValue) {
-            await this.executePayout(request, invoice);
+            await this.executePayout(request, invoice, tenantId);
         }
 
         NexusTelemetryService.emitAuditPulse('FINANCE', 'PAYOUT_INITIATED', {
@@ -58,7 +58,7 @@ export class SovereignPayout {
     /**
      * Valide le paiement via l'Approbation Duale (MCC).
      */
-    static async approvePayout(request: PayoutRequest, invoice: PayoutInvoice, secondAdminId: string): Promise<PayoutRequest> {
+    static async approvePayout(request: PayoutRequest, invoice: PayoutInvoice, secondAdminId: string, tenantId: string = 'restaurant-os'): Promise<PayoutRequest> {
         if (request.status !== 'pending_approval') {
             throw new Error('PAYOUT_003: Request is not pending approval.');
         }
@@ -84,7 +84,7 @@ export class SovereignPayout {
             secondAdminId
         });
 
-        await this.executePayout(request, invoice);
+        await this.executePayout(request, invoice, tenantId);
 
         return request;
     }
@@ -92,7 +92,7 @@ export class SovereignPayout {
     /**
      * Exécute le paiement SEPA et suture le registre comptable.
      */
-    private static async executePayout(request: PayoutRequest, invoice: PayoutInvoice): Promise<void> {
+    private static async executePayout(request: PayoutRequest, invoice: PayoutInvoice, tenantId: string): Promise<void> {
         if (request.status !== 'approved') {
             throw new Error('PAYOUT_005: Cannot execute unapproved payout.');
         }
@@ -111,7 +111,7 @@ export class SovereignPayout {
             request.status = 'completed';
 
             // Suture Financière: Extinction de la dette (Débit 401) et sortie de trésorerie (Crédit 512 / CASH)
-            await SovereignLedger.recordTransfer({
+            await SovereignLedger.getInstance(tenantId).recordTransfer({
                 debitAccount: 'SUPPLIER_DEBT_401',
                 creditAccount: 'CASH',
                 amountInCents: request.amountInCents,

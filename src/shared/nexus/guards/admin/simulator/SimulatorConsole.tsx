@@ -80,7 +80,7 @@ export function SimulatorConsole() {
     const runInquisiteurQA = async () => {
         setIntegrityStatus('VERIFYING');
         try {
-            const audit = await SovereignLedger.runInquisiteurQA();
+            const audit = await SovereignLedger.getInstance('restaurant-os').runInquisiteurQA();
             setIntegrityStatus(audit.secure ? 'SECURE' : 'BREACH');
             if (!audit.secure) {
                 addLog(`INQUISITEUR QA: Critical Balance Breach! Diff: ${(Math.abs(audit.expected - audit.actual)/100).toFixed(2)}€`, 'error');
