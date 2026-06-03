@@ -24,6 +24,7 @@ import { MasterBridge } from './MasterBridge';
 import { Mutex } from './utils/Mutex';
 import { TaskContext, TASK_MAPS, shouldEagerLoad } from './icm/TaskContext';
 import { registerNexusHandlers, unregisterNexusHandlers } from './events/registerHandlers';
+import { readZcpoState, degradeImportanceMap } from './icm/zcpoBridge';
 
 // Grade IX: Genome Immunity
 import { genomeValidator } from '@domain/services/GenomeValidator';
@@ -66,6 +67,13 @@ export const NexusSyncService = {
 
         // --- EVENT BUS HANDLERS ---
         registerNexusHandlers();
+
+        // --- ZCPO × ICM degradation — ajuste l'importance map selon pression mémoire ---
+        const zcpoState = await readZcpoState();
+        const icmDegraded = { ...icm, importance: degradeImportanceMap(icm.importance, zcpoState) };
+        if (zcpoState?.memoryPressure !== 'normal' && zcpoState !== null) {
+          logger.warn(`[NexusSyncService] ZCPO pressure=${zcpoState.memoryPressure} — ICM dégradé`);
+        }
 
         // --- MASTER BRIDGE SUTURE ---
         if (tenantId !== 'restaurant-os' && tenantId !== 'lepetitpoucet' && tenantId !== 'vanguard') {
@@ -116,7 +124,7 @@ export const NexusSyncService = {
         }
 
         // 2. PARALLEL INITIALIZATION — ICM-lite selective sync
-        const imp = icm.importance;
+        const imp = icmDegraded.importance;
         logger.info(`[NexusSyncService][ICM] Task="${icm.taskId}" — chargement sélectif activé.`);
         const initStart = performance.now();
         try {
