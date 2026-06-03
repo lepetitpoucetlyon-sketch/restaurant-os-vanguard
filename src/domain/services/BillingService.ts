@@ -2,14 +2,9 @@ import 'server-only';
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { PRICING } from '@/shared/constants/pricing';
 
-const PLANS = {
-  STANDARD:   { priceId: process.env.STRIPE_PRICE_STANDARD   ?? '', amountEur: 79  },
-  PREMIUM:    { priceId: process.env.STRIPE_PRICE_PREMIUM    ?? '', amountEur: 149 },
-  ENTERPRISE: { priceId: process.env.STRIPE_PRICE_ENTERPRISE ?? '', amountEur: 299 },
-} as const;
-
-export type PlanTier = keyof typeof PLANS;
+export type PlanTier = keyof typeof PRICING;
 
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -30,18 +25,18 @@ export const BillingService = {
     cancelUrl: string;
   }): Promise<{ url: string }> {
     const stripe = getStripe();
-    const plan = PLANS[params.tier];
+    const tier = PRICING[params.tier];
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       customer_email: params.email,
-      line_items: [{ price: plan.priceId, quantity: 1 }],
+      line_items: [{ price: tier.stripePriceId, quantity: 1 }],
       metadata: { tenantId: params.tenantId, tier: params.tier },
       success_url: params.successUrl,
       cancel_url: params.cancelUrl,
     });
 
-    logger.info(`[BillingService] Checkout created for ${params.tenantId} — tier=${params.tier}`);
+    logger.info(`[BillingService] Checkout created for ${params.tenantId} — tier=${params.tier} @ €${tier.monthlyEur}`);
     return { url: session.url ?? params.successUrl };
   },
 

@@ -63,34 +63,34 @@ export default function MCCDashboard() {
   const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury'>('fleet');
   const [newCloneName, setNewCloneName] = useState('');
   const [newCloneKey, setNewCloneKey] = useState('');
+  const [newCloneEmail, setNewCloneEmail] = useState('');
   const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
 
   // Filter & Search
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleCreateClone = async () => {
-    if (!newCloneName || !newCloneKey) return;
-    
+    if (!newCloneName || !newCloneKey || !newCloneEmail) return;
+
     setProvisioningStatus('Initializing Cloud Resources...');
     try {
       const newInst = await ProvisioningEngine.provisionNewInstance({
         name: newCloneName,
         key: newCloneKey,
-        ownerEmail: 'admin@empire.com',
+        ownerEmail: newCloneEmail,
         initialPrimaryColor: '#6366f1',
         tier: 'STANDARD',
         copyBaseTemplates: true
       });
 
-      // Simulation injection
       refreshFleet();
-      
-      // Success! - zero delay mandate
+
       setProvisioningStatus('Success! Clone Active.');
       setShowCloneModal(false);
       setProvisioningStatus(null);
       setNewCloneName('');
       setNewCloneKey('');
+      setNewCloneEmail('');
     } catch (err) {
       setProvisioningStatus('Critical Error in Provisioning.');
     }
@@ -360,12 +360,23 @@ export default function MCCDashboard() {
                 </div>
                 <div>
                   <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Subdomain Slug</label>
-                  <input 
-                    type="text" 
-                    placeholder="ex: le-grand-paris" 
+                  <input
+                    type="text"
+                    placeholder="ex: le-grand-paris"
                     className="w-full bg-[#0a0a0b] border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-mono"
                     value={newCloneKey}
                     onChange={(e) => setNewCloneKey(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Owner Email</label>
+                  <input
+                    type="email"
+                    placeholder="owner@restaurant.fr"
+                    className="w-full bg-[#0a0a0b] border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all"
+                    value={newCloneEmail}
+                    onChange={(e) => setNewCloneEmail(e.target.value)}
+                    required
                   />
                 </div>
 

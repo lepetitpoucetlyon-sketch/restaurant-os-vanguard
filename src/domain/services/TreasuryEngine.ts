@@ -1,5 +1,6 @@
 import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
+import { PRICING, getPriceEur } from '@/shared/constants/pricing';
 
 export interface TreasuryReport {
     totalMRR: number;
@@ -7,17 +8,11 @@ export interface TreasuryReport {
     collectiveSavings: number;
     netMargin: number;
     fleetTierStats: {
-        standard: number;
-        premium: number;
-        elite: number;
+        STANDARD: number;
+        PREMIUM: number;
+        ENTERPRISE: number;
     };
 }
-
-const TIER_PRICING = {
-    standard: 199,
-    premium: 499,
-    elite: 1299
-};
 
 const AI_TOKEN_COST_MODEL = 0.00002; // € per generated token equivalent
 
@@ -35,17 +30,18 @@ export class TreasuryEngine {
 
         let totalMRR = 0;
         let totalAICosts = 0;
-        const tierStats = { standard: 0, premium: 0, elite: 0 };
+        const tierStats = { STANDARD: 0, PREMIUM: 0, ENTERPRISE: 0 };
 
         instances.forEach(instance => {
-            // MRR Calculation
-            const tier = instance?.tier || 'standard';
-            const price = TIER_PRICING[tier as keyof typeof TIER_PRICING] || TIER_PRICING.standard;
+            // MRR Calculation — use centralized pricing
+            const tier = (instance?.tier || 'STANDARD') as keyof typeof PRICING;
+            const validTier = tier in PRICING ? tier : 'STANDARD';
+            const price = getPriceEur(validTier);
             totalMRR += price;
 
             // Tier distribution tracking
-            if (tier in tierStats) {
-                tierStats[tier as keyof typeof tierStats]++;
+            if (validTier in tierStats) {
+                tierStats[validTier as keyof typeof tierStats]++;
             }
 
             // AI Consumption Metering (Simulated from instance metrics)
