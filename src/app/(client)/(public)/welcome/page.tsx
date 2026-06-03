@@ -64,9 +64,11 @@ export default function WelcomePage() {
                 Un système d'exploitation premium, conçu comme l'extension naturelle de votre brigade. La configuration ne vous prendra que quelques minutes.
             </motion.p>
             <motion.div variants={fadeUp} className="flex gap-4 justify-center">
+                <Link href="/signup">
                 <Button className="bg-text-primary text-bg-primary w-48 h-14 rounded-full font-bold uppercase tracking-widest text-xs shadow-xl shadow-black/10 hover:scale-105 transition-all">
                     Commencer
                 </Button>
+                </Link>
                 <Link href="#migration">
                     <Button variant="outline" className="w-48 h-14 rounded-full font-bold uppercase tracking-widest text-xs border-border hover:bg-bg-secondary text-text-primary transition-all">
                         Voir le Guide
