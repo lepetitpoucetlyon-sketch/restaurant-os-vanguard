@@ -32,7 +32,11 @@ export async function GET(request: NextRequest): Promise<NextResponse<GitStatusR
       lastCommit: 'GRADE X: Email service integration + pricing fixes'
     };
 
-    logger.info('[GitStatus] Status queried', mockStatus);
+    logger.info('[GitStatus] Status queried', {
+      branch: mockStatus.branch,
+      modifiedCount: mockStatus.modifiedCount,
+      lastCommit: mockStatus.lastCommit
+    });
 
     return NextResponse.json(mockStatus);
   } catch (error) {
