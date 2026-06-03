@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
 interface SignupForm {
@@ -48,8 +46,12 @@ export default function SignupPage() {
         return;
       }
 
-      toast.success('Compte créé ! Redirection vers votre espace…');
-      router.push(`/?tenant=${data.tenantId}`);
+      toast.success('Compte créé ! Redirection vers le paiement…');
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        router.push(`/?tenant=${data.tenantId}`);
+      }
     } catch {
       toast.error('Erreur réseau — réessayez');
     } finally {
@@ -67,8 +69,8 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
-            <Label htmlFor="restaurantName">Nom du restaurant</Label>
-            <Input
+            <label htmlFor="restaurantName">Nom du restaurant</label>
+            <input
               id="restaurantName"
               name="restaurantName"
               placeholder="Le Petit Poucet"
@@ -79,8 +81,8 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="siret">SIRET</Label>
-            <Input
+            <label htmlFor="siret">SIRET</label>
+            <input
               id="siret"
               name="siret"
               placeholder="12345678900010"
@@ -91,8 +93,8 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="websiteUrl">URL de votre site (optionnel)</Label>
-            <Input
+            <label htmlFor="websiteUrl">URL de votre site (optionnel)</label>
+            <input
               id="websiteUrl"
               name="websiteUrl"
               type="url"
@@ -108,8 +110,8 @@ export default function SignupPage() {
           <hr className="border-border" />
 
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
+            <label htmlFor="email">Email</label>
+            <input
               id="email"
               name="email"
               type="email"
@@ -120,8 +122,8 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="password">Mot de passe</Label>
-            <Input
+            <label htmlFor="password">Mot de passe</label>
+            <input
               id="password"
               name="password"
               type="password"

@@ -3,6 +3,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
 import { BrandingService } from '@/domain/services/BrandingService';
+import { BillingService } from '@/domain/services/BillingService';
 import { logger } from '@/lib/logger';
 
 function toTenantKey(name: string): string {
@@ -54,7 +55,23 @@ export async function POST(req: NextRequest) {
 
     logger.info(`[signup] New tenant provisioned: ${tenantId} (uid=${userRecord.uid})`);
 
-    return NextResponse.json({ tenantId, uid: userRecord.uid }, { status: 201 });
+    // 5. Create Stripe Checkout session for initial subscription
+    const origin = req.headers.get('origin') ?? 'https://app.nexus-fleet.io';
+    let checkoutUrl: string | null = null;
+    try {
+      const checkout = await BillingService.createCheckoutSession({
+        tenantId,
+        email,
+        tier: 'STANDARD',
+        successUrl: `${origin}/?tenant=${tenantId}&checkout=success`,
+        cancelUrl: `${origin}/signup?checkout=cancelled`,
+      });
+      checkoutUrl = checkout.url;
+    } catch (err) {
+      logger.warn('[signup] Stripe checkout creation failed — tenant can pay later', String(err));
+    }
+
+    return NextResponse.json({ tenantId, uid: userRecord.uid, checkoutUrl }, { status: 201 });
 
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
