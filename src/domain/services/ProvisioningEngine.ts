@@ -2,6 +2,7 @@ import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
 import { fleetTelemetry } from './FleetTelemetryService';
+import { TenantSeeder } from './TenantSeeder';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -82,10 +83,24 @@ export const ProvisioningEngine = {
                 status: newInstance.status as any // Mapping status enum
             });
 
-            logger.info('ProvisioningEngine: Instance registered in Master Registry', { 
-                instanceId: newInstance.id, 
-                url: `https://${dna.key}.nexus-fleet.io` 
+            logger.info('ProvisioningEngine: Instance registered in Master Registry', {
+                instanceId: newInstance.id,
+                url: `https://${dna.key}.nexus-fleet.io`
             });
+
+            // 3. TENANT SEED — PCG, users, fiscalSeals genesis, tables/floors/zones
+            if (dna.copyBaseTemplates !== false) {
+                const seedResult = await TenantSeeder.seed({
+                    tenantId: dna.key,
+                    name: dna.name,
+                    adminEmail: dna.ownerEmail,
+                    adminPin: '0000', // Default PIN — owner must change after first login
+                    primaryColor: dna.initialPrimaryColor,
+                });
+                if (!seedResult.success) {
+                    logger.warn('ProvisioningEngine: TenantSeeder partial failure', { error: seedResult.error });
+                }
+            }
 
             empireAudit.log({
                 module: 'system',
