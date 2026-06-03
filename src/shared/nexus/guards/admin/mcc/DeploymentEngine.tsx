@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, Loader2, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
+import { logger } from '@/lib/logger';
 
 interface GitStatus {
     branch: string;
@@ -26,7 +27,7 @@ export function DeploymentEngine() {
                 setStatus(data);
             }
         } catch (error) {
-            console.error('Failed to fetch git status');
+            logger.warn('[DeploymentEngine] Failed to fetch git status', String(error));
         } finally {
             setIsLoading(false);
         }

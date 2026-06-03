@@ -5,6 +5,7 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { revokeDevice } from '@/lib/sovereign/lockdown';
 import { ShieldAlert, ShieldCheck, Smartphone, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { logger } from '@/lib/logger';
 
 interface Device {
   id: string; // fingerprint
@@ -31,7 +32,7 @@ export function DeviceManager({ uid }: { uid: string }) {
       })) as Device[];
       setDevices(fetchedDevices);
     } catch (err) {
-      console.error("Failed to fetch devices", err);
+      logger.warn('[DeviceManager] Failed to fetch devices', String(err));
     } finally {
       setLoading(false);
     }
