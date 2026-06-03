@@ -7,12 +7,12 @@ import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { useFleet } from '@/context/FleetContext';
 import { FleetInsight } from '@domain/services/MacroBrain';
+import { logger } from '@/lib/logger';
 
 export function MCCInsights() {
     const { macroInsights, refreshFleet } = useFleet();
     const triggerRebalancing = (insight: FleetInsight) => {
-        console.log('[Fleet] Triggering rebalancing for insight:', insight);
-
+        logger.info('[Fleet] Triggering rebalancing', { insightId: insight.id, type: insight.type });
         refreshFleet?.(true);
     };
     const fleetState = useAtomValue(fleetSnapshotAtom);
