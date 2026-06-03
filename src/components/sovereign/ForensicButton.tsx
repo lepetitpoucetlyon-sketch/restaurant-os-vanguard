@@ -1,69 +1,62 @@
 "use client";
 
-import React, { useCallback } from 'react';
-import { useStore } from 'jotai';
-import { z } from 'zod';
-import { TicketSchema_v1 } from '@/shared/validation/TicketSchema';
+import React, { useCallback, useState } from 'react';
+import { useTenant } from '@/hooks/useTenant';
 import { toast } from 'sonner';
 
 export function ForensicButton() {
-  const store = useStore();
+  const { activeTenantId } = useTenant();
+  const [loading, setLoading] = useState(false);
 
   const handleForensicCapture = useCallback(async () => {
-    console.log("[NEXUS BRIDGE] Début de la capture Forensic...");
+    if (!activeTenantId) {
+      toast.error('Aucun tenant actif');
+      return;
+    }
 
-    const snapshot = {
-      timestamp: Date.now(),
-      storeId: store.toString(),
-      message: "Jotai Store capture (Metadata)"
-    };
-
-    const consoleLogs = ["[NEXUS BRIDGE] No recent unhandled exceptions caught in standard buffer."];
-    const screenshotData = "data:image/png;base64,mocked_screenshot_base64_nexus";
-
-    const ticketData = {
-      title: "Auto-Generated Forensic Ticket",
-      description: "Capture automatisée via ForensicButton. Nécessite une analyse NAM.",
-      priority: "high",
-      category: "ui",
-      metadata: {
-        jotaiSnapshot: snapshot,
-        consoleLogs,
-        timestamp: Date.now(),
-        screenshotBase64: screenshotData
-      }
-    };
-
+    setLoading(true);
     try {
-      const validTicket = TicketSchema_v1.parse(ticketData);
-      console.log("[NEXUS BRIDGE] Validation Zod TicketSchema_v1 OK:", validTicket);
+      const yearMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
-      const res = await fetch('/api/nam/analyze', {
+      const res = await fetch('/api/admin/finance/fec/export', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(validTicket)
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nexus-tenant-id': activeTenantId,
+        },
+        body: JSON.stringify({ siren: '', yearMonth }),
       });
 
-      const responseData = await res.json();
-      console.log("[NEXUS BRIDGE] NAM Analysis Result:", responseData);
-
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        console.error("[NEXUS BRIDGE] Zod Validation Failed:", error.issues);
-        toast.error(`Validation Failed: ${error.issues.map((e: { message: string }) => e.message).join(", ")}`);
-      } else {
-        console.error("[NEXUS BRIDGE] Unexpected error:", error);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        toast.error(`Export FEC échoué : ${err.error ?? res.statusText}`);
+        return;
       }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `FEC_${activeTenantId}_${yearMonth}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      toast.success(`Export FEC ${yearMonth} téléchargé`);
+    } catch (err) {
+      toast.error(`Erreur export FEC : ${String(err)}`);
+    } finally {
+      setLoading(false);
     }
-  }, [store]);
+  }, [activeTenantId]);
 
   return (
-    <button 
+    <button
       onClick={handleForensicCapture}
-      className="fixed bottom-4 right-4 z-50 bg-status-danger hover:bg-status-danger text-white font-bold py-2 px-4 rounded shadow-lg flex items-center gap-2 transition-colors"
-      aria-label="Capture Forensic"
+      disabled={loading}
+      className="fixed bottom-4 right-4 z-50 bg-status-danger hover:bg-status-danger text-white font-bold py-2 px-4 rounded shadow-lg flex items-center gap-2 transition-colors disabled:opacity-60"
+      aria-label="Export FEC Forensic"
     >
-      <span>📸 Forensic Capture (NEXUS)</span>
+      <span>{loading ? '⏳ Export…' : '📋 Export FEC'}</span>
     </button>
   );
 }
