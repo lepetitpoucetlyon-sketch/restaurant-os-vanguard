@@ -35,6 +35,17 @@ export interface JournalLine extends SovereignMap {
 
 export type JournalEntryStatus = 'draft' | 'validated' | 'closed' | 'pending' | 'cancelled' | 'refunded';
 
+/**
+ * JournalEntry — Type de STOCKAGE Firestore + affichage (couche domaine/UI)
+ *
+ * ⚠️  Ce type représente un enregistrement tel que stocké dans Firestore.
+ *     Il n'est PAS le schéma de validation NF525.
+ *
+ * Pour la validation d'entrée (API, Bridge NF525), utiliser :
+ *   import { JournalEntrySchema } from '@/domain/schemas/finance'
+ *
+ * Pour lire/afficher des enregistrements Firestore, utiliser ce type.
+ */
 export interface JournalEntry extends SovereignNode {
     id: string;
     date: number | string | Date;
