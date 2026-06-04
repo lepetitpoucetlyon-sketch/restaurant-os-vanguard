@@ -99,7 +99,7 @@ class TelemetryService {
           supported: true
         };
       }
-    } catch (e) {}
+    } catch (_e) {}
 
     return {
       level: 1,

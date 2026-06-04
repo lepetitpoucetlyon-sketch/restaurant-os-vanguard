@@ -1,7 +1,8 @@
 import { execSync } from 'child_process';
 
 
-const exec = require('util').promisify(execSync);
+import { promisify } from "util";
+const exec = promisify(execSync);
 
 export interface ArchitecturalHealthReport {
   timestamp: string;

@@ -80,9 +80,9 @@ export class GeminiLiveService {
             // 🛡️ DYNAMIC TOOL MASKING: Declare only permitted tools to the chatbot
             let safeTools = config?.tools;
             if (safeTools && this.user && this.rolePermissions) {
-                safeTools = safeTools.filter((t: any) => {
+                safeTools = safeTools.filter((t: Record<string, unknown>) => {
                     if (!t.category) return true;
-                    return AccessPolicyManager.hasAccess(this.user!, this.rolePermissions!, t.category);
+                    return AccessPolicyManager.hasAccess(this.user!, this.rolePermissions!, t.category as string);
                 });
             }
 

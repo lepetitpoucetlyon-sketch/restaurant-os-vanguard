@@ -5,6 +5,8 @@ import { useAtomValue } from 'jotai';
 import { nexusPulseAtom } from '../store/accountingAtoms';
 import { useAccounting } from './useAccounting';
 import { logger } from '@/lib/logger';
+import { toMicrounits } from '@/domain/schemas/primitives';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 export function useFinanceReflex() {
     const pulse = useAtomValue(nexusPulseAtom);
@@ -20,8 +22,7 @@ export function useFinanceReflex() {
             logger.info(`[FINANCE_REFLEX] Reaction to HACCP Waste: ${pulse.id}`);
             
             const wasteData = pulse.payload.data as { item?: string; quantity?: number };
-            const { toMicrounits } = require('@/domain/schemas/primitives');
-            const { SovereignMath } = require('@/shared/services/SovereignMath');
+            // toMicrounits and SovereignMath are imported at the top of the file
             
             addJournalEntry({
                 id: `ref_${pulse.id.substring(0, 8)}`,
