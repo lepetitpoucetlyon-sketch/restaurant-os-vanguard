@@ -25,7 +25,7 @@ export interface MasterConfig {
     [key: string]: unknown;
 }
 
-export const globalPolicyAtom = atom<MasterConfig>({});
+export const globalPolicyAtom = atom<MasterConfig>({ maintenanceMode: undefined });
 export const commanderSignatureAtom = atom<string | null>(null);
 
 /**

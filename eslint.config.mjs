@@ -14,7 +14,14 @@ const eslintConfig = defineConfig([
       "vanguard/no-cross-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
-      "@typescript-eslint/no-unused-vars": "warn",
+      // Unused vars: warn level, underscore prefix silences intentional non-use
+      // Run `npx knip` or use VSCode "Organize Imports" to bulk-clean imports
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_",
+        "ignoreRestSiblings": true,
+        "caughtErrorsIgnorePattern": "^_"
+      }],
       "@typescript-eslint/no-explicit-any": "error",
       "@next/next/no-img-element": "off",
       "@typescript-eslint/ban-ts-comment": "error",

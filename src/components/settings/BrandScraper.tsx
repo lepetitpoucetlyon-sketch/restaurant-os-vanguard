@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 
-interface ExtractedTokens extends Partial<BrandConfig> {}
+type ExtractedTokens = Partial<BrandConfig>
 
 /**
  * Saisir l'URL du restaurant → Gemini Vision analyse la charte → preview → appliquer.

@@ -91,7 +91,7 @@ export class ResilienceSlayer {
         if (targetAtom) {
             logger.warn(`[Slayer] PULVERIZING stale local state for ${atomPath}. Forcing truth from Nexus Cloud.`);
             const persistencePath = Nexus.getTenantPath(atomPath);
-            SelfHealingEngine.auditAndHeal(targetAtom as any, "FORCE_SYNC", persistencePath);
+            SelfHealingEngine.auditAndHeal(targetAtom as import("jotai").PrimitiveAtom<import("@/store/base").NexusNode<unknown>>, "FORCE_SYNC", persistencePath);
         }
     }
 }
