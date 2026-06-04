@@ -20,7 +20,7 @@ export class FirestoreDocumentStore implements IDocumentStore {
         const snap = await getDoc(docRef);
         if (!snap.exists()) return null;
         const rawData = { id: snap.id, ...snap.data() } as Record<string, unknown>;
-        return hydrateBasedOnPath(path, rawData) as any as T;
+        return hydrateBasedOnPath(path, rawData) as unknown as T;
     }
 
     async set<T>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {

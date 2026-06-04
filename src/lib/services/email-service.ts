@@ -52,13 +52,11 @@ export async function sendEmail({
   }
 
   try {
-    // Use dynamic import to avoid build-time dependency if not installed
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const resendModule: any = require('resend');
-    const resend = new resendModule.Resend(resendApiKey);
+    // Dynamic import to avoid build-time dependency if resend is not installed
+    const { Resend } = await import("resend" as string) as { Resend: new(key: string) => { emails: { send: (opts: Record<string, unknown>) => Promise<{ data?: unknown; error?: { message?: string } }> } } };
+    const resend = new Resend(resendApiKey);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response: any = await resend.emails.send({
+    const response = await resend.emails.send({
       from,
       to,
       subject,
@@ -71,8 +69,9 @@ export async function sendEmail({
       return { success: false, error: response.error?.message || 'Unknown error' };
     }
 
-    logger.info('[EmailService] Email sent successfully', { to, subject, messageId: response.data.id });
-    return { success: true, messageId: response.data.id };
+    const dataId = (response.data as { id?: string })?.id;
+    logger.info("[EmailService] Email sent successfully", { to, subject, messageId: dataId });
+    return { success: true, messageId: dataId };
   } catch (error) {
     // If Resend package not installed, log gracefully
     if (error instanceof Error && error.message.includes('Cannot find module')) {

@@ -33,6 +33,57 @@ export interface ComplianceDocument {
   updatedAt: string;
 }
 
+/** Extincteur avec ses champs spécifiques (différents du ComplianceDocument générique) */
+export interface ExtincteurDocument {
+  id: string;
+  location?: string;
+  type?: string;
+  lastCheck?: string;
+  nextCheck?: string;
+  numero?: string;
+  status?: 'ok' | 'a_verifier' | 'hors_service';
+  [k: string]: string | number | boolean | undefined | null;
+}
+
+/** Exercice d'évacuation */
+export interface ExerciceDocument {
+  id: string;
+  date?: string;
+  type?: string;
+  participants?: number;
+  duration?: string;
+  observations?: string;
+  status?: 'planifie' | 'realise' | 'annule';
+  [k: string]: string | number | boolean | undefined | null;
+}
+
+/** Intervention de maintenance */
+export interface InterventionDocument {
+  id: string;
+  date?: string;
+  type?: string;
+  description?: string;
+  prestataire?: string;
+  technicien?: string;
+  status?: string;
+  [k: string]: string | number | boolean | undefined | null;
+}
+
+/** Prestataire / sous-traitant */
+export interface PrestataireDocument {
+  id: string;
+  name?: string;
+  contact?: string;
+  service?: string;
+  type?: string;
+  contratExpiry?: string;
+  email?: string;
+  phone?: string;
+  nextIntervention?: string;
+  certifications?: string;
+  [k: string]: string | number | boolean | undefined | null;
+}
+
 export interface PMRAmenagement {
   id: string;
   status: 'conforme' | 'en_cours' | 'a_faire';
@@ -45,12 +96,12 @@ export interface RegistreContextValue {
   cerfa?: ComplianceDocument;
   duerp?: ComplianceDocument;
   incendieDoc?: ComplianceDocument;
-  extincteurs?: ComplianceDocument[];
-  exercices?: ComplianceDocument[];
-  interventions?: ComplianceDocument[];
+  extincteurs?: ExtincteurDocument[];
+  exercices?: ExerciceDocument[];
+  interventions?: InterventionDocument[];
   pmrDoc?: ComplianceDocument;
   pmrAmenagements?: PMRAmenagement[];
-  prestataires?: any[]; // Keep any for now as it's complex, but mark as list
+  prestataires?: PrestataireDocument[];
   certHalal?: ComplianceDocument;
   agrementBoucher?: ComplianceDocument;
   hottesDoc?: ComplianceDocument;

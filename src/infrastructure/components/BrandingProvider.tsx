@@ -13,7 +13,7 @@ export function BrandingProvider() {
   const rawBrandTokens = useAtomValue(tenantBrandTokensAtom);
 
   // Synchronisation temps réel Google Stitch
-  useFirestoreBrand((tenantId as any) || '');
+  useFirestoreBrand(tenantId || "");
 
   useEffect(() => {
     // Valider les tokens tenant via Zod avant injection
@@ -21,7 +21,7 @@ export function BrandingProvider() {
     const brandTokens = result.success ? result.data : defaultBrandTokens;
 
     // Construire le override de tokens sémantiques
-    const overrides: any = {};
+    const overrides: Record<string, unknown> = {};
     
     if (brandTokens.primaryColor) {
         overrides.action = {

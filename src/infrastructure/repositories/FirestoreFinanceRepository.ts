@@ -22,7 +22,7 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     }
 
     async getJournalEntries(): Promise<JournalEntry[]> {
-        const raw = await this.adapter.query<any>(this.getPath('journalEntries'));
+        const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('journalEntries'));
         return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateJournalEntry);
     }
 
@@ -31,7 +31,7 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     }
 
     async getAccounts(): Promise<Account[]> {
-        const raw = await this.adapter.query<any>(this.getPath('accounts'));
+        const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('accounts'));
         return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateAccount);
     }
 
@@ -40,12 +40,12 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     }
 
     async getBankTransactions(): Promise<BankTransaction[]> {
-        const raw = await this.adapter.query<any>(this.getPath('bankTransactions'));
+        const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('bankTransactions'));
         return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateBankTransaction);
     }
 
     async getExpenseClaims(): Promise<ExpenseClaim[]> {
-        const raw = await this.adapter.query<any>(this.getPath('expenseClaims'));
+        const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('expenseClaims'));
         return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateExpenseClaim);
     }
 

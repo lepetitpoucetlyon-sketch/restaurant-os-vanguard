@@ -17,7 +17,7 @@ import { Table, TableStatus } from "@nexus/contracts";
 import { FloorPlanEditorRef } from "@modules/ops";
 
 
-const FloorPlanEditor = dynamic<any>(
+const FloorPlanEditor = dynamic(
     () => import("@modules/ops/engine/components/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
     { 
         ssr: false,

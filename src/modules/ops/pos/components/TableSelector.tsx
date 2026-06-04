@@ -201,7 +201,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                         >
                             <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                             <p className="text-[11px] font-black uppercase tracking-widest whitespace-nowrap">
-                                {tables.filter((t: any) => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length} / {tables.length} Actives
+                                {tables.filter((t: import("@nexus/contracts").Table) => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length} / {tables.length} Actives
                             </p>
                         </motion.div>
 

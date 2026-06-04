@@ -32,7 +32,7 @@ export function useSettingsModule() {
             }
             setIsLoading(false);
         }, {
-            onError: (error: any) => {
+            onError: (error: unknown) => {
                 logger.error('useSettingsModule: Sync error', { error });
                 clearTimeout(safetyTimeout);
                 setIsLoading(false);

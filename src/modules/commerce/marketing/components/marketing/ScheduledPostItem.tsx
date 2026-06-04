@@ -11,7 +11,7 @@ interface ScheduledPostItemProps {
         media: { type: string, url: string };
         scheduledFor: string;
     };
-    socialAccounts: (import('../../store/marketingAtoms').SocialAccount & { icon?: any, color?: string })[];
+    socialAccounts: (import('../../store/marketingAtoms').SocialAccount & { icon?: import("react").ComponentType<{ size?: number; strokeWidth?: number }>, color?: string })[];
 }
 
 export function ScheduledPostItem({ post, socialAccounts }: ScheduledPostItemProps) {
@@ -32,10 +32,10 @@ export function ScheduledPostItem({ post, socialAccounts }: ScheduledPostItemPro
                         {post.platforms.map((p) => {
                             const account = socialAccounts.find(a => a.id === p);
                             if (!account) return null;
-                            const Icon = account.icon;
+                            const Icon = account.icon as import("react").FC<{ size?: number; style?: import("react").CSSProperties }> | undefined;
                             return (
                                 <div key={p} className="p-1.5 rounded-lg bg-surface-card dark:bg-surface-sidebar/20 text-text-primary shadow-sm ring-1 ring-black/5">
-                                    <Icon size={14} style={{ color: account.color }} />
+                                    { Icon ? <Icon size={14} style={{ color: account.color }} /> : null }
                                 </div>
                             );
                         })}

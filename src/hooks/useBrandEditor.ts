@@ -30,7 +30,7 @@ export function useBrandEditor() {
         ...patch,
         updatedAt: new Date().toISOString(),
       }, { merge: true });
-      setBrandTokens({ ...(patch as any) });
+      setBrandTokens(patch as unknown as import("@/shared/nexus/tokens/brand").BrandConfig);
     } finally {
       setIsSaving(false);
     }

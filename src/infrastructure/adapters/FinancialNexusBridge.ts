@@ -124,7 +124,7 @@ export const FinancialNexusBridge = {
       totalTTCInMicrounits,
       tvaBreakdown,
       timestamp: now,
-    } as any);
+    } as import("@/shared/nexus-contract").SovereignData);
 
     let hash: string;
     let signature: string;
@@ -149,7 +149,7 @@ export const FinancialNexusBridge = {
       isValidated: true,
       fiscalSealHash: hash,
       sealedAt: now,
-      type: 'revenue' as any,
+      type: 'revenue' as 'revenue' | 'expense' | 'tax' | 'other',
       amountInCents: Math.round(totalTTCInMicrounits / 10000),
       status: 'validated',
       updatedAt: now,
