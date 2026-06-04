@@ -8,6 +8,18 @@ export const TaxRateSchema = z.enum(['0.055', '0.10', '0.20'])
 export type TaxRate = z.infer<typeof TaxRateSchema>;
 
 // ── Journal Entry NF525 ────────────────────────────────────────────────────
+/**
+ * JournalEntrySchema — Schéma de VALIDATION NF525 (couche entrée/API)
+ *
+ * ⚠️  Ce schéma sert à valider les données AVANT écriture.
+ *     Il n'est PAS le type de stockage Firestore.
+ *
+ * Pour le type de stockage/affichage, utiliser :
+ *   import type { JournalEntry } from '@nexus/contracts'   (finance.types.ts)
+ *
+ * Pour la validation d'entrée (API, Bridge), utiliser ce schéma :
+ *   JournalEntrySchema.parse(data)
+ */
 export const JournalEntrySchema = z.object({
   id:                 UUIDSchema,
   receiptNumber:      z.string()
