@@ -138,11 +138,11 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     // 🛡️ SINCERE TREASURY MAPPING (Zero-Cast)
     const treasury: TreasuryMetrics = {
-        totalRevenueInMicrounits: 0 as any,
-        totalExpensesInMicrounits: 0 as any,
+        totalRevenueInMicrounits: 0 as unknown as import("@/domain/schemas/primitives").Microunits,
+        totalExpensesInMicrounits: 0 as unknown as import("@/domain/schemas/primitives").Microunits,
         netProfitInMicrounits: 0,
         marginRate: 0,
-        forecastedRevenueInMicrounits: 0 as any,
+        forecastedRevenueInMicrounits: 0 as unknown as import("@/domain/schemas/primitives").Microunits,
         cashPositionInMicrounits: 0,
         periodStart: Date.now(),
         periodEnd: Date.now() + 86400000

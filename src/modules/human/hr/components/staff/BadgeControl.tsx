@@ -133,7 +133,7 @@ export const BadgeControl: React.FC = () => {
                             {(() => {
                                     const ts = currentShift.timestamp;
                                     if (typeof ts === 'string') return new Date(ts).toLocaleTimeString('fr-FR');
-                                    if ((ts as any) instanceof Date) return (ts as any).toLocaleTimeString('fr-FR');
+                                    if (ts !== null && ts !== undefined && typeof ts === "object" && !Array.isArray(ts) && (ts as object) instanceof Date) return (ts as Date).toLocaleTimeString('fr-FR');
                                     
                                     // Handle Firestore Timestamp lookalike with strict casting
                                     const fireTs = ts as { toDate?: () => Date };

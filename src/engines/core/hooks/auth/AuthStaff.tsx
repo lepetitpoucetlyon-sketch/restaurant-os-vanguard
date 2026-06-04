@@ -83,7 +83,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
                 }
             },
             {
-                onError: (error: any) => {
+                onError: (error: unknown) => {
                     console.error('Unable to subscribe to users', error);
                     if (isActive) setIsUsersLoaded(true);
                 }

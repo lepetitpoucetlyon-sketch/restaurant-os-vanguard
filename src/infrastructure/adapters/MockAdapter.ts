@@ -26,7 +26,7 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
             const { field, direction } = options.orderBy;
             results.sort((a, b) => {
                 const valA = a[field] as any; // Cast for comparison
-                const valB = b[field] as any;
+                const valB = b[field] as unknown;
                 if (valA === null || valA === undefined) return direction === 'asc' ? 1 : -1;
                 if (valB === null || valB === undefined) return direction === 'asc' ? -1 : 1;
                 if (valA < valB) return direction === 'asc' ? -1 : 1;

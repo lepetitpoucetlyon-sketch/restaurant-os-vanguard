@@ -81,7 +81,7 @@ export class RealityGenerator {
                     status: 'pending',
                     createdAt: now,
                     updatedAt: now
-                }] as any,
+                }] as unknown as import("@nexus/contracts").OrderItem[],
                 totalInMicrounits: toMicrounits(1500),
                 createdAt: now,
                 updatedAt: now,

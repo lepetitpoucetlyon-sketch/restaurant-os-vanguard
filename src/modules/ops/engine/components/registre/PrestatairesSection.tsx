@@ -46,17 +46,17 @@ export function PrestatairesSection() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {(prestataires || []).map((p: any) => (
+                {(prestataires || []).map((p: import("@/shared/nexus/contracts/context/registre.contracts").PrestataireDocument) => (
                     <div key={p.id} className="group bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm hover:shadow-2xl transition-all duration-500">
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex items-center gap-4">
                                 <div className="w-14 h-14 rounded-xl bg-bg-tertiary border border-border flex items-center justify-center font-serif text-xl font-black text-text-primary">
-                                    {p.name.charAt(0)}
+                                    {p.name?.charAt(0) ?? "?"}
                                 </div>
                                 <div>
                                     <h4 className="font-serif font-bold text-lg text-text-primary group-hover:text-accent transition-colors">{p.name}</h4>
-                                    <span className={cn("inline-flex px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest border mt-1", TYPE_COLORS[p.type])}>
-                                        {TYPE_LABELS[p.type]}
+                                    <span className={cn("inline-flex px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest border mt-1", TYPE_COLORS[p.type as string])}>
+                                        {TYPE_LABELS[p.type as string]}
                                     </span>
                                 </div>
                             </div>

@@ -167,7 +167,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         <PremiumSelect
                             label="Classification Transact."
                             value={formData.category || ''}
-                            onChange={(val) => setFormData(prev => ({ ...prev, category: val as any }))}
+                            onChange={(val) => setFormData(prev => ({ ...prev, category: val as 'other' | 'food' | 'equipment' | 'maintenance' | 'utilities' | 'marketing' | 'training' | 'travel' | undefined }))}
                             options={CATEGORIES.map(cat => ({
                                 value: cat.id,
                                 label: cat.label,

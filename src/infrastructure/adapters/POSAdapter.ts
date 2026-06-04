@@ -42,7 +42,7 @@ export class POSService {
      * Calculates the total for a set of items (Cart or Order).
      */
     static calculateCartTotal(items: (OrderItem | CartItem)[]): Microunits {
-        return toMicrounits(items.reduce((acc, item) => acc + ((item as any).unitPriceInMicrounits * item.quantity), 0));
+        return toMicrounits(items.reduce((acc, item) => acc + (((item as { unitPriceInMicrounits?: number }).unitPriceInMicrounits ?? 0) * item.quantity), 0));
     }
 
     /**

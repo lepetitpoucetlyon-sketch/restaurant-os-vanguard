@@ -36,7 +36,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
                 if (isActive) setIsPermissionsLoaded(true);
             },
             {
-                onError: (error: any) => {
+                onError: (error: unknown) => {
                     console.error('Unable to subscribe to role permissions', error);
                     if (isActive) {
                         setRolePermissions(DEFAULT_ROLE_PERMISSIONS);
