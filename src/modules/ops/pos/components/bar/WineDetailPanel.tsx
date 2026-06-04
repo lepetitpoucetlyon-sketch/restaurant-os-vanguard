@@ -50,8 +50,8 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
                     <span className="text-2xl font-black">{selectedWine.rating}/100</span>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-black text-[#722F37] dark:text-text-primary">{(selectedWine.priceInCents / 100).toLocaleString('fr-FR')} €</p>
-                    <p className="text-[11px] text-text-muted">Coût: {(selectedWine.costPriceInCents / 100).toLocaleString('fr-FR')} €</p>
+                    <p className="text-2xl font-black text-[#722F37] dark:text-text-primary">{((selectedWine.priceInMicrounits / 1_000_000)).toLocaleString('fr-FR')} €</p>
+                    <p className="text-[11px] text-text-muted">Coût: {(selectedWine.costPriceInMicrounits / 1_000_000).toLocaleString('fr-FR')} €</p>
                 </div>
             </div>
 

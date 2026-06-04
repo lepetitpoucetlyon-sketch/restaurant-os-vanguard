@@ -38,7 +38,7 @@ interface ProductCardProps {
  * Uses layout="position" for efficient GPU-accelerated transitions during filtering.
  */
 const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, disabledReason, t, onClick, multiplier, performanceMode }: ProductCardProps) => {
-    const finalPrice = ((product.priceInCents ?? 0) * multiplier) / 100;
+    const finalPrice = (product.priceInMicrounits / 1_000_000 * multiplier);
 
     return (
     <motion.div
@@ -129,7 +129,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                     </span>
                     {multiplier !== 1 && (
                         <span className="text-xs text-text-muted line-through opacity-50">
-                            {((product.priceInCents ?? 0) / 100).toFixed(2)}€
+                            {(product.priceInMicrounits / 1_000_000).toFixed(2)}€
                         </span>
                     )}
                     <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
