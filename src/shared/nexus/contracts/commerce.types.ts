@@ -10,15 +10,20 @@ export interface Quote extends SovereignNode {
     number?: string;
     amount?: number;
     amountInCents: number;
+    amountInMicrounits?: number; // microunits = cents × 10 000
     status: 'draft' | 'sent' | 'viewed' | 'accepted' | 'converted' | 'rejected' | 'expired';
     customerId: string;
     customerName: string;
     validUntil?: string;
     totals: {
         totalHTInCents: number;
+        totalHTInMicrounits?: number; // microunits = cents × 10 000
         totalTTCInCents: number;
+        totalTTCInMicrounits?: number; // microunits = cents × 10 000
         totalTaxInCents: number;
+        totalTaxInMicrounits?: number; // microunits = cents × 10 000
         totalDiscountInCents: number;
+        totalDiscountInMicrounits?: number; // microunits = cents × 10 000
     };
     customer?: {
         id: string;
@@ -31,6 +36,7 @@ export interface Quote extends SovereignNode {
         name: string;
         quantity: number;
         priceInCents: number;
+        priceInMicrounits?: number; // microunits = cents × 10 000
     }>;
 }
 

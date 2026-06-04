@@ -55,6 +55,7 @@ export interface Ingredient {
     minQuantity: number;
     parLevel?: number;
     costInCents: number;
+    costInMicrounits?: number; // microunits = cents × 10 000
     supplier: string;
     supplierRef?: string;
     defaultStorageLocation: string;
@@ -91,7 +92,9 @@ export interface StockItem {
     supplierName?: string;
     invoiceReference?: string;
     unitCostInCents: number;
+    unitCostInMicrounits?: number; // microunits = cents × 10 000
     priceInCents?: number;
+    priceInMicrounits?: number; // microunits = cents × 10 000
     taxRate?: number;
     shelfLifeDays?: number;
     unitCost?: number;
@@ -99,6 +102,7 @@ export interface StockItem {
     notes?: string;
     initialQuantity?: number;
     costInCents?: number;
+    costInMicrounits?: number; // microunits = cents × 10 000
     createdAt?: string;
     updatedAt?: string;
 }
@@ -111,6 +115,7 @@ export interface SupplierOrderItem {
     quantity: number;
     unit: IngredientUnit;
     unitPriceInCents: number;
+    unitPriceInMicrounits?: number; // microunits = cents × 10 000
     receivedQuantity?: number;
 }
 
@@ -121,6 +126,7 @@ export interface SupplierOrder {
     status: SupplierOrderStatus;
     items: SupplierOrderItem[];
     totalCostInCents: number;
+    totalCostInMicrounits?: number; // microunits = cents × 10 000
     createdAt: string;
     updatedAt: string;
     deliveryDate?: string;
@@ -142,6 +148,7 @@ export interface InventoryMovement {
     performedBy: string;
     timestamp: string; // Grade X Alias for performedAt
     unitCostInCents?: number;
+    unitCostInMicrounits?: number; // microunits = cents × 10 000
 }
 
 export type PreparationType =
@@ -193,7 +200,8 @@ export interface Preparation extends SovereignNode {
     lastCheckedBy?: string;
 
     notes: string;
-    costInCents?: number; // Total cost in cents
+    costInCents?: number;
+    costInMicrounits?: number; // microunits = cents × 10 000 // Total cost in cents
     isCompleted?: boolean; // Grade X Task Tracking
 }
 
@@ -204,6 +212,7 @@ export interface RecipeIngredient extends SovereignMap {
     quantity: number;
     unit: string;
     costInCents: number;
+    costInMicrounits?: number; // microunits = cents × 10 000
     cost?: number; // Alias for UI compatibility
 }
 
@@ -231,6 +240,8 @@ export interface Recipe extends SovereignNode {
     category?: string;
     portions?: number;
     costPriceInCents?: number;
+    costPriceInMicrounits?: number; // microunits = cents × 10 000
     sellingPriceInCents?: number;
+    sellingPriceInMicrounits?: number; // microunits = cents × 10 000
     isActive?: boolean;
 }

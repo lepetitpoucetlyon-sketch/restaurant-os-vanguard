@@ -14,8 +14,12 @@ export interface Wine {
   type: 'Rouge' | 'Blanc' | 'Rosé' | 'Champagne' | 'Liquoreux';
   grape: string;
   vintage: number;
-  priceInCents: number;
-  costPriceInCents: number;
+  /** @deprecated Use priceInMicrounits */
+  priceInCents?: number;
+  /** @deprecated Use costPriceInMicrounits */
+  costPriceInCents?: number;
+  priceInMicrounits: number;
+  costPriceInMicrounits: number;
   stock: number;
   minStock: number;
   rating: number;
@@ -29,8 +33,12 @@ export interface Cocktail {
   id: string;
   name: string;
   category: string;
-  priceInCents: number;
-  costPriceInCents: number;
+  /** @deprecated Use priceInMicrounits */
+  priceInCents?: number;
+  /** @deprecated Use costPriceInMicrounits */
+  costPriceInCents?: number;
+  priceInMicrounits: number;
+  costPriceInMicrounits: number;
   ingredients: string[];
   garnish: string;
   glassware: string;

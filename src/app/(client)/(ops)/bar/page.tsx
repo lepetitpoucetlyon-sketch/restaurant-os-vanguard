@@ -60,7 +60,7 @@ export default function BarPage() {
         return true;
     });
 
-    const totalCellarValue = WINE_CELLAR.reduce((sum, w) => sum + (w.priceInCents * w.stock), 0);
+    const totalCellarValue = WINE_CELLAR.reduce((sum, w) => sum + (w.priceInMicrounits / 1_000_000 * w.stock), 0);
     const lowStockWines = WINE_CELLAR.filter(w => w.stock <= w.minStock).length;
 
     return (

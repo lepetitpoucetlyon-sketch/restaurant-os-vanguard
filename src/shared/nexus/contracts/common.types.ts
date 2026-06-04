@@ -42,6 +42,7 @@ export interface Option {
     id: string;
     name: string;
     priceModifierInCents: number;
+    priceModifierInMicrounits?: number; // microunits = cents × 10 000
     isDefault?: boolean;
 }
 
@@ -171,6 +172,7 @@ export interface WasteLog {
     unit: string;
     reason: 'damaged' | 'expired' | 'mistake' | 'waste';
     costInCents: number;
+    costInMicrounits?: number; // microunits = cents × 10 000
     timestamp: Date;
     loggedBy: string;
     createdAt: string;
@@ -265,6 +267,7 @@ export interface PredictiveAlert {
 export interface IngredientPricePoint {
     ingredientId: string;
     priceInCents: number;
+    priceInMicrounits?: number; // microunits = cents × 10 000
     timestamp: Date;
     source: 'invoice' | 'market';
 }
@@ -273,11 +276,14 @@ export interface ProfitabilityAlert {
     productId: string;
     productName: string;
     currentMarginInCents: number;
+    currentMarginInMicrounits?: number; // microunits = cents × 10 000
     currentMargin: number; // Alias for UI
     targetMarginInCents: number;
+    targetMarginInMicrounits?: number; // microunits = cents × 10 000
     targetMargin: number; // Alias for UI
     status: 'ok' | 'critical';
     suggestedPriceInCents: number;
+    suggestedPriceInMicrounits?: number; // microunits = cents × 10 000
     suggestedPrice: number; // Alias for UI
 }
 

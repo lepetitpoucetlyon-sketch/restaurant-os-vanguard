@@ -113,7 +113,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
     };
 
     const calculateTotal = () => {
-        let total = product.priceInCents || 0;
+        let total = product.priceInMicrounits / 1_000_000 || 0;
         (product.optionGroups as OptionGroup[] | undefined)?.forEach(group => {
             const selectedIds = selections[group.id] || [];
             selectedIds.forEach(id => {
@@ -208,7 +208,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                         </div>
                         <div className="flex items-center gap-4">
                             <span className="text-3xl md:text-3xl font-serif font-black text-accent-gold italic drop-shadow-sm">
-                                {(((product.priceInCents ?? 0) * priceMultiplier) / 100).toFixed(2)}€
+                                {((product.priceInMicrounits / 1_000_000) * priceMultiplier).toFixed(2)}€
                             </span>
                             <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
                                 <button
