@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 export function registerTicketZHandler(): () => void {
   return NexusEventBus.on(
     'order.paid',
-    async ({ tenantId, totalInMicrounits, items, orderId }) => {
+    async ({ tenantId, totalInMicrounits, items, orderId: _orderId }) => {
       const today = new Date().toISOString().split('T')[0];
       const path = `tenants/${tenantId}/ticketZ/${today}`;
 

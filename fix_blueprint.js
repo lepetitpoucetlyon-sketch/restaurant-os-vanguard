@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const fs = require('fs');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const path = require('path');
+const _path = require('path');
 
 const TARGET_FILE = 'public/blueprint/data.js';
 const VAR_NAME = 'SINGULARITY_EMPIRE';
@@ -81,7 +81,7 @@ function expandNode(node, currentDepth, rootDomain) {
             // Generate a child based on root domain patterns if generic
             const patterns = DOMAIN_MAP[rootDomain] || DOMAIN_MAP["🛒 OPÉRATIONS"];
             let nextNom = "";
-            let nextGenre = node.genre;
+            let _nextGenre = node.genre;
 
             if (currentDepth === 3) nextNom = `${node.nom} Layer`;
             else if (currentDepth === 4) nextNom = patterns[`level5`];

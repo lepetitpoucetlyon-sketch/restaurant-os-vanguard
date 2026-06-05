@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { cn } from "@/lib/ui.foundations";
-import { Users, AlertCircle, LayoutGrid, Layers, ChevronUp, ChevronDown, MousePointer2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Users, LayoutGrid, Layers } from "lucide-react";
+import { motion } from "framer-motion";
 import { Table } from "@/domain/schemas/ops";
 
 interface TableSelectorProps {

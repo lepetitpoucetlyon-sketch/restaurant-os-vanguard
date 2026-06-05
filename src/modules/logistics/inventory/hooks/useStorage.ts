@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { Storage } from "@domain/services/Storage";
 
 interface UseLocalStorageOptions<T> {

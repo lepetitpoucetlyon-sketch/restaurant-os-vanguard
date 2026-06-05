@@ -16,14 +16,14 @@ export function SovereignLockout() {
   // Logic: Only activate if maintenance mode is ON, license is INVALID, or killSwitch is active
   const isLocked = config?.status?.maintenanceMode || config?.status?.licenceStatus === 'LOCKED' || config?.status?.killSwitch;
 
-  const getLockReason = () => {
+  const _getLockReason = () => {
     if (config?.status?.killSwitch) return "SOUVERAINETÉ_RÉVOQUÉE";
     if (config?.status?.maintenanceMode) return "STABILISATION_SYSTÈME";
     if (config?.status?.licenceStatus === 'LOCKED') return "LICENCE_EXPIREE";
     return "ACCÈS_RESTREINT";
   };
 
-  const getLockDescription = () => {
+  const _getLockDescription = () => {
     if (config?.status?.killSwitch) return "L'accès à cette instance a été révoqué par l'Orchestrateur Central (MCC) pour des raisons de conformité ou de sécurité.";
     if (config?.status?.maintenanceMode) return "Le système est actuellement en cours de maintenance préventive. Toutes les opérations locales sont suspendues.";
     return "Votre licence d'utilisation a expiré. Veuillez contacter le support technique pour réactiver vos services.";

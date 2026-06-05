@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { X, Calendar, Clock, Users, MapPin, Tag, Plus, Check, Search, ChevronRight, ChevronLeft, UserCheck, Sparkles, Gem, ArrowRight, ShieldCheck } from "lucide-react";
+import { X, Calendar, Clock, Users, MapPin, Tag, Plus, Check, Search, ChevronRight, ChevronLeft, UserCheck, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { format } from "date-fns";
-import { fr } from "date-fns/locale";
 import { Modal } from "@ui/Modal";
 
 interface NewReservationDialogProps {

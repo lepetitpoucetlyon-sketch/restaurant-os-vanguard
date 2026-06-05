@@ -4,7 +4,6 @@ import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { 
   Activity, 
   AlertCircle, 
-  CheckCircle2, 
   ExternalLink, 
   TrendingUp, 
   ShieldCheck,

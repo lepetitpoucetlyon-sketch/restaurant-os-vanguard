@@ -4,7 +4,7 @@ import React from 'react';
 import { Palette, Hand, Wind, Package, Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-interface CheckItem {
+interface _CheckItem {
   id: string;
   label: string;
   icon: React.ReactNode;

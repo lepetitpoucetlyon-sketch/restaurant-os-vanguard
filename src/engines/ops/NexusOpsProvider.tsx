@@ -1,21 +1,18 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { SovereignData, SovereignValue, OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
+import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { NexusNode } from '@/store/base';
 import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
 import { 
-  Table, Order, Product, Recipe, Reservation, Quote, Campaign, JournalEntry, Category, Customer,
-  isTable, isOrder, isProduct, isRecipe, isIngredient, isReservation, isQuote, isCampaign, isCategory,
-  toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup, toJournalEntry, toCategory, toCustomer
+  Table, Order, Recipe, Quote, Campaign,
+  toTable, toOrder, toProduct, toRecipe, toReservation, toQuote, toCampaign, toFloor, toZone, toGroup, toJournalEntry, toCategory, toCustomer
 } from '@nexus/contracts/nexus-internal-mapper';
-import type { Ingredient } from '@nexus/contracts/logistics';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TelemetryHook } from '@/lib/telemetry/TelemetryHook';
-import { useVisibilityPurge } from '@/hooks/useVisibilityPurge';
 import { logger } from '@/lib/logger';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { genomeValidator } from '@domain/services/GenomeValidator';
@@ -29,7 +26,6 @@ import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { ordersNodeAtom, tablesNodeAtom } from '@/store/pillars/ops';
 import { 
-  stockItemsNodeAtom, 
   recipesNodeAtom, 
   prepTasksNodeAtom,
   categoriesNodeAtom,
@@ -42,28 +38,18 @@ import {
   groupsNodeAtom 
 } from '@/store/pillars/commerce';
 import { 
-  deliveriesNodeAtom, 
-  fiscalLedgerNodeAtom, 
-  wasteLogsNodeAtom 
+  fiscalLedgerNodeAtom 
 } from '@/store/pillars/compliance';
 import { 
-  seoProfileAtom, 
-  marketingCampaignsNodeAtom, 
-  socialAccountsNodeAtom 
+  marketingCampaignsNodeAtom 
 } from '@/store/pillars/marketing';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
-import { leaveRequestsNodeAtom, leaveBalancesNodeAtom } from '@/store/pillars/human';
+import { leaveRequestsNodeAtom } from '@/store/pillars/human';
+
+
 
 import { 
-  ingredientsNodeAtom, 
-  preparationsNodeAtom, 
-  storageLocationsNodeAtom 
-} from '@/store/pillars/logistics';
-import { 
   crmsNodeAtom, 
-  marketingSegmentsNodeAtom, 
-  scheduledPostsNodeAtom, 
-  isMarketingSyncingAtom, 
   selectedCRMAtom 
 } from '@/store/pillars/marketing';
 import { 
@@ -72,9 +58,7 @@ import {
   zonesLockedAtom, 
   currentFloorIdAtom 
 } from '@/store/pillars/ops';
-import { 
-  isReservationSyncingAtom, 
-  reservationStatsAtom,
+import {
   menuAnalysisSelector,
   staffPerformanceSelector,
   laborCostRatioSelector
@@ -309,7 +293,7 @@ export const useOperationalNodes = () => {
 
     const toggleZonesLock = useCallback(() => setZonesLocked(prev => !prev), [setZonesLocked]);
     const setCurrentFloor = useCallback((id: string) => setCurrentFloorId(id), [setCurrentFloorId]);
-    const getTablesForFloor = useCallback((floorId: string) => nodes.filter((t: Table) => t.floorId === floorId), [nodes]);
+    const _getTablesForFloor = useCallback((floorId: string) => nodes.filter((t: Table) => t.floorId === floorId), [nodes]);
     const getZonesForFloor = useCallback((floorId: string) => zones.filter(z => z.floorId === floorId || !z.floorId), [zones]);
     const updateTablePosition = useCallback(async (id: string, x: number, y: number) => {
         await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {

@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { ToolDefinition } from './types';
-import { EmpireInstance } from '@domain/types/empire';
 import { SovereignValue } from '@/shared/nexus-contract';
 
 export const FleetStatusSchema = z.object({
@@ -31,7 +30,7 @@ export const FleetTool: ToolDefinition<FleetStatusArgs> = {
     },
     schema: FleetStatusSchema,
     category: 'fleet',
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (_args, _user): Promise<SovereignValue> => {
         // Enforced by RBAC - Should ideally call useNexusFleet but tools run in class context
         // We will pass the fleet state as context to the GeminiLiveService later
         return {
@@ -58,7 +57,7 @@ export const FlagSiteTool: ToolDefinition<FlagSiteArgs> = {
     },
     schema: FlagSiteSchema,
     category: 'fleet',
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (args, _user): Promise<SovereignValue> => {
         return {
             success: true,
             notificationSent: true,

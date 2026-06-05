@@ -9,22 +9,16 @@ import {
     Search,
     Building2,
     User,
-    Euro,
     FileText,
     Sparkles,
-    ChevronRight,
-    UtensilsCrossed,
-    Package,
-    Settings,
-    Clock
+    Package
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from '@ui/Modal';
 import { PremiumSelect } from '@ui/PremiumSelect';
 import { useInventory, useQuotes, useCRM } from '@/engines/ops/NexusOpsProvider';
-import { QuoteLine, QuoteLineType } from '@modules/commerce/marketing/types';
-import { Product, Quote, Customer } from '@nexus/contracts';
-import { StockItem } from '@nexus/contracts/logistics';
+import { QuoteLine } from '@modules/commerce/marketing/types';
+import { Quote } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 

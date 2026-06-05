@@ -2,7 +2,6 @@ import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
 import { fiscalLedgerAtom } from '@modules/compliance';
 import { TelemetryPulse } from '@/shared/nexus-contract';
-import { FiscalSeal } from '@nexus/contracts';
 
 interface BatteryManager {
   level: number;
@@ -66,7 +65,7 @@ export class TelemetryService {
             charging: battery.charging,
             supported: true
           };
-        } catch (e) { /* Fallback */ }
+        } catch (_e) { /* Fallback */ }
       }
 
       // 2. Gather NF525 Status
@@ -126,7 +125,7 @@ export class TelemetryService {
       });
       
       console.warn(`[TelemetryService] TECHNICAL_SIGNAL_SENT: ${code} from ${source}`, techMetadata);
-    } catch (e) {
+    } catch (_e) {
       // Échec silencieux pour ne pas perturber l'expérience locale
     }
   }

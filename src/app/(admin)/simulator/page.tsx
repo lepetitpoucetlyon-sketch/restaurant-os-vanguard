@@ -5,9 +5,9 @@ import { PageHeader } from "@ui/PageHeader";
 import { GlassCard } from "@ui/GlassCard";
 import { StatCard, StatsGrid } from "@ui/StatCard";
 import { Button } from "@ui/button";
-import { SimulationService, MonteCarloResult, SimulationProfile, SimulationMode } from "@domain/services/SimulationService";
+import { SimulationService, MonteCarloResult, SimulationProfile } from "@domain/services/SimulationService";
 import { SimulatorConsole } from "@nexus/guards";
-import { TrendingUp, Users, AlertTriangle, Play, RefreshCcw, DollarSign, Activity } from "lucide-react";
+import { TrendingUp, Users, AlertTriangle, Play, RefreshCcw, DollarSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**

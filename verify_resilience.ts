@@ -1,5 +1,4 @@
 import { MonkeyChaos } from './src/domain/agents/MonkeyChaos';
-import { logger } from './src/lib/logger';
 
 async function runAudit() {
     console.log('🏁 Starting Resilience Audit [MONKEY CHAOS vs LEDGER]');

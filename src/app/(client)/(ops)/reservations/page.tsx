@@ -6,9 +6,7 @@ import { ReservationToolbar } from "@modules/commerce";
 import { ReservationSidebar } from "@modules/commerce";
 import { TableGrid } from "@modules/commerce";
 import { CustomerCustomerView } from "@modules/commerce";
-import { NewReservationDialog } from "@modules/commerce";
 import { CustomerDetailPanel } from "@modules/commerce";
-import { NewCustomerDialog } from "@modules/commerce";
 import { AnimatePresence, motion } from "framer-motion";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -26,12 +24,12 @@ export default function ReservationsPage() {
     const [activeSection, setActiveSection] = useState<"reservations" | "customers">("reservations");
     const [view, setView] = useState<"day" | "week">("day");
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-    const [isNewResOpen, setIsNewResOpen] = useState(false);
+    const [isSidebarVisible, _setIsSidebarVisible] = useState(true);
+    const [_isNewResOpen, setIsNewResOpen] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
-    const { data: reservations = [], isLoading: resLoading } = useReservations();
-    const { data: customers = [], isLoading: crmLoading, upsertCustomer } = useCRM();
+    const { data: reservations = [], isLoading: _resLoading } = useReservations();
+    const { data: customers = [], isLoading: _crmLoading, upsertCustomer: _upsertCustomer } = useCRM();
     const { tables = [] } = useTables();
     const tablesByZone = tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
         const zone = table.zoneId || 'STANDARD';

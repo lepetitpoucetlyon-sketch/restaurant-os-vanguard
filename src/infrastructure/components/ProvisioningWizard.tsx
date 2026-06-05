@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Rocket, ShieldCheck, Zap, Globe, Palette, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Rocket, Zap, Globe, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
 import { ProvisioningDNA, EmpireInstance } from '@domain/types/empire';
 import { Button } from '@ui/button';
-import { cn } from '@/lib/ui.foundations';
 
 interface ProvisioningWizardProps {
     onClose: () => void;
@@ -18,7 +17,7 @@ type Step = 'identity' | 'config' | 'deploying';
 
 export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardProps) {
     const [step, setStep] = useState<Step>('identity');
-    const [isLoading, setIsLoading] = useState(false);
+    const [_isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [formData, setFormData] = useState<ProvisioningDNA>({
         name: '',

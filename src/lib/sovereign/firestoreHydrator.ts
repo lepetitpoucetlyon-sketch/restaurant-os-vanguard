@@ -1,4 +1,4 @@
-import { z, ZodSchema } from 'zod';
+import { ZodSchema } from 'zod';
 import { UserSchema } from '../../domain/schemas/users';
 import { OrderSchema } from '../../domain/schemas/orders';
 import { StockItemSchema } from '../../domain/schemas/inventory';
@@ -10,7 +10,6 @@ import {
   BankTransactionSchema, 
   ExpenseClaimSchema 
 } from '../../domain/schemas/finance';
-import { SovereignMath } from '@/shared/services/SovereignMath';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { logger } from '../axiom';
 

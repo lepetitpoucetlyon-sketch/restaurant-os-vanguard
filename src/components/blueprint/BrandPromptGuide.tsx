@@ -1,10 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { fadeInUp } from "@/lib/motion";
 import { 
-    Palette, Type, Cpu, Sparkles, 
-    Terminal, MessageSquare
+    Palette, Type, Cpu, MessageSquare
 } from "lucide-react";
 import { GlassCard } from "@ui/GlassCard";
 

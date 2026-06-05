@@ -71,7 +71,7 @@ class EmpireAuditLogger {
                 // 1. Axiom Integration (Long-term Observability)
                 try {
                     logger.info(event.action, payload as import('@/shared/nexus-contract').SovereignMap);
-                } catch (e) {
+                } catch (_e) {
                     // Silently fail if axiom is not configured
                 }
 
@@ -89,7 +89,7 @@ class EmpireAuditLogger {
                             extra: event.details,
                             tags: { module: event.module }
                         });
-                    } catch (e) {
+                    } catch (_e) {
                         // Silently fail
                     }
                 }

@@ -93,7 +93,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
     };
 
 
-    const performMigration = useCallback(async <T extends { version: number }>(data: T, migrations: Record<number, (d: T) => T>) => {
+    const _performMigration = useCallback(async <T extends { version: number }>(data: T, migrations: Record<number, (d: T) => T>) => {
         let current = { ...data };
         const targetVersion = Math.max(...Object.keys(migrations).map(Number));
 

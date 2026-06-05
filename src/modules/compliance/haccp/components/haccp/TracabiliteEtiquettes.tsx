@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Tags,
     Camera,
-    Plus,
     PackageSearch,
     CalendarClock,
     Box,
@@ -16,7 +15,6 @@ import { useHygieneLabels, useCreateHygieneLabel, useDeleteHygieneLabel } from '
 import { useNotifications } from '@/context/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
-import { StatusBadge } from '@ui/StatusBadge';
 import { CameraCapture } from './CameraCapture';
 import { StorageService } from '@domain/services/Storage';
 import { useTenant } from '@/hooks';

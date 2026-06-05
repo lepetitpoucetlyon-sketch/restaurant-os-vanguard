@@ -2,14 +2,12 @@
 
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
-import { ZoomIn, ZoomOut, Maximize, Move, Grid, LayoutTemplate, Plus, MousePointer2, Camera, RefreshCw, Users, Heart, AlertTriangle, Square, Box, Layers, Home, Sun, Building2, ChevronDown, X, Sparkles, Minus, ClipboardList, ChefHat } from "lucide-react";
-import { Button } from "@ui/button";
+import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { fadeInUp, easing } from "@/lib/motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
@@ -43,10 +41,10 @@ export default function FloorPlanPage() {
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mode, setMode] = useState<'select' | 'add'>('select');
-    const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
-    const [showGrid, setShowGrid] = useState(true);
+    const [viewMode, _setViewMode] = useState<'2d' | '3d'>('2d');
+    const [showGrid, _setShowGrid] = useState(true);
     const [showTemplateModal, setShowTemplateModal] = useState(false);
-    const [showFloorModal, setShowFloorModal] = useState(false);
+    const [_showFloorModal, setShowFloorModal] = useState(false);
     const [showFloorSelector, setShowFloorSelector] = useState(false);
     const [newFloorName, setNewFloorName] = useState("");
     const [newFloorLevel, setNewFloorLevel] = useState(0);
@@ -75,7 +73,7 @@ export default function FloorPlanPage() {
         showToast("Plan homologué", "success");
     };
 
-    const handleAddFloor = () => {
+    const _handleAddFloor = () => {
         if (!newFloorName.trim()) return;
         addFloor({
             name: newFloorName,

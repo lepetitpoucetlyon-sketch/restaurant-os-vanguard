@@ -12,7 +12,6 @@ import {
 import {
     INVOICE_EXTRACTION_SYSTEM_PROMPT,
     PRICE_REFERENCE_TABLE,
-    type PriceRange,
 } from '@/config/prompts/invoice-extraction.prompt';
 
 // ─── Types ──────────────────────────────────────────────────────────────────────

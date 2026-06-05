@@ -11,7 +11,7 @@ import { logger } from '@/lib/axiom';
  */
 export function useStrategicOracle() {
     const fleet = useFleet() as import('@/shared/nexus/contracts/nexus.types').NexusFleetState;
-    const { instances, refreshFleet } = fleet;
+    const { instances, refreshFleet: _refreshFleet } = fleet;
     const agent = useGeminiAgent();
 
     // 1. Analyze Fleet - Get strategic insights from MacroBrain

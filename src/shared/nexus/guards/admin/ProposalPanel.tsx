@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Check, X, AlertTriangle, TrendingUp, DollarSign } from 'lucide-react';
+import { Users, Check, X, AlertTriangle, TrendingUp } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
 import { Button } from '@ui/button';
 import { StaffingProposal } from '@/lib/shared-kernel';

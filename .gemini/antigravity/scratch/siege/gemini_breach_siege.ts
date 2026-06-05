@@ -28,7 +28,7 @@ async function runSiege() {
         } else {
             logger.info('✅ [Siege] Vector 3 Blocked: FiscalEngine generated its own secure hash, ignoring AI payload hash.');
         }
-    } catch (error) {
+    } catch (_error) {
         logger.info('✅ [Siege] Vector 3 Blocked: System threw Exception on Malicious Payload.');
     }
 }

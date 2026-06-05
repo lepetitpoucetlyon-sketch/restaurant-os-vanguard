@@ -1,4 +1,3 @@
-import { SupplierOrder } from '@nexus/contracts/logistics';
 import { Box, Snowflake, Droplets, ChefHat, Truck } from 'lucide-react';
 
 export interface CleaningTask {

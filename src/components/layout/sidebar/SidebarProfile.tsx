@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/hooks";

@@ -4,12 +4,10 @@ import React, { useEffect, useState } from "react";
 import { 
   Bot, 
   ShieldCheck, 
-  Activity, 
   Zap, 
   Terminal, 
   Cpu, 
   Network, 
-  CheckCircle2, 
   AlertTriangle,
   Map,
   Sparkles,
@@ -18,7 +16,7 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { GlassCard } from "@ui/GlassCard";
-import { StatCard, StatsGrid } from "@ui/StatCard";
+import { StatCard } from "@ui/StatCard";
 import { PageHeader } from "@ui/PageHeader";
 
 interface SentinelReport {

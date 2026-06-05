@@ -2,10 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Award, FileText, Download, Printer, CheckCircle, ShieldCheck, User, AlertTriangle, Search, Cpu, Sparkles, Zap, Lock, Clock } from 'lucide-react';
+import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu } from 'lucide-react';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { logger } from '@/lib/logger';
-import { cn } from '@/lib/ui.foundations';
 import { SiteIntegrityReport, GlobalComplianceCertificate } from '@domain/services/FleetComplianceService';
 
 interface AuditReport {

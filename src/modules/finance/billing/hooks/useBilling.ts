@@ -22,7 +22,7 @@ export function useBilling() {
     const { data: orders, isLoading } = useOrders();
     const fiscalLedgerNode = useAtomValue(fiscalLedgerNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
-    const store = useStore();
+    const _store = useStore();
 
     /**
      * Fiscal Suture: Process a single order into a LegalInvoice and seal it.

@@ -2,10 +2,9 @@
 
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Link, Database, Search, AlertTriangle, CheckCircle2, Lock } from 'lucide-react';
+import { ShieldCheck, Link, Database, Search, CheckCircle2, Lock } from 'lucide-react';
 import { useCompliance } from '@/engines/fiscal/NexusFiscalProvider';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 
 import { FiscalSeal } from '@modules/finance/types';
 

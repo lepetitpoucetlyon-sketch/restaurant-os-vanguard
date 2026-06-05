@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, UtensilsCrossed, DollarSign } from "lucide-react";
 import { Button } from "@ui/button";
 import { PremiumSelect } from "@ui/PremiumSelect";
-import { cn } from "@/lib/ui.foundations";
 import { Recipe, RecipeIngredient } from "@nexus/contracts";
 
 interface RecipeCompositionTabProps {

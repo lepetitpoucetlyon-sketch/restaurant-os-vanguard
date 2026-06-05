@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { RecipeDetailDialog } from "@modules/ops";
-import { PRODUCTS } from "@/lib/mock-data";
 
 // Domain & Constants
 import { BarTab, Wine, Cocktail } from "@domain/types/bar";

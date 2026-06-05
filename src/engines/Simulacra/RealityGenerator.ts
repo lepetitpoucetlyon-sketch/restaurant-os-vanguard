@@ -1,6 +1,5 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
-import { SensorReading } from '@nexus/contracts';
 import { Order } from '@nexus/contracts';
 import { toMicrounits } from '@/domain/schemas/primitives';
 

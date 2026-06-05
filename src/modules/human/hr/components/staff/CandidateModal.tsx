@@ -10,7 +10,6 @@ import {
     User, 
     Mail, 
     Phone, 
-    Briefcase, 
     ShieldCheck, 
     Upload, 
     Camera, 
@@ -141,7 +140,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                 showToast("Nouvelle candidature enregistrée", "success");
             }
             handleClose();
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur lors de la sauvegarde", "error");
         }
     };

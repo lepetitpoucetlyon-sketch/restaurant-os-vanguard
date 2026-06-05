@@ -14,7 +14,7 @@ export interface TreasuryReport {
     };
 }
 
-const AI_TOKEN_COST_MODEL = 0.00002; // € per generated token equivalent
+const _AI_TOKEN_COST_MODEL = 0.00002; // € per generated token equivalent
 
 /**
  * 💰 TREASURY ENGINE (Empire Grade)

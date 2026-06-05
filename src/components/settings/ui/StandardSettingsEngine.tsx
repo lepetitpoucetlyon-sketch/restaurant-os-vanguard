@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Save, AlertCircle, CheckCircle2, RotateCcw, Plus, Trash2 } from 'lucide-react';
+import { Save, CheckCircle2, RotateCcw, Plus, Trash2 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { GoldSwitch } from '@/components/shared/atomic/GoldSwitch';
@@ -100,7 +100,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
     const renderField = (field: SettingsField, value: SovereignValue, onChange: (val: SovereignValue) => void) => {
 
         // Adaptation pour supporter 'key' ou 'id'
-        const fieldId = field.id || field.key;
+        const _fieldId = field.id || field.key;
 
         switch (field.type) {
             case 'boolean':
@@ -143,7 +143,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                     <GlassInput
                         type="number"
                         label={field.label}
-                        value={SharedKernel.castNumber(value)}
+                        value={SharedKernel.castNumber(displayValue)}
                         onChange={(e) => onChange(parseFloat(e.target.value))}
                         icon={field.type === 'percentage' ? <span className="text-xs text-status-warning font-bold">%</span> : null}
                     />

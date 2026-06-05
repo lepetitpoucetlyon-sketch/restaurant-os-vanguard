@@ -13,13 +13,11 @@ import {
     LayoutDashboard,
     Store,
     Map,
-    ChefHat,
     MoreHorizontal,
     X,
     CalendarDays,
     Package,
     Users,
-    BarChart3,
     Settings,
     Sparkles,
     Bell,
@@ -49,7 +47,7 @@ export function MobileNavBar() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
     const { t } = useLanguage();
-    const { toggleTheme, openCommandPalette } = useUI();
+    const { toggleTheme: _toggleTheme, openCommandPalette: _openCommandPalette } = useUI();
     const { unreadCount } = useNotifications();
 
     return (

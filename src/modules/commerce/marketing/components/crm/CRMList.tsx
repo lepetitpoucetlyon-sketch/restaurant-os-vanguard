@@ -9,7 +9,6 @@ import {
 } from '@modules/commerce/marketing/store/crmAtoms';
 import { crmsAtom, selectedCRMAtom } from '@modules/commerce/marketing/store/marketingAtoms';
 import { useLanguage } from '@/hooks';
-import { cn } from '@/lib/ui.foundations';
 import { CRM } from '@nexus/contracts';
 
 // Helper functions (extracted from page.tsx logic)
@@ -25,7 +24,7 @@ export function CRMList() {
     const [searchQuery] = useAtom(crmSearchQueryAtom);
     const [filterSegment] = useAtom(crmFilterSegmentAtom);
     const [crms] = useAtom(crmsAtom);
-    const [selectedCRM, setSelectedCRM] = useAtom(selectedCRMAtom) as [CRM | null, (crm: CRM | null) => void];
+    const [_selectedCRM, setSelectedCRM] = useAtom(selectedCRMAtom) as [CRM | null, (crm: CRM | null) => void];
 
     const filteredCRMs = crms.filter(c => {
         const cName = c.name || `${getFirstName(c)} ${getLastName(c)}`;

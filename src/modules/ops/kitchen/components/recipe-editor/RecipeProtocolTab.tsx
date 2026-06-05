@@ -3,8 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Clock, Timer, AlertTriangle } from "lucide-react";
 import { Button } from "@ui/button";
-import { cn } from "@/lib/ui.foundations";
-import { Recipe, RecipeStep, RecipeIngredient } from "@nexus/contracts";
+import { Recipe, RecipeStep } from "@nexus/contracts";
 
 interface RecipeProtocolTabProps {
     formData: Partial<Recipe>;
@@ -66,7 +65,7 @@ export function RecipeProtocolTab({
             <div className="space-y-6">
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Chronologie d'Exécution</label>
                 <AnimatePresence mode="popLayout">
-                    {formData.steps?.map((step: RecipeStep, idx: number) => (
+                    {formData.steps?.map((step: RecipeStep, _idx: number) => (
                         <motion.div
                             key={step.order}
                             initial={{ opacity: 0, scale: 0.95 }}

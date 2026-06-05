@@ -29,8 +29,8 @@ export const AgentEngine = {
             throw new Error('AgentEngine: Missing API Configuration (Check Settings)');
         }
 
-        const systemPrompt = generateSystemPrompt(request.domain, request.userRole);
-        const dataContext = request.contextData ? `\nCONTEXTE DATA ACTUEL :\n${JSON.stringify(request.contextData, null, 2)}` : '';
+        const _systemPrompt = generateSystemPrompt(request.domain, request.userRole);
+        const _dataContext = request.contextData ? `\nCONTEXTE DATA ACTUEL :\n${JSON.stringify(request.contextData, null, 2)}` : '';
 
         // Prepare the actual payload for Gemini 1.5 (assuming Flash/Pro REST API format)
         // Here we simulate the reasoning steps for the "Wow Effect" requested by user

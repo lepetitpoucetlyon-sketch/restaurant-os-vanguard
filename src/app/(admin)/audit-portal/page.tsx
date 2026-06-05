@@ -7,11 +7,9 @@ import {
     Cpu, 
     Shield, 
     Sparkles,
-    Zap,
-    Cpu as AiIcon
+    Zap
 } from 'lucide-react';
 import { AuditPortalController } from './AuditPortalController';
-import { motion } from 'framer-motion';
 
 // For RSC, I'll use standard <div> for the non-interactive header parts.
 

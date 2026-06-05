@@ -1,10 +1,7 @@
-import { YieldState, ProcurementOrder } from '@/lib/shared-kernel';
-import { SimulationService } from './SimulationService';
-import { StockEngine } from './StockEngine';
+import { YieldState } from '@/lib/shared-kernel';
 import { MarketingService } from './MarketingService';
 import { ProcurementService } from './ProcurementService';
 import { logger } from '@/lib/logger';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 /**
  * 🌀 NexusYieldEngine - Restaurant OS

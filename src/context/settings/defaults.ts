@@ -14,7 +14,6 @@ import {
     SessionSettings,
     ThemeSettings,
     PerformanceGoals,
-    SLMConfig,
     StaffConfig,
     PlanningConfig,
     RecipesConfig,

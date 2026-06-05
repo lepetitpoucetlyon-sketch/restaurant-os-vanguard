@@ -1,5 +1,5 @@
 import React from 'react';
-import { Thermometer, AlertCircle, CheckCircle2, ChevronUp, ChevronDown } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 
 interface TemperatureCardProps {

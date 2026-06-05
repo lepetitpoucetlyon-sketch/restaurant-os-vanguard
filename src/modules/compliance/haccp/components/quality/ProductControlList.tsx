@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, Check, X, Thermometer, Info, Calendar, PackageSearch } from 'lucide-react';
+import { Package, Check, X, Thermometer, PackageSearch } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useQuality } from '@modules/compliance/haccp';
 import { ActiveQualityControlItem, DecisionType } from '@nexus/contracts';

@@ -16,7 +16,7 @@ interface GitStatusResponse {
   error?: string;
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse<GitStatusResponse>> {
+export async function GET(_request: NextRequest): Promise<NextResponse<GitStatusResponse>> {
   try {
     // In production, verify admin access
     // const session = await getServerSession(authOptions);

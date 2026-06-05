@@ -43,7 +43,7 @@ export async function POST(
             metadata: { version: 'v2', timestamp: new Date().toISOString() }
         });
 
-    } catch (error) {
+    } catch (_error) {
         return NextResponse.json({
             success: false,
             error: CoreErrorCode.INTERNAL_CRASH,

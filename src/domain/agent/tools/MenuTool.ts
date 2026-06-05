@@ -4,7 +4,6 @@ import { logger } from '@/lib/logger';
 import { SovereignData, SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { ToolDefinition } from './types';
-import { SharedKernel } from '@/lib/shared-kernel';
 
 export const UpdateMenuSchema = z.object({
     tenantId: z.string().min(1),
@@ -34,7 +33,7 @@ export const MenuTool: ToolDefinition<UpdateMenuArgs> = {
     },
     schema: UpdateMenuSchema,
     category: "inventory",
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (args, _user): Promise<SovereignValue> => {
         try {
             const productName = args.productName;
             const newDescription = args.newDescription;

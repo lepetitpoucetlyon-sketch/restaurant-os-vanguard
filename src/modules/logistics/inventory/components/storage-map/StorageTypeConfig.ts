@@ -1,15 +1,8 @@
 
 import {
-    Thermometer,
     Snowflake,
-    Package,
     Wine,
     ChefHat,
-    AlertTriangle,
-    Calendar,
-    Clock,
-    X,
-    ArrowRight,
     Refrigerator,
     Archive,
     Box,

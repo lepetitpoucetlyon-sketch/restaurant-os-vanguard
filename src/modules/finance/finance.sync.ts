@@ -1,9 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { updateNexusNode } from "@/store/nexusNodeFactory";
-import { FiscalSeal, JournalEntry } from '@nexus/contracts';
-import { 
-    fiscalLedgerNodeAtom 
-} from '@/store/pillars/compliance';
+import { FiscalSeal } from '@nexus/contracts';
+
+
 
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
@@ -42,7 +40,7 @@ export const FinanceSyncService = {
     );
   },
 
-  async hydrate(store: JotaiStore) {
+  async hydrate(_store: JotaiStore) {
     try {
       const seals = await db.fiscalSeals.toArray();
       if (seals.length > 0) {

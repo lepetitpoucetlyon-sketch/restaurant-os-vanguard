@@ -17,7 +17,7 @@ function toTenantKey(name: string): string {
 }
 
 export async function POST(req: NextRequest) {
-  const { email, password, restaurantName, siret, websiteUrl } = await req.json();
+  const { email, password, restaurantName, siret: _siret, websiteUrl } = await req.json();
 
   if (!email || !password || !restaurantName) {
     return NextResponse.json({ error: 'Champs obligatoires manquants' }, { status: 400 });

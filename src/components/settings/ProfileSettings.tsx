@@ -15,7 +15,6 @@ import {
     Key,
     Save,
     Loader2,
-    Check,
     X,
     Edit3,
     Star,
@@ -23,7 +22,6 @@ import {
     Briefcase,
     Eye,
     EyeOff,
-    Fingerprint,
     ScanFace,
     BadgeCheck,
     Terminal,
@@ -46,7 +44,7 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [showPin, setShowPin] = useState(false);
-    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [_saveSuccess, setSaveSuccess] = useState(false);
 
     const [formData, setFormData] = useState<ProfileData>({
         name: '',

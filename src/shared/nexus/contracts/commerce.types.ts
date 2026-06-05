@@ -1,6 +1,4 @@
-import { SovereignNode, SovereignMap } from '@/shared/nexus-contract';
-import { OrderItem } from './ops.types';
-import { OptionGroup } from './common.types';
+import { SovereignNode } from '@/shared/nexus-contract';
 
 import { Product } from '@/domain/schemas/commerce';
 export type { Product };

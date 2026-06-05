@@ -46,7 +46,7 @@ export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
 
   const isTempCompliant = (t: number, target: { min: number, max: number }) => t >= target.min && t <= target.max;
 
-  const statusColor = item.decision === 'accepted' ? "text-success" : item.decision === 'rejected' ? "text-error" : "text-warning";
+  const _statusColor = item.decision === 'accepted' ? "text-success" : item.decision === 'rejected' ? "text-error" : "text-warning";
 
   return (
     <div className="flex flex-col md:flex-row items-center justify-between p-5 bg-bg-tertiary/20 rounded-[1.5rem] border border-border hover:border-accent-gold/50 transition-all gap-4 mb-3">

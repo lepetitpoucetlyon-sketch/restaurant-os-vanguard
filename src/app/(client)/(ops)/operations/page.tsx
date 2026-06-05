@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Book,
@@ -8,20 +8,15 @@ import {
     User,
     Calendar,
     Key,
-    Settings,
-    Search,
     Plus,
     ArrowRight,
-    MapPin,
     Layers,
     Coffee,
     Cloud,
     PenTool,
-    Info,
     CheckCircle2,
     TrendingUp
 } from 'lucide-react';
-import { NewReservationDialog } from "@modules/commerce";
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
 import { useFloorOps as useOMS } from '@/context/FloorContext';
 import { cn } from "@/lib/ui.foundations";
@@ -77,7 +72,7 @@ export default function OperationsPage() {
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();
 
-    const handleArrival = async (area: OperationalArea) => {
+    const handleArrival = async (_area: OperationalArea) => {
         if (!activeTenantId) return;
         try {
             const promise = Promise.resolve({ success: true });

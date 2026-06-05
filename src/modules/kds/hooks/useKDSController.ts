@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useKitchen } from '@/engines/ops/NexusOpsProvider';
 import { KitchenStation, ITEM_STATION_MAP } from '../contracts/kds-constants';
 import { Order } from '@nexus/contracts';

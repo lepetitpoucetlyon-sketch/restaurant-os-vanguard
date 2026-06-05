@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 import { NAV_SECTIONS } from "@/config/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";

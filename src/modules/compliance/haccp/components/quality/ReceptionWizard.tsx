@@ -2,10 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { 
-    qualityActiveControlAtom, 
-    qualityControlStepAtom,
-    qualityControlsAtom,
+import {
     qualitySelectedDeliveryIdAtom,
     qualityCurrentSessionStatsSelector
 } from '@modules/compliance/haccp/store/qualityAtoms';

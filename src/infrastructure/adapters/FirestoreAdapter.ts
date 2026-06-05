@@ -34,7 +34,7 @@ export class FirestoreAdapter implements INexusAdapter {
         this.db = getFirestore(app);
     }
 
-    async get<T>(path: string, context?: NexusContext): Promise<T | null> {
+    async get<T>(path: string, _context?: NexusContext): Promise<T | null> {
         try {
             const docRef = doc(this.db, path);
             const snap = await getDoc(docRef);
@@ -45,7 +45,7 @@ export class FirestoreAdapter implements INexusAdapter {
         }
     }
 
-    async query<T = unknown>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
+    async query<T = unknown>(collectionPath: string, options?: IQueryOptions, _context?: NexusContext): Promise<T[]> {
         try {
             const constraints: QueryConstraint[] = [];
             if (options?.where) {
@@ -73,7 +73,7 @@ export class FirestoreAdapter implements INexusAdapter {
         path: string, 
         callback: (data: T) => void, 
         options?: IQueryOptions & { onError?: (error: Error) => void },
-        context?: NexusContext
+        _context?: NexusContext
     ): () => void {
         const isCollection = path.split('/').length % 2 !== 0;
         if (isCollection) {
@@ -90,27 +90,27 @@ export class FirestoreAdapter implements INexusAdapter {
         }
     }
 
-    batch(context?: NexusContext): INexusBatch {
+    batch(_context?: NexusContext): INexusBatch {
         return new FirestoreBatch(this.db);
     }
 
-    async set<T>(path: string, data: T, options?: { merge?: boolean }, context?: NexusContext): Promise<void> {
+    async set<T>(path: string, data: T, options?: { merge?: boolean }, _context?: NexusContext): Promise<void> {
         await setDoc(doc(this.db, path), data as DocumentData, options ?? {});
     }
 
-    async update<T>(path: string, data: Partial<T>, context?: NexusContext): Promise<void> {
+    async update<T>(path: string, data: Partial<T>, _context?: NexusContext): Promise<void> {
         await updateDoc(doc(this.db, path), data as DocumentData);
     }
 
-    async increment(path: string, field: string, amount: number, context?: NexusContext): Promise<void> {
+    async increment(path: string, field: string, amount: number, _context?: NexusContext): Promise<void> {
         await updateDoc(doc(this.db, path), { [field]: increment(amount) });
     }
 
-    async create<T>(path: string, data: T, context?: NexusContext): Promise<void> {
+    async create<T>(path: string, data: T, _context?: NexusContext): Promise<void> {
         await addDoc(collection(this.db, path), data as DocumentData);
     }
 
-    async delete(path: string, context?: NexusContext): Promise<void> {
+    async delete(path: string, _context?: NexusContext): Promise<void> {
         await deleteDoc(doc(this.db, path));
     }
 

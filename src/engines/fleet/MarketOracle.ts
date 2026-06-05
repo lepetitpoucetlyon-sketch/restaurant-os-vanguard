@@ -205,12 +205,12 @@ export class MarketOracle {
 
             // Aggregate performance metrics
             const avgMetrics: Record<string, number> = {};
-            let metricCount = 0;
+            let _metricCount = 0;
 
             for (const pulse of cuisinePulses) {
                 for (const [key, value] of Object.entries(pulse.payload.metrics)) {
                     avgMetrics[key] = (avgMetrics[key] ?? 0) + value;
-                    metricCount++;
+                    _metricCount++;
                 }
             }
 

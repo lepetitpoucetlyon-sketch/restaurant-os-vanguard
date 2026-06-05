@@ -6,7 +6,6 @@ import {
     staffMembersAtom,
     stockItemsAtom,
 } from '@/store/pillars';
-import { Order, Product, Recipe, User as StaffMember } from '@nexus/contracts';
 
 // --- 📈 ANALYTICS DOMAIN (Cross-domain computed selectors) ---
 

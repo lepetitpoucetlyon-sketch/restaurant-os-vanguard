@@ -8,18 +8,14 @@ import { FiscalEngine } from './FiscalEngine';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 
-    ReceptionData, 
-    CleaningData,
-    WasteData,
-    OilCheckData,
+    ReceptionData,
     SovereignData
 } from '@nexus/contracts';
 
 import { 
     ReceptionSchema, 
     CleaningSchema, 
-    WasteSchema, 
-    OilCheckSchema 
+    WasteSchema 
 } from '../schemas/haccp';
 
 /**

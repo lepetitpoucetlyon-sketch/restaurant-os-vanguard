@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/NexusOpsProvider";
 import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
-import { Table, Category, Product, OrderItem } from "@nexus/contracts";
+import { Table, OrderItem } from "@nexus/contracts";
 import { toMicrounits } from "@/domain/schemas/primitives";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { CartItem, SovereignProduct } from "../../engine/types";
 import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
 
@@ -96,7 +95,7 @@ export function usePOSController() {
             if (selectedTableId) {
                 await updateTable(selectedTableId, { status: 'ordered' });
             }
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur lors de l'envoi en cuisine", "error");
         }
     }, [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast]);
@@ -117,7 +116,7 @@ export function usePOSController() {
             setSelectedTableId(null);
             setIsPaymentOpen(false);
             await updateTable(currentTable.id, { status: 'dirty' });
-        } catch (error) {
+        } catch (_error) {
             showToast("Transaction Échouée", "error");
         }
     }, [currentTable, cartItems, currentUser, selectedTableId, handleClearCart, updateTable, showToast]);

@@ -38,7 +38,7 @@ export const crmInitialFormState: CRMFormState = {
 export const crmFormAtom = atom<CRMFormState>(crmInitialFormState);
 
 // 4. Derived Atoms (Selectors)
-export const crmFilteredCountAtom = atom((get) => {
+export const crmFilteredCountAtom = atom((_get) => {
     // This will be used for displaying counts in the sidebar
     // Real filtering happens in the list component for performance
     return 0; // Placeholder

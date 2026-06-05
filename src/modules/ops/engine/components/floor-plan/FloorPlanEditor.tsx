@@ -2,7 +2,7 @@
 
 import { Stage, Layer, Rect, Circle, Text, Group } from "react-konva";
 import { forwardRef, useImperativeHandle } from "react";
-import { Table, TableStatus, Zone } from "@nexus/contracts";
+import { Table, Zone } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 import { AnimatePresence } from "framer-motion";
 

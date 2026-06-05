@@ -77,10 +77,7 @@ export interface ComplianceCertificate {
 import type { 
     Account, 
     JournalEntry, 
-    BankTransaction, 
-    ExpenseClaim, 
-    LedgerAccount,
-    TreasuryMetrics,
+    ExpenseClaim,
     AccountingContextData
 } from '@/domain/schemas/finance';
 import { SovereignData, SovereignValue } from '@/shared/nexus-contract';

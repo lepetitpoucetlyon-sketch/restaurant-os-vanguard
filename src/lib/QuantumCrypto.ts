@@ -1,4 +1,3 @@
-import { logger } from './logger';
 
 /**
  * 🔐 QuantumCrypto - Restaurant OS (Darwin V5.5 Master Code)
@@ -138,7 +137,7 @@ export const QuantumCrypto = {
             }
         }
         return true;
-    } catch (e) {
+    } catch (_e) {
         return false;
     }
   }

@@ -7,10 +7,9 @@ import {
     todayReceptionStatsAtom 
 } from '@modules/compliance/haccp/store/qualityAtoms';
 import { QualityEngine } from '@domain/services/QualityEngine';
-import { QualityControl, QualityControlItem } from '@domain/types/quality';
+import { QualityControl } from '@domain/types/quality';
 import type { ActiveQualityControl } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import { useSettings } from '@/hooks/useSettings';
 import { useTenant } from '@/hooks';
 
 /**

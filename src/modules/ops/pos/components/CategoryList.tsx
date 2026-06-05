@@ -3,7 +3,7 @@
 import { useAtomValue } from "jotai";
 import { categoriesAtom } from "@/store/pillars/logistics";
 import { cn } from "@/lib/ui.foundations";;
-import { Store, Pizza, Coffee, GlassWater, Beef, UtensilsCrossed, Star, ArrowLeft } from "lucide-react";
+import { Pizza, Coffee, GlassWater, Beef, UtensilsCrossed, Star, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
 

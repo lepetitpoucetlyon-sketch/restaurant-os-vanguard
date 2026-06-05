@@ -1,26 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-    UtensilsCrossed,
-    Save,
     Loader2,
     Plus,
     Trash2,
     GripVertical,
-    ImageIcon,
     Euro,
     Leaf,
     Flame,
     AlertTriangle,
-    Zap,
     LayoutGrid,
     Target,
-    Activity,
     ChefHat,
     Sparkles,
-    CheckCircle2,
     ShieldCheck,
     FileText,
     ImageIcon as FileImageIcon

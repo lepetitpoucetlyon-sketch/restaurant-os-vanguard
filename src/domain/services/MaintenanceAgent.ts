@@ -143,7 +143,7 @@ export const MaintenanceAgent = {
         try {
             const analysis: MaintenanceAIAnalysis = JSON.parse(jsonMatch[0]);
             return analysis;
-        } catch (e) {
+        } catch (_e) {
             return { 
                 summary: "Erreur de formatage AI", 
                 potentialCause: "JSON Parse Error", 

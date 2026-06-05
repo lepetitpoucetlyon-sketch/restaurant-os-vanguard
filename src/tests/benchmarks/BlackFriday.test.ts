@@ -1,8 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import '@/tests/vanguard/mocks';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
-import { ordersNodeAtom } from '@/store/pillars';
-import { getDefaultStore } from 'jotai';
 
 /**
  * 🐉 Black Friday Certification - Grade VI

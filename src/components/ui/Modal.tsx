@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion";
-import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop, mobileSpring } from "@/lib/motion";
+import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/lib/motion";
 import { useHasMounted, useIsMobile } from "@/hooks";
 
 interface ModalProps {

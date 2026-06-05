@@ -1,7 +1,6 @@
 "use client";
 
 import { Edit3, Trash2, Image as ImageIcon, Video } from "lucide-react";
-import { LucideIcon } from "lucide-react";
 
 interface ScheduledPostItemProps {
     post: {

@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { X, Camera, Upload, ReceiptEuro, Save, AlertCircle, Sparkles, Gem, ShieldCheck, FileText, CheckCircle2 } from "lucide-react";
+import { X, Camera, ReceiptEuro, Save, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAccounting } from "@/engines/fiscal/NexusFiscalProvider";
 import { useToast } from "@ui/Toast";
-import { TransactionCategory } from "@nexus/contracts";
 import { Modal } from "@ui/Modal";
 import { useUI } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
@@ -46,7 +45,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [_isAnalyzing, setIsAnalyzing] = useState(false);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -79,7 +78,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
             showToast("Note de frais scannée et transmise au coffre-fort fiscal", "success");
             reset();
             onClose();
-        } catch (error) {
+        } catch (_error) {
             showToast("Échec de la transmission du justificatif", "error");
         } finally {
             setIsSubmitting(false);

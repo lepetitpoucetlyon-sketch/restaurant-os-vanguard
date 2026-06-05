@@ -26,7 +26,7 @@ import { useToast } from "@ui/Toast";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
 export default function AccountSettingsPage() {
-    const { currentUser, users, rolePermissions, updateRolePermissions, hasAccess } = useAuth();
+    const { currentUser: _currentUser, users, rolePermissions, updateRolePermissions, hasAccess } = useAuth();
     const { showToast } = useToast();
     const [expandedRole, setExpandedRole] = useState<UserRole | null>(null);
     const [pendingChanges, setPendingChanges] = useState<Record<UserRole, CategoryKey[]>>({} as Record<UserRole, CategoryKey[]>);

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, Loader2, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { logger } from '@/lib/logger';
 
@@ -56,7 +56,7 @@ export function DeploymentEngine() {
             } else {
                 setLastResult({ success: false, msg: 'Échec de Synchronisation' });
             }
-        } catch (error) {
+        } catch (_error) {
             setLastResult({ success: false, msg: 'Erreur Réseau' });
         } finally {
             setIsPushing(false);

@@ -87,7 +87,7 @@ export const SelfHealingEngine = {
               logger.info(`[Self-Healing] Atomic Burst SUCCESSFUL: ${persistencePath} (${duration}ms)`);
             }
           }
-        } catch (error) {
+        } catch (_error) {
           logger.error(`[Self-Healing] Injection FAILED: error`);
         }
       }

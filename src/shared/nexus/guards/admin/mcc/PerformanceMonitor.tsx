@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Activity, Zap, Cpu, ShieldCheck, Gauge, Trash2 } from 'lucide-react';
+import { Activity, Zap, Cpu, ShieldCheck, Trash2 } from 'lucide-react';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { useStore } from 'jotai';
 
@@ -140,7 +140,7 @@ const MetricGauge: React.FC<{
     </div>
 );
 
-const ContextSlot: React.FC<{ label: string, status: string, complexity: number }> = ({ label, status, complexity }) => (
+const ContextSlot: React.FC<{ label: string, status: string, complexity: number }> = ({ label, status: _status, complexity }) => (
     <div className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-status-success group-hover:animate-pulse" />

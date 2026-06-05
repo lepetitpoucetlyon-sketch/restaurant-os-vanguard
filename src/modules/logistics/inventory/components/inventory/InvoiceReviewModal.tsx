@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, AlertCircle, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
+import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-import { ExtractedInvoice, ExtractedInvoiceItem } from '@domain/services/VisionService';
+import { ExtractedInvoice } from '@domain/services/VisionService';
 import { InventoryVisionService, VisionMatchResult } from '@domain/services/InventoryVisionService';
 import { useInventory } from '@/engines/ops/NexusOpsProvider';
 
@@ -17,7 +17,7 @@ interface InvoiceReviewModalProps {
 
 export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceReviewModalProps) {
     const { ingredients, addStockItem } = useInventory();
-    const [matches, setMatches] = useState<VisionMatchResult[]>(() => 
+    const [matches, _setMatches] = useState<VisionMatchResult[]>(() => 
         data.items.map(item => InventoryVisionService.findBestMatch(item, ingredients as import("@nexus/contracts").Ingredient[]))
     );
 

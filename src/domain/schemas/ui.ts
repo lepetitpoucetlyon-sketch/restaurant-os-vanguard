@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UUIDSchema, SanitizedStringSchema, sanitized } from './primitives';
+import { UUIDSchema, sanitized } from './primitives';
 
 export const TenantIdSchema = sanitized(1, 50);
 export const RolePermissionsSchema = z.array(z.string()).default([]);

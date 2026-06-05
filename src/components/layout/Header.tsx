@@ -3,12 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Bell, Search, Wifi, Settings, HelpCircle, ChevronRight, Globe, Command, Sparkles, Menu, BookOpen } from "lucide-react";
+import { Bell, Search, Settings, Menu } from "lucide-react";
 import { useUI } from "@/hooks";
 import { useAuth } from "@/hooks";
-import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { useNotifications } from "@/context/NotificationsContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { CommandModal } from "@ui/CommandModal";
 import { NotificationPanel } from "@ui/NotificationPanel";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
@@ -21,10 +20,10 @@ import { cn } from "@/lib/ui.foundations";;
 
 export function Header() {
     const pathname = usePathname();
-    const router = useRouter();
-    const { currentUser } = useAuth();
+    const _router = useRouter();
+    const { currentUser: _currentUser } = useAuth();
     const { unreadCount } = useNotifications();
-    const { theme, toggleTheme, toggleMobileMenu, openDocumentation, isCommandOpen, openCommandPalette, closeCommandPalette, toggleLaunchpad } = useUI();
+    const { theme: _theme, toggleTheme: _toggleTheme, toggleMobileMenu, openDocumentation: _openDocumentation, isCommandOpen, openCommandPalette, closeCommandPalette, toggleLaunchpad } = useUI();
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
     const { openSettings, getPageSettings, canAccessSetting } = useContextualSettings();
@@ -70,7 +69,7 @@ export function Header() {
         return pathToPageKey[segment] || null;
     };
 
-    const { t, language, setLanguage } = useLanguage();
+    const { t, language, setLanguage: _setLanguage } = useLanguage();
 
     const currentPageKey = getPageKeyFromPath(pathname);
     const pageSettings = currentPageKey ? getPageSettings(currentPageKey) : null;

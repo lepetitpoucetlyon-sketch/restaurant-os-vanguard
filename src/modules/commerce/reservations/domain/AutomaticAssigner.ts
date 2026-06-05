@@ -1,5 +1,5 @@
 import { Reservation, Table } from '@nexus/contracts';
-import { format, parse, addMinutes, isBefore, isAfter, areIntervalsOverlapping } from 'date-fns';
+import { parse, addMinutes, areIntervalsOverlapping } from 'date-fns';
 
 export class AutomaticAssigner {
   /**
@@ -49,11 +49,11 @@ export class AutomaticAssigner {
    * Suggests table combining for large groups if no single table fits
    */
   static findTableCombo(
-    covers: number,
-    date: string,
-    time: string,
-    tables: Table[],
-    existingReservations: Reservation[]
+    _covers: number,
+    _date: string,
+    _time: string,
+    _tables: Table[],
+    _existingReservations: Reservation[]
   ): string[] | null {
     // Phase 2: Implementation of table merging logic
     // For now, we only support single tables

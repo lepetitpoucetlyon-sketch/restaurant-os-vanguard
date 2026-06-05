@@ -1,7 +1,6 @@
 import { BillingSubscription, BillingEvent } from './types';
 import { SovereignLedger } from '@/domain/services/SovereignLedger';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
-import { EscalationEngine } from '@/domain/finance/collection/EscalationEngine';
 import { InvoiceTarget } from '@/domain/finance/collection/types';
 import { CollectionService } from '@/domain/finance/collection/CollectionService';
 
@@ -138,7 +137,7 @@ export class CronosBillingEngine {
         sub.nextBillingDate = retryDate.toISOString();
     }
 
-    private static async chargeSubscription(sub: BillingSubscription): Promise<void> {
+    private static async chargeSubscription(_sub: BillingSubscription): Promise<void> {
         // Stub: Simulation de charge Stripe/Swan.
         // Génère aléatoirement un échec pour tester la boucle de retry.
         if (Math.random() < 0.2) {

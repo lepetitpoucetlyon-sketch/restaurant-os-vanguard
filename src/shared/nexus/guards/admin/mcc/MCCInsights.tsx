@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Lightbulb, TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
+import { TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { useFleet } from '@/context/FleetContext';
@@ -15,7 +15,7 @@ export function MCCInsights() {
         logger.info('[Fleet] Triggering rebalancing', { insightId: insight.id, type: insight.type });
         refreshFleet?.(true);
     };
-    const fleetState = useAtomValue(fleetSnapshotAtom);
+    const _fleetState = useAtomValue(fleetSnapshotAtom);
 
     if (!macroInsights || macroInsights.length === 0) return null;
 

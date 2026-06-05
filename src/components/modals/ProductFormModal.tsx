@@ -37,7 +37,7 @@ interface ProductFormModalProps {
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
     const { ingredients } = useInventory();
-    const { data: recipes, add: addRecipe, updateRecipe, calculateRecipeCost: calculateRecipeCostHook } = useRecipes();
+    const { data: _recipes, add: addRecipe, updateRecipe, calculateRecipeCost: calculateRecipeCostHook } = useRecipes();
     const { showToast } = useToast();
 
     const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
@@ -168,7 +168,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 showToast("Fiche créée", "success");
             }
             onClose();
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur d'enregistrement", "error");
         } finally {
             setIsSubmitting(false);

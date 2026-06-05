@@ -15,7 +15,7 @@
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-interface LoggerOptions {
+interface _LoggerOptions {
     prefix?: string;
     enabled?: boolean;
 }
@@ -23,7 +23,7 @@ interface LoggerOptions {
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 const formatMessage = (level: LogLevel, message: string, prefix?: string): string => {
-    const timestamp = new Date().toISOString();
+    const _timestamp = new Date().toISOString();
     const levelEmoji = {
         debug: '🔍',
         info: 'ℹ️',

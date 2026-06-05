@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { ApiVersion, StandardResponseSchema } from '@/shared/nexus/contracts/api/api.contracts';
 import { GatewayErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 

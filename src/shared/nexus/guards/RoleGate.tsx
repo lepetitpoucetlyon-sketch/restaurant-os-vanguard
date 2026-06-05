@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
-import { ShieldAlert, Lock, Home } from 'lucide-react';
+import { Lock, Home } from 'lucide-react';
 import { Button } from '@ui/button';
 import { motion } from 'framer-motion';
 import { canAccessModule, User } from '@nexus/contracts';

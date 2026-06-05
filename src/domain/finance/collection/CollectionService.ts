@@ -1,4 +1,4 @@
-import { InvoiceTarget, CollectionAction, CommunicationPulse } from './types';
+import { InvoiceTarget, CollectionAction } from './types';
 import { EscalationEngine } from './EscalationEngine';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { DocumentVault } from '@/domain/shared/DocumentVault';

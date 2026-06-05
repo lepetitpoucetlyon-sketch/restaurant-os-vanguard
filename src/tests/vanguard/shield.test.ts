@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { ShieldedContext, SovereignSecurityViolation } from '@/lib/ai/ShieldedContext';
 import { DNAInjector } from '@/lib/ai/DNAInjector';
-import { atom } from 'jotai';
 
 describe('Sovereign Grade X++ - Deep Core Refortification Tests', () => {
 

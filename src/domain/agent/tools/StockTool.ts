@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { User, StockItem, Ingredient } from '@nexus/contracts';
+import { StockItem, Ingredient } from '@nexus/contracts';
 import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -27,7 +27,7 @@ export const StockTool: ToolDefinition<LowStockArgs> = {
     },
     schema: LowStockSchema,
     category: 'inventory',
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (args, _user): Promise<SovereignValue> => {
         const inventoryPath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.LOGISTICS)}`;
         const resourcePath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
 

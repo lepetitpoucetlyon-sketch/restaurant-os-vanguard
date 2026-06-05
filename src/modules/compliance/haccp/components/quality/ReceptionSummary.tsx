@@ -1,11 +1,9 @@
 import React from 'react';
 import { 
-    CheckCircle2, 
     XOctagon, 
     AlertTriangle, 
     Truck, 
-    Thermometer, 
-    Activity,
+    Thermometer,
     ShieldCheck
 } from 'lucide-react';
 import { QualityControl } from '@domain/types/quality';

@@ -1,4 +1,3 @@
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { EmpireInstance } from '@domain/types/empire';
 import { MacroBrain, FleetInsight } from '@domain/services/MacroBrain';
 import { logger } from '@/lib/logger';

@@ -2,9 +2,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, ShieldAlert, XCircle, RotateCcw } from 'lucide-react';
+import { GraduationCap, ShieldAlert, XCircle } from 'lucide-react';
 import { useFleet } from '@/context/FleetContext';
-import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 
 export function TrainingOverlay() {

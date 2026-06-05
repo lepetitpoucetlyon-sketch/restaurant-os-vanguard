@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Download, ShieldCheck } from 'lucide-react';
+import { Download, ShieldCheck } from 'lucide-react';
 import { Button } from '@ui/button';
 
 export const SanitaryReport: React.FC = () => {

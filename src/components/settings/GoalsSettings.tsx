@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
 import {
     Target,
-    Save,
     Loader2,
     TrendingUp,
     Users,
@@ -17,8 +16,7 @@ import {
     ArrowUpRight,
     Activity,
     LayoutPanelTop,
-    ShieldCheck,
-    Circle
+    ShieldCheck
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 

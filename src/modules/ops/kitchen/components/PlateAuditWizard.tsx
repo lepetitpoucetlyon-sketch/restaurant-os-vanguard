@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Sparkles, CheckCircle, AlertCircle, X, Loader2, Gauge, Zap } from 'lucide-react';
+import { Camera, Sparkles, CheckCircle, AlertCircle, X, Loader2, Zap } from 'lucide-react';
 import { Button } from '@ui/button';
 import { VisionService, PlateAuditResult } from '@domain/services/VisionService';
 import { cn } from '@/lib/ui.foundations';

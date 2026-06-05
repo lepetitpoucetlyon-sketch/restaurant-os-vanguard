@@ -1,4 +1,3 @@
-import { logger } from '@/lib/logger';
 import { GroupEvent } from '@nexus/contracts';
 
 /**

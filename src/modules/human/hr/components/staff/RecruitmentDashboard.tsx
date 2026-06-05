@@ -15,7 +15,6 @@ import {
     FileText, 
     UserPlus, 
     Mail, 
-    Phone, 
     Download, 
     Eye,
     CheckCircle2,
@@ -62,7 +61,7 @@ export const RecruitmentDashboard = () => {
         try {
             await updateCandidateStatus(id, newStatus);
             showToast(`Statut mis à jour vers ${STATUS_CONFIG[newStatus].label}`, "success");
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur lors de la mise à jour", "error");
         }
     };

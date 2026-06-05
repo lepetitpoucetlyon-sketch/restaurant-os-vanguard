@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
-import { useKitchen, useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useState, useEffect, useRef } from "react";
+import { useRecipes } from "@/engines/ops/NexusOpsProvider";
 import { useKDSController } from "@modules/kds";
 import { useNexusOps } from "@modules/ops";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
-import { Order, Recipe } from "@nexus/contracts";
+import { Recipe } from "@nexus/contracts";
 
 // Components
 import { KDSHeader } from "./components/KDSHeader";
@@ -20,7 +20,6 @@ import { RecipeDetailDialog } from "@modules/ops";
 import { PlateAuditWizard } from "@modules/ops";
 
 // Constants (Now from domain module)
-import { KitchenStation } from "@modules/kds";
 
 interface AuditTicket {
     id: string;
@@ -33,8 +32,8 @@ export default function KDSPage() {
         orders: filteredOrders, 
         allOrders: orders,
         updateOrderStatus, 
-        getPendingModifications,
-        isLoading,
+        getPendingModifications: _getPendingModifications,
+        isLoading: _isLoading,
         activeStation,
         setActiveStation,
         rushMode,
@@ -45,7 +44,7 @@ export default function KDSPage() {
         pendingModificationsCount
     } = useKDSController();
 
-    const { floorOps } = useNexusOps();
+    const { floorOps: _floorOps } = useNexusOps();
     const { data: recipes } = useRecipes();
     
     // Core State

@@ -16,7 +16,6 @@ export interface NodeHealth {
   timestamp: number;
 }
 
-import { SovereignData } from '@/shared/nexus-contract';
 
 import { SiteTelemetry } from '@nexus/contracts';
 export type { SiteTelemetry };

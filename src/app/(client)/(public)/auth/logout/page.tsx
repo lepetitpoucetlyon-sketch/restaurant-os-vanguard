@@ -27,7 +27,7 @@ export default function LogoutPage() {
                 globalMessage: 'Session terminée avec succès.',
                 allowedFeatures: []
             });
-        } catch (e) {
+        } catch (_e) {
             console.warn('[RESCUE] Master override failed, but session will be cleared locally.');
         }
     };

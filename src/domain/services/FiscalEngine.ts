@@ -1,4 +1,3 @@
-import { logger } from '@/lib/logger';
 import { FiscalSeal } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from './CryptoService';
@@ -78,7 +77,7 @@ export const FiscalEngine = {
   /**
    * 🛡️ Comprehensive Audit (Grade X)
    */
-  async runAudit(seals: FiscalSeal[], instanceId: string = 'default'): Promise<{ 
+  async runAudit(seals: FiscalSeal[], _instanceId: string = 'default'): Promise<{ 
       success: boolean; 
       integrity: boolean;
       sealedCount: number;

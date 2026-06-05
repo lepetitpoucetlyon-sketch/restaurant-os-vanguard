@@ -1,18 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     Users,
-    Save,
     Loader2,
     Clock,
-    Calendar,
-    GraduationCap,
-    Briefcase,
-    AlertTriangle,
     Coffee,
-    HeartPulse,
     Zap,
     Scale,
     Timer,
@@ -37,7 +31,7 @@ interface PositionConfig {
     breakDuration: number;
 }
 
-const defaultPositions: PositionConfig[] = [
+const _defaultPositions: PositionConfig[] = [
     { id: '1', name: 'Wait Staff', color: '#C5A572', hourlyRate: 12.50, overtime: 25, breakDuration: 30 },
     { id: '2', name: 'Rang Commander', color: '#1A1A1A', hourlyRate: 14.00, overtime: 25, breakDuration: 30 },
     { id: '3', name: 'Thermal Engineer', color: '#C5A572', hourlyRate: 13.50, overtime: 25, breakDuration: 45 },
@@ -47,7 +41,7 @@ const defaultPositions: PositionConfig[] = [
 ];
 
 export default function StaffSettings() {
-    const { settings, updateConfig, updateList, isSaving: contextIsSaving } = useSettings();
+    const { settings, updateConfig, updateList, isSaving: _contextIsSaving } = useSettings();
     const [positions, setPositions] = useState<PositionSettings[]>(settings?.positions || []);
     const [isSaving, setIsSaving] = useState(false);
     const [localConfig, setLocalConfig] = useState<StaffConfig>(settings?.staffConfig || {

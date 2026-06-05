@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bot, Sparkles } from "lucide-react";
+import { Bot } from "lucide-react";
 import { useUI } from "@/hooks";
-import { cn } from "@/lib/ui.foundations";;
+;
 
 export function GlobalFAB() {
-    const { openCommandPalette, toggleLaunchpad } = useUI();
+    const { openCommandPalette: _openCommandPalette, toggleLaunchpad: _toggleLaunchpad } = useUI();
 
     const triggerOracle = () => {
         window.dispatchEvent(new KeyboardEvent('keydown', { altKey: true, key: 'v' }));

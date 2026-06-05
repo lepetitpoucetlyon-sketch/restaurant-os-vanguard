@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
  * Audit Suture for secure reporting (Internal).
  */
 export const useAuditMapper = () => {
-    const logAudit = (msg: string) => {
+    const logAudit = (_msg: string) => {
         logger.info(`[AuditMapper] Reporting incident to Sovereign Vault`);
         // Integrated reporting logic
     };

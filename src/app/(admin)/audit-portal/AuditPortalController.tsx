@@ -5,13 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronDown,
     AlertTriangle,
-    Copy,
-    Sparkles,
-    Code2,
-    Layers,
-    Cpu,
-    Shield,
-    ArrowRight
+    Copy
 } from 'lucide-react';
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { ArchitecturalHealthService } from '@/domain/system/ArchitecturalHealthService';
-import { StandardResponseSchema } from '@/shared/nexus/contracts/api/api.contracts';
 import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
@@ -9,7 +8,7 @@ export const runtime = 'nodejs';
 /**
  * 🏛️ Route: System Health - Grade X+++
  */
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
     try {
         const report = await ArchitecturalHealthService.generateReport();
 
@@ -26,7 +25,7 @@ export async function GET(request: Request) {
                 timestamp: new Date().toISOString()
             }
         });
-    } catch (error) {
+    } catch (_error) {
         return NextResponse.json({
             success: false,
             error: CoreErrorCode.INTERNAL_CRASH,

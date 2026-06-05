@@ -13,11 +13,11 @@ import {
 export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine, IRealtimeSubscriber {
     private storage: Record<string, unknown> = {};
     
-    async get<T = unknown>(path: string, context?: NexusContext): Promise<T | null> {
+    async get<T = unknown>(path: string, _context?: NexusContext): Promise<T | null> {
         return (this.storage[path] as T) || null;
     }
 
-    async query<T = unknown>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
+    async query<T = unknown>(collectionPath: string, options?: IQueryOptions, _context?: NexusContext): Promise<T[]> {
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
             .map(([, data]) => data as Record<string, unknown>);
@@ -42,12 +42,12 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         return results as unknown as T[];
     }
 
-    onSnapshot<T = unknown>(path: string, callback: (data: T) => void, options?: IQueryOptions, context?: NexusContext): () => void {
+    onSnapshot<T = unknown>(path: string, callback: (data: T) => void, _options?: IQueryOptions, _context?: NexusContext): () => void {
         callback(this.storage[path] as T);
         return () => {}; 
     }
 
-    batch(context?: NexusContext): INexusBatch {
+    batch(_context?: NexusContext): INexusBatch {
         const operations: Array<() => Promise<void>> = [];
         return {
             set: (path: string, data: unknown) => operations.push(async () => { await this.set(path, data); }),
@@ -67,26 +67,26 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         };
     }
 
-    async set<T = unknown>(path: string, data: T, options?: { merge?: boolean }, context?: NexusContext): Promise<void> {
+    async set<T = unknown>(path: string, data: T, _options?: { merge?: boolean }, _context?: NexusContext): Promise<void> {
         this.storage[path] = data;
     }
 
-    async create<T = unknown>(path: string, data: T, context?: NexusContext): Promise<void> {
+    async create<T = unknown>(path: string, data: T, _context?: NexusContext): Promise<void> {
         return this.set(path, data);
     }
 
-    async update<T = unknown>(path: string, data: Partial<T>, context?: NexusContext): Promise<void> {
+    async update<T = unknown>(path: string, data: Partial<T>, _context?: NexusContext): Promise<void> {
         const existingData = (this.storage[path] || {}) as Record<string, unknown>;
         this.storage[path] = { ...existingData, ...data };
     }
 
-    async increment(path: string, field: string, amount: number, context?: NexusContext): Promise<void> {
+    async increment(path: string, field: string, amount: number, _context?: NexusContext): Promise<void> {
         const existingData = (this.storage[path] || {}) as Record<string, unknown>;
         const currentValue = typeof existingData[field] === 'number' ? existingData[field] as number : 0;
         await this.update(path, { [field]: currentValue + amount } as Record<string, unknown>);
     }
 
-    async delete(path: string, context?: NexusContext): Promise<void> {
+    async delete(path: string, _context?: NexusContext): Promise<void> {
         delete this.storage[path];
     }
 

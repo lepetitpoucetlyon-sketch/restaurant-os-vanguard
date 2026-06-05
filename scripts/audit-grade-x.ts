@@ -56,7 +56,7 @@ function auditDirectory(dir: string, report: AuditReport) {
             const twMatches = content.match(STATIC_TW_REGEX) || [];
 
             // Filtrage des hex dans les tokens eux-mêmes pour l'audit
-            const realHex = hexMatches.filter(h => !content.includes('shared/nexus/tokens'));
+            const realHex = hexMatches.filter(_h => !content.includes('shared/nexus/tokens'));
             
             report.residualHex += realHex.length + rgbMatches.length + hslMatches.length;
             report.staticTailwindClasses += twMatches.length;

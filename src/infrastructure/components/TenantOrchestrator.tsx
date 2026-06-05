@@ -8,12 +8,9 @@ import {
     Globe, 
     ShieldCheck, 
     AlertTriangle, 
-    ChevronRight, 
     Activity,
-    Lock,
     Zap,
-    Building2,
-    CheckCircle2
+    Building2
 } from "lucide-react";
 import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
@@ -110,7 +107,7 @@ export const TenantOrchestrator: React.FC = () => {
                 {displayFleet.map((instance) => {
                     const isActive = instance.id === activeTenantId;
                     const isError = instance.status === 'CRITICAL';
-                    const isMaintenance = instance.status === 'MAINTENANCE';
+                    const _isMaintenance = instance.status === 'MAINTENANCE';
 
                     return (
                         <motion.button

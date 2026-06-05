@@ -1,11 +1,11 @@
-import { User, UserRole, UserStatus, CategoryKey, RolePermissions } from './auth.types';
+import { User, UserRole, CategoryKey, RolePermissions } from './auth.types';
 import { IntelligenceConfig } from './common.types';
-import { TenantConfig, BusinessLaws, ExpertConfig, SovereignData, SovereignNode } from '@/shared/nexus-contract';
+import { TenantConfig, SovereignData, SovereignNode } from '@/shared/nexus-contract';
 
 import { GlobalSettings, PerformanceGoals } from './settings';
 import { Language } from '@/i18n/translations';
 import { ThemeMode, AccentColor, UIDensity, BorderRadius } from '@/store/themeAtoms';
-import { EmpireInstance, EmpireGlobalMetrics, FleetInsight, ConsolidatedMetrics } from './fleet.types';
+import { EmpireInstance, EmpireGlobalMetrics, FleetInsight } from './fleet.types';
 
 /**
  * 🏛️ NEXUS CORE INTERFACES (GRADE X)

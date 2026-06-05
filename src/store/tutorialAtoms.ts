@@ -1,5 +1,4 @@
 import { atom, WritableAtom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 
 export interface TutorialPoint {
     selector: string;

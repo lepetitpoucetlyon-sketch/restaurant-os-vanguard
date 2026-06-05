@@ -1,4 +1,3 @@
-import { logger } from '@/lib/logger';
 import { SovereignData } from '@/shared/nexus-contract';
 
 /**

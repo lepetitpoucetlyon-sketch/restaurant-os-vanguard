@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { DollarSign } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Recipe } from "@nexus/contracts";
 

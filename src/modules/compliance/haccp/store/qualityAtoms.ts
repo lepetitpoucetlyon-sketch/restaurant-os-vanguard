@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { createNexusNode, updateNexusNode } from '@/store/pillars/core';
+import { createNexusNode } from '@/store/pillars/core';
 import {
     QualityControl,
     ProductQualityConfig,

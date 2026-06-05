@@ -7,17 +7,14 @@ import {
     TrendingDown,
     DollarSign,
     Users,
-    Percent,
     Play,
     Zap,
-    BarChart3,
-    ArrowRight,
-    Save
+    BarChart3
 } from "lucide-react";
 import { useIntelligence } from "@/context/IntelligenceContext";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNotifications } from "@/context/NotificationsContext";
 import { Modal } from "@ui/Modal";
 

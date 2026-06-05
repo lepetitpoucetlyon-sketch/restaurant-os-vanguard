@@ -12,10 +12,8 @@ import {
 } from '@modules/compliance/haccp/store/qualityAtoms';
 import { deliveriesAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
-import { SovereignData } from '@/shared/nexus-contract';
 import { QualityEngine } from '@domain/services/QualityEngine';
 import { 
-    Delivery, 
     DeliveryItem, 
     QualityControl, 
     ActiveQualityControl, 
@@ -30,7 +28,7 @@ import { IDService } from '@/infrastructure/adapters/IDAdapter';
  * Interface between UI and Sovereign Quality Engine
  */
 export const useQuality = () => {
-    const [controls, setControls] = useAtom(qualityControlsAtom);
+    const [controls, _setControls] = useAtom(qualityControlsAtom);
     const loading = useAtomValue(qualityLoadingAtom);
     const [activeControl, setActiveControl] = useAtom(qualityActiveControlAtom);
     const [step, setStep] = useAtom(qualityControlStepAtom);

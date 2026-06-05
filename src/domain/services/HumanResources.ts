@@ -1,5 +1,4 @@
 import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@domain/schemas/hr";
-import { User } from '@nexus/contracts';
 import { format, addDays, isSameDay } from 'date-fns';
 import { SovereignData } from "@shared/nexus-contract";
 
@@ -31,7 +30,7 @@ export class HumanResourcesService {
      */
     static calculateEmployeeStats(shifts: ShiftEntry[], weekStart: Date): ShiftStats {
         let totalHours = 0;
-        const breakTime = 0;
+        const _breakTime = 0;
 
         for (let i = 0; i < 7; i++) {
             const dayDate = addDays(weekStart, i);
