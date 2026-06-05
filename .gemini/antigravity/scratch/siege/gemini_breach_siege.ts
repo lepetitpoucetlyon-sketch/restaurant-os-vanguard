@@ -1,6 +1,5 @@
 import { FiscalEngine } from '@/domain/services/FiscalEngine';
 import { logger } from '@/lib/logger';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 async function runSiege() {
     logger.info('🚀 [Siege] Vector 3: Gemini Breach - Initiating...');
@@ -20,7 +19,7 @@ async function runSiege() {
     try {
         // Attempting to seal with malicious data
         // In reality, the AI would try to call a tool that writes this data
-        const result = await FiscalEngine.sealEntry('TX_MODIFIED', maliciousPayload as any);
+        const result = await FiscalEngine.sealEntry('TX_MODIFIED', maliciousPayload as unknown as Parameters<typeof FiscalEngine.sealEntry>[1]);
         
         logger.info('📊 [Siege] FiscalEngine output:', result);
 

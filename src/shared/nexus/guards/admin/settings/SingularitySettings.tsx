@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Settings, Users, Calculator, Shield, Cpu, Save } from 'lucide-react';
+import { Users, Calculator, Shield, Cpu, Save } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
 import { Button } from '@ui/button';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -16,7 +15,7 @@ import { logger } from '@/lib/logger';
  * Permet d'ajuster l'intelligence de l'Oracle et la profondeur comptable.
  */
 export function SingularitySettings() {
-    const [settings, setSettings] = useState<any>(null); // SOVEREIGN_OVERRIDE: legacy typings
+    const [settings, setSettings] = useState<import('@nexus/contracts').GlobalSettings | null>(null); // SOVEREIGN_OVERRIDE: legacy typings
     const [saving, setSaving] = useState(false);
     const [rbacLevel, setRbacLevel] = useState<'ADMIN' | 'MANAGER' | 'DENIED'>('DENIED');
 
@@ -47,7 +46,7 @@ export function SingularitySettings() {
     const handleSave = async () => {
         setSaving(true);
         try {
-            await SettingsManager.saveSettings(settings as any); // SOVEREIGN_OVERRIDE
+            await SettingsManager.saveSettings(settings as import('@nexus/contracts').GlobalSettings); // SOVEREIGN_OVERRIDE
             logger.info('SingularitySettings: Intelligence updated.');
         } catch (e) {
             console.error("Failed to save", e);
@@ -123,7 +122,7 @@ export function SingularitySettings() {
                                         key={mode}
                                         onClick={() => setSettings({
                                             ...settings!,
-                                            accountingConfig: { ...settings?.accountingConfig, complexityMode: mode as AccountingMode }
+                                            accountingConfig: { ...settings?.accountingConfig, complexityMode: mode as AccountingMode } as import('@nexus/contracts').AccountingConfig
                                         })}
                                         className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
                                             settings?.accountingConfig?.complexityMode === mode 

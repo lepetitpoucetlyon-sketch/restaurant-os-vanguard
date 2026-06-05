@@ -1,5 +1,4 @@
 import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 import { DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { TenantConfigSchema, type TenantConfig } from '@/domain/schemas/tenant';
 import { UserSchema, type User } from '@/domain/schemas/users';
@@ -111,7 +110,7 @@ export const FLEET_GENOME = {
             const config = get(tenantConfigAtom);
             set(tenantConfigAtom, {
                 ...config,
-                branding: next as any // On cast en any ici car branding dans TenantConfig attend un TenantTheme strict, mais on veut stocker le BrandConfig complet
+                branding: next as unknown as typeof config.branding // On cast ici car branding dans TenantConfig attend un TenantTheme strict, mais on veut stocker le BrandConfig complet
             });
         }
     ),

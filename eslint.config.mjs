@@ -2,20 +2,23 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import { murDeChinePlugin } from "./eslint-plugins/mur-de-chine.mjs";
+import unusedImports from "eslint-plugin-unused-imports";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
     plugins: {
-      "vanguard": murDeChinePlugin
+      "vanguard": murDeChinePlugin,
+      "unused-imports": unusedImports,
     },
     rules: {
       "vanguard/no-cross-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
+      // unused-imports plugin: auto-removes unused import statements with --fix
+      "unused-imports/no-unused-imports": "error",
       // Unused vars: warn level, underscore prefix silences intentional non-use
-      // Run `npx knip` or use VSCode "Organize Imports" to bulk-clean imports
       "@typescript-eslint/no-unused-vars": ["warn", {
         "varsIgnorePattern": "^_",
         "argsIgnorePattern": "^_",

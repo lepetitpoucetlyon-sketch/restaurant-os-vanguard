@@ -34,7 +34,7 @@ export interface VirtualCard {
 export interface IBankingProvider {
     createAccount(tenantId: string, kyb: KYBData): Promise<BankAccount>;
     getBalance(accountId: string): Promise<number>;
-    getTransactions(accountId: string, fromDate: string): Promise<any[]>;
+    getTransactions(accountId: string, fromDate: string): Promise<Record<string, unknown>[]>;
     issueVirtualCard(accountId: string, pillarId: string, limitInCents: number): Promise<VirtualCard>;
     executeSepaTransfer(iban: string, amountInCents: number, reference: string): Promise<string>;
 }

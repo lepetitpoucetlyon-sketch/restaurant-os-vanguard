@@ -8,7 +8,7 @@ const GRAPH_REPORT = './graphify-out/GRAPH_REPORT.md';
 // Map pillars to their potential physical folders
 const PILLAR_FOLDERS = ['commerce', 'compliance', 'finance', 'human', 'infrastructure', 'intelligence', 'logistics', 'ops'];
 
-const MODULE_TO_FOLDER: any = {
+const MODULE_TO_FOLDER: Record<string, string> = {
     'Tableau de Bord': 'engine',
     'Intelligence Exécutive': 'analytics',
     'Analytique BI': 'analytics',
@@ -51,8 +51,8 @@ function sync() {
     let atlasContent = '';
     if (fs.existsSync(GRAPH_REPORT)) atlasContent = fs.readFileSync(GRAPH_REPORT, 'utf-8');
 
-    const forensicStatus: any = {};
-    const pillarIndexes: any = {};
+    const forensicStatus: Record<string, { connected: boolean; active: boolean }> = {};
+    const pillarIndexes: Record<string, string> = {};
 
     // Load ALL pillar indexes for search
     PILLAR_FOLDERS.forEach(folder => {
@@ -106,7 +106,7 @@ function sync() {
         });
     });
 
-    const statusEntries = Object.entries(forensicStatus).map(([id, status]: any) => {
+    const statusEntries = Object.entries(forensicStatus).map(([id, status]) => {
         return `"${id}": { connected: ${status.connected}, active: ${status.active} }`;
     }).join(',\n                        ');
 

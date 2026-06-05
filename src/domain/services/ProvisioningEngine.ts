@@ -80,7 +80,7 @@ export const ProvisioningEngine = {
                 activeUsers: newInstance.metrics.activeUsers,
                 lowStockAlerts: newInstance.metrics.lowStockAlerts,
                 dailyRevenue: newInstance.metrics.dailyRevenue,
-                status: newInstance.status as any // Mapping status enum
+                status: newInstance.status
             });
 
             logger.info('ProvisioningEngine: Instance registered in Master Registry', {

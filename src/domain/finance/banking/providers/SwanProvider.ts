@@ -1,4 +1,3 @@
-import { NexusTelemetryService } from "@/domain/services/NexusTelemetryService";
 
 import { IBankingProvider, KYBData, BankAccount, VirtualCard } from '../types';
 
@@ -23,7 +22,7 @@ export class SwanProvider implements IBankingProvider {
         return 15000000; // 150,000.00 EUR
     }
 
-    async getTransactions(accountId: string, fromDate: string): Promise<any[]> {
+    async getTransactions(accountId: string, fromDate: string): Promise<Record<string, unknown>[]> {
         return [];
     }
 

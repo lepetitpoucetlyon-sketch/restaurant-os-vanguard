@@ -17,7 +17,6 @@ import { useRecipes, useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
-import { AnimatePresence } from "framer-motion";
 import type { Recipe } from "@nexus/contracts/nexus-internal-mapper";
 
 
@@ -48,7 +47,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 const ing = ingredients.find((i) => i.id === ri.ingredientId);
                 return { ...ing, quantity: ri.quantity };
             })
-        } as any); // Hook expects full Recipe, we pass partial
+        } as unknown as Recipe); // Hook expects full Recipe, we pass partial
     };
 
     // Form State

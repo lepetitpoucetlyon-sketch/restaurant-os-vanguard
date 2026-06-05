@@ -1,4 +1,4 @@
-import { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext } from "@/lib/nexus/types";
+import { INexusAdapter, INexusBatch, NexusContext } from "@/lib/nexus/types";
 import { logger } from '@/lib/logger';
 import { 
     IDocumentStore, 
@@ -25,7 +25,7 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         if (options?.orderBy) {
             const { field, direction } = options.orderBy;
             results.sort((a, b) => {
-                const valA = a[field] as any; // Cast for comparison
+                const valA = a[field] as unknown; // Cast for comparison
                 const valB = b[field] as unknown;
                 if (valA === null || valA === undefined) return direction === 'asc' ? 1 : -1;
                 if (valB === null || valB === undefined) return direction === 'asc' ? -1 : 1;

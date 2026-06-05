@@ -22,7 +22,6 @@ const makePayload = () => ({
 describe('📡 NexusEventBus', () => {
   beforeEach(() => {
     // Nettoyer les handlers entre tests
-    // @ts-ignore — accès privé pour les tests
     NexusEventBus['handlers'].clear();
   });
 

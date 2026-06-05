@@ -162,7 +162,7 @@ export const ChaosMonkey = {
         logger.debug(`[Chaos-Monkey] NODE_DRIFT_INJECTED: ${choice.path}`);
         
         // Use functional update to bypass read-only issues
-        store.set(choice.atom as unknown as WritableAtom<unknown, unknown[], unknown>, (prev: any) => updateNexusNode(prev, { data: corruptedData }));
+        store.set(choice.atom as unknown as WritableAtom<unknown, unknown[], unknown>, (prev: unknown) => updateNexusNode(prev as Parameters<typeof updateNexusNode>[0], { data: corruptedData }));
 
         // 🛡️ RECOVERY TRIGGER
         const persistencePath = Nexus.getTenantPath(choice.path);
