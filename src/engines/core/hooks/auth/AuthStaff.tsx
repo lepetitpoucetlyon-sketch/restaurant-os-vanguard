@@ -6,7 +6,6 @@ import { firebaseApp, isMock } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { IdentityManager, ROOT_ADMIN } from '@domain/services/IdentityManager';
 import { User } from '@nexus/contracts';
-import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
 
@@ -132,7 +131,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
         const patch: import('@/shared/nexus-contract').SovereignData = {};
 
         for (const [key, value] of Object.entries(data)) {
-            if (value !== undefined) patch[key] = value as any;
+            if (value !== undefined) patch[key] = value as import('@/shared/nexus-contract').SovereignField;
         }
 
         if (typeof data.pin === 'string' && data.pin.trim()) {

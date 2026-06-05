@@ -19,9 +19,9 @@ const nextConfig: NextConfig = {
     },
   },
   devIndicators: {
-    // @ts-ignore - Hiding the dev indicator
+    // @ts-expect-error - Hiding the dev indicator
     buildActivity: false,
-    // @ts-ignore
+    // @ts-expect-error - appIsrStatus not in NextConfig types
     appIsrStatus: false,
   },
   onDemandEntries: {

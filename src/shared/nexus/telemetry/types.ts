@@ -15,7 +15,7 @@ export interface AuditPulse {
     pulse: AuditPulseType;
     vassalId: string;
     actorId: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
     severity: 'INFO' | 'WARNING' | 'CRITICAL';
     timestamp: string;
 }

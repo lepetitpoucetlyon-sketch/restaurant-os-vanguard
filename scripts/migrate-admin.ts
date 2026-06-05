@@ -1,4 +1,4 @@
-import { Project, SyntaxKind } from 'ts-morph';
+import { Project, SyntaxKind, StringLiteral } from 'ts-morph';
 import path from 'path';
 import fs from 'fs';
 
@@ -92,7 +92,7 @@ const STATIC_TW_REGEX = new RegExp(`\\b(${PREFIXES})-(${ALL_COLORS})-(${SHADES})
 const ARBITRARY_HEX_REGEX = new RegExp(`\\b(${PREFIXES})-\\[#([0-9a-fA-F]{3,6})\\](?:\\/([0-9]{1,3}))?\\b`, 'g');
 
 let totalReplacements = 0;
-const migrationLog: any[] = [];
+const migrationLog: Array<{ file: string; line: number; original: string; replaced: string }> = [];
 
 project.getSourceFiles().forEach(sourceFile => {
     let fileModified = false;
@@ -155,7 +155,7 @@ project.getSourceFiles().forEach(sourceFile => {
         });
 
         if (text !== originalText) {
-            (node as any).setLiteralValue(text);
+            (node as StringLiteral).setLiteralValue(text);
             fileModified = true;
             totalReplacements++;
         }

@@ -4,7 +4,7 @@
  */
 
 import { IdGenerator } from './utils/IdGenerator';
-import type { SovereignData, SovereignSchemaField, SovereignField, SovereignValue } from '@/shared/nexus-contract';
+import type { SovereignData, SovereignSchemaField, SovereignField } from '@/shared/nexus-contract';
 
 export const SharedKernel = {
     // --- SOVEREIGN FIELD HANDLERS (GRADE X) ---
@@ -115,7 +115,7 @@ export const SharedKernel = {
      */
     sync: (schemaKey: string, rawData: SovereignData, schemaFields: SovereignSchemaField[]): SovereignData => {
 
-        const sanitized = { ...rawData } as Record<string, any>;
+        const sanitized = { ...rawData } as Record<string, SovereignField>;
 
         schemaFields.forEach(field => {
             const valueField = sanitized[field.id];

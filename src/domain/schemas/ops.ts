@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SanitizedStringSchema, TimestampSchema, UUIDSchema, StatusSchema } from './primitives';
+import { SanitizedStringSchema, TimestampSchema, UUIDSchema } from './primitives';
 
 export const TableShapeSchema = z.enum(['rect', 'circle']).or(z.string());
 
@@ -18,7 +18,7 @@ export const TableSchema = z.object({
   floorId:           UUIDSchema.optional(),
   shape:             TableShapeSchema,
   schemaVersion:     z.literal(2).default(2),
-  updatedAt:         TimestampSchema.default(() => Date.now() as any), // TECH_DEBT: Zod union input — refacto primitives
+  updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
 }).catchall(z.any());
 
 export const ReservationSchema = z.object({
@@ -35,7 +35,7 @@ export const ReservationSchema = z.object({
   duration:          z.number().int().min(1).optional(),
   notes:             SanitizedStringSchema.optional(),
   schemaVersion:     z.literal(2).default(2),
-  updatedAt:         TimestampSchema.default(() => Date.now() as any), // TECH_DEBT: Zod union input — refacto primitives
+  updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
 }).catchall(z.any());
 
 export const FloorSchema = z.object({
@@ -47,7 +47,7 @@ export const FloorSchema = z.object({
   icon:              z.string().optional(),
   description:       SanitizedStringSchema.optional(),
   schemaVersion:     z.literal(2).default(2),
-  updatedAt:         TimestampSchema.default(() => Date.now() as any), // TECH_DEBT: Zod union input — refacto primitives
+  updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
 }).catchall(z.any());
 
 export const ZoneSchema = z.object({
@@ -62,7 +62,7 @@ export const ZoneSchema = z.object({
   width:             z.number().optional(),
   height:            z.number().optional(),
   schemaVersion:     z.literal(2).default(2),
-  updatedAt:         TimestampSchema.default(() => Date.now() as any), // TECH_DEBT: Zod union input — refacto primitives
+  updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
 });
 
 export type Table = z.infer<typeof TableSchema>;

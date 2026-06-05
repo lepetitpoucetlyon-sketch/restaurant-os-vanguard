@@ -45,7 +45,7 @@ class TelemetryService {
   /**
    * 🖋️ Suture GRADE X+++: Emission d'Audit Pulse
    */
-  public emitAuditPulse(pillar: string, action: string, data: Record<string, any>) {
+  public emitAuditPulse(pillar: string, action: string, data: object) {
       console.log(`[AuditPulse|${pillar}] ${action}`, data);
       // Implémentation réelle vers le MCC
   }
