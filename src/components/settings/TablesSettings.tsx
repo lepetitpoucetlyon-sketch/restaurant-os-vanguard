@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
-import { Floor, Table, Zone } from "@nexus/contracts";
 import {
     LayoutGrid,
     Users,

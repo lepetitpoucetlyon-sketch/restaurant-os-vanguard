@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 
 
 import { promisify } from "util";
-const exec = promisify(execSync);
+const _exec = promisify(execSync);
 
 export interface ArchitecturalHealthReport {
   timestamp: string;

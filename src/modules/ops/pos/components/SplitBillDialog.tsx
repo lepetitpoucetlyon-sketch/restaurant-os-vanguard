@@ -2,16 +2,14 @@
 
 import { useState } from "react";
 import { X, Users, DivideCircle, Check, ArrowRight, User, Minus, Plus, CheckCircle2, CreditCard, Banknote, Smartphone, Sparkles } from "lucide-react";
-import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
 
 import { CartItem } from "@modules/ops";
 export type SplitCartItem = CartItem;
-import { Microunits, toMicrounits } from "@/domain/schemas/primitives";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 
 interface SplitBillDialogProps {

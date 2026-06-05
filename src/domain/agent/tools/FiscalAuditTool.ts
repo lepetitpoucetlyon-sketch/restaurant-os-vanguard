@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { User, FiscalSeal } from '@nexus/contracts';
+import { FiscalSeal } from '@nexus/contracts';
 import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -27,7 +27,7 @@ export const FiscalAuditTool: ToolDefinition<FiscalAuditArgs> = {
     },
     schema: FiscalAuditSchema,
     category: 'finance',
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (args, _user): Promise<SovereignValue> => {
         const fiscalPath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.LEDGER)}`;
         
         // 🏛️ GATHERING ALL SEALS

@@ -38,7 +38,7 @@ export function useDeepMemo<T>(factory: () => T, deps: SovereignValue[]): T {
 /**
  * Hook to track render count (debug).
  */
-export function useRenderCount(componentName: string): number {
+export function useRenderCount(_componentName: string): number {
     const renderCount = useRef(0);
     
     useEffect(() => {

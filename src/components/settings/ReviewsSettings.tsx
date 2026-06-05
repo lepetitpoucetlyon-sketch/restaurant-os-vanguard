@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Star,
-    Save,
     Loader2,
     MessageSquare,
     ThumbsUp,
@@ -12,16 +11,15 @@ import {
     TrendingUp,
     ExternalLink,
     AlertTriangle,
-    Zap,
     Cpu,
     Sparkles,
     ShieldCheck,
     PenTool
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-const stubAction = async (...args: import("@/shared/nexus-contract").SovereignValue[]) => ({ success: true, id: "STUB_ID" });
+const stubAction = async (..._args: import("@/shared/nexus-contract").SovereignValue[]) => ({ success: true, id: "STUB_ID" });
 const saveMarketingSettingsAction = stubAction;
-const updateReviewSettingsAction = stubAction;
+const _updateReviewSettingsAction = stubAction;
 import { toast } from "sonner";
 
 interface ReviewSource {
@@ -64,7 +62,7 @@ export default function ReviewsSettings() {
                 templates
             });
             toast.success("Reputation state committed to the industrial core.");
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to commit reputation state.");
         } finally {
             setIsSaving(false);

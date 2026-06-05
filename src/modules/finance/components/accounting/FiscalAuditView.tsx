@@ -2,14 +2,12 @@
 
 import React, { useState } from 'react';
 import { useFiscal } from '@/engines/ops/NexusOpsProvider';
-import { FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
 import { BlockchainLedgerService } from '@modules/finance/accounting/domain/BlockchainLedgerService';
-import { Card, CardHeader, CardTitle, CardContent } from '@ui/card';
-import { ShieldCheck, ShieldAlert, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const FiscalAuditView: React.FC = () => {
-    const { data: seals = [], isLoading: sealsLoading } = useFiscal();
+    const { data: seals = [], isLoading: _sealsLoading } = useFiscal();
     const [isVerifying, setIsVerifying] = useState(false);
     const [auditResult, setAuditResult] = useState<{ success: boolean; message: string } | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -25,7 +23,7 @@ export const FiscalAuditView: React.FC = () => {
                     ? "Chaîne fiscale intègre. Tous les sceaux sont valides et chaînés correctement."
                     : "Violation d'intégrité détectée ! La chaîne a été corrompue."
             });
-        } catch (error) {
+        } catch (_error) {
             setAuditResult({ success: false, message: "Erreur lors de l'audit technique." });
         } finally {
             setIsVerifying(false);

@@ -11,14 +11,13 @@ import {
     Calculator,
     Truck,
     ShieldAlert,
-    ChevronRight,
     ChevronLeft,
     LucideIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useManagement, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
-import { Recipe, PrepTask, Product, Order } from "@nexus/contracts";
+import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import { useUI } from "@/hooks/useUI";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { PrepTaskDetailDialog } from "@modules/ops";
@@ -41,16 +40,16 @@ import { performanceModeAtom } from "@/store/pillars/sovereign";
 type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'waste' | 'suppliers' | 'allergens' | 'cooking-times';
 
 export default function KitchenPage() {
-    const router = useRouter();
-    const ordersData: unknown[] = []; // Real orders should come from useKitchen
+    const _router = useRouter();
+    const _ordersData: unknown[] = []; // Real orders should come from useKitchen
     const [activeTab, setActiveTab] = useState<KitchenTab>('mise-en-place');
     
     // Nexus Grade X Hooks
     const kitchen = useKitchen();
     const recipesHook = useRecipes();
-    const management = useManagement();
+    const _management = useManagement();
     const inventory = useInventory();
-    const { openDocumentation } = useUI();
+    const { openDocumentation: _openDocumentation } = useUI();
     const performanceMode = useAtomValue(performanceModeAtom);
 
     // Mapping to NexusNode (Grade X)
@@ -64,15 +63,15 @@ export default function KitchenPage() {
 
     const {
         data: recipes,
-        addRecipe,
-        updateRecipe,
+        addRecipe: _addRecipe,
+        updateRecipe: _updateRecipe,
         deleteRecipe
     } = recipesHook;
     
     const wasteLogs = [] as import("@nexus/contracts").RegulatoryWasteLog[]; // Suture required for waste
     
     const ingredients = (inventory.stockItems || []) as unknown as import("@nexus/contracts").Ingredient[];
-    const products = inventory.stockItems;
+    const _products = inventory.stockItems;
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
     const [selectedPrepTask, setSelectedPrepTask] = useState<PrepTask | null>(null);

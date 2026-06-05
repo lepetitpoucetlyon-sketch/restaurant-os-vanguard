@@ -6,11 +6,8 @@ import {
   ShieldCheck, 
   Rocket, 
   LayoutGrid, 
-  Settings, 
   Activity, 
-  Plus, 
-  Search,
-  Bell,
+  Plus,
   Lock,
   ChevronRight,
   TrendingUp,
@@ -18,7 +15,6 @@ import {
   Zap,
   Cpu,
   Award,
-  Thermometer,
   Wallet,
   BrainCircuit
 } from 'lucide-react';
@@ -67,14 +63,14 @@ export default function MCCDashboard() {
   const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
 
   // Filter & Search
-  const [searchQuery, setSearchQuery] = useState('');
+  const [_searchQuery, _setSearchQuery] = useState('');
 
   const handleCreateClone = async () => {
     if (!newCloneName || !newCloneKey || !newCloneEmail) return;
 
     setProvisioningStatus('Initializing Cloud Resources...');
     try {
-      const newInst = await ProvisioningEngine.provisionNewInstance({
+      const _newInst = await ProvisioningEngine.provisionNewInstance({
         name: newCloneName,
         key: newCloneKey,
         ownerEmail: newCloneEmail,
@@ -91,7 +87,7 @@ export default function MCCDashboard() {
       setNewCloneName('');
       setNewCloneKey('');
       setNewCloneEmail('');
-    } catch (err) {
+    } catch (_err) {
       setProvisioningStatus('Critical Error in Provisioning.');
     }
   };
@@ -442,7 +438,7 @@ function StatCard({ label, value, icon, trend, isWarning = false }: { label: str
   );
 }
 
-function InstanceRow({ instance, index }: { instance: EmpireInstance, index: number }) {
+function _InstanceRow({ instance, index }: { instance: EmpireInstance, index: number }) {
   return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }}

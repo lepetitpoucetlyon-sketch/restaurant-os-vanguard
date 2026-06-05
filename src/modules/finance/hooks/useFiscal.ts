@@ -2,12 +2,12 @@
 
 import { useAtomValue } from "jotai";
 import { fiscalLedgerNodeAtom } from "@/store/pillars/compliance";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useAuth, useTenant } from "@/hooks";
 // import { submitExpenseAction } from "@/app/(admin)/actions/accounting";
 import { JournalEntry } from "../types";
 
-const stubAction = async (...args: unknown[]) => ({ success: true, id: "STUB_ID" });
+const stubAction = async (..._args: unknown[]) => ({ success: true, id: "STUB_ID" });
 const submitExpenseAction = stubAction as (...args: unknown[]) => Promise<{success: boolean, id: string}>;
 import { FiscalEngine } from "@/infrastructure/adapters/FiscalAdapter";
 

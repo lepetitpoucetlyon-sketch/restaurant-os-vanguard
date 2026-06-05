@@ -48,7 +48,7 @@ export class TransactionService {
                 orderBy: { field: 'timestamp', direction: 'desc' },
                 limit: 1
             });
-            const lastHash = lastSeals.length > 0 ? lastSeals[0].hash : null;
+            const _lastHash = lastSeals.length > 0 ? lastSeals[0].hash : null;
 
             const seal = await FiscalEngine.sealEntry(order.id, {
                 amount: order.totalInCents,

@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useTutorial } from '@/context/TutorialContext';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronRight, X } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { useHasMounted } from '@/hooks';
 import { NexusTutorialState } from '@nexus/contracts/nexus.types';
@@ -12,7 +12,7 @@ import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 import { usePathname, useRouter } from 'next/navigation';
 
 export function TutorialBubble() {
-    const { isActive, currentSection, currentPointIndex, nextStep, prevStep, stopTutorial } = useTutorial() as NexusTutorialState;
+    const { isActive, currentSection, currentPointIndex, nextStep, prevStep: _prevStep, stopTutorial } = useTutorial() as NexusTutorialState;
     const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, height: 0 });
     const isMounted = useHasMounted();
     const bubbleRef = useRef<HTMLDivElement>(null);

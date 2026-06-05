@@ -2,11 +2,9 @@
 
 import { useRegistre } from "@/context/RegistreContext";
 import { 
-    Clock, 
     Calendar, 
     BadgeCheck, 
     AlertTriangle, 
-    CheckCircle2, 
     Plus, 
     Download, 
     FileText,

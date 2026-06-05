@@ -1,31 +1,21 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { format, isToday, subDays, startOfDay, eachDayOfInterval } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
   TrendingUp,
-  TrendingDown,
   Users,
-  Clock,
-  AlertCircle,
-  ArrowRight,
-  ChevronRight,
-  Download,
   Calendar,
   Zap,
-  Star,
   ShoppingBag,
   Plus,
   Package,
-  BarChart3,
-  Sun,
-  HandMetal
+  BarChart3
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Button } from "@ui/button";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
@@ -36,7 +26,7 @@ import { useLanguage } from "@/hooks";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useIsMobile } from "@/hooks";
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { kpiContainerVariants, kpiCardVariants, fadeInUp, staggerContainer } from "@/lib/motion";
+import { kpiContainerVariants, kpiCardVariants, fadeInUp } from "@/lib/motion";
 
 interface KpiCardProps {
   title: string;
@@ -49,7 +39,7 @@ interface KpiCardProps {
   isMobile?: boolean;
 }
 
-const KpiCard = ({ title, value, trend, trendValue, icon: Icon, delay = 0, tutorialId, isMobile }: KpiCardProps) => (
+const KpiCard = ({ title, value, trend, trendValue, icon: Icon, delay: _delay = 0, tutorialId, isMobile }: KpiCardProps) => (
   <motion.div
     variants={kpiCardVariants}
     data-tutorial={tutorialId}
@@ -145,19 +135,19 @@ export default function Home() {
   const router = useRouter();
   const { tables } = useTables();
   const { data: orders } = useOrders();
-  const totalRevenue = orders.reduce((acc, o) => {
+  const _totalRevenue = orders.reduce((acc, o) => {
     const amountInMicrounits = (o.totalInCents || 0) * 10_000;
     return SovereignMath.add(acc, amountInMicrounits);
   }, 0);
   const { lowStockItems } = useInventory();
   const { currentUser } = useAuth();
-  const { showToast } = useToast();
+  const { showToast: _showToast } = useToast();
   const { t } = useLanguage();
   const isMobile = useIsMobile();
 
   const showCA = usePageSetting('dashboard', 'show_ca', true);
-  const showStaffMetrics = usePageSetting('dashboard', 'show_staff_metrics', true);
-  const showWeatherWidget = usePageSetting('dashboard', 'show_weather_widget', true);
+  const _showStaffMetrics = usePageSetting('dashboard', 'show_staff_metrics', true);
+  const _showWeatherWidget = usePageSetting('dashboard', 'show_weather_widget', true);
   const dailyCATarget = usePageSetting('dashboard', 'ca_target', 5000);
   const dailyTicketsTarget = usePageSetting('dashboard', 'tickets_target', 100);
   const occupancyTarget = usePageSetting('dashboard', 'occupation_target', 85);

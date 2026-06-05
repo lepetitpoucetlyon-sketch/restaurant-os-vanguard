@@ -1,4 +1,4 @@
-import { Order, LegalInvoice, NexusInternalMapper } from '@nexus/contracts/nexus-internal-mapper';
+import { LegalInvoice, NexusInternalMapper } from '@nexus/contracts/nexus-internal-mapper';
 import { SovereignNode } from '@/shared/nexus-contract';
 import { JournalEntry, TaxRate } from '@modules/finance';
 import { SovereignMath } from '@/shared/services/SovereignMath';
@@ -44,7 +44,7 @@ export class InvoiceEngine {
   /**
    * Seal an invoice to the Fiscal Ledger format (JournalEntry)
    */
-  static toJournalEntry(invoice: LegalInvoice, tenantId: string): JournalEntry {
+  static toJournalEntry(invoice: LegalInvoice, _tenantId: string): JournalEntry {
     const now = Date.now();
     
     return {

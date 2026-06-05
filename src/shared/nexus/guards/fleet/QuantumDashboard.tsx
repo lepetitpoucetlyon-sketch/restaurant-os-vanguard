@@ -4,7 +4,6 @@ import { activeTenantSlotsAtom, fleetSnapshotAtom } from '@nexus/state/Sovereign
 import { MacroBrain } from '@domain/services/MacroBrain';
 import { QuantumOrchestrator } from '@domain/services/QuantumOrchestrator';
 import { EmpireInstance } from '@nexus/contracts';
-import { logger } from '@/lib/logger';
 
 /**
  * 🛰️ QuantumDashboard - Phase 5 (MCC Industrial Console)
@@ -12,7 +11,7 @@ import { logger } from '@/lib/logger';
  */
 export const QuantumDashboard: React.FC = () => {
     const fleet = useAtomValue(fleetSnapshotAtom);
-    const slots = useAtomValue(activeTenantSlotsAtom);
+    const _slots = useAtomValue(activeTenantSlotsAtom);
 
     const consolidated = useMemo(() => MacroBrain.getConsolidatedMetrics(fleet as unknown as EmpireInstance[]), [fleet]);
     const quantum = useMemo(() => MacroBrain.getQuantumFleetSnapshot(fleet as unknown as EmpireInstance[]), [fleet]);

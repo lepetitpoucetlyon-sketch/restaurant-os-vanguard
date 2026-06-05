@@ -25,7 +25,7 @@ export const Imperial3DView = {
   /**
    * Updates a nodes position based on transaction frequency (Gravity).
    */
-  updateNodeGravity(tenantId: string, transactionPulse: number) {
+  updateNodeGravity(_tenantId: string, _transactionPulse: number) {
     // Highly efficient WebGL buffer update
     // Simulation of data "pull" in the 3D map
   }

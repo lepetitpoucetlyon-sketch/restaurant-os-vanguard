@@ -11,11 +11,11 @@ import { logger } from '@/lib/logger';
  * Orchestre l'optimisation adaptative de l'UI en fonction du matériel.
  */
 export function PerformanceEngine(): null {
-    const [performanceMode, setPerformanceMode] = useAtom(performanceModeAtom);
+    const [performanceMode, _setPerformanceMode] = useAtom(performanceModeAtom);
     const { showToast } = useToast();
     const frameCount = useRef(0);
     const lastTime = useRef<number | null>(null);
-    const [fps, setFps] = useState(60);
+    const [_fps, setFps] = useState(60);
 
     useEffect(() => {
         if (lastTime.current === null) {

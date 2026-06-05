@@ -63,7 +63,7 @@ export const SovereignGuard = {
   /**
    * ⚖️ Grade X NF525: Check if a path is fiscally sealed.
    */
-  async isFiscallySealed(path: string, context: { vassalId: string }): Promise<boolean> {
+  async isFiscallySealed(path: string, _context: { vassalId: string }): Promise<boolean> {
     const collection = this.extractCollectionName(path);
     return this.IMMUTABLE_COLLECTIONS.has(collection) || path.includes('fiscal/');
   },
@@ -248,7 +248,7 @@ export const SovereignGuard = {
         globalMessage: errorMsg,
         allowedFeatures: []
       });
-    } catch (e) {}
+    } catch (_e) {}
 
     if (typeof window !== 'undefined') {
       import('@/shared/services/SovereignStorage').then(({ SovereignStorage }) => {

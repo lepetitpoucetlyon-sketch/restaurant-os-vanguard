@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Search } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";;
 import { NavSection } from "@/config/navigation";
 import { useState, useRef, useEffect } from "react";
@@ -23,13 +22,13 @@ interface AppLaunchpadProps {
 
 export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
     const router = useRouter();
-    const { theme, setIsMap3DOpen } = useUI();
+    const { theme: _theme, setIsMap3DOpen } = useUI();
     const mounted = useHasMounted();
     const [searchQuery, setSearchQuery] = useState("");
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const { t } = useLanguage();
-    const [isScrolled, setIsScrolled] = useState(false);
+    const [_isScrolled, setIsScrolled] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {

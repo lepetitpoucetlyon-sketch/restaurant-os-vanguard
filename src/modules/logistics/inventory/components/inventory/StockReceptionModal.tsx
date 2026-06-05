@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X } from "lucide-react";
@@ -44,10 +44,10 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
     const [quantity, setQuantity] = useState<string>('');
     const [unit, setUnit] = useState<IngredientUnit>('kg');
     const [storageLocation, setStorageLocation] = useState<string>('');
-    const [batchNumber, setBatchNumber] = useState<string>('');
-    const [lotNumber, setLotNumber] = useState<string>('');
-    const [supplierName, setSupplierName] = useState<string>('');
-    const [unitCostInCents, setUnitCostInCents] = useState<string>('');
+    const [_batchNumber, setBatchNumber] = useState<string>('');
+    const [_lotNumber, _setLotNumber] = useState<string>('');
+    const [_supplierName, setSupplierName] = useState<string>('');
+    const [_unitCostInCents, setUnitCostInCents] = useState<string>('');
     const [receptionDate, setReceptionDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [dlc, setDlc] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState(false);

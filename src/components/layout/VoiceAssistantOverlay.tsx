@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { SovereignData, SovereignValue } from "@shared/nexus-contract";
+import { SovereignData } from "@shared/nexus-contract";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeX, History, X, Zap, Maximize2, Minimize2, AlertTriangle, CheckCircle2, Minus, Bot } from 'lucide-react';
-import { useGeminiAgent, AgentSession } from "@/hooks/useGeminiAgent";
+import { Volume2, VolumeX, History, X, Maximize2, Minimize2, AlertTriangle, Minus, Bot } from 'lucide-react';
+import { useGeminiAgent } from "@/hooks/useGeminiAgent";
 import { useGeminiLive } from '@modules/commerce';
 import { useSettings } from "@/context/SettingsContext";
 
 import { cn } from "@/lib/ui.foundations";
-import { useRouter } from "next/navigation";
 
 import { NexusSphere } from './voice/NexusSphere';
 import { ChatThread } from './voice/ChatThread';
@@ -57,7 +56,7 @@ export function VoiceAssistantOverlay() {
         pendingAction,
         confirmAction,
         sendMessage,
-        clearError,
+        clearError: _clearError,
         fetchAllSessions,
         loadSession,
         startNewSession
@@ -65,15 +64,15 @@ export function VoiceAssistantOverlay() {
 
     const {
         isActive: isLiveActive,
-        isConnecting: isLiveConnecting,
+        isConnecting: _isLiveConnecting,
         error: liveError,
-        transcripts: liveTranscripts,
-        startSession: startLiveSession,
-        stopSession: stopLiveSession,
-        sendText: sendLiveText
+        transcripts: _liveTranscripts,
+        startSession: _startLiveSession,
+        stopSession: _stopLiveSession,
+        sendText: _sendLiveText
     } = useGeminiLive();
 
-    const error = chatError || liveError;
+    const _error = chatError || liveError;
 
     const toggleDictation = useCallback(() => {
         if (isDictating && recognitionRef.current) {

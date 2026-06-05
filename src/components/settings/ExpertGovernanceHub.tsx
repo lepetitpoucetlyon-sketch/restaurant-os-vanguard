@@ -6,9 +6,7 @@ import { staggerContainer, fadeInUp } from "@/lib/motion";
 import { 
     Save, 
     ShieldCheck, 
-    Settings, 
     Activity, 
-    Search, 
     Database, 
     Utensils, 
     TrendingUp, 

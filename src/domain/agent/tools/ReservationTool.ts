@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { User, Reservation } from '@nexus/contracts';
+import { Reservation } from '@nexus/contracts';
 import { ToolDefinition } from './types';
-import { SovereignData, SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
+import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 
@@ -26,7 +26,7 @@ export const ReservationTool: ToolDefinition<ReservationArgs> = {
     },
     schema: ReservationSchema,
     category: 'reservations',
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (args, _user): Promise<SovereignValue> => {
         const path = DomainRegistry.resolve(OperationalIdentity.NODES); // Reservations are Nodes in Grade X
         const results = await Nexus.adapter.query<Reservation>(`tenants/${args.tenantId}/${path}`, {
             where: [

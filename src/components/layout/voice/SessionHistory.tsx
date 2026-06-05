@@ -1,6 +1,6 @@
 "use client";
 
-import { History, Plus, MessageSquareText } from "lucide-react";
+import { Plus, MessageSquareText } from "lucide-react";
 
 interface Session {
     id: string;

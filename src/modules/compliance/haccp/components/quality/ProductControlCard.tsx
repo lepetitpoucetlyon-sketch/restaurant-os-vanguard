@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { QualityControlItem } from '@domain/types/quality';
-import { StatusBadge as Badge } from "@ui/StatusBadge";
 import { Calendar, Thermometer, CheckCircle2, AlertOctagon, Timer } from 'lucide-react';
 
 interface ProductControlCardProps {

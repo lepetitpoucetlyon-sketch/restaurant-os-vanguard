@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 
 export interface InstanceGuardResult {
     result: import('@/shared/nexus-contract').SovereignData;

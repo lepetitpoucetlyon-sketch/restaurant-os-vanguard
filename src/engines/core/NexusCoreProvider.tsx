@@ -5,7 +5,6 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 
 // Modules internes (logique extraite)
 import { useAuthSession } from '@/engines/core/hooks/auth/AuthSession';
-import { FleetComplianceService } from '@domain/services/FleetComplianceService';
 import { useAuthAccess } from '@/engines/core/hooks/auth/AuthAccess';
 import { useAuthStaff } from '@/engines/core/hooks/auth/AuthStaff';
 
@@ -22,11 +21,8 @@ import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
 import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { 
-    tenantConfigAtom,
-    themeAtom,
-    performanceModeAtom
+    tenantConfigAtom
 } from '@/store/pillars/sovereign';
-import { reservationStatsAtom } from '@/store/pillars/commerce';
 import { 
     isSidebarCollapsedAtom, 
     isLaunchpadOpenAtom, 
@@ -39,22 +35,19 @@ import {
     addToastAtom 
 } from '@nexus/state/SovereignGenome';
 
-import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
 import { 
     themeModeAtom, accentColorAtom, uiDensityAtom, 
     borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
 } from '@/store/themeAtoms';
-import { User, UserRole, GlobalSettings, EmpireInstance, FleetInsight } from '@nexus/contracts';
+import { User, EmpireInstance, FleetInsight } from '@nexus/contracts';
 import { TenantConfig, SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import {
     NexusCoreState, 
     NexusAuthState, 
     NexusTenantState, 
-    NexusUIState,
-    NexusSettingsState, 
+    NexusUIState, 
     NexusLangState,
     NexusNotifState,
-    NexusFleetState,
     NexusTheme
 } from '@nexus/contracts/nexus.types';
 
@@ -159,7 +152,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
                         session.setIsTwoFactorVerified(true);
                         return true;
                     }
-                } catch (cloudError) {
+                } catch (_cloudError) {
                     console.warn('[NexusCore] Cloud Login failed, testing local bypass...');
                 }
             }
@@ -184,7 +177,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         session.clearPersistedSession();
     }, [session]);
     
-    const updateUser = useCallback(async (userId: string, data: Partial<User>) => {
+    const _updateUser = useCallback(async (userId: string, data: Partial<User>) => {
         logger.info('NexusAuth: Updating user profile', { userId, data });
         // Suture to Firestore/Nexus logic later
     }, []);
@@ -209,7 +202,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     // -------------------------------------------------------------------------
     // 4. NOTIFICATIONS MODULE
     // -------------------------------------------------------------------------
-    const [notifications, setNotifications] = useAtom(notificationsAtom);
+    const [notifications, _setNotifications] = useAtom(notificationsAtom);
     const unreadCount = useAtomValue(unreadNotificationsCountAtom);
     const addToast = useSetAtom(addToastAtom);
 
@@ -270,7 +263,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
         // Grade X Bridges
         require2FAChallenge: false,
         verifyTwoFactor: async () => true,
-        verifyPin: async (pin: string, userId?: string) => {
+        verifyPin: async (pin: string, _userId?: string) => {
             return pin === '9999';
         },
         switchProfile: (uid: string) => console.log('Profile switch', uid),

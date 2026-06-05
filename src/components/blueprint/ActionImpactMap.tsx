@@ -3,8 +3,7 @@
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/motion";
 import { 
-    MousePointer2, Database, Receipt, 
-    TrendingUp, Cpu, ChevronRight, Activity
+    MousePointer2, Database, Receipt, Cpu, ChevronRight, Activity
 } from "lucide-react";
 import { GlassCard } from "@ui/GlassCard";
 

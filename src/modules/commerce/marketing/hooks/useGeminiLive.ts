@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks';
 import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
 import { useSettings } from '@/context/SettingsContext';
 import { SovereignData } from '@/shared/nexus-contract';
 
-interface WebkitWindow extends Window {
+interface _WebkitWindow extends Window {
     webkitAudioContext: typeof AudioContext;
 }
 
@@ -16,7 +16,7 @@ declare global {
     }
 }
 
-interface PerformanceMemory {
+interface _PerformanceMemory {
     memory: {
         usedJSHeapSize: number;
     };

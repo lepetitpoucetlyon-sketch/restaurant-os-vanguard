@@ -38,7 +38,7 @@ export function NexusServiceInitializer(): null {
         if (typeof window !== 'undefined') {
             // Run a background fleet refresh
             import('@domain/services/FleetTelemetryService').then(({ fleetTelemetry }) => {
-                fleetTelemetry.discoverRealFleet().then(data => {
+                fleetTelemetry.discoverRealFleet().then(_data => {
                    // This logic is simplified here as useNexusFleet will handle the atom update
                 });
             });

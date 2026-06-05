@@ -1,4 +1,3 @@
-import { NexusTelemetryService } from "@/domain/services/NexusTelemetryService";
 
 import { SovereignMath } from '@/shared/services/SovereignMath';
 import { JournalEntry, JournalLine } from '@/shared/nexus/contracts/finance.types';

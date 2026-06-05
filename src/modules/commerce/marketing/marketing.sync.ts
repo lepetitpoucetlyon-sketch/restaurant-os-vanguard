@@ -1,17 +1,12 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { 
     Campaign, 
     SocialAccount, 
-    Quote, 
-    Delivery 
+    Quote 
 } from '@nexus/contracts';
 import { SEOProfile } from './seo.types';
 import { 
-    seoProfileAtom, 
-    marketingCampaignsNodeAtom, 
-    socialAccountsNodeAtom, 
-    quotesNodeAtom
+    seoProfileAtom
 } from './store/marketingAtoms';
 import { logger } from '@/lib/logger';
 import { MarketingEngine } from "@/lib/marketing-engine";
@@ -108,7 +103,7 @@ export const MarketingSyncService = {
     // 2. CAMPAIGNS SYNC
     this.private_listeners.marketing = Nexus.adapter.onSnapshot(
         path('marketingCampaigns'),
-        (data: Campaign[]) => {
+        (_data: Campaign[]) => {
         },
         {
           onError: (error: Error) => logger.error('[MarketingSync] Marketing Sync Failed', error)
@@ -118,7 +113,7 @@ export const MarketingSyncService = {
     // 3. SOCIAL ACCOUNTS SYNC
     this.private_listeners.social = Nexus.adapter.onSnapshot(
         path('socialAccounts'),
-        (data: SocialAccount[]) => {
+        (_data: SocialAccount[]) => {
         },
         {
           onError: (error: Error) => logger.error('[MarketingSync] Social Sync Failed', error)
@@ -128,7 +123,7 @@ export const MarketingSyncService = {
     // 4. QUOTES & DELIVERIES
     this.private_listeners.quotes = Nexus.adapter.onSnapshot(
       path('quotes'),
-      (data: Quote[]) => {
+      (_data: Quote[]) => {
       },
       {
         orderBy: { field: 'updatedAt', direction: 'desc' },

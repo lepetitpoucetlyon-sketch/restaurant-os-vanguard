@@ -9,13 +9,13 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@ui/button';
-import { Table as CustomerTable, GroupEventStatus, Group } from '@nexus/contracts'; // Suture Nexus
+// Suture Nexus
 
 // Extracted Components (Sutured for Grade X Stability)
 import { GroupStatCard } from './components/GroupStatCard';
 import { EventCard } from './components/EventCard';
 // GroupFilters is not yet implemented or imported elsewhere, let's keep it as is but type it correctly if possible
-const GroupFilters = (props: {
+const GroupFilters = (_props: {
     searchQuery: string;
     setSearchQuery: (v: string) => void;
     selectedType: string;
@@ -29,7 +29,7 @@ import { useGroups } from '@/engines/ops/NexusOpsProvider';
 import { Calendar, BarChart3, Star } from 'lucide-react';
 
 export default function GroupsPage() {
-    const { data: groups, isLoading } = useGroups();
+    const { data: groups, isLoading: _isLoading } = useGroups();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState('Tous');
     const [selectedStatus, setSelectedStatus] = useState('Tous');

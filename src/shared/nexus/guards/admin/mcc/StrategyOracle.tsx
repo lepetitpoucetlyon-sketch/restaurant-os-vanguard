@@ -1,19 +1,16 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
-    Zap, 
     Target, 
-    ShieldCheck, 
     ArrowRight, 
     BrainCircuit, 
     Sparkles, 
     TrendingUp,
     Terminal,
     AlertTriangle,
-    CheckCircle2,
-    Eye
+    CheckCircle2
 } from 'lucide-react';
 import { useStrategicOracle } from '@/hooks/useStrategicOracle';
 import { useFleet } from '@/context/FleetContext';
@@ -22,7 +19,7 @@ import { FleetInsight } from '@domain/services/MacroBrain';
 export function StrategyOracle() {
     const { instances } = useFleet();
     const { insights, getExecutiveBriefing, executeAction, messages, isProcessing } = useStrategicOracle();
-    const [selectedInsight, setSelectedInsight] = useState<FleetInsight | null>(null);
+    const [_selectedInsight, _setSelectedInsight] = useState<FleetInsight | null>(null);
 
     return (
         <div className="space-y-8 pb-12">

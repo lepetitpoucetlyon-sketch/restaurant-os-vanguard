@@ -3,11 +3,10 @@
 import { X, Clock, AlertTriangle, ChefHat, CheckCircle2, Flame, Heart, Share2, Printer } from "lucide-react";
 import { Button } from "@ui/button";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/ui.foundations";;
+;
 import { staggerContainer, staggerItem } from "@/lib/motion";
 import { Modal } from "@ui/Modal";
-import { useUI } from "@/hooks";
-import { Recipe, RecipeIngredient, RecipeStep } from "@nexus/contracts";
+import { Recipe, RecipeIngredient } from "@nexus/contracts";
 
 interface RecipeDetailDialogProps {
     isOpen: boolean;

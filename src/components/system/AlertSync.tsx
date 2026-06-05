@@ -49,7 +49,7 @@ export function AlertSync(): null {
     useEffect(() => {
         if (!criticalAlerts) return;
         // Create a set of existing unread notifications for fast lookup
-        const existingAlertKeys = new Set(
+        const _existingAlertKeys = new Set(
             notifications
                 .filter(n => n.module === 'haccp' && !n.read)
                 .map(n => n.message) // Using message as key part
@@ -60,7 +60,7 @@ export function AlertSync(): null {
             if (notifiedItems.current.has(notifiedKey)) return false;
 
             // Check if notification already exists using the Set
-            const messagePart = sensor.name;
+            const _messagePart = sensor.name;
             // Simple check if unknown message contains the sensor name
             // This is still partly O(N) on the Set keys but much faster than array.some
             // For true O(1), we would need unique IDs on notifications that match sensor IDs.

@@ -1,7 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { HumanResourcesService } from './HumanResources';
 import { ShiftEntry } from "@domain/schemas/hr";
-import { addDays } from 'date-fns';
 
 describe('HumanResourcesService (Grade VI Validation)', () => {
     describe('calculatePayroll', () => {

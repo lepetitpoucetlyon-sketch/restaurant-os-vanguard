@@ -8,7 +8,7 @@ import { ActionImpactMap } from "@/components/blueprint/ActionImpactMap";
 import { StructureOverview } from "@/components/blueprint/StructureOverview";
 import { BrandPromptGuide } from "@/components/blueprint/BrandPromptGuide";
 import { GlassCard } from "@ui/GlassCard";
-import { Database, Network, Cpu, Palette, Info } from "lucide-react";
+import { Database, Network, Cpu, Info } from "lucide-react";
 
 export default function BlueprintPage() {
     return (

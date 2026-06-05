@@ -1,4 +1,4 @@
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { initializeApp, getApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { getStorage, FirebaseStorage } from 'firebase/storage';
@@ -62,7 +62,7 @@ export function getTenantFirebase(tenantId: string): TenantFirebaseContext {
     
     try {
         app = getApp(tenantId);
-    } catch (e) {
+    } catch (_e) {
         try {
             app = initializeApp(config.firebase as import('firebase/app').FirebaseOptions, tenantId);
         } catch (initErr) {

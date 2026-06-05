@@ -5,15 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Users,
     Calendar,
-    ArrowDown,
-    Info,
-    ChevronLeft,
     ChevronRight,
     Timer,
     CheckCircle2,
-    AlertCircle,
     Star,
-    UtensilsCrossed,
     Wallet,
     Clock,
 } from "lucide-react";

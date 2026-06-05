@@ -6,10 +6,8 @@ import {
     Truck, 
     Camera, 
     Plus, 
-    History, 
     Thermometer, 
     PackageCheck, 
-    CalendarClock, 
     Trash2, 
     ShieldCheck,
     AlertTriangle

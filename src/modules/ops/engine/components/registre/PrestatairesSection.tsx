@@ -1,7 +1,7 @@
 "use client";
 
 import { useRegistre } from "@/context/RegistreContext";
-import { BadgeCheck, Phone, Calendar, Clock, AlertTriangle, CheckCircle2, XCircle, Plus, User } from "lucide-react";
+import { BadgeCheck, Phone, Calendar, Clock, Plus } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 

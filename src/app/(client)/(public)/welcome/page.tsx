@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { ArrowRight, ChevronDown, CheckCircle2, FileText, Smartphone, Laptop, ChefHat, Database, Box, PlayCircle } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { Button } from "@ui/button";
@@ -25,7 +24,7 @@ const fadeUp: Variants = {
 export default function WelcomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
-  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const _yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
     <div ref={containerRef} className="min-h-screen bg-bg-primary font-sans overflow-x-hidden selection:bg-accent selection:text-white">

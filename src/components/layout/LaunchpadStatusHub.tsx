@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Settings, Sparkles, MoreHorizontal, X } from "lucide-react";
+import { Bell, Settings, Sparkles } from "lucide-react";
 import { useUI } from "@/hooks";
 import { useNotifications } from "@/context/NotificationsContext";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,8 +11,8 @@ import { CommandModal } from "@ui/CommandModal";
 import { NotificationPanel } from "@ui/NotificationPanel";
 import { useContextualSettings } from "@/components/settings/ContextualSettings";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/ui.foundations";;
-import { LANGUAGES, type LanguageCode } from "@/config/languages";
+;
+import { LANGUAGES } from "@/config/languages";
 import { useAuth } from "@/hooks";
 
 
@@ -21,8 +21,8 @@ interface LaunchpadStatusHubProps {
     onClose?: () => void;
 }
 
-export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadStatusHubProps) {
-    const { toggleTheme } = useUI();
+export function LaunchpadStatusHub({ isScrolled: _isScrolled = false, onClose }: LaunchpadStatusHubProps) {
+    const { toggleTheme: _toggleTheme } = useUI();
     const { hasAccess } = useAuth();
     const { unreadCount } = useNotifications();
     const { language, setLanguage } = useLanguage();
@@ -33,18 +33,18 @@ export function LaunchpadStatusHub({ isScrolled = false, onClose }: LaunchpadSta
 
 
     const { openSettings } = useContextualSettings();
-    const pathname = usePathname();
+    const _pathname = usePathname();
 
     // Determine current page key for settings (simplified logic matching Header)
     // Note: In Launchpad, we might want to open Global Settings or Dashboard settings
     // For now, we'll default to 'dashboard' if pathname is root, or try to respect underlying page
-    const getPageKeyFromPath = (path: string | null) => {
+    const _getPageKeyFromPath = (path: string | null) => {
         const segment = (path || "").split('/').filter(Boolean)[0] || 'dashboard';
         return segment; // Simplified
     };
 
     // Default to handling settings click safely
-    const handleSettingsClick = () => {
+    const _handleSettingsClick = () => {
         // Just open settings modal if possible, or navigate
         // Given the context, we might trigger the contextual settings of the dashboard
         // But for safety in Launchpad, let's assuming mostly visual

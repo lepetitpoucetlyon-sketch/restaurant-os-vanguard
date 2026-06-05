@@ -87,7 +87,7 @@ export class FiscalTransmitter {
     /**
      * Transmission vers le partenaire EDI (ex: Jedéclare)
      */
-    private static async transmitToEDIProvider(xmlContent: string): Promise<EDISubmissionResult> {
+    private static async transmitToEDIProvider(_xmlContent: string): Promise<EDISubmissionResult> {
         // Stub: Simulation de réponse du partenaire EDI
         return {
             success: true,

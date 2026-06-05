@@ -1,7 +1,6 @@
 import { IBankingProvider, KYBData, BankAccount, VirtualCard } from './types';
 import { SwanProvider } from './providers/SwanProvider';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
-import { QuantumCrypto } from '@/lib/QuantumCrypto';
 
 /**
  * 🏛️ FinancialNexusBridge - Grade X+++

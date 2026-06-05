@@ -6,8 +6,6 @@ import {
     Thermometer,
     Snowflake,
     Flame,
-    History,
-    CheckCircle2,
     AlertTriangle,
     Minus,
     Plus

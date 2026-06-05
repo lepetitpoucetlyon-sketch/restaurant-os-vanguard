@@ -2,7 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { History, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@ui/button";
 import { formatCurrency } from "@/lib/formatters";;
 import { cinematicContainer, fadeInUp } from "@/lib/motion";
@@ -17,7 +17,7 @@ interface WasteTabProps {
     wasteLogs: RegulatoryWasteLog[];
 }
 
-export function WasteTab({ ingredients, wasteLogs }: WasteTabProps) {
+export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) {
     const { showToast } = useToast();
     const [selectedIngredient, setSelectedIngredient] = useState("");
 

@@ -84,7 +84,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
                 showToast("Nouveau collaborateur ajouté", "success");
             }
             onClose();
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur lors de l'enregistrement", "error");
         }
     };

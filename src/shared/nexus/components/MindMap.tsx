@@ -11,12 +11,9 @@ import {
     X,
     Maximize2,
     Search,
-    ChevronRight,
     ArrowRight
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
-import { FleetCommander } from '@domain/services/FleetCommander';
-import { calculateLowStock } from '@domain/services/StockEngine';
 
 /**
  * EXECUTIVE DATA MAP (TATAMAP)
@@ -93,7 +90,7 @@ const LINKS: Link[] = [
 export function MindMap() {
     const svgRef = useRef<SVGSVGElement>(null);
     const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [_searchTerm, _setSearchTerm] = useState('');
 
     useEffect(() => {
         if (!svgRef.current) return;

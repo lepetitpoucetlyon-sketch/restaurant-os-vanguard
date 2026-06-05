@@ -2,15 +2,11 @@
 
 import { useRegistre } from "@/context/RegistreContext";
 import { 
-    BadgeCheck, 
     Calendar, 
     Clock, 
     AlertTriangle, 
     CheckCircle2, 
-    XCircle, 
-    FileText, 
-    ShieldCheck, 
-    UtensilsCrossed,
+    ShieldCheck,
     Gem,
     Beef
 } from "lucide-react";

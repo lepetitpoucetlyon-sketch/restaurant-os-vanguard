@@ -7,7 +7,7 @@ import { IBankingProvider, KYBData, BankAccount, VirtualCard } from '../types';
  */
 export class SwanProvider implements IBankingProvider {
     
-    async createAccount(tenantId: string, kyb: KYBData): Promise<BankAccount> {
+    async createAccount(_tenantId: string, _kyb: KYBData): Promise<BankAccount> {
         // Stub: Simulation API Swan GraphQL
         return {
             id: `swan_acc_${Date.now()}`,
@@ -18,11 +18,11 @@ export class SwanProvider implements IBankingProvider {
         };
     }
 
-    async getBalance(accountId: string): Promise<number> {
+    async getBalance(_accountId: string): Promise<number> {
         return 15000000; // 150,000.00 EUR
     }
 
-    async getTransactions(accountId: string, fromDate: string): Promise<Record<string, unknown>[]> {
+    async getTransactions(_accountId: string, _fromDate: string): Promise<Record<string, unknown>[]> {
         return [];
     }
 
@@ -37,7 +37,7 @@ export class SwanProvider implements IBankingProvider {
         };
     }
 
-    async executeSepaTransfer(iban: string, amountInCents: number, reference: string): Promise<string> {
+    async executeSepaTransfer(_iban: string, _amountInCents: number, _reference: string): Promise<string> {
         return `SCT_${Date.now()}`;
     }
 }

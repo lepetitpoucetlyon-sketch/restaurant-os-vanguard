@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { ChevronDown, LucideIcon } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/hooks";

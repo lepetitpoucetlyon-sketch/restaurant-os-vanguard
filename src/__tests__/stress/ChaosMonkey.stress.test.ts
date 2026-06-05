@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
 
 // Mocks

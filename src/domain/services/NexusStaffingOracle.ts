@@ -23,7 +23,7 @@ export class NexusStaffingOracle {
                 ratio = settings.planningConfig.staffToCoversRatio;
                 logger.info(`[StaffingOracle] Using Custom Ratio: 1 brigadier / ${ratio} covers`);
             }
-        } catch (e) {
+        } catch (_e) {
             logger.warn(`[StaffingOracle] Failed to fetch settings, falling back to Grade X default (${ratio})`);
         }
 

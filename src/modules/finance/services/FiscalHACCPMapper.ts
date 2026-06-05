@@ -16,7 +16,7 @@ export class FiscalHACCPMapper {
     static async processCriticalWaste(
         reading: SensorReading, 
         impactedStock: StockItem[],
-        tenantId: string
+        _tenantId: string
     ) {
         logger.info(`🚨 [GRADE_X_BRIDGE] Processing Critical Waste for Sensor ${reading.sensorId}`);
 

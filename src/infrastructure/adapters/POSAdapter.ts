@@ -1,6 +1,5 @@
 import { OrderItem } from "@nexus/contracts";
 import { CartItem } from "@modules/ops";
-import { MasterBridge } from "@/lib/MasterBridge";
 import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
 
 export class POSService {

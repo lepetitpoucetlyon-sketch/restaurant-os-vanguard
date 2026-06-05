@@ -63,7 +63,7 @@ export class PowensService {
     /**
      * Step 3: Fetch Transactions (Multi-Source)
      */
-    static async getTransactions(accountId: string, userToken: string): Promise<import('@nexus/contracts').BankTransaction[]> {
+    static async getTransactions(accountId: string, _userToken: string): Promise<import('@nexus/contracts').BankTransaction[]> {
         genomeValidator.validatePower('ACCOUNTING', 'GENERATE_FEC');
         try {
             logger.info(`PowensService: Fetching transitions for account ${accountId}...`);

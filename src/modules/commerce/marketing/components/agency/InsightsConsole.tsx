@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Sparkles, ShieldCheck, Database, Zap, Activity } from 'lucide-react';
+import { Sparkles, ShieldCheck, Database, Zap, Activity } from 'lucide-react';
 import { AgentReasoningStep } from '@domain/agency/types';
 
 interface InsightsConsoleProps {

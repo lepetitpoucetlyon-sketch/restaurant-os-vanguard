@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SanitizedStringSchema, TimestampSchema, UUIDSchema } from './primitives';
+import { TimestampSchema } from './primitives';
 
 export const TenantThemeSchema = z.object({
   primaryColor: z.string(),

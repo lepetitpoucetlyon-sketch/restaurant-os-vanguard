@@ -64,7 +64,7 @@ function StatusBadge({ status }: { status: 'conforme' | 'attention' | 'non_confo
 export default function RegistrePage() {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [isCerfaOpen, setIsCerfaOpen] = useState(false);
-    const { duerp, cerfa, pmrDoc, incendieDoc, hottesDoc, certHalal, agrementBoucher, prestataires, getOverallStatus } = useRegistre();
+    const { duerp, cerfa, pmrDoc, incendieDoc, hottesDoc, certHalal, agrementBoucher: _agrementBoucher, prestataires, getOverallStatus } = useRegistre();
 
     const overall = getOverallStatus() as { conforme: number; attention: number; non_conforme: number };
     const allDocs = [

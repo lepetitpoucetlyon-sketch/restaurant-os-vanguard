@@ -1,14 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import { Trash2, Minus, Plus, ChefHat, CreditCard, Users, Clock, MoreVertical, Split, Zap, Sparkles, X } from "lucide-react";
-import { Button } from "@ui/button";
+import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X } from "lucide-react";
 import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
 import { usePageSetting } from "@/components/settings/ContextualSettings";
-import { useOrders, useIntelligence } from "@/engines/ops/NexusOpsProvider";
+import { useIntelligence } from "@/engines/ops/NexusOpsProvider";
 import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
 import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
@@ -30,10 +29,10 @@ interface CartProps {
     onClose?: () => void;
 }
 
-export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendToKitchen, onSplitBill, tableNumber, guestCount, showClose, onClose }: CartProps) {
+export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill: _onSplitBill, tableNumber, guestCount, showClose, onClose }: CartProps) {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
+    const _splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
     const { data: config } = useIntelligence();
     const globalInflationRate = config?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
@@ -103,7 +102,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
                         </motion.div>
                     ) : (
                         <div className="p-6 lg:p-10 space-y-8">
-                            {items.map((item, idx) => (
+                            {items.map((item, _idx) => (
                                 <motion.div
                                     key={item.cartId}
                                     layout

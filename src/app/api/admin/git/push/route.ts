@@ -14,7 +14,7 @@ interface GitPushResponse {
   error?: string;
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse<GitPushResponse>> {
+export async function POST(_request: NextRequest): Promise<NextResponse<GitPushResponse>> {
   try {
     // In production, verify admin access
     // const session = await getServerSession(authOptions);

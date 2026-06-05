@@ -1,4 +1,3 @@
-import { OpsSyncService } from '@/modules/ops/engine/ops.sync';
 import { getDefaultStore } from 'jotai';
 import { ordersNodeAtom } from '@/store/pillars/ops';
 import { updateNexusNode } from '@/store/nexusNodeFactory';
@@ -7,7 +6,7 @@ import { logger } from '@/lib/logger';
 async function runSiege() {
     logger.info('🚀 [Siege] Vector 2: NexusBridge Storm - Initiating...');
     const store = getDefaultStore();
-    const tenantId = 'vanguard';
+    const _tenantId = 'vanguard';
 
     // Simulation of 500 simultaneous events
     const stormEvents = Array.from({ length: 500 }).map((_, i) => {

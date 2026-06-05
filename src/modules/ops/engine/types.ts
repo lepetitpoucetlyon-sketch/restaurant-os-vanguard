@@ -1,4 +1,3 @@
-import { SovereignData } from '@/shared/nexus-contract';
 import { Microunits, TaxRate } from '@/domain/schemas/primitives';
 import type { Order, OrderItem, OrderStatus, Product } from '@nexus/contracts/nexus-internal-mapper';
 export type { Order, OrderItem, OrderStatus };

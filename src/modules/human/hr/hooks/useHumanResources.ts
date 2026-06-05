@@ -76,7 +76,7 @@ export function useHumanResources() {
         } as unknown as SovereignData);
     }, [leaveForge]);
 
-    const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, details?: string) => {
+    const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, _details?: string) => {
         const now = new Date().toISOString();
         return leaveForge.mutate('UPDATE', id, { 
             status: 'rejected',

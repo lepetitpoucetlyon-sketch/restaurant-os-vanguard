@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Utensils, Scale, Clock, Thermometer, Users, CheckCircle2, AlertTriangle, FileText, RotateCcw } from "lucide-react";
+import { X, Utensils, Scale, Clock, Thermometer, Users, CheckCircle2, AlertTriangle, RotateCcw } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
@@ -120,7 +120,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                         { step: 4, instruction: "Suivre la fiche technique associée", duration: "15 min", done: false },
                                         { step: 5, instruction: "Portionner selon les quantités requises", duration: "10 min", done: false },
                                         { step: 6, instruction: "Étiqueter et stocker correctement", duration: "5 min", done: false },
-                                    ].map((item, idx) => (
+                                    ].map((item, _idx) => (
                                         <motion.div
                                             key={item.step}
                                             variants={staggerItem}

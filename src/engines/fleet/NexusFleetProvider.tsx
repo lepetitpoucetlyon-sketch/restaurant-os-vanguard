@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { useAtom, useSetAtom, useAtomValue } from 'jotai';
+import { useSetAtom, useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { fleetTelemetry } from '@domain/services/FleetTelemetryService';
 import { FleetComplianceService } from '@domain/services/FleetComplianceService';
@@ -9,11 +9,10 @@ import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
 import { TenantID } from '@domain/types/brands';
 import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
 import { SiteTelemetry, EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
-import { FleetInsight, ConsolidatedMetrics } from '@domain/services/MacroBrain';
+import { FleetInsight } from '@domain/services/MacroBrain';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { whiteLabelInstanceConfig } from '@/config/instance';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { SovereignValue } from '@/shared/nexus-contract';
 
 import { NexusFleetState } from '@nexus/contracts/nexus.types';
 
@@ -38,7 +37,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     // --- INTELLIGENCE STATE (Grade X) ---
     const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
     const [scenarios, setScenarios] = useState<import('@nexus/contracts').SimulationScenario[]>([]); 
-    const [financialInsight, setFinancialInsight] = useState<{
+    const [financialInsight, _setFinancialInsight] = useState<{
         revenue: number;
         foodCostPercent: number;
         laborCostPercent: number;

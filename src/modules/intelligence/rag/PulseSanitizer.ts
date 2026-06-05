@@ -126,7 +126,7 @@ export class PulseSanitizer {
      */
     sanitizePayload(
         rawData: Record<string, unknown>,
-        category: PulseCategory
+        _category: PulseCategory
     ): SanitizedPayload {
         const metrics: Record<string, number> = {};
         const tags: Record<string, string> = {};

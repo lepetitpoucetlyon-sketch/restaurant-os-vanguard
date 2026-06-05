@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
-import { NexusErrorCode } from '@/shared/nexus/errors';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 
@@ -16,7 +15,7 @@ vi.mock('@/lib/simulator/SimulatorDB', () => {
     const makeTable = () => ({
         get: async (path: string) => virtualMap.get(path) ?? undefined,
         put: async (doc: any) => { virtualMap.set(doc.path, doc); },
-        where: (field: string) => ({
+        where: (_field: string) => ({
             equals: (val: string) => ({
                 filter: (fn: (d: any) => boolean) => ({
                     toArray: async () => Array.from(virtualMap.values()).filter(d => d.forkId === val).filter(fn),

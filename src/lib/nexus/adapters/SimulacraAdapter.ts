@@ -1,4 +1,4 @@
-import { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext } from "@/lib/nexus/types";
+import { INexusAdapter, INexusBatch, NexusContext } from "@/lib/nexus/types";
 import type { SovereignData } from '@/shared/nexus-contract';
 import { simulatorDb } from '@/lib/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';
@@ -23,7 +23,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
     }
 
-    async get<T = SovereignData>(path: string, context?: NexusContext): Promise<T | null> {
+    async get<T = SovereignData>(path: string, _context?: NexusContext): Promise<T | null> {
         // 1. Check Virtual Store first
         const virtual = await simulatorDb.virtualStore.get(path);
         
@@ -36,7 +36,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         return this.realAdapter.get<T>(path);
     }
 
-    async query<T = SovereignData>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
+    async query<T = SovereignData>(collectionPath: string, options?: IQueryOptions, _context?: NexusContext): Promise<T[]> {
         const realResults = await this.realAdapter.query<T>(collectionPath, options);
         const virtualResults = await simulatorDb.virtualStore
             .where('forkId').equals(this.forkId)
@@ -60,7 +60,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         return merged as T[];
     }
 
-    onSnapshot<T = SovereignData>(path: string, callback: (data: T) => void, options?: IQueryOptions, context?: NexusContext): () => void {
+    onSnapshot<T = SovereignData>(path: string, callback: (data: T) => void, _options?: IQueryOptions, _context?: NexusContext): () => void {
         logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X.");
         
         // Initial load
@@ -96,7 +96,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         };
     }
 
-    async set<T = SovereignData>(path: string, data: T, options?: { merge?: boolean }, context?: NexusContext): Promise<void> {
+    async set<T = SovereignData>(path: string, data: T, options?: { merge?: boolean }, _context?: NexusContext): Promise<void> {
         let finalData = data;
 
         if (options?.merge) {
@@ -113,7 +113,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         });
     }
 
-    async update<T = SovereignData>(path: string, data: Partial<T>, context?: NexusContext): Promise<void> {
+    async update<T = SovereignData>(path: string, data: Partial<T>, _context?: NexusContext): Promise<void> {
         const existing = await this.get<Record<string, unknown>>(path);
         const finalData = { ...existing, ...data };
 
@@ -126,7 +126,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         });
     }
 
-    async delete(path: string, context?: NexusContext): Promise<void> {
+    async delete(path: string, _context?: NexusContext): Promise<void> {
         await simulatorDb.virtualStore.put({
             path,
             data: null,
@@ -140,11 +140,11 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         await this.set(path, data, undefined, context);
     }
 
-    generateId(collectionPath: string): string {
+    generateId(_collectionPath: string): string {
         return IdGenerator.generateWithPrefix('sim');
     }
 
-    async increment(path: string, field: string, amount: number, context?: NexusContext): Promise<void> {
+    async increment(path: string, field: string, amount: number, _context?: NexusContext): Promise<void> {
         const existing = await this.get<Record<string, number>>(path) || {} as Record<string, number>;
         existing[field] = (Number(existing[field]) || 0) + amount;
         await this.set(path, existing);

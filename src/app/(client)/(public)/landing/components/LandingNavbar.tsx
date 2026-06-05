@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ChefHat, X, Menu } from "lucide-react";
+import { X, Menu } from "lucide-react";
 import Link from "next/link";
 
 import { useBrandAsset } from "@/shared/nexus/tokens/assets";

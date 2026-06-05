@@ -3,7 +3,6 @@
 import { useRegistre } from "@/context/RegistreContext";
 import { PMRAmenagement } from "@/shared/nexus/contracts/context/registre.contracts";
 import { Accessibility, Calendar, Clock, CheckCircle2, AlertTriangle, Wrench, MapPin } from "lucide-react";
-import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 
 export function PMRSection() {

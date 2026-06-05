@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { X, User, Phone, Mail, Calendar, Plus, Save, Tag as TagIcon, Star, Sparkles, Gem, ShieldCheck } from "lucide-react";
+import { X, User, Phone, Mail, Plus, Save, Tag as TagIcon, Star, Sparkles, Gem, ShieldCheck } from "lucide-react";
 import { Button } from "@ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 
 interface NewCustomerDialogProps {

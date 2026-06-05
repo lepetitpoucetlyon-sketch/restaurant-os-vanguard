@@ -1,10 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { HygieneLabel, MaintenanceLog } from '@nexus/contracts';
-import { 
-    hygieneLabelsNodeAtom, 
-    maintenanceLogsNodeAtom 
-} from './store/complianceAtoms';
+
+
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 
@@ -17,13 +14,13 @@ type JotaiStore = ReturnType<typeof getDefaultStore>;
 export const HACCPSyncService = {
   private_listeners: {} as Record<string, () => void>,
 
-  init(tenantId: string, store: JotaiStore) {
+  init(tenantId: string, _store: JotaiStore) {
     const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
     
     // 1. HYGIENE LABELS SYNC
     this.private_listeners.hygiene = Nexus.adapter.onSnapshot(
       path('hygieneLabels'),
-      (data: HygieneLabel[]) => {
+      (_data: HygieneLabel[]) => {
       },
       {
         orderBy: { field: 'createdAt', direction: 'desc' },
@@ -37,7 +34,7 @@ export const HACCPSyncService = {
     // 2. MAINTENANCE LOGS SYNC
     this.private_listeners.maintenance = Nexus.adapter.onSnapshot(
       path('maintenanceLogs'),
-      (data: MaintenanceLog[]) => {
+      (_data: MaintenanceLog[]) => {
       },
       {
         orderBy: { field: 'date', direction: 'desc' },

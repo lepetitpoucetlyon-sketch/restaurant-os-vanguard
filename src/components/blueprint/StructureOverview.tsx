@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/motion";
 import { 
-    Folder, FileCode, Layers, 
-    Monitor, Server, Database, Brain
+    Folder, Layers, 
+    Monitor, Database, Brain
 } from "lucide-react";
 import { GlassCard } from "@ui/GlassCard";
 
@@ -43,7 +43,7 @@ export function StructureOverview() {
     return (
         <GlassCard className="p-10 space-y-10">
             <div className="grid grid-cols-1 gap-6">
-                {STRUCTURE.map((item, i) => (
+                {STRUCTURE.map((item, _i) => (
                     <motion.div
                         key={item.title}
                         variants={fadeInUp}

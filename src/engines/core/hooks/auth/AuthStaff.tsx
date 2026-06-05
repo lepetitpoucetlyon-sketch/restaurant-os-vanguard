@@ -9,7 +9,7 @@ import { User } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
 
-export function useAuthStaff(firebaseUserId: string | null, sessionUserId: string | null) {
+export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: string | null) {
     const firebaseFunctions = getFunctions(firebaseApp);
     const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
         firebaseFunctions,

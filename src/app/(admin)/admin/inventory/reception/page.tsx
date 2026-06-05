@@ -15,15 +15,14 @@ import {
   ScanLine
 } from 'lucide-react';
 
-import { NewReservationDialog } from "@modules/commerce";
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
-const upsertReservationAction = async (...args: unknown[]) => ({ success: true });
-const deleteReservationAction = async (...args: unknown[]) => ({ success: true });
-const cancelReservationAction = async (...args: unknown[]) => ({ success: true });
+const _upsertReservationAction = async (..._args: unknown[]) => ({ success: true });
+const _deleteReservationAction = async (..._args: unknown[]) => ({ success: true });
+const _cancelReservationAction = async (..._args: unknown[]) => ({ success: true });
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
 // import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
-const receiveStockAction = async (tenantId: string, ingredient: import('@nexus/contracts').Ingredient, data: unknown) => ({ success: true });
-const searchIngredientsAction = async (tenantId: string, query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
+const receiveStockAction = async (_tenantId: string, _ingredient: import('@nexus/contracts').Ingredient, _data: unknown) => ({ success: true });
+const searchIngredientsAction = async (_tenantId: string, _query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
 import { toast } from 'sonner';
 
 interface ScannedItem {

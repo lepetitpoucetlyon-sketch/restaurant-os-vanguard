@@ -1,4 +1,3 @@
-import { NexusTelemetryService } from "@/domain/services/NexusTelemetryService";
 
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { FECMapper } from './FECMapper';

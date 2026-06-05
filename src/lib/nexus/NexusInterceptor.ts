@@ -1,4 +1,4 @@
-import { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext } from './types';
+import { INexusAdapter, INexusBatch, NexusContext } from './types';
 import { SovereignData } from '@/shared/nexus-contract';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';

@@ -11,7 +11,7 @@ export type GeminiLiveEvent =
     | { type: 'tool_call', name: string, args: SovereignData, callId: string }
     | { type: 'error', message: string };
 
-interface WebkitWindow extends Window {
+interface _WebkitWindow extends Window {
     webkitAudioContext: typeof AudioContext;
 }
 

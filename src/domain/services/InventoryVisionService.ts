@@ -1,7 +1,6 @@
 import { Ingredient, StockItem } from '@nexus/contracts';
 import { ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
 import type { InvoiceLineItem } from '@/domain/schemas/supplier-invoice.schemas';
-import { calculatePriceEvolution } from './StockEngine';
 
 export interface VisionMatchResult {
     extracted: ExtractedInvoiceItem;

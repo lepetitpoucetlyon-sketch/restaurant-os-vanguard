@@ -66,7 +66,7 @@ export function NeuralShield() {
 
             setIsOpen(false);
             setDescription('');
-        } catch (error) {
+        } catch (_error) {
             showToast({
                 title: 'Erreur',
                 description: "Échec de l'envoi du SOS. Réessayez ou contactez le support.",

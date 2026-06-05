@@ -24,8 +24,8 @@ export interface BridgeResult {
   seal: FiscalSeal;
 }
 
-const DEVICE_ID = 'MAIN_POS';
-const SCHEMA_VERSION = '1.0.0';
+const _DEVICE_ID = 'MAIN_POS';
+const _SCHEMA_VERSION = '1.0.0';
 
 /**
  * Calcule la ventilation TVA par taux à partir des lignes du panier.
@@ -106,14 +106,14 @@ export const FinancialNexusBridge = {
       (a, b) => a + b,
       0
     );
-    const totalHTInMicrounits = totalTTCInMicrounits - totalTVAInMicrounits;
+    const _totalHTInMicrounits = totalTTCInMicrounits - totalTVAInMicrounits;
 
     // ── 2. Chaîne de scellement ───────────────────────────────────────────────
     const lastSeal = await getLastSeal(tenantId);
     const previousHash = lastSeal?.hash ?? FISCAL_CONSTANTS.GENESIS_ROOT;
     const receiptNumber = generateReceiptNumber();
     const entryId = SharedKernel.generateId('JE');
-    const correlationId = SharedKernel.generateId('COR');
+    const _correlationId = SharedKernel.generateId('COR');
     const now = new Date().toISOString();
 
     const dataSnapshot = CryptoService.canonicalStringify({

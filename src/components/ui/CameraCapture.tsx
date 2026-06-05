@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Camera, RefreshCcw, Check, X, SwitchCamera } from "lucide-react";
+import { RefreshCcw, Check, X, SwitchCamera } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 
@@ -13,7 +13,7 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
-    const [stream, setStream] = useState<MediaStream | null>(null);
+    const [_stream, setStream] = useState<MediaStream | null>(null);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [isMirror, setIsMirror] = useState(false);
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');

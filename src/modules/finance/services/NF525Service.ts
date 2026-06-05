@@ -1,5 +1,4 @@
 import { getTenantPath } from '@/lib/firebase';
-import { Table } from 'dexie';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
@@ -130,7 +129,7 @@ export class NF525Service {
         ];
     }
 
-    private static async executeCommit(instructions: FiscalInstruction[], isOnline: boolean, orderId: string, tenantId: string) {
+    private static async executeCommit(instructions: FiscalInstruction[], isOnline: boolean, orderId: string, _tenantId: string) {
         if (isOnline) {
             try {
                 const batch = Nexus.adapter.batch();
@@ -141,7 +140,7 @@ export class NF525Service {
                 });
                 await batch.commit();
                 return;
-            } catch (err) { logger.warn('Online commit failed, using fallback.'); }
+            } catch (_err) { logger.warn('Online commit failed, using fallback.'); }
         }
         await this.executeOfflineFallback(orderId, instructions);
     }

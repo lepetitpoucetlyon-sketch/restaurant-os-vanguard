@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { User, FiscalSeal } from '@nexus/contracts';
-import { SovereignData, SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
+import { FiscalSeal } from '@nexus/contracts';
+import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { SovereignMath } from '@/shared/services/SovereignMath';
@@ -33,7 +33,7 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
     },
     schema: RevenueReportSchema,
     category: 'finance',
-    execute: async (args, user): Promise<SovereignValue> => {
+    execute: async (args, _user): Promise<SovereignValue> => {
         const fiscalPath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.LEDGER)}`;
         
         // 🏛️ QUERY SEALS
@@ -55,7 +55,7 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
                     totalRevenueInMicrounits = (totalRevenueInMicrounits + microunits) as Microunits;
                     count++;
                 }
-            } catch (e) {
+            } catch (_e) {
                 // Ignore malformed snapshots
             }
         });

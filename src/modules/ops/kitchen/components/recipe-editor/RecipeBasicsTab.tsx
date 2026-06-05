@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Clock, Timer, Users, ChefHat } from "lucide-react";
+import { Clock, Timer, Users } from "lucide-react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { cn } from "@/lib/ui.foundations";
 import { Recipe } from "@nexus/contracts";

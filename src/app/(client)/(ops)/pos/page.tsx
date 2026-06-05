@@ -2,23 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CategoryList } from "@modules/ops";
 import { ProductGrid } from "@modules/ops";
 import { Cart } from "@modules/ops";
 import { TableSelector } from "@modules/ops";
 import { PaymentDialog } from "@modules/ops";
 import { SplitBillDialog } from "@modules/ops";
 import { useKitchen } from "@/engines/ops/NexusOpsProvider";
-import { useTables } from "@/engines/ops/NexusOpsProvider";
-import { useToast } from "@ui/Toast";
-import { LucideIcon, ShoppingCart, Plus, ArrowLeft, MoreHorizontal, LayoutGrid, Star, Pizza, UtensilsCrossed, GlassWater, Beef, Coffee, Zap } from "lucide-react";
+import { LucideIcon, Plus, ArrowLeft, MoreHorizontal, Star, Pizza, UtensilsCrossed, GlassWater, Beef, Coffee, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks";
-import { fabVariants, mobileSpring } from "@/lib/motion";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
-import { usePOSController, CartItem } from "@modules/ops";
+import { usePOSController } from "@modules/ops";
 import { AmbianceService, RestaurantAmbiance } from "@domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 
@@ -33,9 +29,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
 };
 
 export default function POSPage() {
-    const { t } = useLanguage();
+    const { t: _t } = useLanguage();
     const isMobile = useIsMobile();
-    const { orders } = useKitchen();
+    const { orders: _orders } = useKitchen();
     const [ambiance, setAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());
     const [tokens, setTokens] = useState(AmbianceService.getThemeTokens());
 

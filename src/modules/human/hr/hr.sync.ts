@@ -2,7 +2,6 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { 
   shiftLogsNodeAtom, 
-  activeShiftsNodeAtom, 
   shiftsNodeAtom, 
   leaveRequestsNodeAtom, 
   leaveBalancesNodeAtom, 

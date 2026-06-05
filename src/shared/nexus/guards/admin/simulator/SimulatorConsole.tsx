@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { Play, Square, Activity, Users, DollarSign, AlertCircle, Terminal, TrendingUp, Cpu, ChevronRight, Settings, Calculator } from 'lucide-react';
 import { simulator } from '@/lib/simulator/TemporalSimulator';
 import { simulationMetricsAtom, isSimulationRunningAtom } from '@/store/simulatorAtoms';
@@ -34,7 +34,7 @@ export function SimulatorConsole() {
                 const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@nexus/contracts').GlobalSettings;
                 if (data?.planningConfig?.staffToCoversRatio) setStaffRatio(data.planningConfig.staffToCoversRatio);
                 if (data?.accountingConfig?.complexityMode) setAccountingMode(data.accountingConfig.complexityMode);
-            } catch (e) {}
+            } catch (_e) {}
         };
         loadSettings();
     }, []);
@@ -74,7 +74,7 @@ export function SimulatorConsole() {
             } else {
                 setIntegrityStatus('IDLE');
             }
-        } catch (e) {}
+        } catch (_e) {}
     };
 
     const runInquisiteurQA = async () => {
@@ -87,7 +87,7 @@ export function SimulatorConsole() {
             } else {
                 addLog('INQUISITEUR QA: Ledger Integrity Certified (Grade X).', 'info');
             }
-        } catch(e) {
+        } catch(_e) {
             setIntegrityStatus('BREACH');
             addLog('INQUISITEUR QA: System Failure during scan.', 'error');
         }

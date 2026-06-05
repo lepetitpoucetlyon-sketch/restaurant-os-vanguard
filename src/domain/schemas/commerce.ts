@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SanitizedStringSchema, MicrounitsSchema, UUIDSchema, TaxRateSchema, toMicrounits } from './primitives';
+import { SanitizedStringSchema, MicrounitsSchema, UUIDSchema, TaxRateSchema } from './primitives';
 
 export const ProductSchema = z.object({
   id:                UUIDSchema,

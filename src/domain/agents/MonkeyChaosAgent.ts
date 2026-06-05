@@ -1,6 +1,5 @@
 import { SovereignLedger } from '../services/SovereignLedger';
 import { logger } from '@/lib/logger';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type ChaosVector = 'ASSET_CORRUPTION' | 'SYNC_LATENCY' | 'GUARD_BYPASS';
 
@@ -68,7 +67,7 @@ export class MonkeyChaosAgent {
                 _monkeyPatch: { forceAsymmetry: true }
             });
             logger.error('🔥 [FAILLE SOUVERAINE] Monkey corrupted the Ledger successfully.');
-        } catch (e) {
+        } catch (_e) {
             logger.info('🛡️ [Oracle Score +1] Ledger Inviolable: Sabotage blocked.');
         }
     }

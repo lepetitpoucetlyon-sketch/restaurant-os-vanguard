@@ -29,7 +29,7 @@ async function runSiege() {
             description: 'Sabotage Attempt',
             _monkeyPatch: { forceAsymmetry: true }
         });
-    } catch (error) {
+    } catch (_error) {
         logger.info(`✅ [Siege] Attack 2 Blocked: SovereignLedger detected sabotage. System Status: ${SovereignLedger.currentMode}`);
         if (SovereignLedger.currentMode === 'LOCAL_LOCK') {
             logger.info('🏆 [Siege] SYSTEM LOCKDOWN ACHIEVED. Legal Stop successful.');

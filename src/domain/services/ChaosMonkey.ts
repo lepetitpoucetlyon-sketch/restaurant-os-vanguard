@@ -75,7 +75,7 @@ export const ChaosMonkey = {
         const corruptedValue = 10.5523; // Floats are prohibited
         
         SovereignMath.toMicrounits(corruptedValue); 
-    } catch (e) {
+    } catch (_e) {
         logger.info("[Chaos-Monkey] Float Injection BLOCKED by SovereignMath.");
     }
 
@@ -83,7 +83,7 @@ export const ChaosMonkey = {
     try {
         
         CycleGuard.validateRecipe("CHAOS_RECIPE", ["CHAOS_RECIPE"]); // Self-referencing cycle
-    } catch (e) {
+    } catch (_e) {
         logger.info("[Chaos-Monkey] DAG Cycle Injection BLOCKED by CycleGuard.");
     }
   },

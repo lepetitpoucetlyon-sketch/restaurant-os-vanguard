@@ -123,7 +123,7 @@ if (typeof global.crypto === 'undefined' || (global.crypto as any)._isMock) {
     const mockCrypto = {
         _isMock: true,
         subtle: {
-            digest: vi.fn(async (algo, data) => {
+            digest: vi.fn(async (_algo, _data) => {
                 // Return a dummy but valid ArrayBuffer (32 bytes for SHA-256 simulation)
                 return new Uint8Array(32).fill(0).buffer;
             }),

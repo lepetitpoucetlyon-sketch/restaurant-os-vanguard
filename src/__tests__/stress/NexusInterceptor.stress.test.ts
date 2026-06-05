@@ -57,7 +57,7 @@ describe('NexusInterceptor - Stress & Race Condition Audit', () => {
         expect(results).toHaveLength(50);
         
         // Verifier que chaque appel à l'adapter a reçu le bon chemin scopé
-        transactions.forEach((tx, i) => {
+        transactions.forEach((tx, _i) => {
             const expectedPath = `tenants/${mockTenantId}/${tx.path}`;
             expect(mockAdapter.set).toHaveBeenCalledWith(
                 expectedPath,
@@ -76,7 +76,7 @@ describe('NexusInterceptor - Stress & Race Condition Audit', () => {
 
         await Promise.all(tasks.map(t => interceptor.set(t.path, t.data)));
 
-        tasks.forEach((t, i) => {
+        tasks.forEach((t, _i) => {
             expect(mockAdapter.set).toHaveBeenCalledWith(
                 `tenants/${mockTenantId}/${t.path}`,
                 t.data,

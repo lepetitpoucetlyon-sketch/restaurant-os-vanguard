@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
 import { useAuth, useTenant } from '@/hooks';
-const stubAction = async (tenantId: string, candidate: Candidate): Promise<{ success: boolean; id: string }> => ({ success: true, id: "STUB_ID" });
+const stubAction = async (_tenantId: string, _candidate: Candidate): Promise<{ success: boolean; id: string }> => ({ success: true, id: "STUB_ID" });
 const hiredCandidateAction = stubAction;
 
 export function useRecruitment() {

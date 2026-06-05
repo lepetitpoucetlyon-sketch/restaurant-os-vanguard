@@ -1,7 +1,7 @@
 "use client";
 
 import { useRegistre } from "@/context/RegistreContext";
-import { FileText, Calendar, Clock, AlertTriangle, CheckCircle2, Download, Eye, History, Users } from "lucide-react";
+import { FileText, Calendar, Clock, AlertTriangle, Download, Eye, History, Users } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 

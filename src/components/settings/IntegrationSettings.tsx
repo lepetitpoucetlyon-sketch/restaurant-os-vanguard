@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    Plug,
-    Save,
     Loader2,
     Key,
     Globe,
@@ -13,15 +11,12 @@ import {
     Mail,
     Calendar,
     ShoppingCart,
-    Check,
     ExternalLink,
     Zap,
-    Cpu,
     Webhook,
     Eye,
     EyeOff,
-    Link2,
-    Network
+    Link2
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useSettings } from "@/context/SettingsContext";
@@ -39,7 +34,7 @@ const INTEGRATIONS_METADATA = [
 ];
 
 export default function IntegrationSettings() {
-    const { settings, updateConfig, updateList, isSaving: contextIsSaving } = useSettings();
+    const { settings, updateConfig, updateList, isSaving: _contextIsSaving } = useSettings();
     const [localIntegrations, setLocalIntegrations] = useState<IntegrationType[]>(settings.integrations || []);
     const [localConfig, setLocalConfig] = useState<IntegrationsConfig>(settings.integrationsConfig || {
         stripePublicKey: '',

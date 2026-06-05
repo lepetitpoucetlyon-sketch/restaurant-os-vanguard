@@ -1,7 +1,4 @@
-import { Order, StockItem, Ingredient, InventoryMovement, FiscalSeal, User } from '@nexus/contracts';
-import { FiscalEngine } from './FiscalEngine';
-import { StockEngine } from './StockEngine';
-import { logger } from '@/lib/logger';
+import { Order, StockItem, Ingredient, FiscalSeal } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toMicrounits } from '@/domain/schemas/primitives';
 
@@ -87,7 +84,7 @@ export const SimulationService = {
         metrics.burnoutIndex = Math.min(100, (intensity / 15) * 100);
 
         const orders: Order[] = [];
-        const currentLastSeal = context.lastSeal;
+        const _currentLastSeal = context.lastSeal;
 
         for (let i = 0; i < dailyVolume; i++) {
             const isChaos = mode === 'CHAOS' && Math.random() < config.chaosProbability;

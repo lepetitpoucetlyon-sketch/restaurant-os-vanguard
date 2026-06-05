@@ -4,7 +4,6 @@ import React from 'react';
 import { useAtom } from 'jotai';
 import { crmFormAtom, crmNewCRMModalAtom } from '@modules/commerce/marketing/store/crmAtoms';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, MapPin, Tag, Plus, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/hooks';
 import { Button } from '@ui/button';
 import { BottomSheet } from '@ui/BottomSheet';

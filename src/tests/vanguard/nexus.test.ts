@@ -5,12 +5,7 @@ import { SovereignData } from '@/shared/nexus-contract';
 import { 
     createNexusNode, 
     updateNexusNode, 
-    ordersNodeAtom, 
-    tenantIdAtom,
-    fleetSnapshotAtom,
-    isMarketingSyncingAtom,
-    isReservationSyncingAtom,
-    reservationStatsAtom
+    tenantIdAtom
 } from '@/store/pillars';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 
@@ -158,7 +153,7 @@ describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {
     it('T29: Global Error Recovery - Résilience aux crashs de services', async () => {
         try {
             await NexusSyncService.init('');
-        } catch (e) {
+        } catch (_e) {
         }
         expect(true).toBe(true);
     });

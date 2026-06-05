@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import path from 'path';
 
 /**
  * 🛡️ Configuration Industrielle Playwright - Restaurant OS

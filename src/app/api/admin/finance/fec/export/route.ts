@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
             }
         });
 
-    } catch (error) {
+    } catch (_error) {
         return NextResponse.json({
             success: false,
             error: CoreErrorCode.INTERNAL_CRASH,

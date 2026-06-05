@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { AgentDomain, AgentRole, AgentResponse } from './types';
 
 /**
  * 🏺 Zeus - The Sovereign Orchestrator

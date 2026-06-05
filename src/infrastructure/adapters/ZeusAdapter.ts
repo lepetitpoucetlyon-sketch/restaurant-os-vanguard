@@ -1,7 +1,6 @@
 import { AgentEngine } from '@/lib/ai/AgentEngine';
-import { AgentDomain, AgentRole } from '@domain/agency/types';
+import { AgentDomain } from '@domain/agency/types';
 import {
-    VanguardAgentConfig,
     ZeusPulseResult,
     ZeusAnomaly,
     ZeusManifest,
@@ -119,7 +118,7 @@ export class ZeusEngine {
                     detectedAt: new Date().toISOString(),
                 });
             }
-        } catch (err) {
+        } catch (_err) {
             // Log & proceed
         }
 

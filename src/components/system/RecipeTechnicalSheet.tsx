@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Clock, ChefHat, Download, X, AlertCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { cn } from "@/lib/ui.foundations";;
+import { Clock, ChefHat, Download, X } from 'lucide-react';
+;
 
 interface Ingredient {
     name: string;

@@ -26,7 +26,7 @@ export class DNAInjector {
                     where: [{ field: 'tenantId', operator: '==', value: tenantId }]
                 });
                 dynamicRules = results.map(doc => String(doc.rule || ""));
-            } catch (err) {
+            } catch (_err) {
                 // Silencieusement ignorer en mode Mock / Sans clés
                 logger.warn('DNAInjector: Firestore dynamic rules lookup failed (Normal in Mock Mode)');
             }

@@ -2,8 +2,7 @@
 
 import { useAtomValue } from "jotai";
 import { 
-    wasteLogsNodeAtom,
-    wasteLogsAtom 
+    wasteLogsNodeAtom 
 } from "@/store/pillars/compliance";
 import { 
     menuAnalysisSelector, 

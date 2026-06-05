@@ -1,4 +1,3 @@
-import { logger } from '@/lib/logger';
 import { Recipe } from '@nexus/contracts/common.types';
 
 /**

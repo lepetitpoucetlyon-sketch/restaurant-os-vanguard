@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUI } from '@/hooks';
 import { useTutorial } from '@/context/TutorialContext';
 import { cn } from "@/lib/ui.foundations";;
-import { X, ChevronRight, BookOpen, Zap } from 'lucide-react';
+import { X, BookOpen, Zap } from 'lucide-react';
 import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 export function DocumentationPortal({ isPage = false, categoryOverride }: { isPage?: boolean; categoryOverride?: string }) {

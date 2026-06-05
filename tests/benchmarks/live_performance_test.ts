@@ -1,7 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import * as crypto from 'crypto';
-import * as path from 'path';
 import * as fs from 'fs';
 
 // Simulation du FiscalEngine (pour éviter les problèmes d'import ESM dans ts-node)

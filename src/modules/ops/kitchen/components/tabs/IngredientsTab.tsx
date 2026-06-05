@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Plus, Edit2, Trash2, Package, Tag, User, Truck, Filter } from "lucide-react";
-import { Button } from "@ui/button";
+import { motion } from "framer-motion";
+import { Search, Plus, Edit2, Trash2, Package, Tag, Truck } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";

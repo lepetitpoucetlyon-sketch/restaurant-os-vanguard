@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { createNexusNode } from '@/store/nexusNodeFactory';
 import { getDefaultStore } from 'jotai';

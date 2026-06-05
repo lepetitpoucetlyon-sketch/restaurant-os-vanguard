@@ -12,8 +12,8 @@ export const MarketingEngine = {
         { term: 'prix petit poucet', clicks: 95, impressions: 1100, avgPosition: 1.1 }
     ] as KeywordStat[],
     
-    analyzeSentiment: (text: string) => 0.8,
-    suggestOptimization: (profile: import('@/shared/nexus-contract').SovereignData) => 'SEO baseline established.',
+    analyzeSentiment: (_text: string) => 0.8,
+    suggestOptimization: (_profile: import('@/shared/nexus-contract').SovereignData) => 'SEO baseline established.',
     
     calculateSEOScore: (): SEOScore => ({
         overall: 84,
@@ -30,7 +30,7 @@ export const MarketingEngine = {
         recommendations: ['Ajouter des balises Schema.org pour le menu']
     }),
     
-    getVisibilityStatus: (score: SEOScore) => ({ label: 'Excellent', color: 'text-emerald-500' }),
+    getVisibilityStatus: (_score: SEOScore) => ({ label: 'Excellent', color: 'text-emerald-500' }),
     
     getLivePageAnalysis: () => [
         { 

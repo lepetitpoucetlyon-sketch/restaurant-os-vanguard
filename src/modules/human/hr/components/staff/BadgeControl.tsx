@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/hooks';
 import { useAtomValue } from 'jotai';
 import { activeShiftsAtom } from '../../store/staffAtoms';
 import { hrLoadingAtom } from '../../store/hrAtoms';
 import { NexusPayrollEngine } from '@domain/services/NexusPayrollEngine';
-import { ShiftEntry } from '@domain/schemas/hr';
 import { Button } from '@ui/button';
-import { Clock, Shield, AlertTriangle, Fingerprint, Loader2 } from 'lucide-react';
+import { Clock, Shield, Fingerprint, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/ui.foundations';
 import { useToast } from '@ui/Toast';

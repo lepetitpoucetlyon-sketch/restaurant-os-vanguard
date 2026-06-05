@@ -1,8 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { Upload, CheckCircle2, Loader2, Image as ImageIcon, X } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Loader2, Image as ImageIcon, X } from 'lucide-react';
 import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/hooks/useBrandEditor';
 

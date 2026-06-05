@@ -8,20 +8,16 @@ import {
     Wind, 
     AlertTriangle, 
     CheckCircle2, 
-    Plus, 
     History,
-    Calendar,
     ArrowRight,
-    Scale,
     Shield
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
-import { motion } from "framer-motion";
 
 export function WasteManagementHACCP() {
-    const { logWaste } = useHACCP();
-    const { hottesDoc, prestataires } = useRegistre();
+    const { logWaste: _logWaste } = useHACCP();
+    const { hottesDoc, prestataires: _prestataires } = useRegistre();
 
     // Mock recent waste logs
     const recentLogs = [

@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import { useNexusCore } from "@/hooks";
-import { NAV_SECTIONS, NavSection } from "@/config/navigation";
+import { NAV_SECTIONS } from "@/config/navigation";
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
 import { SidebarProfile } from "./sidebar/SidebarProfile";
@@ -19,11 +18,11 @@ export function DesktopSidebar() {
     const { currentUser, logout } = auth;
     
     const [isSidebarCollapsed, setSidebarCollapsed] = useAtom(isSidebarCollapsedAtom);
-    const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
-    const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
+    const [_isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
+    const [_isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
 
     // Sidebar interaction states
-    const [isInteracting, setIsInteracting] = useState(false);
+    const [_isInteracting, setIsInteracting] = useState(false);
 
     const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
 

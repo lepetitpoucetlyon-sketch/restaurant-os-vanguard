@@ -2,8 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Upload, Loader2, CheckCircle2, XCircle, Scan, Zap } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Loader2, Scan, Zap } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { VisionService, type ExtractedInvoice } from '@domain/services/VisionService';
 

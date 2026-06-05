@@ -1,6 +1,6 @@
-import { DaySchedule, ReservationSlotSettings, GlobalSettings } from '@nexus/contracts';
+import { ReservationSlotSettings, GlobalSettings } from '@nexus/contracts';
 import { Reservation, Table } from '@nexus/contracts';
-import { format, parse, addMinutes, isWithinInterval, isBefore, isAfter, startOfDay } from 'date-fns';
+import { format, parse, addMinutes, isBefore } from 'date-fns';
 
 export interface AvailableSlot {
   time: string;

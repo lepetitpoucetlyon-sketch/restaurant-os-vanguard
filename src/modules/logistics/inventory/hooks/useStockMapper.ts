@@ -10,7 +10,7 @@ import { useTenant } from '@/hooks';
  */
 export const useStockMapper = () => {
     const [inventory] = useAtom(stockItemsAtom);
-    const { tenantId } = useTenant();
+    const { tenantId: _tenantId } = useTenant();
 
     const injectQuantities = async (receptionId: string, item: import('@nexus/contracts').Ingredient, data: Parameters<typeof StockEngine.processReception>[1]) => {
         logger.info(`[StockMapper] Injecting reception ${receptionId} into Nexus`);

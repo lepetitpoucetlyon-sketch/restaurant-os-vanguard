@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore, collection, doc, query, orderBy, limit, getDocs, runTransaction, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, query, orderBy, limit, getDocs, runTransaction } from 'firebase/firestore';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';

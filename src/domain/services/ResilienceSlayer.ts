@@ -52,7 +52,7 @@ export class ResilienceSlayer {
             if (node.loading || !node.data) return;
 
             // Audit the current heap against the calculated CRC
-            const currentCRC = SelfHealingEngine.calculateCRC(node.data);
+            const _currentCRC = SelfHealingEngine.calculateCRC(node.data);
             
             // 🛡️ ATOMIC BURST: Anti-Latency Reconciliation & Rollback Engine
             if (node.version && node.remoteVersion && node.version !== node.remoteVersion) {

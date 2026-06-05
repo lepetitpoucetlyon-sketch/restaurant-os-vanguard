@@ -8,7 +8,7 @@ import { useLanguage } from "@/hooks";
 import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@/components/settings/ui/PremiumSelect";
 import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput";
-import { SovereignData, SovereignValue, SovereignField } from "@shared/nexus-contract";
+import { SovereignData, SovereignField } from "@shared/nexus-contract";
 import { SharedKernel } from "@/lib/shared-kernel";
 
 interface LogicTabProps {

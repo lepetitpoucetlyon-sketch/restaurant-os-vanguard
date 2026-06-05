@@ -4,17 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
 import {
-    BookOpen,
     Save,
     Loader2,
-    Clock,
     Users,
     CreditCard,
-    Mail,
     MessageSquare,
     AlertTriangle,
-    Bell,
-    FileText,
     Calendar,
     Target,
     Zap,

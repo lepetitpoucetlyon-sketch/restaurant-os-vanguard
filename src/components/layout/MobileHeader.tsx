@@ -1,9 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { UserCircle, Bell, Search, Settings } from "lucide-react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/ui.foundations";;
+import { UserCircle, Search } from "lucide-react";
+;
 import { useAuth } from "@/hooks";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { ProfileSwitcher } from "./ProfileSwitcher";

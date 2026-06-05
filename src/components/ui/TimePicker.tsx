@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Check, ChevronDown, Calendar } from "lucide-react";
+import { Clock, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 
 interface TimePickerProps {

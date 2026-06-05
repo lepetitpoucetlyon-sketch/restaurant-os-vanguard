@@ -29,7 +29,7 @@ export function SidebarQuickActions({
     const [currentAmbiance, setCurrentAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());
 
     useEffect(() => {
-        const handleAmbianceChange = (e: Event) => {
+        const handleAmbianceChange = (_e: Event) => {
             setCurrentAmbiance(AmbianceService.getCurrentAmbiance());
         };
         window.addEventListener('ambiance-changed', handleAmbianceChange);

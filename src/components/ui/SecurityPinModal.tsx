@@ -21,7 +21,7 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({
     onSuccess,
     title = "Autorisation Requise",
     description = "Veuillez saisir votre code PIN pour valider cette action.",
-    requiredLevel = 70
+    requiredLevel: _requiredLevel = 70
 }) => {
     const [pin, setPin] = useState('');
     const [error, setError] = useState(false);

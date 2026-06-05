@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Settings,
@@ -9,7 +9,6 @@ import {
     Check,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useTheme } from "@/context/ThemeContext";
 import { useLanguage } from "@/hooks";
 import { PAGE_SETTINGS } from "./config-registry";
 import { LogicTab } from "./panels/LogicTab";
@@ -73,7 +72,7 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
         return PAGE_SETTINGS[page];
     };
 
-    const canAccessSetting = (setting: PageSettingConfig) => {
+    const canAccessSetting = (_setting: PageSettingConfig) => {
         // Simplified for now - in a real app, check user permissions
         return true;
     };

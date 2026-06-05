@@ -212,7 +212,7 @@ export class SovereignLedger {
             
             logger.info(`[SovereignLedger] EBITDA Calculated: ${ebitda / 100}€ (Rev: ${revenue/100}€, COGS: ${cogs/100}€, Labor: ${labor/100}€)`);
             return ebitda;
-        } catch (e) {
+        } catch (_e) {
             logger.error('[SovereignLedger] EBITDA Calculation Failed. Falling back to safe 0.');
             return 0;
         }

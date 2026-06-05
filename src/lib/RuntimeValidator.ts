@@ -1,5 +1,5 @@
 import { logger } from './logger';
-import { Cents, Quantity, Rate } from './brands';
+import { Cents, Quantity } from './brands';
 
 /**
  * 🔍 RuntimeValidator - Restaurant OS (Singularity 5.4)

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { logger } from '@/lib/axiom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -12,13 +12,11 @@ import {
   RefreshCw, 
   Plus, 
   Bot, 
-  ChevronRight, 
   Activity, 
   Database, 
   ShieldAlert,
   Search,
   CreditCard,
-  ArrowUpRight,
   Target,
   Layers,
   Sparkles,
@@ -27,8 +25,6 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { useFleet } from "@/context/FleetContext";
 import { 
-    MCCTreasury, 
-    DeploymentEngine, 
     ZeusDashboard,
     TenantOrchestrator,
     ProvisioningWizard
@@ -60,7 +56,7 @@ export default function MasterConsolePage() {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const selectedInstance = instances.find(i => i.id === selectedInstanceId);
-  const filteredInstances = instances.filter(i => 
+  const _filteredInstances = instances.filter(i => 
     i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     i.id.toLowerCase().includes(searchQuery.toLowerCase())
   );

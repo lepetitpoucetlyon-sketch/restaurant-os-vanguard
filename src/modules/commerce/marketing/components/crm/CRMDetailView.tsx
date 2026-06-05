@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtom } from 'jotai';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
     X, Phone, Mail, Users, DollarSign, TrendingUp, Calendar, Send
 } from 'lucide-react';

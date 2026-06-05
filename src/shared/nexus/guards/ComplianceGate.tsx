@@ -21,10 +21,10 @@ export function ComplianceGate({ children }: ComplianceGateProps) {
     useEffect(() => {
         if (isAuthenticated && currentUser?.role === 'admin' && !currentUser?.setupComplete) {
             // EXCEPTION 1: Always allow access to Master Console for the Creator
-            const isMccArea = pathname?.startsWith('/admin');
+            const _isMccArea = pathname?.startsWith('/admin');
             
             // EXCEPTION 2: Pilot Mode bypass (if tenant parameter is in URL)
-            const isPilotMode = searchParams?.has('tenant');
+            const _isPilotMode = searchParams?.has('tenant');
             
             // ÉJECTION FORCÉE : On sort de l'onboarding pour modifications directes
             if (pathname === '/onboarding/setup' || pathname === '/welcome') {

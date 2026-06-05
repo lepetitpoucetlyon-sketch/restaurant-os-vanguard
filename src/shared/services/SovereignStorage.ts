@@ -1,4 +1,4 @@
-import { z, ZodSchema } from 'zod';
+import { ZodSchema } from 'zod';
 import { atom, WritableAtom } from 'jotai';
 
 // ── Types du service ───────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ class SovereignStorageService {
         error:        result.error.message,
       };
 
-    } catch (parseError) {
+    } catch (_parseError) {
       const raw = typeof window !== 'undefined' ? localStorage.getItem(prefixedKey) ?? '' : '';
       this.purge(key);
       this.logCorruption(key, raw, 'JSON.parse failed');

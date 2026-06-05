@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ChefHat, Book, AlertTriangle, Edit2, Trash2, MoreVertical, Eye } from "lucide-react";
+import { Search, ChefHat, Book, AlertTriangle, Edit2, Trash2 } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";

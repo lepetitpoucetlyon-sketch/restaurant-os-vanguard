@@ -47,7 +47,7 @@ export const EndOfDayWizard: React.FC = () => {
                 showToast("Journée Clôturée mais le scellage fiscal a échoué.", "warning");
             }
             setIsClosed(true);
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur lors de la clôture fiscale", "error");
         } finally {
             setIsClosing(false);

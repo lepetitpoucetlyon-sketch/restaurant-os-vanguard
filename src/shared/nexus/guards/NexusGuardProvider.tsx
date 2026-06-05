@@ -1,23 +1,18 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, useCallback, ReactNode } from 'react';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { logger } from '@/lib/logger';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { 
     hygieneLabelsAtom, 
     hygieneLabelsNodeAtom,
-    maintenanceLogsAtom, 
-    maintenanceLogsNodeAtom,
-    deliveriesAtom, 
-    deliveriesNodeAtom,
+    maintenanceLogsAtom,
+    deliveriesAtom,
     hygieneLogsAtom,
     hygieneLogsNodeAtom,
     receptionLogsAtom,
     receptionLogsNodeAtom,
     oilLogsAtom,
     oilLogsNodeAtom,
-    wasteLogsAtom,
-    wasteLogsNodeAtom,
     guardLoadingAtom
 } from '@/store/pillars/compliance';
 import { updateNexusNode } from '@/store/pillars/core';
@@ -59,7 +54,7 @@ const NexusGuardContext = createContext<NexusGuardState | undefined>(undefined);
 export const NexusGuardProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const haccpLabels = useAtomValue(hygieneLabelsAtom);
     const maintenanceTasks = useAtomValue(maintenanceLogsAtom);
-    const deliveries = useAtomValue(deliveriesAtom);
+    const _deliveries = useAtomValue(deliveriesAtom);
     const isLoading = useAtomValue(guardLoadingAtom);
 
     // Context Value for backward compatibility

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { CreditCard, Banknote, Smartphone, CheckCircle, Loader2, Sparkles, Receipt, X, ArrowRight } from "lucide-react";
-import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 
@@ -38,7 +37,7 @@ export function PaymentDialog({ isOpen, total, onClose, onPaymentComplete }: Pay
 
             // Allow user to see the success state for a bit before closing
             // But this is intentional UI feedback, not a 'mock' simulation
-        } catch (error) {
+        } catch (_error) {
             setIsProcessing(false);
         }
     };

@@ -4,7 +4,6 @@
  * This file provides type-safe conversion functions from SovereignNode to domain-specific types.
  */
 
-import { SovereignNode } from '@/shared/nexus-contract';
 import type { Table, Order, Reservation, OrderStatus, TableStatus, OrderItem, OrderItemModification, Floor, Zone } from './ops.types';
 import type { Product, Quote, Group } from './commerce.types';
 import type { Campaign } from './marketing.types';
@@ -12,7 +11,7 @@ import type { LegalInvoice, JournalEntry } from './finance.types';
 import type { Option, OptionGroup, Category } from './common.types';
 import { ModuleId } from '@shared/genome.types';
 import type { Customer, CRM_Record } from './customer.types';
-import type { Ingredient, Recipe, RecipeIngredient } from './logistics';
+import type { Recipe, RecipeIngredient } from './logistics';
 import { translateError } from './nexus-error-mapper';
 import { canAccessModule } from './nexus-auth-mapper';
 import { toTable, toOrder, toProduct, toRecipe, toIngredient, toReservation, toQuote, toCampaign, toFloor, toZone, toLegalInvoice, toCustomer, toGroup, toJournalEntry, toCategory } from './nexus-type-converters';

@@ -20,7 +20,6 @@ import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import type {
     LegacyImportConfig,
     RawLegacyDocument,
-    DecontaminationIssue,
     NormalizedLegacyRecord,
     DuplicateCandidate,
     FiscalValidationResult,

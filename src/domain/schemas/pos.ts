@@ -1,6 +1,6 @@
 // src/domain/schemas/pos.ts
 import { z } from 'zod';
-import { MicrounitsSchema, TimestampSchema, UUIDSchema, SanitizedStringSchema, sanitized } from './primitives';
+import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from './primitives';
 import { TaxRateSchema } from './finance';
 
 export const CartLineSchema = z.object({

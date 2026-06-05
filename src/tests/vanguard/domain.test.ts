@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import './mocks'; // Charge l'infrastructure de mocks
 
 import { SharedKernel } from '@/lib/shared-kernel';
-import { OrderItem, CartItem } from '@nexus/contracts';
 import { POSService } from '@/infrastructure/adapters/POSAdapter';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 const SyncCompliance = { 

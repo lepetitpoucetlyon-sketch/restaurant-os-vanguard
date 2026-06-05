@@ -32,7 +32,7 @@ export const TimeSync = {
     const performSync = async () => {
         try {
             await Nexus.adapter.set(syncPath, { heartbeat: new Date() }); 
-        } catch (e) {
+        } catch (_e) {
             logger.warn('[TimeSync] Heartbeat failed (Offline?)');
         }
     };

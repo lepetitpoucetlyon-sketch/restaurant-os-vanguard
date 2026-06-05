@@ -1,4 +1,3 @@
-import { NexusTelemetryService } from "@/domain/services/NexusTelemetryService";
 
 import { EscalationLevel } from './types';
 

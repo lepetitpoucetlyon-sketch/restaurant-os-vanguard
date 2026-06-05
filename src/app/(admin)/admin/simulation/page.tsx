@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
     Zap, 
@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
-import { useExpert } from "@domain/agency/useExpert";
 import { SimulationService, SimulationMode, MonteCarloResult } from "@domain/services/SimulationService";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@ui/Toast";

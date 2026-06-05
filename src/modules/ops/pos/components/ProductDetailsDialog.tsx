@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { X, Check, Minus, Plus, ShoppingCart, Sparkles, AlertTriangle } from "lucide-react";
-import { Button } from "@ui/button";
-import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { Product, OptionGroup, Option } from "@nexus/contracts";
@@ -85,7 +83,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
         }
     };
 
-    const removeCustomAllergen = (allergen: string) => {
+    const _removeCustomAllergen = (allergen: string) => {
         setCustomAllergens(prev => prev.filter(a => a !== allergen));
         setSelectedAllergens(prev => prev.filter(id => id !== `custom_${allergen}`));
     };

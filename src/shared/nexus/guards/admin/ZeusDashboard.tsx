@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { ZeusEngine } from '@/infrastructure/adapters/ZeusAdapter';
-import { ZeusPulseResult, VanguardAgentConfig } from '@domain/agency/Zeus';
+import { ZeusPulseResult } from '@domain/agency/Zeus';
 
 /**
  * 🏺 Zeus Dashboard - Grade X Command Center

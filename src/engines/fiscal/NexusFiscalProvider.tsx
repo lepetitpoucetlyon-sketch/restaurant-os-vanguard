@@ -12,7 +12,7 @@ import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
 
 import { SovereignMath } from '@shared/services/SovereignMath';
-import { SovereignNode, OperationalIdentity } from '@/shared/nexus-contract';
+import { OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

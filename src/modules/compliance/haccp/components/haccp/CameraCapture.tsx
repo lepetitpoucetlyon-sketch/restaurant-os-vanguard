@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useRef, useCallback } from 'react';
-import { Camera, RefreshCw, Check, X, Upload } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { RefreshCw, Check, X, Upload } from 'lucide-react';
 import { Button } from '@ui/button';
-import { cn } from "@/lib/ui.foundations";;
+;
 
 interface CameraCaptureProps {
     onCapture: (imageData: string) => void;

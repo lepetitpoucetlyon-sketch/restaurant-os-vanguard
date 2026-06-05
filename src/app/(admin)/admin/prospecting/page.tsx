@@ -8,7 +8,6 @@ import { useSettings } from '@/context/SettingsContext';
 import { BrandingUI } from '@domain/services/BrandingUI';
 import { BrandInput } from '@nexus/contracts';
 // import { extractBrandingFromUrl } from '@/app/actions/branding';
-import { cn } from '@/lib/ui.foundations';
 
 export default function ProspectingDashboard() {
   const { updateIdentity, updateConfig } = useSettings();

@@ -15,7 +15,6 @@ import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Ingredient, StockItem, Preparation, StorageLocation, IngredientUnit, IngredientCategory } from "@shared/nexus/contracts/logistics";
-import { WasteLog } from "@shared/nexus/contracts/common.types";
 
 /**
  * 🥫 useInventory - Grade X Atomic Bridge (Source of Truth)
@@ -86,7 +85,7 @@ export function useInventory() {
         await Nexus.adapter.create(path, { ...data, updatedAt: now });
     };
 
-    const transferStock = async (id: string, locationId: string, qty: number) => {
+    const transferStock = async (id: string, locationId: string, _qty: number) => {
         if (!tenantId) return;
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`;
         await Nexus.adapter.update(path, {

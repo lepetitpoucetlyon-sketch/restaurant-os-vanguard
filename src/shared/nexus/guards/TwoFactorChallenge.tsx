@@ -7,15 +7,8 @@ import { useSettings } from "@/context/SettingsContext";
 import { 
     Smartphone, 
     Mail, 
-    ShieldCheck, 
-    ArrowRight, 
-    RefreshCcw, 
-    AlertCircle,
-    CheckCircle2,
-    Key,
-    Lock
+    ShieldCheck
 } from "lucide-react";
-import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 
@@ -25,7 +18,7 @@ export function TwoFactorChallenge() {
     const { showToast } = useToast();
     
     const [code, setCode] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [_isLoading, setIsLoading] = useState(false);
     const [showRescueOptions, setShowRescueOptions] = useState(false);
     const [method, setMethod] = useState<'sms' | 'email'>('sms');
     const [activePhoneIndex, setActivePhoneIndex] = useState(0);
@@ -42,7 +35,7 @@ export function TwoFactorChallenge() {
                 showToast("Code de vérification invalide", "error");
                 setCode("");
             }
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur lors de la vérification", "error");
         } finally {
             setIsLoading(false);

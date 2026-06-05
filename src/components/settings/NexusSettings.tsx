@@ -3,16 +3,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    Cpu, 
     Bot, 
     Mic, 
     Wand2, 
-    Save, 
-    ShieldCheck, 
     Zap, 
     Plus, 
-    Trash2, 
-    History,
+    Trash2,
     Volume2,
     Check
 } from 'lucide-react';
@@ -23,7 +19,7 @@ import { cn } from '@/lib/ui.foundations';
 
 export default function NexusSettings() {
     const { settings, updateSLM } = useSettings();
-    const [isSaving, setIsSaving] = useState(false);
+    const [_isSaving, _setIsSaving] = useState(false);
     
     // Local state for Nexus Config (mapped from slmConfig or its own field)
     // For now, we use nexusConfig from settings

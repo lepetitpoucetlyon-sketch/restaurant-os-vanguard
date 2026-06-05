@@ -4,22 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
     Search,
-    Command,
     LayoutDashboard,
-    Store,
-    Map,
     CalendarDays,
-    ChefHat,
     Package,
     Users,
-    ClipboardCheck,
     BarChart3,
     Calculator,
     Sparkles,
-    CalendarRange,
-    X,
     ArrowRight,
-    Plus,
     FileText,
     Receipt,
     Clock,
@@ -41,7 +33,7 @@ interface CommandItem {
     shortcut?: string;
 }
 
-const NAV_ITEMS: CommandItem[] = [
+const _NAV_ITEMS: CommandItem[] = [
     // Navigation items kept for reference but hidden from main view as requested
     { id: 'dashboard', label: 'Tableau de bord', description: 'Vue d\'ensemble', icon: LayoutDashboard, href: '/', category: 'navigation', section: 'Navigation', shortcut: '⌘1' },
 ];
@@ -71,7 +63,7 @@ interface CommandModalProps {
 }
 
 export function CommandModal({ isOpen, onClose }: CommandModalProps) {
-    const { theme } = useUI();
+    const { theme: _theme } = useUI();
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -183,7 +175,7 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                             <p className="font-serif italic text-2xl text-primary/20">Aucune action trouvée pour "{searchTerm}"</p>
                         </div>
                     ) : (
-                        Object.entries(groupedItems).map(([section, items], sectionIndex) => (
+                        Object.entries(groupedItems).map(([section, items], _sectionIndex) => (
                             <div key={section} className="space-y-3">
                                 <div className="flex items-center gap-4 px-4 mb-4 mt-2">
                                     <div className="w-8 h-0.5 bg-accent-gold rounded-full" />
