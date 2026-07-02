@@ -3,22 +3,19 @@ import { FECGenerator } from '@/domain/finance/fec/FECGenerator';
 import { DocumentVault } from '@/domain/shared/DocumentVault';
 import { FinanceErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
+import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**
  * 🏛️ Route: Export FEC - Grade X+++
  * Endpoint d'export du Fichier des Écritures Comptables.
+ * Auth : JWT vérifié (admin/manager du tenant, ou fleet_admin).
+ * Le tenant vient du token — jamais d'un header client.
  */
 export async function POST(request: NextRequest) {
     try {
-        // 🛡️ HIDDEN DOOR PATTERN
-        const tenantId = request.headers.get('x-nexus-tenant-id');
-        if (tenantId !== 'restaurant-os') {
-            return NextResponse.json({
-                success: false,
-                error: CoreErrorCode.NEXUS_SYNC_ERROR,
-                metadata: { version: 'v2', timestamp: new Date().toISOString() }
-            }, { status: 404 });
-        }
+        const caller = await requireTenantAdmin(request);
+        if (isDenied(caller)) return caller;
+        const tenantId = caller.tenantId;
 
         const body = await request.json();
         const { entries, siren, yearMonth } = body as { entries: JournalEntry[], siren: string, yearMonth: string };

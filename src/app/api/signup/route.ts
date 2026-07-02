@@ -32,6 +32,15 @@ export async function POST(req: NextRequest) {
     // 2. Determine tenant key
     const tenantId = toTenantKey(restaurantName);
 
+    // 2b. Custom claims — TOUTE la sécurité serveur en dépend :
+    //     firestore.rules lit request.auth.token.tenantId/role,
+    //     adminAuthGuard lit role/tenantId. `clientId` = alias historique.
+    await getAuth().setCustomUserClaims(userRecord.uid, {
+      tenantId,
+      clientId: tenantId,
+      role: 'admin',
+    });
+
     // 3. Optional brand extraction from URL
     let primaryColor: string | undefined;
     if (websiteUrl) {

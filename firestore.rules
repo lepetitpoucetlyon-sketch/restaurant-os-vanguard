@@ -1,9 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // --- 🏛️ SOVEREIGN UTILITIES (Grade X+++) ---
-    
+
+    // --- 🏛️ SOVEREIGN UTILITIES ---
+
     function isSignedIn() {
       return request.auth != null;
     }
@@ -13,12 +13,13 @@ service cloud.firestore {
     }
 
     function isFleetAdmin() {
-      return isSignedIn() && request.auth.token.role == 'fleet_admin';
+      return isSignedIn() &&
+             (request.auth.token.role == 'fleet_admin' || request.auth.token.role == 'SUPER_ADMIN');
     }
 
     function isTenantManager(tenantId) {
-      return isSignedIn() && 
-             getTenantId() == tenantId && 
+      return isSignedIn() &&
+             getTenantId() == tenantId &&
              (request.auth.token.role == 'manager' || request.auth.token.role == 'admin');
     }
 
@@ -26,62 +27,53 @@ service cloud.firestore {
       return isSignedIn() && getTenantId() == tenantId;
     }
 
-    // --- 🏛️ USERS & DEVICES CORE (Phase 2.1) ---
+    // 🔐 NF525 : collections à écriture unique — JAMAIS update/delete,
+    // même pour un fleet_admin (l'immuabilité fiscale prime sur le rôle).
+    // Doit rester aligné avec SovereignGuard.IMMUTABLE_COLLECTIONS (barrière client).
+    function isImmutableCollection(c) {
+      return c in ['journalEntries', 'fiscalSeals', 'fiscalLedger',
+                   'fiscal_ledger', 'audit_logs', 'auditTrails', 'ticketZ', 'haccpLogs'];
+    }
+
+    // --- 🏛️ USERS & DEVICES CORE ---
     match /users/{userId} {
       allow read: if isSignedIn() && request.auth.uid == userId;
       allow write: if isFleetAdmin();
 
       match /certifiedDevices/{fingerprint} {
         allow read: if isSignedIn() && request.auth.uid == userId;
-        allow create: if isSignedIn() && request.auth.uid == userId; // Allow auto-certification for SUPER_ADMIN
+        allow create: if isSignedIn() && request.auth.uid == userId;
         allow update, delete: if isFleetAdmin();
       }
     }
 
     // --- 🏛️ TENANT ISOLATION CORE ---
+    // Toute donnée métier vit sous tenants/{tenantId}/... Le claim tenantId
+    // du JWT est la SEULE source de vérité d'appartenance.
 
     match /tenants/{tenantId} {
-      
-      // Configuration de l'instance (Read only pour le staff)
-      match /config/{docId} {
-        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
-        allow write: if isFleetAdmin();
-      }
 
-      // Opérations (POS, KDS, Tables)
-      match /operations/{docId} {
-        allow read, write: if isTenantStaff(tenantId) || isFleetAdmin();
-      }
-
-      // Inventaire & Stock
-      match /inventory/{docId} {
+      // Configuration de l'instance (lecture staff, écriture manager/MCC)
+      match /tenantConfig/{docId} {
         allow read: if isTenantStaff(tenantId) || isFleetAdmin();
         allow write: if isTenantManager(tenantId) || isFleetAdmin();
       }
 
-      // 🔐 DONNÉES FISCALES (Grade X+++ Immutable)
-      match /fiscal_ledger/{docId} {
-        allow read: if isTenantManager(tenantId) || isFleetAdmin();
-        allow create: if isTenantStaff(tenantId);
-        allow update, delete: if false; // 🚫 NF525: Strict write-once protocol
-      }
-
-      // 🔐 AUDIT LOGS (Grade X+++ Immutable)
-      match /audit_logs/{docId} {
-        allow read: if isTenantManager(tenantId) || isFleetAdmin();
-        allow create: if isTenantStaff(tenantId);
-        allow update, delete: if false; // 🚫 NO MODIFICATION ALLOWED
-      }
-
-      // RH & Staff
-      match /staff/{docId} {
-        allow read, write: if isTenantManager(tenantId) || isFleetAdmin();
+      // Générique : couvre orders, tables, floors, zones, products, stockItems,
+      // accounts, haccp, candidates, users (sous-collection tenant), etc.
+      // Les collections immuables NF525 sont write-once : create autorisé,
+      // update/delete interdits pour TOUT LE MONDE.
+      match /{collection}/{document=**} {
+        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow create: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow update, delete: if !isImmutableCollection(collection) &&
+                                 (isTenantManager(tenantId) || isFleetAdmin());
       }
     }
 
-    // --- 🏛️ FLEET GLOBAL OVERLAY ---
-    
-    match /fleet/{docId} {
+    // --- 🏛️ FLEET GLOBAL OVERLAY (MCC) ---
+
+    match /fleet/{document=**} {
       allow read, write: if isFleetAdmin();
     }
 

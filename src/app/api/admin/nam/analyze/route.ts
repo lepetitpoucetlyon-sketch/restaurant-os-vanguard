@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { GatewayErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 const TicketSchema_v1 = z.object({
   id: z.string().uuid(),
@@ -33,16 +34,17 @@ export type StandardResponse<T> = {
 
 export async function POST(request: Request) {
   try {
-    // 🛡️ HIDDEN DOOR PATTERN: Security Lockdown
-    const tenantId = request.headers.get('x-nexus-tenant-id');
-    if (!tenantId) {
+    // Auth : JWT vérifié — le tenant vient du token.
+    const caller = await requireTenantAdmin(request);
+    if (isDenied(caller)) {
       const errorResponse: StandardResponse<never> = {
         success: false,
         error: GatewayErrorCode.ACCESS_DENIED,
         metadata: { version: 'v1', timestamp: new Date().toISOString() }
       };
-      return NextResponse.json(errorResponse, { status: 401 });
+      return NextResponse.json(errorResponse, { status: 404 });
     }
+    const tenantId = caller.tenantId;
 
     const url = new URL(request.url);
     const version = url.searchParams.get('v') === 'v2' ? 'v2' : 'v1';

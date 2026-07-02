@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**
  * 🛰️ Vision API Proxy - Grade X Sovereign Gateway
  * Proxies Gemini Vision requests from the client to the Google Cloud.
  * This ensures API keys NEVER leak to the browser.
+ * Auth : JWT vérifié — le tenant facturé vient du token, pas du payload.
  */
 export async function POST(req: NextRequest) {
   try {
+    const caller = await requireTenantAdmin(req);
+    if (isDenied(caller)) return caller;
+
     const body = await req.json();
     const { action, payload } = body;
 
@@ -21,18 +26,18 @@ export async function POST(req: NextRequest) {
     // Proxy the request based on action
     if (action === 'ANALYZE_INVOICE') {
        const { InvoiceExtractionService } = await import('@/domain/services/InvoiceExtractionService');
-       const result = await InvoiceExtractionService.extractFromImage(payload.base64Image, { 
+       const result = await InvoiceExtractionService.extractFromImage(payload.base64Image, {
          apiKey,
-         tenantId: payload.tenantId || 'system'
+         tenantId: caller.tenantId
        });
        return NextResponse.json(result);
     }
 
     if (action === 'COMPLIANCE_SCAN') {
        const { IdentityGuardService } = await import('@/domain/services/IdentityGuardService');
-       const result = await IdentityGuardService.scanDocument(payload.base64Image, { 
-         tenantId: payload.tenantId,
-         trustedContext: payload.trustedContext 
+       const result = await IdentityGuardService.scanDocument(payload.base64Image, {
+         tenantId: caller.tenantId,
+         trustedContext: payload.trustedContext
        });
        // Inject the key since we are on server
        // Note: In IdentityGuardService, we should modify it to accept apiKey as param
