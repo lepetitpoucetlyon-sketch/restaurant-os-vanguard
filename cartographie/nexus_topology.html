@@ -165,10 +165,10 @@
                     // --- PHYSICAL CONNECTION AUDIT ---
                     const statusRegistry = {
                         "INTELLIGENCE_0": { connected: true, active: true },
-                        "INTELLIGENCE_1": { connected: true, active: false },
-                        "INTELLIGENCE_2": { connected: true, active: false },
-                        "INTELLIGENCE_3": { connected: true, active: false },
-                        "INTELLIGENCE_4": { connected: true, active: false },
+                        "INTELLIGENCE_1": { connected: true, active: true },
+                        "INTELLIGENCE_2": { connected: true, active: true },
+                        "INTELLIGENCE_3": { connected: true, active: true },
+                        "INTELLIGENCE_4": { connected: true, active: true },
                         "COMMERCE_0": { connected: true, active: true },
                         "COMMERCE_1": { connected: true, active: true },
                         "COMMERCE_2": { connected: true, active: true },
@@ -186,18 +186,18 @@
                         "LOGISTICS_0": { connected: true, active: true },
                         "LOGISTICS_1": { connected: true, active: true },
                         "LOGISTICS_2": { connected: true, active: true },
-                        "HR_0": { connected: true, active: false },
-                        "HR_1": { connected: true, active: false },
-                        "HR_2": { connected: true, active: false },
-                        "HR_3": { connected: true, active: false },
-                        "HR_4": { connected: true, active: false },
+                        "HR_0": { connected: true, active: true },
+                        "HR_1": { connected: true, active: true },
+                        "HR_2": { connected: true, active: true },
+                        "HR_3": { connected: true, active: true },
+                        "HR_4": { connected: true, active: true },
                         "FINANCE_0": { connected: false, active: false },
                         "FINANCE_1": { connected: true, active: true },
                         "FINANCE_2": { connected: true, active: true },
                         "INFRA_0": { connected: true, active: true },
                         "INFRA_1": { connected: false, active: false },
                         "INFRA_2": { connected: false, active: false },
-                        "INFRA_3": { connected: true, active: true }
+                        "INFRA_3": { connected: false, active: false }
                     };
                     const mStatus = statusRegistry[mId] || { connected: false, active: false };
                     const isDisconnected = !mStatus.connected;

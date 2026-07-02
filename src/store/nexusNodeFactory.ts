@@ -11,6 +11,10 @@ export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
  */
 import { NexusNode } from './base';
 export type { NexusNode };
+// updateNexusNode vit dans ./base (module neutre) : ré-export pour préserver la
+// surface, et GlobalRegistryService l'importe directement depuis base (cassage
+// du cycle nexusNodeFactory <-> GlobalRegistryService).
+export { updateNexusNode } from './base';
 
 /**
  * createNexusNode
@@ -33,21 +37,6 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
 
     GlobalRegistryService.register(id, nodeAtom);
     return nodeAtom;
-}
-
-/**
- * updateNexusNode
- * Helper utilitaire pour mettre à jour l'état d'un node sans boilerplate.
- */
-export function updateNexusNode<T>(
-    prev: NexusNode<T>, 
-    updates: Partial<Omit<NexusNode<T>, 'lastUpdated'>>
-): NexusNode<T> {
-    return {
-        ...prev,
-        ...updates,
-        lastUpdated: Date.now()
-    };
 }
 
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';

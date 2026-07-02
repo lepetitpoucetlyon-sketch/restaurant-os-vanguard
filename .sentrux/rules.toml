@@ -1,0 +1,147 @@
+# ============================================================================
+# sentrux — règles architecturales RESTAURANT-OS-CORE
+# ============================================================================
+# Traduit les conventions du CLAUDE.md en garde-fous vérifiables.
+# Vérifie : sentrux check .
+#
+# ATTENTION (honnêteté) : ce fichier n'utilise QUE les champs documentés dans
+# le README de sentrux ([constraints], [[layers]], [[boundaries]]). D'autres
+# clés peuvent exister ou avoir une sémantique différente selon la version.
+# À valider avec `sentrux check .` (v0.5.x) et la doc officielle avant de t'y fier.
+# La sémantique supposée d'un [[boundaries]] est : "from NE DOIT PAS dépendre de to".
+# ============================================================================
+
+[constraints]
+# Aucun cycle de dépendances toléré — cœur de la lutte anti-spaghetti.
+max_cycles = 0
+# Couplage max (échelle suspectée A=meilleur). À ajuster après 1er scan.
+max_coupling = "B"
+# Complexité cyclomatique max par unité.
+max_cc = 25
+# Interdit les "god files" (fichiers fourre-tout) — fréquents avec un agent IA.
+no_god_files = true
+
+# ----------------------------------------------------------------------------
+# COUCHES (layers) — du plus bas niveau (order 0) au plus haut.
+# Principe : une couche ne dépend que de couches d'order <= au sien.
+# ----------------------------------------------------------------------------
+
+# NOTE sémantique (déduite du 1er scan, à confirmer) : sentrux semble exiger que
+# les dépendances pointent vers les order PLUS ÉLEVÉS. Donc le SOCLE porte
+# l'order le plus haut, et la couche présentation l'order le plus bas.
+# (Numérotation inversée par rapport à l'intuition « 0 = base ».)
+
+# Couche présentation / routes Next.js App Router (la plus en surface).
+[[layers]]
+name = "app"
+paths = ["src/app/*"]
+order = 0
+
+# Piliers métier (Core, Ops, Finance, Human, Commerce, Logistics, Compliance...).
+[[layers]]
+name = "pillars"
+paths = ["src/modules/*", "src/engines/*"]
+order = 1
+
+# Infrastructure : adapters concrets (bridge POS→NF525, FiscalAdapter...).
+[[layers]]
+name = "infrastructure"
+paths = ["src/infrastructure/*"]
+order = 2
+
+# Couche Nexus runtime + barrières (SovereignGuard...).
+# Sous-dossiers énumérés explicitement : le glob large "src/shared/nexus/*"
+# happait le fichier voisin "src/shared/nexus-contract.ts" (primitives racine).
+[[layers]]
+name = "nexus-core"
+paths = [
+  "src/lib/nexus/*",
+  "src/shared/nexus/guards/*",
+  "src/shared/nexus/state/*",
+  "src/shared/nexus/engines/*",
+  "src/shared/nexus/components/*",
+  "src/shared/nexus/telemetry/*",
+  "src/shared/nexus/tokens/*",
+]
+order = 3
+
+# État global (atomes Jotai par pilier). Même order que nexus-core : les deux
+# sont des infrastructures runtime mutuellement couplées (nexus lit l'état des
+# piliers et inversement) — ce sont des pairs, pas un empilement.
+[[layers]]
+name = "state"
+paths = ["src/store/pillars/*"]
+order = 3
+
+# Contrats d'accès données (interfaces runtime Nexus).
+[[layers]]
+name = "nexus-contracts"
+paths = ["src/shared/nexus/contracts/*"]
+order = 4
+
+# Socle : types/schémas Zod + primitives (microunits, types branded) + contrat
+# souverain de base (SovereignNode, TenantConfig...) — le plus profond.
+# nexus-contract.ts et genome.types.ts sont des primitives racine : chemin exact
+# pour qu'ils gagnent sur le glob "src/shared/nexus/*" (préfixe le plus spécifique).
+[[layers]]
+name = "domain"
+paths = ["src/domain/*", "src/shared/nexus-contract.ts", "src/shared/genome.types.ts"]
+order = 5
+
+# ----------------------------------------------------------------------------
+# FRONTIÈRES (boundaries) — dépendances INTERDITES (from -> to).
+# ----------------------------------------------------------------------------
+
+# --- SovereignGuard : barrière cross-tenant, ne jamais contourner ---
+[[boundaries]]
+from = "src/modules/*"
+to = "src/infrastructure/adapters/FirestoreAdapter*"
+reason = "Les piliers ne touchent pas Firestore en direct — passer par Nexus/SovereignGuard"
+
+[[boundaries]]
+from = "src/app/*"
+to = "src/infrastructure/adapters/*"
+reason = "Les routes ne dépendent pas des adapters concrets — passer par Nexus"
+
+# --- Étanchéité des piliers : pas d'import direct entre piliers ---
+# (le couplage légitime POS->Finance passe par FinancialNexusBridge en infrastructure)
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/finance/*"
+reason = "Ops ne dépend pas de Finance en direct — passer par le bridge NF525"
+
+[[boundaries]]
+from = "src/modules/finance/*"
+to = "src/modules/ops/*"
+reason = "Finance ne dépend pas d'Ops"
+
+[[boundaries]]
+from = "src/modules/commerce/*"
+to = "src/modules/finance/*"
+reason = "Commerce ne dépend pas de Finance en direct"
+
+[[boundaries]]
+from = "src/modules/compliance/*"
+to = "src/modules/ops/*"
+reason = "Compliance ne dépend pas d'Ops en direct"
+
+[[boundaries]]
+from = "src/modules/logistics/*"
+to = "src/modules/finance/*"
+reason = "Logistics ne dépend pas de Finance en direct"
+
+[[boundaries]]
+from = "src/modules/human/*"
+to = "src/modules/ops/*"
+reason = "Human ne dépend pas d'Ops en direct"
+
+# --- Le domaine reste pur : aucun import vers le haut ---
+[[boundaries]]
+from = "src/domain/*"
+to = "src/infrastructure/*"
+reason = "Les schémas Zod ne doivent dépendre d'aucune infrastructure"
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/modules/*"
+reason = "Le domaine ne dépend pas des piliers"

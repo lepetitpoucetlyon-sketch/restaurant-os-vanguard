@@ -3,7 +3,7 @@ import '@/tests/vanguard/mocks';
 import { db } from '@/lib/offline/offline-store';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 import { getDefaultStore } from 'jotai';
-import { tenantIdAtom } from '@/store/operationalAtoms';
+import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';
 
 /**
  * 🛰️ Tenant Isolation & Performance Test

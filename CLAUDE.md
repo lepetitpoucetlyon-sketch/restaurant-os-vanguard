@@ -1,12 +1,18 @@
 # RESTAURANT-OS-CORE — Conventions Claude Code
 
+> 📐 Pour une analyse complète (flux NF525, RAG, modèle de données, audit de dette), voir **`ARCHITECTURE.md`**.
+
 ## Architecture
 
 Système multi-tenant en **piliers** (Core, Ops, Finance, Human, Commerce, Logistics, Compliance, Sovereign).
 Chaque pilier a : `modules/`, `engines/`, `store/pillars/`, `domain/schemas/`.
+Piliers réels dans `src/modules/` : `ops, commerce, compliance, finance, human, logistics, intelligence, kds`.
 
 **Nexus** = couche d'accès données (adapters : Firestore / Simulacra / Mock).
+Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiquement** tout adapter avec `NexusInterceptor` + `SovereignGuard`.
 **SovereignGuard** = barrière cross-tenant — ne jamais contourner.
+
+**Anti-cycles** : `src/store/base.ts` est le module neutre (`NexusNode`, `updateNexusNode`) ; les types/helpers partagés y vont pour éviter les dépendances circulaires Registry ↔ Atomes.
 
 ## Conventions critiques
 
@@ -66,7 +72,8 @@ Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.t
 ```bash
 npx tsc --noEmit          # Vérification types
 npx vitest run             # Tests
-./scripts/preflight.sh     # Vérification complète avant PR
+sentrux check .            # Gate architectural (cycles, god files, couches) — voir .sentrux/
+./scripts/preflight.sh     # Vérification complète avant PR (inclut sentrux)
 docker-compose up          # App + LightRAG sidecar
 ```
 
