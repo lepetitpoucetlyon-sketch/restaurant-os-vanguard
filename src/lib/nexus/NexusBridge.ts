@@ -9,6 +9,7 @@ import { db } from '@/lib/offline/offline-store';
 import { FiscalKeyService } from '@/domain/services/FiscalKeyService';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
+import { logger } from '@/lib/logger';
 
 interface LegacyTenantConfig {
   features?: Record<string, boolean>;
@@ -27,7 +28,11 @@ import { firestore } from '@/lib/firebase';
  */
 export class NexusBridge {
   private static unsubscribe: Unsubscribe | null = null;
+  private static pulseInterval: ReturnType<typeof setInterval> | null = null;
   private static store = getDefaultStore();
+
+  /** Cadence du pulse montant vers le MCC (le stream bufferise, flush ≤ 5 min). */
+  private static readonly PULSE_INTERVAL_MS = 120_000;
 
   /**
    * Initialise le pont en chargeant la config locale (Dexie) 
@@ -58,8 +63,58 @@ export class NexusBridge {
       this.store.set(tenantConfigAtom, { ...RESTAURANT_FULL_DNA, id: tenantId });
     }
 
-    // 2. Establish Real-time Connection
+    // 2. Establish Real-time Connection — les DEUX sens du lien MCC ↔ instance :
+    //    DOWN : décrets impériaux (tenants/{t}/config/master → onSnapshot)
+    //    UP   : télémétrie de santé (fleet-telemetry/{t} ← pulse périodique)
     this.listen(tenantId);
+    this.startPulse(tenantId);
+  }
+
+  /**
+   * 🛰️ Flux MONTANT du Nexus Bridge : heartbeat instance → MCC.
+   * Enregistre le nœud puis pousse santé/commandes/version toutes les 2 min.
+   */
+  static startPulse(tenantId: string) {
+    this.stopPulse();
+    if (typeof window === 'undefined') return; // pulse côté instance uniquement
+
+    import('@domain/services/FleetTelemetryService')
+      .then(({ fleetTelemetry }) => {
+        fleetTelemetry.registerNode(tenantId as import('@domain/types/brands').TenantID);
+      })
+      .catch((err) => logger.warn('[NexusBridge] registerNode failed', { error: String(err) }));
+
+    const push = () => this.pushPulse(tenantId);
+    push();
+    this.pulseInterval = setInterval(push, this.PULSE_INTERVAL_MS);
+  }
+
+  private static async pushPulse(tenantId: string): Promise<void> {
+    try {
+      const { fleetTelemetry } = await import('@domain/services/FleetTelemetryService');
+      const { pendingOrdersAtom } = await import('@/store/pillars/ops');
+      let activeOrders = 0;
+      try {
+        activeOrders = (this.store.get(pendingOrdersAtom) as unknown[])?.length ?? 0;
+      } catch { /* atomes ops non chargés sur cette route (ICM) — pulse minimal */ }
+
+      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@domain/types/brands').TenantID, {
+        status: 'ONLINE',
+        lastHeartbeat: new Date().toISOString(),
+        healthScore: 100,
+        activeOrders,
+        version: process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0',
+      });
+    } catch (err) {
+      logger.warn('[NexusBridge] Instance pulse failed', { error: String(err) });
+    }
+  }
+
+  static stopPulse() {
+    if (this.pulseInterval) {
+      clearInterval(this.pulseInterval);
+      this.pulseInterval = null;
+    }
   }
 
   private static mapTheme(remoteData: RemoteConfigData): TenantConfig['theme'] {
@@ -145,5 +200,6 @@ export class NexusBridge {
       this.unsubscribe();
       this.unsubscribe = null;
     }
+    this.stopPulse();
   }
 }
