@@ -1,9 +1,5 @@
-import { 
-  doc, 
-  onSnapshot, 
-  Unsubscribe
-} from 'firebase/firestore';
 import { getDefaultStore } from 'jotai';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
 import { FiscalKeyService } from '@/domain/services/FiscalKeyService';
@@ -20,14 +16,16 @@ interface LegacyTenantConfig {
 /** Donnée distante pouvant contenir des champs legacy pré-Grade-VIII. */
 type RemoteConfigData = Partial<TenantConfig> & LegacyTenantConfig;
 
-import { firestore } from '@/lib/firebase';
-
 /**
  * 🛰️ NexusBridge - The Command Omphalos
  * Establishes a real-time, resilient link between the MCC and the OS.
+ *
+ * ⚠️ Cloud-agnostique : AUCUN import firebase/* ici. Toute I/O passe par
+ * Nexus.adapter (Firestore / SQL / Mock interchangeables), donc par le
+ * NexusInterceptor + SovereignGuard.
  */
 export class NexusBridge {
-  private static unsubscribe: Unsubscribe | null = null;
+  private static unsubscribe: (() => void) | null = null;
   private static pulseInterval: ReturnType<typeof setInterval> | null = null;
   private static store = getDefaultStore();
 
@@ -167,11 +165,11 @@ export class NexusBridge {
   static listen(tenantId: string) {
     this.stop();
 
-    const configDocRef = doc(firestore, 'tenants', tenantId, 'config', 'master');
-
-    this.unsubscribe = onSnapshot(configDocRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const remoteData = snapshot.data() as Partial<TenantConfig> & LegacyTenantConfig & { fiscalSigningKey?: string };
+    // Abonnement via l'abstraction Nexus (cloud-agnostique, intercepté).
+    this.unsubscribe = Nexus.adapter.onSnapshot<RemoteConfigData & { fiscalSigningKey?: string } | null>(
+      `tenants/${tenantId}/config/master`,
+      (remoteData) => {
+        if (!remoteData) return;
 
         if (remoteData.fiscalSigningKey) {
           FiscalKeyService.provision(tenantId, remoteData.fiscalSigningKey);
@@ -181,8 +179,9 @@ export class NexusBridge {
 
         this.store.set(tenantConfigAtom, nextConfig);
         db.config.put(nextConfig);
-      }
-    });
+      },
+      { onError: (error) => logger.warn('[NexusBridge] Decree listener error', { error: String(error) }) }
+    );
   }
 
   
