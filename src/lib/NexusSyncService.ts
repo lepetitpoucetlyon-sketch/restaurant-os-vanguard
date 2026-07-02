@@ -3,34 +3,21 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { db } from './offline/offline-store';
 import { ordersNodeAtom } from '@/store/pillars/ops';
-import { stockItemsNodeAtom } from '@/store/pillars/logistics';
-import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
-import { updateNexusNode } from '@/store/pillars/core';
-
-
-// Import Sovereign Modular sub-services
-import { OpsSyncService as SyncOrders } from '@/modules/ops/engine/ops.sync';
-import { InventorySyncService as SyncStocks } from '@/modules/logistics/inventory/inventory.sync';
-import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
-import { HACCPSyncService as SyncHACCP } from '@/modules/compliance/haccp/haccp.sync';
-import { MarketingSyncService as SyncMarketing } from '@/modules/commerce/marketing/marketing.sync';
-import { HRSyncService as SyncStaff } from '@/modules/human/hr/hr.sync';
 
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';
-import { TimeSync } from './TimeSync';
 import { MasterBridge } from './MasterBridge';
 
 import { Mutex } from './utils/Mutex';
-import { TaskContext, TASK_MAPS, shouldEagerLoad } from './icm/TaskContext';
+import { TaskContext, TASK_MAPS } from './icm/TaskContext';
 import { registerNexusHandlers, unregisterNexusHandlers } from './events/registerHandlers';
 import { readZcpoState, degradeImportanceMap } from './icm/zcpoBridge';
 
-// Grade IX: Genome Immunity
-import { genomeValidator } from '@domain/services/GenomeValidator';
-import { ImmunityAuditLogger } from './services/ImmunityAuditLogger';
-
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
+
+// Sous-modules extraits (réduction du fan-out — voir ARCHITECTURE.md §9 P2)
+import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
+import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
 
 const syncMutex = new Mutex();
 
@@ -38,6 +25,10 @@ const syncMutex = new Mutex();
  * 🛰️ NexusSyncService - Restaurant OS (Orchestrator)
  * High-performance orchestrator for specialized real-time synchronization.
  * Grade IX: Protected by GenomeValidator — no sync without valid DNA.
+ *
+ * Découpé (god file) : les sous-services de pilier vivent dans `sync/pillarSyncRegistry`,
+ * les gates de sécurité dans `sync/syncGates`. Cet orchestrateur ne fait plus que
+ * séquencer : cleanup → suture infra → gates → sync sélective.
  */
 export const NexusSyncService = {
   healing_interval: null as NodeJS.Timeout | null,
@@ -52,13 +43,13 @@ export const NexusSyncService = {
     const icm = task ?? TASK_MAPS.default;
     const result = await syncMutex.run(async () => {
         const store = getDefaultStore();
-        
+
         // 1. CLEANUP CACHE & LISTENERS (Zero Leak Policy)
         await this._stopAllInternal();
 
         // 0. ANCHOR CONTEXT (Security Barrier)
         Nexus.tenantOverride = tenantId;
-        
+
         logger.info(`[NexusSyncService] Initializing Atomic Discovery for Tenant: ${tenantId}...`);
 
         // --- OMPHALOS SUTURE (Mission 1 & 3) ---
@@ -86,40 +77,13 @@ export const NexusSyncService = {
           SelfHealingEngine.auditAndHeal(ordersNodeAtom, 'legacy_audit', `tenants/${tenantId}/orders`).catch(() => {});
         }, 60000);
 
-        // --- PRIVACY SHIELD GATE ---
-        const { fleetSnapshotAtom } = await import('@/store/pillars/sovereign');
-        const instances = (store.get(fleetSnapshotAtom) || []) as import('@/domain/types/empire').EmpireInstance[];
-        const instance = instances.find(i => i.key === tenantId);
-
-        // Grade X: Allow access if it's the master tenant OR if specifically granted
-        const isRestricted = tenantId !== 'restaurant-os' && 
-                           tenantId !== 'lepetitpoucet' && 
-                           tenantId !== 'vanguard' &&
-                           instance && 
-                           !instance.security?.supportAccessGranted;
-        
-        if (isRestricted) {
-            logger.warn(`[NexusSyncService] ACCESS RESTRICTED for tenant ${tenantId}.`);
-            store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false }));
-            store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false }));
-            store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false }));
+        // --- PRIVACY SHIELD GATE (Grade X) ---
+        if (!(await evaluatePrivacyGate(tenantId, store))) {
             return;
         }
 
         // --- GENOME HEALTH GATE (Grade IX) ---
-        const genomeCheck = genomeValidator.validatePower('DASHBOARD', 'SYNC_STATE');
-        if (!genomeCheck.allowed) {
-            logger.error(`[NexusSyncService] GENOME HEALTH GATE FAILED: ${genomeCheck.reason}`);
-            await ImmunityAuditLogger.log({
-                moduleId: genomeCheck.moduleId,
-                attemptedPower: genomeCheck.action,
-                reason: genomeCheck.reason === 'AUTHORIZED' ? 'UNKNOWN' : genomeCheck.reason,
-                blockedDependency: genomeCheck.blockedDependency,
-                tenantId
-            });
-            store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
-            store.set(stockItemsNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
-            store.set(fiscalLedgerNodeAtom, (prev) => updateNexusNode(prev, { data: [], loading: false, error: 'GENOME_INTEGRITY_FAILURE' }));
+        if (!(await evaluateGenomeGate(tenantId, store))) {
             return;
         }
 
@@ -128,16 +92,8 @@ export const NexusSyncService = {
         logger.info(`[NexusSyncService][ICM] Task="${icm.taskId}" — chargement sélectif activé.`);
         const initStart = performance.now();
         try {
-            await Promise.all([
-                TimeSync.init(),
-                shouldEagerLoad(imp.orders)     ? SyncOrders.init(tenantId, store)   : Promise.resolve(),
-                shouldEagerLoad(imp.stocks)     ? SyncStocks.init(tenantId, store)   : Promise.resolve(),
-                shouldEagerLoad(imp.finance)    ? SyncFinance.init(tenantId, store)  : Promise.resolve(),
-                shouldEagerLoad(imp.compliance) ? SyncHACCP.init(tenantId, store)    : Promise.resolve(),
-                shouldEagerLoad(imp.marketing)  ? SyncMarketing.init(tenantId, store): Promise.resolve(),
-                shouldEagerLoad(imp.staff)      ? SyncStaff.init(tenantId, store)    : Promise.resolve(),
-            ]);
-            
+            await initPillarSyncs(imp, tenantId, store);
+
             const duration = performance.now() - initStart;
             logger.info(`[NexusSyncService] Atomic Parallel Sync established for ${tenantId} in ${duration.toFixed(2)}ms.`);
             if (duration > 180) {
@@ -171,14 +127,9 @@ export const NexusSyncService = {
         clearInterval(this.healing_interval);
         this.healing_interval = null;
     }
-    TimeSync.stop();
-    SyncOrders.stop();
-    SyncStocks.stop();
-    SyncFinance.stop();
-    SyncHACCP.stop();
-    SyncMarketing.stop();
-    SyncStaff.stop();
-    
+
+    stopPillarSyncs();
+
     if (this.master_unsub) {
         this.master_unsub();
         this.master_unsub = null;

@@ -3,6 +3,7 @@ import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { FECMapper } from './FECMapper';
 import { FECExportResult, FECLine } from './types';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
+import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**
  * 🏛️ FECGenerator - Grade X+++
@@ -59,11 +60,13 @@ export class FECGenerator {
 
         const filename = `FEC_${siren}_${yearMonth}.txt`;
 
-        return {
+        const result = {
             content,
             filename,
             lineCount: fecLines.length,
             finalHash: previousHash
         };
+        NexusTelemetryService.emitAuditPulse('FINANCE', 'FEC_GENERATION_SUCCESS', { siren, yearMonth, lineCount: fecLines.length });
+        return result;
     }
 }

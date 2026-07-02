@@ -1,7 +1,7 @@
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
-import { MasterBridge } from '@/lib/MasterBridge';
+import { NexusEventBus } from '@/lib/events/NexusEventBus';
 import { CryptoService } from '@domain/services/CryptoService';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import type { SignedSovereignData, SovereignData, SovereignWriteSignature } from '@/shared/nexus-contract';
@@ -211,10 +211,9 @@ export const SovereignGuard = {
     }
 
     // 🔬 SHADOW CONTEXT PROTECTION
-    // If we are in Master Mode, we only allow access via the Shadow Port
-    if (MasterBridge.isMasterMode() && !path.startsWith('tenants/')) {
-        // Suzerain is allowed to see the Root, but Vassals are blocked from it.
-    }
+    // L'accès Suzerain à la racine (hors `tenants/`) est déjà arbitré par le contrôle
+    // de tenant ci-dessus (exception `restaurant-os` + WHITELIST). Aucun appel direct
+    // à MasterBridge ici : cela recréerait le cycle de la barrière fiscale.
   },
 
   /**
@@ -239,14 +238,14 @@ export const SovereignGuard = {
     const errorMsg = `[CRITICAL_SECURITY_BREACH] Shadow Context Violation: Drift from ${anchoredId} to ${targetId}${fullPath ? ` at [${fullPath}]` : ''}.`;
     logger.error(errorMsg);
 
+    // Découplage du cycle : le push du kill-switch global passe par le bus.
+    // SovereignBreachHandler (CRITICAL) consomme l'événement et appelle MasterBridge.
     try {
-      await MasterBridge.pushGlobalConfig({
-        maintenanceMode: true,
-        killSwitch: true,
-        forceLogout: true,
-        securityLevel: 'critical',
-        globalMessage: errorMsg,
-        allowedFeatures: []
+      await NexusEventBus.emit('sovereign.breach', {
+        targetTenantId: targetId,
+        anchoredTenantId: anchoredId,
+        path: fullPath,
+        message: errorMsg
       });
     } catch (_e) {}
 

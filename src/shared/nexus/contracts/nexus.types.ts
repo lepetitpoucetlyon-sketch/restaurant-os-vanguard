@@ -81,17 +81,17 @@ export interface NexusSettingsState {
     isLoading: boolean;
     isSaving: boolean;
     lastSaved: Date | null;
-    updateSettings: (data: import('@nexus/contracts').GlobalSettings) => Promise<void>;
-    updateSchedule: (data: import('@nexus/contracts').DaySchedule[]) => Promise<void>;
-    updateService: (data: import('@nexus/contracts').ServiceSettings) => Promise<void>;
-    addClosedPeriod: (period: import('@nexus/contracts').ClosedPeriod) => Promise<void>;
+    updateSettings: (data: GlobalSettings) => Promise<void>;
+    updateSchedule: (data: import('./settings').DaySchedule[]) => Promise<void>;
+    updateService: (data: import('./settings').ServiceSettings) => Promise<void>;
+    addClosedPeriod: (period: import('./settings').ClosedPeriod) => Promise<void>;
     deleteClosedPeriod: (id: string) => Promise<void>;
-    updateIdentity: (data: import('@nexus/contracts/settings/identity').RestaurantIdentity) => Promise<void>;
+    updateIdentity: (data: import('./settings/identity').RestaurantIdentity) => Promise<void>;
     updateReservationConfig?: (data: SovereignData) => Promise<void>;
     updateReservationSlots?: (data: SovereignData) => Promise<void>;
     updateSLM?: (data: SovereignData) => Promise<void>;
-    updateConfig: <K extends keyof import('@nexus/contracts').GlobalSettings>(key: K, data: import('@nexus/contracts').GlobalSettings[K]) => Promise<void>;
-    updateList: <K extends keyof import('@nexus/contracts').GlobalSettings>(key: K, data: import('@nexus/contracts').GlobalSettings[K]) => Promise<void>;
+    updateConfig: <K extends keyof GlobalSettings>(key: K, data: GlobalSettings[K]) => Promise<void>;
+    updateList: <K extends keyof GlobalSettings>(key: K, data: GlobalSettings[K]) => Promise<void>;
     updateGoals: (data: PerformanceGoals) => Promise<void>;
 }
 

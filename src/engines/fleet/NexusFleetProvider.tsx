@@ -8,11 +8,11 @@ import { HACCPTelemetryBridge } from '@domain/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
 import { TenantID } from '@domain/types/brands';
 import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
-import { SiteTelemetry, EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
+import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight } from '@domain/services/MacroBrain';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { whiteLabelInstanceConfig } from '@/config/instance';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { mapSiteTelemetryToInstance, buildGlobalMetrics, buildConfigPatch } from './fleetMappers';
 
 import { NexusFleetState } from '@nexus/contracts/nexus.types';
 
@@ -104,95 +104,20 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         if (!isBackground) setIsLoading(true);
         try {
             const fleetData = await fleetTelemetry.discoverRealFleet();
-            
+
             // Sync to Global Atom (Empire Snapshot)
-            const mappedInstances: EmpireInstance[] = (fleetData || []).map((f: SiteTelemetry): EmpireInstance => {
-                const branding = f.branding;
-                const security = f.security;
-                
-                const lastSeenDate = (() => {
-                    const ls = f.lastSeen;
-                    if (typeof ls === 'string') return ls;
-                    if (typeof ls === 'number') return new Date(ls).toISOString();
-                    const seconds = (ls as { seconds?: number })?.seconds;
-                    if (typeof seconds === 'number') return new Date(seconds * 1000).toISOString();
-                    return new Date().toISOString();
-                })();
-                
-                return {
-                    id: f.id || f.key || `node-${Math.random().toString(36).substring(7)}`,
-                    key: f.key || f.id || `key-${Math.random().toString(36).substring(7)}`,
-                    name: f.name || `Nexus Node ${(f.id || '').slice(0, 4) || '??'}`,
-                    status: f.status || 'ONLINE',
-                    tier: f.tier || 'STANDARD',
-                    version: f.engineVersion || '1.0.0',
-                    createdAt: f.createdAt || new Date().toISOString(),
-                    updatedAt: f.updatedAt || new Date().toISOString(),
-                    lastHeartbeat: lastSeenDate,
-                    metrics: {
-                        activeUsers: Number(f.activeUsers) || 0,
-                        dailyRevenue: Number(f.dailyRevenue) || 0,
-                        revenue24h: Number(f.dailyRevenue) || 0,
-                        aiUsageCost: 0,
-                        healthScore: (() => {
-                            if (!f.healthScore) {
-                                import('@/lib/nexus/TelemetryService').then(({ TelemetryService }) => 
-                                    TelemetryService.reportIssue('FALLBACK_VALUE', 'FleetEngine', { field: 'healthScore' })
-                                );
-                            }
-                            return Number(f.healthScore) || 100;
-                        })(),
-                        complianceScore: Number(f.complianceScore) || 100,
-                        lowStockAlerts: Number(f.lowStockAlerts) || 0,
-                        expiringItemsCount: 0,
-                        alerts: 0,
-                        errorRate: 0,
-                        uptime: 99.9
-                    },
-                    branding: {
-                        primaryColor: (branding?.primaryColor as string) || '#6366f1',
-                        secondaryColor: (branding?.secondaryColor as string) || '#a5b4fc',
-                        logoUrl: (branding?.logoUrl as string) || '',
-                        tagline: (branding?.tagline as string) || ''
-                    },
-                    featureFlags: Object.entries(f.featureFlags || {}).reduce((acc, [key, val]) => ({
-                        ...acc,
-                        [key]: Boolean(val)
-                    }), {} as Record<string, boolean>),
-                    security: {
-                        twoFactorEnabled: Boolean(security?.twoFactorEnabled) || true,
-                        nf525Certified: Boolean(security?.nf525Certified) || true,
-                        maintenanceAccessGranted: Boolean(security?.maintenanceAccessGranted) || false,
-                        supportAccessGranted: Boolean(security?.supportAccessGranted) || false
-                    }
-                };
-            });
-            
+            const mappedInstances: EmpireInstance[] = (fleetData || []).map(mapSiteTelemetryToInstance);
+
             setInstanceIds(mappedInstances); // Update global state
             setLiveFleet(mappedInstances);
 
             // Atomic upgrade to Grade X Intelligence
             const intelligence = await fleetEngine.updateFleetIntelligence(mappedInstances);
-            
+
             if (intelligence.metrics) {
-                const metrics: EmpireGlobalMetrics = {
-                    totalInstances: mappedInstances.length,
-                    activeFleetCount: mappedInstances.filter(m => m.status === 'ONLINE').length,
-                    fleetTotalRevenue: Number(intelligence.metrics.totalRevenue) || 0,
-                    totalActiveUsers: Number(intelligence.metrics.activeUsers) || 0,
-                    averageHealthScore: Number(intelligence.metrics.averageHealth) || 0,
-                    averageComplianceScore: 100,
-                    criticalAlerts: mappedInstances.filter(m => m.status === 'CRITICAL').length,
-                    totalRisks: 0,
-                    totalMRR: 0,
-                    averageDiscount: 0,
-                    lockedInstances: 0,
-                    totalLaborCost: Number(intelligence.metrics.totalLaborCost) || 0,
-                    averageFoodCost: Number(intelligence.metrics.averageFoodCost) || 0
-                };
-                setGlobalMetrics(metrics);
+                setGlobalMetrics(buildGlobalMetrics(mappedInstances, intelligence.metrics));
             }
-            
+
             if (intelligence.insights) {
                 setMacroInsights(intelligence.insights);
             }
@@ -228,13 +153,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         licenceStatus?: 'ACTIVE' | 'LOCKED';
     }) => {
         console.log('[Fleet] Broadcasting global configuration via stream:', config);
-        
-        const patch: Record<string, SovereignValue> = {};
-        if (config.priceMultiplier !== undefined) patch['status.priceMultiplier'] = config.priceMultiplier;
-        if (config.targetVersion !== undefined) patch['status.targetVersion'] = config.targetVersion;
-        if (config.maintenanceMode !== undefined) patch['status.maintenance'] = config.maintenanceMode;
-        if (config.licenceStatus !== undefined) patch['status.licenceStatus'] = config.licenceStatus;
 
+        const patch = buildConfigPatch(config);
         const targetIds = liveFleet.map(f => f.id);
         await fleetTelemetry.broadcastConfiguration(patch, targetIds);
         

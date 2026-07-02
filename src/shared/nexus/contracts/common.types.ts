@@ -7,7 +7,14 @@
 // ============================================
 
 import { SovereignNode, SovereignField, SovereignData } from '@/shared/nexus-contract';
-import { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone } from './nexus-internal-mapper';
+// Imports redirigés vers les sources canoniques pour casser le cycle
+// common.types <-> nexus-internal-mapper (détecté par sentrux). La surface
+// publique (re-export ci-dessous) reste identique.
+import type { Recipe, RecipeIngredient } from './logistics';
+import type { Customer } from './customer.types';
+import type { Product } from './commerce.types';
+import type { ModuleId } from '@/shared/genome.types';
+import type { Floor, Zone } from './ops.types';
 export type { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone };
 import { Ingredient } from './logistics';
 

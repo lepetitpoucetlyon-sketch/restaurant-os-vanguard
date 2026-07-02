@@ -2,6 +2,7 @@
 import { SovereignMath } from '@/shared/services/SovereignMath';
 import { JournalEntry, JournalLine } from '@/shared/nexus/contracts/finance.types';
 import { FECLine } from './types';
+import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**
  * 🏛️ FECMapper - Grade X+++
@@ -17,6 +18,7 @@ export class FECMapper {
 
         const debitStr = debitCents > 0 ? SovereignMath.fromMicrounits(SovereignMath.fromCents(debitCents)).toFixed(2) : '';
         const creditStr = creditCents > 0 ? SovereignMath.fromMicrounits(SovereignMath.fromCents(creditCents)).toFixed(2) : '';
+        NexusTelemetryService.emitAuditPulse('FINANCE', 'FEC_LINE_MAPPED', { pieceNumber: entry.pieceNumber });
 
         return {
             JournalCode: this.getJournalCode(entry.type || 'other'),

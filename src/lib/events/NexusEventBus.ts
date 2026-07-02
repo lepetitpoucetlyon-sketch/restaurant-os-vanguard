@@ -38,6 +38,18 @@ export interface NexusEvents {
     deliveryId: string;
     items: Array<{ itemId: string; quantity: number }>;
   };
+  /**
+   * 🛡️ Brèche d'isolation souveraine (cross-tenant drift) détectée par SovereignGuard.
+   * Émis par la barrière fiscale ; consommé par SovereignBreachHandler qui déclenche
+   * le kill-switch global via MasterBridge. Découple SovereignGuard de MasterBridge
+   * (cassure du cycle SovereignGuard → MasterBridge → TimeSync → NexusAdapter → SovereignGuard).
+   */
+  'sovereign.breach': {
+    targetTenantId: string;
+    anchoredTenantId: string;
+    path?: string;
+    message: string;
+  };
 }
 
 export type NexusEventName = keyof NexusEvents;

@@ -1,6 +1,7 @@
 
 import { CA3Declaration } from './types';
 import { SovereignMath } from '@/shared/services/SovereignMath';
+import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**
  * 🏛️ EDIMapper - Grade X+++
@@ -32,6 +33,7 @@ export class EDIMapper {
         xml += `    <NetTax>${toEuro(declaration.breakdown.netTaxToPayInCents)}</NetTax>\n`;
         xml += `  </CA3>\n`;
         xml += `</TDFC>`;
+        NexusTelemetryService.emitAuditPulse('FINANCE', 'EDI_TDFC_MAPPED', { siren: declaration.siren, period: declaration.period });
         
         return xml;
     }

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
+import { ErrorBoundary } from "@/components/system/ErrorBoundary";
+import { NexusProviderStack } from "@/components/layout/NexusProviderStack";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -27,32 +29,6 @@ export const viewport = {
   viewportFit: "cover",
 };
 
-// Providers Layers
-import { NexusCoreProvider } from "@/engines/core/NexusCoreProvider";
-import { NexusOpsProvider } from "@/engines/ops/NexusOpsProvider";
-import { NexusFiscalProvider } from "@/engines/fiscal/NexusFiscalProvider";
-import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
-import { NexusFleetProvider } from "@/engines/fleet/NexusFleetProvider";
-import { ToastProvider } from "@ui/Toast";
-import { ContextualSettingsProvider } from "@/components/settings/ContextualSettings";
-import { ErrorBoundary } from "@/components/system/ErrorBoundary";
-
-// Gates & Orchestrators
-import { 
-  InstanceGuardGate, 
-  AuthGate, 
-  SaaSBillingGate, 
-  ComplianceGate, 
-  RoleGate 
-} from "@nexus/guards";
-import { AlertSync } from "@/components/system/AlertSync";
-import { ClientComponents } from "@/components/layout/ClientComponents";
-import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
-import { SovereignLockout } from "@/components/layout/SovereignLockout";
-import { BrandingProvider } from "@/infrastructure/components/BrandingProvider";
-import { PerformanceEngine } from "@/theme/PerformanceEngine";
-import { NexusPulseOrchestrator } from "@/engines/NexusPulseOrchestrator";
-
 export default function RootLayout({
   children,
 }: {
@@ -63,39 +39,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
         <ErrorBoundary>
           <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
-            <NexusCoreProvider>
-              <InstanceGuardGate>
-                <ToastProvider>
-                  <BrandingProvider />
-                  <PerformanceEngine />
-                  <NexusPulseOrchestrator />
-                  <SovereignLockout />
-                  <ContextualSettingsProvider>
-                    <NexusOpsProvider>
-                      <NexusFiscalProvider>
-                        <NexusGuardProvider>
-                          <NexusFleetProvider>
-                            <AuthGate>
-                              <SaaSBillingGate>
-                                <ComplianceGate>
-                                  <AlertSync />
-                                  <TrainingOverlay />
-                                  <ClientComponents>
-                                    <RoleGate>
-                                      {children}
-                                    </RoleGate>
-                                  </ClientComponents>
-                                </ComplianceGate>
-                              </SaaSBillingGate>
-                            </AuthGate>
-                          </NexusFleetProvider>
-                        </NexusGuardProvider>
-                      </NexusFiscalProvider>
-                    </NexusOpsProvider>
-                  </ContextualSettingsProvider>
-                </ToastProvider>
-              </InstanceGuardGate>
-            </NexusCoreProvider>
+            <NexusProviderStack>
+                {children}
+            </NexusProviderStack>
           </Suspense>
         </ErrorBoundary>
       </body>

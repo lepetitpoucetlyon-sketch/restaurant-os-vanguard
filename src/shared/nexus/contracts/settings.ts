@@ -2,42 +2,28 @@
 // RESTAURANT OS - SETTINGS TYPES (CONSOLIDATED)
 // ===========================================
 
-import { RestaurantIdentity, RestaurantContact, SocialMedia } from './settings/identity';
-import { DaySchedule, ServiceSettings, ReservationSlotSettings, ClosedPeriod } from './settings/schedule';
-import { MenuCategory, ProductSettings, Supplement, MenuFormule } from './settings/catalog';
-import { RecipesConfig, RecipeSettings, RecipeStep, RecipeIngredient } from './settings/recipes';
-import { IngredientSettings, SupplierSettings, InventoryConfig } from './settings/inventory';
-import { EmployeeSettings, PositionSettings, StaffConfig, ShiftTemplate, AbsenceSettings, PlanningConfig } from './settings/hr';
-import { ReservationSettings } from './settings/reservations';
-import { ClientSettings, LoyaltyProgram } from './settings/customer';
-import { POSSettings, PaymentMethod, ReceiptTemplate } from './settings/pos';
-import { AccountingConfig } from './settings/accounting';
-import { HACCPConfig, ControlPoint, NonConformity } from './settings/haccp';
-import { DeliveryZone, ClickCollectSettings } from './settings/delivery';
-import { AlertRouting, NotificationsConfig, ReportSchedule } from './settings/notifications';
-import { RoleSettings, SessionSettings, SecurityConfig } from './settings/security';
-import { ThemeSettings } from './settings/theme';
-import { PerformanceGoals } from './settings/performance';
-import { IntegrationSettings, IntegrationsConfig } from './settings/integrations';
+import {
+    RestaurantIdentity, RestaurantContact, SocialMedia,
+    DaySchedule, ServiceSettings, ReservationSlotSettings, ClosedPeriod,
+    MenuCategory, ProductSettings, Supplement, MenuFormule,
+    RecipesConfig, RecipeSettings, RecipeStep, RecipeIngredient,
+    IngredientSettings, SupplierSettings, InventoryConfig,
+    EmployeeSettings, PositionSettings, StaffConfig, ShiftTemplate, AbsenceSettings, PlanningConfig,
+    ReservationSettings,
+    ClientSettings, LoyaltyProgram,
+    POSSettings, PaymentMethod, ReceiptTemplate,
+    AccountingConfig,
+    HACCPConfig, ControlPoint, NonConformity,
+    DeliveryZone, ClickCollectSettings,
+    AlertRouting, NotificationsConfig, ReportSchedule,
+    RoleSettings, SessionSettings, SecurityConfig,
+    ThemeSettings,
+    PerformanceGoals,
+    IntegrationSettings, IntegrationsConfig
+} from './settings/index';
 
 // Re-export all sub-modules
-export * from './settings/identity';
-export * from './settings/schedule';
-export * from './settings/catalog';
-export * from './settings/recipes';
-export * from './settings/inventory';
-export * from './settings/hr';
-export * from './settings/reservations';
-export * from './settings/customer';
-export * from './settings/pos';
-export * from './settings/accounting';
-export * from './settings/haccp';
-export * from './settings/delivery';
-export * from './settings/notifications';
-export * from './settings/security';
-export * from './settings/theme';
-export * from './settings/performance';
-export * from './settings/integrations';
+export * from './settings/index';
 
 export interface LegalConfig {
     legalEntityName?: string;

@@ -19,7 +19,7 @@ function scanDirectory(dir: string, fileList: string[] = []): string[] {
         const fullPath = path.join(dir, file);
         if (fs.statSync(fullPath).isDirectory()) {
             scanDirectory(fullPath, fileList);
-        } else if (fullPath.endsWith('.ts') && !fullPath.endsWith('types.ts')) {
+        } else if (fullPath.endsWith('.ts') && !fullPath.endsWith('types.ts') && !fullPath.endsWith('index.ts')) {
             fileList.push(fullPath);
         }
     }

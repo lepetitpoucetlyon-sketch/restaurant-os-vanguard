@@ -15,6 +15,9 @@ interface LegacyTenantConfig {
   laws?: Record<string, boolean>;
 }
 
+/** Donnée distante pouvant contenir des champs legacy pré-Grade-VIII. */
+type RemoteConfigData = Partial<TenantConfig> & LegacyTenantConfig;
+
 import { firestore } from '@/lib/firebase';
 
 /**
@@ -54,6 +57,49 @@ export class NexusBridge {
     this.listen(tenantId);
   }
 
+  private static mapTheme(remoteData: RemoteConfigData): TenantConfig['theme'] {
+      return { 
+        primaryColor: remoteData.theme?.primaryColor || RESTAURANT_FULL_DNA.theme?.primaryColor || DEFAULT_TENANT_CONFIG.theme.primaryColor,
+        secondaryColor: remoteData.theme?.secondaryColor || RESTAURANT_FULL_DNA.theme?.secondaryColor || DEFAULT_TENANT_CONFIG.theme.secondaryColor,
+        logoUrl: remoteData.theme?.logoUrl || RESTAURANT_FULL_DNA.theme?.logoUrl || DEFAULT_TENANT_CONFIG.theme.logoUrl,
+        borderRadius: remoteData.theme?.borderRadius || RESTAURANT_FULL_DNA.theme?.borderRadius || DEFAULT_TENANT_CONFIG.theme.borderRadius,
+        appearance: remoteData.theme?.appearance || RESTAURANT_FULL_DNA.theme?.appearance || DEFAULT_TENANT_CONFIG.theme.appearance
+      };
+  }
+
+  private static mapStatus(remoteData: RemoteConfigData): TenantConfig['status'] {
+      return { 
+        ...(RESTAURANT_FULL_DNA.status || DEFAULT_TENANT_CONFIG.status), 
+        ...(remoteData.status || {}),
+        layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as unknown as string,
+        businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as unknown as Record<string, unknown>
+      };
+  }
+
+  private static mapMetadata(remoteData: RemoteConfigData): TenantConfig['metadata'] {
+      return { 
+        name: remoteData.metadata?.name || RESTAURANT_FULL_DNA.metadata?.name || DEFAULT_TENANT_CONFIG.metadata.name,
+        version: remoteData.metadata?.version || RESTAURANT_FULL_DNA.metadata?.version || DEFAULT_TENANT_CONFIG.metadata.version,
+        description: remoteData.metadata?.description || RESTAURANT_FULL_DNA.metadata?.description || '',
+        ownerId: remoteData.metadata?.ownerId || RESTAURANT_FULL_DNA.metadata?.ownerId || '',
+        createdAt: remoteData.metadata?.createdAt || RESTAURANT_FULL_DNA.metadata?.createdAt || Date.now(),
+        subscriptionTier: (remoteData.metadata?.subscriptionTier || RESTAURANT_FULL_DNA.metadata?.subscriptionTier || 'FREE') as string
+      };
+  }
+
+  /**
+   * Grade VIII Mapping: Accept everything, map to core structure
+   */
+  static mapRemoteConfig(remoteData: Partial<TenantConfig> & LegacyTenantConfig, tenantId: string): TenantConfig {
+    return {
+      id: tenantId,
+      capabilities: remoteData.capabilities || remoteData.features || RESTAURANT_FULL_DNA.capabilities,
+      theme: this.mapTheme(remoteData),
+      status: this.mapStatus(remoteData),
+      metadata: this.mapMetadata(remoteData),
+    };
+  }
+
   /**
    * Écoute les changements sur le document de configuration du tenant.
    * Grade VIII : Injection agnostique.
@@ -67,32 +113,7 @@ export class NexusBridge {
       if (snapshot.exists()) {
         const remoteData = snapshot.data() as Partial<TenantConfig> & LegacyTenantConfig;
         
-        // Grade VIII Mapping: Accept everything, map to core structure
-        const nextConfig: TenantConfig = {
-          id: tenantId,
-          capabilities: remoteData.capabilities || remoteData.features || RESTAURANT_FULL_DNA.capabilities,
-          theme: { 
-            primaryColor: remoteData.theme?.primaryColor || RESTAURANT_FULL_DNA.theme?.primaryColor || DEFAULT_TENANT_CONFIG.theme.primaryColor,
-            secondaryColor: remoteData.theme?.secondaryColor || RESTAURANT_FULL_DNA.theme?.secondaryColor || DEFAULT_TENANT_CONFIG.theme.secondaryColor,
-            logoUrl: remoteData.theme?.logoUrl || RESTAURANT_FULL_DNA.theme?.logoUrl || DEFAULT_TENANT_CONFIG.theme.logoUrl,
-            borderRadius: remoteData.theme?.borderRadius || RESTAURANT_FULL_DNA.theme?.borderRadius || DEFAULT_TENANT_CONFIG.theme.borderRadius,
-            appearance: remoteData.theme?.appearance || RESTAURANT_FULL_DNA.theme?.appearance || DEFAULT_TENANT_CONFIG.theme.appearance
-          },
-          status: { 
-            ...(RESTAURANT_FULL_DNA.status || DEFAULT_TENANT_CONFIG.status), 
-            ...(remoteData.status || {}),
-            layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as unknown as string,
-            businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as unknown as Record<string, unknown>
-          },
-          metadata: { 
-            name: remoteData.metadata?.name || RESTAURANT_FULL_DNA.metadata?.name || DEFAULT_TENANT_CONFIG.metadata.name,
-            version: remoteData.metadata?.version || RESTAURANT_FULL_DNA.metadata?.version || DEFAULT_TENANT_CONFIG.metadata.version,
-            description: remoteData.metadata?.description || RESTAURANT_FULL_DNA.metadata?.description || '',
-            ownerId: remoteData.metadata?.ownerId || RESTAURANT_FULL_DNA.metadata?.ownerId || '',
-            createdAt: remoteData.metadata?.createdAt || RESTAURANT_FULL_DNA.metadata?.createdAt || Date.now(),
-            subscriptionTier: (remoteData.metadata?.subscriptionTier || RESTAURANT_FULL_DNA.metadata?.subscriptionTier || 'FREE') as string
-          },
-        };
+        const nextConfig = this.mapRemoteConfig(remoteData, tenantId);
 
         this.store.set(tenantConfigAtom, nextConfig);
         db.config.put(nextConfig);
@@ -103,40 +124,11 @@ export class NexusBridge {
   
   /**
    * 🖋️ Suture GRADE X+++: Emission CommunicationPulse (Email/SMS)
+   * @deprecated Use CommunicationService.sendCommunicationPulse directly
    */
   static async sendCommunicationPulse(pulse: import('@/domain/finance/collection/types').CommunicationPulse) {
-      const { sendEmail } = await import('@/lib/services/email-service');
-
-      // Handle EMAIL and MIXED types (SMS would need separate provider)
-      if (pulse.type === 'EMAIL' || pulse.type === 'MIXED') {
-          try {
-              const result = await sendEmail({
-                  to: pulse.recipient,
-                  subject: pulse.subject,
-                  html: pulse.content
-              });
-
-              if (result.success) {
-                  // Track successful send in local audit log
-                  await import('@/lib/logger').then(({ logger }) => {
-                      logger.info('[CommunicationPulse] Email sent', {
-                          recipient: pulse.recipient,
-                          type: pulse.type,
-                          messageId: result.messageId
-                      });
-                  });
-              } else {
-                  throw new Error(result.error || 'Email send failed');
-              }
-          } catch (error) {
-              const { logger } = await import('@/lib/logger');
-              logger.error('[CommunicationPulse] Failed to send email', {
-                  recipient: pulse.recipient,
-                  type: pulse.type,
-                  error: error instanceof Error ? error.message : String(error)
-              });
-          }
-      }
+      const { CommunicationService } = await import('@/lib/services/CommunicationService');
+      return CommunicationService.sendCommunicationPulse(pulse);
   }
 
   static stop() {
