@@ -1,5 +1,9 @@
 import { vi } from 'vitest';
 
+// 🔑 Clé de scellement NF525 pour les tests — reflète l'env serveur réel.
+// FiscalKeyService refuse de sceller sans clé (plus de repli 'default_instance').
+process.env.FISCAL_SIGNING_SECRET = 'test-fiscal-signing-secret';
+
 // 🏛️ RESTAURANT OS - MASTER TEST SHIELD
 // Protection globale contre les initialisations Firebase/Dexie/IDB
 import { Nexus } from '@/lib/nexus/NexusAdapter';

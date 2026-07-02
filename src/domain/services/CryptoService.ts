@@ -48,13 +48,24 @@ export class CryptoService {
 
     /**
      * Generates a Digital Signature for Fiscal Seals.
+     * HMAC-SHA256 : sans la clé, une signature valide est incalculable.
+     * (L'ancien schéma — SHA-256 du hash concaténé à un « secret » public,
+     * tronqué à 32 chars — était forgeable par construction.)
      */
     static async signFiscalData(hash: string, secret: string): Promise<string> {
-        const signatureBase = `EMP_NF525_${secret}:${hash}`;
+        if (!secret) {
+            throw new Error('FISCAL_SIGNATURE_SECRET_MISSING: refus de signer sans clé.');
+        }
         const encoder = new TextEncoder();
-        const dataUint8 = encoder.encode(signatureBase);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', dataUint8);
-        return this.toHexString(hashBuffer, true).substring(0, 32);
+        const key = await crypto.subtle.importKey(
+            'raw',
+            encoder.encode(secret),
+            { name: 'HMAC', hash: 'SHA-256' },
+            false,
+            ['sign']
+        );
+        const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(`EMP_NF525:${hash}`));
+        return this.toHexString(sigBuffer, true);
     }
 
     /**
