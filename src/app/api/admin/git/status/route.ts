@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 interface GitStatusResponse {
   success: boolean;
@@ -16,13 +17,11 @@ interface GitStatusResponse {
   error?: string;
 }
 
-export async function GET(_request: NextRequest): Promise<NextResponse<GitStatusResponse>> {
+export async function GET(request: NextRequest): Promise<NextResponse<GitStatusResponse>> {
   try {
-    // In production, verify admin access
-    // const session = await getServerSession(authOptions);
-    // if (!session?.user?.isAdmin) {
-    //   return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-    // }
+    // Outillage dev : fleet_admin uniquement (et bloqué en prod par le middleware).
+    const caller = await requireFleetAdmin(request);
+    if (isDenied(caller)) return caller as NextResponse<GitStatusResponse>;
 
     // Mock git status for now (in production, would call git commands via exec)
     const mockStatus: GitStatusResponse = {

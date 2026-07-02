@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { logger } from '@/lib/logger';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface GitStatus {
     branch: string;
@@ -21,7 +22,7 @@ export function DeploymentEngine() {
 
     const fetchStatus = async () => {
         try {
-            const res = await fetch('/api/admin/git/status');
+            const res = await authedFetch('/api/admin/git/status');
             const data = await res.json();
             if (data.success) {
                 setStatus(data);
@@ -45,7 +46,7 @@ export function DeploymentEngine() {
         setLastResult(null);
 
         try {
-            const res = await fetch('/api/admin/git/push', { method: 'POST' });
+            const res = await authedFetch('/api/admin/git/push', { method: 'POST' });
             const data = await res.json();
 
             setPushProgress(100);

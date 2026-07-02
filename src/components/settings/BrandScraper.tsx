@@ -5,17 +5,16 @@ import { Globe, Wand2, Loader2, CheckCircle2, AlertTriangle } from 'lucide-react
 import { Button } from '@ui/button';
 import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/hooks/useBrandEditor';
-import { useAtomValue } from 'jotai';
-import { tenantIdAtom } from '@/store/pillars/sovereign';
+import { authedFetch } from '@/lib/client/authedFetch';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 
 type ExtractedTokens = Partial<BrandConfig>
 
 /**
  * Saisir l'URL du restaurant → Gemini Vision analyse la charte → preview → appliquer.
+ * Le tenant est résolu côté serveur depuis le JWT (authedFetch).
  */
 export function BrandScraper() {
-  const tenantId = useAtomValue(tenantIdAtom) as string;
   const { saveTokens, isSaving } = useBrandEditor();
   const { showToast } = useToast();
 
@@ -31,10 +30,10 @@ export function BrandScraper() {
     setError(null);
 
     try {
-      const res = await fetch('/api/admin/brand/extract', {
+      const res = await authedFetch('/api/admin/brand/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, tenantId }),
+        body: JSON.stringify({ url }),
       });
 
       const data = await res.json();

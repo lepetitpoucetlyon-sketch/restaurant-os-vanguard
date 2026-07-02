@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 interface GitPushResponse {
   success: boolean;
@@ -14,13 +15,11 @@ interface GitPushResponse {
   error?: string;
 }
 
-export async function POST(_request: NextRequest): Promise<NextResponse<GitPushResponse>> {
+export async function POST(request: NextRequest): Promise<NextResponse<GitPushResponse>> {
   try {
-    // In production, verify admin access
-    // const session = await getServerSession(authOptions);
-    // if (!session?.user?.isAdmin) {
-    //   return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-    // }
+    // Outillage dev : fleet_admin uniquement (et bloqué en prod par le middleware).
+    const caller = await requireFleetAdmin(request);
+    if (isDenied(caller)) return caller as NextResponse<GitPushResponse>;
 
     logger.info('[GitPush] Push initiated by admin');
 

@@ -2,6 +2,7 @@ import { logger } from '@/lib/axiom';
 import { InvoiceExtractionService } from './InvoiceExtractionService';
 import { IdentityGuardService } from './IdentityGuardService';
 import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 // ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
 
@@ -45,7 +46,7 @@ export const VisionService = {
         logger.info('VisionService: Starting invoice analysis...');
 
         if (typeof window !== 'undefined') {
-            const response = await fetch('/api/admin/intelligence/vision', {
+            const response = await authedFetch('/api/admin/intelligence/vision', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'ANALYZE_INVOICE', payload: { base64Image } })
@@ -81,7 +82,7 @@ export const VisionService = {
         logger.info(`VisionService: Starting compliance scan...`);
 
         if (typeof window !== 'undefined') {
-            const response = await fetch('/api/admin/intelligence/vision', {
+            const response = await authedFetch('/api/admin/intelligence/vision', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'COMPLIANCE_SCAN', payload: { base64Image, ...options } })

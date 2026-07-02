@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { useTenant } from '@/hooks/useTenant';
+import { authedFetch } from '@/lib/client/authedFetch';
 import { toast } from 'sonner';
 
 export function ForensicButton() {
@@ -18,10 +19,12 @@ export function ForensicButton() {
     try {
       const yearMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
-      const res = await fetch('/api/admin/finance/fec/export', {
+      const res = await authedFetch('/api/admin/finance/fec/export', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Ciblage explicite pour un fleet_admin ; pour un admin tenant,
+          // le serveur impose le tenant du token.
           'x-nexus-tenant-id': activeTenantId,
         },
         body: JSON.stringify({ siren: '', yearMonth }),

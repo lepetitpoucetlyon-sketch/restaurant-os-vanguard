@@ -1,19 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 const BodySchema = z.object({
   url: z.string().url(),
-  tenantId: z.string().min(1),
 });
 
 /**
  * POST /api/admin/brand/extract
  * Prend l'URL du site du restaurant, capture un screenshot via Playwright,
  * l'analyse avec Gemini Vision et retourne les tokens de marque extraits.
+ * Auth : JWT vérifié — le tenant vient du token, plus du body.
  */
 export async function POST(req: NextRequest) {
   try {
+    const caller = await requireTenantAdmin(req);
+    if (isDenied(caller)) return caller;
+    const tenantId = caller.tenantId;
+
     const body = await req.json();
     const parsed = BodySchema.safeParse(body);
 
@@ -21,7 +26,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'URL invalide' }, { status: 400 });
     }
 
-    const { url, tenantId } = parsed.data;
+    const { url } = parsed.data;
 
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({ error: 'GEMINI_API_KEY non configuré' }, { status: 500 });
