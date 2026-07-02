@@ -6,6 +6,7 @@ import {
 import { getDefaultStore } from 'jotai';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
+import { FiscalKeyService } from '@/domain/services/FiscalKeyService';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 
@@ -37,7 +38,11 @@ export class NexusBridge {
     
 
     // 1. Local-First Boot: Load from Dexie
-    const localConfig = await db.config.get(tenantId) as (TenantConfig & LegacyTenantConfig) | undefined;
+    const localConfig = await db.config.get(tenantId) as (TenantConfig & LegacyTenantConfig & { fiscalSigningKey?: string }) | undefined;
+    if (localConfig?.fiscalSigningKey) {
+      // Clé de scellement NF525 provisionnée par tenant (voir FiscalKeyService).
+      FiscalKeyService.provision(tenantId, localConfig.fiscalSigningKey);
+    }
     if (localConfig) {
       this.store.set(tenantConfigAtom, {
         ...localConfig,
@@ -111,8 +116,12 @@ export class NexusBridge {
 
     this.unsubscribe = onSnapshot(configDocRef, (snapshot) => {
       if (snapshot.exists()) {
-        const remoteData = snapshot.data() as Partial<TenantConfig> & LegacyTenantConfig;
-        
+        const remoteData = snapshot.data() as Partial<TenantConfig> & LegacyTenantConfig & { fiscalSigningKey?: string };
+
+        if (remoteData.fiscalSigningKey) {
+          FiscalKeyService.provision(tenantId, remoteData.fiscalSigningKey);
+        }
+
         const nextConfig = this.mapRemoteConfig(remoteData, tenantId);
 
         this.store.set(tenantConfigAtom, nextConfig);

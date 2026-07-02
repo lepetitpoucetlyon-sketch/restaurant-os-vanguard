@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
+import { FiscalKeyService } from './FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
 import type { Floor, Zone, Table } from '@/modules/ops/engine/tables.types';
@@ -41,10 +42,15 @@ export const TenantSeeder = {
       }
 
       // 1. tenantConfig
+      // Clé de scellement NF525 : générée par tenant, jamais une constante.
+      // Lisible uniquement par le staff du tenant (firestore.rules) ; chargée
+      // en mémoire via FiscalKeyService.provision() au sync de la config.
+      const fiscalSigningKey = FiscalKeyService.generateKey();
       const config = {
         ...RESTAURANT_FULL_DNA,
         id: tenantId,
         name,
+        fiscalSigningKey,
         metadata: {
           ...RESTAURANT_FULL_DNA.metadata,
           name,

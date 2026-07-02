@@ -1,6 +1,7 @@
 import { FiscalSeal } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from './CryptoService';
+import { FiscalKeyService } from './FiscalKeyService';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 /**
@@ -44,7 +45,8 @@ export const FiscalEngine = {
     }
 
     const hash = await CryptoService.generateHash(dataSnapshot, previousHash);
-    const signature = await CryptoService.signFiscalData(hash, options.instanceId || 'default_instance');
+    // instanceId = index de lookup de la clé provisionnée — jamais le secret lui-même.
+    const signature = await CryptoService.signFiscalData(hash, FiscalKeyService.requireKey(options.instanceId));
 
     const seal: FiscalSeal = { id, transactionId, previousHash, hash, dataSnapshot, timestamp, signature, updatedAt: new Date().toISOString() };
 

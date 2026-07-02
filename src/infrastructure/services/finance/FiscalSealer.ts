@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FISCAL_CONSTANTS } from '../../adapters/FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
+import { FiscalKeyService } from '@domain/services/FiscalKeyService';
 import type { FiscalSeal } from '@nexus/contracts';
 
 export class FiscalSealer {
@@ -35,7 +36,8 @@ export class FiscalSealer {
       signature = 'VTC_SCHOOL_TRAINING_SIGNATURE';
     } else {
       hash = await CryptoService.generateHash(dataSnapshot, previousHash);
-      signature = await CryptoService.signFiscalData(hash, tenantId);
+      // Le tenantId sert d'index de lookup — la clé vient de FiscalKeyService.
+      signature = await CryptoService.signFiscalData(hash, FiscalKeyService.requireKey(tenantId));
     }
 
     return { hash, signature };
