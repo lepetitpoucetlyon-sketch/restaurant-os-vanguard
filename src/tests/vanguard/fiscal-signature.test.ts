@@ -11,7 +11,7 @@ import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
  * le nouveau contrat : HMAC-SHA256 avec clé provisionnée, échec sans clé.
  */
 describe('🔐 Signature fiscale — HMAC & non-forgeabilité', () => {
-    const ENV_KEY = process.env.FISCAL_SIGNING_SECRET;
+    const ENV_KEY = process.env.FISCAL_SIGNING_SECRET ?? '';
 
     afterEach(() => {
         process.env.FISCAL_SIGNING_SECRET = ENV_KEY;
@@ -34,13 +34,16 @@ describe('🔐 Signature fiscale — HMAC & non-forgeabilité', () => {
         FiscalKeyService.provision('resto-paris', FiscalKeyService.generateKey());
         const seal = await FiscalEngine.sealEntry('tx-2', { amount: 4200 }, { instanceId: 'resto-paris' });
 
+        const signature = seal.signature ?? '';
+        expect(signature).not.toBe('');
+
         // L'attaquant connaît le hash et l'instanceId — il tente l'ancien schéma.
         const forged = await CryptoService.signFiscalData(seal.hash, 'resto-paris');
-        expect(forged).not.toBe(seal.signature);
+        expect(forged).not.toBe(signature);
 
         // Et la vérification avec la vraie clé valide bien le sceau légitime.
         const key = FiscalKeyService.requireKey('resto-paris');
-        expect(await CryptoService.verifyFiscalSignature(seal.hash, seal.signature, key)).toBe(true);
+        expect(await CryptoService.verifyFiscalSignature(seal.hash, signature, key)).toBe(true);
         expect(await CryptoService.verifyFiscalSignature(seal.hash, forged, key)).toBe(false);
     });
 
