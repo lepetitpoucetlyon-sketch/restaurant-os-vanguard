@@ -77,6 +77,13 @@ service cloud.firestore {
       allow read, write: if isFleetAdmin();
     }
 
+    // 🛰️ Télémétrie montante : chaque instance écrit UNIQUEMENT son propre
+    // document de santé ; seul le MCC (fleet_admin) lit la flotte entière.
+    match /fleet-telemetry/{tenantId} {
+      allow read, delete: if isFleetAdmin();
+      allow create, update: if isFleetAdmin() || isTenantStaff(tenantId);
+    }
+
     // --- 🛡️ EMERGENCY CATCH-ALL ---
     match /{document=**} {
       allow read, write: if false;

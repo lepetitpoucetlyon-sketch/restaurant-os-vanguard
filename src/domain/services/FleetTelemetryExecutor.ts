@@ -17,12 +17,15 @@ function getMemoryUsage(): number {
 
 export async function executeAdministrativeAction(event: TelemetryEvent): Promise<void> {
     try {
-        const path = `tenants/${event.tenantId}`;
+        // ⚠️ Chemin du décret = chemin écouté par les instances :
+        // NexusBridge.listen s'abonne à tenants/{t}/config/master. Écrire sur
+        // le doc racine tenants/{t} ne déclenche RIEN côté instance.
+        const path = `tenants/${event.tenantId}/config/master`;
         const patch = {
             ...event.payload,
             updatedAt: new Date().toISOString()
         };
-        await Nexus.adapter.update(path, patch);
+        await Nexus.adapter.set(path, patch, { merge: true });
         console.log(`[Fleet] Administrative ${event.type} successful for: ${event.tenantId}`);
     } catch (error: unknown) {
         console.error(`[Fleet] Administrative action failed for ${event.tenantId}`, error);
