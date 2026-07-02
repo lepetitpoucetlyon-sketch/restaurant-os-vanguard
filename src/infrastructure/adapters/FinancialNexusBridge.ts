@@ -6,6 +6,8 @@ import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, FiscalSeal } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/engine/types';
 import { NexusEventBus } from '@/lib/events/NexusEventBus';
+import { TaxCalculator } from '../services/finance/TaxCalculator';
+import { FiscalSealer } from '../services/finance/FiscalSealer';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer';
 
@@ -28,48 +30,6 @@ const _DEVICE_ID = 'MAIN_POS';
 const _SCHEMA_VERSION = '1.0.0';
 
 /**
- * Calcule la ventilation TVA par taux à partir des lignes du panier.
- */
-function computeTvaBreakdown(items: CartItem[]): Record<string, number> {
-  const breakdown: Record<string, number> = {};
-  for (const item of items) {
-    const rate = item.taxRate ?? '0.10';
-    const lineHT = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-    const tva = Math.round(lineHT * parseFloat(rate));
-    breakdown[rate] = (breakdown[rate] ?? 0) + tva;
-  }
-  return breakdown;
-}
-
-/**
- * Génère un numéro de ticket conforme NF525 : AAAA-NNNNNN
- */
-function generateReceiptNumber(): string {
-  const year = new Date().getFullYear().toString();
-  const seq = Date.now().toString().slice(-6);
-  return `${year}-${seq}`;
-}
-
-/**
- * Récupère le dernier FiscalSeal depuis Nexus pour assurer la continuité de chaîne.
- */
-async function getLastSeal(tenantId: string): Promise<FiscalSeal | undefined> {
-  try {
-    const seals = await Nexus.adapter.query<FiscalSeal>(
-      `tenants/${tenantId}/fiscalSeals`
-    );
-    if (!seals || seals.length === 0) return undefined;
-    return [...seals].sort((a, b) => {
-      const ta = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-      const tb = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-      return tb - ta;
-    })[0];
-  } catch {
-    return undefined;
-  }
-}
-
-/**
  * FinancialNexusBridge — Grade X "NF525 Suture"
  *
  * Converts a validated POS cart into:
@@ -87,6 +47,7 @@ export const FinancialNexusBridge = {
       tableId,
       tenantId,
       isTrainingMode = false,
+      paymentMode = 'card',
     } = payload;
 
     if (cartItems.length === 0) {
@@ -94,26 +55,13 @@ export const FinancialNexusBridge = {
     }
 
     // ── 1. Calcul des totaux ──────────────────────────────────────────────────
-    const totalTTCInMicrounits = cartItems.reduce(
-      (acc, item) =>
-        acc +
-        item.unitPriceInMicrounits * item.quantity -
-        (item.discountInMicrounits ?? 0),
-      0
-    );
-    const tvaBreakdown = computeTvaBreakdown(cartItems);
-    const totalTVAInMicrounits = Object.values(tvaBreakdown).reduce(
-      (a, b) => a + b,
-      0
-    );
-    const _totalHTInMicrounits = totalTTCInMicrounits - totalTVAInMicrounits;
+    const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(cartItems);
 
     // ── 2. Chaîne de scellement ───────────────────────────────────────────────
-    const lastSeal = await getLastSeal(tenantId);
+    const lastSeal = await FiscalSealer.getLastSeal(tenantId);
     const previousHash = lastSeal?.hash ?? FISCAL_CONSTANTS.GENESIS_ROOT;
-    const receiptNumber = generateReceiptNumber();
+    const receiptNumber = FiscalSealer.generateReceiptNumber();
     const entryId = SharedKernel.generateId('JE');
-    const _correlationId = SharedKernel.generateId('COR');
     const now = new Date().toISOString();
 
     const dataSnapshot = CryptoService.canonicalStringify({
@@ -126,16 +74,7 @@ export const FinancialNexusBridge = {
       timestamp: now,
     } as import("@/shared/nexus-contract").SovereignData);
 
-    let hash: string;
-    let signature: string;
-
-    if (isTrainingMode) {
-      hash = FISCAL_CONSTANTS.TRAINING_MODE_HASH;
-      signature = 'VTC_SCHOOL_TRAINING_SIGNATURE';
-    } else {
-      hash = await CryptoService.generateHash(dataSnapshot, previousHash);
-      signature = await CryptoService.signFiscalData(hash, tenantId);
-    }
+    const { hash, signature } = await FiscalSealer.sealData(dataSnapshot, tenantId, isTrainingMode, previousHash);
 
     // ── 3. JournalEntry NF525 ─────────────────────────────────────────────────
     const journalEntry: JournalEntry = {
@@ -198,7 +137,7 @@ export const FinancialNexusBridge = {
       operatorId,
       items: cartItems,
       totalInMicrounits: totalTTCInMicrounits,
-      paymentMode: 'card',
+      paymentMode,
     }).catch(() => {}); // fire-and-forget — ne bloque pas le retour bridge
 
     empireAudit.log({

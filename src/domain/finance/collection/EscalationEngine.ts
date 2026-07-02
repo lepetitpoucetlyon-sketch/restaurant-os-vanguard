@@ -1,5 +1,6 @@
 
 import { EscalationLevel } from './types';
+import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**
  * 🏛️ EscalationEngine - Grade X+++
@@ -15,12 +16,15 @@ export class EscalationEngine {
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Division sur le temps, non financière.
 
         if (diffDays >= 1 && diffDays <= 6) {
+            NexusTelemetryService.emitAuditPulse('FINANCE', 'ESCALATION_LEVEL_FRIENDLY', { diffDays });
             return 'FRIENDLY_REMINDER';
         }
         if (diffDays >= 7 && diffDays <= 29) {
+            NexusTelemetryService.emitAuditPulse('FINANCE', 'ESCALATION_LEVEL_FORMAL', { diffDays });
             return 'FORMAL_NOTICE';
         }
         if (diffDays >= 30) {
+            NexusTelemetryService.emitAuditPulse('FINANCE', 'ESCALATION_LEVEL_LEGAL', { diffDays });
             return 'LEGAL_WARNING';
         }
 

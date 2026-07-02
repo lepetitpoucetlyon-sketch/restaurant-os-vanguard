@@ -6,6 +6,7 @@
 
 export * from './AccessPolicyManager';
 export * from './AmbianceService';
+export * from './BillingService';
 export * from './BrandingService';
 export * from './BrandingUI';
 export * from './ChaosMonkey';
@@ -23,8 +24,10 @@ export * from './GreenEngine';
 export * from './GroupService';
 export * from './HACCPTelemetryBridge';
 export * from './HumanResources';
+export * from './IdentityGuardService';
 export * from './IdentityManager';
 export * from './InventoryVisionService';
+export * from './InvoiceExtractionService';
 export * from './KitchenService';
 export * from './LegalArchiveService';
 export * from './MacroBrain';
@@ -52,6 +55,7 @@ export * from './SplitBillDomainService';
 export * from './StaffService';
 export * from './StockEngine';
 export * from './Storage';
+export * from './TenantSeeder';
 export * from './TransactionService';
 export * from './TreasuryEngine';
 export * from './VisionService';

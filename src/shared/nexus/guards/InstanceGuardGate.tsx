@@ -28,7 +28,8 @@ export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ chi
                 isAuthorized,
                 tenantId: isAuthorized ? tenantId : null,
                 hostname,
-                isDev
+                isDev,
+                role: null
             });
 
             if (!isAuthorized) {

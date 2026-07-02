@@ -1,6 +1,7 @@
 import { registerStockDeductionHandler } from './handlers/StockDeductionHandler';
 import { registerTicketZHandler } from './handlers/TicketZHandler';
 import { registerIntelligenceHandler } from './handlers/IntelligenceHandler';
+import { registerSovereignBreachHandler } from './handlers/SovereignBreachHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -18,6 +19,7 @@ export function registerNexusHandlers(): void {
     registerStockDeductionHandler(),  // HIGH  — parallèle avec FinancialBridge
     registerTicketZHandler(),          // BACKGROUND — Ticket Z temps réel
     registerIntelligenceHandler(),     // BACKGROUND — analyse IA
+    registerSovereignBreachHandler(),  // CRITICAL — kill-switch sur brèche d'isolation
   );
 }
 

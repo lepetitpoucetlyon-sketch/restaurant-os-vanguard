@@ -10,6 +10,7 @@ export interface InstanceState {
     tenantId: string | null;
     hostname: string | null;
     isDev: boolean;
+    role: 'PROVIDER' | 'TENANT_ADMIN' | 'DEVICE' | null;
 }
 
 import { atomWithStorage } from 'jotai/utils';
@@ -18,7 +19,8 @@ export const instanceStateAtom = atomWithStorage<InstanceState>('nexus_instance_
     isAuthorized: false,
     tenantId: null,
     hostname: null,
-    isDev: false
+    isDev: false,
+    role: null
 });
 
 /**

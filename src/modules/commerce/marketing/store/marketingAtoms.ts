@@ -2,36 +2,12 @@ import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { MarketingCampaign, SocialAccount } from '../types';
 import { Quote } from '../quotes.types';
-import { SEOProfile } from '../seo.types';
+// MarketingSegment & ScheduledPost déplacés vers seo.types (cassage de cycle).
+// Réimportés ici (et ré-exportés pour préserver la surface publique).
+import { SEOProfile, MarketingSegment, ScheduledPost } from '../seo.types';
 import { Customer as CRM } from '@modules/commerce/customers/types';
 
-// --- 📢 INDUSTRIAL TYPES (V3 - Agnostic) ---
-export interface MarketingSegment {
-    id: string;
-    name: string;
-    description: string;
-    criteria: Record<string, string> | string;
-    estimatedSize: number;
-    count?: number;
-    color: string;
-    createdAt?: string;
-    updatedAt?: string;
-}
-
-export interface ScheduledPost {
-    id: string;
-    caption?: string;
-    content: string;
-    platforms: string[];
-    scheduledDate: string;
-    scheduledTime: string;
-    scheduledFor: string;
-    status: 'draft' | 'scheduled' | 'published' | 'failed';
-    imageUrl?: string;
-    media: { type: string; url: string; };
-    createdAt?: string;
-    updatedAt?: string;
-}
+export type { MarketingSegment, ScheduledPost } from '../seo.types';
 
 // SocialAccount availability for pages
 export type { SocialAccount } from '../types';

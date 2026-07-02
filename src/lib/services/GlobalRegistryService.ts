@@ -1,6 +1,8 @@
 import { WritableAtom } from 'jotai';
 import { logger } from '@/lib/logger';
-import { NexusNode, updateNexusNode } from '@/store/nexusNodeFactory';
+// Import depuis le module neutre ./base (et non nexusNodeFactory) pour casser
+// le cycle GlobalRegistryService <-> nexusNodeFactory.
+import { NexusNode, updateNexusNode } from '@/store/base';
 import type { SetStateAction } from 'jotai';
 
 interface RegisteredAtom<T> {

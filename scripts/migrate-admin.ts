@@ -41,51 +41,53 @@ const ALL_COLORS = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|g
 const SHADES = '50|[1-9]00';
 const PREFIXES = 'bg|text|border|ring|from|to|via';
 
-function getSemanticReplacement(prefix: string, color: string, shade: string): string | null {
-    // ── GRIS / SURFACES ──
-    if (['slate', 'gray', 'zinc', 'neutral', 'stone'].includes(color)) {
-        if (['bg', 'from', 'to', 'via'].includes(prefix)) {
-            if (['50', '100', '200'].includes(shade)) return `${prefix}-surface-bg`;
-            if (['300', '400', '500'].includes(shade)) return `${prefix}-surface-tertiary`;
-            if (['600', '700', '800', '900'].includes(shade)) return `${prefix}-surface-sidebar`;
-        }
-        if (prefix === 'text') {
-            if (['50', '100', '200', '300', '400'].includes(shade)) return 'text-muted';
-            if (['500', '600'].includes(shade)) return 'text-secondary';
-            if (['700', '800', '900'].includes(shade)) return 'text-primary';
-        }
-        if (prefix === 'border' || prefix === 'ring') {
-            if (['50', '100', '200'].includes(shade)) return `${prefix}-subtle`;
-            return `${prefix}-default`;
-        }
+function getGrayReplacement(prefix: string, color: string, shade: string): string | null {
+    if (!['slate', 'gray', 'zinc', 'neutral', 'stone'].includes(color)) return null;
+    if (['bg', 'from', 'to', 'via'].includes(prefix)) {
+        if (['50', '100', '200'].includes(shade)) return `${prefix}-surface-bg`;
+        if (['300', '400', '500'].includes(shade)) return `${prefix}-surface-tertiary`;
+        if (['600', '700', '800', '900'].includes(shade)) return `${prefix}-surface-sidebar`;
     }
-
-    // ── BRAND / ACTIONS (Bleu/Indigo/Gold) ──
-    if (['blue', 'indigo', 'sky', 'cyan'].includes(color)) {
-        if (['bg', 'from', 'to', 'via'].includes(prefix)) return `${prefix}-action-primary`;
-        if (prefix === 'text') return 'text-brand';
-        if (prefix === 'border' || prefix === 'ring') return `${prefix}-focus`;
+    if (prefix === 'text') {
+        if (['50', '100', '200', '300', '400'].includes(shade)) return 'text-muted';
+        if (['500', '600'].includes(shade)) return 'text-secondary';
+        if (['700', '800', '900'].includes(shade)) return 'text-primary';
     }
+    if (prefix === 'border' || prefix === 'ring') {
+        if (['50', '100', '200'].includes(shade)) return `${prefix}-subtle`;
+        return `${prefix}-default`;
+    }
+    return null;
+}
 
-    // ── SUCCESS (Vert/Emerald) ──
+function getBrandReplacement(prefix: string, color: string, _shade: string): string | null {
+    if (!['blue', 'indigo', 'sky', 'cyan'].includes(color)) return null;
+    if (['bg', 'from', 'to', 'via'].includes(prefix)) return `${prefix}-action-primary`;
+    if (prefix === 'text') return 'text-brand';
+    if (prefix === 'border' || prefix === 'ring') return `${prefix}-focus`;
+    return null;
+}
+
+function getStatusReplacement(prefix: string, color: string, _shade: string): string | null {
     if (['green', 'emerald', 'teal', 'lime'].includes(color)) {
         if (['bg', 'from', 'to', 'via'].includes(prefix)) return `${prefix}-status-success`;
         if (prefix === 'text') return 'text-status-success';
     }
-
-    // ── WARNING (Jaune/Amber/Orange) ──
     if (['yellow', 'amber', 'orange'].includes(color)) {
         if (['bg', 'from', 'to', 'via'].includes(prefix)) return `${prefix}-status-warning`;
         if (prefix === 'text') return 'text-status-warning';
     }
-
-    // ── DANGER (Rouge/Rose) ──
     if (['red', 'rose', 'pink'].includes(color)) {
         if (['bg', 'from', 'to', 'via'].includes(prefix)) return `${prefix}-status-danger`;
         if (prefix === 'text') return 'text-status-danger';
     }
-
     return null;
+}
+
+function getSemanticReplacement(prefix: string, color: string, shade: string): string | null {
+    return getGrayReplacement(prefix, color, shade) 
+        || getBrandReplacement(prefix, color, shade) 
+        || getStatusReplacement(prefix, color, shade);
 }
 
 const STATIC_TW_REGEX = new RegExp(`\\b(${PREFIXES})-(${ALL_COLORS})-(${SHADES})\\b`, 'g');

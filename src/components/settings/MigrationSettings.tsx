@@ -20,7 +20,10 @@ export default function MigrationSettings() {
     const handleMenuAnalysis = async () => {
         if (!rawMenuText.trim()) return showToast("Veuillez coller le texte de votre menu.", "warning");
         try {
-            const data = await analyzeMenuWithAI(rawMenuText);
+            const data = await analyzeMenuWithAI(rawMenuText) as { 
+                categories: { id: string; name: string }[]; 
+                products: { name: string; description: string; priceInCents: number; categoryId: string; categoryName?: string }[] 
+            };
             setParsedMenuData(data);
             showToast("Menu analysé avec succès. Veuillez vérifier les données.", "success");
         } catch (err) {

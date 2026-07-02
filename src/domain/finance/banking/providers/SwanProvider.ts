@@ -1,5 +1,6 @@
 
 import { IBankingProvider, KYBData, BankAccount, VirtualCard } from '../types';
+import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**
  * 🏛️ SwanProvider - Grade X+++
@@ -9,13 +10,15 @@ export class SwanProvider implements IBankingProvider {
     
     async createAccount(_tenantId: string, _kyb: KYBData): Promise<BankAccount> {
         // Stub: Simulation API Swan GraphQL
-        return {
+        const account = {
             id: `swan_acc_${Date.now()}`,
             iban: `FR763000400000${Math.floor(Math.random() * 10000000000)}`,
             bic: 'SWANFRPP',
             currency: 'EUR',
-            status: 'active'
+            status: 'active' as const
         };
+        NexusTelemetryService.emitAuditPulse('FINANCE', 'SWAN_ACCOUNT_CREATED', { accountId: account.id });
+        return account;
     }
 
     async getBalance(_accountId: string): Promise<number> {

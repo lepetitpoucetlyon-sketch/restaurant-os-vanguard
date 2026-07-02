@@ -5,7 +5,9 @@ export type { Order, OrderItem, OrderStatus };
 export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';
 
-import { OrderItemModification } from '@nexus/contracts';
+// Import depuis le fichier source (ops.types) et non le barrel '@nexus/contracts'
+// pour casser le cycle ops/engine/types <-> contracts/index.
+import type { OrderItemModification } from '@nexus/contracts/ops.types';
 export type { OrderItemModification };
 
 export interface SovereignProduct extends Product {

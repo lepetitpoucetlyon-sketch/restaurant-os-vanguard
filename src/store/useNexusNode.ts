@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
 import type { PrimitiveAtom } from 'jotai';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
-import type { NexusNode } from './nexusNodeFactory';
+import type { NexusNode } from './base';
 
 /**
  * useNexusNode (Grade VI - Lifecycle Managed)

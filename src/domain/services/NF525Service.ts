@@ -7,6 +7,5 @@
  * the modular @modules/finance/ services.
  */
 
-export * from '@modules/finance';
 import { NF525Service } from '@modules/finance';
 export { NF525Service };
