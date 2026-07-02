@@ -82,5 +82,10 @@
     "ts-node": "^10.9.2",
     "typescript": "^5",
     "vitest": "^4.1.2"
+  },
+  "overrides": {
+    "@sentry/nextjs": {
+      "@opentelemetry/core": "2.6.1"
+    }
   }
 }

@@ -13,7 +13,7 @@ import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/hooks";
 import { POSService } from "@/infrastructure/adapters/POSAdapter";
-import { CartItem } from "@modules/ops";
+import { CartItem } from "@modules/ops/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 
 interface CartProps {

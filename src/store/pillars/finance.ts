@@ -13,4 +13,4 @@ export {
     accountingViewModeAtom,   // FINANCE
     isAccountingSyncingAtom,  // FINANCE
     accountingLoadingAtom,    // FINANCE
-} from '@modules/finance';
+} from '@modules/finance/store/accountingAtoms';

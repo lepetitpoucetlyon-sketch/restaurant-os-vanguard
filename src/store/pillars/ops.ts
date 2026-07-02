@@ -1,5 +1,7 @@
 // 🍽️ OPS PILLAR — Orders, POS, KDS & Floor Plan
-// Source: @modules/ops
+// ⚠️ Ré-exports depuis les fichiers SOURCES des atomes, jamais depuis le
+// barrel `@modules/ops` : la couche état ne doit pas importer les barrels
+// de modules (cycle store → module → hooks/components → store, TDZ au build SSR).
 
 export {
     ordersNodeAtom,           // OPS
@@ -12,7 +14,7 @@ export {
     availableTablesAtom,      // OPS
     pendingOrdersAtom,        // OPS
     pendingModificationsAtom, // OPS
-} from '@modules/ops';
+} from '@modules/ops/pos/store/orderAtoms';
 
 export {
     floorsAtom,               // OPS
