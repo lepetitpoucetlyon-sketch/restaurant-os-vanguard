@@ -2,8 +2,8 @@
 
 import { useEffect, useCallback } from 'react';
 import { useOrders } from '@/engines/ops/NexusOpsProvider';
-import type { Order } from '@modules/ops';
-import type { JournalEntry } from '@modules/finance';
+import type { Order } from '@modules/ops/engine/types';
+import type { JournalEntry } from '@modules/finance/types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';

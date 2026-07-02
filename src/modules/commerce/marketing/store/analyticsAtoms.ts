@@ -1,11 +1,9 @@
 import { atom } from 'jotai';
-import {
-    ordersAtom,
-    productsAtom,
-    recipesAtom,
-    staffMembersAtom,
-    stockItemsAtom,
-} from '@/store/pillars';
+// ⚠️ Imports par fichier de pilier, jamais via le barrel '@/store/pillars' :
+// pillars/index ré-exporte pillars/commerce qui ré-exporte CE fichier (cycle SSR).
+import { ordersAtom } from '@/store/pillars/ops';
+import { productsAtom, recipesAtom, stockItemsAtom } from '@/store/pillars/logistics';
+import { staffMembersAtom } from '@/store/pillars/human';
 
 // --- 📈 ANALYTICS DOMAIN (Cross-domain computed selectors) ---
 

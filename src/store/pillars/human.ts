@@ -1,5 +1,5 @@
 // 👥 HUMAN PILLAR — Staff, Planning & Shifts
-// Source: @modules/human
+// ⚠️ Ré-exports depuis le fichier SOURCE des atomes, jamais depuis le barrel (anti-cycle SSR).
 
 export {
     staffMembersNodeAtom,     // HUMAN
@@ -15,4 +15,4 @@ export {
     leaveBalancesNodeAtom,    // HUMAN
     leaveBalancesAtom,        // HUMAN
     hrStaffLoadingAtom,       // HUMAN (Original mapping: hrLoadingAtom)
-} from '@modules/human';
+} from '@modules/human/hr/store/staffAtoms';

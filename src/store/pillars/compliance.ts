@@ -1,5 +1,5 @@
 // 🛡️ COMPLIANCE PILLAR — HACCP, Hygiene & Fiscal Ledger
-// Source: @modules/compliance
+// ⚠️ Ré-exports depuis le fichier SOURCE des atomes, jamais depuis le barrel (anti-cycle SSR).
 
 export {
     fiscalLedgerNodeAtom,     // COMPLIANCE
@@ -20,4 +20,4 @@ export {
     wasteLogsNodeAtom,        // COMPLIANCE
     wasteLogsAtom,            // COMPLIANCE
     guardLoadingAtom,         // COMPLIANCE
-} from '@modules/compliance';
+} from '@modules/compliance/haccp/store/complianceAtoms';

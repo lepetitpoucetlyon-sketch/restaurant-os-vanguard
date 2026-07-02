@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
 
-import { CartItem } from "@modules/ops";
+import { CartItem } from "@modules/ops/engine/types";
 export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
 

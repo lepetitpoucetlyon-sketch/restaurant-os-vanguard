@@ -5,7 +5,8 @@ import type { NextConfig } from "next";
 const workspaceRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // NOTE: pas de `output: 'export'` — le produit exige un serveur Node
+  // (routes API : signup, webhook Stripe, export FEC, middleware d'auth).
   turbopack: {
     root: workspaceRoot,
   },
