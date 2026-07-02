@@ -1,0 +1,8 @@
+# Exclusions sentrux — code non-prod, à ne pas compter dans le score.
+# NOTE : mécanisme à confirmer (si scratch/ réapparaît dans le scan,
+# sentrux ne lit pas ce fichier — voir .sentrux/README.md).
+scratch/
+out/
+graphify-out/
+cartographie/
+analysis/

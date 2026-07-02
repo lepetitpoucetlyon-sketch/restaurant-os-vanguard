@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant OS - L'Architecture Expliquée Simplement 🏛️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-hover: rgba(31, 41, 55, 0.8);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            /* Pillar Colors */
+            --color-core: #6366f1;
+            --color-ops: #f59e0b;
+            --color-finance: #10b981;
+            --color-logistics: #ef4444;
+            --color-compliance: #06b6d4;
+            --color-human: #ec4899;
+            --color-intelligence: #8b5cf6;
+            --color-security: #14b8a6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(3, 7, 18, 1) 0%, rgba(3, 7, 18, 0.9) 100%),
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        header {
+            padding: 80px 40px 40px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 8px 20px;
+            border-radius: 99px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text {
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--color-core);
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 100px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 80px;
+        }
+
+        section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 5px solid var(--color-core);
+            padding-left: 20px;
+        }
+
+        /* METAPHOR SECTION */
+        .metaphors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .metaphor-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metaphor-card:hover {
+            background: var(--card-hover);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.05);
+        }
+
+        .metaphor-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            opacity: 0.8;
+        }
+
+        .metaphor-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .metaphor-tech {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            color: var(--color-core);
+            background: rgba(99, 102, 241, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .metaphor-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* SVG TRANSACTION FLOW */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 40px 0;
+            width: 100%;
+        }
+
+        .flow-svg-wrapper {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        .flow-step-desc {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 900px;
+            font-size: 14px;
+        }
+
+        .flow-step-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--color-ops);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* PILLAR EXPLORER */
+        .explorer-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 45px;
+            min-height: 500px;
+        }
+
+        .pillar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pillar-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pillar-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: transparent;
+        }
+
+        .pillar-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .pillar-btn.active {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .pillar-btn.active::before {
+            background: var(--p-color, var(--color-core));
+        }
+
+        .pillar-btn-icon {
+            font-size: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--p-color, var(--color-core));
+        }
+
+        .pillar-btn-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .pillar-btn-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .pillar-detail-pane {
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+        }
+
+        .pillar-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .pillar-detail-badge {
+            font-size: 32px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .pillar-detail-meta h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .pillar-detail-meta-color {
+            color: var(--p-color, var(--color-core));
+        }
+
+        .pillar-detail-path {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: var(--p-color, var(--color-core));
+            margin-top: 4px;
+        }
+
+        .pillar-files-list {
+            margin-top: 15px;
+        }
+
+        .file-entry {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+        }
+
+        .file-entry:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .file-icon {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--p-color, var(--color-core));
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .file-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .file-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* DIRECTORY EXPLORER TREE */
+        .tree-container {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            background: #020617;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            overflow-x: auto;
+            max-height: 600px;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            user-select: none;
+            width: fit-content;
+        }
+
+        .tree-node:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tree-node-icon {
+            color: var(--color-ops);
+        }
+
+        .tree-node-text {
+            color: #e2e8f0;
+        }
+
+        .tree-node-desc {
+            color: #64748b;
+            font-size: 11px;
+            margin-left: 10px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .tree-children {
+            margin-left: 24px;
+            border-left: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-left: 15px;
+        }
+
+        .tree-collapsed {
+            display: none;
+        }
+
+        .tree-caret {
+            display: inline-block;
+            transition: transform 0.2s;
+            color: #64748b;
+            width: 12px;
+            text-align: center;
+        }
+
+        .tree-caret.expanded {
+            transform: rotate(90deg);
+        }
+
+        .badge-essential {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 9px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            margin-left: 5px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: bold;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .explorer-layout {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+        @media (max-width: 768px) {
+            header, main {
+                padding: 40px 20px;
+            }
+            section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <span class="logo-icon">🌐</span>
+            <span class="logo-text">Restaurant OS</span>
+        </div>
+        <h1>L'Architecture de l'Empire</h1>
+        <p class="subtitle">Comprendre le fonctionnement et la structure interne de notre système d'exploitation modulaire, vulgarisé pour les humains.</p>
+    </header>
+
+    <main>
+
+        <!-- SECTION 1: METAPHORES -->
+        <section id="metaphor">
+            <h2><span style="color: var(--color-core)">01.</span> La Métaphore du Restaurant</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Pour comprendre notre codebase, imaginons notre architecture logicielle comme le fonctionnement d'un véritable restaurant gastronomique :</p>
+            
+            <div class="metaphors-grid">
+                
+                <div class="metaphor-card">
+                    <span class="metaphor-badge">🍽️</span>
+                    <div class="metaphor-title">La Salle (Front-end)</div>
+                    <div class="metaphor-tech">Next.js 16 & React 19</div>
+                    <div class="metaphor-desc">C'est la partie visible. Les tables, le design de la salle, et le comportement des serveurs. Le client passe commande et interagit directement ici (POS, KDS, Floor-Plan).</div>
+                </div>
+
+                <div class="metaphor-card">
+                    <span class="metaphor-badge">🤵</span>
+                    <div class="metaphor-title">Le Maître d'Hôtel (Nexus)</div>
+                    <div class="metaphor-tech">NexusAdapter & Jotai</div>
+                    <div class="metaphor-desc">Il fait le lien entre la Salle et la Cuisine. Il gère l'état global du restaurant en temps réel, se rappelle de chaque commande, et maintient le lien avec la base de données.</div>
+                </div>
+
+                <div class="metaphor-card">
+                    <span class="metaphor-badge">👮</span>
+                    <div class="metaphor-title">Le Directeur de Sécurité</div>
+                    <div class="metaphor-tech">SovereignGuard & FiscalEngine</div>
+                    <div class="metaphor-desc">Il surveille les entrées. Il s'assure que le Restaurant A ne voit jamais la compta du Restaurant B (isolation stricte), et appose un sceau de cire inviolable sur chaque ticket (NF525).</div>
+                </div>
+
+                <div class="metaphor-card">
+                    <span class="metaphor-badge">👨‍🍳</span>
+                    <div class="metaphor-title">Les Chefs de Rang (Piliers)</div>
+                    <div class="metaphor-tech">src/modules/*</div>
+                    <div class="metaphor-desc">Chaque module est un chef spécialisé dans sa tâche (Cuisine, Compta, Stocks, RH). Ils travaillent de manière étanche pour éviter le chaos, raccordés par des ponts spécifiques.</div>
+                </div>
+
+                <div class="metaphor-card">
+                    <span class="metaphor-badge">🧠</span>
+                    <div class="metaphor-title">L'Éminence Grise (Intelligence)</div>
+                    <div class="metaphor-tech">LightRAG & Gemini</div>
+                    <div class="metaphor-desc">Le conseiller stratégique. Il analyse toutes les données (recettes, ventes, plannings) et conseille le manager sur les prix, la météo et les stocks prédictifs.</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: TRANSACTION FLOW -->
+        <section id="flow">
+            <h2><span style="color: var(--color-ops)">02.</span> Le Voyage d'une Vente (Flux NF525)</h2>
+            <p style="color: var(--text-secondary);">Comment une commande saisie sur le plan de table devient une écriture comptable sécurisée et certifiée fiscalement :</p>
+            
+            <div class="flow-container">
+                <div class="flow-svg-wrapper">
+                    <svg viewBox="0 0 850 150" width="100%">
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 2 L 8 5 L 0 8 z" fill="#64748b" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Steps Nodes -->
+                        <g transform="translate(40, 75)" class="svg-step" data-step="1" style="cursor: pointer;">
+                            <circle r="25" fill="#f59e0b" opacity="0.2" stroke="#f59e0b" stroke-width="2" />
+                            <text text-anchor="middle" y="5" fill="#fff" font-weight="bold" font-size="12">POS</text>
+                            <text text-anchor="middle" y="45" fill="#9ca3af" font-size="10" font-weight="600">1. Caisse</text>
+                        </g>
+
+                        <line x1="65" y1="75" x2="175" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4" />
+
+                        <g transform="translate(200, 75)" class="svg-step" data-step="2" style="cursor: pointer;">
+                            <circle r="25" fill="#6366f1" opacity="0.2" stroke="#6366f1" stroke-width="2" />
+                            <text text-anchor="middle" y="5" fill="#fff" font-weight="bold" font-size="12">NXS</text>
+                            <text text-anchor="middle" y="45" fill="#9ca3af" font-size="10" font-weight="600">2. Nexus Core</text>
+                        </g>
+
+                        <line x1="225" y1="75" x2="335" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4" />
+
+                        <g transform="translate(360, 75)" class="svg-step" data-step="3" style="cursor: pointer;">
+                            <circle r="25" fill="#14b8a6" opacity="0.2" stroke="#14b8a6" stroke-width="2" />
+                            <text text-anchor="middle" y="5" fill="#fff" font-weight="bold" font-size="12">GRD</text>
+                            <text text-anchor="middle" y="45" fill="#9ca3af" font-size="10" font-weight="600">3. SovereignGuard</text>
+                        </g>
+
+                        <line x1="385" y1="75" x2="495" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4" />
+
+                        <g transform="translate(520, 75)" class="svg-step" data-step="4" style="cursor: pointer;">
+                            <circle r="25" fill="#8b5cf6" opacity="0.2" stroke="#8b5cf6" stroke-width="2" />
+                            <text text-anchor="middle" y="5" fill="#fff" font-weight="bold" font-size="12">SIG</text>
+                            <text text-anchor="middle" y="45" fill="#9ca3af" font-size="10" font-weight="600">4. Fiscal Engine</text>
+                        </g>
+
+                        <line x1="545" y1="75" x2="655" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4" />
+
+                        <g transform="translate(680, 75)" class="svg-step" data-step="5" style="cursor: pointer;">
+                            <circle r="25" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="2" />
+                            <text text-anchor="middle" y="5" fill="#fff" font-weight="bold" font-size="12">LDG</text>
+                            <text text-anchor="middle" y="45" fill="#9ca3af" font-size="10" font-weight="600">5. Livre Inviolable</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="flow-step-desc" id="step-desc-box">
+                    <div class="flow-step-title" id="step-desc-title">
+                        <span>🛒</span> <span>Sélectionnez un composant ci-dessus pour comprendre son rôle dans le flux fiscal</span>
+                    </div>
+                    <div id="step-desc-body" style="color: var(--text-secondary);">
+                        Ce flux garantit la conformité fiscale NF525 exigée par la loi française en créant une chaîne cryptographique scellée sur chaque écriture.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PILLAR EXPLORER -->
+        <section id="pillars">
+            <h2><span style="color: var(--color-finance)">03.</span> Les Modules & Piliers Métiers</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px;">Chaque pilier métier réside dans <code>src/modules/</code> et isole strictement son état (atomes Jotai) et sa logique.</p>
+            
+            <div class="explorer-layout">
+                <div class="pillar-nav">
+                    <button class="pillar-btn active" data-pillar="ops" style="--p-color: var(--color-ops)">
+                        <div class="pillar-btn-icon">🔌</div>
+                        <div>
+                            <div class="pillar-btn-title">ops</div>
+                            <div class="pillar-btn-desc">Caisse (POS), Cuisine (KDS), Commandes</div>
+                        </div>
+                    </button>
+                    <button class="pillar-btn" data-pillar="finance" style="--p-color: var(--color-finance)">
+                        <div class="pillar-btn-icon">💶</div>
+                        <div>
+                            <div class="pillar-btn-title">finance</div>
+                            <div class="pillar-btn-desc">Comptabilité, Scellement, TVA, Banque</div>
+                        </div>
+                    </button>
+                    <button class="pillar-btn" data-pillar="logistics" style="--p-color: var(--color-logistics)">
+                        <div class="pillar-btn-icon">📦</div>
+                        <div>
+                            <div class="pillar-btn-title">logistics</div>
+                            <div class="pillar-btn-desc">Gestion des stocks et ingrédients</div>
+                        </div>
+                    </button>
+                    <button class="pillar-btn" data-pillar="compliance" style="--p-color: var(--color-compliance)">
+                        <div class="pillar-btn-icon">🛡️</div>
+                        <div>
+                            <div class="pillar-btn-title">compliance</div>
+                            <div class="pillar-btn-desc">HACCP, contrôles sanitaires</div>
+                        </div>
+                    </button>
+                    <button class="pillar-btn" data-pillar="intelligence" style="--p-color: var(--color-intelligence)">
+                        <div class="pillar-btn-icon">🧠</div>
+                        <div>
+                            <div class="pillar-btn-title">intelligence</div>
+                            <div class="pillar-btn-desc">RAG, IA, migration & prédictions</div>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="pillar-detail-pane" id="pillar-detail-pane" style="--p-color: var(--color-ops)">
+                    <div class="pillar-detail-header">
+                        <div class="pillar-detail-badge" id="pillar-detail-badge">🔌</div>
+                        <div class="pillar-detail-meta">
+                            <h3 id="pillar-detail-title">ops</h3>
+                            <div class="pillar-detail-path" id="pillar-detail-path">src/modules/ops/</div>
+                        </div>
+                    </div>
+                    
+                    <p id="pillar-detail-desc" style="color: var(--text-secondary); font-size: 15px;">
+                        Gère tout le flux opérationnel physique en salle et en cuisine. C'est le cœur d'activité du restaurant.
+                    </p>
+
+                    <div class="pillar-files-list" id="pillar-detail-files">
+                        <!-- Dynamic file entries -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: DIRECTORY TREE -->
+        <section id="directory">
+            <h2><span style="color: var(--color-intelligence)">04.</span> Carte des Dossiers (Explorateur interactif)</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">Explorez la structure des dossiers et comprenez en un coup d'œil à quoi sert chaque section du projet :</p>
+            
+            <div class="tree-container">
+                <div class="tree-item">
+                    <div class="tree-node" onclick="toggleTree(this)">
+                        <span class="tree-caret expanded">▶</span>
+                        <span class="tree-node-icon">📁</span>
+                        <span class="tree-node-text font-bold">src</span>
+                        <span class="tree-node-desc">Le cœur de l'application</span>
+                    </div>
+                    <div class="tree-children">
+                        
+                        <div class="tree-item">
+                            <div class="tree-node" onclick="toggleTree(this)">
+                                <span class="tree-caret">▶</span>
+                                <span class="tree-node-icon">📁</span>
+                                <span class="tree-node-text">app</span>
+                                <span class="tree-node-desc">Routes de l'application Next.js (App Router)</span>
+                            </div>
+                            <div class="tree-children tree-collapsed">
+                                <div class="tree-node"><span class="tree-caret"></span>📁 (admin)<span class="tree-node-desc">Portails d'administration, console souveraine</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 (client)<span class="tree-node-desc">Caisse (POS), Cuisine (KDS), réservations</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 api<span class="tree-node-desc">Points d'accès API (Stripe, export FEC, IA)</span></div>
+                            </div>
+                        </div>
+
+                        <div class="tree-item">
+                            <div class="tree-node" onclick="toggleTree(this)">
+                                <span class="tree-caret">▶</span>
+                                <span class="tree-node-icon">📁</span>
+                                <span class="tree-node-text">domain</span>
+                                <span class="tree-node-desc">Modèles et logique métier souveraine</span>
+                            </div>
+                            <div class="tree-children tree-collapsed">
+                                <div class="tree-node"><span class="tree-caret"></span>📁 finance<span class="tree-node-desc">Moteur comptable, TVA, exports fiscaux</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 services<span class="tree-node-desc">Services applicatifs globaux</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 schemas<span class="tree-node-desc">Schémas de validation Zod (contrats d'entrée)</span></div>
+                            </div>
+                        </div>
+
+                        <div class="tree-item">
+                            <div class="tree-node" onclick="toggleTree(this)">
+                                <span class="tree-caret">▶</span>
+                                <span class="tree-node-icon">📁</span>
+                                <span class="tree-node-text">modules</span>
+                                <span class="tree-node-desc">Piliers fonctionnels du restaurant</span>
+                            </div>
+                            <div class="tree-children tree-collapsed">
+                                <div class="tree-node"><span class="tree-caret"></span>📁 ops<span class="tree-node-desc">Point de vente, cuisine, tables</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 finance<span class="tree-node-desc">Metriques et abonnements facturation</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 logistics<span class="tree-node-desc">Gestionnaire de stocks physiques</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 compliance<span class="tree-node-desc">Module sanitaire HACCP</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 intelligence<span class="tree-node-desc">Sidecar RAG et prédictions IA</span></div>
+                            </div>
+                        </div>
+
+                        <div class="tree-item">
+                            <div class="tree-node" onclick="toggleTree(this)">
+                                <span class="tree-caret">▶</span>
+                                <span class="tree-node-icon">📁</span>
+                                <span class="tree-node-text">lib</span>
+                                <span class="tree-node-desc">Librairies techniques transversales</span>
+                            </div>
+                            <div class="tree-children tree-collapsed">
+                                <div class="tree-node"><span class="tree-caret"></span>📁 nexus<span class="tree-node-desc">Contrôle d'accès aux données unifié</span><span class="badge-essential">ESSENTIEL</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📁 icm<span class="tree-node-desc">Gestionnaire de contexte de route (TaskContext)</span></div>
+                            </div>
+                        </div>
+
+                        <div class="tree-item">
+                            <div class="tree-node" onclick="toggleTree(this)">
+                                <span class="tree-caret">▶</span>
+                                <span class="tree-node-icon">📁</span>
+                                <span class="tree-node-text">shared</span>
+                                <span class="tree-node-desc">Contrats partagés et primitives</span>
+                            </div>
+                            <div class="tree-children tree-collapsed">
+                                <div class="tree-node"><span class="tree-caret"></span>📁 nexus<span class="tree-node-desc">Barrières et gardes de sécurité multi-tenant</span></div>
+                                <div class="tree-node"><span class="tree-caret"></span>📄 nexus-contract.ts<span class="tree-node-desc">Interface de base SovereignNode</span></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // STEP INTERACTIVITY FOR TRANSACTION FLOW
+        const steps = {
+            1: {
+                title: "La Caisse (POS)",
+                emoji: "🛒",
+                color: "var(--color-ops)",
+                desc: "Le serveur crée une commande sur le plan de table tactile. Les articles possèdent des prix stockés sous forme d'entiers en microunits (1 EUR = 1 000 000 µ) pour éliminer les erreurs d'arrondis des flottants Javascript."
+            },
+            2: {
+                title: "Le Singleton Nexus Core",
+                emoji: "🤵",
+                color: "var(--color-core)",
+                desc: "Toute requête d'écriture ou de lecture passe par le singleton central <code>Nexus.adapter</code>. Ce point de contrôle central intercepte la transaction pour l'encapsuler et l'auditer."
+            },
+            3: {
+                title: "La Barrière SovereignGuard",
+                emoji: "👮",
+                color: "var(--color-security)",
+                desc: "Le garde vérifie deux choses : d'abord, l'isolation étanche multi-tenant (aucun accès en dehors du répertoire du restaurant n'est toléré). Ensuite, il s'assure que la collection ciblée (par ex. <code>journalEntries</code>) is configurée comme immuable (interdiction formelle d'update ou delete)."
+            },
+            4: {
+                title: "Le Moteur Fiscal (Fiscal Engine)",
+                emoji: "✍️",
+                color: "var(--color-intelligence)",
+                desc: "La transaction est convertie en écriture de journal immuable. Le moteur génère un Hash SHA-256 combinant les données de la vente en cours et le Hash du ticket précédent, créant une chaîne cryptographique ininterrompue."
+            },
+            5: {
+                title: "Le Grand Livre Inviolable (Ledger)",
+                emoji: "📒",
+                color: "var(--color-finance)",
+                desc: "L'écriture signée et son Sceau Fiscal (FiscalSeal) sont inscrits définitivement en base de données. En cas de contrôle fiscal, le système peut recalculer et vérifier toute la chaîne en quelques secondes (conformité NF525)."
+            }
+        };
+
+        document.querySelectorAll('.svg-step').forEach(el => {
+            el.addEventListener('click', () => {
+                const stepNum = el.getAttribute('data-step');
+                const stepData = steps[stepNum];
+                if (stepData) {
+                    // Update content
+                    document.getElementById('step-desc-title').innerHTML = `<span>${stepData.emoji}</span> <span>${stepData.title}</span>`;
+                    document.getElementById('step-desc-title').style.color = stepData.color;
+                    document.getElementById('step-desc-body').innerHTML = stepData.desc;
+                    
+                    // Highlight selected node
+                    document.querySelectorAll('.svg-step circle').forEach(c => {
+                        c.setAttribute('stroke-width', '2');
+                        c.setAttribute('stroke-dasharray', 'none');
+                    });
+                    el.querySelector('circle').setAttribute('stroke-width', '4');
+                    el.querySelector('circle').setAttribute('stroke-dasharray', '4');
+                }
+            });
+        });
+
+        // PILLAR EXPLORER DATA
+        const pillars = {
+            ops: {
+                title: "ops",
+                path: "src/modules/ops/",
+                badge: "🔌",
+                color: "var(--color-ops)",
+                desc: "Ce pilier gère l'activité opérationnelle brute du restaurant, c'est-à-dire l'interaction avec le client et l'envoi en préparation.",
+                files: [
+                    { ext: "Hook", name: "useFloorPlanControls.ts", desc: "Contrôle les actions sur le plan de table interactif en Konva (zoom, drag, placement)." },
+                    { ext: "Store", name: "store/pillars/ops.ts", desc: "Contient les atomes Jotai régissant les tables actives et l'état de la caisse." },
+                    { ext: "Comp", name: "components/kds/", desc: "Composants du Kitchen Display System (écrans de cuisine pour la préparation)." }
+                ]
+            },
+            finance: {
+                title: "finance",
+                path: "src/modules/finance/ & src/domain/finance/",
+                badge: "💶",
+                color: "var(--color-finance)",
+                desc: "Responsable de la comptabilité générale, des transactions financières (BaaS via Swan), du calcul de la TVA et de la facturation Stripe.",
+                files: [
+                    { ext: "Class", name: "FECGenerator.ts", desc: "Génère le Fichier des Écritures Comptables (FEC) réglementaire français." },
+                    { ext: "Class", name: "SwanProvider.ts", desc: "Provider BaaS intégrant l'API Swan GraphQL pour la gestion des comptes bancaires." },
+                    { ext: "Class", name: "EscalationEngine.ts", desc: "Détermine automatiquement le niveau de relance d'une facture impayée." }
+                ]
+            },
+            logistics: {
+                title: "logistics",
+                path: "src/modules/logistics/",
+                badge: "📦",
+                color: "var(--color-logistics)",
+                desc: "Gère l'inventaire physique des stocks, le calcul des coûts de revient par recette et la réception des livraisons de marchandises.",
+                files: [
+                    { ext: "Service", name: "services/StockEngine.ts", desc: "Déduit en temps réel la quantité d'ingrédients en stock à chaque vente de plat." },
+                    { ext: "Schema", name: "schemas/inventory.ts", desc: "Schémas Zod validant la cohérence des transactions d'inventaire." }
+                ]
+            },
+            compliance: {
+                title: "compliance",
+                path: "src/modules/compliance/",
+                badge: "🛡️",
+                color: "var(--color-compliance)",
+                desc: "Assure la conformité réglementaire de l'établissement, notamment la traçabilité des températures et le plan de maîtrise sanitaire (HACCP).",
+                files: [
+                    { ext: "Bridge", name: "HACCPTelemetryBridge.ts", desc: "Associe les données d'hygiène et de conformité aux alertes du tableau de bord." },
+                    { ext: "Store", name: "store/pillars/compliance.ts", desc: "Stocke les résultats des audits de températures de conservation." }
+                ]
+            },
+            intelligence: {
+                title: "intelligence",
+                path: "src/modules/intelligence/",
+                badge: "🧠",
+                color: "var(--color-intelligence)",
+                desc: "Orchestre le Knowledge Graph et le RAG (Retrieval-Augmented Generation) via un sidecar Python LightRAG pour assister le manager.",
+                files: [
+                    { ext: "Manager", name: "rag/HermesKnowledgeManager.ts", desc: "Gère l'indexation et la requête de la base de connaissances du restaurant." },
+                    { ext: "Client", name: "rag/LightRAGClient.ts", desc: "Client de communication REST avec le serveur Python LightRAG autonome." },
+                    { ext: "Service", name: "MigrationService.ts", desc: "Assiste à la migration intelligente de cartes de restaurants scannées par OCR." }
+                ]
+            }
+        };
+
+        // Render files list for selected pillar
+        function selectPillar(pKey) {
+            const data = pillars[pKey];
+            if (!data) return;
+
+            // Update active state in nav
+            document.querySelectorAll('.pillar-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.pillar-btn[data-pillar="${pKey}"]`).classList.add('active');
+
+            // Update details pane
+            const pane = document.getElementById('pillar-detail-pane');
+            pane.style.setProperty('--p-color', data.color);
+            document.getElementById('pillar-detail-badge').innerText = data.badge;
+            document.getElementById('pillar-detail-title').innerText = data.title;
+            document.getElementById('pillar-detail-path').innerText = data.path;
+            document.getElementById('pillar-detail-desc').innerText = data.desc;
+
+            // Populate files
+            const filesContainer = document.getElementById('pillar-detail-files');
+            filesContainer.innerHTML = '';
+            data.files.forEach(f => {
+                const entry = document.createElement('div');
+                entry.className = 'file-entry';
+                entry.innerHTML = `
+                    <div class="file-icon" style="--p-color: ${data.color}">${f.ext}</div>
+                    <div>
+                        <div class="file-name">${f.name}</div>
+                        <div class="file-desc">${f.desc}</div>
+                    </div>
+                `;
+                filesContainer.appendChild(entry);
+            });
+        }
+
+        // Add event listeners to pillar buttons
+        document.querySelectorAll('.pillar-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pKey = btn.getAttribute('data-pillar');
+                selectPillar(pKey);
+            });
+        });
+
+        // Initialize with 'ops'
+        selectPillar('ops');
+
+        // DIRECTORY TREE INTERACTIVITY
+        function toggleTree(nodeEl) {
+            const caret = nodeEl.querySelector('.tree-caret');
+            const children = nodeEl.nextElementSibling;
+            if (children && children.classList.contains('tree-children')) {
+                children.classList.toggle('tree-collapsed');
+                caret.classList.toggle('expanded');
+            }
+        }
+    </script>
+</body>
+</html>

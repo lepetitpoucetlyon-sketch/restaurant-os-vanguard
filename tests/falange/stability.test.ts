@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { atom, getDefaultStore } from 'jotai';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
-import { updateNexusNode, createNexusNode, NexusNode } from '@/store/operationalAtoms';
+import { updateNexusNode, type NexusNode } from '@/store/base';
+import { createNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 
 // Mocking dependencies
