@@ -2,6 +2,7 @@ import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { db } from './offline/offline-store';
+import { bootSyncManager } from './offline/sync-manager';
 import { ordersNodeAtom } from '@/store/pillars/ops';
 
 import { NexusBridge } from './nexus/NexusBridge';
@@ -55,6 +56,11 @@ export const NexusSyncService = {
         // --- OMPHALOS SUTURE (Mission 1 & 3) ---
         await NexusBridge.init(tenantId);
         TelemetryService.start(tenantId);
+
+        // --- OFFLINE RESILIENCE : vide la file Dexie au boot + au retour réseau ---
+        // (bootSyncManager n'était appelé nulle part : les tickets NF525 mis en
+        //  file hors-ligne n'étaient JAMAIS resynchronisés.)
+        bootSyncManager();
 
         // --- EVENT BUS HANDLERS ---
         registerNexusHandlers();

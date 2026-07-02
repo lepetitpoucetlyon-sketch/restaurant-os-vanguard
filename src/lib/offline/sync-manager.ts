@@ -10,6 +10,9 @@ import { logger } from '@/lib/axiom';
 export class SyncManager {
     private static isSyncing = false;
 
+    /** Au-delà : on continue de retenter (jamais de drop fiscal) mais on loggue en critique. */
+    private static readonly ALERT_ATTEMPTS = 10;
+
     /**
      * Ajoute une opération à la file d'attente et tente une synchro si possible.
      */
@@ -19,7 +22,11 @@ export class SyncManager {
             status: 'pending',
             attempts: 0,
             timestamp: new Date().toISOString(),
-            priority: op.type.includes('FISCAL') ? 1 : 0
+            // ⚠️ 'NF525_PAYMENT' ne contient pas « FISCAL » : l'ancien calcul
+            // (op.type.includes('FISCAL')) classait les paiements en priorité 0.
+            priority: op.priority ?? (
+                op.type === 'NF525_PAYMENT' || op.type === 'FISCAL_SEAL' || op.type === 'JOURNAL_ENTRY' ? 1 : 0
+            )
         };
 
         const id = await db.syncQueue.add(newOp);
@@ -36,11 +43,15 @@ export class SyncManager {
      */
     static async processQueue() {
         if (this.isSyncing) return;
-        
-        const pendingOps = await db.syncQueue
+
+        // ⚠️ Rejouer AUSSI les 'failed' : les laisser de côté = ticket NF525
+        // perdu au premier échec. Une op fiscale n'est JAMAIS abandonnée.
+        const pendingOps = (await db.syncQueue
             .where('status')
-            .equals('pending')
-            .sortBy('priority');
+            .anyOf('pending', 'failed')
+            .toArray())
+            // Fiscal (priority 1) d'abord, puis ordre chronologique (chaîne de sceaux).
+            .sort((a, b) => (b.priority - a.priority) || a.timestamp.localeCompare(b.timestamp));
 
         if (pendingOps.length === 0) return;
 
@@ -64,6 +75,12 @@ export class SyncManager {
                     lastError: errorMessage
                 });
 
+                if (op.attempts + 1 >= this.ALERT_ATTEMPTS) {
+                    logger.error('SyncManager: CRITICAL — operation stuck after repeated attempts', {
+                        id: op.id, type: op.type, attempts: op.attempts + 1
+                    });
+                }
+
                 // Si c'est une erreur de connexion, on arrête la boucle
                 if (!checkOnlineStatus()) break;
             }
@@ -71,7 +88,9 @@ export class SyncManager {
 
         this.isSyncing = false;
         
-        // Relancer si de nouveaux items sont arrivés entre temps
+        // Relancer si de nouveaux items PENDING sont arrivés entre temps.
+        // (Les 'failed' attendent le prochain déclencheur — online/boot/enqueue —
+        // pour éviter une boucle chaude de retries.)
         const remaining = await db.syncQueue.where('status').equals('pending').count();
         if (remaining > 0 && checkOnlineStatus()) {
             this.processQueue();
