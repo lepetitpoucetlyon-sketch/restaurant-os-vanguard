@@ -38,7 +38,15 @@ export const SelfHealingEngine = {
       if (persistencePath) {
         try {
           const startTime = Date.now();
-          const freshData = await Nexus.adapter.get(persistencePath);
+          // Firestore : un chemin à nombre de segments IMPAIR est une COLLECTION
+          // (ex. tenants/{t}/orders → 3 segments), à nombre PAIR est un DOCUMENT.
+          // get() n'accepte qu'un document → sur une collection il jetait
+          // « Invalid document reference » à chaque cycle. On query() les
+          // collections (le merge en aval attend déjà une liste).
+          const isCollection = persistencePath.split('/').filter(Boolean).length % 2 !== 0;
+          const freshData = isCollection
+            ? await Nexus.adapter.query(persistencePath)
+            : await Nexus.adapter.get(persistencePath);
           if (freshData) {
             type HealItem = { id?: string;[k: string]: unknown };
             const rawState = currentState as Record<string, unknown>;
@@ -87,8 +95,18 @@ export const SelfHealingEngine = {
               logger.info(`[Self-Healing] Atomic Burst SUCCESSFUL: ${persistencePath} (${duration}ms)`);
             }
           }
-        } catch (_error) {
-          logger.error(`[Self-Healing] Injection FAILED: error`);
+        } catch (error) {
+          // Un backend indisponible (offline) ou un refus de permission (claims
+          // pas encore posés) n'est PAS une dérive à réparer : on ne spamme pas
+          // Sentry en boucle. On loggue en warn avec la VRAIE cause (avant :
+          // « error » littéral, indiagnostiquable).
+          const message = error instanceof Error ? error.message : String(error);
+          const expected = /permission|insufficient|offline|unavailable|network/i.test(message);
+          if (expected) {
+            logger.warn(`[Self-Healing] Heal skipped (backend indisponible) for ${persistencePath}: ${message}`);
+          } else {
+            logger.error(`[Self-Healing] Injection FAILED for ${persistencePath}: ${message}`);
+          }
         }
       }
     }

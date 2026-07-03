@@ -67,9 +67,13 @@ const mockTable = {
     toArray: vi.fn().mockResolvedValue([]),
     where: vi.fn().mockReturnThis(),
     equals: vi.fn().mockReturnThis(),
+    anyOf: vi.fn().mockReturnThis(),   // SyncManager.processQueue : where('status').anyOf('pending','failed')
     sortBy: vi.fn().mockResolvedValue([]),
     orderBy: vi.fn().mockReturnThis(),
+    reverse: vi.fn().mockReturnThis(),
+    first: vi.fn().mockResolvedValue(undefined),
     last: vi.fn().mockResolvedValue(undefined),
+    delete: vi.fn().mockResolvedValue(undefined),
     bulkPut: vi.fn().mockResolvedValue(undefined),
 };
 
