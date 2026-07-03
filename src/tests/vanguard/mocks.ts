@@ -88,6 +88,9 @@ function createTableMock() {
         count: vi.fn(async () => internalStore.length),
         where: vi.fn().mockReturnThis(),
         equals: vi.fn().mockReturnThis(),
+        anyOf: vi.fn().mockReturnThis(),   // SyncManager.processQueue : where('status').anyOf(...)
+        sortBy: vi.fn(async () => internalStore),
+        update: vi.fn(async () => undefined),
         first: vi.fn(async () => undefined),
         orderBy: vi.fn().mockReturnThis(),
         reverse: vi.fn().mockReturnThis(),

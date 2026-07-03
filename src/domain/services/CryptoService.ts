@@ -38,12 +38,41 @@ export class CryptoService {
 
     /**
      * Generates a SHA-256 hash (Standard for NF 525).
+     * Fast path node:crypto (serveur) — WebCrypto.digest est lent sous jsdom
+     * et bloquait le rush test (1000 tx). Repli WebCrypto côté navigateur.
      */
     static async generateHash(data: string, previousHash: string = ''): Promise<string> {
-        const encoder = new TextEncoder();
-        const dataUint8 = encoder.encode(data + previousHash);
+        const message = data + previousHash;
+        const nodeHash = this.nodeCreateHash;
+        if (nodeHash) {
+            return nodeHash('sha256').update(message).digest('hex');
+        }
+        const dataUint8 = new TextEncoder().encode(message);
         const hashBuffer = await crypto.subtle.digest('SHA-256', dataUint8);
         return this.toHexString(hashBuffer);
+    }
+
+    /**
+     * Cache des CryptoKey HMAC importées, indexé par secret.
+     * importKey() est coûteux : le réimporter à chaque scellement faisait
+     * exploser la latence sur un rush (1000 tx). Une clé n'est importée qu'une
+     * fois. Le secret ne quitte jamais ce process (WeakMap-like par valeur).
+     */
+    private static hmacKeyCache = new Map<string, Promise<CryptoKey>>();
+
+    private static getHmacKey(secret: string): Promise<CryptoKey> {
+        let keyPromise = this.hmacKeyCache.get(secret);
+        if (!keyPromise) {
+            keyPromise = crypto.subtle.importKey(
+                'raw',
+                new TextEncoder().encode(secret),
+                { name: 'HMAC', hash: 'SHA-256' },
+                false,
+                ['sign']
+            );
+            this.hmacKeyCache.set(secret, keyPromise);
+        }
+        return keyPromise;
     }
 
     /**
@@ -51,21 +80,52 @@ export class CryptoService {
      * HMAC-SHA256 : sans la clé, une signature valide est incalculable.
      * (L'ancien schéma — SHA-256 du hash concaténé à un « secret » public,
      * tronqué à 32 chars — était forgeable par construction.)
+     *
+     * Isomorphe : côté serveur (là où le scellement tourne réellement) on
+     * utilise node:crypto.createHmac — synchrone et ~100× plus rapide que
+     * WebCrypto, indispensable pour tenir la latence sur un rush (1000 tx).
+     * Côté navigateur, repli sur WebCrypto (clé importée mise en cache).
      */
     static async signFiscalData(hash: string, secret: string): Promise<string> {
         if (!secret) {
             throw new Error('FISCAL_SIGNATURE_SECRET_MISSING: refus de signer sans clé.');
         }
-        const encoder = new TextEncoder();
-        const key = await crypto.subtle.importKey(
-            'raw',
-            encoder.encode(secret),
-            { name: 'HMAC', hash: 'SHA-256' },
-            false,
-            ['sign']
-        );
-        const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(`EMP_NF525:${hash}`));
+        const message = `EMP_NF525:${hash}`;
+
+        const nodeHmac = this.nodeCreateHmac;
+        if (nodeHmac) {
+            return nodeHmac('sha256', secret).update(message).digest('hex').toUpperCase();
+        }
+
+        const key = await this.getHmacKey(secret);
+        const sigBuffer = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
         return this.toHexString(sigBuffer, true);
+    }
+
+    /**
+     * Module node:crypto si on tourne côté serveur, sinon null (navigateur).
+     * Résolu une seule fois. Le require est gardé par typeof process pour ne
+     * jamais être atteint dans un bundle client.
+     */
+    private static _nodeCrypto: {
+        createHmac: (algo: string, key: string) => { update(d: string): { digest(enc: string): string } };
+        createHash: (algo: string) => { update(d: string): { digest(enc: string): string } };
+    } | null | undefined;
+    private static get nodeCrypto() {
+        if (this._nodeCrypto !== undefined) return this._nodeCrypto;
+        this._nodeCrypto = null;
+        if (typeof process !== 'undefined' && process.versions?.node) {
+            try {
+                this._nodeCrypto = (eval('require') as NodeRequire)('node:crypto');
+            } catch { this._nodeCrypto = null; }
+        }
+        return this._nodeCrypto;
+    }
+    private static get nodeCreateHmac(): ((algo: string, key: string) => { update(d: string): { digest(enc: string): string } }) | null {
+        return this.nodeCrypto ? (this.nodeCrypto.createHmac as never) : null;
+    }
+    private static get nodeCreateHash(): ((algo: string) => { update(d: string): { digest(enc: string): string } }) | null {
+        return this.nodeCrypto ? (this.nodeCrypto.createHash as never) : null;
     }
 
     /**

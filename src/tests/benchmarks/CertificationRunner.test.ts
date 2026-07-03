@@ -91,5 +91,9 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         console.log(`[CERT] Ledger Latency: ${results.avgLatency.toFixed(2)}ms/tx`);
         expect(results.integrity).toBe(true);
         expect(results.avgLatency).toBeLessThan(15); // The 15ms bar set by the user
-    });
+        // Timeout 30s : benchmark de 1000 scellements chaînés. La LATENCE métier
+        // (avgLatency, < 15ms/tx) est bonne ; c'est le wall-time des 1000
+        // itérations sous jsdom (crypto.subtle polyfillé lent) qui dépassait les
+        // 5s par défaut. Les fast paths node:crypto (CryptoService) réduisent ce coût.
+    }, 30000);
 });
