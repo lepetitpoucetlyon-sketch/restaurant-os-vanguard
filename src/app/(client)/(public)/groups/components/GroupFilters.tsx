@@ -29,8 +29,8 @@ export function GroupFilters({
                         className={cn(
                             "px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border",
                             selectedType === type
-                                ? "bg-purple-500 text-white border-purple-500 shadow-lg shadow-purple-500/20"
-                                : "bg-bg-secondary text-text-muted border-border hover:border-purple-500/30"
+                                ? "bg-action-primary text-white border-focus shadow-lg shadow-purple-500/20"
+                                : "bg-bg-secondary text-text-muted border-border hover:border-focus/30"
                         )}
                         id={`groups-type-filter-${type}`}
                     >
@@ -41,13 +41,13 @@ export function GroupFilters({
 
             <div className="flex items-center gap-4">
                 <div className="relative flex-1 xl:w-80 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted group-focus-within:text-purple-500 transition-colors" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted group-focus-within:text-brand transition-colors" />
                     <input
                         type="text"
                         placeholder="Rechercher un groupe, un contact..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-12 pl-12 pr-6 rounded-2xl bg-bg-secondary border border-border focus:border-purple-500/50 outline-none text-sm transition-all"
+                        className="w-full h-12 pl-12 pr-6 rounded-2xl bg-bg-secondary border border-border focus:border-focus/50 outline-none text-sm transition-all"
                         id="groups-search-input"
                     />
                 </div>

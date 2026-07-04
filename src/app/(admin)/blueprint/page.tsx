@@ -71,10 +71,10 @@ export default function BlueprintPage() {
                     {/* 4. Marque & Guide de Prompt IA */}
                     <section id="brand" className="space-y-8">
                         <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-border flex items-center justify-center">
-                                <Cpu className="w-6 h-6 text-purple-400" />
+                            <div className="w-12 h-12 rounded-2xl bg-action-primary/10 border border-border flex items-center justify-center">
+                                <Cpu className="w-6 h-6 text-brand" />
                             </div>
-                            <h2 className="text-3xl font-brand">ADN de Marque & <span className="text-purple-400 italic">Oracle IA</span></h2>
+                            <h2 className="text-3xl font-brand">ADN de Marque & <span className="text-brand italic">Oracle IA</span></h2>
                         </div>
                         <BrandPromptGuide />
                     </section>

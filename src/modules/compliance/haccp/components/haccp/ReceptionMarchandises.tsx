@@ -168,7 +168,7 @@ export function ReceptionMarchandises() {
 
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500">
+                                        <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                             <ShieldCheck size={14} />
                                         </div>
                                         <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">INTÉGRITÉ</span>

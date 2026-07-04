@@ -15,10 +15,10 @@ export function GroupStatCard({ stat }: { stat: Stat }) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-8 rounded-[2.5rem] bg-bg-secondary border border-border group hover:border-purple-500/30 transition-all cursor-default"
+            className="p-8 rounded-[2.5rem] bg-bg-secondary border border-border group hover:border-focus/30 transition-all cursor-default"
         >
             <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-500 group-hover:bg-purple-500 group-hover:text-white transition-all duration-500">
+                <div className="w-12 h-12 rounded-2xl bg-action-primary/10 flex items-center justify-center text-brand group-hover:bg-action-primary group-hover:text-white transition-all duration-500">
                     <Icon className="w-6 h-6" />
                 </div>
                 <div className="text-right">

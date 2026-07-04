@@ -17,7 +17,7 @@ export const QUOTE_STATUS_CONFIG: Record<QuoteStatus, { label: string; color: st
     draft: { label: 'Brouillon', color: 'text-secondary', bgColor: 'bg-surface-tertiary' },
     pending_approval: { label: 'En validation', color: 'text-status-warning', bgColor: 'bg-status-warning' },
     approved: { label: 'Validé', color: 'text-brand', bgColor: 'bg-action-primary' },
-    sent: { label: 'Envoyé', color: 'text-purple-600', bgColor: 'bg-purple-100' },
+    sent: { label: 'Envoyé', color: 'text-brand', bgColor: 'bg-purple-100' },
     viewed: { label: 'Consulté', color: 'text-brand', bgColor: 'bg-action-primary' },
     accepted: { label: 'Accepté', color: 'text-status-success', bgColor: 'bg-status-success' },
     rejected: { label: 'Refusé', color: 'text-status-danger', bgColor: 'bg-status-danger' },

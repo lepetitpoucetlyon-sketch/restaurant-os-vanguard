@@ -98,7 +98,7 @@ export function TracabiliteEtiquettes() {
         <div className="space-y-8 pb-12">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-[22px] bg-purple-500/10 text-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/5">
+                    <div className="w-12 h-12 rounded-[22px] bg-action-primary/10 text-brand flex items-center justify-center shadow-lg shadow-purple-500/5">
                         <Tags size={24} />
                     </div>
                     <div>
@@ -130,7 +130,7 @@ export function TracabiliteEtiquettes() {
                                 transition={{ delay: idx * 0.05 }}
                                 className="bg-bg-primary rounded-[32px] border border-border p-6 relative group overflow-hidden shadow-sm"
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-action-primary/5 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none" />
 
                                 <div className="flex justify-between items-start mb-6 relative z-10">
                                     <div className="w-12 h-12 rounded-2xl bg-bg-tertiary flex items-center justify-center border border-border relative overflow-hidden">
@@ -282,7 +282,7 @@ export function TracabiliteEtiquettes() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={isUploading}
-                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-purple-500 text-white hover:bg-purple-600 border border-purple-500/20"
+                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-action-primary text-white hover:bg-action-primary border border-focus/20"
                             >
                                 {isUploading ? (
                                     <>

@@ -369,7 +369,7 @@ export default function MasterConsolePage() {
                                           {[
                                             { label: 'Revenue 24h', value: `€${(selectedInstance.metrics.dailyRevenue || 0).toLocaleString()}`, icon: TrendingUp, color: 'text-status-success' },
                                             { label: 'System Health', value: `${(selectedInstance.metrics.healthScore || 100).toFixed(1)}%`, icon: Activity, color: 'text-action-primary' },
-                                            { label: 'Active Users', value: selectedInstance.metrics.activeUsers, icon: Bot, color: 'text-purple-400' }
+                                            { label: 'Active Users', value: selectedInstance.metrics.activeUsers, icon: Bot, color: 'text-brand' }
                                           ].map((stat) => (
                                             <div key={stat.label} className="bg-[var(--surface-card)] border border-border-subtle rounded-[2.5rem] p-10 hover:bg-[#0E0E0F] transition-all group">
                                               <div className="flex items-center justify-between mb-8">

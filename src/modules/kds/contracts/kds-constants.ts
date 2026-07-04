@@ -48,5 +48,5 @@ export const STATION_CONFIG = {
     cold: { label: 'FROID', icon: Snowflake, activeBg: 'bg-info', activeText: 'text-white', iconColor: 'text-info' },
     hot: { label: 'CHAUD', icon: Flame, activeBg: 'bg-error', activeText: 'text-white', iconColor: 'text-error' },
     bar: { label: 'BAR', icon: Beer, activeBg: 'bg-warning', activeText: 'text-white', iconColor: 'text-warning' },
-    pastry: { label: 'PÂTISSERIE', icon: Utensils, activeBg: 'bg-purple-500', activeText: 'text-white', iconColor: 'text-purple-500' },
+    pastry: { label: 'PÂTISSERIE', icon: Utensils, activeBg: 'bg-action-primary', activeText: 'text-white', iconColor: 'text-brand' },
 };

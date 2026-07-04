@@ -128,7 +128,7 @@ export function KDSTicket({
                     const hasMods = (item.modifiers && item.modifiers.length > 0) || item.notes;
 
                     const badgeColor = isDrink
-                        ? "bg-purple-600 text-white shadow-lg shadow-purple-500/20"
+                        ? "bg-action-primary text-white shadow-lg shadow-purple-500/20"
                         : isCold
                             ? "bg-action-primary text-white shadow-lg shadow-blue-500/20"
                             : "bg-status-danger text-white shadow-lg shadow-red-700/20";

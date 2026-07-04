@@ -99,7 +99,7 @@ export default function MCCDashboard() {
       {/* Header MCC */}
       <header className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-tr from-action-primary to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <div className="w-12 h-12 bg-gradient-to-tr from-action-primary to-action-primary rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <Rocket className="text-white w-7 h-7" />
           </div>
           <div>
@@ -116,7 +116,7 @@ export default function MCCDashboard() {
             disabled={isLoading}
             className={`flex items-center gap-2 bg-[#161618] border border-white/5 px-4 py-2.5 rounded-xl hover:bg-[#1c1c1f] transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}
           >
-            <RefreshCw className={`w-4 h-4 text-indigo-400 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-brand ${isLoading ? 'animate-spin' : ''}`} />
             <span className="text-xs font-bold uppercase tracking-widest text-muted">Global Sync</span>
           </button>
           
@@ -277,7 +277,7 @@ export default function MCCDashboard() {
                       <StatusItem label="Provisioning Engine" status="Ready" color="bg-status-success" />
                       <StatusItem label="Axiom Log Ingest" status="Streaming" color="bg-status-success" />
                       <StatusItem label="NF525 Seal Engine" status="Secured" color="bg-action-primary" />
-                      <StatusItem label="Fleet Intelligence" status="Aggregating" color="bg-violet-500" />
+                      <StatusItem label="Fleet Intelligence" status="Aggregating" color="bg-action-primary" />
                   </div>
               </div>
 

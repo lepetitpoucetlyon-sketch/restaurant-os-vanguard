@@ -32,7 +32,7 @@ import { useToast } from "@ui/Toast";
 
 const STATUS_CONFIG: Record<CandidateStatus, { label: string; icon: import('lucide-react').LucideIcon; color: string; bg: string }> = {
     new: { label: "Nouveau", icon: UserPlus, color: "text-brand", bg: "bg-[--color-surface-form]" },
-    interview: { label: "Entretien", icon: Clock, color: "text-purple-500", bg: "bg-purple-50" },
+    interview: { label: "Entretien", icon: Clock, color: "text-brand", bg: "bg-purple-50" },
     trial: { label: "Essai", icon: CheckCircle2, color: "text-status-warning", bg: "bg-status-warning" },
     hired: { label: "Embauché", icon: CheckCircle2, color: "text-status-success", bg: "bg-surface-bg" },
     refused: { label: "Refusé", icon: XCircle, color: "text-status-danger", bg: "bg-surface-bg" },
