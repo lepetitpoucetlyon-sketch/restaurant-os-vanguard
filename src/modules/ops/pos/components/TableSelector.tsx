@@ -83,12 +83,12 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     };
                 case 'reserved':
                     return {
-                        container: "bg-purple-500/5 border-purple-500 shadow-inner",
-                        circle: "bg-purple-500/20 text-purple-500 border-purple-500/30",
-                        icon: "text-purple-500",
-                        indicator: "bg-purple-500",
-                        bar: "bg-purple-500",
-                        spotlight: "bg-gradient-to-br from-purple-500/10 to-transparent"
+                        container: "bg-action-primary/5 border-focus shadow-inner",
+                        circle: "bg-action-primary/20 text-brand border-focus/30",
+                        icon: "text-brand",
+                        indicator: "bg-action-primary",
+                        bar: "bg-action-primary",
+                        spotlight: "bg-gradient-to-br from-action-primary/10 to-transparent"
                     };
                 default:
                     return {
@@ -319,7 +319,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Encaissement</span>
                             </div>
                             <div className="flex items-center gap-4 group">
-                                <div className="w-3 h-3 rounded-full bg-purple-500 shadow-glow shadow-purple-500/40 transition-all group-hover:scale-125" />
+                                <div className="w-3 h-3 rounded-full bg-action-primary shadow-glow shadow-purple-500/40 transition-all group-hover:scale-125" />
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">VIP</span>
                             </div>
                         </div>

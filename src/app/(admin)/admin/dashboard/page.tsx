@@ -119,7 +119,7 @@ export default function VibecodingDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white p-8 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-neutral-950 text-white p-8 font-sans selection:bg-action-primary/30">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Section */}
@@ -161,13 +161,13 @@ export default function VibecodingDashboard() {
             >
               {/* Subtle glassmorphism gradient glow */}
               <div 
-                className={`absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 transition-opacity duration-500 ${hoveredStat === index ? 'opacity-100' : ''}`}
+                className={`absolute inset-0 bg-gradient-to-br from-action-primary/10 to-action-primary/10 opacity-0 transition-opacity duration-500 ${hoveredStat === index ? 'opacity-100' : ''}`}
               />
               
               <div className="relative z-10">
                 <div className="flex justify-between items-start">
                   <div className="p-3 bg-white/[0.05] rounded-xl border border-white/[0.05]">
-                    <stat.icon className={`w-6 h-6 ${stat.title === "Alertes HACCP" && parseInt(stat.value) > 0 ? "text-rose-400" : "text-indigo-400"}`} />
+                    <stat.icon className={`w-6 h-6 ${stat.title === "Alertes HACCP" && parseInt(stat.value) > 0 ? "text-rose-400" : "text-brand"}`} />
                   </div>
                   <div className={`flex items-center gap-1 text-sm font-medium ${stat.trend === 'up' ? 'text-emerald-400' : 'text-rose-400'}`}>
                     {stat.trend === 'up' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
@@ -196,7 +196,7 @@ export default function VibecodingDashboard() {
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-white/90">Commandes Récentes</h2>
-              <button className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors">Voir tout</button>
+              <button className="text-sm text-brand hover:text-brand transition-colors">Voir tout</button>
             </div>
             
             <div className="space-y-4">
@@ -209,7 +209,7 @@ export default function VibecodingDashboard() {
                   className="flex items-center justify-between p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.02] transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-medium group-hover:bg-indigo-500/20 transition-colors">
+                    <div className="w-12 h-12 rounded-full bg-action-primary/10 flex items-center justify-center text-brand font-medium group-hover:bg-action-primary/20 transition-colors">
                       {order.id}
                     </div>
                     <div>
@@ -246,7 +246,7 @@ export default function VibecodingDashboard() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="rounded-3xl bg-gradient-to-b from-indigo-500/10 to-transparent border border-indigo-500/20 p-8 backdrop-blur-xl flex flex-col"
+            className="rounded-3xl bg-gradient-to-b from-action-primary/10 to-transparent border border-focus/20 p-8 backdrop-blur-xl flex flex-col"
           >
             <h2 className="text-xl font-medium text-white/90 mb-6">Souveraineté & État</h2>
             

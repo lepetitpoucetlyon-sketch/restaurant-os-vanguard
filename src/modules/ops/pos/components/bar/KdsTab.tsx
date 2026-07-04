@@ -210,7 +210,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                                 </div>
                                             )}
                                             
-                                            <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-purple-600 text-white text-[9px] font-black tracking-widest shadow-lg">
+                                            <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-action-primary text-white text-[9px] font-black tracking-widest shadow-lg">
                                                 {item.station}
                                             </div>
                                             

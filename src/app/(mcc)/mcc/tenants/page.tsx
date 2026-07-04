@@ -14,7 +14,7 @@ export default function MCCTenantsPage() {
           <h1 className="text-3xl font-bold tracking-tight text-white">Tenants</h1>
           <p className="text-slate-400 mt-2">Manage connected Restaurant Brands</p>
         </div>
-        <button className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl font-medium transition-colors">
+        <button className="flex items-center gap-2 bg-action-primary hover:bg-action-primary text-white px-4 py-2 rounded-xl font-medium transition-colors">
           <Plus className="w-5 h-5" />
           Provision Tenant
         </button>
@@ -38,7 +38,7 @@ export default function MCCTenantsPage() {
                 <td className="p-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center">
-                      <Building2 className="w-5 h-5 text-indigo-400" />
+                      <Building2 className="w-5 h-5 text-brand" />
                     </div>
                     <span className="font-semibold text-white">{tenant.name}</span>
                   </div>

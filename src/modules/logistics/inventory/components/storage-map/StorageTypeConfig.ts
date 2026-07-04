@@ -21,10 +21,10 @@ export const STORAGE_TYPE_CONFIG: Record<string, { icon: LucideIcon; color: stri
     freezer: {
         icon: Snowflake,
         color: '#8B5CF6',
-        bgColor: 'bg-violet-500/10',
-        borderColor: 'border-violet-500/30',
+        bgColor: 'bg-action-primary/10',
+        borderColor: 'border-focus/30',
         label: 'Congélateur',
-        gradient: 'from-violet-500/20 to-violet-600/5'
+        gradient: 'from-action-primary/20 to-action-primary/5'
     },
     dry_storage: {
         icon: Archive,

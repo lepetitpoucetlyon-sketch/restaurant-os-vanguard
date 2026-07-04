@@ -11,15 +11,15 @@ export function Cerfa13984Section() {
         <div className="max-w-5xl mx-auto space-y-8">
             {/* Header */}
             <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-10 relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/5 -mr-24 -mt-24 rounded-full blur-3xl" />
+                <div className="absolute top-0 right-0 w-48 h-48 bg-action-primary/5 -mr-24 -mt-24 rounded-full blur-3xl" />
                 <div className="relative z-10 flex flex-col md:flex-row items-start justify-between gap-6">
                     <div className="flex items-start gap-6">
-                        <div className="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/10 shadow-sm">
-                            <ShieldCheck strokeWidth={1.5} className="w-8 h-8 text-purple-500" />
+                        <div className="w-16 h-16 rounded-2xl bg-action-primary/10 flex items-center justify-center border border-focus/10 shadow-sm">
+                            <ShieldCheck strokeWidth={1.5} className="w-8 h-8 text-brand" />
                         </div>
                         <div>
                             <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Cerfa 13984</h2>
-                            <p className="text-[10px] font-black text-purple-500 uppercase tracking-[0.3em] mt-1">Déclaration de manipulation de denrées alimentaires d'origine animale</p>
+                            <p className="text-[10px] font-black text-brand uppercase tracking-[0.3em] mt-1">Déclaration de manipulation de denrées alimentaires d'origine animale</p>
                             <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(cerfa?.name || 'Détails réglementaires en attente de synchronisation.')}</p>
                                 <div className="flex items-center gap-6 mt-4">
                                     <div className="flex items-center gap-2 text-text-muted">
@@ -81,10 +81,10 @@ export function Cerfa13984Section() {
                         { category: 'Ovoproduits', details: 'Œufs frais, préparations à base d\'œufs', declared: true },
                         { category: 'Gibier', details: 'Non manipulé actuellement', declared: false },
                     ].map((cat, i) => (
-                        <div key={i} className={`p-5 rounded-xl border ${cat.declared ? 'bg-purple-500/5 border-purple-500/10' : 'bg-bg-tertiary/30 border-border opacity-60'}`}>
+                        <div key={i} className={`p-5 rounded-xl border ${cat.declared ? 'bg-action-primary/5 border-focus/10' : 'bg-bg-tertiary/30 border-border opacity-60'}`}>
                             <div className="flex items-center justify-between mb-2">
                                 <span className="font-bold text-[13px] text-text-primary">{cat.category}</span>
-                                <span className={`text-[9px] font-black uppercase tracking-widest ${cat.declared ? 'text-purple-500' : 'text-text-muted'}`}>
+                                <span className={`text-[9px] font-black uppercase tracking-widest ${cat.declared ? 'text-brand' : 'text-text-muted'}`}>
                                     {cat.declared ? '✓ Déclaré' : 'Non déclaré'}
                                 </span>
                             </div>
@@ -95,11 +95,11 @@ export function Cerfa13984Section() {
             </div>
 
             {/* Rappel */}
-            <div className="bg-purple-50 dark:bg-purple-500/5 rounded-2xl border border-purple-200 dark:border-purple-500/10 p-8">
+            <div className="bg-purple-50 dark:bg-action-primary/5 rounded-2xl border border-purple-200 dark:border-focus/10 p-8">
                 <div className="flex items-start gap-4">
-                    <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-purple-500 mt-0.5 shrink-0" />
+                    <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-brand mt-0.5 shrink-0" />
                     <div>
-                        <h4 className="font-serif font-bold text-purple-900 dark:text-purple-300 mb-2">Obligations légales</h4>
+                        <h4 className="font-serif font-bold text-purple-900 dark:text-brand mb-2">Obligations légales</h4>
                         <ul className="text-sm text-purple-800 dark:text-purple-200/80 space-y-2 leading-relaxed">
                             <li>• La déclaration Cerfa 13984 doit être effectuée avant le début de l'activité auprès de la DD(CS)PP</li>
                             <li>• Toute modification d'activité (nouvelle catégorie de denrées) doit faire l'objet d'une mise à jour</li>

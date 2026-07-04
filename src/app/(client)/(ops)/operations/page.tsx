@@ -267,7 +267,7 @@ export default function OperationsPage() {
                                 <MindMapNode x={350} y={100} label="Espaces" icon={Key} color="bg-action-primary" description="50 tables, 5 salons de luxe" />
                                 <MindMapNode x={550} y={200} label="Logistique" icon={Layers} color="bg-status-warning" description="Office et maintenance technique" />
                                 <MindMapNode x={180} y={350} label="Salle" icon={Layers} color="bg-status-success" description="Entretien et protocole HACCP de la salle" />
-                                <MindMapNode x={480} y={380} label="Accueil" icon={Coffee} color="bg-purple-500" description="Services clients et réservations" />
+                                <MindMapNode x={480} y={380} label="Accueil" icon={Coffee} color="bg-action-primary" description="Services clients et réservations" />
 
                                 <div className="absolute top-10 right-10 flex gap-4">
                                     <HandDrawnLegend label="Flux Opérationnels" color="text-brand" />

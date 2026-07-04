@@ -74,7 +74,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                         {/* Header */}
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-action-primary to-purple-600 text-white flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-action-primary to-action-primary text-white flex items-center justify-center shadow-lg">
                                     <Megaphone size={24} />
                                 </div>
                                 <div>
@@ -193,7 +193,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                 Annuler
                             </Button>
                             <Button
-                                className="flex-[2] h-16 bg-gradient-to-r from-action-primary to-purple-600 text-white hover:from-action-primary hover:to-purple-700 rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
+                                className="flex-[2] h-16 bg-gradient-to-r from-action-primary to-action-primary text-white hover:from-action-primary hover:to-action-primary rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
                                 onClick={handleSubmit}
                                 disabled={!name.trim()}
                             >

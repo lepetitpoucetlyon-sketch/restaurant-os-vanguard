@@ -12,10 +12,10 @@ export default function MCCDashboardPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {[
-          { title: "Active Tenants", value: "2", icon: Users, color: "text-blue-400" },
-          { title: "Connected Nodes", value: "14", icon: Server, color: "text-indigo-400" },
+          { title: "Active Tenants", value: "2", icon: Users, color: "text-brand" },
+          { title: "Connected Nodes", value: "14", icon: Server, color: "text-brand" },
           { title: "System Health", value: "99.9%", icon: Activity, color: "text-emerald-400" },
-          { title: "Active Seals", value: "1,204", icon: Shield, color: "text-purple-400" },
+          { title: "Active Seals", value: "1,204", icon: Shield, color: "text-brand" },
         ].map((stat, i) => (
           <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md relative overflow-hidden group hover:border-white/20 transition-all">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-all" />

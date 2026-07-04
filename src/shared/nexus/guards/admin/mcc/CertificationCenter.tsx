@@ -137,7 +137,7 @@ export function CertificationCenter() {
                             <div>
                                 <label className="block text-[10px] font-black text-secondary uppercase mb-3 ml-1 tracking-[0.3em]">Node Instance Selection</label>
                                 <div className="relative group">
-                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-action-primary/20 to-purple-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-action-primary/20 to-action-primary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
                                     <select 
                                         className="relative w-full bg-[#0a0a0b] border border-subtle rounded-2xl p-4 text-sm text-muted focus:outline-none focus:border-focus/50 appearance-none cursor-pointer transition-all hover:border-default"
                                         value={selectedInstanceId}

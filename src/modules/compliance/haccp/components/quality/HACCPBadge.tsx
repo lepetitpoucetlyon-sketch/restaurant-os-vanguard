@@ -12,7 +12,7 @@ export const HACCPBadge: React.FC<HACCPBadgeProps> = ({ status, size = 'md' }) =
         pass: { icon: ShieldCheck, color: 'text-success bg-success/10 border-success/30', label: 'Conforme' },
         warning: { icon: ShieldAlert, color: 'text-warning bg-warning/10 border-warning/30', label: 'Alerte' },
         fail: { icon: ShieldX, color: 'text-error bg-error/10 border-error/30', label: 'Non-Conforme' },
-        quarantine: { icon: ShieldAlert, color: 'text-purple-500 bg-purple-500/10 border-purple-500/30', label: 'Quarantaine' }
+        quarantine: { icon: ShieldAlert, color: 'text-brand bg-action-primary/10 border-focus/30', label: 'Quarantaine' }
     };
 
     const { icon: Icon, color, label } = config[status];

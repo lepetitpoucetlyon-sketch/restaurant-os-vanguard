@@ -40,7 +40,7 @@ export const NexusSphere: React.FC<NexusSphereProps> = ({ isActive, isProcessing
         }}
         className={cn(
           "relative w-8 h-8 rounded-full overflow-hidden border border-default shadow-lg",
-          "bg-gradient-to-br from-action-primary via-purple-500 to-status-danger"
+          "bg-gradient-to-br from-action-primary via-action-primary to-status-danger"
         )}
       >
         {/* Shimmer Effect */}

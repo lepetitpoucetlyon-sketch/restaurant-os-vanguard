@@ -59,16 +59,16 @@ export function BrandPromptGuide() {
             {/* 3. Oracle Master Prompt */}
             <div className="space-y-6 pt-6 border-t border-border/50">
                 <div className="flex items-center gap-3">
-                    <Cpu className="w-5 h-5 text-purple-400" />
+                    <Cpu className="w-5 h-5 text-brand" />
                     <h4 className="text-xl font-serif text-text-primary italic">Prompt Maître Oracle</h4>
                 </div>
-                <div className="p-8 rounded-3xl bg-surface-sidebar/40 border border-purple-500/20 font-mono text-sm group relative overflow-hidden">
+                <div className="p-8 rounded-3xl bg-surface-sidebar/40 border border-focus/20 font-mono text-sm group relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
-                        <MessageSquare className="w-20 h-20 text-purple-400" />
+                        <MessageSquare className="w-20 h-20 text-brand" />
                     </div>
                     
                     <div className="space-y-4 relative z-10 text-white/80 leading-relaxed italic">
-                        <p className="text-purple-400 font-black mb-4 flex items-center gap-2">
+                        <p className="text-brand font-black mb-4 flex items-center gap-2">
                              Instruction Système (Racine Serveur)
                         </p>
                         <p>"Vous êtes l'IA centrale 'Oracle' de Restaurant OS."</p>
@@ -79,7 +79,7 @@ export function BrandPromptGuide() {
                     </div>
 
                     <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-[10px] text-purple-400/60 uppercase font-black tracking-widest">Modèle: Gemini 3.1 </span>
+                        <span className="text-[10px] text-brand/60 uppercase font-black tracking-widest">Modèle: Gemini 3.1 </span>
                         <div className="flex gap-2">
                             <span className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
                             <span className="text-[10px] text-status-success uppercase font-black">Agent En Ligne</span>

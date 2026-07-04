@@ -55,15 +55,15 @@ export default function GroupsPage() {
         <div className="flex h-screen -m-4 md:-m-8 flex-col bg-bg-primary overflow-hidden relative font-sans">
             {/* Cinematic Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-500/5 blur-[120px] rounded-full" />
+                <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-action-primary/5 blur-[120px] rounded-full" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-action-primary/5 blur-[100px] rounded-full" />
             </div>
 
             {/* Header */}
             <div className="relative z-30 pt-10 px-12 pb-8 flex items-center justify-between border-b border-border bg-bg-primary/40 backdrop-blur-sm">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-                        <Users className="w-6 h-6 text-purple-500" />
+                    <div className="w-12 h-12 rounded-2xl bg-action-primary/10 border border-focus/20 flex items-center justify-center shrink-0">
+                        <Users className="w-6 h-6 text-brand" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-serif italic font-black text-text-primary tracking-tight leading-none">
@@ -77,7 +77,7 @@ export default function GroupsPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-purple-500 text-white hover:bg-purple-600 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
+                        className="h-12 px-8 bg-action-primary text-white hover:bg-action-primary rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
                         id="groups-create-button"
                     >
                         <Plus className="w-4 h-4" />

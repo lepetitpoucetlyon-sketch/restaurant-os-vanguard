@@ -13,7 +13,7 @@ export function MindMapDependencies() {
         { id: 'ai', label: 'Gemini 3.1', sub: "L'Oracle", icon: Cpu, color: 'text-brand', bg: 'bg-action-primary/10', x: 180, y: -120 },
         { id: 'ux', label: 'Motion 12', sub: 'Le Ressenti', icon: Sparkles, color: 'text-status-warning', bg: 'bg-status-warning/10', x: 220, y: 120 },
         { id: 'ui', label: 'Tailwind 4', sub: 'L\'Apparence', icon: Layout, color: 'text-brand', bg: 'bg-action-primary/10', x: -220, y: 120 },
-        { id: 'sec', label: 'Auth RBAC', sub: 'Le Bouclier', icon: ShieldCheck, color: 'text-purple-400', bg: 'bg-purple-500/10', x: 0, y: -240 },
+        { id: 'sec', label: 'Auth RBAC', sub: 'Le Bouclier', icon: ShieldCheck, color: 'text-brand', bg: 'bg-action-primary/10', x: 0, y: -240 },
         { id: 'lib', label: 'Utilitaire Lib', sub: 'Les Outils', icon: Box, color: 'text-status-danger', bg: 'bg-status-danger/10', x: 0, y: 240 },
         { id: 'workflow', label: 'Agent Edge', sub: 'La Logique', icon: Workflow, color: 'text-brand', bg: 'bg-action-primary/10', x: 320, y: 0 }
     ];

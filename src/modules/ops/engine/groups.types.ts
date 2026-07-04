@@ -106,7 +106,7 @@ export const GROUP_EVENT_STATUS_CONFIG: Record<GroupEventStatus, { label: string
     quote_sent: { label: 'Devis envoyé', color: 'text-brand', bgColor: 'bg-action-primary' },
     confirmed: { label: 'Confirmé', color: 'text-status-success', bgColor: 'bg-status-success' },
     deposit_paid: { label: 'Acompte versé', color: 'text-status-success', bgColor: 'bg-status-success' },
-    preparation: { label: 'Préparation', color: 'text-purple-600', bgColor: 'bg-purple-100' },
+    preparation: { label: 'Préparation', color: 'text-brand', bgColor: 'bg-purple-100' },
     in_progress: { label: 'En cours', color: 'text-brand', bgColor: 'bg-action-primary' },
     completed: { label: 'Terminé', color: 'text-secondary', bgColor: 'bg-surface-tertiary' },
     invoiced: { label: 'Facturé', color: 'text-brand', bgColor: 'bg-action-primary' },
