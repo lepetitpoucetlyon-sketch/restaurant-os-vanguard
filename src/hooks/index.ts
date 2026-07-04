@@ -30,4 +30,3 @@ export {
     useLanguage,
     useNotifications
 } from "@/engines/core/NexusCoreProvider";
-export { useTheme } from "@/theme/ZestryThemeProvider";

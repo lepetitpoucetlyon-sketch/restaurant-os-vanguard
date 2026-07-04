@@ -1,9 +1,9 @@
 {
   "score": 9,
-  "totalFilesScanned": 994,
-  "componentsMigrated": 271,
+  "totalFilesScanned": 1012,
+  "componentsMigrated": 272,
   "residualHex": 364,
   "staticTailwindClasses": 430,
   "coverage": "27%",
-  "timestamp": "2026-06-29T09:17:56.767Z"
+  "timestamp": "2026-07-04T11:40:18.351Z"
 }
