@@ -3,25 +3,26 @@ import { FISCAL_CONSTANTS } from '../../adapters/FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import { FiscalKeyService } from '@domain/services/FiscalKeyService';
 import type { FiscalSeal } from '@nexus/contracts';
+import { IdGenerator } from '@/lib/utils/IdGenerator';
 
 export class FiscalSealer {
   static generateReceiptNumber(): string {
     const year = new Date().getFullYear().toString();
-    const seq = Date.now().toString().slice(-6);
-    return `${year}-${seq}`;
+    // Timestamp base-36 haute-résolution + suffix aléatoire 4 chars pour
+    // minimiser les collisions. Un compteur atomique serveur (FieldValue.increment)
+    // reste nécessaire pour une numérotation NF525 strictement séquentielle.
+    const ts = Date.now().toString(36).toUpperCase();
+    const rnd = Math.random().toString(36).slice(2, 6).toUpperCase();
+    return `${year}-${ts}-${rnd}`;
   }
 
   static async getLastSeal(tenantId: string): Promise<FiscalSeal | undefined> {
     try {
       const seals = await Nexus.adapter.query<FiscalSeal>(
-        `tenants/${tenantId}/fiscalSeals`
+        `tenants/${tenantId}/fiscalSeals`,
+        { orderBy: { field: 'timestamp', direction: 'desc' }, limit: 1 }
       );
-      if (!seals || seals.length === 0) return undefined;
-      return [...seals].sort((a, b) => {
-        const ta = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-        const tb = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-        return tb - ta;
-      })[0];
+      return seals[0];
     } catch {
       return undefined;
     }
@@ -41,5 +42,63 @@ export class FiscalSealer {
     }
 
     return { hash, signature };
+  }
+
+  /**
+   * Atomic NF525 seal — reads previousHash and writes the new seal inside a
+   * single adapter transaction (auto-retries on conflict in Firestore, sequential
+   * in Simulacra/Mock). Works across all adapters (agnostic).
+   *
+   * Pattern: a fixed-path `chainHead` document carries the current chain tip.
+   * The transaction reads chainHead → computes hash → writes new seal + updates
+   * chainHead, all atomically. Prevents hash-chain forks under concurrent sealing.
+   *
+   * chainHead path: tenants/{tenantId}/fiscalMeta/chainHead
+   */
+  static async sealDataAtomically(
+    dataSnapshot: string,
+    tenantId: string,
+    isTrainingMode: boolean,
+  ): Promise<{ hash: string; signature: string; sealId: string; previousHash: string }> {
+    const sealId = IdGenerator.generateWithPrefix('seal');
+    const sealPath = `tenants/${tenantId}/fiscalSeals/${sealId}`;
+    const chainHeadPath = `tenants/${tenantId}/fiscalMeta/chainHead`;
+
+    let hash: string;
+    let signature: string;
+    let prevHash: string;
+
+    if (isTrainingMode) {
+      hash = FISCAL_CONSTANTS.TRAINING_MODE_HASH;
+      signature = 'VTC_SCHOOL_TRAINING_SIGNATURE';
+      prevHash = FISCAL_CONSTANTS.GENESIS_ROOT;
+      await Nexus.adapter.runTransaction(async (tx) => {
+        tx.set(sealPath, {
+          id: sealId, hash, signature,
+          previousHash: FISCAL_CONSTANTS.GENESIS_ROOT,
+          timestamp: new Date().toISOString(),
+          isTrainingMode: true,
+        } as unknown);
+        tx.update(chainHeadPath, { hash, sealId, updatedAt: new Date().toISOString() });
+      });
+    } else {
+      await Nexus.adapter.runTransaction(async (tx) => {
+        const head = await tx.get<{ hash?: string }>(chainHeadPath);
+        const previousHash = head?.hash ?? FISCAL_CONSTANTS.GENESIS_ROOT;
+        prevHash = previousHash;
+
+        hash = await CryptoService.generateHash(dataSnapshot, previousHash);
+        signature = await CryptoService.signFiscalData(hash, FiscalKeyService.requireKey(tenantId));
+
+        tx.set(sealPath, {
+          id: sealId, hash, signature, previousHash,
+          timestamp: new Date().toISOString(),
+          isTrainingMode: false,
+        } as unknown);
+        tx.set(chainHeadPath, { hash, sealId, updatedAt: new Date().toISOString() });
+      });
+    }
+
+    return { hash: hash!, signature: signature!, sealId, previousHash: prevHash! };
   }
 }

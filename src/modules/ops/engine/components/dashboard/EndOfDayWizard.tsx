@@ -84,7 +84,7 @@ export const EndOfDayWizard: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
                     <p className="text-xs text-secondary uppercase font-bold mb-1">CA à Sceller</p>
-                    <p className="text-lg font-bold text-white">{(revenue / 100).toFixed(2)} €</p>
+                    <p className="text-lg font-bold text-white">{(revenue / 1_000_000).toFixed(2)} €</p>
                 </div>
                 <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
                     <p className="text-xs text-secondary uppercase font-bold mb-1">État Tables</p>

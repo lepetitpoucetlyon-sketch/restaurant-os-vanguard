@@ -1,10 +1,9 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { LLMManager } from "@/lib/ai/LLMManager";
+import { AI_MODELS } from "@/lib/ai/types";
 import { logger } from "../../lib/axiom";
 import { DNAInjector } from "../../lib/ai/DNAInjector";
 import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 /**
  * 🤖 MaintenanceAgent - Restaurant OS
@@ -91,14 +90,9 @@ export const MaintenanceAgent = {
      * AI CORE : Analyse Gemini Pro avec Injection d'ADN
      */
     async analyzeWithAI(ticket: MaintenanceTicket, context: MaintenanceTicketContext): Promise<MaintenanceAIAnalysis> {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        
-        // 🧬 Récupération de l'ADN Client
         const tenantDNA = await DNAInjector.getTenantDNA(ticket.tenantId);
 
-        const prompt = `
-            You are the Senior SRE for Restaurant OS Empire.
-            
+        const userPrompt = `
             === CLIENT DNA (Rules to respect) ===
             ${tenantDNA}
 
@@ -125,9 +119,13 @@ export const MaintenanceAgent = {
             }
         `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const response = await LLMManager.provider.generateText({
+            model: AI_MODELS.fast,
+            systemPrompt: 'You are the Senior SRE for Restaurant OS Empire.',
+            userPrompt,
+            responseMimeType: 'application/json',
+        });
+        const text = response.text;
         
         // Nettoyage JSON strict
         const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -158,6 +156,5 @@ export const MaintenanceAgent = {
      */
     async finalizeTicket(ticketId: string, resolution: string) {
         logger.info(`🏛️ [EMPIRE NOTIFICATION] Ticket ${ticketId} résolu.`, { resolution });
-        console.log(`%c 🛡️ NEURAL SHIELD : RESOLUTION ACHIEVED - TICKET ${ticketId} `, 'background: #C5A059; color: black; font-weight: bold;');
     }
 };

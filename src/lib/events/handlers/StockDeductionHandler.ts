@@ -2,70 +2,100 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import type { Recipe } from '@shared/nexus/contracts/logistics';
+
+type StockProduct = {
+  linkedStockItemId?: string;
+  recipeId?: string;
+};
+
+type StockItem = {
+  quantity?: number;
+  reorderThreshold?: number;
+};
 
 /**
  * Déduit les stocks consommés lors d'un paiement validé.
- * S'appuie sur le lien product → stockItem via le champ linkedStockItemId.
- * Enregistré en HIGH (parallèle avec FinancialBridge).
+ *
+ * Priorité :
+ *  1. Si product.recipeId → explosion BOM "au gramme" via recipe.ingredients
+ *  2. Sinon si product.linkedStockItemId → déduction 1:1 (fallback simple)
  */
 export function registerStockDeductionHandler(): () => void {
   return NexusEventBus.on(
     'order.paid',
     async ({ tenantId, items, orderId }) => {
-      const deductions: Array<{ itemId: string; delta: number; name: string }> = [];
+      const deductedItems: string[] = [];
 
-      for (const item of items) {
-        // Résolution product → stockItem
-        const product = await Nexus.adapter.get<{ linkedStockItemId?: string; quantity?: number; reorderThreshold?: number }>(
-          `tenants/${tenantId}/products/${item.productId}`
-        );
-        if (!product?.linkedStockItemId) continue;
-
-        deductions.push({
-          itemId: product.linkedStockItemId,
-          delta: item.quantity,
-          name: item.name,
-        });
-      }
-
-      if (deductions.length === 0) return;
-
-      // Déductions en parallèle
       await Promise.allSettled(
-        deductions.map(async ({ itemId, delta, name }) => {
-          const path = `tenants/${tenantId}/stockItems/${itemId}`;
-          const stockItem = await Nexus.adapter.get<{ quantity?: number; reorderThreshold?: number }>(path);
-          if (!stockItem) return;
+        items.map(async (item) => {
+          const product = await Nexus.adapter.get<StockProduct>(
+            `tenants/${tenantId}/products/${item.productId}`
+          );
+          if (!product) return;
 
-          const newQty = Math.max(0, (stockItem.quantity ?? 0) - delta);
-          await Nexus.adapter.update(path, {
-            quantity: newQty,
-            updatedAt: new Date().toISOString(),
-          });
+          if (product.recipeId) {
+            // ── BOM expansion "au gramme" ─────────────────────────────────────
+            const recipe = await Nexus.adapter.get<Recipe>(
+              `tenants/${tenantId}/recipes/${product.recipeId}`
+            );
+            if (!recipe?.ingredients?.length) return;
 
-          logger.info(`[StockDeduction] ${name} ×${delta} → stock ${newQty}`);
-
-          // Alerte seuil bas
-          if (stockItem.reorderThreshold && newQty <= stockItem.reorderThreshold) {
-            await NexusEventBus.emit('stock.low', {
-              tenantId,
-              itemId,
-              itemName: name,
-              currentQuantity: newQty,
-              threshold: stockItem.reorderThreshold,
-            });
+            await Promise.allSettled(
+              recipe.ingredients.map(async (ing) => {
+                if (!ing.ingredientId) return;
+                const deductQty = ing.quantity * item.quantity;
+                await _deductStock(tenantId, ing.ingredientId, deductQty, ing.name ?? ing.ingredientId);
+                deductedItems.push(`${ing.name ?? ing.ingredientId} ×${deductQty}`);
+              })
+            );
+          } else if (product.linkedStockItemId) {
+            // ── Déduction 1:1 (fallback pour items sans recette) ─────────────
+            await _deductStock(tenantId, product.linkedStockItemId, item.quantity, item.name);
+            deductedItems.push(`${item.name} ×${item.quantity}`);
           }
         })
       );
 
+      if (deductedItems.length === 0) return;
+
       empireAudit.log({
         module: 'inventory',
         action: 'STOCK_DEDUCTED',
-        details: { orderId, deductions: deductions.map(d => d.name) },
+        details: { orderId, deductions: deductedItems },
         severity: 'low',
         timestamp: new Date(),
       });
     },
     { id: 'stock-deduction', priority: 'HIGH' }
   );
+}
+
+async function _deductStock(
+  tenantId: string,
+  stockItemId: string,
+  qty: number,
+  label: string,
+): Promise<void> {
+  const path = `tenants/${tenantId}/stockItems/${stockItemId}`;
+  const stockItem = await Nexus.adapter.get<StockItem>(path);
+  if (!stockItem) return;
+
+  const newQty = Math.max(0, (stockItem.quantity ?? 0) - qty);
+  await Nexus.adapter.update(path, {
+    quantity: newQty,
+    updatedAt: new Date().toISOString(),
+  });
+
+  logger.info(`[StockDeduction] ${label} −${qty} → stock ${newQty}`);
+
+  if (stockItem.reorderThreshold !== undefined && newQty <= stockItem.reorderThreshold) {
+    await NexusEventBus.emit('stock.low', {
+      tenantId,
+      itemId: stockItemId,
+      itemName: label,
+      currentQuantity: newQty,
+      threshold: stockItem.reorderThreshold,
+    });
+  }
 }

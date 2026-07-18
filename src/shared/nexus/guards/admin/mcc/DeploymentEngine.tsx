@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, ChevronRight, CheckCircle2, Brain, RotateCcw, Zap } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { logger } from '@/lib/logger';
 import { authedFetch } from '@/lib/client/authedFetch';
@@ -13,12 +13,24 @@ interface GitStatus {
     lastCommit: string;
 }
 
+interface RagHealth {
+    status: 'online' | 'offline' | 'error';
+    version?: string;
+    documentCount?: number;
+    latencyMs: number;
+}
+
 export function DeploymentEngine() {
     const [status, setStatus] = useState<GitStatus | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isPushing, setIsPushing] = useState(false);
     const [pushProgress, setPushProgress] = useState(0);
     const [lastResult, setLastResult] = useState<{ success: boolean; msg: string } | null>(null);
+
+    // ── Sovereign RAG state ──────────────────────────────────────────────────
+    const [ragHealth, setRagHealth] = useState<RagHealth | null>(null);
+    const [isRagIndexing, setIsRagIndexing] = useState(false);
+    const [ragResult, setRagResult] = useState<{ success: boolean; msg: string } | null>(null);
 
     const fetchStatus = async () => {
         try {
@@ -34,11 +46,46 @@ export function DeploymentEngine() {
         }
     };
 
+    const fetchRagHealth = async () => {
+        try {
+            const res = await authedFetch('/api/admin/fleet/rag', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'health' }),
+            });
+            const data = await res.json();
+            if (data.success) setRagHealth(data.health as RagHealth);
+        } catch (error) {
+            logger.warn('[DeploymentEngine] RAG health check failed', String(error));
+        }
+    };
+
     useEffect(() => {
         fetchStatus();
-        const interval = setInterval(fetchStatus, 30000); // Refresh every 30s
-        return () => clearInterval(interval);
+        fetchRagHealth();
+        const interval = setInterval(fetchStatus, 30000);
+        const ragInterval = setInterval(fetchRagHealth, 60000);
+        return () => { clearInterval(interval); clearInterval(ragInterval); };
     }, []);
+
+    const handleRagReindexFleet = async () => {
+        setIsRagIndexing(true);
+        setRagResult(null);
+        try {
+            const res = await authedFetch('/api/admin/fleet/rag', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'push_version' }),
+            });
+            const data = await res.json();
+            setRagResult({ success: data.success, msg: data.success ? 'Réindexation lancée sur la flotte' : 'Échec de réindexation' });
+        } catch {
+            setRagResult({ success: false, msg: 'Erreur réseau' });
+        } finally {
+            setIsRagIndexing(false);
+            await fetchRagHealth();
+        }
+    };
 
     const handlePush = async () => {
         setIsPushing(true);
@@ -157,14 +204,14 @@ export function DeploymentEngine() {
 
                 <AnimatePresence>
                     {lastResult && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
                             className={cn(
                                 "flex items-center gap-2 text-[10px] font-black uppercase tracking-widest p-3 rounded-xl border",
-                                lastResult.success 
-                                    ? "bg-status-success/10 text-status-success border-emerald-500/20" 
+                                lastResult.success
+                                    ? "bg-status-success/10 text-status-success border-emerald-500/20"
                                     : "bg-status-danger/10 text-status-danger border-red-500/20"
                             )}
                         >
@@ -173,6 +220,79 @@ export function DeploymentEngine() {
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* ── Sovereign RAG Panel ─────────────────────────────────── */}
+                <div className="pt-4 border-t border-white/5 space-y-3">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Brain className="w-3.5 h-3.5 text-brand" />
+                            <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Sovereign RAG</span>
+                        </div>
+                        <div className={cn(
+                            "px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border",
+                            ragHealth?.status === 'online'
+                                ? "bg-status-success/10 text-status-success border-emerald-500/20"
+                                : ragHealth?.status === 'offline'
+                                ? "bg-status-danger/10 text-status-danger border-red-500/20"
+                                : "bg-surface-card/5 text-secondary border-white/5"
+                        )}>
+                            {ragHealth?.status ?? 'Checking...'}
+                        </div>
+                    </div>
+
+                    {ragHealth && (
+                        <div className="grid grid-cols-3 gap-2">
+                            <div className="p-2.5 bg-bg-primary/30 border border-white/5 rounded-xl text-center">
+                                <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Docs</p>
+                                <p className="text-xs font-bold text-muted">{ragHealth.documentCount ?? '—'}</p>
+                            </div>
+                            <div className="p-2.5 bg-bg-primary/30 border border-white/5 rounded-xl text-center">
+                                <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Latence</p>
+                                <p className="text-xs font-bold text-muted">{ragHealth.latencyMs}ms</p>
+                            </div>
+                            <div className="p-2.5 bg-bg-primary/30 border border-white/5 rounded-xl text-center">
+                                <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Version</p>
+                                <p className="text-xs font-bold text-muted">{ragHealth.version ?? '—'}</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex gap-2">
+                        <button
+                            onClick={handleRagReindexFleet}
+                            disabled={isRagIndexing}
+                            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface-card/5 border border-white/5 text-[9px] font-black uppercase tracking-widest text-muted hover:border-brand hover:text-brand transition-all disabled:opacity-50"
+                        >
+                            <RotateCcw className={cn("w-3.5 h-3.5", isRagIndexing && "animate-spin")} />
+                            Réindexer flotte
+                        </button>
+                        <button
+                            onClick={fetchRagHealth}
+                            className="p-3 rounded-xl bg-surface-card/5 border border-white/5 text-muted hover:text-white transition-all"
+                        >
+                            <Zap className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+
+                    <AnimatePresence>
+                        {ragResult && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                className={cn(
+                                    "flex items-center gap-2 text-[10px] font-black uppercase tracking-widest p-3 rounded-xl border",
+                                    ragResult.success
+                                        ? "bg-status-success/10 text-status-success border-emerald-500/20"
+                                        : "bg-status-danger/10 text-status-danger border-red-500/20"
+                                )}
+                            >
+                                {ragResult.success ? <CheckCircle2 className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                                {ragResult.msg}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </div>
     );

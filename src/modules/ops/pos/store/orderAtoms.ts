@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 import { Order, Table, OrderItem, OrderItemModification } from '@nexus/contracts';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 // --- 🛒 ORDERS & TABLES DOMAIN (Service room, KDS, Additions) ---
 
@@ -21,9 +22,11 @@ export const pendingModificationsAtom = atom<OrderItemModification[]>([]);
 /** 📊 Orders Statistics (Atomic Scalpel) */
 export const orderStatsAtom = atom((get) => {
     const orders = get(ordersAtom);
+    // Canonical total sourced from µ (Microunits Protocol); exposed in cents for parity with existing consumers.
+    const revenueMicro = orders.reduce((sum, o) => sum + SovereignMath.orderTotalMicrounits(o), 0);
     return {
         total: orders.length,
-        revenue: orders.reduce((sum, o) => sum + (o.totalInCents || 0), 0),
+        revenue: SovereignMath.toCents(BigInt(revenueMicro)),
         pending: orders.filter(o => o.status !== 'paid' && o.status !== 'cancelled').length
     };
 });

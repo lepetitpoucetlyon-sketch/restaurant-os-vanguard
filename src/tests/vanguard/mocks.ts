@@ -158,6 +158,10 @@ vi.mock('jotai', async () => {
 
 // 5. MOCK CONFIGURATION
 vi.mock('@/config/instance', () => ({
+    APP_MODE: 'tenant',
+    isMCCMode: () => false,
+    isTenantMode: () => true,
+    DEFAULT_TENANT_ID: 'lepetitpoucet',
     whiteLabelInstanceConfig: {
         identityDefaults: {
             name: 'Restaurant Test',
@@ -168,12 +172,7 @@ vi.mock('@/config/instance', () => ({
     }
 }));
 
-// 6. MOCK FIREBASE UTILS (GRADE VI SAAS)
 vi.mock('@/lib/firebase', () => ({
-    getTenantPath: vi.fn((relativePath, tenantIdOverride) => {
-        if (tenantIdOverride) return `tenants/${tenantIdOverride}/${relativePath}`;
-        return relativePath;
-    }),
     firestore: { id: 'mock-db' },
     auth: { id: 'mock-auth' },
     storage: { id: 'mock-storage' },

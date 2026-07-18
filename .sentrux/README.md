@@ -6,71 +6,96 @@ qualité, un treemap visuel et un *quality gate* qui détecte la dégradation
 architecturale pendant les sessions d'agent IA.
 
 > Source : https://github.com/sentrux/sentrux — binaire Rust, 52 langages (dont TS) via tree-sitter.
-> ✅ **Exécuté et vérifié le 2026-06-15 sur Mac** : `sentrux check .` → **Quality 7011/10000,
-> 14 règles, toutes au vert, 0 cycle** (1259 fichiers). Le « 4884 » d'anciennes notes était un
-> chiffre inventé : la vraie valeur est 7011.
 
-## 1. Installer (sur ton Mac)
+## Baseline
+
+| Date | Score | Règles | Cycles | max_cc |
+|---|---|---|---|---|
+| 2026-06-15 | **7011**/10000 | 14 | 0 | 25 |
+| 2026-07-04 | À mesurer | **67** (63 boundaries + 4 constraints) | 0 cible | **20** |
+
+Après `sentrux check .` avec les nouvelles règles, relancer `./scripts/sentrux-baseline.sh`
+pour figer la nouvelle baseline.
+
+## 1. Installer
 
 ```bash
 brew install sentrux/tap/sentrux
-sentrux --version   # vérifier
+sentrux --version
 ```
 
-## 2. Premier scan
+## 2. Lancer
 
 ```bash
-cd ~/RESTAURANT-OS-CORE
-sentrux                 # GUI : treemap live des piliers
-sentrux check .         # vérifie .sentrux/rules.toml (exit 0/1, CI-friendly)
+sentrux                 # GUI treemap interactif
+sentrux check .         # vérifie rules.toml — exit 0/1 (CI-friendly)
+sentrux gate .          # compare vs baseline (bloquant si régression)
 ```
 
-⚠️ sentrux parse via tree-sitter (analyse syntaxique). Vérifie au 1er scan qu'il
-suit bien les alias `@/...` du tsconfig et qu'il cartographie correctement les
-piliers `src/modules/*`. Sinon, ajuste les `paths` dans `rules.toml`.
+## 3. Groupes de règles (v2.0)
 
-## 3. Calibrer les règles
+| # | Groupe | Règles | Ce que ça protège |
+|---|---|---|---|
+| 1 | Contraintes globales | 4 | max_cycles=0, max_cc=20, no_god_files |
+| 2 | Couches (layers) | 12 | Hiérarchie app→pillars→nexus→domain |
+| 3 | Nexus bypass | 5 | Rien ne court-circuite SovereignGuard |
+| 4 | SSR / Store purity | 6 | store/pillars → atoms sources uniquement |
+| 5 | Matrice piliers | 35 | Isolation complète 8×8 entre piliers |
+| 6 | Purété domaine | 6 | Schémas Zod ne remontent jamais |
+| 7 | Ségrégation routes | 2 | (client) ↮ (admin) |
+| 8 | Direction infra | 2 | Adapters ne descendent pas dans les piliers |
+| 9 | Guards d'accès | 3 | adminAuthGuard réservé aux routes admin |
 
-`rules.toml` est volontairement prudent. Après le 1er `sentrux check .` :
-- ajuste `max_coupling` / `max_cc` au niveau réel du repo, puis resserre ;
-- vérifie que les `[[boundaries]]` entre piliers ne génèrent pas de faux positifs
-  (le couplage légitime POS→Finance doit passer par `FinancialNexusBridge`) ;
-- ajoute les paires de piliers manquantes si besoin (intelligence, kds, sovereign…).
+**Total : 67 règles** (63 boundaries + 4 constraints) — vs 14 en v1.0 (+378%).
 
-## 4. Quality gate autour des sessions d'agent
+## 4. Matrice piliers — logique
 
-Baseline actuelle protégée : **7011/10000** (figée le 2026-06-15).
+Chaque pilier (Ops, Finance, Commerce, Human, Logistics, Compliance, Intelligence, KDS)
+est **étanche** aux autres. Le couplage légitime passe TOUJOURS par :
+- `FinancialNexusBridge` (POS → NF525)
+- `NexusAdapter` (read/write multi-tenant)
+- `NexusEventBus` (événements asynchrones)
+
+Exemple : Ops a besoin du stock Logistics → émet un événement `STOCK_DEDUCTION`
+capté par `StockDeductionHandler` dans lib/events/handlers — jamais par import direct.
+
+## 5. SSR / TDZ protection (groupe 4)
+
+Le bug le plus fréquent sous agent IA : `store/pillars/ops.ts` importe
+`src/modules/ops/index.ts` (barrel) qui importe un hook React qui importe
+un atome → cycle qui se manifeste uniquement en SSR production (impossible à déboguer).
+
+**Règle** : `store/pillars/*` → `*/index*` est interdit.
+Les pillar files n'importent QUE les fichiers `*Atoms.ts` directement.
+
+## 6. Quality gate autour des sessions d'agent
 
 ```bash
-./scripts/sentrux-baseline.sh   # fige la baseline (= sentrux gate --save .) — à lancer 1 fois
-# ... session agent ...
-sentrux gate .                  # signale toute dégradation sous la baseline
+./scripts/sentrux-baseline.sh   # fige la baseline AVANT une session
+# ... session agent IA ...
+sentrux gate .                  # vérifie APRÈS — bloquant si régression
 ```
 
-Intégré dans `scripts/preflight.sh` : étape 4 = `sentrux check .` (bloquant), étape 5 =
-`sentrux gate .` (échoue si l'archi a régressé sous la baseline). Relance
-`./scripts/sentrux-baseline.sh` seulement après une amélioration **volontaire**.
+Intégré dans `scripts/preflight.sh` : étape 6 = check (bloquant) + étape 7 = gate (bloquant).
 
-## 5. Brancher Claude Code (MCP)
+Ne jamais relancer `sentrux-baseline.sh` pour masquer une dégradation —
+seulement après une amélioration **volontaire et vérifiée**.
+
+## 7. Brancher Claude Code (MCP)
 
 ```bash
 /plugin marketplace add sentrux/sentrux
 /plugin install sentrux
 ```
 
-L'agent accède alors à : scan · health · session_start · session_end · rescan ·
-check_rules · evolution · dsm · test_gaps.
+L'agent accède alors à : `scan`, `health`, `session_start`, `session_end`,
+`rescan`, `check_rules`, `evolution`, `dsm`, `test_gaps`.
 
-## 6. CI / preflight
+## Limites (garder en tête)
 
-`scripts/preflight.sh` lance `sentrux check .` en étape 4 (non bloquant par
-défaut). Retire le `|| true` une fois la config calibrée pour bloquer les PR qui
-dégradent l'architecture.
-
-## Limites (à garder en tête)
-
-- sentrux regarde la **structure** (cycles, couplage, frontières), PAS les règles
-  métier : il ne vérifie pas `toMicrounits()`, l'immuabilité NF525, ni le
-  multi-tenancy `tenants/{tenantId}/...`. Ça reste du ressort de tsc, Vitest et
-  tes lint rules custom.
-- Projet jeune (v0.5.x) : attends-toi à des limites et vérifie chaque résultat.
+- sentrux regarde la **structure** (cycles, couplage, frontières), PAS les règles métier :
+  il ne vérifie pas `toMicrounits()`, l'immuabilité NF525, ni les chemins
+  `tenants/{tenantId}/...`. Ça reste du ressort de `tsc`, Vitest et lint custom.
+- Les alias `@/...` du tsconfig peuvent ne pas être résolus selon la version.
+  Si les imports alias ne sont pas suivis, compléter avec madge (déjà dans preflight étape 4).
+- Projet séniorux jeune (v0.5.x) : toujours vérifier manuellement les violations signalées.

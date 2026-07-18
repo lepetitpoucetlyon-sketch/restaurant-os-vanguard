@@ -161,9 +161,14 @@ interface ProductGridProps {
     products: Product[];
     isLoading: boolean;
     onAddToCart: (product: Product, quantity: number, options: Record<string, Option[]>) => void;
+    /**
+     * Optional set of out-of-stock product IDs / lowercased names from useStockAlerts.
+     * Augments the ingredient-based stock check already performed internally.
+     */
+    outOfStockIds?: Set<string>;
 }
 
-export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }: ProductGridProps) {
+export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, outOfStockIds }: ProductGridProps) {
     const [selectedProduct, setSelectedProduct] = useAtom(posSelectedProductAtom) as [Product | null, (p: Product | null) => void];
     const [isDialogOpen, setIsDialogOpen] = useAtom(posProductDetailsOpenAtom);
     const [searchQuery, setSearchQuery] = useAtom(posSearchQueryAtom);
@@ -208,8 +213,17 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart }
                         // Otherwise it's a simple 'stockout'
                         const expiredOnly = relatedStock.length > 0 && nonExpiredStock.length === 0;
                         disabledReason = expiredOnly ? 'expired' : 'stockout';
-                        break; 
+                        break;
                     }
+                }
+            }
+
+            // Secondary stockout check: useStockAlerts set (matches by productId or lowercased name)
+            if (!isDisabled && outOfStockIds && outOfStockIds.size > 0) {
+                const nameKey = (product.name || '').toLowerCase();
+                if (outOfStockIds.has(product.id) || outOfStockIds.has(nameKey)) {
+                    isDisabled = true;
+                    disabledReason = 'stockout';
                 }
             }
 

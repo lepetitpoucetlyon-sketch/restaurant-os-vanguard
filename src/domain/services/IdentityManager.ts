@@ -11,7 +11,7 @@ export interface PersistedSession {
  * NEVER hardcode credentials in source code.
  */
 function getRootAdminPin(): string {
-    const pin = process.env.NEXT_PUBLIC_ROOT_ADMIN_PIN || process.env.ROOT_ADMIN_PIN;
+    const pin = process.env.ROOT_ADMIN_PIN;
     if (!pin || pin.trim().length !== 4) {
         // No default PIN — ever. An unconfigured PIN must block admin access,
         // not silently open a well-known credential (dev or prod).

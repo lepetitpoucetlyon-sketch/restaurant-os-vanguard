@@ -1,7 +1,8 @@
-import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
 import { fiscalLedgerAtom } from '@modules/compliance/haccp/store/complianceAtoms';
 import { TelemetryPulse } from '@/shared/nexus-contract';
+import { logger } from '@/lib/logger';
 
 interface BatteryManager {
   level: number;
@@ -34,7 +35,7 @@ export class TelemetryService {
   static start(tenantId: string) {
     this.stop(); // Cleanup previous if unknown
 
-    console.log(`[TelemetryService] Heartbeat démarré pour ${tenantId} (Intervalle: 5min).`);
+    logger.info(`[TelemetryService] Heartbeat démarré pour ${tenantId} (Intervalle: 5min).`);
 
     // Initial beat
     this.sendPulse(tenantId);
@@ -50,9 +51,7 @@ export class TelemetryService {
    */
   private static async sendPulse(tenantId: string) {
     try {
-      const firestore = getFirestore();
-      // Path aligned with MCC Mirror dashboard
-      const statusDocRef = doc(firestore, 'tenants', tenantId, 'status', 'heartbeat');
+      const heartbeatPath = `tenants/${tenantId}/status/heartbeat`;
 
       // 1. Gather Battery Info
       let batteryInfo = { level: 1, charging: true, supported: false };
@@ -81,7 +80,7 @@ export class TelemetryService {
       const payload: TelemetryPulse = {
         version: '9.0.0-grade-ix',
         status: 'ACTIVE',
-        lastPulse: serverTimestamp() as unknown as Date,
+        lastPulse: Nexus.adapter.serverTimestamp() as unknown as Date,
         health: {
           uptime: typeof process !== 'undefined' && process.uptime ? Math.floor(process.uptime()) : 0,
           battery: batteryInfo,
@@ -97,8 +96,8 @@ export class TelemetryService {
         }
       };
 
-      await setDoc(statusDocRef, payload, { merge: true });
-      console.log(`[TelemetryService] Heartbeat envoyé à ${new Date().toLocaleTimeString()}`);
+      await Nexus.adapter.set(heartbeatPath, payload, { merge: true });
+      logger.debug(`[TelemetryService] Heartbeat envoyé à ${new Date().toLocaleTimeString()}`);
     } catch (error) {
       console.warn(`[TelemetryService] Échec du heartbeat:`, error);
     }
@@ -110,16 +109,14 @@ export class TelemetryService {
    */
   static async reportIssue(code: 'FALLBACK_VALUE' | 'INTEGRITY_DRIFT' | 'AUTH_ANOMALY', source: string, techMetadata: { field: string, type?: string }) {
     try {
-      const firestore = getFirestore();
-      // ID d'incident totalement anonyme
       const issueId = `INCIDENT-${Math.random().toString(36).substring(7).toUpperCase()}`;
-      const issueRef = doc(firestore, 'system_alerts', issueId);
-      
-      await setDoc(issueRef, {
+      const issuePath = `system_alerts/${issueId}`;
+
+      await Nexus.adapter.set(issuePath, {
         code,
         source,
-        techMetadata, // Uniquement des noms de champs/types
-        timestamp: serverTimestamp(),
+        techMetadata,
+        timestamp: Nexus.adapter.serverTimestamp(),
         version: '9.0.0-grade-ix',
         severity: code === 'INTEGRITY_DRIFT' ? 'CRITICAL' : 'WARNING'
       });
@@ -137,7 +134,7 @@ export class TelemetryService {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
-      console.log(`[TelemetryService] Heartbeat arrêté.`);
+      logger.info(`[TelemetryService] Heartbeat arrêté.`);
     }
   }
 }

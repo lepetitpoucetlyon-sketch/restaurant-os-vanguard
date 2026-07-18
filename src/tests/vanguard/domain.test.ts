@@ -193,12 +193,11 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
         });
 
         it('T15: Isolation Tenant (Paths)', async () => {
-            // Darwin-3 : Sûreté Grade VI
-            const { getTenantPath } = await import('../../lib/firebase');
-            const path = getTenantPath('orders', 'tenant-A');
+            const { Nexus } = await import('../../lib/nexus/NexusAdapter');
+            const path = Nexus.getTenantPath('orders', 'tenant-A');
             expect(path).toBe('tenants/tenant-A/orders');
-            
-            const pathB = getTenantPath('orders', 'tenant-B');
+
+            const pathB = Nexus.getTenantPath('orders', 'tenant-B');
             expect(pathB).not.toBe(path);
         });
     });

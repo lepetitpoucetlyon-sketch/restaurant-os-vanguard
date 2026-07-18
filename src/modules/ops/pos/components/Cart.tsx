@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X } from "lucide-react";
+import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X, MoreHorizontal } from "lucide-react";
 import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,9 +27,11 @@ interface CartProps {
     guestCount?: number;
     showClose?: boolean;
     onClose?: () => void;
+    /** Called when staff taps the "⋯" action button on a cart item (discount / offer / cancel). */
+    onItemContextMenu?: (cartId: string, item: CartItem) => void;
 }
 
-export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill: _onSplitBill, tableNumber, guestCount, showClose, onClose }: CartProps) {
+export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill: _onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
     const _splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
@@ -54,9 +56,11 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
             htMicro = BigInt(SovereignMath.add(Number(htMicro), Number(itemHtMicro)));
         });
 
-        return { 
-            totalInCents: SovereignMath.toCents(totalMicro), 
-            htInCents: SovereignMath.toCents(htMicro) 
+        return {
+            // Source of truth (Microunits Protocol); totalInCents kept as a deprecated parity mirror for legacy formatters.
+            totalInMicrounits: Number(totalMicro),
+            totalInCents: SovereignMath.toCents(totalMicro),
+            htInCents: SovereignMath.toCents(htMicro)
         };
     }, [items, priceMultiplier]);
 
@@ -123,9 +127,27 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="flex flex-col items-end">
+                                        <div className="flex flex-col items-end gap-0.5">
+                                            {/* Strikethrough original price when a discount is active */}
+                                            {item.originalPriceInMicrounits && (
+                                                <span className="text-[10px] line-through opacity-40 font-mono text-status-error">
+                                                    {formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}
+                                                </span>
+                                            )}
                                             <span className="text-sm font-serif font-black italic">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}</span>
                                             <span className="text-[10px] opacity-40 font-mono">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))))} unit</span>
+                                            {/* Offer badge */}
+                                            {item.isOffer && (
+                                                <span className="text-[8px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                                                    OFFERT
+                                                </span>
+                                            )}
+                                            {/* Discount badge */}
+                                            {!item.isOffer && (item.discountPercent ?? 0) > 0 && (
+                                                <span className="text-[8px] font-black uppercase tracking-widest bg-accent-gold/10 text-accent-gold border border-accent-gold/20 px-2 py-0.5 rounded-full">
+                                                    -{item.discountPercent}%
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
@@ -137,6 +159,16 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                                         <button onClick={() => onUpdateQuantity(item.cartId, 1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
                                             <Plus className="w-3 h-3" />
                                         </button>
+                                        {onItemContextMenu && (
+                                            <button
+                                                onClick={() => onItemContextMenu(item.cartId, item)}
+                                                className="w-8 h-8 rounded-lg bg-bg-tertiary/60 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
+                                                title="Actions (remise / offrir / annuler)"
+                                                aria-label="Options article"
+                                            >
+                                                <MoreHorizontal className="w-3.5 h-3.5" />
+                                            </button>
+                                        )}
                                     </div>
                                 </motion.div>
                             ))}

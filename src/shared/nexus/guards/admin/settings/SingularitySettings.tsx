@@ -8,6 +8,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SettingsManager } from '@domain/services/SettingsManager';
 import { AccountingMode, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
+import { useNotifications } from '@/context/NotificationsContext';
 
 /**
  * ⚙️ SingularitySettings - Grade X
@@ -18,6 +19,7 @@ export function SingularitySettings() {
     const [settings, setSettings] = useState<import('@nexus/contracts').GlobalSettings | null>(null); // SOVEREIGN_OVERRIDE: legacy typings
     const [saving, setSaving] = useState(false);
     const [rbacLevel, setRbacLevel] = useState<'ADMIN' | 'MANAGER' | 'DENIED'>('DENIED');
+    const { addNotification } = useNotifications();
 
     useEffect(() => {
         loadSettings();
@@ -50,6 +52,7 @@ export function SingularitySettings() {
             logger.info('SingularitySettings: Intelligence updated.');
         } catch (e) {
             console.error("Failed to save", e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer les paramètres de l\'intelligence.' });
         } finally {
             setSaving(false);
         }

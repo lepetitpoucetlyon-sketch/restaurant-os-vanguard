@@ -1,18 +1,19 @@
 import { logger } from '@/lib/logger';
-import { 
-    IdentityExtractionSchema, 
-    ComplianceExtractionErrorSchema, 
-    type IdentityExtraction, 
-    type ComplianceExtractionError 
+import { LLMManager } from '@/lib/ai/LLMManager';
+import {
+    IdentityExtractionSchema,
+    ComplianceExtractionErrorSchema,
+    type IdentityExtraction,
+    type ComplianceExtractionError
 } from '@/domain/schemas/compliance.schemas';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
+import { AI_MODELS } from '@/lib/ai/types';
 
-export type IdentityExtractionResult = 
+export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }
     | { success: false; error: ComplianceExtractionError | { error: string; reason: string; flags: string[] }; rawResponse: string };
 
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
-const MODEL_ID = 'gemini-1.5-flash'; // High speed for classification
+const MODEL_ID = AI_MODELS.fast;
 
 export const IdentityGuardService = {
     /**
@@ -20,23 +21,14 @@ export const IdentityGuardService = {
      */
     async scanDocument(
         base64Image: string, 
-        options: { tenantId: string; trustedContext: boolean; apiKey?: string }
+        options: { tenantId: string; trustedContext: boolean }
     ): Promise<IdentityExtractionResult> {
-        const { tenantId, trustedContext, apiKey: providedKey } = options;
-        const apiKey = providedKey || process.env.GEMINI_API_KEY || '';
-
-        if (!apiKey) {
-            return { 
-                success: false, 
-                error: { error: 'NON_PROCESSABLE', reason: 'Missing API Key', flags: [] },
-                rawResponse: '' 
-            };
-        }
+        const { tenantId, trustedContext } = options;
 
         logger.info(`[IdentityGuard] Scanning document for tenant ${tenantId} (Trusted: ${trustedContext})`);
 
         try {
-            const rawResponse = await this.callGeminiVision(base64Image, apiKey, trustedContext);
+            const rawResponse = await this.callVisionAPI(base64Image, trustedContext);
             const parsed = this.extractJson(rawResponse);
 
             // 1. Error check
@@ -67,42 +59,23 @@ export const IdentityGuardService = {
         }
     },
 
-    async callGeminiVision(base64: string, key: string, trusted: boolean): Promise<string> {
+    async callVisionAPI(base64: string, trusted: boolean): Promise<string> {
         const imageData = base64.includes(',') ? base64.split(',')[1] : base64;
-        const url = `${GEMINI_ENDPOINT}/${MODEL_ID}:generateContent?key=${key}`;
 
-        const contextInstruction = trusted 
+        const contextInstruction = trusted
             ? "\nCONTEXTE : TRUSTED_SECURE_VASSAL. Vous pouvez extraire les raw_values."
             : "\nCONTEXTE : UNTRUSTED_OUTSIDE_VASSAL. raw_value doit être NULL pour tout Tier 4.";
 
-        const body = {
-            system_instruction: {
-                parts: [{ text: IDENTITY_GUARD_SYSTEM_PROMPT + contextInstruction }]
-            },
-            contents: [{
-                parts: [
-                    { inline_data: { mime_type: 'image/jpeg', data: imageData } },
-                    { text: "Analyze this document for GDPR compliance. Return JSON only." }
-                ]
-            }],
-            generationConfig: {
-                temperature: 0.1,
-                responseMimeType: "application/json"
-            }
-        };
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+        const response = await LLMManager.provider.generateFromImage({
+            model: MODEL_ID,
+            systemPrompt: IDENTITY_GUARD_SYSTEM_PROMPT + contextInstruction,
+            userPrompt: "Analyze this document for GDPR compliance. Return JSON only.",
+            image: { base64: imageData, mimeType: 'image/jpeg' },
+            temperature: 0.1,
+            responseMimeType: 'application/json',
         });
 
-        if (!response.ok) {
-            throw new Error(`Gemini API Error: ${response.status}`);
-        }
-
-        const res = await response.json();
-        return res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        return response.text;
     },
 
     extractJson(text: string): unknown {

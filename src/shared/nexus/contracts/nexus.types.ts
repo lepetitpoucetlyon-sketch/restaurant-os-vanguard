@@ -4,7 +4,7 @@ import { TenantConfig, SovereignData, SovereignNode } from '@/shared/nexus-contr
 
 import { GlobalSettings, PerformanceGoals } from './settings';
 import { Language } from '@/i18n/translations';
-import { ThemeMode, AccentColor, UIDensity, BorderRadius } from '@/store/themeAtoms';
+import { ThemeMode, AccentColor, UIDensity, BorderRadius } from './theme.types';
 import { EmpireInstance, EmpireGlobalMetrics, FleetInsight } from './fleet.types';
 
 /**

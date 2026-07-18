@@ -2,7 +2,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Clock, ArrowRight } from "lucide-react";
+import { CheckCircle2, Clock, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
 
@@ -12,9 +12,10 @@ interface MiseEnPlaceTabProps {
     prepTasks: MiseEnPlaceTask[];
     togglePrepTask: (id: string) => Promise<void>;
     onSelectTask: (task: MiseEnPlaceTask) => void;
+    isLoading?: boolean;
 }
 
-export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask }: MiseEnPlaceTabProps) {
+export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoading }: MiseEnPlaceTabProps) {
     return (
         <motion.div
             variants={cinematicContainer}
@@ -38,6 +39,17 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask }: Mise
             </motion.div>
 
             <div className="grid gap-4">
+                {isLoading && prepTasks.length === 0 ? (
+                    <div className="flex items-center justify-center py-16 text-text-muted gap-3">
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span className="text-[11px] font-bold uppercase tracking-widest">Chargement des tâches…</span>
+                    </div>
+                ) : !isLoading && prepTasks.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-16 text-text-muted text-center">
+                        <CheckCircle2 strokeWidth={1} className="w-10 h-10 mb-4 opacity-30" />
+                        <p className="text-[11px] font-bold uppercase tracking-widest">Aucune tâche planifiée</p>
+                    </div>
+                ) : null}
                 <AnimatePresence mode="popLayout">
                     {prepTasks.map(task => (
                         <motion.div

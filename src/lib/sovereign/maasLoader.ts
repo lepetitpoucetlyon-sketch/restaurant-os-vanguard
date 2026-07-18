@@ -1,6 +1,5 @@
 import { logger } from '@/lib/logger';
-import { getTenantFirebase } from '@/lib/multi-tenant-firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
@@ -28,8 +27,6 @@ export async function dispatchMaasAlert(claims: MaasClaims, type: 'technical' | 
     }
     
     try {
-        const { firestore } = getTenantFirebase(claims.tenantId);
-        
         const alertPayload = {
             message,
             moduleName,
@@ -37,15 +34,13 @@ export async function dispatchMaasAlert(claims: MaasClaims, type: 'technical' | 
             role: claims.role,
             plan: claims.plan,
             type: 'maas_violation',
-            timestamp: serverTimestamp(),
+            timestamp: Nexus.adapter.serverTimestamp(),
             userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
         };
 
-        if (type === 'technical') {
-            await addDoc(collection(firestore, 'mcc/alerts'), alertPayload);
-        } else {
-            await addDoc(collection(firestore, `clients/${claims.orgId}/alerts`), alertPayload);
-        }
+        const collectionPath = type === 'technical' ? 'mcc/alerts' : `clients/${claims.orgId}/alerts`;
+        const alertId = Nexus.adapter.generateId(collectionPath);
+        await Nexus.adapter.create(`${collectionPath}/${alertId}`, alertPayload);
     } catch (err) {
         logger.error('Failed to dispatch MaaS alert', err);
     }

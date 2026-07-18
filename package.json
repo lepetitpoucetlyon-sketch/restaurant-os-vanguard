@@ -56,6 +56,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-konva": "^19.2.1",
+    "resend": "^6.17.2",
     "sonner": "^2.0.7",
     "stripe": "^22.2.0",
     "tailwind-merge": "^3.4.0",

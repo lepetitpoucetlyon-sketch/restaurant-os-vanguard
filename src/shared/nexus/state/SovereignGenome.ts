@@ -74,9 +74,10 @@ export const addToastAtom = atom(
  */
 // Storage import moved to top
 
-const TenantIdSchema = z.string().min(1).default('lepetitpoucet');
+const FALLBACK_TENANT = process.env.NEXT_PUBLIC_DEFAULT_TENANT_ID || 'lepetitpoucet';
+const TenantIdSchema = z.string().min(1).default(FALLBACK_TENANT);
 
-const _tenantIdBase = atom(SovereignStorage.get('nexus_tenant_id', TenantIdSchema, 'lepetitpoucet').data);
+const _tenantIdBase = atom(SovereignStorage.get('nexus_tenant_id', TenantIdSchema, FALLBACK_TENANT).data);
 
 export const tenantConfigAtom = SovereignStorage.atomWithSovereignStorage<TenantConfig>('nexus_tenant_config', TenantConfigSchema, {
     id: 'default_node',

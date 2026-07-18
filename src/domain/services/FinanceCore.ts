@@ -6,6 +6,8 @@
 
 import { Order, OrderItem, FiscalSeal } from "@nexus/contracts";
 import { SovereignData } from "@shared/nexus-contract";
+import { SovereignMath } from "@/shared/services/SovereignMath";
+import { logger } from "@/lib/logger";
 
 export interface TaxBreakdown {
     total: number;
@@ -95,7 +97,7 @@ export class FinanceCore {
             ]
         }) as Order[];
 
-        const totalInMicrounits = dayOrders.reduce((sum, o) => sum + ('totalInMicrounits' in o ? Number((o as Record<string, unknown>).totalInMicrounits) : ('totalInCents' in o ? Number((o as Record<string, unknown>).totalInCents) * 10000 : 0)), 0);
+        const totalInMicrounits = dayOrders.reduce((sum, o) => sum + SovereignMath.orderTotalMicrounits(o), 0);
         const taxBreakdown = this.calculateTaxBreakdown(dayOrders.flatMap(o => o.items || []));
 
         const zReport: ZReport = {
@@ -122,9 +124,9 @@ export class FinanceCore {
     static async sealRecordWithHash(id: string, data: SovereignData): Promise<FiscalSeal> {
         const { QuantumCrypto } = await import('@/lib/QuantumCrypto');
         const serialized = JSON.stringify(data);
-        const secret = process.env.NEXT_PUBLIC_FISCAL_SECRET;
+        const secret = process.env.FISCAL_SIGNING_SECRET;
         if (!secret) {
-            throw new Error('❌ SÉCURITÉ : NEXT_PUBLIC_FISCAL_SECRET manquant. Le scellage fiscal ne peut être cryptographiquement souverain.');
+            throw new Error('❌ SÉCURITÉ : FISCAL_SIGNING_SECRET manquant. Le scellage fiscal ne peut être cryptographiquement souverain.');
         }
         
         const seal = await QuantumCrypto.generateQuantumSeal(serialized, secret);
@@ -143,7 +145,7 @@ export class FinanceCore {
      * Grade X: Export souverain conforme à l'administration fiscale.
      */
     static async exportMonthlyFEC(tenantId: string, month: string): Promise<string> {
-        console.log(`[FinanceCore] Exporting FEC for ${tenantId} / ${month}`);
+        logger.info(`[FinanceCore] Exporting FEC for ${tenantId} / ${month}`);
         return "FEC-CONTENT-STUB";
     }
 
@@ -152,7 +154,7 @@ export class FinanceCore {
      * Grade X: Vérification de l'intégrité de la chaîne fiscale.
      */
     static async auditLedger(tenantId: string): Promise<boolean> {
-        console.log(`[FinanceCore] Auditing Ledger for ${tenantId}`);
+        logger.info(`[FinanceCore] Auditing Ledger for ${tenantId}`);
         return true;
     }
 }

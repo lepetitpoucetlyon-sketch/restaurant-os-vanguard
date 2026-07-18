@@ -10,11 +10,13 @@ import {
 } from "../store/inventoryAtoms";
 import { wasteLogsNodeAtom } from "@/modules/compliance/haccp/store/complianceAtoms";
 import { useVisibilityPurge } from "@/hooks/useVisibilityPurge";
-import { SovereignNode, SovereignData, OperationalIdentity, SovereignField } from "@shared/nexus-contract";
+import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { Ingredient, StockItem, Preparation, StorageLocation, IngredientUnit, IngredientCategory } from "@shared/nexus/contracts/logistics";
+import { Ingredient, StockItem, Preparation, StorageLocation } from "@shared/nexus/contracts/logistics";
+import { mapNodeToIngredient } from "./inventoryMappers";
+import { logger } from "@/lib/logger";
 
 /**
  * 🥫 useInventory - Grade X Atomic Bridge (Source of Truth)
@@ -31,23 +33,6 @@ export function useInventory() {
     const storageNode = useAtomValue(storageLocationsNodeAtom);
     const wasteNode = useAtomValue(wasteLogsNodeAtom);
 
-    // 🛡️ SOVEREIGN MAPPING (Grade X)
-    const toIngredient = (n: SovereignNode): Ingredient => {
-        const attr = (n.attributes || {}) as Record<string, SovereignField>;
-        return {
-            id: String(n.id),
-            name: String(attr.name || ''),
-            unit: (attr.unit || 'unit') as IngredientUnit,
-            minQuantity: Number(attr.minQuantity || 0),
-            costInCents: Number(attr.costInCents || 0),
-            category: (attr.category || 'other') as IngredientCategory,
-            supplier: String(attr.supplier || ''),
-            defaultStorageLocation: String(attr.defaultStorageLocation || ''),
-            createdAt: typeof n.createdAt === 'string' ? n.createdAt : now,
-            updatedAt: now
-        } as Ingredient;
-    };
-
     const stockItems = (stockNode.data || []) as StockItem[];
     const ingredients = (ingredientsNode.data || []) as Ingredient[];
     const preparations = (preparationsNode.data || []) as Preparation[];
@@ -60,11 +45,11 @@ export function useInventory() {
     );
 
     const receiveOrder = useCallback((id: string, data: SovereignData) => {
-        console.log('[Inventory] Bridge: Receive Order', id, data);
+        logger.debug('[Inventory] Bridge: Receive Order', id, data);
     }, []);
 
     const cancelOrder = useCallback((id: string) => {
-        console.log('[Inventory] Bridge: Cancel Order', id);
+        logger.debug('[Inventory] Bridge: Cancel Order', id);
     }, []);
 
     const addStockItem = async (data: Partial<SovereignNode>) => {
@@ -104,15 +89,48 @@ export function useInventory() {
         });
     };
 
-    return { 
-        data: stockItems, 
+    const deductStockForProduct = async (productId: string, quantity: number) => {
+        if (!tenantId) return;
+        const product = await Nexus.adapter.get<{ linkedStockItemId?: string; recipeId?: string }>(
+            `tenants/${tenantId}/products/${productId}`
+        );
+        if (!product) return;
+
+        const stockBase = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
+
+        if (product.recipeId) {
+            const recipe = await Nexus.adapter.get<{ ingredients?: Array<{ ingredientId: string; quantity: number }> }>(
+                `tenants/${tenantId}/recipes/${product.recipeId}`
+            );
+            await Promise.allSettled(
+                (recipe?.ingredients ?? []).map(async (ing) => {
+                    if (!ing.ingredientId) return;
+                    const itemPath = `${stockBase}/${ing.ingredientId}`;
+                    const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
+                    if (!stockItem) return;
+                    const newQty = Math.max(0, (stockItem.quantity ?? 0) - ing.quantity * quantity);
+                    await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: now });
+                })
+            );
+        } else if (product.linkedStockItemId) {
+            const itemPath = `${stockBase}/${product.linkedStockItemId}`;
+            const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
+            if (stockItem) {
+                const newQty = Math.max(0, (stockItem.quantity ?? 0) - quantity);
+                await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: now });
+            }
+        }
+    };
+
+    return {
+        data: stockItems,
         stockItems,
-        ingredients: ingredients.map(i => toIngredient(i as unknown as SovereignNode)),
+        ingredients: ingredients.map(i => mapNodeToIngredient(i as unknown as SovereignNode, now)),
         preparations,
         storageLocations,
         wasteLogs,
-        lowStockItems, 
-        isLoading: stockNode.loading || ingredientsNode.loading, 
+        lowStockItems,
+        isLoading: stockNode.loading || ingredientsNode.loading,
         error: stockNode.error || ingredientsNode.error,
         receiveOrder,
         cancelOrder,
@@ -120,6 +138,7 @@ export function useInventory() {
         addPreparation,
         addWaste,
         transferStock,
-        consumeStock
+        consumeStock,
+        deductStockForProduct,
     };
 }

@@ -4,6 +4,7 @@ import { AGENT_TOOLS } from '@domain/agent/tools';
 import { ToolDefinition } from '@domain/agent/tools/types';
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 import { ShieldedContext } from '../../lib/ai/ShieldedContext';
+import { logger } from '@/lib/logger';
 
 export type GeminiLiveEvent = 
     | { type: 'audio', data: Int16Array }
@@ -75,7 +76,7 @@ export class GeminiLiveService {
         };
 
         this.socket.onopen = () => {
-            console.log("Connected to Gemini Live Secure Relay");
+            logger.info("Connected to Gemini Live Secure Relay");
             
             // 🛡️ DYNAMIC TOOL MASKING: Declare only permitted tools to the chatbot
             let safeTools = config?.tools;

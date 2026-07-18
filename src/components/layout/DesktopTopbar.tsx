@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePathname } from "next/navigation";
-import { NAV_SECTIONS } from "@/config/navigation";
+import { NAV_SECTIONS } from "@/config/navConfig";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
 import { useNexusCore } from "@/hooks";

@@ -58,29 +58,20 @@ export async function POST(request: Request) {
       parsedData = TicketSchema_v1.parse(body);
     }
 
-    // Neural Analysis Module processing payload
-    const resultData = {
-      ticketId: parsedData.id,
-      suggestedPatch: "Code modification required to stabilize state desynchronization.",
-      confidenceScore: 0.94,
-      actionRequired: "REVIEW_IN_AI_WORKSHOP"
-    };
-
-    NexusTelemetryService.emitAuditPulse('INTELLIGENCE', 'NAM_ANALYSIS_COMPLETED', {
+    NexusTelemetryService.emitAuditPulse('INTELLIGENCE', 'NAM_ANALYSIS_REQUESTED', {
       ticketId: parsedData.id,
       tenantId
     });
 
-    const successResponse: StandardResponse<typeof resultData> = {
-      success: true,
-      data: resultData,
-      metadata: {
-        version: version as 'v1' | 'v2',
-        timestamp: new Date().toISOString()
-      }
-    };
-
-    return NextResponse.json(successResponse);
+    // NAM AI analysis not yet implemented — return honest 501.
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'NOT_IMPLEMENTED',
+        metadata: { version: version as 'v1' | 'v2', timestamp: new Date().toISOString() }
+      },
+      { status: 501 }
+    );
   } catch (error) {
     NexusTelemetryService.emitAuditPulse('INTELLIGENCE', 'NAM_ANALYSIS_FAILED', {
       error: error instanceof Error ? error.message : 'Unknown validation error'

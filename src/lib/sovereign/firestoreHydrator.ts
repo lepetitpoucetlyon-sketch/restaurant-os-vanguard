@@ -36,7 +36,7 @@ export class FirestoreHydrator {
       date: data.date || data.serverTimestamp,
       pieceNumber: data.pieceNumber || data.receiptNumber,
       description: data.description || `Transaction ${data.receiptNumber}`,
-      amountInCents: Math.round(data.amountInMicrounits / 100),
+      amountInCents: Math.round(data.amountInMicrounits / 10_000),
       isValidated: data.status === 'validated',
       isSystemGenerated: true,
       updatedAt: data.serverTimestamp,
@@ -56,7 +56,7 @@ export class FirestoreHydrator {
     const data = parsed.data;
     return {
       ...data,
-      balanceInCents: Math.round(data.balanceInMicrounits / 100),
+      balanceInCents: Math.round(data.balanceInMicrounits / 10_000),
       updatedAt: data.updatedAt,
       class: data.class as '1' | '2' | '3' | '4' | '5' | '6' | '7',
     };
@@ -76,7 +76,7 @@ export class FirestoreHydrator {
       ...data,
       date: data.date || data.executedAt,
       label: data.label || data.description,
-      amountInCents: Math.round(data.amountInMicrounits / 100),
+      amountInCents: Math.round(data.amountInMicrounits / 10_000),
       type: (data.type || data.direction) as 'credit' | 'debit',
       isReconciled: !!data.reconciledAt,
       updatedAt: data.executedAt,
@@ -99,7 +99,7 @@ export class FirestoreHydrator {
       userId: data.userId || data.submittedBy,
       userName: data.userName || 'Unknown',
       userRole: data.userRole || 'employee',
-      amountInCents: Math.round(data.amountInMicrounits / 100),
+      amountInCents: Math.round(data.amountInMicrounits / 10_000),
       updatedAt: data.submittedAt,
     };
   }

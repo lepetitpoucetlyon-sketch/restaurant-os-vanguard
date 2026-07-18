@@ -18,8 +18,12 @@ const MenuSettings = dynamic(() => import("@/components/settings/MenuSettings"),
 const ProfileSettings = dynamic(() => import("@/components/settings/ProfileSettings"), { loading: () => <SettingsLoading />, ssr: false });
 const TablesSettings = dynamic(() => import("@/components/settings/TablesSettings"), { loading: () => <SettingsLoading />, ssr: false });
 const ExpertGovernanceHub = dynamic(() => import("@/components/settings/ExpertGovernanceHub"), { loading: () => <SettingsLoading />, ssr: false });
-const MigrationSettings = dynamic(() => import("@/components/settings/MigrationSettings"), { loading: () => <SettingsLoading />, ssr: false });
+const MigrationHub = dynamic(() => import("@/components/settings/MigrationHub"), { loading: () => <SettingsLoading />, ssr: false });
 const NexusSettings = dynamic(() => import("@/components/settings/NexusSettings"), { loading: () => <SettingsLoading />, ssr: false });
+const PrinterSettings = dynamic(() => import("@/components/settings/PrinterSettings"), { loading: () => <SettingsLoading />, ssr: false });
+const PaymentTerminalSettings = dynamic(() => import("@/components/settings/PaymentTerminalSettings"), { loading: () => <SettingsLoading />, ssr: false });
+const CashDrawerSettings = dynamic(() => import("@/components/settings/CashDrawerSettings"), { loading: () => <SettingsLoading />, ssr: false });
+const PayrollIntegrationPanel = dynamic(() => import("@/components/settings/PayrollIntegrationPanel").then(m => ({ default: m.PayrollIntegrationPanel })), { loading: () => <SettingsLoading />, ssr: false });
 
 // Nexus-Sync Schema Orchestration
 import { StandardSettingsEngine } from "@/components/settings/ui/StandardSettingsEngine";
@@ -44,7 +48,7 @@ import {
 
 
 import {
-    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot
+    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot, Wallet
 } from "lucide-react";
 
 // Settings categories
@@ -75,6 +79,9 @@ const SETTINGS_CATEGORIES = [
     { id: 'haccp', label: 'HACCP & Hygiène', icon: Shield, color: '#00BCD4' },
     { id: 'migration', label: 'Migration & Import (IA)', icon: Database, color: '#3B82F6' },
     { id: 'tables', label: 'Tables & Zones', icon: LayoutGrid, color: '#7C3AED' },
+    { id: 'printer', label: 'Imprimante', icon: Receipt, color: '#0D9488' },
+    { id: 'tpe', label: 'Terminaux de paiement', icon: CreditCard, color: '#C5A059' },
+    { id: 'cash-drawer', label: 'Tiroir-caisse', icon: Wallet, color: '#10B981' },
 ];
 
 function SettingsLoading() {
@@ -155,6 +162,9 @@ export default function SettingsPage() {
                 <div className="space-y-12">
                     <StaffSettings />
                     <StandardSettingsEngine schema={STAFF_CONFIG_SCHEMA} />
+                    <div className="p-6 rounded-2xl bg-surface-card border border-border">
+                        <PayrollIntegrationPanel />
+                    </div>
                 </div>
             );
             case 'customer': return <StandardSettingsEngine schema={Customer_SCHEMA} />;
@@ -167,8 +177,11 @@ export default function SettingsPage() {
             case 'accounting': return <StandardSettingsEngine schema={ACCOUNTING_SCHEMA} />;
             case 'recipes': return <SettingsPlaceholder category={activeConfig} />;
             case 'haccp': return <StandardSettingsEngine schema={HACCP_SCHEMA} />;
-            case 'migration': return <MigrationSettings />;
+            case 'migration': return <MigrationHub />;
             case 'tables': return <TablesSettings />;
+            case 'printer': return <PrinterSettings />;
+            case 'tpe': return <PaymentTerminalSettings />;
+            case 'cash-drawer': return <CashDrawerSettings />;
             default: return <SettingsPlaceholder category={activeConfig} />;
         }
     }, [activeCategory, activeConfig]);

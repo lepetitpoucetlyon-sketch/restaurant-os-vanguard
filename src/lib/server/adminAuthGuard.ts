@@ -72,13 +72,38 @@ export async function requireTenantAdmin(request: Request): Promise<(AdminCaller
 
   const isFleet = (FLEET_ROLES as readonly string[]).includes(caller.role);
   const headerTenant = request.headers.get('x-nexus-tenant-id') ?? undefined;
-  const tenantId = isFleet ? (headerTenant ?? caller.tenantId) : caller.tenantId;
+  // x-resolved-tenant-id is injected by middleware from the request hostname (subdomain routing).
+  const hostTenant = request.headers.get('x-resolved-tenant-id') ?? undefined;
+  const tenantId = isFleet
+    ? (headerTenant ?? caller.tenantId ?? hostTenant)
+    : (caller.tenantId ?? hostTenant);
 
   if (!tenantId) return hiddenDoor();
   if (!isFleet && headerTenant && headerTenant !== tenantId) {
     logger.warn(`[adminAuth] Cross-tenant attempt blocked: uid=${caller.uid} claims=${tenantId} header=${headerTenant}`);
     return hiddenDoor();
   }
+  return { ...caller, tenantId };
+}
+
+/**
+ * Exige un utilisateur authentifié du tenant (n'importe quel rôle).
+ * Utilisé pour les endpoints accessibles à tous les employés (oracle, RAG).
+ * Le contrôle granulaire est délégué au Sovereign RAG (veto membrane par rôle).
+ */
+export async function requireTenantUser(
+  request: Request,
+): Promise<(AdminCaller & { tenantId: string }) | NextResponse> {
+  const caller = await verifyCaller(request);
+  if (!caller || !caller.role) return hiddenDoor();
+
+  const isFleet = (FLEET_ROLES as readonly string[]).includes(caller.role);
+  const hostTenant = request.headers.get('x-resolved-tenant-id') ?? undefined;
+  const tenantId = isFleet
+    ? (request.headers.get('x-nexus-tenant-id') ?? caller.tenantId ?? hostTenant)
+    : (caller.tenantId ?? hostTenant);
+
+  if (!tenantId) return hiddenDoor();
   return { ...caller, tenantId };
 }
 

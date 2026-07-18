@@ -5,8 +5,10 @@ export class TaxCalculator {
     const breakdown: Record<string, number> = {};
     for (const item of items) {
       const rate = item.taxRate ?? '0.10';
-      const lineHT = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-      const tva = Math.round(lineHT * parseFloat(rate));
+      const rateNum = parseFloat(rate);
+      // Prix stockés TTC (norme restauration FR) : TVA = TTC × r/(1+r)
+      const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
+      const tva = Math.round(lineTTC * rateNum / (1 + rateNum));
       breakdown[rate] = (breakdown[rate] ?? 0) + tva;
     }
     return breakdown;

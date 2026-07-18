@@ -31,13 +31,6 @@ export class POSService {
     }
 
     /**
-     * Formats prices for the POS system with currency and alignment.
-     */
-    static formatPOSPrice(amountInCents: number): string {
-        return `${(amountInCents / 100).toFixed(2)}€`;
-    }
-
-    /**
      * Calculates the total for a set of items (Cart or Order).
      */
     static calculateCartTotal(items: (OrderItem | CartItem)[]): Microunits {

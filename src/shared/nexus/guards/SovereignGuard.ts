@@ -88,7 +88,20 @@ export const SovereignGuard = {
   },
 
   getWriteSignatureSecret(path: string, tenantId: string): string {
-    return `${tenantId}:${this.extractCollectionName(path)}:NF525_WRITE_V1`;
+    const message = `${tenantId}:${this.extractCollectionName(path)}:NF525_WRITE_V1`;
+    const secret = process.env.NEXUS_TENANT_SECRET;
+    if (!secret) {
+      logger.warn('[SovereignGuard] NEXUS_TENANT_SECRET non configuré — la signature d\'écriture est dérivable publiquement');
+      return message;
+    }
+    // HMAC serveur uniquement — la vérification des writes se fait server-side
+    if (typeof process !== 'undefined' && process.versions?.node) {
+      try {
+        const { createHmac } = (eval('require') as NodeRequire)('node:crypto');
+        return createHmac('sha256', secret).update(message).digest('hex');
+      } catch { /* fallback */ }
+    }
+    return message;
   },
 
   requiresSignedWrite(path: string): boolean {
@@ -201,8 +214,10 @@ export const SovereignGuard = {
 
     // 🛡️ SUZERAIN EXCEPTION: Master Tenant (restaurant-os) can view anything.
     // Also allow specific whitelisted 'main' operations.
-    const WHITELIST = ['heartbeat', 'telemetry', 'config', 'health', 'system', 'time_sync', 'auth'];
-    const isWhitelisted = WHITELIST.some(w => path.includes(w));
+    // ⚠️ Match par SEGMENT, pas par sous-chaîne : `path.includes('config')`
+    // whitelistait `tenants/victime/systemConfig/x` → fuite cross-tenant.
+    const WHITELIST = new Set(['heartbeat', 'telemetry', 'config', 'health', 'system', 'time_sync', 'auth']);
+    const isWhitelisted = pathParts.some(seg => WHITELIST.has(seg));
     if (pathTenantId !== currentTenant && currentTenant !== 'restaurant-os' && !isWhitelisted) {
       if (process.env.NODE_ENV === 'test' && !process.env.STRICT_ISOLATION_TEST) {
         return;

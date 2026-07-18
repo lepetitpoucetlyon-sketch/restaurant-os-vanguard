@@ -64,6 +64,7 @@ export function ReleveTemperatures() {
             }
         } catch (e) {
             console.error(e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer le relevé de température.' });
         } finally {
             setRecordingEq(null);
         }

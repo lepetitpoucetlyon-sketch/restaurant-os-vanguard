@@ -4,6 +4,7 @@
  */
 
 import { logger } from './axiom';
+import { logger as devLogger } from '@/lib/logger';
 import * as Sentry from '@sentry/nextjs';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -75,11 +76,10 @@ class EmpireAuditLogger {
                     // Silently fail if axiom is not configured
                 }
 
-                // 2. Console Development Log
-                if (process.env.NODE_ENV !== 'production') {
-                    const color = event.severity === 'critical' ? '\x1b[31m' : event.severity === 'high' ? '\x1b[33m' : '\x1b[32m';
-                    console.log(`${color}[AUDIT][${event.module.toUpperCase()}]\x1b[0m ${event.action}`, event.details || '');
-                }
+                // 2. Development Log — routed through the central logger so this
+                // no longer writes to stdout on the fiscal-sealing hot path in prod
+                // (logger.debug is a no-op outside development).
+                devLogger.debug(`[AUDIT][${event.module.toUpperCase()}] ${event.action}`, event.details || '');
 
                 // 3. Sentry Integration (Critical Error Tracking)
                 if (event.severity === 'critical') {

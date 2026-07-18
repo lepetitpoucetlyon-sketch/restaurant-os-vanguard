@@ -45,6 +45,29 @@ export class FloorPlanGeometry {
         return { scale: optimalScale, position: newPos };
     }
 
+    /**
+     * Convertit un point écran (pointer) en coordonnées « monde » du plan,
+     * en tenant compte de la translation + du zoom du stage.
+     */
+    static toWorldPoint(
+        pointer: { x: number, y: number },
+        stageOffset: { x: number, y: number },
+        stageScale: { x: number, y: number }
+    ): { x: number, y: number } {
+        return {
+            x: (pointer.x - stageOffset.x) / stageScale.x,
+            y: (pointer.y - stageOffset.y) / stageScale.y,
+        };
+    }
+
+    /**
+     * Calcule le prochain numéro de table (max existant + 1) — pur.
+     */
+    static nextTableNumber(tables: Table[]): string {
+        const maxNumber = Math.max(0, ...tables.map((t: Table) => parseInt(String(t.number || '')) || 0));
+        return (maxNumber + 1).toString();
+    }
+
     static calculateZoom(
         point: { x: number, y: number },
         currentScale: number,

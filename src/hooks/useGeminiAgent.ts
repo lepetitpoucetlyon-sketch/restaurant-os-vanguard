@@ -1,6 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
 
 import { SovereignData } from '@/shared/nexus-contract';
+import { logger } from '@/lib/logger';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+
+const AGENT_SESSIONS_KEY_BASE = 'nexus_agent_sessions';
 
 export interface MessageMetadata extends SovereignData {
     tokens?: number;
@@ -29,10 +33,10 @@ export interface AgentSession {
 }
 
 /**
- * useGeminiAgent
- * Classic Oracle hook for non-realtime text interactions with Gemini.
+ * useOracleAgent
+ * Classic Oracle hook for non-realtime text interactions with the LLM provider.
  */
-export function useGeminiAgent() {
+export function useOracleAgent() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -55,7 +59,7 @@ export function useGeminiAgent() {
         setError(null);
 
         try {
-            const response = await fetch('/api/gemini', {
+            const response = await fetch('/api/oracle', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -80,12 +84,12 @@ export function useGeminiAgent() {
             
             // Handle metadata for tools etc if needed
             if (data.usage) {
-                console.log("Gemini Usage:", data.usage);
+                logger.debug("LLM Usage:", data.usage);
             }
 
         } catch (e) {
             const err = e as Error;
-            console.error("useGeminiAgent Error:", err);
+            logger.error("useOracleAgent Error:", err);
             setError(err.message || "Une erreur est survenue.");
         } finally {
             setIsProcessing(false);
@@ -98,18 +102,18 @@ export function useGeminiAgent() {
         setError(null);
     }, []);
     const fetchAllSessions = useCallback(async (): Promise<AgentSession[]> => {
-        const stored = localStorage.getItem('nexus_agent_sessions');
+        const stored = localStorage.getItem(tenantScopedKey(AGENT_SESSIONS_KEY_BASE));
         return stored ? JSON.parse(stored) as AgentSession[] : [];
     }, []);
 
     const loadSession = useCallback(async (sessionId: string) => {
-        const stored = localStorage.getItem('nexus_agent_sessions');
+        const stored = localStorage.getItem(tenantScopedKey(AGENT_SESSIONS_KEY_BASE));
         if (stored) {
             const sessions = JSON.parse(stored) as AgentSession[];
             const found = sessions.find((s) => s.id === sessionId);
             if (found) {
                 // To keep it simple for now, we just notify
-                console.log("Loading session:", sessionId);
+                logger.debug("Loading session:", sessionId);
             }
         }
     }, []);
@@ -138,3 +142,6 @@ export function useGeminiAgent() {
         startNewSession
     };
 }
+
+/** @deprecated Use useOracleAgent instead */
+export const useGeminiAgent = useOracleAgent;

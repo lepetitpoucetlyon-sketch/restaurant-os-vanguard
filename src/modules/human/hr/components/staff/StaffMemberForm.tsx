@@ -23,9 +23,11 @@ interface StaffMemberFormProps {
     isOpen: boolean;
     onClose: () => void;
     editingUser?: User | null;
+    /** Pre-fill fields when creating a new user (e.g. promoted from recruitment) */
+    prefillData?: { name?: string; role?: UserRole };
 }
 
-export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFormProps) => {
+export const StaffMemberForm = ({ isOpen, onClose, editingUser, prefillData }: StaffMemberFormProps) => {
     const { updateUser, addUser, deleteUser, canDo, logAction } = useAuth();
     const { showToast } = useToast();
     const [showSecurityModal, setShowSecurityModal] = useState(false);
@@ -40,12 +42,13 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser }: StaffMemberFor
         avatar: editingUser.avatar || '',
         hourlyRate: editingUser.hourlyRate || 15,
     } : {
-        name: '',
-        role: 'server' as UserRole,
+        name: prefillData?.name ?? '',
+        role: prefillData?.role ?? ('server' as UserRole),
         pin: '',
         avatar: '',
         hourlyRate: 15,
-    }, [editingUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editingUser, prefillData?.name, prefillData?.role]);
 
     const [formData, setFormData] = useState(defaultFormData);
 

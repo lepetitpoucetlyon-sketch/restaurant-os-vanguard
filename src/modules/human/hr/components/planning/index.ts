@@ -5,3 +5,4 @@
  */
 
 export * from './ShiftEditModal';
+export * from './PlanningWeekView';

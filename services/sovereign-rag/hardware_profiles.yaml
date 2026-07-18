@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# hardware_profiles.yaml — Profils matériels Zenith
+# Chaque profil pré-configure les paramètres de performance optimaux.
+# Les valeurs peuvent être surchargées dans zenith.yaml → hardware.overrides
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Apple Silicon M2 Ultra — Mac Studio (192GB mémoire unifiée)
+# Règle des tiers : OS(8G) + HNSW(40G) + Ollama(28G) + Workers(12G) + Buffer(20G)
+mac_studio_m2_ultra:
+  max_concurrent_ingestions: 6
+  embed_device: "mps"
+  embed_batch_size: 64
+  ollama_num_thread: 12
+  gunicorn_workers: 6
+  ollama_num_ctx: 8192
+  notes: "Metal backend via MPS. Éviter >6 ingestions simultanées (thermique)."
+
+# Apple Silicon M2 Pro — Mac Mini ou MacBook Pro (16-32GB)
+mac_mini_m2_pro:
+  max_concurrent_ingestions: 3
+  embed_device: "mps"
+  embed_batch_size: 32
+  ollama_num_thread: 8
+  gunicorn_workers: 3
+  ollama_num_ctx: 4096
+  notes: "Mémoire unifiée partagée GPU/CPU — limiter le batch size embedding."
+
+# Apple Silicon M4 — Mac Mini M4 (16-24GB)
+mac_mini_m4:
+  max_concurrent_ingestions: 3
+  embed_device: "mps"
+  embed_batch_size: 32
+  ollama_num_thread: 8
+  gunicorn_workers: 3
+  ollama_num_ctx: 4096
+  notes: "Neural Engine disponible pour embedding si MLX activé."
+
+# Linux avec GPU CUDA (typiquement serveur cloud)
+linux_gpu:
+  max_concurrent_ingestions: 8
+  embed_device: "cuda"
+  embed_batch_size: 128
+  ollama_num_thread: 8
+  gunicorn_workers: 8
+  ollama_num_ctx: 8192
+  notes: "Vérifier VRAM disponible. Batch size 128 assume ≥16GB VRAM."
+
+# CPU uniquement — serveur Linux ou CI
+cpu_only:
+  max_concurrent_ingestions: 2
+  embed_device: "cpu"
+  embed_batch_size: 16
+  ollama_num_thread: 4
+  gunicorn_workers: 2
+  ollama_num_ctx: 2048
+  notes: "Mode dégradé. Embedding ~10x plus lent. À réserver aux tests/CI."

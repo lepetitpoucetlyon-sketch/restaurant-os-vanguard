@@ -4,9 +4,6 @@
  * Manual changes will be overwritten unless you remove this header.
  */
 
-export * from './CustomerCustomerView';
-export * from './CustomerDetailPanel';
-export * from './NewCustomerDialog';
 export * from './NewReservationDialog';
 export * from './ReservationSidebar';
 export * from './ReservationToolbar';

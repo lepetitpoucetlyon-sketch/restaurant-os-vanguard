@@ -2,17 +2,27 @@ import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from 
 import { format, addDays, isSameDay } from 'date-fns';
 import { SovereignData } from "@shared/nexus-contract";
 
+/** Scheduled shift reference used for punctuality scoring */
+interface ScheduledShiftRef {
+    date: string;   // ISO date string YYYY-MM-DD
+    startTime: string; // HH:mm
+}
+
 export class HumanResourcesService {
     /**
      * Calculate monthly payroll based on weekly hours
      * Grade VI - Precision Engine
+     * @see taux indicatifs 2024 — utiliser DSN réelle
      */
     static calculatePayroll(weeklyHours: number, hourlyRate: number): PayrollCalculation {
         // Standard formula: weekly hours * 4.33 weeks/month
         const monthlyHours = weeklyHours * 4.33;
         const grossAmount = monthlyHours * hourlyRate;
-        const netAmount = grossAmount * 0.78; // Approx net for France
+        // Taux indicatifs 2024 — MSA/URSSAF selon convention collective
+        // @see https://www.urssaf.fr — utiliser DSN réelle en production
+        const netAmount = grossAmount * (1 - 0.22);        // charges salariales ~22%
         const chargesSociales = grossAmount - netAmount;
+        const employerCost = grossAmount * 1.42;            // charges patronales ~42%
 
         return {
             totalHours: Number(monthlyHours.toFixed(2)),
@@ -20,6 +30,7 @@ export class HumanResourcesService {
             grossAmount: Number(grossAmount.toFixed(2)),
             netAmount: Number(netAmount.toFixed(2)),
             chargesSociales: Number(chargesSociales.toFixed(2)),
+            employerCost: Number(employerCost.toFixed(2)),
             period: format(new Date(), 'yyyy-MM')
         };
     }
@@ -28,20 +39,74 @@ export class HumanResourcesService {
      * Calculate comprehensive statistics for an employee over a period
      * Centralized logic for the "Weaver" operation
      */
-    static calculateEmployeeStats(shifts: ShiftEntry[], weekStart: Date): ShiftStats {
+    static calculateEmployeeStats(
+        shifts: ShiftEntry[],
+        weekStart: Date,
+        scheduledShifts?: ScheduledShiftRef[]
+    ): ShiftStats {
         let totalHours = 0;
-        const _breakTime = 0;
 
         for (let i = 0; i < 7; i++) {
             const dayDate = addDays(weekStart, i);
             totalHours += this.getHoursForDay(shifts, dayDate);
         }
 
+        // --- Break time: sum of (BREAK_END − BREAK_START) pairs ---
+        const sortedEntries = [...shifts].sort(
+            (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        );
+        let breakTimeMinutes = 0;
+        const pendingBreakStarts: ShiftEntry[] = [];
+        for (const entry of sortedEntries) {
+            if (entry.type === 'BREAK_START') {
+                pendingBreakStarts.push(entry);
+            } else if (entry.type === 'BREAK_END' && pendingBreakStarts.length > 0) {
+                const breakStart = pendingBreakStarts.pop()!;
+                const diffMs =
+                    new Date(entry.timestamp).getTime() - new Date(breakStart.timestamp).getTime();
+                breakTimeMinutes += diffMs / (1000 * 60);
+            }
+        }
+
+        // --- Punctuality: 100 − round(lateArrivals / totalShifts × 100) ---
+        let punctualityScore = 100;
+        if (scheduledShifts && scheduledShifts.length > 0) {
+            let lateArrivals = 0;
+            let totalScheduled = 0;
+
+            for (const scheduled of scheduledShifts) {
+                const [h, m] = scheduled.startTime.split(':').map(Number);
+                const scheduledStart = new Date(scheduled.date);
+                scheduledStart.setHours(h, m, 0, 0);
+                const graceMs = 5 * 60 * 1000; // 5 minutes grace
+
+                const dayClockIn = shifts.find(
+                    (e) =>
+                        e.type === 'CLOCK_IN' &&
+                        isSameDay(new Date(e.timestamp), new Date(scheduled.date))
+                );
+
+                if (dayClockIn) {
+                    totalScheduled++;
+                    if (
+                        new Date(dayClockIn.timestamp).getTime() >
+                        scheduledStart.getTime() + graceMs
+                    ) {
+                        lateArrivals++;
+                    }
+                }
+            }
+
+            if (totalScheduled > 0) {
+                punctualityScore = 100 - Math.round((lateArrivals / totalScheduled) * 100);
+            }
+        }
+
         return {
             totalHours: Number(totalHours.toFixed(2)),
             overtime: Math.max(0, totalHours - 35),
-            breakTime: 0, // Logic to be implemented when BREAK events are active
-            punctualityScore: 100, // Placeholder for Phase 4.2
+            breakTime: Math.round(breakTimeMinutes),
+            punctualityScore,
             period: format(weekStart, 'yyyy-MM-dd')
         };
     }

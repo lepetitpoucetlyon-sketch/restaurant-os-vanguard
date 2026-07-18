@@ -1,4 +1,3 @@
-import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { ShiftEntrySchema, ShiftEntry } from "@domain/schemas/hr";
@@ -54,7 +53,7 @@ export class NexusPayrollEngine {
     return await NexusTransaction.run(
       { HR_EVENT: { schema: ShiftEntrySchema, data: rawData } },
       async (transaction) => {
-        const tenantPath = getTenantPath(this.COLLECTION);
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION);
         const newId = Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 12);
         const newPath = `${tenantPath}/${newId}`;
 
@@ -82,7 +81,7 @@ export class NexusPayrollEngine {
    */
   private static async fetchLastHRSealCloudStrict() {
     try {
-      const snap = await Nexus.adapter.query(getTenantPath(this.COLLECTION), {
+      const snap = await Nexus.adapter.query(Nexus.getTenantPath(this.COLLECTION), {
         orderBy: { field: 'fiscalSeal.sequence', direction: 'desc' },
         limit: 1
       });

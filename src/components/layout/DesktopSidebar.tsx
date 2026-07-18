@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
 import { useNexusCore } from "@/hooks";
-import { NAV_SECTIONS } from "@/config/navigation";
+import { NAV_SECTIONS } from "@/config/navConfig";
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
 import { SidebarProfile } from "./sidebar/SidebarProfile";

@@ -8,16 +8,11 @@ export * from './auth';
 
 
 // 📡 Telemetry & MCC Monitoring (Sovereign Infrastructure)
-export { 
+export {
     MCCAuditStream,
     MCCTreasury,
     CertificationCenter,
     DeploymentEngine,
     FiscalChainExplorer,
     StrategyOracle,
-    ZeusDashboard
 } from "@nexus/guards";
-
-// 🏗️ Infrastructure Components (Relocated from Guards)
-export { ProvisioningWizard } from './components/ProvisioningWizard';
-export { TenantOrchestrator } from './components/TenantOrchestrator';

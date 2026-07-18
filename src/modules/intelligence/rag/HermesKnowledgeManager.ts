@@ -1,20 +1,21 @@
 /**
- * 🧠 HermesKnowledgeManager — LightRAG Orchestrator
+ * 🧠 HermesKnowledgeManager — Sovereign RAG Orchestrator
  * Grade X Intelligence Layer
  *
- * This is the brain of each Vassal instance. It delegates all heavy KG
- * operations to the LightRAG Server sidecar via REST API, and handles:
+ * This is the brain of each Vassal instance. It delegates all heavy RAG
+ * operations to the Sovereign RAG sidecar via REST API, and handles:
  *
- * 1. Proxying queries to LightRAG Server
+ * 1. Proxying queries to Sovereign RAG (with RBAC role filtering)
  * 2. Indexing tenant data (products, recipes, suppliers, etc.)
  * 3. Emitting Sanitized Pulses to the MCC via PulseSanitizer
  * 4. Ingesting legacy data through the Air-lock pipeline
  *
- * ISOLATION: All operations are scoped to the tenant via the workspace
- * parameter sent to LightRAG Server (maps to NexusInterceptor tenantId).
+ * ISOLATION: All operations are scoped to the tenant via workspace_id.
+ * RBAC: role is passed on every query — Sovereign RAG veto membrane
+ *       restricts document access to the caller's permission level.
  *
  * Architecture:
- *   HermesKnowledgeManager → LightRAGClient → HTTP → LightRAG Server (Python)
+ *   HermesKnowledgeManager → SovereignRAGClient → HTTP → Sovereign RAG (Python)
  *
  * Copyright © 2026 Mohammed-ali Boudjaadar. Tous droits réservés.
  */
@@ -23,7 +24,9 @@ import { logger } from '@/lib/logger';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { PulseSanitizer } from './PulseSanitizer';
-import { LightRAGClient } from './LightRAGClient';
+import { sovereignQuery, sovereignIngest, sovereignHealth } from '@/lib/rag/SovereignRAGClient';
+import type { RAGHealthResult } from '@/lib/rag/SovereignRAGClient';
+import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
 import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';
 import type { LightRAGKnowledgeGraph } from './LightRAGConfig';
@@ -42,7 +45,6 @@ import type {
 // ============================================
 
 export class HermesKnowledgeManager {
-    private client: LightRAGClient;
     private sanitizer: PulseSanitizer;
     private pulseConsentEnabled: boolean;
     private lastPulseTimestamps: Map<PulseCategory, number>;
@@ -50,30 +52,25 @@ export class HermesKnowledgeManager {
     constructor(
         private readonly tenantId: string,
         private readonly pulseContext: PulseContext,
-        lightragConfig?: Partial<LightRAGConfig>
+        _lightragConfig?: Partial<LightRAGConfig>
     ) {
-        // Initialize the LightRAG REST client with tenant-scoped workspace
-        this.client = new LightRAGClient({
-            workspace: tenantId,
-            ...lightragConfig,
-        });
-
         this.sanitizer = new PulseSanitizer();
-        this.pulseConsentEnabled = false; // Opt-in by default
+        this.pulseConsentEnabled = false;
         this.lastPulseTimestamps = new Map();
-
         logger.info(`[HermesKnowledge] Initialized for tenant: ${tenantId}`);
     }
 
     // ============================================
-    // HEALTH — Check LightRAG Server availability
+    // HEALTH — Check Sovereign RAG availability
     // ============================================
 
-    /**
-     * 🏥 Checks if the LightRAG Server sidecar is reachable.
-     */
     async isReady(): Promise<boolean> {
-        return this.client.isAvailable();
+        const health = await sovereignHealth();
+        return health.status === 'online';
+    }
+
+    async getHealth(): Promise<RAGHealthResult> {
+        return sovereignHealth();
     }
 
     // ============================================
@@ -97,21 +94,20 @@ export class HermesKnowledgeManager {
 
         for (const doc of documents) {
             try {
-                // Convert document to indexable text
                 const text = this.documentToText(collectionType, doc);
-                if (!text) {
-                    failed++;
-                    continue;
-                }
+                if (!text) { failed++; continue; }
 
-                const docId = `${collectionType}_${doc.id ?? Date.now()}`;
-                await this.client.insert(text, docId);
+                const fileName = `${collectionType}_${doc.id ?? Date.now()}.txt`;
+                    await sovereignIngest({
+                    workspaceId: this.tenantId,
+                    fileName,
+                    fileContent: new Blob([text], { type: 'text/plain' }),
+                    mimeType: 'text/plain',
+                });
                 indexed++;
 
             } catch (error) {
-                logger.error(
-                    `[HermesKnowledge] Failed to index ${collectionType} document: ${error}`
-                );
+                logger.error(`[HermesKnowledge] Failed to index ${collectionType} document: ${error}`);
                 failed++;
             }
         }
@@ -140,12 +136,14 @@ export class HermesKnowledgeManager {
         return { indexed, failed };
     }
 
-    /**
-     * 📥 Indexes a single text blob directly.
-     */
     async indexText(text: string, id?: string): Promise<boolean> {
         try {
-            await this.client.insert(text, id);
+            await sovereignIngest({
+                workspaceId: this.tenantId,
+                fileName: `text_${id ?? Date.now()}.txt`,
+                fileContent: new Blob([text], { type: 'text/plain' }),
+                mimeType: 'text/plain',
+            });
             return true;
         } catch (error) {
             logger.error(`[HermesKnowledge] Failed to index text: ${error}`);
@@ -153,23 +151,20 @@ export class HermesKnowledgeManager {
         }
     }
 
-    /**
-     * 📥 Indexes a multimodal file (PDF, Image, etc.) using RAGAnything extraction.
-     * This handles long-running extraction jobs from MinerU/VLM.
-     *
-     * @param fileBlob The actual file blob
-     * @param metadata File metadata
-     */
     async indexMedia(
         fileBlob: Blob,
         metadata: { fileName: string; type: 'pdf' | 'image'; category: KnowledgeEntityType; id?: string }
     ): Promise<boolean> {
         const startTime = Date.now();
-        const docId = metadata.id ?? `${metadata.category}_media_${Date.now()}`;
 
         try {
-            logger.info(`[HermesKnowledge] Starting media extraction for ${metadata.fileName} [${metadata.type}]`);
-            await this.client.insertMedia(fileBlob, metadata.fileName, docId);
+            logger.info(`[HermesKnowledge] Starting media ingestion for ${metadata.fileName} [${metadata.type}]`);
+            await sovereignIngest({
+                workspaceId: this.tenantId,
+                fileName: metadata.fileName,
+                fileContent: fileBlob,
+                mimeType: metadata.type === 'pdf' ? 'application/pdf' : 'image/jpeg',
+            });
 
             // Emit telemetry for successful extraction
             await NexusTelemetryService.emit({
@@ -216,21 +211,18 @@ export class HermesKnowledgeManager {
     // ============================================
 
     /**
-     * 🔍 Answers a natural language question using the Knowledge Graph.
-     * Delegates to LightRAG Server's hybrid KG + vector retrieval.
+     * 🔍 Answers a question via Sovereign RAG with RBAC filtering.
+     * The role parameter restricts which documents the veto membrane allows.
      */
-    async query(query: KnowledgeQuery): Promise<KnowledgeAnswer> {
+    async query(query: KnowledgeQuery, role: PermissionRole = 'serveur'): Promise<KnowledgeAnswer> {
         const startTime = Date.now();
 
-        // Map our query mode to LightRAG modes
-        const mode: LightRAGQueryMode = this.resolveQueryMode(query);
-
         try {
-            const response = await this.client.query(query.question, mode, {
-                topK: query.maxDepth ? query.maxDepth * 20 : undefined,
+            const response = await sovereignQuery(query.question, {
+                workspaceId: this.tenantId,
+                role,
             });
 
-            // Telemetry
             await NexusTelemetryService.emit({
                 pulse: AuditPulseType.KNOWLEDGE_QUERY,
                 vassalId: this.tenantId,
@@ -238,8 +230,7 @@ export class HermesKnowledgeManager {
                 payload: {
                     action: 'query',
                     questionLength: query.question.length,
-                    mode,
-                    responseLength: response.response.length,
+                    responseLength: response.answer.length,
                     durationMs: Date.now() - startTime,
                 },
                 severity: 'INFO',
@@ -247,11 +238,11 @@ export class HermesKnowledgeManager {
             });
 
             return {
-                answer: response.response,
-                confidence: 0.85, // LightRAG doesn't return confidence, use default
+                answer: response.answer,
+                confidence: response.vetoed ? 0 : 0.85,
                 traversedEntities: [],
                 traversedRelations: [],
-                sources: [],
+                sources: response.sources?.map(s => s.title) ?? [],
             };
 
         } catch (error) {
@@ -267,59 +258,14 @@ export class HermesKnowledgeManager {
         }
     }
 
-    /**
-     * 📋 Retrieves raw context from the KG without LLM generation.
-     * Useful for feeding into our own prompts.
-     */
-    async getContext(question: string, mode: LightRAGQueryMode = 'mix'): Promise<string> {
-        return this.client.getContext(question, mode);
-    }
-
-    // ============================================
-    // KNOWLEDGE GRAPH — Exploration
-    // ============================================
-
-    /**
-     * 🕸️ Retrieves a subgraph for visualization.
-     */
-    async getGraph(
-        label: string = '*',
-        maxDepth: number = 3,
-        maxNodes: number = 500
-    ): Promise<LightRAGKnowledgeGraph> {
-        return this.client.getKnowledgeGraph(label, maxDepth, maxNodes);
-    }
-
-    /**
-     * 🏷️ Gets the most connected entities for dashboard display.
-     */
-    async getTopEntities(limit: number = 20): Promise<string[]> {
-        return this.client.getPopularLabels(limit);
-    }
-
-    /**
-     * 🔎 Searches entities by name (for autocomplete).
-     */
-    async searchEntities(query: string, limit: number = 10): Promise<string[]> {
-        return this.client.searchLabels(query, limit);
-    }
-
-    // ============================================
-    // DOCUMENTS — Manage indexed content
-    // ============================================
-
-    /**
-     * 📄 Gets the status of all indexed documents.
-     */
-    async getDocumentStatuses() {
-        return this.client.getDocuments();
-    }
-
-    /**
-     * 🗑️ Removes a document and regenerates affected KG portions.
-     */
-    async removeDocument(documentId: string) {
-        return this.client.deleteDocument(documentId);
+    /** Retrieves raw context (no LLM) for prompt injection. */
+    async getContext(question: string, role: PermissionRole = 'serveur'): Promise<string> {
+        const result = await sovereignQuery(question, {
+            workspaceId: this.tenantId,
+            role,
+            skipMacroRouting: true,
+        });
+        return result.answer;
     }
 
     // ============================================

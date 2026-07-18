@@ -21,25 +21,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<GitPushRe
     const caller = await requireFleetAdmin(request);
     if (isDenied(caller)) return caller as NextResponse<GitPushResponse>;
 
-    logger.info('[GitPush] Push initiated by admin');
+    logger.info('[GitPush] Push requested — not implemented');
 
-    // In production, this would:
-    // 1. Execute `git status` check
-    // 2. Stage all changes
-    // 3. Create commit with timestamp
-    // 4. Push to remote origin
-    // For now, mock the response
-    const result = {
-      success: true,
-      message: 'Deployment synchronization completed'
-    };
-
-    logger.info('[GitPush] Push completed', {
-      success: result.success,
-      message: result.message
-    });
-
-    return NextResponse.json(result);
+    return NextResponse.json(
+      { success: false, error: 'NOT_IMPLEMENTED' },
+      { status: 501 }
+    );
   } catch (error) {
     logger.error('[GitPush] Failed to execute push', {
       error: error instanceof Error ? error.message : String(error)

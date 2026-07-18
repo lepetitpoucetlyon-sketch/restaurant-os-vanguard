@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-    Plus, 
-    ChevronRight, 
-    Briefcase, 
-    Star, 
-    Mail, 
-    Phone 
+import {
+    Plus,
+    ChevronRight,
+    Briefcase,
+    Star,
+    Mail,
+    Phone,
+    FileText,
 } from "lucide-react";
 import { staggerContainer, staggerItem } from "@/lib/motion";
 import { User } from "@nexus/contracts";
@@ -15,9 +16,10 @@ import { User } from "@nexus/contracts";
 interface StaffCardProps {
     user: User;
     onClick?: () => void;
+    onGeneratePaySlip?: (user: User) => void;
 }
 
-export const StaffCard = ({ user, onClick }: StaffCardProps) => (
+export const StaffCard = ({ user, onClick, onGeneratePaySlip }: StaffCardProps) => (
     <motion.div
         variants={staggerItem}
         whileHover={{ scale: 1.02, y: -4 }}
@@ -78,6 +80,26 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                 <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
                     <Phone strokeWidth={1.5} className="w-4 h-4" />
                 </button>
+                {/* Bulletin de paie — désactivé volontairement.
+                    Le générateur PDF actuel est un démo hardcodé (même salaire pour
+                    tous les employés). Utiliser un générateur non-conforme expose
+                    l'employeur à un redressement URSSAF et des risques aux prud'hommes.
+                    Intégration Silae / PayFit prévue pour la production. */}
+                <div
+                    title="Bulletin de paie — Intégration prestataire paie en cours (Silae / PayFit). Non disponible en production."
+                    className="relative group/payslip"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        disabled
+                        className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-dashed border-border flex items-center justify-center text-text-muted opacity-40 cursor-not-allowed"
+                    >
+                        <FileText strokeWidth={1.5} className="w-4 h-4" />
+                    </button>
+                    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/payslip:flex whitespace-nowrap bg-gray-900 text-white text-[9px] font-bold px-2 py-1 rounded z-50 uppercase tracking-wide">
+                        Paie — intégration prestataire à venir
+                    </span>
+                </div>
             </div>
         </div>
     </motion.div>
@@ -86,9 +108,10 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
 interface StaffListProps {
     users: User[];
     onOpenModal: (user?: User) => void;
+    onGeneratePaySlip?: (user: User) => void;
 }
 
-export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
+export const StaffList = ({ users, onOpenModal, onGeneratePaySlip }: StaffListProps) => {
     return (
         <motion.div
             variants={staggerContainer}
@@ -97,7 +120,12 @@ export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8"
         >
             {users.map(user => (
-                <StaffCard key={user.id} user={user} onClick={() => onOpenModal(user)} />
+                <StaffCard
+                    key={user.id}
+                    user={user}
+                    onClick={() => onOpenModal(user)}
+                    onGeneratePaySlip={onGeneratePaySlip}
+                />
             ))}
 
             {/* Empty state add card */}

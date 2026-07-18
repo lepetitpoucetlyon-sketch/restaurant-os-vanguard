@@ -7,6 +7,7 @@ import {
     addToastAtom 
 } from '@nexus/state/SovereignGenome';
 import type { NexusNotifState } from '@nexus/contracts/nexus.types';
+import { logger } from '@/lib/logger';
 
 export const NotificationContext = createContext<NexusNotifState | undefined>(undefined);
 
@@ -25,10 +26,10 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
             module?: string;
             action?: { label: string; href: string };
         }) => addToast({ ...n, duration: 3000 }),
-        markAsRead: (id: string) => console.log('Mark as read', id),
-        markAllAsRead: () => console.log('Mark all read'),
-        removeNotification: (id: string) => console.log('Remove notification', id),
-        clearAll: () => console.log('Clear all notifications')
+        markAsRead: (id: string) => logger.debug('Mark as read', id),
+        markAllAsRead: () => logger.debug('Mark all read'),
+        removeNotification: (id: string) => logger.debug('Remove notification', id),
+        clearAll: () => logger.debug('Clear all notifications')
     }), [unreadCount, notifications, addToast]);
 
     return <NotificationContext.Provider value={notifValue}>{children}</NotificationContext.Provider>;

@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { LLMManager } from '@/lib/ai/LLMManager';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import {
@@ -23,15 +24,15 @@ export type InvoiceExtractionResult =
 export interface InvoiceExtractionOptions {
     model?: 'flash' | 'pro';
     tenantId?: string;
-    apiKey?: string;
 }
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
+import { AI_MODELS } from '@/lib/ai/types';
+
 const MODELS = {
-    flash: 'gemini-2.0-flash',
-    pro: 'gemini-2.0-pro',
+    flash: AI_MODELS.visionFast,
+    pro: AI_MODELS.visionPro,
 } as const;
 
 // Cross-validation tolerance (±2 centimes)
@@ -55,19 +56,6 @@ export const InvoiceExtractionService = {
         options: InvoiceExtractionOptions = {}
     ): Promise<InvoiceExtractionResult> {
         const { model = 'flash', tenantId = 'system' } = options;
-        const apiKey = options.apiKey
-            || (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : undefined)
-            || '';
-
-        if (!apiKey) {
-            logger.error('[InvoiceExtraction] No API key configured');
-            return {
-                success: false,
-                error: { error: 'NON_PROCESSABLE', reason: 'No API key configured', flags: [] },
-                rawResponse: '',
-            };
-        }
-
         const modelId = MODELS[model];
         const startTime = Date.now();
 
@@ -76,8 +64,8 @@ export const InvoiceExtractionService = {
         let rawResponse = '';
 
         try {
-            // 1. Call Gemini Vision API
-            rawResponse = await this.callGeminiVision(base64Image, modelId, apiKey);
+            // 1. Call LLM Vision API
+            rawResponse = await this.callVisionAPI(base64Image, modelId);
 
             // 2. Parse JSON from response (handle markdown-wrapped JSON)
             const parsed = this.extractJsonFromResponse(rawResponse);
@@ -132,60 +120,24 @@ export const InvoiceExtractionService = {
         }
     },
 
-    // ─── Internal: Gemini API Call ──────────────────────────────────────────────
+    // ─── Internal: LLM Vision API Call ──────────────────────────────────────────
 
-    async callGeminiVision(base64Image: string, modelId: string, apiKey: string): Promise<string> {
-        // Strip data URI prefix if present
+    async callVisionAPI(base64Image: string, modelId: string): Promise<string> {
         const imageData = base64Image.includes(',')
             ? base64Image.split(',')[1]
             : base64Image;
 
-        const url = `${GEMINI_ENDPOINT}/${modelId}:generateContent?key=${apiKey}`;
-
-        const body = {
-            system_instruction: {
-                parts: [{ text: INVOICE_EXTRACTION_SYSTEM_PROMPT }],
-            },
-            contents: [{
-                parts: [
-                    {
-                        inline_data: {
-                            mime_type: 'image/jpeg',
-                            data: imageData,
-                        },
-                    },
-                    {
-                        text: 'Extract this supplier invoice. Return JSON only.',
-                    },
-                ],
-            }],
-            generationConfig: {
-                temperature: 0.1,    // Near-deterministic for structured extraction
-                topP: 0.8,
-                maxOutputTokens: 8192,
-                responseMimeType: 'application/json',
-            },
-        };
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
+        const response = await LLMManager.provider.generateFromImage({
+            model: modelId,
+            systemPrompt: INVOICE_EXTRACTION_SYSTEM_PROMPT,
+            userPrompt: 'Extract this supplier invoice. Return JSON only.',
+            image: { base64: imageData, mimeType: 'image/jpeg' },
+            temperature: 0.1,
+            maxTokens: 8192,
+            responseMimeType: 'application/json',
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Gemini API error (${response.status}): ${errorText.slice(0, 200)}`);
-        }
-
-        const data = await response.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (!text) {
-            throw new Error('Gemini returned no text content');
-        }
-
-        return text;
+        return response.text;
     },
 
     // ─── Internal: JSON Extraction ──────────────────────────────────────────────

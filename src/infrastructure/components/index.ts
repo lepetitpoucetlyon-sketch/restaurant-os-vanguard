@@ -4,5 +4,3 @@
  * Manual changes will be overwritten unless you remove this header.
  */
 
-export * from './ProvisioningWizard';
-export * from './TenantOrchestrator';

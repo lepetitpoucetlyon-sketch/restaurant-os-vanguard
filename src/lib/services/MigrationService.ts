@@ -1,6 +1,21 @@
 import { z } from 'zod';
+import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
+import { authedFetch } from '@/lib/client/authedFetch';
+import { validatePin } from '@/lib/auth/validatePin';
+
+/**
+ * Generates a cryptographically secure 4-digit PIN (1000–9999).
+ * Uses crypto.randomBytes — never Math.random().
+ */
+function generateSecurePin(): string {
+  let pin: string;
+  do {
+    pin = String(1000 + (randomBytes(2).readUInt16BE(0) % 9000));
+  } while (!validatePin(pin).valid);
+  return pin;
+}
 
 export const MenuMigrationSchema = z.object({
     categories: z.array(z.object({
@@ -67,7 +82,7 @@ Tu dois retourner UNIQUEMENT un objet JSON valide, sans balises markdown, suivan
 }
 Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le JSON brut.`;
 
-        const response = await fetch('/api/gemini', {
+        const response = await authedFetch('/api/oracle', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt })
@@ -132,7 +147,7 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
                 batch.set(`users/${id}`, {
                     name: emp.name || emp.Nom,
                     role: emp.role || 'server',
-                    pin: emp.pin || Math.floor(1000 + Math.random() * 9000).toString(),
+                    pin: (emp.pin && validatePin(emp.pin).valid) ? emp.pin : generateSecurePin(),
                     createdAt: new Date().toISOString(),
                     accessLevel: 3,
                     performanceScore: 5.0
@@ -163,6 +178,10 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
     }
 
     static async seedProduction(): Promise<boolean> {
+        // Idempotency guard: skip if any category already exists to avoid overwriting real data
+        const existing = await Nexus.adapter.get('categories/antipasti').catch(() => null);
+        if (existing) return true;
+
         const batch = Nexus.adapter.batch();
         
         const CATEGORIES = [

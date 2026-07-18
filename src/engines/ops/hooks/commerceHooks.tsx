@@ -14,11 +14,20 @@ import { tenantIdAtom } from '@/store/pillars/sovereign';
  */
 export const useAllocations = () => {
   const base = createSovereignHook(reservationsNodeAtom, OperationalIdentity.NODES, toReservation)();
+  const tenantId = useAtomValue(tenantIdAtom) as string;
   return {
     ...base,
     getReservationsForTable: (tableId: string) => {
       return (base.data || []).filter((r) => r.tableId === tableId || r.assignedTableId === tableId);
-    }
+    },
+    markArrived: async (reservationId: string) => {
+      const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${reservationId}`;
+      await Nexus.adapter.update(path, {
+        status: 'arrived',
+        arrivedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    },
   };
 };
 export const useReservations = useAllocations;

@@ -15,7 +15,9 @@ export const StandardResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
 
 export const OrderResponseSchema = StandardResponseSchema(z.object({
   id: z.string(),
-  totalInCents: z.number(),
+  // Microunits Protocol: totalInMicrounits is canonical; totalInCents is a deprecated parity mirror.
+  totalInMicrounits: z.number().optional(),
+  totalInCents: z.number().optional(),
   status: z.string()
 }));
 

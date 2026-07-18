@@ -31,6 +31,7 @@ export interface IDocumentStore {
   create<T>(path: string, data: T): Promise<void>;
   delete(path: string): Promise<void>;
   generateId(collectionPath: string): string;
+  serverTimestamp(): unknown;
 }
 
 export interface IQueryEngine {

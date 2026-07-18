@@ -8,6 +8,7 @@ import { IdentityManager, ROOT_ADMIN } from '@domain/services/IdentityManager';
 import { User } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
+import { logger } from '@/lib/logger';
 
 export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: string | null) {
     const firebaseFunctions = getFunctions(firebaseApp);
@@ -23,7 +24,7 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
 
         const loadLoginProfiles = async () => {
             if (isMock) {
-                console.info('[AuthStaff] Mode MOCK détecté. Chargement immédiat du Root Admin.');
+                logger.info('[AuthStaff] Mode MOCK détecté. Chargement immédiat du Root Admin.');
                 setUsers([IdentityManager.buildSessionUser(ROOT_ADMIN)]);
                 setIsUsersLoaded(true);
                 return;

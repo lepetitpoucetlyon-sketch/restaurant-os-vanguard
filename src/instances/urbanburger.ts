@@ -34,6 +34,6 @@ export const urbanburgerConfig: TenantConfig = {
     },
     ai: {
         enabled: false,
-        geminiApiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
+        llmApiKey: process.env.NEXT_PUBLIC_LLM_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
     }
 };

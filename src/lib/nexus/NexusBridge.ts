@@ -7,6 +7,10 @@ import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
 
+// nexus-core ne doit pas dépendre de la couche config (règle sentrux) : on lit
+// l'env directement plutôt que d'importer APP_MODE de @/config/instance.
+const APP_MODE = process.env.NEXT_PUBLIC_APP_MODE || 'tenant';
+
 interface LegacyTenantConfig {
   features?: Record<string, boolean>;
   layout?: string;
@@ -65,7 +69,10 @@ export class NexusBridge {
     //    DOWN : décrets impériaux (tenants/{t}/config/master → onSnapshot)
     //    UP   : télémétrie de santé (fleet-telemetry/{t} ← pulse périodique)
     this.listen(tenantId);
-    this.startPulse(tenantId);
+    // MCC reads fleet telemetry — it never pushes its own pulse.
+    if (APP_MODE === 'tenant') {
+      this.startPulse(tenantId);
+    }
   }
 
   /**

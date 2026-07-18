@@ -147,7 +147,21 @@ export class CryptoService {
      */
     static async verifyFiscalSignature(hash: string, signature: string, secret: string): Promise<boolean> {
         const expectedSignature = await this.signFiscalData(hash, secret);
-        return expectedSignature === signature;
+        const nc = this.nodeCrypto as (typeof this._nodeCrypto & { timingSafeEqual?: (a: Buffer, b: Buffer) => boolean }) | null;
+        if (nc?.timingSafeEqual) {
+            const a = Buffer.from(expectedSignature, 'utf8');
+            const b = Buffer.from(signature, 'utf8');
+            if (a.length !== b.length) return false;
+            return nc.timingSafeEqual(a, b);
+        }
+        // Browser XOR fallback
+        const enc = new TextEncoder();
+        const aBytes = enc.encode(expectedSignature);
+        const bBytes = enc.encode(signature);
+        if (aBytes.length !== bBytes.length) return false;
+        let diff = 0;
+        for (let i = 0; i < aBytes.length; i++) diff |= aBytes[i]! ^ bBytes[i]!;
+        return diff === 0;
     }
 
     /**

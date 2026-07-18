@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 import { ordersNodeAtom } from './pillars/ops';
 import { stockItemsNodeAtom } from './pillars/logistics';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 
 /**
@@ -17,10 +18,7 @@ export const dashboardRevenueSelector = atom((get) => {
         o.updatedAt && String(new Date(o.updatedAt).toISOString()).startsWith(today)
     );
     
-    return paidToday.reduce((sum, o) => {
-        const order = o as unknown as { totalInMicrounits?: number; totalInCents?: number };
-        return sum + (order.totalInMicrounits ?? (order.totalInCents ? order.totalInCents * 10000 : 0));
-    }, 0);
+    return paidToday.reduce((sum, o) => sum + SovereignMath.orderTotalMicrounits(o), 0);
 });
 
 // 2. KPI: HACCP Alerts (Produits périmés ou proches)

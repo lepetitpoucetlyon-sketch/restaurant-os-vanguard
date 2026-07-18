@@ -11,9 +11,11 @@ describe('HumanResourcesService (Grade VI Validation)', () => {
             expect(result.totalHours).toBe(151.55);
             // 151.55 * 20 = 3031
             expect(result.grossAmount).toBe(3031);
-            // 3031 * 0.78 = 2364.18
+            // net = gross * (1 - 0.22) = 3031 * 0.78 = 2364.18
             expect(result.netAmount).toBe(2364.18);
             expect(result.chargesSociales).toBe(666.82);
+            // employerCost = gross * 1.42 = 3031 * 1.42 = 4304.02
+            expect(result.employerCost).toBe(4304.02);
         });
     });
 

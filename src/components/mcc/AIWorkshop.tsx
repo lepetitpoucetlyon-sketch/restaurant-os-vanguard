@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Ticket_v1 } from '@/shared/validation/TicketSchema';
+import { logger } from '@/lib/logger';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface AIWorkshopProps {
   initialTicket?: Ticket_v1;
@@ -12,7 +14,7 @@ export function AIWorkshop({ initialTicket }: AIWorkshopProps) {
   const [analysisResult, setAnalysisResult] = useState<{ confidenceScore: number; suggestedPatch: string } | null>(null);
 
   const handleDeployPatch = () => {
-    console.log("[AI WORKSHOP] Déploiement du patch NAM en cours...");
+    logger.info("[AI WORKSHOP] Déploiement du patch NAM en cours...");
     // Simulation du déploiement
     setTimeout(() => {
       setTicketStatus('Deploye et Valide (NEXUS)');
@@ -22,7 +24,7 @@ export function AIWorkshop({ initialTicket }: AIWorkshopProps) {
   const handleRunAnalysis = async () => {
     if (!initialTicket) return;
     try {
-      const res = await fetch('/api/nam/analyze', {
+      const res = await authedFetch('/api/admin/nam/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(initialTicket)

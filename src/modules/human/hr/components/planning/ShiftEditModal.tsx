@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { X, Clock, MapPin, Save, Trash2 } from "lucide-react";
+import { X, Clock, MapPin, Save, Trash2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import type { User } from "@nexus/contracts";
 import { PremiumSelect } from "@ui/PremiumSelect";
@@ -31,6 +31,84 @@ export const ZONES = [
     { id: "bar", name: "Bar" },
 ];
 
+// ─── Legal scheduling helpers ───────────────────────────────────────────────
+
+function parseTimeToMinutes(time: string): number {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+}
+
+function shiftDurationHours(startTime: string, endTime: string): number {
+    let diff = parseTimeToMinutes(endTime) - parseTimeToMinutes(startTime);
+    if (diff < 0) diff += 24 * 60; // overnight
+    return diff / 60;
+}
+
+interface LegalWarning {
+    label: string;
+}
+
+function computeLegalWarnings(
+    startTime: string,
+    endTime: string,
+    date: Date,
+    otherShifts: Shift[]
+): LegalWarning[] {
+    const warnings: LegalWarning[] = [];
+    const duration = shiftDurationHours(startTime, endTime);
+
+    // 1. Excessive duration
+    if (duration > 10) {
+        warnings.push({ label: `Durée excessive (${duration.toFixed(1)}h > 10h max)` });
+    }
+
+    // 2. Rest between shifts
+    const [sh, sm] = startTime.split(":").map(Number);
+    const thisStart = new Date(date);
+    thisStart.setHours(sh, sm, 0, 0);
+
+    for (const s of otherShifts) {
+        const sDate = new Date(s.date);
+        const [eh, em] = s.endTime.split(":").map(Number);
+        const prevEnd = new Date(sDate);
+        prevEnd.setHours(eh, em, 0, 0);
+
+        if (prevEnd < thisStart) {
+            const restH = (thisStart.getTime() - prevEnd.getTime()) / (1000 * 3600);
+            if (restH < 11) {
+                warnings.push({
+                    label: `Repos insuffisant (${restH.toFixed(1)}h < 11h min)`,
+                });
+            }
+        }
+    }
+
+    // 3. Weekly total > 48h
+    const weekStart = new Date(date);
+    const dow = weekStart.getDay(); // 0 = sunday
+    weekStart.setDate(weekStart.getDate() - ((dow + 6) % 7)); // back to monday
+    weekStart.setHours(0, 0, 0, 0);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+
+    let weeklyHours = duration;
+    for (const s of otherShifts) {
+        const sDate = new Date(s.date);
+        if (sDate >= weekStart && sDate < weekEnd) {
+            weeklyHours += shiftDurationHours(s.startTime, s.endTime);
+        }
+    }
+    if (weeklyHours > 48) {
+        warnings.push({
+            label: `Dépassement hebdomadaire (${weeklyHours.toFixed(1)}h > 48h max)`,
+        });
+    }
+
+    return warnings;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+
 interface ShiftEditModalProps {
     shift: Shift | null;
     user: User | null;
@@ -39,6 +117,8 @@ interface ShiftEditModalProps {
     onSave: (shift: Shift) => void;
     onDelete: (shiftId: string) => void;
     onCreate: (newShift: Omit<Shift, "id">) => void;
+    /** All other shifts for this user — used for legal warning computation */
+    allUserShifts?: Shift[];
 }
 
 export function ShiftEditModal({
@@ -49,6 +129,7 @@ export function ShiftEditModal({
     onSave,
     onDelete,
     onCreate,
+    allUserShifts = [],
 }: ShiftEditModalProps) {
     const isNew = !shift;
     const [formData, setFormData] = useState({
@@ -57,6 +138,22 @@ export function ShiftEditModal({
         type: shift?.type || ("lunch" as ShiftType),
         zoneId: shift?.zoneId || ZONES[0].id,
     });
+
+    // Exclude the current shift from the "other shifts" list used for warnings
+    const otherShifts = useMemo(
+        () => allUserShifts.filter((s) => s.id !== shift?.id),
+        [allUserShifts, shift]
+    );
+
+    const legalWarnings = useMemo(() => {
+        if (!date) return [];
+        return computeLegalWarnings(
+            formData.startTime,
+            formData.endTime,
+            date,
+            otherShifts
+        );
+    }, [formData.startTime, formData.endTime, date, otherShifts]);
 
     const handleSave = () => {
         if (isNew && user && date) {
@@ -138,6 +235,23 @@ export function ShiftEditModal({
 
                 {/* Modal Body */}
                 <div className="p-10 space-y-10 bg-[#050505]">
+                    {/* Legal Scheduling Warnings */}
+                    {legalWarnings.length > 0 && (
+                        <div className="space-y-2">
+                            {legalWarnings.map((w, i) => (
+                                <div
+                                    key={i}
+                                    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                                >
+                                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                                    <span className="text-xs font-bold uppercase tracking-widest">
+                                        {w.label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                     {/* Service Type Selector */}
                     <div>
                         <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mb-4 block italic">

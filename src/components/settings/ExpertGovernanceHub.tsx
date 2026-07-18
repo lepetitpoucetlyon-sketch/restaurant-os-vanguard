@@ -22,6 +22,7 @@ import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
 import { SLMExpert } from "@nexus/contracts";
 import { AgentDomain } from "@domain/agency/types";
+import { AI_MODELS } from "@/lib/ai/types";
 
 const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; description: string }> = {
     inventory: { 
@@ -63,8 +64,8 @@ const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; de
 
 const ROLES = ['admin', 'manager', 'staff', 'commis'] as const;
 const MODELS = [
-    { id: 'gemini-1.5-flash', name: 'Standard (Vitesse)', description: 'Idéal pour les tâches rapides et audits simples.' },
-    { id: 'gemini-1.5-pro', name: 'Avancé (Raisonnement)', description: 'Puissance maximale pour analyses stratégiques complexes.' }
+    { id: AI_MODELS.fast, name: 'Standard (Vitesse)', description: 'Idéal pour les tâches rapides et audits simples.' },
+    { id: AI_MODELS.reasoning, name: 'Avancé (Raisonnement)', description: 'Puissance maximale pour analyses stratégiques complexes.' }
 ];
 
 export default function ExpertGovernanceHub() {

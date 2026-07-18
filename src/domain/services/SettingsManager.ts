@@ -1,4 +1,3 @@
-import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { GlobalSettings } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
@@ -6,7 +5,7 @@ import { logger } from '@/lib/logger';
 export class SettingsManager {
     static async saveSettings(newSettings: GlobalSettings): Promise<Date> {
         try {
-            const settingsPath = `${getTenantPath('settings')}/global`;
+            const settingsPath = `${Nexus.getTenantPath('settings')}/global`;
             await Nexus.adapter.set(settingsPath, newSettings);
             logger.info('SettingsManager: Configuration saved successfully');
             return new Date();

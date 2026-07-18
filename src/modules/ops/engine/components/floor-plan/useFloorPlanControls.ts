@@ -127,21 +127,27 @@ export function useFloorPlanControls({
 
     const handleStageClick = useCallback(async (e: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = e.target.getStage();
-        if (mode === 'add' && e.target === stage) {
-            if (!stage) return;
-            const pointer = stage.getPointerPosition();
-            if (!pointer) return;
-            const x = (pointer.x - stage.x()) / stage.scaleX();
-            const y = (pointer.y - stage.y()) / stage.scaleY();
-            const newTableNumber = (Math.max(0, ...floorTables.map((t: Table) => parseInt(String(t.number || '')) || 0)) + 1).toString();
+        if (e.target !== stage) return;
 
-            await addTable({
-                number: newTableNumber, x, y, seats: 4, status: 'free', shape: 'rect',
-                width: 80, height: 80, zoneId: floorZones[0]?.id || 'main', floorId: currentFloorId
-            });
-        } else if (e.target === stage) {
+        if (mode !== 'add') {
             setSelectedId(null);
+            return;
         }
+
+        const pointer = stage?.getPointerPosition();
+        if (!stage || !pointer) return;
+
+        const { x, y } = FloorPlanGeometry.toWorldPoint(
+            pointer,
+            { x: stage.x(), y: stage.y() },
+            { x: stage.scaleX(), y: stage.scaleY() }
+        );
+
+        await addTable({
+            number: FloorPlanGeometry.nextTableNumber(floorTables),
+            x, y, seats: 4, status: 'free', shape: 'rect',
+            width: 80, height: 80, zoneId: floorZones[0]?.id || 'main', floorId: currentFloorId
+        });
     }, [mode, floorTables, floorZones, currentFloorId, addTable]);
 
     const handleCheckout = useCallback((total: number) => {

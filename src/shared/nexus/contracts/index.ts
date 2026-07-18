@@ -114,6 +114,8 @@ export * from './settings/security';
 export * from './settings/theme';
 
 // --- 🏁 FINAL RESOLUTIONS ---
+export type { ThemeMode, AccentColor, UIDensity, BorderRadius } from './theme.types';
+export { defaultSettings } from './settings.defaults';
 export * from './nexus.types';
 export * from './errors.types';
 export type { GlobalSettings } from './settings';

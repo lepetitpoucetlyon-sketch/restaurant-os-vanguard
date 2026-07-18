@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logCorrectiveAction } from '@/lib/sovereign/telemetry';
 
 export interface SwitchboardState {
@@ -22,19 +21,15 @@ export function useSovereignSwitchboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const switchboardRef = doc(db, 'mcc', 'switchboard');
-        const unsubscribe = onSnapshot(switchboardRef, (snapshot) => {
-            if (snapshot.exists()) {
-                setState(snapshot.data() as SwitchboardState);
-            } else {
-                // Sincérité à la Racine: If document doesn't exist, we don't assume `as unknown`.
-                // We fallback to DEFAULT_STATE visually.
+        const unsubscribe = Nexus.adapter.onSnapshot<SwitchboardState | null>('mcc/switchboard', (data) => {
+            if (data) {
+                setState(data);
             }
             setLoading(false);
-        }, (error) => {
+        }, { onError: (error) => {
             console.error('[SWITCHBOARD] Error listening to state', error);
             setLoading(false);
-        });
+        }});
 
         return () => unsubscribe();
     }, []);
@@ -44,8 +39,7 @@ export function useSovereignSwitchboard() {
             const currentState = state[moduleName];
             const newState = !currentState;
             
-            const switchboardRef = doc(db, 'mcc', 'switchboard');
-            await updateDoc(switchboardRef, {
+            await Nexus.adapter.update('mcc/switchboard', {
                 [moduleName]: newState
             });
 

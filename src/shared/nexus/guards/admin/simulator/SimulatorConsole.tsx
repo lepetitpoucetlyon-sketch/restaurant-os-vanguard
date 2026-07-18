@@ -14,8 +14,10 @@ import { NexusStaffingOracle as StaffingOracle } from '@domain/services/NexusSta
 import { SovereignLedger } from '@/infrastructure/adapters/SovereignLedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { cn } from '@/lib/ui.foundations';
+import { useTenant } from '@/hooks';
 
 export function SimulatorConsole() {
+    const { activeTenantId } = useTenant();
     const [metrics, setMetrics] = useAtom(simulationMetricsAtom);
     const [isRunning, setIsRunning] = useAtom(isSimulationRunningAtom);
     const [speed, setSpeed] = useState(5);
@@ -80,7 +82,7 @@ export function SimulatorConsole() {
     const runInquisiteurQA = async () => {
         setIntegrityStatus('VERIFYING');
         try {
-            const audit = await SovereignLedger.getInstance('restaurant-os').runInquisiteurQA();
+            const audit = await SovereignLedger.getInstance(activeTenantId ?? 'unknown').runInquisiteurQA();
             setIntegrityStatus(audit.secure ? 'SECURE' : 'BREACH');
             if (!audit.secure) {
                 addLog(`INQUISITEUR QA: Critical Balance Breach! Diff: ${(Math.abs(audit.expected - audit.actual)/100).toFixed(2)}€`, 'error');

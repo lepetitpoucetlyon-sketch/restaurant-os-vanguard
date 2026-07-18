@@ -21,6 +21,7 @@ import { useOrders, useTables, useReservations } from "@/engines/ops/NexusOpsPro
 interface Order {
   id: string;
   tableId?: string;
+  tableNumber?: string;
   status: string;
   totalInMicrounits?: number;
   createdAt: string;
@@ -96,7 +97,7 @@ export default function VibecodingDashboard() {
     if (!orders) return [];
     return orders.slice(0, 4).map(order => ({
       id: `#${order.id.slice(-4).toUpperCase()}`,
-      table: order.tableId ? `Table ${order.tableId.split('-').pop()}` : "Emporter",
+      table: order.tableId ? `Table ${order.tableNumber ?? order.tableId.split('-').pop()}` : "Emporter",
       status: order.status,
       time: new Date(order.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
       amount: new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((order.totalInMicrounits || 0) / 1000000)

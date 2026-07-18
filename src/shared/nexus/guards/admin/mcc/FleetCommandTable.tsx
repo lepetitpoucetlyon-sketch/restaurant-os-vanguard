@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
-import { 
-  Activity, 
-  AlertCircle, 
-  ExternalLink, 
-  TrendingUp, 
+import { authedFetch } from '@/lib/client/authedFetch';
+import {
+  Activity,
+  AlertCircle,
+  ExternalLink,
+  TrendingUp,
   ShieldCheck,
   Search,
-  Filter
+  Filter,
+  Brain,
+  RotateCcw
 } from 'lucide-react';
 
 export function FleetCommandTable() {
     const { instances, isLoading } = useNexusFleet();
+    const [reindexing, setReindexing] = useState<Record<string, boolean>>({});
+
+    const handleReindex = async (instanceId: string) => {
+        setReindexing(prev => ({ ...prev, [instanceId]: true }));
+        try {
+            await authedFetch('/api/admin/fleet/rag', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'reindex', instanceId }),
+            });
+        } finally {
+            setReindexing(prev => ({ ...prev, [instanceId]: false }));
+        }
+    };
 
     if (isLoading) {
         return (
@@ -58,6 +75,9 @@ export function FleetCommandTable() {
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">HACCP Risk</th>
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Users</th>
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Global Compliance</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">
+                                <div className="flex items-center gap-1.5"><Brain className="w-3 h-3" />RAG</div>
+                            </th>
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Actions</th>
                         </tr>
                     </thead>
@@ -143,8 +163,38 @@ export function FleetCommandTable() {
                                     </div>
                                 </td>
 
+                                {/* RAG status */}
+                                <td className="px-6 py-5">
+                                    {instance.rag ? (
+                                        <div className="flex flex-col gap-1">
+                                            <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase border w-fit ${
+                                                instance.rag.status === 'online'   ? 'bg-status-success/10 text-status-success border-emerald-500/20' :
+                                                instance.rag.status === 'indexing' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse' :
+                                                instance.rag.status === 'offline'  ? 'bg-status-danger/10 text-status-danger border-red-500/20' :
+                                                'bg-surface-card/5 text-secondary border-white/5'
+                                            }`}>
+                                                <Brain className="w-2.5 h-2.5" />
+                                                {instance.rag.status}
+                                            </div>
+                                            {instance.rag.documentCount !== undefined && (
+                                                <span className="text-[8px] text-secondary font-mono">{instance.rag.documentCount} docs</span>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <span className="text-[9px] text-secondary font-mono">—</span>
+                                    )}
+                                </td>
+
                                 <td className="px-6 py-5">
                                     <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleReindex(instance.id)}
+                                            disabled={reindexing[instance.id]}
+                                            title="Réindexer RAG"
+                                            className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-brand hover:border-brand transition-all opacity-0 group-hover:opacity-100 disabled:opacity-30"
+                                        >
+                                            <RotateCcw className={`w-3.5 h-3.5 ${reindexing[instance.id] ? 'animate-spin' : ''}`} />
+                                        </button>
                                         <button className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-white hover:border-default transition-all opacity-0 group-hover:opacity-100">
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </button>

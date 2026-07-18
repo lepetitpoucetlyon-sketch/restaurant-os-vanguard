@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
+import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from "@domain/services/SimulationService";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@ui/Toast";
@@ -64,7 +65,7 @@ export default function SimulationPage() {
             
             setResults(prev => [...prev, { date: date.toLocaleDateString(), ...result, anomalies: Array(result.anomalyCount).fill("Écart de flux détecté") }]);
             setStats(prev => ({
-                revenue: prev.revenue + result.orders.reduce((acc, o: import('@nexus/contracts').Order) => acc + (o.totalInCents || 0), 0),
+                revenue: prev.revenue + SovereignMath.toCents(BigInt(result.orders.reduce((acc, o: import('@nexus/contracts').Order) => acc + SovereignMath.orderTotalMicrounits(o), 0))),
                 anomalies: prev.anomalies + result.anomalyCount,
                 integrity: currentMode === 'CHAOS' ? Math.max(0, prev.integrity - (result.anomalyCount * 2)) : prev.integrity
             }));

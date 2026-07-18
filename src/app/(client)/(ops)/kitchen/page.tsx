@@ -12,18 +12,17 @@ import {
     Truck,
     ShieldAlert,
     ChevronLeft,
+    ClipboardList,
     LucideIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { useKitchen, useManagement, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useKitchen, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
-import { useUI } from "@/hooks/useUI";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { PrepTaskDetailDialog } from "@modules/ops";
 import { RecipeDetailDialog } from "@modules/ops";
 import { cinematicContainer, fadeInUp } from "@/lib/motion";
-import { useRouter } from "next/navigation";
 import { ExpertHub } from "@modules/commerce";
 
 import { MiseEnPlaceTab } from "@modules/ops";
@@ -34,22 +33,19 @@ import { SuppliersTab } from "@modules/ops";
 import { AllergensTab } from "@modules/ops";
 import { CookingTimesTab } from "@modules/ops";
 import { IngredientsTab } from "@modules/ops";
+import { DailyPrepList } from "@/components/recipes";
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 
-type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'waste' | 'suppliers' | 'allergens' | 'cooking-times';
+type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'waste' | 'suppliers' | 'allergens' | 'cooking-times' | 'prep-journalier';
 
 export default function KitchenPage() {
-    const _router = useRouter();
-    const _ordersData: unknown[] = []; // Real orders should come from useKitchen
     const [activeTab, setActiveTab] = useState<KitchenTab>('mise-en-place');
     
     // Nexus Grade X Hooks
     const kitchen = useKitchen();
     const recipesHook = useRecipes();
-    const _management = useManagement();
     const inventory = useInventory();
-    const { openDocumentation: _openDocumentation } = useUI();
     const performanceMode = useAtomValue(performanceModeAtom);
 
     // Mapping to NexusNode (Grade X)
@@ -71,7 +67,6 @@ export default function KitchenPage() {
     const wasteLogs = [] as import("@nexus/contracts").RegulatoryWasteLog[]; // Suture required for waste
     
     const ingredients = (inventory.stockItems || []) as unknown as import("@nexus/contracts").Ingredient[];
-    const _products = inventory.stockItems;
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
     const [selectedPrepTask, setSelectedPrepTask] = useState<PrepTask | null>(null);
@@ -144,9 +139,10 @@ export default function KitchenPage() {
                             animate="visible"
                             className="space-y-1.5 flex-1 min-w-[260px]"
                         >
-                            {(['mise-en-place', 'recipes', 'ingredients', 'margins', 'waste', 'suppliers', 'allergens', 'cooking-times'] as const).map((tab) => {
+                            {(['mise-en-place', 'prep-journalier', 'recipes', 'ingredients', 'margins', 'waste', 'suppliers', 'allergens', 'cooking-times'] as const).map((tab) => {
                                 const icons: Record<KitchenTab, LucideIcon> = {
                                     'mise-en-place': Utensils,
+                                    'prep-journalier': ClipboardList,
                                     'recipes': BookOpen,
                                     'ingredients': Truck,
                                     'margins': Calculator,
@@ -157,6 +153,7 @@ export default function KitchenPage() {
                                 };
                                 const labels: Record<KitchenTab, string> = {
                                     'mise-en-place': 'Mise en Place',
+                                    'prep-journalier': 'Prep Journalière',
                                     'recipes': 'Livre de Recettes',
                                     'ingredients': 'Catalogue Ingrédients',
                                     'margins': 'Marges & Rentabilité',
@@ -232,6 +229,11 @@ export default function KitchenPage() {
                         togglePrepTask={togglePrepTask}
                         onSelectTask={setSelectedPrepTask}
                     />
+                )}
+
+                {/* cui-5: Daily prep list from reservations */}
+                {activeTab === 'prep-journalier' && (
+                    <DailyPrepList recipes={recipes} />
                 )}
 
                 {activeTab === 'recipes' && (

@@ -1,5 +1,4 @@
 import type { CategoryKey } from "./auth.types";
-import  {FunctionDeclaration } from "@google/generative-ai";
 
 export interface ChatMessage {
     id: string;
@@ -10,8 +9,14 @@ export interface ChatMessage {
     source?: 'slm' | 'gemini';
 }
 
+export interface ToolDeclaration {
+    name: string;
+    description: string;
+    parameters: Record<string, unknown>;
+}
+
 export interface ToolWithAccess {
-    declaration: FunctionDeclaration;
+    declaration: ToolDeclaration;
     requiredCategories: CategoryKey[];
 }
 

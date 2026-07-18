@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantID, SiteTelemetry } from '@domain/types/brands';
 import { TelemetryEvent } from '@/lib/telemetry/TelemetryStream';
+import { logger } from '@/lib/logger';
 
 interface PerformanceMemory extends Performance {
   memory?: {
@@ -26,7 +27,7 @@ export async function executeAdministrativeAction(event: TelemetryEvent): Promis
             updatedAt: new Date().toISOString()
         };
         await Nexus.adapter.set(path, patch, { merge: true });
-        console.log(`[Fleet] Administrative ${event.type} successful for: ${event.tenantId}`);
+        logger.info(`[Fleet] Administrative ${event.type} successful for: ${event.tenantId}`);
     } catch (error: unknown) {
         console.error(`[Fleet] Administrative action failed for ${event.tenantId}`, error);
         throw error;
@@ -47,7 +48,7 @@ export async function executeCloudSync(tenantId: TenantID, data: Partial<SiteTel
         }
       };
       await Nexus.adapter.set(telemetryPath, payload, { merge: true });
-      console.log(`[Fleet] Nexus-Stream Sync Successful for site: ${tenantId}`);
+      logger.info(`[Fleet] Nexus-Stream Sync Successful for site: ${tenantId}`);
     } catch (error: unknown) {
       console.error(`[Fleet] Stream sync failed for ${tenantId}.`, error);
       throw error;

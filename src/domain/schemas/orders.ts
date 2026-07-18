@@ -45,7 +45,9 @@ export const OrderSchema = z.object({
   serverName:    z.string().pipe(SanitizedStringSchema).optional(),
   items:         z.array(OrderLineSchema).min(1, 'Une commande ne peut pas être vide'),
   status:        z.enum(['pending', 'cooking', 'ready', 'served', 'paid', 'cancelled', 'draft', 'new', 'preparing', 'delivered', 'pending_modification']),
+  /** Source of truth for the order total (Microunits Protocol). Prefer this everywhere. */
   totalInMicrounits: MicrounitsSchema.optional(),
+  /** @deprecated — use totalInMicrounits. Parity mirror kept only for legacy Firestore documents. */
   totalInCents:  z.number().int().min(0).optional(),
   createdAt:     TimestampSchema,
   updatedAt:     TimestampSchema.default(() => Date.now() as unknown as ReturnType<typeof Date.now>),

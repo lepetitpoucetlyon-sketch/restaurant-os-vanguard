@@ -4,11 +4,32 @@ import { toMicrounits } from '@/domain/schemas/primitives';
 
 // --- Mocks ---
 
+const { mockBatchSet, mockBatchCommit, mockBatch } = vi.hoisted(() => {
+  const mockBatchSet = vi.fn();
+  const mockBatchCommit = vi.fn().mockResolvedValue(undefined);
+  const mockBatch = vi.fn(() => ({
+    set: mockBatchSet,
+    update: vi.fn(),
+    delete: vi.fn(),
+    commit: mockBatchCommit,
+  }));
+  return { mockBatchSet, mockBatchCommit, mockBatch };
+});
+
 vi.mock('@/lib/nexus/NexusAdapter', () => ({
   Nexus: {
     adapter: {
       query: vi.fn().mockResolvedValue([]),
-      set: vi.fn().mockResolvedValue(undefined),
+      batch: mockBatch,
+      runTransaction: vi.fn(async (cb: (tx: any) => Promise<any>) => {
+        const tx = {
+          get: vi.fn().mockResolvedValue(null),
+          set: vi.fn(),
+          update: vi.fn(),
+          delete: vi.fn(),
+        };
+        return cb(tx);
+      }),
     },
   },
 }));
@@ -61,6 +82,7 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (Nexus.adapter.query as any).mockResolvedValue([]);
+    mockBatchCommit.mockResolvedValue(undefined);
   });
 
   it('rejette un panier vide', async () => {
@@ -86,7 +108,7 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
     expect(result.journalEntry.amountInCents).toBe(3000); // 30€ = 3000 centimes
   });
 
-  it('écrit JournalEntry et FiscalSeal dans Nexus', async () => {
+  it('écrit JournalEntry dans Nexus (seal écrit via transaction)', async () => {
     const item = makeCartItem();
     await FinancialNexusBridge.processOrder({
       cartItems: [item],
@@ -94,24 +116,24 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
       tableId: 'table-1',
       tenantId: 'tenant-test',
     });
-    expect(Nexus.adapter.set).toHaveBeenCalledTimes(2);
-    const calls = (Nexus.adapter.set as any).mock.calls;
-    expect(calls[0][0]).toContain('journalEntries/');
-    expect(calls[1][0]).toContain('fiscalSeals/');
+    expect(mockBatch).toHaveBeenCalled();
+    expect(mockBatchSet).toHaveBeenCalledTimes(1);
+    expect(mockBatchSet.mock.calls[0][0]).toContain('journalEntries/');
+    expect(mockBatchCommit).toHaveBeenCalled();
+    expect(Nexus.adapter.runTransaction).toHaveBeenCalled();
   });
 
   it('chaîne avec le hash du dernier seal existant', async () => {
-    const mockLastSeal = {
-      id: 'seal-prev',
-      hash: 'b'.repeat(64),
-      previousHash: 'GENESIS_ROOT_0000000000000000',
-      timestamp: new Date().toISOString(),
-      transactionId: 'je-prev',
-      dataSnapshot: '{}',
-      signature: 'sig',
-      updatedAt: new Date().toISOString(),
-    };
-    (Nexus.adapter.query as any).mockResolvedValue([mockLastSeal]);
+    const prevHash = 'b'.repeat(64);
+    (Nexus.adapter.runTransaction as any).mockImplementation(async (cb: (tx: any) => Promise<any>) => {
+      const tx = {
+        get: vi.fn().mockResolvedValue({ hash: prevHash, sealId: 'seal-prev' }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+      };
+      return cb(tx);
+    });
 
     const { CryptoService } = await import('@/domain/services/CryptoService');
     const item = makeCartItem();
@@ -121,10 +143,9 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
       tableId: null,
       tenantId: 'tenant-test',
     });
-    // generateHash should receive previousHash from last seal
     expect(CryptoService.generateHash).toHaveBeenCalledWith(
       expect.any(String),
-      'b'.repeat(64)
+      prevHash
     );
   });
 

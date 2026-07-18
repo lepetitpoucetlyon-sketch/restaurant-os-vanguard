@@ -120,13 +120,13 @@ export const OracleEngine = {
  * 🤖 Agent AI : Suggest Chicken Procurement
  * Bridges Oracle forecasts with SovereignLedger entries.
  */
-export async function suggestChickenProcurement(qty: number): Promise<void> {
+export async function suggestChickenProcurement(qty: number, tenantId: string): Promise<void> {
   const cost = qty * 450; // 4.50€ per industrial chicken
   logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} chickens (Cost: ${cost/100}€)`);
-  
+
   // Inject into SovereignLedger PROPOSALS account
   const { SovereignLedger } = await import('./SovereignLedger');
-  await SovereignLedger.getInstance('restaurant-os').recordTransfer({
+  await SovereignLedger.getInstance(tenantId).recordTransfer({
     debitAccount: 'PURCHASES',
     creditAccount: 'PROPOSALS', // Awaiting human signing
     amountInCents: cost,
@@ -139,9 +139,9 @@ export async function suggestChickenProcurement(qty: number): Promise<void> {
  * 🔮 Oracle Supervision: Monitor Monkey Chaos
  * Generates Genomic Suture reports if flaws are detected.
  */
-export async function superviseChaos(): Promise<string> {
+export async function superviseChaos(tenantId: string): Promise<string> {
   const { MonkeyChaos } = await import('../agents/MonkeyChaos');
-  const result = await MonkeyChaos.attackLedger();
+  const result = await MonkeyChaos.attackLedger(tenantId);
   
   if (result.success) {
     return `[RAPPORT DE SUTURE GÉNOMIQUE]\nStatut: INTÉGRITÉ_MAINTENUE\nObservation: L'attaque du Monkey Chaos a été rejetée par le SovereignLedger.\nDiagnostic: Pont Financier Inviolable.`;

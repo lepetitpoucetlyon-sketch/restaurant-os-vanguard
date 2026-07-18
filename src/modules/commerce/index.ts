@@ -1,5 +1,8 @@
 export * from './marketing';
 export * from './reservations';
+// Composants "customer" canoniques (fiche client, dialog, vue CRM) — source unique
+// partagée par les sous-modules customers et reservations du pilier commerce.
+export * from './customers/components';
 export { useMarketing } from './marketing/hooks/useMarketing';
 export { useQuotes } from './marketing/hooks/useQuotes';
 // Ré-export depuis la source (commerceHooks) et non le barrel NexusOpsProvider :

@@ -6,11 +6,11 @@ import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
 import { updateNexusNode } from '@/store/pillars/core';
 import { genomeValidator } from '@domain/services/GenomeValidator';
 import { ImmunityAuditLogger } from '@/lib/services/ImmunityAuditLogger';
+import { DEFAULT_TENANT_ID } from '@/config/instance';
 
 type Store = ReturnType<typeof getDefaultStore>;
 
-// Tenants « racine » exemptés des restrictions d'accès vassal.
-const PRIVILEGED_TENANTS = new Set(['restaurant-os', 'lepetitpoucet', 'vanguard']);
+const PRIVILEGED_TENANTS = new Set(['restaurant-os', DEFAULT_TENANT_ID, 'vanguard']);
 
 /**
  * Réinitialise les nœuds d'état critiques (orders / stocks / fiscalLedger) à vide.

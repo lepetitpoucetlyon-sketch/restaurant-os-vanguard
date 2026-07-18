@@ -1,8 +1,23 @@
+'use client';
+
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Table as TableIcon, Search, LayoutGrid, Zap, Bell } from "lucide-react";
+import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { STATION_CONFIG, KitchenStation } from "@modules/kds";
+import { STATION_CONFIG, KitchenStation } from "@modules/ops/kds";
+import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export type ServiceStation = 'all' | 'cuisine' | 'bar';
+
+const SERVICE_STATION_LABELS: Record<ServiceStation, string> = {
+    all: 'Tout',
+    cuisine: 'Cuisine',
+    bar: 'Bar',
+};
+
+const LS_KEY_BASE = 'kds-station-filter';
 
 interface KDSHeaderProps {
     activeStation: KitchenStation;
@@ -18,6 +33,12 @@ interface KDSHeaderProps {
     setRushMode: (mode: boolean) => void;
     pendingModificationsCount: number;
     setShowModificationAlerts: (show: boolean) => void;
+    /** kds-5: selected service-station filter */
+    serviceStation: ServiceStation;
+    setServiceStation: (s: ServiceStation) => void;
+    /** kds-6: toggle recall mode */
+    isRecallMode: boolean;
+    setIsRecallMode: (v: boolean) => void;
 }
 
 export function KDSHeader({
@@ -33,7 +54,11 @@ export function KDSHeader({
     rushMode,
     setRushMode,
     pendingModificationsCount,
-    setShowModificationAlerts
+    setShowModificationAlerts,
+    serviceStation,
+    setServiceStation,
+    isRecallMode,
+    setIsRecallMode,
 }: KDSHeaderProps) {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [isGridDropdownOpen, setIsGridDropdownOpen] = useState(false);
@@ -52,6 +77,12 @@ export function KDSHeader({
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    // kds-5: persist service station preference
+    const handleSetServiceStation = (s: ServiceStation) => {
+        setServiceStation(s);
+        try { localStorage.setItem(tenantScopedKey(LS_KEY_BASE), s); } catch { /* silently ignore in SSR / private browsing */ }
+    };
 
     return (
         <div className="relative z-20 w-full border-b border-border/50 bg-bg-primary/60 backdrop-blur-xl shrink-0">
@@ -108,7 +139,36 @@ export function KDSHeader({
 
                         <div className="w-px h-8 bg-surface-bg mx-2" />
 
-                        {/* 3. Search */}
+                        {/* 3. kds-5: Service station toggle (Tout / Cuisine / Bar) */}
+                        <div className="flex items-center p-1 bg-surface-bg/50 rounded-full border border-black/5 shadow-inner">
+                            {(Object.keys(SERVICE_STATION_LABELS) as ServiceStation[]).map(s => {
+                                const isActive = serviceStation === s;
+                                return (
+                                    <button
+                                        key={s}
+                                        onClick={() => handleSetServiceStation(s)}
+                                        className={cn(
+                                            "relative px-4 h-9 rounded-full font-bold text-[10px] uppercase tracking-[0.15em] transition-all duration-200 z-10",
+                                            isActive ? "text-white" : "text-secondary hover:text-primary"
+                                        )}
+                                    >
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="serviceStationPill"
+                                                className="absolute inset-0 rounded-full bg-surface-sidebar z-[-1] shadow-md"
+                                                initial={false}
+                                                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                                            />
+                                        )}
+                                        <span className="relative z-10">{SERVICE_STATION_LABELS[s]}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <div className="w-px h-8 bg-surface-bg mx-2" />
+
+                        {/* 4. Search */}
                         <div ref={searchRef} className="relative flex items-center">
                             <AnimatePresence mode="wait">
                                 {isSearchExpanded ? (
@@ -145,7 +205,7 @@ export function KDSHeader({
 
                         <div className="w-px h-8 bg-surface-bg mx-2" />
 
-                        {/* 4. Grid Selector */}
+                        {/* 5. Grid Selector */}
                         <div ref={gridDropdownRef} className="relative z-[100]">
                             <button
                                 onClick={() => setIsGridDropdownOpen(!isGridDropdownOpen)}
@@ -189,7 +249,7 @@ export function KDSHeader({
 
                         <div className="w-px h-10 bg-surface-bg mx-4" />
 
-                        {/* 5. Production Info */}
+                        {/* 6. Production Info */}
                         <div className="flex items-center gap-4 pr-1 relative z-10">
                             <div className="flex flex-col items-center min-w-[80px]">
                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-accent-gold mb-0.5">TIME</span>
@@ -202,11 +262,27 @@ export function KDSHeader({
                                 onClick={() => setRushMode(!rushMode)}
                                 className={cn(
                                     "flex items-center gap-3 px-6 h-12 rounded-full font-black text-[10px] uppercase tracking-[0.25em] transition-all border duration-300",
-                                    rushMode ? "bg-status-danger text-white border-red-500 shadow-lg shadow-red-500/20" : "bg-surface-card border-subtle text-muted hover:text-accent-gold hover:border-accent-gold/50"
+                                    rushMode
+                                        ? "bg-status-danger text-white border-red-500 shadow-lg shadow-red-500/20"
+                                        : "bg-surface-card border-subtle text-muted hover:text-accent-gold hover:border-accent-gold/50"
                                 )}
                             >
                                 <Zap className={cn("w-3.5 h-3.5", rushMode ? "fill-white" : "text-current")} strokeWidth={2} />
                                 {rushMode ? 'RUSH' : 'NORMAL'}
+                            </button>
+
+                            {/* kds-6: Recall mode toggle */}
+                            <button
+                                onClick={() => setIsRecallMode(!isRecallMode)}
+                                className={cn(
+                                    "flex items-center gap-2.5 px-5 h-12 rounded-full font-black text-[10px] uppercase tracking-[0.2em] transition-all border duration-300",
+                                    isRecallMode
+                                        ? "bg-action-primary text-white border-action-primary shadow-lg shadow-purple-500/20"
+                                        : "bg-surface-card border-subtle text-muted hover:text-action-primary hover:border-action-primary/40"
+                                )}
+                            >
+                                <RotateCcw className="w-3.5 h-3.5" strokeWidth={2} />
+                                RAPPEL
                             </button>
 
                             <div className="relative pl-2 pr-1">
@@ -214,7 +290,9 @@ export function KDSHeader({
                                     onClick={() => setShowModificationAlerts(true)}
                                     className={cn(
                                         "relative w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 group hover:scale-110 active:scale-95",
-                                        pendingModificationsCount > 0 ? "bg-status-warning text-status-warning ring-2 ring-amber-500/20" : "bg-surface-bg text-muted hover:bg-surface-bg"
+                                        pendingModificationsCount > 0
+                                            ? "bg-status-warning text-status-warning ring-2 ring-amber-500/20"
+                                            : "bg-surface-bg text-muted hover:bg-surface-bg"
                                     )}
                                 >
                                     <Bell className={cn("w-5 h-5 transition-transform group-hover:rotate-12", pendingModificationsCount > 0 && "animate-pulse")} strokeWidth={2} />

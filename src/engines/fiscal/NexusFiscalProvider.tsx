@@ -26,7 +26,7 @@ import {
 } from '@modules/finance/types';
 import { useBilling } from '@modules/finance/billing/hooks/useBilling';
 
-// import Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 /**
  * 🏛️ SovereignSignable
@@ -106,30 +106,35 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     const submitExpense = useCallback(async (expenseData: Partial<ExpenseClaim>) => {
         if (!tenantId || !currentUser) throw new Error("FISCAL_SESSION_ERROR");
 
-        const finalData: SovereignSignable = {
-            ...expenseData,
-            amountInMicrounits: Number(expenseData.amountInMicrounits || 0),
-            category: expenseData.category || 'other',
-            date: expenseData.submittedAt ? new Date(expenseData.submittedAt).toISOString() : new Date().toISOString()
-        };
+        try {
+            const finalData: SovereignSignable = {
+                ...expenseData,
+                amountInMicrounits: Number(expenseData.amountInMicrounits || 0),
+                category: expenseData.category || 'other',
+                date: expenseData.submittedAt ? new Date(expenseData.submittedAt).toISOString() : new Date().toISOString()
+            };
 
-        const businessSignature = generateBusinessSignature(finalData);
-        const idempotencyKey = `FISCAL_${tenantId}_${businessSignature}`;
+            const businessSignature = generateBusinessSignature(finalData);
+            const idempotencyKey = `FISCAL_${tenantId}_${businessSignature}`;
 
-        // Sentry.setTag("fiscal.idempotency_key", idempotencyKey);
-        // Sentry.setTag("nexus.grade", "X+++");
+            Sentry.setTag("fiscal.idempotency_key", idempotencyKey);
+            Sentry.setTag("nexus.grade", "X+++");
 
-        const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`;
-        const id = Nexus.adapter.generateId(path);
-        
-        await Nexus.adapter.set(`${path}/${id}`, { 
-            ...expenseData, 
-            id, 
-            idempotencyKey,
-            updatedAt: new Date().toISOString() 
-        });
+            const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`;
+            const id = Nexus.adapter.generateId(path);
 
-        return id;
+            await Nexus.adapter.set(`${path}/${id}`, {
+                ...expenseData,
+                id,
+                idempotencyKey,
+                updatedAt: new Date().toISOString()
+            });
+
+            return id;
+        } catch (error) {
+            Sentry.captureException(error, { tags: { source: 'fiscal', tenantId } });
+            throw error;
+        }
     }, [tenantId, currentUser]);
 
     const runFiscalAudit = useCallback(async () => {

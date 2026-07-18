@@ -1,0 +1,71 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# zenith.restaurant.yaml — Sovereign RAG adapté Restaurant OS
+# Mode on_premise : une instance par restaurant, données sur site
+# ═══════════════════════════════════════════════════════════════════════════════
+
+deployment:
+  # on_premise : données au restaurant, zéro partage cross-client
+  mode: "on_premise"
+  tenant_model: "single"
+  host: "0.0.0.0"
+  port: 8000
+  workers: 2
+
+llm:
+  primary:
+    # cloud par défaut — passe à "local" pour mode air_gap (Ollama)
+    backend: "cloud"
+    local:
+      engine: "ollama"
+      model: "gemma2:2b"
+      url: "http://ollama:11434"
+      keep_alive: -1
+      num_ctx: 4096
+    cloud:
+      provider: "gemini"
+      model: "gemini-2.5-flash"
+      api_key_env: "GOOGLE_API_KEY"
+      timeout_s: 30
+  deep_analysis:
+    enabled: false          # désactivé en on_premise (trop coûteux)
+  sovereign:
+    raw_snippet_leaves_server: false
+  retry:
+    max_attempts: 3
+    backoff_min_s: 0.5
+    backoff_max_s: 8.0
+
+embedding:
+  model: "paraphrase-multilingual-MiniLM-L12-v2"   # multilingue FR/EN
+  device: "cpu"
+  batch_size: 16
+
+retrieval:
+  top_k_initial: 20
+  top_k_final: 5
+  min_similarity_threshold: 0.25
+
+veto:
+  # Seuil de confiance pour bloquer une question hors-scope
+  threshold: 0.65
+  # Catégories de documents autorisées par rôle (restaurant)
+  role_document_map:
+    plongeur:       ["taches", "nettoyage", "planning_propre"]
+    cuisinier:      ["recettes", "allergenes", "fiches_technique", "planning_propre"]
+    barman:         ["cocktails", "carte_bar", "stock_bar", "planning_propre"]
+    hotesse:        ["menu", "plan_salle", "reservations_lecture"]
+    serveur:        ["menu", "allergenes", "promotions", "plan_salle", "planning_propre"]
+    chef_rang:      ["menu", "allergenes", "promotions", "plan_salle", "reservations", "planning_equipe"]
+    chef_cuisinier: ["recettes", "allergenes", "fiches_technique", "couts_matieres", "planning_cuisine"]
+    comptable:      ["factures", "fournisseurs", "rapports_financiers", "journal_comptable"]
+    manager:        ["*"]
+    directeur:      ["*"]
+    super_admin:    ["*"]
+
+storage:
+  db_path: "${SOVEREIGN_RAG_DB_PATH:-/data/sovereign_rag/sovereign.db}"
+  upload_dir: "${UPLOAD_DIR:-/data/uploads}"
+  max_upload_bytes: 52428800    # 50 MB
+
+logging:
+  level: "INFO"

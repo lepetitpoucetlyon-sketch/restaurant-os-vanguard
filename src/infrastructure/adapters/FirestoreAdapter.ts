@@ -1,19 +1,21 @@
-import { 
-    getFirestore, 
-    doc, 
-    getDoc, 
-    getDocs, 
-    collection, 
-    query, 
-    where, 
-    orderBy, 
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    getDocs,
+    collection,
+    query,
+    where,
+    orderBy,
     limit,
-    setDoc, 
-    addDoc, 
-    updateDoc, 
-    deleteDoc, 
+    setDoc,
+    addDoc,
+    updateDoc,
+    deleteDoc,
     onSnapshot,
     increment,
+    runTransaction as firestoreRunTransaction,
+    serverTimestamp as firestoreServerTimestamp,
     Firestore,
     DocumentData,
     QueryConstraint,
@@ -21,7 +23,7 @@ import {
 } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import * as Sentry from "@sentry/nextjs";
-import { INexusAdapter, IQueryOptions, INexusBatch, NexusContext } from '@/lib/nexus/types';
+import { INexusAdapter, INexusTransaction, IQueryOptions, INexusBatch, NexusContext } from '@/lib/nexus/types';
 import { FirestoreBatch } from './FirestoreBatch';
 
 /**
@@ -116,5 +118,24 @@ export class FirestoreAdapter implements INexusAdapter {
 
     generateId(collectionPath: string): string {
         return doc(collection(this.db, collectionPath)).id;
+    }
+
+    serverTimestamp(): unknown {
+        return firestoreServerTimestamp();
+    }
+
+    async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, _context?: NexusContext): Promise<T> {
+        return firestoreRunTransaction(this.db, async (fsTx) => {
+            const tx: INexusTransaction = {
+                get: async <U>(path: string) => {
+                    const snap = await fsTx.get(doc(this.db, path));
+                    return snap.exists() ? ({ id: snap.id, ...snap.data() } as unknown as U) : null;
+                },
+                set: (path, data) => { fsTx.set(doc(this.db, path), data as DocumentData); },
+                update: (path, data) => { fsTx.update(doc(this.db, path), data as DocumentData); },
+                delete: (path) => { fsTx.delete(doc(this.db, path)); },
+            };
+            return callback(tx);
+        });
     }
 }

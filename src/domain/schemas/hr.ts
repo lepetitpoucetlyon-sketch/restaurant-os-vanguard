@@ -60,6 +60,8 @@ export interface PayrollCalculation {
   grossAmount: number;
   netAmount: number;
   chargesSociales: number;
+  /** @see taux indicatifs 2024 — utiliser DSN réelle en production */
+  employerCost: number;
   period: string;
 }
 
