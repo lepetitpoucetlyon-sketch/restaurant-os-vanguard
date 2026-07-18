@@ -83,7 +83,14 @@ export function mapSiteTelemetryToInstance(f: SiteTelemetry): EmpireInstance {
       ...acc,
       [key]: Boolean(val)
     }), {} as Record<string, boolean>),
-    security: buildInstanceSecurity(f)
+    security: buildInstanceSecurity(f),
+    rag: f.ragStatus ? {
+      status: f.ragStatus.status,
+      version: f.ragStatus.version,
+      documentCount: f.ragStatus.documentCount,
+      lastIndexed: f.ragStatus.lastIndexed,
+      latencyMs: f.ragStatus.latencyMs,
+    } : undefined,
   };
 }
 

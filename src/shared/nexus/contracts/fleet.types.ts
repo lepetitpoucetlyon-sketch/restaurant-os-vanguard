@@ -39,6 +39,13 @@ export interface EmpireInstance extends SovereignNode {
         supportAccessUntil?: string;
         [key: string]: SovereignField;
     };
+    rag?: {
+        status: 'online' | 'offline' | 'indexing' | 'error';
+        version?: string;
+        documentCount?: number;
+        lastIndexed?: string;
+        latencyMs?: number;
+    };
     featureFlags?: Record<string, boolean>;
     firebaseConfig?: {
         apiKey: string;
@@ -138,6 +145,13 @@ export interface SiteTelemetry {
     featureFlags?: Record<string, boolean>;
     branding: SiteBranding;
     security: SiteSecurity;
+    ragStatus?: {
+        status: 'online' | 'offline' | 'indexing' | 'error';
+        version?: string;
+        documentCount?: number;
+        lastIndexed?: string;
+        latencyMs?: number;
+    };
 }
  
 export interface ProvisioningDNA {
