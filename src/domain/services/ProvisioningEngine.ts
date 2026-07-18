@@ -3,6 +3,7 @@ import { empireAudit } from '@/lib/audit';
 import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
+import { sovereignCreateWorkspace } from '@/lib/rag/SovereignRAGClient';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -25,7 +26,7 @@ export const ProvisioningEngine = {
         try {
             // 1. Build the Multi-Tenant Empire Instance (Global Contract)
             const newInstance: EmpireInstance = {
-                id: `node_${Math.random().toString(36).substring(2, 11)}`,
+                id: `node_${crypto.randomUUID().replace(/-/g, '').substring(0, 9)}`,
                 key: dna.key,
                 name: dna.name.toUpperCase(),
                 status: 'ONLINE', // Ready for single-core bridge
@@ -100,6 +101,19 @@ export const ProvisioningEngine = {
                 if (!seedResult.success) {
                     logger.warn('ProvisioningEngine: TenantSeeder partial failure', { error: seedResult.error });
                 }
+            }
+
+            // 4. Initialiser le workspace Sovereign RAG pour ce nouveau tenant.
+            // Non-bloquant : si le sidecar est indisponible au moment du provisionnement,
+            // le workspace sera créé à la première réindexation manuelle depuis le MCC.
+            try {
+                await sovereignCreateWorkspace(dna.key, dna.name);
+                logger.info('ProvisioningEngine: Sovereign RAG workspace initialized', { tenantId: dna.key });
+            } catch (ragErr) {
+                logger.warn('ProvisioningEngine: RAG workspace init skipped (sidecar unavailable)', {
+                    tenantId: dna.key,
+                    error: String(ragErr),
+                });
             }
 
             empireAudit.log({

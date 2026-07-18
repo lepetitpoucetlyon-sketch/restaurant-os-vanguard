@@ -9,14 +9,19 @@ import {
     AlertTriangle,
     Save,
     Sparkles,
-    Gem
+    Gem,
+    GlassWater,
+    Plus,
+    Trash2
 } from "lucide-react";
+import type { ServingMethod } from "@nexus/contracts";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { useRecipes, useInventory } from "@/engines/ops/NexusOpsProvider";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
+import { authedFetch } from "@/lib/client/authedFetch";
 import type { Recipe } from "@nexus/contracts/nexus-internal-mapper";
 
 
@@ -64,6 +69,14 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
     const [recipeSteps, setRecipeSteps] = useState<Array<{ order: number; instruction: string; duration?: number }>>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // ── cui-3: Bar recipe fields ──────────────────────────────────────────────
+    const [baseSpirit, setBaseSpirit] = useState("");
+    const [mixersInput, setMixersInput] = useState<string[]>([]);
+    const [newMixerInput, setNewMixerInput] = useState("");
+    const [garnish, setGarnish] = useState("");
+    const [servingMethod, setServingMethod] = useState<ServingMethod>("built");
+    const [glassType, setGlassType] = useState("");
+
     useEffect(() => {
         if (editProduct && isOpen) {
             setName(String(editProduct.name || ""));
@@ -75,11 +88,17 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsVegetarian(editProduct?.isVegetarian || false);
             setIsVegan(editProduct?.isVegan || false);
             setIsGlutenFree(editProduct?.isGlutenFree || false);
-            setRecipeIngredients((editProduct?.ingredients || []).map((i) => ({ 
-                ingredientId: (i as { ingredientId?: string; id?: string }).ingredientId ?? (i as { id?: string }).id ?? "", 
-                quantity: i.quantity 
+            setRecipeIngredients((editProduct?.ingredients || []).map((i) => ({
+                ingredientId: (i as { ingredientId?: string; id?: string }).ingredientId ?? (i as { id?: string }).id ?? "",
+                quantity: i.quantity
             })));
             setRecipeSteps(editProduct?.recipeSteps || []);
+            // Bar fields
+            setBaseSpirit(String(editProduct.baseSpirit ?? ""));
+            setMixersInput((editProduct.mixers ?? []) as string[]);
+            setGarnish(String(editProduct.garnish ?? ""));
+            setServingMethod((editProduct.servingMethod as ServingMethod) ?? "built");
+            setGlassType(String(editProduct.glassType ?? ""));
         } else if (!editProduct && isOpen) {
             setName("");
             setDescription("");
@@ -92,6 +111,13 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsGlutenFree(false);
             setRecipeIngredients([]);
             setRecipeSteps([]);
+            // Bar fields
+            setBaseSpirit("");
+            setMixersInput([]);
+            setNewMixerInput("");
+            setGarnish("");
+            setServingMethod("built");
+            setGlassType("");
         }
     }, [editProduct, isOpen]);
 
@@ -158,6 +184,14 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 productType,
                 isActive: true,
                 color: productType === 'dish' ? '#1B4332' : '#7C3AED',
+                // ── cui-3: bar fields (only persisted for cocktails) ──────────
+                ...(productType === 'cocktail' ? {
+                    baseSpirit: baseSpirit.trim() || undefined,
+                    mixers: mixersInput.filter(Boolean),
+                    garnish: garnish.trim() || undefined,
+                    servingMethod,
+                    glassType: glassType.trim() || undefined,
+                } : {}),
             };
 
             if (editProduct) {
@@ -167,6 +201,14 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 await addRecipe(productData);
                 showToast("Fiche créée", "success");
             }
+
+            // Indexation RAG asynchrone — fire-and-forget, sans bloquer l'UX.
+            authedFetch('/api/oracle/index', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: productType, data: productData }),
+            }).catch(() => { /* l'indexation échouée ne bloque pas l'utilisateur */ });
+
             onClose();
         } catch (_error) {
             showToast("Erreur d'enregistrement", "error");
@@ -220,6 +262,137 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                     </div>
 
                     <ProductFinancials sellPriceInCents={sellPriceInCents} setSellPriceInCents={setSellPriceInCents} prepTime={prepTime} setPrepTime={setPrepTime} calculatedCost={calculatedCost} margin={margin} />
+
+                    {/* ── cui-3: Bar & Cocktail fields ───────────────────────── */}
+                    {productType === 'cocktail' && (
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 px-2">
+                                <GlassWater className="w-4 h-4 text-accent" />
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Profil Cocktail</h3>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                {/* Base spirit */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Spiritueux de base</label>
+                                    <input
+                                        type="text"
+                                        value={baseSpirit}
+                                        onChange={e => setBaseSpirit(e.target.value)}
+                                        placeholder="Ex: Rhum blanc, Gin..."
+                                        className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                </div>
+
+                                {/* Glass type */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Type de verre</label>
+                                    <input
+                                        type="text"
+                                        value={glassType}
+                                        onChange={e => setGlassType(e.target.value)}
+                                        placeholder="Ex: Coupe, Highball..."
+                                        className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                </div>
+
+                                {/* Garnish */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Garniture / Décor</label>
+                                    <input
+                                        type="text"
+                                        value={garnish}
+                                        onChange={e => setGarnish(e.target.value)}
+                                        placeholder="Ex: Zeste de citron vert..."
+                                        className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                </div>
+
+                                {/* Serving method */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Méthode de préparation</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {(['shaken', 'stirred', 'built', 'blended', 'layered'] as const).map(method => {
+                                            const labels: Record<ServingMethod, string> = {
+                                                shaken: 'Shaké',
+                                                stirred: 'Remué',
+                                                built: 'Construit',
+                                                blended: 'Mixé',
+                                                layered: 'En couches',
+                                            };
+                                            return (
+                                                <button
+                                                    key={method}
+                                                    type="button"
+                                                    onClick={() => setServingMethod(method)}
+                                                    className={cn(
+                                                        "px-4 py-2 rounded-xl border-2 font-black text-[10px] uppercase tracking-widest transition-all",
+                                                        servingMethod === method
+                                                            ? "bg-accent/10 border-accent text-accent"
+                                                            : "bg-surface-card border-border text-text-muted hover:border-text-muted/30"
+                                                    )}
+                                                >
+                                                    {labels[method]}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Mixers list */}
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Mixeurs / Accompagnements</label>
+                                <div className="flex gap-3">
+                                    <input
+                                        type="text"
+                                        value={newMixerInput}
+                                        onChange={e => setNewMixerInput(e.target.value)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter' && newMixerInput.trim()) {
+                                                e.preventDefault();
+                                                setMixersInput(prev => [...prev, newMixerInput.trim()]);
+                                                setNewMixerInput("");
+                                            }
+                                        }}
+                                        placeholder="Ex: Jus de citron, sirop... (Entrée pour ajouter)"
+                                        className="flex-1 h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (newMixerInput.trim()) {
+                                                setMixersInput(prev => [...prev, newMixerInput.trim()]);
+                                                setNewMixerInput("");
+                                            }
+                                        }}
+                                        className="h-14 px-6 bg-accent text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-accent/90 transition-all"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                    </button>
+                                </div>
+                                {mixersInput.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 pt-2">
+                                        {mixersInput.map((mixer, i) => (
+                                            <div
+                                                key={i}
+                                                className="flex items-center gap-2 px-4 py-2 bg-bg-tertiary/60 border border-border/50 rounded-xl"
+                                            >
+                                                <span className="text-[11px] font-bold text-text-primary">{mixer}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setMixersInput(prev => prev.filter((_, idx) => idx !== i))}
+                                                    className="text-text-muted hover:text-error transition-colors"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Section: Régimes & Allergènes */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
