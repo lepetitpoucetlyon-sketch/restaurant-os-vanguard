@@ -1,25 +1,17 @@
 "use client";
-import { NexusSutures } from '@/store/nexusSutures';
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode, useRef } from 'react';
-import { getTenantConfig } from '@/instances';
-import { logger } from '@/lib/axiom';
-import { useSearchParams } from 'next/navigation';
+import React, { createContext, useContext, useState, useMemo, useCallback, ReactNode } from 'react';
 import { translations, Language } from '@/i18n/translations';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
-import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
-import { useSetAtom, useAtomValue } from 'jotai';
-import { tenantConfigAtom } from '@/store/pillars/sovereign';
-import { TenantConfig, SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { useAtomValue } from 'jotai';
+import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import { unreadNotificationsCountAtom } from '@nexus/state/SovereignGenome';
 import {
-    NexusCoreState, 
-    NexusTenantState, 
+    NexusCoreState,
     NexusLangState,
 } from '@nexus/contracts/nexus.types';
 
 import { UIThemeProvider, UIThemeContext } from './providers/UIThemeProvider';
 import { NotificationProvider, NotificationContext } from './providers/NotificationProvider';
+import { useNexusTenantLogic } from './hooks/useNexusTenantLogic';
 import { useNexusAuthLogic } from './hooks/useNexusAuthLogic';
 import { useNexusFleetLogic } from './hooks/useNexusFleetLogic';
 
@@ -27,49 +19,10 @@ const NexusCoreContext = createContext<NexusCoreState | undefined>(undefined);
 
 const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     // 1. TENANT MODULE
-    const searchParams = useSearchParams();
-    const hasInitialized = useRef(false);
-    const setGlobalTenantConfig = useSetAtom(tenantConfigAtom);
-    
-    const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
-    const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
-
-    useEffect(() => {
-        try { Nexus.adapter = new FirestoreAdapter(); } catch { }
-    }, []);
-
-    useEffect(() => {
-        NexusTelemetryEngine.mountChaosMonkeys();
-        NexusSutures.init();
-        return () => {
-            NexusTelemetryEngine.unmountChaosMonkeys();
-            NexusSutures.stop();
-        };
-    }, []);
-
-    const switchTenant = useCallback((tenantIdRaw: string) => {
-        const tenantId = tenantIdRaw.replace(/['"]+/g, '');
-        logger.info('NexusCore: Switching Digital Twin context', { tenantId });
-        const config = getTenantConfig(tenantId);
-        if (!config) return;
-        
-        setActiveTenantId(tenantId);
-        setActiveTenantConfig(config);
-        setGlobalTenantConfig(config);
-        Nexus.tenantOverride = tenantId;
-        NexusTelemetryEngine.initSession(tenantId);
-    }, [setGlobalTenantConfig]);
-
-    useEffect(() => {
-        if (!activeTenantId && !hasInitialized.current) {
-            const targetTenant = searchParams.get('tenant') || 'lepetitpoucet';
-            hasInitialized.current = true;
-            switchTenant(targetTenant);
-        }
-    }, [activeTenantId, searchParams, switchTenant]);
+    const tenantValue = useNexusTenantLogic();
 
     // 2. AUTH MODULE
-    const authValue = useNexusAuthLogic(activeTenantId);
+    const authValue = useNexusAuthLogic(tenantValue.activeTenantId);
 
     // 3. UI, NOTIF & THEME
     const uiThemeContext = useContext(UIThemeContext);
@@ -95,18 +48,13 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
         availableLanguages: Object.keys(translations)
     }), [t, currentLanguage]);
 
-    const tenantValue: NexusTenantState = useMemo(() => ({
-        activeTenantId, activeTenantConfig, switchTenant,
-        isTenantLoading: !activeTenantId, tenantId: activeTenantId || undefined
-    }), [activeTenantId, activeTenantConfig, switchTenant]);
-
     const fleetValue = useNexusFleetLogic();
 
     const contextValue: NexusCoreState = useMemo(() => ({
         auth: authValue, tenant: tenantValue, ui: uiThemeContext.ui, settings: uiThemeContext.settings,
         theme: uiThemeContext.theme, lang: langValue, notif: notifContext, fleet: fleetValue,
-        tenantConfig: activeTenantConfig
-    }), [tenantValue, authValue, uiThemeContext, langValue, notifContext, fleetValue, activeTenantConfig]);
+        tenantConfig: tenantValue.activeTenantConfig
+    }), [tenantValue, authValue, uiThemeContext, langValue, notifContext, fleetValue]);
 
     return (
         <NexusCoreContext.Provider value={contextValue}>

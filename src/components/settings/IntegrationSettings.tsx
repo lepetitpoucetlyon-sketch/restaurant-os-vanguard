@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { useSettings } from "@/context/SettingsContext";
+import { useNotifications } from '@/context/NotificationsContext';
 import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 
 const INTEGRATIONS_METADATA = [
@@ -44,6 +45,7 @@ export default function IntegrationSettings() {
     });
     const [isSaving, setIsSaving] = useState(false);
     const [showSecrets, setShowSecrets] = useState(false);
+    const { addNotification } = useNotifications();
 
     const handleSave = async () => {
         setIsSaving(true);
@@ -52,6 +54,7 @@ export default function IntegrationSettings() {
             await updateList('integrations', localIntegrations);
         } catch (error) {
             console.error(error);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer la configuration des intégrations.' });
         } finally {
             setIsSaving(false);
         }

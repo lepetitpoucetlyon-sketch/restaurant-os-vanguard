@@ -1,5 +1,6 @@
 import { IFinanceRepository } from '@domain/repositories/IFinanceRepository';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
+import { logger } from '@/lib/logger';
 
 /**
  * 🧪 MockFinanceRepository - Validation of Sovereignty
@@ -12,7 +13,7 @@ export class MockFinanceRepository implements IFinanceRepository {
     }
 
     async saveJournalEntry(entry: JournalEntry): Promise<void> {
-        console.log("MOCK_SAVE: Journal Entry saved to local memory", entry);
+        logger.debug("MOCK_SAVE: Journal Entry saved to local memory", entry);
     }
 
     async getAccounts(): Promise<Account[]> {
@@ -20,7 +21,7 @@ export class MockFinanceRepository implements IFinanceRepository {
     }
 
     async saveAccount(account: Account): Promise<void> {
-        console.log("MOCK_SAVE: Account saved to local memory", account);
+        logger.debug("MOCK_SAVE: Account saved to local memory", account);
     }
 
     async getBankTransactions(): Promise<BankTransaction[]> {
@@ -32,6 +33,6 @@ export class MockFinanceRepository implements IFinanceRepository {
     }
 
     async saveExpenseClaim(claim: ExpenseClaim): Promise<void> {
-        console.log("MOCK_SAVE: Expense Claim saved to local memory", claim);
+        logger.debug("MOCK_SAVE: Expense Claim saved to local memory", claim as unknown as Record<string, unknown>);
     }
 }

@@ -136,8 +136,7 @@ export default function Home() {
   const { tables } = useTables();
   const { data: orders } = useOrders();
   const _totalRevenue = orders.reduce((acc, o) => {
-    const amountInMicrounits = (o.totalInCents || 0) * 10_000;
-    return SovereignMath.add(acc, amountInMicrounits);
+    return SovereignMath.add(acc, SovereignMath.orderTotalMicrounits(o));
   }, 0);
   const { lowStockItems } = useInventory();
   const { currentUser } = useAuth();
@@ -164,7 +163,7 @@ export default function Home() {
     const revenueInMicrounits = todayOrders
       .filter(o => o.status === 'paid' || o.status === 'delivered')
       .reduce((acc, o) => {
-        return SovereignMath.add(acc, (o.totalInCents || 0) * 10_000);
+        return SovereignMath.add(acc, SovereignMath.orderTotalMicrounits(o));
       }, 0);
     return SovereignMath.fromMicrounits(revenueInMicrounits);
   }, [todayOrders]);
@@ -176,7 +175,7 @@ export default function Home() {
     if (paidOrders.length === 0) return 0;
     
     const totalInMicrounits = paidOrders.reduce((acc, o) => {
-      return SovereignMath.add(acc, (o.totalInCents || 0) * 10_000);
+      return SovereignMath.add(acc, SovereignMath.orderTotalMicrounits(o));
     }, 0);
     
     const averageInMicrounits = SovereignMath.divide(totalInMicrounits, paidOrders.length);
@@ -205,7 +204,7 @@ export default function Home() {
           && (o.status === 'paid' || o.status === 'delivered');
       });
       const dayRevenueInMicrounits = dayOrders.reduce((acc, o) => {
-          return SovereignMath.add(acc, (o.totalInCents || 0) * 10_000);
+          return SovereignMath.add(acc, SovereignMath.orderTotalMicrounits(o));
       }, 0);
       return SovereignMath.fromMicrounits(dayRevenueInMicrounits);
     });

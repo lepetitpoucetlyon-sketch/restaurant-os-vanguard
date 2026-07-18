@@ -1,5 +1,4 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FISCAL_CONSTANTS } from './FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
@@ -58,8 +57,8 @@ export const FinancialNexusBridge = {
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(cartItems);
 
     // ── 2. Chaîne de scellement ───────────────────────────────────────────────
-    const lastSeal = await FiscalSealer.getLastSeal(tenantId);
-    const previousHash = lastSeal?.hash ?? FISCAL_CONSTANTS.GENESIS_ROOT;
+    // previousHash is managed atomically inside sealDataAtomically via chainHead —
+    // never read it here to avoid hash-chain forks under concurrent orders.
     const receiptNumber = FiscalSealer.generateReceiptNumber();
     const entryId = SharedKernel.generateId('JE');
     const now = new Date().toISOString();
@@ -74,7 +73,7 @@ export const FinancialNexusBridge = {
       timestamp: now,
     } as import("@/shared/nexus-contract").SovereignData);
 
-    const { hash, signature } = await FiscalSealer.sealData(dataSnapshot, tenantId, isTrainingMode, previousHash);
+    const { hash, signature, sealId, previousHash } = await FiscalSealer.sealDataAtomically(dataSnapshot, tenantId, isTrainingMode);
 
     // ── 3. JournalEntry NF525 ─────────────────────────────────────────────────
     const journalEntry: JournalEntry = {
@@ -105,7 +104,8 @@ export const FinancialNexusBridge = {
     } as unknown as JournalEntry;
 
     // ── 4. FiscalSeal ─────────────────────────────────────────────────────────
-    const sealId = SharedKernel.generateId('SEAL');
+    // sealId comes from sealDataAtomically; the seal document is already written
+    // to Nexus atomically (with correct previousHash) — do NOT re-write it here.
     const seal: FiscalSeal = {
       id: sealId,
       transactionId: entryId,
@@ -118,16 +118,10 @@ export const FinancialNexusBridge = {
     };
 
     // ── 5. Écriture atomique Nexus ────────────────────────────────────────────
-    await Promise.all([
-      Nexus.adapter.set(
-        `tenants/${tenantId}/journalEntries/${entryId}`,
-        journalEntry
-      ),
-      Nexus.adapter.set(
-        `tenants/${tenantId}/fiscalSeals/${sealId}`,
-        seal
-      ),
-    ]);
+    // Only journalEntry is written here — fiscalSeal was already committed by sealDataAtomically.
+    const batch = Nexus.adapter.batch();
+    batch.set(`tenants/${tenantId}/journalEntries/${entryId}`, journalEntry);
+    await batch.commit();
 
     // Émission de l'événement — déclenche stock, Ticket Z, IA en parallèle
     NexusEventBus.emit('order.paid', {

@@ -1,6 +1,7 @@
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
+import { LLMManager } from '@/lib/ai/LLMManager';
 
 /**
  * BRANDING SERVICE (Phase 33 - Nexus Industrialization)
@@ -30,46 +31,27 @@ export const BrandingService = {
         logger.info(`[Nexus Branding] Initiating AI Extraction for: ${url}`);
         
         try {
-            // Dynamic imports to isolate server-side dependencies
             const { VisualIdentityExtractor } = await import('./VisualIdentityExtractor');
-            const { GoogleGenerativeAI } = await import('@google/generative-ai');
 
-            // Initialize Gemini with the secured API Key inside the server context
-            const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-
-            // 1. Capture the visual identity
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 
-            // 2. Prepare Gemini Vision
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-            const prompt = `
-                You are a Senior Art Director. 
-                Analyze this website screenshot and extract the Brand Identity.
+            const { AI_MODELS } = await import('@/lib/ai/types');
+            const response = await LLMManager.provider.generateFromImage({
+                model: AI_MODELS.fast,
+                systemPrompt: 'You are a Senior Art Director.',
+                userPrompt: `Analyze this website screenshot and extract the Brand Identity.
                 Return ONLY a JSON object with this structure:
                 {
                     "name": "Brand Name",
                     "primaryColor": "Hex Code",
                     "atmosphere": "luxury" | "bistro" | "fast-food" | "modern",
                     "fontVibe": "serif" | "sans-serif"
-                }
-            `;
+                }`,
+                image: { base64: base64Image, mimeType: 'image/jpeg' },
+                responseMimeType: 'application/json',
+            });
 
-            const result = await model.generateContent([
-                prompt,
-                {
-                    inlineData: {
-                        data: base64Image,
-                        mimeType: "image/jpeg"
-                    }
-                }
-            ]);
-
-            const response = await result.response;
-            const text = response.text();
-            
-            // Clean the output (Gemini sometimes adds ```json blocks)
-            const cleanJson = text.replace(/```json|```/g, '').trim();
+            const cleanJson = response.text.replace(/```json|```/g, '').trim();
             const data = JSON.parse(cleanJson);
 
             logger.info(`[Nexus Branding] AI Analysis Success:`, { data });

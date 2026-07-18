@@ -268,6 +268,7 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
 };
 
 import { NexusAIConfig } from '@nexus/contracts/settings/nexus';
+import { AI_MODELS } from '@/lib/ai/types';
 
 export const defaultInventory: InventoryConfig = {
     lowStockThreshold: 1000,
@@ -385,14 +386,14 @@ export const defaultSettings: GlobalSettings = {
         enabled: false,
         endpoint: '',
         apiKey: '',
-        modelId: 'gemini-1.5-flash',
+        modelId: AI_MODELS.fast,
         fallbackThreshold: 0.5,
         fallbackTriggerWord: 'FORCE_GEMINI_FALLBACK',
         experts: [
-            { id: 'exp-inv', domain: 'inventory', name: 'Expert Inventaire', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' },
-            { id: 'exp-haccp', domain: 'haccp', name: 'Expert Hygiène', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' },
-            { id: 'exp-recipes', domain: 'recipes', name: 'Expert Recettes', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' },
-            { id: 'exp-sales', domain: 'sales', name: 'Expert Croissance', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' }
+            { id: 'exp-inv', domain: 'inventory', name: 'Expert Inventaire', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast },
+            { id: 'exp-haccp', domain: 'haccp', name: 'Expert Hygiène', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast },
+            { id: 'exp-recipes', domain: 'recipes', name: 'Expert Recettes', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast },
+            { id: 'exp-sales', domain: 'sales', name: 'Expert Croissance', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast }
         ],
     },
     nexusConfig: defaultNexusConfig,

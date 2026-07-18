@@ -1,4 +1,3 @@
-import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getAllTenants } from '@/instances';
@@ -40,7 +39,7 @@ export const FleetComplianceService = {
     logger.info(`[Compliance] Verifying ledger chain for ${tenantId}...`);
     
     try {
-      const ledgerPath = getTenantPath('fiscal_ledger', tenantId);
+      const ledgerPath = Nexus.getTenantPath('fiscal_ledger', tenantId);
       const entriesRaw = await Nexus.adapter.query(ledgerPath);
       
       const entries = entriesRaw.map(e => e as import('@nexus/contracts').FiscalSeal).sort((a, b) => (a.sequence || 0) - (b.sequence || 0));

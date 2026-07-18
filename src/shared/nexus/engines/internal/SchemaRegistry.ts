@@ -21,9 +21,11 @@ export const SchemaRegistry: Record<string, Record<string, z.ZodSchema>> = {
             id: z.string(),
             tableNumber: z.string(),
             status: z.enum(['draft', 'new', 'ordered', 'preparing', 'ready', 'delivered', 'cancelled', 'paid']),
-            totalInCents: z.number().int(),
+            // Microunits Protocol: totalInMicrounits is canonical; totalInCents is a deprecated parity mirror. Both optional.
+            totalInMicrounits: z.number().int().optional(),
+            totalInCents: z.number().int().optional(),
             timestamp: z.string().or(z.date())
-        })
+        }).catchall(z.any())
     },
     STOCK: {
         items: z.object({

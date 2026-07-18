@@ -1,15 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { verifyDevice } from '../lib/sovereign/lockdown';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-vi.mock('firebase/firestore', () => {
+vi.mock('@/lib/nexus/NexusAdapter', () => {
+  const mockAdapter = {
+    get: vi.fn(),
+    set: vi.fn(),
+    update: vi.fn(),
+    query: vi.fn(),
+    create: vi.fn(),
+    delete: vi.fn(),
+    batch: vi.fn(),
+    onSnapshot: vi.fn(),
+    generateId: vi.fn(),
+    increment: vi.fn(),
+    serverTimestamp: vi.fn(() => new Date()),
+  };
   return {
-    getFirestore: vi.fn(),
-    doc: vi.fn(),
-    getDoc: vi.fn(),
-    setDoc: vi.fn(),
+    Nexus: {
+      adapter: mockAdapter,
+      getTenantPath: vi.fn((col: string, tid?: string) => `tenants/${tid || 'default'}/${col}`),
+    },
   };
 });
+
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+const mockAdapter = Nexus.adapter as unknown as Record<string, ReturnType<typeof vi.fn>>;
 
 describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
   beforeEach(() => {
@@ -20,23 +35,11 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
   });
 
   it('Scénario 1: Appareil certifié - Accès autorisé', async () => {
-    vi.mocked(getDoc).mockImplementation((ref: any) => {
-      if (ref === 'deviceDocRef') {
-        return Promise.resolve({
-          exists: () => true,
-          data: (): any => ({ fingerprint: 'fingerprint_123' })
-        } as any);
+    mockAdapter.get.mockImplementation((path: string) => {
+      if (path.includes('certifiedDevices')) {
+        return Promise.resolve({ fingerprint: 'fingerprint_123' });
       }
-      return Promise.resolve({
-        exists: () => true,
-        data: (): any => ({ role: 'USER' })
-      } as any);
-    });
-
-    vi.mocked(doc).mockImplementation((...args: any[]) => {
-      const subCol = args[3];
-      if (subCol === 'certifiedDevices') return 'deviceDocRef' as any;
-      return 'userDocRef' as any;
+      return Promise.resolve({ role: 'USER' });
     });
 
     const result = await verifyDevice('uid_123', 'fingerprint_123');
@@ -44,23 +47,11 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
   });
 
   it('Scénario 2: Appareil inconnu et sans 2FA - Validation Manager', async () => {
-    vi.mocked(getDoc).mockImplementation((ref: any) => {
-      if (ref === 'deviceDocRef') {
-        return Promise.resolve({
-          exists: () => false,
-          data: (): any => null
-        } as any);
+    mockAdapter.get.mockImplementation((path: string) => {
+      if (path.includes('certifiedDevices')) {
+        return Promise.resolve(null);
       }
-      return Promise.resolve({
-        exists: () => true,
-        data: (): any => ({ role: 'USER' }) // no preferences2FA
-      } as any);
-    });
-
-    vi.mocked(doc).mockImplementation((...args: any[]) => {
-      const subCol = args[3];
-      if (subCol === 'certifiedDevices') return 'deviceDocRef' as any;
-      return 'userDocRef' as any;
+      return Promise.resolve({ role: 'USER' });
     });
 
     const result = await verifyDevice('uid_123', 'fingerprint_unknown');
@@ -68,26 +59,14 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
   });
 
   it('Scénario 2b: Appareil inconnu avec 2FA - Propose 2FA', async () => {
-    vi.mocked(getDoc).mockImplementation((ref: any) => {
-      if (ref === 'deviceDocRef') {
-        return Promise.resolve({
-          exists: () => false,
-          data: (): any => null
-        } as any);
+    mockAdapter.get.mockImplementation((path: string) => {
+      if (path.includes('certifiedDevices')) {
+        return Promise.resolve(null);
       }
       return Promise.resolve({
-        exists: () => true,
-        data: (): any => ({ 
-          role: 'USER',
-          preferences2FA: { email_enabled: true, sms_enabled: false }
-        })
-      } as any);
-    });
-
-    vi.mocked(doc).mockImplementation((...args: any[]) => {
-      const subCol = args[3];
-      if (subCol === 'certifiedDevices') return 'deviceDocRef' as any;
-      return 'userDocRef' as any;
+        role: 'USER',
+        preferences2FA: { email_enabled: true, sms_enabled: false }
+      });
     });
 
     const result = await verifyDevice('uid_123', 'fingerprint_unknown');
@@ -95,23 +74,11 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
   });
 
   it('Scénario 3: Révocation - Accès refusé', async () => {
-    vi.mocked(getDoc).mockImplementation((ref: any) => {
-      if (ref === 'deviceDocRef') {
-        return Promise.resolve({
-          exists: () => true,
-          data: (): any => ({ fingerprint: 'fingerprint_revoked', revoked: true })
-        } as any);
+    mockAdapter.get.mockImplementation((path: string) => {
+      if (path.includes('certifiedDevices')) {
+        return Promise.resolve({ fingerprint: 'fingerprint_revoked', revoked: true });
       }
-      return Promise.resolve({
-        exists: () => true,
-        data: (): any => ({ role: 'USER' })
-      } as any);
-    });
-
-    vi.mocked(doc).mockImplementation((...args: any[]) => {
-      const subCol = args[3];
-      if (subCol === 'certifiedDevices') return 'deviceDocRef' as any;
-      return 'userDocRef' as any;
+      return Promise.resolve({ role: 'USER' });
     });
 
     const result = await verifyDevice('uid_123', 'fingerprint_revoked');
@@ -119,54 +86,29 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
   });
 
   it('Scénario 4: SUPER_ADMIN - Auto-certification', async () => {
-    vi.mocked(getDoc).mockImplementation((ref: any) => {
-      if (ref === 'deviceDocRef') {
-        return Promise.resolve({
-          exists: () => false,
-          data: (): any => null
-        } as any);
+    mockAdapter.get.mockImplementation((path: string) => {
+      if (path.includes('certifiedDevices')) {
+        return Promise.resolve(null);
       }
-      return Promise.resolve({
-        exists: () => true,
-        data: (): any => ({ role: 'SUPER_ADMIN' })
-      } as any);
-    });
-
-    vi.mocked(doc).mockImplementation((...args: any[]) => {
-      const subCol = args[3];
-      if (subCol === 'certifiedDevices') return 'deviceDocRef' as any;
-      return 'userDocRef' as any;
+      return Promise.resolve({ role: 'SUPER_ADMIN' });
     });
 
     const result = await verifyDevice('uid_super_admin', 'new_fingerprint_super');
     expect(result).toEqual({ status: 'CERTIFIED' });
-    expect(setDoc).toHaveBeenCalled();
+    expect(mockAdapter.set).toHaveBeenCalled();
   });
 
   it('Scénario 5: Tablette fixe - Validation manuelle', async () => {
-    vi.mocked(getDoc).mockImplementation((ref: any) => {
-      if (ref === 'deviceDocRef') {
-        return Promise.resolve({
-          exists: () => false,
-          data: (): any => null
-        } as any);
+    mockAdapter.get.mockImplementation((path: string) => {
+      if (path.includes('certifiedDevices')) {
+        return Promise.resolve(null);
       }
       return Promise.resolve({
-        exists: () => true,
-        data: (): any => ({ 
-          role: 'USER',
-          preferences2FA: { email_enabled: true, sms_enabled: true }
-        })
-      } as any);
+        role: 'USER',
+        preferences2FA: { email_enabled: true, sms_enabled: true }
+      });
     });
 
-    vi.mocked(doc).mockImplementation((...args: any[]) => {
-      const subCol = args[3];
-      if (subCol === 'certifiedDevices') return 'deviceDocRef' as any;
-      return 'userDocRef' as any;
-    });
-
-    // isFixedAsset = true
     const result = await verifyDevice('uid_fixed', 'fingerprint_fixed', true);
     expect(result).toEqual({ status: 'REQUIRES_MANAGER_VALIDATION' });
   });

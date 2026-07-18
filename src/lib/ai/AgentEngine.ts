@@ -85,7 +85,6 @@ export const AgentEngine = {
             };
 
         } catch (error) {
-            console.error('AgentEngine: Error during reasoning', error);
             throw new Error('Échec du moteur de raisonnement expert.');
         }
 

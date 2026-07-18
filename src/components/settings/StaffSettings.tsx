@@ -20,6 +20,7 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 
 import { useSettings } from "@/context/SettingsContext";
+import { useNotifications } from '@/context/NotificationsContext';
 import { PositionSettings, StaffConfig } from "@nexus/contracts";
 
 interface PositionConfig {
@@ -44,6 +45,7 @@ export default function StaffSettings() {
     const { settings, updateConfig, updateList, isSaving: _contextIsSaving } = useSettings();
     const [positions, setPositions] = useState<PositionSettings[]>(settings?.positions || []);
     const [isSaving, setIsSaving] = useState(false);
+    const { addNotification } = useNotifications();
     const [localConfig, setLocalConfig] = useState<StaffConfig>(settings?.staffConfig || {
         maxHoursPerWeek: 35,
         maxOvertimePerWeek: 8,
@@ -66,6 +68,7 @@ export default function StaffSettings() {
             await updateList('positions', positions);
         } catch (error) {
             console.error(error);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer la configuration du personnel.' });
         } finally {
             setIsSaving(false);
         }

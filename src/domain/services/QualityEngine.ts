@@ -1,4 +1,3 @@
-import { getTenantPath } from '@/lib/firebase';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from './HACCPTelemetryBridge';
@@ -36,7 +35,7 @@ export class QualityEngine {
     const result = await NexusTransaction.run(
       { RECEPTION_VALIDATION: { schema: ReceptionSchema, data: validatedData } },
       async (transaction) => {
-        const tenantPath = getTenantPath(this.COLLECTION, tenantId);
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION, tenantId);
         const receptionId = SharedKernel.generateId('HACCP-REC');
         const receptionPath = `${tenantPath}/${receptionId}`;
 
@@ -53,7 +52,7 @@ export class QualityEngine {
         };
         transaction.set(receptionPath, log);
 
-        const deliveryPath = `${getTenantPath('deliveries', tenantId)}/${validatedData.deliveryId}`;
+        const deliveryPath = `${Nexus.getTenantPath('deliveries', tenantId)}/${validatedData.deliveryId}`;
         transaction.update(deliveryPath, { status: 'checked', checkedAt: new Date().toISOString() });
 
         return { id: receptionId, currentStatus: log.hygieneStatus };
@@ -75,7 +74,7 @@ export class QualityEngine {
     const validatedData = CleaningSchema.parse(rawData);
     const id = SharedKernel.generateId('HACCP-CLN');
     
-    await Nexus.adapter.set(`${getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
+    await Nexus.adapter.set(`${Nexus.getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
         ...validatedData,
         id,
         type: 'cleaning',
@@ -95,7 +94,7 @@ export class QualityEngine {
     // 🛡️ NF525 BRIDGE : Fiscal Sealing of Waste
     const seal = await FiscalEngine.sealEntry(id, validatedData, { instanceId: tenantId });
 
-    await Nexus.adapter.set(`${getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
+    await Nexus.adapter.set(`${Nexus.getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
         ...validatedData,
         id,
         type: 'waste',
@@ -111,7 +110,7 @@ export class QualityEngine {
    */
   private static async trackRecentFailures(tenantId: string) {
     try {
-        const tenantPath = getTenantPath(this.COLLECTION, tenantId);
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION, tenantId);
         const snapshots = await Nexus.adapter.query<ReceptionData & { hygieneStatus: string; createdAt: string }>(tenantPath, {
           where: [{ field: 'type', operator: '==', value: 'reception' }],
           orderBy: { field: 'createdAt', direction: 'desc' },

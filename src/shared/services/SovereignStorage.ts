@@ -1,5 +1,9 @@
 import { ZodSchema } from 'zod';
 import { atom, WritableAtom } from 'jotai';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+
+/** Keys that identify the tenant itself — MUST stay unscoped to bootstrap. */
+const UNSCOPED_KEYS = new Set(['nexus_tenant_id']);
 
 // ── Types du service ───────────────────────────────────────────────────────
 interface StorageReadResult<T> {
@@ -29,13 +33,19 @@ class SovereignStorageService {
   private readonly prefix = 'sovereign:';
   private corruptionLog: CorruptionLog[] = [];
 
+  /** Resolve the physical storage key: `sovereign:t:{tenant}:{key}` unless bootstrap key. */
+  private physicalKey(key: string): string {
+    if (UNSCOPED_KEYS.has(key)) return this.prefix + key;
+    return this.prefix + tenantScopedKey(key);
+  }
+
   // ── LECTURE SOUVERAINE ─────────────────────────────────────────────────
   get<T>(
     key: string,
     schema: ZodSchema<T>,
     defaultValue: T
   ): StorageReadResult<T> {
-    const prefixedKey = this.prefix + key;
+    const prefixedKey = this.physicalKey(key);
 
     try {
       const raw = typeof window !== 'undefined' ? localStorage.getItem(prefixedKey) : null;
@@ -94,7 +104,7 @@ class SovereignStorageService {
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem(
-          this.prefix + key,
+          this.physicalKey(key),
           JSON.stringify(result.data)
         );
       }
@@ -109,7 +119,7 @@ class SovereignStorageService {
 
   purge(key: string): void {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem(this.prefix + key);
+      localStorage.removeItem(this.physicalKey(key));
     }
   }
 
@@ -129,7 +139,7 @@ class SovereignStorageService {
 
   has(key: string): boolean {
     if (typeof window !== 'undefined') {
-        return localStorage.getItem(this.prefix + key) !== null;
+        return localStorage.getItem(this.physicalKey(key)) !== null;
     }
     return false;
   }

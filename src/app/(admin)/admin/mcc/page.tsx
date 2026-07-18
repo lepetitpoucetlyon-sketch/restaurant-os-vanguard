@@ -93,7 +93,11 @@ export default function MCCDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white p-8 font-sans selection:bg-action-primary/30">
+    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-action-primary/30 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-action-primary/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="relative z-10 p-8">
       <VoiceAssistantOverlay />
       
       {/* Header MCC */}
@@ -111,16 +115,16 @@ export default function MCCDashboard() {
         <div className="flex items-center gap-4">
           <AmbientAudio />
           
-          <button 
+          <button
             onClick={() => refreshFleet()}
             disabled={isLoading}
-            className={`flex items-center gap-2 bg-[#161618] border border-white/5 px-4 py-2.5 rounded-xl hover:bg-[#1c1c1f] transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}
+            className={`flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}
           >
             <RefreshCw className={`w-4 h-4 text-brand ${isLoading ? 'animate-spin' : ''}`} />
             <span className="text-xs font-bold uppercase tracking-widest text-muted">Global Sync</span>
           </button>
           
-          <div className="flex items-center gap-2 bg-[#161618] border border-white/5 px-4 py-2.5 rounded-xl">
+          <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl">
             <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
             <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Axiom Bridge Connected</span>
           </div>
@@ -268,10 +272,10 @@ export default function MCCDashboard() {
               <MCCAuditStream />
               
               {/* System Status Panel & Sovereign Switchboard */}
-              <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl mb-8">
+              <div className="p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl mb-8">
                   <div className="flex items-center gap-3 mb-6">
                       <Cpu className="w-5 h-5 text-brand mt-0.5" />
-                      <h3 className="text-sm font-bold uppercase tracking-widest text-muted">MCC Core Status</h3>
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">MCC Core Status</h3>
                   </div>
                   <div className="space-y-4">
                       <StatusItem label="Provisioning Engine" status="Ready" color="bg-status-success" />
@@ -281,7 +285,7 @@ export default function MCCDashboard() {
                   </div>
               </div>
 
-              <div className="p-6 bg-[#161618] border border-focus/20 rounded-3xl">
+              <div className="p-6 bg-white/5 backdrop-blur-md border border-focus/20 rounded-2xl">
                   <div className="flex items-center gap-3 mb-6">
                       <Zap className="w-5 h-5 text-brand mt-0.5" />
                       <h3 className="text-sm font-bold uppercase tracking-widest text-brand">Sovereign Switchboard</h3>
@@ -324,11 +328,11 @@ export default function MCCDashboard() {
               onClick={() => !provisioningStatus && setShowCloneModal(false)}
               className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-lg bg-[#161618] border border-subtle rounded-3xl p-8 shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden"
             >
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-12 bg-action-primary/20 rounded-2xl flex items-center justify-center">
@@ -346,7 +350,7 @@ export default function MCCDashboard() {
                   <input 
                     type="text" 
                     placeholder="ex: Le Grand Paris" 
-                    className="w-full bg-[#0a0a0b] border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-medium"
+                    className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-medium"
                     value={newCloneName}
                     onChange={(e) => {
                       setNewCloneName(e.target.value);
@@ -359,7 +363,7 @@ export default function MCCDashboard() {
                   <input
                     type="text"
                     placeholder="ex: le-grand-paris"
-                    className="w-full bg-[#0a0a0b] border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-mono"
+                    className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-mono"
                     value={newCloneKey}
                     onChange={(e) => setNewCloneKey(e.target.value)}
                   />
@@ -369,7 +373,7 @@ export default function MCCDashboard() {
                   <input
                     type="email"
                     placeholder="owner@restaurant.fr"
-                    className="w-full bg-[#0a0a0b] border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all"
+                    className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all"
                     value={newCloneEmail}
                     onChange={(e) => setNewCloneEmail(e.target.value)}
                     required
@@ -416,24 +420,24 @@ export default function MCCDashboard() {
           </div>
         )}
       </AnimatePresence>
+      </div>{/* /relative z-10 */}
     </div>
   );
 }
 
 function StatCard({ label, value, icon, trend, isWarning = false }: { label: string, value: string, icon: React.ReactNode, trend: string, isWarning?: boolean }) {
   return (
-    <div className={`p-6 bg-[#161618] border ${isWarning ? 'border-amber-500/20' : 'border-white/5'} rounded-3xl relative overflow-hidden group hover:border-white/10 transition-all`}>
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-3 bg-surface-card/5 rounded-2xl group-hover:bg-surface-card/10 transition-all">
+    <div className={`p-6 bg-white/5 backdrop-blur-md border ${isWarning ? 'border-amber-500/20' : 'border-white/10'} rounded-2xl relative overflow-hidden group hover:border-white/20 transition-all`}>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-all" />
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <div className="p-3 bg-white/5 rounded-xl group-hover:bg-white/10 transition-all">
           {icon}
         </div>
         {isWarning && <div className="w-2.5 h-2.5 rounded-full bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]" />}
       </div>
-      <h3 className="text-secondary text-[10px] font-black uppercase tracking-widest mb-1">{label}</h3>
-      <div className="text-3xl font-black mb-2 tracking-tighter">{value}</div>
-      <p className="text-[10px] font-medium text-secondary uppercase tracking-tighter">{trend}</p>
-      
-      <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-surface-card/5 rounded-full blur-3xl group-hover:bg-surface-card/10 transition-all" />
+      <h3 className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1 relative z-10">{label}</h3>
+      <div className="text-3xl font-bold mb-2 tracking-tight text-white relative z-10">{value}</div>
+      <p className="text-[10px] font-medium text-slate-500 uppercase tracking-tighter relative z-10">{trend}</p>
     </div>
   );
 }
@@ -444,7 +448,7 @@ function _InstanceRow({ instance, index }: { instance: EmpireInstance, index: nu
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="grid grid-cols-12 px-6 py-5 bg-[#161618] border border-white/5 rounded-2xl hover:border-focus/30 hover:bg-[#1a1a1d] transition-all cursor-pointer group"
+      className="grid grid-cols-12 px-6 py-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl hover:border-focus/30 hover:bg-white/8 transition-all cursor-pointer group"
     >
       <div className="col-span-4 flex items-center gap-4">
         <div 

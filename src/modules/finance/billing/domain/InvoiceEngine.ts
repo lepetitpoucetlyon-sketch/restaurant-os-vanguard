@@ -17,7 +17,8 @@ export class InvoiceEngine {
   static transform(rawOrder: SovereignNode): LegalInvoice {
     const order = NexusInternalMapper.mapToOrder(rawOrder);
     
-    const subTotalInCents = order?.totalInCents ?? 0;
+    // Canonical Order total (Microunits Protocol) → cents for the LegalInvoice boundary. Value-preserving for legacy orders.
+    const subTotalInCents = SovereignMath.toCents(BigInt(SovereignMath.orderTotalMicrounits(order)));
     const taxRateValue = parseFloat(this.DEFAULT_TAX_RATE);
     const taxTotalInCents = Math.round(subTotalInCents * taxRateValue);
     const totalInCents = subTotalInCents + taxTotalInCents;

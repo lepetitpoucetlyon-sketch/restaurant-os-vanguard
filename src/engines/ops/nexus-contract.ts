@@ -129,7 +129,7 @@ export interface TenantConfig {
     enabled: boolean;
     model?: string;
     quota?: number;
-    geminiApiKey?: string;
+    llmApiKey?: string;
   };
   branding?: TenantTheme;
   capabilities?: Record<string, boolean>;

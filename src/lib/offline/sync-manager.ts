@@ -102,13 +102,21 @@ export class SyncManager {
      */
     private static async executeOperation(op: SyncOperation) {
         if (op.type === 'NF525_PAYMENT') {
-            // Pour les batchs complexes, le payload contient déjà le snapshot prêt pour Firestore.
-            // On peut re-jouer le batch ici.
-            const batch = Nexus.adapter.batch();
-            
-            // Le payload contient une liste d'instructions { path, data, method }
             const payload = op.payload as { instructions: Array<{ method: string; path: string; data: import('@/shared/nexus-contract').SovereignData }> };
             const instructions = payload.instructions;
+
+            // Idempotence : si le JournalEntry existe déjà (écriture partielle avant
+            // déconnexion), on ne rejoue pas le batch — sinon double-scellement NF525.
+            const journalInstruction = instructions.find(i => i.path.includes('/journalEntries/'));
+            if (journalInstruction) {
+                const existing = await Nexus.adapter.get(journalInstruction.path);
+                if (existing) {
+                    logger.info('SyncManager: NF525_PAYMENT déjà commité — skip replay', { path: journalInstruction.path });
+                    return;
+                }
+            }
+
+            const batch = Nexus.adapter.batch();
             for (const ins of instructions) {
                 if (ins.method === 'SET') batch.set(ins.path, ins.data);
                 if (ins.method === 'UPDATE') batch.update(ins.path, ins.data);

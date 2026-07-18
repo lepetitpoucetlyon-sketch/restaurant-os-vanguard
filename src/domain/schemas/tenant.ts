@@ -56,7 +56,7 @@ export const TenantConfigSchema = z.object({
     enabled: z.boolean(),
     model: z.string().optional(),
     quota: z.number().optional(),
-    geminiApiKey: z.string().optional(),
+    llmApiKey: z.string().optional(),
   }).optional(),
   branding: TenantThemeSchema.optional(),
   capabilities: z.record(z.string(), z.boolean()).optional(),

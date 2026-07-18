@@ -8,6 +8,44 @@ import type { SovereignData } from '@/shared/nexus-contract';
 import { useAuthSession } from '@/engines/core/hooks/auth/AuthSession';
 import { useAuthAccess } from '@/engines/core/hooks/auth/AuthAccess';
 import { useAuthStaff } from '@/engines/core/hooks/auth/AuthStaff';
+import { logger } from '@/lib/logger';
+
+/**
+ * Pure resolver (no hooks): finds the active staff user for the current session
+ * and hydrates it into a session user. Kept module-scoped so it stays out of the
+ * hook body and does not affect Rules of Hooks.
+ */
+function resolveActiveUser(
+    users: User[],
+    sessionUserId: string | null,
+    firebaseUserId: string | null,
+    lastActive: number
+) {
+    const activeUserId = sessionUserId || firebaseUserId;
+    if (!activeUserId) return null;
+    const activeUser = users.find(u => u.id === activeUserId) || users.find(u => u.id === firebaseUserId);
+    if (!activeUser) return null;
+    return IdentityManager.buildSessionUser(activeUser, lastActive);
+}
+
+/**
+ * Pure dev-mode fallback (no hooks): validates a PIN locally in development.
+ * Returns true and commits the session when the PIN matches, otherwise false.
+ */
+async function attemptDevLogin(
+    users: User[],
+    userId: string,
+    pin: string,
+    commitSession: () => void
+): Promise<boolean> {
+    if (process.env.NODE_ENV !== 'development') return false;
+    const user = users.find((u: User) => u.id === userId);
+    if (user && (pin === '9999' || await IdentityManager.matchesPin(user, pin))) {
+        commitSession();
+        return true;
+    }
+    return false;
+}
 
 export function useNexusAuthLogic(
     activeTenantId: string | null
@@ -16,17 +54,18 @@ export function useNexusAuthLogic(
     const staff = useAuthStaff(session.firebaseUserId, session.sessionUserId);
     const [lastActive] = useState(() => Date.now());
 
-    const currentUser = useMemo(() => {
-        const activeUserId = session.sessionUserId || session.firebaseUserId;
-        if (!activeUserId) return null;
-        const activeUser = staff.users.find(u => u.id === activeUserId) || staff.users.find(u => u.id === session.firebaseUserId);
-        if (!activeUser) return null;
-        return IdentityManager.buildSessionUser(activeUser, lastActive);
-    }, [session.sessionUserId, session.firebaseUserId, staff.users, lastActive]);
-    
+    const currentUser = useMemo(
+        () => resolveActiveUser(staff.users, session.sessionUserId, session.firebaseUserId, lastActive),
+        [session.sessionUserId, session.firebaseUserId, staff.users, lastActive]
+    );
+
     const access = useAuthAccess(currentUser, session.firebaseUserId);
 
     const login = useCallback(async (pin: string, userId: string) => {
+        const commitSession = () => {
+            session.setSessionUserId(userId);
+            session.setIsTwoFactorVerified(true);
+        };
         try {
             if (session.loginWithPinCallable) {
                 try {
@@ -34,21 +73,12 @@ export function useNexusAuthLogic(
                     const data = result.data as { token: string };
                     if (data.token) {
                         await session.loginWithFirebase(data.token);
-                        session.setSessionUserId(userId);
-                        session.setIsTwoFactorVerified(true);
+                        commitSession();
                         return true;
                     }
                 } catch {}
             }
-            if (process.env.NODE_ENV === 'development') {
-                const user = staff.users.find((u: User) => u.id === userId);
-                if (user && (pin === '9999' || await IdentityManager.matchesPin(user, pin))) {
-                    session.setSessionUserId(userId);
-                    session.setIsTwoFactorVerified(true);
-                    return true;
-                }
-            }
-            return false;
+            return await attemptDevLogin(staff.users, userId, pin, commitSession);
         } catch { return false; }
     }, [session, staff.users]);
 
@@ -72,7 +102,7 @@ export function useNexusAuthLogic(
         require2FAChallenge: false, 
         verifyTwoFactor: async () => true,
         verifyPin: async (pin: string) => pin === '9999',
-        switchProfile: (uid: string) => console.log('Profile switch', uid),
+        switchProfile: (uid: string) => logger.debug('Profile switch', uid),
         updateUser: async (id: string, data: Partial<User>) => {
             if (!activeTenantId) return;
             await Nexus.adapter.update(`tenants/${activeTenantId}/users/${id}`, { ...data, updatedAt: new Date().toISOString() });

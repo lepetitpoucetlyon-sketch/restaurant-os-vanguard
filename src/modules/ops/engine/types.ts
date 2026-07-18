@@ -20,8 +20,36 @@ import { CartLineSchema, CartLine, PosTicket, PosTicketSchema } from '@/domain/s
 export { CartLineSchema, PosTicketSchema };
 export type { CartLine, PosTicket };
 
+/** Course assignment for multi-course meal service (pos-3). */
+export type CourseType = 'entree' | 'plat' | 'dessert';
+
 export interface CartItem extends Omit<CartLine, 'id'> {
     cartId: string;
+    /**
+     * Percentage discount applied by staff (e.g. 10 = 10%).
+     * Used for strikethrough display only — the effective price
+     * is already reflected in unitPriceInMicrounits.
+     */
+    discountPercent?: number;
+    /**
+     * Pre-discount unit price stored for strikethrough display.
+     * Set when a discount is applied so the original price remains visible.
+     */
+    originalPriceInMicrounits?: Microunits;
+    /**
+     * When true the item is treated as a management offer (prix = 0).
+     */
+    isOffer?: boolean;
+    /**
+     * Course assignment (pos-3): groups items for sequential service.
+     * Items without a course go to the kitchen immediately on "Envoyer".
+     */
+    course?: CourseType;
+    /**
+     * Timestamp (ms) when this course was fired to the kitchen.
+     * Undefined = not yet sent. Set by handleSendCourse().
+     */
+    sentAt?: number;
 }
 
 export interface OrdersContextType {

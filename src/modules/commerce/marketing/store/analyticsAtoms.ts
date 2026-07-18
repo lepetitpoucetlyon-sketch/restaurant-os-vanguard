@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 // ⚠️ Imports par fichier de pilier, jamais via le barrel '@/store/pillars' :
 // pillars/index ré-exporte pillars/commerce qui ré-exporte CE fichier (cycle SSR).
 import { ordersAtom } from '@/store/pillars/ops';
@@ -87,10 +88,10 @@ export const staffPerformanceSelector = atom((get) => {
         .filter((u) => u.role === 'server' || u.role === 'admin')
         .map((user) => {
             const serverOrders = orders.filter((o) => o.serverName === user.name);
-            const totalSales = serverOrders.reduce(
-                (sum: number, o) => sum + (o.totalInCents || 0),
+            const totalSales = SovereignMath.toCents(BigInt(serverOrders.reduce(
+                (sum: number, o) => sum + SovereignMath.orderTotalMicrounits(o),
                 0,
-            );
+            )));
             const orderCount = serverOrders.length;
             const upsellOrders = serverOrders.filter((o) =>
                 (o.items || []).some((item) => {
@@ -121,9 +122,9 @@ export const laborCostRatioSelector = atom((get): number => {
     const orders = get(ordersAtom);
     const staff = get(staffMembersAtom);
 
-    const totalRevenue = orders
+    const totalRevenue = SovereignMath.toCents(BigInt(orders
         .filter((o) => o.status === 'paid' || o.status === 'delivered')
-        .reduce((sum: number, o) => sum + (o.totalInCents || 0), 0);
+        .reduce((sum: number, o) => sum + SovereignMath.orderTotalMicrounits(o), 0)));
 
     const activeStaff = staff.length;
     const estimatedHourlyLabor = activeStaff * 1500; // 15.00 in cents

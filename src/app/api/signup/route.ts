@@ -1,10 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from 'firebase-admin/auth';
+import { z } from 'zod';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
 import { BrandingService } from '@/domain/services/BrandingService';
 import { BillingService } from '@/domain/services/BillingService';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { getRateLimiter } from '@/lib/rate-limiter';
+
+const SignupSchema = z.object({
+  email: z.string().email().max(254),
+  password: z.string().min(8).max(128),
+  restaurantName: z.string().min(2).max(80),
+  siret: z.string().max(20).optional(),
+  websiteUrl: z.string().url().max(2048).optional().or(z.literal('')),
+});
 
 function toTenantKey(name: string): string {
   return name
@@ -16,26 +27,67 @@ function toTenantKey(name: string): string {
     .slice(0, 40);
 }
 
-export async function POST(req: NextRequest) {
-  const { email, password, restaurantName, siret: _siret, websiteUrl } = await req.json();
-
-  if (!email || !password || !restaurantName) {
-    return NextResponse.json({ error: 'Champs obligatoires manquants' }, { status: 400 });
+/**
+ * Résout un tenantId LIBRE. Un slug déjà pris ne doit JAMAIS être réutilisé :
+ * sinon le nouveau compte reçoit des claims `{tenantId: <existant>, role: admin}`
+ * et devient admin du tenant d'autrui (TenantSeeder étant idempotent, il skip
+ * et la prise de contrôle passe inaperçue).
+ */
+async function resolveFreeTenantId(base: string): Promise<string> {
+  const root = base || 'resto';
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const candidate = attempt === 0 ? root : `${root}-${Math.random().toString(36).slice(2, 6)}`;
+    const existing = await Nexus.adapter.get(`tenants/${candidate}/tenantConfig`);
+    if (!existing) return candidate;
+    logger.warn(`[signup] tenantId collision on "${candidate}" — retrying`);
   }
+  throw new Error('TENANT_ID_ALLOCATION_FAILED');
+}
+
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  const limiter = getRateLimiter();
+  const rateLimitResult = await limiter.check(`signup:${ip}`, 3, 60 * 60 * 1000); // 3/heure
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json({ error: 'Trop de tentatives' }, { status: 429 });
+  }
+  const parsed = SignupSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Champs invalides', details: parsed.error.flatten().fieldErrors },
+      { status: 400 },
+    );
+  }
+  const { email, password, restaurantName, siret: _siret, websiteUrl } = parsed.data;
 
   initFirebaseAdmin();
 
+  // Tenant résolu AVANT toute création — garantit qu'on ne s'accroche jamais
+  // aux claims d'un tenant existant.
+  let tenantId: string;
   try {
-    // 1. Firebase Auth — create user
+    tenantId = await resolveFreeTenantId(toTenantKey(restaurantName));
+  } catch (err) {
+    logger.error('[signup] Tenant allocation failed', String(err));
+    return NextResponse.json({ error: 'Impossible d\'allouer un identifiant' }, { status: 500 });
+  }
+
+  // 1. Firebase Auth — create user
+  let uid: string;
+  try {
     const userRecord = await getAuth().createUser({ email, password, displayName: restaurantName });
+    uid = userRecord.uid;
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    logger.warn('[signup] createUser failed', message);
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
 
-    // 2. Determine tenant key
-    const tenantId = toTenantKey(restaurantName);
-
-    // 2b. Custom claims — TOUTE la sécurité serveur en dépend :
-    //     firestore.rules lit request.auth.token.tenantId/role,
-    //     adminAuthGuard lit role/tenantId. `clientId` = alias historique.
-    await getAuth().setCustomUserClaims(userRecord.uid, {
+  try {
+    // 2. Custom claims — TOUTE la sécurité serveur en dépend :
+    //    firestore.rules lit request.auth.token.tenantId/role,
+    //    adminAuthGuard lit role/tenantId. `clientId` = alias historique.
+    await getAuth().setCustomUserClaims(uid, {
       tenantId,
       clientId: tenantId,
       role: 'admin',
@@ -62,7 +114,7 @@ export async function POST(req: NextRequest) {
       copyBaseTemplates: true,
     });
 
-    logger.info(`[signup] New tenant provisioned: ${tenantId} (uid=${userRecord.uid})`);
+    logger.info(`[signup] New tenant provisioned: ${tenantId} (uid=${uid})`);
 
     // 5. Create Stripe Checkout session for initial subscription
     const origin = req.headers.get('origin') ?? 'https://app.nexus-fleet.io';
@@ -80,11 +132,18 @@ export async function POST(req: NextRequest) {
       logger.warn('[signup] Stripe checkout creation failed — tenant can pay later', String(err));
     }
 
-    return NextResponse.json({ tenantId, uid: userRecord.uid, checkoutUrl }, { status: 201 });
+    return NextResponse.json({ tenantId, uid, checkoutUrl }, { status: 201 });
 
   } catch (err: unknown) {
+    // Rollback : un user Firebase sans tenant provisionné est un orphelin
+    // qui pollue l'auth et peut bloquer un futur signup avec le même email.
     const message = err instanceof Error ? err.message : String(err);
-    logger.error('[signup] Provisioning failed', message);
+    logger.error('[signup] Provisioning failed — rolling back auth user', message);
+    try {
+      await getAuth().deleteUser(uid);
+    } catch (rollbackErr) {
+      logger.error('[signup] Rollback deleteUser failed — orphan user', String(rollbackErr));
+    }
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

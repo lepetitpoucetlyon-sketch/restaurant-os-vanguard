@@ -17,10 +17,8 @@ import {
     PenTool
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-const stubAction = async (..._args: import("@/shared/nexus-contract").SovereignValue[]) => ({ success: true, id: "STUB_ID" });
-const saveMarketingSettingsAction = stubAction;
-const _updateReviewSettingsAction = stubAction;
 import { toast } from "sonner";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
 
 interface ReviewSource {
     id: string;
@@ -55,15 +53,14 @@ export default function ReviewsSettings() {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            // COMMIT TO REAL PERSISTENCE (Industrial Soudure)
-            await saveMarketingSettingsAction('main', {
+            await Nexus.adapter.set('marketingSettings/reputation', {
                 sources,
                 autoReply,
-                templates
+                templates,
             });
-            toast.success("Reputation state committed to the industrial core.");
+            toast.success("Paramètres réputation sauvegardés.");
         } catch (_error) {
-            toast.error("Failed to commit reputation state.");
+            toast.error("Échec de la sauvegarde des paramètres réputation.");
         } finally {
             setIsSaving(false);
         }

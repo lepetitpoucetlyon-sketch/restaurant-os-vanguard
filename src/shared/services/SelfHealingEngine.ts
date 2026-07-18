@@ -3,6 +3,62 @@ import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
+type HealItem = { id?: string;[k: string]: unknown };
+
+/** Un état de node « liste » : { data: [], loading, error, ... }. */
+function isListNodeState(state: unknown): state is Record<string, unknown> {
+    return !!state && typeof state === 'object' && 'data' in state && 'loading' in state;
+}
+
+/** Normalise un payload backend en liste plate d'items. */
+function toFreshList(freshData: unknown): HealItem[] {
+    if (Array.isArray(freshData)) return freshData as HealItem[];
+    const nested = (freshData as { data?: unknown[] }).data;
+    if (Array.isArray(nested)) return nested as HealItem[];
+    return [freshData as HealItem];
+}
+
+/**
+ * Merge granulaire Merkle : prend l'item frais si absent/différent localement,
+ * conserve l'item local sinon, puis ré-ajoute les items locaux orphelins.
+ * Retourne la liste fusionnée + le nombre d'items réellement soignés.
+ */
+function mergeHealedList(currentList: HealItem[], freshList: HealItem[]): { merged: HealItem[]; healedCount: number } {
+    const currentMap = new Map<string, HealItem>();
+    currentList.forEach((item) => {
+        if (item && item.id) currentMap.set(item.id, item);
+    });
+
+    let healedCount = 0;
+    const mergedList = freshList.map((freshItem) => {
+        if (!freshItem || !freshItem.id) {
+            healedCount++;
+            return freshItem;
+        }
+        const currentItem = currentMap.get(freshItem.id);
+        if (!currentItem || JSON.stringify(currentItem) !== JSON.stringify(freshItem)) {
+            healedCount++;
+            return freshItem;
+        }
+        return currentItem;
+    });
+
+    const freshIds = new Set(freshList.map((item) => item && item.id).filter(Boolean));
+    const merged = [
+        ...mergedList,
+        ...currentList.filter((item) => item && item.id && !freshIds.has(item.id)),
+    ];
+    return { merged, healedCount };
+}
+
+/**
+ * Un backend indisponible (offline) ou un refus de permission (claims pas encore
+ * posés) n'est PAS une dérive à réparer : on ne spamme pas Sentry en boucle.
+ */
+function isHealSkippable(message: string): boolean {
+    return /permission|insufficient|offline|unavailable|network/i.test(message);
+}
+
 /**
  * 🍵 SelfHealingEngine - Restaurant OS (Singularity 5.4)
  * Implements CRC Auditing and Silent Healing to maintain negative entropy.
@@ -21,93 +77,55 @@ export const SelfHealingEngine = {
     // 🧬 CRC CALCULATION
     const currentHash = this.calculateCRC(currentState as unknown as import('@/shared/nexus-contract').SovereignData);
 
-    if (currentHash !== expectedHash || expectedHash === 'FORCE_SYNC') {
-      logger.warn(`[Self-Healing] State Drift Detected (Merkle Mismatch or FORCE_SYNC). Path: ${persistencePath}`);
-      
-      // 🛰️ Report Silent Healing to MCC
-      MasterBridge.pushGlobalConfig({
-        maintenanceMode: false,
-        killSwitch: false,
-        forceLogout: false,
-        securityLevel: 'medium',
-        globalMessage: `ATOMIC_BURST: Corrected drift for atom at ${persistencePath || 'internal_node'}`,
-        allowedFeatures: []
-      }).catch(() => {});
- 
-      // 💉 INJECTION (Silent Restore - High Speed / Granular Merkle-Heal)
-      if (persistencePath) {
-        try {
-          const startTime = Date.now();
-          // Firestore : un chemin à nombre de segments IMPAIR est une COLLECTION
-          // (ex. tenants/{t}/orders → 3 segments), à nombre PAIR est un DOCUMENT.
-          // get() n'accepte qu'un document → sur une collection il jetait
-          // « Invalid document reference » à chaque cycle. On query() les
-          // collections (le merge en aval attend déjà une liste).
-          const isCollection = persistencePath.split('/').filter(Boolean).length % 2 !== 0;
-          const freshData = isCollection
-            ? await Nexus.adapter.query(persistencePath)
-            : await Nexus.adapter.get(persistencePath);
-          if (freshData) {
-            type HealItem = { id?: string;[k: string]: unknown };
-            const rawState = currentState as Record<string, unknown>;
-            
-            if (rawState && typeof rawState === 'object' && 'data' in rawState && 'loading' in rawState) {
-              const currentList = Array.isArray(rawState.data) ? rawState.data : [];
-              const freshList = Array.isArray(freshData) ? freshData : (Array.isArray((freshData as { data?: unknown[] }).data) ? (freshData as { data: unknown[] }).data : [freshData]);
-              
-              const currentMap = new Map<string, HealItem>();
-              currentList.forEach((item: HealItem) => {
-                if (item && item.id) currentMap.set(item.id, item);
-              });
+    if (currentHash === expectedHash && expectedHash !== 'FORCE_SYNC') return;
 
-              let healedCount = 0;
-              const mergedList = freshList.map((freshItem: HealItem) => {
-                if (freshItem && freshItem.id) {
-                  const currentItem = currentMap.get(freshItem.id);
-                  if (!currentItem || JSON.stringify(currentItem) !== JSON.stringify(freshItem)) {
-                    healedCount++;
-                    return freshItem;
-                  }
-                  return currentItem;
-                }
-                healedCount++;
-                return freshItem;
-              });
+    logger.warn(`[Self-Healing] State Drift Detected (Merkle Mismatch or FORCE_SYNC). Path: ${persistencePath}`);
 
-              const freshIds = new Set(freshList.map((item: HealItem) => item && item.id).filter(Boolean));
-              const finalMergedList = [
-                ...mergedList,
-                ...currentList.filter((item: HealItem) => item && item.id && !freshIds.has(item.id))
-              ];
+    // 🛰️ Report Silent Healing to MCC
+    MasterBridge.pushGlobalConfig({
+      maintenanceMode: false,
+      killSwitch: false,
+      forceLogout: false,
+      securityLevel: 'medium',
+      globalMessage: `ATOMIC_BURST: Corrected drift for atom at ${persistencePath || 'internal_node'}`,
+      allowedFeatures: []
+    }).catch(() => {});
 
-              store.set(atom, {
-                ...rawState,
-                data: finalMergedList,
-                loading: false,
-                error: null
-              } as T);
+    // 💉 INJECTION (Silent Restore - High Speed / Granular Merkle-Heal)
+    if (!persistencePath) return;
 
-              const duration = Date.now() - startTime;
-              logger.info(`[Self-Healing] Granular Merkle-Heal SUCCESSFUL: ${persistencePath} (Healed ${healedCount} items in ${duration}ms)`);
-            } else {
-              store.set(atom, freshData as T);
-              const duration = Date.now() - startTime;
-              logger.info(`[Self-Healing] Atomic Burst SUCCESSFUL: ${persistencePath} (${duration}ms)`);
-            }
-          }
-        } catch (error) {
-          // Un backend indisponible (offline) ou un refus de permission (claims
-          // pas encore posés) n'est PAS une dérive à réparer : on ne spamme pas
-          // Sentry en boucle. On loggue en warn avec la VRAIE cause (avant :
-          // « error » littéral, indiagnostiquable).
-          const message = error instanceof Error ? error.message : String(error);
-          const expected = /permission|insufficient|offline|unavailable|network/i.test(message);
-          if (expected) {
-            logger.warn(`[Self-Healing] Heal skipped (backend indisponible) for ${persistencePath}: ${message}`);
-          } else {
-            logger.error(`[Self-Healing] Injection FAILED for ${persistencePath}: ${message}`);
-          }
-        }
+    try {
+      const startTime = Date.now();
+      // Firestore : un chemin à nombre de segments IMPAIR est une COLLECTION
+      // (ex. tenants/{t}/orders → 3 segments), à nombre PAIR est un DOCUMENT.
+      // get() n'accepte qu'un document → sur une collection il jetait
+      // « Invalid document reference » à chaque cycle. On query() les
+      // collections (le merge en aval attend déjà une liste).
+      const isCollection = persistencePath.split('/').filter(Boolean).length % 2 !== 0;
+      const freshData = isCollection
+        ? await Nexus.adapter.query(persistencePath)
+        : await Nexus.adapter.get(persistencePath);
+      if (!freshData) return;
+
+      const rawState = currentState as Record<string, unknown>;
+      if (!isListNodeState(rawState)) {
+        store.set(atom, freshData as T);
+        logger.info(`[Self-Healing] Atomic Burst SUCCESSFUL: ${persistencePath} (${Date.now() - startTime}ms)`);
+        return;
+      }
+
+      const currentList = Array.isArray(rawState.data) ? (rawState.data as HealItem[]) : [];
+      const { merged, healedCount } = mergeHealedList(currentList, toFreshList(freshData));
+
+      store.set(atom, { ...rawState, data: merged, loading: false, error: null } as T);
+      logger.info(`[Self-Healing] Granular Merkle-Heal SUCCESSFUL: ${persistencePath} (Healed ${healedCount} items in ${Date.now() - startTime}ms)`);
+    } catch (error) {
+      // On loggue en warn avec la VRAIE cause (avant : « error » littéral, indiagnostiquable).
+      const message = error instanceof Error ? error.message : String(error);
+      if (isHealSkippable(message)) {
+        logger.warn(`[Self-Healing] Heal skipped (backend indisponible) for ${persistencePath}: ${message}`);
+      } else {
+        logger.error(`[Self-Healing] Injection FAILED for ${persistencePath}: ${message}`);
       }
     }
   },

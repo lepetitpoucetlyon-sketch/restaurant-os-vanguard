@@ -1,4 +1,4 @@
-import { INexusAdapter, INexusBatch, NexusContext } from "@/lib/nexus/types";
+import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from "@/lib/nexus/types";
 import type { SovereignData } from '@/shared/nexus-contract';
 import { simulatorDb } from '@/lib/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';
@@ -144,9 +144,26 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         return IdGenerator.generateWithPrefix('sim');
     }
 
+    serverTimestamp(): unknown {
+        return this.realAdapter.serverTimestamp();
+    }
+
     async increment(path: string, field: string, amount: number, _context?: NexusContext): Promise<void> {
         const existing = await this.get<Record<string, number>>(path) || {} as Record<string, number>;
         existing[field] = (Number(existing[field]) || 0) + amount;
         await this.set(path, existing);
+    }
+
+    async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, context?: NexusContext): Promise<T> {
+        const deferred: Array<() => Promise<void>> = [];
+        const tx: INexusTransaction = {
+            get: (path) => this.get(path, context),
+            set: (path, data) => { deferred.push(() => this.set(path, data as SovereignData, undefined, context)); },
+            update: (path, data) => { deferred.push(() => this.update(path, data as Partial<SovereignData>, context)); },
+            delete: (path) => { deferred.push(() => this.delete(path, context)); },
+        };
+        const result = await callback(tx);
+        for (const op of deferred) await op();
+        return result;
     }
 }

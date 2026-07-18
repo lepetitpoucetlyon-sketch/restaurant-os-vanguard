@@ -31,6 +31,7 @@ export interface INexusAdapter {
     update<T = SovereignData>(path: string, data: Partial<T>): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
+    serverTimestamp(): unknown;
 }
 
 import { logger } from '@/lib/logger';

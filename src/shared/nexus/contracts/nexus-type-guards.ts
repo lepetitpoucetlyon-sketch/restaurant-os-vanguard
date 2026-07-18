@@ -16,7 +16,8 @@ export function isTable(node: SovereignNode): node is Table {
 }
 
 export function isOrder(node: SovereignNode): node is Order {
-    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.status === 'string' && typeof node.tableNumber === 'string' && typeof node.totalInCents === 'number' && Array.isArray(node.items);
+    // Microunits Protocol: a µ-native order carries totalInMicrounits; legacy Firestore docs carry totalInCents. Accept either.
+    return typeof node === 'object' && node !== null && typeof node.id === 'string' && typeof node.status === 'string' && typeof node.tableNumber === 'string' && (typeof node.totalInMicrounits === 'number' || typeof node.totalInCents === 'number') && Array.isArray(node.items);
 }
 
 export function isProduct(node: SovereignNode): node is Product {

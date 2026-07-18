@@ -41,6 +41,7 @@ export interface NavItem {
     href: string;
     icon: LucideIcon;
     category: string;
+    badge?: string;
 }
 
 export interface NavSection {
@@ -71,7 +72,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#10B981', // Emerald
         items: [
             { label: "Intelligence Exécutive", key: "executive_intelligence", href: "/admin/agent", icon: Sparkles, category: "analytics" },
-            { label: "Cartographie 3D", key: "system_map", href: "/admin/system-map", icon: Map, category: "analytics" },
+            { label: "Cartographie 3D", key: "system_map", href: "/system-map", icon: Map, category: "analytics" },
         ]
     },
     {
@@ -114,7 +115,7 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=stockage", icon: Refrigerator, category: "inventory" },
             { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory" },
             { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp" },
-            { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=reception", icon: ShieldCheck, category: "haccp" },
+            { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: ShieldCheck, category: "haccp" },
         ]
     },
     {
@@ -124,8 +125,8 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: Users,
         color: '#06B6D4', // Cyan
         items: [
-            { label: "Prise de Poste", key: "onboarding", href: "/staff?tab=onboarding", icon: Briefcase, category: "onboarding" },
-            { label: "Ressources Humaines", key: "hr", href: "/staff?tab=rh", icon: Users, category: "staff" },
+            { label: "Prise de Poste", key: "onboarding", href: "/staff?tab=team", icon: Briefcase, category: "onboarding" },
+            { label: "Ressources Humaines", key: "hr", href: "/staff?tab=team", icon: Users, category: "staff" },
             { label: "Planning", key: "planning", href: "/staff?tab=planning", icon: CalendarRange, category: "planning" },
             { label: "Congés & Absences", key: "leaves", href: "/staff?tab=leaves", icon: Palmtree, category: "planning" },
             { label: "Recrutement", key: "recruitment", href: "/staff?tab=recruitment", icon: UserPlus, category: "recruitment" },
@@ -139,7 +140,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#8B5CF6', // Purple
         items: [
             { label: "Analytique BI", key: "analytics", href: "/analytics", icon: BarChart3, category: "analytics" },
-            { label: "Google Analytics", key: "google_analytics", href: "/analytics?tab=google", icon: BarChart3, category: "analytics" },
+            { label: "Google Analytics", key: "google_analytics", href: "/analytics?tab=profitability", icon: BarChart3, category: "analytics" },
             { label: "Marketing & Social", key: "social_marketing", href: "/marketing", icon: Instagram, category: "analytics" },
             { label: "Référencement IA", key: "ai_referencing", href: "/marketing?tab=ai", icon: Bot, category: "analytics" },
             { label: "SEO & Référencement", key: "seo", href: "/marketing?tab=seo", icon: Globe, category: "analytics" },
@@ -172,7 +173,7 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: ScrollText,
         color: '#0EA5E9', // Sky
         items: [
-            { label: "Registres & Conformité", key: "registre", href: "/registre", icon: ScrollText, category: "registre" },
+            { label: "Registres & Conformité", key: "registre", href: "/registre", icon: ScrollText, category: "registre", badge: "OBLIGATOIRE" },
         ]
     },
     {

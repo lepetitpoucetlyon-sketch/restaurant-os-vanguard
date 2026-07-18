@@ -34,6 +34,7 @@ const STATUS_CONFIG: Record<CandidateStatus, { label: string; icon: import('luci
     new: { label: "Nouveau", icon: UserPlus, color: "text-brand", bg: "bg-[--color-surface-form]" },
     interview: { label: "Entretien", icon: Clock, color: "text-brand", bg: "bg-purple-50" },
     trial: { label: "Essai", icon: CheckCircle2, color: "text-status-warning", bg: "bg-status-warning" },
+    offer: { label: "Offre", icon: FileText, color: "text-sky-500", bg: "bg-sky-50" },
     hired: { label: "Embauché", icon: CheckCircle2, color: "text-status-success", bg: "bg-surface-bg" },
     refused: { label: "Refusé", icon: XCircle, color: "text-status-danger", bg: "bg-surface-bg" },
 };

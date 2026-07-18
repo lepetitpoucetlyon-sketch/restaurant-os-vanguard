@@ -30,15 +30,16 @@ const cinematicItem: Variants = {
 const getFirstName = (c: Customer): string => (c?.firstName as string) || (c?.name ? String(c.name).split(' ')[0] : '') || '';
 const getLastName = (c: Customer): string => (c?.lastName as string) || (c?.name ? String(c.name).split(' ').slice(1).join(' ') : '') || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s.charAt(0) : '?');
-const getVisitCount = (c: Customer): number => c.visitCount ?? 0;
-const getTotalSpent = (c: Customer): number => (c.totalSpentInCents ?? 0) / 100;
+const getVisitCount = (c: Customer): number => c?.visitCount ?? 0;
+const getTotalSpent = (c: Customer): number => Number(c?.totalSpentInCents ?? 0) / 100;
 
 interface CustomerCustomerViewProps {
     customers: Customer[];
     onCustomerClick: (customer: Customer) => void;
+    isLoading?: boolean;
 }
 
-export function CustomerCustomerView({ customers, onCustomerClick }: CustomerCustomerViewProps) {
+export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: CustomerCustomerViewProps) {
     return (
         <div className="flex-1 w-full bg-bg-primary p-12 pb-32">
             <div className="max-w-7xl mx-auto space-y-16">
@@ -62,7 +63,7 @@ export function CustomerCustomerView({ customers, onCustomerClick }: CustomerCus
                                 REGISTRE
                             </p>
                             <span className="text-sm font-mono font-bold text-accent">
-                                {customers.length} PROFILS
+                                {isLoading ? "—" : customers.length} PROFILS
                             </span>
                         </div>
                     </div>
@@ -75,7 +76,23 @@ export function CustomerCustomerView({ customers, onCustomerClick }: CustomerCus
                     animate="visible"
                     className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12"
                 >
-                    {customers.map((customer) => (
+                    {isLoading && customers.length === 0 ? (
+                        [0, 1, 2].map(i => (
+                            <div key={i} className="bg-surface-card/40 backdrop-blur-2xl rounded-[3.5rem] p-12 border border-default animate-pulse">
+                                <div className="flex items-start gap-10">
+                                    <div className="w-20 h-20 rounded-[2rem] bg-bg-tertiary shrink-0" />
+                                    <div className="flex-1 space-y-4 pt-2">
+                                        <div className="h-6 bg-bg-tertiary rounded-lg w-3/4" />
+                                        <div className="h-4 bg-bg-tertiary rounded-lg w-1/2" />
+                                    </div>
+                                </div>
+                                <div className="flex justify-between mt-12 pt-10 border-t border-border">
+                                    <div className="h-10 w-20 bg-bg-tertiary rounded-2xl" />
+                                    <div className="h-10 w-16 bg-bg-tertiary rounded-2xl" />
+                                </div>
+                            </div>
+                        ))
+                    ) : customers.map((customer) => (
                         <motion.div
                             key={customer.id}
                             variants={cinematicItem}

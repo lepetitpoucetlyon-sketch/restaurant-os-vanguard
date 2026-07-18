@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { 
-  Bot, 
-  ShieldCheck, 
-  Zap, 
-  Terminal, 
-  Cpu, 
-  Network, 
+import { authedFetch } from "@/lib/client/authedFetch";
+import {
+  Bot,
+  ShieldCheck,
+  Zap,
+  Terminal,
+  Cpu,
+  Network,
   AlertTriangle,
   Map,
   Sparkles,
@@ -48,7 +49,7 @@ export default function AgentIntelligencePage() {
   const fetchReport = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/agent/report');
+      const res = await authedFetch('/api/agent/report');
       if (res.ok) {
         const data = await res.json();
         setReport(data);

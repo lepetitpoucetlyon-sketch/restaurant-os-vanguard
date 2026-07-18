@@ -19,6 +19,7 @@ import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 // Sous-modules extraits (réduction du fan-out — voir ARCHITECTURE.md §9 P2)
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
+import { DEFAULT_TENANT_ID, APP_MODE } from '@/config/instance';
 
 const syncMutex = new Mutex();
 
@@ -73,7 +74,9 @@ export const NexusSyncService = {
         }
 
         // --- MASTER BRIDGE SUTURE ---
-        if (tenantId !== 'restaurant-os' && tenantId !== 'lepetitpoucet' && tenantId !== 'vanguard') {
+        // MCC mode IS the master — it writes masterConfig, never listens.
+        // Tenant mode vassals subscribe to master orders.
+        if (APP_MODE === 'tenant' && tenantId !== 'restaurant-os' && tenantId !== DEFAULT_TENANT_ID && tenantId !== 'vanguard') {
             this.master_unsub = MasterBridge.listenToMaster(store);
         }
 

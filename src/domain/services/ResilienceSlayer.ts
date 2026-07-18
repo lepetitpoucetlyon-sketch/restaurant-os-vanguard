@@ -8,6 +8,7 @@ import {
 import { qualityActiveControlAtom } from '@modules/compliance';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 
 /**
  * 🐉 ResilienceSlayer - Grade X
@@ -68,7 +69,7 @@ export class ResilienceSlayer {
 
         // SPECIAL CASE: HACCP Active Session
         const haccpSession = this.store.get(qualityActiveControlAtom);
-        if (!haccpSession && localStorage.getItem('haccp_draft_active') === 'true') {
+        if (!haccpSession && localStorage.getItem(tenantScopedKey('haccp_draft_active')) === 'true') {
             logger.warn("[Slayer] Found Zombie HACCP Draft in Storage. Restoring session...");
             // Logic to restore session from local storage would go here
         }

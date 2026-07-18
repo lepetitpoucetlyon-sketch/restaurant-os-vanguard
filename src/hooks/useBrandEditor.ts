@@ -1,9 +1,8 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { firestore, storage } from '@/lib/firebase';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { StorageManager } from '@/lib/storage';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { tenantIdAtom, tenantBrandTokensAtom } from '@/store/pillars/sovereign';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
@@ -18,14 +17,13 @@ export function useBrandEditor() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const brandRef = doc(firestore, 'brands', tenantId ?? 'default', 'config', 'tokens');
+  const brandPath = `brands/${tenantId ?? 'default'}/config/tokens`;
 
-  /** Sauvegarde des tokens (patch partiel) */
   const saveTokens = useCallback(async (patch: Partial<BrandConfig>) => {
     if (!tenantId) return;
     setIsSaving(true);
     try {
-      await setDoc(brandRef, {
+      await Nexus.adapter.set(brandPath, {
         tenantId,
         ...patch,
         updatedAt: new Date().toISOString(),
@@ -34,9 +32,8 @@ export function useBrandEditor() {
     } finally {
       setIsSaving(false);
     }
-  }, [tenantId, brandRef, setBrandTokens]);
+  }, [tenantId, brandPath, setBrandTokens]);
 
-  /** Upload d'un fichier image vers Firebase Storage, retourne l'URL publique */
   const uploadAsset = useCallback(async (
     file: File,
     slot: 'logo' | 'favicon' | 'banner'
@@ -46,9 +43,7 @@ export function useBrandEditor() {
     try {
       const ext = file.name.split('.').pop() ?? 'png';
       const path = `brands/${tenantId}/${slot}.${ext}`;
-      const storageRef = ref(storage, path);
-      await uploadBytes(storageRef, file, { contentType: file.type });
-      return await getDownloadURL(storageRef);
+      return await StorageManager.provider.upload(path, file, { contentType: file.type });
     } finally {
       setIsUploading(false);
     }

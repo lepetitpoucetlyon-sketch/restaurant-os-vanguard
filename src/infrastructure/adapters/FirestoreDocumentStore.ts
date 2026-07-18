@@ -1,4 +1,4 @@
-import { Firestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, increment } from 'firebase/firestore';
+import { Firestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, increment, serverTimestamp as firestoreServerTimestamp } from 'firebase/firestore';
 import { SovereignSecurityViolation } from '@/shared/nexus/contracts/security.errors';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
 import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
@@ -54,5 +54,9 @@ export class FirestoreDocumentStore implements IDocumentStore {
 
     generateId(collectionPath: string): string {
         return doc(collection(this.db, collectionPath)).id;
+    }
+
+    serverTimestamp(): unknown {
+        return firestoreServerTimestamp();
     }
 }

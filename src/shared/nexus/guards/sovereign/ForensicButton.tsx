@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from 'jotai';
+import { logger } from '@/lib/logger';
 
 export const ForensicButton: React.FC = () => {
   const store = useStore();
@@ -23,7 +24,7 @@ export const ForensicButton: React.FC = () => {
         userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : ''
       };
       
-      console.log('Forensic Snapshot Captured:', forensicData);
+      logger.info('Forensic Snapshot Captured:', forensicData);
       
       // TODO: Dispatch to forensic endpoint
     } catch (error) {

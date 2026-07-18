@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
 
     const { url } = parsed.data;
 
-    if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json({ error: 'GEMINI_API_KEY non configuré' }, { status: 500 });
+    if (!process.env.GEMINI_API_KEY && !process.env.LLM_API_KEY) {
+      return NextResponse.json({ error: 'LLM_API_KEY non configuré' }, { status: 500 });
     }
 
     logger.info(`[BrandExtract] Extraction pour ${tenantId} → ${url}`);

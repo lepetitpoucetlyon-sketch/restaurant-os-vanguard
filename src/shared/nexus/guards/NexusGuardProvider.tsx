@@ -16,6 +16,7 @@ import {
     guardLoadingAtom
 } from '@/store/pillars/compliance';
 import { updateNexusNode } from '@/store/pillars/core';
+import { logger } from '@/lib/logger';
 
 import { 
     HygieneLabel, 
@@ -71,11 +72,11 @@ export const NexusGuardProvider: React.FC<{ children: ReactNode }> = ({ children
             temperatureHistory: [] as TemperatureLog[],
             validateTaskWithVision: async (taskId: string, photoBase64: string) => {
                 // 🧪 SAFE MODE: Blocking if signal is lost (Monkey Chaos Stress Test)
-                console.log('Validating vision task', taskId, photoBase64.slice(0, 20));
+                logger.debug('Validating vision task', taskId, photoBase64.slice(0, 20));
                 return true;
             },
             logWaste: async (data: Omit<RegulatoryWasteLog, 'id' | 'timestamp' | 'user'>) => { 
-                console.log('[HACCP] Waste logged', data); 
+                logger.debug('[HACCP] Waste logged', data);
             }
         },
         maintenance: { logs: maintenanceTasks as MaintenanceLog[] },

@@ -6,7 +6,7 @@ import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
 import { useAuth, useUI } from "@/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { NAV_SECTIONS } from "@/config/navigation";
+import { NAV_SECTIONS } from "@/config/navConfig";
 
 // Modular Sub-components
 import { SidebarBranding } from "./sidebar/SidebarBranding";

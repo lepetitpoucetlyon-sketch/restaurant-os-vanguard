@@ -82,7 +82,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setName(String(editProduct.name || ""));
             setDescription(String(editProduct.description || ""));
             setCategory(String(editProduct.category || ""));
-            setSellPriceInCents(Number(editProduct.price || 0));
+            setSellPriceInCents(Number((editProduct.sellingPriceInCents ?? Math.round((editProduct.sellingPriceInMicrounits ?? 0) / 10_000)) || 0));
             setPrepTime(Number(editProduct.preparationTimeMinutes || 0));
             setSelectedAllergens(editProduct.allergens || []);
             setIsVegetarian(editProduct?.isVegetarian || false);

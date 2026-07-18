@@ -16,12 +16,19 @@ export interface NexusContext {
 export type INexusQueryOptions = IQueryOptions;
 export type INexusBatch = import('@/shared/nexus/contracts/infrastructure/storage.contracts').IBatchProcessor;
 
+export interface INexusTransaction {
+    get<T = unknown>(path: string): Promise<T | null>;
+    set(path: string, data: unknown): void;
+    update(path: string, data: Partial<unknown>): void;
+    delete(path: string): void;
+}
+
 export interface INexusAdapter {
     get<T = import('@/shared/nexus-contract').SovereignData>(path: string, context?: NexusContext): Promise<T | null>;
     query<T = import('@/shared/nexus-contract').SovereignData>(collectionPath: string, options?: INexusQueryOptions, context?: NexusContext): Promise<T[]>;
     onSnapshot<T = import('@/shared/nexus-contract').SovereignData>(
-        path: string, 
-        callback: (data: T) => void, 
+        path: string,
+        callback: (data: T) => void,
         options?: INexusQueryOptions & { onError?: (error: Error) => void },
         context?: NexusContext
     ): () => void;
@@ -32,4 +39,6 @@ export interface INexusAdapter {
     create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T, context?: NexusContext): Promise<void>;
     delete(path: string, context?: NexusContext): Promise<void>;
     generateId(collectionPath: string): string;
+    serverTimestamp(): unknown;
+    runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, context?: NexusContext): Promise<T>;
 }

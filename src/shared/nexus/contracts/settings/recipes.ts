@@ -2,7 +2,7 @@ export interface RecipeSettings {
     id: string;
     name: string;
     photo?: string;
-    category: 'starter' | 'main' | 'dessert' | 'base' | 'sauce' | 'marinade';
+    category: 'starter' | 'main' | 'dessert' | 'base' | 'sauce' | 'marinade' | 'boissons' | 'cocktails' | 'snack' | 'other';
     prepTime: number;
     cookTime: number;
     restTime?: number;

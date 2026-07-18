@@ -11,12 +11,12 @@ export const MonkeyChaos = {
      * Attempts to corrupt the SovereignLedger with an unbalanced transaction.
      * The Ledger MUST reject this to prove Grade X integrity.
      */
-    async attackLedger(): Promise<{ success: boolean; message: string }> {
+    async attackLedger(tenantId: string): Promise<{ success: boolean; message: string }> {
         logger.warn('🧪 [MonkeyChaos] Initiating Ledger Attack: Attempting unbalanced transaction...');
         try {
             // We bypass the standard recordTransfer to test the internal validation if possible,
             // or we send a clearly broken request to verify the financier blocks it.
-            await SovereignLedger.getInstance('restaurant-os').recordTransfer({
+            await SovereignLedger.getInstance(tenantId).recordTransfer({
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',
                 amountInCents: 10000, 

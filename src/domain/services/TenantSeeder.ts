@@ -1,5 +1,7 @@
+import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { validatePin } from '@/lib/auth/validatePin';
 import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
 import { FiscalKeyService } from './FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
@@ -16,6 +18,35 @@ export interface SeedInput {
   primaryColor?: string;
 }
 
+/**
+ * Generates a cryptographically secure 4-digit PIN (1000–9999).
+ * Retries until the PIN passes validatePin (not in blacklist).
+ */
+function generateSecurePin(): string {
+  let pin: string;
+  do {
+    pin = String(1000 + (parseInt(randomBytes(2).toString('hex'), 16) % 9000));
+  } while (!validatePin(pin).valid);
+  return pin;
+}
+
+/**
+ * Returns a safe PIN — generates one if the provided PIN is weak, blacklisted,
+ * or absent. Logs a warning (with the generated PIN) when a replacement occurs.
+ */
+function resolveAdminPin(adminPin: string | undefined, adminEmail: string): string {
+  const validation = adminPin ? validatePin(adminPin) : { valid: false };
+  if (validation.valid) return adminPin as string;
+
+  const generated = generateSecurePin();
+  logger.warn(
+    `[TenantSeeder] Weak or missing adminPin detected for ${adminEmail}. ` +
+    `A secure PIN has been generated: ${generated}. ` +
+    `Please communicate this PIN to the admin securely.`
+  );
+  return generated;
+}
+
 interface SeedResult {
   success: boolean;
   seededPaths: string[];
@@ -28,7 +59,8 @@ interface SeedResult {
  */
 export const TenantSeeder = {
   async seed(input: SeedInput): Promise<SeedResult> {
-    const { tenantId, name, adminEmail, adminPin, siren, primaryColor } = input;
+    const { tenantId, name, adminEmail, siren, primaryColor } = input;
+    const adminPin = resolveAdminPin(input.adminPin, input.adminEmail);
     const seededPaths: string[] = [];
 
     logger.info(`[TenantSeeder] Seeding tenant ${tenantId}...`);

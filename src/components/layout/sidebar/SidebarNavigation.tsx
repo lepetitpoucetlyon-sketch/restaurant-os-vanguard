@@ -6,7 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/hooks";
 import { accordionContent } from "@/lib/motion";
-import { NavSection } from "@/config/navigation";
+import { NavSection } from "@/config/navConfig";
 import { useState } from "react";
 import { empireAudit } from "@/lib/audit";
 
@@ -170,10 +170,15 @@ export function SidebarNavigation({
                                                             </div>
                                                             {!isReallyCollapsed && (
                                                                 <span className={cn(
-                                                                    "tracking-tight transition-colors duration-700 font-serif italic text-lg font-bold leading-none py-1",
+                                                                    "tracking-tight transition-colors duration-700 font-serif italic text-lg font-bold leading-none py-1 flex items-center gap-2",
                                                                     isActive ? "text-text-primary" : "text-text-secondary dark:text-text-primary/90"
                                                                 )}>
                                                                     {t(`nav.${item.key}`)}
+                                                                    {item.badge && (
+                                                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 leading-none not-italic">
+                                                                            {item.badge}
+                                                                        </span>
+                                                                    )}
                                                                 </span>
                                                             )}
                                                         </div>

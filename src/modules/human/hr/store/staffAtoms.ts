@@ -58,7 +58,7 @@ export const myLeaveBalancesAtom = atom((get) => {
 
 import { Candidate } from '@nexus/contracts';
 export const staffSearchQueryAtom = atom('');
-export const staffStatusFilterAtom = atom<'all' | 'new' | 'interview' | 'trial' | 'hired' | 'refused'>('all');
+export const staffStatusFilterAtom = atom<'all' | 'new' | 'interview' | 'trial' | 'offer' | 'hired' | 'refused'>('all');
 export const staffCandidateModalOpenAtom = atom(false);
 export const staffEditingCandidateAtom = atom<Candidate | null>(null);
 

@@ -99,6 +99,89 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     },
   },
 
+  bar: {
+    taskId: 'bar',
+    importance: {
+      ...OFF_ALL,
+      orders:    'HIGH',
+      tables:    'HIGH',
+      products:  'MEDIUM',
+      categories:'MEDIUM',
+      recipes:   'HIGH',
+      stocks:    'MEDIUM',
+    },
+  },
+
+  kitchen: {
+    taskId: 'kitchen',
+    importance: {
+      ...OFF_ALL,
+      orders:  'HIGH',
+      tables:  'MEDIUM',
+      recipes: 'HIGH',
+      stocks:  'MEDIUM',
+    },
+  },
+
+  'floor-plan': {
+    taskId: 'floor-plan',
+    importance: {
+      ...OFF_ALL,
+      tables: 'HIGH',
+      orders: 'MEDIUM',
+    },
+  },
+
+  registre: {
+    taskId: 'registre',
+    importance: {
+      ...OFF_ALL,
+      compliance: 'HIGH',
+      finance:    'MEDIUM',
+      orders:     'LAZY',
+    },
+  },
+
+  groups: {
+    taskId: 'groups',
+    importance: {
+      ...OFF_ALL,
+      orders:    'MEDIUM',
+      tables:    'MEDIUM',
+      marketing: 'LAZY',
+    },
+  },
+
+  staff: {
+    taskId: 'staff',
+    importance: { ...OFF_ALL, staff: 'HIGH' },
+  },
+
+  inventory: {
+    taskId: 'inventory',
+    importance: { ...OFF_ALL, stocks: 'HIGH', products: 'MEDIUM', categories: 'MEDIUM' },
+  },
+
+  haccp: {
+    taskId: 'haccp',
+    importance: { ...OFF_ALL, compliance: 'HIGH', stocks: 'MEDIUM' },
+  },
+
+  crm: {
+    taskId: 'crm',
+    importance: { ...OFF_ALL, marketing: 'MEDIUM', orders: 'LAZY' },
+  },
+
+  marketing: {
+    taskId: 'marketing',
+    importance: { ...OFF_ALL, marketing: 'HIGH', products: 'LAZY' },
+  },
+
+  analytics: {
+    taskId: 'analytics',
+    importance: { ...OFF_ALL, finance: 'MEDIUM', compliance: 'LAZY', marketing: 'LAZY', orders: 'LAZY' },
+  },
+
   admin: {
     taskId: 'admin',
     importance: {
@@ -120,13 +203,24 @@ export const TASK_MAPS: Record<string, TaskContext> = {
 
 /** Résout le TaskContext depuis un pathname Next.js */
 export function resolveTaskContext(pathname: string): TaskContext {
-  if (pathname.includes('/pos'))         return TASK_MAPS.pos;
-  if (pathname.includes('/kds'))         return TASK_MAPS.kds;
-  if (pathname.includes('/finance') || pathname.includes('/audit')) return TASK_MAPS.finance;
-  if (pathname.includes('/operations'))  return TASK_MAPS.operations;
-  if (pathname.includes('/compliance'))  return TASK_MAPS.compliance;
-  if (pathname.includes('/commerce') || pathname.includes('/reservations')) return TASK_MAPS.commerce;
-  if (pathname.includes('/admin'))       return TASK_MAPS.admin;
+  if (pathname.includes('/pos'))                                              return TASK_MAPS.pos;
+  if (pathname.includes('/kds'))                                              return TASK_MAPS.kds;
+  if (pathname.includes('/bar'))                                              return TASK_MAPS.bar;
+  if (pathname.includes('/kitchen'))                                          return TASK_MAPS.kitchen;
+  if (pathname.includes('/floor-plan'))                                       return TASK_MAPS['floor-plan'];
+  if (pathname.includes('/registre'))                                         return TASK_MAPS.registre;
+  if (pathname.includes('/groups'))                                           return TASK_MAPS.groups;
+  if (pathname.includes('/finance') || pathname.includes('/audit'))           return TASK_MAPS.finance;
+  if (pathname.includes('/operations'))                                       return TASK_MAPS.operations;
+  if (pathname.includes('/compliance'))                                       return TASK_MAPS.compliance;
+  if (pathname.includes('/reservations') || pathname.includes('/commerce'))   return TASK_MAPS.commerce;
+  if (pathname.includes('/staff'))                                            return TASK_MAPS.staff;
+  if (pathname.includes('/inventory'))                                        return TASK_MAPS.inventory;
+  if (pathname.includes('/haccp'))                                            return TASK_MAPS.haccp;
+  if (pathname.includes('/crm'))                                              return TASK_MAPS.crm;
+  if (pathname.includes('/marketing'))                                        return TASK_MAPS.marketing;
+  if (pathname.includes('/analytics'))                                        return TASK_MAPS.analytics;
+  if (pathname.includes('/admin'))                                            return TASK_MAPS.admin;
   return TASK_MAPS.default;
 }
 

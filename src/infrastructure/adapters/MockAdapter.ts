@@ -1,4 +1,4 @@
-import { INexusAdapter, INexusBatch, NexusContext } from "@/lib/nexus/types";
+import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from "@/lib/nexus/types";
 import { logger } from '@/lib/logger';
 import { 
     IDocumentStore, 
@@ -92,5 +92,25 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
 
     generateId(): string {
         return `mock_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    serverTimestamp(): unknown {
+        return new Date();
+    }
+
+    async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, _context?: NexusContext): Promise<T> {
+        const deferred: Array<() => void> = [];
+        const tx: INexusTransaction = {
+            get: (path) => this.get(path),
+            set: (path, data) => { deferred.push(() => { this.storage[path] = data; }); },
+            update: (path, data) => { deferred.push(() => {
+                const existing = (this.storage[path] ?? {}) as Record<string, unknown>;
+                this.storage[path] = { ...existing, ...(data as Record<string, unknown>) };
+            }); },
+            delete: (path) => { deferred.push(() => { delete this.storage[path]; }); },
+        };
+        const result = await callback(tx);
+        for (const op of deferred) op();
+        return result;
     }
 }

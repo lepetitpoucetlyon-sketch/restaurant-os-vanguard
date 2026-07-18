@@ -216,6 +216,14 @@ export interface RecipeIngredient extends SovereignMap {
     cost?: number; // Alias for UI compatibility
 }
 
+/** Method used to prepare a cocktail or mixed drink. */
+export type ServingMethod = 'shaken' | 'stirred' | 'built' | 'blended' | 'layered';
+
+/** All supported recipe categories, including bar specialties. */
+export type RecipeCategory =
+    | 'starter' | 'main' | 'dessert' | 'base' | 'sauce' | 'marinade'
+    | 'boissons' | 'cocktails' | 'snack' | 'other';
+
 export interface Recipe extends SovereignNode {
     name: string;
     description?: string;
@@ -237,11 +245,22 @@ export interface Recipe extends SovereignNode {
         tip?: string;
     }>;
     steps?: unknown[]; // Alias for UI compatibility
-    category?: string;
+    category?: RecipeCategory | string;
     portions?: number;
     costPriceInCents?: number;
     costPriceInMicrounits?: number; // microunits = cents × 10 000
     sellingPriceInCents?: number;
     sellingPriceInMicrounits?: number; // microunits = cents × 10 000
     isActive?: boolean;
+    // ── Bar / cocktail fields (cui-3) ─────────────────────────────────────────
+    /** Primary spirit(s) used in the recipe (e.g. "Rhum blanc"). */
+    baseSpirit?: string;
+    /** List of mixers / juices / sodas used (e.g. ["jus de citron", "sirop de canne"]). */
+    mixers?: string[];
+    /** Garnish description (e.g. "Zeste de citron vert"). */
+    garnish?: string;
+    /** How the drink is assembled — drives KDS bar station display. */
+    servingMethod?: ServingMethod;
+    /** Glass type used (e.g. "Coupe", "Highball", "Old Fashioned"). */
+    glassType?: string;
 }

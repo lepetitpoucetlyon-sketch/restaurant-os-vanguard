@@ -58,6 +58,7 @@ export function GestionHuiles() {
             setIsAdding(false);
         } catch (e) {
             console.error(e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer le contrôle huile.' });
         }
     };
 

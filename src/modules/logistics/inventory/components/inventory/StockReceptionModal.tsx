@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
-import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X } from "lucide-react";
+import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X, Truck } from "lucide-react";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
 // import { receiveStockAction } from "@/app/actions/inventory";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { IngredientCategory, IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { logger } from "@/lib/logger";
+
+interface SupplierRecord {
+    id: string;
+    name: string;
+    [key: string]: unknown;
+};
 
 const CATEGORY_LABELS: Record<IngredientCategory, string> = {
     produce: 'Fruits & Légumes',
@@ -44,14 +52,25 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
     const [quantity, setQuantity] = useState<string>('');
     const [unit, setUnit] = useState<IngredientUnit>('kg');
     const [storageLocation, setStorageLocation] = useState<string>('');
-    const [_batchNumber, setBatchNumber] = useState<string>('');
-    const [_lotNumber, _setLotNumber] = useState<string>('');
-    const [_supplierName, setSupplierName] = useState<string>('');
-    const [_unitCostInCents, setUnitCostInCents] = useState<string>('');
+    const [batchNumber, setBatchNumber] = useState<string>('');
+    const [lotNumber, setLotNumber] = useState<string>('');
+    const [unitCost, setUnitCost] = useState<string>('');
     const [receptionDate, setReceptionDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [dlc, setDlc] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+
+    // log-1: Dynamic supplier loading from Nexus (no hardcoded DEFAULT_SUPPLIER)
+    const [suppliers, setSuppliers] = useState<SupplierRecord[]>([]);
+    const [selectedSupplierId, setSelectedSupplierId] = useState<string>('');
+
+    useEffect(() => {
+        if (!isOpen) return;
+        Nexus.adapter
+            .query<SupplierRecord>('suppliers')
+            .then((results) => setSuppliers(results ?? []))
+            .catch((err) => logger.warn('[StockReceptionModal] Failed to load suppliers', err));
+    }, [isOpen]);
 
     // Auto-fill based on selected ingredient
     const handleIngredientChange = (ingredientId: string) => {
@@ -60,8 +79,11 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
         if (ing) {
             setUnit(ing.unit as IngredientUnit);
             setStorageLocation(String(ing.defaultStorageLocation || ''));
-            setSupplierName(String(ing.supplier || ''));
-            setUnitCostInCents((Number(ing.costInCents || 0) / 100).toString());
+            setUnitCost((Number(ing.costInCents || 0) / 100).toString());
+            // Auto-select supplier if ingredient has a supplierId that matches a loaded supplier
+            if (ing.supplierId) {
+                setSelectedSupplierId(String(ing.supplierId));
+            }
 
             // Calculate default DLC
             const dlcDate = new Date();
@@ -76,26 +98,42 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
         setIsSubmitting(true);
 
         const ing = ingredients.find(i => i.id === selectedIngredient);
-        if (!ing) return;
+        if (!ing) { setIsSubmitting(false); return; }
 
         try {
-            const result = { success: true };
-            // Simulation pour l'export statique
-            await new Promise(resolve => setTimeout(resolve, 500));
+            const id = Nexus.adapter.generateId('stockItems');
+            await Nexus.adapter.set(`tenants/${tenantId}/stockItems/${id}`, {
+                id,
+                ingredientId: selectedIngredient,
+                ingredientName: ing.name,
+                category: ing.category,
+                quantity: parseFloat(quantity),
+                unit,
+                storageLocationId: storageLocation,
+                receptionDate,
+                dlc,
+                unitCost: parseFloat(unitCost) || 0,
+                ...(batchNumber && { batchNumber }),
+                ...(lotNumber && { lotNumber }),
+                ...(selectedSupplierId && { supplierId: selectedSupplierId }),
+                status: 'available',
+                createdAt: new Date().toISOString(),
+            });
 
-            if (result.success) {
-                setIsSubmitting(false);
-                setSuccess(true);
-                // Instant feedback and reset - zero delay mandate
-                setSelectedIngredient('');
-                setQuantity('');
-                setBatchNumber('');
-                onClose();
+            setSuccess(true);
+            setSelectedIngredient('');
+            setQuantity('');
+            setBatchNumber('');
+            setLotNumber('');
+            setUnitCost('');
+            setTimeout(() => {
                 setSuccess(false);
-            }
+                onClose();
+            }, 1200);
         } catch (error) {
+            logger.error('[StockReceptionModal] Reception failed', error);
+        } finally {
             setIsSubmitting(false);
-            console.error("Reception failed:", error);
         }
     };
 
@@ -196,6 +234,25 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                         }))}
                                     />
                                 </div>
+                            </div>
+
+                            {/* Supplier dropdown (log-1: dynamic from Nexus) */}
+                            <div className="space-y-4">
+                                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                                    <Truck className="w-3.5 h-3.5 text-accent-gold" />
+                                    FOURNISSEUR
+                                </label>
+                                <PremiumSelect
+                                    value={selectedSupplierId}
+                                    onChange={setSelectedSupplierId}
+                                    options={[
+                                        { value: '', label: suppliers.length === 0 ? '— Aucun fournisseur enregistré —' : '— Sélectionner un fournisseur —' },
+                                        ...suppliers.map(s => ({
+                                            value: s.id,
+                                            label: String(s.name || s.id).toUpperCase(),
+                                        })),
+                                    ]}
+                                />
                             </div>
 
                             {/* Storage Location */}

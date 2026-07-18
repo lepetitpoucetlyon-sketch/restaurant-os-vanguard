@@ -1,4 +1,4 @@
-import { getTenantPath } from '@/lib/firebase';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
@@ -33,7 +33,7 @@ export class QuoteEngine {
     return await NexusTransaction.run(
       { QUOTE_GENERATION: { schema: QuoteSchema as unknown as import("zod").ZodSchema<import("@/shared/nexus-contract").SovereignValue>, data: rawData } },
       async (transaction) => {
-        const tenantPath = getTenantPath(this.COLLECTION);
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION);
         const quoteId = Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 12);
         const quotePath = `${tenantPath}/${quoteId}`;
 

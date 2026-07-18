@@ -13,6 +13,7 @@ import { FleetInsight } from '@domain/services/MacroBrain';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { mapSiteTelemetryToInstance, buildGlobalMetrics, buildConfigPatch } from './fleetMappers';
+import { logger } from '@/lib/logger';
 
 import { NexusFleetState } from '@nexus/contracts/nexus.types';
 
@@ -36,21 +37,17 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     
     // --- INTELLIGENCE STATE (Grade X) ---
     const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
-    const [scenarios, setScenarios] = useState<import('@nexus/contracts').SimulationScenario[]>([]); 
-    const [financialInsight, _setFinancialInsight] = useState<{
-        revenue: number;
-        foodCostPercent: number;
-        laborCostPercent: number;
-        primeCost: number;
-    }>({
-        revenue: 425000,
-        foodCostPercent: 28.5,
-        laborCostPercent: 32.1,
-        primeCost: 60.6
-    });
+    const [scenarios, setScenarios] = useState<import('@nexus/contracts').SimulationScenario[]>([]);
+
+    const financialInsight = useMemo(() => ({
+        revenue: globalMetrics?.fleetTotalRevenue ?? 0,
+        foodCostPercent: globalMetrics?.averageFoodCost ?? 0,
+        laborCostPercent: globalMetrics?.totalLaborCost ?? 0,
+        primeCost: (globalMetrics?.averageFoodCost ?? 0) + (globalMetrics?.totalLaborCost ?? 0),
+    }), [globalMetrics]);
 
     const runSimulation = useCallback(async (config: { name: string; description: string; inputs?: { priceChange?: number } }) => {
-        console.log('[FleetIntelligence] Running simulation...', config);
+        logger.debug('[FleetIntelligence] Running simulation...', config);
         await new Promise(r => setTimeout(r, 1500));
         const newScenario = {
             id: `sim_${Date.now()}`,
@@ -136,13 +133,13 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     const selectInstance = (id: string | null) => setSelectedInstanceId(id);
 
     const registerInstance = async (instance: EmpireInstance) => {
-        console.log('[Fleet] Registering new instance:', instance);
+        logger.debug('[Fleet] Registering new instance:', instance);
         await fleetTelemetry.registerNode(instance.id as TenantID);
         await refreshFleet(true);
     };
 
     const launchPreview = (key: string) => {
-        console.log('[Fleet] Launching digital twin preview for:', key);
+        logger.debug('[Fleet] Launching digital twin preview for:', key);
         window.open(`/preview/${key}`, '_blank');
     };
 
@@ -152,13 +149,13 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         maintenanceMode?: boolean;
         licenceStatus?: 'ACTIVE' | 'LOCKED';
     }) => {
-        console.log('[Fleet] Broadcasting global configuration via stream:', config);
+        logger.debug('[Fleet] Broadcasting global configuration via stream:', config);
 
         const patch = buildConfigPatch(config);
         const targetIds = liveFleet.map(f => f.id);
         await fleetTelemetry.broadcastConfiguration(patch, targetIds);
         
-        console.log('[Fleet] Broadcast events emitted into the sovereign stream.');
+        logger.debug('[Fleet] Broadcast events emitted into the sovereign stream.');
     };
 
     useEffect(() => {
@@ -209,8 +206,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             predictLaborCost: () => 0.0
         },
         isTrainingMode: false,
-        toggleTrainingMode: () => { console.log('[Fleet] Toggling training mode...'); },
-        triggerRebalancing: async () => { console.log('[Fleet] Triggering rebalancing...'); },
+        toggleTrainingMode: () => { logger.debug('[Fleet] Toggling training mode...'); },
+        triggerRebalancing: async () => { logger.debug('[Fleet] Triggering rebalancing...'); },
         nodes: [] as import('@/shared/nexus-contract').SovereignData[],
         health: 'stable',
         tutorial: {
@@ -219,7 +216,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             start: () => {},
             stop: () => {},
             startTutorial: (section?: import('@nexus/contracts/nexus.types').NexusTutorialSection) => {
-                console.log('[Tutorial] Starting section:', section?.id);
+                logger.debug('[Tutorial] Starting section:', section?.id);
             },
             stopTutorial: () => {},
             nextStep: () => {},
@@ -231,6 +228,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             currentPointIndex: 0
         }
     }), [liveFleet, globalMetrics, stats, macroInsights, isLoading, isEmpireMode, selectedInstanceId, isUpdateAvailable, updateInfo, priceMultiplier, refreshFleet, syncFleet, broadcastConfiguration, globalInflationRate, scenarios, runSimulation, financialInsight]);
+
 
 
     return (

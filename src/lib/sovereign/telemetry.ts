@@ -1,5 +1,5 @@
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 
 export interface TelemetryThresholds {
     warning: number;
@@ -23,17 +23,17 @@ export const TELEMETRY_THRESHOLDS = {
 
 export async function logCorrectiveAction(action: string, module: string, previousState: boolean, newState: boolean, reason: string) {
     try {
-        const actionsRef = collection(db, 'mcc', 'sam_actions', 'logs');
-        await addDoc(actionsRef, {
+        const logId = Nexus.adapter.generateId('mcc/sam_actions/logs');
+        await Nexus.adapter.create(`mcc/sam_actions/logs/${logId}`, {
             action,
             module,
             previousState,
             newState,
             reason,
-            timestamp: serverTimestamp(),
+            timestamp: Nexus.adapter.serverTimestamp(),
             protocol: 'PHYSICAL_ACTIVE'
         });
-        console.log(`[SOVEREIGN_TELEMETRY] Logged corrective action: ${action}`);
+        logger.info(`[SOVEREIGN_TELEMETRY] Logged corrective action: ${action}`);
     } catch (err) {
         console.error('[SOVEREIGN_TELEMETRY] Failed to log corrective action', err);
     }

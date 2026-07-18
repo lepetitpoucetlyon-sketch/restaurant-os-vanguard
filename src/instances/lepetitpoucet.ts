@@ -1,4 +1,5 @@
 import type { TenantConfig } from '@/shared/nexus-contract';
+import { AI_MODELS } from '@/lib/ai/types';
 
 /**
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X
@@ -40,7 +41,7 @@ export const lepetitpoucetConfig: TenantConfig = {
         },
         expert: {
             role: 'butcher',
-            modelId: 'gemini-1.5-flash',
+            modelId: AI_MODELS.fast,
             isConfigured: true,
             isAuthorized: true
         }

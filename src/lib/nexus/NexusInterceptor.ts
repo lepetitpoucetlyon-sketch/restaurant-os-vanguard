@@ -1,4 +1,4 @@
-import { INexusAdapter, INexusBatch, NexusContext } from './types';
+import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from './types';
 import { SovereignData } from '@/shared/nexus-contract';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
@@ -25,16 +25,9 @@ export class NexusInterceptor implements INexusAdapter {
 
     async query<T = unknown>(collectionPath: string, options?: IQueryOptions, context?: NexusContext): Promise<T[]> {
         const ctx = this.ensureContext(context);
-        return this.intercept('READ', collectionPath, ctx, () => {
-            const finalOptions = options || {};
-            const organizationId = ctx.vassalId;
-            
-            if (organizationId && organizationId !== 'restaurant-os' && organizationId !== 'main') {
-                const tenantFilter = { field: 'organizationId', operator: '==' as const, value: organizationId };
-                finalOptions.where = [...(finalOptions.where || []), tenantFilter];
-            }
-            return this.adapter.query<T>(this.scopePath(collectionPath, ctx.vassalId), finalOptions);
-        });
+        return this.intercept('READ', collectionPath, ctx, () =>
+            this.adapter.query<T>(this.scopePath(collectionPath, ctx.vassalId), options)
+        );
     }
 
     onSnapshot<T = unknown>(
@@ -73,16 +66,10 @@ export class NexusInterceptor implements INexusAdapter {
             if (isUnsubscribed) return;
 
             // Step 4: Access granted — NOW start the real listener
-            const finalOptions = options || {};
-            if (ctx.vassalId && ctx.vassalId !== 'restaurant-os' && ctx.vassalId !== 'main') {
-                const tenantFilter = { field: 'organizationId', operator: '==' as const, value: ctx.vassalId };
-                finalOptions.where = [...(finalOptions.where || []), tenantFilter];
-            }
-
             innerUnsubscribe = this.adapter.onSnapshot<T>(
                 this.scopePath(path, ctx.vassalId),
                 callback,
-                finalOptions
+                options
             );
         };
 
@@ -100,23 +87,35 @@ export class NexusInterceptor implements INexusAdapter {
         const ctx = this.ensureContext();
         const rawBatch = this.adapter.batch();
         const ops: { type: string, path: string }[] = [];
+        // ⚠️ validateAccess est ASYNC : l'appeler sans await dans ces closures
+        // synchrones laissait passer TOUTE écriture batch (cross-tenant + NF525)
+        // avec un rejet flottant. On accumule les gardes et on les attend au
+        // commit, AVANT le rawBatch.commit — rien n'est écrit si une garde jette.
+        const pendingGuards: Promise<unknown>[] = [];
+        const pendingWrites: Array<() => Promise<void>> = [];
 
         return {
             set: (path, data) => {
                 const scopedPath = this.scopePath(path, ctx.vassalId);
-                this.guard.validateAccess(scopedPath, ctx.vassalId);
-                rawBatch.set(scopedPath, data);
+                pendingGuards.push(this.guard.validateAccess(scopedPath, ctx.vassalId));
+                pendingWrites.push(async () => {
+                    const protectedData = await this.guard.protectWrite(scopedPath, data as SovereignData, ctx.vassalId);
+                    rawBatch.set(scopedPath, protectedData);
+                });
                 ops.push({ type: 'SET', path: scopedPath });
             },
             update: (path, data) => {
                 const scopedPath = this.scopePath(path, ctx.vassalId);
-                this.guard.validateAccess(scopedPath, ctx.vassalId);
-                rawBatch.update(scopedPath, data);
+                pendingGuards.push(this.guard.validateAccess(scopedPath, ctx.vassalId));
+                pendingWrites.push(async () => {
+                    const protectedData = await this.guard.protectWrite(scopedPath, data as SovereignData, ctx.vassalId);
+                    rawBatch.update(scopedPath, protectedData as Partial<unknown>);
+                });
                 ops.push({ type: 'UPDATE', path: scopedPath });
             },
             increment: (path, field, amount) => {
                 const scopedPath = this.scopePath(path, ctx.vassalId);
-                this.guard.validateAccess(scopedPath, ctx.vassalId);
+                pendingGuards.push(this.guard.validateAccess(scopedPath, ctx.vassalId));
                 rawBatch.increment(scopedPath, field, amount);
                 ops.push({ type: 'INCREMENT', path: scopedPath });
             },
@@ -125,11 +124,14 @@ export class NexusInterceptor implements INexusAdapter {
                 if (!this.guard.canDelete(path)) {
                     throw new NexusError(NexusErrorCode.NF525_VIOLATION, 'Cannot delete a fiscally sealed document in batch');
                 }
-                this.guard.validateAccess(scopedPath, ctx.vassalId);
+                pendingGuards.push(this.guard.validateAccess(scopedPath, ctx.vassalId));
                 rawBatch.delete(scopedPath);
                 ops.push({ type: 'DELETE', path: scopedPath });
             },
             commit: async () => {
+                // Barrière de sécurité : toutes les gardes doivent passer avant l'écriture.
+                await Promise.all(pendingGuards);
+                await Promise.all(pendingWrites.map(fn => fn()));
                 await rawBatch.commit();
                 if (ops.length > 0) {
                     await NexusTelemetryService.emit({
@@ -158,10 +160,27 @@ export class NexusInterceptor implements INexusAdapter {
 
     async update<T = unknown>(path: string, data: Partial<T>, context?: NexusContext): Promise<void> {
         const ctx = this.ensureContext(context);
-        return this.intercept('WRITE', path, ctx, async () => {
-            const existing = await this.adapter.get(this.scopePath(path, ctx.vassalId));
-            const protectedData = await this.guard.protectWrite(this.scopePath(path, ctx.vassalId), { ...existing, ...data } as unknown as SovereignData, ctx.vassalId);
-            return this.adapter.update(this.scopePath(path, ctx.vassalId), protectedData);
+        return this.intercept('WRITE', path, ctx, () =>
+            this.adapter.runTransaction(async (tx) => {
+                const scopedPath = this.scopePath(path, ctx.vassalId);
+                const existing = await tx.get<T>(scopedPath);
+                const merged = { ...existing, ...data } as unknown as SovereignData;
+                const protectedData = await this.guard.protectWrite(scopedPath, merged, ctx.vassalId);
+                tx.update(scopedPath, protectedData);
+            })
+        );
+    }
+
+    async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, context?: NexusContext): Promise<T> {
+        const ctx = this.ensureContext(context);
+        return this.adapter.runTransaction(async (rawTx) => {
+            const guardedTx: INexusTransaction = {
+                get: (path) => rawTx.get(this.scopePath(path, ctx.vassalId)),
+                set: (path, data) => rawTx.set(this.scopePath(path, ctx.vassalId), data),
+                update: (path, data) => rawTx.update(this.scopePath(path, ctx.vassalId), data),
+                delete: (path) => rawTx.delete(this.scopePath(path, ctx.vassalId)),
+            };
+            return callback(guardedTx);
         });
     }
 
@@ -185,6 +204,10 @@ export class NexusInterceptor implements INexusAdapter {
 
     generateId(collectionPath: string): string {
         return this.adapter.generateId(collectionPath);
+    }
+
+    serverTimestamp(): unknown {
+        return this.adapter.serverTimestamp();
     }
 
     // --- Private Infrastructure ---

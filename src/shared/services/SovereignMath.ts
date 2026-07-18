@@ -102,5 +102,21 @@ export const SovereignMath = {
      */
     isSovereignInteger: (value: unknown): value is number => {
         return typeof value === 'number' && Number.isInteger(value);
+    },
+
+    /**
+     * 🏛️ CANONICAL Order-total accessor (Microunits Protocol).
+     *
+     * `totalInMicrounits` is the source of truth. `totalInCents` is a deprecated
+     * parity mirror kept only for legacy Firestore documents written before the
+     * migration. This resolver prefers µ and falls back to `cents × 10 000`.
+     *
+     * Value-preserving: a legacy order with `totalInCents = 1500` resolves to
+     * `15 000 000 µ`, i.e. exactly the same monetary value.
+     */
+    orderTotalMicrounits: (order: { totalInMicrounits?: number | null; totalInCents?: number | null } | null | undefined): number => {
+        if (!order) return 0;
+        if (typeof order.totalInMicrounits === 'number') return order.totalInMicrounits;
+        return (order.totalInCents ?? 0) * 10_000;
     }
 };

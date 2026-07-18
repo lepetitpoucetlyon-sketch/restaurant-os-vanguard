@@ -23,6 +23,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useTenant } from '@/hooks';
 // import { arrivalAreaAction } from '@/app/actions/operations';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 // Re-defining OperationalArea locally for the Empire Forge page.
 // This page manages high-level spaces (salons, terrasses) rather than individual tables.
@@ -67,12 +68,12 @@ const HandDrawnBorder = ({ children, className }: { children: React.ReactNode, c
 );
 export default function OperationsPage() {
     const floorOps = useOMS(); const areas = floorOps?.areas ?? [];
-    const updateAreaStatus = (id: string, status: string) => console.log('Update area', id, status);
+    const updateAreaStatus = (id: string, status: string) => logger.debug('Update area', id, status);
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();
 
-    const handleArrival = async (_area: OperationalArea) => {
+    const handleArrival = async (area: OperationalArea) => {
         if (!activeTenantId) return;
         try {
             const promise = Promise.resolve({ success: true });
@@ -82,9 +83,11 @@ export default function OperationsPage() {
                 error: 'Échec de la suture financière.'
             });
             await promise;
+            updateAreaStatus(area.id, 'occupied');
             setSelectedArea(null);
         } catch (e) {
-            console.error(e);
+            toast.error('Échec de l\'accueil client.');
+            logger.error('[Operations] handleArrival failed', e);
         }
     };
 

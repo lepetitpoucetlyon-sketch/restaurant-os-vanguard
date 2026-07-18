@@ -27,7 +27,7 @@ export const EmpireCockpit: React.FC = () => {
     const stockRuptures = useAtomValue(dashboardStockRupturesSelector);
     const activeTables = useAtomValue(dashboardActiveTablesSelector);
 
-    const revenue = (revenueInCents / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+    const revenue = (revenueInCents / 1_000_000).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
 
     const kpis = [
         {

@@ -31,11 +31,13 @@ const cinematicItem: Variants = {
 interface ReservationSidebarProps {
     isVisible: boolean;
     reservations: Reservation[];
+    onMarkArrived?: (reservationId: string) => void;
 }
 
 export function ReservationSidebar({
     isVisible,
     reservations,
+    onMarkArrived,
 }: ReservationSidebarProps) {
     return (
         <motion.div
@@ -133,9 +135,20 @@ export function ReservationSidebar({
                                                 </div>
                                             </div>
                                         </div>
-                                        <button className="p-2 text-muted hover:text-accent transition-all">
-                                            <MoreHorizontal strokeWidth={1.5} className="w-4 h-4" />
-                                        </button>
+                                        <div className="flex items-center gap-1">
+                                            {onMarkArrived && res.status !== 'seated' && res.status !== 'arrived' && (
+                                                <button
+                                                    title="Marquer arrivée"
+                                                    onClick={(e) => { e.stopPropagation(); onMarkArrived(res.id); }}
+                                                    className="p-2 text-muted hover:text-emerald-500 transition-all"
+                                                >
+                                                    <UserCheck strokeWidth={1.5} className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                            <button className="p-2 text-muted hover:text-accent transition-all">
+                                                <MoreHorizontal strokeWidth={1.5} className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="flex justify-between items-center pt-5 border-t border-white/5">

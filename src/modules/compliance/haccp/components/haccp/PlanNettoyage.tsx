@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { HACCPVisionScanner } from './HACCPVisionScanner';
 import { cn } from "@/lib/ui.foundations";;
-import { ZONES_CONFIG, CleaningTask } from '../../types';
+import { ZONES_CONFIG, CleaningTask } from '@modules/compliance/haccp/types';
 import { useHygieneLogs, useCreateHygieneLog, useDeleteHygieneLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/context/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
@@ -53,6 +53,7 @@ export function PlanNettoyage() {
             }
         } catch (e) {
             console.error(e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de mettre à jour la tâche de nettoyage.' });
         }
     };
 
@@ -73,6 +74,7 @@ export function PlanNettoyage() {
             addNotification({ type: 'warning', title: 'Incident consigné', message: 'L\'anomalie a été enregistrée avec succès.' });
         } catch (e) {
             console.error(e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de consigner l\'incident.' });
         } finally {
             setReportingTask(null);
             setReportNote('');

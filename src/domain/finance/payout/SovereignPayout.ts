@@ -14,7 +14,7 @@ export class SovereignPayout {
     /**
      * Initie une demande de paiement fournisseur.
      */
-    static async initiatePayout(invoice: PayoutInvoice, initiatorAdminId: string, tenantId: string = 'restaurant-os'): Promise<PayoutRequest> {
+    static async initiatePayout(invoice: PayoutInvoice, initiatorAdminId: string, tenantId: string): Promise<PayoutRequest> {
         if (invoice.status !== 'validated') {
             throw new Error('PAYOUT_001: Invoice must be validated before payout.');
         }
@@ -58,7 +58,7 @@ export class SovereignPayout {
     /**
      * Valide le paiement via l'Approbation Duale (MCC).
      */
-    static async approvePayout(request: PayoutRequest, invoice: PayoutInvoice, secondAdminId: string, tenantId: string = 'restaurant-os'): Promise<PayoutRequest> {
+    static async approvePayout(request: PayoutRequest, invoice: PayoutInvoice, secondAdminId: string, tenantId: string): Promise<PayoutRequest> {
         if (request.status !== 'pending_approval') {
             throw new Error('PAYOUT_003: Request is not pending approval.');
         }

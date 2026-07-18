@@ -5,6 +5,7 @@ import { StockEngine } from '@domain/services/StockEngine';
 import { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 /**
  * 🏛️ TransactionService - Restaurant OS
@@ -43,6 +44,10 @@ export class TransactionService {
             if (!order) throw new Error(`Order ${orderId} not found.`);
             if (order.status === 'paid') throw new Error(`Order ${orderId} is already paid.`);
 
+            // Canonical total (Microunits Protocol). Sealed amount stays in cents for NF525 continuity;
+            // value-preserving for legacy orders (µ = cents × 10 000) and robust for µ-native orders.
+            const orderTotalInCents = SovereignMath.toCents(BigInt(SovereignMath.orderTotalMicrounits(order)));
+
             // 2. NF525 FISCAL SEALING
             const lastSeals = await Nexus.adapter.query<FiscalSeal>(fiscalPath, {
                 orderBy: { field: 'timestamp', direction: 'desc' },
@@ -51,9 +56,9 @@ export class TransactionService {
             const _lastHash = lastSeals.length > 0 ? lastSeals[0].hash : null;
 
             const seal = await FiscalEngine.sealEntry(order.id, {
-                amount: order.totalInCents,
+                amount: orderTotalInCents,
                 timestamp: timestamp.toISOString()
-            }, { 
+            }, {
                 lastSeal: lastSeals.length > 0 ? lastSeals[0] : undefined, 
                 instanceId: tenantId,
                 isTrainingMode: options.isTrainingMode 
@@ -87,10 +92,10 @@ export class TransactionService {
                 const customerFullPath = `${crmPath}/${order.customerId}`;
                 const customer = await Nexus.adapter.get<{ loyaltyPoints?: number; totalRevenue?: number; totalVisits?: number }>(customerFullPath);
                 if (customer) {
-                    const pointsToAdd = Math.floor((order.totalInCents || 0) / 100);
+                    const pointsToAdd = Math.floor(orderTotalInCents / 100);
                     batch.update(customerFullPath, {
                         loyaltyPoints: (customer.loyaltyPoints || 0) + pointsToAdd,
-                        totalRevenue: (customer.totalRevenue || 0) + ((order.totalInCents || 0) / 100),
+                        totalRevenue: (customer.totalRevenue || 0) + (orderTotalInCents / 100),
                         totalVisits: (customer.totalVisits || 0) + 1,
                         lastVisitDate: timestamp.toISOString(),
                         updatedAt: timestamp.toISOString()

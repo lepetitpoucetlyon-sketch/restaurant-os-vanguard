@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { revokeDevice } from '@/lib/sovereign/lockdown';
 import { ShieldAlert, ShieldCheck, Smartphone, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -23,13 +23,7 @@ export function DeviceManager({ uid }: { uid: string }) {
 
   const fetchDevices = async () => {
     try {
-      const db = getFirestore();
-      const devicesRef = collection(db, "users", uid, "certifiedDevices");
-      const snapshot = await getDocs(devicesRef);
-      const fetchedDevices = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Device[];
+      const fetchedDevices = await Nexus.adapter.query<Device>(`users/${uid}/certifiedDevices`);
       setDevices(fetchedDevices);
     } catch (err) {
       logger.warn('[DeviceManager] Failed to fetch devices', String(err));

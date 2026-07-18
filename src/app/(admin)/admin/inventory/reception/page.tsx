@@ -1,18 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Camera, 
-  CheckCircle2, 
-  AlertCircle, 
-  Save, 
-  Thermometer, 
+import {
+  Camera,
+  CheckCircle2,
+  AlertCircle,
+  Save,
+  Thermometer,
   ShieldAlert,
   ChevronRight,
   ClipboardList,
   FileText,
-  ScanLine
+  ScanLine,
+  Barcode,
+  Search
 } from 'lucide-react';
 
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
@@ -20,6 +22,7 @@ const _upsertReservationAction = async (..._args: unknown[]) => ({ success: true
 const _deleteReservationAction = async (..._args: unknown[]) => ({ success: true });
 const _cancelReservationAction = async (..._args: unknown[]) => ({ success: true });
 import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 // import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
 const receiveStockAction = async (_tenantId: string, _ingredient: import('@nexus/contracts').Ingredient, _data: unknown) => ({ success: true });
 const searchIngredientsAction = async (_tenantId: string, _query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
@@ -36,12 +39,113 @@ interface ScannedItem {
   ingredient?: import('@nexus/contracts').Ingredient;
 }
 
+interface BarcodeSearchResult {
+  id: string;
+  name: string;
+  unit?: string;
+  sku?: string;
+  supplier?: string;
+  supplierId?: string;
+}
+
 export default function ReceptionDashboard() {
   const { tenantId } = useNexusOps();
   const [isScanning, setIsScanning] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [scanResult, setScanResult] = useState<ScannedItem[] | null>(null);
   const [activeStep, setActiveStep] = useState<'scan' | 'verify' | 'advice'>('scan');
+
+  // ── log-5: Barcode scan at reception ──────────────────────────────────────
+  const barcodeRef = useRef<HTMLInputElement>(null);
+  const [barcodeValue, setBarcodeValue] = useState('');
+  const [barcodeResult, setBarcodeResult] = useState<BarcodeSearchResult | null>(null);
+  const [barcodeSearching, setBarcodeSearching] = useState(false);
+  const barcodeBufferRef = useRef('');
+  const barcodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /** Triggered when the barcode field receives a full scan (Enter key or buffer flush) */
+  const handleBarcodeSearch = useCallback(async (code: string) => {
+    if (!code.trim()) return;
+    setBarcodeSearching(true);
+    setBarcodeResult(null);
+
+    type ProductDoc = BarcodeSearchResult & {
+      barcode?: string;
+      sku?: string;
+      supplier?: string;
+      supplierId?: string;
+    };
+
+    type IngredientDoc = ProductDoc & { supplierRef?: string };
+
+    try {
+      // Search both products and ingredients for a matching barcode/sku field
+      const [products, ingredients] = await Promise.all([
+        Nexus.adapter.query<ProductDoc>('products'),
+        Nexus.adapter.query<IngredientDoc>('ingredients'),
+      ]);
+
+      const normalised = code.trim().toUpperCase();
+
+      const matchingProduct = (products ?? []).find(
+        (p) =>
+          p.sku?.toUpperCase() === normalised ||
+          p.barcode?.toUpperCase() === normalised
+      );
+
+      const matchingIngredient = (ingredients ?? []).find(
+        (i) =>
+          i.sku?.toUpperCase() === normalised ||
+          i.barcode?.toUpperCase() === normalised ||
+          i.supplierRef?.toUpperCase() === normalised
+      );
+
+      const found = matchingProduct ?? matchingIngredient ?? null;
+
+      if (found) {
+        setBarcodeResult({
+          id: String(found.id),
+          name: String(found.name),
+          unit: found.unit ? String(found.unit) : undefined,
+          sku: found.sku,
+          supplier: found.supplier,
+          supplierId: found.supplierId,
+        });
+        toast.success(`Produit trouvé : ${found.name}`);
+      } else {
+        toast.warning(`Aucun produit trouvé pour le code : ${code}`);
+      }
+    } catch {
+      toast.error('Erreur lors de la recherche par code-barres.');
+    } finally {
+      setBarcodeSearching(false);
+    }
+  }, []);
+
+  /** Handles rapid barcode-scanner input: accumulate chars, flush on Enter */
+  const handleBarcodeKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const code = barcodeBufferRef.current || barcodeValue;
+        if (code) {
+          void handleBarcodeSearch(code);
+          barcodeBufferRef.current = '';
+        }
+      } else {
+        // For HID scanners that fire blur immediately, buffer chars with a timer
+        barcodeBufferRef.current += e.key;
+        if (barcodeTimerRef.current) clearTimeout(barcodeTimerRef.current);
+        barcodeTimerRef.current = setTimeout(() => {
+          if (barcodeBufferRef.current.length > 3) {
+            void handleBarcodeSearch(barcodeBufferRef.current);
+            barcodeBufferRef.current = '';
+          }
+        }, 100);
+      }
+    },
+    [barcodeValue, handleBarcodeSearch]
+  );
 
   const handleScan = async () => {
     if (!tenantId) return;
@@ -125,6 +229,59 @@ export default function ReceptionDashboard() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-white p-6 md:p-10 font-ui">
+      {/* ── log-5: Barcode scan strip ───────────────────────────────────────── */}
+      <div className="mb-8 bg-[#161618] border border-border-subtle rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-text-secondary shrink-0">
+          <Barcode className="w-4 h-4 text-status-success" />
+          Scan code-barres
+        </div>
+        <div className="flex-1 relative">
+          <input
+            ref={barcodeRef}
+            type="text"
+            value={barcodeValue}
+            onChange={(e) => setBarcodeValue(e.target.value)}
+            onKeyDown={handleBarcodeKeyDown}
+            placeholder="Scannez ou saisissez un code-barres / SKU, puis Entrée…"
+            className="w-full bg-[#0a0a0b] border border-border-default rounded-xl px-4 py-3 text-sm font-medium text-white placeholder:text-text-secondary focus:outline-none focus:border-status-success transition-all"
+            autoComplete="off"
+          />
+          {barcodeSearching && (
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-status-success animate-pulse" />
+          )}
+        </div>
+        <button
+          onClick={() => { if (barcodeValue) { void handleBarcodeSearch(barcodeValue); } }}
+          disabled={!barcodeValue || barcodeSearching}
+          className="px-5 py-3 rounded-xl bg-status-success/10 text-status-success text-xs font-black uppercase tracking-widest hover:bg-status-success/20 disabled:opacity-40 transition-all whitespace-nowrap"
+        >
+          Rechercher
+        </button>
+      </div>
+
+      {/* Barcode result banner */}
+      {barcodeResult && (
+        <div className="mb-6 bg-status-success/10 border border-status-success/20 rounded-2xl px-5 py-4 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-status-success mb-1">
+              Produit identifié
+            </p>
+            <p className="font-bold text-white">{barcodeResult.name}</p>
+            <div className="flex gap-4 mt-1 text-[10px] text-text-secondary font-bold uppercase">
+              {barcodeResult.unit && <span>Unité : {barcodeResult.unit}</span>}
+              {barcodeResult.sku && <span>SKU : {barcodeResult.sku}</span>}
+              {barcodeResult.supplier && <span>Fournisseur : {barcodeResult.supplier}</span>}
+            </div>
+          </div>
+          <button
+            onClick={() => { setBarcodeResult(null); setBarcodeValue(''); }}
+            className="text-text-secondary hover:text-white text-xs font-black uppercase tracking-widest shrink-0"
+          >
+            Effacer
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <header className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-4">

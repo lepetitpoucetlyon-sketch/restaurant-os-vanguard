@@ -1,8 +1,7 @@
 import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';
 import { TimeSync } from './TimeSync';
 import { logger } from './logger';
-import { firestore } from './firebase';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
 import { MasterConfig, globalPolicyAtom } from '@nexus/state/SovereignGenome';
 import { CryptoService } from '@domain/services/CryptoService';
@@ -34,11 +33,10 @@ export const MasterBridge = {
     }
 
     const timestamp = TimeSync.now();
-    const configRef = doc(firestore, this.CONFIG_PATH);
     const pushedAt = new Date(timestamp).toISOString();
     const signedPayload = await this.sealMasterConfig(config, pushedAt);
 
-    await setDoc(configRef, signedPayload, { merge: true });
+    await Nexus.adapter.set(this.CONFIG_PATH, signedPayload, { merge: true });
   },
 
   getBridgeSecret(): string {
@@ -84,8 +82,7 @@ export const MasterBridge = {
     logger.debug("[MasterBridge] Establishing Vassal Tunnel to Master...");
     let lastUpdate = 0;
 
-    const configRef = doc(firestore, this.CONFIG_PATH);
-    return onSnapshot(configRef, async (snapshot) => {
+    return Nexus.adapter.onSnapshot<SignedMasterConfig | null>(this.CONFIG_PATH, async (data) => {
         const now = Date.now();
         if (now - lastUpdate < this.THROTTLE_LIMIT_MS) {
             logger.warn("[MasterBridge] FLOOD DETECTED: Throttling master order.");
@@ -93,8 +90,7 @@ export const MasterBridge = {
         }
         lastUpdate = now;
 
-        if (snapshot.exists()) {
-            const data = snapshot.data() as SignedMasterConfig;
+        if (data) {
             const serverTs = new Date(data.pushedAt).getTime();
             const timeNow = TimeSync.now();
 

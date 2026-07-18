@@ -64,7 +64,7 @@ export function AuthGate({ children }: AuthGateProps) {
     }
 
     // 3. LAYOUT WRAPPERS (Pure UI)
-    const isMccFullWidth = pathname?.startsWith('/admin/master-console') || pathname?.startsWith('/admin/mcc');
+    const isMccFullWidth = pathname?.startsWith('/admin/mcc');
     const isAuthPage = pathname?.startsWith('/auth') || pathname === '/login';
     const isFullWidth = isMccFullWidth || isAuthPage;
 

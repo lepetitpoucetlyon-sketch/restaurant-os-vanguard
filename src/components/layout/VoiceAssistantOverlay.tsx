@@ -72,7 +72,7 @@ export function VoiceAssistantOverlay() {
         sendText: _sendLiveText
     } = useGeminiLive();
 
-    const _error = chatError || liveError;
+    const error = chatError || liveError;
 
     const toggleDictation = useCallback(() => {
         if (isDictating && recognitionRef.current) {
@@ -210,6 +210,13 @@ export function VoiceAssistantOverlay() {
                                 formatText={formatAssistantText} 
                                 scrollRef={scrollRef} 
                             />
+                        )}
+
+                        {error && (
+                            <div className="shrink-0 mx-4 mb-2 px-4 py-3 rounded-xl bg-error/10 border border-error/20 flex items-center gap-3">
+                                <AlertTriangle className="w-4 h-4 text-error shrink-0" />
+                                <p className="text-[11px] font-medium text-error leading-snug">{error}</p>
+                            </div>
                         )}
 
                         {pendingAction && (

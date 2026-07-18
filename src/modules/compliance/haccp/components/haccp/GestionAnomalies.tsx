@@ -31,6 +31,7 @@ export function GestionAnomalies() {
             addNotification({ type: 'success', title: 'Anomalie résolue', message: 'L\'incident a été archivé dans le registre de conformité.' });
         } catch (e) {
             console.error(e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de résoudre l\'anomalie.' });
         }
     };
 

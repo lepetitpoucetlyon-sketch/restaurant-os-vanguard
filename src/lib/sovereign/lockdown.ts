@@ -1,4 +1,4 @@
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export async function generateFingerprint(): Promise<string> {
   const userAgent = navigator.userAgent;
@@ -40,20 +40,15 @@ export type VerificationResult =
   | { status: "REQUIRES_MANAGER_VALIDATION" };
 
 export async function verifyDevice(uid: string, currentFingerprint: string, isFixedAsset: boolean = false): Promise<VerificationResult> {
-  const db = getFirestore();
-
-  const userDocRef = doc(db, "users", uid);
-  const userDoc = await getDoc(userDocRef);
-  const userData = userDoc.exists() ? userDoc.data() : null;
+  const userData = await Nexus.adapter.get<Record<string, unknown>>(`users/${uid}`);
   const isSuperAdmin = userData?.role === "SUPER_ADMIN" || userData?.role === "super_admin";
 
-  const deviceDocRef = doc(db, "users", uid, "certifiedDevices", currentFingerprint);
-  const deviceDoc = await getDoc(deviceDocRef);
+  const devicePath = `users/${uid}/certifiedDevices/${currentFingerprint}`;
+  const deviceData = await Nexus.adapter.get<Record<string, unknown>>(devicePath);
 
-  if (!deviceDoc.exists()) {
+  if (!deviceData) {
     if (isSuperAdmin) {
-      // Auto-certify Super-Admin
-      await setDoc(deviceDocRef, {
+      await Nexus.adapter.set(devicePath, {
         fingerprint: currentFingerprint,
         certifiedAt: new Date().toISOString(),
         autoCertifiedAs: "SUPER_ADMIN",
@@ -66,12 +61,11 @@ export async function verifyDevice(uid: string, currentFingerprint: string, isFi
       return { status: "REQUIRES_MANAGER_VALIDATION" };
     }
 
-    const preferences2FA = userData?.preferences2FA || {};
+    const preferences2FA = (userData as Record<string, unknown>)?.preferences2FA as Record<string, boolean> || {};
     const methods: ("email" | "sms")[] = [];
     if (preferences2FA.email_enabled) methods.push("email");
     if (preferences2FA.sms_enabled) methods.push("sms");
 
-    // Si aucune méthode n'est configurée, on peut par exemple forcer la validation manager
     if (methods.length === 0) {
       return { status: "REQUIRES_MANAGER_VALIDATION" };
     }
@@ -79,7 +73,6 @@ export async function verifyDevice(uid: string, currentFingerprint: string, isFi
     return { status: "REQUIRES_2FA", methods };
   }
 
-  const deviceData = deviceDoc.data();
   if (deviceData?.revoked) {
     return { status: "REVOKED" };
   }
@@ -88,9 +81,7 @@ export async function verifyDevice(uid: string, currentFingerprint: string, isFi
 }
 
 export async function certifyDeviceWith2FA(uid: string, fingerprint: string): Promise<void> {
-  const db = getFirestore();
-  const deviceDocRef = doc(db, "users", uid, "certifiedDevices", fingerprint);
-  await setDoc(deviceDocRef, {
+  await Nexus.adapter.set(`users/${uid}/certifiedDevices/${fingerprint}`, {
     fingerprint,
     certifiedAt: new Date().toISOString(),
     certifiedVia: "2FA",
@@ -100,7 +91,5 @@ export async function certifyDeviceWith2FA(uid: string, fingerprint: string): Pr
 
 
 export async function revokeDevice(uid: string, fingerprint: string): Promise<void> {
-  const db = getFirestore();
-  const deviceDocRef = doc(db, "users", uid, "certifiedDevices", fingerprint);
-  await setDoc(deviceDocRef, { revoked: true, revokedAt: new Date().toISOString() }, { merge: true });
+  await Nexus.adapter.set(`users/${uid}/certifiedDevices/${fingerprint}`, { revoked: true, revokedAt: new Date().toISOString() }, { merge: true });
 }

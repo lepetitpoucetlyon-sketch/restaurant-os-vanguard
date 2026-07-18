@@ -1,8 +1,25 @@
-# Exclusions sentrux — code non-prod, à ne pas compter dans le score.
-# NOTE : mécanisme à confirmer (si scratch/ réapparaît dans le scan,
-# sentrux ne lit pas ce fichier — voir .sentrux/README.md).
-scratch/
+# Exclusions sentrux — code non-prod, ne doit pas influencer le score archi.
+
+# Artefacts de build
+.next/
 out/
+dist/
+
+# Tests (mocks, fixtures, benchmarks) — leur couplage est volontairement large
+src/tests/
+src/**/*.test.ts
+src/**/*.test.tsx
+src/**/*.spec.ts
+src/**/*.spec.tsx
+
+# Scripts de maintenance — pas du code applicatif
+scripts/
+
+# Outils de génération / analyse ponctuelle
+scratch/
 graphify-out/
 cartographie/
 analysis/
+
+# Dossiers de travail temporaires
+tmp/

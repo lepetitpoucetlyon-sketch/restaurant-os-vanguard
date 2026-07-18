@@ -44,7 +44,7 @@ export default function ProfileSettings() {
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [showPin, setShowPin] = useState(false);
-    const [_saveSuccess, setSaveSuccess] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
 
     const [formData, setFormData] = useState<ProfileData>({
         name: '',
@@ -410,16 +410,21 @@ export default function ProfileSettings() {
                             whileTap={{ scale: 0.95 }}
                             onClick={handleSave}
                             disabled={isSaving}
-                            className="flex items-center gap-4 px-12 py-6 bg-text-primary text-bg-primary rounded-[2rem] font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-all disabled:opacity-50 group border border-border"
+                            className={cn(
+                                "flex items-center gap-4 px-12 py-6 rounded-[2rem] font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-all disabled:opacity-50 group border",
+                                saveSuccess
+                                    ? "bg-success text-white border-success"
+                                    : "bg-text-primary text-bg-primary border-border"
+                            )}
                         >
                             {isSaving ? (
                                 <Loader2 className="w-6 h-6 animate-spin" />
+                            ) : saveSuccess ? (
+                                <BadgeCheck className="w-6 h-6" />
                             ) : (
-                                <div className="relative">
-                                    <Save className="w-6 h-6 transition-transform group-hover:scale-110" />
-                                </div>
+                                <Save className="w-6 h-6 transition-transform group-hover:scale-110" />
                             )}
-                            Commit Identity Profile
+                            {saveSuccess ? "Profil sauvegardé" : "Commit Identity Profile"}
                         </motion.button>
                     </motion.div>
                 )}

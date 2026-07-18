@@ -91,6 +91,7 @@ export function TracabiliteEtiquettes() {
             addNotification({ type: 'success', title: 'Produit retiré', message: 'L\'étiquette a été supprimée de l\'historique.' });
         } catch (e) {
             console.error(e);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de supprimer l\'étiquette.' });
         }
     };
 

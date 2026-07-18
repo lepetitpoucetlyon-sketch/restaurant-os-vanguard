@@ -18,7 +18,7 @@ export function TwoFactorChallenge() {
     const { showToast } = useToast();
     
     const [code, setCode] = useState("");
-    const [_isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [showRescueOptions, setShowRescueOptions] = useState(false);
     const [method, setMethod] = useState<'sms' | 'email'>('sms');
     const [activePhoneIndex, setActivePhoneIndex] = useState(0);
@@ -100,10 +100,10 @@ export function TwoFactorChallenge() {
                                 </p>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className={cn("space-y-4 transition-opacity", isLoading && "opacity-50 pointer-events-none")}>
                                 <div className="flex justify-between gap-2">
                                     {[0, 1, 2, 3, 4, 5].map((i) => (
-                                        <div 
+                                        <div
                                             key={i}
                                             className={cn(
                                                 "w-12 h-16 bg-bg-tertiary border-2 flex items-center justify-center rounded-xl text-2xl font-mono font-bold transition-all",
@@ -115,11 +115,12 @@ export function TwoFactorChallenge() {
                                         </div>
                                     ))}
                                 </div>
-                                <input 
+                                <input
                                     type="text"
                                     maxLength={6}
                                     value={code}
                                     onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                                    disabled={isLoading}
                                     autoFocus
                                     className="sr-only"
                                 />

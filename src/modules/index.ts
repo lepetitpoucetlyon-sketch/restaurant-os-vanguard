@@ -9,6 +9,5 @@ export * from './compliance';
 export * from './finance';
 export * from './human';
 export * from './intelligence';
-export * from './kds';
 export * from './logistics';
 export * from './ops';

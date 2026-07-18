@@ -1,7 +1,6 @@
 import { fleetTelemetry } from './FleetTelemetryService';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { logger } from '@/lib/logger';
-import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 /**
@@ -17,7 +16,7 @@ export const HACCPTelemetryBridge = {
    */
   async reportHygieneHealth(tenantId: string) {
     try {
-      const receptionsPath = getTenantPath('receptions', tenantId);
+      const receptionsPath = Nexus.getTenantPath('receptions', tenantId);
       const receptions = await Nexus.adapter.query(receptionsPath, {
         orderBy: { field: 'createdAt', direction: 'desc' },
         limit: 5

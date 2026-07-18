@@ -1,6 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { getTenantPath } from '@/lib/firebase';
 import { OrchestratorSignal } from '@/shared/nexus-contract';
 
 /**
@@ -28,7 +27,7 @@ export class QuantumOrchestrator {
 
             for (const tenantId of chunk) {
                 try {
-                    const configPath = getTenantPath('config/pricing', tenantId);
+                    const configPath = Nexus.getTenantPath('config/pricing', tenantId);
                     batch.update(configPath, { globalMultiplier: multiplier, updatedAt: Date.now() });
                     success++;
                 } catch (err) {
@@ -55,7 +54,7 @@ export class QuantumOrchestrator {
         let count = 0;
 
         for (const tenantId of tenantIds) {
-            const signalPath = getTenantPath('status', tenantId);
+            const signalPath = Nexus.getTenantPath('status', tenantId);
             const signal: Partial<OrchestratorSignal> = {
                 targetVersion: version,
                 otaUrl: otaUrl,
