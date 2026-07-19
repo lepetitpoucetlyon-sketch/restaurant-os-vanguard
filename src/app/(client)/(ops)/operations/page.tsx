@@ -239,7 +239,10 @@ export default function OperationsPage() {
                                     </motion.div>
                                 ))}
 
-                                <button className="border-2 border-dashed border-default rounded-[2.5rem] flex flex-col items-center justify-center gap-4 hover:border-default hover:bg-surface-bg transition-all min-h-[220px] group">
+                                <button
+                                    onClick={() => toast.info("Gérez vos unités depuis Admin → Paramètres → Plan de salle")}
+                                    className="border-2 border-dashed border-default rounded-[2.5rem] flex flex-col items-center justify-center gap-4 hover:border-default hover:bg-surface-bg transition-all min-h-[220px] group"
+                                >
                                     <div className="w-12 h-12 rounded-full bg-surface-bg flex items-center justify-center text-muted group-hover:bg-surface-sidebar group-hover:text-white transition-all">
                                         <Plus className="w-6 h-6" />
                                     </div>

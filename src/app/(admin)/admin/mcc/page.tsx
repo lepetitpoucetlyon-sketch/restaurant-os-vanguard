@@ -62,9 +62,6 @@ export default function MCCDashboard() {
   const [newCloneEmail, setNewCloneEmail] = useState('');
   const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
 
-  // Filter & Search
-  const [_searchQuery, _setSearchQuery] = useState('');
-
   const handleCreateClone = async () => {
     if (!newCloneName || !newCloneKey || !newCloneEmail) return;
 

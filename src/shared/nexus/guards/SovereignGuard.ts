@@ -216,7 +216,9 @@ export const SovereignGuard = {
     // Also allow specific whitelisted 'main' operations.
     // ⚠️ Match par SEGMENT, pas par sous-chaîne : `path.includes('config')`
     // whitelistait `tenants/victime/systemConfig/x` → fuite cross-tenant.
-    const WHITELIST = new Set(['heartbeat', 'telemetry', 'config', 'health', 'system', 'time_sync', 'auth']);
+    // 'fleet-telemetry' est une collection MCC cross-tenant (métriques d'instances,
+    // pas de données sensibles). Elle doit être whitelistée comme 'telemetry'.
+    const WHITELIST = new Set(['heartbeat', 'telemetry', 'fleet-telemetry', 'config', 'health', 'system', 'time_sync', 'auth']);
     const isWhitelisted = pathParts.some(seg => WHITELIST.has(seg));
     if (pathTenantId !== currentTenant && currentTenant !== 'restaurant-os' && !isWhitelisted) {
       if (process.env.NODE_ENV === 'test' && !process.env.STRICT_ISOLATION_TEST) {

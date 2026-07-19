@@ -28,7 +28,6 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const { t } = useLanguage();
-    const [_isScrolled, setIsScrolled] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -127,11 +126,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
 
                         {/* Grid Gallery - The Exhibition Floor */}
                         <motion.div
-                            onScroll={(e) => {
-                                const target = e.target as HTMLDivElement;
-                                setIsScrolled(target.scrollTop > 50);
-                            }}
-                            animate={{ y: isSearchActive ? 40 : 0, opacity: isSearchActive ? 0.9 : 1 }}
+                                animate={{ y: isSearchActive ? 40 : 0, opacity: isSearchActive ? 0.9 : 1 }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                             className="absolute inset-0 w-full h-full overflow-y-auto elegant-scrollbar pb-32 px-6 md:px-12 flex flex-col items-center"
                         >

@@ -260,9 +260,13 @@ export default function AgentIntelligencePage() {
                           {report?.complexity.godObjects[0] ? `"${`Modulariser ${report.complexity.godObjects[0].path} (${report.complexity.godObjects[0].lines} lignes)`}"` : '"Empire Stable"'}
                        </p>
                     </div>
-                    <button className="mt-8 w-full px-6 py-3 bg-action-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2">
-                       <FileCode className="w-4 h-4" />
-                       Lancer le Refactoring Automatisé
+                    <button
+                       className="mt-8 w-full px-6 py-3 bg-action-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                       onClick={fetchReport}
+                       disabled={loading}
+                    >
+                       <FileCode className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                       {loading ? "Analyse en cours..." : "Lancer le Refactoring Automatisé"}
                     </button>
                  </div>
               </div>
