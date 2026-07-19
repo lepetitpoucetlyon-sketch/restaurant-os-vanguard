@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Star, MessageSquare, ThumbsUp, Loader2, Check } from 'lucide-react';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface Review {
   id: string;
@@ -79,7 +80,7 @@ function ReviewCard({ review, restaurantName }: ReviewCardProps) {
   const handleGenerateResponse = async () => {
     setIsGenerating(true);
     try {
-      const res = await fetch('/api/ai/review-response', {
+      const res = await authedFetch('/api/ai/review-response', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

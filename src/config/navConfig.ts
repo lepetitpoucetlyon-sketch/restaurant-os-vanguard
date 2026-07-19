@@ -96,11 +96,9 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#EC4899', // Pink
         items: [
             { label: "Réservations", key: "reservations", href: "/reservations", icon: CalendarDays, category: "reservations" },
-            { label: "Réservations Omnicanal", key: "omnichannel", href: "/reservations?tab=omnicanal", icon: Globe, category: "reservations" },
             { label: "CRM Clients", key: "crm", href: "/crm", icon: Heart, category: "reservations" },
-            { label: "Devis", key: "quotes", href: "/marketing", icon: FileSpreadsheet, category: "reservations" },
+            { label: "Devis & Privatisation", key: "quotes", href: "/marketing?tab=quotes", icon: FileSpreadsheet, category: "reservations" },
             { label: "Groupes & Privatisation", key: "groups", href: "/groups", icon: PartyPopper, category: "reservations" },
-            { label: "Plan de Salle (Service)", key: "floor", href: "/floor-plan", icon: Book, category: "operations" },
         ]
     },
     {
@@ -112,7 +110,7 @@ export const NAV_SECTIONS: NavSection[] = [
         items: [
             { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: ChefHat, category: "kitchen" },
             { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen" },
-            { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=stockage", icon: Refrigerator, category: "inventory" },
+            { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=storage", icon: Refrigerator, category: "inventory" },
             { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory" },
             { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp" },
             { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: ShieldCheck, category: "haccp" },
@@ -125,7 +123,7 @@ export const NAV_SECTIONS: NavSection[] = [
         icon: Users,
         color: '#06B6D4', // Cyan
         items: [
-            { label: "Prise de Poste", key: "onboarding", href: "/staff?tab=team", icon: Briefcase, category: "onboarding" },
+            { label: "Prise de Poste", key: "onboarding", href: "/welcome-staff", icon: Briefcase, category: "onboarding" },
             { label: "Ressources Humaines", key: "hr", href: "/staff?tab=team", icon: Users, category: "staff" },
             { label: "Planning", key: "planning", href: "/staff?tab=planning", icon: CalendarRange, category: "planning" },
             { label: "Congés & Absences", key: "leaves", href: "/staff?tab=leaves", icon: Palmtree, category: "planning" },
@@ -140,7 +138,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#8B5CF6', // Purple
         items: [
             { label: "Analytique BI", key: "analytics", href: "/analytics", icon: BarChart3, category: "analytics" },
-            { label: "Google Analytics", key: "google_analytics", href: "/analytics?tab=profitability", icon: BarChart3, category: "analytics" },
+            { label: "Analyse Rentabilité", key: "google_analytics", href: "/analytics?tab=profitability", icon: BarChart3, category: "analytics" },
             { label: "Marketing & Social", key: "social_marketing", href: "/marketing", icon: Instagram, category: "analytics" },
             { label: "Référencement IA", key: "ai_referencing", href: "/marketing?tab=ai", icon: Bot, category: "analytics" },
             { label: "SEO & Référencement", key: "seo", href: "/marketing?tab=seo", icon: Globe, category: "analytics" },
@@ -185,16 +183,6 @@ export const NAV_SECTIONS: NavSection[] = [
         items: [
             { label: "Paramètres", key: "settings", href: "/settings", icon: Settings, category: "settings" },
             { label: "Gestion des Accès", key: "access_management", href: "/account-settings", icon: UserCog, category: "account-settings" },
-        ]
-    },
-    {
-        id: 'master',
-        key: 'master',
-        title: 'Intelligence',
-        icon: Bot,
-        color: '#F87171',
-        items: [
-            { label: "Antigravity Intelligence", key: "agent_dashboard", href: "/admin/agent", icon: Bot, category: "analytics" },
         ]
     },
 ];

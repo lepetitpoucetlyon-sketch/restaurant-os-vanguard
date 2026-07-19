@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 
 const BodySchema = z.object({
   reviewText: z.string().min(1).max(5000),
@@ -19,6 +20,9 @@ const GEMINI_MODEL = 'gemini-1.5-flash';
  * Retourne: { response: string }
  */
 export async function POST(req: NextRequest) {
+  const caller = await requireTenantUser(req);
+  if (isDenied(caller)) return caller;
+
   try {
     const body = await req.json().catch(() => null);
     const parsed = BodySchema.safeParse(body);

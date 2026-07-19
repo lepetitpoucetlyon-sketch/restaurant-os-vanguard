@@ -8,6 +8,7 @@ import { TelemetryPulse } from "@shared/nexus-contract";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { logger } from "@/lib/logger";
 import { fleetTelemetry } from "./FleetTelemetryService";
+import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
 
 class TelemetryService {
@@ -144,3 +145,10 @@ class TelemetryService {
 }
 
 export const NexusTelemetryService = new TelemetryService();
+
+// Inversion de dépendance anti-cycle : le wrapper shared (importé par
+// NexusInterceptor) délègue l'émission réelle des audit pulses ici, sans
+// jamais importer ce module statiquement.
+registerAuditPulseSink((pillar, action, data) =>
+    NexusTelemetryService.emitAuditPulse(pillar, action, data),
+);

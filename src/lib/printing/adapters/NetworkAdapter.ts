@@ -1,4 +1,5 @@
 import type { NetworkConnection, PrintResult } from '../types';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 export async function printNetworkRaw(
   conn: NetworkConnection,
@@ -31,7 +32,7 @@ async function printEposHttp(conn: NetworkConnection, data: Uint8Array): Promise
 async function printRawViaProxy(conn: NetworkConnection, data: Uint8Array): Promise<PrintResult> {
   // Next.js API route converts HTTP request to raw TCP on the server side
   try {
-    const res = await fetch('/api/print/network', {
+    const res = await authedFetch('/api/print/network', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

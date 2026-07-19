@@ -56,7 +56,7 @@ export class ManualAdapter implements IPaymentTerminalAdapter {
     this._status = 'connected';
   }
 
-  async refund(request: RefundRequest): Promise<RefundResult> {
+  async refund(_request: RefundRequest): Promise<RefundResult> {
     // Manual refund — operator performs it on their terminal, we just record
     return {
       status: 'approved',

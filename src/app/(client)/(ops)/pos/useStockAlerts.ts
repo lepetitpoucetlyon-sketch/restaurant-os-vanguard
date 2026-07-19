@@ -49,7 +49,7 @@ export function useStockAlerts(): Set<string> {
         return () => {
             if (timerRef.current) clearInterval(timerRef.current);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, []);
 
     return outOfStockIds;

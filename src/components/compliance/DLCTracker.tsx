@@ -62,7 +62,6 @@ export function DLCTracker() {
         try {
             const path = buildCollectionPath(tenantId ?? '');
             const now = Date.now();
-            const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
 
             // Query all items — filter client-side (Firestore range queries on nullable fields are tricky)
             const items = await Nexus.adapter.query<StockItemRaw>(path);

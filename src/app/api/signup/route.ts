@@ -36,7 +36,7 @@ function toTenantKey(name: string): string {
 async function resolveFreeTenantId(base: string): Promise<string> {
   const root = base || 'resto';
   for (let attempt = 0; attempt < 6; attempt++) {
-    const candidate = attempt === 0 ? root : `${root}-${Math.random().toString(36).slice(2, 6)}`;
+    const candidate = attempt === 0 ? root : `${root}-${crypto.randomUUID().slice(0, 6)}`;
     const existing = await Nexus.adapter.get(`tenants/${candidate}/tenantConfig`);
     if (!existing) return candidate;
     logger.warn(`[signup] tenantId collision on "${candidate}" — retrying`);

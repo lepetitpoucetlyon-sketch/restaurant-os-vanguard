@@ -29,7 +29,6 @@ import type { RAGHealthResult } from '@/lib/rag/SovereignRAGClient';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
 import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';
-import type { LightRAGKnowledgeGraph } from './LightRAGConfig';
 
 import type {
     KnowledgeQuery,

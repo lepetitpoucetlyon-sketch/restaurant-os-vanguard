@@ -180,6 +180,12 @@ export function usePOSController() {
         showToast("Article annulé", "success");
     }, [showToast]);
 
+    const handleSetItemNote = useCallback((cartId: string, note: string) => {
+        setCartItems((prev) =>
+            prev.map((item) => item.cartId !== cartId ? item : { ...item, notes: note || undefined })
+        );
+    }, []);
+
     const handleSendToKitchen = useCallback(async () => {
         if (cartItems.length === 0 || !currentTable) return;
 
@@ -333,5 +339,6 @@ export function usePOSController() {
         handlePaySplit,
         handleSetItemCourse,
         handleSendCourse,
+        handleSetItemNote,
     };
 }

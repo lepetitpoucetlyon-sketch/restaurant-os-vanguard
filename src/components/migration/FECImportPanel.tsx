@@ -78,7 +78,7 @@ export function FECImportPanel() {
         });
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
 
@@ -120,7 +120,7 @@ export function FECImportPanel() {
         message: err instanceof Error ? err.message : String(err),
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [state, tenantId, exercice]);
 
   const reset = () => setState({ phase: "idle" });

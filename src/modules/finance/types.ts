@@ -88,7 +88,7 @@ export interface AccountingContextType extends AccountingContextData {
     
     addJournalEntry: (entry: Omit<JournalEntry, 'id'>) => Promise<void>;
     updateJournalEntry: (id: string, updates: Partial<JournalEntry>) => Promise<void>;
-    deleteJournalEntry: (id: string) => Promise<void>;
+    // NF525 : pas de deleteJournalEntry — le ledger fiscal est immuable (jamais delete).
     validateJournalEntry: (id: string) => Promise<void>;
     
     addAccount: (account: Omit<Account, 'id'>) => Promise<void>;

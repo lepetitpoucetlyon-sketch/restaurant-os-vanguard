@@ -17,11 +17,9 @@ export function NexusServiceInitializer(): null {
     const store = useStore();
 
     useEffect(() => {
-        // 🧪 ROOT PURGE (Grade VI) - Clear legacy state on first boot
+        // Boot marker — no longer purges localStorage (LS-015: destroyed printer/terminal configs)
         if (typeof window !== 'undefined' && !sessionStorage.getItem('nexus_boot_purged')) {
-            localStorage.clear();
             sessionStorage.setItem('nexus_boot_purged', 'true');
-            logger.info('[NexusInitializer] Nuclear Cache Purge: Success');
         }
 
         if (!tenantId) {

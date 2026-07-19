@@ -319,7 +319,7 @@ export default function ProspectingDashboard() {
                             <div className="px-8 pb-6 border-t border-border/30 pt-5">
                                 <p className="text-xs font-black uppercase tracking-widest text-text-muted mb-3">Typographie</p>
                                 {tokens.fontBrandUrl && (
-                                    // eslint-disable-next-line @next/next/no-page-custom-font
+                                     
                                     <link rel="stylesheet" href={tokens.fontBrandUrl} />
                                 )}
                                 <div className="bg-bg-primary rounded-xl p-5 flex items-baseline gap-6">

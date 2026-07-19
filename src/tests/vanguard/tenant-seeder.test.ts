@@ -33,7 +33,7 @@ describe('TenantSeeder', () => {
       tenantId: 'test-resto',
       name: 'Test Resto',
       adminEmail: 'admin@test.fr',
-      adminPin: '1234',
+      adminPin: '2580', // PIN valide (hors blacklist) — sinon resolveAdminPin en génère un aléatoire
     });
 
     expect(result.success).toBe(true);
@@ -54,7 +54,7 @@ describe('TenantSeeder', () => {
     // Admin user
     expect(mockSet).toHaveBeenCalledWith(
       'tenants/test-resto/users/admin_test-resto',
-      expect.objectContaining({ email: 'admin@test.fr', pin: '1234', role: 'admin' })
+      expect.objectContaining({ email: 'admin@test.fr', pin: '2580', role: 'admin' })
     );
 
     // Genesis fiscal seal

@@ -83,7 +83,6 @@ export async function sovereignQuery(
     });
 
     if (!res.ok) {
-      const err = await res.text();
       return { answer: '', vetoed: false, latencyMs: Date.now() - t0 };
     }
 

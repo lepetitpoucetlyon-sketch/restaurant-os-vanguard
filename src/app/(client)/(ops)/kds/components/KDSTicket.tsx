@@ -10,7 +10,6 @@ import {
     MessageSquare,
     CheckCircle2,
     Flame,
-    ArrowRight,
     GripVertical,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";

@@ -11,7 +11,12 @@ const nextConfig: NextConfig = {
     root: workspaceRoot,
   },
   images: {
-    unoptimized: true,
+    // Production-grade image optimization — AVIF → WebP → JPEG fallback.
+    // `unoptimized: true` was previously used to avoid build issues but
+    // it disables all Next.js image processing (LCP penalty on menu photos).
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
   reactStrictMode: false,
   logging: {

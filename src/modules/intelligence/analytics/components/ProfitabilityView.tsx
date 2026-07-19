@@ -27,7 +27,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                         <div>
                             <h4 className="text-xl font-serif font-black italic text-text-primary">{alert.productName}</h4>
                             <p className="text-[9px] font-black text-error uppercase tracking-widest mt-1">
-                                Marge sous le seuil ({alert.currentMarginInCents / 100}%)
+                                Marge sous le seuil ({(alert.currentMarginBps / 100).toFixed(1)}%)
                             </p>
                         </div>
                         <TrendingUp className="w-6 h-6 text-error" />
@@ -36,7 +36,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                         <div>
                             <p className="text-[8px] font-black uppercase opacity-40 mb-1">Prix Suggéré</p>
                             <div className="text-3xl font-serif italic text-accent-gold font-black">
-                                {(alert.suggestedPriceInCents / 100).toFixed(2)}€
+                                {(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€
                             </div>
                         </div>
                         <Button className="h-11 px-8 bg-text-primary text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">

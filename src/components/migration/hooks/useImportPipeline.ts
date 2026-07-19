@@ -34,7 +34,6 @@ export function useImportPipeline(category: ImportCategory) {
   // Keep a stable ref for the raw file to pass to the importer
   const rawFileRef = useRef<File | null>(null);
 
-  const updateStage = (stage: ImportStage) => setState(s => ({ ...s, stage }));
   const updateProgress = (progress: number) => setState(s => ({ ...s, progress }));
 
   // Build auto-mappings from parsed headers → target fields

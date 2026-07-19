@@ -103,6 +103,7 @@ export interface StockItem {
     initialQuantity?: number;
     costInCents?: number;
     costInMicrounits?: number; // microunits = cents × 10 000
+    reorderQuantity?: number; // log-3: configurable per ingredient (g/unit), fallback 10 000
     createdAt?: string;
     updatedAt?: string;
 }

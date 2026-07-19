@@ -176,7 +176,7 @@ export class MergePayrollClient {
         let synced = 0;
 
         // Récupérer les employés existants pour réconciliation par matricule
-        let remoteMap = new Map<string, string>(); // matricule → merge ID
+        const remoteMap = new Map<string, string>(); // matricule → merge ID
         try {
             const remote = await this.listRemoteEmployees();
             for (const emp of remote) {

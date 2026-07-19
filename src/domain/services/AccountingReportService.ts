@@ -61,15 +61,6 @@ function formatEur(value: number): string {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
 }
 
-function toTimestamp(val: unknown): number {
-    if (typeof val === 'number') return val;
-    if (typeof val === 'string') return new Date(val).getTime();
-    if (val && typeof (val as { toMillis?: () => number }).toMillis === 'function') {
-        return (val as { toMillis: () => number }).toMillis();
-    }
-    return 0;
-}
-
 // ── Service ───────────────────────────────────────────────────────────────────
 
 export class AccountingReportService {

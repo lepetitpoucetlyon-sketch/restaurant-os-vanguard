@@ -8,7 +8,7 @@ import {
 import { printerService } from "@/lib/printing/PrintingService";
 import { isBluetoothSupported, scanBluetoothPrinters } from "@/lib/printing/adapters/BluetoothAdapter";
 import { isUSBSupported, requestUSBPrinter } from "@/lib/printing/adapters/USBAdapter";
-import { isSerialSupported, requestSerialPrinter } from "@/lib/printing/adapters/SerialAdapter";
+import { isSerialSupported } from "@/lib/printing/adapters/SerialAdapter";
 import type {
   PrinterDevice, PrinterBrand, PrinterRole, PrinterConnectionType,
   PaperWidth, PrinterConnection,
@@ -271,7 +271,7 @@ function AddPrinterWizard({ onClose, onAdded }: { onClose(): void; onAdded(): vo
 
           {step === "role" && <RoleStep onNext={role => next({ role }, "brand")} />}
           {step === "brand" && <BrandStep onNext={brand => next({ brand }, "connection")} />}
-          {step === "connection" && <ConnectionStep onNext={type => next({}, "configure")} brand={draft.brand ?? "generic"} />}
+          {step === "connection" && <ConnectionStep onNext={() => next({}, "configure")} brand={draft.brand ?? "generic"} />}
           {step === "configure" && (
             <ConfigureStep
               draft={draft}
@@ -336,7 +336,7 @@ function BrandStep({ onNext }: { onNext(b: PrinterBrand): void }) {
   );
 }
 
-function ConnectionStep({ onNext, brand }: { onNext(t: PrinterConnectionType): void; brand: PrinterBrand }) {
+function ConnectionStep({ onNext }: { onNext(t: PrinterConnectionType): void; brand: PrinterBrand }) {
   const btOk  = isBluetoothSupported();
   const usbOk = isUSBSupported();
   const serOk = isSerialSupported();

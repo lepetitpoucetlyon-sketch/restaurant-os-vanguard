@@ -13,7 +13,7 @@
  * Valider avec Silae avant mise en production.
  */
 
-import type { PrepaieRow, PayrollPeriodSummary, PayrollProviderConfig } from './types';
+import type { PayrollPeriodSummary, PayrollProviderConfig } from './types';
 import { logger } from '@/lib/logger';
 
 const DEFAULT_SILAE_URL = 'https://api.silae.fr';

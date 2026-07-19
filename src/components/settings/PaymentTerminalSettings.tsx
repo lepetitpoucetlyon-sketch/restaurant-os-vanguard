@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import {
     CreditCard, Plus, Trash2, Wifi, Bluetooth, Cloud, Usb,
-    CheckCircle2, AlertCircle, Loader2, Star, Settings2, ChevronDown, Zap,
+    CheckCircle2, AlertCircle, Loader2, Star, Zap,
 } from "lucide-react";
 import { terminalService } from "@/lib/payment-terminal/PaymentTerminalService";
 import { useNotifications } from '@/context/NotificationsContext';

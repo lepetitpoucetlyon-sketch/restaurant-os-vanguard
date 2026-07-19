@@ -6,11 +6,43 @@ import type { FiscalSeal } from '@nexus/contracts';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 
 export class FiscalSealer {
-  static generateReceiptNumber(): string {
+  /**
+   * 🏛️ NF525 Sequential Receipt Numbering (Grade X)
+   *
+   * Uses an atomic Firestore transaction to guarantee strictly sequential
+   * receipt numbers per tenant per year. The counter document lives at
+   * `tenants/{tenantId}/fiscalMeta/receiptCounter`.
+   *
+   * Format: {YEAR}-{COUNTER} (e.g. 2026-000042)
+   *
+   * Replaces the previous timestamp+random approach which did not guarantee
+   * sequential ordering as required by the NF525 certification standard.
+   */
+  static async generateSequentialReceiptNumber(tenantId: string): Promise<string> {
     const year = new Date().getFullYear().toString();
-    // Timestamp base-36 haute-résolution + suffix aléatoire 4 chars pour
-    // minimiser les collisions. Un compteur atomique serveur (FieldValue.increment)
-    // reste nécessaire pour une numérotation NF525 strictement séquentielle.
+    const counterPath = `tenants/${tenantId}/fiscalMeta/receiptCounter`;
+
+    let nextNumber: number = 1;
+    await Nexus.adapter.runTransaction(async (tx) => {
+      const doc = await tx.get<{ year: string; counter: number }>(counterPath);
+      if (doc && doc.year === year) {
+        nextNumber = (doc.counter ?? 0) + 1;
+      } else {
+        // New year or first receipt ever — reset counter
+        nextNumber = 1;
+      }
+      tx.set(counterPath, { year, counter: nextNumber, updatedAt: new Date().toISOString() });
+    });
+
+    return `${year}-${String(nextNumber).padStart(6, '0')}`;
+  }
+
+  /**
+   * @deprecated Use generateSequentialReceiptNumber(tenantId) for NF525 compliance.
+   * Kept for offline/training fallback only.
+   */
+  static generateReceiptNumberFallback(): string {
+    const year = new Date().getFullYear().toString();
     const ts = Date.now().toString(36).toUpperCase();
     const rnd = Math.random().toString(36).slice(2, 6).toUpperCase();
     return `${year}-${ts}-${rnd}`;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload } from "lucide-react";
+import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, TrendingUp, Zap } from "lucide-react";
 import type { Customer } from "@nexus/contracts";
 
 import { useCRM } from "@modules/ops";
@@ -16,8 +16,10 @@ import { EmailCampaign } from "@/components/crm/EmailCampaign";
 import { BasketAnalysis } from "@/components/crm/BasketAnalysis";
 import { VisitHistory } from "@/components/crm/VisitHistory";
 import { CustomerImportPanel } from "@/components/migration/CustomerImportPanel";
+import { RFMSegmentation } from "@/components/crm/RFMSegmentation";
+import { EmailAutomations } from "@/components/crm/EmailAutomations";
 
-type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import";
+type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
 
 export default function CrmPage() {
     const [activeTab, setActiveTab] = useState<CrmTab>("pipeline");
@@ -51,6 +53,8 @@ export default function CrmPage() {
                     { id: "import", label: "Import CSV", icon: Upload },
                     { id: "promos", label: "Codes Promo", icon: Tag },
                     { id: "emails", label: "Campagnes Email", icon: Mail },
+                    { id: "automations", label: "Automations", icon: Zap },
+                    { id: "rfm", label: "Segmentation RFM", icon: TrendingUp },
                     { id: "analytics", label: "Analytiques", icon: BarChart2 },
                 ] as const).map((tab) => {
                     const Icon = tab.icon;
@@ -159,6 +163,18 @@ export default function CrmPage() {
                 {activeTab === "emails" && (
                     <section className="max-w-2xl">
                         <EmailCampaign />
+                    </section>
+                )}
+
+                {activeTab === "automations" && (
+                    <section className="max-w-2xl">
+                        <EmailAutomations />
+                    </section>
+                )}
+
+                {activeTab === "rfm" && (
+                    <section className="max-w-4xl">
+                        <RFMSegmentation customers={customers} />
                     </section>
                 )}
 

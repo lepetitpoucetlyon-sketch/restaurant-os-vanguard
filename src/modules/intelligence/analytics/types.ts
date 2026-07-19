@@ -22,8 +22,8 @@ export interface ComplianceAlert {
 export interface ProfitabilityAlert {
     productId: string;
     productName: string;
-    currentMarginInCents: number;
-    suggestedPriceInCents: number;
+    currentMarginBps: number;
+    suggestedPriceInMicrounits: number;
     impactLevel: 'high' | 'medium' | 'low';
     category: string;
 }

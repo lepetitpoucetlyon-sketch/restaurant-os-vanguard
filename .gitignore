@@ -133,3 +133,6 @@ phase_*.txt
 05_vectors/
 99_quarantine/
 Ki_Map.md
+
+# Scratch / working files (scripts d'analyse jetables, non versionnés)
+scratch/

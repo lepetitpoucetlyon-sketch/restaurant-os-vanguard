@@ -46,7 +46,7 @@ export class SimulatorAdapter implements IPaymentTerminalAdapter {
     };
   }
 
-  async refund(request: RefundRequest): Promise<RefundResult> {
+  async refund(_request: RefundRequest): Promise<RefundResult> {
     await delay(1000);
     return {
       status: 'approved',
