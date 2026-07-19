@@ -59,7 +59,7 @@ export const FinancialNexusBridge = {
     // ── 2. Chaîne de scellement ───────────────────────────────────────────────
     // previousHash is managed atomically inside sealDataAtomically via chainHead —
     // never read it here to avoid hash-chain forks under concurrent orders.
-    const receiptNumber = FiscalSealer.generateReceiptNumber();
+    const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
     const entryId = SharedKernel.generateId('JE');
     const now = new Date().toISOString();
 

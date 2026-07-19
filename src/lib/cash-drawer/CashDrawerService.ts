@@ -10,6 +10,7 @@
  */
 
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 const ESC = 0x1b;
 const DRAWER_CMD = new Uint8Array([ESC, 0x40, ESC, 0x70, 0x00, 0x19, 0xfa]);
@@ -127,7 +128,7 @@ export class CashDrawerService {
     const port = this._config.networkPort ?? 9100;
 
     try {
-      const res = await fetch('/api/print/network', {
+      const res = await authedFetch('/api/print/network', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ip, port, data: Array.from(DRAWER_CMD) }),

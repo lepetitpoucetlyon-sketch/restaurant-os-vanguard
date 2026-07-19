@@ -14,7 +14,7 @@ import {
     LucideIcon, Plus, ArrowLeft, MoreHorizontal, Star, Pizza,
     UtensilsCrossed, GlassWater, Beef, Coffee, Zap,
     Percent, Tag, Gift, Trash2, X, Check,
-    Wallet, RotateCcw, Tablet, BookOpen, Printer
+    Wallet, RotateCcw, Tablet, BookOpen, Printer, MessageSquare
 } from "lucide-react";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
@@ -106,6 +106,7 @@ export default function POSPage() {
         handleSendToKitchen, handlePaymentComplete,
         handleCheckout, handlePaySplit,
         handleSetItemCourse, handleSendCourse,
+        handleSetItemNote,
     } = usePOSController();
 
     // ── USP-007: pre-select table from floor-plan (?table=<id>) ──────────────
@@ -131,6 +132,7 @@ export default function POSPage() {
     // ── Cart item context menu (pos-4) ────────────────────────────────────────
     const [contextMenuItem, setContextMenuItem] = useState<CartItem | null>(null);
     const [customDiscountValue, setCustomDiscountValue] = useState("");
+    const [noteValue, setNoteValue] = useState("");
     const contextMenuRef = useRef<HTMLDivElement>(null);
 
     // Close context menu on outside click
@@ -250,6 +252,7 @@ export default function POSPage() {
     const handleItemContextMenu = useCallback((cartId: string, item: CartItem) => {
         setContextMenuItem(item);
         setCustomDiscountValue("");
+        setNoteValue(item.notes ?? "");
     }, []);
 
     /** Execute an already-authorised POS action */
@@ -804,6 +807,50 @@ export default function POSPage() {
                                         className="mt-2 text-[10px] text-status-error hover:underline font-bold tracking-wider"
                                     >
                                         Retirer la remise actuelle ({contextMenuItem.discountPercent}%)
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* ── Note par article (pos-2) ─────────────────── */}
+                            <div className="mb-5">
+                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
+                                    <MessageSquare className="w-3 h-3" />
+                                    Note cuisine
+                                </p>
+                                <div className="flex gap-2">
+                                    <div className="flex-1 flex items-center gap-2 border border-border rounded-2xl px-4 h-10 bg-bg-primary focus-within:border-accent-gold/50 transition-colors">
+                                        <input
+                                            type="text"
+                                            value={noteValue}
+                                            onChange={(e) => setNoteValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    handleSetItemNote(contextMenuItem.cartId, noteValue);
+                                                    setContextMenuItem(null);
+                                                }
+                                            }}
+                                            placeholder="Sans oignons, bien cuit…"
+                                            maxLength={200}
+                                            className="flex-1 bg-transparent text-[12px] text-text-primary placeholder:text-text-muted/50 focus:outline-none"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            handleSetItemNote(contextMenuItem.cartId, noteValue);
+                                            setContextMenuItem(null);
+                                        }}
+                                        className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-white transition-all"
+                                        aria-label="Valider la note"
+                                    >
+                                        <Check className="w-4 h-4" />
+                                    </button>
+                                </div>
+                                {contextMenuItem.notes && (
+                                    <button
+                                        onClick={() => { handleSetItemNote(contextMenuItem.cartId, ""); setNoteValue(""); }}
+                                        className="mt-2 text-[10px] text-status-error hover:underline font-bold tracking-wider"
+                                    >
+                                        Effacer la note actuelle
                                     </button>
                                 )}
                             </div>

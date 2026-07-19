@@ -1,29 +1,22 @@
 "use client";
 
-import { useState, Suspense, useEffect, useMemo } from "react";
-import dynamic from "next/dynamic";
+import { useState, Suspense, useEffect, useMemo, useRef } from "react";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
-// Dynamic imports for settings components
-const HoursSettings = dynamic(() => import("@/components/settings/HoursSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ReservationSettingsComponent = dynamic(() => import("@/components/settings/ReservationSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const GoalsSettings = dynamic(() => import("@/components/settings/GoalsSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const StaffSettings = dynamic(() => import("@/components/settings/StaffSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const IntegrationSettings = dynamic(() => import("@/components/settings/IntegrationSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ReviewsSettings = dynamic(() => import("@/components/settings/ReviewsSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const MenuSettings = dynamic(() => import("@/components/settings/MenuSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ProfileSettings = dynamic(() => import("@/components/settings/ProfileSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const TablesSettings = dynamic(() => import("@/components/settings/TablesSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ExpertGovernanceHub = dynamic(() => import("@/components/settings/ExpertGovernanceHub"), { loading: () => <SettingsLoading />, ssr: false });
-const MigrationHub = dynamic(() => import("@/components/settings/MigrationHub"), { loading: () => <SettingsLoading />, ssr: false });
-const NexusSettings = dynamic(() => import("@/components/settings/NexusSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const PrinterSettings = dynamic(() => import("@/components/settings/PrinterSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const PaymentTerminalSettings = dynamic(() => import("@/components/settings/PaymentTerminalSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const CashDrawerSettings = dynamic(() => import("@/components/settings/CashDrawerSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const PayrollIntegrationPanel = dynamic(() => import("@/components/settings/PayrollIntegrationPanel").then(m => ({ default: m.PayrollIntegrationPanel })), { loading: () => <SettingsLoading />, ssr: false });
+// Panneaux lazy — extraits en registres pour garder ce fichier sous le seuil de fan-out.
+import { SettingsLoading } from "./_SettingsLoading";
+import {
+    ProfileSettings, ExpertGovernanceHub, NexusSettings, HoursSettings,
+    ReservationSettingsComponent, StaffSettings, MenuSettings, GoalsSettings,
+} from "./panelsCore";
+import {
+    IntegrationSettings, ReviewsSettings, TablesSettings, MigrationHub,
+    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel,
+} from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
 import { StandardSettingsEngine } from "@/components/settings/ui/StandardSettingsEngine";
@@ -84,18 +77,6 @@ const SETTINGS_CATEGORIES = [
     { id: 'cash-drawer', label: 'Tiroir-caisse', icon: Wallet, color: '#10B981' },
 ];
 
-function SettingsLoading() {
-    return (
-        <div className="space-y-8 animate-pulse">
-            <div className="h-64 rounded-[2.5rem] bg-surface-card" />
-            <div className="grid grid-cols-2 gap-8">
-                <div className="h-48 rounded-[2.5rem] bg-surface-card" />
-                <div className="h-48 rounded-[2.5rem] bg-surface-card" />
-            </div>
-        </div>
-    );
-}
-
 function SettingsPlaceholder({ category }: { category: typeof SETTINGS_CATEGORIES[0] }) {
     const Icon = category.icon;
     return (
@@ -117,7 +98,54 @@ export default function SettingsPage() {
     const [activeCategory, setActiveCategory] = useState(DEFAULT_SETTINGS_CATEGORY);
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
-    const { lastSaved } = useSettings();
+    const { lastSaved, settings, updateSettings } = useSettings();
+    const importInputRef = useRef<HTMLInputElement>(null);
+
+    const handleExport = () => {
+        if (!settings) { toast.error('Réglages non chargés'); return; }
+        const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `restaurant-os-settings-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast.success('Réglages exportés');
+    };
+
+    const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file) return;
+        try {
+            const parsed = JSON.parse(await file.text());
+            if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+                throw new Error('format');
+            }
+            await updateSettings?.(parsed);
+            toast.success('Réglages importés et synchronisés');
+        } catch {
+            toast.error('Fichier invalide — export JSON Restaurant OS attendu');
+        }
+    };
+
+    const handleReset = () => {
+        toast('Réinitialiser tous les réglages ?', {
+            action: {
+                label: 'Confirmer',
+                onClick: async () => {
+                    try {
+                        const { defaultSettings } = await import('@/context/settings/defaults');
+                        await updateSettings?.(defaultSettings);
+                        toast.success('Réglages réinitialisés aux valeurs par défaut');
+                    } catch {
+                        toast.error('Échec de la réinitialisation');
+                    }
+                },
+            },
+            cancel: { label: 'Annuler', onClick: () => {} },
+        });
+    };
     const activeConfig = useMemo(() => SETTINGS_CATEGORIES.find(c => c.id === activeCategory) || SETTINGS_CATEGORIES[0], [activeCategory]);
 
     useEffect(() => {
@@ -248,9 +276,10 @@ export default function SettingsPage() {
                                 </div>
                             )}
                             <div className="flex gap-2">
-                                <button className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Download className="w-4 h-4" /></button>
-                                <button className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Upload className="w-4 h-4" /></button>
-                                <button className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-error"><RotateCcw className="w-4 h-4" /></button>
+                                <button onClick={handleExport} title="Exporter les réglages (JSON)" className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Download className="w-4 h-4" /></button>
+                                <button onClick={() => importInputRef.current?.click()} title="Importer des réglages (JSON)" className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Upload className="w-4 h-4" /></button>
+                                <button onClick={handleReset} title="Réinitialiser aux valeurs par défaut" className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-error"><RotateCcw className="w-4 h-4" /></button>
+                                <input ref={importInputRef} type="file" accept="application/json" onChange={handleImportFile} className="hidden" />
                             </div>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Mail, Send, Users, Eye, Loader2, CheckCircle2, ChevronDown } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
+import { authedFetch } from "@/lib/client/authedFetch";
 
 type CampaignSegment = "all_active" | "inactive_3m" | "birthdays_this_month";
 
@@ -100,7 +101,7 @@ export function EmailCampaign() {
 
     setSendStatus("sending");
     try {
-      const res = await fetch("/api/crm/campaign", {
+      const res = await authedFetch("/api/crm/campaign", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ segment, subject: subject.trim(), body: body.trim() }),

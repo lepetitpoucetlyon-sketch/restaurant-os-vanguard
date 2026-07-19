@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
+import { requireTenantAdmin, isDenied } from "@/lib/server/adminAuthGuard";
 
 // NOTE: Set RESEND_API_KEY and RESEND_FROM_EMAIL in .env.local to enable real sends.
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -23,11 +24,15 @@ interface CustomerRecord {
 }
 
 async function getCustomersForSegment(
+  tenantId: string,
   segment: z.infer<typeof CampaignPayloadSchema>["segment"]
 ): Promise<CustomerRecord[]> {
   // Dynamic import to avoid bundling Nexus in a cold-start context
   const { Nexus } = await import("@/lib/nexus/NexusAdapter");
-  const all = await Nexus.adapter.query<CustomerRecord>("customers").catch(() => [] as CustomerRecord[]);
+  // Scoping tenant explicite : jamais la collection racine (fuite cross-tenant)
+  const all = await Nexus.adapter
+    .query<CustomerRecord>(`tenants/${tenantId}/customers`)
+    .catch(() => [] as CustomerRecord[]);
   const withEmail = all.filter((c) => Boolean(c.email?.trim()));
 
   const now = new Date();
@@ -51,6 +56,9 @@ async function getCustomersForSegment(
 }
 
 export async function POST(request: NextRequest) {
+  const caller = await requireTenantAdmin(request);
+  if (isDenied(caller)) return caller;
+
   try {
     const json = await request.json();
     const parse = CampaignPayloadSchema.safeParse(json);
@@ -59,7 +67,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { segment, subject, body } = parse.data;
-    const customers = await getCustomersForSegment(segment);
+    const customers = await getCustomersForSegment(caller.tenantId, segment);
 
     if (customers.length === 0) {
       return NextResponse.json({ success: true, sent: 0, message: "Aucun destinataire" });

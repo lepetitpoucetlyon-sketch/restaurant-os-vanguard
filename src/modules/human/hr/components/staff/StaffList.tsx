@@ -16,10 +16,9 @@ import { User } from "@nexus/contracts";
 interface StaffCardProps {
     user: User;
     onClick?: () => void;
-    onGeneratePaySlip?: (user: User) => void;
 }
 
-export const StaffCard = ({ user, onClick, onGeneratePaySlip }: StaffCardProps) => (
+export const StaffCard = ({ user, onClick }: StaffCardProps) => (
     <motion.div
         variants={staggerItem}
         whileHover={{ scale: 1.02, y: -4 }}
@@ -108,10 +107,9 @@ export const StaffCard = ({ user, onClick, onGeneratePaySlip }: StaffCardProps) 
 interface StaffListProps {
     users: User[];
     onOpenModal: (user?: User) => void;
-    onGeneratePaySlip?: (user: User) => void;
 }
 
-export const StaffList = ({ users, onOpenModal, onGeneratePaySlip }: StaffListProps) => {
+export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
     return (
         <motion.div
             variants={staggerContainer}
@@ -124,7 +122,6 @@ export const StaffList = ({ users, onOpenModal, onGeneratePaySlip }: StaffListPr
                     key={user.id}
                     user={user}
                     onClick={() => onOpenModal(user)}
-                    onGeneratePaySlip={onGeneratePaySlip}
                 />
             ))}
 

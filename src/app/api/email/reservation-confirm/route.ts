@@ -3,9 +3,21 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
+
+/**
+ * Vrai si l'appel provient d'un service interne (ex : /api/widget/book côté
+ * serveur pour le flux de réservation public) porteur du secret partagé.
+ * Deny-by-default : sans secret configuré, ce chemin est fermé.
+ */
+function hasInternalSecret(req: NextRequest): boolean {
+    const secret = process.env.INTERNAL_API_SECRET;
+    if (!secret) return false;
+    return req.headers.get('x-internal-secret') === secret;
+}
 
 interface ConfirmPayload {
     to: string;
@@ -139,6 +151,13 @@ function buildHtml({ name, date, time, covers, restaurantName }: ConfirmPayload)
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+    // Autorisé si : appel interne serveur (widget booking) OU utilisateur tenant authentifié.
+    // Sinon 404 « hidden door » — bloque tout relais de spam anonyme depuis le domaine.
+    if (!hasInternalSecret(request)) {
+        const caller = await requireTenantUser(request);
+        if (isDenied(caller)) return caller;
+    }
+
     try {
         const body = (await request.json()) as Partial<ConfirmPayload>;
 

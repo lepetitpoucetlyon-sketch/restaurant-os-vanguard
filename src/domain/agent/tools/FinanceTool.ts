@@ -4,7 +4,7 @@ import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { SovereignMath } from '@/shared/services/SovereignMath';
-import { Microunits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 import { ToolDefinition } from './types';
 
@@ -42,7 +42,7 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
             limit: 100 // Cap for speed, could be optimized with date range
         });
 
-        let totalRevenueInMicrounits = 0 as Microunits;
+        let totalRevenueInMicrounits = toMicrounits(0);
         let count = 0;
 
         seals.forEach(seal => {
@@ -52,7 +52,7 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
                 const microunits = data.amountInMicrounits || (data.amount ? SovereignMath.toMicrounits(data.amount) : 0);
                 
                 if (microunits > 0) {
-                    totalRevenueInMicrounits = (totalRevenueInMicrounits + microunits) as Microunits;
+                    totalRevenueInMicrounits = toMicrounits(totalRevenueInMicrounits + microunits);
                     count++;
                 }
             } catch (_e) {

@@ -90,7 +90,7 @@ export function CustomerImportPanel() {
         });
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
 
@@ -134,7 +134,7 @@ export function CustomerImportPanel() {
         message: err instanceof Error ? err.message : String(err),
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [state, tenantId]);
 
   const reset = () => setState({ phase: "idle" });

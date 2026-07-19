@@ -47,7 +47,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser, prefillData }: S
         pin: '',
         avatar: '',
         hourlyRate: 15,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [editingUser, prefillData?.name, prefillData?.role]);
 
     const [formData, setFormData] = useState(defaultFormData);

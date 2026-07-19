@@ -6,6 +6,7 @@ import { Mail, AlignLeft, PenLine, Send, Save, Loader2, Info } from 'lucide-reac
 import { toast } from 'sonner';
 import { useTenant } from '@/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface EmailTemplate {
   subject: string;
@@ -91,7 +92,7 @@ export default function MigrationEmailTemplate() {
     }
     setSending(true);
     try {
-      const res = await fetch('/api/crm/campaign', {
+      const res = await authedFetch('/api/crm/campaign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

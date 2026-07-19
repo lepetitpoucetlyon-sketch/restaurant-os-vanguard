@@ -48,7 +48,7 @@ function findColumn(row: Record<string, string>, candidates: string[]): string {
   return '';
 }
 
-export function buildColumnMapping(source: SourceSystem): Record<string, string[]> {
+export function buildColumnMapping(_source: SourceSystem): Record<string, string[]> {
   const base: Record<string, string[]> = {
     name: ['name', 'nom', 'article', 'libellé', 'product_name', 'ProductName', 'plat', 'designation'],
     categoryName: ['category', 'categorie', 'catégorie', 'famille', 'category_id', 'section'],
@@ -76,7 +76,7 @@ Extrait tous les plats et retourne UNIQUEMENT un objet JSON valide sans markdown
 
   const result = await res.json();
   onProgress(40);
-  let json = result.content.replace(/```json/g, '').replace(/```/g, '').trim();
+  const json = result.content.replace(/```json/g, '').replace(/```/g, '').trim();
   const data = JSON.parse(json) as { categories: { name: string; type: string; sortOrder: number }[]; products: { name: string; description: string; price: number; categoryName: string; taxRate: number }[] };
 
   return _injectMenuData(data, onProgress);

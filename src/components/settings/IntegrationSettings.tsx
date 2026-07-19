@@ -24,14 +24,14 @@ import { useNotifications } from '@/context/NotificationsContext';
 import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 
 const INTEGRATIONS_METADATA = [
-    { id: 'stripe', name: 'Stripe', category: 'Payment Gateway', icon: CreditCard, description: 'Neural Payment Processing' },
-    { id: 'paypal', name: 'PayPal', category: 'Payment Gateway', icon: CreditCard, description: 'Global Alternative Rails' },
-    { id: 'thefork', name: 'TheFork', category: 'Reservation Grid', icon: Calendar, description: 'Bookings Synchronization' },
-    { id: 'google', name: 'Google Business', category: 'Growth Matrix', icon: Globe, description: 'Global Maps Synchronization' },
-    { id: 'mailchimp', name: 'Mailchimp', category: 'Growth Matrix', icon: Mail, description: 'Outbound Signal Campaigns' },
-    { id: 'twilio', name: 'Twilio', category: 'Signal Protocol', icon: MessageSquare, description: 'SMS & Signal Dispatch' },
-    { id: 'uber', name: 'Uber Eats', category: 'Logistics Node', icon: ShoppingCart, description: 'Remote Acquisitions' },
-    { id: 'deliveroo', name: 'Deliveroo', category: 'Logistics Node', icon: ShoppingCart, description: 'Remote Acquisitions' },
+    { id: 'stripe', name: 'Stripe', category: 'Payment Gateway', icon: CreditCard, description: 'Neural Payment Processing', dashboardUrl: 'https://dashboard.stripe.com' },
+    { id: 'paypal', name: 'PayPal', category: 'Payment Gateway', icon: CreditCard, description: 'Global Alternative Rails', dashboardUrl: 'https://www.paypal.com/businessmanage' },
+    { id: 'thefork', name: 'TheFork', category: 'Reservation Grid', icon: Calendar, description: 'Bookings Synchronization', dashboardUrl: 'https://manager.thefork.com' },
+    { id: 'google', name: 'Google Business', category: 'Growth Matrix', icon: Globe, description: 'Global Maps Synchronization', dashboardUrl: 'https://business.google.com' },
+    { id: 'mailchimp', name: 'Mailchimp', category: 'Growth Matrix', icon: Mail, description: 'Outbound Signal Campaigns', dashboardUrl: 'https://admin.mailchimp.com' },
+    { id: 'twilio', name: 'Twilio', category: 'Signal Protocol', icon: MessageSquare, description: 'SMS & Signal Dispatch', dashboardUrl: 'https://console.twilio.com' },
+    { id: 'uber', name: 'Uber Eats', category: 'Logistics Node', icon: ShoppingCart, description: 'Remote Acquisitions', dashboardUrl: 'https://merchants.ubereats.com' },
+    { id: 'deliveroo', name: 'Deliveroo', category: 'Logistics Node', icon: ShoppingCart, description: 'Remote Acquisitions', dashboardUrl: 'https://restaurant-hub.deliveroo.net' },
 ];
 
 export default function IntegrationSettings() {
@@ -221,7 +221,11 @@ export default function IntegrationSettings() {
                                                 {integration.isActive ? 'Terminate Link' : 'Initialize Session'}
                                             </button>
                                             {integration.isActive && (
-                                                <button className="w-12 h-12 bg-bg-tertiary border border-border text-text-muted rounded-xl flex items-center justify-center hover:bg-bg-primary hover:text-text-primary transition-all transform hover:rotate-12">
+                                                <button
+                                                    onClick={() => window.open(meta.dashboardUrl, '_blank', 'noopener,noreferrer')}
+                                                    title={`Ouvrir le dashboard ${meta.name}`}
+                                                    className="w-12 h-12 bg-bg-tertiary border border-border text-text-muted rounded-xl flex items-center justify-center hover:bg-bg-primary hover:text-text-primary transition-all transform hover:rotate-12"
+                                                >
                                                     <ExternalLink className="w-5 h-5" />
                                                 </button>
                                             )}

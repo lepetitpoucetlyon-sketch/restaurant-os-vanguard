@@ -39,12 +39,21 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
     tenantData.theme?.logoUrl ??
     null;
 
+  // Forward card-imprint config so the widget can show the guarantee step
+  const resaRaw = (tenantData as Record<string, unknown>).reservationConfig as Record<string, unknown> | undefined;
+  const cardImprintConfig = {
+    enabled: resaRaw?.cardImprintEnabled === true,
+    condition: (resaRaw?.cardImprintCondition as string | undefined) ?? 'group',
+    groupMin: (resaRaw?.cardImprintGroupMin as number | undefined) ?? 5,
+    penaltyAmount: (resaRaw?.cardImprintPenaltyAmount as number | undefined) ?? 20,
+    cancelHours: (resaRaw?.cardImprintCancelHours as number | undefined) ?? 24,
+  };
+
   return (
     <div className="w-full max-w-md mx-auto">
       {/* Branding header */}
       <div className="flex flex-col items-center mb-6 gap-3">
         {logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={logoUrl}
             alt={restaurantName}
@@ -61,7 +70,11 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
         <p className="text-sm text-gray-500">Réserver une table</p>
       </div>
 
-      <ReservationWidget tenantId={slug} restaurantName={restaurantName} />
+      <ReservationWidget
+        tenantId={slug}
+        restaurantName={restaurantName}
+        cardImprintConfig={cardImprintConfig}
+      />
     </div>
   );
 }

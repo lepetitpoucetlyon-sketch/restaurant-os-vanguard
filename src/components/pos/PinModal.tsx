@@ -30,7 +30,7 @@ export function PinModal({ isOpen, title, onConfirm, onClose, error }: PinModalP
             return () => clearTimeout(timer);
         }
     // inputRefs is stable (refs don't change identity), so this is correct
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [isOpen]);
 
     // Clear error by resetting digits when error appears
@@ -40,7 +40,7 @@ export function PinModal({ isOpen, title, onConfirm, onClose, error }: PinModalP
             const timer = setTimeout(() => inputRefs[0].current?.focus(), 60);
             return () => clearTimeout(timer);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [error]);
 
     const submit = (pinDigits: string[]) => {

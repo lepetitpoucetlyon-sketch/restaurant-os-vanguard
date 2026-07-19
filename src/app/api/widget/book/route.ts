@@ -13,6 +13,7 @@ const BookSchema = z.object({
   email: z.string().email().max(254),
   phone: z.string().max(30).optional().default(''),
   notes: z.string().max(500).optional().default(''),
+  stripePaymentMethodId: z.string().max(100).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -37,6 +38,7 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       notes,
+      stripePaymentMethodId,
     } = parsed.data;
 
     const context = { vassalId: tenantId, actorId: 'widget' };
@@ -62,6 +64,9 @@ export async function POST(request: NextRequest) {
       guestPhone: phone || undefined,
       guestFirstName: firstName,
       guestLastName: lastName,
+      // Empreinte bancaire — populated when card imprint was collected
+      stripePaymentMethodId: stripePaymentMethodId ?? undefined,
+      cardImprintCollectedAt: stripePaymentMethodId ? Date.now() : undefined,
     };
 
     await Nexus.adapter.create(`reservations/${id}`, reservation, context);
@@ -72,7 +77,10 @@ export async function POST(request: NextRequest) {
     try {
       await fetch(`${request.nextUrl.origin}/api/email/reservation-confirm`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-secret': process.env.INTERNAL_API_SECRET ?? '',
+        },
         body: JSON.stringify({
           tenantId,
           bookingRef: id,

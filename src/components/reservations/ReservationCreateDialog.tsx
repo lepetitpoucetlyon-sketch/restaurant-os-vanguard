@@ -65,7 +65,7 @@ export function ReservationCreateDialog({
         if (suggestedTable && !formData.tableId) {
             setFormData((f) => ({ ...f, tableId: suggestedTable.id }));
         }
-    }, [suggestedTable]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [suggestedTable]);  
 
     const filteredCustomers = useMemo(
         () =>

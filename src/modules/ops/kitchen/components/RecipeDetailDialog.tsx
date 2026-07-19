@@ -47,7 +47,6 @@ function printRecipeTechnicalSheet(recipe: Recipe, currentPortions: number) {
         .map((step, i) => `<li><strong>Étape ${i + 1}:</strong> ${step.instruction ?? ''}</li>`)
         .join('');
 
-    const allergens = (recipe.allergens ?? []).join(', ') || 'Aucun';
     const foodCostMu = computeRecipeFoodCostInMu(recipe);
     const saleMu = recipeSalePriceInMu(recipe);
     const fcPct = foodCostPct(foodCostMu, saleMu);

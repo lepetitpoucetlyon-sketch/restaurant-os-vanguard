@@ -280,16 +280,15 @@ export interface IngredientPricePoint {
 export interface ProfitabilityAlert {
     productId: string;
     productName: string;
-    currentMarginInCents: number;
-    currentMarginInMicrounits?: number; // microunits = cents × 10 000
-    currentMargin: number; // Alias for UI
-    targetMarginInCents: number;
-    targetMarginInMicrounits?: number; // microunits = cents × 10 000
-    targetMargin: number; // Alias for UI
+    currentMarginBps: number;
+    currentMargin: number;
+    targetMarginBps: number;
+    targetMargin: number;
     status: 'ok' | 'critical';
-    suggestedPriceInCents: number;
-    suggestedPriceInMicrounits?: number; // microunits = cents × 10 000
-    suggestedPrice: number; // Alias for UI
+    suggestedPriceInMicrounits: number;
+    suggestedPrice: number;
+    impactLevel?: 'high' | 'medium' | 'low';
+    category?: string;
 }
 
 // 5. DIGITAL TWIN SIMULATOR

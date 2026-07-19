@@ -46,16 +46,16 @@ export interface QuoteLine {
     quantity: number;
     unit: string;
 
-    // Prix
-    unitPriceHTInCents: number;
+    // Prix (microunits: 1€ = 1_000_000)
+    unitPriceHTInMicrounits: number;
     discountPercent?: number;
-    discountAmountInCents?: number;
-    totalHTInCents: number;
+    discountAmountInMicrounits?: number;
+    totalHTInMicrounits: number;
 
     // TVA
     vatRate: number;  // 5.5, 10, 20
-    vatAmountInCents: number;
-    totalTTCInCents: number;
+    vatAmountInMicrounits: number;
+    totalTTCInMicrounits: number;
 
     // Options
     isOptional: boolean;

@@ -93,7 +93,6 @@ function ImportPreviewTable({
   headers,
   warnings,
   extraWarnings,
-  category,
   onImport,
   onBack,
 }: {

@@ -320,7 +320,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                             </label>
                             {formPhoto && (
                                 <div className="relative mt-2 w-20 h-20">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    { }
                                     <img src={formPhoto} alt="Preview" className="w-20 h-20 object-cover rounded-lg border border-border" />
                                     <button
                                         onClick={() => { setFormPhoto(undefined); setFormPhotoName(''); }}
@@ -428,7 +428,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                                     {nc.photoRef && (
                                         <div>
                                             <p className="text-xs text-text-muted mb-1">Photo</p>
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            { }
                                             <img
                                                 src={nc.photoRef}
                                                 alt="Photo non-conformité"

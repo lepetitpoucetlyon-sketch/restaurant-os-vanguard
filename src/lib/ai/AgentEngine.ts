@@ -84,7 +84,7 @@ export const AgentEngine = {
                 rawText: "Analyse terminée."
             };
 
-        } catch (error) {
+        } catch {
             throw new Error('Échec du moteur de raisonnement expert.');
         }
 

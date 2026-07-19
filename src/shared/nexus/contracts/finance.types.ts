@@ -247,7 +247,7 @@ export interface AccountingContextType {
     addJournalEntry: (entry: JournalEntry) => Promise<void>;
     addManualJournalEntry: (entry: JournalEntry) => Promise<void>;
     updateJournalEntry: (id: string, updates: Partial<JournalEntry>) => Promise<void>;
-    deleteJournalEntry: (id: string) => Promise<void>;
+    // NF525 : pas de deleteJournalEntry — le ledger fiscal est immuable (jamais delete).
     addAccount: (account: Account) => Promise<void>;
     updateAccount: (id: string, updates: Partial<Account>) => Promise<void>;
     submitExpenseClaim: (claim: ExpenseClaim, receiptBlob?: string) => Promise<void>;

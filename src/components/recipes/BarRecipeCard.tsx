@@ -6,6 +6,7 @@
  * Renders bar-specific fields: baseSpirit, mixers, garnish, servingMethod, glassType.
  */
 
+import { createElement } from 'react';
 import { Wine, GlassWater, Layers, RotateCcw, Droplets, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/ui.foundations';
@@ -58,7 +59,6 @@ export interface BarRecipeCardProps {
 
 export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps) {
   const servingLabel = resolveServingLabel(recipe.servingMethod as string | undefined);
-  const ServingIcon = resolveServingIcon(recipe.servingMethod as string | undefined);
   const mixers = (recipe.mixers || []) as string[];
   const categoryLabel = recipe.category?.toUpperCase() ?? 'BAR';
 
@@ -89,7 +89,7 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
 
         {servingLabel && (
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 rounded-xl border border-accent/20 shrink-0 ml-3">
-            <ServingIcon className="w-3 h-3 text-accent" strokeWidth={1.5} />
+            {createElement(resolveServingIcon(recipe.servingMethod as string | undefined), { className: 'w-3 h-3 text-accent', strokeWidth: 1.5 })}
             <span className="text-[9px] font-black text-accent uppercase tracking-wider">
               {servingLabel}
             </span>

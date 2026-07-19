@@ -45,7 +45,6 @@ const ZONES = [
     { id: 'bar', label: 'Bar', icon: Wine, tasks: ['Nettoyer la machine à café', 'Désinfecter le plan de bar', 'Vidanger les bacs de rinçage'] },
 ] as const;
 
-type ZoneId = (typeof ZONES)[number]['id'];
 
 const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
@@ -122,7 +121,7 @@ export function CleaningPlan() {
         } finally {
             setLoading(false);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [tenantId, weekDates[0]]);
 
     useEffect(() => {
