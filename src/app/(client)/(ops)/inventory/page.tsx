@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
     Package,
     Warehouse,
@@ -309,7 +310,14 @@ function AdjustStockModal({
 // ── Main page ──────────────────────────────────────────────────────────────────
 
 export default function InventoryPage() {
-    const [activeTab, setActiveTab] = useState<InvTab>("stock");
+    const searchParams = useSearchParams();
+const _TAB_ALIASES: Record<string, InvTab> = { stockage: "storage", stocks: "stock" };
+const _VALID_INV_TABS: InvTab[] = ["stock", "storage", "rotating_count"];
+const _rawTab = searchParams.get("tab") ?? "";
+const _initTab: InvTab = _VALID_INV_TABS.includes(_rawTab as InvTab)
+    ? (_rawTab as InvTab)
+    : (_TAB_ALIASES[_rawTab] ?? "stock");
+const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
     const [receptionOpen, setReceptionOpen] = useState(false);
     const [transferOpen, setTransferOpen] = useState(false);
     const [prepOpen, setPrepOpen] = useState(false);

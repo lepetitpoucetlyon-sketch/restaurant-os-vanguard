@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import {
     BookOpen,
     Receipt,
@@ -114,7 +115,12 @@ function muToEur(mu: number): number {
 // ── Page component ────────────────────────────────────────────────────────────
 
 export default function FinancePage() {
-    const [activeTab, setActiveTab] = useState<FinanceTab>("accounting");
+    const searchParams = useSearchParams();
+const _tabParam = searchParams.get("tab") as FinanceTab | null;
+const _VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "audit"];
+const [activeTab, setActiveTab] = useState<FinanceTab>(
+    _tabParam && _VALID_FINANCE_TABS.includes(_tabParam) ? _tabParam : "accounting"
+);
     const [claimOpen, setClaimOpen] = useState(false);
     const [closingZ, setClosingZ] = useState(false);
     const [billingOrder, setBillingOrder] = useState<string | null>(null);

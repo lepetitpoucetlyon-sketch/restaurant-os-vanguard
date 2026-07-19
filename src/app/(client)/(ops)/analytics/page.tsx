@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   TrendingUp,
   TrendingDown,
@@ -218,7 +219,12 @@ const EXAMPLE_ALERTS: MacroBrainAlert[] = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function AnalyticsPage() {
-  const [activeTab, setActiveTab] = useState<AnalyticsTab>("profitability");
+  const searchParams = useSearchParams();
+const _tabParam = searchParams.get("tab") as AnalyticsTab | null;
+const _VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];
+const [activeTab, setActiveTab] = useState<AnalyticsTab>(
+    _tabParam && _VALID_ANALYTICS_TABS.includes(_tabParam) ? _tabParam : "profitability"
+);
   const [macroAlerts, setMacroAlerts] = useState<MacroBrainAlert[]>([]);
   const [attendance, setAttendance] = useState<{
     low: number;
