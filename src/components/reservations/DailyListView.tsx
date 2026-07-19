@@ -33,7 +33,7 @@ export function DailyListView({
     setNoShowConfirmId,
     isLoading,
 }: DailyListViewProps) {
-    const sorted = [...reservations].sort((a, b) => a.time.localeCompare(b.time));
+    const sorted = [...reservations].sort((a, b) => (a.time ?? '').localeCompare(b.time ?? ''));
 
     return (
         <div className="flex-1 overflow-y-auto p-6 space-y-3">

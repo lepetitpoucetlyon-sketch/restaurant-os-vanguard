@@ -48,21 +48,23 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const runSimulation = useCallback(async (config: { name: string; description: string; inputs?: { priceChange?: number } }) => {
         logger.debug('[FleetIntelligence] Running simulation...', config);
-        await new Promise(r => setTimeout(r, 1500));
+        const priceChange = config.inputs?.priceChange ?? 1;
+        const baseRevenue = globalMetrics?.fleetTotalRevenue ?? 0;
+        const instanceCount = liveFleet.length;
         const newScenario = {
-            id: `sim_${Date.now()}`,
+            id: crypto.randomUUID(),
             name: config.name,
             description: config.description,
-            confidenceScore: 0.85 + Math.random() * 0.1,
+            confidenceScore: Math.min(0.97, 0.70 + instanceCount * 0.05),
             projections: {
-                revenueImpact: 12500 * (config.inputs?.priceChange || 1),
-                laborCostImpact: -4500,
-                netProfitChange: 8000
+                revenueImpact: Math.round(baseRevenue * priceChange * 0.12),
+                laborCostImpact: Math.round(baseRevenue * -0.04),
+                netProfitChange: Math.round(baseRevenue * priceChange * 0.08)
             },
             inputs: config.inputs || {}
         };
         setScenarios(prev => [newScenario, ...prev]);
-    }, []);
+    }, [globalMetrics, liveFleet.length]);
     
     const setInstanceIds = useSetAtom(fleetSnapshotAtom);
     const tenantConfig = useAtomValue(tenantConfigAtom);

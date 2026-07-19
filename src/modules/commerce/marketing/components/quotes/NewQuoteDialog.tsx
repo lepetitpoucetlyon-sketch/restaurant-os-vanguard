@@ -28,20 +28,20 @@ interface NewQuoteDialogProps {
     onClose: () => void;
 }
 
-type QuoteProduct = { name?: string; priceInCents?: number; unitCostInCents?: number };
+type QuoteProduct = { name?: string; priceInMicrounits?: number; priceInCents?: number; unitCostInCents?: number };
 function createQuoteLine(product?: QuoteProduct): Partial<QuoteLine> {
-    const price = product?.priceInCents ?? product?.unitCostInCents ?? 0;
+    const price = product?.priceInMicrounits ?? ((product?.priceInCents ?? product?.unitCostInCents ?? 0) * 10_000);
     return {
         id: crypto.randomUUID(),
         type: product ? 'product' : 'service',
         designation: product?.name ?? '',
         quantity: 1,
-        unitPriceHTInCents: price,
+        unitPriceHTInMicrounits: price,
         vatRate: 20,
         unit: 'unité',
-        totalHTInCents: price,
-        totalTTCInCents: Math.round(price * 1.2),
-        vatAmountInCents: Math.round(price * 0.2)
+        totalHTInMicrounits: price,
+        totalTTCInMicrounits: Math.round(price * 1.2),
+        vatAmountInMicrounits: Math.round(price * 0.2)
     };
 }
 
@@ -86,14 +86,14 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                 const updatedLine = { ...l, ...updates };
 
                 // Recalculate totals
-                if (updates.quantity !== undefined || updates.unitPriceHTInCents !== undefined || updates.vatRate !== undefined) {
+                if (updates.quantity !== undefined || updates.unitPriceHTInMicrounits !== undefined || updates.vatRate !== undefined) {
                     const q = updatedLine.quantity || 0;
-                    const p = updatedLine.unitPriceHTInCents || 0;
+                    const p = updatedLine.unitPriceHTInMicrounits || 0;
                     const v = updatedLine.vatRate || 20;
 
-                    updatedLine.totalHTInCents = Math.round(q * p);
-                    updatedLine.vatAmountInCents = Math.round(updatedLine.totalHTInCents * (v / 100));
-                    updatedLine.totalTTCInCents = updatedLine.totalHTInCents + updatedLine.vatAmountInCents;
+                    updatedLine.totalHTInMicrounits = Math.round(q * p);
+                    updatedLine.vatAmountInMicrounits = Math.round(updatedLine.totalHTInMicrounits * (v / 100));
+                    updatedLine.totalTTCInMicrounits = updatedLine.totalHTInMicrounits + updatedLine.vatAmountInMicrounits;
                 }
 
                 return updatedLine;
@@ -103,10 +103,10 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     };
 
     const calculateTotals = () => {
-        const totalHTInCents = lines.reduce((sum, l) => sum + (l.totalHTInCents || 0), 0);
-        const totalVATInCents = lines.reduce((sum, l) => sum + (l.vatAmountInCents || 0), 0);
-        const totalTTCInCents = lines.reduce((sum, l) => sum + (l.totalTTCInCents || 0), 0);
-        return { totalHTInCents, totalVATInCents, totalTTCInCents };
+        const totalHTInMicrounits = lines.reduce((sum, l) => sum + (l.totalHTInMicrounits || 0), 0);
+        const totalVATInMicrounits = lines.reduce((sum, l) => sum + (l.vatAmountInMicrounits || 0), 0);
+        const totalTTCInMicrounits = lines.reduce((sum, l) => sum + (l.totalTTCInMicrounits || 0), 0);
+        return { totalHTInMicrounits, totalVATInMicrounits, totalTTCInMicrounits };
     };
 
     const totals = calculateTotals();
@@ -131,16 +131,21 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                     id: l.id!,
                     name: l.designation!,
                     quantity: l.quantity || 1,
-                    priceInCents: l.unitPriceHTInCents || 0
+                    priceInMicrounits: l.unitPriceHTInMicrounits || 0,
+                    priceInCents: Math.round((l.unitPriceHTInMicrounits || 0) / 10_000),
                 })),
-                amountInCents: totals.totalTTCInCents,
+                amountInMicrounits: totals.totalTTCInMicrounits,
                 validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
                 status: 'draft',
                 totals: {
-                    totalHTInCents: totals.totalHTInCents,
-                    totalTTCInCents: totals.totalTTCInCents,
-                    totalTaxInCents: totals.totalVATInCents,
-                    totalDiscountInCents: 0
+                    totalHTInMicrounits: totals.totalHTInMicrounits,
+                    totalHTInCents: Math.round(totals.totalHTInMicrounits / 10_000),
+                    totalTTCInMicrounits: totals.totalTTCInMicrounits,
+                    totalTTCInCents: Math.round(totals.totalTTCInMicrounits / 10_000),
+                    totalTaxInMicrounits: totals.totalVATInMicrounits,
+                    totalTaxInCents: Math.round(totals.totalVATInMicrounits / 10_000),
+                    totalDiscountInMicrounits: 0,
+                    totalDiscountInCents: 0,
                 }
             };
 
@@ -331,8 +336,8 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                             <div className="flex justify-center">
                                                 <input
                                                     type="number"
-                                                    value={line.unitPriceHTInCents ? (line.unitPriceHTInCents / 100) : 0}
-                                                    onChange={(e) => updateLine(line.id!, { unitPriceHTInCents: Math.round(parseFloat(e.target.value) * 100) || 0 })}
+                                                    value={line.unitPriceHTInMicrounits ? (line.unitPriceHTInMicrounits / 1_000_000) : 0}
+                                                    onChange={(e) => updateLine(line.id!, { unitPriceHTInMicrounits: Math.round(parseFloat(e.target.value) * 1_000_000) || 0 })}
                                                     className="w-24 h-10 bg-bg-tertiary border border-border rounded-xl text-center text-sm font-mono text-accent focus:border-accent-gold transition-all shadow-inner"
                                                 />
                                             </div>
@@ -349,7 +354,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                                 />
                                             </div>
                                             <div className="text-right text-sm font-mono font-black text-text-primary tracking-tighter">
-                                                {((line.totalTTCInCents || 0) / 100).toFixed(2)}€
+                                                {((line.totalTTCInMicrounits || 0) / 1_000_000).toFixed(2)}€
                                             </div>
                                             <div className="flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button
@@ -379,17 +384,17 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                     <div className="flex items-center gap-16">
                         <div className="flex flex-col">
                             <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">Total HT</span>
-                            <span className="text-2xl font-mono text-text-primary tracking-tighter">{((totals.totalHTInCents || 0) / 100).toFixed(2)}€</span>
+                            <span className="text-2xl font-mono text-text-primary tracking-tighter">{((totals.totalHTInMicrounits || 0) / 1_000_000).toFixed(2)}€</span>
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">TVA (Mixte)</span>
-                            <span className="text-2xl font-mono text-text-primary/40 tracking-tighter">{((totals.totalVATInCents || 0) / 100).toFixed(2)}€</span>
+                            <span className="text-2xl font-mono text-text-primary/40 tracking-tighter">{((totals.totalVATInMicrounits || 0) / 1_000_000).toFixed(2)}€</span>
                         </div>
                         <div className="w-px h-10 bg-border mx-4" />
                         <div className="flex flex-col">
                             <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mb-1">VALEUR FINALE TTC</span>
                             <span className="text-4xl font-mono font-black text-accent tracking-tighter">
-                                {((totals.totalTTCInCents || 0) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}€
+                                {((totals.totalTTCInMicrounits || 0) / 1_000_000).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}€
                             </span>
                         </div>
                     </div>
@@ -464,7 +469,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                     >
                                         <div>
                                             <p className="text-sm font-black text-text-primary group-hover:text-accent-gold transition-colors">{String(product.name || '')}</p>
-                                            <p className="text-[10px] text-text-muted font-medium mt-1">{(Number(product.priceInCents || 0) / 100).toFixed(2)}€ HT</p>
+                                            <p className="text-[10px] text-text-muted font-medium mt-1">{(Number(product.priceInMicrounits || 0) / 1_000_000).toFixed(2)}€ HT</p>
                                         </div>
                                         <div className="w-10 h-10 rounded-full bg-bg-tertiary border border-border flex items-center justify-center text-text-muted group-hover:bg-accent-gold group-hover:text-white transition-all">
                                             <Plus className="w-4 h-4" />
