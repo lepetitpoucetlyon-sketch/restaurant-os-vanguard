@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import {
     Thermometer,
     Droplets,
@@ -88,7 +89,12 @@ const TOOLS: { id: HaccpTool; label: string; icon: typeof Thermometer }[] = [
 
 export default function HaccpPage() {
     const { tenantId, activeTenantConfig } = useTenant();
-    const [activeTab, setActiveTab] = useState<HaccpTab>("haccp");
+    const searchParams = useSearchParams();
+const _tabParam = searchParams.get("tab") as HaccpTab | null;
+const _VALID_HACCP_TABS: HaccpTab[] = ["haccp", "quality", "planning", "compliance", "lots"];
+const [activeTab, setActiveTab] = useState<HaccpTab>(
+    _tabParam && _VALID_HACCP_TABS.includes(_tabParam) ? _tabParam : "haccp"
+);
     const [activeTool, setActiveTool] = useState<HaccpTool>("temperatures");
     const [openNcCount, setOpenNcCount] = useState(0);
     const [pmsLoading, setPmsLoading] = useState(false);

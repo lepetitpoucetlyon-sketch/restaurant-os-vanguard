@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProductGrid } from "@modules/ops";
 import { Cart } from "@modules/ops";
@@ -106,6 +107,13 @@ export default function POSPage() {
         handleCheckout, handlePaySplit,
         handleSetItemCourse, handleSendCourse,
     } = usePOSController();
+
+    // ── USP-007: pre-select table from floor-plan (?table=<id>) ──────────────
+    const searchParams = useSearchParams();
+    useEffect(() => {
+        const tableParam = searchParams.get("table");
+        if (tableParam) setSelectedTableId(tableParam);
+    }, [searchParams, setSelectedTableId]);
 
     // ── Stock alerts (pos-8) ──────────────────────────────────────────────────
     const outOfStockIds = useStockAlerts();

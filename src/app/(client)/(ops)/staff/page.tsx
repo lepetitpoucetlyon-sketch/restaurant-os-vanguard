@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { useAtomValue } from "jotai";
 import { Users, CalendarRange, Palmtree, UserPlus, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -16,7 +17,6 @@ import {
     staffMembersAtom,
 } from "@modules/human";
 // generatePaySlip intentionnellement désactivé — voir paySlipGenerator.ts
-import { useActionPermission } from "@/hooks/useActionPermission";
 import { useAuth } from "@/hooks";
 import {
     StaffList,
@@ -43,7 +43,12 @@ const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
 ];
 
 export default function StaffPage() {
-    const [activeTab, setActiveTab] = useState<StaffTab>("team");
+    const searchParams = useSearchParams();
+const _tabParam = searchParams.get("tab") as StaffTab | null;
+const _VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "leaves", "recruitment"];
+const [activeTab, setActiveTab] = useState<StaffTab>(
+    _tabParam && _VALID_STAFF_TABS.includes(_tabParam) ? _tabParam : "team"
+);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
@@ -54,7 +59,6 @@ export default function StaffPage() {
     const { currentUser } = useAuth();
     const staffMembers = useAtomValue(staffMembersAtom) as User[];
     const { auditLogs } = useStaffAudit();
-    const modifySalaryPermission = useActionPermission("staff", "modify_salary");
     const {
         leaveRequests,
         leaveBalances,
@@ -219,7 +223,6 @@ export default function StaffPage() {
                             <StaffList
                                 users={staffMembers}
                                 onOpenModal={openStaffModal}
-                                onGeneratePaySlip={undefined}
                             />
                         </div>
                         <div>
