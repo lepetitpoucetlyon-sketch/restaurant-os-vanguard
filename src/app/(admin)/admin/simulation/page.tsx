@@ -259,7 +259,13 @@ export default function SimulationPage() {
                                     <p className="text-[11px] font-medium text-muted">Drift de stock de <span className="text-status-danger font-bold">18.4%</span> injecté. Écarts fiscaux identifiés sur 4 ordres.</p>
                                 </div>
                             </div>
-                            <Button className="h-10 bg-surface-card text-primary text-[8px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform">
+                            <Button
+                                className="h-10 bg-surface-card text-primary text-[8px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
+                                onClick={() => {
+                                    showToast("Export FEC des données simulées en cours...", "info");
+                                    window.open('/api/admin/finance/fec/export', '_blank');
+                                }}
+                            >
                                 Générer Audit FEC
                             </Button>
                         </div>

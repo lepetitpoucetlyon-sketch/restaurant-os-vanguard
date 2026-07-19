@@ -8,7 +8,6 @@ import {
     addWeeks,
     subWeeks,
     format,
-    isSameDay,
 } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
@@ -43,6 +42,7 @@ import { CustomerDetailPanel } from "@modules/commerce";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { cn } from "@/lib/ui.foundations";
+import { authedFetch } from "@/lib/client/authedFetch";
 
 import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/domain/schemas/ops";
@@ -223,7 +223,9 @@ export default function ReservationsPage() {
     );
 
     // ── rbac-3: Override capacity guard ──────────────────────────────────
-    const requestOverrideCapacity = useCallback(
+    // TODO(rbac-3): helper prêt mais non branché — reste à déclencher depuis
+    // le flux de création quand une réservation dépasse la capacité d'une table.
+    const _requestOverrideCapacity = useCallback(
         (onAllowed: () => void) => {
             if (!overrideCapacityPerm.allowed) {
                 toast.error("Permission insuffisante pour dépasser la capacité");
@@ -238,6 +240,7 @@ export default function ReservationsPage() {
         },
         [overrideCapacityPerm]
     );
+    void _requestOverrideCapacity;
 
     const handlePinConfirm = useCallback(
         (_pin: string) => {
@@ -255,7 +258,7 @@ export default function ReservationsPage() {
     const handleSaveReservation = useCallback(
         async (data: Partial<Reservation> & { suggestedTable?: OpsTable }) => {
             try {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                 
                 const { suggestedTable: _st, ...resData } = data;
                 await addReservation({
                     ...resData,
@@ -269,7 +272,7 @@ export default function ReservationsPage() {
                 const customer = customers.find((c) => c.id === resData.customerId);
                 if (customer?.email) {
                     try {
-                        await fetch("/api/email/reservation-confirm", {
+                        await authedFetch("/api/email/reservation-confirm", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
@@ -601,7 +604,7 @@ export default function ReservationsPage() {
                                     <div className="hidden xl:flex w-[420px] border-l border-border overflow-auto p-6 bg-bg-primary shrink-0">
                                         <TableGrid
                                             tables={tablesByZone}
-                                            onTableClick={() => undefined}
+                                            onTableClick={() => setIsNewResOpen(true)}
                                         />
                                     </div>
                                 </>

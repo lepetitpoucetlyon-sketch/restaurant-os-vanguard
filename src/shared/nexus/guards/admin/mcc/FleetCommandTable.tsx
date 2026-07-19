@@ -17,6 +17,15 @@ import {
 export function FleetCommandTable() {
     const { instances, isLoading } = useNexusFleet();
     const [reindexing, setReindexing] = useState<Record<string, boolean>>({});
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredInstances = searchQuery.trim()
+        ? instances.filter(inst =>
+            inst.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            inst.key?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            inst.id?.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : instances;
 
     const handleReindex = async (instanceId: string) => {
         setReindexing(prev => ({ ...prev, [instanceId]: true }));
@@ -53,9 +62,11 @@ export function FleetCommandTable() {
                 <div className="flex items-center gap-3">
                     <div className="px-4 py-2 bg-surface-card/5 rounded-xl border border-white/5 flex items-center gap-2">
                         <Search className="w-3.5 h-3.5 text-secondary" />
-                        <input 
-                            type="text" 
-                            placeholder="RECHERCHER UN SITE..." 
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="RECHERCHER UN SITE..."
                             className="bg-transparent border-none outline-none text-[10px] font-bold text-white placeholder:text-secondary w-32"
                         />
                     </div>
@@ -82,7 +93,7 @@ export function FleetCommandTable() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
-                        {instances.map((instance, idx) => (
+                        {filteredInstances.map((instance, idx) => (
                             <motion.tr 
                                 key={instance.id}
                                 initial={{ opacity: 0, x: -10 }}
