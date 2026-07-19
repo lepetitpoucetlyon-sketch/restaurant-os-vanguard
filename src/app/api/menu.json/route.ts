@@ -37,13 +37,14 @@ export async function GET(req: NextRequest) {
       ? { vassalId: tenantId, actorId: 'menu-api' }
       : undefined;
 
+    let degraded = false;
     const [categories, products] = await Promise.all([
       Nexus.adapter
         .query<CategoryRecord>('menu_categories', { orderBy: { field: 'order', direction: 'asc' } }, context)
-        .catch(() => [] as CategoryRecord[]),
+        .catch(() => { degraded = true; return [] as CategoryRecord[]; }),
       Nexus.adapter
         .query<ProductRecord>('products', undefined, context)
-        .catch(() => [] as ProductRecord[]),
+        .catch(() => { degraded = true; return [] as ProductRecord[]; }),
     ]);
 
     // Only return visible items
@@ -51,11 +52,12 @@ export async function GET(req: NextRequest) {
     const visibleProducts = products.filter((p) => p.visibleOnMenu !== false);
 
     return NextResponse.json(
-      { categories: visibleCategories, products: visibleProducts },
+      { categories: visibleCategories, products: visibleProducts, ...(degraded ? { degraded: true } : {}) },
       {
-        headers: {
-          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60',
-        },
+        status: degraded ? 503 : 200,
+        headers: degraded
+          ? {}
+          : { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60' },
       }
     );
   } catch (err) {

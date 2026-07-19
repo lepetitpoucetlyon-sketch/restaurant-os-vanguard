@@ -61,7 +61,8 @@ export function SimulatorConsole() {
     };
 
     const toggleAccountingMode = async () => {
-        const newMode = accountingMode === 'SIMPLE' ? 'EXPERT' : 'SIMPLE';
+        const prevMode = accountingMode;
+        const newMode = prevMode === 'SIMPLE' ? 'EXPERT' : 'SIMPLE';
         setAccountingMode(newMode);
         try {
             const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@nexus/contracts').GlobalSettings;
@@ -70,13 +71,16 @@ export function SimulatorConsole() {
                 accountingConfig: { ...data?.accountingConfig, complexityMode: newMode }
             });
             addLog(`Financial Complexity: ${newMode}`, 'info');
-            
+
             if (newMode === 'EXPERT') {
                 runInquisiteurQA();
             } else {
                 setIntegrityStatus('IDLE');
             }
-        } catch (_e) {}
+        } catch (_e) {
+            setAccountingMode(prevMode);
+            addLog('Financial Complexity toggle failed — reverted.', 'error');
+        }
     };
 
     const runInquisiteurQA = async () => {

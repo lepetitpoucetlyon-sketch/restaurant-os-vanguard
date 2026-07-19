@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Megaphone, Instagram, FileSpreadsheet, Sparkles, PlusCircle, Users, Globe } from "lucide-react";
 
 import { useMarketing, useQuotes } from "@modules/commerce/marketing/hooks";
@@ -11,12 +12,18 @@ import { SEOManager } from "@modules/commerce/marketing/services/SEOManager";
 
 type MktTab = "campaigns" | "social" | "quotes" | "ai" | "seo";
 
+const VALID_TABS: MktTab[] = ["campaigns", "social", "quotes", "ai", "seo"];
+
 type CampaignRow = { id: string; name?: string; type?: string };
 type SocialRow = { id: string; platform?: string; handle?: string; followers?: number };
 type QuoteRow = { id: string; title?: string; clientName?: string; status?: string };
 
 export default function MarketingPage() {
-    const [activeTab, setActiveTab] = useState<MktTab>("campaigns");
+    const searchParams = useSearchParams();
+    const tabParam = searchParams.get("tab") as MktTab | null;
+    const [activeTab, setActiveTab] = useState<MktTab>(
+        tabParam && VALID_TABS.includes(tabParam) ? tabParam : "campaigns"
+    );
     const [campaignModalOpen, setCampaignModalOpen] = useState(false);
     const [quoteModalOpen, setQuoteModalOpen] = useState(false);
 

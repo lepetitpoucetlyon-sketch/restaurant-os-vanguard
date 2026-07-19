@@ -30,7 +30,7 @@ export function RecipeAnalyticTab({
                 <div className="bg-surface-card p-10 rounded-[3rem] border border-border shadow-soft">
                     <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Coût de Revient HT</label>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-serif font-black text-text-primary">{((formData.costPriceInCents || 0) / 100).toFixed(2)}</span>
+                        <span className="text-4xl font-serif font-black text-text-primary">{((formData.costPriceInMicrounits || 0) / 1_000_000).toFixed(2)}</span>
                         <span className="text-xl font-black text-text-muted">€</span>
                     </div>
                 </div>
@@ -41,8 +41,8 @@ export function RecipeAnalyticTab({
                         <input
                             type="number"
                             step="0.01"
-                            value={formData.sellingPriceInCents ? (formData.sellingPriceInCents / 100) : ''}
-                            onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), sellingPriceInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
+                            value={formData.sellingPriceInMicrounits ? (formData.sellingPriceInMicrounits / 1_000_000) : ''}
+                            onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), sellingPriceInMicrounits: Math.round(parseFloat(e.target.value) * 1_000_000) || 0 }))}
                             className="w-full bg-transparent text-4xl font-serif font-black text-text-primary outline-none"
                             placeholder="0.00"
                         />
