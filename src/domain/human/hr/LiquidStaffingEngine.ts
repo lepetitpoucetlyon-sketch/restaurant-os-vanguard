@@ -74,7 +74,7 @@ export class LiquidStaffingEngine {
                 logger.info(`🤝 [Liquid Staffing] MATCH INTRA-GROUPE : Déplacement de ${provider.tenantId} vers ${shortage.tenantId}`);
                 
                 // Notification au personnel du groupe via l'App RH
-                NexusEventBus.emit('hr.transfer_offer' as any, {
+                NexusEventBus.emit('hr.transfer_offer', {
                     fromTenantId: provider.tenantId,
                     toTenantId: shortage.tenantId,
                     ownerId: shortage.ownerId, // Traçabilité stricte

@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!resend) {
-      // TODO: Set RESEND_API_KEY in .env.local to enable real email sending.
+      // RESEND_API_KEY absent — simulation mode (set in .env.local to enable real sends)
       console.info(`[CRM Campaign] RESEND not configured — would send to ${customers.length} recipients. Subject: "${subject}"`);
       return NextResponse.json({ success: true, sent: customers.length, simulated: true });
     }

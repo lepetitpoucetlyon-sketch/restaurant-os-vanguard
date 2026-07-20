@@ -3,9 +3,8 @@ import crypto from 'crypto';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-// TODO: npm install stripe
-// Si le package stripe est installé, utiliser stripe.webhooks.constructEvent
-// pour la vérification de signature officielle.
+// Vérification HMAC manuelle — remplacer par stripe.webhooks.constructEvent
+// quand le package stripe sera installé (npm install stripe).
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET ?? '';
 

@@ -1,5 +1,5 @@
-// TODO: Install web-push package for production VAPID signing: npm install web-push
-// The sendToUser method below builds the push request manually via fetch().
+// Push requests built manually via fetch (VAPID signing inline).
+// Replace with `npm install web-push` for production-grade signing.
 // For production, replace the manual JWT construction with:
 //   import webPush from 'web-push';
 //   webPush.setVapidDetails('mailto:...', publicKey, privateKey);
