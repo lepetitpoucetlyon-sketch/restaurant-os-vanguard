@@ -3,23 +3,16 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { db } from './offline/offline-store';
 import { bootSyncManager } from './offline/sync-manager';
-import { ordersNodeAtom } from '@/store/pillars/ops';
-
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';
-import { MasterBridge } from './MasterBridge';
-
 import { Mutex } from './utils/Mutex';
 import { TaskContext, TASK_MAPS } from './icm/TaskContext';
 import { registerNexusHandlers, unregisterNexusHandlers } from './events/registerHandlers';
 import { readZcpoState, degradeImportanceMap } from './icm/zcpoBridge';
-
-import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
-
-// Sous-modules extraits (réduction du fan-out — voir ARCHITECTURE.md §9 P2)
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
-import { DEFAULT_TENANT_ID, APP_MODE } from '@/config/instance';
+import { initMasterBridgeListener } from './sync/masterBridgeInit';
+import { startSelfHealingInterval } from './sync/selfHealingInit';
 
 const syncMutex = new Mutex();
 
@@ -74,17 +67,10 @@ export const NexusSyncService = {
         }
 
         // --- MASTER BRIDGE SUTURE ---
-        // MCC mode IS the master — it writes masterConfig, never listens.
-        // Tenant mode vassals subscribe to master orders.
-        if (APP_MODE === 'tenant' && tenantId !== 'restaurant-os' && tenantId !== DEFAULT_TENANT_ID && tenantId !== 'vanguard') {
-            this.master_unsub = MasterBridge.listenToMaster(store);
-        }
+        this.master_unsub = initMasterBridgeListener(tenantId, store);
 
         // --- SELF-HEALING ACTIVATION (Grade X+) ---
-        this.healing_interval = setInterval(() => {
-          // Audit critical state nodes
-          SelfHealingEngine.auditAndHeal(ordersNodeAtom, 'legacy_audit', `tenants/${tenantId}/orders`).catch(() => {});
-        }, 60000);
+        this.healing_interval = startSelfHealingInterval(tenantId);
 
         // --- PRIVACY SHIELD GATE (Grade X) ---
         if (!(await evaluatePrivacyGate(tenantId, store))) {

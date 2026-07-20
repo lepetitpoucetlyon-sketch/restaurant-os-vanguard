@@ -1,20 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ProductGrid } from "@modules/ops";
-import { Cart } from "@modules/ops";
-import { TableSelector } from "@modules/ops";
-import { PaymentDialog } from "@modules/ops";
-import { SplitBillDialog } from "@modules/ops";
+import { ProductGrid, Cart, TableSelector, PaymentDialog, SplitBillDialog } from "@modules/ops";
 import { useKitchen, useTables } from "@/engines/ops/NexusOpsProvider";
 import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import {
     LucideIcon, Plus, ArrowLeft, MoreHorizontal, Star, Pizza,
     UtensilsCrossed, GlassWater, Beef, Coffee, Zap,
-    Percent, Tag, Gift, Trash2, X, Check,
-    Wallet, RotateCcw, Tablet, BookOpen, Printer, MessageSquare
+    Wallet, RotateCcw, Tablet, BookOpen, Printer,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
@@ -22,35 +17,14 @@ import { useLanguage } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { usePOSController } from "@modules/ops";
-import { AmbianceService, RestaurantAmbiance } from "@domain/services/AmbianceService";
 import { formatCurrency } from "@/lib/formatters";
 import { toast } from "sonner";
-
-// ── Printing (p0-2) ───────────────────────────────────────────
-import { EpsonPrinter } from "@/lib/printing/EpsonPrinter";
-import type { ReceiptTicket } from "@/lib/printing/EpsonPrinter";
-import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
-
-// ── New pos/ features ──────────────────────────────────────────
 import { useStockAlerts } from "./useStockAlerts";
 import { useActionPermission } from "@/hooks/useActionPermission";
-import { PinModal } from "@/components/pos/PinModal";
-import { TipPanel } from "@/components/pos/TipPanel";
+import { CashDrawerModal, PinModal, TipPanel, VoidModal, CourseManager } from "@modules/commerce/ui/pos";
 import { CartItem, CourseType } from "@modules/ops/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { CourseManager } from "@/components/pos/CourseManager";
-import { CashDrawerModal } from "@/components/pos/CashDrawerModal";
-import { VoidModal } from "@/components/pos/VoidModal";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Types
-// ─────────────────────────────────────────────────────────────────────────────
-
-type PendingAction =
-    | { type: "offer";    cartId: string }
-    | { type: "cancel";   cartId: string }
-    | { type: "refund";   cartId: string }
-    | { type: "discount"; cartId: string; percent: number };
+import { useAmbiance, useTabletMode, usePrintReceipt, useRbacGate, CartItemContextMenu } from "./_posSlices";
 
 const ICON_MAP: Record<string, LucideIcon> = {
     all:      Star,
@@ -61,8 +35,6 @@ const ICON_MAP: Record<string, LucideIcon> = {
     plats:    Beef,
     desserts: Coffee,
 };
-
-const DISCOUNT_PRESETS = [5, 10, 15] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Component
@@ -76,18 +48,9 @@ export default function POSPage() {
     const { activeTenantId } = useTenant();
     const { nodes: allTables } = useTables();
 
-    // ── Ambiance ──────────────────────────────────────────────────────────────
-    const [ambiance, setAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());
-    const [tokens, setTokens] = useState(AmbianceService.getThemeTokens());
-
-    useEffect(() => {
-        const handleAmbianceChange = () => {
-            setAmbiance(AmbianceService.getCurrentAmbiance());
-            setTokens(AmbianceService.getThemeTokens());
-        };
-        window.addEventListener("ambiance-changed", handleAmbianceChange);
-        return () => window.removeEventListener("ambiance-changed", handleAmbianceChange);
-    }, []);
+    // ── Slices ────────────────────────────────────────────────────────────────
+    const { ambiance, tokens } = useAmbiance();
+    const { isTabletMode, setIsTabletMode, isTablePickerOpen, setIsTablePickerOpen } = useTabletMode();
 
     // ── POS controller ────────────────────────────────────────────────────────
     const {
@@ -125,149 +88,24 @@ export default function POSPage() {
     const cancelPerm   = useActionPermission("pos", "cancel_item_sent");
     const discountPerm = useActionPermission("pos", "apply_discount_percent");
 
-    // ── PIN modal state ───────────────────────────────────────────────────────
-    const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
-    const [pinError, setPinError]           = useState<string | undefined>();
-
-    // ── Cart item context menu (pos-4) ────────────────────────────────────────
+    // ── Cart item context menu state (pos-4) ──────────────────────────────────
     const [contextMenuItem, setContextMenuItem] = useState<CartItem | null>(null);
     const [customDiscountValue, setCustomDiscountValue] = useState("");
     const [noteValue, setNoteValue] = useState("");
-    const contextMenuRef = useRef<HTMLDivElement>(null);
 
-    // Close context menu on outside click
-    useEffect(() => {
-        if (!contextMenuItem) return;
-        const onOutside = (e: MouseEvent) => {
-            if (contextMenuRef.current && !contextMenuRef.current.contains(e.target as Node)) {
-                setContextMenuItem(null);
-                setCustomDiscountValue("");
-            }
-        };
-        document.addEventListener("mousedown", onOutside);
-        return () => document.removeEventListener("mousedown", onOutside);
-    }, [contextMenuItem]);
-
-    // ── Tip panel state (pos-7) ───────────────────────────────────────────────
-    const [isTipPanelOpen, setIsTipPanelOpen] = useState(false);
-
-    // ── Cash drawer modal (pos-5) ─────────────────────────────────────────────
+    // ── Modal states ──────────────────────────────────────────────────────────
+    const [isTipPanelOpen, setIsTipPanelOpen]   = useState(false);
     const [isCashDrawerOpen, setIsCashDrawerOpen] = useState(false);
-
-    // ── Void/refund modal (pos-6) ─────────────────────────────────────────────
-    const [isVoidModalOpen, setIsVoidModalOpen] = useState(false);
-
-    // ── Tablet mode (pos-9) ───────────────────────────────────────────────────
-    const [isTabletMode, setIsTabletMode] = useState<boolean>(() => {
-        if (typeof window === "undefined") return false;
-        return localStorage.getItem(tenantScopedKey("pos-tablet-mode")) === "true";
-    });
-    const [isTablePickerOpen, setIsTablePickerOpen] = useState(false);
-    useEffect(() => {
-        localStorage.setItem(tenantScopedKey("pos-tablet-mode"), String(isTabletMode));
-    }, [isTabletMode]);
-
-    // ── Course view (pos-3) ───────────────────────────────────────────────────
+    const [isVoidModalOpen, setIsVoidModalOpen]   = useState(false);
     const [isCourseViewOpen, setIsCourseViewOpen] = useState(false);
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Handlers
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /** Intercept checkout: show tip step first, then open PaymentDialog */
-    const handleCheckoutWithTip = useCallback(() => {
-        if (cartItems.length === 0) return;
-        setIsTipPanelOpen(true);
-    }, [cartItems.length]);
-
-    const handleTipConfirmed = useCallback(
-        (tip: number) => {
-            setTipInMicrounits(tip);
-            setIsTipPanelOpen(false);
-            handleCheckout();
-        },
-        [setTipInMicrounits, handleCheckout]
-    );
-
-    const handleTipSkipped = useCallback(() => {
-        setTipInMicrounits(0);
-        setIsTipPanelOpen(false);
-        handleCheckout();
-    }, [setTipInMicrounits, handleCheckout]);
-
-    /** Print current cart as a NF525 receipt using localStorage printer config (p0-2) */
-    const handlePrintReceipt = useCallback(async () => {
-        if (cartItems.length === 0) return;
-
-        const STORAGE_KEY = tenantScopedKey("printer_config");
-        let _ip = "192.168.1.100";
-        let _port = 8008;
-        try {
-            const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
-            if (raw) {
-                const parsed = JSON.parse(raw) as unknown;
-                if (
-                    typeof parsed === "object" &&
-                    parsed !== null &&
-                    "ip" in parsed &&
-                    typeof (parsed as { ip: unknown }).ip === "string"
-                ) {
-                    _ip = (parsed as { ip: string }).ip;
-                }
-                if (
-                    typeof parsed === "object" &&
-                    parsed !== null &&
-                    "port" in parsed &&
-                    typeof (parsed as { port: unknown }).port === "number"
-                ) {
-                    _port = (parsed as { port: number }).port;
-                }
-            }
-        } catch {
-            // fallback to defaults
-        }
-
-        const ticket: ReceiptTicket = {
-            restaurantName: "RESTAURANT OS CORE",
-            ticketNumber: `T-${Date.now()}`,
-            tvaRatePercent: 10,
-            totalInMicrounits: Math.round(cartTotal),
-            items: cartItems.map((item) => ({
-                name: item.name,
-                qty: item.quantity,
-                priceInMicrounits: item.unitPriceInMicrounits,
-            })),
-        };
-
-        try {
-            await EpsonPrinter.printReceipt(ticket);
-            toast.success(`Impression envoyée — ${_ip}:${_port}`);
-        } catch (err) {
-            const msg = err instanceof Error ? err.message : "Erreur impression";
-            toast.error(`Impression échouée : ${msg}`);
-        }
-    }, [cartItems, cartTotal]);
-
-    /** Cart item "⋯" button triggers context menu */
-    const handleItemContextMenu = useCallback((cartId: string, item: CartItem) => {
-        setContextMenuItem(item);
-        setCustomDiscountValue("");
-        setNoteValue(item.notes ?? "");
-    }, []);
-
-    /** Execute an already-authorised POS action */
+    // ── executeAction (shared between RBAC gate + context menu) ──────────────
     const executeAction = useCallback(
-        (action: PendingAction) => {
+        (action: import("./_hooks/useRbacGate").PendingAction) => {
             switch (action.type) {
-                case "discount":
-                    handleApplyDiscount(action.cartId, action.percent);
-                    break;
-                case "offer":
-                    handleApplyOffer(action.cartId);
-                    break;
-                case "cancel":
-                    handleCancelItem(action.cartId);
-                    break;
+                case "discount": handleApplyDiscount(action.cartId, action.percent); break;
+                case "offer":    handleApplyOffer(action.cartId); break;
+                case "cancel":   handleCancelItem(action.cartId); break;
                 case "refund":
                     toast.success("Remboursement initié — ticket annulé");
                     handleCancelItem(action.cartId);
@@ -279,65 +117,41 @@ export default function POSPage() {
         [handleApplyDiscount, handleApplyOffer, handleCancelItem]
     );
 
-    /**
-     * RBAC gate: check permission, show PinModal if required, else execute.
-     */
-    const handleProtectedAction = useCallback(
-        (action: PendingAction) => {
-            let allowed = false;
-            let requiresPin = false;
-            let reason: string | undefined;
+    // ── RBAC gate (pin flow) ──────────────────────────────────────────────────
+    const { pendingAction, pinError, handleProtectedAction, handlePinConfirm, handlePinClose } =
+        useRbacGate(
+            { discount: discountPerm, offer: offerPerm, cancel: cancelPerm, refund: refundPerm },
+            executeAction,
+            verifyPin,
+        );
 
-            if (action.type === "discount") {
-                ({ allowed, requiresPin, reason } = discountPerm);
-            } else if (action.type === "offer") {
-                ({ allowed, requiresPin, reason } = offerPerm);
-            } else if (action.type === "cancel") {
-                ({ allowed, requiresPin, reason } = cancelPerm);
-            } else {
-                // refund
-                ({ allowed, requiresPin, reason } = refundPerm);
-            }
+    // ── Print receipt hook ────────────────────────────────────────────────────
+    const handlePrintReceipt = usePrintReceipt(cartItems, cartTotal);
 
-            if (!allowed) {
-                toast.error(`Accès refusé — ${reason ?? "Niveau insuffisant"}`);
-                return;
-            }
+    // ─────────────────────────────────────────────────────────────────────────
+    // Handlers
+    // ─────────────────────────────────────────────────────────────────────────
 
-            if (requiresPin) {
-                setPendingAction(action);
-                setPinError(undefined);
-                return;
-            }
+    const handleCheckoutWithTip = useCallback(() => {
+        if (cartItems.length === 0) return;
+        setIsTipPanelOpen(true);
+    }, [cartItems.length]);
 
-            executeAction(action);
-        },
-        [discountPerm, offerPerm, cancelPerm, refundPerm, executeAction]
+    const handleTipConfirmed = useCallback(
+        (tip: number) => { setTipInMicrounits(tip); setIsTipPanelOpen(false); handleCheckout(); },
+        [setTipInMicrounits, handleCheckout]
     );
 
-    /** Called after user submits PIN */
-    const handlePinConfirm = useCallback(
-        async (pin: string) => {
-            const ok = verifyPin ? await verifyPin(pin) : pin === "9999";
-            if (!ok) {
-                setPinError("PIN incorrect. Réessayez.");
-                return;
-            }
-            setPinError(undefined);
-            if (pendingAction) {
-                executeAction(pendingAction);
-            }
-            setPendingAction(null);
-        },
-        [verifyPin, pendingAction, executeAction]
-    );
+    const handleTipSkipped = useCallback(() => {
+        setTipInMicrounits(0); setIsTipPanelOpen(false); handleCheckout();
+    }, [setTipInMicrounits, handleCheckout]);
 
-    const handlePinClose = useCallback(() => {
-        setPendingAction(null);
-        setPinError(undefined);
+    const handleItemContextMenu = useCallback((_cartId: string, item: CartItem) => {
+        setContextMenuItem(item);
+        setCustomDiscountValue("");
+        setNoteValue(item.notes ?? "");
     }, []);
 
-    /** Apply a preset % discount via RBAC gate */
     const handleDiscountPreset = useCallback(
         (percent: number) => {
             if (!contextMenuItem) return;
@@ -346,7 +160,6 @@ export default function POSPage() {
         [contextMenuItem, handleProtectedAction]
     );
 
-    /** Apply a custom % discount (from text input) */
     const handleDiscountCustom = useCallback(() => {
         if (!contextMenuItem) return;
         const pct = parseFloat(customDiscountValue.replace(",", "."));
@@ -358,11 +171,9 @@ export default function POSPage() {
     }, [contextMenuItem, customDiscountValue, handleProtectedAction]);
 
     // ── Derived ───────────────────────────────────────────────────────────────
-    const isRushMode = ambiance === "RUSH_SPEED";
-    /** Show cart as sidebar only on xl+ screens AND not in tablet mode */
+    const isRushMode    = ambiance === "RUSH_SPEED";
     const isCartSidebar = !isMobile && !isTabletMode;
 
-    // PIN modal title based on pending action
     const pinModalTitle = pendingAction
         ? pendingAction.type === "offer"   ? "Autoriser l'offre"
         : pendingAction.type === "cancel"  ? "Autoriser l'annulation"
@@ -715,197 +526,22 @@ export default function POSPage() {
             </AnimatePresence>
 
             {/* ── Cart item context menu (pos-4 discount + rbac-1 actions) ──── */}
-            <AnimatePresence>
-                {contextMenuItem && (
-                    <motion.div
-                        key="ctx-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="fixed inset-0 z-[160] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-8 sm:pb-0"
-                    >
-                        <motion.div
-                            ref={contextMenuRef}
-                            key="ctx-card"
-                            initial={{ opacity: 0, y: 32 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 32 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                            className="bg-surface-card border border-border rounded-t-[2rem] sm:rounded-[2rem] p-6 w-full sm:w-[400px] shadow-2xl"
-                        >
-                            {/* Header */}
-                            <div className="flex items-center justify-between mb-5">
-                                <div>
-                                    <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
-                                        Actions article
-                                    </h3>
-                                    <p className="text-[11px] text-accent-gold font-bold font-serif italic mt-0.5">
-                                        {contextMenuItem.name}
-                                    </p>
-                                </div>
-                                <button
-                                    onClick={() => { setContextMenuItem(null); setCustomDiscountValue(""); }}
-                                    className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            {/* ── Discount section ─────────────────────────── */}
-                            <div className="mb-5">
-                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
-                                    <Percent className="w-3 h-3" />
-                                    Appliquer remise
-                                </p>
-                                <div className="grid grid-cols-3 gap-2 mb-3">
-                                    {DISCOUNT_PRESETS.map((pct) => {
-                                        const isActive = contextMenuItem.discountPercent === pct;
-                                        return (
-                                            <button
-                                                key={pct}
-                                                onClick={() => handleDiscountPreset(pct)}
-                                                className={cn(
-                                                    "h-10 rounded-2xl border text-[11px] font-black uppercase tracking-wider transition-all",
-                                                    isActive
-                                                        ? "bg-accent-gold border-accent-gold text-white shadow-md shadow-accent-gold/20"
-                                                        : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
-                                                )}
-                                            >
-                                                {pct}%
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                                {/* Custom discount input */}
-                                <div className="flex gap-2">
-                                    <div className="flex-1 flex items-center gap-2 border border-border rounded-full px-4 h-10 bg-bg-primary focus-within:border-accent-gold/50 transition-colors">
-                                        <Tag className="w-3 h-3 text-text-muted shrink-0" />
-                                        <input
-                                            type="text"
-                                            inputMode="decimal"
-                                            value={customDiscountValue}
-                                            onChange={(e) => setCustomDiscountValue(e.target.value)}
-                                            onKeyDown={(e) => e.key === "Enter" && handleDiscountCustom()}
-                                            placeholder="% personnalisé"
-                                            className="flex-1 bg-transparent text-[12px] text-text-primary placeholder:text-text-muted/50 focus:outline-none"
-                                        />
-                                    </div>
-                                    <button
-                                        onClick={handleDiscountCustom}
-                                        disabled={!customDiscountValue.trim()}
-                                        className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-white transition-all disabled:opacity-30"
-                                        aria-label="Appliquer"
-                                    >
-                                        <Check className="w-4 h-4" />
-                                    </button>
-                                </div>
-                                {/* Show current discount info */}
-                                {(contextMenuItem.discountPercent ?? 0) > 0 && (
-                                    <button
-                                        onClick={() => handleProtectedAction({ type: "discount", cartId: contextMenuItem.cartId, percent: 0 })}
-                                        className="mt-2 text-[10px] text-status-error hover:underline font-bold tracking-wider"
-                                    >
-                                        Retirer la remise actuelle ({contextMenuItem.discountPercent}%)
-                                    </button>
-                                )}
-                            </div>
-
-                            {/* ── Note par article (pos-2) ─────────────────── */}
-                            <div className="mb-5">
-                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
-                                    <MessageSquare className="w-3 h-3" />
-                                    Note cuisine
-                                </p>
-                                <div className="flex gap-2">
-                                    <div className="flex-1 flex items-center gap-2 border border-border rounded-2xl px-4 h-10 bg-bg-primary focus-within:border-accent-gold/50 transition-colors">
-                                        <input
-                                            type="text"
-                                            value={noteValue}
-                                            onChange={(e) => setNoteValue(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    handleSetItemNote(contextMenuItem.cartId, noteValue);
-                                                    setContextMenuItem(null);
-                                                }
-                                            }}
-                                            placeholder="Sans oignons, bien cuit…"
-                                            maxLength={200}
-                                            className="flex-1 bg-transparent text-[12px] text-text-primary placeholder:text-text-muted/50 focus:outline-none"
-                                        />
-                                    </div>
-                                    <button
-                                        onClick={() => {
-                                            handleSetItemNote(contextMenuItem.cartId, noteValue);
-                                            setContextMenuItem(null);
-                                        }}
-                                        className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-white transition-all"
-                                        aria-label="Valider la note"
-                                    >
-                                        <Check className="w-4 h-4" />
-                                    </button>
-                                </div>
-                                {contextMenuItem.notes && (
-                                    <button
-                                        onClick={() => { handleSetItemNote(contextMenuItem.cartId, ""); setNoteValue(""); }}
-                                        className="mt-2 text-[10px] text-status-error hover:underline font-bold tracking-wider"
-                                    >
-                                        Effacer la note actuelle
-                                    </button>
-                                )}
-                            </div>
-
-                            {/* Separator */}
-                            <div className="h-px bg-border/50 mb-4" />
-
-                            {/* ── RBAC-guarded actions ──────────────────────── */}
-                            <div className="space-y-2">
-                                {/* Offer product — requires pos.offer_product (manager + PIN) */}
-                                <button
-                                    onClick={() => handleProtectedAction({ type: "offer", cartId: contextMenuItem.cartId })}
-                                    disabled={contextMenuItem.isOffer}
-                                    className={cn(
-                                        "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider transition-all",
-                                        contextMenuItem.isOffer
-                                            ? "border-emerald-500/20 bg-emerald-500/5 text-emerald-400 cursor-not-allowed"
-                                            : "border-border bg-bg-primary text-text-muted hover:border-emerald-500/40 hover:text-emerald-400"
-                                    )}
-                                >
-                                    <Gift className="w-4 h-4 shrink-0" />
-                                    {contextMenuItem.isOffer ? "Article offert" : "Offrir l'article"}
-                                    {!contextMenuItem.isOffer && offerPerm.requiresPin && (
-                                        <span className="ml-auto text-[8px] text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
-                                    )}
-                                </button>
-
-                                {/* Cancel item — requires pos.cancel_item_sent */}
-                                <button
-                                    onClick={() => handleProtectedAction({ type: "cancel", cartId: contextMenuItem.cartId })}
-                                    className="w-full h-11 rounded-2xl border border-border bg-bg-primary flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider text-text-muted hover:border-status-error/40 hover:text-status-error transition-all"
-                                >
-                                    <Trash2 className="w-4 h-4 shrink-0" />
-                                    Annuler l'article
-                                    {cancelPerm.requiresPin && (
-                                        <span className="ml-auto text-[8px] text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
-                                    )}
-                                </button>
-
-                                {/* Refund — requires pos.refund (manager + PIN) */}
-                                <button
-                                    onClick={() => handleProtectedAction({ type: "refund", cartId: contextMenuItem.cartId })}
-                                    className="w-full h-11 rounded-2xl border border-border bg-bg-primary flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider text-text-muted hover:border-status-error/40 hover:text-status-error transition-all"
-                                >
-                                    <X className="w-4 h-4 shrink-0" />
-                                    Rembourser l'article
-                                    {refundPerm.requiresPin && (
-                                        <span className="ml-auto text-[8px] text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
-                                    )}
-                                </button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <CartItemContextMenu
+                contextMenuItem={contextMenuItem}
+                customDiscountValue={customDiscountValue}
+                noteValue={noteValue}
+                offerRequiresPin={offerPerm.requiresPin}
+                cancelRequiresPin={cancelPerm.requiresPin}
+                refundRequiresPin={refundPerm.requiresPin}
+                onClose={() => { setContextMenuItem(null); setCustomDiscountValue(""); }}
+                onDiscountPreset={handleDiscountPreset}
+                onDiscountCustom={handleDiscountCustom}
+                onDiscountCustomChange={setCustomDiscountValue}
+                onProtectedAction={handleProtectedAction}
+                onNoteChange={setNoteValue}
+                onNoteSave={(cartId, note) => { handleSetItemNote(cartId, note); setContextMenuItem(null); }}
+                onNoteClear={(cartId) => { handleSetItemNote(cartId, ""); setNoteValue(""); }}
+            />
 
             {/* ── Payment dialog ────────────────────────────────────────────── */}
             <PaymentDialog
