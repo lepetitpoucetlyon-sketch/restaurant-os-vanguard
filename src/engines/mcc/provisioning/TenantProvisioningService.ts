@@ -78,7 +78,23 @@ export class TenantProvisioningService {
                 logger.warn(`🧠 [MCC] LightRAG non disponible — workspace ${ragWorkspaceId} en attente`);
             }
 
-            // 5. Initialisation du premier utilisateur Admin + envoi PIN par email (mcc-prov-1)
+            // 5. Auto-DNS : sous-domaine {slug}.restaurantos.app (mcc-crm-1)
+            const slug = request.companyName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').slice(0, 40);
+            try {
+                const dnsRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? ''}/api/admin/fleet/dns`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-mcc-internal': process.env.INTERNAL_API_SECRET ?? '' },
+                    body: JSON.stringify({ tenantId, slug }),
+                });
+                if (dnsRes.ok) {
+                    const dns = await dnsRes.json() as { domain: string; provider: string };
+                    logger.info(`🌐 [MCC] DNS provisionné: ${dns.domain} via ${dns.provider}`);
+                }
+            } catch {
+                logger.warn(`[MCC] DNS provisioning ignoré (non bloquant)`);
+            }
+
+            // 6. Initialisation du premier utilisateur Admin + envoi PIN par email (mcc-prov-1)
             const tempPin = await this.createRootAdmin(tenantId, ownerId, request.ownerEmail);
             await this.sendAdminPinEmail(request.ownerEmail, request.companyName, tempPin);
 
