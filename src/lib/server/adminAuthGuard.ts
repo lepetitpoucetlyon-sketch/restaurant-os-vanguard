@@ -3,6 +3,14 @@ import { NextResponse } from 'next/server';
 import { getAuth } from 'firebase-admin/auth';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { logger } from '@/lib/logger';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+
+interface StoredDevice {
+    fingerprint: string;
+    role: string;
+    status: 'active' | 'revoked';
+    deviceId: string;
+}
 
 /**
  * 🛡️ Garde d'authentification des routes /api/admin.
@@ -69,10 +77,47 @@ export async function requireMccLevel(
             return hiddenDoor();
         }
 
+        // Vérification Trusted Device Registry pour les opérateurs non-fleet-admin.
+        // fleet_admin/SUPER_ADMIN sont exemptés (ils gèrent le registre).
+        const isFleetAdmin = callerLevel >= MCC_ROLE_HIERARCHY['fleet_admin'];
+        if (!isFleetAdmin) {
+            const fp = request.headers.get('x-mcc-device-fp');
+            if (fp) {
+                const denied = await checkDeviceFingerprintInternal(fp, role as MccRole);
+                if (denied) {
+                    logger.warn(`[adminAuth] Device fingerprint non reconnu ou révoqué: uid=${decoded.uid} fp=${fp.slice(0, 8)}…`);
+                    return hiddenDoor();
+                }
+            } else {
+                // Pas de fingerprint — on laisse passer avec un avertissement (migration progressive).
+                logger.warn(`[adminAuth] x-mcc-device-fp absent pour uid=${decoded.uid} role=${role} — Device Registry non encore appliqué`);
+            }
+        }
+
         return { uid: decoded.uid, role, tenantId };
     } catch (err) {
         logger.warn('[adminAuth] Token verification failed', String(err));
         return hiddenDoor();
+    }
+}
+
+/**
+ * Vérifie qu'un fingerprint est dans le Trusted Device Registry avec un rôle suffisant.
+ * Retourne true si le device doit être refusé, false sinon.
+ */
+async function checkDeviceFingerprintInternal(fingerprint: string, callerRole: MccRole): Promise<boolean> {
+    try {
+        const devices = await Nexus.adapter.query<StoredDevice>('mcc/trustedDevices');
+        const device = devices.find(d => d.fingerprint === fingerprint && d.status === 'active');
+        if (!device) return true; // Pas trouvé → refus
+        // Le rôle enregistré doit être >= au rôle du caller (pas de dépassement)
+        const deviceLevel = MCC_ROLE_HIERARCHY[device.role as MccRole] ?? 0;
+        const callerLevel = MCC_ROLE_HIERARCHY[callerRole] ?? 0;
+        return deviceLevel < callerLevel; // refus si appareil a moins de droits que demandé
+    } catch {
+        // En cas d'erreur Firestore, on laisse passer (fail-open en dev, alerter en prod)
+        logger.warn('[adminAuth] checkDeviceFingerprint: impossible de lire mcc/trustedDevices');
+        return false;
     }
 }
 

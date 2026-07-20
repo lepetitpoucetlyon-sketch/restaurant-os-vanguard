@@ -34,6 +34,8 @@ const FleetCommandTable = dynamic(() => import('@nexus/guards/admin/mcc/FleetCom
 const PerformanceMonitor = dynamic(() => import('@nexus/guards/admin/mcc/PerformanceMonitor').then(mod => mod.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
 const AIWorkshop = dynamic(() => import('@nexus/guards/admin/mcc/AIWorkshop').then(mod => mod.AIWorkshop), { loading: () => <MCCWidgetSkeleton /> });
 const DeviceManager = dynamic(() => import('@nexus/guards/admin/mcc/DeviceManager').then(mod => mod.DeviceManager), { loading: () => <MCCWidgetSkeleton /> });
+const TaxAuditPanel = dynamic(() => import('@nexus/guards/admin/mcc/TaxAuditPanel').then(mod => mod.TaxAuditPanel), { loading: () => <MCCWidgetSkeleton /> });
+const TrustedDevicePanel = dynamic(() => import('@nexus/guards/admin/mcc/TrustedDevicePanel').then(mod => mod.TrustedDevicePanel), { loading: () => <MCCWidgetSkeleton /> });
 
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
@@ -266,19 +268,25 @@ export default function MCCDashboard() {
             )}
 
             {activeTab === 'compliance' && (
-              <motion.div 
-                key="compliance" 
-                initial={{ opacity: 0, x: -20 }} 
-                animate={{ opacity: 1, x: 0 }} 
+              <motion.div
+                key="compliance"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="grid grid-cols-12 gap-8"
+                className="space-y-8"
               >
-                <div className="col-span-12 xl:col-span-8">
-                  <CertificationCenter />
+                <div className="grid grid-cols-12 gap-8">
+                  <div className="col-span-12 xl:col-span-8">
+                    <CertificationCenter />
+                  </div>
+                  <div className="col-span-12 xl:col-span-4">
+                    <FiscalChainExplorer />
+                  </div>
                 </div>
-                <div className="col-span-12 xl:col-span-4">
-                  <FiscalChainExplorer />
-                </div>
+                {/* p0-1/fin-1 — Audit fiscal par tenant (contrôle fiscal administration) */}
+                <TaxAuditPanel />
+                {/* mcc-security-adv-1+2 — Registre des appareils de confiance ZTNA Layer 2 */}
+                <TrustedDevicePanel />
               </motion.div>
             )}
 
