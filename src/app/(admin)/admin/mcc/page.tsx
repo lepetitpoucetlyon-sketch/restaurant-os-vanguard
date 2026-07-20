@@ -9,12 +9,10 @@ import {
   Activity, 
   Plus,
   Lock,
-  ChevronRight,
   TrendingUp,
   RefreshCw,
   Zap,
   Cpu,
-  Award,
   Wallet,
   BrainCircuit
 } from 'lucide-react';
@@ -35,6 +33,8 @@ const MCCTreasury = dynamic(() => import('@nexus/guards/admin/mcc/MCCTreasury').
 const StrategyOracle = dynamic(() => import('@nexus/guards/admin/mcc/StrategyOracle').then(mod => mod.StrategyOracle), { loading: () => <MCCWidgetSkeleton /> });
 const FleetCommandTable = dynamic(() => import('@nexus/guards/admin/mcc/FleetCommandTable').then(mod => mod.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
 const PerformanceMonitor = dynamic(() => import('@nexus/guards/admin/mcc/PerformanceMonitor').then(mod => mod.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
+const AIWorkshop = dynamic(() => import('@nexus/guards/admin/mcc/AIWorkshop').then(mod => mod.AIWorkshop), { loading: () => <MCCWidgetSkeleton /> });
+const DeviceManager = dynamic(() => import('@nexus/guards/admin/mcc/DeviceManager').then(mod => mod.DeviceManager), { loading: () => <MCCWidgetSkeleton /> });
 
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
@@ -60,31 +60,56 @@ export default function MCCDashboard() {
   const [newCloneName, setNewCloneName] = useState('');
   const [newCloneKey, setNewCloneKey] = useState('');
   const [newCloneEmail, setNewCloneEmail] = useState('');
+  const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
   const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
+  const [provisionStep, setProvisionStep] = useState(0); // mcc-prov-7
+
+  // mcc-prov-7 — étapes réelles du provisioning
+  const PROV_STEPS = [
+    'Vérification DNS & slug…',
+    'Provisionnement Registry…',
+    'Seeding Config & Templates…',
+    'Activation RAG Sovereign…',
+  ];
 
   const handleCreateClone = async () => {
     if (!newCloneName || !newCloneKey || !newCloneEmail) return;
 
-    setProvisioningStatus('Initializing Cloud Resources...');
+    setProvisionStep(0);
+    setProvisioningStatus(PROV_STEPS[0]);
+
+    const stepTimer = (step: number) => setTimeout(() => {
+      if (step < PROV_STEPS.length) {
+        setProvisionStep(step);
+        setProvisioningStatus(PROV_STEPS[step]);
+      }
+    }, step * 900);
+
+    const timers = PROV_STEPS.map((_, i) => stepTimer(i));
+
     try {
       const _newInst = await ProvisioningEngine.provisionNewInstance({
         name: newCloneName,
         key: newCloneKey,
         ownerEmail: newCloneEmail,
         initialPrimaryColor: '#6366f1',
-        tier: 'STANDARD',
+        tier: newCloneTier,
         copyBaseTemplates: true
       });
 
+      timers.forEach(clearTimeout);
       refreshFleet();
 
       setProvisioningStatus('Success! Clone Active.');
       setShowCloneModal(false);
       setProvisioningStatus(null);
+      setProvisionStep(0);
       setNewCloneName('');
       setNewCloneKey('');
       setNewCloneEmail('');
+      setNewCloneTier('STANDARD');
     } catch (_err) {
+      timers.forEach(clearTimeout);
       setProvisioningStatus('Critical Error in Provisioning.');
     }
   };
@@ -237,13 +262,18 @@ export default function MCCDashboard() {
             )}
 
             {activeTab === 'intelligence' && (
-              <motion.div 
-                key="intelligence" 
-                initial={{ opacity: 0, x: -20 }} 
-                animate={{ opacity: 1, x: 0 }} 
+              <motion.div
+                key="intelligence"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
+                className="space-y-8"
               >
                 <StrategyOracle />
+                {/* mcc-ai-2 — AIWorkshop câblé sur mcc/aiPatches */}
+                <AIWorkshop />
+                {/* mcc-users-6 — DeviceManager intégré (UID d'un opérateur MCC) */}
+                <DeviceManagerPanel />
               </motion.div>
             )}
 
@@ -377,6 +407,26 @@ export default function MCCDashboard() {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Tier</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['STANDARD', 'PREMIUM', 'ENTERPRISE'] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setNewCloneTier(t)}
+                        className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                          newCloneTier === t
+                            ? 'bg-action-primary/20 border-focus/50 text-brand'
+                            : 'bg-slate-950 border-subtle text-secondary hover:border-white/20'
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="p-4 bg-action-primary/5 border border-focus/10 rounded-2xl flex items-center gap-3">
                   <Lock className="w-5 h-5 text-brand shrink-0" />
                   <p className="text-[10px] text-muted leading-relaxed uppercase tracking-tighter">
@@ -385,16 +435,21 @@ export default function MCCDashboard() {
                 </div>
 
                 {provisioningStatus ? (
-                  <div className="flex flex-col items-center justify-center py-4">
-                    <div className="w-full h-1 bg-surface-card/5 rounded-full overflow-hidden mb-4">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: '100%' }}
-                        transition={{ duration: 3.5 }}
-                        className="h-full bg-action-primary shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                      />
-                    </div>
-                    <span className="text-[10px] font-black text-brand animate-pulse uppercase tracking-[0.2em]">{provisioningStatus}</span>
+                  <div className="flex flex-col py-4 gap-3">
+                    {PROV_STEPS.map((step, i) => (
+                      <div key={step} className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                          i < provisionStep ? 'bg-status-success border-emerald-500' :
+                          i === provisionStep ? 'border-brand animate-pulse bg-action-primary/20' :
+                          'border-white/10'
+                        }`}>
+                          {i < provisionStep && <span className="text-[8px] text-white">✓</span>}
+                        </div>
+                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${
+                          i === provisionStep ? 'text-brand' : i < provisionStep ? 'text-status-success/60' : 'text-white/20'
+                        }`}>{step}</span>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <div className="flex gap-4 pt-4">
@@ -439,81 +494,30 @@ function StatCard({ label, value, icon, trend, isWarning = false }: { label: str
   );
 }
 
-function _InstanceRow({ instance, index }: { instance: EmpireInstance, index: number }) {
+// mcc-users-6 — DeviceManager accessible depuis l'onglet Intelligence
+function DeviceManagerPanel() {
+  const [uid, setUid] = React.useState('');
+  const [submitted, setSubmitted] = React.useState('');
   return (
-    <motion.div 
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="grid grid-cols-12 px-6 py-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl hover:border-focus/30 hover:bg-white/8 transition-all cursor-pointer group"
-    >
-      <div className="col-span-4 flex items-center gap-4">
-        <div 
-          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs shadow-inner" 
-          style={{ backgroundColor: `${instance.branding.primaryColor}20`, color: instance.branding.primaryColor, border: `1px solid ${instance.branding.primaryColor}40` }}
+    <div className="bg-[#0f0f11] border border-white/5 rounded-3xl p-6 space-y-4">
+      <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Device Management</h3>
+      <div className="flex gap-3">
+        <input
+          type="text"
+          placeholder="User UID…"
+          value={uid}
+          onChange={e => setUid(e.target.value)}
+          className="flex-1 bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono focus:outline-none focus:border-focus/50 transition-all text-white"
+        />
+        <button
+          onClick={() => setSubmitted(uid.trim())}
+          disabled={!uid.trim()}
+          className="px-4 py-2.5 bg-action-primary/20 text-brand border border-focus/30 rounded-xl text-[10px] font-black uppercase tracking-widest disabled:opacity-40 transition-all hover:bg-action-primary/30"
         >
-          {instance.name.substring(0, 2)}
-        </div>
-        <div>
-          <h4 className="font-bold text-sm tracking-tight group-hover:text-brand transition-colors uppercase">{instance.name}</h4>
-          <p className="text-secondary text-[10px] font-mono tracking-tighter uppercase">{instance.key}.nexus-fleet.io</p>
-        </div>
-      </div>
-
-      <div className="col-span-3 flex items-center">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-action-primary" />
-             <span className="text-[10px] font-bold text-muted uppercase">Health {instance.metrics.healthScore}%</span>
-          </div>
-          <div className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-status-success" />
-             <span className="text-[10px] font-black text-status-success/80 uppercase tracking-tighter">NF525 SEALED</span>
-          </div>
-          <div className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-action-primary" />
-             <span className="text-[10px] font-black text-brand/80 uppercase tracking-tighter">HACCP GUARD ACTIVE</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-span-3 flex items-center">
-        <div className="text-sm font-black text-muted tracking-tight">
-          €{Math.round(instance.metrics.dailyRevenue).toLocaleString()}
-          <span className="block text-[9px] text-secondary font-bold uppercase tracking-widest mt-0.5">{instance.metrics.activeUsers} Sessions Actives</span>
-        </div>
-      </div>
-
-      <div className="col-span-2 flex items-center justify-end gap-3">
-        <StatusBadge status={instance.status} />
-        
-        {/* Compliance Action */}
-        <button 
-          title="Certifier l'instance"
-          className="p-2 hover:bg-status-warning/10 rounded-lg transition-all text-secondary hover:text-status-warning group/cert"
-        >
-          <Award className="w-5 h-5" />
-        </button>
-
-        <button className="p-2 hover:bg-surface-card/5 rounded-lg transition-all text-secondary hover:text-white">
-          <ChevronRight className="w-5 h-5" />
+          Inspecter
         </button>
       </div>
-    </motion.div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    PROVISIONING: 'bg-action-primary/10 text-brand border-focus/30',
-    ONLINE: 'bg-status-success/10 text-status-success border-emerald-500/30',
-    MAINTENANCE: 'bg-status-warning/10 text-status-warning border-amber-500/30',
-    LOCKED: 'bg-status-danger/10 text-status-danger border-red-500/30',
-  };
-
-  return (
-    <div className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase border tracking-widest animate-in fade-in ${styles[status] || 'bg-surface-tertiary/10 text-muted border-default/30'}`}>
-      {status}
+      {submitted && <DeviceManager uid={submitted} />}
     </div>
   );
 }

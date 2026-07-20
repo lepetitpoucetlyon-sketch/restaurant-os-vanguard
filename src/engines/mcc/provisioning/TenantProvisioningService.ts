@@ -1,4 +1,6 @@
 import { logger } from '@/lib/logger';
+import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
+import { getAuth } from 'firebase-admin/auth';
 import { MasterBridge } from '@/lib/MasterBridge';
 // import { StripeBillingService } from '@/infrastructure/services/finance/StripeBillingService';
 // import { LightRAGClient } from '@/modules/intelligence/rag/LightRAGClient';
@@ -89,14 +91,38 @@ export class TenantProvisioningService {
             createdAt: Date.now()
         };
 
-        // Le MasterBridge peut écrire dans `tenants/{tenantId}` sans être bloqué par le SovereignGuard
-        // TODO: Implémenter pushTenantConfigPatch dans MasterBridge
-        // await MasterBridge.pushTenantConfigPatch(tenantId, baseConfig);
+        await MasterBridge.pushTenantConfigPatch(tenantId, baseConfig);
         logger.info(`🏗️ [MCC] TenantConfig initialisée avec les couleurs B2B.`);
     }
 
     private static async createRootAdmin(tenantId: string, ownerId: string, email: string): Promise<void> {
         logger.info(`🔐 [MCC] Création de l'accès patron (Owner) pour ${email}`);
-        // Logique Firebase Auth pour créer l'utilisateur avec Custom Claims { tenantId, role: 'OWNER' }
+        initFirebaseAdmin();
+        const firebaseAuth = getAuth();
+
+        let uid: string;
+        try {
+            // Réutilise le compte si l'email existe déjà (idempotence)
+            const existing = await firebaseAuth.getUserByEmail(email);
+            uid = existing.uid;
+            logger.info(`🔐 [MCC] Compte Firebase existant réutilisé: ${uid}`);
+        } catch {
+            // Crée un nouveau compte Firebase Auth
+            const created = await firebaseAuth.createUser({
+                email,
+                displayName: ownerId,
+                emailVerified: false,
+            });
+            uid = created.uid;
+            logger.info(`🔐 [MCC] Compte Firebase créé: ${uid}`);
+        }
+
+        // Pose les Custom Claims : tenantId + rôle OWNER
+        await firebaseAuth.setCustomUserClaims(uid, {
+            tenantId,
+            role: 'OWNER',
+        });
+
+        logger.info(`✅ [MCC] Custom Claims posés — uid=${uid} tenantId=${tenantId} role=OWNER`);
     }
 }

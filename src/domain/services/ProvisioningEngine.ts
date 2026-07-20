@@ -4,6 +4,8 @@ import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
 import { sovereignCreateWorkspace } from '@/lib/rag/SovereignRAGClient';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -24,6 +26,12 @@ export const ProvisioningEngine = {
         });
 
         try {
+            // 0. Slug unicité — collision = écrasement silencieux d'un tenant existant
+            const slugExists = await Nexus.adapter.get(`tenants/${dna.key}/tenantConfig`);
+            if (slugExists) {
+                throw new Error(`SLUG_COLLISION: tenantId "${dna.key}" est déjà utilisé — choisissez un slug différent`);
+            }
+
             // 1. Build the Multi-Tenant Empire Instance (Global Contract)
             const newInstance: EmpireInstance = {
                 id: `node_${crypto.randomUUID().replace(/-/g, '').substring(0, 9)}`,
@@ -95,7 +103,6 @@ export const ProvisioningEngine = {
                     tenantId: dna.key,
                     name: dna.name,
                     adminEmail: dna.ownerEmail,
-                    adminPin: '0000', // Default PIN — owner must change after first login
                     primaryColor: dna.initialPrimaryColor,
                 });
                 if (!seedResult.success) {
@@ -103,7 +110,13 @@ export const ProvisioningEngine = {
                 }
             }
 
-            // 4. Initialiser le workspace Sovereign RAG pour ce nouveau tenant.
+            // 4. mcc-deploy-adv-1 — White-Label Branding Injector
+            await injectBrandingVars(dna.key, {
+                primaryColor: dna.initialPrimaryColor || '#6366f1',
+                displayName: dna.name,
+            }).catch(err => logger.warn('ProvisioningEngine: Branding injection skipped', String(err)));
+
+            // 5. Initialiser le workspace Sovereign RAG pour ce nouveau tenant.
             // Non-bloquant : si le sidecar est indisponible au moment du provisionnement,
             // le workspace sera créé à la première réindexation manuelle depuis le MCC.
             try {
@@ -127,8 +140,24 @@ export const ProvisioningEngine = {
             return newInstance;
 
         } catch (error: unknown) {
-            logger.error('ProvisioningEngine: Registry entry failed', { error });
-            throw new Error("Échec critique lors de l'enregistrement de l'instance. Vérifiez le Master Registry.");
+            logger.error('ProvisioningEngine: Registry entry failed — rollback partiel', { key: dna.key, error });
+
+            // Rollback best-effort : purge des fragments Firestore créés avant l'échec.
+            // Ne jamais supprimer fiscalSeals (NF525 immuable) — ils ne sont créés qu'en fin de seed réussie.
+            await Promise.allSettled([
+                Nexus.adapter.delete(`tenants/${dna.key}/tenantConfig`).catch(() => {}),
+                Nexus.adapter.delete(`tenants/${dna.key}/users/admin_${dna.key}`).catch(() => {}),
+            ]);
+
+            empireAudit.log({
+                module: 'system',
+                action: 'PROVISIONING_ROLLBACK',
+                details: { key: dna.key, error: String(error) },
+                severity: 'critical',
+                timestamp: new Date(),
+            });
+
+            throw new Error(`Provisioning échoué pour "${dna.key}" — fragments nettoyés. Détail: ${String(error)}`);
         }
     }
 };

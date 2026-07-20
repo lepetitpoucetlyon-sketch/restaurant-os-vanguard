@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu } from 'lucide-react';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { logger } from '@/lib/logger';
+import { auth } from '@/lib/firebase';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SiteIntegrityReport, GlobalComplianceCertificate } from '@domain/services/FleetComplianceService';
 
 interface AuditReport {
@@ -34,8 +36,14 @@ export function CertificationCenter() {
   const [auditReport, setAuditReport] = useState<AuditReport | null>(null);
   const [auditStatus, setAuditStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
 
-  // Local certificates state (could be moved to a global atom later)
+  // mcc-comp-1 — persisté dans Nexus (plus de perte au refresh)
   const [certificates, setCertificates] = useState<DigitalCertificate[]>([]);
+
+  useEffect(() => {
+    Nexus.adapter.query<DigitalCertificate>('mcc/certificates')
+      .then(certs => setCertificates((certs ?? []).sort((a, b) => b.issuedAt.localeCompare(a.issuedAt))))
+      .catch(err => logger.warn('[CertificationCenter] Failed to load certs', String(err)));
+  }, []);
 
   const selectedInstance = instances.find(i => i.id === selectedInstanceId);
 
@@ -65,7 +73,8 @@ export function CertificationCenter() {
     setIsGenerating(true);
     try {
         // 🔒 GLOBAL SEAL: Signing the fleet manifest
-        const cert = await complianceService.issueGlobalCertificate('FLEET_CMDR_01') as GlobalComplianceCertificate;
+        const operatorId = auth.currentUser?.email ?? auth.currentUser?.uid ?? 'FLEET_CMDR';
+        const cert = await complianceService.issueGlobalCertificate(operatorId) as GlobalComplianceCertificate;
         
         const digitalCert: DigitalCertificate = {
             id: cert.id,
@@ -77,6 +86,8 @@ export function CertificationCenter() {
             issuer: cert.issuedBy
         };
 
+        // Persister dans Nexus
+        await Nexus.adapter.set(`mcc/certificates/${digitalCert.id}`, digitalCert);
         setCertificates(prev => [digitalCert, ...prev]);
         setIsGenerating(false);
 

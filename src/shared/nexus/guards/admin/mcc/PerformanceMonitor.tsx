@@ -6,47 +6,50 @@ import { Activity, Zap, Cpu, ShieldCheck, Trash2 } from 'lucide-react';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { useStore } from 'jotai';
 
-/**
- * ⚡ PerformanceMonitor (MCC Diagnostic)
- * Visualizes the "Nexus Heartbeat" and the benefits of Phase 5 optimizations.
- */
+// mcc-tel-6 — classes statiques (JIT purge les interpolations bg-${color}-500/10)
+const GAUGE_COLORS = {
+    indigo: {
+        wrap:     'bg-indigo-500/10 border border-indigo-500/20 text-indigo-400',
+        gradient: 'bg-gradient-to-r from-indigo-600 to-indigo-400',
+    },
+    violet: {
+        wrap:     'bg-violet-500/10 border border-violet-500/20 text-violet-400',
+        gradient: 'bg-gradient-to-r from-violet-600 to-violet-400',
+    },
+} as const;
+
 export const PerformanceMonitor: React.FC = () => {
     const store = useStore();
-    const [stats, setStats] = useState({
-        opsLatency: 12, // ms
-        reRenderEfficiency: 99.8, // %
-        memoryUsage: 0, // MB
-        activeDomains: 0,
-        nexusUptime: '99.99%',
-        buildStatus: 'optimisé'
-    });
+    const [stats, setStats] = useState({ opsLatency: 0, memoryUsage: 0, activeDomains: 0 });
+    // mcc-tel-7 — clés réelles du registre
+    const [domainKeys, setDomainKeys] = useState<string[]>([]);
 
-    // Real-time monitoring (Zero Leak Phase 4)
     useEffect(() => {
-        const interval = setInterval(() => {
+        const measure = () => {
             const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
 
+            // mcc-tel-5 — latence réelle : coût du round-trip getInventory()
+            const t0 = performance.now();
             const domains = GlobalRegistryService.getInventory();
-            
-            setStats(prev => ({
-                ...prev,
-                opsLatency: Math.max(2, Math.min(15, prev.opsLatency + (Math.random() - 0.5))),
-                memoryUsage: memory ? Math.round(memory.usedJSHeapSize / 1048576) : prev.memoryUsage,
-                activeDomains: domains.length
-            }));
-        }, 2000);
-        return () => clearInterval(interval);
-    }, []);
+            const opsLatency = Math.round((performance.now() - t0) * 1000) / 1000 || 0.05;
 
-    const handleNuclearPurge = () => {
-        GlobalRegistryService.forceNuclearPurge(store);
-    };
+            setDomainKeys(domains.slice(0, 6));
+            setStats({
+                opsLatency,
+                memoryUsage: memory ? Math.round(memory.usedJSHeapSize / 1048576) : 0,
+                activeDomains: domains.length,
+            });
+        };
+
+        measure();
+        const id = setInterval(measure, 2000);
+        return () => clearInterval(id);
+    }, []);
 
     return (
         <div className="bg-[#111113] border border-white/5 rounded-3xl p-6 overflow-hidden relative">
-            {/* Ambient background glow */}
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-action-primary/10 blur-[100px] rounded-full pointer-events-none" />
-            
+
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-action-primary/10 rounded-xl flex items-center justify-center border border-focus/20">
@@ -60,7 +63,6 @@ export const PerformanceMonitor: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="flex flex-col items-end">
                     <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Build Status</span>
                     <span className="text-sm font-bold text-white flex items-center gap-2">
@@ -71,17 +73,17 @@ export const PerformanceMonitor: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <MetricGauge 
-                    label="Ops Latency" 
-                    value={`${stats.opsLatency.toFixed(1)}ms`} 
-                    percentage={(stats.opsLatency / 20) * 100} 
+                <MetricGauge
+                    label="Ops Latency"
+                    value={`${stats.opsLatency.toFixed(2)}ms`}
+                    percentage={Math.min(100, stats.opsLatency * 100)}
                     icon={<Zap className="w-4 h-4" />}
                     color="indigo"
                 />
-                <MetricGauge 
-                    label="RAM Heap" 
-                    value={`${stats.memoryUsage}MB`} 
-                    percentage={(stats.memoryUsage / 256) * 100} 
+                <MetricGauge
+                    label="RAM Heap"
+                    value={`${stats.memoryUsage}MB`}
+                    percentage={(stats.memoryUsage / 256) * 100}
                     icon={<Cpu className="w-4 h-4" />}
                     color="violet"
                 />
@@ -93,8 +95,8 @@ export const PerformanceMonitor: React.FC = () => {
                         <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Atomic Domains Health</span>
                         <span className="text-[10px] font-bold text-brand">{stats.activeDomains} Domains Registered</span>
                     </div>
-                    <button 
-                        onClick={handleNuclearPurge}
+                    <button
+                        onClick={() => GlobalRegistryService.forceNuclearPurge(store)}
                         className="p-2 bg-status-danger/10 hover:bg-status-danger/20 text-status-danger rounded-xl border border-rose-500/20 transition-all group flex items-center gap-2"
                         title="Nuclear Purge (Zero Leak)"
                     >
@@ -102,55 +104,52 @@ export const PerformanceMonitor: React.FC = () => {
                         <span className="text-[10px] font-black uppercase tracking-widest">Purge</span>
                     </button>
                 </div>
-                
+
                 <div className="space-y-3">
-                    <ContextSlot label="Orders Context" status="stable" complexity={12} />
-                    <ContextSlot label="Kitchen Context" status="stable" complexity={45} />
-                    <ContextSlot label="Inventory Context" status="stable" complexity={88} />
-                    <ContextSlot label="Tables Context" status="stable" complexity={2} />
+                    {(domainKeys.length > 0 ? domainKeys : ['Orders', 'Kitchen', 'Inventory', 'Tables']).map((key) => (
+                        <ContextSlot key={key} label={key} />
+                    ))}
                 </div>
             </div>
         </div>
     );
 };
 
-const MetricGauge: React.FC<{ 
-    label: string, 
-    value: string, 
-    percentage: number, 
-    icon: React.ReactNode,
-    color: 'indigo' | 'violet' 
-}> = ({ label, value, percentage, icon, color }) => (
-    <div className="bg-surface-card/[0.02] border border-white/5 rounded-2xl p-4">
-        <div className="flex items-center gap-2 mb-3">
-            <div className={`p-1.5 rounded-lg bg-${color}-500/10 border border-${color}-500/20 text-${color}-400`}>
-                {icon}
+const MetricGauge: React.FC<{
+    label: string;
+    value: string;
+    percentage: number;
+    icon: React.ReactNode;
+    color: keyof typeof GAUGE_COLORS;
+}> = ({ label, value, percentage, icon, color }) => {
+    const c = GAUGE_COLORS[color];
+    return (
+        <div className="bg-surface-card/[0.02] border border-white/5 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-3">
+                <div className={`p-1.5 rounded-lg ${c.wrap}`}>{icon}</div>
+                <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
             </div>
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
+            <div className="relative h-1 bg-surface-card/5 rounded-full overflow-hidden mb-2">
+                <motion.div
+                    className={`absolute left-0 top-0 h-full ${c.gradient}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.min(100, percentage)}%` }}
+                    transition={{ duration: 1 }}
+                />
+            </div>
+            <div className="text-xl font-bold tracking-tight tabular-nums">{value}</div>
         </div>
-        <div className="relative h-1 bg-surface-card/5 rounded-full overflow-hidden mb-2">
-            <motion.div 
-                className={`absolute left-0 top-0 h-full bg-gradient-to-r from-${color}-600 to-${color}-400`}
-                initial={{ width: 0 }}
-                animate={{ width: `${percentage}%` }}
-                transition={{ duration: 1 }}
-            />
-        </div>
-        <div className="text-xl font-bold tracking-tight">{value}</div>
-    </div>
-);
+    );
+};
 
-const ContextSlot: React.FC<{ label: string, status: string, complexity: number }> = ({ label, status: _status, complexity }) => (
+const ContextSlot: React.FC<{ label: string }> = ({ label }) => (
     <div className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-status-success group-hover:animate-pulse" />
-            <span className="text-xs font-medium text-muted group-hover:text-white transition-colors">{label}</span>
+            <span className="text-xs font-medium text-muted group-hover:text-white transition-colors truncate max-w-[140px]" title={label}>
+                {label}
+            </span>
         </div>
-        <div className="flex items-center gap-3">
-            <div className="text-[10px] font-mono text-secondary">MEM: {complexity}kb</div>
-            <div className="px-1.5 py-0.5 rounded bg-action-primary/5 border border-focus/10 text-[8px] font-black text-brand uppercase tracking-tighter">Isolated</div>
-        </div>
+        <div className="px-1.5 py-0.5 rounded bg-action-primary/5 border border-focus/10 text-[8px] font-black text-brand uppercase tracking-tighter">Isolated</div>
     </div>
 );
-
-

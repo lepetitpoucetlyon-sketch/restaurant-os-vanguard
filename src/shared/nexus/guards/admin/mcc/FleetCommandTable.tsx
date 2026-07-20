@@ -6,7 +6,6 @@ import {
   Activity,
   AlertCircle,
   ExternalLink,
-  TrendingUp,
   ShieldCheck,
   Search,
   Filter,
@@ -31,9 +30,9 @@ const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
 ];
 
 const COMMANDER_ACTIONS = [
-    { key: 'RESTART',     label: 'Redémarrer',     icon: RefreshCw,  danger: false },
-    { key: 'MAINTENANCE', label: 'Mode maintenance', icon: Wrench,     danger: false },
-    { key: 'LOCK',        label: 'Verrouiller',     icon: Lock,       danger: true  },
+    { key: 'RESTART',    label: 'Redémarrer',    icon: RefreshCw, danger: false },
+    { key: 'SOFT_LOCK',  label: 'Soft Lock',     icon: Wrench,    danger: false },
+    { key: 'HARD_LOCK',  label: 'Hard Lock',     icon: Lock,      danger: true  },
 ];
 
 export function FleetCommandTable() {
@@ -215,10 +214,6 @@ export function FleetCommandTable() {
                                         {instance.security?.supportAccessGranted ? (
                                             <>
                                                 <span className="text-sm font-black text-white">{(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
-                                                <div className="flex items-center gap-1 text-[9px] font-bold text-status-success uppercase">
-                                                    <TrendingUp className="w-2.5 h-2.5" />
-                                                    +4.2%
-                                                </div>
                                             </>
                                         ) : (
                                             <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-card/5 rounded-md border border-white/5 opacity-40">
@@ -340,12 +335,10 @@ export function FleetCommandTable() {
             </div>
             
             <div className="p-6 bg-surface-card/[0.01] border-t border-white/5 flex items-center justify-between">
-                <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">Total Fleet capacity: 10,000+ nodes</p>
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <Activity className="w-3 h-3 text-brand" />
-                        <span className="text-[9px] font-black text-muted uppercase">Fleet Latency: 12ms</span>
-                    </div>
+                <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">{filteredInstances.length} site{filteredInstances.length !== 1 ? 's' : ''} affiché{filteredInstances.length !== 1 ? 's' : ''} / {instances.length} total</p>
+                <div className="flex items-center gap-2">
+                    <Activity className="w-3 h-3 text-brand" />
+                    <span className="text-[9px] font-black text-muted uppercase">Fleet live</span>
                 </div>
             </div>
         </div>

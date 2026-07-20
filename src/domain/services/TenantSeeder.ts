@@ -2,6 +2,7 @@ import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { validatePin } from '@/lib/auth/validatePin';
+import { hashPin } from '@/lib/shared-kernel';
 import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
 import { FiscalKeyService } from './FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
@@ -12,8 +13,8 @@ export interface SeedInput {
   tenantId: string;
   name: string;
   adminEmail: string;
-  /** 4-digit PIN for the admin user */
-  adminPin: string;
+  /** 4-digit PIN for the admin user — omit to let TenantSeeder generate a secure one */
+  adminPin?: string;
   siren?: string;
   primaryColor?: string;
 }
@@ -116,12 +117,13 @@ export const TenantSeeder = {
       );
       seededPaths.push(`tenants/${tenantId}/accounts (${PCG_ACCOUNTS.length} comptes PCG)`);
 
-      // 3. Admin user
+      // 3. Admin user — PIN stocké en hash SHA-256, jamais en clair
       const adminId = `admin_${tenantId}`;
+      const adminPinHash = await hashPin(adminPin, adminId);
       await Nexus.adapter.set(`tenants/${tenantId}/users/${adminId}`, {
         id: adminId,
         email: adminEmail,
-        pin: adminPin,
+        pinHash: adminPinHash,
         role: 'admin',
         displayName: `Admin ${name}`,
         createdAt: new Date().toISOString(),

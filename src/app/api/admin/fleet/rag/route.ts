@@ -3,9 +3,10 @@
  * Gestion Sovereign RAG sur la flotte depuis le MCC.
  *
  * Actions :
- *   { action: 'health' }                         → état RAG de toutes les instances
- *   { action: 'reindex', instanceId: string }    → réindexe une instance spécifique
- *   { action: 'push_version' }                   → signale une nouvelle version (OTA)
+ *   { action: 'health' }                                        → état RAG de toutes les instances
+ *   { action: 'reindex', instanceId: string }                   → réindexe une instance spécifique
+ *   { action: 'push_version', version: string, otaUrl?: string }  → broadcast OTA nouvelle version
+ *   { action: 'rollback_version', version: string, otaUrl?: string } → rollback OTA vers version antérieure
  *
  * Protégé : fleet_admin uniquement.
  */
@@ -13,14 +14,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/lib/rag/SovereignRAGClient';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
-type RagAction = 'health' | 'reindex' | 'push_version' | 'stats';
+type RagAction = 'health' | 'reindex' | 'push_version' | 'rollback_version' | 'stats';
 
 interface RagRequest {
   action: RagAction;
   instanceId?: string;
   version?: string;
+  otaUrl?: string;
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -34,7 +38,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { action, instanceId, version } = body;
+  const { action, instanceId, version, otaUrl } = body;
 
   try {
     switch (action) {
@@ -59,12 +63,53 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       }
 
       case 'push_version': {
-        // Enregistre la nouvelle version cible dans Firestore — les instances
-        // la détectent via NexusTelemetryService (OTA signal existant).
-        logger.info(`[FleetRAG] Push version signal: ${version ?? 'latest'}`);
+        if (!version) {
+          return NextResponse.json({ error: 'version est requis pour push_version' }, { status: 400 });
+        }
+        await Nexus.adapter.set('mcc/deployments/latest', {
+            targetVersion: version,
+            otaUrl: otaUrl ?? null,
+            broadcastAt: new Date().toISOString(),
+            action: 'push',
+        }, { merge: true });
+        empireAudit.log({
+            module: 'system',
+            action: 'OTA_VERSION_PUSH',
+            severity: 'medium',
+            details: { version, otaUrl: otaUrl ?? '' } as unknown as import('@/shared/nexus-contract').SovereignData,
+            timestamp: new Date(),
+        });
+        logger.info(`[FleetRAG] OTA push_version: ${version}`);
         return NextResponse.json({
           success: true,
-          message: `Version ${version ?? 'latest'} broadcast — instances will pull on next heartbeat`,
+          message: `Version ${version} diffusée — instances updated on next heartbeat`,
+          targetVersion: version,
+        });
+      }
+
+      case 'rollback_version': {
+        if (!version) {
+          return NextResponse.json({ error: 'version est requis pour rollback_version' }, { status: 400 });
+        }
+        await Nexus.adapter.set('mcc/deployments/latest', {
+            targetVersion: version,
+            otaUrl: otaUrl ?? null,
+            broadcastAt: new Date().toISOString(),
+            action: 'rollback',
+        }, { merge: true });
+        empireAudit.log({
+            module: 'system',
+            action: 'OTA_VERSION_ROLLBACK',
+            severity: 'high',
+            details: { rollbackTo: version, otaUrl: otaUrl ?? '' } as unknown as import('@/shared/nexus-contract').SovereignData,
+            timestamp: new Date(),
+        });
+        logger.info(`[FleetRAG] OTA rollback_version: ${version}`);
+        return NextResponse.json({
+          success: true,
+          message: `Rollback vers ${version} diffusé — instances updated on next heartbeat`,
+          targetVersion: version,
+          isRollback: true,
         });
       }
 

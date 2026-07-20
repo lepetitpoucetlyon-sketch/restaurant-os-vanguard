@@ -11,7 +11,15 @@ import {
 } from 'lucide-react';
 import { AuditPortalController } from './AuditPortalController';
 
-// For RSC, I'll use standard <div> for the non-interactive header parts.
+const AUDIT_METRICS_SNAPSHOT = {
+    snapshotDate: '2026-07-20',
+    metrics: [
+        { label: 'LOC Mastered', value: '62K', sub: '+242 Files', icon: Code2 },
+        { label: 'Active Modules', value: '33', sub: 'Production Ready', icon: Layers },
+        { label: 'Integrations', value: '24', sub: 'Npm Ecosystem', icon: Cpu },
+        { label: 'Trust Margin', value: '7.2', sub: 'Audit Score / 10', icon: Shield, isGold: true },
+    ],
+};
 
 const AUDIT_DATA = [
     {
@@ -76,13 +84,12 @@ export default function AuditPortal() {
                 </header>
 
                 {/* Metrics Grid */}
-                <section className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-32">
-                    {[
-                                            { label: 'LOC Mastered', value: '62K', sub: '+242 Files', icon: Code2 },
-                                            { label: 'Active Modules', value: '33', sub: 'Production Ready', icon: Layers },
-                                            { label: 'Integrations', value: '24', sub: 'Npm Ecosystem', icon: Cpu },
-                                            { label: 'Trust Margin', value: '7.2', sub: 'Audit Score / 10', icon: Shield, isGold: true },
-                                        ].map((metric, i) => (
+                <section className="mb-32">
+                    <p className="text-center text-[9px] font-mono text-text-muted/30 uppercase tracking-widest mb-6">
+                        Snapshot du {AUDIT_METRICS_SNAPSHOT.snapshotDate}
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    {AUDIT_METRICS_SNAPSHOT.metrics.map((metric, i) => (
                                             <div
                                                 key={i}
                                                 className="bg-bg-secondary p-10 rounded-[3rem] border border-border/40 text-center relative overflow-hidden group hover:border-action-primary transition-all duration-500"
@@ -95,6 +102,7 @@ export default function AuditPortal() {
                                                 </div>
                                             </div>
                                         ))}
+                    </div>
                 </section>
 
                 {/* Main Improvement Axes - Interactive Part */}
