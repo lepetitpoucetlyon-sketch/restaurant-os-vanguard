@@ -8,6 +8,7 @@ import { BillingService } from '@/domain/services/BillingService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/lib/rate-limiter';
+import { sendEmail } from '@/lib/services/email-service';
 
 const SignupSchema = z.object({
   email: z.string().email().max(254),
@@ -16,6 +17,28 @@ const SignupSchema = z.object({
   siret: z.string().max(20).optional(),
   websiteUrl: z.string().url().max(2048).optional().or(z.literal('')),
 });
+
+function welcomeEmailHtml(restaurantName: string, tenantId: string): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.restaurant-os.app';
+  return `<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0a0a0b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e2e8f0">
+  <div style="max-width:560px;margin:40px auto;padding:40px 32px;background:#161618;border-radius:16px;border:1px solid rgba(255,255,255,0.08)">
+    <div style="width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:12px;margin-bottom:24px;display:flex;align-items:center;justify-content:center">
+      <span style="color:white;font-size:22px">🚀</span>
+    </div>
+    <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#f8fafc">Bienvenue sur Restaurant OS</h1>
+    <p style="margin:0 0 24px;color:#94a3b8;font-size:14px">Votre restaurant <strong style="color:#e2e8f0">${restaurantName}</strong> est prêt.</p>
+    <a href="${appUrl}/pos" style="display:inline-block;background:#6366f1;color:white;font-weight:700;font-size:13px;padding:12px 24px;border-radius:10px;text-decoration:none;letter-spacing:0.05em;text-transform:uppercase">
+      Accéder au tableau de bord →
+    </a>
+    <hr style="margin:32px 0;border:none;border-top:1px solid rgba(255,255,255,0.06)">
+    <p style="margin:0 0 8px;font-size:12px;color:#475569"><strong>Vos identifiants</strong></p>
+    <p style="margin:0 0 4px;font-size:12px;color:#475569">Identifiant restaurant : <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:11px">${tenantId}</code></p>
+    <p style="margin:24px 0 0;font-size:11px;color:#334155">Restaurant OS · Système d'exploitation pour la restauration · <a href="${appUrl}/legal" style="color:#6366f1;text-decoration:none">Mentions légales</a></p>
+  </div>
+</body></html>`;
+}
 
 function toTenantKey(name: string): string {
   return name
@@ -115,6 +138,13 @@ export async function POST(req: NextRequest) {
     });
 
     logger.info(`[signup] New tenant provisioned: ${tenantId} (uid=${uid})`);
+
+    // inf-1 — Email de bienvenue (fire-and-forget, ne bloque pas la réponse)
+    sendEmail({
+      to: email,
+      subject: `Bienvenue sur Restaurant OS — ${restaurantName}`,
+      html: welcomeEmailHtml(restaurantName, tenantId),
+    }).catch(err => logger.warn('[signup] Welcome email failed', String(err)));
 
     // 5. Create Stripe Checkout session for initial subscription
     const origin = req.headers.get('origin') ?? 'https://app.nexus-fleet.io';
