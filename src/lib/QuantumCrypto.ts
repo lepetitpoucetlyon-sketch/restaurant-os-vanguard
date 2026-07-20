@@ -98,7 +98,8 @@ export const QuantumCrypto = {
    * 🖋️ Suture GRADE X+++: Signature for NF525
    */
   async sign(data: string, previousHash: string = ''): Promise<string> {
-    const secretKey = process.env.NEXUS_TENANT_SECRET || 'fallback-quantum-secret-key-001';
+    const secretKey = process.env.NEXUS_TENANT_SECRET;
+    if (!secretKey) throw new Error('❌ SÉCURITÉ : NEXUS_TENANT_SECRET manquant — signature NF525 refusée.');
     const payload = previousHash + data;
     const seal = await this.generateQuantumSeal(payload, secretKey);
     return seal.hash;
@@ -117,7 +118,8 @@ export const QuantumCrypto = {
         const payload = JSON.parse(payloadStr);
         const { b, q, n } = payload;
         
-        const secretKey = customSecretKey || process.env.NEXUS_TENANT_SECRET || 'fallback-quantum-secret-key-001';
+        const secretKey = customSecretKey ?? process.env.NEXUS_TENANT_SECRET;
+        if (!secretKey) throw new Error('❌ SÉCURITÉ : NEXUS_TENANT_SECRET manquant — vérification du sceau refusée.');
         
         const A = this.generateDeterministicMatrixA(seal.hash, q, n, n);
         const s = this.generateDeterministicVectorS(secretKey, q, n);
