@@ -4225,6 +4225,17 @@ const DONE_BY_AGENTS = new Set([
   'mcc-users-5',
   // Email RGPD notifyTenantAccess() déclenché sur support-access request + revoke
   'mcc-users-7',
+  // ── v21 — Vague 3 MCC Billing (2026-07-20) ──
+  // TenantBillingPanel + /api/admin/fleet/tenant-billing (statut, plan, prochaine facture)
+  'mcc-bill-2',
+  // DunningEngine /api/billing/dunning : J+3 relance / J+7 suspend / J+14 LOCKED
+  'mcc-bill-3',
+  // fleet/command route : HARD_LOCK écrit tenantConfig.status.licenceStatus=LOCKED
+  'mcc-bill-4',
+  // /api/admin/fleet/billing/feature-flags : PAID_MODULES marketing/rh/ia toggle
+  'mcc-billing-adv-1',
+  // UsageTracker.ts + /api/admin/fleet/billing/usage (SMS/email/IA par mois)
+  'mcc-billing-adv-2',
 ]);
 
 function loadChecked() {

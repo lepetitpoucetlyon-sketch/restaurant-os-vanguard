@@ -11,12 +11,12 @@
 - [x] mcc-users-5 : /api/admin/fleet/users/impersonate + ImpersonationBanner (bannière jaune)
 - [x] mcc-users-7 : Email RGPD notifyTenantAccess() dans support-access/route.ts
 
-## VAGUE 3 — MCC Billing (5 items)
-- [ ] mcc-bill-2      : Vue abonnements par tenant (statut Stripe, plan, prochaine facture)
-- [ ] mcc-bill-3      : Dunning J+3 relance / J+7 suspension / J+14 LOCKED
-- [ ] mcc-bill-4      : LOCKED broadcast → blocage interface tenant
-- [ ] mcc-billing-adv-1 : Feature Flag Billing (Marketing +99€, RH +49€, IA +149€)
-- [ ] mcc-billing-adv-2 : Usage-Based Tracking SMS/emails/IA
+## VAGUE 3 — MCC Billing (5 items) ✅
+- [x] mcc-bill-2      : TenantBillingPanel + /api/admin/fleet/tenant-billing
+- [x] mcc-bill-3      : DunningEngine cron /api/billing/dunning (J+3/J+7/J+14)
+- [x] mcc-bill-4      : fleet/command écrit tenantConfig.status.licenceStatus LOCKED
+- [x] mcc-billing-adv-1 : /api/admin/fleet/billing/feature-flags (PAID_MODULES)
+- [x] mcc-billing-adv-2 : UsageTracker.ts + /api/admin/fleet/billing/usage
 
 ## VAGUE 4 — MCC Provisioning (4 items)
 - [ ] mcc-prov-1  : Email PIN admin après provisioning

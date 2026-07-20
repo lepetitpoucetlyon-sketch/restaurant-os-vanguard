@@ -58,6 +58,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             lastCommandAction: action,
         }, { merge: true });
 
+        // Propager le statut vers tenantConfig pour que SovereignLockout s'active côté tenant
+        if (newStatus === 'LOCKED' || newStatus === 'MAINTENANCE' || newStatus === 'ONLINE') {
+            await Nexus.adapter.set(`tenants/${instanceId}/tenantConfig`, {
+                status: {
+                    licenceStatus: newStatus === 'LOCKED' ? 'LOCKED' : 'ACTIVE',
+                    maintenanceMode: newStatus === 'MAINTENANCE',
+                },
+            }, { merge: true });
+        }
+
         empireAudit.log({
             module: 'fleet',
             action: `FLEET_CMD_${action}`,
