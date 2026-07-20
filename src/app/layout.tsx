@@ -6,6 +6,7 @@ import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { ErrorBoundary } from "@/components/system/ErrorBoundary";
 import { NexusProviderStack } from "@/components/layout/NexusProviderStack";
+import { ImpersonationBanner } from "@/components/layout/ImpersonationBanner";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -51,6 +52,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
             <NexusProviderStack>
+                <ImpersonationBanner />
                 {children}
             </NexusProviderStack>
           </Suspense>

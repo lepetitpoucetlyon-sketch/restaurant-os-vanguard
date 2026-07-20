@@ -6,10 +6,10 @@
 - [x] mcc-core-5  : 4 sondes câblées sur /api/admin/mcc/health (env vars réelles)
 - [x] mcc-core-6  : avatar "AD" → initiales depuis currentUser.name
 
-## VAGUE 2 — MCC Users (3 items)
-- [ ] mcc-users-2 : Vue "Utilisateurs du tenant" dans le MCC
-- [ ] mcc-users-5 : Impersonation auditée ("Se connecter comme") + bannière
-- [ ] mcc-users-7 : Notif RGPD quand opérateur flotte accède aux données
+## VAGUE 2 — MCC Users (3 items) ✅
+- [x] mcc-users-2 : TenantUsersPanel — liste users, reset PIN, changement rôle
+- [x] mcc-users-5 : /api/admin/fleet/users/impersonate + ImpersonationBanner (bannière jaune)
+- [x] mcc-users-7 : Email RGPD notifyTenantAccess() dans support-access/route.ts
 
 ## VAGUE 3 — MCC Billing (5 items)
 - [ ] mcc-bill-2      : Vue abonnements par tenant (statut Stripe, plan, prochaine facture)
