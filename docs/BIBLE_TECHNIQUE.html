@@ -4236,6 +4236,15 @@ const DONE_BY_AGENTS = new Set([
   'mcc-billing-adv-1',
   // UsageTracker.ts + /api/admin/fleet/billing/usage (SMS/email/IA par mois)
   'mcc-billing-adv-2',
+  // ── v21 — Vague 4 MCC Provisioning (2026-07-20) ──
+  // sendAdminPinEmail() : PIN 6 chiffres hashé + email Resend après provisioning
+  'mcc-prov-1',
+  // decommissionTenant() : snapshot NF525 + LOCKED + rgpdPurgeAt J+90
+  'mcc-prov-4',
+  // Stripe.customers.create() réel dans TenantProvisioningService (fallback mock)
+  'mcc-prov-9',
+  // LightRAGClient workspace isolé par tenant + bootstrap insert au provisioning
+  'mcc-prov-10',
 ]);
 
 function loadChecked() {
