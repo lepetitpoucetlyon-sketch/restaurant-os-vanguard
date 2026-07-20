@@ -3990,7 +3990,7 @@ const EXPL = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v21'; // v21 = sprint-final vagues 1-11 — 52 items agents (2026-07-20) // v20 = A2 god-files + T2 as-any/TODOs // v18 = Sprint 10 Admin P2 // v17 = Sprint 10 Admin P1
+const STORE_KEY = 'ros_checklist_v22'; // v22 = TaxAuditPanel + TrustedDevicePanel + Stripe checkout + ZTNA Device RBAC (2026-07-20) // v21 = sprint-final vagues 1-11 — 52 items agents // v20 = A2 god-files + T2 as-any/TODOs
 
 // Items confirmés terminés par les agents (vérifiés sur disque + tsc 0 erreur)
 const DONE_BY_AGENTS = new Set([
@@ -4312,6 +4312,13 @@ const DONE_BY_AGENTS = new Set([
   'inf-7',
   // DPAE automatique /api/hr/employees → XML URSSAF + archivage Nexus
   'rh-5',
+  // ── v22 — TaxAuditPanel + TrustedDevicePanel + Stripe Checkout + ZTNA (2026-07-20) ──
+  // TaxAuditPanel MCC : audit fiscal par tenant (journalEntries + fiscalSeals + export JSON)
+  'p0-1','fin-1',
+  // Stripe Checkout Session /api/billing/checkout (STRIPE_PRICE_STANDARD/PREMIUM/ENTERPRISE)
+  'fin-2',
+  // Trusted Device Registry (CRUD API + MCC panel + fingerprint RBAC dans requireMccLevel)
+  'mcc-security-adv-1','mcc-security-adv-2',
 ]);
 
 function loadChecked() {
