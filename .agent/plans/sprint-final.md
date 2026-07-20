@@ -56,11 +56,11 @@
 - [x] com-rules-1     : Anti-spam rules (délai 7j, quota mensuel)
 - [x] com-ab-1        : A/B testing email (20% sample → winner → 80%)
 
-## VAGUE 10 — Finance Powens (4 items)
-- [ ] fin-4 : Powens OAuth réel createConnectionToken()
-- [ ] fin-5 : getAccounts() → PowensAccount[]
-- [ ] fin-6 : getTransactions() → PCG → JournalEntry → scellement
-- [ ] fin-7 : Webhook HMAC-SHA256 sync temps réel
+## VAGUE 10 — Finance Powens (4 items) ✅
+- [x] fin-4 : Powens OAuth réel createConnectionToken()
+- [x] fin-5 : getAccounts() → PowensAccount[]
+- [x] fin-6 : getTransactions() → PCG → JournalEntry → scellement
+- [x] fin-7 : Webhook HMAC-SHA256 sync temps réel
 
 ## VAGUE 11 — Réservations + Infra (4 items)
 - [ ] res-arch-1 : Architecture biface (backoffice / widget public)

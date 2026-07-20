@@ -1,17 +1,31 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import {
+    OpenBankingProviderFactory,
+    BankConnectionStore,
+    inferPCGAccount,
+} from '@/domain/finance/banking/openBanking';
+import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
+import { CryptoService } from '@domain/services/CryptoService';
+import type { FiscalSeal } from '@nexus/contracts';
 
 /**
  * POST /api/finance/bank/sync
- * Triggers a bank synchronisation via the configured Powens integration.
- * In demo mode, returns a success stub; in production the Powens webhook
- * pushes transactions to the Nexus bankTransactions/ collection directly.
+ * Déclenche une synchronisation bancaire pour le tenant authentifié.
+ * Auth : admin/manager du tenant (ou fleet_admin) — le tenant vient du token.
+ * Aucun secret global n'est utilisé pour rafraîchir un compte : uniquement
+ * le jeton utilisateur propre à CE tenant, chargé depuis sa connexion persistée.
  */
-export async function POST() {
+export async function POST(request: NextRequest) {
     try {
-        const clientId = process.env.NEXT_PUBLIC_POWENS_CLIENT_ID;
-        const isDemoMode = !clientId || clientId.includes('placeholder') || clientId === 'restaurant-os-master';
+        const caller = await requireTenantAdmin(request);
+        if (isDenied(caller)) return caller;
+        const { tenantId } = caller;
 
-        if (isDemoMode) {
+        const provider = OpenBankingProviderFactory.get();
+
+        if (provider.isDemoMode()) {
             return NextResponse.json({
                 success: true,
                 isDemoMode: true,
@@ -20,27 +34,90 @@ export async function POST() {
             });
         }
 
-        // Production: call Powens API to trigger a refresh
-        const secret = process.env.POWENS_CLIENT_SECRET;
-        if (!secret) {
-            return NextResponse.json({ error: 'POWENS_CLIENT_SECRET manquant.' }, { status: 503 });
+        const connection = await BankConnectionStore.get(tenantId);
+        if (!connection || connection.status !== 'active') {
+            return NextResponse.json({ error: 'Aucune connexion bancaire active pour ce restaurant.' }, { status: 400 });
         }
 
-        // Trigger account refresh via Powens management endpoint
-        const res = await fetch(`https://sandbox.biapi.pro/2.0/connections`, {
-            method: 'PUT',
-            headers: {
-                Authorization: `Bearer ${secret}`,
-                'Content-Type': 'application/json',
-            },
-        });
+        const userToken = BankConnectionStore.decryptToken(connection);
+        await provider.refreshConnection(userToken);
 
-        if (!res.ok) {
-            return NextResponse.json({ error: 'Erreur Powens lors de la synchronisation.' }, { status: 502 });
+        const accounts = await provider.getAccounts(userToken);
+        const fromDate = connection.lastSyncAt
+            ? connection.lastSyncAt.slice(0, 10)
+            : new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+        const existing = await Nexus.adapter.query<{ id: string; signature?: string }>(
+            `tenants/${tenantId}/bankTransactions`
+        );
+        const knownSignatures = new Set(existing.map((e) => e.signature).filter(Boolean));
+
+        const batch = Nexus.adapter.batch();
+        let created = 0;
+
+        // Charger le dernier seal pour chaîner les entrées (fin-6)
+        const existingSeals = await Nexus.adapter.query<FiscalSeal>(
+            `tenants/${tenantId}/fiscalSeals`
+        );
+        let lastSeal: FiscalSeal | undefined = existingSeals.sort(
+            (a, b) => new Date(b.timestamp ?? 0).getTime() - new Date(a.timestamp ?? 0).getTime()
+        )[0];
+
+        for (const account of accounts) {
+            const transactions = await provider.getTransactions(account.id, userToken, fromDate);
+            for (const tx of transactions) {
+                if (tx.signature && knownSignatures.has(tx.signature)) continue;
+                const txId  = Nexus.adapter.generateId(`tenants/${tenantId}/bankTransactions`);
+                const pcg   = inferPCGAccount(tx.label);
+
+                // fin-6 : JournalEntry NF525
+                const jeId = Nexus.adapter.generateId(`tenants/${tenantId}/journalEntries`);
+                const journalEntry = {
+                    id:              jeId,
+                    date:            tx.date,
+                    label:           tx.label,
+                    amountInMicrounits: tx.amountInCents * 10,
+                    type:            tx.type,
+                    pcgAccount:      pcg?.account ?? '512',
+                    pcgLabel:        pcg?.label ?? 'Banque',
+                    source:          'bank_sync' as const,
+                    bankTransactionId: txId,
+                    createdAt:       new Date().toISOString(),
+                };
+                batch.set(`tenants/${tenantId}/journalEntries/${jeId}`, journalEntry);
+
+                // fin-6 : scellement NF525
+                const dataSnapshot = CryptoService.canonicalStringify(
+                    journalEntry as unknown as import('@/shared/nexus-contract').SovereignData
+                );
+                const seal = await FiscalEngine.sealEntry(jeId, journalEntry as Record<string, string | number | boolean | null | undefined | object>, { lastSeal });
+                batch.set(`tenants/${tenantId}/fiscalSeals/${seal.id}`, {
+                    ...seal, dataSnapshot,
+                });
+                lastSeal = seal;
+
+                batch.set(`tenants/${tenantId}/bankTransactions/${txId}`, {
+                    id: txId,
+                    ...tx,
+                    accountId: account.id,
+                    pcgAccount: pcg?.account,
+                    pcgLabel: pcg?.label,
+                    journalEntryId: jeId,
+                    importedAt: Date.now(),
+                    source: provider.id,
+                });
+                created++;
+            }
         }
 
-        return NextResponse.json({ success: true, syncedAt: new Date().toISOString() });
-    } catch (_err) {
-        return NextResponse.json({ error: 'Erreur interne lors de la synchronisation.' }, { status: 500 });
+        await batch.commit();
+        await BankConnectionStore.markSynced(tenantId);
+
+        return NextResponse.json({ success: true, synced: created, syncedAt: new Date().toISOString() });
+    } catch (err) {
+        return NextResponse.json(
+            { error: err instanceof Error ? err.message : 'Erreur interne lors de la synchronisation.' },
+            { status: 500 }
+        );
     }
 }
