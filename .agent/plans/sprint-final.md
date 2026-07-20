@@ -50,11 +50,11 @@
 - [x] mcc-ota-3   : Test broadcast maintenanceMode → bannière tenant
 - [x] mcc-ai-4    : StrategyOracle sur vraies données géo/santé
 
-## VAGUE 9 — CRM Marketing (4 items)
-- [ ] com-analytics-1 : Analytics campagne (open rate, clics, CA)
-- [ ] com-consent-1   : RGPD opt-in par canal (email ≠ SMS ≠ WhatsApp)
-- [ ] com-rules-1     : Anti-spam rules (délai 7j, quota mensuel)
-- [ ] com-ab-1        : A/B testing email (20% sample → winner → 80%)
+## VAGUE 9 — CRM Marketing (4 items) ✅
+- [x] com-analytics-1 : Analytics campagne (open rate, clics, CA)
+- [x] com-consent-1   : RGPD opt-in par canal (email ≠ SMS ≠ WhatsApp)
+- [x] com-rules-1     : Anti-spam rules (délai 7j, quota mensuel)
+- [x] com-ab-1        : A/B testing email (20% sample → winner → 80%)
 
 ## VAGUE 10 — Finance Powens (4 items)
 - [ ] fin-4 : Powens OAuth réel createConnectionToken()
