@@ -30,11 +30,11 @@
 - [x] mcc-crm-4  : Multi-Region Allocation (choix Firestore region)
 - [x] mcc-security-adv-4 : RGPD Purge cryptographique + certificat effacement
 
-## VAGUE 6 — MCC Growth + Health (4 items)
-- [ ] mcc-growth-3 : Churn Predictor IA (baisse activité → alerte)
-- [ ] mcc-growth-4 : Tenant Health Score (uptime + sync + HACCP + tickets)
-- [ ] mcc-deploy-adv-2 : QR Code Device Activation (onboard iPad en 30s)
-- [ ] mcc-deploy-adv-4 : Phased Rollout / Canary (1 tenant pilote avant flotte)
+## VAGUE 6 — MCC Growth + Health (4 items) ✅
+- [x] mcc-growth-3 : Churn Predictor IA (baisse activité → alerte)
+- [x] mcc-growth-4 : Tenant Health Score (uptime + sync + HACCP + tickets)
+- [x] mcc-deploy-adv-2 : QR Code Device Activation (onboard iPad en 30s)
+- [x] mcc-deploy-adv-4 : Phased Rollout / Canary (1 tenant pilote avant flotte)
 
 ## VAGUE 7 — MCC Support IA + Comp (6 items)
 - [ ] mcc-support-ai-2 : Validation Gate human-in-the-loop
