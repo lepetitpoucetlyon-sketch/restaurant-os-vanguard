@@ -44,11 +44,11 @@
 - [x] mcc-comp-3 : PDF certificat NF525 téléchargeable
 - [x] mcc-ai-3  : RAG stats workspace + purge orphelins
 
-## VAGUE 8 — AI + OTA (4 items)
-- [ ] ai-fallback-1 : Provider IA fallback (Gemini → Claude auto)
-- [ ] ai-toggle-1  : Toggles modules IA par restaurant
-- [ ] mcc-ota-3   : Test broadcast maintenanceMode → bannière tenant
-- [ ] mcc-ai-4    : StrategyOracle sur vraies données géo/santé
+## VAGUE 8 — AI + OTA (4 items) ✅
+- [x] ai-fallback-1 : Provider IA fallback (Gemini → Claude auto)
+- [x] ai-toggle-1  : Toggles modules IA par restaurant
+- [x] mcc-ota-3   : Test broadcast maintenanceMode → bannière tenant
+- [x] mcc-ai-4    : StrategyOracle sur vraies données géo/santé
 
 ## VAGUE 9 — CRM Marketing (4 items)
 - [ ] com-analytics-1 : Analytics campagne (open rate, clics, CA)
