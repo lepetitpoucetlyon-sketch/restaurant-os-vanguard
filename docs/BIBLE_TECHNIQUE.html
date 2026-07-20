@@ -4319,6 +4319,15 @@ const DONE_BY_AGENTS = new Set([
   'fin-2',
   // Trusted Device Registry (CRUD API + MCC panel + fingerprint RBAC dans requireMccLevel)
   'mcc-security-adv-1','mcc-security-adv-2',
+  // ── v22b — inf-1/2/5/8 (2026-07-20) ──
+  // Welcome email HTML dans signup/route.ts (fire-and-forget Resend)
+  'inf-1',
+  // NEXUS_TENANT_SECRET: fallbacks dangereux supprimés → throw strict (≠ tenantId slugs)
+  'inf-2',
+  // BackupProvider agnostique GCS/S3-OVH/LocalFS + /api/admin/fleet/backup (NF525 7 ans)
+  'inf-5',
+  // ServerAuthProvider interface Firebase→Keycloak (OVH migration path)
+  'inf-8',
 ]);
 
 function loadChecked() {
