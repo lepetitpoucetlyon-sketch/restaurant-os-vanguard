@@ -4209,6 +4209,15 @@ const DONE_BY_AGENTS = new Set([
   'audit-A2',
   // T2 — 3 as any prod supprimés (NexusEvents typé), 32→20 TODOs purge
   'audit-T2',
+  // ── v21 — Vague 1 Quick wins UI (2026-07-20) ──
+  // Boutons morts masqués + badge "Bientôt" dans MCCTreasury
+  'mcc-bill-5',
+  // Tendances hardcodées (+14.5%/-2.1%) remplacées par "—" neutre + arrowless
+  'mcc-debt-2',
+  // 4 sondes MCC Core Status câblées sur /api/admin/mcc/health (env vars réelles)
+  'mcc-core-5',
+  // Avatar "AD" hardcodé → initiales depuis currentUser.name via useAuth()
+  'mcc-core-6',
 ]);
 
 function loadChecked() {

@@ -61,26 +61,26 @@ export default function VibecodingDashboard() {
     const haccpAlerts = documents?.filter(d => d.status === 'PENDING' || d.status === 'EXPIRED').length || 0;
 
     return [
-      { 
-        title: "Chiffre d'Affaires", 
-        value: new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(revenue), 
-        change: "+14.5%", 
-        trend: "up", 
-        icon: TrendingUp 
+      {
+        title: "Chiffre d'Affaires",
+        value: new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(revenue),
+        change: "—",
+        trend: "neutral",
+        icon: TrendingUp
       },
-      { 
-        title: "Couverts (Jour)", 
-        value: totalCovers.toString(), 
-        change: "+5.2%", 
-        trend: "up", 
-        icon: Users 
+      {
+        title: "Couverts (Jour)",
+        value: totalCovers.toString(),
+        change: "—",
+        trend: "neutral",
+        icon: Users
       },
-      { 
-        title: "Commandes en Cours", 
-        value: activeOrders.length.toString(), 
-        change: "-2.1%", 
-        trend: "down", 
-        icon: Utensils 
+      {
+        title: "Commandes en Cours",
+        value: activeOrders.length.toString(),
+        change: "—",
+        trend: "neutral",
+        icon: Utensils
       },
       { 
         title: "Alertes HACCP", 
@@ -170,8 +170,9 @@ export default function VibecodingDashboard() {
                   <div className="p-3 bg-white/[0.05] rounded-xl border border-white/[0.05]">
                     <stat.icon className={`w-6 h-6 ${stat.title === "Alertes HACCP" && parseInt(stat.value) > 0 ? "text-rose-400" : "text-brand"}`} />
                   </div>
-                  <div className={`flex items-center gap-1 text-sm font-medium ${stat.trend === 'up' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                    {stat.trend === 'up' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                  <div className={`flex items-center gap-1 text-sm font-medium ${stat.trend === 'up' ? 'text-emerald-400' : stat.trend === 'down' ? 'text-rose-400' : 'text-neutral-500'}`}>
+                    {stat.trend === 'up' && <ArrowUpRight className="w-4 h-4" />}
+                    {stat.trend === 'down' && <ArrowDownRight className="w-4 h-4" />}
                     {stat.change}
                   </div>
                 </div>

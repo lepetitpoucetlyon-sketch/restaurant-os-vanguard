@@ -1,0 +1,69 @@
+# Sprint Final — 52 items codables (un par un)
+
+## VAGUE 1 — Quick wins UI (4 items) ✅
+- [x] mcc-bill-5  : boutons morts masqués + badge "Bientôt"
+- [x] mcc-debt-2  : tendances hardcodées remplacées par "—" (neutre)
+- [x] mcc-core-5  : 4 sondes câblées sur /api/admin/mcc/health (env vars réelles)
+- [x] mcc-core-6  : avatar "AD" → initiales depuis currentUser.name
+
+## VAGUE 2 — MCC Users (3 items)
+- [ ] mcc-users-2 : Vue "Utilisateurs du tenant" dans le MCC
+- [ ] mcc-users-5 : Impersonation auditée ("Se connecter comme") + bannière
+- [ ] mcc-users-7 : Notif RGPD quand opérateur flotte accède aux données
+
+## VAGUE 3 — MCC Billing (5 items)
+- [ ] mcc-bill-2      : Vue abonnements par tenant (statut Stripe, plan, prochaine facture)
+- [ ] mcc-bill-3      : Dunning J+3 relance / J+7 suspension / J+14 LOCKED
+- [ ] mcc-bill-4      : LOCKED broadcast → blocage interface tenant
+- [ ] mcc-billing-adv-1 : Feature Flag Billing (Marketing +99€, RH +49€, IA +149€)
+- [ ] mcc-billing-adv-2 : Usage-Based Tracking SMS/emails/IA
+
+## VAGUE 4 — MCC Provisioning (4 items)
+- [ ] mcc-prov-1  : Email PIN admin après provisioning
+- [ ] mcc-prov-4  : Flow décommission (archive + export NF525 + RGPD J+90)
+- [ ] mcc-prov-9  : Stripe createCustomer réel (remplace cus_mock_*)
+- [ ] mcc-prov-10 : LightRAGClient.createWorkspace(tenantId) isolation IA
+
+## VAGUE 5 — MCC CRM + Security (4 items)
+- [ ] mcc-crm-1  : Auto-DNS Vercel/Cloudflare à la création tenant
+- [ ] mcc-crm-2  : Digital Contract Vault (CGV signées + gate blocage)
+- [ ] mcc-crm-4  : Multi-Region Allocation (choix Firestore region)
+- [ ] mcc-security-adv-4 : RGPD Purge cryptographique + certificat effacement
+
+## VAGUE 6 — MCC Growth + Health (4 items)
+- [ ] mcc-growth-3 : Churn Predictor IA (baisse activité → alerte)
+- [ ] mcc-growth-4 : Tenant Health Score (uptime + sync + HACCP + tickets)
+- [ ] mcc-deploy-adv-2 : QR Code Device Activation (onboard iPad en 30s)
+- [ ] mcc-deploy-adv-4 : Phased Rollout / Canary (1 tenant pilote avant flotte)
+
+## VAGUE 7 — MCC Support IA + Comp (6 items)
+- [ ] mcc-support-ai-2 : Validation Gate human-in-the-loop
+- [ ] mcc-support-ai-3 : 1-Click Tenant Restore UI (PITR Firestore)
+- [ ] mcc-support-ai-4 : Firestore Hotspot Radar (détection loops)
+- [ ] mcc-comp-2 : Audit intégrité chaîne auto hebdomadaire
+- [ ] mcc-comp-3 : PDF certificat NF525 téléchargeable
+- [ ] mcc-ai-3  : RAG stats workspace + purge orphelins
+
+## VAGUE 8 — AI + OTA (4 items)
+- [ ] ai-fallback-1 : Provider IA fallback (Gemini → Claude auto)
+- [ ] ai-toggle-1  : Toggles modules IA par restaurant
+- [ ] mcc-ota-3   : Test broadcast maintenanceMode → bannière tenant
+- [ ] mcc-ai-4    : StrategyOracle sur vraies données géo/santé
+
+## VAGUE 9 — CRM Marketing (4 items)
+- [ ] com-analytics-1 : Analytics campagne (open rate, clics, CA)
+- [ ] com-consent-1   : RGPD opt-in par canal (email ≠ SMS ≠ WhatsApp)
+- [ ] com-rules-1     : Anti-spam rules (délai 7j, quota mensuel)
+- [ ] com-ab-1        : A/B testing email (20% sample → winner → 80%)
+
+## VAGUE 10 — Finance Powens (4 items)
+- [ ] fin-4 : Powens OAuth réel createConnectionToken()
+- [ ] fin-5 : getAccounts() → PowensAccount[]
+- [ ] fin-6 : getTransactions() → PCG → JournalEntry → scellement
+- [ ] fin-7 : Webhook HMAC-SHA256 sync temps réel
+
+## VAGUE 11 — Réservations + Infra (4 items)
+- [ ] res-arch-1 : Architecture biface (backoffice / widget public)
+- [ ] res-14     : Acompte privatisation Stripe Checkout + NF525
+- [ ] inf-7      : Rate limiter Redis/Upstash (remplace Map() RAM)
+- [ ] rh-5       : DPAE automatique à la création d'un employé
