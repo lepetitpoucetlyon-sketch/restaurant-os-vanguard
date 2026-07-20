@@ -6,13 +6,14 @@ import { TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { useFleet } from '@/context/FleetContext';
-import { FleetInsight } from '@domain/services/MacroBrain';
+import { FleetInsight, MacroBrain } from '@domain/services/MacroBrain';
 import { logger } from '@/lib/logger';
 
 export function MCCInsights() {
     const { macroInsights, refreshFleet } = useFleet();
-    const triggerRebalancing = (insight: FleetInsight) => {
+    const triggerRebalancing = async (insight: FleetInsight) => {
         logger.info('[Fleet] Triggering rebalancing', { insightId: insight.id, type: insight.type });
+        await MacroBrain.executeStrategicAction(insight);
         refreshFleet?.(true);
     };
     const _fleetState = useAtomValue(fleetSnapshotAtom);

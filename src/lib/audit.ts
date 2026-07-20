@@ -6,6 +6,7 @@
 import { logger } from './axiom';
 import { logger as devLogger } from '@/lib/logger';
 import * as Sentry from '@sentry/nextjs';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
 export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'haccp' | 'system' | 'orchestration' | 'fleet';
@@ -81,7 +82,20 @@ class EmpireAuditLogger {
                 // (logger.debug is a no-op outside development).
                 devLogger.debug(`[AUDIT][${event.module.toUpperCase()}] ${event.action}`, event.details || '');
 
-                // 3. Sentry Integration (Critical Error Tracking)
+                // 3. Firestore persistence — fleet & system events (survit au refresh)
+                if (event.module === 'fleet' || event.module === 'system') {
+                    try {
+                        const id = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+                        Nexus.adapter.set(`mcc/auditLog/${id}`, {
+                            ...payload,
+                            id,
+                        }).catch(() => {});
+                    } catch (_e) {
+                        // Non-bloquant — ne doit jamais faire crasher l'UI
+                    }
+                }
+
+                // 4. Sentry Integration (Critical Error Tracking)
                 if (event.severity === 'critical') {
                     try {
                         Sentry.captureMessage(event.action, { 

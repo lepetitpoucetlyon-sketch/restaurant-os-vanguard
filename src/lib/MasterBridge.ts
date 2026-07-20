@@ -111,6 +111,17 @@ export const MasterBridge = {
     });
   },
 
+  /**
+   * MCC-only: Écrit un patch de config dans l'espace isolé d'un tenant.
+   * Appelé depuis TenantProvisioningService au moment du provisioning.
+   * Ne passe PAS par les atoms Jotai — écriture directe Nexus (server context).
+   */
+  async pushTenantConfigPatch(tenantId: string, patch: Record<string, unknown>): Promise<void> {
+    const path = `tenants/${tenantId}/tenantConfig`;
+    await Nexus.adapter.set(path, { ...patch, updatedAt: new Date().toISOString() }, { merge: true });
+    logger.info(`[MasterBridge] Config patch poussée → ${path}`);
+  },
+
   async verifyVassalBoundSignature(payload: SignedMasterConfig): Promise<boolean> {
     if (payload.signatureVersion !== 'NF525_BRIDGE_V1') {
       return false;
