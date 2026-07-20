@@ -24,11 +24,11 @@
 - [x] mcc-prov-9  : Stripe.customers.create() réel (fallback mock si clé absente)
 - [x] mcc-prov-10 : LightRAGClient({ workspace: ragWorkspaceId }).insert() bootstrap
 
-## VAGUE 5 — MCC CRM + Security (4 items)
-- [ ] mcc-crm-1  : Auto-DNS Vercel/Cloudflare à la création tenant
-- [ ] mcc-crm-2  : Digital Contract Vault (CGV signées + gate blocage)
-- [ ] mcc-crm-4  : Multi-Region Allocation (choix Firestore region)
-- [ ] mcc-security-adv-4 : RGPD Purge cryptographique + certificat effacement
+## VAGUE 5 — MCC CRM + Security (4 items) ✅
+- [x] mcc-crm-1  : Auto-DNS Vercel/Cloudflare à la création tenant
+- [x] mcc-crm-2  : Digital Contract Vault (CGV signées + gate blocage)
+- [x] mcc-crm-4  : Multi-Region Allocation (choix Firestore region)
+- [x] mcc-security-adv-4 : RGPD Purge cryptographique + certificat effacement
 
 ## VAGUE 6 — MCC Growth + Health (4 items)
 - [ ] mcc-growth-3 : Churn Predictor IA (baisse activité → alerte)
