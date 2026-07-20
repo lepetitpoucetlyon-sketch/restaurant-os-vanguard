@@ -36,13 +36,13 @@
 - [x] mcc-deploy-adv-2 : QR Code Device Activation (onboard iPad en 30s)
 - [x] mcc-deploy-adv-4 : Phased Rollout / Canary (1 tenant pilote avant flotte)
 
-## VAGUE 7 — MCC Support IA + Comp (6 items)
-- [ ] mcc-support-ai-2 : Validation Gate human-in-the-loop
-- [ ] mcc-support-ai-3 : 1-Click Tenant Restore UI (PITR Firestore)
-- [ ] mcc-support-ai-4 : Firestore Hotspot Radar (détection loops)
-- [ ] mcc-comp-2 : Audit intégrité chaîne auto hebdomadaire
-- [ ] mcc-comp-3 : PDF certificat NF525 téléchargeable
-- [ ] mcc-ai-3  : RAG stats workspace + purge orphelins
+## VAGUE 7 — MCC Support IA + Comp (6 items) ✅
+- [x] mcc-support-ai-2 : Validation Gate human-in-the-loop
+- [x] mcc-support-ai-3 : 1-Click Tenant Restore UI (PITR Firestore)
+- [x] mcc-support-ai-4 : Firestore Hotspot Radar (détection loops)
+- [x] mcc-comp-2 : Audit intégrité chaîne auto hebdomadaire
+- [x] mcc-comp-3 : PDF certificat NF525 téléchargeable
+- [x] mcc-ai-3  : RAG stats workspace + purge orphelins
 
 ## VAGUE 8 — AI + OTA (4 items)
 - [ ] ai-fallback-1 : Provider IA fallback (Gemini → Claude auto)
