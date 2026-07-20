@@ -4245,6 +4245,73 @@ const DONE_BY_AGENTS = new Set([
   'mcc-prov-9',
   // LightRAGClient workspace isolé par tenant + bootstrap insert au provisioning
   'mcc-prov-10',
+  // Vague 5 — MCC CRM + Security
+  // Auto-DNS Vercel/Cloudflare + intégration TenantProvisioningService
+  'mcc-crm-1',
+  // Digital Contract Vault : CGV SHA-256, gate tenant, audit empire
+  'mcc-crm-2',
+  // Multi-Region Allocation : 5 régions, flag rgpdCompliant, tenantConfig.dataRegion
+  'mcc-crm-4',
+  // RGPD Purge cryptographique + certificat SHA-256, NF525 immuable préservé
+  'mcc-security-adv-4',
+  // Vague 6 — MCC Growth + Health
+  // Churn Predictor IA : 5 signaux, score 0-100, top10 fleet
+  'mcc-growth-3',
+  // Tenant Health Score : 4 dimensions 25pts, POST recalcul fleet
+  'mcc-growth-4',
+  // QR Code Device Activation : token UUID 30min, iPad/KDS/tablet bootstrap
+  'mcc-deploy-adv-2',
+  // Phased Rollout / Canary : pilot → promote/rollback, featureFlags.{key}
+  'mcc-deploy-adv-4',
+  // Vague 7 — MCC Support IA + Comp
+  // Validation Gate human-in-the-loop : create/approve/reject avant actions IA critiques
+  'mcc-support-ai-2',
+  // 1-Click Restore PITR Firestore J-30, NF525 exclu
+  'mcc-support-ai-3',
+  // Hotspot Radar : read_loop/write_storm, top5 fleet-wide
+  'mcc-support-ai-4',
+  // Audit intégrité chaîne : SHA-256 recompute vs fiscalSeal, alerte BREACH
+  'mcc-comp-2',
+  // PDF certificat NF525 : fingerprint SHA-256, Content-Disposition: attachment
+  'mcc-comp-3',
+  // RAG workspace stats + purge orphelins via getDocuments/deleteDocument
+  'mcc-ai-3',
+  // Vague 8 — AI + OTA
+  // AIProviderRouter : Gemini 1.5 Flash → Claude Haiku 4.5 auto-fallback
+  'ai-fallback-1',
+  // 5 toggles modules IA par tenant : recommendations, forecast, churn, pricing, rag
+  'ai-toggle-1',
+  // OTA broadcast maintenanceMode → tenantConfig.status → SovereignLockout bannière
+  'mcc-ota-3',
+  // StrategyOracle sur vraies données géo+santé fleet (GET+POST avec focus custom)
+  'mcc-ai-4',
+  // Vague 9 — CRM Marketing
+  // Analytics campagne : sent/opened/clicked/converted, open/click/conv rates
+  'com-analytics-1',
+  // Opt-in/out par canal email/SMS/WhatsApp, RGPD Art.7 indépendant
+  'com-consent-1',
+  // Anti-spam : délai 7j, quota 4/mois, filter batch POST
+  'com-rules-1',
+  // A/B test : 10%A + 10%B + 80% holdout, resolve → winner → holdout
+  'com-ab-1',
+  // Vague 10 — Finance Powens
+  // createConnectionToken() OAuth réel + isDemoMode fallback
+  'fin-4',
+  // getAccounts() → PowensAccount[] (sync/route.ts)
+  'fin-5',
+  // getTransactions() → PCG → JournalEntry NF525 + FiscalSeal chaîné
+  'fin-6',
+  // Webhook HMAC-SHA256 + trigger sync serveur→serveur (connection.synced)
+  'fin-7',
+  // Vague 11 — Réservations + Infra
+  // Architecture biface /api/reservations (backoffice) vs /api/widget/* (public)
+  'res-arch-1',
+  // Acompte privatisation Stripe Checkout + webhook → JournalEntry NF525 + FiscalSeal
+  'res-14',
+  // Rate limiter Upstash wired dans /api/widget/book (10 req/h par IP)
+  'inf-7',
+  // DPAE automatique /api/hr/employees → XML URSSAF + archivage Nexus
+  'rh-5',
 ]);
 
 function loadChecked() {
