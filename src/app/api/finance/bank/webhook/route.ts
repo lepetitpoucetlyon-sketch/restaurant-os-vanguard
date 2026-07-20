@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { logger } from '@/lib/axiom';
+import { OpenBankingProviderFactory } from '@/domain/finance/banking/openBanking';
 
 /**
  * POST /api/finance/bank/webhook
@@ -27,33 +28,40 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Webhook non configuré.' }, { status: 503 });
     }
 
-    const rawBody = await request.text();
-    const signature = request.headers.get('x-powens-signature') ?? request.headers.get('x-webhook-signature');
+    // Résoudre le provider actif pour connaître son header de signature
+    const provider  = OpenBankingProviderFactory.get();
+    const rawBody   = await request.text();
+    const signature = request.headers.get(provider.webhookSignatureHeader)
+                   ?? request.headers.get('x-webhook-signature'); // fallback générique
 
     if (!verifySignature(rawBody, signature, secret)) {
-        logger.warn('bank/webhook: signature invalide, requête rejetée.');
+        logger.warn(`bank/webhook: signature invalide (provider: ${provider.id}), requête rejetée.`);
         return NextResponse.json({ error: 'Signature invalide.' }, { status: 401 });
     }
 
-    let payload: { tenant_id?: string; event?: string };
+    let raw: unknown;
     try {
-        payload = JSON.parse(rawBody);
+        raw = JSON.parse(rawBody);
     } catch {
         return NextResponse.json({ error: 'Payload invalide.' }, { status: 400 });
     }
 
-    if (payload.event === 'connection.synced' && payload.tenant_id) {
-        logger.info('bank/webhook: connection.synced reçu — déclenchement sync', { tenantId: payload.tenant_id });
-        // Déclenchement serveur-à-serveur de la sync bancaire (fin-7)
+    // Normalisation agnostique — chaque provider mappe ses champs vers l'enveloppe canonique
+    const envelope = provider.normalizeWebhookPayload(raw);
+
+    if (envelope.event === 'connection.synced') {
+        logger.info(`bank/webhook: connection.synced (${provider.id})`, { tenantId: envelope.tenantId });
         const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXTAUTH_URL ?? 'http://localhost:3000';
-        fetch(`${appUrl}/api/finance/bank/sync`, {
-            method: 'POST',
-            headers: {
-                'Content-Type':   'application/json',
-                'x-internal-secret': process.env.INTERNAL_API_SECRET ?? '',
-                'x-tenant-id':    payload.tenant_id,
-            },
-        }).catch(err => logger.error('bank/webhook: sync trigger failed', { err: String(err) }));
+        if (envelope.tenantId) {
+            fetch(`${appUrl}/api/finance/bank/sync`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type':      'application/json',
+                    'x-internal-secret': process.env.INTERNAL_API_SECRET ?? '',
+                    'x-tenant-id':       envelope.tenantId,
+                },
+            }).catch(err => logger.error('bank/webhook: sync trigger failed', { err: String(err) }));
+        }
     }
 
     return NextResponse.json({ received: true });

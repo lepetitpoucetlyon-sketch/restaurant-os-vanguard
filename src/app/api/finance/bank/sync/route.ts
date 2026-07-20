@@ -23,7 +23,9 @@ export async function POST(request: NextRequest) {
         if (isDenied(caller)) return caller;
         const { tenantId } = caller;
 
-        const provider = OpenBankingProviderFactory.get();
+        // Charger la connexion une seule fois — le provider est lu depuis connection.provider
+        const connection = await BankConnectionStore.get(tenantId);
+        const provider   = OpenBankingProviderFactory.get(connection?.provider);
 
         if (provider.isDemoMode()) {
             return NextResponse.json({
@@ -34,7 +36,6 @@ export async function POST(request: NextRequest) {
             });
         }
 
-        const connection = await BankConnectionStore.get(tenantId);
         if (!connection || connection.status !== 'active') {
             return NextResponse.json({ error: 'Aucune connexion bancaire active pour ce restaurant.' }, { status: 400 });
         }
