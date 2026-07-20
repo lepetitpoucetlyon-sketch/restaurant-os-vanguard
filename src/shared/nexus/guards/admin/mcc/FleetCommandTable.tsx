@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { authedFetch } from '@/lib/client/authedFetch';
 import {
@@ -11,21 +11,59 @@ import {
   Search,
   Filter,
   Brain,
-  RotateCcw
+  RotateCcw,
+  Terminal,
+  Lock,
+  Wrench,
+  RefreshCw,
+  ChevronDown,
+  Check
 } from 'lucide-react';
+
+type StatusFilter = 'ALL' | 'ONLINE' | 'OFFLINE' | 'CRITICAL' | 'MAINTENANCE';
+
+const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
+    { value: 'ALL', label: 'Tous les sites' },
+    { value: 'ONLINE', label: 'En ligne' },
+    { value: 'OFFLINE', label: 'Hors ligne' },
+    { value: 'CRITICAL', label: 'Critique' },
+    { value: 'MAINTENANCE', label: 'Maintenance' },
+];
+
+const COMMANDER_ACTIONS = [
+    { key: 'RESTART',     label: 'Redémarrer',     icon: RefreshCw,  danger: false },
+    { key: 'MAINTENANCE', label: 'Mode maintenance', icon: Wrench,     danger: false },
+    { key: 'LOCK',        label: 'Verrouiller',     icon: Lock,       danger: true  },
+];
 
 export function FleetCommandTable() {
     const { instances, isLoading } = useNexusFleet();
     const [reindexing, setReindexing] = useState<Record<string, boolean>>({});
+    const [commanding, setCommanding] = useState<Record<string, boolean>>({});
     const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
+    const [filterOpen, setFilterOpen] = useState(false);
+    const [commandMenuId, setCommandMenuId] = useState<string | null>(null);
+    const filterRef = useRef<HTMLDivElement>(null);
 
-    const filteredInstances = searchQuery.trim()
-        ? instances.filter(inst =>
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+                setFilterOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
+
+    const filteredInstances = instances.filter(inst => {
+        const matchesSearch = !searchQuery.trim() ||
             inst.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             inst.key?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            inst.id?.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        : instances;
+            inst.id?.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus = statusFilter === 'ALL' || inst.status === statusFilter;
+        return matchesSearch && matchesStatus;
+    });
 
     const handleReindex = async (instanceId: string) => {
         setReindexing(prev => ({ ...prev, [instanceId]: true }));
@@ -37,6 +75,20 @@ export function FleetCommandTable() {
             });
         } finally {
             setReindexing(prev => ({ ...prev, [instanceId]: false }));
+        }
+    };
+
+    const handleCommand = async (instanceId: string, action: string) => {
+        setCommandMenuId(null);
+        setCommanding(prev => ({ ...prev, [instanceId]: true }));
+        try {
+            await authedFetch('/api/admin/fleet/command', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, instanceId }),
+            });
+        } finally {
+            setCommanding(prev => ({ ...prev, [instanceId]: false }));
         }
     };
 
@@ -70,9 +122,42 @@ export function FleetCommandTable() {
                             className="bg-transparent border-none outline-none text-[10px] font-bold text-white placeholder:text-secondary w-32"
                         />
                     </div>
-                    <button className="p-2.5 bg-action-primary/10 text-brand border border-focus/20 rounded-xl hover:bg-action-primary/20 transition-all">
-                        <Filter className="w-4 h-4" />
-                    </button>
+                    <div className="relative" ref={filterRef}>
+                        <button
+                            onClick={() => setFilterOpen(o => !o)}
+                            className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl transition-all text-[9px] font-black uppercase tracking-widest ${
+                                statusFilter !== 'ALL'
+                                    ? 'bg-action-primary text-white border-focus/40'
+                                    : 'bg-action-primary/10 text-brand border-focus/20 hover:bg-action-primary/20'
+                            }`}
+                        >
+                            <Filter className="w-3.5 h-3.5" />
+                            {statusFilter !== 'ALL' ? statusFilter : ''}
+                            <ChevronDown className={`w-3 h-3 transition-transform ${filterOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        <AnimatePresence>
+                            {filterOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                                    transition={{ duration: 0.12 }}
+                                    className="absolute right-0 top-full mt-2 w-44 bg-[#111113] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden"
+                                >
+                                    {STATUS_FILTERS.map(f => (
+                                        <button
+                                            key={f.value}
+                                            onClick={() => { setStatusFilter(f.value); setFilterOpen(false); }}
+                                            className="flex items-center justify-between w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors text-left"
+                                        >
+                                            <span className={statusFilter === f.value ? 'text-brand' : 'text-muted'}>{f.label}</span>
+                                            {statusFilter === f.value && <Check className="w-3 h-3 text-brand" />}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
 
@@ -127,7 +212,7 @@ export function FleetCommandTable() {
                                 </td>
                                 <td className="px-6 py-5 text-right">
                                     <div className="flex flex-col items-end">
-                                        {instance.security?.supportAccessGranted || true ? ( // Forced true for Command view
+                                        {instance.security?.supportAccessGranted ? (
                                             <>
                                                 <span className="text-sm font-black text-white">{(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                                                 <div className="flex items-center gap-1 text-[9px] font-bold text-status-success uppercase">
@@ -209,9 +294,43 @@ export function FleetCommandTable() {
                                         <button className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-white hover:border-default transition-all opacity-0 group-hover:opacity-100">
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </button>
-                                        <button className="px-4 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary hover:text-white transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100">
-                                            COMMANDER
-                                        </button>
+                                        <div className="relative">
+                                            <button
+                                                onClick={() => setCommandMenuId(commandMenuId === instance.id ? null : instance.id)}
+                                                disabled={commanding[instance.id]}
+                                                className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary hover:text-white transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100 disabled:opacity-40"
+                                            >
+                                                {commanding[instance.id]
+                                                    ? <><RefreshCw className="w-3 h-3 animate-spin" /> EN COURS</>
+                                                    : <><Terminal className="w-3 h-3" /> COMMANDER</>
+                                                }
+                                            </button>
+                                            <AnimatePresence>
+                                                {commandMenuId === instance.id && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                        exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                                                        transition={{ duration: 0.12 }}
+                                                        className="absolute right-0 bottom-full mb-2 w-44 bg-[#111113] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden"
+                                                    >
+                                                        <div className="px-3 py-2 border-b border-white/5">
+                                                            <p className="text-[8px] font-black uppercase tracking-widest text-secondary">Action sur {instance.name}</p>
+                                                        </div>
+                                                        {COMMANDER_ACTIONS.map(({ key, label, icon: Icon, danger }) => (
+                                                            <button
+                                                                key={key}
+                                                                onClick={() => handleCommand(instance.id, key)}
+                                                                className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors ${danger ? 'text-error hover:bg-red-500/10' : 'text-muted hover:text-white'}`}
+                                                            >
+                                                                <Icon className="w-3 h-3" />
+                                                                {label}
+                                                            </button>
+                                                        ))}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
                                     </div>
                                 </td>
                             </motion.tr>

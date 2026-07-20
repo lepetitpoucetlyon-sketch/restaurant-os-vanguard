@@ -13,6 +13,7 @@ import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
 import { SidebarQuickActions } from "./sidebar/SidebarQuickActions";
 import { SidebarProfile } from "./sidebar/SidebarProfile";
+import { OtaUpdateBanner } from "./sidebar/OtaUpdateBanner";
 
 // External Modals/Overlays
 import { AppLaunchpad } from "./AppLaunchpad";
@@ -23,6 +24,7 @@ import { empireAudit } from "@/lib/audit";
 
 import { useAtomValue } from 'jotai';
 import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
+import { whiteLabelInstanceConfig } from '@/config/instance';
 
 const sidebarReveal: Variants = {
     hidden: { opacity: 0, x: -20 },
@@ -176,8 +178,21 @@ export function Sidebar() {
                     setIsMap3DOpen={setIsMap3DOpen}
                 />
 
+                {/* OTA Update Banner — visible quand targetVersion diffère de la version installée */}
+                {(() => {
+                    const status = (tenantConfig as { status?: { targetVersion?: string; otaUrl?: string } }).status;
+                    const tv = status?.targetVersion;
+                    return tv && tv !== whiteLabelInstanceConfig.version ? (
+                        <OtaUpdateBanner
+                            targetVersion={tv}
+                            otaUrl={status?.otaUrl}
+                            isSidebarCollapsed={isSidebarCollapsed}
+                        />
+                    ) : null;
+                })()}
+
                 {/* 3. Quick Actions */}
-                <SidebarQuickActions 
+                <SidebarQuickActions
                     isSidebarCollapsed={isSidebarCollapsed}
                     setIsExpenseModalOpen={setIsExpenseModalOpen}
                 />
