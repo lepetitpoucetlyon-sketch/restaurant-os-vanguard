@@ -26,6 +26,56 @@ export interface AdminCaller {
 const FLEET_ROLES = ['fleet_admin', 'SUPER_ADMIN'] as const;
 const TENANT_ADMIN_ROLES = ['fleet_admin', 'SUPER_ADMIN', 'admin', 'manager'] as const;
 
+/**
+ * RBAC MCC Interne — trois niveaux d'accès opérateurs.
+ *
+ * mcc_junior_dev  : lecture seule (telemetry, status). Aucune action destructive.
+ * mcc_support     : +reset PIN, demande/status support access, réindexation RAG.
+ * fleet_admin     : accès complet (y compris rôles, commandes, révocation).
+ * SUPER_ADMIN     : alias historique fleet_admin.
+ */
+export type MccRole = 'mcc_junior_dev' | 'mcc_support' | 'fleet_admin' | 'SUPER_ADMIN';
+
+const MCC_ROLE_HIERARCHY: Record<MccRole, number> = {
+    mcc_junior_dev: 1,
+    mcc_support: 2,
+    fleet_admin: 3,
+    SUPER_ADMIN: 3,
+};
+
+/**
+ * Vérifie qu'un opérateur MCC a le niveau minimum requis.
+ * Usage : `const caller = await requireMccLevel(req, 'mcc_support'); if (isDenied(caller)) return caller;`
+ */
+export async function requireMccLevel(
+    request: Request,
+    minLevel: MccRole,
+): Promise<AdminCaller | NextResponse> {
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) return hiddenDoor();
+
+    try {
+        initFirebaseAdmin();
+        const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));
+        const role = typeof decoded.role === 'string' ? decoded.role : '';
+        const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
+            : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
+
+        const callerLevel = MCC_ROLE_HIERARCHY[role as MccRole] ?? 0;
+        const requiredLevel = MCC_ROLE_HIERARCHY[minLevel];
+
+        if (callerLevel < requiredLevel) {
+            logger.warn(`[adminAuth] MCC RBAC denied: uid=${decoded.uid} role=${role} needed=${minLevel}`);
+            return hiddenDoor();
+        }
+
+        return { uid: decoded.uid, role, tenantId };
+    } catch (err) {
+        logger.warn('[adminAuth] Token verification failed', String(err));
+        return hiddenDoor();
+    }
+}
+
 function hiddenDoor(): NextResponse {
   return new NextResponse(null, { status: 404 });
 }

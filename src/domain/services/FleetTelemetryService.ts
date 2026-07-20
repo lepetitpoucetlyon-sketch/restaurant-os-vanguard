@@ -1,6 +1,8 @@
 import { TenantID, SiteTelemetry } from '@domain/types/brands';
 import { TelemetryStream, TelemetryEvent } from '@/lib/telemetry/TelemetryStream';
 import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { empireAudit } from '@/lib/audit';
 
 /**
  * 🛰️ FleetTelemetryService - Restaurant OS
@@ -61,6 +63,65 @@ export class FleetTelemetryService {
     });
   }
 
+  public async monitorFleetHealth(): Promise<void> {
+    const HEALTH_THRESHOLD = 70;
+    const HEARTBEAT_STALE_MS = 5 * 60 * 1000; // 5 minutes
+
+    let sites: SiteTelemetry[];
+    try {
+      sites = await discoverRealFleet();
+    } catch {
+      return;
+    }
+
+    const now = Date.now();
+
+    for (const site of sites) {
+      const healthLow = site.healthScore < HEALTH_THRESHOLD;
+      const lastBeat = site.lastHeartbeat ? new Date(site.lastHeartbeat).getTime() : 0;
+      const heartbeatStale = !lastBeat || now - lastBeat > HEARTBEAT_STALE_MS;
+
+      if (!healthLow && !heartbeatStale) continue;
+
+      const reason = healthLow && heartbeatStale
+        ? `health=${site.healthScore}% + heartbeat silencieux depuis ${Math.round((now - lastBeat) / 60000)} min`
+        : healthLow
+          ? `health critique: ${site.healthScore}% (seuil 70%)`
+          : `heartbeat silencieux depuis ${Math.round((now - lastBeat) / 60000)} min`;
+
+      const alertId = `${now}_${site.id}`;
+      const alert = {
+        id: alertId,
+        tenantId: site.tenantId ?? site.key,
+        instanceId: site.id,
+        instanceName: site.name,
+        severity: site.healthScore < 50 ? 'critical' : 'high',
+        reason,
+        healthScore: site.healthScore,
+        lastHeartbeat: site.lastHeartbeat,
+        detectedAt: new Date(now).toISOString(),
+        acknowledged: false,
+      };
+
+      try {
+        Nexus.adapter.set(`mcc/alerts/${alertId}`, alert).catch(() => {});
+      } catch { /* non-bloquant */ }
+
+      empireAudit.log({
+        module: 'fleet',
+        action: 'FLEET_HEALTH_ALERT',
+        severity: alert.severity as 'critical' | 'high',
+        details: alert as unknown as import('@/shared/nexus-contract').SovereignData,
+        instanceId: site.id,
+        timestamp: new Date(now),
+      });
+    }
+  }
+
+  public static async monitorFleetHealth(): Promise<void> {
+    return this.getInstance().monitorFleetHealth();
+  }
+
   private async handleStreamFlush(events: TelemetryEvent[]): Promise<void> {
     const telemetryUpdates: Record<string, Partial<SiteTelemetry>> = {};
     const administrativeActions: TelemetryEvent[] = [];
@@ -85,6 +146,9 @@ export class FleetTelemetryService {
     );
 
     await Promise.all([...syncTasks, ...adminTasks]);
+
+    // Alerte proactive après chaque flush (toutes les 5 min) — mcc-tel-2
+    this.monitorFleetHealth().catch(() => {});
   }
 
   public async discoverRealFleet(): Promise<SiteTelemetry[]> {
