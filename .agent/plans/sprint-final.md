@@ -62,8 +62,8 @@
 - [x] fin-6 : getTransactions() → PCG → JournalEntry → scellement
 - [x] fin-7 : Webhook HMAC-SHA256 sync temps réel
 
-## VAGUE 11 — Réservations + Infra (4 items)
-- [ ] res-arch-1 : Architecture biface (backoffice / widget public)
-- [ ] res-14     : Acompte privatisation Stripe Checkout + NF525
-- [ ] inf-7      : Rate limiter Redis/Upstash (remplace Map() RAM)
-- [ ] rh-5       : DPAE automatique à la création d'un employé
+## VAGUE 11 — Réservations + Infra (4 items) ✅
+- [x] res-arch-1 : Architecture biface (backoffice / widget public)
+- [x] res-14     : Acompte privatisation Stripe Checkout + NF525
+- [x] inf-7      : Rate limiter Redis/Upstash (remplace Map() RAM)
+- [x] rh-5       : DPAE automatique à la création d'un employé

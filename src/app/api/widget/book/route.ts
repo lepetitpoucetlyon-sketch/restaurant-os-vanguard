@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { getRateLimiter } from '@/lib/rate-limiter';
 
 const BookSchema = z.object({
   tenantId: z.string().min(1).max(80),
@@ -17,6 +18,14 @@ const BookSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  // inf-7: Rate limiter Redis/Upstash (anti-abus widget public)
+  const ip      = request.headers.get('x-forwarded-for') ?? 'unknown';
+  const limiter = getRateLimiter();
+  const rl      = await limiter.check(`widget:book:${ip}`, 10, 60 * 60 * 1000); // 10/heure
+  if (!rl.allowed) {
+    return NextResponse.json({ success: false, error: 'Trop de requêtes — réessayez dans 1h.' }, { status: 429 });
+  }
+
   try {
     const body = await request.json();
     const parsed = BookSchema.safeParse(body);
