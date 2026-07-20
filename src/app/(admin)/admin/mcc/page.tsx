@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, 
@@ -17,7 +17,6 @@ import {
   BrainCircuit
 } from 'lucide-react';
 import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
-import { EmpireInstance } from '@domain/types/empire';
 
 
 import dynamic from 'next/dynamic';
@@ -40,6 +39,8 @@ import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
 import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
+import { useAuth } from '@/engines/core/NexusCoreProvider';
+import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 
 /**
  * 👑 Master Command Control (MCC) Dashboard
@@ -54,6 +55,20 @@ export default function MCCDashboard() {
   } = useNexusFleet();
 
   const { state: switchboard, toggleModule } = useSovereignSwitchboard();
+  const { currentUser } = useAuth();
+
+  const [health, setHealth] = useState<MCCHealthStatus | null>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/mcc/health')
+      .then(r => r.ok ? r.json() as Promise<MCCHealthStatus> : null)
+      .then(data => { if (data) setHealth(data); })
+      .catch(() => {});
+  }, []);
+
+  const userInitials = currentUser?.name
+    ? currentUser.name.split(' ').map((p: string) => p[0]).join('').toUpperCase().slice(0, 2)
+    : 'MCC';
 
   const [showCloneModal, setShowCloneModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury'>('fleet');
@@ -154,7 +169,7 @@ export default function MCCDashboard() {
           <div className="w-px h-10 bg-surface-card/5 mx-2" />
           
           <div className="w-10 h-10 rounded-full bg-action-primary/20 border border-focus/30 flex items-center justify-center font-bold text-brand">
-            AD
+            {userInitials}
           </div>
         </div>
       </header>
@@ -305,10 +320,26 @@ export default function MCCDashboard() {
                       <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">MCC Core Status</h3>
                   </div>
                   <div className="space-y-4">
-                      <StatusItem label="Provisioning Engine" status="Ready" color="bg-status-success" />
-                      <StatusItem label="Axiom Log Ingest" status="Streaming" color="bg-status-success" />
-                      <StatusItem label="NF525 Seal Engine" status="Secured" color="bg-action-primary" />
-                      <StatusItem label="Fleet Intelligence" status="Aggregating" color="bg-action-primary" />
+                      <StatusItem
+                        label="Provisioning Engine"
+                        status={health ? (health.provisioningEngine === 'ready' ? 'Ready' : health.provisioningEngine === 'degraded' ? 'Dégradé' : 'Offline') : '…'}
+                        color={health ? (health.provisioningEngine === 'ready' ? 'bg-status-success' : health.provisioningEngine === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                      <StatusItem
+                        label="Axiom Log Ingest"
+                        status={health ? (health.axiomLogIngest === 'streaming' ? 'Streaming' : health.axiomLogIngest === 'degraded' ? 'Dégradé' : 'Offline') : '…'}
+                        color={health ? (health.axiomLogIngest === 'streaming' ? 'bg-status-success' : health.axiomLogIngest === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                      <StatusItem
+                        label="NF525 Seal Engine"
+                        status={health ? (health.nf525SealEngine === 'secured' ? 'Secured' : health.nf525SealEngine === 'degraded' ? 'Dégradé' : 'Offline ⚠') : '…'}
+                        color={health ? (health.nf525SealEngine === 'secured' ? 'bg-action-primary' : health.nf525SealEngine === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                      <StatusItem
+                        label="Fleet Intelligence"
+                        status={health ? (health.fleetIntelligence === 'aggregating' ? 'Aggregating' : health.fleetIntelligence === 'degraded' ? 'Dégradé' : 'Offline') : '…'}
+                        color={health ? (health.fleetIntelligence === 'aggregating' ? 'bg-action-primary' : health.fleetIntelligence === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
                   </div>
               </div>
 

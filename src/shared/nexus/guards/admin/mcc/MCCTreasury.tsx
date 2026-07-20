@@ -95,14 +95,14 @@ export function MCCTreasury() {
                         />
                     </div>
 
-                    <div className="mt-10 p-4 bg-action-primary/5 border border-focus/10 rounded-2xl flex items-center justify-between group/btn cursor-pointer hover:bg-action-primary/10 transition-all">
+                    <div className="mt-10 p-4 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center justify-between opacity-40 select-none">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-action-primary/20 flex items-center justify-center">
-                                <TrendingUp className="w-4 h-4 text-brand" />
+                            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+                                <TrendingUp className="w-4 h-4 text-secondary" />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-brand">Open Master Supply Portal</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Master Supply Portal</span>
                         </div>
-                        <ArrowUpRight className="w-4 h-4 text-secondary group-hover/btn:text-white group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-all" />
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-secondary border border-white/10 px-2 py-0.5 rounded-full">Bientôt</span>
                     </div>
                 </div>
 
@@ -133,17 +133,17 @@ export function MCCTreasury() {
                         </div>
                     </div>
 
-                    <div className="bg-[#161618] border border-white/5 rounded-3xl p-6 flex items-center justify-between group hover:border-emerald-500/30 transition-all cursor-pointer">
+                    <div className="bg-[#161618] border border-white/5 rounded-3xl p-6 flex items-center justify-between opacity-40 select-none">
                         <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-status-success/10 flex items-center justify-center">
-                                <Package className="w-5 h-5 text-status-success" />
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                                <Package className="w-5 h-5 text-secondary" />
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold uppercase tracking-tight">Inter-Site Logistics</h4>
-                                <p className="text-[10px] text-secondary font-medium uppercase tracking-tighter">4 Active stock transfers in fleet</p>
+                                <p className="text-[10px] text-secondary font-medium uppercase tracking-tighter">Module non activé</p>
                             </div>
                         </div>
-                        <ArrowRight className="w-5 h-5 text-secondary group-hover:text-white transition-all" />
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-secondary border border-white/10 px-2 py-0.5 rounded-full">Bientôt</span>
                     </div>
                 </div>
             </div>
