@@ -50,6 +50,17 @@ export interface NexusEvents {
     path?: string;
     message: string;
   };
+  'commerce.yield_updated': {
+    tenantId: string;
+    config: Record<string, unknown>;
+  };
+  'hr.transfer_offer': {
+    fromTenantId: string;
+    toTenantId: string;
+    ownerId: string;
+    headcount: number;
+    bonusInMicrounits: number;
+  };
 }
 
 export type NexusEventName = keyof NexusEvents;

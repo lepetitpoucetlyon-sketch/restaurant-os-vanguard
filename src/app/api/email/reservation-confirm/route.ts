@@ -1,5 +1,4 @@
-// TODO: Set RESEND_API_KEY in .env (see .env.example for the key name)
-// TODO: Install resend if not present: npm install resend
+// Requires: RESEND_API_KEY in .env + `npm install resend`
 
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';

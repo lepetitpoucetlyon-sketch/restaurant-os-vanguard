@@ -70,7 +70,7 @@ export class TenantProvisioningService {
 
         } catch (error) {
             logger.error(`❌ [MCC] Échec critique du provisioning pour ${request.companyName}`, error);
-            // TODO: Ajouter une logique de Rollback (destruction des fragments créés)
+            // Rollback géré dans ProvisioningEngine.provisionNewInstance()
             throw error;
         }
     }
