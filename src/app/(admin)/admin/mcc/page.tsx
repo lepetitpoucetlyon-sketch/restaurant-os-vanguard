@@ -41,6 +41,7 @@ import { AmbientAudio } from '@/components/layout/AmbientAudio';
 import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
 import { useAuth } from '@/engines/core/NexusCoreProvider';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
+import { TenantUsersPanel } from '@nexus/guards/admin/mcc/TenantUsersPanel';
 
 /**
  * 👑 Master Command Control (MCC) Dashboard
@@ -256,6 +257,11 @@ export default function MCCDashboard() {
                 </div>
 
                 <FleetCommandTable />
+
+                {/* mcc-users-2 — Utilisateurs du tenant sélectionné */}
+                {instances.length > 0 && (
+                  <TenantUsersPanel instance={instances[0]} />
+                )}
               </motion.div>
             )}
 

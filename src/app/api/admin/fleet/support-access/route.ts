@@ -19,6 +19,33 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { Resend } from 'resend';
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
+
+async function notifyTenantAccess(tenantId: string, operatorId: string, action: string) {
+  if (!resend) return;
+  try {
+    const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as {
+      contactEmail?: string; name?: string;
+    } | null;
+    const to = config?.contactEmail;
+    if (!to) return;
+    const label = action === 'request' ? 'a demandé un accès technique' : 'a révoqué son accès';
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject: `[Restaurant OS] Un technicien ${label} à votre instance`,
+      html: `<p>Bonjour,</p>
+<p>Un opérateur technique de Restaurant OS (ID : <code>${operatorId}</code>) ${label} à votre instance <strong>${config?.name ?? tenantId}</strong> le <strong>${new Date().toLocaleString('fr-FR')}</strong>.</p>
+<p>Si vous n'avez pas fait cette demande ou souhaitez révoquer l'accès, contactez le support.</p>
+<p style="color:#888;font-size:12px;">Restaurant OS — Transparence RGPD</p>`,
+    });
+  } catch (err) {
+    logger.warn('[support-access] Notification email failed:', String(err));
+  }
+}
 
 const DEFAULT_DURATION_HOURS = 4;
 
@@ -74,6 +101,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 });
 
                 logger.info(`[MCC/support-access] Demande PENDING créée pour tenant ${tenantId} (${durationHours}h)`);
+                void notifyTenantAccess(tenantId, caller.uid, 'request');
                 return NextResponse.json({ success: true, requestId, expiresAt, status: 'PENDING' });
             }
 
@@ -93,6 +121,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 });
 
                 logger.info(`[MCC/support-access] Accès support révoqué pour tenant ${tenantId}`);
+                void notifyTenantAccess(tenantId, caller.uid, 'revoke');
                 return NextResponse.json({ success: true, message: 'Accès support révoqué immédiatement.' });
             }
 
