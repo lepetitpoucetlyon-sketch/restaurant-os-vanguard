@@ -84,13 +84,29 @@ export const BillingService = {
         break;
       }
 
-      case 'invoice.payment_failed':
+      case 'invoice.payment_failed': {
+        // Dunning progressif — ne pas suspendre immédiatement
+        const dueAt = new Date().toISOString();
+        await Nexus.adapter.set(configPath, {
+          billing: { status: 'past_due', dueAt },
+          status: { economy: { billingStatus: 'past_due' } },
+        }, { merge: true });
+        await Nexus.adapter.set(`mcc/dunning/${tenantId}`, {
+          tenantId,
+          dueAt,
+          step: 0,          // 0=past_due, 1=relance J+3, 2=suspend J+7, 3=LOCKED J+14
+          nextActionAt: new Date(Date.now() + 3 * 86400_000).toISOString(),
+        });
+        logger.warn(`[BillingService] ${tenantId} → PAST_DUE (dunning démarré)`);
+        break;
+      }
+
       case 'customer.subscription.deleted': {
         await Nexus.adapter.set(configPath, {
-          billing: { status: 'suspended' },
-          status: { economy: { billingStatus: 'suspended' } },
+          billing: { status: 'cancelled' },
+          status: { economy: { billingStatus: 'cancelled' }, licenceStatus: 'LOCKED' },
         }, { merge: true });
-        logger.warn(`[BillingService] ${tenantId} → SUSPENDED (${event.type})`);
+        logger.warn(`[BillingService] ${tenantId} → CANCELLED + LOCKED`);
         break;
       }
 
