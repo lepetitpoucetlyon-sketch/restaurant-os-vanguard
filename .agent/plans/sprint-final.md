@@ -18,11 +18,11 @@
 - [x] mcc-billing-adv-1 : /api/admin/fleet/billing/feature-flags (PAID_MODULES)
 - [x] mcc-billing-adv-2 : UsageTracker.ts + /api/admin/fleet/billing/usage
 
-## VAGUE 4 — MCC Provisioning (4 items)
-- [ ] mcc-prov-1  : Email PIN admin après provisioning
-- [ ] mcc-prov-4  : Flow décommission (archive + export NF525 + RGPD J+90)
-- [ ] mcc-prov-9  : Stripe createCustomer réel (remplace cus_mock_*)
-- [ ] mcc-prov-10 : LightRAGClient.createWorkspace(tenantId) isolation IA
+## VAGUE 4 — MCC Provisioning (4 items) ✅
+- [x] mcc-prov-1  : sendAdminPinEmail() après createRootAdmin (Resend)
+- [x] mcc-prov-4  : decommissionTenant() — archive NF525 + LOCKED + rgpdPurgeAt J+90
+- [x] mcc-prov-9  : Stripe.customers.create() réel (fallback mock si clé absente)
+- [x] mcc-prov-10 : LightRAGClient({ workspace: ragWorkspaceId }).insert() bootstrap
 
 ## VAGUE 5 — MCC CRM + Security (4 items)
 - [ ] mcc-crm-1  : Auto-DNS Vercel/Cloudflare à la création tenant

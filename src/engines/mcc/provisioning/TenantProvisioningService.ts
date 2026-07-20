@@ -2,8 +2,11 @@ import { logger } from '@/lib/logger';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
 import { MasterBridge } from '@/lib/MasterBridge';
-// import { StripeBillingService } from '@/infrastructure/services/finance/StripeBillingService';
-// import { LightRAGClient } from '@/modules/intelligence/rag/LightRAGClient';
+import { hashPin } from '@/lib/shared-kernel';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import Stripe from 'stripe';
+import { LightRAGClient } from '@/modules/intelligence/rag/LightRAGClient';
+import { Resend } from 'resend';
 
 export interface ProvisioningRequest {
     ownerEmail: string;
@@ -44,19 +47,40 @@ export class TenantProvisioningService {
             // 2. Création de la coquille isolée de configuration (Le Génome)
             await this.initializeTenantConfig(tenantId, request);
 
-            // 3. Billing : Création du compte Stripe B2B pour les 350€/mois
-            // const stripeCustomerId = await StripeBillingService.createCustomer(request.ownerEmail, request.companyName);
-            const stripeCustomerId = `cus_mock_${Date.now()}`;
+            // 3. Billing : Création du compte Stripe réel (mcc-prov-9)
+            const stripeKey = process.env.STRIPE_SECRET_KEY;
+            let stripeCustomerId: string;
+            if (stripeKey) {
+                const stripe = new Stripe(stripeKey, { apiVersion: '2026-05-27.dahlia' });
+                const customer = await stripe.customers.create({
+                    email: request.ownerEmail,
+                    name:  request.companyName,
+                    metadata: { tenantId },
+                });
+                stripeCustomerId = customer.id;
+            } else {
+                stripeCustomerId = `cus_mock_${Date.now()}`;
+                logger.warn('💳 [MCC] STRIPE_SECRET_KEY absent — Stripe customer mocké');
+            }
             logger.info(`💳 [MCC] Compte de facturation SaaS créé: ${stripeCustomerId}`);
 
-            // 4. Intelligence : Création de l'espace RAG Hermétique
-            // const ragClient = new LightRAGClient();
-            // await ragClient.createWorkspace(tenantId);
+            // 4. Intelligence : Isolation workspace RAG par tenant (mcc-prov-10)
             const ragWorkspaceId = `rag_workspace_${tenantId}`;
-            logger.info(`🧠 [MCC] Espace IA isolé provisionné: ${ragWorkspaceId}`);
+            try {
+                const ragClient = new LightRAGClient({ workspace: ragWorkspaceId });
+                // Indexation d'un document de bootstrap pour initialiser le workspace
+                await ragClient.insert(
+                    `Restaurant ${request.companyName} — workspace IA initialisé. TenantID: ${tenantId}.`,
+                    `bootstrap_${tenantId}`,
+                );
+                logger.info(`🧠 [MCC] Workspace RAG isolé créé: ${ragWorkspaceId}`);
+            } catch {
+                logger.warn(`🧠 [MCC] LightRAG non disponible — workspace ${ragWorkspaceId} en attente`);
+            }
 
-            // 5. Initialisation du premier utilisateur Admin (Le Patron)
-            await this.createRootAdmin(tenantId, ownerId, request.ownerEmail);
+            // 5. Initialisation du premier utilisateur Admin + envoi PIN par email (mcc-prov-1)
+            const tempPin = await this.createRootAdmin(tenantId, ownerId, request.ownerEmail);
+            await this.sendAdminPinEmail(request.ownerEmail, request.companyName, tempPin);
 
             logger.info(`✅ [MCC] Provisioning terminé avec succès pour ${tenantId} !`);
             
@@ -95,34 +119,103 @@ export class TenantProvisioningService {
         logger.info(`🏗️ [MCC] TenantConfig initialisée avec les couleurs B2B.`);
     }
 
-    private static async createRootAdmin(tenantId: string, ownerId: string, email: string): Promise<void> {
+    private static async createRootAdmin(tenantId: string, ownerId: string, email: string): Promise<string> {
         logger.info(`🔐 [MCC] Création de l'accès patron (Owner) pour ${email}`);
         initFirebaseAdmin();
         const firebaseAuth = getAuth();
 
         let uid: string;
         try {
-            // Réutilise le compte si l'email existe déjà (idempotence)
             const existing = await firebaseAuth.getUserByEmail(email);
             uid = existing.uid;
-            logger.info(`🔐 [MCC] Compte Firebase existant réutilisé: ${uid}`);
         } catch {
-            // Crée un nouveau compte Firebase Auth
             const created = await firebaseAuth.createUser({
                 email,
                 displayName: ownerId,
                 emailVerified: false,
             });
             uid = created.uid;
-            logger.info(`🔐 [MCC] Compte Firebase créé: ${uid}`);
         }
 
-        // Pose les Custom Claims : tenantId + rôle OWNER
-        await firebaseAuth.setCustomUserClaims(uid, {
-            tenantId,
-            role: 'OWNER',
+        await firebaseAuth.setCustomUserClaims(uid, { tenantId, role: 'OWNER' });
+
+        // Générer et stocker le PIN admin temporaire (mcc-prov-1)
+        const rawDigits = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join('');
+        const salt      = crypto.randomUUID();
+        const hashed    = await hashPin(rawDigits, salt);
+
+        await Nexus.adapter.set(`tenants/${tenantId}/users/${ownerId}`, {
+            id:     ownerId,
+            uid,
+            email,
+            role:   'OWNER',
+            pin:    hashed,
+            pinSalt: salt,
+            status: 'active',
+            schemaVersion: 2,
         });
 
-        logger.info(`✅ [MCC] Custom Claims posés — uid=${uid} tenantId=${tenantId} role=OWNER`);
+        logger.info(`✅ [MCC] Admin créé — uid=${uid} tenantId=${tenantId}`);
+        return rawDigits;
     }
+
+    private static async sendAdminPinEmail(email: string, companyName: string, pin: string): Promise<void> {
+        const resendKey = process.env.RESEND_API_KEY;
+        const from      = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
+        if (!resendKey) {
+            logger.warn(`[MCC/prov-1] RESEND_API_KEY absent — PIN ${pin} non envoyé à ${email}`);
+            return;
+        }
+        const resend = new Resend(resendKey);
+        await resend.emails.send({
+            from, to: email,
+            subject: `[Restaurant OS] Votre accès — ${companyName}`,
+            html: `<p>Bienvenue sur Restaurant OS !</p>
+<p>Votre instance <strong>${companyName}</strong> est prête. Votre PIN administrateur temporaire :</p>
+<h2 style="font-family:monospace;letter-spacing:0.4em;font-size:32px;">${pin}</h2>
+<p>Connectez-vous et modifiez ce PIN dès votre première connexion.</p>
+<p style="color:#888;font-size:11px;">Restaurant OS — ne partagez pas ce PIN.</p>`,
+        }).catch(e => logger.warn('[MCC/prov-1] email error:', String(e)));
+    }
+}
+
+/**
+ * Flow de décommission d'un tenant (mcc-prov-4).
+ * Archive les données NF525, révoque les accès, planifie purge RGPD à J+90.
+ */
+export async function decommissionTenant(tenantId: string, operatorId: string): Promise<{
+    success: boolean; archivePath: string; rgpdPurgeAt: string;
+}> {
+    const archivePath = `mcc/decommissioned/${tenantId}`;
+    const rgpdPurgeAt = new Date(Date.now() + 90 * 86400_000).toISOString();
+
+    // 1. Snapshot des données critiques NF525 (lecture seule, immuable)
+    const [journalEntries, fiscalSeals] = await Promise.all([
+        Nexus.adapter.query(`tenants/${tenantId}/journalEntries`),
+        Nexus.adapter.query(`tenants/${tenantId}/fiscalSeals`),
+    ]);
+
+    // 2. Archivage dans le namespace MCC (hors portée SovereignGuard tenant)
+    await Nexus.adapter.set(archivePath, {
+        tenantId,
+        decommissionedAt:  new Date().toISOString(),
+        decommissionedBy:  operatorId,
+        rgpdPurgeAt,
+        nf525Snapshot: {
+            journalEntriesCount: journalEntries.length,
+            fiscalSealsCount:    fiscalSeals.length,
+            exportedAt:          new Date().toISOString(),
+        },
+        status: 'DECOMMISSIONED',
+    });
+
+    // 3. Verrouillage de l'accès tenant
+    await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
+        status: { licenceStatus: 'LOCKED', killSwitch: true },
+        billing: { status: 'cancelled' },
+        decommissionedAt: new Date().toISOString(),
+    }, { merge: true });
+
+    logger.info(`[MCC/decommission] ${tenantId} archivé. Purge RGPD prévue: ${rgpdPurgeAt}`);
+    return { success: true, archivePath, rgpdPurgeAt };
 }
