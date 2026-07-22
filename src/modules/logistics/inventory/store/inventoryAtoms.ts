@@ -1,16 +1,17 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
-import { 
-    StockItem, 
-    Product, 
-    Recipe, 
-    Category, 
-    Ingredient, 
-    Preparation, 
-    SupplierOrder, 
+import {
+    StockItem,
+    Product,
+    Recipe,
+    Category,
+    Ingredient,
+    Preparation,
+    SupplierOrder,
     StorageLocation,
-    MiseEnPlaceTask
+    MiseEnPlaceTask,
+    InventoryMovement,
 } from '@nexus/contracts';
 
 // --- 📦 INVENTORY & KITCHEN DOMAIN (Stocks, Catégories, Produits, Recettes, Préparations) ---
@@ -122,6 +123,10 @@ export const decrementStockAtom = atom(
         }
     }
 );
+const _inventoryMovements = createProxyDomain<InventoryMovement>('inventoryMovements');
+export const inventoryMovementsNodeAtom = _inventoryMovements.node;
+export const inventoryMovementsAtom = _inventoryMovements.data;
+
 // --- 🔄 STOCK TRANSFER FLOW (Grade X) ---
 export const stockTransferSelectedItemAtom = atom<string | null>(null);
 export const stockTransferTargetLocationAtom = atom<string>('');

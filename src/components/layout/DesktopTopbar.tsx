@@ -21,9 +21,10 @@ export function DesktopTopbar() {
                 
                 <div className="hidden xl:flex items-center gap-8">
                     {NAV_SECTIONS.slice(0, 5).map((section) => (
-                        <Link 
-                            key={section.id} 
+                        <Link
+                            key={section.id}
                             href={section.items[0]?.href || '#'}
+                            prefetch={false}
                             className={cn(
                                 "text-[10px] font-black uppercase tracking-[0.3em] transition-all",
                                 pathname.startsWith(section.items[0]?.href) ? "text-accent-gold" : "text-text-muted hover:text-text-primary"

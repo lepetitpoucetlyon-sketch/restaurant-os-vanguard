@@ -38,6 +38,7 @@ const TaxAuditPanel = dynamic(() => import('@nexus/guards/admin/mcc/TaxAuditPane
 const TrustedDevicePanel = dynamic(() => import('@nexus/guards/admin/mcc/TrustedDevicePanel').then(mod => mod.TrustedDevicePanel), { loading: () => <MCCWidgetSkeleton /> });
 
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
+import { MFAGate } from '@/components/mcc/MFAGate';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
 import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
@@ -133,6 +134,7 @@ export default function MCCDashboard() {
   };
 
   return (
+    <MFAGate>
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-action-primary/30 relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none" />
@@ -519,6 +521,7 @@ export default function MCCDashboard() {
       </AnimatePresence>
       </div>{/* /relative z-10 */}
     </div>
+    </MFAGate>
   );
 }
 

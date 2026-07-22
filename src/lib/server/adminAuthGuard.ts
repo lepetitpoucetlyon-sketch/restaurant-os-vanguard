@@ -1,6 +1,6 @@
 import 'server-only';
 import { NextResponse } from 'next/server';
-import { getAuth } from 'firebase-admin/auth';
+import { getAuth, type DecodedIdToken } from 'firebase-admin/auth';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -77,9 +77,15 @@ export async function requireMccLevel(
             return hiddenDoor();
         }
 
+        // MFA obligatoire pour les fleet_admin (mcc-core-3).
+        const isFleetAdmin = callerLevel >= MCC_ROLE_HIERARCHY['fleet_admin'];
+        if (isFleetAdmin) {
+            const mfaDenied = await checkFleetAdminMFA(decoded.uid, decoded);
+            if (mfaDenied) return mfaDenied;
+        }
+
         // Vérification Trusted Device Registry pour les opérateurs non-fleet-admin.
         // fleet_admin/SUPER_ADMIN sont exemptés (ils gèrent le registre).
-        const isFleetAdmin = callerLevel >= MCC_ROLE_HIERARCHY['fleet_admin'];
         if (!isFleetAdmin) {
             const fp = request.headers.get('x-mcc-device-fp');
             if (fp) {
@@ -122,7 +128,46 @@ async function checkDeviceFingerprintInternal(fingerprint: string, callerRole: M
 }
 
 function hiddenDoor(): NextResponse {
-  return new NextResponse(null, { status: 404 });
+    return new NextResponse(null, { status: 404 });
+}
+
+function mfaError(code: 'MFA_ENROLLMENT_REQUIRED' | 'MFA_REAUTHENTICATION_REQUIRED' | 'MFA_CHECK_FAILED'): NextResponse {
+    return new NextResponse(JSON.stringify({ code }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}
+
+/**
+ * Vérifie que le fleet_admin a bien activé et utilisé le MFA lors de cette session.
+ * Retourne une NextResponse 403 si le check échoue, null si tout est OK.
+ *
+ * Deux scénarios distincts :
+ * - MFA_ENROLLMENT_REQUIRED : le compte n'a aucun facteur 2FA enrollé → l'UI doit proposer l'enrollment.
+ * - MFA_REAUTHENTICATION_REQUIRED : le MFA est enrollé mais n'a pas été utilisé pour cette session
+ *   (session dérobée ou connexion avec mot de passe seul) → l'UI doit redemander l'authentification.
+ */
+async function checkFleetAdminMFA(
+    uid: string,
+    decoded: DecodedIdToken,
+): Promise<NextResponse | null> {
+    try {
+        const userRecord = await getAuth().getUser(uid);
+        const enrolled = (userRecord.multiFactor?.enrolledFactors?.length ?? 0) > 0;
+        if (!enrolled) {
+            logger.warn(`[adminAuth] MFA non enrollé pour fleet_admin uid=${uid}`);
+            return mfaError('MFA_ENROLLMENT_REQUIRED');
+        }
+        const usedMFA = !!decoded.firebase?.sign_in_second_factor;
+        if (!usedMFA) {
+            logger.warn(`[adminAuth] MFA enrollé mais non utilisé cette session uid=${uid}`);
+            return mfaError('MFA_REAUTHENTICATION_REQUIRED');
+        }
+        return null;
+    } catch (err) {
+        logger.warn('[adminAuth] Erreur lors du check MFA', String(err));
+        return mfaError('MFA_CHECK_FAILED');
+    }
 }
 
 async function verifyCaller(request: Request): Promise<AdminCaller | null> {
@@ -148,12 +193,32 @@ async function verifyCaller(request: Request): Promise<AdminCaller | null> {
 
 /**
  * Exige un opérateur flotte (MCC). Retourne le caller vérifié,
- * ou une NextResponse 404 à renvoyer telle quelle.
+ * ou une NextResponse 404/403 à renvoyer telle quelle.
+ *
+ * En plus du rôle, enforce le MFA (mcc-core-3) :
+ * - 403 { code: 'MFA_ENROLLMENT_REQUIRED' }       → compte sans 2FA
+ * - 403 { code: 'MFA_REAUTHENTICATION_REQUIRED' } → session sans 2FA
  */
 export async function requireFleetAdmin(request: Request): Promise<AdminCaller | NextResponse> {
-  const caller = await verifyCaller(request);
-  if (!caller || !(FLEET_ROLES as readonly string[]).includes(caller.role)) return hiddenDoor();
-  return caller;
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) return hiddenDoor();
+
+    try {
+        initFirebaseAdmin();
+        const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));
+        const role = typeof decoded.role === 'string' ? decoded.role : '';
+        if (!(FLEET_ROLES as readonly string[]).includes(role)) return hiddenDoor();
+
+        const mfaDenied = await checkFleetAdminMFA(decoded.uid, decoded);
+        if (mfaDenied) return mfaDenied;
+
+        const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
+            : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
+        return { uid: decoded.uid, role, tenantId };
+    } catch (err) {
+        logger.warn('[adminAuth] Token verification failed', String(err));
+        return hiddenDoor();
+    }
 }
 
 /**

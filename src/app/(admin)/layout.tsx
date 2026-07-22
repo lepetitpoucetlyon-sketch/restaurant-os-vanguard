@@ -4,7 +4,9 @@ import { ReactNode, useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { Shield } from "lucide-react";
 
-const FLEET_ROLES = ["fleet_admin", "SUPER_ADMIN"] as const;
+// Roles allowed to access any (admin) route.
+// MCC-specific pages (/admin/mcc) have their own MFAGate + server-side fleet_admin check.
+const ADMIN_ROLES = ["fleet_admin", "SUPER_ADMIN", "admin", "manager"] as const;
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
     const [status, setStatus] = useState<"loading" | "authorized" | "denied">("loading");
@@ -18,7 +20,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             try {
                 const token = await user.getIdTokenResult(true);
                 const role = typeof token.claims.role === "string" ? token.claims.role : "";
-                setStatus((FLEET_ROLES as readonly string[]).includes(role) ? "authorized" : "denied");
+                setStatus((ADMIN_ROLES as readonly string[]).includes(role) ? "authorized" : "denied");
             } catch {
                 setStatus("denied");
             }

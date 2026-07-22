@@ -131,6 +131,7 @@ export function SidebarNavigation({
                                                 <div key={item.href} className="relative group">
                                                     <Link
                                                         href={item.key === 'system_map' ? '#' : item.href}
+                                                        prefetch={false}
                                                         onClick={(e) => {
                                                             empireAudit.log({
                                                                 module: 'system',

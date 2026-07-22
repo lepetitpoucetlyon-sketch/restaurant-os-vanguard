@@ -161,9 +161,37 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     useEffect(() => {
-        refreshFleet();
-        const intervalId = setInterval(() => refreshFleet(true), 120000);
-        return () => clearInterval(intervalId);
+        // Guard: only start fleet polling once Firebase auth resolves to a real user.
+        // Without a session, discoverRealFleet() 403s in a loop every 2 min against
+        // Firestore `fleet-telemetry` rules — noisy in console and wastes cycles.
+        // We also self-heal: if a refresh comes back permission-denied, stop polling.
+        let cancelled = false;
+        let intervalId: ReturnType<typeof setInterval> | null = null;
+
+        const startPolling = () => {
+            if (cancelled || intervalId) return;
+            refreshFleet();
+            intervalId = setInterval(() => refreshFleet(true), 120000);
+        };
+
+        import('@/lib/firebase').then(({ auth }) => {
+            if (cancelled) return;
+            const unsub = auth.onAuthStateChanged(user => {
+                if (cancelled) return;
+                if (user) {
+                    startPolling();
+                } else if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+            });
+            return () => unsub();
+        }).catch(() => { /* firebase absent — skip polling */ });
+
+        return () => {
+            cancelled = true;
+            if (intervalId) clearInterval(intervalId);
+        };
     }, [refreshFleet]);
 
     const stats = useMemo(() => ({

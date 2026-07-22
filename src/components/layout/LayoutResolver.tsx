@@ -8,6 +8,11 @@ import { MobileNavBar } from "@/components/layout/MobileNavBar";
 import { GlobalFAB } from "@/components/layout/GlobalFAB";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 import { DesktopTopbar } from "@/components/layout/DesktopTopbar";
+import { Header } from "@/components/layout/Header";
+import { AppLaunchpad } from "@/components/layout/AppLaunchpad";
+import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { APP_MODE } from "@/config/instance";
+import { useUI } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
 
 /**
@@ -18,18 +23,33 @@ import { cn } from "@/lib/ui.foundations";
 export function LayoutResolver({ children }: { children: React.ReactNode }) {
     const config = useAtomValue(tenantConfigAtom);
     const layout = (config as { status?: { layoutType?: string } })?.status?.layoutType || 'default';
+    const { isLaunchpadOpen, setIsLaunchpadOpen } = useUI();
+
+    const launchpad = (
+        <AppLaunchpad
+            isOpen={isLaunchpadOpen}
+            onClose={() => setIsLaunchpadOpen(false)}
+            sections={filterNavSections(NAV_SECTIONS, APP_MODE)}
+        />
+    );
 
     // Morphing Logic
     switch (layout) {
         case 'sidebar':
             return (
-                <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
-                    <DesktopSidebar />
-                    <main className="flex-1 overflow-auto relative scroll-smooth">
-                        {children}
-                        <GlobalFAB />
-                    </main>
-                </div>
+                <>
+                    <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
+                        <DesktopSidebar />
+                        <div className="flex-1 flex flex-col min-w-0 relative">
+                            <Header />
+                            <main className="flex-1 overflow-auto relative scroll-smooth">
+                                {children}
+                                <GlobalFAB />
+                            </main>
+                        </div>
+                    </div>
+                    {launchpad}
+                </>
             );
 
         case 'topbar':
@@ -59,29 +79,34 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
         case 'default':
         default:
             return (
-                <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
-                    {/* Desktop Sidebar (Only visible on Desktop) */}
-                    <div className="hidden lg:block">
-                        <DesktopSidebar />
-                    </div>
+                <>
+                    <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
+                        {/* Desktop Sidebar (Only visible on Desktop) */}
+                        <div className="hidden lg:block">
+                            <DesktopSidebar />
+                        </div>
 
-                    <div className="flex-1 flex flex-col min-w-0 relative">
-                        {/* Mobile Header (Hidden on Desktop via lg:hidden internally) */}
-                        <MobileHeader />
-                        
-                        <main className={cn(
-                            "flex-1 overflow-auto relative scroll-smooth",
-                            "pb-24 lg:pb-0" // Space for Mobile NavBar
-                        )}>
-                            {children}
-                        </main>
+                        <div className="flex-1 flex flex-col min-w-0 relative">
+                            {/* Desktop Header with 5 toggles (hidden on mobile via md:flex internally) */}
+                            <Header />
+                            {/* Mobile Header (Hidden on Desktop via lg:hidden internally) */}
+                            <MobileHeader />
 
-                        {/* Mobile NavBar (Hidden on Desktop via lg:hidden internally) */}
-                        <MobileNavBar />
-                        
-                        <GlobalFAB />
+                            <main className={cn(
+                                "flex-1 overflow-auto relative scroll-smooth",
+                                "pb-24 lg:pb-0" // Space for Mobile NavBar
+                            )}>
+                                {children}
+                            </main>
+
+                            {/* Mobile NavBar (Hidden on Desktop via lg:hidden internally) */}
+                            <MobileNavBar />
+
+                            <GlobalFAB />
+                        </div>
                     </div>
-                </div>
+                    {launchpad}
+                </>
             );
     }
 }
