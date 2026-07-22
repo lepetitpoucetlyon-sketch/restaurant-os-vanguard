@@ -59,7 +59,7 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
   theme: {
     primaryColor: '#C5A059', // Classic Gold branding
     secondaryColor: '#B08D48',
-    logoUrl: '/default-restaurant-logo.png',
+    logoUrl: '/default-restaurant-logo.svg',
     borderRadius: '12px',
     appearance: 'dark'
   },

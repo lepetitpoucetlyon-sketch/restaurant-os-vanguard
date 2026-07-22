@@ -6,4 +6,5 @@ export { useNexusOps, useOrders, useKitchen, useFloorOps, useManagement, useAllo
 export { usePOSController } from './pos/hooks/usePos';
 // 🛒 usePOSController is now imported from @modules/ops/pos
 export type { Order, OrderItem } from './engine';
-export { FloorPlanEditor } from './engine/components/floor-plan/FloorPlanEditor';
+// FloorPlanEditor (konva + react-reconciler ~1.2MB) must be lazy-loaded via next/dynamic.
+// Import it directly from '@modules/ops/engine/components/floor-plan/FloorPlanEditor' — do NOT re-export here.

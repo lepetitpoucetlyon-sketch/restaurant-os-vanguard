@@ -1,3 +1,4 @@
+import { Sentry } from '@/lib/sentry';
 
 /**
  * 🏛️ SovereignMath - Grade X OFFICIAL STANDARD
@@ -19,11 +20,9 @@ export const SovereignMath = {
         
         // 🛡️ EPSILON SECURITY: Detect real precision loss (> 1e-10)
         if (Math.abs(rawValue - roundedValue) > SovereignMath.EPSILON) {
-            import('@sentry/nextjs').then(Sentry => {
-                Sentry.captureException(new Error(`FISCAL_PRECISION_CORRUPTION: Data exceeds 6 decimal places. Value: ${value}`), {
-                    tags: { protocol: "Microunits", security: "EPSILON_GUARD" },
-                    extra: { rawValue, roundedValue, delta: Math.abs(rawValue - roundedValue) }
-                });
+            Sentry.captureException(new Error(`FISCAL_PRECISION_CORRUPTION: Data exceeds 6 decimal places. Value: ${value}`), {
+                tags: { protocol: "Microunits", security: "EPSILON_GUARD" },
+                extra: { rawValue, roundedValue, delta: Math.abs(rawValue - roundedValue) }
             });
         }
         

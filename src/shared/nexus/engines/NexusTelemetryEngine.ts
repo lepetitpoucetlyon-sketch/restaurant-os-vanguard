@@ -1,5 +1,6 @@
 import { ChaosMonkey } from '@domain/services/ChaosMonkey';
 import { ResilienceSlayer } from '@domain/services/ResilienceSlayer';
+import { Sentry } from '@/lib/sentry';
 
 /**
  * 📡 NexusTelemetryEngine
@@ -8,15 +9,11 @@ import { ResilienceSlayer } from '@domain/services/ResilienceSlayer';
 export class NexusTelemetryEngine {
     static initSession(tenantId: string) {
         if (typeof window !== 'undefined') {
-            import('@sentry/nextjs').then(Sentry => {
-                Sentry.setTag("empire.domain", tenantId);
-                Sentry.setTag("nexus.grade", "X+++");
-                Sentry.setContext("Sovereign Session", {
-                    activeTenant: tenantId,
-                    initializedAt: new Date().toISOString()
-                });
-            }).catch(() => {
-                console.warn('[Telemetry] Sentry not loaded.');
+            Sentry.setTag("empire.domain", tenantId);
+            Sentry.setTag("nexus.grade", "X+++");
+            Sentry.setContext("Sovereign Session", {
+                activeTenant: tenantId,
+                initializedAt: new Date().toISOString()
             });
         }
     }

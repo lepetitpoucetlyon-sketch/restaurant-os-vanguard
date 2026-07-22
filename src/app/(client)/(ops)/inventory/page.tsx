@@ -14,6 +14,7 @@ import {
     ClipboardCheck,
     SlidersHorizontal,
     RotateCcw,
+    Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -23,6 +24,7 @@ import {
     StockReceptionModal,
     StockTransferModal,
     CreatePreparationModal,
+    OracleModal,
 } from "@modules/logistics/inventory/components";
 import { useActionPermission } from "@/hooks/useActionPermission";
 import { SecurityPinModal } from "@/components/ui";
@@ -307,6 +309,34 @@ function AdjustStockModal({
     );
 }
 
+// ── DLC helpers (log-5 : coloration DLC) ───────────────────────────────────────
+// Un item se lit d'un coup d'œil : rouge = périmé, orange = urgent (<3j), amber = alerte (<7j),
+// gris = OK. Le tri place les plus critiques en haut.
+
+interface DLCStatus {
+    daysLeft: number | null;
+    label: string;
+    className: string;
+    rank: number; // pour tri croissant : 0 = plus critique
+}
+
+function computeDLCStatus(dlc: string | undefined): DLCStatus {
+    if (!dlc) return { daysLeft: null, label: "—", className: "text-text-muted", rank: 99 };
+    const d = new Date(dlc);
+    if (isNaN(d.getTime())) return { daysLeft: null, label: "—", className: "text-text-muted", rank: 99 };
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    d.setHours(0, 0, 0, 0);
+    const daysLeft = Math.round((d.getTime() - today.getTime()) / 86_400_000);
+    if (daysLeft < 0) {
+        return { daysLeft, label: `Périmé (${Math.abs(daysLeft)}j)`, className: "text-red-600 font-semibold", rank: 0 };
+    }
+    if (daysLeft === 0) return { daysLeft, label: "Aujourd'hui", className: "text-red-500 font-semibold", rank: 1 };
+    if (daysLeft <= 3) return { daysLeft, label: `${daysLeft}j`, className: "text-orange-500 font-semibold", rank: 2 };
+    if (daysLeft <= 7) return { daysLeft, label: `${daysLeft}j`, className: "text-amber-500", rank: 3 };
+    return { daysLeft, label: `${daysLeft}j`, className: "text-text-muted", rank: 4 };
+}
+
 // ── Main page ──────────────────────────────────────────────────────────────────
 
 export default function InventoryPage() {
@@ -340,6 +370,9 @@ const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
 
     // Adjust stock modal state
     const [adjustItem, setAdjustItem] = useState<StockItem | null>(null);
+
+    // Oracle prediction modal state
+    const [oracleItem, setOracleItem] = useState<StockItem | null>(null);
 
     const {
         stockItems,
@@ -476,19 +509,26 @@ const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
                                         <th className="px-4 py-2.5 font-medium">Article</th>
                                         <th className="px-4 py-2.5 font-medium">Quantité</th>
                                         <th className="px-4 py-2.5 font-medium">Unité</th>
+                                        <th className="px-4 py-2.5 font-medium">DLC</th>
                                         <th className="px-4 py-2.5 font-medium">Seuil</th>
                                         <th className="px-4 py-2.5 font-medium">Réassort</th>
                                         <th className="px-4 py-2.5 font-medium text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {stockItems.map((item) => {
+                                    {[...stockItems]
+                                        .sort((a, b) =>
+                                            computeDLCStatus(a.dlc as string | undefined).rank -
+                                            computeDLCStatus(b.dlc as string | undefined).rank,
+                                        )
+                                        .map((item) => {
                                         const reorderQty =
                                             (item as Record<string, unknown>).reorderQuantity as
                                                 | number
                                                 | undefined;
                                         const isLow =
                                             item.quantity <= (item.minQuantity ?? 0);
+                                        const dlcStatus = computeDLCStatus(item.dlc as string | undefined);
                                         return (
                                             <tr
                                                 key={item.id}
@@ -506,6 +546,10 @@ const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
                                                 </td>
                                                 <td className="px-4 py-2.5 text-text-muted">
                                                     {item.unit}
+                                                </td>
+                                                {/* DLC (log-5) */}
+                                                <td className={`px-4 py-2.5 tabular-nums ${dlcStatus.className}`} title={item.dlc as string | undefined}>
+                                                    {dlcStatus.label}
                                                 </td>
                                                 {/* Seuil d'alerte (log-2) */}
                                                 <td className="px-4 py-2.5 tabular-nums text-text-muted">
@@ -573,6 +617,15 @@ const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
                                                             <SlidersHorizontal className="w-3.5 h-3.5" />
                                                         </button>
 
+                                                        {/* Oracle prediction (log-oracle) */}
+                                                        <button
+                                                            onClick={() => setOracleItem(item)}
+                                                            title="Prévision Oracle"
+                                                            className="p-1.5 rounded hover:bg-surface-hover text-accent-gold hover:text-accent-gold/80"
+                                                        >
+                                                            <Sparkles className="w-3.5 h-3.5" />
+                                                        </button>
+
                                                         {/* Delete (rbac-4 — requires PIN) */}
                                                         <button
                                                             onClick={() => handleDeleteClick(item)}
@@ -597,7 +650,7 @@ const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
                                     {!isLoading && stockItems.length === 0 && (
                                         <tr>
                                             <td
-                                                colSpan={6}
+                                                colSpan={7}
                                                 className="px-4 py-8 text-center text-text-muted italic"
                                             >
                                                 Aucun article en stock.
@@ -678,6 +731,13 @@ const [activeTab, setActiveTab] = useState<InvTab>(_initTab);
                 <AdjustStockModal
                     item={adjustItem}
                     onClose={() => setAdjustItem(null)}
+                />
+            )}
+
+            {oracleItem && (
+                <OracleModal
+                    item={oracleItem}
+                    onClose={() => setOracleItem(null)}
                 />
             )}
 

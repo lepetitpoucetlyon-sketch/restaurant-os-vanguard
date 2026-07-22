@@ -16,17 +16,21 @@ import { OperationalIdentity } from '@/shared/nexus-contract';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { BlockchainLedgerService } from '@/modules/finance/accounting/domain/BlockchainLedgerService';
+import { computeTreasury } from '@/domain/services/TreasuryCalculator';
 import { 
-    JournalEntry, 
-    Account, 
-    BankTransaction, 
+    JournalEntry,
+    Account,
+    BankTransaction,
     ExpenseClaim,
-    TreasuryMetrics,
+    TreasurySnapshot,
     FiscalSeal
 } from '@modules/finance/types';
+import type { TreasuryMetrics } from '@/domain/schemas/finance';
 import { useBilling } from '@modules/finance/billing/hooks/useBilling';
 
-import * as Sentry from '@sentry/nextjs';
+import { Sentry } from '@/lib/sentry';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 /**
  * 🏛️ SovereignSignable
@@ -63,11 +67,12 @@ export interface NexusFiscalState {
     };
     compliance: {
         seals: FiscalSeal[];
-        runAudit: () => Promise<void>;
+        runAudit: () => Promise<boolean>;
         documents: ComplianceDocument[]; 
     };
     finance: {
         treasury: TreasuryMetrics;
+        cashSnapshot: TreasurySnapshot;
     };
 }
 
@@ -84,12 +89,23 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     // 🛡️ SOVEREIGN MATH: Total elimination of native operators
     const netProfitInMicrounits = useMemo(() => {
-        const entries = (journalEntries.data || []) as unknown as JournalEntry[];
+        const entries = journalEntries.data;
         const total = entries.reduce((acc: number, entry) => {
             const amount = Number(entry.amountInMicrounits || 0);
             return entry.type === 'revenue' ? SovereignMath.add(acc, amount) : SovereignMath.subtract(acc, amount);
         }, 0);
         return total;
+    }, [journalEntries.data]);
+
+    // Produits & charges séparés (pour le résumé P&L de la trésorerie).
+    const { totalRevenueMu, totalExpensesMu } = useMemo(() => {
+        let rev = 0, exp = 0;
+        for (const entry of journalEntries.data) {
+            const amount = Number(entry.amountInMicrounits || 0);
+            if (entry.type === 'revenue') rev = SovereignMath.add(rev, amount);
+            else if (entry.type === 'expense') exp = SovereignMath.add(exp, amount);
+        }
+        return { totalRevenueMu: rev, totalExpensesMu: exp };
     }, [journalEntries.data]);
 
     const generateBusinessSignature = (data: SovereignSignable): string => {
@@ -137,41 +153,58 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     }, [tenantId, currentUser]);
 
-    const runFiscalAudit = useCallback(async () => {
+    const runFiscalAudit = useCallback(async (): Promise<boolean> => {
         logger.info("[NexusFiscal] Running NF525 Integrity Audit...");
+        const intact = await BlockchainLedgerService.auditFullChain();
+        logger.info(`[NexusFiscal] Audit terminé — chaîne ${intact ? 'intacte' : 'BRISÉE'}`);
+        return intact;
     }, []);
 
-    // 🛡️ SINCERE TREASURY MAPPING (Zero-Cast)
-    const treasury: TreasuryMetrics = {
-        totalRevenueInMicrounits: 0 as unknown as import("@/domain/schemas/primitives").Microunits,
-        totalExpensesInMicrounits: 0 as unknown as import("@/domain/schemas/primitives").Microunits,
-        netProfitInMicrounits: 0,
-        marginRate: 0,
-        forecastedRevenueInMicrounits: 0 as unknown as import("@/domain/schemas/primitives").Microunits,
-        cashPositionInMicrounits: 0,
-        periodStart: Date.now(),
-        periodEnd: Date.now() + 86400000
-    };
+    // 💰 CASH SNAPSHOT — position de trésorerie réelle depuis les écritures Nexus
+    // (PCG 53x caisse / 512x banque / 411x créances / 401x dettes). Remplace le stub zéro.
+    const cashSnapshot: TreasurySnapshot = useMemo(
+        () => computeTreasury(journalEntries.data),
+        [journalEntries.data],
+    );
+
+    // 💰 TREASURY — résumé P&L (produits / charges / résultat), désormais calculé.
+    const treasury: TreasuryMetrics = useMemo(() => {
+        const marginRate = totalRevenueMu > 0
+            ? Math.max(-1, Math.min(1, netProfitInMicrounits / totalRevenueMu))
+            : 0;
+        const now = Date.now();
+        return {
+            totalRevenueInMicrounits: toMicrounits(totalRevenueMu),
+            totalExpensesInMicrounits: toMicrounits(totalExpensesMu),
+            netProfitInMicrounits,
+            marginRate,
+            forecastedRevenueInMicrounits: toMicrounits(totalRevenueMu),
+            cashPositionInMicrounits: cashSnapshot.netCashPositionInMicrounits,
+            periodStart: now - 30 * 86_400_000,
+            periodEnd: now,
+        };
+    }, [totalRevenueMu, totalExpensesMu, netProfitInMicrounits, cashSnapshot]);
 
     const contextValue: NexusFiscalState = useMemo(() => ({
         accounting: {
-            entries: (journalEntries.data || []) as unknown as JournalEntry[],
-            accounts: (accounts || []) as unknown as Account[],
-            bankTransactions: (bankTransactions || []) as unknown as BankTransaction[],
-            expenseClaims: (expenseClaims || []) as unknown as ExpenseClaim[],
+            entries: journalEntries.data,
+            accounts,
+            bankTransactions,
+            expenseClaims,
             isLoading: journalEntries.loading || false,
             metrics: { netProfitInMicrounits },
             submitExpense
         },
         compliance: {
-            seals: (fiscalSeals.data || []) as unknown as FiscalSeal[],
+            seals: fiscalSeals.data as unknown as FiscalSeal[],
             runAudit: runFiscalAudit,
             documents: [] as ComplianceDocument[] 
         },
         finance: {
-            treasury
+            treasury,
+            cashSnapshot
         }
-    }), [journalEntries, accounts, bankTransactions, expenseClaims, netProfitInMicrounits, submitExpense, fiscalSeals, runFiscalAudit, treasury]);
+    }), [journalEntries, accounts, bankTransactions, expenseClaims, netProfitInMicrounits, submitExpense, fiscalSeals, runFiscalAudit, treasury, cashSnapshot]);
 
     // 🧾 FISCAL ORCHESTRATOR: Connect POS [OPS] -> Ledger [FINANCE]
     useBilling();

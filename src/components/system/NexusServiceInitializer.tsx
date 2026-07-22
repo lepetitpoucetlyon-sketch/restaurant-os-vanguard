@@ -32,15 +32,19 @@ export function NexusServiceInitializer(): null {
         // 1. Initialize Sync Engine
         NexusSyncService.init(tenantId);
         
-        // 2. Initial Fleet Discover
-        //    Le lien MCC ↔ instance (pulse montant + décrets descendants) vit
-        //    dans NexusBridge — démarré par NexusSyncService.init → NexusBridge.init.
+        // 2. Initial Fleet Discover — gated on Firebase auth.
+        //    Without a signed-in user, discoverRealFleet() 403s against the
+        //    fleet-telemetry Firestore rules; NexusFleetProvider already re-runs
+        //    it on auth-state-change, so no need to fire it here without a user.
         if (typeof window !== 'undefined') {
-            import('@domain/services/FleetTelemetryService').then(({ fleetTelemetry }) => {
-                fleetTelemetry.discoverRealFleet().then(_data => {
-                   // This logic is simplified here as useNexusFleet will handle the atom update
-                });
-            });
+            Promise.all([
+                import('@/lib/firebase'),
+                import('@domain/services/FleetTelemetryService'),
+            ]).then(([{ auth }, { fleetTelemetry }]) => {
+                if (auth.currentUser) {
+                    fleetTelemetry.discoverRealFleet().catch(() => { /* silent */ });
+                }
+            }).catch(() => { /* firebase absent — skip */ });
         }
 
         // 3. Global Purge Registry

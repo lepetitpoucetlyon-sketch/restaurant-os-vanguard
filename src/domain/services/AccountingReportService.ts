@@ -90,8 +90,8 @@ export class AccountingReportService {
                 const prefix = code.charAt(0);
 
                 // Determine microunit amounts (lines may be in cents; we normalise)
-                const debit = (line.debitInCents ?? 0) * 1000;   // cents → microunits
-                const credit = (line.creditInCents ?? 0) * 1000;
+                const debit = (line.debitInCents ?? 0) * 10_000;   // cents → microunits (1 cent = 10 000 µ)
+                const credit = (line.creditInCents ?? 0) * 10_000;
 
                 if (prefix === '7') {
                     const existing = revenueMap.get(code) ?? {
@@ -334,8 +334,8 @@ export class AccountingReportService {
                 const first = code.charAt(0);
                 if (!['1', '2', '3', '4', '5'].includes(first)) continue;
 
-                const debit = (line.debitInCents ?? 0) * 1000;
-                const credit = (line.creditInCents ?? 0) * 1000;
+                const debit = (line.debitInCents ?? 0) * 10_000;
+                const credit = (line.creditInCents ?? 0) * 10_000;
 
                 const map = isActif(code) ? actifMap : passifMap;
                 const existing = map.get(code) ?? {

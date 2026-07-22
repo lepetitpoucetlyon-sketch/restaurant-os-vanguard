@@ -1,10 +1,4 @@
-// Push requests built manually via fetch (VAPID signing inline).
-// Replace with `npm install web-push` for production-grade signing.
-// For production, replace the manual JWT construction with:
-//   import webPush from 'web-push';
-//   webPush.setVapidDetails('mailto:...', publicKey, privateKey);
-//   await webPush.sendNotification(subscription, JSON.stringify(payload));
-
+import webPush from 'web-push';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
@@ -25,13 +19,13 @@ interface UserRecord {
   [key: string]: unknown;
 }
 
-/**
- * Server-side Web Push helper.
- *
- * VAPID note: full VAPID JWT signing requires the `web-push` npm package.
- * Until it is installed, sendToUser logs a TODO and skips the actual delivery.
- * The subscription storage and retrieval paths are fully functional.
- */
+function getVapidKeys(): { publicKey: string; privateKey: string } | null {
+  const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  if (!publicKey || !privateKey) return null;
+  return { publicKey, privateKey };
+}
+
 export class WebPushService {
   // ---------------------------------------------------------------------------
   // saveSubscription
@@ -53,64 +47,39 @@ export class WebPushService {
   // sendToUser
   // ---------------------------------------------------------------------------
   static async sendToUser(userId: string, payload: PushPayload): Promise<void> {
+    const keys = getVapidKeys();
+    if (!keys) {
+      logger.warn('[WebPushService] VAPID keys not configured — skipping push delivery');
+      return;
+    }
+
     const record = await Nexus.adapter.get<PushSubscriptionRecord>(
       `pushSubscriptions/${userId}`
     );
-
     if (!record) {
       logger.warn(`[WebPushService] No subscription found for user ${userId}`);
       return;
     }
 
-    let sub: PushSubscription;
+    let sub: webPush.PushSubscription;
     try {
-      sub = JSON.parse(record.subscription) as PushSubscription;
+      sub = JSON.parse(record.subscription) as webPush.PushSubscription;
     } catch {
-      logger.error(
-        `[WebPushService] Failed to parse subscription for user ${userId}`
-      );
+      logger.error(`[WebPushService] Failed to parse subscription for user ${userId}`);
       return;
     }
 
-    const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-    const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+    webPush.setVapidDetails(
+      'mailto:contact@restaurant-os.app',
+      keys.publicKey,
+      keys.privateKey
+    );
 
-    if (!vapidPublicKey || !vapidPrivateKey) {
-      // TODO: Set NEXT_PUBLIC_VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY env vars,
-      // then replace this block with web-push.sendNotification() for full VAPID support.
-      logger.warn(
-        '[WebPushService] VAPID keys not configured — skipping push delivery. ' +
-          'Set NEXT_PUBLIC_VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY, then install web-push.'
-      );
-      return;
-    }
-
-    // TODO: Replace the manual fetch below with `web-push` once installed.
-    // The Web Push Protocol requires a VAPID JWT signed with ES256; building it
-    // manually with Web Crypto is possible but error-prone. Using the `web-push`
-    // package (npm install web-push) is strongly recommended for production.
     try {
-      const response = await fetch(sub.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Placeholder — real VAPID auth header must be signed JWT:
-          // Authorization: `vapid t=<jwt>,k=<urlsafe-base64-public-key>`
-          Authorization: `vapid t=TODO_SIGN_JWT,k=${vapidPublicKey}`,
-          TTL: '86400',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        logger.error(
-          `[WebPushService] Push delivery failed for ${userId}: ${response.status}`
-        );
-      } else {
-        logger.info(`[WebPushService] Push sent to user ${userId}`);
-      }
+      await webPush.sendNotification(sub, JSON.stringify(payload));
+      logger.info(`[WebPushService] Push sent to user ${userId}`);
     } catch (err) {
-      logger.error(`[WebPushService] Network error sending push to ${userId}`, err);
+      logger.error(`[WebPushService] Push delivery failed for ${userId}`, err);
     }
   }
 

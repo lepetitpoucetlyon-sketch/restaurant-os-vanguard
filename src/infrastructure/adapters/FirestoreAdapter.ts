@@ -22,7 +22,7 @@ import {
     WhereFilterOp
 } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
-import * as Sentry from "@sentry/nextjs";
+import { Sentry } from "@/lib/sentry";
 import { INexusAdapter, INexusTransaction, IQueryOptions, INexusBatch, NexusContext } from '@/lib/nexus/types';
 import { FirestoreBatch } from './FirestoreBatch';
 

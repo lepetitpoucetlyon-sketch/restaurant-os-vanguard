@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { Sentry } from "@/lib/sentry";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { useFinanceReflex } from "@modules/finance";

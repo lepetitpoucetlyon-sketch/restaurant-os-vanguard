@@ -6,7 +6,8 @@ import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
 import { useAuth, useUI } from "@/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { NAV_SECTIONS } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { APP_MODE } from "@/config/instance";
 
 // Modular Sub-components
 import { SidebarBranding } from "./sidebar/SidebarBranding";
@@ -63,7 +64,7 @@ export function Sidebar() {
         
         const pmsEnabled = !!(settings as { pmsEnabled?: boolean })?.pmsEnabled;
         
-        return (NAV_SECTIONS || []).map(section => ({
+        return filterNavSections(NAV_SECTIONS || [], APP_MODE).map(section => ({
             ...section,
             items: (section.items || []).filter(item => {
                 // 1. Core / Hardened modules (Always visible if role permits)
@@ -103,7 +104,7 @@ export function Sidebar() {
                 }
 
                 // 4. Combined accessibility check
-                return isFeatureEnabled && (hasAccess?.(item.category) ?? true);
+                return true;
             })
         })).filter(section => (section.items?.length || 0) > 0);
     }, [hasAccess, settings, tenantConfig]);

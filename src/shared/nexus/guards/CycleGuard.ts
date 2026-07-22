@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { Sentry } from '@/lib/sentry';
 
 /**
  * 🌀 CycleGuard - The "Circuit Breaker" for DAG structures.
@@ -19,12 +20,10 @@ export class CycleGuard {
                 logger.error(errorMsg);
                 
                 // 🛡️ SENTRY SUTURE: Send DAG violation to the MCC
-                import('@sentry/nextjs').then(Sentry => {
-                    Sentry.captureMessage(errorMsg, {
-                        level: 'fatal',
-                        tags: { service: "CycleGuard", integrity: "DAG_VIOLATION" },
-                        extra: { graph, offendingNode: node }
-                    });
+                Sentry.captureMessage(errorMsg, {
+                    level: 'fatal',
+                    tags: { service: "CycleGuard", integrity: "DAG_VIOLATION" },
+                    extra: { graph, offendingNode: node }
                 });
                 
                 return true;

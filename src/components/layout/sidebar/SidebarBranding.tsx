@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { ChevronRight, ChevronLeft, X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
@@ -37,7 +38,9 @@ export function SidebarBranding({
 }: SidebarBrandingProps) {
     const { t } = useLanguage();
     const config = useAtomValue(tenantConfigAtom);
-    const hasDynamicLogo = !!config?.theme?.logoUrl;
+    // Track load failure so a 404 doesn't cause the browser to retry on every re-render.
+    const [logoFailed, setLogoFailed] = useState(false);
+    const hasDynamicLogo = !!config?.theme?.logoUrl && !logoFailed;
 
     return (
         <div className={cn(
@@ -98,10 +101,11 @@ export function SidebarBranding({
                             } : undefined}
                         >
                             {hasDynamicLogo && config?.theme?.logoUrl ? (
-                                <img 
-                                    src={config.theme.logoUrl} 
-                                    alt="Logo" 
+                                <img
+                                    src={config.theme.logoUrl}
+                                    alt="Logo"
                                     className="w-full h-full object-cover"
+                                    onError={() => setLogoFailed(true)}
                                 />
                             ) : (
                                 <>

@@ -5,7 +5,7 @@
 
 import { logger } from './axiom';
 import { logger as devLogger } from '@/lib/logger';
-import * as Sentry from '@sentry/nextjs';
+import { Sentry } from '@/lib/sentry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
