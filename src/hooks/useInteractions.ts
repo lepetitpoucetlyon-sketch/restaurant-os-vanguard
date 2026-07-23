@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, RefObject } from "react";
+import { useEffect, RefObject } from "react";
 
 /**
  * Hook pour détecter les clics en dehors d'un élément.

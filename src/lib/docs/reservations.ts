@@ -1,5 +1,5 @@
 import { Calendar } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const reservations: DocCategory = {
     title: 'Manifeste & Réservations',

@@ -3,7 +3,7 @@ import { getDefaultStore } from 'jotai';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { logger } from '@/lib/logger';
 import { checkOnlineStatus } from '@/lib/offline/status';
-import { commanderSignatureAtom } from '@/store/masterAtoms';
+import { commanderSignatureAtom } from '@nexus/state/SovereignGenome';
 
 /**
  * 👁️ useCoreOracle - Restaurant OS
@@ -25,7 +25,7 @@ export const useCoreOracle = () => {
             const isOnline = checkOnlineStatus();
             const latency = performance.now(); 
             
-            const health = {
+            const _health = {
                 status: isOnline ? 'online' : 'offline',
                 latency: Math.round(latency),
                 timestamp: new Date().toISOString()
@@ -36,7 +36,7 @@ export const useCoreOracle = () => {
                     // Reporting as Suzerain
                     logger.debug('[Oracle] Master Telemetry Heartbeat sent.');
                 }
-            } catch (err) {
+            } catch (_err) {
                 // Oracle never blocks the thread
             }
         }, 10000); 

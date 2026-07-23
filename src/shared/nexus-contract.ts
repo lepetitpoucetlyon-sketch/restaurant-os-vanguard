@@ -4,20 +4,35 @@
  */
 
 export interface BusinessLaws {
-  table_count: number;
-  tax_rate: number;
+  node_capacity: number;
+  fiscal_coefficient: number;
   currency: string;
   pmsEnabled: boolean;
   [key: string]: string | number | boolean | undefined;
 }
 
-export type SovereignPrimitive = string | number | boolean | null | undefined | Date;
-export type SovereignValue = SovereignPrimitive;
+export type SovereignField =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | Date
+  | unknown[]
+  | { [key: string]: unknown }
+  | { type: 'string'; value: string }
+  | { type: 'number'; value: number }
+  | { type: 'boolean'; value: boolean }
+  | { type: 'null'; value: null }
+  | { type: 'date'; value: Date | string }
+  | { type: 'object'; value: Record<string, unknown> }
+  | { type: 'array'; value: unknown[] };
+
+export type SovereignValue = SovereignField;
 export interface SovereignMap {
   [key: string]: SovereignField;
 }
 export type SovereignData<T = SovereignMap> = T;
-export type SovereignField = SovereignValue | SovereignMap | SovereignField[];
 
 export interface SovereignSchemaField {
   id: string;
@@ -27,7 +42,7 @@ export interface SovereignSchemaField {
   [key: string]: SovereignField;
 }
 
-export interface SovereignWriteSignature {
+export interface SovereignWriteSignature extends SovereignMap {
   scope: 'NF525_WRITE';
   version: 'NF525_WRITE_V1';
   tenantId: string;
@@ -48,40 +63,13 @@ export interface ExpertConfig {
   isAuthorized: boolean;
 }
 
-export interface TenantTheme {
-  primaryColor: string;
-  secondaryColor: string;
-  logoUrl: string;
-  borderRadius: string;
-  appearance: 'light' | 'dark';
-}
+// TenantTheme is now imported from schemas
 
-export interface OrchestratorSignal {
-  maintenanceMode: boolean;
-  killSwitch: boolean;
-  licenceStatus: 'ACTIVE' | 'LOCKED' | 'TRIAL';
-  layoutType: 'default' | 'kiosk' | 'hud' | 'admin' | 'sidebar' | 'topbar';
-  updatedAt: string;
-  economy: {
-    basePrice: number;
-    currency: string;
-    billingStatus: string;
-    discountMultiplier?: number;
-  };
-  businessLaws: BusinessLaws;
-  expert?: ExpertConfig;
-  // --- Grade X OTA & Fleet Extensions ---
-  targetVersion?: string;
-  otaUrl?: string;
-  targetState?: 'stable' | 'beta' | 'bleeding-edge';
-  priceMultiplier?: number;
-  lastSignalId?: string; // Suture Grade X
-}
 
 export interface TelemetryPulse {
   version: string;
   status: 'ACTIVE' | 'MAINTENANCE' | 'CRITICAL';
-  lastPulse: string | number | Date | { seconds: number; nanoseconds: number } | any; // 'any' for Firestore FieldValue
+  lastPulse: string | number | Date | { seconds: number; nanoseconds: number };
   health: {
     uptime: number;
     battery: {
@@ -112,44 +100,57 @@ export interface TenantFirebaseConfig {
   [key: string]: string | undefined;
 }
 
-export interface TenantConfig {
+import type { TenantConfig, OrchestratorSignal, TenantTheme } from '@/domain/schemas/tenant';
+export type { TenantConfig, OrchestratorSignal, TenantTheme };
+
+/**
+ * 🏛️ SovereignNode - Universal Entity Contract
+ * unknown business object MUST implement this to be handled by the Core.
+ */
+export interface SovereignNode {
   id: string;
-  name?: string; 
-  tier?: string; 
-  billing?: {
-    status: string;
-    plan: string;
-    nextBillingDate?: string;
-  };
-  marketplace?: {
-    enabledModules: string[];
-    [key: string]: string[] | undefined;
-  };
-  ai?: {
-    enabled: boolean;
-    model?: string;
-    quota?: number;
-    geminiApiKey?: string;
-  };
-  branding?: TenantTheme;
-  capabilities?: Record<string, boolean>;
-  features?: Record<string, boolean>; 
-  theme?: TenantTheme;
-  status?: OrchestratorSignal;
-  metadata?: {
-    name: string;
-    version: string;
-    description?: string;
-    ownerId?: string;
-    createdAt?: string;
-    subscriptionTier?: string;
-  };
-  customFeatures?: Record<string, boolean>;
-  firebase?: TenantFirebaseConfig;
+  updatedAt: string | Date | number;
+  createdAt?: string | Date | number;
+  [key: string]: SovereignField;
 }
+
+/**
+ * 🏛️ OperationalIdentity - Abstract Identifiers
+ */
+export enum OperationalIdentity {
+  CORE = 'STX_CORE',
+  FINANCE = 'STX_FINANCE',
+  OPS = 'STX_OPS',
+  HR = 'STX_HR',
+  CRM = 'STX_CRM',
+  LOGISTICS = 'STX_LOGISTICS',
+  INTELLIGENCE = 'STX_INTELLIGENCE',
+  NODES = 'STX_ALPHA',
+  ALLOCATIONS = 'STX_BETA',
+  FLOWS = 'STX_GAMMA',
+  RESOURCES = 'STX_DELTA',
+  PROTOCOLS = 'STX_EPSILON',
+  COMPLIANCE = 'STX_ZETA',
+  RELATIONS = 'STX_ETA',
+  STRUCTURES = 'STX_THETA',
+  ZONES = 'STX_IOTA',
+  STAFF = 'STX_KAPPA',
+  LEDGER = 'STX_LAMBDA'
+}
+
+
 
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
   capabilities: {},
+  features: {
+    pos: true,
+    kds: true,
+    inventory: true,
+    hr: true,
+    reservations: true,
+    finance: true,
+    marketing: true
+  },
   theme: {
     primaryColor: '#0F172A',
     secondaryColor: '#38BDF8',
@@ -170,8 +171,8 @@ export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
       discountMultiplier: 1
     },
     businessLaws: {
-      table_count: 0,
-      tax_rate: 0.1,
+      node_capacity: 0,
+      fiscal_coefficient: 0.1,
       currency: 'EUR',
       pmsEnabled: false
     },

@@ -1,18 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     Users,
-    Save,
     Loader2,
     Clock,
-    Calendar,
-    GraduationCap,
-    Briefcase,
-    AlertTriangle,
     Coffee,
-    HeartPulse,
     Zap,
     Scale,
     Timer,
@@ -26,7 +20,8 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 
 import { useSettings } from "@/context/SettingsContext";
-import { PositionSettings, StaffConfig } from "@/types";
+import { useNotifications } from '@/context/NotificationsContext';
+import { PositionSettings, StaffConfig } from "@nexus/contracts";
 
 interface PositionConfig {
     id: string;
@@ -37,7 +32,7 @@ interface PositionConfig {
     breakDuration: number;
 }
 
-const defaultPositions: PositionConfig[] = [
+const _defaultPositions: PositionConfig[] = [
     { id: '1', name: 'Wait Staff', color: '#C5A572', hourlyRate: 12.50, overtime: 25, breakDuration: 30 },
     { id: '2', name: 'Rang Commander', color: '#1A1A1A', hourlyRate: 14.00, overtime: 25, breakDuration: 30 },
     { id: '3', name: 'Thermal Engineer', color: '#C5A572', hourlyRate: 13.50, overtime: 25, breakDuration: 45 },
@@ -47,9 +42,10 @@ const defaultPositions: PositionConfig[] = [
 ];
 
 export default function StaffSettings() {
-    const { settings, updateConfig, updateList, isSaving: contextIsSaving } = useSettings();
+    const { settings, updateConfig, updateList, isSaving: _contextIsSaving } = useSettings();
     const [positions, setPositions] = useState<PositionSettings[]>(settings?.positions || []);
     const [isSaving, setIsSaving] = useState(false);
+    const { addNotification } = useNotifications();
     const [localConfig, setLocalConfig] = useState<StaffConfig>(settings?.staffConfig || {
         maxHoursPerWeek: 35,
         maxOvertimePerWeek: 8,
@@ -68,10 +64,11 @@ export default function StaffSettings() {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            await updateConfig('staffConfig', localConfig as any);
-            await updateList('positions', positions as any);
+            await updateConfig('staffConfig', localConfig);
+            await updateList('positions', positions);
         } catch (error) {
             console.error(error);
+            addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer la configuration du personnel.' });
         } finally {
             setIsSaving(false);
         }
@@ -258,12 +255,12 @@ export default function StaffSettings() {
                         onClick={() => setLocalConfig(s => ({ ...s, paidBreaks: !s.paidBreaks }))}
                         className={cn(
                             "w-16 h-8 rounded-full relative transition-all duration-500",
-                            localConfig.paidBreaks ? "bg-emerald-500" : "bg-bg-tertiary border border-border"
+                            localConfig.paidBreaks ? "bg-status-success" : "bg-bg-tertiary border border-border"
                         )}
                     >
                         <motion.div
                             animate={{ x: localConfig.paidBreaks ? 34 : 6 }}
-                            className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all"
+                            className="absolute top-1 w-6 h-6 rounded-full bg-surface-card shadow-md transition-all"
                         />
                     </button>
                 </div>
@@ -371,7 +368,7 @@ export default function StaffSettings() {
                     ) : (
                         <div className="relative">
                             <Activity className="w-6 h-6 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Sauvegarder Configuration

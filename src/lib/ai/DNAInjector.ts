@@ -1,6 +1,7 @@
 import { getTenantConfig } from "@/instances";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from '@/lib/logger';
+import { ShieldedContext } from './ShieldedContext';
 
 /**
  * 🧬 DNAInjector - Restaurant OS
@@ -12,6 +13,9 @@ export class DNAInjector {
      * Priorité : Firestore (Dynamic) > Instance Config (Static)
      */
     static async getTenantDNA(tenantId: string): Promise<string> {
+        // Assert context validation to block tenant context crossover leaks
+        ShieldedContext.assertTenantAccess(tenantId);
+
         try {
             // 1. Recherche dans Firestore (Règles dynamiques injectées via MCC)
             // Note: En mode Mock, cette étape sera sautée ou retournera un array vide.
@@ -22,7 +26,7 @@ export class DNAInjector {
                     where: [{ field: 'tenantId', operator: '==', value: tenantId }]
                 });
                 dynamicRules = results.map(doc => String(doc.rule || ""));
-            } catch (err) {
+            } catch (_err) {
                 // Silencieusement ignorer en mode Mock / Sans clés
                 logger.warn('DNAInjector: Firestore dynamic rules lookup failed (Normal in Mock Mode)');
             }

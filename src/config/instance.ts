@@ -1,4 +1,4 @@
-import type { RestaurantIdentity } from '@/types';
+import type { RestaurantIdentity } from '@nexus/contracts';
 
 export interface FirebaseInstanceConfig {
     apiKey: string;
@@ -10,7 +10,7 @@ export interface FirebaseInstanceConfig {
 }
 
 export interface AIInstanceConfig {
-    geminiApiKey: string;
+    llmApiKey: string;
 }
 
 export interface WhiteLabelInstanceConfig {
@@ -28,7 +28,16 @@ export interface WhiteLabelInstanceConfig {
     identityDefaults: RestaurantIdentity;
 }
 
+export type AppMode = 'tenant' | 'mcc';
+
+export const APP_MODE: AppMode = (process.env.NEXT_PUBLIC_APP_MODE as AppMode) || 'tenant';
+
+export const isMCCMode = () => APP_MODE === 'mcc';
+export const isTenantMode = () => APP_MODE === 'tenant';
+
 const defaultProjectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'kitchen-os-gastro';
+
+export const DEFAULT_TENANT_ID = process.env.NEXT_PUBLIC_DEFAULT_TENANT_ID || 'lepetitpoucet';
 
 /**
  * Resolves the current instance configuration (STATIC FALLBACK)
@@ -59,7 +68,7 @@ export const whiteLabelInstanceConfig: WhiteLabelInstanceConfig = {
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
     },
     ai: {
-        geminiApiKey: process.env.GEMINI_API_KEY || '',
+        llmApiKey: process.env.LLM_API_KEY || process.env.GEMINI_API_KEY || '',
     },
     identityDefaults: {
         id: 'main',

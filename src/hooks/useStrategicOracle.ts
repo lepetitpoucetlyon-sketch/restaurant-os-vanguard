@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useNexusFleet as useFleet } from '@/hooks/useNexusFleet';
 import { useGeminiAgent } from './useGeminiAgent';
-import { MacroBrain, FleetInsight } from '@/domain/services/MacroBrain';
+import { MacroBrain, FleetInsight } from '@domain/services/MacroBrain';
 import { logger } from '@/lib/axiom';
 
 /**
@@ -10,7 +10,8 @@ import { logger } from '@/lib/axiom';
  * Manages fleet-wide strategy and autonomous action execution.
  */
 export function useStrategicOracle() {
-    const { instances, refreshFleet } = useFleet();
+    const fleet = useFleet() as import('@/shared/nexus/contracts/nexus.types').NexusFleetState;
+    const { instances, refreshFleet: _refreshFleet } = fleet;
     const agent = useGeminiAgent();
 
     // 1. Analyze Fleet - Get strategic insights from MacroBrain
@@ -30,7 +31,7 @@ export function useStrategicOracle() {
         
         await agent.sendMessage(
             "Analyse l'état global de l'empire à partir des insights fournis. Donne-moi 3 priorités stratégiques immédiates.",
-            context as any
+            context as unknown as import("@/shared/nexus-contract").SovereignMap
         );
     }, [agent, instances, insights]);
 

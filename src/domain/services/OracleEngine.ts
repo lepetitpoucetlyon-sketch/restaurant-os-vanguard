@@ -1,5 +1,5 @@
-import { StockItem, StockEvent } from '@/types';
-import { Quantity, toQuantity } from '@/lib/brands';
+import { InventoryMovement as StockEvent } from '@nexus/contracts';
+import { Quantity } from '@/lib/brands';
 import { logger } from '@/lib/logger';
 
 /**
@@ -40,22 +40,22 @@ export const OracleEngine = {
     }
 
     const dailyUsage = this.calculateBitwiseDailyUsage(events);
-    const avgUsage = dailyUsage.reduce((a, b) => a + b, 0) / dailyUsage.length;
+    const avgUsage = dailyUsage.reduce((a: number, b: number) => a + b, 0) / dailyUsage.length;
     
     // Variance calculation for Monte Carlo
-    const variance = dailyUsage.reduce((acc, val) => acc + Math.pow(val - avgUsage, 2), 0) / dailyUsage.length;
+    const variance = dailyUsage.reduce((acc: number, val: number) => acc + Math.pow(val - avgUsage, 2), 0) / dailyUsage.length;
     const stdDev = Math.sqrt(variance);
 
     // Run Monte Carlo Simulation (1000 iterations for Grade VII)
     const simulations = this.runMonteCarlo(currentQty, avgUsage, stdDev, 1000);
-    simulations.sort((a, b) => a - b);
+    simulations.sort((a: number, b: number) => a - b);
     
     const p50 = simulations[Math.floor(simulations.length * 0.5)];
     const p10 = simulations[Math.floor(simulations.length * 0.1)]; // Pessimistic (runs out fast)
     const p90 = simulations[Math.floor(simulations.length * 0.9)]; // Optimistic
 
     // Acceleration detection
-    const recentUsage = dailyUsage.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const recentUsage = dailyUsage.slice(-3).reduce((a: number, b: number) => a + b, 0) / 3;
     const acceleration = recentUsage / (avgUsage || 1);
 
     let trend: 'STABLE' | 'ACCELERATING' | 'DECELERATING' = 'STABLE';
@@ -107,8 +107,8 @@ export const OracleEngine = {
   calculateBitwiseDailyUsage(events: StockEvent[]): number[] {
     const usageMap: Record<string, number> = {};
     events.forEach(e => {
-      const date = e.timestamp.split('T')[0];
-      if (e.type === 'OUT') {
+      const date = (e.performedAt as string).split('T')[0];
+      if (e.type === 'consumption' || e.type === 'sale') {
         usageMap[date] = (usageMap[date] || 0) + e.quantity;
       }
     });
@@ -120,13 +120,13 @@ export const OracleEngine = {
  * 🤖 Agent AI : Suggest Chicken Procurement
  * Bridges Oracle forecasts with SovereignLedger entries.
  */
-export async function suggestChickenProcurement(qty: number): Promise<void> {
+export async function suggestChickenProcurement(qty: number, tenantId: string): Promise<void> {
   const cost = qty * 450; // 4.50€ per industrial chicken
   logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} chickens (Cost: ${cost/100}€)`);
-  
+
   // Inject into SovereignLedger PROPOSALS account
   const { SovereignLedger } = await import('./SovereignLedger');
-  await SovereignLedger.recordTransfer({
+  await SovereignLedger.getInstance(tenantId).recordTransfer({
     debitAccount: 'PURCHASES',
     creditAccount: 'PROPOSALS', // Awaiting human signing
     amountInCents: cost,
@@ -139,9 +139,9 @@ export async function suggestChickenProcurement(qty: number): Promise<void> {
  * 🔮 Oracle Supervision: Monitor Monkey Chaos
  * Generates Genomic Suture reports if flaws are detected.
  */
-export async function superviseChaos(): Promise<string> {
+export async function superviseChaos(tenantId: string): Promise<string> {
   const { MonkeyChaos } = await import('../agents/MonkeyChaos');
-  const result = await MonkeyChaos.attackLedger();
+  const result = await MonkeyChaos.attackLedger(tenantId);
   
   if (result.success) {
     return `[RAPPORT DE SUTURE GÉNOMIQUE]\nStatut: INTÉGRITÉ_MAINTENUE\nObservation: L'attaque du Monkey Chaos a été rejetée par le SovereignLedger.\nDiagnostic: Pont Financier Inviolable.`;

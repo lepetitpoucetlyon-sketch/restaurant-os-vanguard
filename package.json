@@ -1,27 +1,30 @@
 {
-  "name": "restaurant-os-app",
+  "name": "restaurant-os-vanguard",
   "version": "0.1.0",
   "private": true,
   "author": "Mohammed-ali Boudjaadar",
   "copyright": "Copyright © 2026 Mohammed-ali Boudjaadar. Tous droits réservés.",
   "scripts": {
-    "setup:atlas": "node scripts/setup-atlas.js",
-    "atlas": "node scripts/atlas-wrapper.js",
-    "instance:generate": "node scripts/generate-instance-env.js",
-    "instance:validate": "node scripts/validate-instance-config.js",
-    "instance:preflight": "node scripts/preflight-instance.js",
-    "instance:preflight:sample": "node scripts/preflight-instance.js templates/client-instance.sample.json",
-    "fleet:list": "node scripts/fleet.js list",
-    "fleet:switch": "node scripts/fleet.js switch",
+    "setup:atlas": "node .nexus/scripts/setup-atlas.js",
+    "atlas": "node .nexus/scripts/atlas-wrapper.js",
+    "instance:generate": "node .nexus/scripts/generate-instance-env.js",
+    "instance:validate": "node .nexus/scripts/validate-instance-config.js",
+    "instance:preflight": "node .nexus/scripts/preflight-instance.js",
+    "instance:preflight:sample": "node .nexus/scripts/preflight-instance.js templates/client-instance.sample.json",
+    "fleet:list": "node .nexus/scripts/fleet.js list",
+    "fleet:switch": "node .nexus/scripts/fleet.js switch",
     "release:check": "npx eslint . --quiet && npm run instance:preflight:sample && npx vitest run",
     "dev": "NODE_OPTIONS='--max-old-space-size=1024' next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "benchmark": "ts-node tests/benchmarks/live_performance_test.ts",
-    "gitpush": "node scripts/antigravity-push.js"
+    "gitpush": "node .nexus/scripts/antigravity-push.js",
+    "nexus:seal": "node .nexus/scripts/smart-seal.js",
+    "nexus:deploy": "node .nexus/scripts/quick-deploy.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1091.0",
     "@axiomhq/nextjs": "^0.2.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
@@ -33,7 +36,9 @@
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.4",
     "@sentry/nextjs": "^10.47.0",
+    "@stripe/terminal-js": "^0.26.0",
     "@types/d3": "^7.4.3",
+    "@types/web-push": "^3.6.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
@@ -49,13 +54,18 @@
     "konva": "^10.0.12",
     "lucide-react": "^0.562.0",
     "next": "^16.2.3",
+    "openai": "^6.35.0",
     "protobufjs": "^7.2.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-konva": "^19.2.1",
+    "resend": "^6.17.2",
     "sonner": "^2.0.7",
+    "stripe": "^22.2.0",
     "tailwind-merge": "^3.4.0",
     "use-image": "^1.1.4",
+    "web-push": "^3.6.7",
+    "xlsx": "^0.18.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -66,14 +76,22 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "firebase-tools": "^15.14.0",
     "jsdom": "^29.0.2",
     "playwright": "^1.59.1",
     "tailwindcss": "^4",
+    "ts-morph": "^28.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5",
     "vitest": "^4.1.2"
+  },
+  "overrides": {
+    "@sentry/nextjs": {
+      "@opentelemetry/core": "2.6.1"
+    }
   }
 }

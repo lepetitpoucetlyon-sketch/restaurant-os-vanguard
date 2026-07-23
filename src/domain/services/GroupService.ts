@@ -1,5 +1,4 @@
-import { logger } from '@/lib/logger';
-import { GroupEvent } from '@/modules/ops/groups.types';
+import { GroupEvent } from '@nexus/contracts';
 
 /**
  * 🏢 GroupService - Restaurant OS
@@ -12,7 +11,7 @@ export class GroupService {
      * Prepares a group/event payload for persistence.
      * Could include deposit calculation or room allotment logic in the future.
      */
-    static prepareGroup(data: Record<string, unknown>, generatedId: string): Record<string, unknown> {
+    static prepareGroup(data: Record<string, import("@/shared/nexus-contract").SovereignValue>, generatedId: string): Record<string, import("@/shared/nexus-contract").SovereignValue> {
         return {
             ...data,
             id: generatedId,

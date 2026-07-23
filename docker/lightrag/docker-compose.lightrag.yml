@@ -1,0 +1,88 @@
+# ============================================
+# 🧠 LightRAG Server — Docker Compose Sidecar
+# Restaurant OS Intelligence Layer
+#
+# Run alongside the main Restaurant OS app:
+#   docker compose -f docker/lightrag/docker-compose.lightrag.yml up -d
+#
+# This starts:
+#   1. LightRAG Server (Python, port 9621)
+#   2. Neo4j (Graph DB, ports 7474/7687)
+#
+# Copyright © 2026 Mohammed-ali Boudjaadar.
+# ============================================
+
+services:
+  # ============================================
+  # LightRAG / RAGAnything Server
+  # ============================================
+  lightrag:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ros-lightrag
+    restart: unless-stopped
+    ports:
+      - "${LIGHTRAG_PORT:-9621}:9621"
+    env_file:
+      - .env.lightrag
+    environment:
+      # RAGAnything / MinerU Multimodal extraction config
+      - VISION_MODEL=${VISION_MODEL:-gemini-1.5-pro} # Use Gemini for plate analysis
+      - ENABLE_MULTIMODAL=true
+    volumes:
+      - lightrag_data:/app/rag_storage
+      - mineru_weights:/app/mineru_models # Cache for local extraction models
+      - ./raganything_server.py:/app/raganything_server.py
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    networks:
+      - ros-intelligence
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9621/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ============================================
+  # Neo4j — Knowledge Graph Storage
+  # ============================================
+  neo4j:
+    image: neo4j:5-community
+    container_name: ros-neo4j
+    restart: unless-stopped
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+    environment:
+      - NEO4J_AUTH=${NEO4J_USERNAME:-neo4j}/${NEO4J_PASSWORD:?NEO4J_PASSWORD must be set}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_server_memory_heap_initial__size=256m
+      - NEO4J_server_memory_heap_max__size=512m
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    networks:
+      - ros-intelligence
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  lightrag_data:
+    driver: local
+  neo4j_data:
+    driver: local
+  neo4j_logs:
+    driver: local
+  mineru_weights:
+    driver: local
+
+networks:
+  ros-intelligence:
+    driver: bridge

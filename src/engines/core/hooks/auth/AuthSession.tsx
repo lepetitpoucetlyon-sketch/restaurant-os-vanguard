@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { browserSessionPersistence, onAuthStateChanged, setPersistence, signInWithCustomToken, signOut } from 'firebase/auth';
 import { httpsCallable, getFunctions } from 'firebase/functions';
 import { auth, firebaseApp } from '@/lib/firebase';
-import { logger } from '@/lib/axiom';
-import { IdentityManager, ROOT_ADMIN, type PersistedSession } from '@/domain/services/IdentityManager';
-import { User } from '@/types';
+import { type PersistedSession } from '@domain/services/IdentityManager';
+import { User } from '@nexus/contracts';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';
@@ -33,7 +32,7 @@ export function useAuthSession() {
             if (raw) {
                 try {
                     return (JSON.parse(raw) as PersistedSession).userId;
-                } catch (e) {}
+                } catch (_e) {}
             }
         }
         return null;

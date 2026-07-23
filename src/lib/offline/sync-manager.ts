@@ -10,6 +10,9 @@ import { logger } from '@/lib/axiom';
 export class SyncManager {
     private static isSyncing = false;
 
+    /** Au-delà : on continue de retenter (jamais de drop fiscal) mais on loggue en critique. */
+    private static readonly ALERT_ATTEMPTS = 10;
+
     /**
      * Ajoute une opération à la file d'attente et tente une synchro si possible.
      */
@@ -19,7 +22,11 @@ export class SyncManager {
             status: 'pending',
             attempts: 0,
             timestamp: new Date().toISOString(),
-            priority: op.type.includes('FISCAL') ? 1 : 0
+            // ⚠️ 'NF525_PAYMENT' ne contient pas « FISCAL » : l'ancien calcul
+            // (op.type.includes('FISCAL')) classait les paiements en priorité 0.
+            priority: op.priority ?? (
+                op.type === 'NF525_PAYMENT' || op.type === 'FISCAL_SEAL' || op.type === 'JOURNAL_ENTRY' ? 1 : 0
+            )
         };
 
         const id = await db.syncQueue.add(newOp);
@@ -36,11 +43,15 @@ export class SyncManager {
      */
     static async processQueue() {
         if (this.isSyncing) return;
-        
-        const pendingOps = await db.syncQueue
+
+        // ⚠️ Rejouer AUSSI les 'failed' : les laisser de côté = ticket NF525
+        // perdu au premier échec. Une op fiscale n'est JAMAIS abandonnée.
+        const pendingOps = (await db.syncQueue
             .where('status')
-            .equals('pending')
-            .sortBy('priority');
+            .anyOf('pending', 'failed')
+            .toArray())
+            // Fiscal (priority 1) d'abord, puis ordre chronologique (chaîne de sceaux).
+            .sort((a, b) => (b.priority - a.priority) || a.timestamp.localeCompare(b.timestamp));
 
         if (pendingOps.length === 0) return;
 
@@ -64,6 +75,12 @@ export class SyncManager {
                     lastError: errorMessage
                 });
 
+                if (op.attempts + 1 >= this.ALERT_ATTEMPTS) {
+                    logger.error('SyncManager: CRITICAL — operation stuck after repeated attempts', {
+                        id: op.id, type: op.type, attempts: op.attempts + 1
+                    });
+                }
+
                 // Si c'est une erreur de connexion, on arrête la boucle
                 if (!checkOnlineStatus()) break;
             }
@@ -71,7 +88,9 @@ export class SyncManager {
 
         this.isSyncing = false;
         
-        // Relancer si de nouveaux items sont arrivés entre temps
+        // Relancer si de nouveaux items PENDING sont arrivés entre temps.
+        // (Les 'failed' attendent le prochain déclencheur — online/boot/enqueue —
+        // pour éviter une boucle chaude de retries.)
         const remaining = await db.syncQueue.where('status').equals('pending').count();
         if (remaining > 0 && checkOnlineStatus()) {
             this.processQueue();
@@ -83,13 +102,21 @@ export class SyncManager {
      */
     private static async executeOperation(op: SyncOperation) {
         if (op.type === 'NF525_PAYMENT') {
-            // Pour les batchs complexes, le payload contient déjà le snapshot prêt pour Firestore.
-            // On peut re-jouer le batch ici.
-            const batch = Nexus.adapter.batch();
-            
-            // Le payload contient une liste d'instructions { path, data, method }
-            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: any }> };
+            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: import('@/shared/nexus-contract').SovereignData }> };
             const instructions = payload.instructions;
+
+            // Idempotence : si le JournalEntry existe déjà (écriture partielle avant
+            // déconnexion), on ne rejoue pas le batch — sinon double-scellement NF525.
+            const journalInstruction = instructions.find(i => i.path.includes('/journalEntries/'));
+            if (journalInstruction) {
+                const existing = await Nexus.adapter.get(journalInstruction.path);
+                if (existing) {
+                    logger.info('SyncManager: NF525_PAYMENT déjà commité — skip replay', { path: journalInstruction.path });
+                    return;
+                }
+            }
+
+            const batch = Nexus.adapter.batch();
             for (const ins of instructions) {
                 if (ins.method === 'SET') batch.set(ins.path, ins.data);
                 if (ins.method === 'UPDATE') batch.update(ins.path, ins.data);
@@ -101,14 +128,16 @@ export class SyncManager {
             // Logique générique pour les opérations simples
             const fullPath = `${op.collection}/${op.targetId}`;
             if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
-            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as any);
+            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
         }
     }
 }
 
 // Lancement automatique du manager lors du chargement (si en ligne)
-if (typeof window !== 'undefined') {
-    window.addEventListener('online', () => SyncManager.processQueue());
-    // On lance immédiatement la synchro au chargement
-    SyncManager.processQueue();
+export function bootSyncManager() {
+    if (typeof window !== 'undefined') {
+        window.addEventListener('online', () => SyncManager.processQueue());
+        // On lance immédiatement la synchro au chargement
+        SyncManager.processQueue();
+    }
 }

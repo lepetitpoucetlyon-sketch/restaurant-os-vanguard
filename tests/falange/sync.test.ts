@@ -1,14 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import '@/tests/vanguard/mocks';
 import { NexusSyncService } from '@/lib/NexusSyncService';
-import { SyncOrders } from '@/lib/sync/Sync.Orders';
-import { SyncStocks } from '@/lib/sync/Sync.Stocks';
-import { SyncCompliance } from '@/lib/sync/Sync.Compliance';
+// ICM-lite : init() ne charge que les piliers demandés par la route. `operations` charge
+// orders+stocks+compliance (les 3 testés ici), finance/marketing/staff restent OFF.
+import { TASK_MAPS } from '@/lib/icm/TaskContext';
+import { OpsSyncService as SyncOrders } from '@/modules/ops/engine/ops.sync';
+import { InventorySyncService as SyncStocks } from '@/modules/logistics/inventory/inventory.sync';
+import { HACCPSyncService as SyncHACCP } from '@/modules/compliance/haccp/haccp.sync';
 import { MasterBridge } from '@/lib/MasterBridge';
 
 // Mocking dependencies
-vi.mock('@/lib/sync/Sync.Orders', () => ({ SyncOrders: { init: vi.fn(), stop: vi.fn() } }));
-vi.mock('@/lib/sync/Sync.Stocks', () => ({ SyncStocks: { init: vi.fn(), stop: vi.fn() } }));
-vi.mock('@/lib/sync/Sync.Compliance', () => ({ SyncCompliance: { init: vi.fn(), stop: vi.fn() } }));
+vi.mock('@/modules/ops/engine/ops.sync', () => ({ OpsSyncService: { init: vi.fn(), stop: vi.fn() } }));
+vi.mock('@/modules/logistics/inventory/inventory.sync', () => ({ InventorySyncService: { init: vi.fn(), stop: vi.fn() } }));
+vi.mock('@/modules/compliance/haccp/haccp.sync', () => ({ HACCPSyncService: { init: vi.fn(), stop: vi.fn() } }));
 vi.mock('@/lib/MasterBridge', () => ({ MasterBridge: { listenToMaster: vi.fn(() => vi.fn()) } }));
 
 describe('🛰️ FALANGE - COHORTE SYNC (10 TESTS)', () => {
@@ -21,10 +25,10 @@ describe('🛰️ FALANGE - COHORTE SYNC (10 TESTS)', () => {
      * TEST 1: Initialisation Parallèle (NEXUS-BOOST)
      */
     it('1. NexusSyncService.init devrait lancer l\'initialisation des 3 piliers en parallèle', async () => {
-        await NexusSyncService.init('restaurant-os');
+        await NexusSyncService.init('restaurant-os', TASK_MAPS.operations);
         expect(SyncOrders.init).toHaveBeenCalled();
         expect(SyncStocks.init).toHaveBeenCalled();
-        expect(SyncCompliance.init).toHaveBeenCalled();
+        expect(SyncHACCP.init).toHaveBeenCalled();
     });
 
     /**
@@ -34,7 +38,7 @@ describe('🛰️ FALANGE - COHORTE SYNC (10 TESTS)', () => {
         await NexusSyncService.stopAll();
         expect(SyncOrders.stop).toHaveBeenCalled();
         expect(SyncStocks.stop).toHaveBeenCalled();
-        expect(SyncCompliance.stop).toHaveBeenCalled();
+        expect(SyncHACCP.stop).toHaveBeenCalled();
     });
 
     /**
@@ -61,11 +65,11 @@ describe('🛰️ FALANGE - COHORTE SYNC (10 TESTS)', () => {
     });
 
     /**
-     * TEST 6: Audit Trail - Sync Compliance
+     * TEST 6: Audit Trail - Sync HACCP
      */
-    it('6. SyncCompliance devrait être initialisé à chaque démarrage', async () => {
-        await NexusSyncService.init('restaurant-os');
-        expect(SyncCompliance.init).toHaveBeenCalled();
+    it('6. SyncHACCP devrait être initialisé à chaque démarrage', async () => {
+        await NexusSyncService.init('restaurant-os', TASK_MAPS.operations);
+        expect(SyncHACCP.init).toHaveBeenCalled();
     });
 
     /**

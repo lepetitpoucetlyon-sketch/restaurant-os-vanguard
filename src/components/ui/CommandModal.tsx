@@ -4,30 +4,22 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
     Search,
-    Command,
     LayoutDashboard,
-    Store,
-    Map,
     CalendarDays,
-    ChefHat,
     Package,
     Users,
-    ClipboardCheck,
     BarChart3,
     Calculator,
     Sparkles,
-    CalendarRange,
-    X,
     ArrowRight,
-    Plus,
     FileText,
     Receipt,
     Clock,
     Printer
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { Modal } from "@/components/ui/Modal";
-import { useUI } from "@/context/UIContext";
+import { Modal } from "@ui/Modal";
+import { useUI } from "@/hooks";
 
 interface CommandItem {
     id: string;
@@ -41,7 +33,7 @@ interface CommandItem {
     shortcut?: string;
 }
 
-const NAV_ITEMS: CommandItem[] = [
+const _NAV_ITEMS: CommandItem[] = [
     // Navigation items kept for reference but hidden from main view as requested
     { id: 'dashboard', label: 'Tableau de bord', description: 'Vue d\'ensemble', icon: LayoutDashboard, href: '/', category: 'navigation', section: 'Navigation', shortcut: '⌘1' },
 ];
@@ -71,7 +63,7 @@ interface CommandModalProps {
 }
 
 export function CommandModal({ isOpen, onClose }: CommandModalProps) {
-    const { theme } = useUI();
+    const { theme: _theme } = useUI();
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -180,10 +172,10 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                 <div className="max-h-[500px] overflow-y-auto elegant-scrollbar p-6 space-y-8 relative z-10">
                     {filteredItems.length === 0 ? (
                         <div className="py-20 text-center">
-                            <p className="font-serif italic text-2xl text-black/20">Aucune action trouvée pour "{searchTerm}"</p>
+                            <p className="font-serif italic text-2xl text-primary/20">Aucune action trouvée pour "{searchTerm}"</p>
                         </div>
                     ) : (
-                        Object.entries(groupedItems).map(([section, items], sectionIndex) => (
+                        Object.entries(groupedItems).map(([section, items], _sectionIndex) => (
                             <div key={section} className="space-y-3">
                                 <div className="flex items-center gap-4 px-4 mb-4 mt-2">
                                     <div className="w-8 h-0.5 bg-accent-gold rounded-full" />
@@ -205,26 +197,26 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                                                     "group flex items-center gap-5 p-4 rounded-2.5xl transition-all duration-500 border",
                                                     isActive
                                                         ? "bg-accent-gold border-transparent shadow-glow translate-x-1"
-                                                        : "bg-white/5 border-transparent opacity-60 hover:opacity-100"
+                                                        : "bg-surface-card/5 border-transparent opacity-60 hover:opacity-100"
                                                 )}
                                             >
                                                 <div className={cn(
                                                     "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-700",
-                                                    isActive ? "bg-white/20 text-white" : "bg-white text-accent-gold border border-accent-gold/20 shadow-sm"
+                                                    isActive ? "bg-surface-card/20 text-white" : "bg-surface-card text-accent-gold border border-accent-gold/20 shadow-sm"
                                                 )}>
                                                     <Icon strokeWidth={1.5} className="w-6 h-6" />
                                                 </div>
                                                 <div className="flex-1 text-left">
-                                                    <p className={cn("font-serif font-black italic text-md leading-none transition-colors", isActive ? "text-black hidden-text-shadow" : "text-text-primary")}>
+                                                    <p className={cn("font-serif font-black italic text-md leading-none transition-colors", isActive ? "text-primary hidden-text-shadow" : "text-text-primary")}>
                                                         {item.label}
                                                     </p>
-                                                    <p className={cn("text-[10px] font-black uppercase tracking-widest mt-2", isActive ? "text-black/60" : "text-text-muted/60")}>
+                                                    <p className={cn("text-[10px] font-black uppercase tracking-widest mt-2", isActive ? "text-primary/60" : "text-text-muted/60")}>
                                                         {item.description}
                                                     </p>
                                                 </div>
                                                 <ArrowRight className={cn(
                                                     "w-5 h-5 transition-all duration-700",
-                                                    isActive ? "text-black translate-x-2" : "text-text-muted/20"
+                                                    isActive ? "text-primary translate-x-2" : "text-text-muted/20"
                                                 )} />
                                             </button>
                                         );
@@ -236,21 +228,21 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                 </div>
 
                 {/* Footer Center - Operational Protocol */}
-                <div className="p-8 border-t flex items-center justify-between relative z-10 shrink-0 border-black/5 bg-black/[0.02]">
+                <div className="p-8 border-t flex items-center justify-between relative z-10 shrink-0 border-black/5 bg-surface-sidebar/[0.02]">
                     <div className="flex items-center gap-8">
                         <div className="flex items-center gap-3">
-                            <div className="bg-black/5 border-black/10 text-black/40 px-2 py-1 border rounded-lg text-[9px] font-black">↑↓</div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Parcourir</span>
+                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-[9px] font-black">↑↓</div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-primary/20">Parcourir</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="bg-black/5 border-black/10 text-black/40 px-2 py-1 border rounded-lg text-[9px] font-black">↵</div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Activer</span>
+                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-[9px] font-black">↵</div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-primary/20">Activer</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="flex flex-col text-right">
                             <span className="text-[9px] font-black text-accent-gold uppercase tracking-[0.3em]">IA Maître</span>
-                            <span className="text-[7px] font-black uppercase tracking-[0.5em] mt-1 text-black/20 transition-colors">Version 2.5 Alpha</span>
+                            <span className="text-[7px] font-black uppercase tracking-[0.5em] mt-1 text-primary/20 transition-colors">Version 2.5 Alpha</span>
                         </div>
                         <div className="w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/20 flex items-center justify-center">
                             <Sparkles className="w-4 h-4 text-accent-gold" />

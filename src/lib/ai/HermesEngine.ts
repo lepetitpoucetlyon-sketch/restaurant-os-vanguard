@@ -8,7 +8,7 @@ import {
 } from '@/domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalHACCPBridge } from '@/modules/finance/services/FiscalHACCPBridge';
+import { FiscalHACCPMapper } from '@/modules/finance/services/FiscalHACCPMapper';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator
@@ -61,7 +61,7 @@ export class HermesEngine {
         // Here we simulate an autonomous bridge trigger if temperature rises
         try {
             const haccpPath = Nexus.getTenantPath('haccp_readings', tenantId);
-            const haccpResults = await Nexus.adapter.query<import('@/types').SensorReading>(haccpPath, {
+            const haccpResults = await Nexus.adapter.query<import('@modules/compliance/haccp/types/domain').SensorReading>(haccpPath, {
                 where: [
                     { field: 'isAnomaly', operator: '==', value: true },
                     { field: 'processed', operator: '==', value: false }
@@ -78,11 +78,11 @@ export class HermesEngine {
                         domain: 'haccp',
                         severity: 'critical',
                         message: `Critical temperature reached: ${reading.value}${reading.unit} for ${reading.name}`,
-                        detectedAt: reading.lastUpdated instanceof Date ? reading.lastUpdated.toISOString() : String(reading.lastUpdated)
+                        detectedAt: String(reading.timestamp)
                     });
 
                     // Auto-Trigger Bridge: Themis Agent Intervention
-                    await FiscalHACCPBridge.processCriticalWaste(reading, [], tenantId);
+                    await FiscalHACCPMapper.processCriticalWaste(reading, [], tenantId);
                     actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId || reading.id}`);
                     
                     // Mark as processed in Nexus
@@ -122,7 +122,7 @@ export class HermesEngine {
         logger.info(`✅ [HERMES] Pulse cycle completed in ${duration}ms. ${anomalies.length} issues found.`);
 
         return {
-            timestamp: this.manifest.lastPulse as string,
+            timestamp: this.manifest.lastPulse,
             anomalies,
             actionsTaken,
             insights: [] // To be populated by AgentEngine query if needed

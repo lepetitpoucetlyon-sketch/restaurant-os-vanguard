@@ -1,4 +1,4 @@
-import type { User, UserRole } from '@/types';
+import type { User, UserRole } from '@nexus/contracts';
 
 /**
  * Grade VIII - Agnostic Access Management
@@ -73,7 +73,20 @@ function canDo(user: User | null, action: string, actionPermissions: Record<stri
     return userLevel >= requiredLevel;
 }
 
+
+function canAccessDocument(user: User | null, documentOwnerId: string): boolean {
+    if (!user) return false;
+    // Social Shield: Un utilisateur RESTRICTED ne peut accéder qu'à ses documents personnels
+    if (user.status === 'RESTRICTED') {
+        return user.id === documentOwnerId;
+    }
+    // Admin has super-user bypass
+    if (user.role === 'admin') return true;
+    return true; // For ACTIVE users
+}
+
 export const AccessPolicyManager = {
+    canAccessDocument,
     normalizeCategoryList,
     sanitizeRolePermissions,
     getAccessibleCategories,

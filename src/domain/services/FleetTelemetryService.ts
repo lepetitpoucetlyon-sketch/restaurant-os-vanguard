@@ -1,30 +1,24 @@
-/**
- * @file FleetTelemetryService.ts
- * @version 5.4.1 [NEXUS-LOW-RES]
- * @description Orchestrateur de télémétrie avec Buffering et Heartbeat.
- */
-
+import { TenantID, SiteTelemetry } from '@domain/types/brands';
+import { TelemetryStream, TelemetryEvent } from '@/lib/telemetry/TelemetryStream';
+import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TenantID, SiteTelemetry } from '@/domain/types/brands';
+import { empireAudit } from '@/lib/audit';
 
-interface PerformanceMemory extends Performance {
-  memory?: {
-    usedJSHeapSize: number;
-  };
-}
-
+/**
+ * 🛰️ FleetTelemetryService - Restaurant OS
+ * Version Grade X - Event-Driven Sovereignty
+ * Orchestrator of fleet-wide metrics using TelemetryStream.
+ * Decoupled as a Facade Hub.
+ */
 export class FleetTelemetryService {
   private static instance: FleetTelemetryService;
+  private stream: TelemetryStream;
   
-  // État Interne (Buffer & Sécurité)
-  private telemetryBuffer: Partial<SiteTelemetry> = {};
-  private lastPushTime: number = 0;
-  private isSyncing: boolean = false;
+  private currentAggregatedMetrics: Record<string, Partial<SiteTelemetry>> = {};
 
-  // Configuration du Suzerain
-  private readonly HEARTBEAT_INTERVAL = 300000; // 5 minutes pour préserver les quotas
-
-  private constructor() {}
+  private constructor() {
+    this.stream = new TelemetryStream(async (events) => this.handleStreamFlush(events), 300000); // 5 min default
+  }
 
   public static getInstance(): FleetTelemetryService {
     if (!FleetTelemetryService.instance) {
@@ -33,115 +27,142 @@ export class FleetTelemetryService {
     return FleetTelemetryService.instance;
   }
 
-  /**
-   * @method pushSiteTelemetry
-   * @description Enregistre les métriques et décide s'il faut pousser vers le Cloud.
-   */
-  public async pushSiteTelemetry(
-    tenantId: TenantID,
-    metrics: Partial<SiteTelemetry>
-  ): Promise<void> {
-    // 1. Accumulation dans le buffer (Zéro coût CPU/Réseau immédiat)
-    this.telemetryBuffer = { ...this.telemetryBuffer, ...metrics, tenantId };
+  public async pushSiteTelemetry(tenantId: TenantID, metrics: Partial<SiteTelemetry>): Promise<void> {
+    const isCritical = metrics.status === 'CRITICAL' || (metrics.healthScore !== undefined && metrics.healthScore < 50);
+
+    const event: TelemetryEvent = {
+        type: metrics.status === 'CRITICAL' ? 'ALERT' : 'METRIC',
+        tenantId: String(tenantId),
+        payload: { ...metrics, tenantId: String(tenantId) },
+        timestamp: Date.now(),
+        priority: isCritical ? 'CRITICAL' : 'NORMAL'
+    };
+
+    this.stream.emit(event);
+  }
+
+  public async registerNode(tenantId: TenantID): Promise<void> {
+    this.stream.emit({
+        type: 'HEARTBEAT',
+        tenantId: String(tenantId),
+        payload: { id: tenantId, status: 'ONLINE' },
+        timestamp: Date.now(),
+        priority: 'HIGH'
+    });
+  }
+
+  public async broadcastConfiguration(config: Record<string, import("@/shared/nexus-contract").SovereignValue>, targetTenantIds: string[]): Promise<void> {
+    targetTenantIds.forEach(tid => {
+        this.stream.emit({
+            type: 'BROADCAST',
+            tenantId: tid,
+            payload: config,
+            timestamp: Date.now(),
+            priority: 'HIGH'
+        });
+    });
+  }
+
+  public async monitorFleetHealth(): Promise<void> {
+    const HEALTH_THRESHOLD = 70;
+    const HEARTBEAT_STALE_MS = 5 * 60 * 1000; // 5 minutes
+
+    let sites: SiteTelemetry[];
+    try {
+      sites = await discoverRealFleet();
+    } catch {
+      return;
+    }
 
     const now = Date.now();
-    
-    // Détection d'urgence pour bypasser le délai
-    const isCritical = metrics.status === 'CRITICAL' || 
-                      (metrics.healthScore !== undefined && metrics.healthScore < 50);
 
-    // 2. Jugement : On pousse si c'est urgent ou si le délai est expiré
-    if (isCritical || (now - this.lastPushTime >= this.HEARTBEAT_INTERVAL)) {
-      this.scheduleHeartbeat(tenantId);
-    }
-  }
+    for (const site of sites) {
+      const healthLow = site.healthScore < HEALTH_THRESHOLD;
+      const lastBeat = site.lastHeartbeat ? new Date(site.lastHeartbeat).getTime() : 0;
+      const heartbeatStale = !lastBeat || now - lastBeat > HEARTBEAT_STALE_MS;
 
-  /**
-   * @internal Planification sur thread libre
-   */
-  private scheduleHeartbeat(tenantId: TenantID): void {
-    if (this.isSyncing) return;
+      if (!healthLow && !heartbeatStale) continue;
 
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      window.requestIdleCallback(() => this.executeCloudSync(tenantId));
-    } else {
-      // Fallback pour environnements sans requestIdleCallback
-      setTimeout(() => this.executeCloudSync(tenantId), 1500);
-    }
-  }
+      const reason = healthLow && heartbeatStale
+        ? `health=${site.healthScore}% + heartbeat silencieux depuis ${Math.round((now - lastBeat) / 60000)} min`
+        : healthLow
+          ? `health critique: ${site.healthScore}% (seuil 70%)`
+          : `heartbeat silencieux depuis ${Math.round((now - lastBeat) / 60000)} min`;
 
-  /**
-   * @internal Exécution physique de l'I/O Firestore
-   */
-  private async executeCloudSync(tenantId: TenantID): Promise<void> {
-    this.isSyncing = true;
-    
-    try {
-      const telemetryPath = `fleet-telemetry/${tenantId}`;
-      
-      const payload = {
-        ...this.telemetryBuffer,
-        lastSeen: new Date().toISOString(),
-        engineVersion: "5.4.1-NEXUS",
-        nodeHealth: {
-          memoryUsageMB: Math.round((typeof window !== 'undefined' && 'memory' in window.performance) ? ((window.performance as PerformanceMemory).memory?.usedJSHeapSize || 0) / 1024 / 1024 : 0),
-          lowResActive: true,
-          timestamp: Date.now()
-        }
+      const alertId = `${now}_${site.id}`;
+      const alert = {
+        id: alertId,
+        tenantId: site.tenantId ?? site.key,
+        instanceId: site.id,
+        instanceName: site.name,
+        severity: site.healthScore < 50 ? 'critical' : 'high',
+        reason,
+        healthScore: site.healthScore,
+        lastHeartbeat: site.lastHeartbeat,
+        detectedAt: new Date(now).toISOString(),
+        acknowledged: false,
       };
 
-      await Nexus.adapter.set(telemetryPath, payload, { merge: true });
+      try {
+        Nexus.adapter.set(`mcc/alerts/${alertId}`, alert).catch(() => {});
+      } catch { /* non-bloquant */ }
 
-      // Reset de l'état après succès
-      this.lastPushTime = Date.now();
-      this.telemetryBuffer = {};
-      this.isSyncing = false;
-      
-      console.log(`[Fleet] Nexus-Sync Successful for site: ${tenantId}`);
-    } catch (error) {
-      console.error("[Fleet] Sync failed. Buffer preserved for next retry.", error);
-      this.isSyncing = false;
+      empireAudit.log({
+        module: 'fleet',
+        action: 'FLEET_HEALTH_ALERT',
+        severity: alert.severity as 'critical' | 'high',
+        details: alert as unknown as import('@/shared/nexus-contract').SovereignData,
+        instanceId: site.id,
+        timestamp: new Date(now),
+      });
     }
   }
 
-  // --- Logic de Découverte (Fleet Discovery) ---
+  public static async monitorFleetHealth(): Promise<void> {
+    return this.getInstance().monitorFleetHealth();
+  }
 
-  /**
-   * @method discoverRealFleet
-   * @description Récupère la liste des nœuds actifs avec leurs métriques de base.
-   */
+  private async handleStreamFlush(events: TelemetryEvent[]): Promise<void> {
+    const telemetryUpdates: Record<string, Partial<SiteTelemetry>> = {};
+    const administrativeActions: TelemetryEvent[] = [];
+    
+    events.forEach(event => {
+        if (event.type === 'BROADCAST' || event.type === 'COMMAND') {
+            administrativeActions.push(event);
+        } else {
+            telemetryUpdates[event.tenantId] = {
+                ...(telemetryUpdates[event.tenantId] || {}),
+                ...(event.payload as Partial<SiteTelemetry>)
+            };
+        }
+    });
+
+    const syncTasks = Object.entries(telemetryUpdates).map(([tid, payload]) => 
+        executeCloudSync(tid as TenantID, payload)
+    );
+
+    const adminTasks = administrativeActions.map(action => 
+        executeAdministrativeAction(action)
+    );
+
+    await Promise.all([...syncTasks, ...adminTasks]);
+
+    // Alerte proactive après chaque flush (toutes les 5 min) — mcc-tel-2
+    this.monitorFleetHealth().catch(() => {});
+  }
+
   public async discoverRealFleet(): Promise<SiteTelemetry[]> {
-    try {
-      const fleetSnap = await Nexus.adapter.query<SiteTelemetry>("fleet-telemetry");
-      return fleetSnap;
-    } catch (e) {
-      console.error("[Fleet] Discovery failed", e);
-      return [];
-    }
+    return discoverRealFleet();
   }
 
-  /**
-   * @method getGlobalMetrics
-   * @description Agrège les données pour le dashboard MCC sans saturer la RAM.
-   */
   public async getGlobalMetrics(sites?: SiteTelemetry[]): Promise<{ totalNodes: number; empireHealth: number }> {
-    const nodes = sites || (await this.discoverRealFleet());
-    return {
-      totalNodes: nodes.length,
-      empireHealth: 96 // Score de résilience calculé
-    };
+    return getGlobalMetrics(sites);
   }
 
-  /**
-   * @static Static Wrapper for Fleet Discovery (Compatibility)
-   */
   public static async discoverRealFleet(): Promise<SiteTelemetry[]> {
     return this.getInstance().discoverRealFleet();
   }
 
-  /**
-   * @static Static Wrapper for Global Metrics (Compatibility)
-   */
   public static async getGlobalMetrics(sites?: SiteTelemetry[]): Promise<{ totalNodes: number; empireHealth: number }> {
     return this.getInstance().getGlobalMetrics(sites);
   }

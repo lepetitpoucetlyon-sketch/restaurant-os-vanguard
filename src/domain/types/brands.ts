@@ -16,22 +16,6 @@ export interface NodeHealth {
   timestamp: number;
 }
 
-// Structure de télémétrie pour le MCC
-export interface SiteTelemetry {
-  tenantId: TenantID;
-  id?: string;
-  key?: string;
-  name?: string;
-  status: 'ONLINE' | 'OFFLINE' | 'CRITICAL' | 'MAINTENANCE' | 'PROVISIONING' | 'LOCKED';
-  tier?: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
-  healthScore: number;
-  complianceScore?: number;
-  lowStockAlerts?: number;
-  lastSeen: string | number | { seconds: number; nanoseconds: number }; 
-  activeOrders?: number;
-  dailyRevenue?: number;
-  engineVersion: string;
-  nodeHealth: NodeHealth;
-  branding?: any;
-  security?: any;
-}
+
+import { SiteTelemetry } from '@nexus/contracts';
+export type { SiteTelemetry };

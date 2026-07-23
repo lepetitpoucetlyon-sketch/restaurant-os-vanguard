@@ -1,20 +1,24 @@
 import { Nexus } from './nexus/NexusAdapter';
 import { INexusBatch } from './nexus/NexusAdapter';
 import { z } from 'zod';
-import { ZodInterceptor } from '@/domain/services/ZodInterceptor';
+import { ZodInterceptor } from '@domain/services/ZodInterceptor';
 import { logger } from '@/lib/logger';
 
 /**
- * 🛡️ NexusTransaction - Higher-Order Transaction Wrapper
- * The "Great Wall" of Restaurant OS operations.
- * Enforces mandatory data validation before any bit touches the database.
+ * 🛡️ NexusTransaction - Zod-Validated Batch Wrapper
+ *
+ * Despite the name, this is NOT a Firestore transaction (no read-before-write,
+ * no optimistic locking, no auto-retry on conflict).
+ * It is a Zod validation gate + batch commit.
+ * For ACID read-modify-write semantics use Nexus.adapter.runTransaction().
  */
 export class NexusTransaction {
   /**
-   * Runs a Firestore transaction with mandatory schema validation.
-   * 
+   * Validates all schemas then runs fn inside a Nexus batch.
+   * All writes are committed atomically via batch — no individual-op rollback.
+   *
    * @param schemas Map of validation contexts to their respective Zod schemas and data.
-   * @param fn The transaction callback.
+   * @param fn The batch callback.
    */
   static async run<T extends Record<string, { schema: z.ZodSchema<import('@/shared/nexus-contract').SovereignValue>, data: import('@/shared/nexus-contract').SovereignData }>, R>(
 

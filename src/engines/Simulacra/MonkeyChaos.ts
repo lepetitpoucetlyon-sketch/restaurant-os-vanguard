@@ -1,9 +1,8 @@
 "use client";
 
 import { getDefaultStore } from 'jotai';
-import { ordersNodeAtom, journalEntriesNodeAtom, hygieneLogsNodeAtom } from '@/store/operationalAtoms';
+
 import { logger } from '@/lib/logger';
-import { v4 as uuidv4 } from 'uuid';
 
 import { RealityGenerator } from './RealityGenerator';
 
@@ -21,7 +20,7 @@ export class MonkeyChaos {
         if (this.isRunning) return;
         this.isRunning = true;
         
-        const store = getDefaultStore();
+        const _store = getDefaultStore();
         
         await RealityGenerator.generateSalesRush((order) => {
             logger.debug(`[CHAOS] Injecting Sales Rush Pulse: ${order.id}`);
@@ -36,7 +35,7 @@ export class MonkeyChaos {
      * HACCP STRESS: Starts a noisy temperature stream with anomalies.
      */
     static startHACCPStress(frequencyMs: number = 2000) {
-        RealityGenerator.startHACCPStream((reading) => {
+        RealityGenerator.startHACCPStream((_reading) => {
             // This will trigger HACCP Sentinel alerts if value is out of bounds
             // The system reacts as if a real sensor was sending data
         }, frequencyMs);

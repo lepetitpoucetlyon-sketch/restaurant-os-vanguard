@@ -13,7 +13,7 @@ interface ChatThreadProps {
     messages: Message[];
     isProcessing: boolean;
     formatText: (text: string) => string;
-    scrollRef: React.RefObject<HTMLDivElement>;
+    scrollRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function ChatThread({ messages, isProcessing, formatText, scrollRef }: ChatThreadProps) {
@@ -24,7 +24,7 @@ export function ChatThread({ messages, isProcessing, formatText, scrollRef }: Ch
         >
             {messages.length === 0 && (
                 <div className="flex-1 flex flex-col items-center justify-center text-center opacity-50 space-y-4">
-                    <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full border border-subtle flex items-center justify-center">
                         <motion.div
                             animate={{ opacity: [0.3, 1, 0.3] }}
                             transition={{ duration: 2, repeat: Infinity }}

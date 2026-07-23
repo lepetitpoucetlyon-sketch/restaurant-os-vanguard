@@ -7,5 +7,5 @@ import { useNexusFleet as useNexusFleetContext } from "@/engines/fleet/NexusFlee
  * Redirection vers le contexte centralisé pour assurer la souveraineté des types.
  */
 export function useNexusFleet() {
-    return useNexusFleetContext() as any;
+    return useNexusFleetContext() as unknown;
 }

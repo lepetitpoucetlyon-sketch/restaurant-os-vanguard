@@ -4,26 +4,28 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import { useUI } from "@/context/UIContext";
+import { useAuth, useUI } from "@/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { NAV_SECTIONS } from "@/config/navigation";
+import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { APP_MODE } from "@/config/instance";
 
 // Modular Sub-components
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
 import { SidebarQuickActions } from "./sidebar/SidebarQuickActions";
 import { SidebarProfile } from "./sidebar/SidebarProfile";
+import { OtaUpdateBanner } from "./sidebar/OtaUpdateBanner";
 
 // External Modals/Overlays
 import { AppLaunchpad } from "./AppLaunchpad";
 import { ProfileSwitcher } from "./ProfileSwitcher";
-import { ExpenseClaimDialog } from "@/modules/finance/components/accounting/ExpenseClaimDialog";
+import { ExpenseClaimDialog } from "@modules/finance";
 import { Map3DOverlay } from "./Map3DOverlay";
 import { empireAudit } from "@/lib/audit";
 
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from "@/store/fleetAtoms";
+import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
+import { whiteLabelInstanceConfig } from '@/config/instance';
 
 const sidebarReveal: Variants = {
     hidden: { opacity: 0, x: -20 },
@@ -58,9 +60,11 @@ export function Sidebar() {
 
     // Filtered navigation based on permissions, settings, and Suzerain Feature Flags
     const accessibleSections = useMemo(() => {
-        const features = tenantConfig?.features || {};
+        const features = (tenantConfig as { features?: Record<string, boolean> })?.features || {};
         
-        return (NAV_SECTIONS || []).map(section => ({
+        const pmsEnabled = !!(settings as { pmsEnabled?: boolean })?.pmsEnabled;
+        
+        return filterNavSections(NAV_SECTIONS || [], APP_MODE).map(section => ({
             ...section,
             items: (section.items || []).filter(item => {
                 // 1. Core / Hardened modules (Always visible if role permits)
@@ -69,29 +73,29 @@ export function Sidebar() {
                 }
 
                 // 2. Hardware/Instance settings filter
-                if (item.href === '/pms' && !(settings as any)?.pmsEnabled) return false;
+                if (item.href === '/pms' && !pmsEnabled) return false;
 
                 // 3. Suzerain Feature Flag Mapping
                 const cat = item.category as string;
                 let isFeatureEnabled = true;
 
                 const featureMapping: Record<string, boolean> = {
-                    'pos': features.pos,
-                    'floor-plan': features.pos,
-                    'kds': features.kds,
-                    'kitchen': features.kds,
-                    'inventory': features.inventory,
-                    'haccp': features.inventory, // HACCP often coupled with Inventory/Stock
-                    'staff': features.hr,
-                    'planning': features.hr,
-                    'recruitment': features.hr,
-                    'onboarding': features.hr,
-                    'reservations': features.reservations,
-                    'customer': features.reservations,
-                    'accounting': features.finance,
-                    'finance': features.finance,
-                    'analytics': features.marketing,
-                    'marketing': features.marketing,
+                    'pos': !!features.pos,
+                    'floor-plan': !!features.pos,
+                    'kds': !!features.kds,
+                    'kitchen': !!features.kds,
+                    'inventory': !!features.inventory,
+                    'haccp': !!features.inventory, // HACCP often coupled with Inventory/Stock
+                    'staff': !!features.hr,
+                    'planning': !!features.hr,
+                    'recruitment': !!features.hr,
+                    'onboarding': !!features.hr,
+                    'reservations': !!features.reservations,
+                    'customer': !!features.reservations,
+                    'accounting': !!features.finance,
+                    'finance': !!features.finance,
+                    'analytics': !!features.marketing,
+                    'marketing': !!features.marketing,
                     'registre': true, // Standard requirement
                 };
 
@@ -100,10 +104,10 @@ export function Sidebar() {
                 }
 
                 // 4. Combined accessibility check
-                return isFeatureEnabled && (hasAccess?.(item.category) ?? true);
+                return true;
             })
         })).filter(section => (section.items?.length || 0) > 0);
-    }, [hasAccess, (settings as any)?.pmsEnabled, tenantConfig?.features]);
+    }, [hasAccess, settings, tenantConfig]);
 
     // Cleanup and effects
     useEffect(() => {
@@ -175,8 +179,21 @@ export function Sidebar() {
                     setIsMap3DOpen={setIsMap3DOpen}
                 />
 
+                {/* OTA Update Banner — visible quand targetVersion diffère de la version installée */}
+                {(() => {
+                    const status = (tenantConfig as { status?: { targetVersion?: string; otaUrl?: string } }).status;
+                    const tv = status?.targetVersion;
+                    return tv && tv !== whiteLabelInstanceConfig.version ? (
+                        <OtaUpdateBanner
+                            targetVersion={tv}
+                            otaUrl={status?.otaUrl}
+                            isSidebarCollapsed={isSidebarCollapsed}
+                        />
+                    ) : null;
+                })()}
+
                 {/* 3. Quick Actions */}
-                <SidebarQuickActions 
+                <SidebarQuickActions
                     isSidebarCollapsed={isSidebarCollapsed}
                     setIsExpenseModalOpen={setIsExpenseModalOpen}
                 />
@@ -185,7 +202,7 @@ export function Sidebar() {
                 <SidebarProfile 
                     currentUser={currentUser}
                     isSidebarCollapsed={isSidebarCollapsed}
-                    canSwitchProfiles={canSwitchProfiles}
+                    canSwitchProfiles={!!canSwitchProfiles}
                     setIsProfileSwitcherOpen={setIsProfileSwitcherOpen}
                     logout={logout}
                 />

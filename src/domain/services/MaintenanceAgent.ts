@@ -1,10 +1,9 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { logger } from "@/lib/axiom";
-import { DNAInjector } from "@/lib/ai/DNAInjector";
-import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@/types/maintenance.types";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+import { LLMManager } from "@/lib/ai/LLMManager";
+import { AI_MODELS } from "@/lib/ai/types";
+import { logger } from "../../lib/axiom";
+import { DNAInjector } from "../../lib/ai/DNAInjector";
+import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
 
 /**
  * 🤖 MaintenanceAgent - Restaurant OS
@@ -48,8 +47,8 @@ export const MaintenanceAgent = {
             this.runAutoMaintenance(ticketId, data);
 
             return ticketId;
-        } catch (error) {
-            logger.error('MaintenanceAgent: SOS submission failed', { error });
+        } catch (error: unknown) {
+            logger.error('MaintenanceAgent: SOS submission failed', { error: String(error) });
             throw error;
         }
     },
@@ -82,8 +81,8 @@ export const MaintenanceAgent = {
             logger.info('MaintenanceAgent: [Step 5] PR Ready for Admin Review', { ticketId, diagnostic: analysis.summary });
 
             // Note: Steps 6 & 7 (Application & Vérification) sont manuelles/semi-auto via l'UI.
-        } catch (error) {
-            logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error });
+        } catch (error: unknown) {
+            logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error: String(error) });
         }
     },
 
@@ -91,14 +90,9 @@ export const MaintenanceAgent = {
      * AI CORE : Analyse Gemini Pro avec Injection d'ADN
      */
     async analyzeWithAI(ticket: MaintenanceTicket, context: MaintenanceTicketContext): Promise<MaintenanceAIAnalysis> {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        
-        // 🧬 Récupération de l'ADN Client
         const tenantDNA = await DNAInjector.getTenantDNA(ticket.tenantId);
 
-        const prompt = `
-            You are the Senior SRE for Restaurant OS Empire.
-            
+        const userPrompt = `
             === CLIENT DNA (Rules to respect) ===
             ${tenantDNA}
 
@@ -125,9 +119,13 @@ export const MaintenanceAgent = {
             }
         `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const response = await LLMManager.provider.generateText({
+            model: AI_MODELS.fast,
+            systemPrompt: 'You are the Senior SRE for Restaurant OS Empire.',
+            userPrompt,
+            responseMimeType: 'application/json',
+        });
+        const text = response.text;
         
         // Nettoyage JSON strict
         const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -143,7 +141,7 @@ export const MaintenanceAgent = {
         try {
             const analysis: MaintenanceAIAnalysis = JSON.parse(jsonMatch[0]);
             return analysis;
-        } catch (e) {
+        } catch (_e) {
             return { 
                 summary: "Erreur de formatage AI", 
                 potentialCause: "JSON Parse Error", 
@@ -158,6 +156,5 @@ export const MaintenanceAgent = {
      */
     async finalizeTicket(ticketId: string, resolution: string) {
         logger.info(`🏛️ [EMPIRE NOTIFICATION] Ticket ${ticketId} résolu.`, { resolution });
-        console.log(`%c 🛡️ NEURAL SHIELD : RESOLUTION ACHIEVED - TICKET ${ticketId} `, 'background: #C5A059; color: black; font-weight: bold;');
     }
 };

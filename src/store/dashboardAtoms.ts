@@ -1,5 +1,8 @@
 import { atom } from 'jotai';
-import { ordersNodeAtom, stockItemsNodeAtom } from './operationalAtoms';
+import { ordersNodeAtom } from './pillars/ops';
+import { stockItemsNodeAtom } from './pillars/logistics';
+import { SovereignMath } from '@/shared/services/SovereignMath';
+
 
 /**
  * ⚛️ DASHBOARD ATOMS - Grade VI
@@ -10,13 +13,12 @@ import { ordersNodeAtom, stockItemsNodeAtom } from './operationalAtoms';
 export const dashboardRevenueSelector = atom((get) => {
     const orders = get(ordersNodeAtom).data || [];
     const today = new Date().toISOString().split('T')[0];
-    
     const paidToday = orders.filter(o => 
         o.status === 'paid' && 
-        o.updatedAt && String(o.updatedAt).startsWith(today)
+        o.updatedAt && String(new Date(o.updatedAt).toISOString()).startsWith(today)
     );
     
-    return paidToday.reduce((sum, o) => sum + (o.totalInCents || 0), 0);
+    return paidToday.reduce((sum, o) => sum + SovereignMath.orderTotalMicrounits(o), 0);
 });
 
 // 2. KPI: HACCP Alerts (Produits périmés ou proches)
@@ -43,5 +45,5 @@ export const dashboardStockRupturesSelector = atom((get) => {
 // 4. KPI: Active Tables
 export const dashboardActiveTablesSelector = atom((get) => {
     const orders = get(ordersNodeAtom).data || [];
-    return orders.filter(o => o.status === 'new' || o.status === 'ordered').length;
+    return orders.filter(o => o.status === 'new' || o.status === 'pending').length;
 });

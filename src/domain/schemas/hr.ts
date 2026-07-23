@@ -17,7 +17,7 @@ export const ShiftEntrySchema = z.object({
   userId: z.string().min(1, "L'identifiant de l'employé est requis"),
   userName: z.string().min(1, "Le nom de l'employé est requis"),
   type: ShiftEntryTypeSchema,
-  timestamp: z.date().or(z.string()),
+  timestamp: z.string(),
   
   // Location & Context
   location: z.object({
@@ -36,7 +36,7 @@ export const ShiftEntrySchema = z.object({
     signedPayload: z.string()
   }).optional(),
 
-  metadata: z.record(z.string(), z.unknown()).optional()
+  metadata: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])).optional()
 });
 
 export type ShiftEntry = z.infer<typeof ShiftEntrySchema>;
@@ -60,6 +60,8 @@ export interface PayrollCalculation {
   grossAmount: number;
   netAmount: number;
   chargesSociales: number;
+  /** @see taux indicatifs 2024 — utiliser DSN réelle en production */
+  employerCost: number;
   period: string;
 }
 

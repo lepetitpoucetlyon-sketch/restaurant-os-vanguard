@@ -1,7 +1,6 @@
 import { fleetTelemetry } from './FleetTelemetryService';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { logger } from '@/lib/logger';
-import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 /**
@@ -17,7 +16,7 @@ export const HACCPTelemetryBridge = {
    */
   async reportHygieneHealth(tenantId: string) {
     try {
-      const receptionsPath = getTenantPath('receptions', tenantId);
+      const receptionsPath = Nexus.getTenantPath('receptions', tenantId);
       const receptions = await Nexus.adapter.query(receptionsPath, {
         orderBy: { field: 'createdAt', direction: 'desc' },
         limit: 5
@@ -43,9 +42,9 @@ export const HACCPTelemetryBridge = {
       const healthScore = Math.max(0, 100 - riskPoints);
 
       // 📡 Push to Telemetry Hub
-      await fleetTelemetry.pushSiteTelemetry(tenantId as any, {
+      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@domain/types/brands').TenantID, {
         healthScore,
-        complianceScore: (receptions as unknown[]).length > 0 ? 100 : 50, // Penalty for missing audits
+        complianceScore: (receptions as import("@/shared/nexus-contract").SovereignValue[]).length > 0 ? 100 : 50, // Penalty for missing audits
       });
 
       // 🚨 Trigger SOS if health is critical
@@ -67,7 +66,7 @@ export const HACCPTelemetryBridge = {
       }
 
       return healthScore;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[HACCPBridge] Failed for ${tenantId}:`, error);
       return 100;
     }

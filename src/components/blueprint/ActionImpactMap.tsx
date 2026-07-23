@@ -3,10 +3,9 @@
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/motion";
 import { 
-    MousePointer2, Database, Receipt, 
-    TrendingUp, Cpu, ChevronRight, Activity
+    MousePointer2, Database, Receipt, Cpu, ChevronRight, Activity
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 
 const ONDES_DE_CHOC = [
     {
@@ -100,7 +99,7 @@ export function ActionImpactMap() {
                     </p>
                 </div>
                 <div className="flex gap-4">
-                    <div className="px-5 py-3 bg-bg-tertiary rounded-2xl border border-border font-mono text-[10px] uppercase tracking-widest text-emerald-400">
+                    <div className="px-5 py-3 bg-bg-tertiary rounded-2xl border border-border font-mono text-[10px] uppercase tracking-widest text-status-success">
                         Propagation: ~150ms
                     </div>
                 </div>

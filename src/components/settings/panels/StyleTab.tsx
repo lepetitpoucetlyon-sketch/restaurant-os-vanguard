@@ -2,20 +2,21 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Check, Zap, Paintbrush } from "lucide-react";
+import { Check, Zap } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useTheme } from "@/context/ThemeContext";
-import { useLanguage } from "@/context/LanguageContext";
-import { PageSettingConfig } from "@/types/permissions.types";
+import { useLanguage } from "@/hooks";
+import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@/components/settings/ui/PremiumSelect";
 import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData, SovereignField } from "@shared/nexus-contract";
+import { SharedKernel } from "@/lib/shared-kernel";
 
 
 interface StyleTabProps {
     filteredSettings: PageSettingConfig[];
     localValues: SovereignData;
-    updateValue: (key: string, value: SovereignValue) => void;
+    updateValue: (key: string, value: unknown) => void;
 }
 
 
@@ -166,7 +167,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                     >
                         <motion.div
                             animate={{ x: theme.animations ? 26 : 2 }}
-                            className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                            className="absolute top-1 left-1 w-4 h-4 bg-surface-card rounded-full shadow-sm"
                         />
                     </button>
                 </div>
@@ -197,25 +198,25 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                             {setting.type === "toggle" && (
                                 <button
-                                    onClick={() => updateValue(setting.key, !localValues[setting.key])}
+                                    onClick={() => updateValue(setting.key, !SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField))}
                                     className={cn(
                                         "w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-500",
-                                        localValues[setting.key]
+                                        localValues[setting.key] && SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField)
                                             ? "bg-accent/5 border-accent text-accent shadow-[0_0_20px_rgba(197,160,89,0.1)]"
                                             : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
                                     )}
                                 >
                                     <span className="text-sm font-serif font-medium">
-                                        {localValues[setting.key] ? t('common.enabled') || "Activé" : t('common.disabled') || "Désactivé"}
+                                        {SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField) ? t('common.enabled') || "Activé" : t('common.disabled') || "Désactivé"}
                                     </span>
                                     <div className={cn(
                                         "w-12 h-6 rounded-full transition-all duration-500 relative",
                                         localValues[setting.key] ? "bg-accent" : "bg-bg-secondary border border-border"
                                     )}>
                                         <motion.div
-                                            animate={{ x: localValues[setting.key] ? 24 : 4 }}
+                                            animate={{ x: SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField) ? 24 : 4 }}
                                             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                            className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-lg"
+                                            className="absolute top-1 w-4 h-4 rounded-full bg-surface-card shadow-lg"
                                         />
                                     </div>
                                 </button>
@@ -223,7 +224,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                             {setting.type === "select" && (
                                 <PremiumSelect
-                                    value={(localValues[setting.key] as any) || ""}
+                                    value={SharedKernel.castString(localValues[setting.key] as SovereignField)}
                                     onChange={(val) => updateValue(setting.key, val)}
                                     options={setting.options || []}
                                 />
@@ -231,7 +232,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                             {setting.type === "number" && (
                                 <PremiumNumberInput
-                                    value={(localValues[setting.key] as any) || setting.min || 0}
+                                    value={SharedKernel.castNumber(localValues[setting.key] as SovereignField) || setting.min || 0}
                                     onChange={(val) => updateValue(setting.key, val)}
                                     min={setting.min}
                                     max={setting.max}

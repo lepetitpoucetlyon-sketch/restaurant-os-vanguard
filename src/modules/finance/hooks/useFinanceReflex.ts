@@ -1,8 +1,12 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { nexusPulseAtom } from '../store/accountingAtoms';
 import { useAccounting } from './useAccounting';
 import { logger } from '@/lib/logger';
+import { toMicrounits } from '@/domain/schemas/primitives';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 export function useFinanceReflex() {
     const pulse = useAtomValue(nexusPulseAtom);
@@ -17,21 +21,25 @@ export function useFinanceReflex() {
         if (pulse.type === 'HACCP_SET_WASTELOGS' || pulse.type === 'HACCP_WASTE') {
             logger.info(`[FINANCE_REFLEX] Reaction to HACCP Waste: ${pulse.id}`);
             
-            const wasteData = pulse.payload.data as any;
+            const wasteData = pulse.payload.data as { item?: string; quantity?: number };
+            // toMicrounits and SovereignMath are imported at the top of the file
             
             addJournalEntry({
-                date: new Date().toISOString(),
+                id: `ref_${pulse.id.substring(0, 8)}`,
+                serverTimestamp: Date.now(),
                 pieceNumber: `WST-${pulse.id.substring(0, 5)}`,
                 description: `Pertes HACCP automatiques : ${wasteData.item || 'Produit inconnu'}`,
                 type: 'expense',
-                amountInCents: (wasteData.quantity || 1) * 1000, // Débit par défaut 10€ pour simuler
-                lines: [
-                    { accountCode: '601', accountName: 'Achats stockés - Matières premières', side: 'debit', amountInCents: 1000, accountId: 'acc_601', description: 'Correction de stock automatique (Débit)' },
-                    { accountCode: '371', accountName: 'Stocks de matières premières', side: 'credit', amountInCents: 1000, accountId: 'acc_371', description: 'Correction de stock automatique (Crédit)' }
-                ],
-                isSystemGenerated: true,
-                isValidated: false
-            } as any);
+                amountInMicrounits: toMicrounits(SovereignMath.fromCents((wasteData.quantity || 1) * 1000)), // 10€ par unité
+                taxRate: '0.20',
+                taxAmountInMicrounits: toMicrounits(0),
+                operatorId: 'SYSTEM',
+                deviceId: 'HACCP_SCANNER',
+                correlationId: pulse.id,
+                status: 'validated',
+                hash: '1'.repeat(64),
+                hashPrecedent: '0'.repeat(64),
+            } as unknown as Parameters<typeof addJournalEntry>[0]);
         }
 
     }, [pulse, addJournalEntry]);

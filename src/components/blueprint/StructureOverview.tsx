@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/motion";
 import { 
-    Folder, FileCode, Layers, 
-    Monitor, Server, Database, Brain
+    Folder, Layers, 
+    Monitor, Database, Brain
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 
 const STRUCTURE = [
     {
@@ -43,7 +43,7 @@ export function StructureOverview() {
     return (
         <GlassCard className="p-10 space-y-10">
             <div className="grid grid-cols-1 gap-6">
-                {STRUCTURE.map((item, i) => (
+                {STRUCTURE.map((item, _i) => (
                     <motion.div
                         key={item.title}
                         variants={fadeInUp}
@@ -65,7 +65,7 @@ export function StructureOverview() {
             </div>
 
             {/* Aperçu de l'Arborescence */}
-            <div className="pt-10 border-t border-border/50 font-mono text-[11px] text-text-muted/60 bg-black/20 p-6 rounded-2xl">
+            <div className="pt-10 border-t border-border/50 font-mono text-[11px] text-text-muted/60 bg-surface-sidebar/20 p-6 rounded-2xl">
                 <div className="flex items-center gap-2 mb-4 text-accent-gold uppercase tracking-[0.2em] font-black">
                     <Folder className="w-3 h-3" /> Structure Racine
                 </div>

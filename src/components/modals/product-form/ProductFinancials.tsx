@@ -23,7 +23,7 @@ export function ProductFinancials({
 }: ProductFinancialsProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 bg-white dark:bg-bg-secondary rounded-3xl border border-border shadow-soft space-y-3">
+            <div className="p-6 bg-surface-card dark:bg-bg-secondary rounded-3xl border border-border shadow-soft space-y-3">
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                     <DollarSign className="w-3.5 h-3.5" /> Prix Carte
                 </label>
@@ -38,7 +38,7 @@ export function ProductFinancials({
                     <span className="text-xl font-black">€</span>
                 </div>
             </div>
-            <div className="p-6 bg-white dark:bg-bg-secondary rounded-3xl border border-border shadow-soft space-y-3">
+            <div className="p-6 bg-surface-card dark:bg-bg-secondary rounded-3xl border border-border shadow-soft space-y-3">
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                     <Timer className="w-3.5 h-3.5" /> Envoi ESTIMÉ
                 </label>

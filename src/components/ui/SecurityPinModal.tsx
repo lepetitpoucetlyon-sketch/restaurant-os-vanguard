@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield } from 'lucide-react';
 import { Modal } from './Modal';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { useToast } from './Toast';
 
 interface SecurityPinModalProps {
@@ -21,7 +21,7 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({
     onSuccess,
     title = "Autorisation Requise",
     description = "Veuillez saisir votre code PIN pour valider cette action.",
-    requiredLevel = 70
+    requiredLevel: _requiredLevel = 70
 }) => {
     const [pin, setPin] = useState('');
     const [error, setError] = useState(false);
@@ -58,7 +58,7 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({
     const submitPin = async (candidatePin: string) => {
         const isValid = await verifyPin?.(candidatePin);
         if (isValid) {
-            await logAction('pin_validated', { title });
+            await logAction?.('pin_validated', { title });
             onSuccess();
             onClose();
         } else {

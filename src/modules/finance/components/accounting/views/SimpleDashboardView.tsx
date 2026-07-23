@@ -15,7 +15,7 @@ import {
     Users,
     Activity
 } from 'lucide-react';
-import { useAccounting } from '@/context/AccountingContext';
+import { useAccounting } from '@modules/finance';
 import { formatCurrency } from '@/lib/formatters';
 import { cn } from '@/lib/ui.foundations';
 import { motion } from 'framer-motion';

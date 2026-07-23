@@ -1,8 +1,12 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
+import { ErrorBoundary } from "@/components/system/ErrorBoundary";
+import { NexusProviderStack } from "@/components/layout/NexusProviderStack";
+import { ImpersonationBanner } from "@/components/layout/ImpersonationBanner";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -27,80 +31,33 @@ export const viewport = {
   viewportFit: "cover",
 };
 
-// Providers Layers
-// Nexus Industrial Engines
-import { NexusCoreProvider } from "@/engines/core/NexusCoreProvider";
-import { NexusOpsProvider } from "@/engines/ops/NexusOpsProvider";
-import { NexusFiscalProvider } from "@/engines/fiscal/NexusFiscalProvider";
-import { NexusGuardProvider } from "@/engines/guard/NexusGuardProvider";
-import { NexusFleetProvider } from "@/engines/fleet/NexusFleetProvider";
-
-// Specialized UI Helpers
-import { ToastProvider } from "@/components/ui/Toast";
-import { ContextualSettingsProvider } from "@/components/settings/ContextualSettings";
-import { ErrorBoundary } from "@/components/system/ErrorBoundary";
-
-// Gates & Orchestrators
-// ... (imports continue)
-import { AuthGate } from "@/modules/auth/components/AuthGate";
-import { SaaSBillingGate } from "@/modules/auth/components/SaaSBillingGate";
-import { ComplianceGate } from "@/modules/auth/components/ComplianceGate";
-import { RoleGate } from "@/modules/auth/components/RoleGate";
-import { AlertSync } from "@/components/system/AlertSync";
-import { ClientComponents } from "@/components/layout/ClientComponents";
-import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
-import { SovereignLockout } from "@/components/layout/SovereignLockout";
-import { ThemeEngine } from "@/components/layout/ThemeEngine";
-import { PerformanceEngine } from "@/theme/PerformanceEngine";
-import { NexusPulseOrchestrator } from "@/engines/NexusPulseOrchestrator";
-
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="fr" className="light" suppressHydrationWarning>
-      <head />
-      <body 
-        className={`${inter.variable} ${cormorant.variable} ${jetbrainsMono.variable} font-sans antialiased bg-bg-primary text-text-primary transition-colors duration-500`}
-      >
+    <html lang="fr" suppressHydrationWarning className={`${inter.variable} ${cormorant.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <Script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.js"
+            strategy="afterInteractive"
+          />
+        )}
+      </head>
+      <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
         <ErrorBoundary>
-          <React.Suspense fallback={<div className="min-h-screen bg-bg-primary flex items-center justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>}>
-            <NexusCoreProvider>
-              <ToastProvider>
-                <ContextualSettingsProvider>
-                  <NexusOpsProvider>
-                    <NexusGuardProvider>
-                      <NexusFiscalProvider>
-                        <NexusFleetProvider>
-                        <ThemeEngine />
-                        <PerformanceEngine />
-                        <NexusPulseOrchestrator />
-                        <SovereignLockout />
-                        <AuthGate>
-                          <SaaSBillingGate>
-                            <ComplianceGate>
-                              <AlertSync />
-                              <TrainingOverlay />
-                              <ClientComponents>
-                                <RoleGate>
-                                  {children}
-                                </RoleGate>
-                              </ClientComponents>
-                            </ComplianceGate>
-                          </SaaSBillingGate>
-                        </AuthGate>
-                    </NexusFleetProvider>
-                  </NexusFiscalProvider>
-                </NexusGuardProvider>
-              </NexusOpsProvider>
-            </ContextualSettingsProvider>
-          </ToastProvider>
-        </NexusCoreProvider>
-      </React.Suspense>
-    </ErrorBoundary>
-  </body>
-</html>
+          <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
+            <NexusProviderStack>
+                <ImpersonationBanner />
+                {children}
+            </NexusProviderStack>
+          </Suspense>
+        </ErrorBoundary>
+      </body>
+    </html>
   );
 }

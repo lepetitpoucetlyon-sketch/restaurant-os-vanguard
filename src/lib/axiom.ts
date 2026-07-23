@@ -17,11 +17,11 @@ interface AppLogger {
     flush: () => Promise<void>;
 }
 
-const isProd = process.env.NODE_ENV === "production";
+const _isProd = process.env.NODE_ENV === "production";
 
 function writeLog(level: LogLevel, message: string, meta?: LogMetadata) {
     const timestamp = new Date().toISOString();
-    const structuredLog = {
+    const _structuredLog = {
         timestamp,
         level,
         message,
@@ -30,7 +30,7 @@ function writeLog(level: LogLevel, message: string, meta?: LogMetadata) {
     };
 
     // AXIOM INDUSTRIAL LOGGING (v4.0)
-    const AXIOM_DATASET = 'restaurant-os-audit';
+    const _AXIOM_DATASET = 'restaurant-os-audit';
     
     // In local dev/static mode, we produce high-visibility industrial console logs
     // In actual production, this would be a POST to https://api.axiom.co/v1/datasets/${AXIOM_DATASET}/ingest

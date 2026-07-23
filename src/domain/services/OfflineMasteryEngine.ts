@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
-import { Order } from '@/types';
+import { Order } from '@nexus/contracts';
 
 /**
  * 🏔️ OfflineMasteryEngine - Restaurant OS (Darwin V5.5 Master Code)
@@ -19,7 +19,7 @@ export const OfflineMasteryEngine = {
     await db.orders.add(order);
     
     // Mark as pending sync with high-resolution timestamp
-    // (order as any)._syncTimestamp = Date.now();
+    // (order as unknown)._syncTimestamp = Date.now();
   },
 
   /**

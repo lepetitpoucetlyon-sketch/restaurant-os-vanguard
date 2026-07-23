@@ -35,7 +35,7 @@ export function BlueprintHeader() {
 
             <div className="flex items-center justify-center gap-12 pt-10">
                 <div className="flex flex-col items-center gap-2">
-                    <div className="flex items-center gap-2 text-emerald-400 font-mono text-sm">
+                    <div className="flex items-center gap-2 text-status-success font-mono text-sm">
                         <Activity className="w-4 h-4" /> 100% EN LIGNE
                     </div>
                     <span className="text-[10px] text-text-muted uppercase tracking-widest font-bold">Présence Cloud</span>

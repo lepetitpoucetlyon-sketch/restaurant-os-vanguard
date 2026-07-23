@@ -1,0 +1,236 @@
+[
+  {
+    "file": "SovereignLockout.tsx",
+    "line": 32,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SovereignLockout.tsx",
+    "line": 59,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SovereignLockout.tsx",
+    "line": 65,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "ProposalPanel.tsx",
+    "line": 85,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "QuantumDashboard.tsx",
+    "line": 36,
+    "original": "from-blue-400",
+    "replaced": "from-action-primary"
+  },
+  {
+    "file": "QuantumDashboard.tsx",
+    "line": 36,
+    "original": "to-emerald-400",
+    "replaced": "to-status-success"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 141,
+    "original": "from-indigo-500",
+    "replaced": "from-action-primary"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 143,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 143,
+    "original": "border-white/20",
+    "replaced": "border-default"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 198,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 201,
+    "original": "from-indigo-500",
+    "replaced": "from-action-primary"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 201,
+    "original": "to-indigo-500",
+    "replaced": "to-action-primary"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 221,
+    "original": "via-indigo-400",
+    "replaced": "via-action-primary"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 273,
+    "original": "via-indigo-500",
+    "replaced": "via-action-primary"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 342,
+    "original": "via-indigo-500",
+    "replaced": "via-action-primary"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 446,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "CertificationCenter.tsx",
+    "line": 471,
+    "original": "border-white/20",
+    "replaced": "border-default"
+  },
+  {
+    "file": "DeviceManager.tsx",
+    "line": 75,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "FiscalChainExplorer.tsx",
+    "line": 130,
+    "original": "via-indigo-500",
+    "replaced": "via-action-primary"
+  },
+  {
+    "file": "FiscalChainExplorer.tsx",
+    "line": 141,
+    "original": "from-indigo-500",
+    "replaced": "from-action-primary"
+  },
+  {
+    "file": "FiscalChainExplorer.tsx",
+    "line": 141,
+    "original": "via-indigo-500",
+    "replaced": "via-action-primary"
+  },
+  {
+    "file": "FiscalChainExplorer.tsx",
+    "line": 141,
+    "original": "to-indigo-500",
+    "replaced": "to-action-primary"
+  },
+  {
+    "file": "FleetCommandTable.tsx",
+    "line": 32,
+    "original": "from-indigo-500",
+    "replaced": "from-action-primary"
+  },
+  {
+    "file": "FleetCommandTable.tsx",
+    "line": 149,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "FleetCommandTable.tsx",
+    "line": 149,
+    "original": "border-white/20",
+    "replaced": "border-default"
+  },
+  {
+    "file": "MCCTreasury.tsx",
+    "line": 167,
+    "original": "ring-indigo-500",
+    "replaced": "ring-focus"
+  },
+  {
+    "file": "MCCTreasury.tsx",
+    "line": 208,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "StrategyOracle.tsx",
+    "line": 56,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SingularitySettings.tsx",
+    "line": 78,
+    "original": "border-white/20",
+    "replaced": "border-default"
+  },
+  {
+    "file": "SingularitySettings.tsx",
+    "line": 101,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SingularitySettings.tsx",
+    "line": 120,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 133,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 151,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 314,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 344,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 364,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 383,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 398,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  },
+  {
+    "file": "SimulatorConsole.tsx",
+    "line": 480,
+    "original": "border-white/10",
+    "replaced": "border-subtle"
+  }
+]

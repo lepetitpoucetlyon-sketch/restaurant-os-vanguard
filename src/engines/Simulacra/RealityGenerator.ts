@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
-import { SensorReading } from '@/types';
-import { Order } from '@/types';
+import { Order } from '@nexus/contracts';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 /**
  * 🌀 RealityGenerator - The Vital Heart of the Simulacra
@@ -67,6 +67,7 @@ export class RealityGenerator {
         logger.info(`🔥 [SIMULACRA] COMMENCING SALES RUSH: ${count} orders incoming...`);
         for (let i = 0; i < count; i++) {
             const items = ['Burger', 'Frites', 'Soda', 'Salade'];
+            const now = Date.now();
             const order: Partial<Order> = {
                 id: `sim_${uuidv4().substring(0, 8)}`,
                 items: [{
@@ -74,11 +75,15 @@ export class RealityGenerator {
                     productId: 'sim_prod',
                     name: items[Math.floor(Math.random() * items.length)],
                     quantity: 1,
-                    priceInCents: 1500,
-                    status: 'pending'
-                }],
-                totalInCents: 1500,
-                timestamp: new Date(),
+                    unitPriceInMicrounits: toMicrounits(1500),
+                    taxRate: "0.10",
+                    status: 'pending',
+                    createdAt: now,
+                    updatedAt: now
+                }] as unknown as import("@nexus/contracts").OrderItem[],
+                totalInMicrounits: toMicrounits(1500),
+                createdAt: now,
+                updatedAt: now,
                 tableNumber: String(Math.floor(Math.random() * 20) + 1)
             };
             

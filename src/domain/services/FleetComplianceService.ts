@@ -1,7 +1,26 @@
-import { getTenantPath } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getAllTenants } from '@/instances';
+
+import { SovereignNode } from '@/shared/nexus-contract';
+
+export interface SiteIntegrityReport extends SovereignNode {
+  tenantId: string;
+  isChainValid: boolean;
+  sequenceError: number | null;
+  entryCount: number;
+  verifiedAt: string;
+}
+
+export interface GlobalComplianceCertificate extends SovereignNode {
+  issuedAt: string;
+  issuedBy: string;
+  totalSites: number;
+  complianceRatio: number;
+  results: SiteIntegrityReport[];
+  status: 'FULL_COMPLIANCE' | 'PARTIAL_COMPLIANCE';
+  manifestHash: string;
+}
 
 /**
  * 👑 FleetComplianceService - Industrial v1.0
@@ -9,40 +28,46 @@ import { getAllTenants } from '@/instances';
  */
 export const FleetComplianceService = {
   private_COLLECTION: 'fleet-compliance',
+  isNF525Valid: true,
+  lastSealHash: '0x00000000000000000000000000000000',
 
   /**
    * 🔍 Verifies the fiscal chain of a specific site.
    * Checks for sequence breaks in the secure ledger.
    */
-  async verifySiteIntegrity(tenantId: string) {
+  async verifySiteIntegrity(tenantId: string): Promise<SiteIntegrityReport> {
     logger.info(`[Compliance] Verifying ledger chain for ${tenantId}...`);
     
     try {
-      const ledgerPath = getTenantPath('fiscal_ledger', tenantId);
+      const ledgerPath = Nexus.getTenantPath('fiscal_ledger', tenantId);
       const entriesRaw = await Nexus.adapter.query(ledgerPath);
       
-      const entries = entriesRaw.sort((a, b) => (a as any).sequence - (b as any).sequence);
+      const entries = entriesRaw.map(e => e as import('@nexus/contracts').FiscalSeal).sort((a, b) => (a.sequence || 0) - (b.sequence || 0));
       
       let isChainValid = true;
       let sequenceError: number | null = null;
       
       // Verify hashes and sequence continuity
       for (let i = 1; i < entries.length; i++) {
-        if ((entries[i] as any).sequence !== (entries[i-1] as any).sequence + 1) {
+        const currentSeq = entries[i].sequence || 0;
+        const prevSeq = entries[i-1].sequence || 0;
+        if (currentSeq !== prevSeq + 1) {
           isChainValid = false;
-          sequenceError = (entries[i] as any).sequence;
+          sequenceError = currentSeq;
           break;
         }
       }
 
       return {
+        id: `REPORT-${tenantId}-${Date.now()}`,
+        updatedAt: new Date().toISOString(),
         tenantId,
         isChainValid,
         sequenceError,
         entryCount: entries.length,
         verifiedAt: new Date().toISOString()
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error(`[Compliance] Integrity check failed for ${tenantId}:`, error);
       throw error;
     }
@@ -52,7 +77,7 @@ export const FleetComplianceService = {
    * 🛡️ Issues a Fleet-wide Compliance Certificate (Self-Certification).
    * Aggregates all site verification results and signs a global manifest.
    */
-  async issueGlobalCertificate(commanderId: string) {
+  async issueGlobalCertificate(commanderId: string): Promise<GlobalComplianceCertificate> {
     logger.info(`[Compliance] Issuing Global Fleet Certificate for Commander ${commanderId}`);
     
     const tenants = getAllTenants();
@@ -61,9 +86,10 @@ export const FleetComplianceService = {
     const totalSites = results.length;
     const compliantSites = results.filter(r => r.isChainValid).length;
     
-    const certificate = {
+    const certificate: GlobalComplianceCertificate = {
       id: `CERT-${Date.now()}`,
-      issuedAt: new Date(),
+      updatedAt: new Date().toISOString(),
+      issuedAt: new Date().toISOString(),
       issuedBy: commanderId,
       totalSites,
       complianceRatio: compliantSites / totalSites,

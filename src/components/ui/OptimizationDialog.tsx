@@ -1,8 +1,8 @@
 "use client";
 
 import { Sparkles, Settings2, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Modal } from "@/components/ui/Modal";
+import { Button } from "@ui/button";
+import { Modal } from "@ui/Modal";
 
 interface OptimizationDialogProps {
     isOpen: boolean;
@@ -28,7 +28,7 @@ export function OptimizationDialog({ isOpen, onClose, title, description, type =
             showClose={false}
             noPadding
         >
-            <div className="relative bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.4)] border border-white/10 overflow-hidden group/modal">
+            <div className="relative bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.4)] border border-subtle overflow-hidden group/modal">
                 <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")` }} />
                 <div className="p-10 text-center">
                     <div className="w-24 h-24 rounded-[2rem] bg-accent/5 flex items-center justify-center mx-auto mb-8 border border-accent/10">

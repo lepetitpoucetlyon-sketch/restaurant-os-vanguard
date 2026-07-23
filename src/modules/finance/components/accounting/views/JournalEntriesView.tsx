@@ -2,10 +2,10 @@
 
 import { useState, useMemo } from "react";
 import { CheckCircle2, Clock, Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-import { useAccounting } from "@/context/AccountingContext";
+import { useAccounting } from "@modules/finance";
 
 export function JournalEntriesView() {
     const { journalEntries, validateJournalEntry } = useAccounting();
@@ -69,7 +69,7 @@ export function JournalEntriesView() {
                         ) : (
                             filtered.map(entry => (
                                 <tr key={entry.id} className="hover:bg-bg-tertiary/20 group">
-                                    <td className="py-4 px-6 text-sm text-text-muted">{new Date(entry.date).toLocaleDateString('fr-FR')}</td>
+                                    <td className="py-4 px-6 text-sm text-text-muted">{entry.date ? new Date(entry.date).toLocaleDateString('fr-FR') : '—'}</td>
                                     <td className="py-4 px-6"><span className="font-mono text-xs font-bold text-accent bg-accent/5 px-2 py-1 rounded">{entry.pieceNumber}</span></td>
                                     <td className="py-4 px-6 text-sm font-medium text-text-primary max-w-xs truncate">{entry.description}</td>
                                     <td className="py-4 px-6 text-center text-sm text-text-muted">{entry.lines.length}</td>

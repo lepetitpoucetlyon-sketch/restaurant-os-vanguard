@@ -76,9 +76,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                 "pointer-events-auto rounded-2xl shadow-2xl border min-w-[340px] backdrop-blur-xl overflow-hidden",
                                 toast.type === 'success' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-green-100 dark:border-green-900/30" :
                                     toast.type === 'error' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-red-100 dark:border-red-900/30" :
-                                        toast.type === 'premium' ? "bg-text-primary/95 border-neutral-800" :
+                                        toast.type === 'premium' ? "bg-text-primary/95 border-default" :
                                             toast.type === 'warning' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-amber-100 dark:border-amber-900/30" :
-                                                "bg-bg-primary/95 dark:bg-bg-secondary/95 border-blue-100 dark:border-blue-900/30"
+                                                "bg-bg-primary/95 dark:bg-bg-secondary/95 border-focus dark:border-focus/30"
                             )}
                         >
                             <div className="px-5 py-4 flex items-center gap-4">
@@ -93,7 +93,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                             toast.type === 'error' ? "bg-error/10 text-error" :
                                                 toast.type === 'premium' ? "bg-accent text-white" :
                                                     toast.type === 'warning' ? "bg-warning/10 text-warning" :
-                                                        "bg-blue-500/10 text-blue-500"
+                                                        "bg-action-primary/10 text-brand"
                                     )}
                                 >
                                     {toast.type === 'success' && <CheckCircle2 className="w-5 h-5" />}
@@ -128,7 +128,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                     className={cn(
                                         "w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0",
                                         toast.type === 'premium'
-                                            ? "text-white/40 hover:text-white hover:bg-white/10"
+                                            ? "text-white/40 hover:text-white hover:bg-surface-card/10"
                                             : "text-text-muted hover:text-text-primary hover:bg-bg-tertiary"
                                     )}
                                 >
@@ -147,8 +147,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                     toast.type === 'success' ? "bg-accent" :
                                         toast.type === 'error' ? "bg-[#FF4D4D]" :
                                             toast.type === 'premium' ? "bg-accent" :
-                                                toast.type === 'warning' ? "bg-amber-500" :
-                                                    "bg-blue-500"
+                                                toast.type === 'warning' ? "bg-status-warning" :
+                                                    "bg-action-primary"
                                 )}
                             />
                         </motion.div>

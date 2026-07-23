@@ -1,11 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import './mocks'; // Charge l'infrastructure de mocks
 
 import { SharedKernel } from '@/lib/shared-kernel';
-import { OrderItem, CartItem } from '@/types';
-import { POSService } from '@/lib/pos-service';
+import { POSService } from '@/infrastructure/adapters/POSAdapter';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
-const SyncCompliance = { init: async (...args: any[]) => {} } as any;
+const SyncCompliance = { 
+    init: vi.fn().mockResolvedValue(undefined) 
+};
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 /**
  * 🛡️ OMNI-VANGUARD : BATAILLON DOMAINE (GRADE VI)
@@ -54,11 +56,12 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
                 ingredients: [{ cost: 2.10 }, { cost: 1.00 }] 
             };
             
-            const sanitized = SharedKernel.sync('test', rawData, schemaFields);
+            const sanitized = SharedKernel.sync('test', rawData, schemaFields as any);
+            const data = sanitized as Record<string, any>;
             
-            expect(sanitized.price).toBe(1050);
-            expect(sanitized.ingredients[0].cost).toBe(210);
-            expect(sanitized.ingredients[1].cost).toBe(100);
+            expect(data.price.value).toBe(1050);
+            expect(data.ingredients.value[0].cost.value).toBe(210);
+            expect(data.ingredients.value[1].cost.value).toBe(100);
         });
     });
 
@@ -66,17 +69,28 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
     describe('POSService : Opérations & Projections', () => {
         
         it('T5: Intégrité du Panier (calculateCartTotal)', () => {
-            const items: (OrderItem | CartItem)[] = [
-                { cartId: '1', productId: 'p1', categoryId: 'c1', name: 'A', priceInCents: 1500, quantity: 2 },
-                { cartId: '2', productId: 'p2', categoryId: 'c2', name: 'B', priceInCents: 550, quantity: 1 }
+            const items: any[] = [
+                { cartId: '1', productId: 'p1', categoryId: 'c1', name: 'A', unitPriceInMicrounits: toMicrounits(15000000), quantity: 2, taxRate: "0.10" },
+                { cartId: '2', productId: 'p2', categoryId: 'c2', name: 'B', unitPriceInMicrounits: toMicrounits(5500000), quantity: 1, taxRate: "0.10" }
             ];
-            expect(POSService.calculateCartTotal(items)).toBe(3550);
+            expect(POSService.calculateCartTotal(items)).toBe(35500000);
         });
 
         it('T6: Analyse de Rentabilité (Deding)', () => {
-            const items: CartItem[] = [
-                { cartId: 'c1', productId: 'p1', categoryId: 'c1', name: 'Burger', priceInCents: 1000, quantity: 1 }
-            ] as any;
+            const items: any[] = [
+                { 
+                    cartId: 'c1', 
+                    productId: 'p1', 
+                    categoryId: 'c1', 
+                    name: 'Burger', 
+                    unitPriceInMicrounits: toMicrounits(10000000), 
+                    quantity: 1, 
+                    taxRate: "0.10",
+                    modifiers: [],
+                    discountInMicrounits: toMicrounits(0),
+                    notes: ""
+                }
+            ];
             // Marge = (1000 - 420) / 1000 = 58%
             // Le seuil est à 60% dans POSService.analyzeProfitability
             const alerts = (POSService as any).analyzeProfitability(items);
@@ -94,8 +108,19 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
 
         it('T8: Stock Théorique (Schema Validation)', () => {
             // Simulation de formatage pour la cuisine
-            const items: CartItem[] = [{ cartId: 'c1', productId: 'p1', categoryId: 'cat1', name: 'Test', priceInCents: 100, quantity: 1 }];
-            const kitchenData = POSService.formatForKitchen(items);
+            const items: any[] = [{ 
+                cartId: 'c1', 
+                productId: 'p1', 
+                categoryId: 'cat1', 
+                name: 'Test', 
+                unitPriceInMicrounits: toMicrounits(1000000), 
+                quantity: 1, 
+                taxRate: "0.10",
+                modifiers: [],
+                discountInMicrounits: toMicrounits(0),
+                notes: ""
+            }];
+            const kitchenData = POSService.formatForKitchen(items as any);
             expect(kitchenData[0].status).toBe('pending');
             expect(kitchenData[0]).toHaveProperty('productId');
         });
@@ -134,9 +159,13 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
         });
 
         it('T12: Validation de Sceau (verifySeal)', () => {
-            const seal = { version: 'V5.5-PQ' };
-            expect(QuantumCrypto.verifySeal(seal as any, "data")).toBe(true);
-            expect(QuantumCrypto.verifySeal({ version: 'V1' } as any, "data")).toBe(false);
+            const seal = { 
+                version: 'V5.5-PQ', 
+                hash: 'abc', 
+                latticeSignature: 'sig' 
+            };
+            expect(QuantumCrypto.verifySeal(seal, "data")).toBe(true);
+            expect(QuantumCrypto.verifySeal({ version: 'V1', hash: 'x', latticeSignature: 'y' }, "data")).toBe(false);
         });
     });
 
@@ -153,19 +182,22 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
 
         it('T14: Intégrité HACCP (Snapshot Simulation)', () => {
             // On vérifie que SyncCompliance.init ne crash pas avec nos mocks
-            const mockStore = { set: vi.fn(), get: vi.fn() };
+            const mockStore = { 
+                set: vi.fn(), 
+                get: vi.fn(),
+                sub: vi.fn()
+            };
             expect(async () => {
-                await SyncCompliance.init('tenant-test', mockStore as any);
+                await (SyncCompliance as any).init('tenant-test', mockStore);
             }).not.toThrow();
         });
 
         it('T15: Isolation Tenant (Paths)', async () => {
-            // Darwin-3 : Sûreté Grade VI
-            const { getTenantPath } = await import('../../lib/firebase');
-            const path = getTenantPath('orders', 'tenant-A');
+            const { Nexus } = await import('../../lib/nexus/NexusAdapter');
+            const path = Nexus.getTenantPath('orders', 'tenant-A');
             expect(path).toBe('tenants/tenant-A/orders');
-            
-            const pathB = getTenantPath('orders', 'tenant-B');
+
+            const pathB = Nexus.getTenantPath('orders', 'tenant-B');
             expect(pathB).not.toBe(path);
         });
     });

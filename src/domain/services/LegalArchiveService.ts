@@ -1,6 +1,6 @@
 import { FiscalEngine } from './FiscalEngine';
 import { NF525Service } from './NF525Service';
-import { FiscalSeal } from '@/types';
+import { FiscalSeal } from '@nexus/contracts';
 
 /**
  * 🏛️ LegalArchiveService - Grade IX Sovereign Bridge

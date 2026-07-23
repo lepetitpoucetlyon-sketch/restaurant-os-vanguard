@@ -1,14 +1,14 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
-import { ROLE_LABELS } from "@/domain/services/AccessPolicyManager";
+import { useLanguage } from "@/hooks";
+import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { empireAudit } from "@/lib/audit";
 
 interface SidebarProfileProps {
-    currentUser: import('@/types').User | null;
+    currentUser: import('@nexus/contracts').User | null;
     isSidebarCollapsed: boolean;
     canSwitchProfiles: boolean;
     setIsProfileSwitcherOpen: (val: boolean) => void;
@@ -20,7 +20,7 @@ const navItemReveal = {
     visible: {
         opacity: 1,
         x: 0,
-        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
     }
 };
 
@@ -46,9 +46,9 @@ export function SidebarProfile({
 
     return (
         <motion.div
-            variants={navItemReveal as any}
+            variants={navItemReveal}
             className={cn(
-                "p-6 border-t border-border/40 bg-bg-tertiary/20 dark:bg-black/40 backdrop-blur-md",
+                "p-6 border-t border-border/40 bg-bg-tertiary/20 dark:bg-surface-sidebar/40 backdrop-blur-md",
                 isSidebarCollapsed ? "px-2" : "p-8"
             )}
         >

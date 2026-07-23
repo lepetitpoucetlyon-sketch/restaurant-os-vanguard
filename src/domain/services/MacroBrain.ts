@@ -1,6 +1,6 @@
-export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@/shared/types/fleet.types';
-import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@/shared/types/fleet.types';
-import { EmpireInstance } from '@/domain/types/empire';
+export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
+import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
+import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 
@@ -138,7 +138,7 @@ export const MacroBrain = {
      * 🧠 ORACLE AUDIT BRIDGE (Industrial Grade)
      * Direct interface for Strategic AI Analysis.
      */
-    async getOracleAudit(prompt: string, context: Record<string, unknown>): Promise<string> {
+    async getOracleAudit(prompt: string, context: Record<string, import("@/shared/nexus-contract").SovereignValue>): Promise<string> {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);
         
         try {
@@ -150,8 +150,8 @@ export const MacroBrain = {
 
             const data = await response.json();
             return data.content || "Analyse indisponible.";
-        } catch (error) {
-            logger.error('[MacroBrain] Oracle Audit Failed', error);
+        } catch (error: unknown) {
+            logger.error('[MacroBrain] Oracle Audit Failed', { error: String(error) });
             return "Échec de la connexion à l'Oracle.";
         }
     }

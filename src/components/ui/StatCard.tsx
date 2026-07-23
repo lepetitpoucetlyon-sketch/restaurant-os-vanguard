@@ -27,28 +27,28 @@ const accentColors = {
         trend: "text-accent",
     },
     success: {
-        icon: "text-emerald-500",
-        bg: "bg-emerald-500/10",
+        icon: "text-status-success",
+        bg: "bg-status-success/10",
         border: "border-emerald-500/20",
-        trend: "text-emerald-500",
+        trend: "text-status-success",
     },
     warning: {
-        icon: "text-amber-500",
-        bg: "bg-amber-500/10",
+        icon: "text-status-warning",
+        bg: "bg-status-warning/10",
         border: "border-amber-500/20",
-        trend: "text-amber-500",
+        trend: "text-status-warning",
     },
     error: {
-        icon: "text-rose-500",
-        bg: "bg-rose-500/10",
+        icon: "text-status-danger",
+        bg: "bg-status-danger/10",
         border: "border-rose-500/20",
-        trend: "text-rose-500",
+        trend: "text-status-danger",
     },
     info: {
-        icon: "text-blue-500",
-        bg: "bg-blue-500/10",
-        border: "border-blue-500/20",
-        trend: "text-blue-500",
+        icon: "text-brand",
+        bg: "bg-action-primary/10",
+        border: "border-focus/20",
+        trend: "text-brand",
     },
 };
 
@@ -127,8 +127,8 @@ export function StatCard({
                     <div
                         className={cn(
                             "flex items-center gap-1 text-[10px] font-bold",
-                            trend.direction === "up" && "text-emerald-500",
-                            trend.direction === "down" && "text-rose-500",
+                            trend.direction === "up" && "text-status-success",
+                            trend.direction === "down" && "text-status-danger",
                             trend.direction === "neutral" && "text-text-muted"
                         )}
                     >

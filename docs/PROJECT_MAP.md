@@ -1,40 +1,41 @@
-# 🗺️ Restaurant OS : Carte du Projet (Foam Edition)
+# 🗺️ Restaurant OS : Carte de l'Empire (Modular Monolith)
 
-Bienvenue dans le cerveau numérique de **Restaurant OS**. Ce document est optimisé pour [[Foam]] afin de vous permettre de naviguer dans l'architecture complexe du système.
+Bienvenue dans le cerveau numérique de **Restaurant OS**. Ce document est la carte de l'architecture **Modular Monolith** Grade X, structurée autour de ses 8 Piliers Souverains.
 
-## 🏗️ Architecture Souveraine (Grade X)
-Le système repose sur une triade de puissance, orchestrée par le protocole [[SYNC_PROTOCOL]].
+## 🏛️ Fondations de l'Empire (Grade X)
+Le système est unifié par le **Nexus Bridge**, garant de l'étanchéité multi-tenant et de l'intégrité des données.
 
-- **[[CORE_ENGINE]]** : Le cœur nucléaire de l'application (Nexus).
-- **[[ARCHITECTURE]]** : Les principes fondamentaux de l'isolation multi-tenant.
-- **[[SECURITY_GUARD]]** : La couche de protection et de conformité NF525.
-- **[[MD_DIRECTORY]]** : L'index complet de tous les documents du système.
+- **[[CORE_ENGINE]]** : Le cœur nucléaire (NexusOpsProvider).
+- **[[DNA_MAPPER]]** : Le NexusInternalMapper, traducteur universel de l'ADN STX.
+- **[[SECURITY_GUARD]]** : Protection NF525 et scellement des données.
+- **[[SYNC_PROTOCOL]]** : Synchronisation multi-agents et multi-instances.
 
-## 📦 Modules Fonctionnels (Les Pôles)
-Chaque module est une entité autonome mais synchronisée via le Nexus.
+## ⚔️ Les 8 Piliers Souverains
+L'Empire est organisé en domaines autonomes (Bounded Contexts), chacun scellé par un index impérial.
 
-- 💰 **[[FINANCE_MODULE]]** : Gestion de la trésorerie, facturation et Ledger.
-- 👥 **[[HR_MODULE]]** : Staff, planning et recrutement.
-- 🍏 **[[HACCP_MODULE]]** : Sécurité alimentaire et traçabilité labo.
-- 🍽️ **[[OPS_MODULE]]** : POS, KDS et gestion des commandes.
+1. 🍽️ **[[OPS_PILLAR]]** : Le moteur opérationnel (Commandes, POS, Kitchen).
+2. 💰 **[[COMMERCE_PILLAR]]** : La force marchande (Réservations, CRM, Marketing).
+3. 📦 **[[LOGISTICS_PILLAR]]** : La mémoire physique (Stocks, Recettes, Produits).
+4. 🏦 **[[FINANCE_PILLAR]]** : Le bastion fiscal (Comptabilité, Facturation, Ledger).
+5. 👥 **[[HUMAN_PILLAR]]** : Le cœur social (RH, Staff, Brigade).
+6. 🛡️ **[[COMPLIANCE_PILLAR]]** : La sentinelle (HACCP, Sécurité, Hygiène).
+7. 👁️ **[[INTELLIGENCE_PILLAR]]** : L'oracle (Analytics, Rapports, IA).
+8. 🔑 **[[GATEWAY_PILLAR]]** : Le gardien des accès (Auth, Flotte, Identité).
 
 ## 🛠️ Standards & Développement
-Pour maintenir la souveraineté de Grade X, nous suivons des règles strictes.
-
 - **[[CODING_STANDARDS]]** : Zéro 'any', typage strict et patterns industriels.
-- **[[COMPONENT_LIBRARY]]** : Notre bibliothèque de composants Atomiques.
+- **[[COMPONENT_LIBRARY]]** : Bibliothèque atomique souveraine.
 - **[[HOOKS_AND_UTILITIES]]** : Les outils transverses du système.
 
 ## 🚀 Déploiement & Maintenance
-- **[[WHITE_LABEL_SETUP]]** : Configurer une nouvelle instance client.
-- **[[MULTI_INSTANCE_MAINTENANCE]]** : Gérer la flotte de restaurants.
-- **[[CLIENT_INSTANCE_RUNBOOK]]** : Guide opérationnel pour le support.
+- **[[FLEET_MANAGEMENT]]** : Gérer la constellation de restaurants.
+- **[[WHITE_LABEL_SETUP]]** : Déploiement de nouvelles instances souveraines.
 
 ---
 
 ### 📝 Notes & Idées (Backlog)
-- [ ] Explorer l'intégration de Pay-OS.
-- [ ] Optimiser le rendu 3D du [[ATOMIC_MAP]].
+- [ ] Optimiser l'absorption des derniers fragments SDF.
+- [ ] Finaliser l'unification des stores par pilier.
 
 ---
-*Généré par Antigravity pour la clarté universelle du système.* 🛰️⚡️
+*Généré par Antigravity pour la clarté universelle de l'Empire.* 🛰️⚡️

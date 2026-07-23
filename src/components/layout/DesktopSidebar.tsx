@@ -2,16 +2,16 @@
 
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNexusCore } from "@/engines/core/NexusCoreProvider";
-import { NAV_SECTIONS, NavSection } from "@/config/navigation";
+import { useNexusCore } from "@/hooks";
+import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { APP_MODE } from "@/config/instance";
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
 import { SidebarProfile } from "./sidebar/SidebarProfile";
 import { SidebarQuickActions } from "./sidebar/SidebarQuickActions";
 import { cn } from "@/lib/ui.foundations";
 import { useAtom } from 'jotai';
-import { isSidebarCollapsedAtom } from '@/store/operationalAtoms';
+import { isSidebarCollapsedAtom } from '@/store/pillars/sovereign';
 
 export function DesktopSidebar() {
     const pathname = usePathname();
@@ -19,17 +19,15 @@ export function DesktopSidebar() {
     const { currentUser, logout } = auth;
     
     const [isSidebarCollapsed, setSidebarCollapsed] = useAtom(isSidebarCollapsedAtom);
-    const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
-    const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
+    const [_isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
+    const [_isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
 
     // Sidebar interaction states
-    const [isInteracting, setIsInteracting] = useState(false);
+    const [_isInteracting, setIsInteracting] = useState(false);
 
     const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
 
-    // Filtering accessible sections based on permissions (Simplified for now, as AccessPolicyManager handles it usually)
-    // Here we just pass all NAV_SECTIONS, the SidebarNavigation will handle its own logic or we can filter here
-    const accessibleSections = NAV_SECTIONS;
+    const accessibleSections = filterNavSections(NAV_SECTIONS, APP_MODE);
 
     return (
         <aside 

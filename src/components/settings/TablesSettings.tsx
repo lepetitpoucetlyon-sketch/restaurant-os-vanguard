@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useTables } from "@/engines/ops/NexusOpsProvider";
 import {
     LayoutGrid,
@@ -15,10 +15,11 @@ import { ZoneService } from "./tables/ZoneService";
 import { MobilierConfig } from "./tables/MobilierConfig";
 
 export default function TablesSettings() {
+    const tablesHook = useTables();
+    const tables = tablesHook.tables;
+    const zones = tablesHook.zones;
+    const floors = tablesHook.floors;
     const {
-        tables,
-        zones,
-        floors,
         addTable,
         updateTable,
         deleteTable,
@@ -28,7 +29,7 @@ export default function TablesSettings() {
         addFloor,
         updateFloor,
         deleteFloor
-    } = useTables();
+    } = tablesHook;
 
     const [isSaving, setIsSaving] = useState(false);
     const [activeTab, setActiveTab] = useState<'zones' | 'tables' | 'floors'>('zones');
@@ -44,7 +45,7 @@ export default function TablesSettings() {
     };
 
     const tablesCount = tables.length;
-    const totalSeats = tables.reduce((acc, t) => acc + t.seats, 0);
+    const totalSeats = tables.reduce((acc: number, t: { seats: number }) => acc + t.seats, 0);
 
     const isEditing = isEditingZone || isEditingTable || isEditingFloor;
 

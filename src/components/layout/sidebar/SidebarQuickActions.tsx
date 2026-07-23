@@ -3,8 +3,8 @@
 import { motion, Variants } from "framer-motion";
 import { ReceiptEuro, Sparkles, Flame, Moon } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
-import { AmbianceService, RestaurantAmbiance } from "@/domain/services/AmbianceService";
+import { useLanguage } from "@/hooks";
+import { AmbianceService, RestaurantAmbiance } from "@domain/services/AmbianceService";
 import { useState, useEffect } from "react";
 
 interface SidebarQuickActionsProps {
@@ -29,7 +29,7 @@ export function SidebarQuickActions({
     const [currentAmbiance, setCurrentAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());
 
     useEffect(() => {
-        const handleAmbianceChange = (e: Event) => {
+        const handleAmbianceChange = (_e: Event) => {
             setCurrentAmbiance(AmbianceService.getCurrentAmbiance());
         };
         window.addEventListener('ambiance-changed', handleAmbianceChange);
@@ -37,9 +37,9 @@ export function SidebarQuickActions({
     }, []);
 
     const ambiences: { key: RestaurantAmbiance; icon: React.ElementType; label: string; color: string }[] = [
-        { key: 'SERENITY', icon: Sparkles, label: 'Serenity', color: 'text-indigo-400' },
-        { key: 'RUSH_SPEED', icon: Flame, label: 'Rush', color: 'text-emerald-400' },
-        { key: 'ELEGANCE_NIGHT', icon: Moon, label: 'Elegance', color: 'text-amber-400' },
+        { key: 'SERENITY', icon: Sparkles, label: 'Serenity', color: 'text-brand' },
+        { key: 'RUSH_SPEED', icon: Flame, label: 'Rush', color: 'text-status-success' },
+        { key: 'ELEGANCE_NIGHT', icon: Moon, label: 'Elegance', color: 'text-status-warning' },
     ];
 
     return (

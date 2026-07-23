@@ -1,5 +1,35 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.8.0] - 2026-05-08 - SOVEREIGN RAG & OMNI-REFACTOR 🧠🏛️
+### 🧠 SOVEREIGN RAG & FAST BRAIN (ATLAS-X)
+- **Fast Brain Architecture** : Déploiement de l'ingestion de données structurées et de la distillation des connaissances via les Sovereign Knowledge Items (KIs).
+- **LightRAG & GraphRAG** : Intégration de Docker et des pipelines de requêtage sémantique hybride (Graphes + Vecteurs) pour une latence sub-500ms sur les données fiscales NF525.
+- **Benchmarks & Stress Tests** : Finalisation du `benchmark_rag.py` et des simulations de données "dirty" pour garantir 100% de fiabilité juridique.
+
+### 🏛️ OMNI-REFACTOR & GRADE X
+- **Sécurisation Admin & Ops** : Refonte massive et durcissement des modules `src/app/(admin)` et `src/app/(client)/(ops)`.
+- **Infrastructure SaaS Multi-Tenant** : Clarification de l'isolation des données et du déploiement via DNA Injector.
+## [1.7.0] - 2026-05-02 - DÉCOMPOSITION ATOMIQUE & RBAC-X ⚛️🛡️
+### ⚛️ DÉCOMPOSITION ATOMIQUE (ATOMIC-DECOMPOSITION-X)
+- **Scission des God Files** : Extraction de `MutationValidator`, `DomainRegistry` et `NexusTelemetryEngine` depuis le `NexusManager` et `NexusCoreProvider`.
+- **Purification des Contrats** : `nexus-contract.ts` est désormais un fichier de types purs, le runtime ayant été déplacé dans des moteurs atomiques.
+- **Réduction de la Densité** : Baisse de 28 connexions et suppression de 23 communautés de bruit via Graphify.
+
+### 🛡️ ÉTANCHÉITÉ & RBAC (MODULE-EXTRACTOR-X)
+- **Indice de Friction Zéro** : Élimination des dépendances directes entre Piliers (Finance <-> Logistics, Logistics <-> Commerce).
+- **Forecast Genome** : Centralisation des données prédictives dans le `SovereignGenome` pour un partage de données sans dépendance d'import.
+- **Lockdown-X (RBAC)** : Intégration d'un garde-fou RBAC obligatoire dans `useNexusMutation` basé sur les permissions du `DomainRegistry`.
+- **Sutures Headless** : Déploiement de `NexusSutures` pour la synchronisation asynchrone des états inter-domaines.
+
+## [1.6.0] - 2026-05-01 - LA SOUVERAINETÉ FINALE (GRADE X) 🏛️🚀
+### 🏛️ SUTURE TOTALE & INTÉGRITÉ ABSOLUE
+- **Grade X Sovereignty Achieve** : Élimination totale des erreurs TypeScript (`0 Errors`) sur l'ensemble du projet (1691 fichiers).
+- **Harcèlement des Types (Nuclear Hardening)** : Enforcement strict des contrats `SovereignNode` et `SovereignField` (support natif de `Date` et `Date[]`).
+- **Purification Physique** : Éradication complète du module `gateway` et migration de l'infrastructure vers des composants souverains (`TenantOrchestrator`, `ProvisioningWizard`).
+- **Suture des Barrels** : Normalisation des exports nommés pour tous les composants MCC et Guards.
+- **Chaos & Résilience** : Stabilisation de l'agent adversarial `ChaosMonkey` et sécurisation du moteur d'ingestion `Slayer`.
+- **Omni-Certification** : Validation physique et logique de l'intégrité du disque via le protocole **Atlas Bridge V5**.
+
 ## [1.5.0] - 2026-04-22 - LA PURIFICATION VANGUARD 🏛️
 ### 🏛️ RÉCONCILIATION & PURIFICATION (PHASES 1-7)
 - **Purification Multi-Pôles** : Liquidation de ~110 errors TSC dans les domaines `Marketing`, `CRM`, `Ops` et `Fleet`.

@@ -2,24 +2,31 @@
 
 import { useSetAtom, WritableAtom } from 'jotai';
 import { useCallback } from 'react';
-import { updateNexusNode, emitPulseAtom } from '@/store/operationalAtoms';
+import { updateNexusNode, emitPulseAtom } from '@/store/pillars/core';
 import { NexusNode } from '@/store/base';
-import { validateMutation } from '../validation/SchemaRegistry';
+import { validateMutation } from '@shared/nexus/engines/MutationValidator';
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
+
+import { canDoAtom } from '@shared/nexus/state/SovereignGenome';
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { useAtomValue } from 'jotai';
 
 /**
  * 🔨 useNexusMutation - The Sovereign Forge v3 (Génétique)
  * Orchestre les mutations atomiques avec validation génomique (Zod)
  * et diffusion de Pulses réactifs.
+ * GRADE X: Suture RBAC active.
  */
-export function useNexusMutation<T extends { id: string }>(
+export function useNexusMutation<T extends { id: string } & import("@shared/nexus-contract").SovereignMap>(
     nodeAtom: WritableAtom<NexusNode<T>, [NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)], void>, 
     key: string, 
     moduleId: string = 'CORE'
 ) {
     const setNode = useSetAtom(nodeAtom);
     const emitPulse = useSetAtom(emitPulseAtom);
+    const canDo = useAtomValue(canDoAtom);
+
 
     const mutate = useCallback(async (
         action: 'SET' | 'UPDATE' | 'DELETE',
@@ -30,9 +37,17 @@ export function useNexusMutation<T extends { id: string }>(
         const mutationId = uuidv4();
         const timestamp = new Date().toISOString();
 
+        // 🛡️ 0. RBAC MANDATE CHECK (Lockdown-X)
+        const permission = DomainRegistry.getMetadata(key).requiredPermission;
+        if (!canDo(permission)) {
+            const breachMsg = `[LOCKDOWN-X] AUTH_BREACH in ${moduleId}:${key}. User lacks [${permission}] mandate. Mutation ABORTED.`;
+            logger.error(breachMsg);
+            throw new Error(breachMsg);
+        }
+
         // 🧬 1. VALIDATION GÉNOMIQUE
         if (!options.skipValidation && (action === 'SET' || action === 'UPDATE')) {
-            const validation = validateMutation(moduleId, key, (payload || {}) as import("@/shared/nexus-contract").SovereignData);
+            const validation = validateMutation(moduleId, key, (payload || {}) as import("@shared/nexus-contract").SovereignData);
             if (!validation.success) {
                 const errorMsg = `[FORGE v3] VALIDATION ERROR in ${moduleId}:${key}: ${validation.errors?.join(', ')}`;
                 logger.error(errorMsg);

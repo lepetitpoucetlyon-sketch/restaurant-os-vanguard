@@ -1,13 +1,12 @@
-import type { TenantConfig } from '@/types';
+import type { TenantConfig } from '@nexus/contracts';
 
-export const bistrolyonConfig: any = {
+export const bistrolyonConfig: TenantConfig = {
     id: 'bistrolyon',
     name: 'Bistro de Lyon (Fictif)',
     tier: 'pro',
     billing: {
         status: 'active',
-        monthlyFee: 149,
-        currency: 'EUR',
+        plan: 'professional',
         usageLimits: {
             aiRequests: 3000,
             transactions: 10000,
@@ -34,6 +33,7 @@ export const bistrolyonConfig: any = {
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_BISTROLYON || '',
     },
     ai: {
-        geminiApiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
+        enabled: true,
+        llmApiKey: process.env.NEXT_PUBLIC_LLM_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
     }
 };

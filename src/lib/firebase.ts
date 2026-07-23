@@ -1,4 +1,4 @@
-import { initializeApp, getApps, getApp, FirebaseOptions } from "firebase/app";
+import { initializeApp, getApps, FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -11,12 +11,13 @@ const DEFAULT_CONFIG = whiteLabelInstanceConfig.firebase;
 // --- 🏛️ EMPIRE CORE ENGINE (Grade VI - Local-First Indestructible) ---
 function getStableApp() {
     const apps = getApps();
-    const existing = apps.find(a => a.name === 'EMPIRE_CORE');
+    const existing = apps.find(a => a.name === '[DEFAULT]');
     if (existing) return existing;
-    return initializeApp(DEFAULT_CONFIG, 'EMPIRE_CORE');
+    return initializeApp(DEFAULT_CONFIG);
 }
 
 export const firebaseApp = getStableApp();
+export const app = firebaseApp; // 🏛️ Nexus Alias Bridge
 
 /**
  * 🛡️ FIRESTORE LOCAL-FIRST ENGINE (NF525 Compliant)
@@ -80,10 +81,6 @@ export async function initializeTenantFirebase(config?: FirebaseOptions) {
     return firebaseApp;
 }
 
-// DEPRECATED WRAPPERS (Maintain for legacy compat during final cleanup)
-export function getTenantPath(relativePath: string, tenantIdOverride?: string): string {
-    return Nexus.getTenantPath(relativePath, tenantIdOverride);
-}
 
 // --- ⚡ BROWSER OPTIMIZATIONS ---
 if (typeof window !== 'undefined') {

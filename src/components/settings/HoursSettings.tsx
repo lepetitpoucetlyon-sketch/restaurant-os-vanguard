@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
-import { DaySchedule, DayOfWeek, ServiceSettings, ClosedPeriod } from "@/types";
+import { DaySchedule, DayOfWeek, ServiceSettings, ClosedPeriod } from "@nexus/contracts";
 import { Loader2, Save } from "lucide-react";
 
 // Modular Sub-components
@@ -68,8 +68,12 @@ export default function HoursSettings() {
         setServiceDraft(null);
     };
 
-    const handleAddClosedPeriod = async (period: Omit<ClosedPeriod, 'id' | 'isAnnual'>) => {
-        await addClosedPeriod({ ...period, isAnnual: false } as any);
+    const handleAddClosedPeriod = async (period: Omit<ClosedPeriod, 'id'>) => {
+        await addClosedPeriod({ 
+            ...period, 
+            id: `CP-${Date.now()}`,
+            isAnnual: (period as { isAnnual?: boolean }).isAnnual ?? false 
+        } as ClosedPeriod);
     };
 
     return (
@@ -115,7 +119,7 @@ export default function HoursSettings() {
                     ) : (
                         <div className="relative">
                             <Save className="w-5 h-5 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Synchroniser les Protocoles

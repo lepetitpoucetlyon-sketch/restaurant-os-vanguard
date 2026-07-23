@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion";
-import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop, mobileSpring } from "@/lib/motion";
+import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/lib/motion";
 import { useHasMounted, useIsMobile } from "@/hooks";
 
 interface ModalProps {
@@ -103,7 +103,7 @@ export function Modal({
                             animate="visible"
                             exit="exit"
                             onClick={onClose}
-                            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                            className="absolute inset-0 bg-surface-sidebar/50 backdrop-blur-sm"
                         />
 
                         {/* Sheet */}
@@ -174,7 +174,7 @@ export function Modal({
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/40 backdrop-blur-xl"
+                        className="absolute inset-0 bg-surface-sidebar/40 backdrop-blur-xl"
                     />
 
                     {/* Modal Content */}

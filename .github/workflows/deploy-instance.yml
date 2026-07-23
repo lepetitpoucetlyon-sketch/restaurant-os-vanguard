@@ -2,7 +2,7 @@ name: Deploy Private Instance
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "grade-x-vanguard" ]
   workflow_dispatch:
     inputs:
       instance_name:
@@ -40,7 +40,7 @@ jobs:
       run: npm ci
 
     - name: Generate Instance Environment
-      run: node scripts/generate-instance-env.js "${{ github.event.inputs.config_path || 'instances/restaurant-os.json' }}" .env.production
+      run: node .nexus/scripts/generate-instance-env.js "${{ github.event.inputs.config_path || 'instances/restaurant-os.json' }}" .env.production
 
     - name: Build Application
       run: npm run build

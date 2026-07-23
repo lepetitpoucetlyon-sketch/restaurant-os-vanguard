@@ -5,12 +5,18 @@ import type { NextConfig } from "next";
 const workspaceRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // NOTE: pas de `output: 'export'` — le produit exige un serveur Node
+  // (routes API : signup, webhook Stripe, export FEC, middleware d'auth).
   turbopack: {
     root: workspaceRoot,
   },
   images: {
-    unoptimized: true,
+    // Production-grade image optimization — AVIF → WebP → JPEG fallback.
+    // `unoptimized: true` was previously used to avoid build issues but
+    // it disables all Next.js image processing (LCP penalty on menu photos).
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
   reactStrictMode: false,
   logging: {
@@ -19,9 +25,9 @@ const nextConfig: NextConfig = {
     },
   },
   devIndicators: {
-    // @ts-ignore - Hiding the dev indicator
+    // @ts-expect-error - Hiding the dev indicator
     buildActivity: false,
-    // @ts-ignore
+    // @ts-expect-error - appIsrStatus not in NextConfig types
     appIsrStatus: false,
   },
   onDemandEntries: {
@@ -29,11 +35,8 @@ const nextConfig: NextConfig = {
     pagesBufferLength: 1,      // 1 seule page
   },
   typescript: {
-    ignoreBuildErrors: true, // Désactivé pour le dev rush
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+    ignoreBuildErrors: false,
+  }
 };
 
 export default nextConfig;

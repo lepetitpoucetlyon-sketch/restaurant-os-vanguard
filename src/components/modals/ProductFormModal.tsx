@@ -9,16 +9,20 @@ import {
     AlertTriangle,
     Save,
     Sparkles,
-    Gem
+    Gem,
+    GlassWater,
+    Plus,
+    Trash2
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import type { ServingMethod } from "@nexus/contracts";
+import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { useKitchen, useInventory } from "@/engines/ops/NexusOpsProvider";
-import { useToast } from "@/components/ui/Toast";
-import { Modal } from "@/components/ui/Modal";
-import { PremiumSelect } from "@/components/ui/PremiumSelect";
-import { AnimatePresence } from "framer-motion";
-import type { Recipe } from "@/types";
+import { useRecipes, useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useToast } from "@ui/Toast";
+import { Modal } from "@ui/Modal";
+import { PremiumSelect } from "@ui/PremiumSelect";
+import { authedFetch } from "@/lib/client/authedFetch";
+import type { Recipe } from "@nexus/contracts/nexus-internal-mapper";
 
 
 // Sub-components
@@ -37,9 +41,19 @@ interface ProductFormModalProps {
 }
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
-    const { data: ingredients } = useInventory();
-    const { addRecipe, updateRecipe, calculateRecipeCost } = useKitchen();
+    const { ingredients } = useInventory();
+    const { data: _recipes, add: addRecipe, updateRecipe, calculateRecipeCost: calculateRecipeCostHook } = useRecipes();
     const { showToast } = useToast();
+
+    const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
+        // Ensure we pass a properly structured recipe-like object to the hook
+        return calculateRecipeCostHook({
+            ingredients: ings.map((ri) => {
+                const ing = ingredients.find((i) => i.id === ri.ingredientId);
+                return { ...ing, quantity: ri.quantity };
+            })
+        } as unknown as Recipe); // Hook expects full Recipe, we pass partial
+    };
 
     // Form State
     const [name, setName] = useState("");
@@ -55,19 +69,36 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
     const [recipeSteps, setRecipeSteps] = useState<Array<{ order: number; instruction: string; duration?: number }>>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // ── cui-3: Bar recipe fields ──────────────────────────────────────────────
+    const [baseSpirit, setBaseSpirit] = useState("");
+    const [mixersInput, setMixersInput] = useState<string[]>([]);
+    const [newMixerInput, setNewMixerInput] = useState("");
+    const [garnish, setGarnish] = useState("");
+    const [servingMethod, setServingMethod] = useState<ServingMethod>("built");
+    const [glassType, setGlassType] = useState("");
+
     useEffect(() => {
         if (editProduct && isOpen) {
-            setName(editProduct.name || "");
-            setDescription(editProduct.description || "");
-            setCategory(editProduct.category || "");
-            setSellPriceInCents(editProduct.priceInCents || editProduct.sellingPriceInCents || 0);
-            setPrepTime(editProduct.prepTime || 0);
+            setName(String(editProduct.name || ""));
+            setDescription(String(editProduct.description || ""));
+            setCategory(String(editProduct.category || ""));
+            setSellPriceInCents(Number((editProduct.sellingPriceInCents ?? Math.round((editProduct.sellingPriceInMicrounits ?? 0) / 10_000)) || 0));
+            setPrepTime(Number(editProduct.preparationTimeMinutes || 0));
             setSelectedAllergens(editProduct.allergens || []);
-            setIsVegetarian((editProduct as any).isVegetarian || false);
-            setIsVegan((editProduct as any).isVegan || false);
-            setIsGlutenFree((editProduct as any).isGlutenFree || false);
-            setRecipeIngredients((editProduct as any).ingredients || []);
-            setRecipeSteps((editProduct as any).recipeSteps || []);
+            setIsVegetarian(editProduct?.isVegetarian || false);
+            setIsVegan(editProduct?.isVegan || false);
+            setIsGlutenFree(editProduct?.isGlutenFree || false);
+            setRecipeIngredients((editProduct?.ingredients || []).map((i) => ({
+                ingredientId: (i as { ingredientId?: string; id?: string }).ingredientId ?? (i as { id?: string }).id ?? "",
+                quantity: i.quantity
+            })));
+            setRecipeSteps(editProduct?.recipeSteps || []);
+            // Bar fields
+            setBaseSpirit(String(editProduct.baseSpirit ?? ""));
+            setMixersInput((editProduct.mixers ?? []) as string[]);
+            setGarnish(String(editProduct.garnish ?? ""));
+            setServingMethod((editProduct.servingMethod as ServingMethod) ?? "built");
+            setGlassType(String(editProduct.glassType ?? ""));
         } else if (!editProduct && isOpen) {
             setName("");
             setDescription("");
@@ -80,6 +111,13 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
             setIsGlutenFree(false);
             setRecipeIngredients([]);
             setRecipeSteps([]);
+            // Bar fields
+            setBaseSpirit("");
+            setMixersInput([]);
+            setNewMixerInput("");
+            setGarnish("");
+            setServingMethod("built");
+            setGlassType("");
         }
     }, [editProduct, isOpen]);
 
@@ -132,20 +170,28 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 isVegan,
                 isGlutenFree,
                 ingredients: recipeIngredients.map((ri, idx) => {
-                    const ing = ingredients.find(i => i.id === ri.ingredientId);
+                    const ing = ingredients.find((i) => i.id === ri.ingredientId);
                     return {
                         id: `ing_${idx}`,
                         ingredientId: ri.ingredientId,
                         name: ing?.name || '',
                         quantity: ri.quantity,
                         unit: ing?.unit || 'unit',
-                        costInCents: Math.round((ing?.costInCents || 0) * ri.quantity),
+                        costInCents: Math.round(Number((ing as { costInCents?: number })?.costInCents || 0) * ri.quantity),
                     };
                 }),
                 recipeSteps,
                 productType,
                 isActive: true,
                 color: productType === 'dish' ? '#1B4332' : '#7C3AED',
+                // ── cui-3: bar fields (only persisted for cocktails) ──────────
+                ...(productType === 'cocktail' ? {
+                    baseSpirit: baseSpirit.trim() || undefined,
+                    mixers: mixersInput.filter(Boolean),
+                    garnish: garnish.trim() || undefined,
+                    servingMethod,
+                    glassType: glassType.trim() || undefined,
+                } : {}),
             };
 
             if (editProduct) {
@@ -155,8 +201,16 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                 await addRecipe(productData);
                 showToast("Fiche créée", "success");
             }
+
+            // Indexation RAG asynchrone — fire-and-forget, sans bloquer l'UX.
+            authedFetch('/api/oracle/index', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: productType, data: productData }),
+            }).catch(() => { /* l'indexation échouée ne bloque pas l'utilisateur */ });
+
             onClose();
-        } catch (error) {
+        } catch (_error) {
             showToast("Erreur d'enregistrement", "error");
         } finally {
             setIsSubmitting(false);
@@ -165,13 +219,13 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl" className="p-0 border-none bg-transparent" showClose={false} noPadding>
-            <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.3)] border border-white/20">
+            <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.3)] border border-default">
                 {/* Premium Header */}
                 <div className={cn("px-10 py-8 text-white relative overflow-hidden", productType === 'dish' ? "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F]" : "bg-gradient-to-br from-[#4C1D95] to-[#7C3AED]")}>
                     <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")` }} />
                     <div className="relative z-10 flex items-center justify-between">
                         <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20">
+                            <div className="w-16 h-16 rounded-2xl bg-surface-card/10 backdrop-blur-xl flex items-center justify-center border border-default">
                                 {productType === 'dish' ? <ChefHat className="w-8 h-8" /> : <Wine className="w-8 h-8" />}
                             </div>
                             <div>
@@ -182,7 +236,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                                 <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Configuration de la Fiche Technique de Vente</p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-all"><X className="w-6 h-6" /></button>
+                        <button onClick={onClose} className="w-12 h-12 rounded-2xl bg-surface-card/10 hover:bg-surface-card/20 border border-subtle flex items-center justify-center transition-all"><X className="w-6 h-6" /></button>
                     </div>
                 </div>
 
@@ -195,19 +249,150 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                         <div className="grid grid-cols-2 gap-6">
                             <div className="col-span-2 lg:col-span-1 space-y-3">
                                 <label className="text-[10px] font-bold text-text-muted px-4 font-black uppercase tracking-widest">Intitulé de la Création</label>
-                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Noix de Saint-Jacques Snackées..." className="w-full h-14 px-6 bg-white dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-serif font-black text-lg outline-none transition-all" />
+                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Noix de Saint-Jacques Snackées..." className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-serif font-black text-lg outline-none transition-all" />
                             </div>
                             <div className="col-span-2 lg:col-span-1">
                                 <PremiumSelect label="Classification" value={category} onChange={setCategory} options={categories.map(cat => ({ value: cat, label: cat }))} placeholder="SÉLECTIONNER..." />
                             </div>
                             <div className="col-span-2 space-y-3">
                                 <label className="text-[10px] font-bold text-text-muted px-4 font-black uppercase tracking-widest">Description Narrative</label>
-                                <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Briefing pour le personnel de salle et informations clients..." className="w-full h-24 px-6 py-4 bg-white dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none resize-none transition-all" />
+                                <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Briefing pour le personnel de salle et informations clients..." className="w-full h-24 px-6 py-4 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none resize-none transition-all" />
                             </div>
                         </div>
                     </div>
 
                     <ProductFinancials sellPriceInCents={sellPriceInCents} setSellPriceInCents={setSellPriceInCents} prepTime={prepTime} setPrepTime={setPrepTime} calculatedCost={calculatedCost} margin={margin} />
+
+                    {/* ── cui-3: Bar & Cocktail fields ───────────────────────── */}
+                    {productType === 'cocktail' && (
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 px-2">
+                                <GlassWater className="w-4 h-4 text-accent" />
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Profil Cocktail</h3>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                {/* Base spirit */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Spiritueux de base</label>
+                                    <input
+                                        type="text"
+                                        value={baseSpirit}
+                                        onChange={e => setBaseSpirit(e.target.value)}
+                                        placeholder="Ex: Rhum blanc, Gin..."
+                                        className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                </div>
+
+                                {/* Glass type */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Type de verre</label>
+                                    <input
+                                        type="text"
+                                        value={glassType}
+                                        onChange={e => setGlassType(e.target.value)}
+                                        placeholder="Ex: Coupe, Highball..."
+                                        className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                </div>
+
+                                {/* Garnish */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Garniture / Décor</label>
+                                    <input
+                                        type="text"
+                                        value={garnish}
+                                        onChange={e => setGarnish(e.target.value)}
+                                        placeholder="Ex: Zeste de citron vert..."
+                                        className="w-full h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                </div>
+
+                                {/* Serving method */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Méthode de préparation</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {(['shaken', 'stirred', 'built', 'blended', 'layered'] as const).map(method => {
+                                            const labels: Record<ServingMethod, string> = {
+                                                shaken: 'Shaké',
+                                                stirred: 'Remué',
+                                                built: 'Construit',
+                                                blended: 'Mixé',
+                                                layered: 'En couches',
+                                            };
+                                            return (
+                                                <button
+                                                    key={method}
+                                                    type="button"
+                                                    onClick={() => setServingMethod(method)}
+                                                    className={cn(
+                                                        "px-4 py-2 rounded-xl border-2 font-black text-[10px] uppercase tracking-widest transition-all",
+                                                        servingMethod === method
+                                                            ? "bg-accent/10 border-accent text-accent"
+                                                            : "bg-surface-card border-border text-text-muted hover:border-text-muted/30"
+                                                    )}
+                                                >
+                                                    {labels[method]}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Mixers list */}
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-4 block">Mixeurs / Accompagnements</label>
+                                <div className="flex gap-3">
+                                    <input
+                                        type="text"
+                                        value={newMixerInput}
+                                        onChange={e => setNewMixerInput(e.target.value)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter' && newMixerInput.trim()) {
+                                                e.preventDefault();
+                                                setMixersInput(prev => [...prev, newMixerInput.trim()]);
+                                                setNewMixerInput("");
+                                            }
+                                        }}
+                                        placeholder="Ex: Jus de citron, sirop... (Entrée pour ajouter)"
+                                        className="flex-1 h-14 px-6 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-border focus:border-accent font-bold text-sm outline-none transition-all"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (newMixerInput.trim()) {
+                                                setMixersInput(prev => [...prev, newMixerInput.trim()]);
+                                                setNewMixerInput("");
+                                            }
+                                        }}
+                                        className="h-14 px-6 bg-accent text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-accent/90 transition-all"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                    </button>
+                                </div>
+                                {mixersInput.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 pt-2">
+                                        {mixersInput.map((mixer, i) => (
+                                            <div
+                                                key={i}
+                                                className="flex items-center gap-2 px-4 py-2 bg-bg-tertiary/60 border border-border/50 rounded-xl"
+                                            >
+                                                <span className="text-[11px] font-bold text-text-primary">{mixer}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setMixersInput(prev => prev.filter((_, idx) => idx !== i))}
+                                                    className="text-text-muted hover:text-error transition-colors"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Section: Régimes & Allergènes */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -219,7 +404,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                                     { id: 'vegan', label: 'VÉGAN', icon: '🌱', state: isVegan, setState: setIsVegan },
                                     { id: 'glutenFree', label: 'NO GLUTEN', icon: '🌾', state: isGlutenFree, setState: setIsGlutenFree },
                                 ].map(opt => (
-                                    <button key={opt.id} type="button" onClick={() => opt.setState(!opt.state)} className={cn("px-5 py-3 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all", opt.state ? "bg-success text-white border-success shadow-lg shadow-success/20" : "bg-white border-border text-text-muted hover:border-text-muted/30")}>{opt.label}</button>
+                                    <button key={opt.id} type="button" onClick={() => opt.setState(!opt.state)} className={cn("px-5 py-3 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all", opt.state ? "bg-success text-white border-success shadow-lg shadow-success/20" : "bg-surface-card border-border text-text-muted hover:border-text-muted/30")}>{opt.label}</button>
                                 ))}
                             </div>
                         </div>
@@ -227,19 +412,19 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                             <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2 px-2"><AlertTriangle className="w-3.5 h-3.5 text-error" /> Vigilance Allergènes</label>
                             <div className="flex flex-wrap gap-2">
                                 {ALLERGENS.map(a => (
-                                    <button key={a.id} type="button" onClick={() => toggleAllergen(a.id)} className={cn("px-4 py-2 rounded-xl border-2 text-[9px] font-black transition-all", selectedAllergens.includes(a.id) ? "bg-error/10 border-error text-error" : "bg-white border-border text-text-muted hover:bg-bg-tertiary")}>{a.name.toUpperCase()}</button>
+                                    <button key={a.id} type="button" onClick={() => toggleAllergen(a.id)} className={cn("px-4 py-2 rounded-xl border-2 text-[9px] font-black transition-all", selectedAllergens.includes(a.id) ? "bg-error/10 border-error text-error" : "bg-surface-card border-border text-text-muted hover:bg-bg-tertiary")}>{a.name.toUpperCase()}</button>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients as any} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
+                    <ProductIngredients recipeIngredients={recipeIngredients} ingredients={ingredients} addIngredient={addIngredient} updateIngredient={updateIngredient} removeIngredient={removeIngredient} />
                     <ProductSteps recipeSteps={recipeSteps} addStep={addStep} updateStep={updateStep} removeStep={removeStep} />
                 </div>
 
-                <div className="px-10 py-8 border-t border-border bg-white dark:bg-bg-secondary flex gap-6 shrink-0">
-                    <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-border bg-white hover:bg-bg-tertiary transition-all">Abandonner</Button>
-                    <Button disabled={isSubmitting} onClick={handleSubmit} className={cn("flex-2 px-12 h-14 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all transform hover:scale-[1.02]", productType === 'dish' ? "bg-[#1B4332] hover:bg-black shadow-[#1B4332]/20" : "bg-[#4C1D95] hover:bg-black shadow-[#4C1D95]/20")}>
+                <div className="px-10 py-8 border-t border-border bg-surface-card dark:bg-bg-secondary flex gap-6 shrink-0">
+                    <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-border bg-surface-card hover:bg-bg-tertiary transition-all">Abandonner</Button>
+                    <Button disabled={isSubmitting} onClick={handleSubmit} className={cn("flex-2 px-12 h-14 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all transform hover:scale-[1.02]", productType === 'dish' ? "bg-[#1B4332] hover:bg-surface-sidebar shadow-[#1B4332]/20" : "bg-[#4C1D95] hover:bg-surface-sidebar shadow-[#4C1D95]/20")}>
                         {isSubmitting ? <Sparkles className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                         {editProduct ? 'Sauvegarder les modifications' : 'Consigner la Fiche Technique'}
                     </Button>

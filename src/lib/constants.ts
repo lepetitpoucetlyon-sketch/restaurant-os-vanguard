@@ -1,7 +1,7 @@
 // Shared constants and labels across the application
 // This file centralizes commonly used constants to avoid duplication
 
-import type { UserRole } from '@/types';
+import type { UserRole } from '@nexus/contracts';
 
 export const ROLE_LABELS: Record<UserRole, string> = {
     admin: 'Administrateur',

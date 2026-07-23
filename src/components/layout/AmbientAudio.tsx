@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
-import { Volume2, VolumeX, Radio } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -24,9 +23,10 @@ export const AmbientAudio: React.FC = () => {
     const initializeAudio = useCallback(() => {
         if (ctxRef.current) return;
         
-        const AudioContextClass = (window.AudioContext || (window as unknown as Window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
-
-        const ctx = new AudioContextClass();
+        const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+        const AudioContextClass = w.AudioContext ?? w.webkitAudioContext;
+        if (!AudioContextClass) return;
+        const ctx = new AudioContextClass() as AudioContext;
         ctxRef.current = ctx;
 
         // Master Gain
@@ -119,7 +119,7 @@ export const AmbientAudio: React.FC = () => {
 
     return (
         <div className="flex items-center gap-2 bg-[#161618] border border-white/5 px-4 py-2.5 rounded-xl cursor-pointer hover:bg-[#1c1c1f] transition-all group" onClick={togglePlayback}>
-            <div className={`relative flex items-center justify-center w-5 h-5 rounded-full transition-colors ${isPlaying ? 'text-indigo-400' : 'text-gray-500'}`}>
+            <div className={`relative flex items-center justify-center w-5 h-5 rounded-full transition-colors ${isPlaying ? 'text-brand' : 'text-secondary'}`}>
                 {isPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                 
                 {/* Visualizer bars */}
@@ -134,7 +134,7 @@ export const AmbientAudio: React.FC = () => {
                             {[1, 2, 3].map((i) => (
                                 <motion.div 
                                     key={i}
-                                    className="w-1 bg-indigo-500 rounded-t-sm"
+                                    className="w-1 bg-action-primary rounded-t-sm"
                                     animate={{ height: ['20%', '100%', '20%'] }}
                                     transition={{
                                         duration: 1.5,
@@ -150,10 +150,10 @@ export const AmbientAudio: React.FC = () => {
             </div>
             
             <div className={`flex flex-col ml-1 ${isPlaying ? 'mr-6' : 'mr-0'} transition-all`}>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 line-clamp-1">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted line-clamp-1">
                     Ambient Soundtrack
                 </span>
-                <span className={`text-[8px] uppercase tracking-tighter font-black ${isPlaying ? 'text-indigo-500' : 'text-gray-600'}`}>
+                <span className={`text-[8px] uppercase tracking-tighter font-black ${isPlaying ? 'text-brand' : 'text-secondary'}`}>
                     {isPlaying ? 'Playing • Empire Drone' : 'Muted'}
                 </span>
             </div>

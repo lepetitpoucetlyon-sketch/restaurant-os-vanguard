@@ -1,8 +1,6 @@
-import { Order, StockItem, Ingredient, InventoryMovement, FiscalSeal, User } from '@/types';
-import { FiscalEngine } from './FiscalEngine';
-import { StockEngine } from './StockEngine';
-import { logger } from '@/lib/logger';
+import { Order, StockItem, Ingredient, FiscalSeal } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 /**
  * 🌀 SimulationEngine - Grade X "Quantique"
@@ -57,7 +55,7 @@ export const SimulationService = {
      * Simulation d'une journée complète avec calcul financier et burnout.
      */
     async simulateDay(
-        date: Date, 
+        date: string, 
         mode: SimulationMode, 
         profileId: SimulationProfile = 'DEFAULT',
         context: {
@@ -86,7 +84,7 @@ export const SimulationService = {
         metrics.burnoutIndex = Math.min(100, (intensity / 15) * 100);
 
         const orders: Order[] = [];
-        let currentLastSeal = context.lastSeal;
+        const _currentLastSeal = context.lastSeal;
 
         for (let i = 0; i < dailyVolume; i++) {
             const isChaos = mode === 'CHAOS' && Math.random() < config.chaosProbability;
@@ -98,18 +96,19 @@ export const SimulationService = {
             metrics.totalRevenue += revenue;
             metrics.totalFoodCost += Math.round(revenue * 0.28); // 28% food cost baseline
 
+            const now = Date.now();
             // Record virtual order
             const order: Order = {
                 id: orderId,
                 tableId: 'T1',
                 tableNumber: '1',
                 serverName: 'Virtual Agent',
-                timestamp: date,
                 items: [],
-                totalInCents: revenue,
+                totalInMicrounits: toMicrounits(revenue),
                 status: 'paid',
-                customerName: 'Simulated'
-            };
+                createdAt: now,
+                updatedAt: now
+            } as unknown as import("@nexus/contracts").Order;
 
             await Nexus.adapter.set(Nexus.getTenantPath(`orders/${orderId}`), order);
             orders.push(order);
@@ -148,7 +147,7 @@ export const SimulationService = {
             };
 
             for (let d = 0; d < days; d++) {
-                const day = await this.simulateDay(new Date(), mode, profileId, { 
+                const day = await this.simulateDay(new Date().toISOString(), mode, profileId, { 
                     ingredients: [], // Placeholder
                     stockItems: []   // Placeholder
                 });

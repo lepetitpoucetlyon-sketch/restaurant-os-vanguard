@@ -1,8 +1,9 @@
 import { useCallback, useMemo } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { useSettings } from '@/context/SettingsContext';
-import { AgentDomain, AgentRole, AgentResponse } from '@/domain/agency/types';
+import { AgentDomain, AgentRole, AgentResponse } from '@domain/agency/types';
 import { AgentEngine } from '@/lib/ai/AgentEngine';
+import { AI_MODELS } from '@/lib/ai/types';
 
 /**
  * useExpert - Le hook standard pour consommer l'expertise système.
@@ -28,9 +29,9 @@ export function useExpert(domain: AgentDomain) {
     
     const isEnabled = expertConfig?.enabled ?? false;
     const isAuthorized = rolePower[userRole] >= rolePower[(expertConfig?.minRole as AgentRole) || 'admin'];
-    const modelId = expertConfig?.modelId || slmConfig?.modelId || 'gemini-1.5-flash';
+    const modelId = expertConfig?.modelId || slmConfig?.modelId || AI_MODELS.fast;
 
-    const queryExpert = useCallback(async (prompt: string, contextData?: unknown): Promise<AgentResponse> => {
+    const queryExpert = useCallback(async (prompt: string, contextData?: import("@/shared/nexus-contract").SovereignField): Promise<AgentResponse> => {
         if (!slmConfig?.apiKey || !slmConfig?.endpoint) {
             throw new Error('Erreur Système : Services d\'expertise non configurés.');
         }
@@ -43,7 +44,7 @@ export function useExpert(domain: AgentDomain) {
             domain,
             userRole,
             userPrompt: prompt,
-            contextData: contextData as any,
+            contextData: contextData,
             apiKey: slmConfig.apiKey,
             endpoint: slmConfig.endpoint,
             modelId: modelId // Pass precise model

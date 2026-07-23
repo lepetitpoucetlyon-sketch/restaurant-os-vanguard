@@ -1,65 +1,90 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Utility functions
+
+    // --- 🏛️ SOVEREIGN UTILITIES ---
+
     function isSignedIn() {
       return request.auth != null;
     }
 
-    function isAdmin() {
+    function getTenantId() {
+      return request.auth.token.tenantId;
+    }
+
+    function isFleetAdmin() {
       return isSignedIn() &&
-        (
-          request.auth.token.admin == true ||
-          request.auth.token.role == 'admin'
-        );
+             (request.auth.token.role == 'fleet_admin' || request.auth.token.role == 'SUPER_ADMIN');
     }
 
-    function isManager() {
+    function isTenantManager(tenantId) {
       return isSignedIn() &&
-        (
-          isAdmin() ||
-          request.auth.token.role == 'manager'
-        );
+             getTenantId() == tenantId &&
+             (request.auth.token.role == 'manager' || request.auth.token.role == 'admin');
     }
 
-    function isCurrentUser(userId) {
-      return isSignedIn() && request.auth.uid == userId;
+    function isTenantStaff(tenantId) {
+      return isSignedIn() && getTenantId() == tenantId;
     }
 
-    // Rules for Users collection
+    // 🔐 NF525 : collections à écriture unique — JAMAIS update/delete,
+    // même pour un fleet_admin (l'immuabilité fiscale prime sur le rôle).
+    // Doit rester aligné avec SovereignGuard.IMMUTABLE_COLLECTIONS (barrière client).
+    function isImmutableCollection(c) {
+      return c in ['journalEntries', 'fiscalSeals', 'fiscalLedger',
+                   'fiscal_ledger', 'audit_logs', 'auditTrails', 'ticketZ', 'haccpLogs'];
+    }
+
+    // --- 🏛️ USERS & DEVICES CORE ---
     match /users/{userId} {
-      allow read: if isSignedIn();
-      allow create: if isAdmin();
-      allow update: if isAdmin() || isCurrentUser(userId);
-      allow delete: if isAdmin() && userId != 'user_root';
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isFleetAdmin();
+
+      match /certifiedDevices/{fingerprint} {
+        allow read: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId;
+        allow update, delete: if isFleetAdmin();
+      }
     }
 
-    // Rules for Inventory
-    match /inventory/{itemId} {
-      allow read: if isSignedIn();
-      allow create, update: if isManager();
-      allow delete: if isAdmin();
+    // --- 🏛️ TENANT ISOLATION CORE ---
+    // Toute donnée métier vit sous tenants/{tenantId}/... Le claim tenantId
+    // du JWT est la SEULE source de vérité d'appartenance.
+
+    match /tenants/{tenantId} {
+
+      // Configuration de l'instance (lecture staff, écriture manager/MCC)
+      match /tenantConfig/{docId} {
+        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow write: if isTenantManager(tenantId) || isFleetAdmin();
+      }
+
+      // Générique : couvre orders, tables, floors, zones, products, stockItems,
+      // accounts, haccp, candidates, users (sous-collection tenant), etc.
+      // Les collections immuables NF525 sont write-once : create autorisé,
+      // update/delete interdits pour TOUT LE MONDE.
+      match /{collection}/{document=**} {
+        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow create: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow update, delete: if !isImmutableCollection(collection) &&
+                                 (isTenantManager(tenantId) || isFleetAdmin());
+      }
     }
 
-    // Rules for Financial Data (Strict)
-    match /financials/{docId} {
-      allow read, write: if isAdmin();
+    // --- 🏛️ FLEET GLOBAL OVERLAY (MCC) ---
+
+    match /fleet/{document=**} {
+      allow read, write: if isFleetAdmin();
     }
 
-    // Rules for System Config
-    match /systemConfig/{documentId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin();
+    // 🛰️ Télémétrie montante : chaque instance écrit UNIQUEMENT son propre
+    // document de santé ; seul le MCC (fleet_admin) lit la flotte entière.
+    match /fleet-telemetry/{tenantId} {
+      allow read, delete: if isFleetAdmin();
+      allow create, update: if isFleetAdmin() || isTenantStaff(tenantId);
     }
 
-    // Rules for Audit Logs (Immutable)
-    match /audit_logs/{logId} {
-      allow create: if isSignedIn();
-      allow read: if isManager();
-      allow update, delete: if false; // No one can modify logs
-    }
-
-    // Default: Deny everything else (The "Safe" catch-all)
+    // --- 🛡️ EMERGENCY CATCH-ALL ---
     match /{document=**} {
       allow read, write: if false;
     }

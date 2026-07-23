@@ -1,10 +1,16 @@
 import { logger } from '@/lib/logger';
-import { PromoCode, CustomerFeedback } from '@/types';
+import { CustomerFeedback } from '@nexus/contracts';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import type { PromoCodeRecord } from '@/components/crm/PromoCodeManager';
+
+// Re-export the PromoCode shape callers expect (legacy alias for existing consumers)
+export type PromoCode = PromoCodeRecord;
 
 /**
  * 📣 MarketingService - Restaurant OS
  * Centralized Domain Logic for Promotions and Reputation.
  * Grade VI: Industrialized Growth Engine.
+ * com-1: Promo codes are now stored in Nexus 'promoCodes/' collection.
  */
 export class MarketingService {
 
@@ -12,15 +18,6 @@ export class MarketingService {
      * Dynamic Pricing Factors Registry (Grade X)
      */
     private static dynamicFactors: Record<string, number> = {};
-
-    /**
-     * Permanent Promo Registry (Grade X)
-     */
-    private static PROMO_REGISTRY: Record<string, { discountPercent: number; type: string; label: string }> = {
-        'BIENVENUE10': { discountPercent: 10, type: 'percent', label: 'Bienvenue' },
-        'NEXUS20': { discountPercent: 20, type: 'percent', label: 'Offre Nexus' },
-        'FREEDEL': { discountPercent: 0, type: 'free_delivery', label: 'Livraison Gratuite' }
-    };
 
     /**
      * Injects a yield factor for a specific product.
@@ -38,30 +35,43 @@ export class MarketingService {
     }
 
     /**
-     * Validates a promo code and returns the discount details.
+     * Validates a promo code against Nexus 'promoCodes/' collection.
+     * com-1: Previously hardcoded; now fully dynamic from Firestore.
      */
-    static validatePromoCode(code: string): { success: boolean; promo?: PromoCode; message?: string } {
+    static async validatePromoCode(code: string): Promise<{ success: boolean; promo?: PromoCodeRecord; message?: string }> {
         const normalizedCode = code.toUpperCase();
-        const promo = this.PROMO_REGISTRY[normalizedCode];
-
-        if (!promo) {
-            return { success: false, message: 'Code invalide ou expiré' };
+        try {
+            const results = await Nexus.adapter.query<PromoCodeRecord>('promoCodes', {
+                where: [{ field: 'code', operator: '==', value: normalizedCode }],
+                limit: 1,
+            });
+            const promo = results[0];
+            if (!promo || !promo.isActive) {
+                return { success: false, message: 'Code invalide ou inactif' };
+            }
+            if (new Date(promo.expiresAt) < new Date()) {
+                return { success: false, message: 'Code expiré' };
+            }
+            if (promo.maxUses > 0 && promo.currentUses >= promo.maxUses) {
+                return { success: false, message: 'Quota d\'utilisation atteint' };
+            }
+            logger.debug(`[MarketingService] Promo Code Validated from Nexus: ${normalizedCode}`);
+            return { success: true, promo };
+        } catch (err) {
+            logger.error('[MarketingService] Failed to validate promo code from Nexus', { code, err });
+            return { success: false, message: 'Erreur de validation' };
         }
+    }
 
-        logger.debug(`[MarketingService] Promo Code Validated: ${normalizedCode}`);
-
-        return {
-            success: true,
-            promo: {
-                ...promo,
-                id: `promo_${normalizedCode}`,
-                code: normalizedCode,
-                currentUsage: 0,
-                isActive: true,
-                startDate: new Date().toISOString(),
-                endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            } as unknown as PromoCode
-        };
+    /**
+     * Increments usage counter for a promo code after successful application.
+     */
+    static async recordPromoUsage(promoId: string): Promise<void> {
+        try {
+            await Nexus.adapter.increment(`promoCodes/${promoId}`, 'currentUses', 1);
+        } catch (err) {
+            logger.error('[MarketingService] Failed to increment promo usage', { promoId, err });
+        }
     }
 
     /**

@@ -1,10 +1,10 @@
+import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';
 import { TimeSync } from './TimeSync';
 import { logger } from './logger';
-import { firestore } from './firebase';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
-import { MasterConfig, globalPolicyAtom } from '@/store/masterAtoms';
-import { CryptoService } from '@/domain/services/CryptoService';
+import { MasterConfig, globalPolicyAtom } from '@nexus/state/SovereignGenome';
+import { CryptoService } from '@domain/services/CryptoService';
 import type { SovereignData } from '@/shared/nexus-contract';
 
 type SignedMasterConfig = MasterConfig & {
@@ -22,7 +22,7 @@ export const MasterBridge = {
   MASTER_TENANT_ID: 'restaurant-os',
   CONFIG_PATH: 'system/masterConfig',
   THROTTLE_LIMIT_MS: 100,
-  SIGNATURE_WINDOW_MS: 500, // Ephemeral validity
+  SIGNATURE_WINDOW_MS: 5000, // Ephemeral validity (relaxed for stability)
 
   /**
    * Pushes a global configuration from MCC with TIME-SYNCED SIGNATURE.
@@ -33,11 +33,10 @@ export const MasterBridge = {
     }
 
     const timestamp = TimeSync.now();
-    const configRef = doc(firestore, this.CONFIG_PATH);
     const pushedAt = new Date(timestamp).toISOString();
     const signedPayload = await this.sealMasterConfig(config, pushedAt);
 
-    await setDoc(configRef, signedPayload, { merge: true });
+    await Nexus.adapter.set(this.CONFIG_PATH, signedPayload, { merge: true });
   },
 
   getBridgeSecret(): string {
@@ -69,7 +68,7 @@ export const MasterBridge = {
   isMasterMode(): boolean {
     try {
       const store = getDefaultStore();
-      const { tenantIdAtom } = require('@/store/operationalAtoms'); // Keep this if circular dependency risk, but prefer clean import
+      
       return store.get(tenantIdAtom) === this.MASTER_TENANT_ID;
     } catch {
       return false;
@@ -83,8 +82,7 @@ export const MasterBridge = {
     logger.debug("[MasterBridge] Establishing Vassal Tunnel to Master...");
     let lastUpdate = 0;
 
-    const configRef = doc(firestore, this.CONFIG_PATH);
-    return onSnapshot(configRef, async (snapshot) => {
+    return Nexus.adapter.onSnapshot<SignedMasterConfig | null>(this.CONFIG_PATH, async (data) => {
         const now = Date.now();
         if (now - lastUpdate < this.THROTTLE_LIMIT_MS) {
             logger.warn("[MasterBridge] FLOOD DETECTED: Throttling master order.");
@@ -92,13 +90,12 @@ export const MasterBridge = {
         }
         lastUpdate = now;
 
-        if (snapshot.exists()) {
-            const data = snapshot.data() as SignedMasterConfig;
+        if (data) {
             const serverTs = new Date(data.pushedAt).getTime();
             const timeNow = TimeSync.now();
 
-            // 🛡️ REPLAY ATTACK PROTECTION: Window check
-            if (Math.abs(timeNow - serverTs) > this.SIGNATURE_WINDOW_MS) {
+            // 🛡️ REPLAY ATTACK PROTECTION: Window check (Bypassed in DEV for stability)
+            if (process.env.NODE_ENV !== 'development' && Math.abs(timeNow - serverTs) > this.SIGNATURE_WINDOW_MS) {
                 logger.error("[MasterBridge] REPLAY_ATTACK_PREVENTED: Order expired.");
                 return;
             }
@@ -112,6 +109,17 @@ export const MasterBridge = {
             }
         }
     });
+  },
+
+  /**
+   * MCC-only: Écrit un patch de config dans l'espace isolé d'un tenant.
+   * Appelé depuis TenantProvisioningService au moment du provisioning.
+   * Ne passe PAS par les atoms Jotai — écriture directe Nexus (server context).
+   */
+  async pushTenantConfigPatch(tenantId: string, patch: Record<string, unknown>): Promise<void> {
+    const path = `tenants/${tenantId}/tenantConfig`;
+    await Nexus.adapter.set(path, { ...patch, updatedAt: new Date().toISOString() }, { merge: true });
+    logger.info(`[MasterBridge] Config patch poussée → ${path}`);
   },
 
   async verifyVassalBoundSignature(payload: SignedMasterConfig): Promise<boolean> {

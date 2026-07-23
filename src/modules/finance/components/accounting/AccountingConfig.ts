@@ -105,11 +105,11 @@ export const ACCOUNTING_CATEGORIES: CategoryConfig[] = [
 ];
 
 export const CLASS_LABELS: Record<string, { name: string; color: string }> = {
-    '1': { name: 'Capitaux', color: 'bg-indigo-500' },
-    '2': { name: 'Immobilisations', color: 'bg-amber-500' },
-    '3': { name: 'Stocks', color: 'bg-emerald-500' },
-    '4': { name: 'Tiers', color: 'bg-rose-500' },
-    '5': { name: 'Financiers', color: 'bg-blue-500' },
-    '6': { name: 'Charges', color: 'bg-red-500' },
-    '7': { name: 'Produits', color: 'bg-green-500' },
+    '1': { name: 'Capitaux', color: 'bg-action-primary' },
+    '2': { name: 'Immobilisations', color: 'bg-status-warning' },
+    '3': { name: 'Stocks', color: 'bg-status-success' },
+    '4': { name: 'Tiers', color: 'bg-status-danger' },
+    '5': { name: 'Financiers', color: 'bg-action-primary' },
+    '6': { name: 'Charges', color: 'bg-[--color-status-error]' },
+    '7': { name: 'Produits', color: 'bg-[--color-status-success]' },
 };

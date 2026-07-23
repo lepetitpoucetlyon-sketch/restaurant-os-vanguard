@@ -1,0 +1,18 @@
+[
+  {
+    "title": "KI Fournisseurs Global",
+    "query": "Dresse la liste exhaustive de tous les fournisseurs identifiés et leurs alias."
+  },
+  {
+    "title": "KI Montants Cumulés",
+    "query": "Quel est le montant total facturé par chaque fournisseur ?"
+  },
+  {
+    "title": "KI Achats Métiers Viande",
+    "query": "Synthèse des quantités et dépenses pour la catégorie Viande (Poulet, Bœuf, etc)."
+  },
+  {
+    "title": "KI Anomalies OCR",
+    "query": "Liste toutes les factures contenant des données illisibles ou tronquées (#ERR, ***)."
+  }
+]

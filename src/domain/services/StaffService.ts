@@ -1,5 +1,5 @@
-import { Shift, LeaveRequest } from '@/types';
-import { ShiftProvision } from '@/types/domain.types';
+import { Shift, LeaveRequest } from '@nexus/contracts';
+import { ShiftProvision } from '@nexus/contracts/domain.types';
 import { logger } from '@/lib/logger';
 
 /**
@@ -63,7 +63,7 @@ export class StaffService {
                     hourlyRate: estimatedHourlyRate
                 }
             };
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error(`[StaffService] Failed to calculate provision for shift ${shift.id}`, { error });
             return null;
         }

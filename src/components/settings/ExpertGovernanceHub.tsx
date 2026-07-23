@@ -6,9 +6,7 @@ import { staggerContainer, fadeInUp } from "@/lib/motion";
 import { 
     Save, 
     ShieldCheck, 
-    Settings, 
     Activity, 
-    Search, 
     Database, 
     Utensils, 
     TrendingUp, 
@@ -20,10 +18,11 @@ import {
 } from "lucide-react";
 
 import { useSettings } from "@/context/SettingsContext";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
-import { SLMExpert } from "@/types";
-import { AgentDomain } from "@/domain/agency/types";
+import { SLMExpert } from "@nexus/contracts";
+import { AgentDomain } from "@domain/agency/types";
+import { AI_MODELS } from "@/lib/ai/types";
 
 const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; description: string }> = {
     inventory: { 
@@ -65,8 +64,8 @@ const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; de
 
 const ROLES = ['admin', 'manager', 'staff', 'commis'] as const;
 const MODELS = [
-    { id: 'gemini-1.5-flash', name: 'Standard (Vitesse)', description: 'Idéal pour les tâches rapides et audits simples.' },
-    { id: 'gemini-1.5-pro', name: 'Avancé (Raisonnement)', description: 'Puissance maximale pour analyses stratégiques complexes.' }
+    { id: AI_MODELS.fast, name: 'Standard (Vitesse)', description: 'Idéal pour les tâches rapides et audits simples.' },
+    { id: AI_MODELS.reasoning, name: 'Avancé (Raisonnement)', description: 'Puissance maximale pour analyses stratégiques complexes.' }
 ];
 
 export default function ExpertGovernanceHub() {
@@ -74,11 +73,11 @@ export default function ExpertGovernanceHub() {
     const { showToast } = useToast();
     const [isSaving, setIsSaving] = useState(false);
 
-    const experts = settings.slmConfig?.experts || [];
+    const experts = settings?.slmConfig?.experts || [];
 
     const handleUpdateExpert = (domain: AgentDomain, updates: Partial<SLMExpert>) => {
         const newExperts = experts.map(e => e.domain === domain ? { ...e, ...updates } : e);
-        updateSLM({ experts: newExperts } as any);
+        updateSLM?.({ experts: newExperts });
     };
 
     const handleSaveGlobal = async () => {
@@ -86,7 +85,7 @@ export default function ExpertGovernanceHub() {
         // REAL SYNC (Industrial Soudure)
         // Since we are using production local persistence, feedback is immediate.
         setIsSaving(false);
-        showToast("Gouvernance des experts synchronisée", "success");
+        showToast?.("Gouvernance des experts synchronisée", "success");
     };
 
     return (
@@ -101,7 +100,7 @@ export default function ExpertGovernanceHub() {
                 <div className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                 
                 <div className="flex items-center gap-6 relative z-10">
-                    <div className="w-20 h-20 rounded-3xl bg-black border border-white/10 flex items-center justify-center shadow-2xl">
+                    <div className="w-20 h-20 rounded-3xl bg-surface-sidebar border border-subtle flex items-center justify-center shadow-2xl">
                         <Scale className="w-10 h-10 text-accent-gold" />
                     </div>
                     <div>
@@ -174,7 +173,7 @@ export default function ExpertGovernanceHub() {
                                                 className={cn(
                                                     "px-4 h-9 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all border",
                                                     expert.minRole === role 
-                                                        ? "bg-black text-accent-gold border-accent-gold/30 shadow-lg" 
+                                                        ? "bg-surface-sidebar text-accent-gold border-accent-gold/30 shadow-lg" 
                                                         : "bg-bg-tertiary text-text-muted border-border opacity-60 hover:opacity-100"
                                                 )}
                                             >
@@ -227,9 +226,9 @@ export default function ExpertGovernanceHub() {
                         <h3 className="text-xl font-serif text-text-primary">État du Moteur de Diagnostic</h3>
                         <p className="text-xs text-text-muted mt-1 uppercase tracking-widest font-bold">Synchronisation Infrastructure Cloud</p>
                     </div>
-                    <div className="flex items-center gap-3 px-6 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Connectivité Active (Google AI)</span>
+                    <div className="flex items-center gap-3 px-6 py-2 bg-status-success/10 border border-emerald-500/20 rounded-full">
+                        <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                        <span className="text-[10px] font-black text-status-success uppercase tracking-widest">Connectivité Active (Google AI)</span>
                     </div>
                 </div>
 
@@ -237,7 +236,7 @@ export default function ExpertGovernanceHub() {
                     <button
                         onClick={handleSaveGlobal}
                         disabled={isSaving}
-                        className="flex items-center gap-4 px-10 py-5 bg-black text-accent-gold rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all"
+                        className="flex items-center gap-4 px-10 py-5 bg-surface-sidebar text-accent-gold rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all"
                     >
                         {isSaving ? (
                             <Activity className="w-4 h-4 animate-spin" />

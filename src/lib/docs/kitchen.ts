@@ -1,5 +1,5 @@
 import { ChefHat } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const kitchen: DocCategory = {
     title: 'Fiche Technique & Standardisation',

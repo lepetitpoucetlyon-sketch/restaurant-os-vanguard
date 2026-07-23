@@ -18,17 +18,17 @@ export class NexusStaffingOracle {
         // 1. Fetch Dynamic Configuration
         let ratio = DEFAULT_STAFF_RATIO;
         try {
-            const settings = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as any;
-            if (settings?.hr?.planning?.staffToCoversRatio) {
-                ratio = settings.hr.planning.staffToCoversRatio;
+            const settings = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@nexus/contracts').GlobalSettings;
+            if (settings?.planningConfig?.staffToCoversRatio) {
+                ratio = settings.planningConfig.staffToCoversRatio;
                 logger.info(`[StaffingOracle] Using Custom Ratio: 1 brigadier / ${ratio} covers`);
             }
-        } catch (e) {
+        } catch (_e) {
             logger.warn(`[StaffingOracle] Failed to fetch settings, falling back to Grade X default (${ratio})`);
         }
 
         // 2. Get Predicted Velocity from Oracle
-        const prediction = await SimulationService.simulateDay(new Date(date), 'EMPIRE', 'PIZZERIA_RUSH', {
+        const prediction = await SimulationService.simulateDay(date, 'EMPIRE', 'PIZZERIA_RUSH', {
             ingredients: [],
             stockItems: []
         });

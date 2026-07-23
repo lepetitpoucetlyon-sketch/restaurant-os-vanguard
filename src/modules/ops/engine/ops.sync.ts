@@ -1,0 +1,152 @@
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateNexusNode } from "@/store/nexusNodeFactory";
+import { Order, Table, Reservation, GroupEvent } from '@nexus/contracts';
+import { 
+    ordersNodeAtom, 
+    tablesNodeAtom,
+    zonesAtom,
+    floorsAtom
+} from '@/store/pillars/ops';
+import { 
+    reservationsNodeAtom, 
+    groupsNodeAtom
+} from '@/store/pillars/commerce';
+
+import { logger } from '@/lib/logger';
+import { db } from "@/lib/offline/offline-store";
+import { getDefaultStore } from 'jotai';
+import { Zone, Floor } from '@nexus/contracts';
+
+type JotaiStore = ReturnType<typeof getDefaultStore>;
+
+/**
+ * 🍱 Ops Sovereign Sync Service
+ * Handles real-time synchronization for Tables, Orders, and Reservations.
+ * Critical path for floor and kitchen operations.
+ */
+export const OpsSyncService = {
+  private_listeners: {} as Record<string, () => void>,
+
+  async init(tenantId: string, store: JotaiStore) {
+    const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
+    
+    // Hydrate for zero-latency start in POS/KDS
+    await this.hydrate(store);
+
+    // 1. ORDERS SYNC
+    this.private_listeners.orders = Nexus.adapter.onSnapshot(
+      path('orders'),
+      async (data: Order[]) => {
+        await db.orders.bulkPut(data);
+        store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
+      },
+      {
+        orderBy: { field: 'updatedAt', direction: 'desc' },
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Orders Sync Failed', error);
+        }
+      }
+    );
+
+    // 2. TABLES SYNC
+    this.private_listeners.tables = Nexus.adapter.onSnapshot(
+      path('tables'),
+      (data: Table[]) => {
+        store.set(tablesNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Tables Sync Failed', error);
+        }
+      }
+    );
+
+    // 3. RESERVATIONS SYNC
+    this.private_listeners.reservations = Nexus.adapter.onSnapshot(
+      path('reservations'),
+      (data: Reservation[]) => {
+        store.set(reservationsNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Reservations Sync Failed', error);
+        }
+      }
+    );
+
+    // 4. GROUPS SYNC
+    this.private_listeners.groups = Nexus.adapter.onSnapshot(
+      path('groups'),
+      (data: GroupEvent[]) => {
+        store.set(groupsNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Groups Sync Failed', error);
+        }
+      }
+    );
+
+    // 5. ZONES SYNC (Empire Forge)
+    this.private_listeners.zones = Nexus.adapter.onSnapshot(
+      path('zones'),
+      (data: Zone[]) => {
+        store.set(zonesAtom, data || []);
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Zones Sync Failed', error);
+        }
+      }
+    );
+
+    // 6. FLOORS SYNC
+    this.private_listeners.floors = Nexus.adapter.onSnapshot(
+      path('floors'),
+      (data: Floor[]) => {
+        store.set(floorsAtom, data || []);
+      },
+      {
+        onError: (error: Error) => {
+          logger.error('[OpsSync] Floors Sync Failed', error);
+        }
+      }
+    );
+  },
+
+  async hydrate(store: JotaiStore) {
+    try {
+      const orders = await db.orders.toArray();
+      if (orders.length > 0) {
+        store.set(ordersNodeAtom, (prev) => updateNexusNode(prev, {
+          data: orders,
+          loading: false,
+          error: null
+        }));
+      }
+    } catch (error) {
+      logger.error('[OpsSync] Local Hydration Failed', error);
+    }
+  },
+
+  stop() {
+    Object.values(this.private_listeners).forEach((unsub: unknown) => { if (typeof unsub === "function") unsub(); });
+    this.private_listeners = {};
+  }
+};

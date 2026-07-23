@@ -2,20 +2,26 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAtom } from 'jotai';
-import { performanceModeAtom } from '@/store/operationalAtoms';
-import { useToast } from '@/components/ui/Toast';
+import { performanceModeAtom } from '@/store/pillars/sovereign';
+import { useToast } from '@ui/Toast';
 import { logger } from '@/lib/logger';
 
 /**
  * ⚡ PerformanceEngine - Lumière de Brigade
  * Orchestre l'optimisation adaptative de l'UI en fonction du matériel.
  */
-export function PerformanceEngine() {
-    const [performanceMode, setPerformanceMode] = useAtom(performanceModeAtom);
+export function PerformanceEngine(): null {
+    const [performanceMode, _setPerformanceMode] = useAtom(performanceModeAtom);
     const { showToast } = useToast();
     const frameCount = useRef(0);
-    const lastTime = useRef(performance.now());
-    const [fps, setFps] = useState(60);
+    const lastTime = useRef<number | null>(null);
+    const [_fps, setFps] = useState(60);
+
+    useEffect(() => {
+        if (lastTime.current === null) {
+            lastTime.current = performance.now();
+        }
+    }, []);
     const lowFpsCounter = useRef(0);
     const hasSuggestedMode = useRef(false);
 
@@ -40,7 +46,7 @@ export function PerformanceEngine() {
             const now = performance.now();
             frameCount.current++;
 
-            if (now >= lastTime.current + 1000) {
+            if (lastTime.current !== null && now >= lastTime.current + 1000) {
                 const currentFps = Math.round((frameCount.current * 1000) / (now - lastTime.current));
                 setFps(currentFps);
                 
@@ -55,6 +61,8 @@ export function PerformanceEngine() {
                 }
 
                 frameCount.current = 0;
+                lastTime.current = now;
+            } else if (lastTime.current === null) {
                 lastTime.current = now;
             }
 

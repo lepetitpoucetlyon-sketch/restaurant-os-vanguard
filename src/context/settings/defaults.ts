@@ -14,7 +14,6 @@ import {
     SessionSettings,
     ThemeSettings,
     PerformanceGoals,
-    SLMConfig,
     StaffConfig,
     PlanningConfig,
     RecipesConfig,
@@ -22,8 +21,11 @@ import {
     HACCPConfig,
     SecurityConfig,
     NotificationsConfig,
-    IntegrationsConfig
-} from '@/types';
+    IntegrationsConfig,
+    InventoryConfig,
+    LegalConfig,
+    CustomerConfig
+} from '@nexus/contracts';
 
 export const defaultIdentity: RestaurantIdentity = {
     ...whiteLabelInstanceConfig.identityDefaults,
@@ -77,6 +79,24 @@ export const defaultReservationConfig: ReservationSettings = {
     cancellationMessage: 'Votre réservation a été annulée.',
     cancellationPolicy: 'Annulation gratuite 24h avant.',
     terms: '',
+    cardImprintEnabled: false,
+    cardImprintCondition: 'group',
+    cardImprintGroupMin: 5,
+    cardImprintAmountMin: 100,
+    cardImprintPenaltyAmount: 20,
+    cardImprintCancelHours: 24,
+    mgrNotifNewReservation: true,
+    mgrNotifCancellation: true,
+    mgrNotifNoShow: true,
+    mgrNotifModification: false,
+    mgrNotifChannels: ['email'],
+    mgrNotifEmail: '',
+    mgrNotifPhone: '',
+    clientNotifConfirmation: true,
+    clientNotifReminder: true,
+    clientReminderHours: 24,
+    clientNotifCancellation: true,
+    clientNotifChannels: ['email'],
 };
 
 export const defaultPOS: POSSettings = {
@@ -265,7 +285,28 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
     ],
 };
 
-import { NexusAIConfig } from '@/types/settings/nexus';
+import { NexusAIConfig } from '@nexus/contracts/settings/nexus';
+import { AI_MODELS } from '@/lib/ai/types';
+
+export const defaultInventory: InventoryConfig = {
+    lowStockThreshold: 1000,
+    autoReorder: false,
+    locations: [
+        { id: 'loc-1', name: 'Cuisine', type: 'dry' },
+        { id: 'loc-2', name: 'Chambre Froide', type: 'cold' }
+    ]
+};
+
+export const defaultCustomer: CustomerConfig = {
+    loyaltyEnabled: false,
+    pointsPerEuro: 1
+};
+
+export const defaultLegal: LegalConfig = {
+    legalEntityName: '',
+    siret: '',
+    registrationCity: ''
+};
 
 export const defaultNexusConfig: NexusAIConfig = {
     aiName: 'NEXUS',
@@ -298,6 +339,7 @@ export const defaultSettings: GlobalSettings = {
 
     ingredients: [],
     suppliers: [],
+    inventory: defaultInventory,
 
     employees: [],
     positions: [],
@@ -311,6 +353,7 @@ export const defaultSettings: GlobalSettings = {
 
     clients: [],
     loyaltyPrograms: [],
+    customer: defaultCustomer,
 
     posSettings: defaultPOS,
     pos: defaultPOS,
@@ -346,6 +389,8 @@ export const defaultSettings: GlobalSettings = {
     integrations: [],
     integrationsConfig: defaultIntegrationsConfig,
 
+    legal: defaultLegal,
+
     legalEntityName: '',
     legalForm: '',
     siret: '',
@@ -359,14 +404,14 @@ export const defaultSettings: GlobalSettings = {
         enabled: false,
         endpoint: '',
         apiKey: '',
-        modelId: 'gemini-1.5-flash',
+        modelId: AI_MODELS.fast,
         fallbackThreshold: 0.5,
         fallbackTriggerWord: 'FORCE_GEMINI_FALLBACK',
         experts: [
-            { id: 'exp-inv', domain: 'inventory', name: 'Expert Inventaire', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' },
-            { id: 'exp-haccp', domain: 'haccp', name: 'Expert Hygiène', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' },
-            { id: 'exp-recipes', domain: 'recipes', name: 'Expert Recettes', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' },
-            { id: 'exp-sales', domain: 'sales', name: 'Expert Croissance', enabled: true, minRole: 'admin', modelId: 'gemini-1.5-flash' }
+            { id: 'exp-inv', domain: 'inventory', name: 'Expert Inventaire', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast },
+            { id: 'exp-haccp', domain: 'haccp', name: 'Expert Hygiène', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast },
+            { id: 'exp-recipes', domain: 'recipes', name: 'Expert Recettes', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast },
+            { id: 'exp-sales', domain: 'sales', name: 'Expert Croissance', enabled: true, minRole: 'admin', modelId: AI_MODELS.fast }
         ],
     },
     nexusConfig: defaultNexusConfig,

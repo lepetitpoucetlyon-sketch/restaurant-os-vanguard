@@ -1,11 +1,10 @@
-
 "use client";
 
 import { useMemo } from "react";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-import { useAccounting } from "@/context/AccountingContext";
+import { useAccounting } from "@modules/finance";
 
 export function BalanceSheetView() {
     const { generateBalanceSheet, metrics } = useAccounting();

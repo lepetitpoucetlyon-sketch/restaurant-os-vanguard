@@ -22,10 +22,10 @@ self.onmessage = (e: MessageEvent) => {
 };
 
 function runSimulation(config: SimulationConfig) {
-    const { arrivalRate, staffCount, chaosProbability, timeMultiplier } = config;
+    const { arrivalRate, staffCount: _staffCount, chaosProbability, timeMultiplier } = config;
     
-    let isRunning = true;
-    let metrics = {
+    const isRunning = true;
+    const metrics = {
         totalTransactions: 0,
         totalRevenueCents: 0,
         errorCount: 0,

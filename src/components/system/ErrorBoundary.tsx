@@ -2,7 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/button";
 
 interface Props {
     children: ReactNode;
@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
                         </div>
                         <Button
                             onClick={() => window.location.reload()}
-                            className="w-full bg-accent hover:bg-black text-white h-12 rounded-xl font-black text-[11px] uppercase tracking-[0.2em]"
+                            className="w-full bg-accent hover:bg-surface-sidebar text-white h-12 rounded-xl font-black text-[11px] uppercase tracking-[0.2em]"
                         >
                             <RefreshCcw className="w-4 h-4 mr-3" />
                             Recharger l'application

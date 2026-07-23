@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
-import { posCartTotalSelector } from "@/modules/ops/store/posAtoms";
-import { qualityGlobalMetricsSelector } from "@/modules/haccp/store/qualityAtoms";
+import { posCartTotalSelector } from "@modules/ops";
+import { qualityGlobalMetricsSelector } from "@modules/compliance";
 
 /**
  * 👻 GHOST FINANCE SELECTORS - Grade VI

@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { ChevronRight, ChevronLeft, X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { useAtomValue } from 'jotai';
-import { tenantConfigAtom } from "@/store/fleetAtoms";
+import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 
 interface SidebarBrandingProps {
     isSidebarCollapsed: boolean;
@@ -37,7 +38,9 @@ export function SidebarBranding({
 }: SidebarBrandingProps) {
     const { t } = useLanguage();
     const config = useAtomValue(tenantConfigAtom);
-    const hasDynamicLogo = !!config?.theme?.logoUrl;
+    // Track load failure so a 404 doesn't cause the browser to retry on every re-render.
+    const [logoFailed, setLogoFailed] = useState(false);
+    const hasDynamicLogo = !!config?.theme?.logoUrl && !logoFailed;
 
     return (
         <div className={cn(
@@ -91,24 +94,25 @@ export function SidebarBranding({
                                     ? "bg-transparent border-transparent" 
                                     : "bg-text-primary dark:bg-accent-gold/10 text-accent-gold border-accent-gold/20 shadow-premium"
                             )}
-                            style={!hasDynamicLogo && config.theme.primaryColor ? { 
+                            style={!hasDynamicLogo && config?.theme?.primaryColor ? { 
                                 color: config.theme.primaryColor,
                                 borderColor: `${config.theme.primaryColor}33`,
                                 backgroundColor: `${config.theme.primaryColor}1a`
                             } : undefined}
                         >
-                            {hasDynamicLogo ? (
-                                <img 
-                                    src={config.theme.logoUrl} 
-                                    alt="Logo" 
+                            {hasDynamicLogo && config?.theme?.logoUrl ? (
+                                <img
+                                    src={config.theme.logoUrl}
+                                    alt="Logo"
                                     className="w-full h-full object-cover"
+                                    onError={() => setLogoFailed(true)}
                                 />
                             ) : (
                                 <>
                                     <ChevronLeft strokeWidth={2} className="w-5 h-5" />
                                     <div 
                                         className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent-gold border-2 border-bg-secondary shadow-glow transition-colors duration-500" 
-                                        style={config.theme.primaryColor ? { backgroundColor: config.theme.primaryColor } : undefined}
+                                        style={config?.theme?.primaryColor ? { backgroundColor: config.theme.primaryColor } : undefined}
                                     />
                                 </>
                             )}
@@ -120,9 +124,9 @@ export function SidebarBranding({
                             className="overflow-hidden flex-1 min-w-0"
                         >
                             <h1 className="font-serif font-black text-lg text-text-primary tracking-tight leading-none italic">
-                                {t('sidebar.resto')} <span className="text-accent-gold not-italic transition-colors duration-500" style={config.theme.primaryColor ? { color: config.theme.primaryColor } : undefined}>{t('sidebar.os')}</span>
+                                {t('sidebar.resto')} <span className="text-accent-gold not-italic transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>{t('sidebar.os')}</span>
                             </h1>
-                            <p className="text-[7px] uppercase tracking-[0.4em] text-accent-gold font-black mt-1.5 whitespace-nowrap overflow-hidden text-ellipsis leading-none opacity-60 transition-colors duration-500" style={config.theme.primaryColor ? { color: config.theme.primaryColor } : undefined}>
+                            <p className="text-[7px] uppercase tracking-[0.4em] text-accent-gold font-black mt-1.5 whitespace-nowrap overflow-hidden text-ellipsis leading-none opacity-60 transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>
                                 {t('nav.executive_intelligence')}
                             </p>
                         </motion.div>

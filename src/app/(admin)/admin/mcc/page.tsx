@@ -1,44 +1,50 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, 
   Rocket, 
   LayoutGrid, 
-  Settings, 
   Activity, 
-  Plus, 
-  Search,
-  Bell,
+  Plus,
   Lock,
-  ChevronRight,
   TrendingUp,
   RefreshCw,
   Zap,
   Cpu,
-  Award,
-  Thermometer,
   Wallet,
   BrainCircuit
 } from 'lucide-react';
-import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
-import { EmpireInstance } from '@/domain/types/empire';
+import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
 
 
-// MCC Components
-import MCCAuditStream from '@/components/admin/mcc/MCCAuditStream';
-import { MCCInsights } from '@/components/admin/mcc/MCCInsights';
-import CertificationCenter from '@/components/admin/mcc/CertificationCenter';
-import FiscalChainExplorer from '@/components/admin/mcc/FiscalChainExplorer';
-import DeploymentEngine from '@/components/admin/mcc/DeploymentEngine';
-import MCCTreasury from '@/components/admin/mcc/MCCTreasury';
-import StrategyOracle from '@/components/admin/mcc/StrategyOracle';
-import { FleetCommandTable } from '@/components/admin/mcc/FleetCommandTable';
+import dynamic from 'next/dynamic';
+import { MCCWidgetSkeleton } from '@nexus/guards/admin/mcc/MCCWidgetSkeleton';
+
+// 🚀 DYNAMIC MCC WIDGETS (LIGHTSPEED-TURBINE - Direct Sharding)
+const MCCAuditStream = dynamic(() => import('@nexus/guards/admin/mcc/MCCAuditStream').then(mod => mod.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });
+const MCCInsights = dynamic(() => import('@nexus/guards/admin/mcc/MCCInsights').then(mod => mod.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });
+const CertificationCenter = dynamic(() => import('@nexus/guards/admin/mcc/CertificationCenter').then(mod => mod.CertificationCenter), { loading: () => <MCCWidgetSkeleton /> });
+const FiscalChainExplorer = dynamic(() => import('@nexus/guards/admin/mcc/FiscalChainExplorer').then(mod => mod.FiscalChainExplorer), { loading: () => <MCCWidgetSkeleton /> });
+const DeploymentEngine = dynamic(() => import('@nexus/guards/admin/mcc/DeploymentEngine').then(mod => mod.DeploymentEngine), { loading: () => <MCCWidgetSkeleton /> });
+const MCCTreasury = dynamic(() => import('@nexus/guards/admin/mcc/MCCTreasury').then(mod => mod.MCCTreasury), { loading: () => <MCCWidgetSkeleton /> });
+const StrategyOracle = dynamic(() => import('@nexus/guards/admin/mcc/StrategyOracle').then(mod => mod.StrategyOracle), { loading: () => <MCCWidgetSkeleton /> });
+const FleetCommandTable = dynamic(() => import('@nexus/guards/admin/mcc/FleetCommandTable').then(mod => mod.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
+const PerformanceMonitor = dynamic(() => import('@nexus/guards/admin/mcc/PerformanceMonitor').then(mod => mod.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
+const AIWorkshop = dynamic(() => import('@nexus/guards/admin/mcc/AIWorkshop').then(mod => mod.AIWorkshop), { loading: () => <MCCWidgetSkeleton /> });
+const DeviceManager = dynamic(() => import('@nexus/guards/admin/mcc/DeviceManager').then(mod => mod.DeviceManager), { loading: () => <MCCWidgetSkeleton /> });
+const TaxAuditPanel = dynamic(() => import('@nexus/guards/admin/mcc/TaxAuditPanel').then(mod => mod.TaxAuditPanel), { loading: () => <MCCWidgetSkeleton /> });
+const TrustedDevicePanel = dynamic(() => import('@nexus/guards/admin/mcc/TrustedDevicePanel').then(mod => mod.TrustedDevicePanel), { loading: () => <MCCWidgetSkeleton /> });
+
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
-import { PerformanceMonitor } from '@/components/admin/mcc/PerformanceMonitor';
+import { MFAGate } from '@/components/mcc/MFAGate';
 import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
+import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
+import { useAuth } from '@/engines/core/NexusCoreProvider';
+import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
+import { TenantUsersPanel } from '@nexus/guards/admin/mcc/TenantUsersPanel';
 
 /**
  * 👑 Master Command Control (MCC) Dashboard
@@ -52,80 +58,123 @@ export default function MCCDashboard() {
     refreshFleet 
   } = useNexusFleet();
 
+  const { state: switchboard, toggleModule } = useSovereignSwitchboard();
+  const { currentUser } = useAuth();
+
+  const [health, setHealth] = useState<MCCHealthStatus | null>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/mcc/health')
+      .then(r => r.ok ? r.json() as Promise<MCCHealthStatus> : null)
+      .then(data => { if (data) setHealth(data); })
+      .catch(() => {});
+  }, []);
+
+  const userInitials = currentUser?.name
+    ? currentUser.name.split(' ').map((p: string) => p[0]).join('').toUpperCase().slice(0, 2)
+    : 'MCC';
+
   const [showCloneModal, setShowCloneModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury'>('fleet');
   const [newCloneName, setNewCloneName] = useState('');
   const [newCloneKey, setNewCloneKey] = useState('');
+  const [newCloneEmail, setNewCloneEmail] = useState('');
+  const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
   const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
+  const [provisionStep, setProvisionStep] = useState(0); // mcc-prov-7
 
-  // Filter & Search
-  const [searchQuery, setSearchQuery] = useState('');
+  // mcc-prov-7 — étapes réelles du provisioning
+  const PROV_STEPS = [
+    'Vérification DNS & slug…',
+    'Provisionnement Registry…',
+    'Seeding Config & Templates…',
+    'Activation RAG Sovereign…',
+  ];
 
   const handleCreateClone = async () => {
-    if (!newCloneName || !newCloneKey) return;
-    
-    setProvisioningStatus('Initializing Cloud Resources...');
+    if (!newCloneName || !newCloneKey || !newCloneEmail) return;
+
+    setProvisionStep(0);
+    setProvisioningStatus(PROV_STEPS[0]);
+
+    const stepTimer = (step: number) => setTimeout(() => {
+      if (step < PROV_STEPS.length) {
+        setProvisionStep(step);
+        setProvisioningStatus(PROV_STEPS[step]);
+      }
+    }, step * 900);
+
+    const timers = PROV_STEPS.map((_, i) => stepTimer(i));
+
     try {
-      const newInst = await ProvisioningEngine.provisionNewInstance({
+      const _newInst = await ProvisioningEngine.provisionNewInstance({
         name: newCloneName,
         key: newCloneKey,
-        ownerEmail: 'admin@empire.com',
+        ownerEmail: newCloneEmail,
         initialPrimaryColor: '#6366f1',
-        tier: 'STANDARD',
+        tier: newCloneTier,
         copyBaseTemplates: true
       });
 
-      // Simulation injection
+      timers.forEach(clearTimeout);
       refreshFleet();
-      
-      // Success! - zero delay mandate
+
       setProvisioningStatus('Success! Clone Active.');
       setShowCloneModal(false);
       setProvisioningStatus(null);
+      setProvisionStep(0);
       setNewCloneName('');
       setNewCloneKey('');
-    } catch (err) {
+      setNewCloneEmail('');
+      setNewCloneTier('STANDARD');
+    } catch (_err) {
+      timers.forEach(clearTimeout);
       setProvisioningStatus('Critical Error in Provisioning.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white p-8 font-sans selection:bg-indigo-500/30">
+    <MFAGate>
+    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-action-primary/30 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-action-primary/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="relative z-10 p-8">
       <VoiceAssistantOverlay />
       
       {/* Header MCC */}
       <header className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <div className="w-12 h-12 bg-gradient-to-tr from-action-primary to-action-primary rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <Rocket className="text-white w-7 h-7" />
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight uppercase">Master Console</h1>
-            <p className="text-gray-500 text-sm font-medium">Empire Orchestrator • v4.0.0-NEXUS</p>
+            <p className="text-secondary text-sm font-medium">Empire Orchestrator • v4.0.0-NEXUS</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
           <AmbientAudio />
           
-          <button 
+          <button
             onClick={() => refreshFleet()}
             disabled={isLoading}
-            className={`flex items-center gap-2 bg-[#161618] border border-white/5 px-4 py-2.5 rounded-xl hover:bg-[#1c1c1f] transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}
+            className={`flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}
           >
-            <RefreshCw className={`w-4 h-4 text-indigo-400 ${isLoading ? 'animate-spin' : ''}`} />
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Global Sync</span>
+            <RefreshCw className={`w-4 h-4 text-brand ${isLoading ? 'animate-spin' : ''}`} />
+            <span className="text-xs font-bold uppercase tracking-widest text-muted">Global Sync</span>
           </button>
           
-          <div className="flex items-center gap-2 bg-[#161618] border border-white/5 px-4 py-2.5 rounded-xl">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Axiom Bridge Connected</span>
+          <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl">
+            <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
+            <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Axiom Bridge Connected</span>
           </div>
           
-          <div className="w-px h-10 bg-white/5 mx-2" />
+          <div className="w-px h-10 bg-surface-card/5 mx-2" />
           
-          <div className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400">
-            AD
+          <div className="w-10 h-10 rounded-full bg-action-primary/20 border border-focus/30 flex items-center justify-center font-bold text-brand">
+            {userInitials}
           </div>
         </div>
       </header>
@@ -176,35 +225,35 @@ export default function MCCDashboard() {
                   <StatCard 
                     label="Total Instances" 
                     value={instances.length.toString()} 
-                    icon={<LayoutGrid className="text-indigo-400" />} 
+                    icon={<LayoutGrid className="text-brand" />} 
                     trend="Fleet capacity at 100%"
                   />
                   <StatCard 
                     label="Global Revenue" 
                     value={`€${((globalMetrics?.fleetTotalRevenue || 0) / 100).toLocaleString()}`} 
-                    icon={<TrendingUp className="text-emerald-400" />} 
+                    icon={<TrendingUp className="text-status-success" />} 
                     trend="Calculated in real-time"
                   />
                   <StatCard 
                     label="Fleet Health" 
                     value={`${Math.round(globalMetrics?.averageHealthScore || 100)}%`} 
-                    icon={<Activity className="text-blue-400" />} 
+                    icon={<Activity className="text-brand" />} 
                     trend="Weighted average"
                   />
                   <StatCard 
                     label="Global Compliance" 
                     value={`${globalMetrics?.averageComplianceScore?.toFixed(1) || '100'}%`} 
-                    icon={<ShieldCheck className="text-indigo-400" />} 
+                    icon={<ShieldCheck className="text-brand" />} 
                     trend="NF525 Integrity Level"
                   />
 
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <h3 className="text-sm font-black uppercase tracking-[0.3em] text-gray-500">Fleet Tactical Overview</h3>
+                  <h3 className="text-sm font-black uppercase tracking-[0.3em] text-secondary">Fleet Tactical Overview</h3>
                    <button 
                     onClick={() => setShowCloneModal(true)}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95 whitespace-nowrap uppercase tracking-widest text-[10px]"
+                    className="bg-action-primary hover:bg-action-primary text-white font-bold py-3 px-6 rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95 whitespace-nowrap uppercase tracking-widest text-[10px]"
                   >
                     <Plus className="w-4 h-4" />
                     New Clone
@@ -212,34 +261,50 @@ export default function MCCDashboard() {
                 </div>
 
                 <FleetCommandTable />
+
+                {/* mcc-users-2 — Utilisateurs du tenant sélectionné */}
+                {instances.length > 0 && (
+                  <TenantUsersPanel instance={instances[0]} />
+                )}
               </motion.div>
             )}
 
             {activeTab === 'compliance' && (
-              <motion.div 
-                key="compliance" 
-                initial={{ opacity: 0, x: -20 }} 
-                animate={{ opacity: 1, x: 0 }} 
+              <motion.div
+                key="compliance"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="grid grid-cols-12 gap-8"
+                className="space-y-8"
               >
-                <div className="col-span-12 xl:col-span-8">
-                  <CertificationCenter />
+                <div className="grid grid-cols-12 gap-8">
+                  <div className="col-span-12 xl:col-span-8">
+                    <CertificationCenter />
+                  </div>
+                  <div className="col-span-12 xl:col-span-4">
+                    <FiscalChainExplorer />
+                  </div>
                 </div>
-                <div className="col-span-12 xl:col-span-4">
-                  <FiscalChainExplorer />
-                </div>
+                {/* p0-1/fin-1 — Audit fiscal par tenant (contrôle fiscal administration) */}
+                <TaxAuditPanel />
+                {/* mcc-security-adv-1+2 — Registre des appareils de confiance ZTNA Layer 2 */}
+                <TrustedDevicePanel />
               </motion.div>
             )}
 
             {activeTab === 'intelligence' && (
-              <motion.div 
-                key="intelligence" 
-                initial={{ opacity: 0, x: -20 }} 
-                animate={{ opacity: 1, x: 0 }} 
+              <motion.div
+                key="intelligence"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
+                className="space-y-8"
               >
                 <StrategyOracle />
+                {/* mcc-ai-2 — AIWorkshop câblé sur mcc/aiPatches */}
+                <AIWorkshop />
+                {/* mcc-users-6 — DeviceManager intégré (UID d'un opérateur MCC) */}
+                <DeviceManagerPanel />
               </motion.div>
             )}
 
@@ -264,17 +329,62 @@ export default function MCCDashboard() {
               <MCCInsights />
               <MCCAuditStream />
               
-              {/* System Status Panel */}
-              <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl">
+              {/* System Status Panel & Sovereign Switchboard */}
+              <div className="p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl mb-8">
                   <div className="flex items-center gap-3 mb-6">
-                      <Cpu className="w-5 h-5 text-indigo-400 mt-0.5" />
-                      <h3 className="text-sm font-bold uppercase tracking-widest text-gray-300">MCC Core Status</h3>
+                      <Cpu className="w-5 h-5 text-brand mt-0.5" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">MCC Core Status</h3>
                   </div>
                   <div className="space-y-4">
-                      <StatusItem label="Provisioning Engine" status="Ready" color="bg-green-500" />
-                      <StatusItem label="Axiom Log Ingest" status="Streaming" color="bg-green-500" />
-                      <StatusItem label="NF525 Seal Engine" status="Secured" color="bg-indigo-500" />
-                      <StatusItem label="Fleet Intelligence" status="Aggregating" color="bg-violet-500" />
+                      <StatusItem
+                        label="Provisioning Engine"
+                        status={health ? (health.provisioningEngine === 'ready' ? 'Ready' : health.provisioningEngine === 'degraded' ? 'Dégradé' : 'Offline') : '…'}
+                        color={health ? (health.provisioningEngine === 'ready' ? 'bg-status-success' : health.provisioningEngine === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                      <StatusItem
+                        label="Axiom Log Ingest"
+                        status={health ? (health.axiomLogIngest === 'streaming' ? 'Streaming' : health.axiomLogIngest === 'degraded' ? 'Dégradé' : 'Offline') : '…'}
+                        color={health ? (health.axiomLogIngest === 'streaming' ? 'bg-status-success' : health.axiomLogIngest === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                      <StatusItem
+                        label="NF525 Seal Engine"
+                        status={health ? (health.nf525SealEngine === 'secured' ? 'Secured' : health.nf525SealEngine === 'degraded' ? 'Dégradé' : 'Offline ⚠') : '…'}
+                        color={health ? (health.nf525SealEngine === 'secured' ? 'bg-action-primary' : health.nf525SealEngine === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                      <StatusItem
+                        label="Fleet Intelligence"
+                        status={health ? (health.fleetIntelligence === 'aggregating' ? 'Aggregating' : health.fleetIntelligence === 'degraded' ? 'Dégradé' : 'Offline') : '…'}
+                        color={health ? (health.fleetIntelligence === 'aggregating' ? 'bg-action-primary' : health.fleetIntelligence === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'}
+                      />
+                  </div>
+              </div>
+
+              <div className="p-6 bg-white/5 backdrop-blur-md border border-focus/20 rounded-2xl">
+                  <div className="flex items-center gap-3 mb-6">
+                      <Zap className="w-5 h-5 text-brand mt-0.5" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-brand">Sovereign Switchboard</h3>
+                  </div>
+                  <div className="space-y-4">
+                      <SwitchboardItem 
+                          label="Telemetry & Sentinel" 
+                          active={switchboard.telemetryActive} 
+                          onToggle={() => toggleModule('telemetryActive', 'Manual MCC override')} 
+                      />
+                      <SwitchboardItem 
+                          label="SAM Automations" 
+                          active={switchboard.samActive} 
+                          onToggle={() => toggleModule('samActive', 'Manual MCC override')} 
+                      />
+                      <SwitchboardItem 
+                          label="Nexus Sync Engine" 
+                          active={switchboard.nexusSyncActive} 
+                          onToggle={() => toggleModule('nexusSyncActive', 'Manual MCC override')} 
+                      />
+                      <SwitchboardItem 
+                          label="Client Interface" 
+                          active={switchboard.clientInterfaceActive} 
+                          onToggle={() => toggleModule('clientInterfaceActive', 'Manual MCC override')} 
+                      />
                   </div>
               </div>
           </div>
@@ -290,31 +400,31 @@ export default function MCCDashboard() {
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
               onClick={() => !provisioningStatus && setShowCloneModal(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-lg bg-[#161618] border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-indigo-600/20 rounded-2xl flex items-center justify-center">
-                  <Rocket className="text-indigo-400 w-6 h-6" />
+                <div className="w-12 h-12 bg-action-primary/20 rounded-2xl flex items-center justify-center">
+                  <Rocket className="text-brand w-6 h-6" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold uppercase tracking-tight">Birth of a New Clone</h2>
-                  <p className="text-gray-500 text-sm">DNA Injection & Infrastructure</p>
+                  <p className="text-secondary text-sm">DNA Injection & Infrastructure</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-xs font-black text-gray-500 uppercase mb-2 ml-1 tracking-widest">Instance Name</label>
+                  <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Instance Name</label>
                   <input 
                     type="text" 
                     placeholder="ex: Le Grand Paris" 
-                    className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-indigo-500/50 transition-all font-medium"
+                    className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-medium"
                     value={newCloneName}
                     onChange={(e) => {
                       setNewCloneName(e.target.value);
@@ -323,46 +433,82 @@ export default function MCCDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-gray-500 uppercase mb-2 ml-1 tracking-widest">Subdomain Slug</label>
-                  <input 
-                    type="text" 
-                    placeholder="ex: le-grand-paris" 
-                    className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-indigo-500/50 transition-all font-mono"
+                  <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Subdomain Slug</label>
+                  <input
+                    type="text"
+                    placeholder="ex: le-grand-paris"
+                    className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-mono"
                     value={newCloneKey}
                     onChange={(e) => setNewCloneKey(e.target.value)}
                   />
                 </div>
+                <div>
+                  <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Owner Email</label>
+                  <input
+                    type="email"
+                    placeholder="owner@restaurant.fr"
+                    className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all"
+                    value={newCloneEmail}
+                    onChange={(e) => setNewCloneEmail(e.target.value)}
+                    required
+                  />
+                </div>
 
-                <div className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl flex items-center gap-3">
-                  <Lock className="w-5 h-5 text-indigo-400 shrink-0" />
-                  <p className="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">
+                <div>
+                  <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Tier</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['STANDARD', 'PREMIUM', 'ENTERPRISE'] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setNewCloneTier(t)}
+                        className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                          newCloneTier === t
+                            ? 'bg-action-primary/20 border-focus/50 text-brand'
+                            : 'bg-slate-950 border-subtle text-secondary hover:border-white/20'
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-action-primary/5 border border-focus/10 rounded-2xl flex items-center gap-3">
+                  <Lock className="w-5 h-5 text-brand shrink-0" />
+                  <p className="text-[10px] text-muted leading-relaxed uppercase tracking-tighter">
                     Policy: Toutes les instances sont provisionnées avec NF525 et 2FA activés par défaut (STANDARD_DNA_V3).
                   </p>
                 </div>
 
                 {provisioningStatus ? (
-                  <div className="flex flex-col items-center justify-center py-4">
-                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mb-4">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: '100%' }}
-                        transition={{ duration: 3.5 }}
-                        className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                      />
-                    </div>
-                    <span className="text-[10px] font-black text-indigo-400 animate-pulse uppercase tracking-[0.2em]">{provisioningStatus}</span>
+                  <div className="flex flex-col py-4 gap-3">
+                    {PROV_STEPS.map((step, i) => (
+                      <div key={step} className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                          i < provisionStep ? 'bg-status-success border-emerald-500' :
+                          i === provisionStep ? 'border-brand animate-pulse bg-action-primary/20' :
+                          'border-white/10'
+                        }`}>
+                          {i < provisionStep && <span className="text-[8px] text-white">✓</span>}
+                        </div>
+                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${
+                          i === provisionStep ? 'text-brand' : i < provisionStep ? 'text-status-success/60' : 'text-white/20'
+                        }`}>{step}</span>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <div className="flex gap-4 pt-4">
                     <button 
                       onClick={() => setShowCloneModal(false)}
-                      className="flex-1 py-4 font-bold text-gray-500 hover:text-white transition-all text-xs uppercase tracking-[0.2em]"
+                      className="flex-1 py-4 font-bold text-secondary hover:text-white transition-all text-xs uppercase tracking-[0.2em]"
                     >
                       Cancel
                     </button>
                     <button 
                       onClick={handleCreateClone}
-                      className="flex-1 bg-white text-black font-black py-4 rounded-2xl hover:bg-gray-200 transition-all active:scale-95 text-xs uppercase tracking-[0.2em]"
+                      className="flex-1 bg-surface-card text-primary font-black py-4 rounded-2xl hover:bg-surface-bg transition-all active:scale-95 text-xs uppercase tracking-[0.2em]"
                     >
                       Launch Birth
                     </button>
@@ -373,103 +519,53 @@ export default function MCCDashboard() {
           </div>
         )}
       </AnimatePresence>
+      </div>{/* /relative z-10 */}
     </div>
+    </MFAGate>
   );
 }
 
 function StatCard({ label, value, icon, trend, isWarning = false }: { label: string, value: string, icon: React.ReactNode, trend: string, isWarning?: boolean }) {
   return (
-    <div className={`p-6 bg-[#161618] border ${isWarning ? 'border-amber-500/20' : 'border-white/5'} rounded-3xl relative overflow-hidden group hover:border-white/10 transition-all`}>
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-white/10 transition-all">
+    <div className={`p-6 bg-white/5 backdrop-blur-md border ${isWarning ? 'border-amber-500/20' : 'border-white/10'} rounded-2xl relative overflow-hidden group hover:border-white/20 transition-all`}>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-all" />
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <div className="p-3 bg-white/5 rounded-xl group-hover:bg-white/10 transition-all">
           {icon}
         </div>
-        {isWarning && <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" />}
+        {isWarning && <div className="w-2.5 h-2.5 rounded-full bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]" />}
       </div>
-      <h3 className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">{label}</h3>
-      <div className="text-3xl font-black mb-2 tracking-tighter">{value}</div>
-      <p className="text-[10px] font-medium text-gray-600 uppercase tracking-tighter">{trend}</p>
-      
-      <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all" />
+      <h3 className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1 relative z-10">{label}</h3>
+      <div className="text-3xl font-bold mb-2 tracking-tight text-white relative z-10">{value}</div>
+      <p className="text-[10px] font-medium text-slate-500 uppercase tracking-tighter relative z-10">{trend}</p>
     </div>
   );
 }
 
-function InstanceRow({ instance, index }: { instance: EmpireInstance, index: number }) {
+// mcc-users-6 — DeviceManager accessible depuis l'onglet Intelligence
+function DeviceManagerPanel() {
+  const [uid, setUid] = React.useState('');
+  const [submitted, setSubmitted] = React.useState('');
   return (
-    <motion.div 
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="grid grid-cols-12 px-6 py-5 bg-[#161618] border border-white/5 rounded-2xl hover:border-indigo-500/30 hover:bg-[#1a1a1d] transition-all cursor-pointer group"
-    >
-      <div className="col-span-4 flex items-center gap-4">
-        <div 
-          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs shadow-inner" 
-          style={{ backgroundColor: `${instance.branding.primaryColor}20`, color: instance.branding.primaryColor, border: `1px solid ${instance.branding.primaryColor}40` }}
+    <div className="bg-[#0f0f11] border border-white/5 rounded-3xl p-6 space-y-4">
+      <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Device Management</h3>
+      <div className="flex gap-3">
+        <input
+          type="text"
+          placeholder="User UID…"
+          value={uid}
+          onChange={e => setUid(e.target.value)}
+          className="flex-1 bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono focus:outline-none focus:border-focus/50 transition-all text-white"
+        />
+        <button
+          onClick={() => setSubmitted(uid.trim())}
+          disabled={!uid.trim()}
+          className="px-4 py-2.5 bg-action-primary/20 text-brand border border-focus/30 rounded-xl text-[10px] font-black uppercase tracking-widest disabled:opacity-40 transition-all hover:bg-action-primary/30"
         >
-          {instance.name.substring(0, 2)}
-        </div>
-        <div>
-          <h4 className="font-bold text-sm tracking-tight group-hover:text-indigo-400 transition-colors uppercase">{instance.name}</h4>
-          <p className="text-gray-600 text-[10px] font-mono tracking-tighter uppercase">{instance.key}.nexus-fleet.io</p>
-        </div>
-      </div>
-
-      <div className="col-span-3 flex items-center">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-             <span className="text-[10px] font-bold text-gray-300 uppercase">Health {instance.metrics.healthScore}%</span>
-          </div>
-          <div className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-             <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-tighter">NF525 SEALED</span>
-          </div>
-          <div className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-             <span className="text-[10px] font-black text-blue-500/80 uppercase tracking-tighter">HACCP GUARD ACTIVE</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-span-3 flex items-center">
-        <div className="text-sm font-black text-gray-300 tracking-tight">
-          €{Math.round(instance.metrics.dailyRevenue).toLocaleString()}
-          <span className="block text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">{instance.metrics.activeUsers} Sessions Actives</span>
-        </div>
-      </div>
-
-      <div className="col-span-2 flex items-center justify-end gap-3">
-        <StatusBadge status={instance.status} />
-        
-        {/* Compliance Action */}
-        <button 
-          title="Certifier l'instance"
-          className="p-2 hover:bg-amber-500/10 rounded-lg transition-all text-gray-600 hover:text-amber-500 group/cert"
-        >
-          <Award className="w-5 h-5" />
-        </button>
-
-        <button className="p-2 hover:bg-white/5 rounded-lg transition-all text-gray-600 hover:text-white">
-          <ChevronRight className="w-5 h-5" />
+          Inspecter
         </button>
       </div>
-    </motion.div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    PROVISIONING: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-    ONLINE: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    MAINTENANCE: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    LOCKED: 'bg-red-500/10 text-red-400 border-red-500/30',
-  };
-
-  return (
-    <div className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase border tracking-widest animate-in fade-in ${styles[status] || 'bg-gray-500/10 text-gray-400 border-gray-500/30'}`}>
-      {status}
+      {submitted && <DeviceManager uid={submitted} />}
     </div>
   );
 }
@@ -478,13 +574,13 @@ function TabButton({ active, onClick, label, icon }: { active: boolean, onClick:
   return (
     <button 
       onClick={onClick}
-      className={`pb-4 px-2 flex items-center gap-2 border-b-2 transition-all ${active ? 'border-indigo-500 text-white' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+      className={`pb-4 px-2 flex items-center gap-2 border-b-2 transition-all ${active ? 'border-focus text-white' : 'border-transparent text-secondary hover:text-muted'}`}
     >
-      <div className={`${active ? 'text-indigo-400' : 'text-gray-600'}`}>
+      <div className={`${active ? 'text-brand' : 'text-secondary'}`}>
         {icon}
       </div>
       <span className="text-xs font-bold uppercase tracking-widest">{label}</span>
-      {active && <motion.div layoutId="activeTabDot" className="w-1 h-1 rounded-full bg-indigo-400" />}
+      {active && <motion.div layoutId="activeTabDot" className="w-1 h-1 rounded-full bg-action-primary" />}
     </button>
   );
 }
@@ -492,10 +588,29 @@ function TabButton({ active, onClick, label, icon }: { active: boolean, onClick:
 function StatusItem({ label, status, color }: { label: string, status: string, color: string }) {
     return (
         <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{label}</span>
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
             <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black text-white uppercase tracking-tighter">{status}</span>
                 <div className={`w-1.5 h-1.5 rounded-full ${color}`} />
+            </div>
+        </div>
+    );
+}
+
+function SwitchboardItem({ label, active, onToggle }: { label: string, active: boolean, onToggle: () => void }) {
+    return (
+        <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
+            <div className="flex items-center gap-3">
+                <span className={`text-[10px] font-black uppercase tracking-tighter ${active ? 'text-status-success' : 'text-status-danger'}`}>
+                    {active ? 'ONLINE' : 'OFFLINE'}
+                </span>
+                <button 
+                    onClick={onToggle}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${active ? 'bg-status-success/20 border border-emerald-500/50' : 'bg-status-danger/20 border border-red-500/50'}`}
+                >
+                    <span className={`inline-block h-3 w-3 transform rounded-full transition-transform ${active ? 'translate-x-5 bg-status-success' : 'translate-x-1 bg-status-danger'}`} />
+                </button>
             </div>
         </div>
     );

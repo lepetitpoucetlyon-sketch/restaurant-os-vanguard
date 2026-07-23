@@ -5,21 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { useLanguage } from "@/context/LanguageContext";
-import { useUI } from "@/context/UIContext";
+import { useLanguage } from "@/hooks";
+import { useUI } from "@/hooks";
 import { useNotifications } from "@/context/NotificationsContext";
-import { NotificationPanel } from "@/components/ui/NotificationPanel";
+import { NotificationPanel } from "@ui/NotificationPanel";
 import {
     LayoutDashboard,
     Store,
     Map,
-    ChefHat,
     MoreHorizontal,
     X,
     CalendarDays,
     Package,
     Users,
-    BarChart3,
     Settings,
     Sparkles,
     Bell,
@@ -49,7 +47,7 @@ export function MobileNavBar() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
     const { t } = useLanguage();
-    const { toggleTheme, openCommandPalette } = useUI();
+    const { toggleTheme: _toggleTheme, openCommandPalette: _openCommandPalette } = useUI();
     const { unreadCount } = useNotifications();
 
     return (
@@ -60,13 +58,13 @@ export function MobileNavBar() {
                 animate={{ y: 0 }}
                 className="fixed bottom-6 left-6 right-6 z-[60] lg:hidden"
             >
-                <div className="bg-white/80 dark:bg-bg-primary/80 backdrop-blur-3xl border border-white/20 dark:border-white/10 rounded-[2.5rem] p-2 shadow-2xl flex items-center justify-between">
+                <div className="bg-surface-card/80 dark:bg-bg-primary/80 backdrop-blur-3xl border border-default dark:border-subtle rounded-[2.5rem] p-2 shadow-2xl flex items-center justify-between">
                     <div className="flex items-center gap-1">
                         {PRIMARY_NAV.map((item) => {
                             const isActive = pathname === item.href;
                             const Icon = item.icon;
                             return (
-                                <Link key={item.href} href={item.href} className="relative">
+                                <Link key={item.href} href={item.href} prefetch={false} className="relative">
                                     <motion.div
                                         whileTap={{ scale: 0.9 }}
                                         className={cn(
@@ -89,7 +87,7 @@ export function MobileNavBar() {
                     <button onClick={() => setIsMenuOpen(true)} className="relative mr-1">
                         <div className="w-12 h-12 rounded-full flex items-center justify-center text-text-muted bg-bg-tertiary/50">
                             <MoreHorizontal className="w-5 h-5" />
-                            {unreadCount > 0 && <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white" />}
+                            {unreadCount > 0 && <div className="absolute top-2 right-2 w-2 h-2 bg-status-danger rounded-full border border-white" />}
                         </div>
                     </button>
                 </div>
@@ -104,14 +102,14 @@ export function MobileNavBar() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsMenuOpen(false)}
-                            className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[70]"
+                            className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl z-[70]"
                         />
                         <motion.div
                             initial={{ y: "100%" }}
                             animate={{ y: 0 }}
                             exit={{ y: "100%" }}
                             transition={mobileSpring}
-                            className="fixed bottom-0 left-0 right-0 z-[80] bg-white dark:bg-bg-secondary rounded-t-[3.5rem] p-10 pb-[calc(2rem+env(safe-area-inset-bottom))]"
+                            className="fixed bottom-0 left-0 right-0 z-[80] bg-surface-card dark:bg-bg-secondary rounded-t-[3.5rem] p-10 pb-[calc(2rem+env(safe-area-inset-bottom))]"
                         >
                             <div className="w-12 h-1.5 bg-border rounded-full mx-auto mb-10" />
                             <div className="flex justify-between items-center mb-10">
@@ -124,7 +122,7 @@ export function MobileNavBar() {
                             <div className="grid grid-cols-3 gap-8">
                                 {GRID_ITEMS.map((item, idx) => (
                                     <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
-                                        <Link href={item.href} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-3">
+                                        <Link href={item.href} prefetch={false} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-3">
                                             <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center border border-border shadow-soft", pathname === item.href ? "bg-accent-gold text-white border-transparent" : "bg-bg-primary")}>
                                                 <item.icon className="w-6 h-6" />
                                             </div>
@@ -138,7 +136,7 @@ export function MobileNavBar() {
                                 <button onClick={() => { setIsNotificationsOpen(true); setIsMenuOpen(false); }} className="flex-1 flex flex-col items-center gap-2">
                                     <div className="w-12 h-12 rounded-full bg-bg-tertiary flex items-center justify-center relative">
                                         <Bell className="w-5 h-5" />
-                                        {unreadCount > 0 && <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />}
+                                        {unreadCount > 0 && <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-status-danger rounded-full border-2 border-white" />}
                                     </div>
                                     <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">Alertes</span>
                                 </button>

@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData } from "@shared/nexus-contract";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeX, History, X, Zap, Maximize2, Minimize2, AlertTriangle, CheckCircle2, Minus, Bot } from 'lucide-react';
+import { Volume2, VolumeX, History, X, Maximize2, Minimize2, AlertTriangle, Minus, Bot } from 'lucide-react';
 import { useGeminiAgent } from "@/hooks/useGeminiAgent";
-import { useGeminiLive } from '@/modules/marketing/hooks/useGeminiLive';
+import { useGeminiLive } from '@modules/commerce';
 import { useSettings } from "@/context/SettingsContext";
 
 import { cn } from "@/lib/ui.foundations";
-import { useRouter } from "next/navigation";
 
 import { NexusSphere } from './voice/NexusSphere';
 import { ChatThread } from './voice/ChatThread';
@@ -57,7 +56,7 @@ export function VoiceAssistantOverlay() {
         pendingAction,
         confirmAction,
         sendMessage,
-        clearError,
+        clearError: _clearError,
         fetchAllSessions,
         loadSession,
         startNewSession
@@ -65,12 +64,12 @@ export function VoiceAssistantOverlay() {
 
     const {
         isActive: isLiveActive,
-        isConnecting: isLiveConnecting,
+        isConnecting: _isLiveConnecting,
         error: liveError,
-        transcripts: liveTranscripts,
-        startSession: startLiveSession,
-        stopSession: stopLiveSession,
-        sendText: sendLiveText
+        transcripts: _liveTranscripts,
+        startSession: _startLiveSession,
+        stopSession: _stopLiveSession,
+        sendText: _sendLiveText
     } = useGeminiLive();
 
     const error = chatError || liveError;
@@ -82,18 +81,16 @@ export function VoiceAssistantOverlay() {
             return;
         }
 
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-
+        const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
         if (!SpeechRecognition) return;
 
-        const recognition = new SpeechRecognition();
+        const recognition = new (SpeechRecognition as { new(): { lang: string; onstart: (() => void) | null; onresult: ((event: { results: { [index: number]: { [index: number]: { transcript: string } } } }) => void) | null; onerror: (() => void) | null; onend: (() => void) | null; start: () => void; stop: () => void } })();
         recognitionRef.current = recognition;
         recognition.lang = 'fr-FR';
         recognition.onstart = () => setIsDictating(true);
-        recognition.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
+        recognition.onresult = (event: { results: { [index: number]: { [index: number]: { transcript: string } } } }) => {
             const transcript = event.results[0][0].transcript;
-            if (transcript.trim()) sendMessage(transcript, pageContextRef.current);
+            if (transcript.trim()) sendMessage(transcript, pageContextRef.current ?? undefined);
         };
         recognition.onerror = () => setIsDictating(false);
         recognition.onend = () => setIsDictating(false);
@@ -111,8 +108,8 @@ export function VoiceAssistantOverlay() {
     }, [isVoiceMode, toggleDictation]);
 
     useEffect(() => {
-        const lastMsg = (messages as { role: string; content?: string; text?: string }[])[messages.length - 1];
-        if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text);
+        const lastMsg = messages[messages.length - 1] as { role?: string; content?: string; text?: string } | undefined;
+        if (lastMsg && lastMsg.role === 'assistant' && !isProcessing) speakMessage(lastMsg.content || lastMsg.text || '');
     }, [messages, isProcessing, speakMessage]);
 
     useEffect(() => {
@@ -134,8 +131,13 @@ export function VoiceAssistantOverlay() {
 
     const toggleHistory = async () => {
         if (!showHistory) {
-            const hist = await (fetchAllSessions as any)();
-            setSessions(hist);
+            const hist = await fetchAllSessions();
+            const mappedSessions = hist.map(h => ({
+                id: h.id,
+                timestamp: h.createdAt ? new Date(h.createdAt) : new Date(),
+                lastMessage: h.name || "Conversation"
+            }));
+            setSessions(mappedSessions);
         }
         setShowHistory(!showHistory);
     };
@@ -150,11 +152,11 @@ export function VoiceAssistantOverlay() {
                     <motion.button
                         initial={{ scale: 0, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0, opacity: 0, y: 20 }}
                         onClick={() => setIsOpen(true)}
-                        className="fixed bottom-6 right-6 z-[190] w-14 h-14 md:w-16 md:h-16 bg-accent rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(197,160,89,0.3)] border border-white/20 hover:scale-110 active:scale-95 transition-all group"
+                        className="fixed bottom-6 right-6 z-[190] w-14 h-14 md:w-16 md:h-16 bg-accent rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(197,160,89,0.3)] border border-default hover:scale-110 active:scale-95 transition-all group"
                     >
                         <Bot className="w-7 h-7 md:w-8 md:h-8 text-white relative z-10" />
                         <div className="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-bg-primary flex items-center justify-center">
-                            <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-surface-card animate-pulse" />
                         </div>
                     </motion.button>
                 )}
@@ -184,21 +186,37 @@ export function VoiceAssistantOverlay() {
                                 <button onClick={() => setIsVoiceMode(!isVoiceMode)} className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all", isVoiceMode ? "bg-accent text-white shadow-lg shadow-accent/20" : "bg-bg-tertiary text-text-muted")}>
                                     {isVoiceMode ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                                 </button>
-                                <button onClick={toggleHistory} className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all", showHistory ? "bg-accent-gold text-black" : "bg-bg-secondary border border-border/50")}>
+                                <button onClick={toggleHistory} className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all", showHistory ? "bg-accent-gold text-primary" : "bg-bg-secondary border border-border/50")}>
                                     <History className="w-4 h-4" />
                                 </button>
                                 <button onClick={() => setIsExpanded(!isExpanded)} className="hidden md:flex w-8 h-8 rounded-full bg-bg-tertiary items-center justify-center text-text-muted hover:bg-bg-secondary">
                                     {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                                 </button>
                                 <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-primary"><Minus className="w-4 h-4" /></button>
-                                <button onClick={() => { handleClose(); (startNewSession as () => void)(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+                                <button onClick={() => { handleClose(); startNewSession?.(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
                             </div>
                         </div>
 
                         {showHistory ? (
                             <SessionHistory sessions={sessions} onLoadSession={(id) => { loadSession(id); setShowHistory(false); }} onNewSession={() => { startNewSession(); setShowHistory(false); }} />
                         ) : (
-                            <ChatThread messages={messages as any[]} isProcessing={isProcessing} formatText={formatAssistantText} scrollRef={scrollRef} />
+                            <ChatThread 
+                                messages={messages.map(msg => ({
+                                    id: msg.id,
+                                    role: msg.role === 'assistant' ? ('model' as const) : msg.role,
+                                    text: msg.content
+                                }))} 
+                                isProcessing={isProcessing} 
+                                formatText={formatAssistantText} 
+                                scrollRef={scrollRef} 
+                            />
+                        )}
+
+                        {error && (
+                            <div className="shrink-0 mx-4 mb-2 px-4 py-3 rounded-xl bg-error/10 border border-error/20 flex items-center gap-3">
+                                <AlertTriangle className="w-4 h-4 text-error shrink-0" />
+                                <p className="text-[11px] font-medium text-error leading-snug">{error}</p>
+                            </div>
                         )}
 
                         {pendingAction && (
@@ -211,7 +229,7 @@ export function VoiceAssistantOverlay() {
                             </div>
                         )}
 
-                        <ChatInput textInput={textInput} setTextInput={setTextInput} isDictating={isDictating} isProcessing={isProcessing} pendingAction={!!pendingAction} onSend={(e) => { e.preventDefault(); if (textInput.trim()) { sendMessage(textInput, pageContextRef.current); setTextInput(""); } }} onToggleDictation={toggleDictation} />
+                        <ChatInput textInput={textInput} setTextInput={setTextInput} isDictating={isDictating} isProcessing={isProcessing} pendingAction={!!pendingAction} onSend={(e) => { e.preventDefault(); if (textInput.trim()) { sendMessage(textInput, pageContextRef.current ?? undefined); setTextInput(""); } }} onToggleDictation={toggleDictation} />
                     </motion.div>
                 )}
             </AnimatePresence>

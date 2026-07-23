@@ -1,9 +1,13 @@
 import { vi } from 'vitest';
 
+// 🔑 Clé de scellement NF525 pour les tests — reflète l'env serveur réel.
+// FiscalKeyService refuse de sceller sans clé (plus de repli 'default_instance').
+process.env.FISCAL_SIGNING_SECRET = 'test-fiscal-signing-secret';
+
 // 🏛️ RESTAURANT OS - MASTER TEST SHIELD
 // Protection globale contre les initialisations Firebase/Dexie/IDB
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MockAdapter } from '@/lib/nexus/adapters/MockAdapter';
+import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
 import { Order } from '@/modules/ops/types';
 import { StockItem, InventoryMovement } from '@/modules/inventory/types';
 import { JournalEntry, FiscalSeal } from '@/modules/finance/types';
@@ -63,9 +67,13 @@ const mockTable = {
     toArray: vi.fn().mockResolvedValue([]),
     where: vi.fn().mockReturnThis(),
     equals: vi.fn().mockReturnThis(),
+    anyOf: vi.fn().mockReturnThis(),   // SyncManager.processQueue : where('status').anyOf('pending','failed')
     sortBy: vi.fn().mockResolvedValue([]),
     orderBy: vi.fn().mockReturnThis(),
+    reverse: vi.fn().mockReturnThis(),
+    first: vi.fn().mockResolvedValue(undefined),
     last: vi.fn().mockResolvedValue(undefined),
+    delete: vi.fn().mockResolvedValue(undefined),
     bulkPut: vi.fn().mockResolvedValue(undefined),
 };
 

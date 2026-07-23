@@ -1,0 +1,142 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# zenith.yaml — Configuration Souveraine Zenith
+# UN seul fichier. Tout le comportement du système en découle.
+# Les valeurs peuvent être surchargées par variables d'environnement.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Contexte de déploiement ───────────────────────────────────────────────────
+deployment:
+  # "api_server"  : Multi-tenant, hébergé sur ton Mac Studio ou cloud
+  # "on_premise"  : Installé chez le client, single-tenant
+  # "air_gap"     : Aucune connexion externe autorisée
+  mode: "api_server"
+  tenant_model: "multi"   # "multi" | "single"
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4              # Gunicorn workers — auto-calculé depuis le profil hardware si absent
+
+# ── Routage LLM ───────────────────────────────────────────────────────────────
+llm:
+  # Routeur primaire : veto, synthèse, cristallisation, query expansion
+  primary:
+    backend: "cloud"      # "cloud" | "local" | "cloud_sovereign"
+    local:
+      # "ollama"       : daemon Ollama externe (url ci-dessous)
+      # "transformers" : modèle HF chargé en process sur MPS — zéro dépendance
+      engine: "transformers"
+      model: "Qwen/Qwen2.5-1.5B-Instruct"
+      url: "http://localhost:11434"
+      keep_alive: -1      # Modèle permanent en mémoire, TTFT cold-start → 0
+      num_ctx: 4096
+      num_thread: 8       # Auto depuis profil hardware si absent
+
+    cloud:
+      provider: "gemini"
+      model: "gemini-2.5-flash"
+      api_key_env: "GOOGLE_API_KEY"
+      timeout_s: 30
+
+  # Routeur deep : ROOT generation, cluster summary uniquement
+  # Désactivé par défaut en on_premise/air_gap
+  deep_analysis:
+    enabled: true
+    backend: "cloud"
+    model: "gemini-2.5-pro"
+    # Ces opérations NE doivent JAMAIS traiter des requêtes utilisateur finales
+    allowed_operations:
+      - "document_root_generation"
+      - "cluster_summary"
+    user_query_forbidden: true
+
+  # Cloison sémantique — invariant non overridable
+  sovereign:
+    raw_snippet_leaves_server: false  # Toujours false, ignoré si modifié
+
+  # Retry sur erreurs réseau transitoires
+  retry:
+    max_attempts: 3
+    backoff_min_s: 0.5
+    backoff_max_s: 8.0
+
+# ── Hardware ──────────────────────────────────────────────────────────────────
+hardware:
+  # Profil auto-détecté ou forcé ici
+  # Profils disponibles dans hardware_profiles.yaml
+  profile: "auto"         # "auto" | "mac_studio_m2_ultra" | "mac_mini_m4" | "linux_gpu" | "cpu_only"
+
+  # Overrides manuels — écrasent le profil
+  overrides: {}
+  # Exemples d'overrides :
+  # overrides:
+  #   max_concurrent_ingestions: 6
+  #   embed_device: "mps"
+  #   embed_batch_size: 64
+
+# ── Sécurité ──────────────────────────────────────────────────────────────────
+security:
+  # Chiffrement au repos (SQLCipher) — désactivé par défaut, activer en prod
+  encryption:
+    enabled: false
+    key_env: "ZENITH_MASTER_KEY"
+
+  # Rate limiting par IP
+  rate_limiting:
+    requests_per_minute: 100
+    burst_capacity: 100
+
+  # CORS — origines supplémentaires (localhost toujours inclus)
+  cors:
+    extra_origins_env: "CORS_ORIGINS"
+
+  # Zero-Knowledge — désactivé jusqu'à implémentation SQLCipher complète
+  zero_knowledge:
+    entity_anonymization: false
+
+# ── Pipeline RAG ──────────────────────────────────────────────────────────────
+rag:
+  # Modèle d'embedding — multilingue par défaut (384 dims, compatible daemon)
+  embedding:
+    model: "paraphrase-multilingual-MiniLM-L12-v2"
+
+  # Reranker cross-encoder — re-trie les candidats du retrieval hybride.
+  # Coût : ~30-80ms par requête sur MPS. Gain : précision top-k nettement supérieure.
+  reranker:
+    enabled: true
+    model: "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
+    top_k: 5          # Nombre de résultats retournés après rerank
+    candidates: 20    # Nombre de candidats récupérés avant rerank
+
+  veto:
+    default_threshold: 0.65     # Override par workspace en DB
+    max_candidates_evaluated: 3
+
+  crystallizer:
+    enabled_by_default: true    # Override par workspace via crystallization_enabled en DB
+    min_score: 0.60
+    min_answer_length: 20
+    tau_fusion: 0.75
+
+  aliases:
+    ki_aliases_per_question: 10
+    query_expansion_variants: 3
+
+  domain_rules:
+    default_ruleset: "finance_fr"  # Override par workspace via active_ruleset en DB
+    # Rulesets disponibles : finance_fr | legal_fr | hr_fr | generic
+
+  graphrag:
+    max_relations_per_doc: 20
+
+# ── Base de données ───────────────────────────────────────────────────────────
+database:
+  path_env: "DB_PATH"
+  wal_mode: true
+  foreign_keys: true
+  pool: "thread_local"
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  level: "INFO"           # "DEBUG" | "INFO" | "WARNING" | "ERROR"
+  max_file_size_mb: 50
+  backup_count: 5
+  structured_json: false  # true pour Loki / CloudWatch

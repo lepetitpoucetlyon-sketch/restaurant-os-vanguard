@@ -1,25 +1,21 @@
-import { getTenantPath } from '@/lib/firebase';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from './HACCPTelemetryBridge';
 import { MaintenanceAgent } from './MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine } from './FiscalEngine';
-import { SovereignLedger } from './SovereignLedger';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 
-    ReceptionSchema, 
-    ReceptionData, 
-    CleaningSchema, 
-    CleaningData,
-    WasteSchema,
-    WasteData,
-    OilCheckSchema,
-    OilCheckData
-} from '../schemas/haccp';
+    ReceptionData,
+    SovereignData
+} from '@nexus/contracts';
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { 
+    ReceptionSchema, 
+    CleaningSchema, 
+    WasteSchema 
+} from '../schemas/haccp';
 
 /**
  * 🏺 QualityEngine - Restaurant OS Guard
@@ -31,15 +27,15 @@ export class QualityEngine {
   /**
    * Records a delivery reception with HACCP controls.
    */
-  static async validateReception(rawData: any, tenantId: string = 'main'): Promise<{ id: string; currentStatus: string }> {
+  static async validateReception(rawData: ReceptionData, tenantId: string = 'main'): Promise<{ id: string; currentStatus: string }> {
     logger.info(`[QualityEngine] Initiating reception validation for tenant: ${tenantId}`);
 
-    const validatedData = rawData as any;
+    const validatedData = ReceptionSchema.parse(rawData);
 
-    const result: any = await NexusTransaction.run(
-      { RECEPTION_VALIDATION: { schema: ReceptionSchema as any, data: validatedData } },
+    const result = await NexusTransaction.run(
+      { RECEPTION_VALIDATION: { schema: ReceptionSchema, data: validatedData } },
       async (transaction) => {
-        const tenantPath = getTenantPath(this.COLLECTION, tenantId);
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION, tenantId);
         const receptionId = SharedKernel.generateId('HACCP-REC');
         const receptionPath = `${tenantPath}/${receptionId}`;
 
@@ -56,7 +52,7 @@ export class QualityEngine {
         };
         transaction.set(receptionPath, log);
 
-        const deliveryPath = `${getTenantPath('deliveries', tenantId)}/${validatedData.deliveryId}`;
+        const deliveryPath = `${Nexus.getTenantPath('deliveries', tenantId)}/${validatedData.deliveryId}`;
         transaction.update(deliveryPath, { status: 'checked', checkedAt: new Date().toISOString() });
 
         return { id: receptionId, currentStatus: log.hygieneStatus };
@@ -75,10 +71,10 @@ export class QualityEngine {
    * Logs a cleaning operation.
    */
   static async validateCleaning(rawData: SovereignData, tenantId: string = 'main'): Promise<string> {
-    const validatedData = CleaningSchema.parse(rawData as any) as any;
+    const validatedData = CleaningSchema.parse(rawData);
     const id = SharedKernel.generateId('HACCP-CLN');
     
-    await Nexus.adapter.set(`${getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
+    await Nexus.adapter.set(`${Nexus.getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
         ...validatedData,
         id,
         type: 'cleaning',
@@ -92,13 +88,13 @@ export class QualityEngine {
    * Logs food waste.
    */
   static async logWaste(rawData: SovereignData, tenantId: string = 'main'): Promise<string> {
-    const validatedData = WasteSchema.parse(rawData as any) as any;
+    const validatedData = WasteSchema.parse(rawData);
     const id = SharedKernel.generateId('HACCP-WST');
     
     // 🛡️ NF525 BRIDGE : Fiscal Sealing of Waste
     const seal = await FiscalEngine.sealEntry(id, validatedData, { instanceId: tenantId });
 
-    await Nexus.adapter.set(`${getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
+    await Nexus.adapter.set(`${Nexus.getTenantPath(this.COLLECTION, tenantId)}/${id}`, {
         ...validatedData,
         id,
         type: 'waste',
@@ -114,8 +110,8 @@ export class QualityEngine {
    */
   private static async trackRecentFailures(tenantId: string) {
     try {
-        const tenantPath = getTenantPath(this.COLLECTION, tenantId);
-        const snapshots = await Nexus.adapter.query<any>(tenantPath, {
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION, tenantId);
+        const snapshots = await Nexus.adapter.query<ReceptionData & { hygieneStatus: string; createdAt: string }>(tenantPath, {
           where: [{ field: 'type', operator: '==', value: 'reception' }],
           orderBy: { field: 'createdAt', direction: 'desc' },
           limit: 3

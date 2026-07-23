@@ -1,6 +1,6 @@
-import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
-import { SyncMessage } from '@/types/domain.types';
-import { Order } from '@/types';
+import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
+import { SyncMessage } from '@nexus/contracts/domain.types';
+import { Order } from '@nexus/contracts';
 import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 
@@ -21,7 +21,7 @@ export const EdgeSyncService = {
     
     this.localChannel = new BroadcastChannel('nexus_edge_sync');
     
-    this.localChannel.onmessage = (event) => {
+    this.localChannel.onmessage = (event: MessageEvent) => {
         this.handleLocalEvent(event.data);
     };
 

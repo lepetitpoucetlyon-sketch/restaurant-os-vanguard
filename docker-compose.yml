@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - SOVEREIGN_RAG_URL=http://sovereign-rag:8000
+      - SOVEREIGN_RAG_ADMIN_KEY=${SOVEREIGN_RAG_ADMIN_KEY}
+    env_file:
+      - .env.local
+    depends_on:
+      sovereign-rag:
+        condition: service_healthy
+    restart: unless-stopped
+
+  sovereign-rag:
+    build:
+      context: ./services/sovereign-rag
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - ADMIN_API_KEY=${SOVEREIGN_RAG_ADMIN_KEY}
+      - ZENITH_CONFIG=zenith.restaurant.yaml
+      - SOVEREIGN_RAG_DB_PATH=/data/sovereign_rag/sovereign.db
+      - UPLOAD_DIR=/data/uploads
+    volumes:
+      - sovereign_rag_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    restart: unless-stopped
+
+volumes:
+  sovereign_rag_data:

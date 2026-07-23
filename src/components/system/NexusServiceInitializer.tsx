@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
-import { tenantIdAtom } from '@/store/operationalAtoms';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
 import { logger } from '@/lib/axiom';
@@ -12,16 +12,14 @@ import { logger } from '@/lib/axiom';
  * Centralizes all root-level side effects and background services.
  * Eradicates the need for multiple logic-less context providers.
  */
-export function NexusServiceInitializer() {
+export function NexusServiceInitializer(): null {
     const tenantId = useAtomValue(tenantIdAtom);
     const store = useStore();
 
     useEffect(() => {
-        // 🧪 ROOT PURGE (Grade VI) - Clear legacy state on first boot
+        // Boot marker — no longer purges localStorage (LS-015: destroyed printer/terminal configs)
         if (typeof window !== 'undefined' && !sessionStorage.getItem('nexus_boot_purged')) {
-            localStorage.clear();
             sessionStorage.setItem('nexus_boot_purged', 'true');
-            logger.info('[NexusInitializer] Nuclear Cache Purge: Success');
         }
 
         if (!tenantId) {
@@ -34,31 +32,30 @@ export function NexusServiceInitializer() {
         // 1. Initialize Sync Engine
         NexusSyncService.init(tenantId);
         
-        // 2. Initial Fleet Discover
+        // 2. Initial Fleet Discover — gated on Firebase auth.
+        //    Without a signed-in user, discoverRealFleet() 403s against the
+        //    fleet-telemetry Firestore rules; NexusFleetProvider already re-runs
+        //    it on auth-state-change, so no need to fire it here without a user.
         if (typeof window !== 'undefined') {
-            // Run a background fleet refresh
-            import('@/domain/services/FleetTelemetryService').then(({ fleetTelemetry }) => {
-                fleetTelemetry.discoverRealFleet().then(data => {
-                   // This logic is simplified here as useNexusFleet will handle the atom update
-                });
-            });
+            Promise.all([
+                import('@/lib/firebase'),
+                import('@domain/services/FleetTelemetryService'),
+            ]).then(([{ auth }, { fleetTelemetry }]) => {
+                if (auth.currentUser) {
+                    fleetTelemetry.discoverRealFleet().catch(() => { /* silent */ });
+                }
+            }).catch(() => { /* firebase absent — skip */ });
         }
-        
+
         // 3. Global Purge Registry
         const purgeInterval = setInterval(() => {
             GlobalRegistryService.purgeInactive(store);
-        }, 120000);
-
-        // 4. Fleet Heartbeat (2 min)
-        const fleetInterval = setInterval(() => {
-             // Dispatch refresh via service directly
         }, 120000);
 
         return () => {
             logger.info('[NexusInitializer] Stopping Services...');
             NexusSyncService.stopAll();
             clearInterval(purgeInterval);
-            clearInterval(fleetInterval);
         };
     }, [tenantId, store]);
 

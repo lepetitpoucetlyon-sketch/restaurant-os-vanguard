@@ -4,8 +4,12 @@
  * Grade VI - Certified Reliability.
  */
 
-import { TelemetryPulse } from "@/shared/nexus-contract";
+import { TelemetryPulse } from "@shared/nexus-contract";
 import { whiteLabelInstanceConfig } from "@/config/instance";
+import { logger } from "@/lib/logger";
+import { fleetTelemetry } from "./FleetTelemetryService";
+import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
+import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
 
 class TelemetryService {
   private intervalId: NodeJS.Timeout | null = null;
@@ -25,7 +29,7 @@ class TelemetryService {
       this.sendPulse(tenantId);
     }, this.PULSE_INTERVAL);
 
-    console.log(`[NexusTelemetry] Heartbeat activated for tenant: ${tenantId}`);
+    logger.info(`[NexusTelemetry] Heartbeat activated for tenant: ${tenantId}`);
   }
 
   /**
@@ -41,21 +45,52 @@ class TelemetryService {
   /**
    * Collects current system telemetry and mirrors it to the Suzerain.
    */
+  
+  /**
+   * 🖋️ Suture GRADE X+++: Emission d'Audit Pulse
+   */
+  public emitAuditPulse(pillar: string, action: string, data: object) {
+      logger.debug(`[AuditPulse|${pillar}] ${action}`, data as Record<string, unknown>);
+      // Implémentation réelle vers le MCC
+  }
+
   private async sendPulse(tenantId: string) {
     try {
       const pulse: TelemetryPulse = await this.collectPulse();
-      
-      // In a real implementation, this would be a POST or Firestore update
-      // For this industrial template, we log the payload for verification
-      console.log(`[NexusTelemetry] Pulse emitted at ${new Date().toISOString()}`, pulse);
-      
-      // simulation of persistence
+
+      // Inclure l'état du RAG local dans le pulse (fire-and-forget sans bloquer).
+      let ragStatus: SiteTelemetry['ragStatus'] | undefined;
+      try {
+        const res = await fetch('/api/health/rag', { signal: AbortSignal.timeout(4_000) });
+        if (res.ok) {
+          const h = await res.json() as { status: string; version?: string; document_count?: number; last_indexed?: string; latencyMs?: number };
+          ragStatus = {
+            status: h.status as NonNullable<SiteTelemetry['ragStatus']>['status'],
+            version: h.version,
+            documentCount: h.document_count,
+            lastIndexed: h.last_indexed,
+            latencyMs: h.latencyMs,
+          };
+        }
+      } catch { /* RAG indisponible — on continue sans bloquer */ }
+
+      // 1. Persist local for quick reads (existing behavior)
       localStorage.setItem(`nexus_last_pulse_${tenantId}`, JSON.stringify({
         timestamp: Date.now(),
-        status: pulse.status
+        status: pulse.status,
+        ragStatus,
       }));
 
-    } catch (error) {
+      // 2. Push to Nexus fleet-telemetry so the MCC can see this instance's RAG status.
+      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@domain/types/brands').TenantID, {
+        status: pulse.status === 'ACTIVE' ? 'ONLINE' : 'OFFLINE',
+        lastHeartbeat: pulse.lastPulse,
+        ...(ragStatus ? { ragStatus } : {}),
+      } as Partial<SiteTelemetry>);
+
+      logger.debug(`[NexusTelemetry] Pulse emitted at ${pulse.lastPulse}`, { tenantId, rag: ragStatus?.status ?? 'unknown' });
+
+    } catch (error: unknown) {
       console.error("[NexusTelemetry] Pulse failure:", error);
     }
   }
@@ -90,7 +125,7 @@ class TelemetryService {
           supported: true
         };
       }
-    } catch (e) {}
+    } catch (_e) {}
 
     return {
       level: 1,
@@ -110,3 +145,10 @@ class TelemetryService {
 }
 
 export const NexusTelemetryService = new TelemetryService();
+
+// Inversion de dépendance anti-cycle : le wrapper shared (importé par
+// NexusInterceptor) délègue l'émission réelle des audit pulses ici, sans
+// jamais importer ce module statiquement.
+registerAuditPulseSink((pillar, action, data) =>
+    NexusTelemetryService.emitAuditPulse(pillar, action, data),
+);

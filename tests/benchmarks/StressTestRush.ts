@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore, collection, doc, query, orderBy, limit, getDocs, runTransaction, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, query, orderBy, limit, getDocs, runTransaction } from 'firebase/firestore';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -69,7 +69,7 @@ async function runProtocolOverload() {
     const fiscalSealsRef = collection(db, `tenants/${TENANT_ID}/fiscalSeals`);
     const qLast = query(fiscalSealsRef, orderBy('timestamp', 'desc'), limit(1));
     const lastSealSnap = await getDocs(qLast);
-    let currentLastHash = lastSealSnap.empty ? 'GENESIS_ROOT' : lastSealSnap.docs[0].data().hash;
+    const currentLastHash = lastSealSnap.empty ? 'GENESIS_ROOT' : lastSealSnap.docs[0].data().hash;
     
     console.log(`⛓️  Ancre de chaîne : ${currentLastHash.substring(0, 12)}...`);
 

@@ -15,7 +15,7 @@
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-interface LoggerOptions {
+interface _LoggerOptions {
     prefix?: string;
     enabled?: boolean;
 }
@@ -23,7 +23,7 @@ interface LoggerOptions {
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 const formatMessage = (level: LogLevel, message: string, prefix?: string): string => {
-    const timestamp = new Date().toISOString();
+    const _timestamp = new Date().toISOString();
     const levelEmoji = {
         debug: '🔍',
         info: 'ℹ️',
@@ -38,7 +38,7 @@ export const logger = {
     /**
      * Debug log - Only in development, completely silent in production
      */
-    debug: (message: string, ...args: unknown[]): void => {
+    debug: (message: string, ...args: import("@/shared/nexus-contract").SovereignValue[]): void => {
 
         if (isDevelopment) {
             console.log(formatMessage('debug', message), ...args);
@@ -48,7 +48,7 @@ export const logger = {
     /**
      * Info log - Important operational info, visible in all environments
      */
-    info: (message: string, ...args: unknown[]): void => {
+    info: (message: string, ...args: import("@/shared/nexus-contract").SovereignValue[]): void => {
 
         console.log(formatMessage('info', message), ...args);
     },
@@ -56,7 +56,7 @@ export const logger = {
     /**
      * Warning log - Potential issues, visible in all environments
      */
-    warn: (message: string, ...args: unknown[]): void => {
+    warn: (message: string, ...args: import("@/shared/nexus-contract").SovereignValue[]): void => {
 
         console.warn(formatMessage('warn', message), ...args);
     },
@@ -64,7 +64,7 @@ export const logger = {
     /**
      * Error log - Errors and exceptions, visible in all environments
      */
-    error: (message: string, error?: unknown, ...args: unknown[]): void => {
+    error: (message: string, error?: unknown, ...args: import("@/shared/nexus-contract").SovereignValue[]): void => {
         console.error(formatMessage('error', message), error, ...args);
     },
 

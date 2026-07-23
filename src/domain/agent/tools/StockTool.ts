@@ -1,35 +1,52 @@
-import { User } from '@/types';
-import { ToolDefinition } from './FinanceTool';
+import { z } from 'zod';
+import { StockItem, Ingredient } from '@nexus/contracts';
+import { ToolDefinition } from './types';
+import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { StockEngine } from '@domain/services/StockEngine';
 
-export const StockTool: ToolDefinition = {
+/**
+ * 📦 STOCK TOOL - Grade X
+ */
+export const LowStockSchema = z.object({
+    tenantId: z.string().min(1, "L'identifiant de l'établissement est requis pour l'analyse de stock.")
+});
+
+export type LowStockArgs = z.infer<typeof LowStockSchema>;
+
+export const StockTool: ToolDefinition<LowStockArgs> = {
     name: 'check_low_stock',
-    description: 'Vérifie les articles en rupture ou en stock faible. Accessible au personnel de cuisine et managers.',
+    description: 'Vérifie les articles en rupture ou en stock faible dans l\'inventaire.',
     parameters: {
         type: 'object',
-        properties: {}
+        properties: {
+            tenantId: { type: 'string', description: 'ID de l\'établissement' }
+        },
+        required: ['tenantId']
     },
+    schema: LowStockSchema,
     category: 'inventory',
-    execute: async (args: any, user: any): Promise<any> => {
-        // Mock data, would call StockEngine
-        return [
-            { item: 'Café Arabica', currentWeight: 1.2, unit: 'kg', threshold: 2.0, status: 'low' },
-            { item: 'Lait Entier', currentVolume: 0, unit: 'L', threshold: 10, status: 'out_of_stock' }
-        ];
-    }
-};
+    execute: async (args, _user): Promise<SovereignValue> => {
+        const inventoryPath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.LOGISTICS)}`;
+        const resourcePath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
 
-export const ReservationTool: ToolDefinition = {
-    name: 'get_today_reservations',
-    description: 'Récupère la liste des réservations pour aujourd\'hui.',
-    parameters: {
-        type: 'object',
-        properties: {}
-    },
-    category: 'reservations',
-    execute: async (args: any, user: any): Promise<any> => {
-        return [
-            { id: 'res_1', customer: 'M. Dupont', time: '20:00', guests: 4, table: 12, vip: true },
-            { id: 'res_2', customer: 'Mme. Martin', time: '19:30', guests: 2, table: 5, vip: false }
-        ];
+        // 🏛️ GATHERING (Grade X Parallel Query)
+        const [allStock, ingredients] = await Promise.all([
+            Nexus.adapter.query<StockItem>(inventoryPath),
+            Nexus.adapter.query<Ingredient>(resourcePath)
+        ]);
+
+        // 📊 ANALYSIS (Powered by StockEngine)
+        const lowStockItems = StockEngine.calculateLowStock(allStock, ingredients);
+
+        return lowStockItems.map(s => ({
+            id: s.id,
+            item: s.ingredientName,
+            current: s.quantity,
+            unit: s.unit,
+            status: s.status,
+            dlc: s.dlc
+        })) as SovereignValue;
     }
 };

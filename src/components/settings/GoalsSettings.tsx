@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
 import {
     Target,
-    Save,
     Loader2,
     TrendingUp,
     Users,
@@ -17,8 +16,7 @@ import {
     ArrowUpRight,
     Activity,
     LayoutPanelTop,
-    ShieldCheck,
-    Circle
+    ShieldCheck
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 
@@ -236,9 +234,9 @@ export default function GoalsSettings() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
                         { label: 'Fiscal Zenith Attained', status: true, color: 'text-accent' },
-                        { label: 'Material Overrun Detection', status: true, color: 'text-rose-500' },
-                        { label: 'Saturation Limit (>90%)', status: false, color: 'text-amber-500' },
-                        { label: 'Semantic Criticality Alert', status: true, color: 'text-blue-500' }
+                        { label: 'Material Overrun Detection', status: true, color: 'text-status-danger' },
+                        { label: 'Saturation Limit (>90%)', status: false, color: 'text-status-warning' },
+                        { label: 'Semantic Criticality Alert', status: true, color: 'text-brand' }
                     ].map((alert, i) => (
                         <div key={i} className="flex items-center justify-between p-6 bg-bg-primary rounded-[1.5rem] border border-border hover:border-accent/40 transition-all group">
                             <div className="flex items-center gap-4">
@@ -250,7 +248,7 @@ export default function GoalsSettings() {
                                 alert.status ? "bg-accent" : "bg-bg-tertiary border border-border shadow-inner"
                             )}>
                                 <div className={cn(
-                                    "absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-all",
+                                    "absolute top-1 w-4 h-4 bg-surface-card rounded-full shadow-sm transition-all",
                                     alert.status ? "right-1" : "left-1"
                                 )} />
                             </button>
@@ -273,7 +271,7 @@ export default function GoalsSettings() {
                     ) : (
                         <div className="relative">
                             <ArrowUpRight className="w-6 h-6 transition-transform group-hover:scale-110 group-hover:-translate-y-1 group-hover:translate-x-1" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Commit Strategic Vector

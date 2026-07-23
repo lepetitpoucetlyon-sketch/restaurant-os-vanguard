@@ -1,5 +1,5 @@
 import { logger } from '@/lib/axiom';
-import { EmpireInstance } from '@/domain/types/empire';
+import { EmpireInstance } from '@domain/types/empire';
 
 /**
  * FleetCommander - Domain Service for Multi-Instance Management
@@ -42,8 +42,8 @@ export const FleetCommander = {
   /**
    * Generates a sync payload for global configuration push
    */
-  generateGlobalSyncPayload(baseConfig: Record<string, unknown>, overrides: Record<string, unknown>): Record<string, unknown> {
-    logger.info('FleetCommander: Generating global sync payload', { overrideKeys: Object.keys(overrides) as any });
+  generateGlobalSyncPayload(baseConfig: Record<string, import("@/shared/nexus-contract").SovereignValue>, overrides: Record<string, import("@/shared/nexus-contract").SovereignValue>): Record<string, import("@/shared/nexus-contract").SovereignValue> {
+    logger.info('FleetCommander: Generating global sync payload', { overrideKeys: Object.keys(overrides) });
     return {
       ...baseConfig,
       ...overrides,

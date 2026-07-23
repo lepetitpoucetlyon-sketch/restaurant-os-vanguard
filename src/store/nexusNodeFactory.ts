@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
-import type { ModuleId } from '@/shared/genome.types';
+import type { ModuleId } from '@shared/genome.types';
 
 // --- 🧹 MEMORY PROTECTION (PHASE 4 - ZERO LEAK) ---
 export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
@@ -11,6 +11,10 @@ export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
  */
 import { NexusNode } from './base';
 export type { NexusNode };
+// updateNexusNode vit dans ./base (module neutre) : ré-export pour préserver la
+// surface, et GlobalRegistryService l'importe directement depuis base (cassage
+// du cycle nexusNodeFactory <-> GlobalRegistryService).
+export { updateNexusNode } from './base';
 
 /**
  * createNexusNode
@@ -31,38 +35,43 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
         orphanNodesRegistry.set(id, new WeakRef(nodeAtom));
     }
 
-    GlobalRegistryService.register(id, nodeAtom as any);
+    GlobalRegistryService.register(id, nodeAtom);
     return nodeAtom;
 }
 
-/**
- * updateNexusNode
- * Helper utilitaire pour mettre à jour l'état d'un node sans boilerplate.
- */
-export function updateNexusNode<T>(
-    prev: NexusNode<T>, 
-    updates: Partial<Omit<NexusNode<T>, 'lastUpdated'>>
-): NexusNode<T> {
-    return {
-        ...prev,
-        ...updates,
-        lastUpdated: Date.now()
-    };
-}
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { canDoAtom } from '@shared/nexus/state/SovereignGenome';
 
 // --- ⚛️ PROXY PATTERN FACTORY (Grade VI Stability) ---
 
 /**
  * createProxyDomain
  * Crée un triplet (node, data selector, loading selector) pour un domaine métier.
+ * GRADE X: Injecte systématiquement un middleware de vérification RBAC.
  */
 export function createProxyDomain<T>(id: string, initialData: T[] = [], moduleId?: ModuleId) {
     const node = createNexusNode<T>(id, initialData, true, moduleId);
+    
+    // Resolve permission for this domain
+    const metadata = DomainRegistry.getMetadata(id);
+    const permission = metadata.requiredPermission;
+
     return {
         id,
         node,
-        data: atom((get) => get(node).data),
-        loading: atom((get) => get(node).loading)
+        data: atom((get) => {
+            // 🛡️ RBAC ENFORCEMENT (Invisible & Automatic)
+            const hasAccess = get(canDoAtom)(permission);
+            if (!hasAccess) {
+                return []; // Return empty array to prevent leak
+            }
+            return get(node).data;
+        }),
+        loading: atom((get) => {
+            const hasAccess = get(canDoAtom)(permission);
+            if (!hasAccess) return false;
+            return get(node).loading;
+        })
     };
 }
 

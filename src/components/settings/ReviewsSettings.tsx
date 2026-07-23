@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Star,
-    Save,
     Loader2,
     MessageSquare,
     ThumbsUp,
@@ -12,31 +11,33 @@ import {
     TrendingUp,
     ExternalLink,
     AlertTriangle,
-    Zap,
     Cpu,
     Sparkles,
     ShieldCheck,
     PenTool
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { updateReviewStatus, replyToReview, deleteReview, saveMarketingSettingsAction } from '@/app/(admin)/actions/marketing';
 import { toast } from "sonner";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
 
 interface ReviewSource {
     id: string;
+    platform: string;
+    url: string;
     name: string;
     logo: string;
     rating: number;
     reviewCount: number;
     connected: boolean;
     color: string;
+    [key: string]: unknown;
 }
 
 const REVIEW_SOURCES: ReviewSource[] = [
-    { id: 'google', name: 'Google Maps', logo: '🌐', rating: 4.6, reviewCount: 234, connected: true, color: '#4285F4' },
-    { id: 'tripadvisor', name: 'TripAdvisor', logo: '🦉', rating: 4.5, reviewCount: 89, connected: true, color: '#00AF87' },
-    { id: 'thefork', name: 'TheFork', logo: '🍴', rating: 8.9, reviewCount: 156, connected: true, color: '#00A97F' },
-    { id: 'yelp', name: 'Yelp', logo: '📍', rating: 4.4, reviewCount: 45, connected: false, color: '#D32323' },
+    { id: 'google', platform: 'google', url: 'https://google.com', name: 'Google Maps', logo: '🌐', rating: 4.6, reviewCount: 234, connected: true, color: '#4285F4' },
+    { id: 'tripadvisor', platform: 'tripadvisor', url: 'https://tripadvisor.com', name: 'TripAdvisor', logo: '🦉', rating: 4.5, reviewCount: 89, connected: true, color: '#00AF87' },
+    { id: 'thefork', platform: 'thefork', url: 'https://thefork.com', name: 'TheFork', logo: '🍴', rating: 8.9, reviewCount: 156, connected: true, color: '#00A97F' },
+    { id: 'yelp', platform: 'yelp', url: 'https://yelp.com', name: 'Yelp', logo: '📍', rating: 4.4, reviewCount: 45, connected: false, color: '#D32323' },
 ];
 
 export default function ReviewsSettings() {
@@ -52,15 +53,14 @@ export default function ReviewsSettings() {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            // COMMIT TO REAL PERSISTENCE (Industrial Soudure)
-            await saveMarketingSettingsAction('main', {
+            await Nexus.adapter.set('marketingSettings/reputation', {
                 sources,
                 autoReply,
-                templates
-            } as any);
-            toast.success("Reputation state committed to the industrial core.");
-        } catch (error) {
-            toast.error("Failed to commit reputation state.");
+                templates,
+            });
+            toast.success("Paramètres réputation sauvegardés.");
+        } catch (_error) {
+            toast.error("Échec de la sauvegarde des paramètres réputation.");
         } finally {
             setIsSaving(false);
         }
@@ -108,8 +108,8 @@ export default function ReviewsSettings() {
                     transition={{ delay: 0.2 }}
                     className="bg-bg-secondary border border-border rounded-[2.5rem] p-10 shadow-premium relative overflow-hidden group"
                 >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-                    <TrendingUp className="w-10 h-10 mb-6 text-emerald-500" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-status-success/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
+                    <TrendingUp className="w-10 h-10 mb-6 text-status-success" />
                     <p className="text-5xl font-serif italic text-text-primary tracking-tighter mb-1">+12%</p>
                     <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Trajectory Growth</p>
                 </motion.div>
@@ -172,7 +172,7 @@ export default function ReviewsSettings() {
                                 >
                                     <motion.div
                                         animate={{ x: source.connected ? 26 : 2 }}
-                                        className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md"
+                                        className="absolute top-1 left-1 w-6 h-6 bg-surface-card rounded-full shadow-md"
                                     />
                                 </button>
                             </div>
@@ -223,7 +223,7 @@ export default function ReviewsSettings() {
                     >
                         <motion.div
                             animate={{ x: autoReply ? 26 : 2 }}
-                            className={cn("absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md", autoReply ? "" : "opacity-50")}
+                            className={cn("absolute top-1 left-1 w-6 h-6 bg-surface-card rounded-full shadow-md", autoReply ? "" : "opacity-50")}
                         />
                     </button>
                 </div>
@@ -237,12 +237,12 @@ export default function ReviewsSettings() {
                             className="space-y-6 overflow-hidden"
                         >
                             <div className="p-8 bg-bg-primary rounded-[2rem] border border-border group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-status-success/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                                        <ThumbsUp className="w-4 h-4 text-emerald-600" />
+                                    <div className="w-8 h-8 rounded-xl bg-status-success/10 flex items-center justify-center">
+                                        <ThumbsUp className="w-4 h-4 text-status-success" />
                                     </div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-emerald-600">Positive Vector Spectrum (4-5★)</span>
+                                    <span className="font-bold text-[10px] uppercase tracking-widest text-status-success">Positive Vector Spectrum (4-5★)</span>
                                 </div>
                                 <textarea
                                     value={templates.positive}
@@ -253,12 +253,12 @@ export default function ReviewsSettings() {
                             </div>
 
                             <div className="p-8 bg-bg-primary rounded-[2rem] border border-border group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-status-warning/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                                        <AlertTriangle className="w-4 h-4 text-amber-600" />
+                                    <div className="w-8 h-8 rounded-xl bg-status-warning/10 flex items-center justify-center">
+                                        <AlertTriangle className="w-4 h-4 text-status-warning" />
                                     </div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-amber-600">Neutral Signal Buffer (3★)</span>
+                                    <span className="font-bold text-[10px] uppercase tracking-widest text-status-warning">Neutral Signal Buffer (3★)</span>
                                 </div>
                                 <textarea
                                     value={templates.neutral}
@@ -269,12 +269,12 @@ export default function ReviewsSettings() {
                             </div>
 
                             <div className="p-8 bg-bg-primary rounded-[2rem] border border-border group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-status-danger/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-8 h-8 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                                        <ThumbsDown className="w-4 h-4 text-rose-600" />
+                                    <div className="w-8 h-8 rounded-xl bg-status-danger/10 flex items-center justify-center">
+                                        <ThumbsDown className="w-4 h-4 text-status-danger" />
                                     </div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-rose-600">Negative Anomaly Protocol (1-2★)</span>
+                                    <span className="font-bold text-[10px] uppercase tracking-widest text-status-danger">Negative Anomaly Protocol (1-2★)</span>
                                 </div>
                                 <textarea
                                     value={templates.negative}
@@ -309,7 +309,7 @@ export default function ReviewsSettings() {
                     ) : (
                         <div className="relative">
                             <ShieldCheck className="w-6 h-6 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Commit Reputation State

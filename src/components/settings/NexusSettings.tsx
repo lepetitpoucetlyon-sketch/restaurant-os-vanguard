@@ -2,28 +2,36 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    Cpu, 
-    Bot, 
-    Mic, 
-    Wand2, 
-    Save, 
-    ShieldCheck, 
-    Zap, 
-    Plus, 
-    Trash2, 
-    History,
+import {
+    Bot,
+    Mic,
+    Wand2,
+    Zap,
+    Plus,
+    Trash2,
     Volume2,
-    Check
+    Check,
+    Cpu,
+    Eye,
+    EyeOff,
+    Server
 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
-import { GEMINI_VOICES, NexusMacro } from '@/types/settings/nexus';
+import { GEMINI_VOICES, NexusMacro, NexusConfig, AI_PROVIDER_MODELS, AIProvider } from '@nexus/contracts/settings/nexus';
 import { NexusSphere } from "@/components/layout/NexusSphere";
 import { cn } from '@/lib/ui.foundations';
 
+const PROVIDER_META: Record<AIProvider, { label: string; color: string; hint: string; keyLabel: string }> = {
+    gemini:    { label: 'Google Gemini',  color: '#4285F4', hint: 'Fournisseur par défaut. Requis pour Nexus Live (voix).', keyLabel: 'Clé API Gemini' },
+    openai:    { label: 'OpenAI',         color: '#10A37F', hint: 'Compatible GPT-4o et GPT-4-Turbo.', keyLabel: 'Clé API OpenAI' },
+    anthropic: { label: 'Anthropic',      color: '#D97706', hint: 'Modèles Claude — excellents pour le raisonnement.', keyLabel: 'Clé API Anthropic' },
+    local:     { label: 'Modèle Local',   color: '#8B5CF6', hint: 'Ollama ou serveur compatible OpenAI. Aucune clé requise.', keyLabel: 'URL du serveur local' },
+};
+
 export default function NexusSettings() {
     const { settings, updateSLM } = useSettings();
-    const [isSaving, setIsSaving] = useState(false);
+    const [_isSaving, _setIsSaving] = useState(false);
+    const [showApiKey, setShowApiKey] = useState(false);
     
     // Local state for Nexus Config (mapped from slmConfig or its own field)
     // For now, we use nexusConfig from settings
@@ -36,9 +44,9 @@ export default function NexusSettings() {
         autoLanguage: true
     };
 
-    const updateConfig = (updates: Partial<import('@/types/settings/nexus').NexusConfig>) => {
+    const updateConfig = (updates: Partial<NexusConfig>) => {
         // Proper immutable update via the settings context
-        updateSLM({ nexusConfig: { ...config, ...updates } } as any);
+        updateSLM?.({ nexusConfig: { ...config, ...updates } });
     };
 
     const addMacro = () => {
@@ -59,6 +67,11 @@ export default function NexusSettings() {
         const updated = config.macros.map(m => m.id === id ? { ...m, ...updates } : m);
         updateConfig({ macros: updated });
     };
+
+    const activeProvider: AIProvider = (config.aiProvider as AIProvider | undefined) ?? 'gemini';
+    const availableModels = AI_PROVIDER_MODELS[activeProvider];
+    const activeModel = config.aiModel ?? availableModels[0]?.id ?? '';
+    const providerMeta = PROVIDER_META[activeProvider];
 
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -145,11 +158,11 @@ export default function NexusSettings() {
                                     {['expert', 'concise', 'friendly', 'protective'].map((p) => (
                                         <button
                                             key={p}
-                                            onClick={() => updateConfig({ personality: p as any })}
+                                            onClick={() => updateConfig({ personality: p as NexusConfig['personality'] })}
                                             className={cn(
                                                 "px-4 py-3 rounded-xl border transition-all text-[11px] font-bold uppercase tracking-widest",
                                                 config.personality === p 
-                                                    ? "bg-accent text-black border-accent" 
+                                                    ? "bg-accent text-primary border-accent" 
                                                     : "bg-bg-tertiary border-border text-text-muted hover:border-accent/40"
                                             )}
                                         >
@@ -176,7 +189,7 @@ export default function NexusSettings() {
                                     )}
                                 >
                                     <div className={cn(
-                                        "absolute top-1 w-4 h-4 rounded-full bg-white transition-all",
+                                        "absolute top-1 w-4 h-4 rounded-full bg-surface-card transition-all",
                                         config.historyEnabled ? "right-1" : "left-1"
                                     )} />
                                 </button>
@@ -212,7 +225,7 @@ export default function NexusSettings() {
                                 >
                                     <div className={cn(
                                         "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
-                                        config.voiceId === v.id ? "bg-accent text-black" : "bg-bg-primary text-text-muted"
+                                        config.voiceId === v.id ? "bg-accent text-primary" : "bg-bg-primary text-text-muted"
                                     )}>
                                         <Mic className="w-5 h-5" />
                                     </div>
@@ -227,7 +240,7 @@ export default function NexusSettings() {
                                     </div>
                                     {config.voiceId === v.id && (
                                         <div className="w-6 h-6 rounded-full bg-accent flex items-center justify-center">
-                                            <Check className="w-3 h-3 text-black" />
+                                            <Check className="w-3 h-3 text-primary" />
                                         </div>
                                     )}
                                 </button>
@@ -236,6 +249,119 @@ export default function NexusSettings() {
                     </div>
                 </motion.div>
             </div>
+
+            {/* --- FOURNISSEUR IA MODEL-AGNOSTIC --- */}
+            <motion.div variants={itemVariants}>
+                <div className="bg-bg-secondary border border-border rounded-[2rem] p-8 shadow-sm">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-2xl bg-bg-tertiary flex items-center justify-center border border-border">
+                            <Cpu className="w-6 h-6 text-accent" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-serif text-text-primary">Fournisseur IA</h3>
+                            <p className="text-[10px] text-text-muted uppercase tracking-widest font-black">Moteur d'Intelligence</p>
+                        </div>
+                    </div>
+
+                    {/* Provider selector */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                        {(Object.keys(PROVIDER_META) as AIProvider[]).map((p) => {
+                            const meta = PROVIDER_META[p];
+                            const isActive = activeProvider === p;
+                            return (
+                                <button
+                                    key={p}
+                                    onClick={() => updateConfig({ aiProvider: p, aiModel: AI_PROVIDER_MODELS[p][0]?.id, aiApiKey: '' })}
+                                    className={cn(
+                                        "flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all text-center",
+                                        isActive
+                                            ? "border-accent bg-bg-tertiary shadow-sm"
+                                            : "border-border hover:border-border-hover"
+                                    )}
+                                >
+                                    <div
+                                        className="w-8 h-8 rounded-xl flex items-center justify-center"
+                                        style={{ backgroundColor: isActive ? meta.color + '22' : undefined }}
+                                    >
+                                        {p === 'local' ? (
+                                            <Server className="w-4 h-4" style={{ color: isActive ? meta.color : undefined }} />
+                                        ) : (
+                                            <Bot className="w-4 h-4" style={{ color: isActive ? meta.color : undefined }} />
+                                        )}
+                                    </div>
+                                    <span className={cn("text-[10px] font-black uppercase tracking-widest", isActive ? "text-text-primary" : "text-text-muted")}>
+                                        {meta.label}
+                                    </span>
+                                    {isActive && <Check className="w-3 h-3 text-accent" />}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <p className="text-xs text-text-muted mb-5 bg-bg-tertiary/50 px-4 py-2 rounded-xl border border-border italic">
+                        {providerMeta.hint}
+                    </p>
+
+                    {/* Model selector */}
+                    <div className="space-y-2 mb-5">
+                        <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Modèle</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            {availableModels.map((m) => (
+                                <button
+                                    key={m.id}
+                                    onClick={() => updateConfig({ aiModel: m.id })}
+                                    className={cn(
+                                        "flex items-center justify-between gap-2 px-4 py-3 rounded-xl border text-left transition-all",
+                                        activeModel === m.id
+                                            ? "border-accent bg-bg-tertiary"
+                                            : "border-border hover:border-border-hover"
+                                    )}
+                                >
+                                    <div>
+                                        <p className="text-xs font-bold text-text-primary">{m.label}</p>
+                                        <p className={cn(
+                                            "text-[9px] uppercase tracking-widest font-black mt-0.5",
+                                            m.tier === 'fast' ? "text-status-success" : m.tier === 'powerful' ? "text-status-danger" : "text-action-primary"
+                                        )}>{m.tier}</p>
+                                    </div>
+                                    {activeModel === m.id && <Check className="w-3 h-3 text-accent shrink-0" />}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* API key / endpoint */}
+                    <div className="space-y-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">
+                            {activeProvider === 'local' ? 'URL du serveur' : providerMeta.keyLabel}
+                        </label>
+                        <div className="relative">
+                            <input
+                                type={activeProvider === 'local' ? 'text' : (showApiKey ? 'text' : 'password')}
+                                value={activeProvider === 'local' ? (config.aiEndpoint ?? '') : (config.aiApiKey ?? '')}
+                                onChange={(e) => activeProvider === 'local'
+                                    ? updateConfig({ aiEndpoint: e.target.value })
+                                    : updateConfig({ aiApiKey: e.target.value })
+                                }
+                                placeholder={activeProvider === 'local' ? 'http://localhost:11434' : 'sk-...'}
+                                className="w-full bg-bg-tertiary/50 border border-border rounded-2xl px-5 py-3 pr-12 text-text-primary text-sm font-mono focus:outline-none focus:border-accent transition-all"
+                            />
+                            {activeProvider !== 'local' && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowApiKey(s => !s)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors"
+                                >
+                                    {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                            )}
+                        </div>
+                        {activeProvider !== 'local' && (
+                            <p className="text-[10px] text-text-muted ml-1">La clé est chiffrée et stockée localement dans Nexus.</p>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
 
             {/* --- NEXUS MACROS: OPERATIONAL SHORTCUTS --- */}
             <motion.div variants={itemVariants}>
@@ -296,7 +422,7 @@ export default function NexusSettings() {
                                                     />
                                                     <button 
                                                         onClick={() => removeMacro(macro.id)}
-                                                        className="opacity-0 group-hover:opacity-100 p-2 text-text-muted hover:text-red-500 transition-all rounded-lg hover:bg-red-500/5"
+                                                        className="opacity-0 group-hover:opacity-100 p-2 text-text-muted hover:text-status-danger transition-all rounded-lg hover:bg-status-danger/5"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>

@@ -2,7 +2,7 @@ import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 
-    | 'array-contains' | 'array-contains-any' 
+    | 'array-contains' | 'array-contains-unknown' 
     | 'in' | 'not-in';
 
 export interface INexusQueryOptions {
@@ -31,6 +31,7 @@ export interface INexusAdapter {
     update<T = SovereignData>(path: string, data: Partial<T>): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
+    serverTimestamp(): unknown;
 }
 
 import { logger } from '@/lib/logger';

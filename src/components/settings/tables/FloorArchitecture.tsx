@@ -9,7 +9,7 @@ import {
     Edit3, 
     Trash2 
 } from "lucide-react";
-import type { Floor } from "@/types";
+import type { Floor } from "@nexus/contracts";
 
 
 interface FloorArchitectureProps {
@@ -150,8 +150,8 @@ export function FloorArchitecture({
                             <button onClick={() => handleEditFloor(floor)} className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors">
                                 <Edit3 className="w-4 h-4 text-text-muted" />
                             </button>
-                            <button onClick={() => deleteFloor(floor.id)} className="p-2 hover:bg-red-500/10 rounded-lg transition-colors">
-                                <Trash2 className="w-4 h-4 text-red-500" />
+                            <button onClick={() => deleteFloor(floor.id)} className="p-2 hover:bg-status-danger/10 rounded-lg transition-colors">
+                                <Trash2 className="w-4 h-4 text-status-danger" />
                             </button>
                         </div>
                     </motion.div>

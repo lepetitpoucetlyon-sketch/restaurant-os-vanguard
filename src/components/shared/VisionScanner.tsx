@@ -2,10 +2,9 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Upload, Loader2, CheckCircle2, XCircle, Scan, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Loader2, Scan, Zap } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { VisionService, type ExtractedInvoice } from '@/domain/services/VisionService';
+import { VisionService, type ExtractedInvoice } from '@domain/services/VisionService';
 
 
 interface VisionScannerProps {
@@ -60,7 +59,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                 onClick={() => fileInputRef.current?.click()}
                 className={cn(
                     "relative group cursor-pointer overflow-hidden rounded-[2.5rem] border-2 border-dashed transition-all duration-500",
-                    isProcessing ? "border-amber-500/50 bg-amber-500/5" : "border-white/10 hover:border-white/30 bg-white/[0.02]"
+                    isProcessing ? "border-amber-500/50 bg-status-warning/5" : "border-subtle hover:border-white/30 bg-surface-card/[0.02]"
                 )}
             >
                 {/* 🛰️ Laser Scan Animation */}
@@ -71,7 +70,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                             animate={{ top: "110%" }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                            className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent shadow-[0_0_20px_#f59e0b] z-20"
+                            className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-status-warning to-transparent shadow-[0_0_20px_#f59e0b] z-20"
                         />
                     )}
                 </AnimatePresence>
@@ -79,22 +78,22 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                 <div className="p-12 flex flex-col items-center text-center space-y-6">
                     <div className={cn(
                         "w-20 h-20 rounded-3xl flex items-center justify-center transition-all duration-700",
-                        isProcessing ? "bg-amber-500 text-black shadow-2xl shadow-amber-500/20 rotate-12" : "bg-white/5 text-neutral-400 group-hover:text-white group-hover:bg-white/10"
+                        isProcessing ? "bg-status-warning text-primary shadow-2xl shadow-amber-500/20 rotate-12" : "bg-surface-card/5 text-muted group-hover:text-white group-hover:bg-surface-card/10"
                     )}>
                         {isProcessing ? <Zap size={36} className="fill-current animate-pulse" /> : <Scan size={36} />}
                     </div>
 
                     <div>
                         <h3 className="text-xl font-serif italic text-white uppercase tracking-tighter mb-2">{label}</h3>
-                        <p className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.3em]">
+                        <p className="text-[10px] font-black text-secondary uppercase tracking-[0.3em]">
                             {isProcessing ? "IA vision en cours d'analyse brute..." : "Glissez-déposez ou cliquez pour capturer"}
                         </p>
                     </div>
 
                     {isProcessing && (
-                        <div className="flex items-center gap-3 px-4 py-2 bg-black/40 rounded-full border border-white/5">
-                            <Loader2 size={12} className="animate-spin text-amber-500" />
-                            <span className="text-[8px] font-bold text-amber-500 uppercase tracking-widest">GEMINI 1.5 PRO ACTIVE</span>
+                        <div className="flex items-center gap-3 px-4 py-2 bg-surface-sidebar/40 rounded-full border border-white/5">
+                            <Loader2 size={12} className="animate-spin text-status-warning" />
+                            <span className="text-[8px] font-bold text-status-warning uppercase tracking-widest">GEMINI 1.5 PRO ACTIVE</span>
                         </div>
                     )}
                 </div>
@@ -105,7 +104,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                         <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="absolute inset-0 z-10 bg-black/80 backdrop-blur-sm"
+                            className="absolute inset-0 z-10 bg-surface-sidebar/80 backdrop-blur-sm"
                         >
                             <img src={preview} alt="Preview" className="w-full h-full object-cover opacity-40" />
                         </motion.div>

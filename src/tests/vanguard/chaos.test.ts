@@ -1,9 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import './mocks';
-import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
 import { createStore } from 'jotai';
-import { ordersNodeAtom, updateNexusNode } from '@/store/operationalAtoms';
-import { type Order } from '@/types';
+import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
+import { type Order } from '@nexus/contracts';
 import { type NexusNode } from '@/store/nexusNodeFactory';
 
 
@@ -35,8 +34,8 @@ describe('🔥 OMNI-VANGUARD : BLOC 4 – CHAOS & PERFORMANCE', () => {
     });
 
     it('T43: Conflict Resolution (LWW) - Priorité au timestamp le plus récent', () => {
-        const node1 = { data: [], loading: false, error: null, lastUpdated: 1000 };
-        const node2 = { data: [], loading: false, error: null, lastUpdated: 2000 };
+        const node1 = { data: [] as any[], loading: false, error: null as string | null, lastUpdated: 1000 } as any;
+        const node2 = { data: [] as any[], loading: false, error: null as string | null, lastUpdated: 2000 } as any;
         const winner = node1.lastUpdated > node2.lastUpdated ? node1 : node2;
         expect(winner.lastUpdated).toBe(2000);
     });

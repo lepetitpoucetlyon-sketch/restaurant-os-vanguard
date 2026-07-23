@@ -1,4 +1,4 @@
-import { getTenantPath } from '@/lib/firebase';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/lib/NexusTransaction';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
@@ -19,7 +19,7 @@ export const QuoteSchema = z.object({
   notes: z.string().optional(),
 });
 
-export type Quote = z.infer<typeof QuoteSchema> & { id: string; createdAt: Date };
+export type Quote = z.infer<typeof QuoteSchema> & { id: string; createdAt: string };
 
 export class QuoteEngine {
   private static COLLECTION = 'quotes';
@@ -31,16 +31,16 @@ export class QuoteEngine {
     logger.info(`[QuoteEngine] Generating new quote for ${rawData.customerName}`);
 
     return await NexusTransaction.run(
-      { QUOTE_GENERATION: { schema: QuoteSchema as any, data: rawData } },
+      { QUOTE_GENERATION: { schema: QuoteSchema as unknown as import("zod").ZodSchema<import("@/shared/nexus-contract").SovereignValue>, data: rawData } },
       async (transaction) => {
-        const tenantPath = getTenantPath(this.COLLECTION);
+        const tenantPath = Nexus.getTenantPath(this.COLLECTION);
         const quoteId = Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 12);
         const quotePath = `${tenantPath}/${quoteId}`;
 
         const finalQuote = {
           ...rawData,
           id: quoteId,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
           status: 'pending',
           version: 1
         };

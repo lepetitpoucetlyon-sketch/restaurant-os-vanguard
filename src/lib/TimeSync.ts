@@ -32,7 +32,7 @@ export const TimeSync = {
     const performSync = async () => {
         try {
             await Nexus.adapter.set(syncPath, { heartbeat: new Date() }); 
-        } catch (e) {
+        } catch (_e) {
             logger.warn('[TimeSync] Heartbeat failed (Offline?)');
         }
     };
@@ -44,7 +44,7 @@ export const TimeSync = {
 
             if (h instanceof Date) {
                 serverDate = h;
-            } else if (h && typeof h === 'object' && 'toDate' in h && typeof (h as any).toDate === 'function') {
+            } else if (h && typeof h === 'object' && 'toDate' in h && typeof (h as { toDate: unknown }).toDate === 'function') {
                 serverDate = (h as unknown as { toDate: () => Date }).toDate();
             } else if (typeof h === 'string' || typeof h === 'number') {
                 serverDate = new Date(h);

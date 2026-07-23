@@ -1,20 +1,20 @@
 import { WritableAtom } from 'jotai';
 import { logger } from '@/lib/logger';
-import { NexusNode, updateNexusNode } from '@/store/nexusNodeFactory';
+// Import depuis le module neutre ./base (et non nexusNodeFactory) pour casser
+// le cycle GlobalRegistryService <-> nexusNodeFactory.
+import { NexusNode, updateNexusNode } from '@/store/base';
+import type { SetStateAction } from 'jotai';
 
-/**
- * 🏛️ GlobalRegistryService - Restaurant OS (Grade VI)
- * Single source of truth for all operational atoms.
- * Enables O(1) fleet-wide purge and memory management.
- */
-interface RegisteredAtom {
-    atom: WritableAtom<NexusNode<any>, [any | ((prev: any) => any)], void>;
+interface RegisteredAtom<T> {
+    atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>;
     lastAccessed: number;
     usageCount: number;
 }
 
+type NexusStoreSetter = { set: <T>(atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>, value: NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)) => void };
 
-const registry = new Map<string, RegisteredAtom>();
+
+const registry = new Map<string, RegisteredAtom<unknown>>();
 
 /**
  * 🧛 Orphan Registry (Grade VI)
@@ -31,11 +31,11 @@ export const GlobalRegistryService = {
     /**
      * Registers a new domain atom for memory management.
      */
-    register(id: string, atom: WritableAtom<NexusNode<any>, [any | ((prev: any) => any)], void>) {
+    register<T>(id: string, atom: WritableAtom<NexusNode<T>, [SetStateAction<NexusNode<T>>], void>) {
 
         if (!registry.has(id)) {
             registry.set(id, {
-                atom,
+                atom: atom as RegisteredAtom<unknown>['atom'],
                 lastAccessed: Date.now(),
                 usageCount: 0
             });
@@ -70,7 +70,7 @@ export const GlobalRegistryService = {
      * Decrements usage count (for hook cleanup).
      * TRIGGER: Immediate GC if count reaches 0 for volatile domains.
      */
-    release(id: string, store?: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }) {
+    release(id: string, store?: NexusStoreSetter) {
 
         const entry = registry.get(id);
         if (entry && entry.usageCount > 0) {
@@ -86,7 +86,7 @@ export const GlobalRegistryService = {
     /**
      * 🧹 Nuclear Purge (Zero Leak Policy)
      */
-    purgeInactive(store: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }, ttlMax: number = 120000) {
+    purgeInactive(store: NexusStoreSetter, ttlMax: number = 120000) {
 
         const now = Date.now();
         let purgedCount = 0;
@@ -97,7 +97,7 @@ export const GlobalRegistryService = {
 
             if (isIdle && isExpired) {
                 logger.info(`[Registry] Purging idle atom: ${id}`);
-                store.set(entry.atom, (prev: NexusNode<any>) => updateNexusNode(prev, { 
+                store.set(entry.atom, (prev: NexusNode<unknown>) => updateNexusNode(prev, { 
                     data: [], 
                     loading: true 
                 }));
@@ -113,7 +113,7 @@ export const GlobalRegistryService = {
     /**
      * ☢️ Force Nuclear Purge
      */
-    forceNuclearPurge(store: { set: <T>(atom: WritableAtom<T, [any], any>, value: T | ((prev: T) => T)) => void }) {
+    forceNuclearPurge(store: NexusStoreSetter) {
 
         this.purgeInactive(store, -1);
     },

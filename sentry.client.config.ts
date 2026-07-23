@@ -1,31 +1,26 @@
 // This file configures Sentry on the client.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-import * as Sentry from "@sentry/nextjs";
-
+// Sentry is loaded dynamically only in production — the top-level `import * as Sentry`
+// used to pull ~2.9MB of Sentry chunks (browser, react, replay, browser-utils, conventions,
+// core, nextjs) into the client bundle *even in dev*, because Next.js bundles this file
+// wholesale.
 const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
 
-Sentry.init({
-  dsn: SENTRY_DSN,
-
-  // Adjust this value in production, or use tracesSampler for greater control
-  tracesSampleRate: 1,
-
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
-
-  replaysOnErrorSampleRate: 1.0,
-
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
-
-  // You can remove this option if you're not planning to use the Sentry browser profiling integration:
-  integrations: [
-    Sentry.replayIntegration({
-      // Additional Replay configuration goes here, for example:
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
-});
+if (process.env.NODE_ENV === "production" && SENTRY_DSN) {
+  import("@sentry/nextjs").then(Sentry => {
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      tracesSampleRate: 1,
+      debug: false,
+      replaysOnErrorSampleRate: 1.0,
+      replaysSessionSampleRate: 0.1,
+      integrations: [
+        Sentry.replayIntegration({
+          maskAllText: true,
+          blockAllMedia: true,
+        }),
+      ],
+    });
+  }).catch(() => { /* Sentry init failed — silent, do not block app */ });
+}

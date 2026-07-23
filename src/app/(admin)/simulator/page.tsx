@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { StatCard, StatsGrid } from "@/components/ui/StatCard";
-import { Button } from "@/components/ui/button";
-import { SimulationService, MonteCarloResult, SimulationProfile, SimulationMode } from "@/domain/services/SimulationService";
-import { SimulatorConsole } from "@/components/admin/simulator/SimulatorConsole";
-import { TrendingUp, Users, AlertTriangle, Play, RefreshCcw, DollarSign, Activity } from "lucide-react";
+import { PageHeader } from "@ui/PageHeader";
+import { GlassCard } from "@ui/GlassCard";
+import { StatCard, StatsGrid } from "@ui/StatCard";
+import { Button } from "@ui/button";
+import { SimulationService, MonteCarloResult, SimulationProfile } from "@domain/services/SimulationService";
+import { SimulatorConsole } from "@nexus/guards";
+import { TrendingUp, Users, AlertTriangle, Play, RefreshCcw, DollarSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
@@ -60,7 +60,7 @@ export default function SimulatorPage() {
                             type="number" 
                             value={days} 
                             onChange={(e) => setDays(Number(e.target.value))}
-                            className="bg-bg-primary border border-border rounded-xl p-3 focus:outline-none focus:border-accent"
+                            className="bg-bg-primary border border-border rounded-xl p-3 focus:outline-none focus:border-action-primary"
                         />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -69,7 +69,7 @@ export default function SimulatorPage() {
                             type="number" 
                             value={iterations} 
                             onChange={(e) => setIterations(Number(e.target.value))}
-                            className="bg-bg-primary border border-border rounded-xl p-3 focus:outline-none focus:border-accent"
+                            className="bg-bg-primary border border-border rounded-xl p-3 focus:outline-none focus:border-action-primary"
                         />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -77,7 +77,7 @@ export default function SimulatorPage() {
                         <select 
                             value={profile} 
                             onChange={(e) => setProfile(e.target.value as SimulationProfile)}
-                            className="bg-bg-primary border border-border rounded-xl p-3 focus:outline-none focus:border-accent"
+                            className="bg-bg-primary border border-border rounded-xl p-3 focus:outline-none focus:border-action-primary"
                         >
                             <option value="PIZZERIA_RUSH">Pizzeria Rush (Vol. Élevé)</option>
                             <option value="FINE_DINING_CALM">Fine Dining (Haute Marge)</option>
@@ -139,7 +139,7 @@ export default function SimulatorPage() {
                             {results.map((r, i) => (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                                     <div 
-                                        className="w-full bg-accent/20 border-t-2 border-accent rounded-t-lg transition-all hover:bg-accent/40"
+                                        className="w-full bg-action-primary border-t-2 border-action-primary rounded-t-lg transition-all hover:bg-action-primary"
                                         style={{ height: `${Math.max(10, (r.metrics.netProfit / results[0].metrics.totalRevenue) * 500)}%` }}
                                     >
                                         <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-bg-secondary border border-border p-2 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
@@ -161,7 +161,7 @@ export default function SimulatorPage() {
 function SectionTitle({ title }: { title: string }) {
     return (
         <div className="flex items-center gap-4">
-            <h2 className="font-serif italic text-2xl text-text-primary capitalize">{title}</h2>
+            <h2 className="font-brand italic text-2xl text-text-primary capitalize">{title}</h2>
             <div className="h-px bg-border flex-1" />
         </div>
     );

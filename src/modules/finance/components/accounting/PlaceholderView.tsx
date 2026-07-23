@@ -3,8 +3,8 @@
 
 import { motion } from "framer-motion";
 import { Plus, LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useUI } from "@/context/UIContext";
+import { Button } from "@ui/button";
+import { useUI } from "@/hooks";
 
 interface PlaceholderViewProps {
     title: string;

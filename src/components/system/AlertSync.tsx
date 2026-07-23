@@ -3,14 +3,14 @@
 import { useEffect, useRef } from 'react';
 import { useInventory } from '@/engines/ops/NexusOpsProvider';
 import { useNotifications } from '@/context/NotificationsContext';
-import { useHACCP } from '@/engines/guard/NexusGuardProvider';
+import { useHACCP } from '@nexus/guards/NexusGuardProvider';
 
 /**
  * ALERT SYNC COMPONENT
  * Bridges Inventory and HACCP alerts to the Notifications system.
  * This component renders nothing but performs side effects.
  */
-export function AlertSync() {
+export function AlertSync(): null {
     const { lowStockItems } = useInventory();
     const { criticalAlerts } = useHACCP();
     const { addNotification, notifications } = useNotifications();
@@ -25,7 +25,7 @@ export function AlertSync() {
             if (notifiedItems.current.has(notifiedKey)) return false;
 
             const alreadyHasNotification = notifications.some(n =>
-                n.module === 'inventory' && n.message.includes(item.ingredientName) && !n.read
+                n.module === 'inventory' && n.message.includes(String(item.ingredientName || '')) && !n.read
             );
 
             return !alreadyHasNotification;
@@ -37,7 +37,7 @@ export function AlertSync() {
             addNotification({
                 type: 'warning',
                 title: 'Stock Bas',
-                message: `${item.ingredientName}: Seuil critique atteint (quantité: ${item.quantity} ${item.unit})`,
+                message: `${String(item.ingredientName || '')}: Seuil critique atteint (quantité: ${item.quantity} ${item.unit})`,
                 module: 'inventory',
                 action: { label: 'Voir Inventaire', href: '/inventory' }
             });
@@ -49,7 +49,7 @@ export function AlertSync() {
     useEffect(() => {
         if (!criticalAlerts) return;
         // Create a set of existing unread notifications for fast lookup
-        const existingAlertKeys = new Set(
+        const _existingAlertKeys = new Set(
             notifications
                 .filter(n => n.module === 'haccp' && !n.read)
                 .map(n => n.message) // Using message as key part
@@ -60,8 +60,8 @@ export function AlertSync() {
             if (notifiedItems.current.has(notifiedKey)) return false;
 
             // Check if notification already exists using the Set
-            const messagePart = sensor.name;
-            // Simple check if any message contains the sensor name
+            const _messagePart = sensor.name;
+            // Simple check if unknown message contains the sensor name
             // This is still partly O(N) on the Set keys but much faster than array.some
             // For true O(1), we would need unique IDs on notifications that match sensor IDs.
             // But this optimization avoids N * M loop where M is all notifications.

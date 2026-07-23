@@ -4,16 +4,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Settings } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
-import { PageSettingConfig } from "@/types/permissions.types";
+import { useLanguage } from "@/hooks";
+import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@/components/settings/ui/PremiumSelect";
 import { PremiumNumberInput } from "@/components/settings/ui/PremiumNumberInput";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData, SovereignField } from "@shared/nexus-contract";
+import { SharedKernel } from "@/lib/shared-kernel";
 
 interface LogicTabProps {
     filteredSettings: PageSettingConfig[];
     localValues: SovereignData;
-    updateValue: (key: string, value: SovereignValue) => void;
+    updateValue: (key: string, value: unknown) => void;
 }
 
 
@@ -56,25 +57,25 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
 
                     {setting.type === "toggle" && (
                         <button
-                            onClick={() => updateValue(setting.key, !localValues[setting.key])}
+                            onClick={() => updateValue(setting.key, !SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField))}
                             className={cn(
                                 "w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-500",
-                                localValues[setting.key]
+                                localValues[setting.key] && SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField)
                                     ? "bg-accent/5 border-accent text-accent shadow-[0_0_20px_rgba(197,160,89,0.1)]"
                                     : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
                             )}
                         >
                             <span className="text-sm font-serif font-medium">
-                                {localValues[setting.key] ? t('common.enabled') || "Activé" : t('common.disabled') || "Désactivé"}
+                                {SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField) ? t('common.enabled') || "Activé" : t('common.disabled') || "Désactivé"}
                             </span>
                             <div className={cn(
                                 "w-12 h-6 rounded-full transition-all duration-500 relative",
                                 localValues[setting.key] ? "bg-accent" : "bg-bg-secondary border border-border"
                             )}>
                                 <motion.div
-                                    animate={{ x: localValues[setting.key] ? 24 : 4 }}
+                                    animate={{ x: SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField) ? 24 : 4 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                    className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-lg"
+                                    className="absolute top-1 w-4 h-4 rounded-full bg-surface-card shadow-lg"
                                 />
                             </div>
                         </button>
@@ -82,7 +83,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
 
                     {setting.type === "select" && (
                         <PremiumSelect
-                            value={(localValues[setting.key] as any) || ""}
+                            value={SharedKernel.castString(localValues[setting.key] as SovereignField)}
                             onChange={(val) => updateValue(setting.key, val)}
                             options={setting.options || []}
                         />
@@ -90,7 +91,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
 
                     {setting.type === "number" && (
                         <PremiumNumberInput
-                            value={(localValues[setting.key] as any) || setting.min || 0}
+                            value={SharedKernel.castNumber(localValues[setting.key] as SovereignField) || setting.min || 0}
                             onChange={(val) => updateValue(setting.key, val)}
                             min={setting.min}
                             max={setting.max}
@@ -100,7 +101,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                     {setting.type === "text" && (
                         <input
                             type="text"
-                            value={(localValues[setting.key] as any) || ""}
+                            value={SharedKernel.castString(localValues[setting.key] as SovereignField)}
                             onChange={(e) => updateValue(setting.key, e.target.value)}
                             className="w-full p-4 rounded-2xl bg-bg-tertiary/20 border-2 border-border/50 text-text-primary font-serif focus:border-accent focus:outline-none focus:shadow-[0_0_20px_rgba(197,160,89,0.15)] transition-all duration-300"
                         />

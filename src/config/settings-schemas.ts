@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { SovereignValue } from '@/shared/nexus-contract';
+import { GlobalSettings } from '@/shared/nexus/contracts/settings';
 
 
 /**
@@ -22,7 +23,7 @@ export interface SettingField {
 }
 
 export interface ModuleSchema {
-    id: string;
+    id: keyof GlobalSettings;
     title: string;
     fields: SettingField[];
 }
@@ -210,6 +211,15 @@ export const INVENTORY_SCHEMA: ModuleSchema = {
     ]
 };
 
+export const SERVICE_SCHEMA: ModuleSchema = {
+    id: 'service',
+    title: 'Paramètres du Service',
+    fields: [
+        { id: 'allowOverbooking', key: 'allowOverbooking', type: 'boolean', label: 'Autoriser Sur-réservation' },
+        { id: 'autoAssignTables', key: 'autoAssignTables', type: 'boolean', label: 'Assignation Automatique' },
+    ]
+};
+
 export const SETTINGS_REGISTRY: ModuleSchema[] = [
     IDENTITY_SCHEMA,
     CONTACT_SCHEMA,
@@ -225,8 +235,7 @@ export const SETTINGS_REGISTRY: ModuleSchema[] = [
     LEGAL_SCHEMA,
     STAFF_CONFIG_SCHEMA,
     RESERVATIONS_CONFIG_SCHEMA,
-    INVENTORY_SCHEMA
+    INVENTORY_SCHEMA,
+    SERVICE_SCHEMA
 ];
-
-export const SERVICE_SCHEMA = RESERVATIONS_CONFIG_SCHEMA;
 

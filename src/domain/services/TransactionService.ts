@@ -1,14 +1,16 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { FiscalEngine, FiscalSeal } from '@/domain/services/FiscalEngine';
-import { StockEngine } from '@/domain/services/StockEngine';
-import { Order, StockItem, Recipe } from '@/types';
-import { getTenantPath } from '@/lib/firebase';
+import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
+import { StockEngine } from '@domain/services/StockEngine';
+import { Order, StockItem, Recipe } from '@nexus/contracts';
+import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { OperationalIdentity } from '@/shared/nexus-contract';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 /**
  * 🏛️ TransactionService - Restaurant OS
  * Centralized Orchestrator for the "Critical Path" (Payment, Stock, Fiscal).
- * Grade VI: Zero Logic in Transport Layers.
+ * Grade X: Molecular Consistency & Domain-Registry Driven.
  */
 export class TransactionService {
 
@@ -22,30 +24,42 @@ export class TransactionService {
             const batch = Nexus.adapter.batch();
             const timestamp = new Date();
 
-            // 1. DATA GATHERING (Parallelized for Performance)
-            const orderPath = `${getTenantPath('orders', tenantId)}/${orderId}`;
+            // 🏛️ RESOLVE DOMAIN PATHS (Grade X)
+            const flowsPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`;
+            const inventoryPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.LOGISTICS)}`;
+            const resourcePath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
+            const fiscalPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.LEDGER)}`;
+            const crmPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.CRM)}`;
+            const nodesPath = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}`;
+
+            const orderPath = `${flowsPath}/${orderId}`;
+
+            // 1. DATA GATHERING
             const [order, recipes, allStock] = await Promise.all([
-                Nexus.adapter.get(orderPath) as Promise<Order>,
-                Nexus.adapter.query(getTenantPath('recipes', tenantId)),
-                Nexus.adapter.query(getTenantPath('stockItems', tenantId))
+                Nexus.adapter.get<Order>(orderPath),
+                Nexus.adapter.query<Recipe>(resourcePath),
+                Nexus.adapter.query<StockItem>(inventoryPath)
             ]);
 
             if (!order) throw new Error(`Order ${orderId} not found.`);
             if (order.status === 'paid') throw new Error(`Order ${orderId} is already paid.`);
 
+            // Canonical total (Microunits Protocol). Sealed amount stays in cents for NF525 continuity;
+            // value-preserving for legacy orders (µ = cents × 10 000) and robust for µ-native orders.
+            const orderTotalInCents = SovereignMath.toCents(BigInt(SovereignMath.orderTotalMicrounits(order)));
+
             // 2. NF525 FISCAL SEALING
-            const fiscalPath = getTenantPath('fiscalLedger', tenantId);
-            const lastSeals = await Nexus.adapter.query(fiscalPath, {
+            const lastSeals = await Nexus.adapter.query<FiscalSeal>(fiscalPath, {
                 orderBy: { field: 'timestamp', direction: 'desc' },
                 limit: 1
             });
-            const lastHash = lastSeals.length > 0 ? (lastSeals[0] as any as FiscalSeal).hash : null;
+            const _lastHash = lastSeals.length > 0 ? lastSeals[0].hash : null;
 
             const seal = await FiscalEngine.sealEntry(order.id, {
-                amount: order.totalInCents, // Correction: changed from totalInCents to amount to match FiscalEngine expected data
+                amount: orderTotalInCents,
                 timestamp: timestamp.toISOString()
-            }, { 
-                lastSeal: lastHash ? { hash: lastHash } as FiscalSeal : undefined, 
+            }, {
+                lastSeal: lastSeals.length > 0 ? lastSeals[0] : undefined, 
                 instanceId: tenantId,
                 isTrainingMode: options.isTrainingMode 
             });
@@ -56,32 +70,32 @@ export class TransactionService {
             // 3. STOCK DEDUCTION (Powered by StockEngine)
             const stockImpact = await StockEngine.calculateOrderStockImpact(
                 order, 
-                recipes as any[] as Recipe[], 
-                allStock as StockItem[], 
+                recipes, 
+                allStock, 
                 orderId
             );
 
-            // Apply stock updates to batch
+            // Apply stock updates
             stockImpact.updates.forEach(upd => {
-                batch.update(`${getTenantPath('stockItems', tenantId)}/${upd.id}`, upd.data);
+                batch.update(`${inventoryPath}/${upd.id}`, upd.data);
             });
 
-            // Apply inventory movements to batch
+            // Apply inventory movements
             stockImpact.movements.forEach(mov => {
-                const movPath = getTenantPath('inventoryMovements', tenantId);
-                const movId = Nexus.adapter.generateId(movPath);
-                batch.set(`${movPath}/${movId}`, { ...mov, id: movId });
+                const movFullPath = `tenants/${tenantId}/inventory_movements`; // Specific audit trail
+                const movId = Nexus.adapter.generateId(movFullPath);
+                batch.set(`${movFullPath}/${movId}`, { ...mov, id: movId });
             });
 
-            // 4. Customer & LOYALTY (Typed Customer Data)
+            // 4. Customer & LOYALTY
             if (order.customerId) {
-                const customerPath = `${getTenantPath('clients', tenantId)}/${order.customerId}`;
-                const customer = await Nexus.adapter.get(customerPath) as { loyaltyPoints?: number, totalRevenue?: number, totalVisits?: number } | null;
+                const customerFullPath = `${crmPath}/${order.customerId}`;
+                const customer = await Nexus.adapter.get<{ loyaltyPoints?: number; totalRevenue?: number; totalVisits?: number }>(customerFullPath);
                 if (customer) {
-                    const pointsToAdd = Math.floor((order.totalInCents || 0) / 100);
-                    batch.update(customerPath, {
+                    const pointsToAdd = Math.floor(orderTotalInCents / 100);
+                    batch.update(customerFullPath, {
                         loyaltyPoints: (customer.loyaltyPoints || 0) + pointsToAdd,
-                        totalRevenue: (customer.totalRevenue || 0) + ((order.totalInCents || 0) / 100),
+                        totalRevenue: (customer.totalRevenue || 0) + (orderTotalInCents / 100),
                         totalVisits: (customer.totalVisits || 0) + 1,
                         lastVisitDate: timestamp.toISOString(),
                         updatedAt: timestamp.toISOString()
@@ -97,8 +111,8 @@ export class TransactionService {
             });
 
             if (order.tableId) {
-                const tablePath = `${getTenantPath('tables', tenantId)}/${order.tableId}`;
-                batch.update(tablePath, {
+                const tableFullPath = `${nodesPath}/${order.tableId}`;
+                batch.update(tableFullPath, {
                     status: 'available',
                     lastCleanedAt: timestamp.toISOString()
                 });
@@ -110,7 +124,7 @@ export class TransactionService {
             logger.info(`[TransactionService] Transaction Certified & Stock Deducted for Order ${orderId}`);
             return { success: true, hash: seal.hash };
 
-        } catch (error) {
+        } catch (error: unknown) {
             logger.error(`[TransactionService] CRITICAL: Transaction failed!`, { error, orderId });
             throw error;
         }

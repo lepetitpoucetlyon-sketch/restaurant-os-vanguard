@@ -1,18 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { fadeInUp } from "@/lib/motion";
 import { 
-    Palette, Type, Cpu, Sparkles, 
-    Terminal, MessageSquare
+    Palette, Type, Cpu, MessageSquare
 } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@ui/GlassCard";
 
 const COLORS = [
     { name: "Or d'Accent", hex: "#EAB308", label: "Identité de Marque", class: "bg-accent-gold" },
     { name: "Noir Onyx", hex: "#000000", label: "Arrière-plan", class: "bg-bg-primary" },
     { name: "Ardoise Sombre", hex: "#1F2937", label: "Secondaire", class: "bg-bg-secondary" },
-    { name: "Émeraude", hex: "#10B981", label: "Succès & Inventaire", class: "bg-emerald-500" }
+    { name: "Émeraude", hex: "#10B981", label: "Succès & Inventaire", class: "bg-status-success" }
 ];
 
 export function BrandPromptGuide() {
@@ -40,7 +37,7 @@ export function BrandPromptGuide() {
             {/* 2. Typography */}
             <div className="space-y-6 pt-6 border-t border-border/50">
                 <div className="flex items-center gap-3">
-                    <Type className="w-5 h-5 text-blue-400" />
+                    <Type className="w-5 h-5 text-brand" />
                     <h4 className="text-xl font-serif text-text-primary">Système Typographique</h4>
                 </div>
                 <div className="space-y-4">
@@ -62,16 +59,16 @@ export function BrandPromptGuide() {
             {/* 3. Oracle Master Prompt */}
             <div className="space-y-6 pt-6 border-t border-border/50">
                 <div className="flex items-center gap-3">
-                    <Cpu className="w-5 h-5 text-purple-400" />
+                    <Cpu className="w-5 h-5 text-brand" />
                     <h4 className="text-xl font-serif text-text-primary italic">Prompt Maître Oracle</h4>
                 </div>
-                <div className="p-8 rounded-3xl bg-black/40 border border-purple-500/20 font-mono text-sm group relative overflow-hidden">
+                <div className="p-8 rounded-3xl bg-surface-sidebar/40 border border-focus/20 font-mono text-sm group relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
-                        <MessageSquare className="w-20 h-20 text-purple-400" />
+                        <MessageSquare className="w-20 h-20 text-brand" />
                     </div>
                     
                     <div className="space-y-4 relative z-10 text-white/80 leading-relaxed italic">
-                        <p className="text-purple-400 font-black mb-4 flex items-center gap-2">
+                        <p className="text-brand font-black mb-4 flex items-center gap-2">
                              Instruction Système (Racine Serveur)
                         </p>
                         <p>"Vous êtes l'IA centrale 'Oracle' de Restaurant OS."</p>
@@ -82,10 +79,10 @@ export function BrandPromptGuide() {
                     </div>
 
                     <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-[10px] text-purple-400/60 uppercase font-black tracking-widest">Modèle: Gemini 3.1 </span>
+                        <span className="text-[10px] text-brand/60 uppercase font-black tracking-widest">Modèle: Gemini 3.1 </span>
                         <div className="flex gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                            <span className="text-[10px] text-emerald-400 uppercase font-black">Agent En Ligne</span>
+                            <span className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                            <span className="text-[10px] text-status-success uppercase font-black">Agent En Ligne</span>
                         </div>
                     </div>
                 </div>

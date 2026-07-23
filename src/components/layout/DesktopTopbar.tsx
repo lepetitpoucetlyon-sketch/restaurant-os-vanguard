@@ -2,11 +2,10 @@
 
 import React from 'react';
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { NAV_SECTIONS } from "@/config/navigation";
+import { NAV_SECTIONS } from "@/config/navConfig";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
-import { useNexusCore } from "@/engines/core/NexusCoreProvider";
+import { useNexusCore } from "@/hooks";
 
 export function DesktopTopbar() {
     const pathname = usePathname();
@@ -22,9 +21,10 @@ export function DesktopTopbar() {
                 
                 <div className="hidden xl:flex items-center gap-8">
                     {NAV_SECTIONS.slice(0, 5).map((section) => (
-                        <Link 
-                            key={section.id} 
+                        <Link
+                            key={section.id}
                             href={section.items[0]?.href || '#'}
+                            prefetch={false}
                             className={cn(
                                 "text-[10px] font-black uppercase tracking-[0.3em] transition-all",
                                 pathname.startsWith(section.items[0]?.href) ? "text-accent-gold" : "text-text-muted hover:text-text-primary"

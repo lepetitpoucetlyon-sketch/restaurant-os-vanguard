@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
-import { useAccounting } from "@/context/AccountingContext";
+import { useAccounting } from "@modules/finance";
 
 export function ProfitLossView() {
     const { generatePandL, metrics } = useAccounting();

@@ -1,35 +1,29 @@
-import { INexusAdapter, INexusQueryOptions, INexusBatch } from "@/lib/nexus/NexusAdapter";
+import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from "@/lib/nexus/types";
+import type { SovereignData } from '@/shared/nexus-contract';
 import { simulatorDb } from '@/lib/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
-import { SovereignGuard } from '@/lib/SovereignGuard';
-import type { SovereignData, SovereignField } from '@/shared/nexus-contract';
-
-const PRODUCTION_TENANT_ID = 'lepetitpoucet';
+import { 
+    IDocumentStore, 
+    IQueryEngine, 
+    IRealtimeSubscriber, 
+    IQueryOptions 
+} from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
 /**
- * 🌀 SimulacraAdapter - Restaurant OS (Grade X)
+ * 🌀 SimulacraAdapter - Restaurant OS (Grade X - Pure I/O)
  * The Copy-on-Write Isolation Layer.
  * Reads from Real Adapter + Virtual Store. Writes ONLY to Virtual Store.
  */
-export class SimulacraAdapter implements INexusAdapter {
+export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEngine, IRealtimeSubscriber {
     constructor(
         private realAdapter: INexusAdapter,
-        private forkId: string = 'default_sim',
-        activeTenantId?: string
+        private forkId: string = 'default_sim'
     ) {
-        // 🛡️ Sovereign Guard: Never allow simulation on production tenant
-        if (activeTenantId === PRODUCTION_TENANT_ID) {
-            const errorMsg = `[Simulacra Critical] Attempted to instantiate simulation bridge on Production Tenant (${PRODUCTION_TENANT_ID}). Blocked by SovereignGuard.`;
-            logger.error(errorMsg);
-            throw new Error(errorMsg);
-        }
-        
         logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
     }
 
-    async get<T = import('@/shared/nexus-contract').SovereignValue>(path: string): Promise<T | null> {
-
+    async get<T = SovereignData>(path: string, _context?: NexusContext): Promise<T | null> {
         // 1. Check Virtual Store first
         const virtual = await simulatorDb.virtualStore.get(path);
         
@@ -42,16 +36,10 @@ export class SimulacraAdapter implements INexusAdapter {
         return this.realAdapter.get<T>(path);
     }
 
-    /**
-     * ⚠️ Query in Simulacra mode is complex. 
-     * For Grade X Alpha, we merge real results with virtual overrides.
-     */
-    async query<T = import('@/shared/nexus-contract').SovereignValue>(collectionPath: string, options?: INexusQueryOptions): Promise<T[]> {
-
+    async query<T = SovereignData>(collectionPath: string, options?: IQueryOptions, _context?: NexusContext): Promise<T[]> {
         const realResults = await this.realAdapter.query<T>(collectionPath, options);
         const virtualResults = await simulatorDb.virtualStore
             .where('forkId').equals(this.forkId)
-            // This is a naive filter for path matching - in production we'd need a more robust approach
             .filter(doc => doc.path.startsWith(collectionPath))
             .toArray();
 
@@ -72,9 +60,8 @@ export class SimulacraAdapter implements INexusAdapter {
         return merged as T[];
     }
 
-    onSnapshot<T = import('@/shared/nexus-contract').SovereignValue>(path: string, callback: (data: T) => void, options?: INexusQueryOptions): () => void {
-
-        logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X Alpha.");
+    onSnapshot<T = SovereignData>(path: string, callback: (data: T) => void, _options?: IQueryOptions, _context?: NexusContext): () => void {
+        logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X.");
         
         // Initial load
         this.get<T>(path).then((data) => callback(data as T));
@@ -88,17 +75,20 @@ export class SimulacraAdapter implements INexusAdapter {
         return () => clearInterval(interval);
     }
 
-    batch(): INexusBatch {
+    batch(context?: NexusContext): INexusBatch {
         const ops: Array<() => Promise<void>> = [];
         return {
-            set: (path, data) => {
-                ops.push(() => this.set(path, data));
+            set: (path: string, data: unknown) => {
+                ops.push(() => this.set(path, data, undefined, context));
             },
-            update: (path, data) => {
-                ops.push(() => this.update(path, data));
+            update: (path: string, data: unknown) => {
+                ops.push(() => this.update(path, data as Partial<SovereignData>, context));
             },
-            delete: (path) => {
-                ops.push(() => this.delete(path));
+            delete: (path: string) => {
+                ops.push(() => this.delete(path, context));
+            },
+            increment: (path: string, field: string, amount: number) => {
+                ops.push(() => this.increment(path, field, amount, context));
             },
             commit: async () => {
                 for (const op of ops) await op();
@@ -106,41 +96,37 @@ export class SimulacraAdapter implements INexusAdapter {
         };
     }
 
-    async set<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {
-        let finalData = data as SovereignData;
+    async set<T = SovereignData>(path: string, data: T, options?: { merge?: boolean }, _context?: NexusContext): Promise<void> {
+        let finalData = data;
 
         if (options?.merge) {
-            const existing = await this.get<SovereignData>(path);
-
-            finalData = { ...existing, ...finalData };
+            const existing = await this.get<Record<string, unknown>>(path);
+            finalData = { ...existing, ...data };
         }
 
-        finalData = await SovereignGuard.protectWrite(path, finalData);
-
         await simulatorDb.virtualStore.put({
             path,
-            data: finalData as SovereignField,
+            data: finalData as SovereignData,
             isDeleted: false,
             forkId: this.forkId,
             updatedAt: new Date().toISOString()
         });
     }
 
-    async update<T = import('@/shared/nexus-contract').SovereignValue>(path: string, data: Partial<T>): Promise<void> {
-        const existing = await this.get<SovereignData>(path);
-        const finalData = await SovereignGuard.protectWrite(path, { ...existing, ...data } as SovereignData);
-
+    async update<T = SovereignData>(path: string, data: Partial<T>, _context?: NexusContext): Promise<void> {
+        const existing = await this.get<Record<string, unknown>>(path);
+        const finalData = { ...existing, ...data };
 
         await simulatorDb.virtualStore.put({
             path,
-            data: finalData as SovereignField,
+            data: finalData as SovereignData,
             isDeleted: false,
             forkId: this.forkId,
             updatedAt: new Date().toISOString()
         });
     }
 
-    async delete(path: string): Promise<void> {
+    async delete(path: string, _context?: NexusContext): Promise<void> {
         await simulatorDb.virtualStore.put({
             path,
             data: null,
@@ -150,11 +136,34 @@ export class SimulacraAdapter implements INexusAdapter {
         });
     }
     
-    async create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T): Promise<void> {
-        await this.set(path, data);
+    async create<T = SovereignData>(path: string, data: T, context?: NexusContext): Promise<void> {
+        await this.set(path, data, undefined, context);
     }
 
-    generateId(collectionPath: string): string {
+    generateId(_collectionPath: string): string {
         return IdGenerator.generateWithPrefix('sim');
+    }
+
+    serverTimestamp(): unknown {
+        return this.realAdapter.serverTimestamp();
+    }
+
+    async increment(path: string, field: string, amount: number, _context?: NexusContext): Promise<void> {
+        const existing = await this.get<Record<string, number>>(path) || {} as Record<string, number>;
+        existing[field] = (Number(existing[field]) || 0) + amount;
+        await this.set(path, existing);
+    }
+
+    async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, context?: NexusContext): Promise<T> {
+        const deferred: Array<() => Promise<void>> = [];
+        const tx: INexusTransaction = {
+            get: (path) => this.get(path, context),
+            set: (path, data) => { deferred.push(() => this.set(path, data as SovereignData, undefined, context)); },
+            update: (path, data) => { deferred.push(() => this.update(path, data as Partial<SovereignData>, context)); },
+            delete: (path) => { deferred.push(() => this.delete(path, context)); },
+        };
+        const result = await callback(tx);
+        for (const op of deferred) await op();
+        return result;
     }
 }

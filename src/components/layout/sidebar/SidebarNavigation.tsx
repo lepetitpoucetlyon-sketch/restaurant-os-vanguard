@@ -1,12 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { ChevronDown, LucideIcon } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { accordionContent } from "@/lib/motion";
-import { NavSection } from "@/config/navigation";
+import { NavSection } from "@/config/navConfig";
 import { useState } from "react";
 import { empireAudit } from "@/lib/audit";
 
@@ -131,6 +131,7 @@ export function SidebarNavigation({
                                                 <div key={item.href} className="relative group">
                                                     <Link
                                                         href={item.key === 'system_map' ? '#' : item.href}
+                                                        prefetch={false}
                                                         onClick={(e) => {
                                                             empireAudit.log({
                                                                 module: 'system',
@@ -149,7 +150,7 @@ export function SidebarNavigation({
                                                         className={cn(
                                                             "flex items-center rounded-2xl text-[13px] font-medium transition-all duration-700 relative overflow-hidden outline-none",
                                                             isActive
-                                                                ? "text-text-primary bg-bg-secondary dark:bg-white/10 border border-border/50 shadow-premium font-bold"
+                                                                ? "text-text-primary bg-bg-secondary dark:bg-surface-card/10 border border-border/50 shadow-premium font-bold"
                                                                 : "text-text-secondary dark:text-text-primary/80 hover:text-text-primary hover:bg-bg-tertiary/50",
                                                             isReallyCollapsed ? "justify-center h-12 w-12 mx-auto" : "px-5 py-3.5 gap-4 mx-0"
                                                         )}
@@ -170,10 +171,15 @@ export function SidebarNavigation({
                                                             </div>
                                                             {!isReallyCollapsed && (
                                                                 <span className={cn(
-                                                                    "tracking-tight transition-colors duration-700 font-serif italic text-lg font-bold leading-none py-1",
+                                                                    "tracking-tight transition-colors duration-700 font-serif italic text-lg font-bold leading-none py-1 flex items-center gap-2",
                                                                     isActive ? "text-text-primary" : "text-text-secondary dark:text-text-primary/90"
                                                                 )}>
                                                                     {t(`nav.${item.key}`)}
+                                                                    {item.badge && (
+                                                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 leading-none not-italic">
+                                                                            {item.badge}
+                                                                        </span>
+                                                                    )}
                                                                 </span>
                                                             )}
                                                         </div>

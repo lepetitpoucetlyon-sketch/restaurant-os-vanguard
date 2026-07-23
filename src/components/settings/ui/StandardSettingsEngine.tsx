@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Save, AlertCircle, CheckCircle2, RotateCcw, Plus, Trash2 } from 'lucide-react';
+import { Save, CheckCircle2, RotateCcw, Plus, Trash2 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { GoldSwitch } from '@/components/shared/atomic/GoldSwitch';
@@ -10,7 +10,8 @@ import { GlassInput } from '@/components/shared/atomic/GlassInput';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue, SovereignField } from '@/shared/nexus-contract';
+import { GlobalSettings } from '@/shared/nexus/contracts/settings';
 
 
 export interface SettingsOption {
@@ -27,21 +28,21 @@ export interface SettingsField {
     unit?: 'cents' | 'grams' | 'percent';
     options?: SettingsOption[];
     subFields?: SettingsField[];
-    validation?: any; // Zod or simple rules
+    validation?: import('zod').ZodTypeAny; // Zod or simple rules
 
 }
 
-export interface SettingsSchema {
-    id: string;
+export interface SettingsSchema<K extends keyof GlobalSettings = keyof GlobalSettings> {
+    id: K;
     title?: string;
     fields: SettingsField[];
 }
 
-interface StandardSettingsEngineProps {
-    schema: SettingsSchema; 
+interface StandardSettingsEngineProps<K extends keyof GlobalSettings> {
+    schema: SettingsSchema<K>; 
 }
 
-export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ schema }) => {
+export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema }: StandardSettingsEngineProps<K>) => {
     const { settings, updateConfig } = useSettings();
     const schemaKey = schema.id;
     
@@ -53,7 +54,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     // Initialisation
     useEffect(() => {
         if (settings && settings[schemaKey as keyof typeof settings]) {
-            setLocalData(settings[schemaKey as keyof typeof settings] as any);
+            setLocalData(settings[schemaKey as keyof typeof settings] as SovereignData);
         }
     }, [settings, schemaKey]);
 
@@ -64,11 +65,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
         return original !== current;
     }, [localData, settings, schemaKey]);
 
-    const handleChange = (fieldId: string, value: SovereignValue) => {
-
-        setLocalData((prev) => ({
+    const handleChange = (id: string, value: unknown) => {
+        setLocalData(prev => ({
             ...prev,
-            [fieldId]: value
+            [id]: SharedKernel.Sovereign.wrap(value)
         }));
     };
 
@@ -79,10 +79,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             // Pour l'instant on se concentre sur le sync
             
             // 2. Synchronisation via le Kernel (Assainissement + Persistence)
-            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as any);
+            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as unknown as import('@/shared/nexus-contract').SovereignSchemaField[]);
             
             // 3. Mise à jour via le Context (Global State + Firestore)
-            await updateConfig(schemaKey as never, sanitizedData);
+            await updateConfig(schemaKey, sanitizedData as GlobalSettings[K]);
             
             toast.success("Synchronisation Nexus-Sync réussie");
         } catch (error) {
@@ -94,13 +94,13 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
     };
 
     const handleReset = () => {
-        setLocalData((settings?.[schemaKey as keyof typeof settings] as any) || {});
+        setLocalData((settings?.[schemaKey as keyof typeof settings] as SovereignData) || {});
     };
 
     const renderField = (field: SettingsField, value: SovereignValue, onChange: (val: SovereignValue) => void) => {
 
         // Adaptation pour supporter 'key' ou 'id'
-        const fieldId = field.id || field.key;
+        const _fieldId = field.id || field.key;
 
         switch (field.type) {
             case 'boolean':
@@ -117,7 +117,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                 return (
                     <GlassInput
                         label={field.label}
-                        value={(value as any) || ''}
+                        value={SharedKernel.castString(value)}
                         onChange={(e) => onChange(e.target.value)}
                         placeholder={`Saisir ${field.label.toLowerCase()}...`}
                     />
@@ -125,10 +125,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             case 'textarea':
                 return (
                     <div className="flex flex-col space-y-2 w-full text-left">
-                        <span className="text-sm font-medium text-slate-300">{field.label}</span>
+                        <span className="text-sm font-medium text-muted">{field.label}</span>
                         <textarea
-                            className="w-full bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-3 text-slate-100 outline-none transition-all focus:border-amber-500/50 min-h-[100px]"
-                            value={(value as any) || ''}
+                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none transition-all focus:border-amber-500/50 min-h-[100px]"
+                            value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         />
                     </div>
@@ -143,34 +143,34 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                     <GlassInput
                         type="number"
                         label={field.label}
-                        value={(displayValue as any) || 0}
+                        value={SharedKernel.castNumber(displayValue)}
                         onChange={(e) => onChange(parseFloat(e.target.value))}
-                        icon={field.type === 'percentage' ? <span className="text-xs text-amber-500 font-bold">%</span> : null}
+                        icon={field.type === 'percentage' ? <span className="text-xs text-status-warning font-bold">%</span> : null}
                     />
                 );
             case 'select':
                 return (
                     <div className="flex flex-col space-y-2 w-full text-left">
-                        <span className="text-sm font-medium text-slate-300">{field.label}</span>
+                        <span className="text-sm font-medium text-muted">{field.label}</span>
                         <select
-                            className="w-full bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-amber-500/50"
-                            value={(value as any) || ''}
+                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none focus:border-amber-500/50"
+                            value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         >
-                            <option value="" className="bg-slate-900">Sélectionner...</option>
+                            <option value="" className="bg-surface-sidebar">Sélectionner...</option>
                             {field.options?.map((opt: SettingsOption) => (
-                                <option key={(opt.value as any)} value={(opt.value as any)} className="bg-slate-900">{opt.label}</option>
+                                <option key={SharedKernel.castString(opt.value)} value={SharedKernel.castString(opt.value)} className="bg-surface-sidebar">{opt.label}</option>
                             ))}
                         </select>
                     </div>
                 );
             case 'color':
                 return (
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/30 border border-slate-700/50">
-                        <span className="text-sm font-medium text-slate-300">{field.label}</span>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-surface-sidebar/30 border border-default/50">
+                        <span className="text-sm font-medium text-muted">{field.label}</span>
                         <input 
                             type="color" 
-                            value={(value as any) || '#ffffff'} 
+                            value={SharedKernel.castString(value)} 
                             onChange={(e) => onChange(e.target.value)}
                             className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-none"
                         />
@@ -179,12 +179,12 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             case 'list':
                 const listValue = Array.isArray(value) ? value : [];
                 return (
-                    <div className="space-y-4 p-4 rounded-2xl bg-slate-900/30 border border-slate-800/50 text-left">
+                    <div className="space-y-4 p-4 rounded-2xl bg-surface-sidebar/30 border border-default/50 text-left">
                         <div className="flex justify-between items-center">
-                            <span className="text-sm font-bold text-amber-500/80 uppercase tracking-wider">{field.label}</span>
+                            <span className="text-sm font-bold text-status-warning/80 uppercase tracking-wider">{field.label}</span>
                             <button 
-                                onClick={() => onChange([...listValue, {}] as any)}
-                                className="p-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 rounded-lg transition-colors border border-amber-500/30"
+                                onClick={() => onChange([...listValue, {}] as SovereignValue)}
+                                className="p-2 bg-status-warning/10 hover:bg-status-warning/20 text-status-warning rounded-lg transition-colors border border-amber-500/30"
                             >
                                 <Plus size={16} />
                             </button>
@@ -196,21 +196,21 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                     initial={{ opacity: 0, scale: 0.98 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.98 }}
-                                    className="relative grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-slate-900/40 rounded-xl border border-slate-700/30 group/item"
+                                    className="relative grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-surface-sidebar/40 rounded-xl border border-default/30 group/item"
                                 >
                                     <button 
-                                        onClick={() => onChange(listValue.filter((_, i) => i !== index) as any)}
-                                        className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg z-10 opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                        onClick={() => onChange(listValue.filter((_, i) => i !== index) as SovereignValue)}
+                                        className="absolute -top-2 -right-2 p-1 bg-status-danger text-white rounded-full hover:bg-status-danger transition-colors shadow-lg z-10 opacity-0 group-hover/item:opacity-100 transition-opacity"
                                     >
                                         <Trash2 size={12} />
                                     </button>
                                     {field.subFields?.map((sub: SettingsField) => (
                                         <div key={sub.id || sub.key}>
-                                            {renderField(sub, (item as any)[sub.id || sub.key!], (val: SovereignValue) => {
+                                            {renderField(sub, (item as Record<string, SovereignValue>)[sub.id || sub.key!], (val: SovereignValue) => {
 
                                                 const newList = [...listValue];
-                                                newList[index] = { ...newList[index], [sub.id || sub.key!]: val };
-                                                onChange(newList as any);
+                                                newList[index] = { ...(newList[index] as object), [sub.id || sub.key!]: val };
+                                                onChange(newList as SovereignValue);
                                             })}
                                         </div>
                                     ))}
@@ -232,10 +232,10 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
             className="space-y-8"
         >
             {/* Header Control */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-[2rem] bg-slate-900/60 backdrop-blur-xl border border-white/5 shadow-2xl gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-[2rem] bg-surface-sidebar/60 backdrop-blur-xl border border-white/5 shadow-2xl gap-4">
                 <div className="text-left">
                     <h2 className="text-2xl font-bold text-white tracking-tight">{schema.title || schema.id.toUpperCase()}</h2>
-                    <p className="text-sm text-slate-400">Configuration gérée par le Nexus-Sync Engine.</p>
+                    <p className="text-sm text-muted">Configuration gérée par le Nexus-Sync Engine.</p>
                 </div>
                 
                 <div className="flex items-center space-x-3">
@@ -246,7 +246,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 10 }}
                                 onClick={handleReset}
-                                className="flex items-center space-x-2 px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors"
+                                className="flex items-center space-x-2 px-4 py-2 text-sm text-muted hover:text-white transition-colors"
                             >
                                 <RotateCcw size={16} />
                                 <span>Annuler</span>
@@ -260,8 +260,8 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                         className={cn(
                             "flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-xl",
                             isDirty 
-                                ? "bg-amber-500 text-slate-950 hover:bg-amber-400 hover:scale-[1.02] active:scale-95 shadow-amber-500/20" 
-                                : "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700"
+                                ? "bg-status-warning text-slate-950 hover:bg-status-warning hover:scale-[1.02] active:scale-95 shadow-amber-500/20" 
+                                : "bg-surface-sidebar text-secondary cursor-not-allowed border border-default"
                         )}
                     >
                         {isSaving ? (
@@ -284,11 +284,11 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                             key={field.id || field.key}
                             variants={fadeInUp}
                             className={cn(
-                                "p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-amber-500/30 transition-all group",
+                                "p-6 rounded-3xl bg-surface-card/5 border border-white/5 hover:border-amber-500/30 transition-all group",
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >
-                            {renderField(field, (localData as any)[field.id || field.key!], (val: SovereignValue) => handleChange(field.id || field.key!, val))}
+                            {renderField(field, (localData as Record<string, SovereignField>)[field.id], (val: unknown) => handleChange(field.id, val))}
 
                         </motion.div>
                     ))}
@@ -300,7 +300,7 @@ export const StandardSettingsEngine: React.FC<StandardSettingsEngineProps> = ({ 
                 <motion.div 
                     initial={{ opacity: 0, y: 10 }} 
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center justify-center space-x-2 text-green-500/80 bg-green-500/5 py-3 rounded-full border border-green-500/10"
+                    className="flex items-center justify-center space-x-2 text-status-success/80 bg-status-success/5 py-3 rounded-full border border-green-500/10"
                 >
                     <CheckCircle2 size={14} />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Données Nexus-Sync Synchronisées</span>

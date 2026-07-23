@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020",
+    "baseUrl": ".",
     "lib": [
       "dom",
       "dom.iterable",
@@ -8,14 +9,14 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
     "strictFunctionTypes": false,
     "strictBindCallApply": false,
     "strictPropertyInitialization": false,
-    "noImplicitThis": false,
-    "useUnknownInCatchVariables": false,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
     "alwaysStrict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -35,9 +36,21 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/components/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@infrastructure": ["./src/infrastructure/index"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@domain/*": ["./src/domain/*"],
+
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@store/*": ["./src/store/*"],
+      "@nexus/*": ["./src/shared/nexus/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@ui": ["./src/components/ui/index"],
+      "@ui/*": ["./src/components/ui/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -55,6 +68,9 @@
     "graphify-out",
     "scratch",
     "scripts",
-    "playwright-report"
+    "playwright-report",
+    "src_VANGUARD_AUDIT",
+    "src_OLD_VIBE_BACKUP",
+    ".nexus/agents"
   ]
 }

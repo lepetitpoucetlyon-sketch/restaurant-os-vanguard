@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 import { ROLE_LABELS, ROLE_COLORS } from "@/lib/constants";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@ui/Toast";
 import { getDefaultStaffEmail } from "@/config/instance";
 import {
     User,
@@ -15,7 +15,6 @@ import {
     Key,
     Save,
     Loader2,
-    Check,
     X,
     Edit3,
     Star,
@@ -23,7 +22,6 @@ import {
     Briefcase,
     Eye,
     EyeOff,
-    Fingerprint,
     ScanFace,
     BadgeCheck,
     Terminal,
@@ -40,7 +38,7 @@ interface ProfileData {
 }
 
 export default function ProfileSettings() {
-    const { currentUser, users, updateUserStatus } = useAuth();
+    const { currentUser, users, updateUser } = useAuth();
     const { showToast } = useToast();
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -86,11 +84,11 @@ export default function ProfileSettings() {
 
         setIsSaving(true);
         try {
-            await updateUserStatus(selectedUser.id, {
+            await updateUser?.(selectedUser.id, {
                 name: formData.name,
                 avatar: formData.avatar,
                 ...(formData.pin ? { pin: formData.pin } : {})
-            } as any);
+            });
 
             setSaveSuccess(true);
             setTimeout(() => setSaveSuccess(false), 2000);
@@ -412,16 +410,21 @@ export default function ProfileSettings() {
                             whileTap={{ scale: 0.95 }}
                             onClick={handleSave}
                             disabled={isSaving}
-                            className="flex items-center gap-4 px-12 py-6 bg-text-primary text-bg-primary rounded-[2rem] font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-all disabled:opacity-50 group border border-border"
+                            className={cn(
+                                "flex items-center gap-4 px-12 py-6 rounded-[2rem] font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-all disabled:opacity-50 group border",
+                                saveSuccess
+                                    ? "bg-success text-white border-success"
+                                    : "bg-text-primary text-bg-primary border-border"
+                            )}
                         >
                             {isSaving ? (
                                 <Loader2 className="w-6 h-6 animate-spin" />
+                            ) : saveSuccess ? (
+                                <BadgeCheck className="w-6 h-6" />
                             ) : (
-                                <div className="relative">
-                                    <Save className="w-6 h-6 transition-transform group-hover:scale-110" />
-                                </div>
+                                <Save className="w-6 h-6 transition-transform group-hover:scale-110" />
                             )}
-                            Commit Identity Profile
+                            {saveSuccess ? "Profil sauvegardé" : "Commit Identity Profile"}
                         </motion.button>
                     </motion.div>
                 )}

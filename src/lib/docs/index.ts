@@ -1,4 +1,4 @@
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 import { dashboard } from './dashboard';
 import { reservations } from './reservations';
 import { floorPlan } from './floor-plan';
@@ -21,7 +21,7 @@ import { staff } from './staff';
 import { settings } from './settings';
 import { general } from './general';
 
-export * from '@/types';
+export * from '@nexus/contracts';
 
 export const CATEGORY_DOCS: Record<string, DocCategory> = {
     general,

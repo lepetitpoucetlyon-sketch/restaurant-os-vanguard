@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Calendar, Plus, ArrowRight, Trash2 } from "lucide-react";
-import { ClosedPeriod } from "@/types";
+import { ClosedPeriod } from "@nexus/contracts";
 
 interface ExceptionProtocolsProps {
     closedPeriods: ClosedPeriod[];
@@ -42,7 +42,7 @@ export function ExceptionProtocols({ closedPeriods, onAdd, onDelete }: Exception
                 <div className="flex items-center gap-4 relative z-10">
                     <motion.div
                         whileHover={{ scale: 1.1, rotate: 180 }}
-                        className="w-14 h-14 rounded-2xl bg-white dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/10 text-accent shadow-premium"
+                        className="w-14 h-14 rounded-2xl bg-surface-card dark:bg-surface-card/5 flex items-center justify-center border border-black/5 dark:border-subtle text-accent shadow-premium"
                     >
                         <Calendar className="w-7 h-7" />
                     </motion.div>
@@ -107,28 +107,28 @@ export function ExceptionProtocols({ closedPeriods, onAdd, onDelete }: Exception
                             initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
                             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                             exit={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-                            className="flex items-center justify-between p-6 bg-rose-500/5 backdrop-blur-md rounded-[2rem] border border-rose-500/10 shadow-sm"
+                            className="flex items-center justify-between p-6 bg-status-danger/5 backdrop-blur-md rounded-[2rem] border border-rose-500/10 shadow-sm"
                         >
                             <div className="flex items-center gap-8">
                                 <div className="flex items-center gap-4">
                                     <div className="text-center">
-                                        <div className="text-xl font-serif font-bold text-rose-600 tracking-tighter">
+                                        <div className="text-xl font-serif font-bold text-status-danger tracking-tighter">
                                             {new Date(period.startDate).toLocaleDateString('fr-FR', { day: '2-digit' })}
                                         </div>
-                                        <div className="text-[9px] font-bold text-rose-400 uppercase">{new Date(period.startDate).toLocaleDateString('fr-FR', { month: 'short' })}</div>
+                                        <div className="text-[9px] font-bold text-status-danger uppercase">{new Date(period.startDate).toLocaleDateString('fr-FR', { month: 'short' })}</div>
                                     </div>
-                                    <ArrowRight className="w-5 h-5 text-rose-200" />
+                                    <ArrowRight className="w-5 h-5 text-status-danger" />
                                     <div className="text-center">
-                                        <div className="text-xl font-serif font-bold text-rose-600 tracking-tighter">
+                                        <div className="text-xl font-serif font-bold text-status-danger tracking-tighter">
                                             {new Date(period.endDate).toLocaleDateString('fr-FR', { day: '2-digit' })}
                                         </div>
-                                        <div className="text-[9px] font-bold text-rose-400 uppercase">{new Date(period.endDate).toLocaleDateString('fr-FR', { month: 'short' })}</div>
+                                        <div className="text-[9px] font-bold text-status-danger uppercase">{new Date(period.endDate).toLocaleDateString('fr-FR', { month: 'short' })}</div>
                                     </div>
                                 </div>
-                                <div className="hidden md:block w-px h-10 bg-rose-500/20" />
+                                <div className="hidden md:block w-px h-10 bg-status-danger/20" />
                                 <div>
                                     <div className="text-sm font-serif font-bold text-text-primary uppercase tracking-tight italic">{period.reason}</div>
-                                    <div className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">
+                                    <div className="text-[10px] font-bold text-status-danger uppercase tracking-widest">
                                         Durée : {Math.ceil((new Date(period.endDate).getTime() - new Date(period.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1} Jours
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@ export function ExceptionProtocols({ closedPeriods, onAdd, onDelete }: Exception
                                 whileHover={{ scale: 1.1, backgroundColor: 'rgba(239, 68, 68, 0.1)' }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() => onDelete(period.id)}
-                                className="p-3 text-rose-500 rounded-xl transition-all"
+                                className="p-3 text-status-danger rounded-xl transition-all"
                             >
                                 <Trash2 className="w-5 h-5" />
                             </motion.button>

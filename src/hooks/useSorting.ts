@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { SovereignData } from "@/shared/nexus-contract";
+import { SovereignData } from "@shared/nexus-contract";
 
 type SortDirection = "asc" | "desc";
 
@@ -82,10 +82,10 @@ export function useSorting<T extends SovereignData>(
             } else if (typeof aValue === "number" && typeof bValue === "number") {
                 comparison = aValue - bValue;
             } else if (
-                aValue && typeof aValue === "object" && (aValue as unknown) instanceof Date &&
-                bValue && typeof bValue === "object" && (bValue as unknown) instanceof Date
+                aValue && typeof aValue === "object" && (aValue instanceof Date) &&
+                bValue && typeof bValue === "object" && (bValue instanceof Date)
             ) {
-                comparison = (aValue as unknown as Date).getTime() - (bValue as unknown as Date).getTime();
+                comparison = (aValue as Date).getTime() - (bValue as Date).getTime();
             } else {
                 comparison = String(aValue).localeCompare(String(bValue));
             }

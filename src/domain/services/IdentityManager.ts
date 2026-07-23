@@ -1,5 +1,5 @@
 import { hashPin } from '@/lib/shared-kernel';
-import type { User } from '@/types';
+import type { User } from '@nexus/contracts';
 
 export interface PersistedSession {
     userId: string;
@@ -11,24 +11,29 @@ export interface PersistedSession {
  * NEVER hardcode credentials in source code.
  */
 function getRootAdminPin(): string {
-    const pin = process.env.NEXT_PUBLIC_ROOT_ADMIN_PIN || process.env.ROOT_ADMIN_PIN;
+    const pin = process.env.ROOT_ADMIN_PIN;
     if (!pin || pin.trim().length !== 4) {
-        if (process.env.NODE_ENV === 'development') {
-            console.warn('[SECURITY] ROOT_ADMIN_PIN non configuré. Utilisation du PIN par défaut 9999 en mode DEV.');
-            return '9999';
-        }
-        throw new Error('[SECURITY] ROOT_ADMIN_PIN is not configured. Set it in .env.local');
+        // No default PIN — ever. An unconfigured PIN must block admin access,
+        // not silently open a well-known credential (dev or prod).
+        throw new Error(
+            '[SECURITY] ROOT_ADMIN_PIN is not configured (must be a 4-digit value). ' +
+            'Set ROOT_ADMIN_PIN in .env.local — no default is provided.'
+        );
     }
     return pin.trim();
 }
 
 export const ROOT_ADMIN: User = {
     id: 'user_root',
+    type: 'user',
     name: 'administrateur',
     role: 'admin',
+    status: 'active',
     avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80',
     performanceScore: 5.0,
     accessLevel: 100,
+    schemaVersion: 2,
+    updatedAt: Date.now(),
 };
 
 function stripSensitiveFields(user: User): User {
@@ -36,11 +41,11 @@ function stripSensitiveFields(user: User): User {
     return safeUser;
 }
 
-function buildSessionUser(user: User, lastActive?: string): User {
+function buildSessionUser(user: User, lastActive?: number): User {
     return stripSensitiveFields({
         ...user,
-        lastActive: lastActive ?? new Date().toISOString(),
-    });
+        lastActive: lastActive ?? Date.now(),
+    } as User);
 }
 
 function sameSessionUser(previous: User | null, next: User): boolean {
@@ -90,7 +95,7 @@ export const IdentityManager = {
      * 🛡️ Multi-tenant Privacy Gate
      * Checks if a user has authority to access a specific tenant's business data.
      */
-    canAccessTenantData(user: User, instance: import('@/domain/types/empire').EmpireInstance): boolean {
+    canAccessTenantData(user: User, instance: import('@domain/types/empire').EmpireInstance): boolean {
         // 1. Ownership Check (Normal User)
         if (user.role === 'admin' && !this.isSuperAdmin(user)) {
              // Basic assumption: normal admins are scoped to their own tenant

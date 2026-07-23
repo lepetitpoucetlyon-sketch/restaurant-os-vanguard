@@ -4,7 +4,9 @@
  */
 
 import { logger } from './axiom';
-import * as Sentry from '@sentry/nextjs';
+import { logger as devLogger } from '@/lib/logger';
+import { Sentry } from '@/lib/sentry';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
 export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'haccp' | 'system' | 'orchestration' | 'fleet';
@@ -53,6 +55,7 @@ class EmpireAuditLogger {
         setTimeout(() => {
             const payload = {
                 ...event,
+                timestamp: event.timestamp.toISOString() as unknown, // Cast temporaire pour le bridge Axiom
                 env: process.env.NODE_ENV || 'development',
                 context: 'RESTAURANT-OS-EMPIRE'
             };
@@ -69,18 +72,30 @@ class EmpireAuditLogger {
 
                 // 1. Axiom Integration (Long-term Observability)
                 try {
-                    logger.info(event.action, payload as any);
-                } catch (e) {
+                    logger.info(event.action, payload as import('@/shared/nexus-contract').SovereignMap);
+                } catch (_e) {
                     // Silently fail if axiom is not configured
                 }
 
-                // 2. Console Development Log
-                if (process.env.NODE_ENV !== 'production') {
-                    const color = event.severity === 'critical' ? '\x1b[31m' : event.severity === 'high' ? '\x1b[33m' : '\x1b[32m';
-                    console.log(`${color}[AUDIT][${event.module.toUpperCase()}]\x1b[0m ${event.action}`, event.details || '');
+                // 2. Development Log — routed through the central logger so this
+                // no longer writes to stdout on the fiscal-sealing hot path in prod
+                // (logger.debug is a no-op outside development).
+                devLogger.debug(`[AUDIT][${event.module.toUpperCase()}] ${event.action}`, event.details || '');
+
+                // 3. Firestore persistence — fleet & system events (survit au refresh)
+                if (event.module === 'fleet' || event.module === 'system') {
+                    try {
+                        const id = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+                        Nexus.adapter.set(`mcc/auditLog/${id}`, {
+                            ...payload,
+                            id,
+                        }).catch(() => {});
+                    } catch (_e) {
+                        // Non-bloquant — ne doit jamais faire crasher l'UI
+                    }
                 }
 
-                // 3. Sentry Integration (Critical Error Tracking)
+                // 4. Sentry Integration (Critical Error Tracking)
                 if (event.severity === 'critical') {
                     try {
                         Sentry.captureMessage(event.action, { 
@@ -88,7 +103,7 @@ class EmpireAuditLogger {
                             extra: event.details,
                             tags: { module: event.module }
                         });
-                    } catch (e) {
+                    } catch (_e) {
                         // Silently fail
                     }
                 }

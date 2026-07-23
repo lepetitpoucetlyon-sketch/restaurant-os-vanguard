@@ -14,7 +14,7 @@ export function useLocalStorage<T>(
         try {
             const item = window.localStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
-        } catch (error) {
+        } catch (_error) {
             return initialValue;
         }
     });
@@ -27,7 +27,9 @@ export function useLocalStorage<T>(
                 if (typeof window !== "undefined") {
                     window.localStorage.setItem(key, JSON.stringify(valueToStore));
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.warn(`[useLocalStorage] setValue failed for key "${key}"`, error);
+            }
         },
         [key, storedValue]
     );
@@ -38,7 +40,9 @@ export function useLocalStorage<T>(
             if (typeof window !== "undefined") {
                 window.localStorage.removeItem(key);
             }
-        } catch (error) {}
+        } catch (error) {
+            console.warn(`[useLocalStorage] removeValue failed for key "${key}"`, error);
+        }
     }, [key, initialValue]);
 
     return [storedValue, setValue, removeValue];
@@ -56,7 +60,7 @@ export function useSessionStorage<T>(
         try {
             const item = window.sessionStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
-        } catch (error) {
+        } catch (_error) {
             return initialValue;
         }
     });
@@ -69,7 +73,7 @@ export function useSessionStorage<T>(
                 if (typeof window !== "undefined") {
                     window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
                 }
-            } catch (error) {}
+            } catch (_error) {}
         },
         [key, storedValue]
     );

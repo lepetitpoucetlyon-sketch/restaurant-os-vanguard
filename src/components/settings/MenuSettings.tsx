@@ -1,26 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-    UtensilsCrossed,
-    Save,
     Loader2,
     Plus,
     Trash2,
     GripVertical,
-    ImageIcon,
     Euro,
     Leaf,
     Flame,
     AlertTriangle,
-    Zap,
     LayoutGrid,
     Target,
-    Activity,
     ChefHat,
     Sparkles,
-    CheckCircle2,
     ShieldCheck,
     FileText,
     ImageIcon as FileImageIcon
@@ -153,11 +147,11 @@ export default function MenuSettings() {
                                     </div>
                                     <div className={cn(
                                         "w-8 h-4 rounded-full relative transition-all duration-500",
-                                        isEnabled ? "bg-emerald-500" : "bg-bg-tertiary border border-border"
+                                        isEnabled ? "bg-status-success" : "bg-bg-tertiary border border-border"
                                     )}>
                                         <motion.div
                                             animate={{ x: isEnabled ? 18 : 2 }}
-                                            className="absolute top-1 w-2 h-2 bg-white rounded-full shadow-sm"
+                                            className="absolute top-1 w-2 h-2 bg-surface-card rounded-full shadow-sm"
                                         />
                                     </div>
                                 </div>
@@ -316,12 +310,12 @@ export default function MenuSettings() {
                                 >
                                     <motion.div
                                         animate={{ x: cat.isActive ? 26 : 2 }}
-                                        className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-md"
+                                        className="absolute top-1 left-1 w-4 h-4 bg-surface-card rounded-full shadow-md"
                                     />
                                 </button>
                                 <button
                                     onClick={() => deleteCategory(cat.id)}
-                                    className="w-10 h-10 bg-red-500/5 text-red-500 hover:bg-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
+                                    className="w-10 h-10 bg-status-danger/5 text-status-danger hover:bg-status-danger hover:text-white rounded-xl flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </button>
@@ -380,7 +374,7 @@ export default function MenuSettings() {
                     ) : (
                         <div className="relative">
                             <Target className="w-6 h-6 transition-transform group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-white/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-surface-card/40 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     )}
                     Commit Menu Hierarchy

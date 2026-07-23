@@ -1,5 +1,5 @@
 import { Globe } from 'lucide-react';
-import { DocCategory } from '@/types';
+import { DocCategory } from '@nexus/contracts';
 
 export const seo: DocCategory = {
     title: 'SEO & Référencement',

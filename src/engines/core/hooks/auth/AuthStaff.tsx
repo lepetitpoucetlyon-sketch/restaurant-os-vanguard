@@ -4,19 +4,18 @@ import { useState, useEffect, useCallback } from 'react';
 import { httpsCallable, getFunctions } from 'firebase/functions';
 import { firebaseApp, isMock } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { IdentityManager, ROOT_ADMIN } from '@/domain/services/IdentityManager';
-import { User } from '@/types';
-import { logger } from '@/lib/axiom';
+import { IdentityManager, ROOT_ADMIN } from '@domain/services/IdentityManager';
+import { User } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
+import { logger } from '@/lib/logger';
 
-const firebaseFunctions = getFunctions(firebaseApp);
-const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
-    firebaseFunctions,
-    'listLoginProfiles',
-);
-
-export function useAuthStaff(firebaseUserId: string | null, sessionUserId: string | null) {
+export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: string | null) {
+    const firebaseFunctions = getFunctions(firebaseApp);
+    const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
+        firebaseFunctions,
+        'listLoginProfiles',
+    );
     const [users, setUsers] = useState<User[]>([]);
     const [isUsersLoaded, setIsUsersLoaded] = useState(false);
 
@@ -25,7 +24,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
 
         const loadLoginProfiles = async () => {
             if (isMock) {
-                console.info('[AuthStaff] Mode MOCK détecté. Chargement immédiat du Root Admin.');
+                logger.info('[AuthStaff] Mode MOCK détecté. Chargement immédiat du Root Admin.');
                 setUsers([IdentityManager.buildSessionUser(ROOT_ADMIN)]);
                 setIsUsersLoaded(true);
                 return;
@@ -84,7 +83,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
                 }
             },
             {
-                onError: (error) => {
+                onError: (error: unknown) => {
                     console.error('Unable to subscribe to users', error);
                     if (isActive) setIsUsersLoaded(true);
                 }
@@ -133,7 +132,7 @@ export function useAuthStaff(firebaseUserId: string | null, sessionUserId: strin
         const patch: import('@/shared/nexus-contract').SovereignData = {};
 
         for (const [key, value] of Object.entries(data)) {
-            if (value !== undefined) patch[key] = value;
+            if (value !== undefined) patch[key] = value as import('@/shared/nexus-contract').SovereignField;
         }
 
         if (typeof data.pin === 'string' && data.pin.trim()) {

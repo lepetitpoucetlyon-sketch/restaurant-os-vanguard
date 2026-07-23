@@ -1,8 +1,8 @@
-import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
-import { fiscalLedgerAtom } from '@/modules/haccp/store/complianceAtoms';
+import { fiscalLedgerAtom } from '@modules/compliance/haccp/store/complianceAtoms';
 import { TelemetryPulse } from '@/shared/nexus-contract';
-import { FiscalSeal } from '@/types';
+import { logger } from '@/lib/logger';
 
 interface BatteryManager {
   level: number;
@@ -33,9 +33,9 @@ export class TelemetryService {
    * Commence l'envoi périodique du heartbeat (chaque 5 minutes).
    */
   static start(tenantId: string) {
-    this.stop(); // Cleanup previous if any
+    this.stop(); // Cleanup previous if unknown
 
-    console.log(`[TelemetryService] Heartbeat démarré pour ${tenantId} (Intervalle: 5min).`);
+    logger.info(`[TelemetryService] Heartbeat démarré pour ${tenantId} (Intervalle: 5min).`);
 
     // Initial beat
     this.sendPulse(tenantId);
@@ -51,9 +51,7 @@ export class TelemetryService {
    */
   private static async sendPulse(tenantId: string) {
     try {
-      const firestore = getFirestore();
-      // Path aligned with MCC Mirror dashboard
-      const statusDocRef = doc(firestore, 'tenants', tenantId, 'status', 'heartbeat');
+      const heartbeatPath = `tenants/${tenantId}/status/heartbeat`;
 
       // 1. Gather Battery Info
       let batteryInfo = { level: 1, charging: true, supported: false };
@@ -66,13 +64,13 @@ export class TelemetryService {
             charging: battery.charging,
             supported: true
           };
-        } catch (e) { /* Fallback */ }
+        } catch (_e) { /* Fallback */ }
       }
 
       // 2. Gather NF525 Status
-      const fiscalData = this.store.get(fiscalLedgerAtom) as FiscalSeal[];
-      const isSealed = Array.isArray(fiscalData) && fiscalData.length > 0;
-      const lastHash = isSealed ? fiscalData[0].hash : undefined;
+      const ledgerData: import('@nexus/contracts/finance.types').JournalEntry[] = this.store.get(fiscalLedgerAtom);
+      const isSealed = Array.isArray(ledgerData) && ledgerData.some(e => e.fiscalSealHash);
+      const lastHash = isSealed ? ledgerData.find(e => e.fiscalSealHash)?.fiscalSealHash : undefined;
 
       // Type-safe connection check
       const connection = extendedNav.connection || extendedNav.mozConnection || extendedNav.webkitConnection;
@@ -82,7 +80,7 @@ export class TelemetryService {
       const payload: TelemetryPulse = {
         version: '9.0.0-grade-ix',
         status: 'ACTIVE',
-        lastPulse: serverTimestamp(),
+        lastPulse: Nexus.adapter.serverTimestamp() as unknown as Date,
         health: {
           uptime: typeof process !== 'undefined' && process.uptime ? Math.floor(process.uptime()) : 0,
           battery: batteryInfo,
@@ -98,10 +96,34 @@ export class TelemetryService {
         }
       };
 
-      await setDoc(statusDocRef, payload, { merge: true });
-      console.log(`[TelemetryService] Heartbeat envoyé à ${new Date().toLocaleTimeString()}`);
+      await Nexus.adapter.set(heartbeatPath, payload, { merge: true });
+      logger.debug(`[TelemetryService] Heartbeat envoyé à ${new Date().toLocaleTimeString()}`);
     } catch (error) {
       console.warn(`[TelemetryService] Échec du heartbeat:`, error);
+    }
+  }
+
+  /**
+   * 📢 Dénonce une anomalie TECHNIQUE au MCC (Anonymisation Totale).
+   * INTERDICTION : Pas de montants, pas de noms, pas de PII.
+   */
+  static async reportIssue(code: 'FALLBACK_VALUE' | 'INTEGRITY_DRIFT' | 'AUTH_ANOMALY', source: string, techMetadata: { field: string, type?: string }) {
+    try {
+      const issueId = `INCIDENT-${Math.random().toString(36).substring(7).toUpperCase()}`;
+      const issuePath = `system_alerts/${issueId}`;
+
+      await Nexus.adapter.set(issuePath, {
+        code,
+        source,
+        techMetadata,
+        timestamp: Nexus.adapter.serverTimestamp(),
+        version: '9.0.0-grade-ix',
+        severity: code === 'INTEGRITY_DRIFT' ? 'CRITICAL' : 'WARNING'
+      });
+      
+      console.warn(`[TelemetryService] TECHNICAL_SIGNAL_SENT: ${code} from ${source}`, techMetadata);
+    } catch (_e) {
+      // Échec silencieux pour ne pas perturber l'expérience locale
     }
   }
 
@@ -112,7 +134,7 @@ export class TelemetryService {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
-      console.log(`[TelemetryService] Heartbeat arrêté.`);
+      logger.info(`[TelemetryService] Heartbeat arrêté.`);
     }
   }
 }

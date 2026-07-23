@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { atom } from 'jotai';
+import { atom, getDefaultStore } from 'jotai';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
-import { updateNexusNode, createNexusNode, NexusNode } from '@/store/operationalAtoms';
+import { updateNexusNode, type NexusNode } from '@/store/base';
+import { createNexusNode } from '@/store/nexusNodeFactory';
 import { logger } from '@/lib/logger';
 
 // Mocking dependencies
@@ -25,9 +26,11 @@ interface StabilityItem {
 }
 
 describe('🍵 FALANGE - COHORTE STABILITY (10 TESTS)', () => {
+    let store: ReturnType<typeof getDefaultStore>;
     
     beforeEach(() => {
         vi.clearAllMocks();
+        store = getDefaultStore();
     });
 
     /**

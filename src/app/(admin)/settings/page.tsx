@@ -1,25 +1,22 @@
 "use client";
 
-import { useState, Suspense, useEffect, useCallback, useMemo } from "react";
-import dynamic from "next/dynamic";
+import { useState, Suspense, useEffect, useMemo, useRef } from "react";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
 import { cn } from "@/lib/ui.foundations";
-import { PageHeaderWithDocs } from "@/components/ui/PageHeaderWithDocs";
+import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
-// Dynamic imports for settings components
-const HoursSettings = dynamic(() => import("@/components/settings/HoursSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ReservationSettingsComponent = dynamic(() => import("@/components/settings/ReservationSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const GoalsSettings = dynamic(() => import("@/components/settings/GoalsSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const StaffSettings = dynamic(() => import("@/components/settings/StaffSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const IntegrationSettings = dynamic(() => import("@/components/settings/IntegrationSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ReviewsSettings = dynamic(() => import("@/components/settings/ReviewsSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const MenuSettings = dynamic(() => import("@/components/settings/MenuSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ProfileSettings = dynamic(() => import("@/components/settings/ProfileSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const TablesSettings = dynamic(() => import("@/components/settings/TablesSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const ExpertGovernanceHub = dynamic(() => import("@/components/settings/ExpertGovernanceHub"), { loading: () => <SettingsLoading />, ssr: false });
-const MigrationSettings = dynamic(() => import("@/components/settings/MigrationSettings"), { loading: () => <SettingsLoading />, ssr: false });
-const NexusSettings = dynamic(() => import("@/components/settings/NexusSettings"), { loading: () => <SettingsLoading />, ssr: false });
+// Panneaux lazy — extraits en registres pour garder ce fichier sous le seuil de fan-out.
+import { SettingsLoading } from "./_SettingsLoading";
+import {
+    ProfileSettings, ExpertGovernanceHub, NexusSettings, HoursSettings,
+    ReservationSettingsComponent, StaffSettings, MenuSettings, GoalsSettings,
+} from "./panelsCore";
+import {
+    IntegrationSettings, ReviewsSettings, TablesSettings, MigrationHub,
+    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel,
+} from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
 import { StandardSettingsEngine } from "@/components/settings/ui/StandardSettingsEngine";
@@ -44,7 +41,7 @@ import {
 
 
 import {
-    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot
+    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot, Wallet
 } from "lucide-react";
 
 // Settings categories
@@ -75,19 +72,10 @@ const SETTINGS_CATEGORIES = [
     { id: 'haccp', label: 'HACCP & Hygiène', icon: Shield, color: '#00BCD4' },
     { id: 'migration', label: 'Migration & Import (IA)', icon: Database, color: '#3B82F6' },
     { id: 'tables', label: 'Tables & Zones', icon: LayoutGrid, color: '#7C3AED' },
+    { id: 'printer', label: 'Imprimante', icon: Receipt, color: '#0D9488' },
+    { id: 'tpe', label: 'Terminaux de paiement', icon: CreditCard, color: '#C5A059' },
+    { id: 'cash-drawer', label: 'Tiroir-caisse', icon: Wallet, color: '#10B981' },
 ];
-
-function SettingsLoading() {
-    return (
-        <div className="space-y-8 animate-pulse">
-            <div className="h-64 rounded-[2.5rem] bg-white/5" />
-            <div className="grid grid-cols-2 gap-8">
-                <div className="h-48 rounded-[2.5rem] bg-white/5" />
-                <div className="h-48 rounded-[2.5rem] bg-white/5" />
-            </div>
-        </div>
-    );
-}
 
 function SettingsPlaceholder({ category }: { category: typeof SETTINGS_CATEGORIES[0] }) {
     const Icon = category.icon;
@@ -96,7 +84,7 @@ function SettingsPlaceholder({ category }: { category: typeof SETTINGS_CATEGORIE
             <div className="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 bg-bg-tertiary border border-border">
                 <Icon className="w-12 h-12 text-text-muted" />
             </div>
-            <h3 className="text-2xl font-serif text-text-primary mb-2 italic">{category.label}</h3>
+            <h3 className="text-2xl font-brand text-text-primary mb-2 italic">{category.label}</h3>
             <p className="text-text-muted text-center max-w-sm font-medium">
                 Configuration du module bientôt disponible.<br />Implémentation en cours.
             </p>
@@ -110,7 +98,54 @@ export default function SettingsPage() {
     const [activeCategory, setActiveCategory] = useState(DEFAULT_SETTINGS_CATEGORY);
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
-    const { lastSaved } = useSettings();
+    const { lastSaved, settings, updateSettings } = useSettings();
+    const importInputRef = useRef<HTMLInputElement>(null);
+
+    const handleExport = () => {
+        if (!settings) { toast.error('Réglages non chargés'); return; }
+        const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `restaurant-os-settings-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast.success('Réglages exportés');
+    };
+
+    const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file) return;
+        try {
+            const parsed = JSON.parse(await file.text());
+            if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+                throw new Error('format');
+            }
+            await updateSettings?.(parsed);
+            toast.success('Réglages importés et synchronisés');
+        } catch {
+            toast.error('Fichier invalide — export JSON Restaurant OS attendu');
+        }
+    };
+
+    const handleReset = () => {
+        toast('Réinitialiser tous les réglages ?', {
+            action: {
+                label: 'Confirmer',
+                onClick: async () => {
+                    try {
+                        const { defaultSettings } = await import('@/context/settings/defaults');
+                        await updateSettings?.(defaultSettings);
+                        toast.success('Réglages réinitialisés aux valeurs par défaut');
+                    } catch {
+                        toast.error('Échec de la réinitialisation');
+                    }
+                },
+            },
+            cancel: { label: 'Annuler', onClick: () => {} },
+        });
+    };
     const activeConfig = useMemo(() => SETTINGS_CATEGORIES.find(c => c.id === activeCategory) || SETTINGS_CATEGORIES[0], [activeCategory]);
 
     useEffect(() => {
@@ -155,6 +190,9 @@ export default function SettingsPage() {
                 <div className="space-y-12">
                     <StaffSettings />
                     <StandardSettingsEngine schema={STAFF_CONFIG_SCHEMA} />
+                    <div className="p-6 rounded-2xl bg-surface-card border border-border">
+                        <PayrollIntegrationPanel />
+                    </div>
                 </div>
             );
             case 'customer': return <StandardSettingsEngine schema={Customer_SCHEMA} />;
@@ -167,8 +205,11 @@ export default function SettingsPage() {
             case 'accounting': return <StandardSettingsEngine schema={ACCOUNTING_SCHEMA} />;
             case 'recipes': return <SettingsPlaceholder category={activeConfig} />;
             case 'haccp': return <StandardSettingsEngine schema={HACCP_SCHEMA} />;
-            case 'migration': return <MigrationSettings />;
+            case 'migration': return <MigrationHub />;
             case 'tables': return <TablesSettings />;
+            case 'printer': return <PrinterSettings />;
+            case 'tpe': return <PaymentTerminalSettings />;
+            case 'cash-drawer': return <CashDrawerSettings />;
             default: return <SettingsPlaceholder category={activeConfig} />;
         }
     }, [activeCategory, activeConfig]);
@@ -176,7 +217,7 @@ export default function SettingsPage() {
     return (
         <div className="flex h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary overflow-hidden">
             {isMobile && !isNavCollapsed && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-20" onClick={() => setIsNavCollapsed(true)} />
+                <div className="fixed inset-0 bg-surface-bg backdrop-blur-sm z-20" onClick={() => setIsNavCollapsed(true)} />
             )}
 
             <main className="flex-1 flex overflow-hidden">
@@ -189,10 +230,10 @@ export default function SettingsPage() {
                         <AnimatePresence mode="wait">
                             {!isNavCollapsed && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+                                    <div className="w-10 h-10 rounded-xl bg-action-primary flex items-center justify-center shadow-lg shadow-accent/20">
                                         <LayoutGrid className="w-5 h-5 text-bg-primary" />
                                     </div>
-                                    <h2 className="text-xl font-serif text-text-primary tracking-tight italic">Paramètres</h2>
+                                    <h2 className="text-xl font-brand text-text-primary tracking-tight italic">Paramètres</h2>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -211,7 +252,7 @@ export default function SettingsPage() {
                                     onClick={() => { setActiveCategory(category.id); if (isMobile) setIsNavCollapsed(true); }}
                                     className={cn("w-full flex items-center gap-4 py-4 rounded-xl transition-all group", isNavCollapsed ? "justify-center px-0" : "px-5", isActive ? "bg-text-primary text-bg-primary shadow-xl" : "text-text-muted hover:bg-bg-tertiary")}
                                 >
-                                    <Icon className={cn("w-5 h-5", isActive ? "text-accent-gold" : "text-text-muted group-hover:text-text-primary")} strokeWidth={isActive ? 2 : 1.5} />
+                                    <Icon className={cn("w-5 h-5", isActive ? "text-action-primary" : "text-text-muted group-hover:text-text-primary")} strokeWidth={isActive ? 2 : 1.5} />
                                     {!isNavCollapsed && <span className="text-xs font-black uppercase tracking-widest">{category.label}</span>}
                                 </button>
                             );
@@ -223,8 +264,8 @@ export default function SettingsPage() {
                     <div className="p-6 md:p-10 pb-0 flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <p className="text-text-muted text-[10px] font-black uppercase tracking-widest mb-2">Intelligence Système</p>
-                            <PageHeaderWithDocs categoryId="settings" title="" className="text-2xl md:text-4xl font-serif text-text-primary uppercase italic">
-                                PARAMÈTRES <span className="text-border">/</span> <span className="text-accent">{activeConfig.label.toUpperCase()}</span>
+                            <PageHeaderWithDocs categoryId="settings" title="" className="text-2xl md:text-4xl font-brand text-text-primary uppercase italic">
+                                PARAMÈTRES <span className="text-border">/</span> <span className="text-action-primary">{activeConfig.label.toUpperCase()}</span>
                             </PageHeaderWithDocs>
                         </div>
                         <div className="flex items-center gap-4">
@@ -235,9 +276,10 @@ export default function SettingsPage() {
                                 </div>
                             )}
                             <div className="flex gap-2">
-                                <button className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Download className="w-4 h-4" /></button>
-                                <button className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Upload className="w-4 h-4" /></button>
-                                <button className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-error"><RotateCcw className="w-4 h-4" /></button>
+                                <button onClick={handleExport} title="Exporter les réglages (JSON)" className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Download className="w-4 h-4" /></button>
+                                <button onClick={() => importInputRef.current?.click()} title="Importer des réglages (JSON)" className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary"><Upload className="w-4 h-4" /></button>
+                                <button onClick={handleReset} title="Réinitialiser aux valeurs par défaut" className="w-10 h-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-error"><RotateCcw className="w-4 h-4" /></button>
+                                <input ref={importInputRef} type="file" accept="application/json" onChange={handleImportFile} className="hidden" />
                             </div>
                         </div>
                     </div>

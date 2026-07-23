@@ -1,22 +1,23 @@
 import { SovereignLedger } from '../services/SovereignLedger';
 import { logger } from '@/lib/logger';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type ChaosVector = 'ASSET_CORRUPTION' | 'SYNC_LATENCY' | 'GUARD_BYPASS';
 
 export class MonkeyChaosAgent {
     private static isSimulating = false;
     private static attackInterval: NodeJS.Timeout | null = null;
+    private static tenantId = 'unknown';
 
     /**
      * Active le protocole Chaos. Seul l'Oracle peut invoquer le singe.
      */
-    static activate(secretKey: string) {
-        if (secretKey !== process.env.NEXT_PUBLIC_ORACLE_KEY) {
+    static activate(secretKey: string, tenantId: string) {
+        if (secretKey !== process.env.ORACLE_CHAOS_KEY) {
             logger.error('🚨 [MonkeyChaos] Unauthorized activation attempt blocked.');
             return;
         }
-        
+
+        this.tenantId = tenantId;
         this.isSimulating = true;
         logger.info('🐒 [MonkeyChaos] Protocol Activated. The monkey is loose.');
         this.scheduleNextAttack();
@@ -59,7 +60,7 @@ export class MonkeyChaosAgent {
     private static async corruptLedger() {
         try {
             // Tentative d'injection asymétrique (Sabotage)
-            await SovereignLedger.recordTransfer({
+            await SovereignLedger.getInstance(this.tenantId).recordTransfer({
                 debitAccount: 'CASH',
                 creditAccount: 'SALES',
                 amountInCents: 10000,
@@ -68,7 +69,7 @@ export class MonkeyChaosAgent {
                 _monkeyPatch: { forceAsymmetry: true }
             });
             logger.error('🔥 [FAILLE SOUVERAINE] Monkey corrupted the Ledger successfully.');
-        } catch (e) {
+        } catch (_e) {
             logger.info('🛡️ [Oracle Score +1] Ledger Inviolable: Sabotage blocked.');
         }
     }

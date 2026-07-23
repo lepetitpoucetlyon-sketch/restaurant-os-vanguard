@@ -1,7 +1,7 @@
 import Dexie, { Table } from 'dexie';
-import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal, Recipe } from '@/types';
-import { TenantConfig, SovereignValue, SovereignData, SovereignField } from '@/shared/nexus-contract';
-import type { ImmunityLogEntry } from '@/shared/genome.types';
+import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal, Recipe } from '@nexus/contracts';
+import { TenantConfig, SovereignField } from '@/shared/nexus-contract';
+import type { ImmunityLogEntry } from '@shared/genome.types';
 
 /**
  * 📥 SyncOperation - Restaurant OS Offline

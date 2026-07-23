@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Settings,
@@ -9,14 +9,15 @@ import {
     Check,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useTheme } from "@/context/ThemeContext";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/hooks";
 import { PAGE_SETTINGS } from "./config-registry";
 import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";
-import { PageSettingConfig, PageKey } from "@/types/permissions.types";
+import { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
-import { SovereignData, SovereignValue } from "@/shared/nexus-contract";
+import { SovereignData, SovereignValue } from "@shared/nexus-contract";
+import { SovereignStorage } from "@/shared/services/SovereignStorage";
+import { PageSettingsSchema } from "@/domain/schemas/ui";
 
 
 // ============ CONTEXT & PROVIDER ============
@@ -41,13 +42,7 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
     const [allSettings, setAllSettings] = useState<Record<string, SovereignData>>(() => {
 
         if (typeof window === 'undefined') return {};
-        try {
-            const saved = localStorage.getItem("restaurant_os_page_settings");
-            return saved ? JSON.parse(saved) : {};
-        } catch (e) {
-            console.error("Failed to parse settings", e);
-            return {};
-        }
+        return SovereignStorage.get("restaurant_os_page_settings", PageSettingsSchema, {}).data as Record<string, SovereignData>;
     });
 
     const openSettings = (page: PageKey) => {
@@ -63,13 +58,13 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
 
         const updated = { ...allSettings, [page]: newSettings };
         setAllSettings(updated);
-        localStorage.setItem("restaurant_os_page_settings", JSON.stringify(updated));
+        SovereignStorage.set("restaurant_os_page_settings", updated, PageSettingsSchema);
         
         // 🏛️ Empire Audit Logging
         logger.info(`Configuration updated for domain: ${page}`, {
             domain: page,
             type: 'CONFIG_CHANGE',
-            newSettings: newSettings as any
+            newSettings: newSettings
         });
     };
 
@@ -77,7 +72,7 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
         return PAGE_SETTINGS[page];
     };
 
-    const canAccessSetting = (setting: PageSettingConfig) => {
+    const canAccessSetting = (_setting: PageSettingConfig) => {
         // Simplified for now - in a real app, check user permissions
         return true;
     };
@@ -154,7 +149,7 @@ function ContextualSettingsPanelContent({
 
     const updateValue = (key: string, value: SovereignValue) => {
 
-        setDraftValues(prev => ({ ...(prev ?? localValues), [key]: value } as any));
+        setDraftValues(prev => ({ ...(prev ?? localValues), [key]: value }));
     };
 
     const accessibleSettings = (pageSettings?.settings || []).filter(canAccessSetting);
@@ -168,7 +163,7 @@ function ContextualSettingsPanelContent({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={closeSettings}
-                className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100]"
+                className="fixed inset-0 bg-surface-sidebar/30 backdrop-blur-sm z-[100]"
             />
 
             {/* Panel */}
@@ -197,7 +192,7 @@ function ContextualSettingsPanelContent({
                         </div>
                         <button
                             onClick={closeSettings}
-                            className="w-10 h-10 rounded-xl bg-bg-tertiary hover:bg-red-500/10 hover:text-red-500 flex items-center justify-center transition-all"
+                            className="w-10 h-10 rounded-xl bg-bg-tertiary hover:bg-status-danger/10 hover:text-status-danger flex items-center justify-center transition-all"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -265,7 +260,7 @@ function ContextualSettingsPanelContent({
                         </button>
                         <button
                             onClick={handleSave}
-                            className="flex-2 flex items-center justify-center gap-2 py-4 px-8 rounded-2xl bg-accent text-black font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent/90 transition-all shadow-lg hover:shadow-accent/20"
+                            className="flex-2 flex items-center justify-center gap-2 py-4 px-8 rounded-2xl bg-accent text-primary font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent/90 transition-all shadow-lg hover:shadow-accent/20"
                         >
                             <Check className="w-4 h-4" />
                             {t('settings.apply')}

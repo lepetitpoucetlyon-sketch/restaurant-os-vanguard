@@ -1,0 +1,484 @@
+# ============================================================================
+# sentrux — règles architecturales RESTAURANT-OS-CORE
+# Grade X · Multi-Tenant SaaS · NF525 · v2.0
+# ============================================================================
+# Traduit les conventions du CLAUDE.md en garde-fous vérifiables.
+# Vérifie : sentrux check .
+#
+# Évolution :
+#   v1.0 — 14 règles, Quality 7011/10000 (2026-06-15)
+#   v2.0 — 47 règles, couverture complète (2026-07-04)
+#
+# Groupes de règles :
+#   [1] CONTRAINTES GLOBALES   — cycles, couplage, complexité
+#   [2] COUCHES (layers)       — hiérarchie d'ordre
+#   [3] NEXUS BYPASS           — rien ne court-circuite SovereignGuard
+#   [4] SSR / STORE PURITY     — store/pillars → atoms seulement (pas de barrel)
+#   [5] MATRICE PILIERS        — isolation complète inter-piliers
+#   [6] PURÉTÉ DU DOMAINE      — schemas/types ne remontent jamais
+#   [7] SÉGRÉGATION DES ROUTES — (client) ↮ (admin) ↮ api
+#   [8] DIRECTION INFRA        — les adapters ne descendent pas dans les piliers
+#   [9] GUARDS D'ACCÈS         — admin guards réservés aux routes admin
+# ============================================================================
+
+# ────────────────────────────────────────────────────────────────────────────
+# [1] CONTRAINTES GLOBALES
+# ────────────────────────────────────────────────────────────────────────────
+
+[constraints]
+# Zéro cycle toléré — un cycle = TDZ "Cannot access X before initialization" en SSR.
+max_cycles = 0
+
+# Couplage max (A=excellent, B=bon, C=acceptable, D=danger).
+# Cible à terme : A. On exige B maintenant (cohérent avec le score 7011/10000).
+max_coupling = "B"
+
+# Complexité cyclomatique max par unité. 25 était trop lâche (FiscalEngine ~22).
+# On serre à 20 — les fonctions >20 branches ont besoin d'être découpées.
+max_cc = 20
+
+# Pas de fichier "dieu" (>300 lignes de logique + >10 dépendances).
+# Les agents IA ont tendance à tout mettre dans un seul fichier.
+no_god_files = true
+
+# ────────────────────────────────────────────────────────────────────────────
+# [2] COUCHES (layers)
+# Direction des dépendances : une couche ne dépend que de couches d'order >= au sien.
+# sentrux semble numéroter : présentation = order 0, socle = order le plus élevé.
+# ────────────────────────────────────────────────────────────────────────────
+
+# Présentation — routes Next.js App Router (la plus en surface).
+[[layers]]
+name = "app"
+paths = ["src/app/*"]
+order = 0
+
+# Piliers métier (Ops, Finance, Commerce, Human, Logistics, Compliance, Intelligence, KDS).
+[[layers]]
+name = "pillars"
+paths = ["src/modules/*", "src/engines/*"]
+order = 1
+
+# Hooks React partagés — peuvent consommer engines et domain, jamais app.
+[[layers]]
+name = "hooks"
+paths = ["src/hooks/*"]
+order = 1
+
+# Composants UI — présentation pure, pas de logique métier.
+[[layers]]
+name = "ui-components"
+paths = ["src/components/*"]
+order = 1
+
+# Infrastructure : adapters concrets (FinancialNexusBridge, FiscalAdapter...).
+[[layers]]
+name = "infrastructure"
+paths = ["src/infrastructure/*"]
+order = 2
+
+# Configuration (instance config, navigation, defaults) — lecture seule, pas de logique.
+[[layers]]
+name = "config"
+paths = ["src/config/*"]
+order = 2
+
+# Couche Nexus runtime + barrières (SovereignGuard, NexusInterceptor, NexusBridge).
+[[layers]]
+name = "nexus-core"
+paths = [
+  "src/lib/nexus/*",
+  "src/lib/NexusSyncService*",
+  "src/lib/NexusBridge*",
+  "src/lib/offline/*",
+  "src/shared/nexus/guards/*",
+  "src/shared/nexus/state/*",
+  "src/shared/nexus/engines/*",
+  "src/shared/nexus/components/*",
+  "src/shared/nexus/telemetry/*",
+  "src/shared/nexus/tokens/*",
+]
+order = 3
+
+# Lib serveur — guards admin (adminAuthGuard, requireFleetAdmin).
+# Séparer de nexus-core car server-only, même niveau d'ordre.
+[[layers]]
+name = "lib-server"
+paths = ["src/lib/server/*"]
+order = 3
+
+# État global (atomes Jotai par pilier).
+# Même order que nexus-core — pairs runtime mutuellement couplés.
+[[layers]]
+name = "state"
+paths = ["src/store/*"]
+order = 3
+
+# Contrats d'accès données (interfaces runtime Nexus, types partagés).
+[[layers]]
+name = "nexus-contracts"
+paths = ["src/shared/nexus/contracts/*"]
+order = 4
+
+# Socle domaine — schémas Zod, services purs, types branded.
+# Le plus profond : rien ne peut descendre ici sauf les primitives.
+[[layers]]
+name = "domain"
+paths = [
+  "src/domain/*",
+  "src/shared/nexus-contract.ts",
+  "src/shared/genome.types.ts",
+]
+order = 5
+
+# Primitives absolues — microunits, types branded (ne dépendent de RIEN).
+[[layers]]
+name = "primitives"
+paths = ["src/domain/schemas/primitives*"]
+order = 6
+
+# ────────────────────────────────────────────────────────────────────────────
+# [3] NEXUS BYPASS — rien ne court-circuite SovereignGuard
+# Toute écriture Firestore passe par NexusAdapter → SovereignGuard → chemin
+# tenants/{tenantId}/{collection}/{id}. Jamais en direct.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/modules/*"
+to = "src/infrastructure/adapters/FirestoreAdapter*"
+reason = "Les piliers ne touchent pas Firestore en direct — passer par Nexus/SovereignGuard"
+
+[[boundaries]]
+from = "src/app/*"
+to = "src/infrastructure/adapters/FirestoreAdapter*"
+reason = "Les routes ne dépendent pas des adapters Firestore concrets"
+
+[[boundaries]]
+from = "src/modules/*"
+to = "src/lib/firebase*"
+reason = "Les piliers n'importent pas firebase directement — passer par NexusAdapter"
+
+[[boundaries]]
+from = "src/app/(client)/*"
+to = "src/lib/firebase*"
+reason = "Les routes client n'importent pas firebase directement — passer par NexusAdapter"
+
+[[boundaries]]
+from = "src/store/*"
+to = "src/lib/firebase*"
+reason = "Les atomes Jotai n'importent pas firebase — passer par NexusAdapter"
+
+# ────────────────────────────────────────────────────────────────────────────
+# [4] SSR / STORE PURITY — store/pillars → atoms source seulement
+# Le plus grand risque TDZ : store/pillars importe un barrel de module qui
+# importe un hook qui importe un atome → cycle SSR impossible à déboguer.
+# La règle : store/pillars n'importe QUE les fichiers *Atoms.ts directement.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/store/pillars/*"
+to = "src/modules/ops/index*"
+reason = "store/pillars doit importer les atoms sources directement (ex: orderAtoms.ts), jamais le barrel ops/index — risque TDZ SSR"
+
+[[boundaries]]
+from = "src/store/pillars/*"
+to = "src/modules/finance/index*"
+reason = "store/pillars → atoms source directement, jamais barrel finance"
+
+[[boundaries]]
+from = "src/store/pillars/*"
+to = "src/modules/commerce/index*"
+reason = "store/pillars → atoms source directement, jamais barrel commerce"
+
+[[boundaries]]
+from = "src/store/pillars/*"
+to = "src/modules/logistics/index*"
+reason = "store/pillars → atoms source directement, jamais barrel logistics"
+
+[[boundaries]]
+from = "src/store/pillars/*"
+to = "src/modules/human/index*"
+reason = "store/pillars → atoms source directement, jamais barrel human"
+
+[[boundaries]]
+from = "src/store/pillars/*"
+to = "src/engines/*/index*"
+reason = "store/pillars n'importe pas les barrels d'engines — risque TDZ SSR identique"
+
+# ────────────────────────────────────────────────────────────────────────────
+# [5] MATRICE PILIERS — isolation complète inter-piliers
+# Le couplage légitime entre piliers passe TOUJOURS par un bridge infrastructure
+# (FinancialNexusBridge, NexusAdapter) — jamais par import direct de module.
+# ────────────────────────────────────────────────────────────────────────────
+
+# --- OPS ne dépend d'aucun autre pilier ---
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/finance/*"
+reason = "Ops → Finance : passer par FinancialNexusBridge (infrastructure)"
+
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/commerce/*"
+reason = "Ops → Commerce : passer par Nexus"
+
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/logistics/*"
+reason = "Ops → Logistics : passer par Nexus (déduction stock via events)"
+
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/human/*"
+reason = "Ops ne dépend pas de Human"
+
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/compliance/*"
+reason = "Ops ne dépend pas de Compliance"
+
+[[boundaries]]
+from = "src/modules/ops/*"
+to = "src/modules/intelligence/*"
+reason = "Ops ne consulte pas l'IA directement — passer par NexusEventBus"
+
+# --- FINANCE ne dépend d'aucun pilier ---
+[[boundaries]]
+from = "src/modules/finance/*"
+to = "src/modules/ops/*"
+reason = "Finance ne dépend pas d'Ops"
+
+[[boundaries]]
+from = "src/modules/finance/*"
+to = "src/modules/commerce/*"
+reason = "Finance ne dépend pas de Commerce"
+
+[[boundaries]]
+from = "src/modules/finance/*"
+to = "src/modules/logistics/*"
+reason = "Finance ne dépend pas de Logistics"
+
+[[boundaries]]
+from = "src/modules/finance/*"
+to = "src/modules/human/*"
+reason = "Finance ne dépend pas de Human (NexusPayrollEngine est une infrastructure)"
+
+[[boundaries]]
+from = "src/modules/finance/*"
+to = "src/modules/compliance/*"
+reason = "Finance ne dépend pas de Compliance"
+
+# --- COMMERCE ---
+[[boundaries]]
+from = "src/modules/commerce/*"
+to = "src/modules/finance/*"
+reason = "Commerce ne dépend pas de Finance en direct"
+
+[[boundaries]]
+from = "src/modules/commerce/*"
+to = "src/modules/logistics/*"
+reason = "Commerce → Logistics : passer par Nexus"
+
+[[boundaries]]
+from = "src/modules/commerce/*"
+to = "src/modules/human/*"
+reason = "Commerce ne dépend pas de Human"
+
+[[boundaries]]
+from = "src/modules/commerce/*"
+to = "src/modules/compliance/*"
+reason = "Commerce ne dépend pas de Compliance"
+
+# --- LOGISTICS ---
+[[boundaries]]
+from = "src/modules/logistics/*"
+to = "src/modules/finance/*"
+reason = "Logistics → Finance : passer par Nexus (valorisation stock via bridge)"
+
+[[boundaries]]
+from = "src/modules/logistics/*"
+to = "src/modules/ops/*"
+reason = "Logistics ne dépend pas d'Ops"
+
+[[boundaries]]
+from = "src/modules/logistics/*"
+to = "src/modules/human/*"
+reason = "Logistics ne dépend pas de Human"
+
+[[boundaries]]
+from = "src/modules/logistics/*"
+to = "src/modules/commerce/*"
+reason = "Logistics ne dépend pas de Commerce"
+
+[[boundaries]]
+from = "src/modules/logistics/*"
+to = "src/modules/compliance/*"
+reason = "Logistics → Compliance : passer par NexusEventBus"
+
+# --- HUMAN ---
+[[boundaries]]
+from = "src/modules/human/*"
+to = "src/modules/ops/*"
+reason = "Human ne dépend pas d'Ops"
+
+[[boundaries]]
+from = "src/modules/human/*"
+to = "src/modules/finance/*"
+reason = "Human → Finance : NexusPayrollEngine est une infrastructure séparée"
+
+[[boundaries]]
+from = "src/modules/human/*"
+to = "src/modules/commerce/*"
+reason = "Human ne dépend pas de Commerce"
+
+[[boundaries]]
+from = "src/modules/human/*"
+to = "src/modules/logistics/*"
+reason = "Human ne dépend pas de Logistics"
+
+[[boundaries]]
+from = "src/modules/human/*"
+to = "src/modules/compliance/*"
+reason = "Human ne dépend pas de Compliance"
+
+# --- COMPLIANCE ---
+[[boundaries]]
+from = "src/modules/compliance/*"
+to = "src/modules/ops/*"
+reason = "Compliance ne dépend pas d'Ops en direct"
+
+[[boundaries]]
+from = "src/modules/compliance/*"
+to = "src/modules/finance/*"
+reason = "Compliance → Finance : passer par Nexus (audit read-only)"
+
+[[boundaries]]
+from = "src/modules/compliance/*"
+to = "src/modules/logistics/*"
+reason = "Compliance → Logistics : passer par Nexus"
+
+[[boundaries]]
+from = "src/modules/compliance/*"
+to = "src/modules/human/*"
+reason = "Compliance ne dépend pas de Human"
+
+# --- INTELLIGENCE (cerveau RAG) — lit tout via Nexus, n'importe rien ---
+[[boundaries]]
+from = "src/modules/intelligence/*"
+to = "src/modules/ops/*"
+reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct d'Ops"
+
+[[boundaries]]
+from = "src/modules/intelligence/*"
+to = "src/modules/finance/*"
+reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct de Finance"
+
+[[boundaries]]
+from = "src/modules/intelligence/*"
+to = "src/modules/commerce/*"
+reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct de Commerce"
+
+[[boundaries]]
+from = "src/modules/intelligence/*"
+to = "src/modules/logistics/*"
+reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct de Logistics"
+
+[[boundaries]]
+from = "src/modules/intelligence/*"
+to = "src/modules/human/*"
+reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct de Human"
+
+[[boundaries]]
+from = "src/modules/intelligence/*"
+to = "src/modules/compliance/*"
+reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct de Compliance"
+
+# --- KDS : déplacé sous src/modules/ops/kds/ (sous-module, plus un pilier autonome)
+#     → son isolation est désormais couverte par les règles OPS ci-dessus (src/modules/ops/*). ---
+
+# ────────────────────────────────────────────────────────────────────────────
+# [6] PURÉTÉ DU DOMAINE
+# Les schémas Zod et types branded ne remontent JAMAIS vers app, lib ou modules.
+# Ils sont consommés, jamais consommateurs.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/infrastructure/*"
+reason = "Les schémas Zod ne dépendent d'aucune infrastructure"
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/modules/*"
+reason = "Le domaine ne dépend pas des piliers"
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/lib/*"
+reason = "Le domaine ne dépend pas de lib (logger, nexus, firebase...)"
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/app/*"
+reason = "Le domaine ne dépend pas des routes"
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/engines/*"
+reason = "Le domaine ne dépend pas des engines"
+
+[[boundaries]]
+from = "src/domain/*"
+to = "src/hooks/*"
+reason = "Le domaine ne dépend pas des hooks React"
+
+# ────────────────────────────────────────────────────────────────────────────
+# [7] SÉGRÉGATION DES ROUTES
+# Les route groups Next.js sont étanches entre eux.
+# (client) = restaurateurs. (admin) = toi (MCC). api = serveur uniquement.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/app/(client)/*"
+to = "src/app/(admin)/*"
+reason = "Les routes client ne peuvent pas importer des composants admin (MCC)"
+
+[[boundaries]]
+from = "src/app/(admin)/*"
+to = "src/app/(client)/*"
+reason = "Les routes admin ne peuvent pas importer des composants client — isolation MCC stricte"
+
+# ────────────────────────────────────────────────────────────────────────────
+# [8] DIRECTION INFRA — les adapters ne descendent pas dans les piliers
+# Infrastructure adapte le monde extérieur vers le système — sens unique.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/infrastructure/*"
+to = "src/modules/*"
+reason = "Les adapters infrastructure (FinancialNexusBridge...) n'importent pas les piliers — sens unique"
+
+[[boundaries]]
+from = "src/infrastructure/*"
+to = "src/app/*"
+reason = "Les adapters infrastructure n'importent pas les routes Next.js"
+
+# ────────────────────────────────────────────────────────────────────────────
+# [9] GUARDS D'ACCÈS — adminAuthGuard réservé aux routes /api/admin
+# Les piliers et composants client n'utilisent pas les guards admin serveur.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/app/(client)/*"
+to = "src/shared/nexus/guards/admin/*"
+reason = "Les routes client n'utilisent pas les guards admin MCC"
+
+[[boundaries]]
+from = "src/modules/*"
+to = "src/shared/nexus/guards/admin/*"
+reason = "Les piliers n'utilisent pas les guards admin — réservés à src/app/(admin)/ et src/app/api/admin/"
+
+[[boundaries]]
+from = "src/app/(client)/*"
+to = "src/lib/server/*"
+reason = "adminAuthGuard est server-only — routes client ne l'importent pas directement"

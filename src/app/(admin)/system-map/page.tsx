@@ -1,6 +1,5 @@
 "use client";
 
-import { MindMap } from "@/components/analytics/MindMap";
 
 export default function SystemMapPage() {
     return (

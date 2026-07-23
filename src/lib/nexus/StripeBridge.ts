@@ -16,6 +16,8 @@ export const SOVEREIGN_PRICING = {
   }
 } as const;
 
+import { logger } from '@/lib/logger';
+
 export type CapabilityId = keyof typeof SOVEREIGN_PRICING.capabilities;
 
 /**
@@ -37,10 +39,10 @@ export const calculateEngineMRR = (
  * 2. PORTAIL EXTERNE STRIPE (Agnostic Redirection)
  * Redirige le vassal vers Stripe pour la gestion d'abonnement.
  */
-export const redirectToStripePortal = async (tenantId: string, returnUrl: string) => {
+export const redirectToStripePortal = async (tenantId: string, _returnUrl: string) => {
   // Dans un cas d'usage réel, ici on appellerait l'API MCC pour obtenir la Stripe Session URL.
   const STRIPE_PORTAL_MOCK_URL = `https://billing.stripe.com/p/session/mock_${tenantId}`;
   
-  console.log(`[Empire Economy] Redirecting Node ${tenantId} to Sovereign Portal...`);
+  logger.info(`[Empire Economy] Redirecting Node ${tenantId} to Sovereign Portal...`);
   window.location.href = STRIPE_PORTAL_MOCK_URL;
 };

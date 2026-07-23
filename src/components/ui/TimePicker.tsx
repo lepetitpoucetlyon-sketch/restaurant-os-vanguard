@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Check, ChevronDown, Calendar } from "lucide-react";
+import { Clock, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 
 interface TimePickerProps {
@@ -91,9 +91,9 @@ export function TimePicker({
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
                     "w-full h-16 px-6 flex items-center justify-between transition-all duration-500 rounded-2xl border-2 outline-none",
-                    "bg-bg-tertiary/50 dark:bg-white/5 backdrop-blur-md",
+                    "bg-bg-tertiary/50 dark:bg-surface-card/5 backdrop-blur-md",
                     isOpen
-                        ? "border-accent-gold ring-4 ring-accent-gold/10 shadow-premium bg-white dark:bg-bg-secondary"
+                        ? "border-accent-gold ring-4 ring-accent-gold/10 shadow-premium bg-surface-card dark:bg-bg-secondary"
                         : "border-transparent hover:border-accent-gold/30"
                 )}
             >
@@ -118,11 +118,11 @@ export function TimePicker({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="absolute z-[110] left-0 right-0 mt-3 p-2 bg-white dark:bg-neutral-900 border border-border/50 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.15)] overflow-hidden"
+                        className="absolute z-[110] left-0 right-0 mt-3 p-2 bg-surface-card dark:bg-surface-sidebar border border-border/50 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.15)] overflow-hidden"
                     >
                         <div className="flex h-64 relative">
                             {/* Selection Highlight */}
-                            <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-14 bg-bg-tertiary/50 dark:bg-white/5 rounded-2xl pointer-events-none border border-accent-gold/10" />
+                            <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-14 bg-bg-tertiary/50 dark:bg-surface-card/5 rounded-2xl pointer-events-none border border-accent-gold/10" />
                             
                             {/* Hours Column */}
                             <div 

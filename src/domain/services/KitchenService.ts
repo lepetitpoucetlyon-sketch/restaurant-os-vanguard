@@ -1,5 +1,4 @@
-import { logger } from '@/lib/logger';
-import { Recipe } from '@/types/common.types';
+import { Recipe } from '@nexus/contracts/common.types';
 
 /**
  * 🍳 KitchenService - Restaurant OS
@@ -29,7 +28,7 @@ export class KitchenService {
             dietaryInfo: recipe.dietaryInfo || [],
             costPriceInCents: recipe.costPriceInCents || 0,
             sellingPriceInCents: recipe.sellingPriceInCents || 0,
-            marginInCents: recipe.marginInCents || (recipe.sellingPriceInCents || 0) - (recipe.costPriceInCents || 0),
+            marginInCents: (recipe.marginInCents as number) || ((recipe.sellingPriceInCents as number) || 0) - ((recipe.costPriceInCents as number) || 0),
             updatedAt: new Date().toISOString(),
             createdAt: typeof recipe.createdAt === 'string' ? recipe.createdAt : now,
             color: recipe.color || '#000000',

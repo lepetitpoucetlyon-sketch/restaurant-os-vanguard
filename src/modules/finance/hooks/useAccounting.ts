@@ -8,27 +8,31 @@ import {
     expenseClaimsAtom,
     accountingViewModeAtom
 } from '../store/accountingAtoms';
-import { fiscalLedgerAtom } from '@/modules/haccp/store/complianceAtoms';
+import { fiscalLedgerAtom } from '@/store/pillars/compliance';
 import { 
     AccountingMetrics, 
     FinancialMetrics,
-    JournalEntry 
+    JournalEntry,
+    BankTransaction,
+    ExpenseClaim,
+    Account
 } from '../types';
 import { useCallback, useMemo } from 'react';
-import { useNexusMutation } from "@/shared/hooks/useNexusMutation";
+import { useNexusMutation } from "@shared/hooks/useNexusMutation";
+import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@nexus/contracts/finance.types';
 
 /**
- * 📊 useAccounting - Grade X Atomic Bridge
+ * 📊 useAccounting - Grade X Atomic Mapper
  * Orchestre la finance souveraine et la conformité NF525.
  */
 export function useAccounting() {
     const [viewMode, setViewMode] = useAtom(accountingViewModeAtom);
     const journalEntriesNode = useAtomValue(journalEntriesNodeAtom);
-    const journalEntries = (journalEntriesNode.data || []) as JournalEntry[];
+    const journalEntries = (journalEntriesNode.data || []) as unknown as JournalEntry[];
     const isLoading = journalEntriesNode.loading;
     const accounts = useAtomValue(accountsAtom);
-    const bankTransactions = useAtomValue(bankTransactionsAtom);
-    const expenseClaims = useAtomValue(expenseClaimsAtom);
+    const bankTransactions = (useAtomValue(bankTransactionsAtom) || []) as unknown as BankTransaction[];
+    const expenseClaims = (useAtomValue(expenseClaimsAtom) || []) as unknown as ExpenseClaim[];
     const ledgerData = useAtomValue(fiscalLedgerAtom);
 
     // --- 🔨 LA FORGE ---
@@ -39,52 +43,145 @@ export function useAccounting() {
     }, [setViewMode]);
 
     // Computed Metrics (Grade X logic)
-    const metrics = useMemo<AccountingMetrics>(() => {
-        const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' ? (tx.amountInCents || 0) : 0), 0);
-        const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' ? (tx.amountInCents || 0) : 0), 0);
+    const metrics = useMemo<FinancialMetrics>(() => {
+        const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' ? Number(tx.amountInMicrounits) : 0), 0);
+        const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' ? Number(tx.amountInMicrounits) : 0), 0);
+        const netProfit = revenue - expenses;
         
         return {
-            totalRevenueInCents: revenue,
-            totalExpensesInCents: expenses,
-            grossMarginInCents: revenue - expenses,
-            grossMarginPercent: revenue > 0 ? ((revenue - expenses) / revenue) * 100 : 0,
-            foodCostPercent: 0, 
-            laborCostPercent: 0, 
-            operatingExpensesInCents: expenses * 0.4,
-            ebitdaInCents: revenue - expenses - (expenses * 0.1),
-            netProfitInCents: revenue - expenses - (expenses * 0.2)
+            totalRevenue: revenue,
+            totalExpenses: expenses,
+            netProfit: netProfit,
+            margin: revenue > 0 ? (netProfit / revenue) * 100 : 0,
+            period: 'current'
+        } as FinancialMetrics;
+    }, [journalEntries]);
+
+    const accountingMetrics = useMemo<AccountingMetrics>(() => ({
+        unreconciledCount: bankTransactions.filter(tx => !tx.journalEntryId).length,
+        pendingClaimsCount: expenseClaims.filter(c => c.status === 'pending').length,
+        lastClosureDate: null,
+        fiscalHealthScore: 100
+    }), [bankTransactions, expenseClaims]);
+
+    // Ledger: account + mouvements calculés depuis les écritures
+    const ledger = useMemo<LedgerAccount[]>(() => {
+        return (accounts as Account[]).map(account => {
+            const movements = journalEntries
+                .flatMap(e => e.lines)
+                .filter(l => l.accountId === account.id || l.accountCode === account.code);
+            let running = 0;
+            const movementsWithBalance = movements.map(m => {
+                running += (m.debitInCents || 0) - (m.creditInCents || 0);
+                return { ...m, runningBalanceInCents: running };
+            });
+            const debitTotal = movements.reduce((s, m) => s + (m.debitInCents || 0), 0);
+            const creditTotal = movements.reduce((s, m) => s + (m.creditInCents || 0), 0);
+            return {
+                ...account,
+                balanceInCents: account.balanceInCents ?? (debitTotal - creditTotal),
+                debitTotalInCents: debitTotal,
+                creditTotalInCents: creditTotal,
+                movements: movementsWithBalance,
+            };
+        });
+    }, [accounts, journalEntries]);
+
+    const generatePandL = useCallback((periodId: string = 'current'): ProfitAndLossReport => {
+        // Note: JournalEntry.amountInMicrounits (1 cent = 10_000 µunits) is the source of truth.
+        // The hook still exposes xxxInCents fields for the accounting views; convert as we read.
+        const toCents = (µ: number) => Math.round(µ / 10_000);
+        const revenues = journalEntries
+            .filter(e => e.type === 'revenue')
+            .map(e => ({
+                category: e.type ?? 'revenue',
+                accountCode: e.pieceNumber,
+                accountName: e.description,
+                amountInCents: e.amountInMicrounits != null
+                    ? toCents(e.amountInMicrounits)
+                    : e.lines.reduce((s, l) => s + (l.side === 'credit' ? toCents(l.amountInMicrounits ?? 0) : 0), 0),
+            }));
+        const expenses = journalEntries
+            .filter(e => e.type === 'expense')
+            .map(e => ({
+                category: e.type ?? 'expense',
+                accountCode: e.pieceNumber,
+                accountName: e.description,
+                amountInCents: e.amountInMicrounits != null
+                    ? toCents(e.amountInMicrounits)
+                    : e.lines.reduce((s, l) => s + (l.side === 'debit' ? toCents(l.amountInMicrounits ?? 0) : 0), 0),
+            }));
+        const totalRevenueInCents = revenues.reduce((s, r) => s + r.amountInCents, 0);
+        const totalExpensesInCents = expenses.reduce((s, e) => s + e.amountInCents, 0);
+        return {
+            periodId,
+            periodName: 'Période courante',
+            revenues,
+            expenses,
+            totalRevenueInCents,
+            totalExpensesInCents,
+            netResultInCents: totalRevenueInCents - totalExpensesInCents,
+            generatedAt: new Date().toISOString(),
         };
     }, [journalEntries]);
 
-    const legacyMetrics = useMemo<FinancialMetrics>(() => ({
+    const generateBalanceSheet = useCallback((_asOfDate: Date = new Date()): BalanceSheetReport => {
+        const toLine = (type: string, label: string) =>
+            (accounts as Account[])
+                .filter(a => a.type === type)
+                .map(a => ({ category: label, accountCode: a.code, accountName: a.name, amountInCents: a.balanceInCents ?? 0 }));
+        const assets = toLine('asset', 'Actif');
+        const liabilities = toLine('liability', 'Passif');
+        const equity = toLine('equity', 'Capitaux propres');
+        const totalAssetsInCents = assets.reduce((s, a) => s + a.amountInCents, 0);
+        const totalLiabilitiesInCents = liabilities.reduce((s, l) => s + l.amountInCents, 0);
+        const totalEquityInCents = equity.reduce((s, e) => s + e.amountInCents, 0);
+        return {
+            asOfDate: new Date().toISOString(),
+            assets,
+            liabilities,
+            equity,
+            totalAssetsInCents,
+            totalLiabilitiesInCents,
+            totalEquityInCents,
+            isBalanced: Math.abs(totalAssetsInCents - (totalLiabilitiesInCents + totalEquityInCents)) < 1,
+            generatedAt: new Date().toISOString(),
+        };
+    }, [accounts]);
+
+    // Alias InCents pour compatibilité des vues transplantées
+    const metricsWithCents = useMemo(() => ({
         ...metrics,
-        cashOnHandInCents: metrics.totalExpensesInCents * 1.5,
-        foodCostInCents: metrics.totalExpensesInCents * 0.3,
-        laborCostInCents: metrics.totalExpensesInCents * 0.35,
-        opExInCents: metrics.totalExpensesInCents * 0.15,
+        netProfitInCents: Math.round(metrics.netProfit / 10_000),
+        totalRevenueInCents: Math.round(metrics.totalRevenue / 10_000),
+        totalExpensesInCents: Math.round(metrics.totalExpenses / 10_000),
     }), [metrics]);
 
     return {
         // State
         viewMode,
-        journalEntries,
-        accounts,
-        bankTransactions,
-        expenseClaims,
-        metrics,
-        legacyMetrics,
+        journalEntries: journalEntries as JournalEntry[],
+        accounts: accounts as Account[],
+        bankTransactions: bankTransactions as BankTransaction[],
+        expenseClaims: expenseClaims as ExpenseClaim[],
+        metrics: metricsWithCents,
+        accountingMetrics,
         isLoading,
         ledgerData,
-        
+        ledger,
+
+        // Computed reports
+        generatePandL,
+        generateBalanceSheet,
+
         // Actions
         toggleViewMode,
         addJournalEntry: async (entry: JournalEntry) => {
             const id = entry.id || `tx_${Date.now()}`;
             return accountingForge.mutate('SET', id, entry);
         },
-        // Bridge functions required by page
         validateJournalEntry: async (id: string) => {
             return accountingForge.mutate('UPDATE', id, { status: 'validated' });
-        }
+        },
     };
 }

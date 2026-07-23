@@ -10,7 +10,7 @@ interface GlassCardProps extends HTMLMotionProps<"div"> {
     variant?: 'default' | 'elevated' | 'inset';
     padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
     rounded?: 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    animate?: boolean;
+    enableInitialAnimation?: boolean;
 }
 
 const paddingMap = {
@@ -30,9 +30,9 @@ const roundedMap = {
 };
 
 const variantMap = {
-    default: 'bg-white/40 dark:bg-bg-secondary/40 border-white/50 dark:border-border/50 shadow-xl',
-    elevated: 'bg-white/50 dark:bg-bg-secondary/50 border-white/60 dark:border-border/60 shadow-2xl shadow-neutral-200/30 dark:shadow-black/40',
-    inset: 'bg-neutral-50/50 dark:bg-white/5 border-neutral-100 dark:border-border shadow-inner',
+    default: 'bg-surface-card/40 dark:bg-bg-secondary/40 border-white/50 dark:border-border/50 shadow-xl',
+    elevated: 'bg-surface-card/50 dark:bg-bg-secondary/50 border-white/60 dark:border-border/60 shadow-2xl shadow-neutral-200/30 dark:shadow-black/40',
+    inset: 'bg-surface-bg/50 dark:bg-surface-card/5 border-subtle dark:border-border shadow-inner',
 };
 
 export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
@@ -42,7 +42,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         variant = 'default',
         padding = 'lg',
         rounded = '2xl',
-        animate = true,
+        enableInitialAnimation = true,
         ...props
     }, ref) => {
         const baseClasses = cn(
@@ -53,7 +53,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
             className
         );
 
-        if (animate) {
+        if (enableInitialAnimation) {
             return (
                 <motion.div
                     ref={ref}
@@ -72,9 +72,17 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
             );
         }
 
-        return (
-            <div ref={ref} className={baseClasses} {...(props as any)}>
+        const { 
+            whileHover, whileTap, whileDrag, whileFocus, whileInView,
+            initial, animate, transition, variants,
+            onAnimationStart, onAnimationComplete, onUpdate,
+            onDragStart, onDragEnd, onDrag, onDirectionLock,
+            onDragTransitionEnd, layout, layoutId,
+            ...htmlProps 
+        } = props;
 
+        return (
+            <div ref={ref} className={baseClasses} {...(htmlProps as React.HTMLAttributes<HTMLDivElement>)}>
                 {children}
             </div>
         );

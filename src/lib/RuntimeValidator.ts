@@ -1,5 +1,5 @@
 import { logger } from './logger';
-import { Cents, Quantity, Rate } from './brands';
+import { Cents, Quantity } from './brands';
 
 /**
  * 🔍 RuntimeValidator - Restaurant OS (Singularity 5.4)
@@ -43,9 +43,13 @@ export const RuntimeValidator = {
   validateOrder(orderData: import('@/shared/nexus-contract').SovereignData) {
 
     const items = Array.isArray(orderData.items) ? orderData.items : [];
+    // Microunits Protocol: totalInMicrounits is canonical (passed through via spread). Only the
+    // deprecated cents mirror is brand-validated, and only when a legacy order actually carries it.
     return {
       ...orderData,
-      totalInCents: RuntimeValidator.validate<Cents>(orderData.totalInCents as import('@/shared/nexus-contract').SovereignValue, 'Cents'),
+      ...(orderData.totalInCents !== undefined
+        ? { totalInCents: RuntimeValidator.validate<Cents>(orderData.totalInCents as import('@/shared/nexus-contract').SovereignValue, 'Cents') }
+        : {}),
       items: items.map((item: import('@/shared/nexus-contract').SovereignData) => ({
 
         ...item,

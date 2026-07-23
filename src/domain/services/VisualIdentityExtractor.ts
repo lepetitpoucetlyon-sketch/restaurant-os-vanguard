@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 export const VisualIdentityExtractor = {
     /**
      * Captures a screenshot of a given URL and returns it as a Base64 string.
@@ -10,7 +12,7 @@ export const VisualIdentityExtractor = {
 
         const { chromium } = await import('playwright');
         
-        console.log(`[Nexus Vision] Launching capture for: ${url}`);
+        logger.info(`[Nexus Vision] Launching capture for: ${url}`);
         
         const browser = await chromium.launch({
             headless: true,
@@ -38,10 +40,10 @@ export const VisualIdentityExtractor = {
                 fullPage: false,
             });
 
-            console.log(`[Nexus Vision] Snapshot captured successfully (${buffer.length} bytes)`);
+            logger.info(`[Nexus Vision] Snapshot captured successfully (${buffer.length} bytes)`);
             
             return buffer.toString('base64');
-        } catch (error) {
+        } catch (error: unknown) {
             console.error(`[Nexus Vision] Capture failed:`, error);
             throw new Error(`Failed to capture visual identity from ${url}`);
         } finally {

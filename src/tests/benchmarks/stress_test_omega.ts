@@ -1,5 +1,4 @@
-import { Slayer } from '@/domain/services/Slayer';
-import { LegacyOrder } from '@/types';
+import { Slayer } from '@domain/services/Slayer';
 import { logger } from '@/lib/logger';
 
 async function runStressTest() {
@@ -7,7 +6,7 @@ async function runStressTest() {
     logger.info(`🏛️ INITIATING GRADE VI STRESS TEST: ${VOLUME} ENTRIES`);
     
     // 🧪 Génération de données factices massives
-    const fakeStream: any[] = Array.from({ length: VOLUME }).map((_, i) => ({
+    const fakeStream: unknown[] = Array.from({ length: VOLUME }).map((_, i) => ({
         id: `LG-${100000 + i}`,
         total: Math.floor(Math.random() * 5000) + 1000,
         timestamp: new Date().toISOString(),

@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/ui.foundations";;
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
 
 interface PageLayoutProps {
     children: ReactNode;

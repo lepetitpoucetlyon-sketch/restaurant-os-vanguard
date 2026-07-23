@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import '@/tests/vanguard/mocks';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
 import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
-import { ordersNodeAtom } from '@/store/operationalAtoms';
+import { ordersNodeAtom } from '@/store/pillars';
 import { getDefaultStore } from 'jotai';
 import { SovereignValue } from '@/shared/nexus-contract';
 
@@ -90,5 +91,14 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         console.log(`[CERT] Ledger Latency: ${results.avgLatency.toFixed(2)}ms/tx`);
         expect(results.integrity).toBe(true);
         expect(results.avgLatency).toBeLessThan(15); // The 15ms bar set by the user
-    });
+        // Timeout 30s : benchmark de 1000 scellements chaînés. La LATENCE métier
+        // (avgLatency, < 15ms/tx) est bonne ; c'est le wall-time des 1000
+        // itérations sous jsdom (crypto.subtle polyfillé lent) qui dépassait les
+        // 5s par défaut. Les fast paths node:crypto (CryptoService) réduisent ce coût.
+    }, 60000);
+    // Timeout 60s (aligné sur BlackFriday.test.ts) : benchmark de 1000
+    // scellements chaînés. La LATENCE métier (avgLatency < 15 ms/tx) est bonne ;
+    // c'est le wall-time de la boucle awaited sous la suite complète (workers
+    // parallèles, event-loop saturée) qui pouvait dépasser 30s. Pure marge
+    // environnementale — l'intégrité NF525 reste un gate dur.
 });
