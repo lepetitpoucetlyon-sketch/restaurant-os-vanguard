@@ -12,6 +12,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     const [status, setStatus] = useState<"loading" | "authorized" | "denied">("loading");
 
     useEffect(() => {
+        // Development bypass: a solo operator running `next dev` has no fleet_admin
+        // Firebase claim yet, so the role gate would lock them out of their own MCC.
+        // Production builds (NODE_ENV=production) always fall through to the real check
+        // below — the fleet_admin claim + per-page MFAGate remain enforced in prod.
+        if (process.env.NODE_ENV !== "production") {
+            setStatus("authorized");
+            return;
+        }
+
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 setStatus("denied");
