@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'node:crypto';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { getRateLimiter } from '@/lib/rate-limiter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import {
     OpenBankingProviderFactory,
@@ -19,32 +21,49 @@ import type { FiscalSeal } from '@nexus/contracts';
  */
 export async function POST(request: NextRequest) {
     try {
-        const caller = await requireTenantAdmin(request);
-        if (isDenied(caller)) return caller;
-        const { tenantId } = caller;
+        let tenantId: string;
+
+        // Chemin interne : webhook Powens → sync (pas de Bearer token disponible)
+        const internalSecret   = request.headers.get('x-internal-secret');
+        const internalTenantId = request.headers.get('x-tenant-id');
+        if (internalSecret && internalTenantId) {
+            const expectedSecret = process.env.INTERNAL_API_SECRET;
+            if (!expectedSecret) {
+                return NextResponse.json({ error: 'INTERNAL_API_SECRET manquant.' }, { status: 503 });
+            }
+            const secretBuf   = Buffer.from(internalSecret);
+            const expectedBuf = Buffer.from(expectedSecret);
+            if (secretBuf.length !== expectedBuf.length || !timingSafeEqual(secretBuf, expectedBuf)) {
+                return NextResponse.json({ error: 'Secret interne invalide.' }, { status: 401 });
+            }
+            tenantId = internalTenantId;
+        } else {
+            const caller = await requireTenantAdmin(request);
+            if (isDenied(caller)) return caller;
+            tenantId = caller.tenantId;
+        }
+
+        // Rate limiting : max 10 syncs/heure par tenant (manuel ou webhook)
+        const rl = await getRateLimiter().check(`bank:sync:${tenantId}`, 10, 60 * 60 * 1000);
+        if (!rl.allowed) {
+            return NextResponse.json({ error: 'Trop de synchronisations — réessayez dans 1h.' }, { status: 429 });
+        }
 
         // Charger la connexion une seule fois — le provider est lu depuis connection.provider
         const connection = await BankConnectionStore.get(tenantId);
         const provider   = OpenBankingProviderFactory.get(connection?.provider);
 
-        if (provider.isDemoMode()) {
-            return NextResponse.json({
-                success: true,
-                isDemoMode: true,
-                syncedAt: new Date().toISOString(),
-                message: 'Mode démonstration : synchronisation simulée.',
-            });
+        if (!provider.isDemoMode()) {
+            if (!connection || connection.status !== 'active') {
+                return NextResponse.json({ error: 'Aucune connexion bancaire active pour ce restaurant.' }, { status: 400 });
+            }
+            const userToken = BankConnectionStore.decryptToken(connection);
+            await provider.refreshConnection(userToken);
         }
 
-        if (!connection || connection.status !== 'active') {
-            return NextResponse.json({ error: 'Aucune connexion bancaire active pour ce restaurant.' }, { status: 400 });
-        }
-
-        const userToken = BankConnectionStore.decryptToken(connection);
-        await provider.refreshConnection(userToken);
-
+        const userToken = provider.isDemoMode() ? 'demo-user-token' : BankConnectionStore.decryptToken(connection!);
         const accounts = await provider.getAccounts(userToken);
-        const fromDate = connection.lastSyncAt
+        const fromDate = connection?.lastSyncAt
             ? connection.lastSyncAt.slice(0, 10)
             : new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
@@ -77,7 +96,7 @@ export async function POST(request: NextRequest) {
                     id:              jeId,
                     date:            tx.date,
                     label:           tx.label,
-                    amountInMicrounits: tx.amountInCents * 10,
+                    amountInMicrounits: tx.amountInCents * 10_000,
                     type:            tx.type,
                     pcgAccount:      pcg?.account ?? '512',
                     pcgLabel:        pcg?.label ?? 'Banque',
@@ -112,9 +131,16 @@ export async function POST(request: NextRequest) {
         }
 
         await batch.commit();
-        await BankConnectionStore.markSynced(tenantId);
+        if (!provider.isDemoMode()) {
+            await BankConnectionStore.markSynced(tenantId);
+        }
 
-        return NextResponse.json({ success: true, synced: created, syncedAt: new Date().toISOString() });
+        return NextResponse.json({
+            success: true,
+            isDemoMode: provider.isDemoMode(),
+            synced: created,
+            syncedAt: new Date().toISOString(),
+        });
     } catch (err) {
         return NextResponse.json(
             { error: err instanceof Error ? err.message : 'Erreur interne lors de la synchronisation.' },

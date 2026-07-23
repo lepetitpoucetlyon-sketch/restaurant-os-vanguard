@@ -4,8 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
+
+function getResend(): Resend {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) throw new Error('RESEND_API_KEY not configured');
+    return new Resend(key);
+}
 
 /**
  * Vrai si l'appel provient d'un service interne (ex : /api/widget/book côté
@@ -168,7 +173,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
         const payload: ConfirmPayload = { to, name, date, time, covers, restaurantName };
 
-        const { error } = await resend.emails.send({
+        const { error } = await getResend().emails.send({
             from: FROM_EMAIL,
             to,
             subject: `Confirmation — ${restaurantName} — ${date} à ${time}`,

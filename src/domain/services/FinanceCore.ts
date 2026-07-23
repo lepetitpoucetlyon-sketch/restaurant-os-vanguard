@@ -141,15 +141,6 @@ export class FinanceCore {
     }
 
     /**
-     * 🏛️ EXPORT MONTHLY FEC (Fichier des Écritures Comptables)
-     * Grade X: Export souverain conforme à l'administration fiscale.
-     */
-    static async exportMonthlyFEC(tenantId: string, month: string): Promise<string> {
-        logger.info(`[FinanceCore] Exporting FEC for ${tenantId} / ${month}`);
-        return "FEC-CONTENT-STUB";
-    }
-
-    /**
      * 🛡️ AUDIT LEDGER
      * Grade X: Vérification de l'intégrité de la chaîne fiscale.
      */

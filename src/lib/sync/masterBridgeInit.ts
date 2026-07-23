@@ -1,4 +1,3 @@
-import type { WritableAtom } from 'jotai';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { DEFAULT_TENANT_ID, APP_MODE } from '@/config/instance';
 

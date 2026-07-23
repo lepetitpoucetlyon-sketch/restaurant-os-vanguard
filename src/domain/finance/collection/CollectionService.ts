@@ -28,7 +28,7 @@ export class CollectionService {
 
             let actionTaken = '';
             let sealHash: string | undefined = undefined;
-            const amountFormatted = SovereignMath.fromMicrounits(SovereignMath.fromCents(invoice.amountOwedInCents)).toFixed(2);
+            const amountFormatted = SovereignMath.fromMicrounits(invoice.amountOwedInMicrounits).toFixed(2);
 
             switch (level) {
                 case 'FRIENDLY_REMINDER':
@@ -41,16 +41,34 @@ export class CollectionService {
                     actionTaken = 'SENT_FRIENDLY_REMINDER_MIXED';
                     break;
 
-                case 'FORMAL_NOTICE':
+                case 'FORMAL_NOTICE': {
+                    const noticePdfContent = [
+                        'MISE EN DEMEURE — NIVEAU 1',
+                        `Facture       : ${invoice.id}`,
+                        `Montant dû    : ${amountFormatted}€`,
+                        `Date          : ${new Date().toISOString().slice(0, 10)}`,
+                        `Destinataire  : ${invoice.customerEmail}`,
+                        '',
+                        'Veuillez régler la somme indiquée dans un délai de 8 jours.',
+                        'Sans règlement, une mise en demeure légale sera engagée.',
+                    ].join('\n');
+                    const noticeHash = await QuantumCrypto.sign(noticePdfContent);
+                    await DocumentVault.archive(`Relance_${invoice.id}.pdf`, noticePdfContent, {
+                        tenantId,
+                        type: 'FORMAL_NOTICE',
+                        invoiceId: invoice.id,
+                        sealHash: noticeHash,
+                    });
                     await NexusBridge.sendCommunicationPulse({
                         type: 'EMAIL',
                         recipient: invoice.customerEmail,
                         subject: `Mise en demeure (Niveau 1) - Facture ${invoice.id}`,
                         content: `Veuillez régler la somme de ${amountFormatted}€ immédiatement. Voir PDF joint.`,
-                        attachments: [{ filename: `Relance_${invoice.id}.pdf`, content: 'PDF_CONTENT_STUB' }]
+                        attachments: [{ filename: `Relance_${invoice.id}.pdf`, content: noticePdfContent }],
                     });
                     actionTaken = 'SENT_FORMAL_NOTICE_WITH_PDF';
                     break;
+                }
 
                 case 'LEGAL_WARNING':
                     const legalPdfContent = `MISE EN DEMEURE OFFICIELLE\nFacture: ${invoice.id}\nMontant: ${amountFormatted}€\n`;

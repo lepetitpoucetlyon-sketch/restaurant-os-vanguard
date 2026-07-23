@@ -9,5 +9,4 @@ export * from './AccountingService';
 export * from './BlockchainLedgerService';
 export * from './FECExporter';
 export * from './PayrollAccountingMapper';
-export * from './PowensService';
 export * from './StatementIngestionService';

@@ -4,7 +4,6 @@ export * from './components';
 export * from './store/accountingAtoms';
 export { useAccounting } from './hooks/useAccounting';
 export { useFinance } from './hooks/useFinance';
-export { useFiscal } from './hooks/useFiscal';
 export { useFinanceReflex } from './hooks/useFinanceReflex';
 export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
 export { BlockchainLedgerService } from './accounting/domain/BlockchainLedgerService';

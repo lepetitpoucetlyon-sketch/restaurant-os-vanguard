@@ -76,7 +76,7 @@ export class TinkProvider implements IOpenBankingProvider {
         };
     }
 
-    getConnectionUrl(token: string, redirectUri: string, state: string): string {
+    async getConnectionUrl(token: string, redirectUri: string, state: string): Promise<string> {
         const base = `${TinkProvider.API_URL}/1.0/authorize`;
         return `${base}?client_id=${TinkProvider.CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=accounts:read,transactions:read&market=FR&locale=fr_FR&state=${state}&access_token=${token}`;
     }

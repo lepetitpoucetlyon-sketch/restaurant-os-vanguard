@@ -14,6 +14,10 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 **Anti-cycles** : `src/store/base.ts` est le module neutre (`NexusNode`, `updateNexusNode`) ; les types/helpers partagés y vont pour éviter les dépendances circulaires Registry ↔ Atomes.
 
+**i18n** : `src/i18n/` existe (domains/ 464 lignes) mais **0 composant UI ne l'utilise** — l'app est monolingue français en dur. Infrastructure conservée en squelette pour une future internationalisation, mais inactive. Ne pas câbler i18n dans de nouveaux composants sans décision explicite.
+
+**Rapatriement progressif** : Le code métier est encore dispersé sur 8 racines (`components/`, `domain/`, `engines/`, etc.). Règle de non-régression : **tout nouveau code d'un pilier va dans `src/modules/<pilier>/`**. À chaque passage sur un fichier orphelin dans `components/` ou `domain/`, le rapatrier vers le bon pilier. Ne jamais créer de nouveau fichier dans `components/<pilier>/` ou `domain/<pilier>/` si `modules/<pilier>/` peut l'accueillir.
+
 ## Conventions critiques
 
 ### Monnaie — MICROUNITS OBLIGATOIRE

@@ -4,17 +4,26 @@ import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
 import { logger } from '@/lib/logger';
+import { getRateLimiter } from '@/lib/rate-limiter';
 
 const QuerySchema = z.object({
   tenantId: z.string().min(1).max(80),
   covers: z.coerce.number().int().min(1).max(100).optional().default(1),
 });
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
-  apiVersion: '2026-05-27.dahlia',
-});
+function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
+  return new Stripe(key, { apiVersion: '2026-05-27.dahlia' });
+}
 
 export async function GET(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+  const rl = await getRateLimiter().check(`widget:setup-intent:${ip}`, 5, 60 * 60 * 1000); // 5/heure — crée des objets Stripe
+  if (!rl.allowed) {
+    return NextResponse.json({ error: 'Trop de requêtes — réessayez dans 1h.' }, { status: 429 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const parsed = QuerySchema.safeParse({
@@ -55,7 +64,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Create Stripe SetupIntent
-    const setupIntent = await stripe.setupIntents.create({
+    const setupIntent = await getStripe().setupIntents.create({
       usage: 'off_session',
       metadata: { tenantId, covers: String(covers) },
     });

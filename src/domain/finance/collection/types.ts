@@ -11,7 +11,7 @@ export interface InvoiceTarget {
     customerEmail: string;
     customerPhone: string;
     dueDate: string | Date;
-    amountOwedInCents: number;
+    amountOwedInMicrounits: number;
     status: 'draft' | 'issued' | 'paid' | 'cancelled' | 'disputed' | 'overdue';
     optOutCollection: boolean;
 }

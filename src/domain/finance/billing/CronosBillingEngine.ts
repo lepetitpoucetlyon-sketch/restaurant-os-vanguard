@@ -100,7 +100,7 @@ export class CronosBillingEngine {
                 customerEmail: 'customer@example.com', // A résoudre via le CRM dans le monde réel
                 customerPhone: '+3300000000',
                 dueDate: currentDate, // La date actuelle sert de point de départ pour l'escalade
-                amountOwedInCents: sub.amountInCents,
+                amountOwedInMicrounits: sub.amountInCents * 10_000,
                 status: 'overdue',
                 optOutCollection: false
             };

@@ -102,7 +102,8 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     // rbac-5: Block RESTRICTED users before any other check
     if (isRestricted) return <RestrictedScreen />;
 
-    let isAllowed = !requiredCategory || (permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
+    const isAdmin = permissions?.role === 'admin' || permissions?.permissions?.isSovereignAdmin === true;
+    let isAllowed = !requiredCategory || isAdmin || (permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
 
     // Social Shield: Un utilisateur RESTRICTED a ses autres accès coupés au niveau du Gate
     if (permissions && (permissions as User & { status?: string }).status === 'RESTRICTED' && requiredCategory) {

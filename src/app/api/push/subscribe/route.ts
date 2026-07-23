@@ -2,22 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { WebPushService } from '@/lib/push/webPushService';
 import { logger } from '@/lib/logger';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 
 // ---------------------------------------------------------------------------
-// Validation
+// Validation — userId retiré : l'uid vient du JWT, jamais du client (IDOR fix)
 // ---------------------------------------------------------------------------
 
 const SubscribeBodySchema = z.object({
-  userId: z.string().min(1).optional(),
   subscription: z.record(z.string(), z.unknown()),
 });
 
 // ---------------------------------------------------------------------------
 // POST /api/push/subscribe
-// Persists a Web Push subscription for a user.
+// Persists a Web Push subscription for the authenticated user.
 // ---------------------------------------------------------------------------
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const caller = await requireTenantUser(req);
+  if (isDenied(caller)) return caller;
+
   let body: unknown;
   try {
     body = await req.json();
@@ -33,30 +36,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const { userId, subscription } = parsed.data;
-
-  // Resolve userId: prefer explicit param, fall back to a stable fingerprint
-  // derived from the subscription endpoint so anonymous users are also tracked.
-  const resolvedUserId =
-    userId ??
-    (typeof subscription.endpoint === 'string'
-      ? Buffer.from(subscription.endpoint).toString('base64').slice(0, 40)
-      : null);
-
-  if (!resolvedUserId) {
-    return NextResponse.json(
-      { error: 'Unable to determine userId from request' },
-      { status: 400 }
-    );
-  }
+  const { subscription } = parsed.data;
 
   try {
-    // Cast to PushSubscription — the Nexus layer only stores the serialised form.
     await WebPushService.saveSubscription(
-      resolvedUserId,
+      caller.uid,
       subscription as unknown as PushSubscription
     );
-    logger.info(`[/api/push/subscribe] Subscription saved for ${resolvedUserId}`);
+    logger.info(`[/api/push/subscribe] Subscription saved for ${caller.uid}`);
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {
     logger.error('[/api/push/subscribe] Failed to save subscription', err);

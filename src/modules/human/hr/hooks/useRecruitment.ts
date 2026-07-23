@@ -4,8 +4,31 @@ import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
 import { useAuth, useTenant } from '@/hooks';
-const stubAction = async (_tenantId: string, _candidate: Candidate): Promise<{ success: boolean; id: string }> => ({ success: true, id: "STUB_ID" });
-const hiredCandidateAction = stubAction;
+async function hiredCandidateAction(tenantId: string, candidate: Candidate): Promise<{ success: boolean; id: string }> {
+    const now = new Date().toISOString();
+    const staffPath = `tenants/${tenantId}/staff`;
+    const employeeId = Nexus.adapter.generateId(staffPath);
+
+    await Nexus.adapter.set(`${staffPath}/${employeeId}`, {
+        id: employeeId,
+        firstName:    candidate.firstName,
+        lastName:     candidate.lastName,
+        email:        candidate.email,
+        phone:        candidate.phone,
+        role:         candidate.appliedRole,
+        contractType: 'CDI',
+        startDate:    now.slice(0, 10),
+        status:       'active',
+        sourceCandidate: candidate.id,
+        createdAt:    now,
+        updatedAt:    now,
+    });
+
+    const candidatePath = `tenants/${tenantId}/candidates/${candidate.id}`;
+    await Nexus.adapter.update(candidatePath, { status: 'hired', updatedAt: now });
+
+    return { success: true, id: employeeId };
+}
 
 export function useRecruitment() {
     const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -88,7 +111,8 @@ export function useRecruitment() {
         if (status === 'hired') {
             const candidate = candidates.find(c => c.id === id);
             if (candidate) {
-                await hiredCandidateAction(activeTenantId, candidate);
+                const { id: employeeId } = await hiredCandidateAction(activeTenantId, candidate);
+                await logAction(id, `Candidat embauché — fiche employé créée`, `employeeId: ${employeeId}`);
                 return;
             }
         }

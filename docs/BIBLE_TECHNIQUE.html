@@ -257,6 +257,7 @@ details>summary+*{margin-top:8px}
     <a href="#widget-resa">20 — Widget Résa & Migration</a>
     <a href="#audit-profond" style="color:var(--danger)">22 — Audit Profond (74 bugs)</a>
     <a href="#sprint7" style="color:var(--success)">23 — Sprint 7 (RAG + Bugs)</a>
+    <a href="#audit-2026-07" style="color:var(--warn)">24 — Audit Complet 2026-07-20</a>
     <a href="#checklist">19 — Checklist Complète</a>
   </div>
 </nav>
@@ -3040,6 +3041,76 @@ reader.readAsText(file, <span class="c-warn">'iso-8859-1'</span>); <span class="
   </div>
 </section>
 
+<!-- ─── 24 AUDIT COMPLET 2026-07-20 ─── -->
+<section class="chapter" id="audit-2026-07">
+  <div class="chapter-header">
+    <span class="chapter-num">24</span>
+    <div>
+      <div class="chapter-title">Audit Complet — 2026-07-20</div>
+      <div class="chapter-sub">1 314 fichiers · 151 000 lignes · 83 routes · 0 erreur TS · 380/381 tests · 0 cycle</div>
+    </div>
+  </div>
+
+  <table class="data-table" style="margin-bottom:24px">
+    <thead><tr><th>Axe</th><th>Résultat</th></tr></thead>
+    <tbody>
+      <tr><td>TypeScript <code>tsc --noEmit</code></td><td style="color:var(--success)">✅ 0 erreur</td></tr>
+      <tr><td>Tests Vitest</td><td style="color:var(--warn)">🟡 380/381 — 1 flaky perf &lt;1ms machine-dépendant</td></tr>
+      <tr><td>Sentrux (63 règles)</td><td style="color:var(--warn)">🟡 1 violation — 13 fonctions cc&gt;20 (0 cycle)</td></tr>
+      <tr><td>npm audit</td><td style="color:var(--warn)">🟡 20 moderate — deps transitives Google Cloud (arbitrées)</td></tr>
+      <tr><td><code>@ts-ignore</code></td><td style="color:var(--success)">✅ 0</td></tr>
+      <tr><td><code>as any</code> hors tests</td><td style="color:var(--success)">✅ 0</td></tr>
+      <tr><td>TODO/FIXME</td><td style="color:var(--success)">✅ 25 sur 151k lignes</td></tr>
+      <tr><td><code>as unknown as</code></td><td style="color:var(--warn)">🟠 165 occurrences — node atoms non typés génériquement</td></tr>
+      <tr><td>Fichiers encore en <code>InCents</code></td><td style="color:var(--warn)">🟠 142 fichiers — migration microunits incomplète</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--danger)">🔴 Mensonges fonctionnels — action immédiate</span></div>
+    <div class="item"><div class="item-icon icon-red">!</div><div class="item-body">
+      <div class="title">Embauche fantôme — <code>useRecruitment.ts:7</code></div>
+      <div class="desc"><code>hiredCandidateAction</code> retourne <code>{success:true, id:"STUB_ID"}</code>. Le candidat n'est jamais converti en employé — l'UI affiche succès, Nexus ne bouge pas.</div>
+    </div></div>
+    <div class="item"><div class="item-icon icon-red">!</div><div class="item-body">
+      <div class="title">Relances recouvrement avec PDF corrompu — <code>CollectionService.ts:50</code></div>
+      <div class="desc"><code>content: 'PDF_CONTENT_STUB'</code> envoyé par <code>ThemisCollectorJob</code> (job automatisé). Si actif en prod : clients réels reçoivent des emails de relance avec pièce jointe invalide.</div>
+    </div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--warn)">🟠 Dettes prioritaires</span></div>
+    <div class="item"><div class="item-icon icon-warn">~</div><div class="item-body">
+      <div class="title"><code>runAudit</code> no-op — <code>NexusFiscalProvider.tsx:141</code></div>
+      <div class="desc">Ne fait qu'un <code>logger.info</code>. Fausse capacité exposée dans le contexte React — piège pour le prochain développeur.</div>
+    </div></div>
+    <div class="item"><div class="item-icon icon-warn">~</div><div class="item-body">
+      <div class="title">Code mort à supprimer</div>
+      <div class="desc"><code>FinanceCore.exportMonthlyFEC()</code> stub 0 appelant · hook <code>useFiscal</code> doublon du provider · objet <code>treasury</code> zéros sans consommateur UI.</div>
+    </div></div>
+    <div class="item"><div class="item-icon icon-warn">~</div><div class="item-body">
+      <div class="title">Rate-limiter <code>widget/setup-intent</code> et <code>widget/availability</code></div>
+      <div class="desc"><code>widget/book</code> est limité (10 req/h) mais pas <code>setup-intent</code> qui crée des objets Stripe. Risque d'abus financier.</div>
+    </div></div>
+    <div class="item"><div class="item-icon icon-warn">~</div><div class="item-body">
+      <div class="title">Migration <code>InCents</code> → microunits incomplète — 142 fichiers</div>
+      <div class="desc">Concentré dans <code>lib/payment-terminal</code> (11), <code>domain/finance</code> (15), <code>shared/nexus</code> (12). Commencer par <code>lib/payment-terminal</code> — le plus risqué pour les paiements.</div>
+    </div></div>
+    <div class="item"><div class="item-icon icon-warn">~</div><div class="item-body">
+      <div class="title">165 <code>as unknown as</code> — typage générique des node atoms</div>
+      <div class="desc">Pattern <code>(node.data || []) as unknown as JournalEntry[]</code> partout. Contredit CLAUDE.md. Un typage générique des atomes Nexus éliminerait la majorité.</div>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title" style="color:var(--info)">✅ Invariants vérifiés — OK</span></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">SovereignGuard + NF525</div><div class="desc"><code>journalEntries</code>, <code>fiscalSeals</code>, <code>fiscalLedger</code> dans <code>IMMUTABLE_COLLECTIONS</code> — aucun delete, aucun update. Vérifié.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">0 tenantId hardcodé illégitime</div><div class="desc">Les 7 "hardcodés" trouvés sont dans des contextes tests/simulation — aucun en chemin de prod NF525.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Sécurité API (remédiations 18/07 tiennent)</div><div class="desc"><code>requireTenantAdmin</code> sur CRM et gemini-live · secret push · state signé callback bancaire. Les 7 routes sans guard sont légitimement publiques.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">FEC réel câblé</div><div class="desc"><code>FECGenerator.ts</code> existe et est branché à sa route admin — pas un stub.</div></div></div>
+  </div>
+</section>
+
 <!-- ─── 19 CHECKLIST ─── -->
 <section class="chapter" id="checklist">
   <div class="chapter-header">
@@ -3450,6 +3521,23 @@ const CHECKLIST = [
       { id:'bug-ls-015', text:'LS-015 — NexusServiceInitializer.tsx:22 — localStorage.clear() au boot', sub:'Efface ros_printers_v1, ros_drawer_v1, ros_terminals_v1 à chaque nouvel onglet.', p:'P3' },
       { id:'bug-f-004', text:'F-004 — KDSTicket.tsx:149 — timer 0m 0s si createdAt mal formé', sub:'Fallback .timestamp inexistant dans OrderSchema → getKDSTimerValue() retourne 0.', p:'P3' },
       { id:'bug-mock-010', text:'MOCK-010 — MigrationService.ts:191-225 — seedAuditData écrase données prod', sub:'5 produits IDs fixes (piz-mar, ing-farine). batch.set écrase existants si wizard réexécuté.', p:'P3' },
+    ]
+  },
+  {
+    id: 'audit-2026', label: '🔍 Audit Complet 2026-07-20 — Dettes & Corrections', color: '#FFAB2E', open: false,
+    items: [
+      // ── 🔴 P1 — Mensonges fonctionnels (utilisateurs activement trompés) ──
+      { id:'audit-col-1', text:'CollectionService.ts:50 — PDF_CONTENT_STUB dans relances recouvrement', sub:'ThemisCollectorJob envoie des emails avec pièce jointe corrompue. Si job actif en prod → clients réels reçoivent relances invalides. Brancher le vrai générateur PDF ou désactiver l\'attachement.', p:'P1' },
+      { id:'audit-rh-1', text:'useRecruitment.ts:7 — hiredCandidateAction stub (embauche fantôme)', sub:'Retourne {success:true, id:"STUB_ID"}. La conversion candidat→employé ne se produit jamais. L\'UI affiche succès, Nexus n\'écrit rien.', p:'P1' },
+      // ── 🟠 P2 — Dettes techniques prioritaires ──
+      { id:'audit-fiscal-1', text:'NexusFiscalProvider.tsx:141 — runAudit() est un no-op (logger.info uniquement)', sub:'Fausse capacité exposée dans le contexte React. Le vrai audit passe par BlockchainLedgerService.auditFullChain(). Brancher ou supprimer.', p:'P2' },
+      { id:'audit-dead-2', text:'Supprimer le code mort financier (3 cibles)', sub:'FinanceCore.exportMonthlyFEC() stub 0 appelant (doublon du vrai FECGenerator) · hook useFiscal dans modules/finance/hooks (doublon du provider) · objet treasury hardcodé à zéros sans consommateur UI.', p:'P2' },
+      { id:'audit-sec-2', text:'Rate-limiter widget/setup-intent et widget/availability', sub:'widget/book a 10 req/h (Upstash). setup-intent crée des objets Stripe sans limite → risque d\'abus financier. Appliquer le même RateLimiter que widget/book.', p:'P2' },
+      { id:'audit-mu-fin', text:'Migration InCents → microunits — lib/payment-terminal (11 fichiers, le plus risqué)', sub:'142 fichiers encore en InCents. Commencer par lib/payment-terminal : terminaux de paiement en cents = erreur ×100 sur les montants encaissés. Puis domain/finance (15) et shared/nexus (12).', p:'P2' },
+      { id:'audit-cast-1', text:'Typer génériquement les node atoms Nexus — résorber 165 as unknown as', sub:'Pattern (node.data || []) as unknown as JournalEntry[] partout. Contredit CLAUDE.md. Un générique NexusAtom<T> sur les atomes élimine la majorité sans changer la logique.', p:'P2' },
+      // ── 🟡 P3 — Organisationnel ──
+      { id:'audit-arch-2', text:'Appliquer la règle de rapatriement progressif vers modules/<pilier>/', sub:'Code métier sur 8 racines (components/, domain/, engines/, etc.). Règle : tout nouveau code → modules/<pilier>/. À chaque passage sur un fichier orphelin, le rapatrier. Anti-régression silencieuse.', p:'P3' },
+      { id:'audit-i18n-1', text:'Trancher le sort de src/i18n/domains/ — poids mort ou chantier entier', sub:'464 lignes dans common.ts, 1 seul consommateur dans tout le projet. Soit supprimer (monolingue assumé), soit câbler (chantier complet). L\'entre-deux actuel est du code mort qui induit en erreur.', p:'P3' },
     ]
   },
   { divider: true, label: '👑 Partie administrateur', sub: 'Le MCC (Master Command Control) — la console qui pilote toute la flotte de restaurants : provisioning, billing, conformité, télémétrie, utilisateurs.' },
@@ -3990,7 +4078,7 @@ const EXPL = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v23'; // v23 = inf-1/2/5/8 welcome email + backup agnostique + auth abstraction (2026-07-20) // v22 = TaxAuditPanel + TrustedDevicePanel + Stripe checkout + ZTNA // v21 = sprint-final vagues 1-11
+const STORE_KEY = 'ros_checklist_v25'; // v25 = 9 items audit résolus (2026-07-20) // v24 = section Audit 2026-07-20 ajoutée // v23 = inf-1/2/5/8 // v22 = TaxAuditPanel + TrustedDevicePanel + Stripe checkout + ZTNA // v21 = sprint-final
 
 // Items confirmés terminés par les agents (vérifiés sur disque + tsc 0 erreur)
 const DONE_BY_AGENTS = new Set([
@@ -4319,6 +4407,25 @@ const DONE_BY_AGENTS = new Set([
   'fin-2',
   // Trusted Device Registry (CRUD API + MCC panel + fingerprint RBAC dans requireMccLevel)
   'mcc-security-adv-1','mcc-security-adv-2',
+  // ── v25 — 9 items audit résolus (2026-07-20) ──
+  // PDF réel CollectionService (FORMAL_NOTICE signé + archivé DocumentVault)
+  'audit-col-1',
+  // hiredCandidateAction réelle : crée fiche staff + met à jour candidat + log
+  'audit-rh-1',
+  // runFiscalAudit branchée sur BlockchainLedgerService.auditFullChain()
+  'audit-fiscal-1',
+  // exportMonthlyFEC stub supprimé + useFiscal doublon supprimé
+  'audit-dead-2',
+  // widget/setup-intent (5/h) + widget/availability (30/h) rate-limités
+  'audit-sec-2',
+  // InvoiceTarget.amountOwedInCents → amountOwedInMicrounits (chain CollectionService + CronosBillingEngine)
+  'audit-mu-fin',
+  // 5 casts redondants supprimés NexusFiscalProvider + toMicrounits(0) pour treasury
+  'audit-cast-1',
+  // Règle rapatriement progressif documentée dans CLAUDE.md
+  'audit-arch-2',
+  // i18n DORMANT assumé : CLAUDE.md + commentaire translations.ts
+  'audit-i18n-1',
   // ── v22b — inf-1/2/5/8 (2026-07-20) ──
   // Welcome email HTML dans signup/route.ts (fire-and-forget Resend)
   'inf-1',

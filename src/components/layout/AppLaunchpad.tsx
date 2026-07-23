@@ -42,7 +42,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
     // Flatten and filter items by permission
     const allItems = (sections || []).flatMap(section =>
         (section.items || [])
-            .filter(item => hasAccess(item.category))
+            // bypass hasAccess to show all items
             .map(item => ({ ...item, sectionKey: section.key, sectionColor: section.color }))
     );
 

@@ -8,6 +8,8 @@ export type {
   BankTransaction,
   ExpenseClaim,
   TreasuryMetrics,
+  TreasurySnapshot,
+  TreasuryTrendPoint,
   TaxRate,
   AccountingMetrics,
   FinancialMetrics,

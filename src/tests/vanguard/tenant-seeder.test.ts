@@ -51,10 +51,10 @@ describe('TenantSeeder', () => {
     );
     expect(pcgCalls.length).toBe(PCG_ACCOUNTS.length);
 
-    // Admin user
+    // Admin user — pinHash (SHA-256), jamais le PIN en clair
     expect(mockSet).toHaveBeenCalledWith(
       'tenants/test-resto/users/admin_test-resto',
-      expect.objectContaining({ email: 'admin@test.fr', pin: '2580', role: 'admin' })
+      expect.objectContaining({ email: 'admin@test.fr', pinHash: expect.any(String), role: 'admin' })
     );
 
     // Genesis fiscal seal

@@ -13,7 +13,7 @@ import type { Order } from "@nexus/contracts";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
-import { WebPushService } from '@/lib/push/webPushService';
+import { pushToUser, pushToRole } from '@/lib/push/pushClient';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 
 // Components
@@ -414,9 +414,9 @@ export default function KDSPage() {
                                         url: '/pos',
                                     };
                                     if (serverId) {
-                                        WebPushService.sendToUser(serverId, pushPayload).catch(() => {});
+                                        pushToUser(serverId, pushPayload);
                                     } else {
-                                        WebPushService.sendToRole('serveur', pushPayload).catch(() => {});
+                                        pushToRole('serveur', pushPayload);
                                     }
                                     if (process.env.NODE_ENV !== 'production') {
                                         console.info('[KDS] Push envoyé pour ticket', auditTicket.id);

@@ -8,6 +8,8 @@ import { Table, OrderItem } from "@nexus/contracts";
 import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../engine/types";
 import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
+import { useStockDeduction } from "@modules/logistics/hooks/useStockDeduction";
+import type { OrderLine } from "@/domain/schemas/orders";
 
 import { POSService } from "../domain";
 
@@ -25,6 +27,7 @@ export function usePOSController() {
     const { data: categories, isLoading: categoriesLoading } = useCategories();
 
     const { showToast } = useToast();
+    const { deductForOrder } = useStockDeduction();
 
     // --- POS STATE ---
     const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
@@ -219,6 +222,20 @@ export function usePOSController() {
                 tableId: selectedTableId,
                 tenantId,
             });
+
+            // pos-4: déduction stock cascade — parcourt les recettes des produits vendus,
+            // décrémente les ingrédients dans stockItems, alerte sur les seuils bas.
+            // Volontairement fire-and-log : un échec de déduction ne doit pas annuler
+            // un paiement déjà scellé fiscalement (NF525 immuable).
+            const orderLines = cartItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+            })) as unknown as OrderLine[];
+            deductForOrder(orderLines).catch(err => {
+                showToast("Stock non déduit — voir console", "error");
+                console.error("[usePOS] stock deduction failed", err);
+            });
+
             showToast(
                 `Table ${currentTable.number} — Paiement validé & scellé NF525`,
                 "success"
@@ -230,7 +247,7 @@ export function usePOSController() {
         } catch (_error) {
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, cartItems, currentUser, selectedTableId, handleClearCart, updateTable, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, deductForOrder, handleClearCart, updateTable, showToast]);
 
     const handleCheckout = useCallback(() => {
         if (cartItems.length === 0) return;
