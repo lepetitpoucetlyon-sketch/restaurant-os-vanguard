@@ -14,14 +14,13 @@ const TENANT_ONLY_ROUTES = [
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.pathname;
 
-  // In development, never hide the MCC console behind APP_MODE — a solo operator
-  // running `next dev` needs access to both the tenant app and the MCC dashboard
-  // from a single server. Production builds (NODE_ENV=production) still enforce the
-  // strict tenant/mcc deployment separation below.
-  const IS_DEV = process.env.NODE_ENV !== 'production';
-
   // --- APP_MODE route gating ---
-  if (APP_MODE === 'tenant' && !IS_DEV) {
+  // The MCC console is a SEPARATE deployment (APP_MODE=mcc), never part of the
+  // tenant application. In tenant mode the MCC routes do not exist — this must hold
+  // in dev and prod alike. To work on the MCC locally, run the dedicated `dev:mcc`
+  // server (NEXT_PUBLIC_APP_MODE=mcc), which serves only MCC routes and 404s the
+  // tenant app.
+  if (APP_MODE === 'tenant') {
     if (MCC_ROUTES.some(r => url.startsWith(r))) {
       return new NextResponse(null, { status: 404 });
     }

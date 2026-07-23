@@ -4582,8 +4582,9 @@ const DONE_BY_AGENTS = new Set([
   'impl-t37','impl-t38','impl-t39','impl-t40','impl-t41',
   'impl-t42','impl-t43','impl-t44',
   'impl-t45','impl-t46','impl-t47','impl-t48','impl-t49','impl-t50','impl-t51',
-  // ── v27 — MCC reachability + items vérifiés déjà implémentés (2026-07-23) ──
-  // mcc-core-2 — APP_MODE=mcc/tenant gating dans middleware.ts (+ dev bypass NODE_ENV)
+  // ── v27 — MCC = déploiement séparé (APP_MODE=mcc) + items vérifiés (2026-07-23) ──
+  // mcc-core-2 — APP_MODE tenant/mcc dans middleware.ts : le MCC n'est JAMAIS dans l'app
+  //             tenant. Scripts dev:mcc / build:mcc / start:mcc (port 3456) + launch "mcc".
   'mcc-core-2',
   // mcc-core-3 — MFAGate.tsx : TOTP 2FA obligatoire pour fleet_admin
   'mcc-core-3',

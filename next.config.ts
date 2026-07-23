@@ -7,6 +7,12 @@ const workspaceRoot = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig: NextConfig = {
   // NOTE: pas de `output: 'export'` — le produit exige un serveur Node
   // (routes API : signup, webhook Stripe, export FEC, middleware d'auth).
+  //
+  // Le MCC (APP_MODE=mcc) est un déploiement SÉPARÉ. En local il tourne en même
+  // temps que l'app tenant : on lui donne son propre distDir pour que les deux
+  // serveurs Turbopack ne partagent pas `.next` (sinon manifeste de routes corrompu
+  // → 404 fantômes sur /admin/*). App tenant → `.next`, console MCC → `.next-mcc`.
+  distDir: process.env.NEXT_PUBLIC_APP_MODE === 'mcc' ? '.next-mcc' : '.next',
   turbopack: {
     root: workspaceRoot,
   },

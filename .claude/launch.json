@@ -12,6 +12,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["next", "dev", "-p", "3455"],
       "port": 3455
+    },
+    {
+      "name": "mcc",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:mcc"],
+      "port": 3456
     }
   ]
 }
