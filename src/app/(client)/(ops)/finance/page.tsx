@@ -27,6 +27,7 @@ import { useFinance } from "@modules/finance";
 import {
     FiscalAuditView,
     ExpenseClaimDialog,
+    TreasuryDashboard,
 } from "@modules/finance/components/accounting";
 import { useBilling } from "@modules/finance/billing/hooks/useBilling";
 import { FECExporter } from "@modules/finance/accounting/domain/FECExporter";
@@ -384,6 +385,9 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
                 {/* ── Comptabilité ───────────────────────────────────────────── */}
                 {activeTab === "accounting" && (
                     <section className="space-y-6">
+
+                        {/* Trésorerie & Prévisions — position cash réelle (PCG) */}
+                        <TreasuryDashboard journalEntries={journalEntries} />
 
                         {/* KPI metrics */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

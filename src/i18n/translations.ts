@@ -1,6 +1,9 @@
 /**
  * translations.ts — Assembleur de Traductions par Domaine
  *
+ * STATUT : DORMANT — 0 composant UI n'utilise t() en dehors de NexusCoreProvider.
+ * Marché cible France → monolingue assumé. Ne pas câbler sans décision explicite.
+ *
  * Architecture décomposée :
  *   domains/common.ts     → nav, header, sidebar, settings, common, allergens
  *   domains/dashboard.ts  → dashboard (KPIs, chart, intelligence, CTA)

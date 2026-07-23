@@ -52,7 +52,10 @@ export class PowensProvider implements IOpenBankingProvider {
 
     isDemoMode(): boolean {
         const clientId = PowensProvider.CLIENT_ID;
-        return !clientId || clientId.includes('placeholder') || clientId === 'restaurant-os-master';
+        if (!clientId || clientId.includes('placeholder') || clientId === 'restaurant-os-master') return true;
+        // Pas de secret = mode démo sécurisé plutôt que throw sur le premier appel réel
+        if (!process.env.POWENS_CLIENT_SECRET) return true;
+        return false;
     }
 
     async createConnectionToken(tenantId: string): Promise<OpenBankingConnectionToken> {
@@ -79,7 +82,7 @@ export class PowensProvider implements IOpenBankingProvider {
         };
     }
 
-    getConnectionUrl(token: string, redirectUri: string, state: string): string {
+    async getConnectionUrl(token: string, redirectUri: string, state: string): Promise<string> {
         const baseUrl = this.isDemoMode()
             ? 'https://restaurant-os-sandbox.biapi.pro/2.0/manage/connect'
             : `${PowensProvider.API_URL}/manage/connect`;

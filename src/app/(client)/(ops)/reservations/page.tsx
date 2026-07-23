@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { useReservations, useCRM, useTables } from "@modules/ops";
 import { useGroups } from "@/engines/ops/NexusOpsProvider";
 import { useActionPermission } from "@/hooks/useActionPermission";
-import { PinModal } from "@/components/pos/PinModal";
+import { PinModal } from "@modules/commerce/ui/pos/PinModal";
 import { DailyListView } from "@/components/reservations/DailyListView";
 import { WeeklyView } from "@/components/reservations/WeeklyView";
 import { GroupFormModal } from "@/components/reservations/GroupFormModal";

@@ -5,6 +5,7 @@
  */
 
 export * from './ComplianceView';
+export * from './MenuEngineeringMatrix';
 export * from './MindMap';
 export * from './OraclePredictor';
 export * from './ProfitabilityView';

@@ -32,6 +32,7 @@ import {
   ProfitabilityView,
   ReputationView,
   ComplianceView,
+  MenuEngineeringMatrix,
 } from "@modules/intelligence/analytics/components";
 import { useQuality } from "@modules/compliance";
 import type { ComplianceAlert } from "@modules/intelligence/analytics/types";
@@ -491,7 +492,12 @@ const [activeTab, setActiveTab] = useState<AnalyticsTab>(
 
       {/* ── Tab content ── */}
       <main>
-        {activeTab === "profitability" && <ProfitabilityView alerts={[]} />}
+        {activeTab === "profitability" && (
+  <div className="space-y-8">
+    <MenuEngineeringMatrix />
+    <ProfitabilityView alerts={[]} />
+  </div>
+)}
         {activeTab === "reputation" && <ReputationView reviews={[]} />}
         {activeTab === "compliance" && (
           <ComplianceView alerts={complianceAlerts} />

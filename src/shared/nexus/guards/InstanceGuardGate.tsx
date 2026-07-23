@@ -62,7 +62,9 @@ export const InstanceGuardGate: React.FC<{ children: React.ReactNode }> = ({ chi
                 <div style={{ fontSize: '1.2rem', maxWidth: '600px', lineHeight: '1.5' }}>
                     Sovereignty Protocol Alpha active.
                     <br />
-                    Host <strong>{state.hostname}</strong> is not listed in the Empire Whitelist.
+                    Host <strong>{state.hostname}</strong> is not listed in the Empire Whitelist, or the Project ID check failed.
+                    <br /><br />
+                    DEBUG: Host={state.hostname}, Project={process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'UNSET'}
                     <br /><br />
                     Execution halted to prevent code extraction.
                 </div>

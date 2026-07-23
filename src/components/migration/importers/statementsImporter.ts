@@ -1,31 +1,12 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { StatementIngestionService } from '@/modules/finance/accounting/domain/StatementIngestionService';
+import { inferPCGAccount } from '@/domain/finance/banking/openBanking/pcgHeuristics';
 import type { ParsedFile, ImportResult } from '../types';
 
 // Cross-impact: StatementIngestionService already has a robust CSV parser with SHA-256 dedup.
-// We wrap it here to give it an accessible UI entry point.
-// TODO: after inject → link each BankTransaction to a JournalEntry via PCG account mapping.
-// That link is the missing piece between bank reconciliation and NF525 accounting.
-
-const PCG_ACCOUNT_HEURISTICS: { pattern: RegExp; account: string; label: string }[] = [
-  { pattern: /virement|salaire|paie/i, account: '641', label: 'Rémunérations du personnel' },
-  { pattern: /urssaf|cotisation|social/i, account: '645', label: 'Charges de sécurité sociale' },
-  { pattern: /loyer|bail|locatio/i, account: '613', label: 'Locations' },
-  { pattern: /electricit|edf|gaz|energie/i, account: '606', label: 'Énergie' },
-  { pattern: /transgourmet|metro|sysco|fournisseur|livraison marchandise/i, account: '607', label: 'Achats de marchandises' },
-  { pattern: /assurance/i, account: '616', label: 'Primes d\'assurance' },
-  { pattern: /telephone|orange|sfr|bouygues|free/i, account: '626', label: 'Frais postaux et de télécommunication' },
-  { pattern: /banque|frais bancaire|commission/i, account: '627', label: 'Services bancaires' },
-  { pattern: /vente|cb|tpe|ticket|stripe|sumup/i, account: '706', label: 'Prestations de services' },
-  { pattern: /remboursement|avoir/i, account: '709', label: 'Rabais, remises, ristournes accordés' },
-];
-
-function inferPCGAccount(label: string): { account: string; label: string } | undefined {
-  for (const h of PCG_ACCOUNT_HEURISTICS) {
-    if (h.pattern.test(label)) return { account: h.account, label: h.label };
-  }
-  return undefined;
-}
+// We wrap it here to give it an accessible UI entry point. The PCG heuristic is shared with
+// the Powens/agrégateur sync (src/domain/finance/banking/openBanking) so manual CSV imports
+// and live bank sync classify transactions identically.
 
 export async function importStatements(file: ParsedFile, rawFile: File, onProgress: (n: number) => void): Promise<ImportResult> {
   onProgress(5);

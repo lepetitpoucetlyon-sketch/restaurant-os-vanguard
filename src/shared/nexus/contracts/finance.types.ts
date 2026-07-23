@@ -94,7 +94,7 @@ export interface BankTransaction {
 
 export interface BankConnection {
     id: string;
-    provider: 'plaid' | 'bridge' | 'manual';
+    provider: 'powens' | 'tink' | 'plaid' | 'bridge' | 'manual';
     institutionName: string;
     status: 'active' | 'error' | 'disconnected';
     lastSyncAt: Date | string;

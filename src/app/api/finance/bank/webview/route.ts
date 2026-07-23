@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
         const { token } = await provider.createConnectionToken(tenantId);
         const redirectUri = `${request.nextUrl.origin}/api/finance/bank/callback`;
         const state = signBankConnectState(tenantId);
-        const url = provider.getConnectionUrl(token, redirectUri, state);
+        const url = await provider.getConnectionUrl(token, redirectUri, state);
 
         return NextResponse.json({ url, isDemoMode: provider.isDemoMode() });
     } catch (err) {

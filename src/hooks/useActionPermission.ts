@@ -48,6 +48,49 @@ const ACTION_MAP: Record<string, Record<string, ActionConfig>> = {
         delete_item:           { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: true },
         adjust_stock:          { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
     },
+    haccp: {
+        // Traçabilité sanitaire — CE 852/2004 & CE 178/2002
+        validate_control:      { minLevel: PERMISSION_ROLE_LEVELS.chef_cuisinier, requiresPin: false },
+        close_nonconformity:   { minLevel: PERMISSION_ROLE_LEVELS.manager,        requiresPin: false },
+        export_pms:            { minLevel: PERMISSION_ROLE_LEVELS.manager,        requiresPin: false },
+        delete_lot:            { minLevel: PERMISSION_ROLE_LEVELS.manager,        requiresPin: true },
+    },
+    kds: {
+        recall_order:          { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
+        force_bump:            { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
+        // Contournement d'un allergène signalé — sécurité alimentaire, PIN obligatoire
+        override_allergen:     { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: true },
+    },
+    crm: {
+        // Données personnelles — RGPD : export & suppression sous PIN
+        export_customers:      { minLevel: PERMISSION_ROLE_LEVELS.manager, requiresPin: true },
+        delete_customer:       { minLevel: PERMISSION_ROLE_LEVELS.manager, requiresPin: true },
+        send_campaign:         { minLevel: PERMISSION_ROLE_LEVELS.manager, requiresPin: false },
+        edit_consent:          { minLevel: PERMISSION_ROLE_LEVELS.manager, requiresPin: false },
+    },
+    kitchen: {
+        edit_recipe:           { minLevel: PERMISSION_ROLE_LEVELS.chef_cuisinier, requiresPin: false },
+        // Marge = donnée financière sensible
+        edit_margin:           { minLevel: PERMISSION_ROLE_LEVELS.manager,        requiresPin: true },
+        delete_product:        { minLevel: PERMISSION_ROLE_LEVELS.manager,        requiresPin: false },
+    },
+    bar: {
+        edit_cocktail:         { minLevel: PERMISSION_ROLE_LEVELS.barman,    requiresPin: false },
+        adjust_cellar:         { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
+    },
+    marketing: {
+        publish_campaign:      { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: false },
+        edit_seo:              { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: false },
+        send_quote:            { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
+    },
+    analytics: {
+        trigger_vision_analysis: { minLevel: PERMISSION_ROLE_LEVELS.manager, requiresPin: false },
+    },
+    registre: {
+        close_intervention:    { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: false },
+        // DUERP = document légal obligatoire (Code du travail R.4121-1)
+        edit_duerp:            { minLevel: PERMISSION_ROLE_LEVELS.directeur, requiresPin: true },
+    },
 };
 
 export function useActionPermission(page: string, action: string): PermissionCheckResult {

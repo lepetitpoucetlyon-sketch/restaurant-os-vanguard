@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
-import { WebPushService } from '@/lib/push/webPushService';
+import { pushToRole } from '@/lib/push/pushClient';
 import type { OrderLine } from "@/domain/schemas/orders";
 
 interface RecipeIngredient {
@@ -112,11 +112,11 @@ export function useStockDeduction() {
                             stockItem.ingredientName ?? ing.ingredientId;
                         toast.warning(`Stock bas : ${ingredientName}`);
                         // not-4: Push critical stock alert to kitchen chef
-                        WebPushService.sendToRole('chef_cuisinier', {
+                        pushToRole('chef_cuisinier', {
                             title: 'Alerte stock critique',
                             body: `${ingredientName} : stock bas (${newQty} ${ing.unit ?? ''})`,
                             url: '/inventory',
-                        }).catch(() => {});
+                        });
                     }
                 } catch (err) {
                     logger.error(

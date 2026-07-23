@@ -183,6 +183,32 @@ export const TreasuryMetricsSchema = z.object({
 
 export type TreasuryMetrics = z.infer<typeof TreasuryMetricsSchema>;
 
+// ── Treasury Snapshot (cash-flow) ──────────────────────────────────────────
+// Sortie CALCULÉE (TreasuryCalculator), pas une donnée Firestore validée :
+// interfaces simples plutôt que schémas Zod. Tout en microunits.
+export interface TreasuryTrendPoint {
+  /** Timestamp du début de journée (ms). */
+  date: number;
+  /** Flux net du jour (produits − charges), en microunits. */
+  netInMicrounits: number;
+}
+
+/**
+ * Position de trésorerie (cash) — distincte de TreasuryMetrics (résumé P&L).
+ * PCG : 53x caisse · 512x banque · 411x créances clients · 401x dettes fournisseurs.
+ */
+export interface TreasurySnapshot {
+  cashOnHandInMicrounits: number;
+  bankBalanceInMicrounits: number;
+  pendingReceivablesInMicrounits: number;
+  pendingPayablesInMicrounits: number;
+  netCashPositionInMicrounits: number;
+  /** Projection linéaire à 30 jours de la position de trésorerie. */
+  forecast30DaysInMicrounits: number;
+  /** Flux net des 14 derniers jours, du plus ancien au plus récent. */
+  cashFlowTrend: TreasuryTrendPoint[];
+}
+
 // ── Accounting Context State (Data only) ───────────────────────────────────
 export const AccountingContextSchema = z.object({
   journalEntries:   z.array(JournalEntrySchema),

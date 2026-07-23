@@ -1,10 +1,11 @@
-/**
- * 🏛️ NEXUS SMART SEAL - Grade X Barrel
- * This file is automatically maintained. Do not edit manually.
- * Manual changes will be overwritten unless you remove this header.
- */
+// Barrel — manual (Grade X Smart Seal removed intentionally).
 
 export * from './NewReservationDialog';
 export * from './ReservationSidebar';
 export * from './ReservationToolbar';
 export * from './TableGrid';
+
+// Phase 2 transplants from origin/main (src/app/(marketing)/reservations/components/*)
+export * from './CustomerListView';
+export * from './FloorPlanView';
+export * from './ReservationCalendarPopup';

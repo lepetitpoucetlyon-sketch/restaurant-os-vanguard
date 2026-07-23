@@ -53,7 +53,7 @@ export interface IOpenBankingProvider {
     createConnectionToken(tenantId: string): Promise<OpenBankingConnectionToken>;
 
     /** Construit l'URL de la webview à partir du jeton temporaire + redirect_uri + state (anti-CSRF, porte le tenantId). */
-    getConnectionUrl(token: string, redirectUri: string, state: string): string;
+    getConnectionUrl(token: string, redirectUri: string, state: string): Promise<string>;
 
     /** Étape 2 — échange le code de callback contre un jeton utilisateur long-terme. */
     exchangeCode(code: string): Promise<OpenBankingUserToken>;

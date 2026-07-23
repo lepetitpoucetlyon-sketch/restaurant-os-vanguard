@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
-import { WebPushService } from '@/lib/push/webPushService';
+import { pushToUser, pushToRole } from '@/lib/push/pushClient';
 import { ITEM_STATION_MAP } from "@modules/ops/kds";
 import {
     DndContext,
@@ -222,9 +222,9 @@ export function KDSTicket({
                 url: '/pos',
             };
             if (serverId) {
-                WebPushService.sendToUser(serverId, pushPayload).catch(() => {});
+                pushToUser(serverId, pushPayload);
             } else {
-                WebPushService.sendToRole('serveur', pushPayload).catch(() => {});
+                pushToRole('serveur', pushPayload);
             }
             if (process.env.NODE_ENV !== 'production') {
                 console.info('[KDS] Push envoyé pour ticket', ticket.id);

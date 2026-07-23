@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TableSchema, ReservationSchema } from '@/domain/schemas/ops';
 import { logger } from '@/lib/logger';
+import { getRateLimiter } from '@/lib/rate-limiter';
 
 const QuerySchema = z.object({
   tenantId: z.string().min(1).max(80),
@@ -37,6 +38,12 @@ function generateSlots(): string[] {
 }
 
 export async function GET(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+  const rl = await getRateLimiter().check(`widget:availability:${ip}`, 30, 60 * 60 * 1000); // 30/heure
+  if (!rl.allowed) {
+    return NextResponse.json({ error: 'Trop de requêtes — réessayez dans 1h.' }, { status: 429 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const parsed = QuerySchema.safeParse({

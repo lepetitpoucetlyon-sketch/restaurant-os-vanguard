@@ -22,6 +22,8 @@ export const DEFAULT_SECURITY_CONFIG: InstanceSecurityConfig = {
         'kitchen-os-lepetitpoucet.web.app': 'lepetitpoucet',
         'kitchen-os-bistrolyon.web.app': 'bistrolyon',
         'kitchen-os-urbanburger.web.app': 'urbanburger',
+        'restaurant-os-web.web.app': 'restaurant-os',
+        'restaurant-os-web.firebaseapp.com': 'restaurant-os',
         // --- 🛠️ Localhost / Dev ---
         'localhost': '__dev__',
         '127.0.0.1': '__dev__',
@@ -30,7 +32,7 @@ export const DEFAULT_SECURITY_CONFIG: InstanceSecurityConfig = {
         'lepetitpoucet': 'lepetitpoucet-prod',
         'bistrolyon': 'bistrolyon-prod',
         'urbanburger': 'urbanburger-prod',
-        'restaurant-os': 'restaurant-os-web',
+        'restaurant-os': 'kitchen-os-gastro', // FIXED
         '__dev__': 'kitchen-os-gastro'
     },
     allowDevMode: process.env.NODE_ENV === 'development',

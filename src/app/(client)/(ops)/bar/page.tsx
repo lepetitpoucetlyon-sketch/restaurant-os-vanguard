@@ -111,9 +111,9 @@ export default function BarPage() {
                 )}
 
                 {activeTab === 'stocks' && (
-                    <StocksTab 
+                    <StocksTab
                         lowStockWines={lowStockWines}
-                        totalCellarValue={totalCellarValue / 100}
+                        totalCellarValue={totalCellarValue}
                         wineCount={WINE_CELLAR.length}
                     />
                 )}

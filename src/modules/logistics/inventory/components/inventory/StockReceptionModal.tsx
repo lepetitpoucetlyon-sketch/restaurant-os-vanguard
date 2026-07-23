@@ -11,6 +11,8 @@ import { IngredientCategory, IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
+import { VisionScanner } from "@/components/shared/VisionScanner";
+import type { ExtractedInvoice } from "@domain/services/VisionService";
 
 interface SupplierRecord {
     id: string;
@@ -139,6 +141,28 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
 
     const activeLocations = storageLocations.length > 0 ? storageLocations : DEFAULT_STORAGE_LOCATIONS;
 
+    // log-4 : préremplissage depuis facture scannée (Vision AI).
+    // On tente de matcher le premier article de la facture à un ingrédient existant par nom
+    // (contains, case-insensitive). Le supplier est repris du champ "supplierName" si un
+    // fournisseur portant ce nom existe déjà. Le reste (quantité/coût) est toujours utilisable.
+    const handleInvoiceScanned = (invoice: ExtractedInvoice) => {
+        const firstItem = invoice.items[0];
+        if (firstItem) {
+            const nameLower = firstItem.name.toLowerCase();
+            const matched = ingredients.find(i => i.name.toLowerCase().includes(nameLower) || nameLower.includes(i.name.toLowerCase()));
+            if (matched) handleIngredientChange(matched.id);
+            setQuantity(String(firstItem.quantity));
+            if (firstItem.unit) setUnit(firstItem.unit as IngredientUnit);
+            setUnitCost(String(firstItem.unitPriceHT));
+            if (firstItem.expirationDate) setDlc(firstItem.expirationDate);
+            if (firstItem.batchNumber) setBatchNumber(firstItem.batchNumber);
+        }
+        if (invoice.supplierName) {
+            const matchedSupplier = suppliers.find(s => s.name.toLowerCase() === invoice.supplierName.toLowerCase());
+            if (matchedSupplier) setSelectedSupplierId(matchedSupplier.id);
+        }
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -189,6 +213,18 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                         </div>
                     ) : (
                         <div className="space-y-10">
+                            {/* Vision Scanner — scan invoice to auto-fill (log-4) */}
+                            <div className="space-y-4">
+                                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shadow-glow" />
+                                    SCAN AUTOMATIQUE (OPTIONNEL)
+                                </label>
+                                <VisionScanner
+                                    onAnalysisComplete={handleInvoiceScanned}
+                                    label="Scanner le bon de livraison"
+                                />
+                            </div>
+
                             {/* Ingredient Selection */}
                             <div className="space-y-4">
                                 <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">

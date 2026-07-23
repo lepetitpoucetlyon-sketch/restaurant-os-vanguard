@@ -142,6 +142,15 @@ export enum OperationalIdentity {
 
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
   capabilities: {},
+  features: {
+    pos: true,
+    kds: true,
+    inventory: true,
+    hr: true,
+    reservations: true,
+    finance: true,
+    marketing: true
+  },
   theme: {
     primaryColor: '#0F172A',
     secondaryColor: '#38BDF8',

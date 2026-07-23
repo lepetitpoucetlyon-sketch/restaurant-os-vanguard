@@ -45,10 +45,11 @@ export class NexusInterceptor implements INexusAdapter {
         let isUnsubscribed = false;
 
         const initListener = async () => {
-            // Step 1: Validate access BEFORE subscribing to any data
+            // Step 1: Validate access BEFORE subscribing to any data (scoped path — même raison que intercept)
+            const scopedForValidation = this.scopePath(path, ctx.vassalId);
             let access: { granted: boolean; reason?: string };
             try {
-                access = await this.guard.validateAccessGradeX('READ', path, ctx);
+                access = await this.guard.validateAccessGradeX('READ', scopedForValidation, ctx);
             } catch (error: unknown) {
                 this.emitDenial('READ', path, ctx, error instanceof Error ? error.message : 'VALIDATION_EXCEPTION');
                 options?.onError?.(new NexusError(NexusErrorCode.ACCESS_DENIED, 'Access validation failed'));
@@ -218,8 +219,11 @@ export class NexusInterceptor implements INexusAdapter {
         context: NexusContext,
         action: () => Promise<R>
     ): Promise<R> {
-        // 1. Validation d'accès
-        const accessResult = await this.guard.validateAccessGradeX(operation, path, context);
+        // 1. Validation d'accès — utiliser le path scopé pour éviter le faux positif :
+        // 'categories' → pathTenantId='main' vs currentTenant='lepetitpoucet' déclenchait fail-safe.
+        // Le batch fait déjà ça correctement (scopedPath avant validateAccess).
+        const scopedForValidation = this.scopePath(path, context.vassalId);
+        const accessResult = await this.guard.validateAccessGradeX(operation, scopedForValidation, context);
         if (!accessResult.granted) {
             // Access denied — emit telemetry and throw
             const reason = accessResult.reason || 'ACCESS_DENIED';

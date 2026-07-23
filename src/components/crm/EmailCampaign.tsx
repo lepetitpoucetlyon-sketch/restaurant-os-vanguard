@@ -5,6 +5,7 @@ import { Mail, Send, Users, Eye, Loader2, CheckCircle2, ChevronDown } from "luci
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { authedFetch } from "@/lib/client/authedFetch";
+import { useActionPermission } from "@/hooks/useActionPermission";
 
 type CampaignSegment = "all_active" | "inactive_3m" | "birthdays_this_month";
 
@@ -93,8 +94,13 @@ export function EmailCampaign() {
   const [preview, setPreview] = useState(false);
   const [sendStatus, setSendStatus] = useState<SendStatus>("idle");
   const { count, loading: countLoading } = useRecipientCount(segment);
+  const sendPermission = useActionPermission("crm", "send_campaign");
 
   const handleSend = async () => {
+    if (!sendPermission.allowed) {
+      toast.error(sendPermission.reason ?? "Action non autorisée");
+      return;
+    }
     if (!subject.trim()) { toast.error("L'objet est obligatoire"); return; }
     if (!body.trim()) { toast.error("Le corps du message est obligatoire"); return; }
     if (count === 0) { toast.error("Aucun destinataire pour ce segment"); return; }
@@ -227,7 +233,8 @@ export function EmailCampaign() {
       {/* Send button */}
       <button
         onClick={handleSend}
-        disabled={sendStatus !== "idle" || count === 0}
+        disabled={sendStatus !== "idle" || count === 0 || !sendPermission.allowed}
+        title={!sendPermission.allowed ? sendPermission.reason : undefined}
         className={`w-full h-12 rounded-xl text-sm font-bold uppercase tracking-wide transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed ${
           sendStatus === "success"
             ? "bg-green-500 text-white"

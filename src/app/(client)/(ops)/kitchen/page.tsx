@@ -18,6 +18,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useHACCP } from "@modules/compliance";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import { ProductFormModal } from "@/components/modals/ProductFormModal";
 import { PrepTaskDetailDialog } from "@modules/ops";
@@ -64,7 +65,7 @@ export default function KitchenPage() {
         deleteRecipe
     } = recipesHook;
     
-    const wasteLogs = [] as import("@nexus/contracts").RegulatoryWasteLog[]; // Suture required for waste
+    const { wasteLogs } = useHACCP();
     
     const ingredients = (inventory.stockItems || []) as unknown as import("@nexus/contracts").Ingredient[];
 
