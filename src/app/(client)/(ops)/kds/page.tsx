@@ -367,6 +367,7 @@ export default function KDSPage() {
                                 <KDSTicket
                                     key={ticket.id}
                                     ticket={ticket}
+                                    tenantId={tenantId ?? ''}
                                     gridColumns={gridColumns}
                                     rushMode={rushMode}
                                     updateOrderStatus={updateOrderStatus}
@@ -414,9 +415,9 @@ export default function KDSPage() {
                                         url: '/pos',
                                     };
                                     if (serverId) {
-                                        pushToUser(serverId, pushPayload);
+                                        pushToUser(tenantId ?? '', serverId, pushPayload);
                                     } else {
-                                        pushToRole('serveur', pushPayload);
+                                        pushToRole(tenantId ?? '', 'serveur', pushPayload);
                                     }
                                     if (process.env.NODE_ENV !== 'production') {
                                         console.info('[KDS] Push envoyé pour ticket', auditTicket.id);

@@ -40,6 +40,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   try {
     await WebPushService.saveSubscription(
+      caller.tenantId,
       caller.uid,
       subscription as unknown as PushSubscription
     );

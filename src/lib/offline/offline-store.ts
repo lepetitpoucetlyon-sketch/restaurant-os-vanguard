@@ -38,6 +38,8 @@ export class RestaurantOfflineDB extends Dexie {
     config!: Table<TenantConfig>;
     /** Grade IX: Boîte Noire des rejets du GenomeValidator */
     immunityLogs!: Table<ImmunityLogEntry>;
+    /** NF525 JET — Journal des Événements Techniques */
+    jetEntries!: Table<import('@shared/genome.types').JetEntry>;
     /** Grade X: Suture des Recettes pour le calcul offline */
     recipes!: Table<Recipe>;
 
@@ -72,6 +74,11 @@ export class RestaurantOfflineDB extends Dexie {
             config: 'id',
             immunityLogs: '++id, timestamp, moduleId, reason',
             recipes: 'id, name'
+        });
+
+        // Version 5 — NF525 JET (Journal des Événements Techniques)
+        this.version(5).stores({
+            jetEntries: '++id, timestamp, eventType, deviceId'
         });
     }
 

@@ -34,7 +34,7 @@ import { NonConformityForm } from "@/components/compliance/NonConformityForm";
 import { PlanMaitriseSanitaire } from "@/domain/services/PlanMaitriseSanitaire";
 import { useTenant } from "@/hooks";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-// web-push is server-only — alert via API route instead of direct import
+import { pushToRole } from '@/lib/push/pushClient';
 import type { StockItem } from "@nexus/contracts";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -152,7 +152,7 @@ const [activeTab, setActiveTab] = useState<HaccpTab>(
                         `Alerte température froide — ${zone} : ${temp}°C (max ${COLD_THRESHOLD}°C)`,
                         { id: `temp-cold-${log.id}` }
                     );
-                    fetch("/api/push/send", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role: "chef_cuisinier", title: "Alerte température !", body: `${zone} : ${temp}°C (dépassement froid)`, url: "/haccp" }) }).catch(() => {});
+                    if (tenantId) pushToRole(tenantId, 'chef_cuisinier', { title: 'Alerte température !', body: `${zone} : ${temp}°C (dépassement froid)`, url: '/haccp' });
                 } else if (isHot && temp < HOT_THRESHOLD) {
                     activeAlerts.push({
                         id: log.id,
@@ -165,7 +165,7 @@ const [activeTab, setActiveTab] = useState<HaccpTab>(
                         `Alerte température chaude — ${zone} : ${temp}°C (min ${HOT_THRESHOLD}°C)`,
                         { id: `temp-hot-${log.id}` }
                     );
-                    fetch("/api/push/send", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role: "chef_cuisinier", title: "Alerte température !", body: `${zone} : ${temp}°C (dépassement chaud)`, url: "/haccp" }) }).catch(() => {});
+                    if (tenantId) pushToRole(tenantId, 'chef_cuisinier', { title: 'Alerte température !', body: `${zone} : ${temp}°C (dépassement chaud)`, url: '/haccp' });
                 }
             }
 

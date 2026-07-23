@@ -50,6 +50,10 @@ export interface CartItem extends Omit<CartLine, 'id'> {
      * Undefined = not yet sent. Set by handleSendCourse().
      */
     sentAt?: number;
+    /**
+     * T21: marked for doggy bag at checkout.
+     */
+    doggyBag?: boolean;
 }
 
 export interface OrdersContextType {

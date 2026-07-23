@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { pushToRole } from '@/lib/push/pushClient';
+import { useTenant } from "@/hooks";
 import type { OrderLine } from "@/domain/schemas/orders";
 
 interface RecipeIngredient {
@@ -45,6 +46,7 @@ interface StockItemDoc {
  * page shows a reminder about this behaviour in its header text.
  */
 export function useStockDeduction() {
+    const { tenantId } = useTenant();
     const deductForOrder = useCallback(async (items: OrderLine[]): Promise<void> => {
         if (!items.length) return;
 
@@ -112,7 +114,7 @@ export function useStockDeduction() {
                             stockItem.ingredientName ?? ing.ingredientId;
                         toast.warning(`Stock bas : ${ingredientName}`);
                         // not-4: Push critical stock alert to kitchen chef
-                        pushToRole('chef_cuisinier', {
+                        if (tenantId) pushToRole(tenantId, 'chef_cuisinier', {
                             title: 'Alerte stock critique',
                             body: `${ingredientName} : stock bas (${newQty} ${ing.unit ?? ''})`,
                             url: '/inventory',
@@ -126,7 +128,7 @@ export function useStockDeduction() {
                 }
             }
         }
-    }, []);
+    }, [tenantId]);
 
     return { deductForOrder };
 }

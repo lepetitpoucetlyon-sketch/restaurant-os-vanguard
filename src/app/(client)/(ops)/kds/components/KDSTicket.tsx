@@ -42,6 +42,7 @@ interface AuditTicket {
 
 interface KDSTicketProps {
     ticket: Order;
+    tenantId: string;
     gridColumns: number;
     rushMode: boolean;
     updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
@@ -134,6 +135,7 @@ function SeatBadge({ seat }: { seat: number | string }) {
 
 export function KDSTicket({
     ticket,
+    tenantId,
     gridColumns,
     rushMode,
     updateOrderStatus,
@@ -222,9 +224,9 @@ export function KDSTicket({
                 url: '/pos',
             };
             if (serverId) {
-                pushToUser(serverId, pushPayload);
+                pushToUser(tenantId, serverId, pushPayload);
             } else {
-                pushToRole('serveur', pushPayload);
+                pushToRole(tenantId, 'serveur', pushPayload);
             }
             if (process.env.NODE_ENV !== 'production') {
                 console.info('[KDS] Push envoyé pour ticket', ticket.id);

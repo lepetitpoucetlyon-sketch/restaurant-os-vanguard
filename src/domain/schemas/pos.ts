@@ -2,6 +2,7 @@
 import { z } from 'zod';
 import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from './primitives';
 import { TaxRateSchema } from './finance';
+import { ConsumptionModeSchema } from './orders';
 
 export const CartLineSchema = z.object({
   id:                    UUIDSchema,
@@ -11,13 +12,14 @@ export const CartLineSchema = z.object({
   quantity:              z.number().int().min(1),
   unitPriceInMicrounits: MicrounitsSchema,
   taxRate:               TaxRateSchema,
+  consumptionMode:       ConsumptionModeSchema.optional(),
   discountInMicrounits:  MicrounitsSchema.default(0 as unknown as import('./primitives').Microunits),
   modifiers:             z.array(z.string()).default([]),
   notes:                 sanitized(0, 200).optional(),
 });
 
 export const PaymentSplitSchema = z.object({
-  mode:             z.enum(['cash', 'card', 'check', 'ticket_resto', 'transfer']),
+  mode:             z.enum(['cash', 'card', 'check', 'ticket_resto', 'transfer', 'on_account']),
   amountInMicrounits: MicrounitsSchema,
   reference:        sanitized(0, 50).optional(),
 });
@@ -31,6 +33,7 @@ export const PosTicketSchema = z.object({
   deviceId:         z.string().min(1),
   operatorId:       UUIDSchema,
   operatorRole:     z.enum(['admin','manager','waiter','cashier','barman']),
+  consumptionMode:  ConsumptionModeSchema.default('dine_in'),
   tableId:          UUIDSchema.nullable(),
   customerId:       UUIDSchema.nullable(),
   lines:            z.array(CartLineSchema).min(1),

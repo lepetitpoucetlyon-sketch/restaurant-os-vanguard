@@ -17,6 +17,9 @@ export const OrderItemModificationSchema = z.object({
   responseNote: z.string().optional(),
 }).catchall(z.any());
 
+export const ConsumptionModeSchema = z.enum(['dine_in', 'takeaway']);
+export type ConsumptionMode = z.infer<typeof ConsumptionModeSchema>;
+
 export const OrderLineSchema = z.object({
   id:           UUIDSchema.optional(),
   productId:    UUIDSchema,
@@ -26,6 +29,7 @@ export const OrderLineSchema = z.object({
   quantity:     z.number().int().min(1, 'Quantité minimale : 1'),
   unitPriceInMicrounits: MicrounitsSchema,
   taxRate:      TaxRateSchema,
+  consumptionMode: ConsumptionModeSchema.optional(),
   discountInMicrounits:  MicrounitsSchema.default(toMicrounits(0)),
   notes:        z.string().max(200).pipe(SanitizedStringSchema).optional(),
   status:       z.enum(['pending', 'cooking', 'ready', 'served', 'cancelled']).default('pending'),
@@ -43,6 +47,8 @@ export const OrderSchema = z.object({
   customerId:    UUIDSchema.nullable().optional(),
   operatorId:    UUIDSchema.optional(),
   serverName:    z.string().pipe(SanitizedStringSchema).optional(),
+  ownerServerId: UUIDSchema.optional(),
+  consumptionMode: ConsumptionModeSchema.default('dine_in'),
   items:         z.array(OrderLineSchema).min(1, 'Une commande ne peut pas être vide'),
   status:        z.enum(['pending', 'cooking', 'ready', 'served', 'paid', 'cancelled', 'draft', 'new', 'preparing', 'delivered', 'pending_modification']),
   /** Source of truth for the order total (Microunits Protocol). Prefer this everywhere. */

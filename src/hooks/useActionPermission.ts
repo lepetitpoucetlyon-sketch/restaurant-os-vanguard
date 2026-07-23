@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { useAuth } from "@/engines/core/NexusCoreProvider";
 import {
     PERMISSION_ROLE_LEVELS,
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
+import { policyEngine } from "@/domain/services/PolicyEngine";
 
 type ActionConfig = {
     minLevel: number;
@@ -117,4 +118,20 @@ export function useActionPermission(page: string, action: string): PermissionChe
             reason: `Niveau insuffisant — rôle ${role} (${userLevel}) < ${config.minLevel} requis`,
         };
     }, [currentUser, page, action]);
+}
+
+export function useThresholdCheck(page: string, action: string) {
+    const { currentUser } = useAuth();
+
+    const checkThreshold = useCallback(
+        (field: 'amount' | 'discountPct' | 'quantity', value: number) => {
+            if (!currentUser) return { allowed: false, reason: 'Non authentifié', requiresElevation: false };
+            const role = currentUser.role as PermissionRole;
+            const fullAction = `${page}.${action}`;
+            return policyEngine.checkThreshold(role, fullAction, field, value);
+        },
+        [currentUser, page, action]
+    );
+
+    return { checkThreshold };
 }

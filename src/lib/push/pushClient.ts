@@ -1,4 +1,3 @@
-// Client-safe push helper — delegates to /api/push/send (web-push is server-only)
 type PushPayload = { title: string; body: string; url?: string };
 
 function sendPush(data: Record<string, unknown>): void {
@@ -9,10 +8,10 @@ function sendPush(data: Record<string, unknown>): void {
   }).catch(() => {});
 }
 
-export function pushToUser(userId: string, payload: PushPayload): void {
-  sendPush({ userId, ...payload });
+export function pushToUser(tenantId: string, userId: string, payload: PushPayload): void {
+  sendPush({ tenantId, userId, ...payload });
 }
 
-export function pushToRole(role: string, payload: PushPayload): void {
-  sendPush({ role, ...payload });
+export function pushToRole(tenantId: string, role: string, payload: PushPayload): void {
+  sendPush({ tenantId, role, ...payload });
 }

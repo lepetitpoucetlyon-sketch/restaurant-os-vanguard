@@ -5,6 +5,7 @@ import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetrySe
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import { auditService } from '@/modules/compliance/audit/AuditService';
 
 /**
  * 🛰️ NexusInterceptor - Grade X Middleware
@@ -266,6 +267,20 @@ export class NexusInterceptor implements INexusAdapter {
                 severity: 'INFO',
                 timestamp: new Date().toISOString(),
             });
+
+            // 4b. Audit log for sensitive collections (T07)
+            const collection = this.extractCollection(path);
+            if (collection && auditService.isAuditedCollection(collection)) {
+                const entityId = this.extractEntityId(path);
+                auditService.record({
+                    tenantId: context.vassalId,
+                    actorId: context.actorId,
+                    actorRole: 'system',
+                    action: operation === 'DELETE' ? 'delete' : 'update',
+                    collection,
+                    entityId,
+                }).catch(() => {});
+            }
         }
 
         return result;
@@ -304,6 +319,21 @@ export class NexusInterceptor implements INexusAdapter {
         }
         
         return `tenants/${vassalId}/${path}`;
+    }
+
+    private extractCollection(path: string): string | null {
+        // tenants/{tenantId}/{collection}/{id} → collection
+        // or {collection}/{id} → collection
+        const parts = path.split('/').filter(Boolean);
+        if (parts[0] === 'tenants' && parts.length >= 3) return parts[2] ?? null;
+        return parts[0] ?? null;
+    }
+
+    private extractEntityId(path: string): string | undefined {
+        const parts = path.split('/').filter(Boolean);
+        if (parts[0] === 'tenants' && parts.length >= 4) return parts[3];
+        if (parts.length >= 2) return parts[1];
+        return undefined;
     }
 
     private ensureContext(context?: NexusContext): NexusContext {

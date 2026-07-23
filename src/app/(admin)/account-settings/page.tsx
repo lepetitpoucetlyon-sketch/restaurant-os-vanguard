@@ -24,6 +24,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
+import { ROLE_TEMPLATES, type RoleTemplate } from "@/domain/services/RoleTemplates";
 
 export default function AccountSettingsPage() {
     const { currentUser: _currentUser, users, rolePermissions, updateRolePermissions, hasAccess } = useAuth();
@@ -85,6 +86,11 @@ export default function AccountSettingsPage() {
 
     const getCategories = (role: UserRole): CategoryKey[] => {
         return pendingChanges[role] || rolePermissions[role] || [];
+    };
+
+    const applyTemplate = (role: UserRole, template: RoleTemplate) => {
+        setPendingChanges(prev => ({ ...prev, [role]: template.categories as CategoryKey[] }));
+        showToast(`Template « ${template.name} » appliqué — sauvegardez pour confirmer`, "info");
     };
 
     const getUserCountByRole = (role: UserRole) => {
@@ -194,6 +200,25 @@ export default function AccountSettingsPage() {
                                                                     {userCount === 0 && (
                                                                         <span className="text-sm text-text-muted italic">Aucun utilisateur</span>
                                                                     )}
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Role Templates */}
+                                                            <div className="mb-6">
+                                                                <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">
+                                                                    Appliquer un template
+                                                                </h4>
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {ROLE_TEMPLATES.map((tpl: RoleTemplate) => (
+                                                                        <button
+                                                                            key={tpl.id}
+                                                                            onClick={() => applyTemplate(role, tpl)}
+                                                                            className="px-4 py-2 rounded-xl border border-action-primary/30 bg-action-primary/5 text-action-primary text-sm font-semibold hover:bg-action-primary/10 transition-colors"
+                                                                            title={tpl.description}
+                                                                        >
+                                                                            {tpl.name}
+                                                                        </button>
+                                                                    ))}
                                                                 </div>
                                                             </div>
 

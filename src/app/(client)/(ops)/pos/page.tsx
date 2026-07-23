@@ -10,6 +10,7 @@ import {
     LucideIcon, Plus, ArrowLeft, MoreHorizontal, Star, Pizza,
     UtensilsCrossed, GlassWater, Beef, Coffee, Zap,
     Wallet, RotateCcw, Tablet, BookOpen, Printer,
+    Store, ShoppingBag,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
@@ -70,6 +71,10 @@ export default function POSPage() {
         handleCheckout, handlePaySplit,
         handleSetItemCourse, handleSendCourse,
         handleSetItemNote,
+        handleSetItemConsumptionMode,
+        handleToggleDoggyBag,
+        consumptionMode,
+        setConsumptionMode,
     } = usePOSController();
 
     // ── USP-007: pre-select table from floor-plan (?table=<id>) ──────────────
@@ -270,6 +275,21 @@ export default function POSPage() {
 
                     {/* ── Header action buttons ──────────────────────────── */}
                     <div className="flex items-center gap-2">
+                        {/* Consumption mode toggle (T12) */}
+                        <button
+                            onClick={() => setConsumptionMode(consumptionMode === 'dine_in' ? 'takeaway' : 'dine_in')}
+                            title={consumptionMode === 'dine_in' ? 'Sur place' : 'À emporter'}
+                            className={cn(
+                                "h-10 px-3 rounded-full flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-all border",
+                                consumptionMode === 'dine_in'
+                                    ? "bg-action-primary/10 border-action-primary/30 text-action-primary"
+                                    : "bg-amber-500/10 border-amber-500/30 text-amber-500"
+                            )}
+                        >
+                            {consumptionMode === 'dine_in' ? <Store className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+                            {consumptionMode === 'dine_in' ? 'Sur place' : 'Emporter'}
+                        </button>
+
                         {/* Course view toggle (pos-3) */}
                         <button
                             onClick={() => setIsCourseViewOpen((v) => !v)}
@@ -541,6 +561,9 @@ export default function POSPage() {
                 onNoteChange={setNoteValue}
                 onNoteSave={(cartId, note) => { handleSetItemNote(cartId, note); setContextMenuItem(null); }}
                 onNoteClear={(cartId) => { handleSetItemNote(cartId, ""); setNoteValue(""); }}
+                ticketConsumptionMode={consumptionMode}
+                onConsumptionModeOverride={handleSetItemConsumptionMode}
+                onToggleDoggyBag={handleToggleDoggyBag}
             />
 
             {/* ── Payment dialog ────────────────────────────────────────────── */}

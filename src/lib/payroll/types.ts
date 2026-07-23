@@ -27,6 +27,9 @@ export interface PrepaieRow {
     absencesJours: number;        // jours d'absence non justifiés (retenue)
     congesPayesJours: number;     // CP pris dans le mois
 
+    // Pourboires
+    pourboiresEur: number;        // part individuelle du tronc (pool distribué)
+
     // Rémunération
     tauxHoraireEur: number;       // EUR (source : User.hourlyRateInMicrounits / 1_000_000)
     salaireBrutEur: number;       // calculé par PrepaieBuilder

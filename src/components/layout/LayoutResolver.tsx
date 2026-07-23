@@ -14,6 +14,7 @@ import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";
+import { ConnectivityBanner } from "@/components/layout/ConnectivityBanner";
 
 /**
  * 🌀 LayoutResolver
@@ -42,6 +43,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                         <DesktopSidebar />
                         <div className="flex-1 flex flex-col min-w-0 relative">
                             <Header />
+                            <ConnectivityBanner />
                             <main className="flex-1 overflow-auto relative scroll-smooth">
                                 {children}
                                 <GlobalFAB />
@@ -91,6 +93,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                             <Header />
                             {/* Mobile Header (Hidden on Desktop via lg:hidden internally) */}
                             <MobileHeader />
+                            <ConnectivityBanner />
 
                             <main className={cn(
                                 "flex-1 overflow-auto relative scroll-smooth",

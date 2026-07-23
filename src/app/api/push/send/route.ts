@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 
 const SendBodySchema = z
   .object({
+    tenantId: z.string().min(1),
     userId: z.string().min(1).optional(),
     role: z.string().min(1).optional(),
     title: z.string().min(1).max(200),
@@ -60,16 +61,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const { userId, role, title, body: notifBody, url } = parsed.data;
+  const { tenantId, userId, role, title, body: notifBody, url } = parsed.data;
   const payload = { title, body: notifBody, url };
 
   try {
     if (userId) {
-      await WebPushService.sendToUser(userId, payload);
-      logger.info(`[/api/push/send] Notification sent to user ${userId}`);
+      await WebPushService.sendToUser(tenantId, userId, payload);
+      logger.info(`[/api/push/send] Notification sent to user ${userId} (tenant: ${tenantId})`);
     } else if (role) {
-      await WebPushService.sendToRole(role, payload);
-      logger.info(`[/api/push/send] Notification sent to role "${role}"`);
+      await WebPushService.sendToRole(tenantId, role, payload);
+      logger.info(`[/api/push/send] Notification sent to role "${role}" (tenant: ${tenantId})`);
     }
 
     return NextResponse.json({ sent: true }, { status: 200 });

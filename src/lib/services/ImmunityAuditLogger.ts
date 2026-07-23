@@ -15,7 +15,7 @@
 
 import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
-import type { ImmunityLogEntry } from '@shared/genome.types';
+import type { ImmunityLogEntry, JetEntry } from '@shared/genome.types';
 
 export const ImmunityAuditLogger = {
 
@@ -76,16 +76,51 @@ export const ImmunityAuditLogger = {
   },
 
   /**
+   * NF525 JET — Journal des Événements Techniques (append-only)
+   */
+  async logTechnicalEvent(entry: Omit<JetEntry, 'id' | 'timestamp'>): Promise<void> {
+    const fullEntry: JetEntry = {
+      ...entry,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      await db.jetEntries.add(fullEntry);
+    } catch (error) {
+      logger.error('[JET] Échec d\'écriture Dexie', error);
+    }
+
+    logger.warn(
+      `[JET] ${entry.eventType} | ${entry.description} | Device: ${entry.deviceId}`
+    );
+  },
+
+  async getJetEntries(limit: number = 200): Promise<JetEntry[]> {
+    try {
+      return await db.jetEntries
+        .orderBy('timestamp')
+        .reverse()
+        .limit(limit)
+        .toArray();
+    } catch {
+      return [];
+    }
+  },
+
+  /**
    * Export complet pour auditeur / régulateur fiscal.
    * Format JSON structuré.
    */
   async exportForAudit(): Promise<string> {
     const logs = await this.getAll();
+    const jet = await this.getJetEntries();
     return JSON.stringify({
       exportDate: new Date().toISOString(),
       systemVersion: 'Grade IX',
       totalRejections: logs.length,
-      entries: logs
+      totalTechnicalEvents: jet.length,
+      immunityEntries: logs,
+      jetEntries: jet,
     }, null, 2);
   }
 };

@@ -101,3 +101,24 @@ export interface ImmunityLogEntry {
   tenantId?: string;
   userId?: string;
 }
+
+export type JetEventType =
+  | 'power_outage'
+  | 'power_restore'
+  | 'time_change'
+  | 'software_update'
+  | 'data_restore'
+  | 'correction'
+  | 'chain_break'
+  | 'fiscal_mode_change';
+
+export interface JetEntry {
+  id?: number;
+  timestamp: string;
+  eventType: JetEventType;
+  description: string;
+  deviceId: string;
+  operatorId?: string;
+  tenantId?: string;
+  metadata?: Record<string, unknown>;
+}

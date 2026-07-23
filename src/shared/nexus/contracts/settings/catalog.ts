@@ -35,6 +35,8 @@ export interface ProductSettings {
     secondaryCategories?: string[];
     tags: string[];
     allergens: string[];
+    faitMaison?: boolean;
+    meatOrigin?: string;
     nutritionInfo?: NutritionInfo;
     origin?: string;
     labels?: string[];

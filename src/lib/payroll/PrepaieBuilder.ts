@@ -13,6 +13,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PrepaieRow, PayrollPeriodSummary } from './types';
 import type { User } from '@nexus/contracts';
+import { TipDistributionService } from '@/modules/human/hr/services/tipDistribution';
 
 const MU_TO_EUR = 1_000_000;
 const NORMAL_WEEKLY_HOURS = 35;
@@ -316,10 +317,21 @@ export const PrepaieBuilder = {
                 nbRepas: totalMeals,
                 absencesJours: absDays,
                 congesPayesJours: cpDays,
+                pourboiresEur: 0,
                 tauxHoraireEur: Math.round(hourlyRateEur * 100) / 100,
                 salaireBrutEur: Math.round(grossEur * 100) / 100,
                 periode,
             });
+        }
+
+        const tipPools = await TipDistributionService.getByPeriode(tenantId, periode);
+        for (const pool of tipPools) {
+            for (const share of pool.shares) {
+                const row = rows.find(r => r.userId === share.userId);
+                if (row) {
+                    row.pourboiresEur += Math.round((share.amountInMicrounits / MU_TO_EUR) * 100) / 100;
+                }
+            }
         }
 
         const totalBrut = rows.reduce((s, r) => s + r.salaireBrutEur, 0);
@@ -344,7 +356,7 @@ export const PrepaieBuilder = {
             'H. normales', 'H. sup +25%', 'H. sup +50%',
             'H. dimanche', 'H. nuit', 'H. jours fériés',
             'Nb repas (AN)', 'Absences (j)', 'CP pris (j)',
-            'Taux horaire (€)', 'Salaire brut (€)',
+            'Pourboires (€)', 'Taux horaire (€)', 'Salaire brut (€)',
         ];
 
         const escape = (v: unknown) => {
@@ -363,7 +375,7 @@ export const PrepaieBuilder = {
                 toFr(r.heuresNormales), toFr(r.heuresSupP25), toFr(r.heuresSupP50),
                 toFr(r.heuresDimanche), toFr(r.heuresNuit), toFr(r.heuresJoursFeries),
                 r.nbRepas, r.absencesJours, r.congesPayesJours,
-                toFr(r.tauxHoraireEur), toFr(r.salaireBrutEur),
+                toFr(r.pourboiresEur), toFr(r.tauxHoraireEur), toFr(r.salaireBrutEur),
             ].map(escape).join(SEP)),
             '',
             `TOTAL${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${toFr(summary.totalBrut)}`,

@@ -9,7 +9,7 @@ import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../engine/types";
 import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
 import { useStockDeduction } from "@modules/logistics/hooks/useStockDeduction";
-import type { OrderLine } from "@/domain/schemas/orders";
+import type { OrderLine, ConsumptionMode } from "@/domain/schemas/orders";
 
 import { POSService } from "../domain";
 
@@ -39,6 +39,9 @@ export function usePOSController() {
 
     /** Tip selected before payment confirmation (in microunits) */
     const [tipInMicrounits, setTipInMicrounits] = useState<number>(0);
+
+    /** Ticket-level consumption mode (dine_in / takeaway) — T12 */
+    const [consumptionMode, setConsumptionMode] = useState<ConsumptionMode>('dine_in');
 
     const isLoading = productsLoading || categoriesLoading;
 
@@ -189,6 +192,18 @@ export function usePOSController() {
         );
     }, []);
 
+    const handleSetItemConsumptionMode = useCallback((cartId: string, mode: ConsumptionMode | undefined) => {
+        setCartItems((prev) =>
+            prev.map((item) => item.cartId !== cartId ? item : { ...item, consumptionMode: mode })
+        );
+    }, []);
+
+    const handleToggleDoggyBag = useCallback((cartId: string) => {
+        setCartItems((prev) =>
+            prev.map((item) => item.cartId !== cartId ? item : { ...item, doggyBag: !item.doggyBag })
+        );
+    }, []);
+
     const handleSendToKitchen = useCallback(async () => {
         if (cartItems.length === 0 || !currentTable) return;
 
@@ -221,6 +236,7 @@ export function usePOSController() {
                 operatorId: currentUser?.id ?? "unknown",
                 tableId: selectedTableId,
                 tenantId,
+                consumptionMode,
             });
 
             // pos-4: déduction stock cascade — parcourt les recettes des produits vendus,
@@ -337,6 +353,10 @@ export function usePOSController() {
         tipInMicrounits,
         setTipInMicrounits,
 
+        // Consumption mode (T12)
+        consumptionMode,
+        setConsumptionMode,
+
         // Derived state
         currentTable,
         cartTotal,
@@ -357,5 +377,7 @@ export function usePOSController() {
         handleSetItemCourse,
         handleSendCourse,
         handleSetItemNote,
+        handleSetItemConsumptionMode,
+        handleToggleDoggyBag,
     };
 }

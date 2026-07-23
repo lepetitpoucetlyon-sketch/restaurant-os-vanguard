@@ -2,7 +2,8 @@
 
 import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Percent, Tag, Gift, Trash2, X, Check, MessageSquare } from "lucide-react";
+import { Percent, Tag, Gift, Trash2, X, Check, MessageSquare, Store, ShoppingBag, PackageOpen } from "lucide-react";
+import type { ConsumptionMode } from "@/domain/schemas/orders";
 import { cn } from "@/lib/ui.foundations";
 import type { CartItem } from "@modules/ops/engine/types";
 import type { PendingAction } from "../_hooks/useRbacGate";
@@ -24,6 +25,9 @@ interface Props {
     onNoteChange:           (v: string) => void;
     onNoteSave:             (cartId: string, note: string) => void;
     onNoteClear:            (cartId: string) => void;
+    ticketConsumptionMode?: ConsumptionMode;
+    onConsumptionModeOverride?: (cartId: string, mode: ConsumptionMode | undefined) => void;
+    onToggleDoggyBag?: (cartId: string) => void;
 }
 
 export function CartItemContextMenu({
@@ -41,6 +45,9 @@ export function CartItemContextMenu({
     onNoteChange,
     onNoteSave,
     onNoteClear,
+    ticketConsumptionMode,
+    onConsumptionModeOverride,
+    onToggleDoggyBag,
 }: Props) {
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -188,7 +195,58 @@ export function CartItemContextMenu({
                             )}
                         </div>
 
+                        {/* Consumption mode per-line override (T12) */}
+                        {onConsumptionModeOverride && (
+                            <div className="mb-5">
+                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
+                                    <Store className="w-3 h-3" />
+                                    Mode consommation
+                                </p>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {([undefined, 'dine_in', 'takeaway'] as const).map((mode) => {
+                                        const currentMode = contextMenuItem.consumptionMode;
+                                        const isActive = mode === undefined ? currentMode === undefined : currentMode === mode;
+                                        const label = mode === undefined ? `Ticket (${ticketConsumptionMode === 'takeaway' ? 'Emp.' : 'SP'})` : mode === 'dine_in' ? 'Sur place' : 'Emporter';
+                                        const Icon = mode === 'takeaway' ? ShoppingBag : Store;
+                                        return (
+                                            <button
+                                                key={mode ?? 'inherit'}
+                                                onClick={() => onConsumptionModeOverride(contextMenuItem.cartId, mode)}
+                                                className={cn(
+                                                    "h-10 rounded-2xl border text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
+                                                    isActive
+                                                        ? "bg-accent-gold border-accent-gold text-white shadow-md shadow-accent-gold/20"
+                                                        : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
+                                                )}
+                                            >
+                                                {mode !== undefined && <Icon className="w-3 h-3" />}
+                                                {label}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="h-px bg-border/50 mb-4" />
+
+                        {/* Doggy bag toggle (T21) */}
+                        {onToggleDoggyBag && (
+                            <div className="mb-4">
+                                <button
+                                    onClick={() => onToggleDoggyBag(contextMenuItem.cartId)}
+                                    className={cn(
+                                        "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider transition-all",
+                                        contextMenuItem.doggyBag
+                                            ? "bg-amber-500/10 border-amber-500/30 text-amber-500"
+                                            : "border-border bg-bg-primary text-text-muted hover:border-amber-500/40 hover:text-amber-500"
+                                    )}
+                                >
+                                    <PackageOpen className="w-4 h-4 shrink-0" />
+                                    {contextMenuItem.doggyBag ? 'Doggy bag marqué' : 'Marquer doggy bag'}
+                                </button>
+                            </div>
+                        )}
 
                         {/* RBAC actions */}
                         <div className="space-y-2">

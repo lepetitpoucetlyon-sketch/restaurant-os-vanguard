@@ -48,6 +48,19 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     },
   },
 
+  'pos-mobile': {
+    taskId: 'pos-mobile',
+    importance: {
+      ...OFF_ALL,
+      orders:     'HIGH',
+      tables:     'HIGH',
+      products:   'HIGH',
+      categories: 'HIGH',
+      stocks:     'LAZY',
+      recipes:    'LAZY',
+    },
+  },
+
   kds: {
     taskId: 'kds',
     importance: {
@@ -177,6 +190,11 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: { ...OFF_ALL, marketing: 'HIGH', products: 'LAZY' },
   },
 
+  'mon-espace': {
+    taskId: 'mon-espace',
+    importance: { ...OFF_ALL, staff: 'HIGH', orders: 'LAZY' },
+  },
+
   analytics: {
     taskId: 'analytics',
     importance: { ...OFF_ALL, finance: 'MEDIUM', compliance: 'LAZY', marketing: 'LAZY', orders: 'LAZY' },
@@ -203,6 +221,7 @@ export const TASK_MAPS: Record<string, TaskContext> = {
 
 /** Résout le TaskContext depuis un pathname Next.js */
 export function resolveTaskContext(pathname: string): TaskContext {
+  if (pathname.includes('/pos-mobile'))                                        return TASK_MAPS['pos-mobile'];
   if (pathname.includes('/pos'))                                              return TASK_MAPS.pos;
   if (pathname.includes('/kds'))                                              return TASK_MAPS.kds;
   if (pathname.includes('/bar'))                                              return TASK_MAPS.bar;
@@ -218,6 +237,7 @@ export function resolveTaskContext(pathname: string): TaskContext {
   if (pathname.includes('/inventory'))                                        return TASK_MAPS.inventory;
   if (pathname.includes('/haccp'))                                            return TASK_MAPS.haccp;
   if (pathname.includes('/crm'))                                              return TASK_MAPS.crm;
+  if (pathname.includes('/mon-espace'))                                       return TASK_MAPS['mon-espace'];
   if (pathname.includes('/marketing'))                                        return TASK_MAPS.marketing;
   if (pathname.includes('/analytics'))                                        return TASK_MAPS.analytics;
   if (pathname.includes('/admin'))                                            return TASK_MAPS.admin;

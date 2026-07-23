@@ -1,14 +1,16 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { StockItem, Category, Recipe } from '@nexus/contracts';
-import { 
-    stockItemsNodeAtom, 
-    categoriesNodeAtom, 
-    recipesNodeAtom 
+import {
+    stockItemsNodeAtom,
+    categoriesNodeAtom,
+    recipesNodeAtom
 } from './store/inventoryAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
+import { Auto86Service } from './services/Auto86Service';
+import { FoodCostRecompute } from './services/FoodCostRecompute';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;
 
@@ -19,8 +21,10 @@ type JotaiStore = ReturnType<typeof getDefaultStore>;
  */
 export const InventorySyncService = {
   private_listeners: {} as Record<string, () => void>,
+  private_tenantId: '' as string,
 
   async init(tenantId: string, store: JotaiStore) {
+    this.private_tenantId = tenantId;
     const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
     
     // Hydrate for zero-latency start in warehouse views
@@ -36,6 +40,12 @@ export const InventorySyncService = {
           loading: false,
           error: null
         }));
+        Auto86Service.evaluate(tenantId).catch(err =>
+          logger.error('[InventorySync] Auto-86 evaluation failed', err)
+        );
+        FoodCostRecompute.recomputeAll(tenantId, data).catch(err =>
+          logger.error('[InventorySync] Food cost recompute failed', err)
+        );
       },
       {
         // Bound the real-time listener: protects against runaway collections.

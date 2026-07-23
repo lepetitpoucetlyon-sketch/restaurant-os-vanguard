@@ -31,6 +31,7 @@ export class WebPushService {
   // saveSubscription
   // ---------------------------------------------------------------------------
   static async saveSubscription(
+    tenantId: string,
     userId: string,
     sub: PushSubscription
   ): Promise<void> {
@@ -39,14 +40,14 @@ export class WebPushService {
       subscription: JSON.stringify(sub),
       updatedAt: Date.now(),
     };
-    await Nexus.adapter.set(`pushSubscriptions/${userId}`, record);
-    logger.info(`[WebPushService] Subscription saved for user ${userId}`);
+    await Nexus.adapter.set(`tenants/${tenantId}/pushSubscriptions/${userId}`, record);
+    logger.info(`[WebPushService] Subscription saved for user ${userId} (tenant: ${tenantId})`);
   }
 
   // ---------------------------------------------------------------------------
   // sendToUser
   // ---------------------------------------------------------------------------
-  static async sendToUser(userId: string, payload: PushPayload): Promise<void> {
+  static async sendToUser(tenantId: string, userId: string, payload: PushPayload): Promise<void> {
     const keys = getVapidKeys();
     if (!keys) {
       logger.warn('[WebPushService] VAPID keys not configured — skipping push delivery');
@@ -54,7 +55,7 @@ export class WebPushService {
     }
 
     const record = await Nexus.adapter.get<PushSubscriptionRecord>(
-      `pushSubscriptions/${userId}`
+      `tenants/${tenantId}/pushSubscriptions/${userId}`
     );
     if (!record) {
       logger.warn(`[WebPushService] No subscription found for user ${userId}`);
@@ -86,13 +87,14 @@ export class WebPushService {
   // ---------------------------------------------------------------------------
   // sendToRole
   // ---------------------------------------------------------------------------
-  static async sendToRole(role: string, payload: PushPayload): Promise<void> {
-    const users = await Nexus.adapter.query<UserRecord & { id?: string }>('users', {
-      where: [{ field: 'role', operator: '==', value: role }],
-    });
+  static async sendToRole(tenantId: string, role: string, payload: PushPayload): Promise<void> {
+    const users = await Nexus.adapter.query<UserRecord & { id?: string }>(
+      `tenants/${tenantId}/users`,
+      { where: [{ field: 'role', operator: '==', value: role }] }
+    );
 
     if (!users.length) {
-      logger.warn(`[WebPushService] No users found with role "${role}"`);
+      logger.warn(`[WebPushService] No users found with role "${role}" in tenant ${tenantId}`);
       return;
     }
 
@@ -102,7 +104,7 @@ export class WebPushService {
           (user as { id?: string; userId?: string }).id ??
           (user as { id?: string; userId?: string }).userId;
         if (!userId) return Promise.resolve();
-        return WebPushService.sendToUser(userId, payload);
+        return WebPushService.sendToUser(tenantId, userId, payload);
       })
     );
   }

@@ -19,7 +19,7 @@ import {
 } from "@modules/human";
 import { BadgeControl } from "@modules/human/hr/components/staff/BadgeControl";
 // generatePaySlip intentionnellement désactivé — voir paySlipGenerator.ts
-import { useAuth } from "@/hooks";
+import { useAuth, useTenant } from "@/hooks";
 import {
     StaffList,
     StaffMemberForm,
@@ -114,6 +114,7 @@ const KNOWN_SKILLS = [
 ];
 
 export default function StaffPage() {
+    const { tenantId } = useTenant();
     const searchParams = useSearchParams();
 const _tabParam = searchParams.get("tab") as StaffTab | null;
 const _VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "leaves", "recruitment"];
@@ -292,7 +293,7 @@ const [activeTab, setActiveTab] = useState<StaffTab>(
                 shiftCount: unpublishedIds.length,
             });
 
-            pushToRole('serveur', {
+            if (tenantId) pushToRole(tenantId, 'serveur', {
                 title: 'Planning publié',
                 body: 'Votre planning de la semaine est disponible',
                 url: '/staff?tab=planning',
@@ -307,7 +308,7 @@ const [activeTab, setActiveTab] = useState<StaffTab>(
     // not-5: Approve leave and notify the employee
     const handleApproveLeave = useCallback(async (request: LeaveRequest) => {
         await approveLeaveRequest(request.id);
-        pushToUser(request.userId, {
+        if (tenantId) pushToUser(tenantId, request.userId, {
             title: 'Demande de congé approuvée ✓',
             body: `Du ${request.startDate} au ${request.endDate}`,
             url: '/staff?tab=leaves',
@@ -317,7 +318,7 @@ const [activeTab, setActiveTab] = useState<StaffTab>(
     // not-5: Reject leave and notify the employee
     const handleRejectLeave = useCallback(async (request: LeaveRequest) => {
         await rejectLeaveRequest(request.id, 'business_needs');
-        pushToUser(request.userId, {
+        if (tenantId) pushToUser(tenantId, request.userId, {
             title: 'Demande de congé refusée ✗',
             body: `Du ${request.startDate} au ${request.endDate}`,
             url: '/staff?tab=leaves',

@@ -42,7 +42,7 @@ describe('NexusInterceptor', () => {
 
       const result = await interceptor.get('users/1', ctx);
       
-      expect(mockGuard.validateAccessGradeX).toHaveBeenCalledWith('READ', 'users/1', ctx);
+      expect(mockGuard.validateAccessGradeX).toHaveBeenCalledWith('READ', 'tenants/tenant_1/users/1', ctx);
       expect(mockAdapter.get).toHaveBeenCalledWith('tenants/tenant_1/users/1');
       expect(result).toEqual({ id: 'doc_1' });
     });

@@ -17,11 +17,11 @@ import { cashDrawerService } from "@/lib/cash-drawer/CashDrawerService";
 export interface CashDrawerSession {
     id: string;
     openedAt: string;
-    openingAmountInCents: number;
+    openingInMicrounits: number;
     closedAt?: string;
-    closingAmountInCents?: number;
-    cashCollectedInCents: number;
-    changeGivenInCents: number;
+    closingInMicrounits?: number;
+    collectedInMicrounits: number;
+    changeGivenInMicrounits: number;
     userId: string;
 }
 
@@ -30,10 +30,8 @@ interface CashDrawerModalProps {
     onClose: () => void;
     tenantId: string;
     userId: string;
-    /** Total cash collected since drawer was opened (in cents). */
-    cashCollectedInCents?: number;
-    /** Total change given since drawer was opened (in cents). */
-    changeGivenInCents?: number;
+    collectedInMicrounits?: number;
+    changeGivenInMicrounits?: number;
 }
 
 // ─── Euro input helper ────────────────────────────────────────────────────────
@@ -44,12 +42,12 @@ function parseEuros(raw: string): number {
     return isNaN(val) ? 0 : Math.max(0, val);
 }
 
-function eurosToCents(euros: number): number {
-    return Math.round(euros * 100);
+function eurosToMicrounits(euros: number): number {
+    return Math.round(euros * 1_000_000);
 }
 
-function centsToEurosString(cents: number): string {
-    return (cents / 100).toFixed(2);
+function microunitsToEuros(mu: number): string {
+    return (mu / 1_000_000).toFixed(2);
 }
 
 // ─── CashDrawerModal ──────────────────────────────────────────────────────────
@@ -59,8 +57,8 @@ export function CashDrawerModal({
     onClose,
     tenantId,
     userId,
-    cashCollectedInCents = 0,
-    changeGivenInCents = 0,
+    collectedInMicrounits = 0,
+    changeGivenInMicrounits = 0,
 }: CashDrawerModalProps) {
     const [session, setSession] = useState<CashDrawerSession | null>(null);
     const [isFetchingSession, setIsFetchingSession] = useState(false);
@@ -114,9 +112,9 @@ export function CashDrawerModal({
             const newSession: CashDrawerSession = {
                 id: sessionId,
                 openedAt: new Date().toISOString(),
-                openingAmountInCents: eurosToCents(euros),
-                cashCollectedInCents: 0,
-                changeGivenInCents: 0,
+                openingInMicrounits: eurosToMicrounits(euros),
+                collectedInMicrounits: 0,
+                changeGivenInMicrounits: 0,
                 userId,
             };
             const path = `tenants/${tenantId}/cashDrawerSessions/${sessionId}`;
@@ -144,25 +142,25 @@ export function CashDrawerModal({
         }
         setIsClosing(true);
         try {
-            const actualCents = eurosToCents(actualEuros);
-            const theoreticalCents =
-                session.openingAmountInCents + cashCollectedInCents - changeGivenInCents;
+            const actualMu = eurosToMicrounits(actualEuros);
+            const theoreticalMu =
+                session.openingInMicrounits + collectedInMicrounits - changeGivenInMicrounits;
 
             const path = `tenants/${tenantId}/cashDrawerSessions/${session.id}`;
             const batch = Nexus.adapter.batch();
             batch.set(path, {
                 ...session,
                 closedAt: new Date().toISOString(),
-                closingAmountInCents: actualCents,
-                cashCollectedInCents,
-                changeGivenInCents,
+                closingInMicrounits: actualMu,
+                collectedInMicrounits,
+                changeGivenInMicrounits,
             } as unknown as Record<string, unknown>);
             await batch.commit();
 
-            const diffCents = actualCents - theoreticalCents;
-            const sign = diffCents >= 0 ? "+" : "";
+            const diffMu = actualMu - theoreticalMu;
+            const sign = diffMu >= 0 ? "+" : "";
             toast.success(
-                `Caisse clôturée — Écart : ${sign}${(diffCents / 100).toFixed(2)} €`
+                `Caisse clôturée — Écart : ${sign}${(diffMu / 1_000_000).toFixed(2)} €`
             );
             setClosed(true);
             setSession(null);
@@ -171,15 +169,15 @@ export function CashDrawerModal({
         } finally {
             setIsClosing(false);
         }
-    }, [session, actualInput, cashCollectedInCents, changeGivenInCents, tenantId]);
+    }, [session, actualInput, collectedInMicrounits, changeGivenInMicrounits, tenantId]);
 
     // ── Derived: theoretical closing amount ───────────────────────────────────
-    const theoreticalCents = session
-        ? session.openingAmountInCents + cashCollectedInCents - changeGivenInCents
+    const theoreticalMu = session
+        ? session.openingInMicrounits + collectedInMicrounits - changeGivenInMicrounits
         : 0;
 
-    const actualCents     = eurosToCents(parseEuros(actualInput));
-    const diffCents       = actualInput.trim() ? actualCents - theoreticalCents : null;
+    const actualMu  = eurosToMicrounits(parseEuros(actualInput));
+    const diffMu    = actualInput.trim() ? actualMu - theoreticalMu : null;
 
     if (!isOpen) return null;
 
@@ -300,7 +298,7 @@ export function CashDrawerModal({
                                 <div className="flex items-center justify-between text-[11px]">
                                     <span className="text-text-muted">Fond initial</span>
                                     <span className="font-mono text-text-primary font-bold">
-                                        {centsToEurosString(session.openingAmountInCents)} €
+                                        {microunitsToEuros(session.openingInMicrounits)} €
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between text-[11px]">
@@ -309,7 +307,7 @@ export function CashDrawerModal({
                                         Espèces encaissées
                                     </span>
                                     <span className="font-mono text-status-success font-bold">
-                                        +{centsToEurosString(cashCollectedInCents)} €
+                                        +{microunitsToEuros(collectedInMicrounits)} €
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between text-[11px]">
@@ -318,14 +316,14 @@ export function CashDrawerModal({
                                         Monnaie rendue
                                     </span>
                                     <span className="font-mono text-status-error font-bold">
-                                        -{centsToEurosString(changeGivenInCents)} €
+                                        -{microunitsToEuros(changeGivenInMicrounits)} €
                                     </span>
                                 </div>
                                 <div className="h-px bg-border/50" />
                                 <div className="flex items-center justify-between text-[12px]">
                                     <span className="font-black text-text-primary uppercase tracking-wider">Fond théorique</span>
                                     <span className="font-mono font-black text-accent-gold">
-                                        {centsToEurosString(theoreticalCents)} €
+                                        {microunitsToEuros(theoreticalMu)} €
                                     </span>
                                 </div>
                             </div>
@@ -343,7 +341,7 @@ export function CashDrawerModal({
                                         value={actualInput}
                                         onChange={(e) => setActualInput(e.target.value)}
                                         onKeyDown={(e) => e.key === "Enter" && handleClose()}
-                                        placeholder={`Attendu : ${centsToEurosString(theoreticalCents)}`}
+                                        placeholder={`Attendu : ${microunitsToEuros(theoreticalMu)}`}
                                         className="flex-1 bg-transparent text-lg font-mono text-text-primary placeholder:text-text-muted/50 focus:outline-none"
                                     />
                                     <span className="text-sm text-text-muted font-mono">€</span>
@@ -351,25 +349,25 @@ export function CashDrawerModal({
                             </div>
 
                             {/* Difference display */}
-                            {diffCents !== null && (
+                            {diffMu !== null && (
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: "auto" }}
                                     className={cn(
                                         "flex items-center justify-between rounded-2xl px-4 py-3 text-[12px] font-black",
-                                        Math.abs(diffCents) < 50
+                                        Math.abs(diffMu) < 500_000
                                             ? "bg-status-success/10 text-status-success border border-status-success/20"
                                             : "bg-status-error/10 text-status-error border border-status-error/20"
                                     )}
                                 >
                                     <div className="flex items-center gap-2">
-                                        {Math.abs(diffCents) < 50
+                                        {Math.abs(diffMu) < 500_000
                                             ? <CheckCircle2 className="w-4 h-4" />
                                             : <AlertCircle className="w-4 h-4" />}
                                         <span className="uppercase tracking-widest">Écart</span>
                                     </div>
                                     <span className="font-mono text-base">
-                                        {diffCents >= 0 ? "+" : ""}{(diffCents / 100).toFixed(2)} €
+                                        {diffMu >= 0 ? "+" : ""}{(diffMu / 1_000_000).toFixed(2)} €
                                     </span>
                                 </motion.div>
                             )}

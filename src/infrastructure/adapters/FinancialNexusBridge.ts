@@ -7,6 +7,8 @@ import type { CartItem } from '@/modules/ops/engine/types';
 import { NexusEventBus } from '@/lib/events/NexusEventBus';
 import { TaxCalculator } from '../services/finance/TaxCalculator';
 import { FiscalSealer } from '../services/finance/FiscalSealer';
+import { resolveVatRate, inferCategory } from '@/modules/finance/tax/vatResolver';
+import type { ConsumptionMode } from '@/domain/schemas/orders';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer';
 
@@ -15,6 +17,7 @@ export interface BridgePayload {
   operatorId: string;
   tableId: string | null;
   tenantId: string;
+  consumptionMode?: ConsumptionMode;
   paymentMode?: PaymentMode;
   covers?: number;
   isTrainingMode?: boolean;
@@ -45,6 +48,7 @@ export const FinancialNexusBridge = {
       operatorId,
       tableId,
       tenantId,
+      consumptionMode = 'dine_in',
       isTrainingMode = false,
       paymentMode = 'card',
     } = payload;
@@ -53,8 +57,15 @@ export const FinancialNexusBridge = {
       throw new Error('FinancialNexusBridge: panier vide');
     }
 
-    // ── 1. Calcul des totaux ──────────────────────────────────────────────────
-    const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(cartItems);
+    // ── 1. Résolution TVA par ligne (mode consommation) ──────────────────────
+    const resolvedItems = cartItems.map(item => {
+      const lineMode = (item as { consumptionMode?: ConsumptionMode }).consumptionMode ?? consumptionMode;
+      const category = inferCategory(item.categoryId ?? '', item.name);
+      const taxRate = resolveVatRate({ category, consumptionMode: lineMode });
+      return { ...item, taxRate };
+    });
+
+    const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
 
     // ── 2. Chaîne de scellement ───────────────────────────────────────────────
     // previousHash is managed atomically inside sealDataAtomically via chainHead —
@@ -91,7 +102,7 @@ export const FinancialNexusBridge = {
       amountInCents: Math.round(totalTTCInMicrounits / 10000),
       status: 'validated',
       updatedAt: now,
-      lines: cartItems.map((item) => ({
+      lines: resolvedItems.map((item) => ({
         productId: item.productId,
         name: item.name,
         quantity: item.quantity,
