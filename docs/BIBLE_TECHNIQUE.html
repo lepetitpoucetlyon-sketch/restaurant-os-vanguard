@@ -3711,6 +3711,89 @@ const CHECKLIST = [
       { id:'mcc-growth-4', text:'Créer le Tenant Health Score : score calculé par restaurant (uptime, dernière sync, alertes HACCP, tickets ouverts)', sub:'Aucune priorisation du support — tous les restaurants ont la même urgence même si l\'un est en état critique', p:'P2' },
     ]
   },
+  { divider: true, label: '🚀 Plan d\'Implémentation (T00–T51)', sub: 'Les 52 tickets du plan d\'implémentation — socle, conformité fiscale, mobilité, revenu, pilotage et plateforme. Tous implémentés et committés.' },
+  {
+    id: 'impl-v0', label: '⚡ V0 — Socle & Vérité (T00–T10)', color: '#3B82F6', open: false,
+    items: [
+      { id:'impl-t00', text:'T00 — Bootstrap : flags & .env.example', sub:'src/config/features.ts avec flags POLICY_ENFORCE, MUNITS_CASH, OFFLINE_FISCAL en mode warn/enforce', p:'P0' },
+      { id:'impl-t01', text:'T01 — Configurer VAPID + test d\'envoi', sub:'WebPush multi-tenant tenants/{tenantId}/pushSubscriptions/{userId}, skip propre sans clés VAPID', p:'P0' },
+      { id:'impl-t02', text:'T02 — Câbler les 3 cascades push par rôle', sub:'HACCP temp hors seuil → chef, plat prêt → serveur, planning publié → équipe', p:'P1' },
+      { id:'impl-t03', text:'T03 — Session caisse µunits + adaptateur rétro', sub:'CashSessionSchema openingInMicrounits/closingInMicrounits, conversion à la frontière UI uniquement', p:'P0' },
+      { id:'impl-t04', text:'T04 — Migration cents→µunits (idempotente)', sub:'Script ×10 000 rejouable sans double conversion, réconciliation comptable identique', p:'P1' },
+      { id:'impl-t05', text:'T05 — Inventaire *InCents restants', sub:'docs/dette-munits.md — rg "InCents" src exhaustif, checklist priorisée', p:'P2' },
+      { id:'impl-t06', text:'T06 — AuditEvent append-only + chaînage hash', sub:'AuditService SHA-256 chaîné, PII exclues du payload, append-only strict', p:'P0' },
+      { id:'impl-t07', text:'T07 — Interception écritures sensibles', sub:'NexusInterceptor hook sur collections finance/staff/settings/RBAC → AuditService.record', p:'P0' },
+      { id:'impl-t08', text:'T08 — Policy SoD + évaluateur', sub:'PolicyEngine matrice SoD reception ⊗ invoiceApproval ⊗ payment, mode warn/enforce', p:'P1' },
+      { id:'impl-t09', text:'T09 — Seuils d\'approbation useActionPermission', sub:'Action au-dessus du seuil bloquée sans élévation PIN, élévation tracée audit', p:'P1' },
+      { id:'impl-t10', text:'T10 — Templates rôles métier (Serveur/Chef/Manager)', sub:'3 bundles un-clic pour catégories/actions du rôle, tracé audit', p:'P1' },
+    ]
+  },
+  {
+    id: 'impl-v1', label: '⚖️ V1 — Conformité Fiscale & Légale (T11–T25)', color: '#EF4444', open: false,
+    items: [
+      { id:'impl-t11', text:'T11 — TVA mode conso + résolution de taux', sub:'vatResolver {category, consumptionMode} → TaxRate, ventilation multi-taux, alcool 20 % forcé', p:'P0' },
+      { id:'impl-t12', text:'T12 — UI POS toggle sur place / à emporter', sub:'Toggle ticket + override ligne chef_rang+, recalcul TVA instantané', p:'P1' },
+      { id:'impl-t13', text:'T13 — Audit PII dans dataSnapshots scellés', sub:'Inventaire PII sérialisées en clair dans FinancialNexusBridge/FiscalAdapter, décision pseudonymisation', p:'P0' },
+      { id:'impl-t14', text:'T14 — piiVault + référence par subjectId', sub:'PiiVault chiffré par sujet, dataSnapshots sans PII en clair, chaîne NF525 intacte', p:'P0' },
+      { id:'impl-t15', text:'T15 — Workflow d\'effacement client RGPD', sub:'Destruction clé sujet → PII irrécupérables, écritures fiscales préservées, tracé audit', p:'P1' },
+      { id:'impl-t16', text:'T16 — Clôtures M/A + grand total perpétuel', sub:'Agrégats scellés/chaînés mensuels et annuels, grand total cohérent, export archivage', p:'P0' },
+      { id:'impl-t17', text:'T17 — JET (Journal Événements Techniques)', sub:'Types NF525 : coupure, correction, changement d\'heure, restauration — append-only', p:'P1' },
+      { id:'impl-t18', text:'T18 — Scellement offline + plages receiptNumber', sub:'Scellement local via CryptoService, file ordonnée, plages par instanceId', p:'P0' },
+      { id:'impl-t19', text:'T19 — Réconciliation reconnexion + indicateur état', sub:'Rejeu ordonné, résolution conflits, vérif intégrité chaîne, bandeau UI état réseau', p:'P1' },
+      { id:'impl-t20', text:'T20 — Champs produit réglementaires', sub:'faitMaison, meatOrigin, nutrition, allergens éditables manager+', p:'P1' },
+      { id:'impl-t21', text:'T21 — Doggy bag + don alimentaire', sub:'Doggy bag à l\'encaissement, don journalisé en registre compliance', p:'P1' },
+      { id:'impl-t22', text:'T22 — Moteur conformité planning (repos/amplitude)', sub:'11h repos, 6j max, amplitude, coupures HCR — warnings bloquants/paramétrables', p:'P1' },
+      { id:'impl-t23', text:'T23 — Documents & certifs + registre unique', sub:'Certif à échéance → alerte push, registre unique personnel exportable', p:'P1' },
+      { id:'impl-t24', text:'T24 — Calendrier de conformité unifié', sub:'Agrège docs RH + licences + DUERP + certifs en une vue triée avec alertes', p:'P1' },
+      { id:'impl-t25', text:'T25 — Index inverse lot→plats→clients + rappel', sub:'Depuis un lot → préparations, plats et couverts impactés via PiiVault', p:'P1' },
+    ]
+  },
+  {
+    id: 'impl-v2', label: '📱 V2 — Mobilité & Parcours Invité (T26–T30)', color: '#8B5CF6', open: false,
+    items: [
+      { id:'impl-t26', text:'T26 — Vue POS mobile + session serveur', sub:'Commande complète depuis mobile → KDS, allergène à la saisie, ownerServerId', p:'P1' },
+      { id:'impl-t27', text:'T27 — Menu QR client (catalogue + allergènes + dispo)', sub:'Menu public par table, filtre allergènes, badge fait maison/origine, dispo auto-86', p:'P1' },
+      { id:'impl-t28', text:'T28 — Commande invité + validation serveur → KDS', sub:'Commande client validée par serveur puis produite, anti-abus intégré', p:'P1' },
+      { id:'impl-t29', text:'T29 — Paiement à table + ticket NF525 dématérialisé', sub:'Stripe split, TVA multi-taux, reçu numérique avec JournalEntry/FiscalSeal', p:'P1' },
+      { id:'impl-t30', text:'T30 — Empreinte/acompte + capture no_show', sub:'Setup Intent Stripe, capture sur no_show, écriture TVA acompte, politique paramétrable', p:'P1' },
+    ]
+  },
+  {
+    id: 'impl-v3', label: '💰 V3 — Revenu & Rétention (T31–T36)', color: '#F59E0B', open: false,
+    items: [
+      { id:'impl-t31', text:'T31 — Cartes cadeaux (émission/redemption) + passif', sub:'Vente = passif comptable 4191, redemption = solde, codes signés', p:'P1' },
+      { id:'impl-t32', text:'T32 — Fidélité points/paliers + provision', sub:'Cumul/dépense points, provision comptable, RGPD-compatible subjectId', p:'P1' },
+      { id:'impl-t33', text:'T33 — Paiement on_account + relevé + plafond', sub:'Règlement sur compte client, relevé mensuel, plafond avec override manager+', p:'P1' },
+      { id:'impl-t34', text:'T34 — Auto-86 stock→availability temps réel', sub:'Ingrédient épuisé → plats retirés en temps réel, réappro réactive, tracé audit', p:'P1' },
+      { id:'impl-t35', text:'T35 — Food-cost recompute + alerte prix', sub:'Hausse prix ingrédient → recalcul recettes + alerte marge + suggestion reprix', p:'P1' },
+      { id:'impl-t36', text:'T36 — Répartition pourboires → bulletin', sub:'Pool réparti par heures/rang, visible sur bulletin + espace salarié', p:'P1' },
+    ]
+  },
+  {
+    id: 'impl-v4', label: '📊 V4 — Pilotage & Contrôle (T37–T44)', color: '#10B981', open: false,
+    items: [
+      { id:'impl-t37', text:'T37 — 3-way match (PO ↔ réception ↔ facture)', sub:'Facture sans BL bloquée, écart quantité/prix signalé, SoD respectée', p:'P1' },
+      { id:'impl-t38', text:'T38 — Seuils d\'approbation achats', sub:'Achat au-dessus du seuil → approbation rôle supérieur, tracée audit', p:'P1' },
+      { id:'impl-t39', text:'T39 — AP aging + SEPA pain.001', sub:'Échéancier fournisseurs, fichier SEPA généré + rapproché OpenBanking', p:'P1' },
+      { id:'impl-t40', text:'T40 — Dénominations caisse, skims, comptage aveugle', sub:'Saisie par coupures, skim/drop tracés, mode aveugle, validation manager+', p:'P1' },
+      { id:'impl-t41', text:'T41 — Labor % vs CA prévu + prévision prep', sub:'Coût planning vs forecast Oracle, labor % temps réel, liste prep J+1', p:'P1' },
+      { id:'impl-t42', text:'T42 — Flash report quotidien + push mobile', sub:'Couverts, addition moy, food %, labor %, écart caisse, incidents — historique', p:'P1' },
+      { id:'impl-t43', text:'T43 — Détection anomalies audit + caisse', sub:'Voids/comps/remises/écarts anormaux → alerte tracée, tableau overrides suspects', p:'P1' },
+      { id:'impl-t44', text:'T44 — Compta analytique + budget + attribution', sub:'P&L par flux food/bev/event, budget vs réalisé, ROI campagne mesurable', p:'P1' },
+    ]
+  },
+  {
+    id: 'impl-v5', label: '🌐 V5 — Expérience & Plateforme (T45–T51)', color: '#06B6D4', open: false,
+    items: [
+      { id:'impl-t45', text:'T45 — a11y parcours critiques (POS/KDS/résa)', sub:'Rôles ARIA, labels, focus, clavier sur POS/KDS/réservations, CI axe-core', p:'P2' },
+      { id:'impl-t46', text:'T46 — Mon espace salarié + bulletin', sub:'Planning/pointage/congés/pourboires/bulletin — employé voit SES données uniquement', p:'P1' },
+      { id:'impl-t47', text:'T47 — Waitlist + handoff + reconnaissance client', sub:'File walk-in + temps estimé + SMS, addition transférable, profil habitué accueil', p:'P1' },
+      { id:'impl-t48', text:'T48 — Flotte benchmarking + rollout multi-sites', sub:'Comparaison à la médiane flotte, déploiement multi-sites en une action', p:'P2' },
+      { id:'impl-t49', text:'T49 — Marketplaces (Uber/Deliveroo)', sub:'Commandes plateforme → KDS, sync catalogue, commissions, vente scellée NF525', p:'P1' },
+      { id:'impl-t50', text:'T50 — Maintenance prédictive température HACCP', sub:'Dérive température frigo détectée avant panne → alerte push responsable HACCP', p:'P2' },
+      { id:'impl-t51', text:'T51 — Résilience IA circuit-breaker + fallback', sub:'Couper Gemini/LightRAG → écrans dégradés utilisables + message clair', p:'P2' },
+    ]
+  },
 ];
 
 // ─── EXPLICATIONS SIMPLES (1 phrase par item) ─────────────────────────────────
@@ -4075,10 +4158,63 @@ const EXPL = {
   'ai-provider-2':"Le code ne parle qu'à une interface abstraite, pas directement à Gemini — changer de fournisseur IA ne nécessite de modifier qu'un seul fichier.",
   'ai-toggle-1':"Un restaurateur avec un petit budget peut désactiver l'assistant IA ou le RAG sans que le reste de l'app cesse de fonctionner — chaque module IA est indépendant.",
   'ai-fallback-1':"Si le fournisseur IA principal est en panne, l'app bascule automatiquement sur un fournisseur de secours — le service ne s'arrête pas.",
+  // ── Plan d'Implémentation (T00–T51) ──
+  'impl-t00':"Les flags de fonctionnalité permettent de livrer chaque vague en mode « avertissement » avant de l'activer en « blocage » — déploiement progressif sans risque.",
+  'impl-t01':"Les notifications push arrivent sur le téléphone du chef ou du serveur en temps réel — sans clés configurées, rien ne plante, rien ne s'envoie.",
+  'impl-t02':"Température anormale → le chef est prévenu, plat prêt → le serveur est prévenu, planning publié → toute l'équipe est prévenue.",
+  'impl-t03':"La caisse travaille en microunités (1€ = 1 000 000 µ) pour éviter les erreurs d'arrondi sur les centimes — l'affichage en euros reste identique.",
+  'impl-t04':"Le script convertit les anciennes valeurs en centimes vers les microunités, rejouable sans risque de double conversion.",
+  'impl-t05':"Liste complète de tous les endroits du code qui utilisent encore « InCents » — permet de planifier la migration restante.",
+  'impl-t06':"Chaque action sensible est enregistrée dans un journal immuable avec une empreinte chaînée — impossible à modifier après coup.",
+  'impl-t07':"Toute modification sur les collections finance, staff, paramètres ou RBAC produit automatiquement un événement d'audit.",
+  'impl-t08':"Un même employé ne peut pas réceptionner une commande ET approuver la facture correspondante — séparation des tâches.",
+  'impl-t09':"Une remise de 30 % ou un achat au-dessus du seuil est bloqué tant qu'un manager n'a pas saisi son PIN pour autoriser.",
+  'impl-t10':"En un clic, on applique le profil « Serveur », « Chef » ou « Manager » avec toutes les permissions prédéfinies.",
+  'impl-t11':"Un ticket mixte (plat sur place + café à emporter + vin) affiche 3 lignes TVA justes : 10 %, 5,5 % et 20 %.",
+  'impl-t12':"Le caissier bascule la commande entre « sur place » et « à emporter » d'un toggle — la TVA se recalcule instantanément.",
+  'impl-t13':"Inventaire de toutes les données personnelles stockées en clair dans les scellés fiscaux — décision avant pseudonymisation.",
+  'impl-t14':"Les données personnelles sont chiffrées dans un coffre séparé, seul un identifiant anonyme reste dans les écritures fiscales.",
+  'impl-t15':"Le client demande l'effacement : sa clé de chiffrement est détruite, ses données deviennent illisibles, les écritures fiscales restent intactes.",
+  'impl-t16':"Chaque fin de mois et chaque fin d'année, le système scelle un total cumulé chaîné — preuve d'intégrité pour le contrôle fiscal.",
+  'impl-t17':"Chaque coupure réseau, changement d'heure ou restauration de sauvegarde est consigné dans un journal technique NF525.",
+  'impl-t18':"En cas de panne réseau, les ventes continuent d'être scellées localement avec des numéros de reçu réservés par plage.",
+  'impl-t19':"À la reconnexion, les ventes offline sont rejouées dans l'ordre avec vérification de la chaîne d'intégrité — aucun trou possible.",
+  'impl-t20':"Chaque produit peut indiquer s'il est fait maison, l'origine de la viande, et ses informations nutritionnelles.",
+  'impl-t21':"À l'encaissement, le serveur peut proposer un doggy bag ou enregistrer un don alimentaire tracé dans les registres.",
+  'impl-t22':"Le système vérifie automatiquement le repos de 11h, les 6 jours max, l'amplitude et les coupures selon la convention HCR.",
+  'impl-t23':"Les certifications et documents du personnel sont suivis avec alerte à l'échéance — le registre unique est exportable d'un clic.",
+  'impl-t24':"Toutes les échéances (RH, licences, DUERP, certifications) apparaissent dans un seul calendrier trié par urgence.",
+  'impl-t25':"Depuis un numéro de lot, le système remonte tous les plats préparés, toutes les commandes servies et tous les clients concernés.",
+  'impl-t26':"Le serveur prend la commande depuis son téléphone — elle arrive directement en cuisine, avec les allergènes visibles.",
+  'impl-t27':"Le client scanne un QR code sur sa table et voit le menu avec filtres allergènes, badges fait maison et disponibilité temps réel.",
+  'impl-t28':"Le client commande depuis le menu QR, le serveur valide, et ça part en cuisine — protection anti-abus intégrée.",
+  'impl-t29':"Le client paie depuis son téléphone et reçoit un ticket dématérialisé valide NF525 — jamais de données bancaires côté app.",
+  'impl-t30':"À la réservation, une empreinte bancaire est prise — en cas de no-show, le restaurant capture automatiquement le montant prévu.",
+  'impl-t31':"Le client achète une carte cadeau (passif comptable), la dépense plus tard (solde du passif) — les codes sont signés contre la fraude.",
+  'impl-t32':"Les points de fidélité s'accumulent à chaque achat et se dépensent au POS — la provision comptable est générée automatiquement.",
+  'impl-t33':"Un client régulier peut payer « sur compte », recevoir un relevé mensuel et est plafonné — dépassement uniquement avec PIN manager.",
+  'impl-t34':"Quand un ingrédient est épuisé, tous les plats qui en dépendent disparaissent du menu et du POS en temps réel.",
+  'impl-t35':"Si le prix d'un ingrédient augmente, toutes les recettes concernées sont recalculées et le chef reçoit une alerte marge.",
+  'impl-t36':"Les pourboires sont répartis selon les heures travaillées et le rang, puis intégrés au bulletin de paie.",
+  'impl-t37':"Une facture fournisseur sans bon de livraison correspondant est bloquée — les écarts de prix ou quantité sont signalés.",
+  'impl-t38':"Un achat au-dessus du seuil configuré nécessite l'approbation d'un supérieur, enregistrée dans l'audit trail.",
+  'impl-t39':"L'échéancier fournisseur montre qui payer quand, et génère le fichier SEPA pain.001 pour le virement bancaire.",
+  'impl-t40':"Le comptage de caisse se fait par coupures, les retraits intermédiaires sont tracés, et le comptage aveugle détecte les écarts.",
+  'impl-t41':"Le coût du personnel s'affiche en pourcentage du CA prévu — avec une alerte si le staffing dépasse le budget.",
+  'impl-t42':"Chaque matin, le directeur reçoit une notification avec les chiffres clés de la veille : couverts, addition moyenne, écart caisse.",
+  'impl-t43':"Le système détecte automatiquement les patterns suspects : trop d'annulations, de remises, ou d'écarts de caisse par employé.",
+  'impl-t44':"Le P&L est ventilé par flux (food, boisson, événementiel), le budget est comparé au réalisé, et le ROI des campagnes est mesuré.",
+  'impl-t45':"Les parcours POS, KDS et réservation sont accessibles au clavier et aux lecteurs d'écran — conformité RGAA.",
+  'impl-t46':"Chaque employé a son espace personnel : planning, pointage, congés, pourboires et bulletin — sans accès aux données des collègues.",
+  'impl-t47':"Les clients sans réservation rejoignent une file d'attente avec temps estimé + SMS, et l'addition est transférable entre serveurs.",
+  'impl-t48':"Le groupe compare ses restaurants entre eux (anonymisé) et déploie un menu ou une config sur plusieurs sites en une action.",
+  'impl-t49':"Les commandes Uber Eats et Deliveroo arrivent dans le KDS comme les autres, avec commission comptabilisée et vente scellée.",
+  'impl-t50':"Le système détecte une dérive de température du frigo AVANT la panne — alerte push au responsable HACCP.",
+  'impl-t51':"Si Gemini ou le RAG tombe, l'app continue de fonctionner en mode dégradé avec un message clair — aucune fonctionnalité bloquée.",
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v25'; // v25 = 9 items audit résolus (2026-07-20) // v24 = section Audit 2026-07-20 ajoutée // v23 = inf-1/2/5/8 // v22 = TaxAuditPanel + TrustedDevicePanel + Stripe checkout + ZTNA // v21 = sprint-final
+const STORE_KEY = 'ros_checklist_v26'; // v26 = Plan d'Implémentation T00–T51 (52 tickets) ajouté // v25 = 9 items audit résolus (2026-07-20) // v24 = section Audit 2026-07-20 ajoutée // v23 = inf-1/2/5/8
 
 // Items confirmés terminés par les agents (vérifiés sur disque + tsc 0 erreur)
 const DONE_BY_AGENTS = new Set([
@@ -4435,6 +4571,17 @@ const DONE_BY_AGENTS = new Set([
   'inf-5',
   // ServerAuthProvider interface Firebase→Keycloak (OVH migration path)
   'inf-8',
+  // ── Plan d'Implémentation — 52 tickets (T00–T51) — commit d1d19da1 ──
+  'impl-t00','impl-t01','impl-t02','impl-t03','impl-t04','impl-t05',
+  'impl-t06','impl-t07','impl-t08','impl-t09','impl-t10',
+  'impl-t11','impl-t12','impl-t13','impl-t14','impl-t15',
+  'impl-t16','impl-t17','impl-t18','impl-t19',
+  'impl-t20','impl-t21','impl-t22','impl-t23','impl-t24','impl-t25',
+  'impl-t26','impl-t27','impl-t28','impl-t29','impl-t30',
+  'impl-t31','impl-t32','impl-t33','impl-t34','impl-t35','impl-t36',
+  'impl-t37','impl-t38','impl-t39','impl-t40','impl-t41',
+  'impl-t42','impl-t43','impl-t44',
+  'impl-t45','impl-t46','impl-t47','impl-t48','impl-t49','impl-t50','impl-t51',
 ]);
 
 function loadChecked() {
