@@ -4668,7 +4668,7 @@ const TUTORIALS = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v31'; // v31 = dette-6 rapatriement compliance+recipes DONE + dette-8 reformulé (investigation) // v30 = section Dette Technique & Qualité (8 items, dette-1/2/3 DONE) // v29 = section Mobile-Readiness & PWA
+const STORE_KEY = 'ros_checklist_v32'; // v32 = dette-7 rapatriement reservations+crm DONE // v31 = dette-6 rapatriement compliance+recipes DONE + dette-8 reformulé // v30 = section Dette Technique & Qualité
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5066,6 +5066,8 @@ const DONE_BY_AGENTS = new Set([
   'dette-3',
   // dette-6 — components/compliance/ → modules/compliance/components/ + components/recipes/ → modules/ops/recipes/ (tsc 0 erreur)
   'dette-6',
+  // dette-7 — components/reservations/ → modules/commerce/reservations/components/ + components/crm/ → modules/commerce/marketing/components/crm/ (tsc 0 erreur)
+  'dette-7',
 ]);
 
 function loadChecked() {

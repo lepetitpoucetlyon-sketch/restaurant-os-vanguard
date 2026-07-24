@@ -11,13 +11,13 @@ import {
     CustomerDetailPanel,
     NewCustomerDialog,
 } from "@modules/commerce/customers/components";
-import { PromoCodeManager } from "@/components/crm/PromoCodeManager";
-import { EmailCampaign } from "@/components/crm/EmailCampaign";
-import { BasketAnalysis } from "@/components/crm/BasketAnalysis";
-import { VisitHistory } from "@/components/crm/VisitHistory";
+import { PromoCodeManager } from "@/modules/commerce/marketing/components/crm/PromoCodeManager";
+import { EmailCampaign } from "@/modules/commerce/marketing/components/crm/EmailCampaign";
+import { BasketAnalysis } from "@/modules/commerce/marketing/components/crm/BasketAnalysis";
+import { VisitHistory } from "@/modules/commerce/marketing/components/crm/VisitHistory";
 import { CustomerImportPanel } from "@/components/migration/CustomerImportPanel";
-import { RFMSegmentation } from "@/components/crm/RFMSegmentation";
-import { EmailAutomations } from "@/components/crm/EmailAutomations";
+import { RFMSegmentation } from "@/modules/commerce/marketing/components/crm/RFMSegmentation";
+import { EmailAutomations } from "@/modules/commerce/marketing/components/crm/EmailAutomations";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
 

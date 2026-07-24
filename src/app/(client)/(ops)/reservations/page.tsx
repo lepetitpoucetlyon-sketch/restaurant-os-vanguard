@@ -29,11 +29,11 @@ import { useReservations, useCRM, useTables } from "@modules/ops";
 import { useGroups } from "@/engines/ops/NexusOpsProvider";
 import { useActionPermission } from "@/hooks/useActionPermission";
 import { PinModal } from "@modules/commerce/ui/pos/PinModal";
-import { DailyListView } from "@/components/reservations/DailyListView";
-import { WeeklyView } from "@/components/reservations/WeeklyView";
-import { GroupFormModal } from "@/components/reservations/GroupFormModal";
-import { EventQuoteModal } from "@/components/reservations/EventQuoteModal";
-import { ReservationCreateDialog } from "@/components/reservations/ReservationCreateDialog";
+import { DailyListView } from "@/modules/commerce/reservations/components/DailyListView";
+import { WeeklyView } from "@/modules/commerce/reservations/components/WeeklyView";
+import { GroupFormModal } from "@/modules/commerce/reservations/components/GroupFormModal";
+import { EventQuoteModal } from "@/modules/commerce/reservations/components/EventQuoteModal";
+import { ReservationCreateDialog } from "@/modules/commerce/reservations/components/ReservationCreateDialog";
 import { ReservationSidebar } from "@modules/commerce";
 import { TableGrid } from "@modules/commerce";
 import { CustomerCustomerView } from "@modules/commerce";
@@ -47,7 +47,7 @@ import { authedFetch } from "@/lib/client/authedFetch";
 import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/domain/schemas/ops";
 import type { Customer } from "@nexus/contracts";
-import type { GroupFormData } from "@/components/reservations/GroupFormModal";
+import type { GroupFormData } from "@/modules/commerce/reservations/components/GroupFormModal";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const TERRACE_ZONE_IDS = ["zone-terrasse", "terrace"];
