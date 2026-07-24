@@ -360,14 +360,13 @@ localhost:3000              →  <span class="c-warn">null</span> → repli NEXT
     <div class="col-card">
       <div class="col-title">Piliers Modules</div>
       <div class="item-list">
-        <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">ops</div><div class="desc">POS, KDS, tables, reservations, floor-plan</div></div></div>
+        <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">ops</div><div class="desc">pos/, kds/, kitchen/, prep/ — POS, KDS, tables, reservations, floor-plan</div></div></div>
         <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">finance</div><div class="desc">JournalEntry, FEC, SovereignLedger, billing</div></div></div>
-        <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">compliance</div><div class="desc">fiscalSeals, HACCP, NF525</div></div></div>
+        <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">compliance</div><div class="desc">haccp/, audit/, rgpd/, recall/ — fiscalSeals, HACCP, NF525</div></div></div>
         <div class="item"><div class="item-icon icon-blue">◉</div><div class="item-body"><div class="title">intelligence</div><div class="desc">RAG, analytics, MacroBrain</div></div></div>
-        <div class="item"><div class="item-icon icon-blue">◉</div><div class="item-body"><div class="title">commerce</div><div class="desc">CRM, marketing, prospecting</div></div></div>
-        <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">human</div><div class="desc">Staff, payroll, shifts NexusPayrollEngine</div></div></div>
+        <div class="item"><div class="item-icon icon-blue">◉</div><div class="item-body"><div class="title">commerce</div><div class="desc">marketing/ — CRM, marketing, prospecting</div></div></div>
+        <div class="item"><div class="item-icon icon-green">◉</div><div class="item-body"><div class="title">human</div><div class="desc">payroll/ — Staff, shifts, NexusPayrollEngine</div></div></div>
         <div class="item"><div class="item-icon icon-yellow">◉</div><div class="item-body"><div class="title">logistics</div><div class="desc">Inventory, stock, procurement</div></div></div>
-        <div class="item"><div class="item-icon icon-yellow">◉</div><div class="item-body"><div class="title">kds</div><div class="desc">Kitchen Display, recipes, zones</div></div></div>
       </div>
     </div>
     <div class="col-card">
@@ -1427,7 +1426,7 @@ POST /v1/mdm/command       <span class="c-muted">→ remote screen observe</span
     <span class="chapter-num">15</span>
     <div>
       <div class="chapter-title">Analyse Module par Module — Logique Métier</div>
-      <div class="chapter-sub">8 piliers · Composition réelle des composants · Ce qui est codé vs ce qui manque</div>
+      <div class="chapter-sub">7 piliers · Composition réelle des composants · Ce qui est codé vs ce qui manque</div>
     </div>
   </div>
 
@@ -3728,6 +3727,32 @@ const CHECKLIST = [
       { id:'mcc-growth-4', text:'Créer le Tenant Health Score : score calculé par restaurant (uptime, dernière sync, alertes HACCP, tickets ouverts)', sub:'Aucune priorisation du support — tous les restaurants ont la même urgence même si l\'un est en état critique', p:'P2' },
     ]
   },
+  {
+    id: 'mobile', label: '📱 Mobile-Readiness & PWA', color: '#06B6D4', open: false,
+    items: [
+      { id:'mob-1', text:'Créer le manifest.json PWA + icônes 192px/512px dans public/', sub:'Sans manifest l\'app n\'est pas installable — "Ajouter à l\'écran d\'accueil" ne fonctionne pas sur iPad/iPhone', p:'P1' },
+      { id:'mob-2', text:'Rendre le MCC responsive : header wrap + tabs scroll horizontal + menu hamburger mobile', sub:'Le dashboard admin est inutilisable sous 768px — tabs débordent, boutons header empilés', p:'P1' },
+      { id:'mob-3', text:'Ajouter MobileHeader + MobileNavBar aux modes sidebar et topbar du LayoutResolver', sub:'Si un tenant utilise layoutType sidebar/topbar, ses utilisateurs mobiles n\'ont aucune navigation', p:'P1' },
+      { id:'mob-4', text:'Aligner les breakpoints Header (md:768px) et MobileHeader (lg:1024px) pour éviter le doublon 768-1024px', sub:'Entre 768px et 1024px les deux headers s\'affichent — choisir lg: partout ou md: partout', p:'P2' },
+      { id:'mob-5', text:'Installer et configurer Responsively App pour les tests multi-devices', sub:'App desktop open-source — preview simultané iPhone SE/iPad/Android côte-à-côte sur localhost', p:'P2', opt:true },
+      { id:'mob-6', text:'Lancer un audit Lighthouse PWA + Performance mobile et corriger les scores < 90', sub:'Chrome DevTools → Lighthouse → catégories PWA + Performance + Accessibility en mode mobile', p:'P2' },
+      { id:'mob-7', text:'Installer Eruda sur les iPads de test pour le debug mobile en conditions réelles', sub:'Script injecté en dev — console JS/réseau/DOM directement sur l\'écran tactile du restaurant', p:'P3', opt:true },
+      { id:'mob-8', text:'Configurer BrowserStack ou un lab de devices pour tester sur vrais appareils iOS/Android', sub:'Émulateurs masquent les bugs touch/scroll réels — BrowserStack Live à 29$/mois ou lab physique iPad+Android', p:'P3', opt:true },
+    ]
+  },
+  {
+    id: 'dette', label: '🧹 Dette Technique & Qualité', color: '#8B5CF6', open: false,
+    items: [
+      { id:'dette-1', text:'Extraire les sous-composants inline du MCC dashboard vers _components.tsx', sub:'StatCard, TabButton, StatusItem, SwitchboardItem, DeviceManagerPanel sortis de page.tsx (god file) → app/(admin)/admin/mcc/_components.tsx', p:'P2' },
+      { id:'dette-2', text:'Extraire la logique remise/offre par ligne (usePos) vers un module domaine pur', sub:'handleApplyDiscount/handleApplyOffer → POSService domain/cartDiscounts.ts (fonctions pures immuables, testables)', p:'P2' },
+      { id:'dette-3', text:'Tests unitaires remise/offre + calcul panier (edge cases microunits)', sub:'cartDiscounts.test.ts (11 cas) + calculateCartTotal edge cases (panier vide, quantités, prix zéro) dans domain.test.ts', p:'P2' },
+      { id:'dette-4', text:'Découper finance/page.tsx (819 lignes) en sous-composants par section', sub:'Le plus gros god file de l\'app — extraire chaque onglet/section vers finance/_components/ pour la maintenabilité', p:'P2' },
+      { id:'dette-5', text:'Découper staff/page.tsx (803), reservations/page.tsx (762), inventory/page.tsx (757)', sub:'Même pattern que dette-4 — sortir les sous-vues des pages route vers des dossiers _components/ dédiés', p:'P3' },
+      { id:'dette-6', text:'Rapatrier components/compliance/ + components/recipes/ vers modules/', sub:'Règle CLAUDE.md : tout code pilier va dans modules/<pilier>/. compliance→modules/compliance, recipes→modules/ops', p:'P2' },
+      { id:'dette-7', text:'Rapatrier components/crm/ + components/reservations/ vers modules/commerce/', sub:'Code métier commerce encore à la racine components/ — le déplacer + mettre à jour les imports + tsc vérifié', p:'P3' },
+      { id:'dette-8', text:'Consolider domain/agent + domain/agents + domain/agency (3 dossiers redondants)', sub:'Trois dossiers au nom quasi identique dans domain/ — clarifier lequel est canonique, fusionner, supprimer les orphelins', p:'P3' },
+    ]
+  },
   { divider: true, label: '🚀 Plan d\'Implémentation (T00–T51)', sub: 'Les 52 tickets du plan d\'implémentation — socle, conformité fiscale, mobilité, revenu, pilotage et plateforme. Tous implémentés et committés.' },
   {
     id: 'impl-v0', label: '⚡ V0 — Socle & Vérité (T00–T10)', color: '#3B82F6', open: false,
@@ -3902,6 +3927,22 @@ const EXPL = {
   'mcc-growth-2':"Aucun canal de distribution partenaire n'existe — des commerciaux indépendants motivés par une commission pourraient démultiplier la croissance sans coût fixe.",
   'mcc-growth-3':"Un client qui va résilier ne donne aucun signal détectable aujourd'hui — une IA prédictive permettrait de déclencher une action de rétention avant qu'il parte.",
   'mcc-growth-4':"Le support ne sait pas quel restaurant est en état critique avant que le client appelle — un score de santé permettrait de prioriser les interventions proactivement.",
+  'mob-1':"Sans fichier manifest.json ni icônes dans public/, le navigateur ne peut pas proposer « Ajouter à l'écran d'accueil » — l'app n'est pas installable en PWA sur iPad ou smartphone.",
+  'mob-2':"Le dashboard MCC est conçu desktop-first : la barre de tabs déborde horizontalement sous 768px, les boutons header ne wrappent pas — un admin sur tablette ne peut pas naviguer.",
+  'mob-3':"Le LayoutResolver ne rend MobileHeader et MobileNavBar que dans le mode « default » — les modes sidebar et topbar laissent les utilisateurs mobiles sans aucune navigation.",
+  'mob-4':"Le Header desktop apparaît à partir de 768px (md:) tandis que le MobileHeader se cache à 1024px (lg:) — entre ces deux breakpoints, les deux s'affichent en même temps.",
+  'mob-5':"Responsively App est un outil gratuit open-source qui affiche localhost en simultané sur iPhone SE, iPad, Android et desktop — gain de temps énorme pour valider le responsive.",
+  'mob-6':"Lighthouse dans Chrome DevTools génère un rapport automatique PWA + Performance + Accessibilité en mode mobile — les scores < 90 révèlent les problèmes d'UX mobile.",
+  'mob-7':"Eruda est une console de debug injectable sur mobile réel — elle affiche les logs JS, les requêtes réseau et le DOM directement sur l'écran tactile de l'iPad du restaurant.",
+  'mob-8':"Les émulateurs masquent les vrais bugs tactiles et de scroll — BrowserStack Live (29$/mois) donne accès à des centaines d'appareils iOS/Android réels à distance.",
+  'dette-1':"Le dashboard MCC (page.tsx) mélangeait 5 sous-composants d'affichage avec la logique de page — les extraire allège le fichier et isole l'UI réutilisable.",
+  'dette-2':"La logique de remise et d'offre par ligne était noyée dans le hook React usePos — la sortir en fonctions pures la rend testable et réutilisable hors React.",
+  'dette-3':"Le calcul de remise/offre et le total panier n'avaient qu'un seul cas de test — ajouter les cas limites (panier vide, ré-application, prix zéro) sécurise les montants encaissés.",
+  'dette-4':"finance/page.tsx fait 819 lignes — le plus gros fichier de l'app. Le découper par section rend chaque bout compréhensible et modifiable sans tout relire.",
+  'dette-5':"Les pages staff, reservations et inventory dépassent 750 lignes chacune — même traitement que finance pour endiguer la dette de god files.",
+  'dette-6':"Du code métier compliance et recipes vit encore à la racine components/ au lieu de modules/ — le rapatrier respecte la règle d'architecture du projet.",
+  'dette-7':"Le code CRM et réservations traîne dans components/ hors du pilier commerce — le déplacer clarifie l'appartenance et évite les imports croisés.",
+  'dette-8':"Trois dossiers au nom quasi identique (agent, agents, agency) coexistent dans domain/ — cette ambiguïté doit être résolue pour qu'un développeur sache où chercher.",
   'p0-1':"Sans cette clé secrète, chaque vente génère une erreur — aucun encaissement n'est possible.",
   'p0-2':"Sans ticket de caisse imprimé, l'encaissement est illégal — c'est la pièce fiscale obligatoire NF525.",
   'p0-3':"Le PIN admin par défaut « 0000 » est connu de tous — n'importe qui peut prendre le contrôle du système.",
@@ -4523,10 +4564,110 @@ const TUTORIALS = {
     {t:'Dashboard MCC : vue des revendeurs',s:'Tableau : reseller, nb clients, commission MTD, statut paiement, bouton "Payer"'},
     {t:'Paiement des commissions',s:'Export CSV pour virement SEPA ou intégration Stripe Connect (payout automatique)'},
   ],
+  'mob-1': [
+    {t:'Créer public/manifest.json',s:'name, short_name, start_url: "/", display: "standalone", theme_color, background_color, icons[]'},
+    {t:'Générer les icônes PWA 192px et 512px',s:'Utiliser realfavicongenerator.net ou pwa-asset-generator — PNG maskable + any'},
+    {t:'Placer les icônes dans public/icons/',s:'icon-192x192.png + icon-512x512.png + apple-touch-icon.png (180px)'},
+    {t:'Ajouter le lien manifest dans layout.tsx',s:'metadata.manifest = "/manifest.json" (export Next.js 14+)'},
+    {t:'Ajouter les meta Apple dans le head',s:'apple-mobile-web-app-capable, apple-mobile-web-app-status-bar-style'},
+    {t:'Tester sur iPhone : Safari → Partager → Sur l\'écran d\'accueil',s:'L\'app doit s\'ouvrir en plein écran sans barre d\'adresse Safari'},
+  ],
+  'mob-2': [
+    {t:'Rendre la tab bar MCC scrollable horizontalement',s:'Ajouter overflow-x-auto flex-nowrap no-scrollbar au conteneur des tabs'},
+    {t:'Responsive du header MCC : stack vertical sous md:',s:'flex-col md:flex-row sur le header — logo/titre au-dessus, boutons en dessous'},
+    {t:'Masquer les pills de statut sur mobile',s:'Ajouter hidden md:flex sur "Axiom Bridge Connected" et bouton Global Sync'},
+    {t:'Ajouter un bouton hamburger mobile au MCC',s:'Bouton md:hidden qui ouvre un drawer latéral avec les 4 tabs + actions'},
+    {t:'Adapter les stat cards en 1 colonne sur mobile',s:'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 (déjà partiellement fait, vérifier)'},
+    {t:'Tester avec Chrome DevTools en mode iPad / iPhone',s:'F12 → Device Toolbar → iPhone 12 Pro et iPad Air → vérifier tous les onglets'},
+  ],
+  'mob-3': [
+    {t:'Modifier le case sidebar dans LayoutResolver.tsx',s:'Ajouter <MobileHeader /> et <MobileNavBar /> + pb-24 lg:pb-0 sur le main'},
+    {t:'Modifier le case topbar dans LayoutResolver.tsx',s:'Ajouter <MobileHeader /> (lg:hidden) + <MobileNavBar /> (lg:hidden) + ajuster padding'},
+    {t:'Cacher DesktopSidebar sous lg: dans le mode sidebar',s:'Wrapper avec div className="hidden lg:block" (comme le mode default)'},
+    {t:'Cacher DesktopTopbar sous lg: dans le mode topbar',s:'Ajouter hidden lg:block au DesktopTopbar dans ce mode'},
+    {t:'Tester les 3 modes en simulant layoutType dans le tenant config',s:'DevTools → Jotai debug → modifier tenantConfigAtom.status.layoutType'},
+    {t:'Vérifier que le GlobalFAB ne chevauche pas le MobileNavBar',s:'Le FAB est bottom-6 right-6, le NavBar bottom-6 — ajuster z-index si nécessaire'},
+  ],
+  'mob-4': [
+    {t:'Choisir le breakpoint unique pour la bascule mobile/desktop',s:'Recommandé : lg: (1024px) partout — tablettes iPad = desktop, smartphones = mobile'},
+    {t:'Modifier Header.tsx : hidden md:flex → hidden lg:flex',s:'Le Header desktop s\'affiche maintenant à 1024px+ au lieu de 768px+'},
+    {t:'Vérifier MobileHeader.tsx : confirmer lg:hidden',s:'Déjà lg:hidden — cohérent avec le changement du Header'},
+    {t:'Vérifier les status pills dans Header',s:'hidden md:flex → hidden lg:flex pour StatusHub et ContextualSettings'},
+    {t:'Tester à 768px, 1024px et 1280px',s:'Exactement un seul header visible à chaque breakpoint — jamais zéro, jamais deux'},
+  ],
+  'mob-5': [
+    {t:'Télécharger Responsively App',s:'responsively.app → Download → macOS (.dmg) — gratuit, open-source'},
+    {t:'Lancer l\'app et configurer les devices',s:'Ajouter : iPhone SE (375×667), iPhone 14 (390×844), iPad (768×1024), Desktop (1280×800)'},
+    {t:'Entrer l\'URL localhost du dev server',s:'http://localhost:3000 → toutes les vues se chargent en parallèle'},
+    {t:'Activer le mode sync scroll + sync click',s:'Les 4 écrans scrollent et cliquent en synchrone — gain de temps x4'},
+    {t:'Tester les parcours critiques',s:'POS → passer commande, Floor Plan → déplacer table, Résa → créer réservation'},
+    {t:'Capturer des screenshots comparatifs',s:'Bouton screenshot → exporte un PNG côte-à-côte des 4 tailles'},
+  ],
+  'mob-6': [
+    {t:'Ouvrir Chrome DevTools → Lighthouse',s:'F12 → onglet Lighthouse → cocher Performance + PWA + Accessibility + Best Practices'},
+    {t:'Sélectionner le mode Mobile + Navigation',s:'Device: Mobile, Catégories cochées, cliquer "Analyze page load"'},
+    {t:'Analyser les scores',s:'Objectif : tout au-dessus de 90 — noter chaque recommandation en rouge/orange'},
+    {t:'Corriger les images non optimisées',s:'Utiliser next/image avec width/height + format WebP/AVIF auto via Next.js'},
+    {t:'Corriger le CLS (Cumulative Layout Shift)',s:'Ajouter width/height sur les images, placeholder skeleton sur les composants lazy'},
+    {t:'Re-lancer Lighthouse après corrections',s:'Comparer avant/après — le score doit monter de 10-20 points minimum'},
+  ],
+  'mob-7': [
+    {t:'Installer le paquet eruda en devDependency',s:'npm i -D eruda — console de debug mobile injectable'},
+    {t:'Créer un composant ErudaLoader conditionnel',s:'if (process.env.NODE_ENV === "development") → import("eruda").then(e => e.default.init())'},
+    {t:'Monter le composant dans NexusProviderStack (dev uniquement)',s:'<ErudaLoader /> avant les children — ne se charge qu\'en dev, tree-shaked en prod'},
+    {t:'Tester sur iPad via le réseau local',s:'Ouvrir http://192.168.x.x:3000 sur l\'iPad → le bouton Eruda flottant apparaît'},
+    {t:'Explorer les onglets Eruda',s:'Console (logs), Network (requêtes), Elements (DOM), Resources (localStorage/cookies)'},
+  ],
+  'mob-8': [
+    {t:'Créer un compte BrowserStack Live',s:'browserstack.com → Live plan à 29$/mois — accès à 3000+ appareils réels'},
+    {t:'Lancer un tunnel local',s:'BrowserStack Local → télécharger l\'app → connecter localhost:3000 au cloud'},
+    {t:'Tester sur iPhone (Safari WebKit)',s:'Choisir iPhone 14 → Safari → localhost:3000 — vérifier les safe areas et le scroll'},
+    {t:'Tester sur Android (Chrome)',s:'Choisir Samsung Galaxy S23 → Chrome → même URL — vérifier les transitions et le touch'},
+    {t:'Tester sur iPad (mode tablette)',s:'iPad Air → Safari → vérifier le LayoutResolver en mode paysage et portrait'},
+    {t:'Documenter les bugs trouvés',s:'Screenshot + noter device/OS/navigateur/bug — créer des tickets dans Linear ou GitHub Issues'},
+  ],
+  'dette-4': [
+    {t:'Cartographier les sections de finance/page.tsx',s:'Repérer chaque onglet/bloc logique (dashboard, journal, TVA, exports, rapprochement…)'},
+    {t:'Créer le dossier finance/_components/',s:'src/app/(client)/(ops)/finance/_components/ — un fichier .tsx par section'},
+    {t:'Extraire une section à la fois',s:'Couper le JSX + les handlers propres à la section → nouveau composant avec props typées'},
+    {t:'Remonter l\'état partagé en props ou hook',s:'Si plusieurs sections partagent un état, le garder dans page.tsx et le passer en props'},
+    {t:'Vérifier après chaque extraction',s:'npx tsc --noEmit + recharger la page finance → aucun changement visuel'},
+    {t:'Viser < 200 lignes pour page.tsx final',s:'La page ne fait plus qu\'orchestrer le layout + assembler les sections'},
+  ],
+  'dette-5': [
+    {t:'Trier les 3 pages par risque',s:'inventory (757) et reservations (762) touchent le stock/résa — extraire prudemment, tester après'},
+    {t:'Appliquer le même pattern que dette-4',s:'Un dossier _components/ par page, une section extraite à la fois'},
+    {t:'staff/page.tsx en premier (moins critique)',s:'Bon rodage du pattern avant de toucher aux pages transactionnelles'},
+    {t:'reservations/page.tsx avec précaution',s:'Vérifier que les hooks de résa (useActionPermission, overbooking) restent câblés'},
+    {t:'inventory/page.tsx en dernier',s:'Le stock alimente l\'auto-86 POS — tester la propagation après découpe'},
+    {t:'tsc + vitest verts après chaque page',s:'Ne jamais enchaîner deux pages sans vérification intermédiaire'},
+  ],
+  'dette-6': [
+    {t:'Lister le contenu de components/compliance/ et components/recipes/',s:'Identifier chaque fichier + qui l\'importe (grep des imports dans src/)'},
+    {t:'Créer les dossiers cibles',s:'compliance → src/modules/compliance/components/ ; recipes → src/modules/ops/recipes/components/'},
+    {t:'Déplacer fichier par fichier avec git mv',s:'git mv préserve l\'historique — un fichier à la fois pour limiter les risques'},
+    {t:'Mettre à jour tous les imports',s:'Rechercher les anciens chemins et les remplacer par les alias @/modules/… '},
+    {t:'Vérifier tsc + sentrux',s:'npx tsc --noEmit + sentrux check . (pas de nouveau cycle ni god file)'},
+    {t:'Supprimer les dossiers vides',s:'Une fois vidés, retirer components/compliance/ et components/recipes/'},
+  ],
+  'dette-7': [
+    {t:'Vérifier le piège git status D',s:'Sur ce repo un fichier « D » est souvent un déplacement — grep dans src/ avant de conclure à une absence'},
+    {t:'Créer modules/commerce/components/',s:'Sous-dossiers crm/ et reservations/ pour garder la séparation logique'},
+    {t:'git mv components/crm/* et components/reservations/*',s:'Déplacer vers le pilier commerce, un fichier à la fois'},
+    {t:'Mettre à jour les imports croisés',s:'Attention aux composants importés par des pages (ops)/ — vérifier chaque référence'},
+    {t:'tsc + build check',s:'npx tsc --noEmit puis lancer le dev server → pages CRM et réservations OK'},
+  ],
+  'dette-8': [
+    {t:'Inspecter les 3 dossiers',s:'ls -la domain/agent domain/agents domain/agency + lister leurs exports respectifs'},
+    {t:'Déterminer le canonique',s:'Lequel est réellement importé ? grep des imports → le plus utilisé devient la référence'},
+    {t:'Fusionner le contenu utile',s:'Rapatrier les fichiers vivants vers le dossier canonique, sans dupliquer'},
+    {t:'Repérer les orphelins (0 import)',s:'Un dossier sans aucun import entrant est du code mort — candidat à suppression'},
+    {t:'Supprimer les dossiers redondants',s:'git rm les dossiers vidés + tsc pour confirmer aucune référence cassée'},
+  ],
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v28'; // v28 = tutoriels intégrés pour les 33 items restants // v27 = MCC reachable in dev (middleware fix) + mcc-core-2/core-3/ota-2 vérifiés // v26 = Plan d'Implémentation T00–T51 (52 tickets) ajouté // v25 = 9 items audit résolus (2026-07-20) // v24 = section Audit 2026-07-20 ajoutée
+const STORE_KEY = 'ros_checklist_v30'; // v30 = section Dette Technique & Qualité (8 items, dette-1/2/3 DONE) // v29 = section Mobile-Readiness & PWA (8 items + tutos + recos logiciels) // v28 = tutoriels intégrés pour les 33 items restants
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -4915,6 +5056,13 @@ const DONE_BY_AGENTS = new Set([
   'mcc-core-3',
   // mcc-ota-2 — git push sécurisé : endpoint 501 NOT_IMPLEMENTED + /api/admin/git/* 404 en prod + requireFleetAdmin
   'mcc-ota-2',
+  // ── v30 — Dette Technique appliquée (2026-07-24), tsc 0 erreur + 26 tests verts ──
+  // dette-1 — sous-composants MCC extraits vers app/(admin)/admin/mcc/_components.tsx
+  'dette-1',
+  // dette-2 — remise/offre par ligne extraite → modules/ops/pos/domain/cartDiscounts.ts (fonctions pures)
+  'dette-2',
+  // dette-3 — cartDiscounts.test.ts (11 cas) + edge cases calculateCartTotal dans domain.test.ts
+  'dette-3',
 ]);
 
 function loadChecked() {

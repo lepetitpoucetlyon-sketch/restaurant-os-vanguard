@@ -14,3 +14,5 @@
 |---------|-----------|-------------------|--------|
 | bible-tutos | `docs/BIBLE_TECHNIQUE.html` | 2026-07-24 | terminée |
 | mcc-coord | `CLAUDE.md`, `.claude/` | 2026-07-24 | terminée |
+| mobile-audit | MCC + client layouts, responsive CSS | 2026-07-24 | terminée |
+| tech-debt | Dette technique : rapatriement, god files, tests POS/fiscal + Bible checklist | 2026-07-24 | terminée |

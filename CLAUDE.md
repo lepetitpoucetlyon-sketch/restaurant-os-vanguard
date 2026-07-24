@@ -17,7 +17,8 @@ Si tu ne t'inscris pas, tu risques d'écraser le travail d'une autre session san
 
 Système multi-tenant en **piliers** (Core, Ops, Finance, Human, Commerce, Logistics, Compliance, Sovereign).
 Chaque pilier a : `modules/`, `engines/`, `store/pillars/`, `domain/schemas/`.
-Piliers réels dans `src/modules/` : `ops, commerce, compliance, finance, human, logistics, intelligence, kds`.
+Piliers réels dans `src/modules/` : `ops, commerce, compliance, finance, human, intelligence, logistics`.
+Sous-modules notables : `ops/{pos, kds, kitchen, prep}`, `compliance/{haccp, audit, rgpd, recall}`, `commerce/{marketing}`, `human/{payroll}`.
 
 **Nexus** = couche d'accès données (adapters : Firestore / Simulacra / Mock).
 Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiquement** tout adapter avec `NexusInterceptor` + `SovereignGuard`.
