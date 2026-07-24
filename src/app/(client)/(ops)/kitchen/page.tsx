@@ -34,7 +34,7 @@ import { SuppliersTab } from "@modules/ops";
 import { AllergensTab } from "@modules/ops";
 import { CookingTimesTab } from "@modules/ops";
 import { IngredientsTab } from "@modules/ops";
-import { DailyPrepList } from "@/components/recipes";
+import { DailyPrepList } from "@/modules/ops/recipes";
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 

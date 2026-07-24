@@ -3750,7 +3750,7 @@ const CHECKLIST = [
       { id:'dette-5', text:'Découper staff/page.tsx (803), reservations/page.tsx (762), inventory/page.tsx (757)', sub:'Même pattern que dette-4 — sortir les sous-vues des pages route vers des dossiers _components/ dédiés', p:'P3' },
       { id:'dette-6', text:'Rapatrier components/compliance/ + components/recipes/ vers modules/', sub:'Règle CLAUDE.md : tout code pilier va dans modules/<pilier>/. compliance→modules/compliance, recipes→modules/ops', p:'P2' },
       { id:'dette-7', text:'Rapatrier components/crm/ + components/reservations/ vers modules/commerce/', sub:'Code métier commerce encore à la racine components/ — le déplacer + mettre à jour les imports + tsc vérifié', p:'P3' },
-      { id:'dette-8', text:'Consolider domain/agent + domain/agents + domain/agency (3 dossiers redondants)', sub:'Trois dossiers au nom quasi identique dans domain/ — clarifier lequel est canonique, fusionner, supprimer les orphelins', p:'P3' },
+      { id:'dette-8', text:'Clarifier le nommage domain/agent vs agents vs agency (PAS des doublons) + code mort', sub:'Investigation faite : agent=outils IA Gemini, agency=Hermes/Zeus, agents=MonkeyChaos (import dynamique OracleEngine). Renommer pour lever la confusion + supprimer MonkeyChaosAgent.ts (0 import) — attention barrel auto-généré', p:'P3' },
     ]
   },
   { divider: true, label: '🚀 Plan d\'Implémentation (T00–T51)', sub: 'Les 52 tickets du plan d\'implémentation — socle, conformité fiscale, mobilité, revenu, pilotage et plateforme. Tous implémentés et committés.' },
@@ -3942,7 +3942,7 @@ const EXPL = {
   'dette-5':"Les pages staff, reservations et inventory dépassent 750 lignes chacune — même traitement que finance pour endiguer la dette de god files.",
   'dette-6':"Du code métier compliance et recipes vit encore à la racine components/ au lieu de modules/ — le rapatrier respecte la règle d'architecture du projet.",
   'dette-7':"Le code CRM et réservations traîne dans components/ hors du pilier commerce — le déplacer clarifie l'appartenance et évite les imports croisés.",
-  'dette-8':"Trois dossiers au nom quasi identique (agent, agents, agency) coexistent dans domain/ — cette ambiguïté doit être résolue pour qu'un développeur sache où chercher.",
+  'dette-8':"Trois dossiers au nom quasi identique (agent, agents, agency) coexistent dans domain/ — investigation faite : ce ne sont PAS des doublons mais 3 responsabilités distinctes (outils IA Gemini / MonkeyChaos saboteur / Hermes-Zeus). MonkeyChaosAgent.ts n'a aucun import (code mort). L'ambiguïté vient du nommage, à lever par renommage — pas par fusion.",
   'p0-1':"Sans cette clé secrète, chaque vente génère une erreur — aucun encaissement n'est possible.",
   'p0-2':"Sans ticket de caisse imprimé, l'encaissement est illégal — c'est la pièce fiscale obligatoire NF525.",
   'p0-3':"Le PIN admin par défaut « 0000 » est connu de tous — n'importe qui peut prendre le contrôle du système.",
@@ -4658,16 +4658,17 @@ const TUTORIALS = {
     {t:'tsc + build check',s:'npx tsc --noEmit puis lancer le dev server → pages CRM et réservations OK'},
   ],
   'dette-8': [
-    {t:'Inspecter les 3 dossiers',s:'ls -la domain/agent domain/agents domain/agency + lister leurs exports respectifs'},
-    {t:'Déterminer le canonique',s:'Lequel est réellement importé ? grep des imports → le plus utilisé devient la référence'},
-    {t:'Fusionner le contenu utile',s:'Rapatrier les fichiers vivants vers le dossier canonique, sans dupliquer'},
-    {t:'Repérer les orphelins (0 import)',s:'Un dossier sans aucun import entrant est du code mort — candidat à suppression'},
-    {t:'Supprimer les dossiers redondants',s:'git rm les dossiers vidés + tsc pour confirmer aucune référence cassée'},
+    {t:'Comprendre les 3 responsabilités (déjà investigué)',s:'agent=outils Gemini (FiscalAuditTool…), agency=Hermes/Zeus experts, agents=MonkeyChaos saboteur'},
+    {t:'Repérer les imports dynamiques AVANT de renommer',s:'OracleEngine.ts fait await import(\'../agents/MonkeyChaos\') — un grep de chemin classique le rate'},
+    {t:'Renommer pour lever la confusion',s:'Ex: agent→ai-tools, agents→chaos, agency→experts — met à jour tous les imports statiques ET dynamiques'},
+    {t:'Vérifier MonkeyChaosAgent.ts (0 import)',s:'Confirmer qu\'il est mort → le supprimer ; mais le barrel index.ts est auto-généré (regénérer, pas éditer à la main)'},
+    {t:'Distinguer les 2 MonkeyChaos',s:'domain/agents/MonkeyChaos (attackLedger) ≠ engines/Simulacra/MonkeyChaos (triggerRushMode) — vérifier lequel est vivant'},
+    {t:'tsc + test gemini_pact après renommage',s:'npx tsc --noEmit + vitest gemini_pact.test.ts (importe domain/agent) → aucune casse'},
   ],
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v30'; // v30 = section Dette Technique & Qualité (8 items, dette-1/2/3 DONE) // v29 = section Mobile-Readiness & PWA (8 items + tutos + recos logiciels) // v28 = tutoriels intégrés pour les 33 items restants
+const STORE_KEY = 'ros_checklist_v31'; // v31 = dette-6 rapatriement compliance+recipes DONE + dette-8 reformulé (investigation) // v30 = section Dette Technique & Qualité (8 items, dette-1/2/3 DONE) // v29 = section Mobile-Readiness & PWA
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5063,6 +5064,8 @@ const DONE_BY_AGENTS = new Set([
   'dette-2',
   // dette-3 — cartDiscounts.test.ts (11 cas) + edge cases calculateCartTotal dans domain.test.ts
   'dette-3',
+  // dette-6 — components/compliance/ → modules/compliance/components/ + components/recipes/ → modules/ops/recipes/ (tsc 0 erreur)
+  'dette-6',
 ]);
 
 function loadChecked() {

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * src/components/recipes — Public API
+ * src/modules/ops/recipes — Public API
  */
 
 export { RecipeCostBadge } from './RecipeCostBadge';

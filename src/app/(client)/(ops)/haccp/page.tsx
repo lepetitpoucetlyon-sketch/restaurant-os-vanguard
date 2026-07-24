@@ -28,9 +28,9 @@ import {
     SanitaryReport,
 } from "@modules/compliance/haccp/components";
 
-import { CleaningPlan } from "@/components/compliance/CleaningPlan";
-import { DLCTracker } from "@/components/compliance/DLCTracker";
-import { NonConformityForm } from "@/components/compliance/NonConformityForm";
+import { CleaningPlan } from "@/modules/compliance/components/CleaningPlan";
+import { DLCTracker } from "@/modules/compliance/components/DLCTracker";
+import { NonConformityForm } from "@/modules/compliance/components/NonConformityForm";
 import { PlanMaitriseSanitaire } from "@/domain/services/PlanMaitriseSanitaire";
 import { useTenant } from "@/hooks";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
