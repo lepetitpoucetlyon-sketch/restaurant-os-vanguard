@@ -5,4 +5,3 @@
  */
 
 export * from './MonkeyChaos';
-export * from './MonkeyChaosAgent';

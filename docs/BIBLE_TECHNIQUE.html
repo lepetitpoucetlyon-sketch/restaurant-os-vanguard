@@ -3750,7 +3750,7 @@ const CHECKLIST = [
       { id:'dette-5', text:'Découper staff/page.tsx (803), reservations/page.tsx (762), inventory/page.tsx (757)', sub:'Même pattern que dette-4 — sortir les sous-vues des pages route vers des dossiers _components/ dédiés', p:'P3' },
       { id:'dette-6', text:'Rapatrier components/compliance/ + components/recipes/ vers modules/', sub:'Règle CLAUDE.md : tout code pilier va dans modules/<pilier>/. compliance→modules/compliance, recipes→modules/ops', p:'P2' },
       { id:'dette-7', text:'Rapatrier components/crm/ + components/reservations/ vers modules/commerce/', sub:'Code métier commerce encore à la racine components/ — le déplacer + mettre à jour les imports + tsc vérifié', p:'P3' },
-      { id:'dette-8', text:'Clarifier le nommage domain/agent vs agents vs agency (PAS des doublons) + code mort', sub:'Investigation faite : agent=outils IA Gemini, agency=Hermes/Zeus, agents=MonkeyChaos (import dynamique OracleEngine). Renommer pour lever la confusion + supprimer MonkeyChaosAgent.ts (0 import) — attention barrel auto-généré', p:'P3' },
+      { id:'dette-8', text:'Clarifier le nommage domain/agent vs agents vs agency + supprimer le code mort', sub:'FAIT : MonkeyChaosAgent.ts (0 import) supprimé + domain/agents/ renommé domain/chaos/ (lève la confusion avec agent=outils Gemini et agency=Hermes/Zeus). Import dynamique OracleEngine corrigé. tsc 0 erreur', p:'P3' },
     ]
   },
   { divider: true, label: '🚀 Plan d\'Implémentation (T00–T51)', sub: 'Les 52 tickets du plan d\'implémentation — socle, conformité fiscale, mobilité, revenu, pilotage et plateforme. Tous implémentés et committés.' },
@@ -4668,7 +4668,7 @@ const TUTORIALS = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v32'; // v32 = dette-7 rapatriement reservations+crm DONE // v31 = dette-6 rapatriement compliance+recipes DONE + dette-8 reformulé // v30 = section Dette Technique & Qualité
+const STORE_KEY = 'ros_checklist_v33'; // v33 = dette-8 DONE (code mort + renommage chaos) + dette-4 part1 (helpers finance) // v32 = dette-7 rapatriement reservations+crm DONE // v31 = dette-6 rapatriement compliance+recipes
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5068,6 +5068,8 @@ const DONE_BY_AGENTS = new Set([
   'dette-6',
   // dette-7 — components/reservations/ → modules/commerce/reservations/components/ + components/crm/ → modules/commerce/marketing/components/crm/ (tsc 0 erreur)
   'dette-7',
+  // dette-8 — MonkeyChaosAgent.ts (code mort) supprimé + domain/agents/ renommé domain/chaos/ (lève la confusion agent/agents) + import dynamique OracleEngine corrigé (tsc 0 erreur)
+  'dette-8',
 ]);
 
 function loadChecked() {
