@@ -2,6 +2,10 @@
 
 > 📐 Pour une analyse complète (flux NF525, RAG, modèle de données, audit de dette), voir **`ARCHITECTURE.md`**.
 
+## Coordination multi-sessions (OBLIGATOIRE)
+
+**Au démarrage de chaque session**, lire `.claude/sessions.md` et y ajouter ta ligne (nom court, périmètre de fichiers, date). Avant de modifier un fichier, vérifier qu'aucune autre session active ne travaille sur le même périmètre. En cas de collision → **demander à l'utilisateur** avant de toucher le fichier. À la fin du travail, passer ton status à `terminée`.
+
 ## Architecture
 
 Système multi-tenant en **piliers** (Core, Ops, Finance, Human, Commerce, Logistics, Compliance, Sovereign).
