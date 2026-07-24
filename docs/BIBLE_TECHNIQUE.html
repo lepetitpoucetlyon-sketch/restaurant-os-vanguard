@@ -1824,6 +1824,23 @@ POST /v1/mdm/command       <span class="c-muted">→ remote screen observe</span
 .cl-opt{background:rgba(0,214,143,.08);color:var(--success)}
 .cl-reset{padding:6px 14px;font-size:.7rem;font-family:var(--code);border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer}
 .cl-reset:hover{border-color:var(--danger);color:var(--danger)}
+/* ── Tutorial dropdowns ── */
+.cl-tuto-toggle{display:inline-flex;align-items:center;gap:4px;margin-top:6px;padding:3px 10px;border-radius:12px;font-size:.64rem;font-weight:700;letter-spacing:.04em;cursor:pointer;border:1px solid var(--accent);color:var(--accent);background:var(--accent-dim);transition:all .15s;user-select:none}
+.cl-tuto-toggle:hover{background:var(--accent);color:#fff}
+.cl-tuto-toggle.open{background:var(--accent);color:#fff}
+.cl-tuto-content{display:none;margin-top:8px;padding:10px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);animation:tutoSlide .2s ease}
+.cl-tuto-toggle.open+.cl-tuto-content{display:block}
+@keyframes tutoSlide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.cl-tuto-step{display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:background .1s}
+.cl-tuto-step:hover{background:var(--accent-dim)}
+.cl-tuto-step.step-done{opacity:.55}
+.cl-tuto-step.step-done .cl-tuto-step-text{text-decoration:line-through;color:var(--muted)}
+.cl-tuto-check{width:14px;height:14px;border:1.5px solid var(--border-hi);border-radius:3px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--success);transition:all .15s}
+.cl-tuto-step.step-done .cl-tuto-check{background:var(--success-dim);border-color:var(--success)}
+.cl-tuto-step-text{font-size:.68rem;color:var(--text);line-height:1.4}
+.cl-tuto-step-sub{font-size:.62rem;color:var(--muted);margin-top:1px;font-family:var(--code);line-height:1.35}
+.cl-tuto-header{font-size:.66rem;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase}
+.cl-tuto-progress{font-size:.60rem;font-family:var(--code);color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
 </style>
 <!-- ─── 16 UI CENSUS ─── -->
 <section class="chapter" id="ui-census">
@@ -4213,8 +4230,316 @@ const EXPL = {
   'impl-t51':"Si Gemini ou le RAG tombe, l'app continue de fonctionner en mode dégradé avec un message clair — aucune fonctionnalité bloquée.",
 };
 
+// ─── TUTORIALS — Guides pas-à-pas pour les 33 items restants ─────────────────
+const TUTORIALS = {
+  'res-2': [
+    {t:'Ouvrir Google Business Profile Manager',s:'business.google.com/dashboard → sélectionner le restaurant'},
+    {t:'Aller dans Infos > Liens',s:'Section "Site web" ou "Liens de rendez-vous"'},
+    {t:'Ajouter l\'URL du widget de réservation',s:'Coller https://widget.restaurant-os.app/{slug}/book'},
+    {t:'Choisir le type "Réserver"',s:'Google affiche un bouton "Réserver" visible dans Maps et Search'},
+    {t:'Vérifier sur Google Maps mobile',s:'Rechercher le restaurant → le bouton doit apparaître sous la fiche'},
+  ],
+  'res-4': [
+    {t:'Créer un compte Twilio ou Vonage',s:'twilio.com/try-twilio — vérification téléphone + email'},
+    {t:'Obtenir un numéro SMS français (+33)',s:'Console Twilio → Phone Numbers → Buy → France → SMS capable'},
+    {t:'Ajouter les clés API dans .env.local',s:'TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER'},
+    {t:'Implémenter le cron de rappel',s:'src/app/api/cron/sms-reminder/route.ts — chercher les réservations à J+1 à 10h'},
+    {t:'Template du SMS',s:'"Rappel : votre réservation chez {nom} demain à {heure} pour {couverts} pers. Annuler : {lien}"'},
+    {t:'Ajouter le consentement SMS dans le widget',s:'Checkbox "Recevoir un rappel par SMS" → customer.smsReminder = true'},
+    {t:'Tester en sandbox Twilio',s:'Envoyer à un numéro vérifié → vérifier réception et contenu'},
+  ],
+  'res-11': [
+    {t:'Vérifier le prérequis : 10+ restaurants actifs sur la plateforme',s:'Actions Center exige un volume minimum pour valider un partenaire'},
+    {t:'Accéder à Actions Center',s:'partneractions.google.com → "Get Started"'},
+    {t:'Remplir le formulaire de candidature partenaire',s:'Catégorie "Reservations", pays France, type "Aggregator"'},
+    {t:'Préparer les feeds requis',s:'merchants.json (liste restaurants), services.json (types de tables), availability.json (créneaux)'},
+    {t:'Implémenter le Booking Server REST',s:'Endpoint POST /bookings/create et POST /bookings/cancel — spec Google'},
+    {t:'Soumettre pour validation Google',s:'Délai ~4 semaines — Google teste les feeds + le booking server'},
+    {t:'Activer restaurant par restaurant',s:'Chaque restaurant doit être associé à son listing Google Maps via placeId'},
+  ],
+  'res-arch-2': [
+    {t:'Créer le template Next.js vitrine',s:'src/app/(vitrine)/[slug]/page.tsx — SSR avec données Nexus tenant'},
+    {t:'Implémenter les sections : hero, menu, horaires, carte, bouton réserver',s:'Composants réutilisables avec props depuis tenantConfig'},
+    {t:'Ajouter la personnalisation dans /settings',s:'Onglet "Site vitrine" → couleurs (primaire, accent), logo upload, description'},
+    {t:'Auto-sync horaires depuis GBP',s:'Si ai-3 est fait : sync bidirectionnelle horaires tenant ↔ Google Business Profile'},
+    {t:'Configurer le sous-domaine wildcard',s:'{slug}.restaurant-os.app → middleware résout le tenant et sert la vitrine'},
+    {t:'SEO : meta tags, og:image, sitemap.xml',s:'generateMetadata() avec nom restaurant, description, photo hero'},
+    {t:'Tester sur mobile (responsive)',s:'Le template doit être 100% mobile-first — 80% du trafic restaurant est mobile'},
+  ],
+  'res-arch-3': [
+    {t:'Le restaurateur achète/possède son domaine (ex: bistro-martin.com)',s:'OVH, Namecheap, Google Domains — ~12€/an'},
+    {t:'Ajouter un CNAME dans la zone DNS du domaine',s:'CNAME : www → cname.vercel-dns.com (ou proxy Cloudflare)'},
+    {t:'Configurer le domaine dans Vercel',s:'Dashboard Vercel → Projet → Settings → Domains → Add "bistro-martin.com"'},
+    {t:'Vérifier le certificat SSL automatique',s:'Vercel génère un certificat Let\'s Encrypt en ~2 minutes'},
+    {t:'Ajouter le champ customDomain dans tenantConfig',s:'tenantConfig.vitrine.customDomain = "bistro-martin.com"'},
+    {t:'Tester : bistro-martin.com doit servir la vitrine du tenant',s:'Le middleware lit customDomain → résout le tenantId → sert la vitrine SSR'},
+  ],
+  'fin-3': [
+    {t:'Accéder à la sandbox Powens',s:'developer.biapi.pro → Create Account (gratuit pour sandbox)'},
+    {t:'Créer une application dans le dashboard Powens',s:'Dashboard → Applications → New → Nom: "Restaurant OS" → Catégorie: "Accounting"'},
+    {t:'Récupérer CLIENT_ID et CLIENT_SECRET',s:'Page de l\'application → onglet Credentials → copier les deux valeurs'},
+    {t:'Mettre à jour .env.local',s:'POWENS_CLIENT_ID=xxx et POWENS_CLIENT_SECRET=yyy (remplacer les placeholders)'},
+    {t:'Configurer le webhook URL',s:'Dashboard Powens → Webhooks → URL: https://api.restaurant-os.app/api/finance/bank/webhook'},
+    {t:'Tester la connexion en sandbox',s:'Sandbox fournit des banques fictives — tester le flow OAuth complet'},
+    {t:'Valider que PowensProvider.ts se connecte avec les vrais credentials',s:'Lancer l\'app → /finance → "Connecter ma banque" → choisir une banque sandbox'},
+  ],
+  'hac-6': [
+    {t:'Choisir le matériel : sonde Bluetooth (Testo 160) ou WiFi (Rotronic)',s:'BLE = moins cher (~80€/sonde) mais portée limitée — WiFi = plus stable pour les chambres froides'},
+    {t:'Commander 2 sondes pour test pilote',s:'1 frigo positif + 1 chambre froide — tester avant déploiement complet'},
+    {t:'Implémenter le connecteur BLE WebAPI',s:'navigator.bluetooth.requestDevice({filters: [{services: ["health_thermometer"]}]})'},
+    {t:'Alternative WiFi : gateway HTTP locale',s:'La sonde envoie en HTTP à un serveur local → relayé vers Nexus via Cloud Function'},
+    {t:'Mapper les lectures sur HACCPSensorReading dans Nexus',s:'Remplacer les données Simulacra par les vraies lectures — même schéma Zod'},
+    {t:'Configurer les seuils d\'alerte par zone',s:'Frigo positif: 0-4°C, chambre froide: -18°C ±2°C — alerte push si hors seuil'},
+    {t:'Tester le cycle complet : lecture → Nexus → alerte push',s:'Mettre une sonde hors seuil → vérifier la notification push côté chef'},
+  ],
+  'rh-9': [
+    {t:'Vérifier si la paie est internalisée ou externalisée',s:'Si Silae/PayFit gère la paie, LEUR DSN suffit — pas besoin de la générer'},
+    {t:'Si paie interne : étudier la norme DSN (net-entreprises.fr)',s:'Format XML normalisé — déclaration mensuelle des salaires, cotisations, événements'},
+    {t:'Implémenter le générateur XML DSN',s:'src/modules/human/domain/DSNGenerator.ts — blocs S10 (émetteur) → S20 (entreprise) → S21 (individu)'},
+    {t:'Intégrer les données pointage + congés',s:'Heures travaillées, absences, primes — depuis les données RH Nexus'},
+    {t:'Configurer le portail net-entreprises.fr',s:'Créer un compte déclarant → enregistrer le SIRET → activer la DSN mensuelle'},
+    {t:'Tester avec une DSN "néant" (zéro salarié)',s:'Premier envoi de test → vérifier le retour de conformité'},
+    {t:'Automatiser l\'envoi mensuel via API',s:'Cron le 5 du mois → générer XML → POST api.net-entreprises.fr/dsn'},
+  ],
+  'com-5': [
+    {t:'Créer un compte Twilio ou Vonage',s:'twilio.com ou vonage.com — vérification identité obligatoire pour SMS France'},
+    {t:'Enregistrer un Sender ID "RESTAURANT"',s:'Twilio → Messaging → Alphanumeric Sender ID → "RESTAURANT" (ou nom du resto)'},
+    {t:'Ajouter les clés API dans .env.local',s:'TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN + numéro ou Sender ID'},
+    {t:'Implémenter le service d\'envoi SMS',s:'src/modules/commerce/domain/SmsService.ts — client.messages.create({body, to, from})'},
+    {t:'Ajouter le consentement SMS séparé (RGPD)',s:'customer.smsConsent — opt-in distinct de l\'email, avec date de consentement'},
+    {t:'Créer l\'UI de campagne SMS dans /marketing',s:'Template SMS (160 chars max), sélection segment, envoi bulk avec throttle'},
+    {t:'Tester en sandbox',s:'Twilio permet d\'envoyer à des numéros vérifiés en mode test (gratuit)'},
+  ],
+  'com-sms-1': [
+    {t:'Créer un compte Brevo (ex-Sendinblue)',s:'brevo.com → Plan Starter (~19€/mois) inclut SMS + email marketing'},
+    {t:'Générer une API Key Brevo',s:'Paramètres → Clés API → Créer → copier la clé v3'},
+    {t:'Ajouter dans .env.local',s:'BREVO_API_KEY=xkeysib-... — une seule clé pour email + SMS'},
+    {t:'Implémenter le service SMS Brevo',s:'POST api.brevo.com/v3/transactionalSMS/sms — {sender, recipient, content}'},
+    {t:'Ajouter le champ smsConsent au modèle Customer',s:'customer.smsConsent: boolean + customer.smsConsentDate: Date (preuve RGPD)'},
+    {t:'Checkbox opt-in dans le widget réservation',s:'"J\'accepte de recevoir des offres par SMS" — coché = false par défaut'},
+    {t:'Intégrer dans EmailCampaign.tsx : onglet SMS',s:'Nouveau canal dans la campagne → template SMS 160 chars → envoi bulk filtré par smsConsent=true'},
+    {t:'Logger chaque envoi dans CommunicationLog',s:'type:"sms", recipient, content, status, timestamp — traçabilité RGPD'},
+  ],
+  'com-social-1': [
+    {t:'Créer un compte Meta Business',s:'business.facebook.com → créer un compte Business Manager'},
+    {t:'Activer WhatsApp Business API',s:'developers.facebook.com → My Apps → Create App → Business → WhatsApp'},
+    {t:'Obtenir un numéro WhatsApp Business',s:'Meta fournit un numéro test — pour la prod, acheter un numéro dédié (~15€/mois)'},
+    {t:'Créer les templates de messages pré-approuvés',s:'Template "confirmation_resa" et "rappel_24h" — soumis à validation Meta (~24h)'},
+    {t:'Ajouter les clés dans .env.local',s:'WHATSAPP_TOKEN, WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_BUSINESS_ACCOUNT_ID'},
+    {t:'Implémenter le service WhatsApp',s:'POST graph.facebook.com/v18.0/{phoneId}/messages — template + paramètres dynamiques'},
+    {t:'Ajouter l\'opt-in WhatsApp dans le widget',s:'Checkbox "Recevoir mes confirmations par WhatsApp" → customer.whatsappConsent'},
+    {t:'Tester : réserver → confirmation WhatsApp reçue',s:'En sandbox Meta, le message arrive sur le numéro test vérifié'},
+  ],
+  'com-social-2': [
+    {t:'Créer une page LinkedIn Company',s:'linkedin.com/company/setup — nom "Restaurant OS" ou le nom du restaurant'},
+    {t:'Accéder à LinkedIn Campaign Manager',s:'linkedin.com/campaignmanager → créer un compte publicitaire'},
+    {t:'Configurer l\'audience B2B',s:'Ciblage : fonction "RH" + "Office Manager", taille entreprise >50, zone géo locale'},
+    {t:'Créer le contenu Sponsored Content',s:'Visuel : photo privatisation + texte "Séminaires et événements d\'entreprise — privatisation sur mesure"'},
+    {t:'Configurer le budget et la durée',s:'Budget recommandé : 20-50€/jour, durée 2 semaines, objectif "Lead generation"'},
+    {t:'Créer un formulaire Lead Gen natif LinkedIn',s:'Champs : entreprise, nombre de personnes, date souhaitée, email — pré-remplis par LinkedIn'},
+    {t:'Connecter les leads à CRM via webhook',s:'LinkedIn → Zapier ou webhook direct → POST /api/crm/leads → fiche prospect dans Nexus'},
+  ],
+  'ai-3': [
+    {t:'Activer l\'API Google Business Profile',s:'console.cloud.google.com → Bibliothèque → "My Business Business Information API" → Activer'},
+    {t:'Configurer OAuth 2.0 pour GBP',s:'Credentials → OAuth Client ID → Web App → redirect URI: /api/auth/callback/google'},
+    {t:'Implémenter le flow OAuth côté serveur',s:'src/app/api/google/connect/route.ts — scope: business.manage, stocker refresh_token dans Nexus'},
+    {t:'Sync horaires : tenant → GBP',s:'PATCH accounts/{accountId}/locations/{locationId} — regularHours depuis tenantConfig.schedule'},
+    {t:'Récupérer et afficher les avis Google',s:'GET accounts/{accountId}/locations/{locationId}/reviews → stockage dans Nexus marketing/reviews'},
+    {t:'Réponse IA aux avis via Gemini',s:'Prompt : "Réponds professionnellement à cet avis en français. Ton: chaleureux." → brouillon → validation manager'},
+    {t:'Posts automatiques',s:'Nouveau plat/événement dans Restaurant OS → POST locations/{locationId}/localPosts → visible sur Maps'},
+    {t:'Demander l\'accès avancé si nécessaire (goo-7)',s:'Quota standard = 10 requêtes/jour — accès avancé = illimité, requis pour >5 restaurants'},
+  ],
+  'mdm-1': [
+    {t:'Accéder à Apple Business Manager',s:'business.apple.com → "S\'inscrire" (D-U-N-S obligatoire)'},
+    {t:'Préparer les documents : SIRET, D-U-N-S, pièce d\'identité du dirigeant',s:'Le D-U-N-S se demande gratuitement sur dnb.com — délai ~5 jours ouvrés'},
+    {t:'Compléter l\'inscription ABM',s:'Nom d\'organisation, adresse, numéro Apple ID du contact autorisé'},
+    {t:'Activer la gestion des appareils (Device Management)',s:'ABM → Paramètres → Gestion des appareils → Activer'},
+    {t:'Ajouter le serveur MDM (Mosyle) dans ABM',s:'ABM → Paramètres → Serveurs MDM → Ajouter → Télécharger le certificat Mosyle'},
+    {t:'Vérifier que l\'organisation est validée par Apple',s:'Statut "Vérifié" dans ABM — délai ~48h après inscription'},
+  ],
+  'mdm-2': [
+    {t:'Créer un compte Mosyle Business',s:'mosyle.com → Free Trial (100 appareils gratuits pour les petites flottes)'},
+    {t:'Générer le certificat APNs (Apple Push Notification)',s:'Mosyle → Organization → Apple Push Certificate → suivre les instructions'},
+    {t:'Télécharger le certificat MDM pour ABM',s:'Mosyle → Organization → MDM Server Token → Download'},
+    {t:'Lier Mosyle à ABM',s:'ABM → Serveurs MDM → Upload du token Mosyle → "Par défaut" si seul serveur'},
+    {t:'Configurer le Automated Device Enrollment (ADE)',s:'ABM → Appareils → Attribuer au serveur Mosyle → les iPads s\'enrôlent automatiquement au reset'},
+    {t:'Enrôler un premier iPad de test',s:'Réinitialiser l\'iPad → il s\'enrôle dans Mosyle via ADE → vérifier dans la console Mosyle'},
+    {t:'Installer le profil Wi-Fi + app Restaurant OS',s:'Mosyle → Profils → Wi-Fi → SSID du restaurant. Apps → Restaurant OS (via VPP ou lien web)'},
+  ],
+  'mdm-4': [
+    {t:'Activer le mode Supervised sur l\'iPad via ABM/ADE',s:'Un iPad ADE est automatiquement supervisé au reset — requis pour Single App Mode'},
+    {t:'Créer un profil de restriction dans Mosyle',s:'Mosyle → Profils → Restrictions → Bloquer : App Store, Safari, Réglages, multitâche'},
+    {t:'Activer Single App Mode (Kiosk)',s:'Mosyle → Profils → Single App Mode → Bundle ID de Restaurant OS'},
+    {t:'Configurer le code de sortie du mode Kiosk',s:'PIN à 6 chiffres pour sortir du mode plein écran (maintenance uniquement)'},
+    {t:'Tester le redémarrage de l\'iPad',s:'Éteindre → rallumer → l\'iPad doit démarrer directement sur Restaurant OS'},
+    {t:'Configurer la luminosité et veille automatique',s:'Mosyle → Profils → Display → Brightness: 80%, Auto-Lock: Never (pour POS/KDS)'},
+  ],
+  'mdm-5': [
+    {t:'Identifier l\'événement Stripe à intercepter',s:'customer.subscription.deleted ou customer.subscription.updated (status=canceled)'},
+    {t:'Ajouter la logique dans le webhook billing existant',s:'src/app/api/billing/webhook/route.ts → case "customer.subscription.deleted"'},
+    {t:'Récupérer les appareils du tenant depuis Mosyle',s:'GET api.mosyle.com/v2/devices?tags={tenantId} → liste des device IDs'},
+    {t:'Appeler Mosyle.lockDevice() pour chaque appareil',s:'POST api.mosyle.com/v2/devices/{id}/commands → {"command":"DeviceLock","message":"Abonnement expiré"}'},
+    {t:'Enregistrer l\'action dans empireAudit',s:'action: "MDM_DEVICE_LOCKED", details: {tenantId, deviceCount, reason: "subscription_deleted"}'},
+    {t:'Implémenter le unlock automatique à la réactivation',s:'customer.subscription.updated (status=active) → Mosyle.unlockDevice() → audit'},
+    {t:'Tester le flow complet en sandbox Stripe',s:'Créer un abonnement test → annuler → vérifier le lock → réactiver → vérifier le unlock'},
+  ],
+  'mdm-6': [
+    {t:'Télécharger TeamViewer QuickSupport sur l\'iPad',s:'App Store → "TeamViewer QuickSupport" (gratuit) — ne nécessite PAS de compte'},
+    {t:'Créer un compte TeamViewer Corporate',s:'teamviewer.com — plan Remote Access (~25€/mois) ou Business (~50€/mois)'},
+    {t:'Déployer QuickSupport via Mosyle sur tous les iPads bêta',s:'Mosyle → Apps → Ajouter QuickSupport → Attribuer au groupe "Bêta"'},
+    {t:'Configurer l\'accès non supervisé (optionnel)',s:'Sur l\'iPad : QuickSupport → Paramètres → Accès non supervisé → lier au compte TeamViewer'},
+    {t:'Former l\'équipe support au workflow',s:'Client appelle → ouvrir TeamViewer → entrer l\'ID affiché sur l\'iPad du client → prendre la main'},
+    {t:'Tester une session de support complète',s:'Se connecter à un iPad bêta → naviguer dans Restaurant OS → vérifier le framerate et la latence'},
+  ],
+  'goo-6': [
+    {t:'Vérifier le prérequis : 10+ restaurants actifs',s:'Actions Center refuse les candidatures < 10 restaurants — attendre le seuil'},
+    {t:'Accéder à Google Actions Center',s:'partneractions.google.com → Se connecter avec le compte Google du projet'},
+    {t:'Remplir le formulaire de candidature',s:'Type: "Aggregator", Catégorie: "Reservations", Pays: France'},
+    {t:'Préparer l\'infrastructure technique',s:'3 feeds JSON (merchants, services, availability) + 1 Booking Server REST'},
+    {t:'Soumettre et attendre la validation Google',s:'~4-6 semaines de review — Google teste les endpoints et la qualité des données'},
+    {t:'Activer les restaurants un par un',s:'Mapper chaque restaurant à son Google Maps placeId'},
+  ],
+  'goo-7': [
+    {t:'Accéder à Google Cloud Console',s:'console.cloud.google.com → sélectionner le projet Restaurant OS'},
+    {t:'Activer l\'API "My Business Business Information"',s:'Bibliothèque → chercher "Business Profile" → Activer'},
+    {t:'Vérifier le quota actuel',s:'Quotas → API Business Profile → le quota standard est très limité (~10 req/jour)'},
+    {t:'Remplir le formulaire de demande d\'accès avancé',s:'APIs & Services → Business Profile → "Request advanced access" → justifier le volume'},
+    {t:'Fournir les informations requises',s:'URL de l\'app, nombre de locations gérées, cas d\'usage (sync horaires + réponse avis)'},
+    {t:'Attendre la validation Google',s:'Délai ~2 semaines — Google vérifie le cas d\'usage et la légitimité'},
+    {t:'Vérifier les nouveaux quotas',s:'Une fois approuvé, les quotas passent à ~6000 req/jour'},
+  ],
+  'goo-9': [
+    {t:'Lire la spec Google Reserve feeds',s:'developers.google.com/maps-booking/reference/rest-api-v3/feeds'},
+    {t:'Implémenter merchants.json',s:'Liste des restaurants : merchant_id, name, address, phone, url, category → depuis Nexus fleet'},
+    {t:'Implémenter services.json',s:'Types de réservation par restaurant : service_id, name (Dîner, Déjeuner), price_type'},
+    {t:'Implémenter availability.json',s:'Créneaux disponibles par service : slot_time, spots_open, duration — depuis reservationConfig'},
+    {t:'Héberger les feeds en statique ou API',s:'/api/google/feeds/{type}.json — régénérés toutes les 15 minutes via cron'},
+    {t:'Valider le format avec l\'outil Google',s:'Actions Center → Test Tools → Feed Validator → upload chaque feed'},
+  ],
+  'goo-10': [
+    {t:'Lire la spec Booking Server',s:'developers.google.com/maps-booking/reference/rest-api-v3/booking-server'},
+    {t:'Implémenter POST /bookings (CreateBooking)',s:'Google envoie : slot, party_size, user_info → créer la réservation dans Nexus → retourner booking_id'},
+    {t:'Implémenter POST /bookings/{id}/cancel',s:'Google appelle quand l\'utilisateur annule depuis Maps → mettre status=cancelled dans Nexus'},
+    {t:'Implémenter GET /bookings/{id}',s:'Google vérifie le statut — retourner la réservation avec status, slot, party_size'},
+    {t:'Authentification HMAC',s:'Google signe les requêtes — vérifier le header X-GOOG-API-KEY avec la clé partagée'},
+    {t:'Tester avec l\'outil Booking Server Test de Google',s:'Actions Center → Test Tools → Booking Server Test → run tous les scénarios'},
+  ],
+  'leg-5': [
+    {t:'Identifier la structure Init\'ialis Lyon',s:'initialisrhonealpes.fr — réseau Init\'ialis pour les entreprises innovantes'},
+    {t:'Vérifier l\'éligibilité',s:'Entreprise <5 ans, projet innovant, implantée en Auvergne-Rhône-Alpes'},
+    {t:'Préparer le dossier de candidature',s:'Business plan, prévisionnel financier 3 ans, présentation du produit, CV fondateur'},
+    {t:'Rédiger le pitch de présentation (5 min)',s:'Problème (gestion restaurant fragmentée) → Solution (OS unifié) → Marché → Traction → Besoin financier'},
+    {t:'Soumettre le dossier en ligne',s:'Formulaire sur le site Init\'ialis → joindre tous les documents'},
+    {t:'Passer le comité d\'agrément',s:'Présentation orale ~20 min devant un jury de professionnels — délai ~2 mois après soumission'},
+    {t:'Si accepté : signer le contrat de prêt d\'honneur',s:'Montant : 5k-50k€ à taux 0% — remboursement sur 2 à 5 ans sans garantie personnelle'},
+  ],
+  'leg-6': [
+    {t:'Vérifier l\'éligibilité JEI (Jeune Entreprise Innovante)',s:'Entreprise <8 ans, indépendante, 15% minimum de dépenses en R&D'},
+    {t:'Lister les dépenses R&D éligibles',s:'Salaires développeurs, coûts serveurs liés au dev, sous-traitance R&D, brevets'},
+    {t:'Prendre RDV avec l\'expert-comptable',s:'L\'évaluation JEI/CIR doit être validée par un comptable — risque fiscal si mal déclaré'},
+    {t:'Préparer le dossier technique CIR',s:'Description des travaux de R&D, état de l\'art, verrous technologiques levés'},
+    {t:'Déposer la demande JEI auprès de la DGFIP',s:'Formulaire de rescrit JEI → réponse sous 3 mois → exonérations sociales + IS'},
+    {t:'Déclarer le CIR dans la liasse fiscale',s:'Formulaire 2069-A-SD → montant du crédit d\'impôt → remboursement immédiat pour les PME'},
+    {t:'Potentiel : ~5 000€+ d\'économies annuelles',s:'JEI = exonération charges patronales sur les chercheurs + CIR = 30% des dépenses R&D'},
+  ],
+  'mcc-bill-1': [
+    {t:'Identifier les données mockées dans MCCTreasury',s:'MRR, ARR, marge, procurement rows, stock transfers — tout est hardcodé'},
+    {t:'Créer l\'endpoint /api/admin/fleet/treasury',s:'Agrège les données Stripe (subscriptions, invoices, charges) pour tous les tenants'},
+    {t:'Récupérer le MRR réel depuis Stripe',s:'stripe.subscriptions.list({status:"active"}) → sum(items.price.unit_amount × quantity)'},
+    {t:'Calculer les métriques : ARR, churn, ARPU, LTV',s:'ARR = MRR×12, churn = cancelled/total, ARPU = MRR/customers, LTV = ARPU/churn'},
+    {t:'Remplacer les données hardcodées par les vraies valeurs',s:'MCCTreasury.tsx → useEffect fetch /api/admin/fleet/treasury → setState'},
+    {t:'Ajouter un graphique MRR historique',s:'Stocker un snapshot MRR mensuel dans Nexus mcc/metrics → afficher la courbe'},
+    {t:'Tester avec des abonnements sandbox Stripe',s:'Créer 3-5 abonnements test → vérifier que le MRR s\'affiche correctement dans le dashboard'},
+  ],
+  'mcc-mdm-1': [
+    {t:'Localiser le webhook Stripe billing',s:'src/app/api/billing/webhook/route.ts — gérer customer.subscription.deleted'},
+    {t:'Récupérer le tenantId depuis l\'événement Stripe',s:'subscription.metadata.tenantId ou customer.metadata.tenantId'},
+    {t:'Appeler l\'API Mosyle pour récupérer les appareils du tenant',s:'GET api.mosyle.com/v2/devices → filtrer par tag ou groupe = tenantId'},
+    {t:'Verrouiller chaque appareil via Mosyle',s:'POST /v2/devices/{id}/commands → DeviceLock avec message "Abonnement suspendu"'},
+    {t:'Mettre à jour tenantConfig.status.licenceStatus = "LOCKED"',s:'Le SovereignLockout bannière s\'affiche si le restaurateur accède à l\'app web'},
+    {t:'Enregistrer dans empireAudit',s:'action: "KILL_SWITCH_ACTIVATED", severity: "critical", tenantId, deviceIds'},
+    {t:'Tester le flow complet',s:'Sandbox Stripe → annuler un abo → vérifier lock iPad + bannière app + audit trail'},
+  ],
+  'mcc-mdm-2': [
+    {t:'Localiser les TODO dans MDMPanel.tsx',s:'Lignes ~227 et ~251 — commentaires "TODO: real Mosyle API call"'},
+    {t:'Obtenir les credentials API Mosyle',s:'Console Mosyle → Organization → API → Générer un token d\'accès'},
+    {t:'Ajouter dans .env.local du MCC',s:'MOSYLE_API_TOKEN=... MOSYLE_TENANT_DOMAIN=...'},
+    {t:'Implémenter getDevices() réel',s:'GET api.mosyle.com/v2/devices → mapper vers le type MDMDevice existant'},
+    {t:'Implémenter sendCommand() réel',s:'POST api.mosyle.com/v2/devices/{id}/commands → Lock, Unlock, Restart, Wipe'},
+    {t:'Remplacer les données mock par les appels réels',s:'MDMPanel.tsx — if (!process.env.MOSYLE_API_TOKEN) → fallback mock, sinon appel réel'},
+    {t:'Tester : lister les iPads enrôlés dans Mosyle depuis le MCC',s:'Dashboard MCC → onglet MDM → les appareils réels doivent apparaître'},
+  ],
+  'mcc-mdm-3': [
+    {t:'Créer le schéma FleetDevice dans Nexus',s:'mcc/devices/{deviceId} : tenantId, serialNumber, model, osVersion, lastCheckin, status'},
+    {t:'Sync périodique Mosyle → Nexus',s:'Cron toutes les 15min : GET tous les devices Mosyle → upsert dans mcc/devices'},
+    {t:'Créer le composant FleetDeviceInventory',s:'Tableau croisé : colonne tenant, colonnes device model/OS/lastCheckin/status'},
+    {t:'Ajouter les filtres',s:'Filtre par tenant, par modèle (iPad Pro/Air/mini), par statut (active/locked/offline)'},
+    {t:'Ajouter la colonne "Dernière activité"',s:'lastCheckin < 24h = vert, < 72h = orange, > 72h = rouge — alerter si un device est silencieux'},
+    {t:'Monter dans le MCC : onglet "Flotte Devices"',s:'Layout MCC → nouvel onglet entre "MDM" et "Intelligence"'},
+  ],
+  'mcc-billing-adv-3': [
+    {t:'Créer le schéma APIKey dans Nexus',s:'tenants/{tenantId}/apiKeys/{keyId} : name, hashedKey, scopes[], expiresAt, createdBy, revokedAt'},
+    {t:'Endpoint tenant : POST /api/settings/api-keys',s:'Générer crypto.randomUUID() → hasher SHA-256 → stocker le hash → retourner la clé en clair UNE SEULE FOIS'},
+    {t:'Endpoint tenant : DELETE /api/settings/api-keys/{id}',s:'Soft-delete : revokedAt = now() → la clé ne fonctionne plus'},
+    {t:'Middleware d\'authentification API',s:'Header X-API-Key → hash → chercher dans apiKeys → vérifier scopes et expiration'},
+    {t:'Endpoint MCC : GET /api/admin/fleet/api-keys/{tenantId}',s:'Le MCC peut lister et révoquer les clés d\'un tenant (requireFleetAdmin)'},
+    {t:'UI tenant : page /settings/api-keys',s:'Liste des clés actives, bouton "Créer", copier la clé, révoquer'},
+    {t:'UI MCC : section dans TenantDetailsPanel',s:'Vue lecture des clés API du tenant + bouton "Révoquer" (audit trail)'},
+    {t:'Documenter l\'API publique',s:'Swagger/OpenAPI auto-généré ou page /docs avec les endpoints disponibles pour les intégrateurs'},
+  ],
+  'mcc-support-ai-1': [
+    {t:'Définir le schéma SupportTicket',s:'mcc/tickets/{id} : tenantId, subject, screenshots[], aiDiagnosis, status, assignedTo, priority'},
+    {t:'Créer l\'endpoint de soumission ticket',s:'POST /api/support/tickets — le tenant envoie sujet + captures d\'écran (upload S3/GCS)'},
+    {t:'Implémenter l\'analyse IA des screenshots',s:'Gemini Vision : "Analyse cette capture d\'écran de Restaurant OS et identifie le problème" → diagnostic JSON'},
+    {t:'Générer le brouillon de réponse',s:'Prompt : "Rédige une réponse de support L1 en français pour ce problème: {diagnosis}"'},
+    {t:'Classifier la priorité automatiquement',s:'Keywords : "paiement"/"fiscal" = P1, "affichage" = P3, "erreur" = P2 — override possible'},
+    {t:'Dashboard MCC : liste des tickets avec diagnostic IA',s:'Tableau : tenant, sujet, priorité IA, statut, bouton "Valider le brouillon" ou "Rédiger manuellement"'},
+    {t:'Boucle de feedback : marquer les diagnostics corrects/incorrects',s:'L\'agent support valide ou corrige → les corrections améliorent le prompt (few-shot)'},
+  ],
+  'mcc-deploy-adv-3': [
+    {t:'Vérifier la disponibilité de la commande Wipe dans l\'API Mosyle',s:'Documentation : POST /v2/devices/{id}/commands → {"command":"EraseDevice"}'},
+    {t:'Créer l\'endpoint MCC',s:'POST /api/admin/fleet/devices/{deviceId}/wipe — requireFleetAdmin + MFA obligatoire'},
+    {t:'Ajouter une double confirmation',s:'Modale : "ATTENTION — Cette action efface TOUTES les données de l\'appareil. Tapez WIPE pour confirmer."'},
+    {t:'Appeler Mosyle EraseDevice',s:'POST api.mosyle.com/v2/devices/{id}/commands → {"command":"EraseDevice","pin":"000000"}'},
+    {t:'Enregistrer dans empireAudit avec severity=critical',s:'action: "REMOTE_WIPE", tenantId, deviceId, serialNumber, triggeredBy'},
+    {t:'Notifier le tenant par email',s:'Resend : "Un appareil de votre restaurant a été effacé à distance pour raison de sécurité."'},
+    {t:'Tester en sandbox (ATTENTION : irréversible sur un vrai device)',s:'Utiliser un iPad de test dédié — jamais sur un appareil en production'},
+  ],
+  'mcc-growth-1': [
+    {t:'Créer une page de statut avec Instatus ou Upptime',s:'instatus.com (gratuit) ou upptime/upptime sur GitHub (auto-hébergé, gratuit)'},
+    {t:'Configurer les moniteurs : Firebase, Stripe, Resend, API app',s:'HTTP check toutes les 5 minutes sur les endpoints critiques'},
+    {t:'Pointer status.restaurantos.com vers la page de statut',s:'CNAME : status → xxx.instatus.com (ou IP du serveur Upptime)'},
+    {t:'Automatiser la mise à jour via webhook',s:'Firebase Status → webhook → Instatus API → incident auto-créé'},
+    {t:'Configurer les notifications par email',s:'Les tenants s\'abonnent à la page → email automatique en cas de panne'},
+    {t:'Intégrer un lien "État des services" dans le footer de l\'app',s:'<a href="https://status.restaurantos.com"> visible dans la sidebar du tenant'},
+    {t:'Tester : simuler une panne Stripe → vérifier la page de statut',s:'Couper STRIPE_SECRET_KEY → le moniteur détecte le 401 → incident créé automatiquement'},
+  ],
+  'mcc-growth-2': [
+    {t:'Définir le modèle de données Reseller',s:'mcc/resellers/{id} : name, email, affiliateCode, commissionRate (10%), totalSales, payoutInfo'},
+    {t:'Créer l\'endpoint d\'inscription revendeur',s:'POST /api/admin/fleet/resellers — le MCC crée le compte + génère le code unique'},
+    {t:'Implémenter le tracking d\'affiliation',s:'Lien : restaurant-os.app/signup?ref={affiliateCode} → stocker ref dans le tenant à la création'},
+    {t:'Calculer les commissions mensuelles',s:'Cron mensuel : pour chaque reseller, sum(MRR des tenants avec ref=code) × 10% → commission'},
+    {t:'Dashboard reseller (portail dédié)',s:'Page /reseller/dashboard : mes clients, mes commissions, lien d\'affiliation, matériel marketing'},
+    {t:'Dashboard MCC : vue des revendeurs',s:'Tableau : reseller, nb clients, commission MTD, statut paiement, bouton "Payer"'},
+    {t:'Paiement des commissions',s:'Export CSV pour virement SEPA ou intégration Stripe Connect (payout automatique)'},
+  ],
+};
+
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v27'; // v27 = MCC reachable in dev (middleware fix) + mcc-core-2/core-3/ota-2 vérifiés // v26 = Plan d'Implémentation T00–T51 (52 tickets) ajouté // v25 = 9 items audit résolus (2026-07-20) // v24 = section Audit 2026-07-20 ajoutée
+const STORE_KEY = 'ros_checklist_v28'; // v28 = tutoriels intégrés pour les 33 items restants // v27 = MCC reachable in dev (middleware fix) + mcc-core-2/core-3/ota-2 vérifiés // v26 = Plan d'Implémentation T00–T51 (52 tickets) ajouté // v25 = 9 items audit résolus (2026-07-20) // v24 = section Audit 2026-07-20 ajoutée
+const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
+
+function loadTutoSteps() {
+  try {
+    const raw = localStorage.getItem(TUTO_STORE_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch { return new Set(); }
+}
+function saveTutoSteps(set) {
+  localStorage.setItem(TUTO_STORE_KEY, JSON.stringify([...set]));
+}
+let tutoSteps = loadTutoSteps();
+let openTutos = new Set();
 
 // Items confirmés terminés par les agents (vérifiés sur disque + tsc 0 erreur)
 const DONE_BY_AGENTS = new Set([
@@ -4698,12 +5023,36 @@ function buildChecklist() {
       '<div class="cl-items" id="items-' + cat.id + '">' +
         cat.items.map(item => {
           const done = checked.has(item.id);
+          const tuto = TUTORIALS[item.id];
+          const tutoOpen = openTutos.has(item.id);
+          let tutoHtml = '';
+          if (tuto) {
+            const stepsD = tuto.filter((_,i) => tutoSteps.has(item.id + ':' + i)).length;
+            tutoHtml =
+              '<div class="cl-tuto-toggle' + (tutoOpen ? ' open' : '') + '" onclick="event.stopPropagation();toggleTuto(\'' + item.id + '\')" id="tuto-btn-' + item.id + '">' +
+                '&#128214; Tuto (' + stepsD + '/' + tuto.length + ')' +
+              '</div>' +
+              '<div class="cl-tuto-content" id="tuto-' + item.id + '"' + (tutoOpen ? ' style="display:block"' : '') + '>' +
+                '<div class="cl-tuto-header">Guide pas-à-pas</div>' +
+                tuto.map((step, i) => {
+                  const sk = item.id + ':' + i;
+                  const sd = tutoSteps.has(sk);
+                  return '<div class="cl-tuto-step' + (sd ? ' step-done' : '') + '" id="step-' + sk.replace(':','-') + '" onclick="event.stopPropagation();toggleTutoStep(\'' + item.id + '\',' + i + ')">' +
+                    '<div class="cl-tuto-check">' + (sd ? '✓' : '') + '</div>' +
+                    '<div><div class="cl-tuto-step-text">' + step.t + '</div>' +
+                    (step.s ? '<div class="cl-tuto-step-sub">' + step.s + '</div>' : '') +
+                    '</div></div>';
+                }).join('') +
+                '<div class="cl-tuto-progress">' + stepsD + ' / ' + tuto.length + ' étapes terminées</div>' +
+              '</div>';
+          }
           return '<div class="cl-item' + (done ? ' done' : '') + '" id="item-' + item.id + '" onclick="toggle(\'' + item.id + '\',\'' + cat.id + '\')">' +
             '<div class="cl-checkbox">' + (done ? '✓' : '') + '</div>' +
             '<div class="cl-item-body">' +
               '<div class="cl-item-text">' + item.text + priorityLabel(item.p, item.opt) + '</div>' +
               (item.sub ? '<div class="cl-item-sub">' + item.sub + '</div>' : '') +
               (EXPL[item.id] ? '<div class="cl-item-expl">💡 ' + EXPL[item.id] + '</div>' : '') +
+              tutoHtml +
             '</div>' +
           '</div>';
         }).join('') +
@@ -4738,6 +5087,43 @@ function toggle(itemId, catId) {
   }
 
   updateProgress();
+}
+
+function toggleTuto(itemId) {
+  const btn = document.getElementById('tuto-btn-' + itemId);
+  const content = document.getElementById('tuto-' + itemId);
+  if (!btn || !content) return;
+  const isOpen = openTutos.has(itemId);
+  if (isOpen) {
+    openTutos.delete(itemId);
+    btn.classList.remove('open');
+    content.style.display = 'none';
+  } else {
+    openTutos.add(itemId);
+    btn.classList.add('open');
+    content.style.display = 'block';
+  }
+}
+
+function toggleTutoStep(itemId, stepIdx) {
+  const sk = itemId + ':' + stepIdx;
+  const el = document.getElementById('step-' + itemId + '-' + stepIdx);
+  if (!el) return;
+  if (tutoSteps.has(sk)) tutoSteps.delete(sk);
+  else tutoSteps.add(sk);
+  saveTutoSteps(tutoSteps);
+  const isDone = tutoSteps.has(sk);
+  el.classList.toggle('step-done', isDone);
+  el.querySelector('.cl-tuto-check').textContent = isDone ? '✓' : '';
+  // Update tuto progress
+  const tuto = TUTORIALS[itemId];
+  if (tuto) {
+    const stepsD = tuto.filter((_,i) => tutoSteps.has(itemId + ':' + i)).length;
+    const btn = document.getElementById('tuto-btn-' + itemId);
+    if (btn) btn.innerHTML = '&#128214; Tuto (' + stepsD + '/' + tuto.length + ')';
+    const prog = document.querySelector('#tuto-' + itemId + ' .cl-tuto-progress');
+    if (prog) prog.textContent = stepsD + ' / ' + tuto.length + ' étapes terminées';
+  }
 }
 
 function resetAll() {
