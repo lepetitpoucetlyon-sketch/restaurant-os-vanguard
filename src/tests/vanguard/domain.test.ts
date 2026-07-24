@@ -76,6 +76,25 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
             expect(POSService.calculateCartTotal(items)).toBe(35500000);
         });
 
+        it('T5b: Panier vide → total 0 (dette-3)', () => {
+            expect(POSService.calculateCartTotal([])).toBe(0);
+        });
+
+        it('T5c: Quantités multiples & prix unitaire (dette-3)', () => {
+            const items: any[] = [
+                { cartId: '1', productId: 'p1', categoryId: 'c1', name: 'A', unitPriceInMicrounits: toMicrounits(3000000), quantity: 4, taxRate: "0.10" },
+            ];
+            expect(POSService.calculateCartTotal(items)).toBe(12000000);
+        });
+
+        it('T5d: Ligne à prix zéro (article offert) n\'affecte pas le total (dette-3)', () => {
+            const items: any[] = [
+                { cartId: '1', productId: 'p1', categoryId: 'c1', name: 'A', unitPriceInMicrounits: toMicrounits(5000000), quantity: 1, taxRate: "0.10" },
+                { cartId: '2', productId: 'p2', categoryId: 'c2', name: 'Offert', unitPriceInMicrounits: toMicrounits(0), quantity: 2, taxRate: "0.10" },
+            ];
+            expect(POSService.calculateCartTotal(items)).toBe(5000000);
+        });
+
         it('T6: Analyse de Rentabilité (Deding)', () => {
             const items: any[] = [
                 { 

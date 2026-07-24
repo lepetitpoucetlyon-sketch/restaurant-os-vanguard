@@ -5,8 +5,9 @@ import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/
 import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Table, OrderItem } from "@nexus/contracts";
-import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
+import { toMicrounits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../engine/types";
+import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
 import { useStockDeduction } from "@modules/logistics/hooks/useStockDeduction";
 import type { OrderLine, ConsumptionMode } from "@/domain/schemas/orders";
@@ -118,38 +119,11 @@ export function usePOSController() {
      * @param percent  0–100 discount percentage (0 removes discount)
      */
     const handleApplyDiscount = useCallback((cartId: string, percent: number) => {
+        // Logique pure extraite → domain/cartDiscounts (dette-2)
         setCartItems((prev) =>
-            prev.map((item) => {
-                if (item.cartId !== cartId) return item;
-
-                // Use the stored original price if one already exists (re-applying discount)
-                const originalPrice: Microunits =
-                    item.originalPriceInMicrounits ?? item.unitPriceInMicrounits;
-
-                if (percent === 0) {
-                    // Remove discount — restore original price
-                    return {
-                        ...item,
-                        unitPriceInMicrounits: originalPrice,
-                        discountInMicrounits: toMicrounits(0),
-                        discountPercent: undefined,
-                        originalPriceInMicrounits: undefined,
-                    };
-                }
-
-                const discountMicro = toMicrounits(
-                    Math.round((originalPrice * percent) / 100)
-                );
-                const discountedPrice = toMicrounits(originalPrice - discountMicro);
-
-                return {
-                    ...item,
-                    originalPriceInMicrounits: originalPrice,
-                    unitPriceInMicrounits: discountedPrice,
-                    discountInMicrounits: discountMicro,
-                    discountPercent: percent,
-                };
-            })
+            prev.map((item) =>
+                item.cartId === cartId ? applyItemDiscount(item, percent) : item
+            )
         );
         showToast(`Remise ${percent}% appliquée`, "success");
     }, [showToast]);
@@ -159,20 +133,11 @@ export function usePOSController() {
      * Requires pos.offer_product permission (checked by caller via RBAC).
      */
     const handleApplyOffer = useCallback((cartId: string) => {
+        // Logique pure extraite → domain/cartDiscounts (dette-2)
         setCartItems((prev) =>
-            prev.map((item) => {
-                if (item.cartId !== cartId) return item;
-                const originalPrice: Microunits =
-                    item.originalPriceInMicrounits ?? item.unitPriceInMicrounits;
-                return {
-                    ...item,
-                    originalPriceInMicrounits: originalPrice,
-                    unitPriceInMicrounits: toMicrounits(0),
-                    discountInMicrounits: originalPrice,
-                    discountPercent: 100,
-                    isOffer: true,
-                };
-            })
+            prev.map((item) =>
+                item.cartId === cartId ? applyItemOffer(item) : item
+            )
         );
         showToast("Article offert", "success");
     }, [showToast]);
