@@ -36,6 +36,17 @@ export const ROOT_ADMIN: User = {
     updatedAt: Date.now(),
 };
 
+export const FLEET_OPERATOR: User = {
+    id: 'user_fleet_operator',
+    type: 'user',
+    name: 'Opérateur Flotte',
+    role: 'fleet_admin',
+    status: 'active',
+    accessLevel: 100,
+    schemaVersion: 2,
+    updatedAt: Date.now(),
+};
+
 function stripSensitiveFields(user: User): User {
     const { pin: _pin, pinHash: _pinHash, ...safeUser } = user;
     return safeUser;
@@ -83,6 +94,24 @@ async function createRootAdminUser(): Promise<User> {
     };
 }
 
+function getFleetAdminPin(): string {
+    const pin = process.env.FLEET_ADMIN_PIN || process.env.ROOT_ADMIN_PIN;
+    if (!pin || pin.trim().length !== 4) {
+        throw new Error(
+            '[SECURITY] FLEET_ADMIN_PIN (or ROOT_ADMIN_PIN fallback) is not configured. ' +
+            'Set FLEET_ADMIN_PIN in .env.local — no default is provided.'
+        );
+    }
+    return pin.trim();
+}
+
+async function createFleetAdminUser(): Promise<User> {
+    return {
+        ...FLEET_OPERATOR,
+        pinHash: await hashPin(getFleetAdminPin(), FLEET_OPERATOR.id),
+    };
+}
+
 export const IdentityManager = {
     stripSensitiveFields,
     buildSessionUser,
@@ -90,6 +119,7 @@ export const IdentityManager = {
     isPinFormatValid,
     matchesPin,
     createRootAdminUser,
+    createFleetAdminUser,
 
     /**
      * 🛡️ Multi-tenant Privacy Gate

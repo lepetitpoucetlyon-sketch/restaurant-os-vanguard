@@ -99,7 +99,7 @@ export const DEFAULT_ROLE_PERMISSIONS: RolePermissions = {
     admin: ['dashboard', 'account-settings', 'settings'],
 };
 
-export const ROLE_LABELS: Record<UserRole, string> = {
+export const ROLE_LABELS: Record<string, string> = {
     admin: "Souverain (Admin)",
     manager: "Directeur de Salle",
     server: "Brigade de Service",
@@ -112,7 +112,11 @@ export const ROLE_LABELS: Record<UserRole, string> = {
     kitchen_line: "Commis / Partie",
     bartender: "Barman / Mixologue",
     host: "Hôte d'Accueil",
-    cashier: "Caisse"
+    cashier: "Caisse",
+    fleet_admin: "Opérateur Flotte",
+    SUPER_ADMIN: "Super Admin",
+    mcc_junior_dev: "Développeur MCC",
+    mcc_support: "Support MCC",
 };
 
 export const CATEGORY_LABELS: Record<string, string> = {

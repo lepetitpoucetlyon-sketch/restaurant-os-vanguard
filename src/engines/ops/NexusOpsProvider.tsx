@@ -14,6 +14,7 @@ import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
 
 import { useFloorOpsValue } from './hooks/floorHooks';
+import { isMCCMode } from '@/config/instance';
 
 /**
  * 🛰️ NexusOpsProvider — orchestrateur React du pilier Ops.
@@ -46,6 +47,10 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
     const taskContext = useTaskContext();
 
     useEffect(() => {
+        if (isMCCMode()) {
+            logger.info('[NexusOpsProvider] MCC mode — tenant sync engines disabled');
+            return;
+        }
         NexusSyncService.init(tenantId as string, taskContext);
         TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusOpsProvider', tenantId: tenantId as string, task: taskContext.taskId });
         const purgeInterval = setInterval(() => GlobalRegistryService.purgeInactive(store), 120000);

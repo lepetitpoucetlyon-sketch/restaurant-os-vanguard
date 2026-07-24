@@ -3,10 +3,11 @@
 import { ReactNode } from "react";
 import { useAuth } from "@/hooks";
 import { Shield } from "lucide-react";
+import { isMCCMode } from "@/config/instance";
 
-// Roles allowed to access any (admin) route.
-// MCC-specific pages (/admin/mcc) have their own MFAGate on top of this.
-const ADMIN_ROLES = ["fleet_admin", "SUPER_ADMIN", "admin", "manager"];
+const MCC_ROLES = ["fleet_admin", "SUPER_ADMIN"];
+const TENANT_ADMIN_ROLES = ["admin", "manager"];
+const ADMIN_ROLES = isMCCMode() ? MCC_ROLES : [...TENANT_ADMIN_ROLES, ...MCC_ROLES];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
     // Gate on the Nexus session user — the same source the rest of the app uses

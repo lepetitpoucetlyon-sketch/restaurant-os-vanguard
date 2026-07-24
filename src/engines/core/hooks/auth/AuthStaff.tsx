@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { httpsCallable, getFunctions } from 'firebase/functions';
 import { firebaseApp, isMock } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { IdentityManager, ROOT_ADMIN } from '@domain/services/IdentityManager';
+import { IdentityManager, ROOT_ADMIN, FLEET_OPERATOR } from '@domain/services/IdentityManager';
+import { isMCCMode } from '@/config/instance';
 import { User } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
@@ -21,11 +22,12 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
 
     useEffect(() => {
         let isActive = true;
+        const seedUser = isMCCMode() ? FLEET_OPERATOR : ROOT_ADMIN;
 
         const loadLoginProfiles = async () => {
-            if (isMock) {
-                logger.info('[AuthStaff] Mode MOCK détecté. Chargement immédiat du Root Admin.');
-                setUsers([IdentityManager.buildSessionUser(ROOT_ADMIN)]);
+            if (isMock || isMCCMode()) {
+                logger.info(`[AuthStaff] Seed immédiat: ${seedUser.role} (${isMCCMode() ? 'MCC' : 'MOCK'})`);
+                setUsers([IdentityManager.buildSessionUser(seedUser)]);
                 setIsUsersLoaded(true);
                 return;
             }
@@ -46,15 +48,15 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
                 }
             } catch (error) {
                 // Network or CORS errors are common in dev/mock environments
-                const isNetworkError = error instanceof Error && 
+                const isNetworkError = error instanceof Error &&
                     (error.message.includes('CORS') || error.message.includes('internal') || error.message.includes('network'));
-                
+
                 if (!isNetworkError) {
                     console.error('Unable to load login profiles', error);
                 }
-                
+
                 if (isActive) {
-                    setUsers([IdentityManager.buildSessionUser(ROOT_ADMIN)]);
+                    setUsers([IdentityManager.buildSessionUser(seedUser)]);
                     setIsUsersLoaded(true);
                 }
             }
@@ -72,9 +74,11 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
                 let currentUsers = fetchedUsers || [];
 
                 if (currentUsers.length === 0) {
-                    const rootAdmin = await IdentityManager.createRootAdminUser();
-                    await Nexus.adapter.set(`${usersPath}/${ROOT_ADMIN.id}`, rootAdmin);
-                    currentUsers = [rootAdmin];
+                    const defaultUser = isMCCMode()
+                        ? await IdentityManager.createFleetAdminUser()
+                        : await IdentityManager.createRootAdminUser();
+                    await Nexus.adapter.set(`${usersPath}/${seedUser.id}`, defaultUser);
+                    currentUsers = [defaultUser];
                 }
 
                 if (isActive) {
