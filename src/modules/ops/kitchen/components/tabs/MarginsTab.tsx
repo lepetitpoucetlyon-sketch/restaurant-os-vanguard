@@ -122,10 +122,10 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                         </thead>
                         <tbody className="divide-y divide-border/30">
                             {recipes.map((recipe, idx) => {
-                                const sellPriceInCents = Number(recipe.sellingPriceInCents || 0);
-                                const costPriceInCents = Number(recipe.costPriceInCents || 0);
-                                const marginInCents = sellPriceInCents - costPriceInCents;
-                                const marginPercent = sellPriceInCents > 0 ? (marginInCents / sellPriceInCents) * 100 : 0;
+                                const sellMu = recipe.sellingPriceInMicrounits ?? (recipe.sellingPriceInCents ?? 0) * 10_000;
+                                const costMu = recipe.costPriceInMicrounits ?? (recipe.costPriceInCents ?? 0) * 10_000;
+                                const marginMu = sellMu - costMu;
+                                const marginPercent = sellMu > 0 ? (marginMu / sellMu) * 100 : 0;
                                 const status = marginPercent >= 70 ? 'excellent' : marginPercent >= 50 ? 'good' : 'warning';
 
                                 return (
@@ -158,17 +158,17 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                         </td>
                                         <td className="px-6 py-6 text-center">
                                             <div className="font-mono font-bold text-[14px] text-text-primary bg-bg-tertiary/40 py-2 px-4 rounded-lg inline-block">
-                                                {formatCurrency(sellPriceInCents)}
+                                                {formatCurrency(Math.round(sellMu / 10_000))}
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-center">
                                             <div className="font-mono font-bold text-[13px] text-text-muted">
-                                                {formatCurrency(costPriceInCents)}
+                                                {formatCurrency(Math.round(costMu / 10_000))}
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-center">
                                             <div className="font-mono font-bold text-[14px] text-text-primary">
-                                                {formatCurrency(marginInCents)}
+                                                {formatCurrency(Math.round(marginMu / 10_000))}
                                             </div>
                                         </td>
                                         <td className="px-6 py-6">
