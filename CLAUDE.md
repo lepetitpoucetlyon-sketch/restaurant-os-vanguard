@@ -2,9 +2,16 @@
 
 > 📐 Pour une analyse complète (flux NF525, RAG, modèle de données, audit de dette), voir **`ARCHITECTURE.md`**.
 
-## Coordination multi-sessions (OBLIGATOIRE)
+## Coordination multi-sessions (OBLIGATOIRE — PREMIÈRE ACTION)
 
-**Au démarrage de chaque session**, lire `.claude/sessions.md` et y ajouter ta ligne (nom court, périmètre de fichiers, date). Avant de modifier un fichier, vérifier qu'aucune autre session active ne travaille sur le même périmètre. En cas de collision → **demander à l'utilisateur** avant de toucher le fichier. À la fin du travail, passer ton status à `terminée`.
+Plusieurs sessions Claude Code tournent en parallèle sur ce repo. **AVANT toute autre action** (même lire du code) :
+
+1. **Lire** `.claude/sessions.md`
+2. **S'inscrire** : ajouter une ligne au tableau avec un nom court, ton périmètre (dossiers/fichiers que tu vas toucher), la date, et `active`
+3. **Vérifier** : si une autre session `active` couvre le même périmètre → **STOP, demander à l'utilisateur**
+4. **À la fin** : passer ton status à `terminée`
+
+Si tu ne t'inscris pas, tu risques d'écraser le travail d'une autre session sans le savoir.
 
 ## Architecture
 
