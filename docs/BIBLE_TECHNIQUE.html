@@ -3746,7 +3746,7 @@ const CHECKLIST = [
       { id:'dette-1', text:'Extraire les sous-composants inline du MCC dashboard vers _components.tsx', sub:'StatCard, TabButton, StatusItem, SwitchboardItem, DeviceManagerPanel sortis de page.tsx (god file) → app/(admin)/admin/mcc/_components.tsx', p:'P2' },
       { id:'dette-2', text:'Extraire la logique remise/offre par ligne (usePos) vers un module domaine pur', sub:'handleApplyDiscount/handleApplyOffer → POSService domain/cartDiscounts.ts (fonctions pures immuables, testables)', p:'P2' },
       { id:'dette-3', text:'Tests unitaires remise/offre + calcul panier (edge cases microunits)', sub:'cartDiscounts.test.ts (11 cas) + calculateCartTotal edge cases (panier vide, quantités, prix zéro) dans domain.test.ts', p:'P2' },
-      { id:'dette-4', text:'Découper finance/page.tsx (819 lignes) en sous-composants par section', sub:'Le plus gros god file de l\'app — extraire chaque onglet/section vers finance/_components/ pour la maintenabilité', p:'P2' },
+      { id:'dette-4', text:'Découper finance/page.tsx (819 lignes) en sous-composants par section', sub:'FAIT : 819→361 lignes. 4 onglets extraits vers finance/_tabs/ (Accounting, Billing, Bank, Audit) + types/helpers vers financeUtils.ts. Page = orchestrateur pur. tsc 0 erreur', p:'P2' },
       { id:'dette-5', text:'Découper staff/page.tsx (803), reservations/page.tsx (762), inventory/page.tsx (757)', sub:'Même pattern que dette-4 — sortir les sous-vues des pages route vers des dossiers _components/ dédiés', p:'P3' },
       { id:'dette-6', text:'Rapatrier components/compliance/ + components/recipes/ vers modules/', sub:'Règle CLAUDE.md : tout code pilier va dans modules/<pilier>/. compliance→modules/compliance, recipes→modules/ops', p:'P2' },
       { id:'dette-7', text:'Rapatrier components/crm/ + components/reservations/ vers modules/commerce/', sub:'Code métier commerce encore à la racine components/ — le déplacer + mettre à jour les imports + tsc vérifié', p:'P3' },
@@ -4668,7 +4668,7 @@ const TUTORIALS = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v33'; // v33 = dette-8 DONE (code mort + renommage chaos) + dette-4 part1 (helpers finance) // v32 = dette-7 rapatriement reservations+crm DONE // v31 = dette-6 rapatriement compliance+recipes
+const STORE_KEY = 'ros_checklist_v34'; // v34 = dette-4 DONE (finance 819->361, 4 onglets extraits) // v33 = dette-8 DONE (code mort + renommage chaos) // v32 = dette-7 rapatriement reservations+crm
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5070,6 +5070,8 @@ const DONE_BY_AGENTS = new Set([
   'dette-7',
   // dette-8 — MonkeyChaosAgent.ts (code mort) supprimé + domain/agents/ renommé domain/chaos/ (lève la confusion agent/agents) + import dynamique OracleEngine corrigé (tsc 0 erreur)
   'dette-8',
+  // dette-4 — finance/page.tsx 819→361 lignes : 4 onglets extraits (_tabs/AccountingTab/BillingTab/BankTab/AuditTab) + financeUtils.ts (tsc 0 erreur)
+  'dette-4',
 ]);
 
 function loadChecked() {
