@@ -4668,7 +4668,7 @@ const TUTORIALS = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v34'; // v34 = dette-4 DONE (finance 819->361, 4 onglets extraits) // v33 = dette-8 DONE (code mort + renommage chaos) // v32 = dette-7 rapatriement reservations+crm
+const STORE_KEY = 'ros_checklist_v35'; // v35 = dette-5 DONE (staff 803->126, reservations 762->233, inventory 757->202) // v34 = dette-4 DONE (finance 819->361) // v33 = dette-8 DONE
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5072,6 +5072,8 @@ const DONE_BY_AGENTS = new Set([
   'dette-8',
   // dette-4 — finance/page.tsx 819→361 lignes : 4 onglets extraits (_tabs/AccountingTab/BillingTab/BankTab/AuditTab) + financeUtils.ts (tsc 0 erreur)
   'dette-4',
+  // dette-5 — staff/page.tsx 803→418 lignes : staffUtils.ts + 4 onglets extraits (_tabs/SkillsTab/TimesheetTab/PayrollTab/LeavesTab) + reservations 762→233 (useReservationsPage hook) + inventory 757→202 (useInventoryPage hook) (tsc 0 erreur, 435 tests)
+  'dette-5',
 ]);
 
 function loadChecked() {
