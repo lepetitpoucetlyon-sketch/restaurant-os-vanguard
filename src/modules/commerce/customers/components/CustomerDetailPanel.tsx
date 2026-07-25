@@ -58,7 +58,7 @@ function useCustomerHistory(customer: Customer): { data: CustomerHistory | null;
                 }, 0);
                 const avgSpend = paidOrders.length > 0
                     ? totalMicrounits / paidOrders.length / 1_000_000
-                    : Number(customer.averageSpendInCents ?? 0) / 100;
+                    : (customer.averageSpendInMicrounits ?? (customer.averageSpendInCents ? customer.averageSpendInCents * 10_000 : 0)) / 1_000_000;
 
                 // Top products from order items
                 const productCount: Record<string, { name: string; count: number }> = {};
@@ -81,7 +81,7 @@ function useCustomerHistory(customer: Customer): { data: CustomerHistory | null;
         }
         load();
         return () => { cancelled = true; };
-    }, [customer.id, customer.averageSpendInCents]);
+    }, [customer.id, customer.averageSpendInMicrounits, customer.averageSpendInCents]);
 
     return { data, loading };
 }
@@ -281,7 +281,7 @@ export function CustomerDetailPanel({
                                 </div>
                                 <div className="p-10 text-center border-r border-white/5">
                                     <p className="text-3xl font-mono font-light text-white italic">
-                                        {((Number(customer.totalSpentInCents || 0)) / 100).toFixed(0)}€
+                                        {((customer.totalSpentInMicrounits ?? (customer.totalSpentInCents ? customer.totalSpentInCents * 10_000 : 0)) / 1_000_000).toFixed(0)}€
                                     </p>
                                     <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
                                         CA Réalisé
@@ -289,7 +289,7 @@ export function CustomerDetailPanel({
                                 </div>
                                 <div className="p-10 text-center">
                                     <p className="text-3xl font-mono font-light text-white italic">
-                                        {((Number(customer.averageSpendInCents || 0)) / 100).toFixed(0)}€
+                                        {((customer.averageSpendInMicrounits ?? (customer.averageSpendInCents ? customer.averageSpendInCents * 10_000 : 0)) / 1_000_000).toFixed(0)}€
                                     </p>
                                     <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
                                         Engagement

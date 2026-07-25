@@ -53,7 +53,9 @@ export interface CRM extends SovereignNode {
     name?: string;
     email?: string;
     phone?: string;
-    totalSpentInCents: number;
+    totalSpentInMicrounits?: number;
+    /** @deprecated use totalSpentInMicrounits */
+    totalSpentInCents?: number;
     lastVisit?: string;
     visitCount?: number;
     segment?: string;

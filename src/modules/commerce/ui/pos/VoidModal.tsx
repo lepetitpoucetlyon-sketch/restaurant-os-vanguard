@@ -25,7 +25,7 @@ interface VoidModalProps {
     /** If provided, pre-fills the reference and amount fields. */
     prefill?: {
         pieceNumber: string;
-        originalAmountInCents: number;
+        originalAmountInMicrounits: number;
     };
 }
 
@@ -40,10 +40,6 @@ function eurosToCents(euros: number): number {
     return Math.round(euros * 100);
 }
 
-function centsToMicrounits(cents: number): number {
-    return cents * 10_000;
-}
-
 // ─── VoidModal ────────────────────────────────────────────────────────────────
 
 export function VoidModal({
@@ -56,7 +52,7 @@ export function VoidModal({
     const [mode, setMode] = useState<VoidMode>("void");
     const [pieceNumber, setPieceNumber] = useState(prefill?.pieceNumber ?? "");
     const [originalAmountInput, setOriginalAmountInput] = useState(
-        prefill ? (prefill.originalAmountInCents / 100).toFixed(2) : ""
+        prefill ? (prefill.originalAmountInMicrounits / 1_000_000).toFixed(2) : ""
     );
     const [refundAmountInput, setRefundAmountInput] = useState("");
     const [reason, setReason] = useState("");
@@ -86,6 +82,7 @@ export function VoidModal({
             const entryId       = IdGenerator.generateWithPrefix("JE");
             const now           = new Date().toISOString();
             const negativeAmount = -refundCents; // NEGATIVE for extourne NF525
+            const negativeAmountInMicrounits = negativeAmount * 10_000;
 
             // Canonical snapshot for hash chain
             const dataSnapshot = CryptoService.canonicalStringify({
@@ -93,7 +90,7 @@ export function VoidModal({
                 type:          mode === "void" ? "void" : "refund",
                 linkedTicketId: pieceNumber,
                 operatorId,
-                amountInCents: negativeAmount,
+                amountInMicrounits: negativeAmountInMicrounits,
                 timestamp:     now,
             } as import("@/shared/nexus-contract").SovereignData);
 
@@ -113,16 +110,15 @@ export function VoidModal({
                 fiscalSealHash:  hash,
                 sealedAt:        now,
                 type:            mode === "void" ? "loss" : "other",
-                // Negative amount is the NF525 extourne signal
-                amountInCents:   negativeAmount,
+                // Negative amount is the NF525 extourne signal (microunits canonical)
+                amountInMicrounits: negativeAmountInMicrounits,
                 status:          mode === "void" ? "cancelled" : "refunded",
                 updatedAt:       now,
                 cancellationRef: pieceNumber,
                 // Extra traceability fields (catchall in Firestore)
                 linkedTicketId:  pieceNumber,
                 voidMode:        mode,
-                refundAmountInCents: negativeAmount,
-                totalInMicrounits:   centsToMicrounits(negativeAmount),
+                totalInMicrounits: negativeAmountInMicrounits,
                 sealId,
                 previousHash,
                 signature,
@@ -147,7 +143,7 @@ export function VoidModal({
         setDone(false);
         setMode("void");
         setPieceNumber(prefill?.pieceNumber ?? "");
-        setOriginalAmountInput(prefill ? (prefill.originalAmountInCents / 100).toFixed(2) : "");
+        setOriginalAmountInput(prefill ? (prefill.originalAmountInMicrounits / 1_000_000).toFixed(2) : "");
         setRefundAmountInput("");
         setReason("");
     }, [prefill]);

@@ -30,8 +30,8 @@ export function CRMDetailView() {
 
     const stats = [
         { value: getVisitCount(selectedCRM), label: 'Sessions', icon: Users },
-        { value: `${(selectedCRM.totalSpentInCents / 100 || 0).toFixed(0)}€`, label: 'Revenue', icon: DollarSign, gold: true },
-        { value: `${((selectedCRM.totalSpentInCents / 100 || 0) / (getVisitCount(selectedCRM) || 1)).toFixed(0)}€`, label: 'Panier', icon: TrendingUp }
+        { value: `${((selectedCRM.totalSpentInMicrounits ?? (selectedCRM.totalSpentInCents ? selectedCRM.totalSpentInCents * 10_000 : 0)) / 1_000_000 || 0).toFixed(0)}€`, label: 'Revenue', icon: DollarSign, gold: true },
+        { value: `${(((selectedCRM.totalSpentInMicrounits ?? (selectedCRM.totalSpentInCents ? selectedCRM.totalSpentInCents * 10_000 : 0)) / 1_000_000 || 0) / (getVisitCount(selectedCRM) || 1)).toFixed(0)}€`, label: 'Panier', icon: TrendingUp }
     ];
 
     if (isMobile) {

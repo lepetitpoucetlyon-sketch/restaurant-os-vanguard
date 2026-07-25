@@ -14,7 +14,11 @@ export interface Customer extends SovereignNode {
   preferences: string[];
   tags: string[];
   visitCount: number;
-  totalSpentInCents: number;
+  totalSpentInMicrounits?: number;
+  averageSpendInMicrounits?: number;
+  /** @deprecated use totalSpentInMicrounits */
+  totalSpentInCents?: number;
+  /** @deprecated use averageSpendInMicrounits */
   averageSpendInCents?: number;
   lastVisitDate?: string;
   segment?: 'vip' | 'regular' | 'new' | string;
