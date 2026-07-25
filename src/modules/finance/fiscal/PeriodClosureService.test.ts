@@ -11,7 +11,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
     },
 }));
 
-vi.mock('@domain/services/CryptoService', () => ({
+vi.mock('@/domain/services/CryptoService', () => ({
     CryptoService: {
         canonicalStringify: vi.fn((data: unknown) => JSON.stringify(data)),
         generateHash: vi.fn(async (data: string, prev: string) => `hash_${data.length}_${prev.slice(0, 4)}`),

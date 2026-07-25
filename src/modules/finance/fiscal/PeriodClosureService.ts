@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { CryptoService } from '@domain/services/CryptoService';
+import { CryptoService } from '@/domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import type { PeriodClosure, PeriodType } from '@/domain/schemas/periodClosure';
 import type { JournalEntry } from '@nexus/contracts';

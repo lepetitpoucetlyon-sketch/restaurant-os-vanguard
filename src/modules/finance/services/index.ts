@@ -5,4 +5,3 @@
  */
 
 export * from './FiscalHACCPMapper';
-export * from './NF525Service';

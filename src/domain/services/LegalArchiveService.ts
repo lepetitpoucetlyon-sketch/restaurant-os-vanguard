@@ -1,5 +1,4 @@
 import { FiscalEngine } from './FiscalEngine';
-import { NF525Service } from './NF525Service';
 import { FiscalSeal } from '@nexus/contracts';
 
 /**
@@ -9,8 +8,7 @@ import { FiscalSeal } from '@nexus/contracts';
  */
 export const LegalArchiveService = {
     ...FiscalEngine,
-    ...NF525Service,
-    
+
     // Grade IX Compatibility Wrappers
     runAudit: (seals: FiscalSeal[]) => FiscalEngine.runAudit(seals, 'master-instance'),
     sealEntry: FiscalEngine.sealEntry,

@@ -33,7 +33,7 @@ export * from './LegalArchiveService';
 export * from './MacroBrain';
 export * from './MaintenanceAgent';
 export * from './MarketingService';
-export * from './NF525Service';
+
 export * from './NexusPayrollEngine';
 export * from './NexusStaffingOracle';
 export * from './NexusTelemetryService';
