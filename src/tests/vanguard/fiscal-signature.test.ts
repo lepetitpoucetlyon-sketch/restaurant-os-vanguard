@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { CryptoService } from '@/domain/services/CryptoService';
-import { FiscalKeyService } from '@/domain/services/FiscalKeyService';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
 
 /**

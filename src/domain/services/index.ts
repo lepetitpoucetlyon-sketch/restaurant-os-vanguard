@@ -6,15 +6,12 @@
 
 export * from './AccessPolicyManager';
 export * from './AmbianceService';
-export * from './BillingService';
 export * from './BrandingService';
 export * from './BrandingUI';
 export * from './ChaosMonkey';
 export * from './CryptoService';
 export * from './DataDigester';
 export * from './EdgeSyncService';
-export * from './FinanceCore';
-export * from './FiscalEngine';
 export * from './FleetCommander';
 export * from './FleetComplianceService';
 export * from './FleetTelemetryExecutor';
@@ -50,7 +47,6 @@ export * from './ResilienceSlayer';
 export * from './SettingsManager';
 export * from './SimulationService';
 export * from './Slayer';
-export * from './SovereignLedger';
 export * from './SplitBillDomainService';
 export * from './StaffService';
 export * from './StockEngine';

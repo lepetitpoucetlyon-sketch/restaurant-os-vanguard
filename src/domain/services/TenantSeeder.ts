@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
 import { validatePin } from '@/lib/auth/validatePin';
 import { hashPin } from '@/lib/shared-kernel';
 import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
-import { FiscalKeyService } from './FiscalKeyService';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
 import type { Floor, Zone, Table } from '@/modules/ops/engine/tables.types';

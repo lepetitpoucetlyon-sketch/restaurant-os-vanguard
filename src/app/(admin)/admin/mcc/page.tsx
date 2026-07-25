@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ShieldCheck, 
-  Rocket, 
-  LayoutGrid, 
-  Activity, 
+import {
+  ShieldCheck,
+  Rocket,
+  LayoutGrid,
+  Activity,
   Plus,
   Lock,
   TrendingUp,
@@ -14,7 +14,8 @@ import {
   Zap,
   Cpu,
   Wallet,
-  BrainCircuit
+  BrainCircuit,
+  GitMerge,
 } from 'lucide-react';
 import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
 
@@ -37,6 +38,9 @@ const AIWorkshop = dynamic(() => import('@nexus/guards/admin/mcc/AIWorkshop').th
 import { StatCard, DeviceManagerPanel, TabButton, StatusItem, SwitchboardItem } from './_components';
 const TaxAuditPanel = dynamic(() => import('@nexus/guards/admin/mcc/TaxAuditPanel').then(mod => mod.TaxAuditPanel), { loading: () => <MCCWidgetSkeleton /> });
 const TrustedDevicePanel = dynamic(() => import('@nexus/guards/admin/mcc/TrustedDevicePanel').then(mod => mod.TrustedDevicePanel), { loading: () => <MCCWidgetSkeleton /> });
+const TenantOverridePanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantOverridePanel').then(mod => mod.TenantOverridePanel), { loading: () => <MCCWidgetSkeleton /> });
+const TenantChangelogPanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantChangelogPanel').then(mod => mod.TenantChangelogPanel), { loading: () => <MCCWidgetSkeleton /> });
+const FleetUpgradePanel = dynamic(() => import('@nexus/guards/admin/mcc/FleetUpgradePanel').then(mod => mod.FleetUpgradePanel), { loading: () => <MCCWidgetSkeleton /> });
 
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
 import { MFAGate } from '@/components/mcc/MFAGate';
@@ -76,7 +80,7 @@ export default function MCCDashboard() {
     : 'MCC';
 
   const [showCloneModal, setShowCloneModal] = useState(false);
-  const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury'>('fleet');
+  const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury' | 'patchcenter'>('fleet');
   const [newCloneName, setNewCloneName] = useState('');
   const [newCloneKey, setNewCloneKey] = useState('');
   const [newCloneEmail, setNewCloneEmail] = useState('');
@@ -200,11 +204,17 @@ export default function MCCDashboard() {
           label="Empire Oracle" 
           icon={<BrainCircuit className="w-4 h-4" />}
         />
-        <TabButton 
-          active={activeTab === 'treasury'} 
-          onClick={() => setActiveTab('treasury')} 
-          label="Treasury & Logistics" 
+        <TabButton
+          active={activeTab === 'treasury'}
+          onClick={() => setActiveTab('treasury')}
+          label="Treasury & Logistics"
           icon={<Wallet className="w-4 h-4" />}
+        />
+        <TabButton
+          active={activeTab === 'patchcenter'}
+          onClick={() => setActiveTab('patchcenter')}
+          label="Patch Center"
+          icon={<GitMerge className="w-4 h-4" />}
         />
       </div>
 
@@ -310,13 +320,35 @@ export default function MCCDashboard() {
             )}
 
             {activeTab === 'treasury' && (
-              <motion.div 
-                key="treasury" 
-                initial={{ opacity: 0, x: -20 }} 
-                animate={{ opacity: 1, x: 0 }} 
+              <motion.div
+                key="treasury"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
               >
                 <MCCTreasury />
+              </motion.div>
+            )}
+
+            {activeTab === 'patchcenter' && (
+              <motion.div
+                key="patchcenter"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="space-y-8"
+              >
+                <div className="grid grid-cols-12 gap-8">
+                  {/* Left: Override + Upgrade */}
+                  <div className="col-span-12 xl:col-span-5 space-y-6">
+                    <TenantOverridePanel />
+                    <FleetUpgradePanel />
+                  </div>
+                  {/* Right: Changelog full width */}
+                  <div className="col-span-12 xl:col-span-7">
+                    <TenantChangelogPanel />
+                  </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

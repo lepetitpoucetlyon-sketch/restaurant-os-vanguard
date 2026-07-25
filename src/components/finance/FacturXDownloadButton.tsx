@@ -11,7 +11,7 @@
 import { useState, useCallback } from "react";
 import { FileCode2 } from "lucide-react";
 import { toast } from "sonner";
-import { AccountingReportService } from "@/domain/services/AccountingReportService";
+import { AccountingReportService } from "@/modules/finance/services/AccountingReportService";
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 

@@ -52,7 +52,7 @@ vi.mock('@/lib/audit', () => ({
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
-import { FiscalKeyService } from '@/domain/services/FiscalKeyService';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 
 import { alicePersona } from './personas/alice';

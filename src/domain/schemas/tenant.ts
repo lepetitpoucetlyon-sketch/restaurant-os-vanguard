@@ -40,6 +40,25 @@ export const OrchestratorSignalSchema = z.object({
   lastSignalId: z.string().optional(),
 }).catchall(z.any());
 
+export const TenantOverridesSchema = z.object({
+  ui: z.object({
+    buttonRadius:  z.string().optional(),
+    buttonVariant: z.enum(['solid', 'outline', 'ghost']).optional(),
+    primaryColor:  z.string().optional(),
+    accentColor:   z.string().optional(),
+    layoutType:    z.enum(['default', 'kiosk', 'hud', 'admin', 'sidebar', 'topbar']).optional(),
+    fontScale:     z.number().min(0.5).max(2).optional(),
+  }).optional(),
+  debug: z.object({
+    enabled:        z.boolean(),
+    level:          z.enum(['info', 'verbose', 'trace']).default('info'),
+    showBoundaries: z.boolean().optional(),
+  }).optional(),
+  custom: z.record(z.string(), z.unknown()).optional(),
+}).catchall(z.any());
+
+export type TenantOverrides = z.infer<typeof TenantOverridesSchema>;
+
 export const TenantConfigSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
@@ -71,6 +90,7 @@ export const TenantConfigSchema = z.object({
     createdAt: TimestampSchema.optional(),
     subscriptionTier: z.string().optional(),
   }).optional(),
+  overrides:     TenantOverridesSchema.optional(),
   customFeatures: z.record(z.string(), z.boolean()).optional(),
   firebase: z.record(z.string(), z.string().optional()).optional(),
 }).catchall(z.any());

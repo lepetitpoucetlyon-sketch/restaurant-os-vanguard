@@ -2,7 +2,7 @@ import { PayoutInvoice, PayoutRequest } from './types';
 import { FinancialNexusBridge } from '@/modules/finance/banking/FinancialNexusBridge';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
-import { SovereignLedger } from '@/domain/services/SovereignLedger';
+import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
 
 /**
  * 🏛️ SovereignPayout - Grade X+++

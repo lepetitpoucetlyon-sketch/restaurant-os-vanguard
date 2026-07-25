@@ -125,7 +125,7 @@ export async function suggestChickenProcurement(qty: number, tenantId: string): 
   logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} chickens (Cost: ${cost/100}€)`);
 
   // Inject into SovereignLedger PROPOSALS account
-  const { SovereignLedger } = await import('./SovereignLedger');
+  const { SovereignLedger } = await import('@/modules/finance/services/SovereignLedger');
   await SovereignLedger.getInstance(tenantId).recordTransfer({
     debitAccount: 'PURCHASES',
     creditAccount: 'PROPOSALS', // Awaiting human signing

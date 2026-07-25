@@ -20,7 +20,7 @@ import { useTenant } from "@/hooks";
 import { useActionPermission } from "@/hooks/useActionPermission";
 import { closeTicketZForDay } from "@/lib/events/handlers/TicketZHandler";
 import { useOrders } from "@/engines/ops/NexusOpsProvider";
-import { AccountingReportService } from "@/domain/services/AccountingReportService";
+import { AccountingReportService } from "@/modules/finance/services/AccountingReportService";
 import type { Order } from "@modules/ops/engine/types";
 import type { BankTransaction } from "@modules/finance/types";
 import type { JournalEntry } from "@nexus/contracts";

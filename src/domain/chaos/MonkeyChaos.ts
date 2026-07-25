@@ -1,4 +1,4 @@
-import { SovereignLedger } from '../services/SovereignLedger';
+import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
 import { logger } from '@/lib/logger';
 
 /**

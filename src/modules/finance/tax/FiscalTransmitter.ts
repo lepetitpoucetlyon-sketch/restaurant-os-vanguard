@@ -3,7 +3,7 @@ import { EDIMapper } from './EDIMapper';
 import { DocumentVault } from '@/domain/shared/DocumentVault';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
-import { SovereignLedger } from '@/domain/services/SovereignLedger';
+import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
 
 /**
  * 🏛️ FiscalTransmitter - Grade X+++

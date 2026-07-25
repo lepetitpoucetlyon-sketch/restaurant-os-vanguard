@@ -8,7 +8,7 @@ import { logger } from "@/lib/logger";
 import { DataDigester } from "./DataDigester";
 import { LegacyOrder, Order } from "@nexus/contracts";
 import { toMicrounits } from "@/domain/schemas/primitives";
-import { FinanceCore } from "./FinanceCore";
+import { FinanceCore } from "@/modules/finance/services/FinanceCore";
 import { NexusTransaction } from "@/lib/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
