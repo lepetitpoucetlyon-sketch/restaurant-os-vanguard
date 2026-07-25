@@ -1,5 +1,1 @@
-"use client";
-import React from 'react';
-import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
-export const useTutorial = () => useNexusFleet()?.tutorial;
-export const TutorialProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+export * from "@/shared/contexts/TutorialContext";
