@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 
 /**
  * Hook pour persister des valeurs dans le localStorage.
+ * Clés automatiquement scopées au tenant actif via tenantScopedKey().
  */
 export function useLocalStorage<T>(
     key: string,
@@ -12,7 +14,7 @@ export function useLocalStorage<T>(
     const [storedValue, setStoredValue] = useState<T>(() => {
         if (typeof window === "undefined") return initialValue;
         try {
-            const item = window.localStorage.getItem(key);
+            const item = window.localStorage.getItem(tenantScopedKey(key));
             return item ? JSON.parse(item) : initialValue;
         } catch (_error) {
             return initialValue;
@@ -25,7 +27,7 @@ export function useLocalStorage<T>(
                 const valueToStore = value instanceof Function ? value(storedValue) : value;
                 setStoredValue(valueToStore);
                 if (typeof window !== "undefined") {
-                    window.localStorage.setItem(key, JSON.stringify(valueToStore));
+                    window.localStorage.setItem(tenantScopedKey(key), JSON.stringify(valueToStore));
                 }
             } catch (error) {
                 console.warn(`[useLocalStorage] setValue failed for key "${key}"`, error);
@@ -38,7 +40,7 @@ export function useLocalStorage<T>(
         try {
             setStoredValue(initialValue);
             if (typeof window !== "undefined") {
-                window.localStorage.removeItem(key);
+                window.localStorage.removeItem(tenantScopedKey(key));
             }
         } catch (error) {
             console.warn(`[useLocalStorage] removeValue failed for key "${key}"`, error);

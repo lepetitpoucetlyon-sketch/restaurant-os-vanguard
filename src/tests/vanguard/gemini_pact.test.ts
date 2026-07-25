@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
-import { AGENT_TOOLS } from '@domain/agent/tools';
+import { AGENT_TOOLS } from '@/modules/intelligence/tools';
 import { User } from '@nexus/contracts';
 
 // Mock Dependencies

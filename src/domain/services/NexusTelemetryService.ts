@@ -10,6 +10,7 @@ import { logger } from "@/lib/logger";
 import { fleetTelemetry } from "./FleetTelemetryService";
 import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
+import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 
 class TelemetryService {
   private intervalId: NodeJS.Timeout | null = null;
@@ -75,7 +76,7 @@ class TelemetryService {
       } catch { /* RAG indisponible — on continue sans bloquer */ }
 
       // 1. Persist local for quick reads (existing behavior)
-      localStorage.setItem(`nexus_last_pulse_${tenantId}`, JSON.stringify({
+      localStorage.setItem(tenantScopedKey('nexus_last_pulse'), JSON.stringify({
         timestamp: Date.now(),
         status: pulse.status,
         ragStatus,

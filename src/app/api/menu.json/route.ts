@@ -55,9 +55,11 @@ export async function GET(req: NextRequest) {
       { categories: visibleCategories, products: visibleProducts, ...(degraded ? { degraded: true } : {}) },
       {
         status: degraded ? 503 : 200,
-        headers: degraded
-          ? {}
-          : { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60' },
+        headers: {
+          'Cache-Control': degraded
+            ? 'public, s-maxage=0, stale-while-revalidate=3600'
+            : 'public, s-maxage=300, stale-while-revalidate=60',
+        },
       }
     );
   } catch (err) {

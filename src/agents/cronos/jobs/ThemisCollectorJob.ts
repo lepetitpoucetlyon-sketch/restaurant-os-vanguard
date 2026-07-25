@@ -1,5 +1,5 @@
-import { CollectionService } from '@/domain/finance/collection/CollectionService';
-import { InvoiceTarget } from '@/domain/finance/collection/types';
+import { CollectionService } from '@/modules/finance/collection/CollectionService';
+import { InvoiceTarget } from '@/modules/finance/collection/types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**

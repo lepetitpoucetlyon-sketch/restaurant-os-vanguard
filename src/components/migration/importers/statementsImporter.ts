@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { StatementIngestionService } from '@/modules/finance/accounting/domain/StatementIngestionService';
-import { inferPCGAccount } from '@/domain/finance/banking/openBanking/pcgHeuristics';
+import { inferPCGAccount } from '@/modules/finance/banking/openBanking/pcgHeuristics';
 import type { ParsedFile, ImportResult } from '../types';
 
 // Cross-impact: StatementIngestionService already has a robust CSV parser with SHA-256 dedup.

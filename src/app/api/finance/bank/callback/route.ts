@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenBankingProviderFactory } from '@/domain/finance/banking/openBanking';
-import { BankConnectionStore } from '@/domain/finance/banking/openBanking/BankConnectionStore';
-import { verifyBankConnectState } from '@/domain/finance/banking/openBanking/tokenCipher';
+import { OpenBankingProviderFactory } from '@/modules/finance/banking/openBanking';
+import { BankConnectionStore } from '@/modules/finance/banking/openBanking/BankConnectionStore';
+import { verifyBankConnectState } from '@/modules/finance/banking/openBanking/tokenCipher';
 
 /**
  * GET /api/finance/bank/callback

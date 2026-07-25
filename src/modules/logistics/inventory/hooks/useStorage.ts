@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Storage } from "@domain/services/Storage";
+import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 
 interface UseLocalStorageOptions<T> {
     serializer?: (value: T) => string;
@@ -30,7 +31,7 @@ export function useLocalStorage<T>(
         }
 
         try {
-            const item = window.localStorage.getItem(key);
+            const item = window.localStorage.getItem(tenantScopedKey(key));
             return item ? deserializer(item) : initialValue;
         } catch (error) {
             console.warn(`Error reading localStorage key "${key}":`, error);
@@ -44,7 +45,7 @@ export function useLocalStorage<T>(
                 const valueToStore = value instanceof Function ? value(storedValue) : value;
                 setStoredValue(valueToStore);
                 if (typeof window !== "undefined") {
-                    window.localStorage.setItem(key, serializer(valueToStore));
+                    window.localStorage.setItem(tenantScopedKey(key), serializer(valueToStore));
                 }
             } catch (error) {
                 console.warn(`Error setting localStorage key "${key}":`, error);
@@ -57,7 +58,7 @@ export function useLocalStorage<T>(
         try {
             setStoredValue(initialValue);
             if (typeof window !== "undefined") {
-                window.localStorage.removeItem(key);
+                window.localStorage.removeItem(tenantScopedKey(key));
             }
         } catch (error) {
             console.warn(`Error removing localStorage key "${key}":`, error);

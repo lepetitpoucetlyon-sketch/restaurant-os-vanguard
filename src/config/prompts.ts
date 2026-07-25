@@ -1,4 +1,4 @@
-import { AgentDomain, AgentRole } from '@domain/agency/types';
+import { AgentDomain, AgentRole } from '@/modules/intelligence/agency/types';
 
 export const MASTER_DNA = `
 Tu es un Agent du "Neural Shield" pour Restaurant OS. 

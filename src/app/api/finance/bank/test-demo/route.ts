@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoCardlessProvider } from '@/domain/finance/banking/openBanking/GoCardlessProvider';
-import { inferPCGAccount } from '@/domain/finance/banking/openBanking';
+import { GoCardlessProvider } from '@/modules/finance/banking/openBanking/GoCardlessProvider';
+import { inferPCGAccount } from '@/modules/finance/banking/openBanking';
 
 /**
  * GET /api/finance/bank/test-demo
