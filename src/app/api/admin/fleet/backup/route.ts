@@ -86,11 +86,12 @@ export async function POST(request: NextRequest) {
 
     for (const tenantId of tenantIds) {
         try {
-            // Exporter toutes les collections NF525 + support
-            const exportData: Record<string, unknown[]> = {};
-            for (const col of FULL_COLLECTIONS) {
-                exportData[col] = await Nexus.adapter.query(`tenants/${tenantId}/${col}`);
-            }
+            const colResults = await Promise.all(
+                FULL_COLLECTIONS.map(col =>
+                    Nexus.adapter.query(`tenants/${tenantId}/${col}`).then(data => [col, data] as const)
+                )
+            );
+            const exportData: Record<string, unknown[]> = Object.fromEntries(colResults);
 
             const jsonBuffer = Buffer.from(JSON.stringify({ tenantId, exportedAt: now, collections: exportData }));
 

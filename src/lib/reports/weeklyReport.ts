@@ -32,19 +32,28 @@ export async function buildWeeklyReportHTML(
   // Dynamic import so this module can be used without bundling Nexus at module level
   const { Nexus } = await import('@/lib/nexus/NexusAdapter');
 
+  const startISO = new Date(startDate).toISOString().split('T')[0];
+  const endISO = new Date(endDate).toISOString().split('T')[0];
+
   const [orders, reservations] = await Promise.all([
-    Nexus.adapter.query<OrderRecord>('orders').catch(() => [] as OrderRecord[]),
+    Nexus.adapter.query<OrderRecord>('orders', {
+      where: [
+        { field: 'createdAt', operator: '>=', value: startDate },
+        { field: 'createdAt', operator: '<=', value: endDate },
+      ],
+    }).catch(() => [] as OrderRecord[]),
     Nexus.adapter
-      .query<ReservationRecord>('reservations')
+      .query<ReservationRecord>('reservations', {
+        where: [
+          { field: 'date', operator: '>=', value: startISO },
+          { field: 'date', operator: '<=', value: endISO },
+        ],
+      })
       .catch(() => [] as ReservationRecord[]),
   ]);
 
-  // Filter paid orders within the week
   const weekOrders = orders.filter(
-    (o) =>
-      o.createdAt >= startDate &&
-      o.createdAt <= endDate &&
-      (o.status === 'paid' || o.status === 'delivered')
+    (o) => o.status === 'paid' || o.status === 'delivered'
   );
 
   // Revenue totals

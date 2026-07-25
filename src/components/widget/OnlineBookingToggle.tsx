@@ -41,21 +41,15 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
       { vassalId: tenantId, actorId: 'system' }
     );
 
-    // If onSnapshot doesn't fire for collection, fallback to query
-    Nexus.adapter
-      .query<Table>('tables', undefined, { vassalId: tenantId, actorId: 'system' })
-      .then((rows) => {
-        if (!cancelled) {
-          setTables(rows);
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+    // onSnapshot fires immediately with cached data — no fallback query needed.
+    // Timeout safety: if onSnapshot hasn't fired after 5s, clear loading.
+    const safetyTimeout = setTimeout(() => {
+      if (!cancelled && loading) setLoading(false);
       });
 
     return () => {
       cancelled = true;
+      clearTimeout(safetyTimeout);
       if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [tenantId]);

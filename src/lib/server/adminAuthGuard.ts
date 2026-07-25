@@ -113,9 +113,14 @@ export async function requireMccLevel(
  */
 async function checkDeviceFingerprintInternal(fingerprint: string, callerRole: MccRole): Promise<boolean> {
     try {
-        const devices = await Nexus.adapter.query<StoredDevice>('mcc/trustedDevices');
-        const device = devices.find(d => d.fingerprint === fingerprint && d.status === 'active');
-        if (!device) return true; // Pas trouvé → refus
+        const devices = await Nexus.adapter.query<StoredDevice>('mcc/trustedDevices', {
+            where: [
+                { field: 'fingerprint', operator: '==', value: fingerprint },
+                { field: 'status', operator: '==', value: 'active' },
+            ],
+        });
+        const device = devices[0];
+        if (!device) return true;
         // Le rôle enregistré doit être >= au rôle du caller (pas de dépassement)
         const deviceLevel = MCC_ROLE_HIERARCHY[device.role as MccRole] ?? 0;
         const callerLevel = MCC_ROLE_HIERARCHY[callerRole] ?? 0;

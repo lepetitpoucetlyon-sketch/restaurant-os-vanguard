@@ -40,17 +40,27 @@ export const CampaignAttributionService = {
         let totalRevenue = 0;
         let totalCouverts = 0;
 
+        const orderIds = [...new Set(reservations.map(r => r.orderId).filter(Boolean))] as string[];
+
+        const orderMap = new Map<string, { totalInMicrounits?: number; totalAmountInCents?: number }>();
+        const BATCH = 30;
+        for (let i = 0; i < orderIds.length; i += BATCH) {
+            const chunk = orderIds.slice(i, i + BATCH);
+            const orders = await Nexus.adapter.query<{
+                id: string;
+                totalInMicrounits?: number;
+                totalAmountInCents?: number;
+            }>(
+                `tenants/${tenantId}/orders`,
+                { where: [{ field: 'id', operator: 'in', value: chunk }] }
+            );
+            for (const o of orders) orderMap.set(o.id, o);
+        }
+
         for (const resa of reservations) {
             totalCouverts += resa.covers ?? 1;
             if (resa.orderId) {
-                const orders = await Nexus.adapter.query<{
-                    totalInMicrounits?: number;
-                    totalAmountInCents?: number;
-                }>(
-                    `tenants/${tenantId}/orders`,
-                    { where: [{ field: 'id', operator: '==', value: resa.orderId }] }
-                );
-                const order = orders[0];
+                const order = orderMap.get(resa.orderId);
                 if (order) {
                     totalRevenue += order.totalInMicrounits ?? (order.totalAmountInCents ?? 0) * 10_000;
                 }

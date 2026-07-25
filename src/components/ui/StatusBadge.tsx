@@ -1,6 +1,4 @@
-"use client";
-
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { ReactNode } from "react";
 
 export type BadgeStatus = "success" | "warning" | "error" | "info" | "neutral" | "accent";

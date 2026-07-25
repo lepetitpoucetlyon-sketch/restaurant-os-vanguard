@@ -111,6 +111,8 @@ export function useReservationsPage() {
         const syncFloorPlan = async () => {
             const now = Date.now();
             const in15Min = now + 15 * 60 * 1000;
+            const updates: Array<Promise<void>> = [];
+            const ts = new Date().toISOString();
             for (const res of reservations) {
                 if (!res.tableId) continue;
                 if (res.status === "cancelled" || res.status === "no_show") continue;
@@ -118,13 +120,14 @@ export function useReservationsPage() {
                 if (isNaN(resDateTime)) continue;
                 const tablePath = `tenants/${tenantId}/ops_nodes/${res.tableId}`;
                 if (res.status === "seated") {
-                    await Nexus.adapter.update(tablePath, { status: "occupied", updatedAt: new Date().toISOString() });
+                    updates.push(Nexus.adapter.update(tablePath, { status: "occupied", updatedAt: ts }));
                 } else if ((res.status as string) === "completed") {
-                    await Nexus.adapter.update(tablePath, { status: "free", updatedAt: new Date().toISOString() });
+                    updates.push(Nexus.adapter.update(tablePath, { status: "free", updatedAt: ts }));
                 } else if (resDateTime <= in15Min && resDateTime >= now) {
-                    await Nexus.adapter.update(tablePath, { status: "reserved", updatedAt: new Date().toISOString() });
+                    updates.push(Nexus.adapter.update(tablePath, { status: "reserved", updatedAt: ts }));
                 }
             }
+            await Promise.all(updates);
         };
         syncFloorPlan();
         const interval = setInterval(syncFloorPlan, 60_000);

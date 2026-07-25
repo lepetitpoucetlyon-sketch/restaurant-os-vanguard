@@ -18,7 +18,8 @@ import { logger } from '@/lib/logger';
  * 🧾 useBilling - Fiscal Suture Hook
  * Orchestrates the real-time link between POS [OPS] and Billing [FINANCE].
  */
-export function useBilling() {
+export function useBilling(options?: { enabled?: boolean }) {
+    const enabled = options?.enabled ?? true;
     const { data: orders, isLoading } = useOrders();
     const fiscalLedgerNode = useAtomValue(fiscalLedgerNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
@@ -55,16 +56,15 @@ export function useBilling() {
      * Orchestrator: Watch for completed orders that haven't been billed.
      */
     useEffect(() => {
-        if (isLoading || !orders) return;
+        if (!enabled || isLoading || !orders) return;
 
         const processOrders = async () => {
             const completedOrders = (orders as Order[]).filter((o: Order) => o.status === 'paid' || (o as { status?: string }).status === 'served');
             const ledgerData = (fiscalLedgerNode.data || []) as unknown as JournalEntry[];
 
             for (const order of completedOrders) {
-                // Check if already billed (avoid double billing in this session)
                 const isAlreadyBilled = ledgerData.some((entry: JournalEntry) => (entry as { metadata?: { orderId?: string } }).metadata?.orderId === order.id);
-                
+
                 if (!isAlreadyBilled) {
                     await billOrder(order);
                 }
@@ -72,7 +72,7 @@ export function useBilling() {
         };
 
         processOrders();
-    }, [orders, isLoading, fiscalLedgerNode.data, billOrder]);
+    }, [enabled, orders, isLoading, fiscalLedgerNode.data, billOrder]);
 
     return {
         billOrder,

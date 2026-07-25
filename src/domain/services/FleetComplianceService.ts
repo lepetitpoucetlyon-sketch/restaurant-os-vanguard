@@ -40,9 +40,11 @@ export const FleetComplianceService = {
     
     try {
       const ledgerPath = Nexus.getTenantPath('fiscal_ledger', tenantId);
-      const entriesRaw = await Nexus.adapter.query(ledgerPath);
-      
-      const entries = entriesRaw.map(e => e as import('@nexus/contracts').FiscalSeal).sort((a, b) => (a.sequence || 0) - (b.sequence || 0));
+      const entriesRaw = await Nexus.adapter.query(ledgerPath, {
+        orderBy: { field: 'sequence', direction: 'asc' },
+      });
+
+      const entries = entriesRaw as import('@nexus/contracts').FiscalSeal[];
       
       let isChainValid = true;
       let sequenceError: number | null = null;

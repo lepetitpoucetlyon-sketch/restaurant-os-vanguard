@@ -28,6 +28,8 @@ export const FoodCostRecompute = {
 
         const alerts: CostAlert[] = [];
 
+        const updates: Array<{ path: string; data: { costPriceInMicrounits: number } }> = [];
+
         for (const recipe of recipes) {
             if (!recipe.ingredients?.length) continue;
 
@@ -44,10 +46,10 @@ export const FoodCostRecompute = {
             const previousCost = recipe.costPriceInMicrounits ?? 0;
             if (newCost === previousCost) continue;
 
-            await Nexus.adapter.update(
-                `tenants/${tenantId}/recipes/${recipe.id}`,
-                { costPriceInMicrounits: newCost }
-            );
+            updates.push({
+                path: `tenants/${tenantId}/recipes/${recipe.id}`,
+                data: { costPriceInMicrounits: newCost },
+            });
 
             if (previousCost > 0) {
                 const deltaPercent = Math.abs(((newCost - previousCost) / previousCost) * 100);
@@ -62,6 +64,10 @@ export const FoodCostRecompute = {
                 }
             }
         }
+
+        await Promise.all(
+            updates.map(u => Nexus.adapter.update(u.path, u.data))
+        );
 
         if (alerts.length > 0) {
             empireAudit.log({

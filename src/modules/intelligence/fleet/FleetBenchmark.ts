@@ -38,35 +38,35 @@ export const FleetBenchmark = {
         fleetTenantIds: string[],
         period: string
     ): Promise<Map<string, BenchmarkResult[]>> {
-        const allMetrics: SiteMetrics[] = [];
+        const allMetrics: SiteMetrics[] = await Promise.all(
+            fleetTenantIds.map(async (tid) => {
+                const orders = await Nexus.adapter.query<{
+                    totalInMicrounits?: number;
+                    covers?: number;
+                    createdAt: string;
+                }>(
+                    `tenants/${tid}/orders`,
+                    {
+                        where: [
+                            { field: 'createdAt', operator: '>=', value: `${period}-01T00:00:00Z` },
+                        ],
+                    }
+                );
 
-        for (const tid of fleetTenantIds) {
-            const orders = await Nexus.adapter.query<{
-                totalInMicrounits?: number;
-                covers?: number;
-                createdAt: string;
-            }>(
-                `tenants/${tid}/orders`,
-                {
-                    where: [
-                        { field: 'createdAt', operator: '>=', value: `${period}-01T00:00:00Z` },
-                    ],
-                }
-            );
+                const revenue = orders.reduce((s, o) => s + (o.totalInMicrounits ?? 0), 0);
+                const couverts = orders.reduce((s, o) => s + (o.covers ?? 1), 0);
+                const avgTicket = couverts > 0 ? revenue / couverts : 0;
 
-            const revenue = orders.reduce((s, o) => s + (o.totalInMicrounits ?? 0), 0);
-            const couverts = orders.reduce((s, o) => s + (o.covers ?? 1), 0);
-            const avgTicket = couverts > 0 ? revenue / couverts : 0;
-
-            allMetrics.push({
-                tenantId: tid,
-                revenueInMicrounits: revenue,
-                couverts,
-                additionMoyenneInMicrounits: avgTicket,
-                foodCostPercent: 30, // placeholder
-                laborPercent: 28,   // placeholder
-            });
-        }
+                return {
+                    tenantId: tid,
+                    revenueInMicrounits: revenue,
+                    couverts,
+                    additionMoyenneInMicrounits: avgTicket,
+                    foodCostPercent: 30,
+                    laborPercent: 28,
+                };
+            })
+        );
 
         const results = new Map<string, BenchmarkResult[]>();
 

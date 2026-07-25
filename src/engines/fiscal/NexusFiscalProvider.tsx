@@ -28,6 +28,7 @@ import {
 } from '@modules/finance/types';
 import type { TreasuryMetrics } from '@/domain/schemas/finance';
 import { useBilling } from '@modules/finance/billing/hooks/useBilling';
+import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { Sentry } from '@/lib/sentry';
 import { toMicrounits } from '@/domain/schemas/primitives';
@@ -206,8 +207,9 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     }), [journalEntries, accounts, bankTransactions, expenseClaims, netProfitInMicrounits, submitExpense, fiscalSeals, runFiscalAudit, treasury, cashSnapshot]);
 
-    // 🧾 FISCAL ORCHESTRATOR: Connect POS [OPS] -> Ledger [FINANCE]
-    useBilling();
+    const taskContext = useTaskContext();
+    const financeActive = taskContext.importance.finance !== 'OFF';
+    useBilling({ enabled: financeActive });
 
     return (
         <NexusFiscalContext.Provider value={contextValue}>

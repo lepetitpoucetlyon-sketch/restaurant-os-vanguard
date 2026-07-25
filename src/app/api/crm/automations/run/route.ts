@@ -58,21 +58,30 @@ export async function POST(req: NextRequest) {
     const tenantId = auth.tenantId;
     const { automation, config } = parsed.data;
 
-    const raw = await Nexus.adapter.query<Customer>(`tenants/${tenantId}/customers`, {});
-    const customers = raw.filter((c): c is Customer & { email: string } => !!c.email);
-
-    let targets: typeof customers = [];
+    let targets: Array<Customer & { email: string }> = [];
 
     if (automation === 'birthday') {
-        targets = customers.filter(c => isBirthdayToday(c.birthDate));
+        const raw = await Nexus.adapter.query<Customer>(`tenants/${tenantId}/customers`, {});
+        targets = raw
+            .filter((c): c is Customer & { email: string } => !!c.email)
+            .filter(c => isBirthdayToday(c.birthDate));
     } else if (automation === 'winback') {
-        targets = customers.filter(c => daysSince(c.lastVisitDate) >= config.delayDays);
+        const cutoff = new Date(Date.now() - config.delayDays * 86_400_000).toISOString();
+        const raw = await Nexus.adapter.query<Customer>(`tenants/${tenantId}/customers`, {
+            where: [{ field: 'lastVisitDate', operator: '<=', value: cutoff }],
+        });
+        targets = raw.filter((c): c is Customer & { email: string } => !!c.email);
     } else if (automation === 'postvisit') {
         const delay = config.delayDays;
-        targets = customers.filter(c => {
-            const d = daysSince(c.lastVisitDate);
-            return d >= delay && d < delay + 1;
+        const windowStart = new Date(Date.now() - (delay + 1) * 86_400_000).toISOString();
+        const windowEnd = new Date(Date.now() - delay * 86_400_000).toISOString();
+        const raw = await Nexus.adapter.query<Customer>(`tenants/${tenantId}/customers`, {
+            where: [
+                { field: 'lastVisitDate', operator: '>=', value: windowStart },
+                { field: 'lastVisitDate', operator: '<', value: windowEnd },
+            ],
         });
+        targets = raw.filter((c): c is Customer & { email: string } => !!c.email);
     }
 
     if (!targets.length) {
