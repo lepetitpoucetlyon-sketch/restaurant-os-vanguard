@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
 import { GEMINI_VOICES, NexusMacro, NexusConfig, AI_PROVIDER_MODELS, AIProvider } from '@nexus/contracts/settings/nexus';
-import { NexusSphere } from "@/components/layout/NexusSphere";
+import { NexusSphereIndicator } from "@/components/layout/NexusSphereIndicator";
 import { cn } from '@/lib/ui.foundations';
 
 const PROVIDER_META: Record<AIProvider, { label: string; color: string; hint: string; keyLabel: string }> = {
@@ -101,7 +101,7 @@ export default function NexusSettings() {
                 <div className="flex flex-col md:flex-row items-center gap-10">
                     <div className="relative">
                         <div className="w-40 h-40 rounded-full bg-bg-primary/50 backdrop-blur-md border border-border flex items-center justify-center shadow-2xl relative z-10">
-                            <NexusSphere isActive={false} isProcessing={false} />
+                            <NexusSphereIndicator isActive={false} isProcessing={false} />
                         </div>
                         <motion.div 
                             animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
