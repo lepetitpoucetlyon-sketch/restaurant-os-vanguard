@@ -49,6 +49,10 @@ export interface Option {
     priceModifierInCents: number;
     priceModifierInMicrounits?: number; // microunits = cents × 10 000
     isDefault?: boolean;
+    // Stock-Engine-Nexus linking
+    ingredientId?: string;
+    action?: 'add' | 'remove' | 'info';
+    quantityImpact?: number; // In grams or units
 }
 
 export interface OptionGroup {

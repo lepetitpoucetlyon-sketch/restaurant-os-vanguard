@@ -43,9 +43,43 @@ export class StockEngine {
                 continue;
             }
 
+            // Aggregate required ingredients (Base Recipe + Modifiers)
+            const requiredIngredients = new Map<string, { id: string, name: string, quantity: number }>();
+            
+            // 1. Add base recipe ingredients
             for (const ing of (recipe.ingredients || [])) {
+                requiredIngredients.set(ing.id, { 
+                    id: ing.id, 
+                    name: ing.name as string, 
+                    quantity: ing.quantity || 0 
+                });
+            }
+
+            // 2. Apply modifiers (additions / removals)
+            const modifiers = (item as unknown as { modifiers?: { action?: string, quantityImpact?: number, ingredientId?: string, name: string }[] }).modifiers || [];
+            for (const mod of modifiers) {
+                if (mod.ingredientId) {
+                    const current = requiredIngredients.get(mod.ingredientId) || { 
+                        id: mod.ingredientId, 
+                        name: mod.name, 
+                        quantity: 0 
+                    };
+                    
+                    if (mod.action === 'add' && mod.quantityImpact) {
+                        current.quantity += mod.quantityImpact;
+                        requiredIngredients.set(mod.ingredientId, current);
+                    } else if (mod.action === 'remove') {
+                        requiredIngredients.delete(mod.ingredientId);
+                    }
+                }
+            }
+
+            // 3. Process deductions
+            for (const ing of requiredIngredients.values()) {
+                if (ing.quantity <= 0) continue;
+
                 // Calculation in GRAMS (Integer Only - Grade X Standard)
-                const needed = (ing.quantity || 0) * (item.quantity || 1);
+                const needed = ing.quantity * (item.quantity || 1);
                 const batches = allStock.filter(s => s.ingredientId === ing.id && s.quantity > 0);
                 
                 const deduction = this.calculateBatchDeduction(batches, needed);
@@ -68,8 +102,8 @@ export class StockEngine {
                         type: 'sale',
                         quantity: e.quantity,
                         unit: allStock.find(s => s.id === e.id)?.unit || 'unit',
-                        ingredientId: ing.id as string,
-                        ingredientName: ing.name as string,
+                        ingredientId: ing.id,
+                        ingredientName: ing.name,
                         reason: `Order #${correlationId}`,
                         performedAt: timestamp,
                         performedBy: 'System (Titan-StockEngine)',

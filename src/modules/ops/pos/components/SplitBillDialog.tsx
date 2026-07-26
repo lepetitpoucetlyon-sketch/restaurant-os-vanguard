@@ -11,6 +11,9 @@ import { formatCurrency } from "@/lib/formatters";
 import { CartItem } from "@modules/ops/engine/types";
 export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
+import { terminalService } from "@/lib/payment-terminal/PaymentTerminalService";
+import { printerService } from "@/lib/printing/PrintingService";
+import { Loader2, AlertCircle } from "lucide-react";
 
 interface SplitBillDialogProps {
     isOpen: boolean;
@@ -50,6 +53,9 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
     const [customAmounts, setCustomAmounts] = useState<number[]>(() => Array(coverCount || 2).fill(total / (coverCount || 2)));
     const [payingConvive, setPayingConvive] = useState<number | null>(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod | null>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [terminalState, setTerminalState] = useState<'idle' | 'pending' | 'manual_wait' | 'error'>('idle');
+    const [terminalError, setTerminalError] = useState<string | null>(null);
     const { t } = useLanguage();
 
     const syncSplitState = (nextSplitCount: number) => {
@@ -89,12 +95,54 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
         setSelectedPaymentMethod(null);
     };
 
-    const handleConfirmPayment = () => {
+    const handleConfirmPayment = async () => {
         if (payingConvive !== null && selectedPaymentMethod) {
+            const amountInCents = getConviveTotal(payingConvive);
+
+            if (selectedPaymentMethod === 'card') {
+                setIsProcessing(true);
+                setTerminalState('pending');
+                setTerminalError(null);
+
+                const defaultDevice = terminalService.getDefault();
+                try {
+                    if (defaultDevice?.adapter === "manual") {
+                        setTerminalState("manual_wait");
+                        if (terminalService.getStatus(defaultDevice.id) === "disconnected") {
+                            await terminalService.connect(defaultDevice.id);
+                        }
+                    }
+
+                    const result = await terminalService.charge({
+                        amountInMicrounits: amountInCents * 10000,
+                        orderId: `SPLIT_${Date.now()}_C${payingConvive}`,
+                        description: `Split Table`,
+                    });
+
+                    if (result.status !== "approved") {
+                        setTerminalState(result.status === "cancelled" ? "idle" : "error");
+                        if (result.status === "error") setTerminalError(result.error ?? "Paiement refusé");
+                        setIsProcessing(false);
+                        return; // Stop here if not approved
+                    }
+                } catch (err) {
+                    setTerminalState("error");
+                    setTerminalError(err instanceof Error ? err.message : "Erreur terminal");
+                    setIsProcessing(false);
+                    return;
+                }
+            } else if (selectedPaymentMethod === 'cash') {
+                printerService.openCashDrawer();
+            }
+
+            // Success (Cash/Mobile, or Card Approved)
+            setIsProcessing(false);
+            setTerminalState('idle');
+            
             setConvivePayments(prev => prev.map((g, i) =>
                 i === payingConvive ? { ...g, paid: true, method: selectedPaymentMethod } : g
             ));
-            onPaySplit(getConviveTotal(payingConvive), payingConvive);
+            onPaySplit(amountInCents, payingConvive);
             setPayingConvive(null);
             setSelectedPaymentMethod(null);
         }
@@ -178,23 +226,52 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             ))}
                         </div>
 
-                        <div className="flex gap-6 w-full max-w-2xl pb-10">
-                            <button
-                                onClick={() => setPayingConvive(null)}
-                                className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-white/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-white transition-all duration-500 border border-subtle"
-                            >
-                                {t('pos.split.back')}
-                            </button>
-                            <button
-                                onClick={handleConfirmPayment}
-                                disabled={!selectedPaymentMethod}
-                                className="flex-[2] h-16 rounded-[28px] bg-accent-gold text-primary font-black text-[12px] uppercase tracking-[0.5em] shadow-glow transition-all duration-500 disabled:opacity-20 disabled:grayscale group relative overflow-hidden"
-                            >
-                                <span className="relative z-10 flex items-center justify-center gap-4">
-                                    <CheckCircle2 className="w-5 h-5" />
-                                    {t('pos.split.seal_transaction')}
-                                </span>
-                            </button>
+                        <div className="flex flex-col items-center gap-6 w-full max-w-2xl pb-10">
+                            {terminalState !== 'idle' && (
+                                <div className="w-full p-6 rounded-3xl border border-accent-gold/20 bg-accent-gold/5 flex flex-col items-center gap-4 animate-in zoom-in duration-500">
+                                    {terminalState === 'pending' || terminalState === 'manual_wait' ? (
+                                        <>
+                                            <div className="w-12 h-12 rounded-full bg-accent-gold/20 flex items-center justify-center">
+                                                <Loader2 className="w-6 h-6 text-accent-gold animate-spin" />
+                                            </div>
+                                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-accent-gold">
+                                                {terminalState === 'manual_wait' ? "Veuillez valider sur le TPE physique" : "Connexion au TPE en cours..."}
+                                            </p>
+                                        </>
+                                    ) : terminalState === 'error' ? (
+                                        <>
+                                            <div className="w-12 h-12 rounded-full bg-status-error/20 flex items-center justify-center">
+                                                <AlertCircle className="w-6 h-6 text-status-error" />
+                                            </div>
+                                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-status-error text-center">
+                                                Erreur de paiement<br/>
+                                                <span className="text-[9px] opacity-70">{terminalError}</span>
+                                            </p>
+                                            <button onClick={() => setTerminalState('idle')} className="px-6 py-2 rounded-full bg-surface-card border border-white/10 text-white/50 text-[10px] font-bold uppercase hover:bg-white/10 transition-colors mt-2">Réessayer</button>
+                                        </>
+                                    ) : null}
+                                </div>
+                            )}
+
+                            <div className="flex gap-6 w-full">
+                                <button
+                                    onClick={() => { setPayingConvive(null); setTerminalState('idle'); }}
+                                    disabled={isProcessing}
+                                    className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-white/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-white transition-all duration-500 border border-subtle disabled:opacity-20"
+                                >
+                                    {t('pos.split.back')}
+                                </button>
+                                <button
+                                    onClick={handleConfirmPayment}
+                                    disabled={!selectedPaymentMethod || isProcessing}
+                                    className="flex-[2] h-16 rounded-[28px] bg-accent-gold text-primary font-black text-[12px] uppercase tracking-[0.5em] shadow-glow transition-all duration-500 disabled:opacity-20 disabled:grayscale group relative overflow-hidden flex items-center justify-center"
+                                >
+                                    <span className="relative z-10 flex items-center justify-center gap-4">
+                                        {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
+                                        {isProcessing ? "Encaissement..." : t('pos.split.seal_transaction')}
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ) : (

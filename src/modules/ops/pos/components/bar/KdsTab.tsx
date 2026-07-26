@@ -239,7 +239,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                                     {item.modifiers.map((m, mi) => (
                                                         <span key={mi} className="text-xs font-bold text-status-warning flex items-center gap-2">
                                                             <span className="w-1 h-1 rounded-full bg-status-warning" />
-                                                            {m}
+                                                            {m.name}
                                                         </span>
                                                     ))}
                                                 </div>

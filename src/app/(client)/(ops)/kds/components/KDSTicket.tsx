@@ -445,10 +445,10 @@ export function KDSTicket({
 
                                             {item.modifiers && item.modifiers.length > 0 ? (
                                                 <div className="flex flex-col gap-1.5 mt-2">
-                                                    {item.modifiers.map((m: string, mi: number) => (
+                                                    {item.modifiers.map((m: { name: string }, mi: number) => (
                                                         <span key={mi} className="text-xs font-bold text-status-warning flex items-start gap-2">
                                                             <span className="w-1.5 h-1.5 rounded-full bg-status-warning mt-1.5 shrink-0 animate-pulse" />
-                                                            {m}
+                                                            {m.name}
                                                         </span>
                                                     ))}
                                                 </div>

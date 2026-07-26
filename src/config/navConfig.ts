@@ -124,6 +124,7 @@ export const NAV_SECTIONS: NavSection[] = [
         mode: 'tenant',
         items: [
             { label: "Point de vente", key: "pos", href: "/pos", icon: Store, category: "pos" },
+            { label: "Éditeur de Carte", key: "menu_builder", href: "/menu-builder", icon: ChefHat, category: "pos" },
             { label: "Plan de salle", key: "floor_plan", href: "/floor-plan", icon: Map, category: "floor-plan" },
             { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds" },
             { label: "Opérations", key: "operations", href: "/operations", icon: ClipboardCheck, category: "operations" },

@@ -112,6 +112,21 @@ export class EscPosBuilder {
     this.text(sep('=', lw));
     this.text('Merci de votre visite !');
     if (ticket.footerNote) this.text(ticket.footerNote);
+
+    if (ticket.nf525Hash || ticket.siret) {
+      this.text(sep('-', lw));
+      if (ticket.siret) this.text(`SIRET: ${ticket.siret}`);
+      this.text('--- CERTIFICATION NF525 ---');
+      this.text('Restaurant OS Core v1.0.0');
+      if (ticket.certifiedAt) this.text(`Date: ${ticket.certifiedAt}`);
+      if (ticket.nf525Hash) {
+        this.text(`Signature:`);
+        for (let i = 0; i < ticket.nf525Hash.length; i += lw) {
+          this.text(ticket.nf525Hash.substring(i, i + lw));
+        }
+      }
+    }
+
     this.push(CMD.FEED_5);
     if (this.hasCutter) this.push(CMD.CUT_PARTIAL);
 

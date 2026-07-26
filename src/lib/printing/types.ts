@@ -79,6 +79,10 @@ export interface ReceiptTicket {
   cashGiven?: number      // microunits
   changeGiven?: number    // microunits
   footerNote?: string
+  // Champs NF525
+  siret?: string
+  nf525Hash?: string
+  certifiedAt?: string
 }
 
 export interface KitchenTicket {

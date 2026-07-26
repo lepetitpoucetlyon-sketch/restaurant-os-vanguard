@@ -19,7 +19,7 @@ import { POSService } from "../domain";
  */
 
 export function usePOSController() {
-    const { currentUser } = useAuth();
+    const { currentUser, hasAccess } = useAuth();
     const { activeTenantId } = useTenant();
     const { nodes: tables, updateTable } = useTables();
     const { add: addOrder } = useOrders();
@@ -68,7 +68,7 @@ export function usePOSController() {
     const handleAddToCart = useCallback((
         product: SovereignProduct,
         quantity: number,
-        selectedOptions: Record<string, { name: string }[]>,
+        selectedOptions: Record<string, { id?: string; name: string; action?: 'add' | 'remove' | 'info'; ingredientId?: string; quantityImpact?: number }[]>,
         note?: string
     ) => {
         const cartId = `${product.id}-${Date.now()}`;
@@ -82,7 +82,13 @@ export function usePOSController() {
             taxRate: product.taxRate || "0.10",
             quantity,
             modifiers: selectedOptions
-                ? Object.values(selectedOptions).flat().map((opt) => opt.name)
+                ? Object.values(selectedOptions).flat().map((opt) => ({
+                    id: opt.id || `${Date.now()}-${Math.random()}`,
+                    name: opt.name,
+                    action: opt.action || 'add',
+                    ingredientId: opt.ingredientId,
+                    quantityImpact: opt.quantityImpact
+                }))
                 : [],
             notes: note || "",
         };
@@ -128,9 +134,13 @@ export function usePOSController() {
 
     /**
      * Mark a cart item as an offer (management comp — sets price to 0).
-     * Requires pos.offer_product permission (checked by caller via RBAC).
+     * Requires operations.pos.offer permission (checked by caller via RBAC).
      */
     const handleApplyOffer = useCallback((cartId: string) => {
+        if (hasAccess && !hasAccess('operations.pos.offer')) {
+            showToast("Accès refusé : Autorisation Manager requise", "error");
+            return;
+        }
         // Logique pure extraite → domain/cartDiscounts (dette-2)
         setCartItems((prev) =>
             prev.map((item) =>
@@ -138,16 +148,21 @@ export function usePOSController() {
             )
         );
         showToast("Article offert", "success");
-    }, [showToast]);
+    }, [showToast, hasAccess]);
 
     /**
      * Remove / void a cart item.
-     * Requires pos.cancel_item_sent permission (checked by caller via RBAC).
+     * Requires operations.pos.cancel_sent permission (checked by caller via RBAC).
      */
     const handleCancelItem = useCallback((cartId: string) => {
+        const itemToCancel = cartItems.find(i => i.cartId === cartId);
+        if (itemToCancel?.sentAt && hasAccess && !hasAccess('operations.pos.cancel_sent')) {
+            showToast("Accès refusé : Ce plat est déjà en préparation", "error");
+            return;
+        }
         setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
         showToast("Article annulé", "success");
-    }, [showToast]);
+    }, [cartItems, showToast, hasAccess]);
 
     const handleSetItemNote = useCallback((cartId: string, note: string) => {
         setCartItems((prev) =>
@@ -226,10 +241,14 @@ export function usePOSController() {
         setIsPaymentOpen(true);
     }, [cartItems]);
 
+    // Partial payments state for resilient splitting
+    const [partialPayments, setPartialPayments] = useState<{ amount: number, guest: number, method?: string }[]>([]);
+
     const handlePaySplit = useCallback((amountInCents: number, guestIndex: number) => {
         // Accusé de réception par convive (feedback UI). Le scellement fiscal de la
         // vente a lieu une seule fois, au terme du fractionnement, via handleSplitComplete.
-        showToast(`Client ${guestIndex + 1} : ${amountInCents / 100}€ réglés`, "success");
+        setPartialPayments(prev => [...prev, { amount: amountInCents, guest: guestIndex }]);
+        showToast(`Client ${guestIndex + 1} : ${amountInCents / 100}€ réglés et persistés`, "success");
     }, [showToast]);
 
     /**
@@ -247,6 +266,8 @@ export function usePOSController() {
                 tableId: selectedTableId,
                 tenantId,
                 consumptionMode,
+                // On passe les partialPayments pour l'enregistrement fiscal final
+                partialPayments,
             });
             showToast(
                 `Table ${currentTable.number} — Paiement fractionné validé & scellé NF525`,
@@ -255,11 +276,12 @@ export function usePOSController() {
             handleClearCart();
             setSelectedTableId(null);
             setIsSplitOpen(false);
+            setPartialPayments([]); // Reset partial payments
             await updateTable(currentTable.id, { status: "dirty" });
         } catch (_error) {
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, handleClearCart, updateTable, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, handleClearCart, updateTable, showToast]);
 
     /**
      * Assign or remove a course from a cart item (pos-3).
@@ -367,5 +389,6 @@ export function usePOSController() {
         handleSetItemNote,
         handleSetItemConsumptionMode,
         handleToggleDoggyBag,
+        partialPayments,
     };
 }

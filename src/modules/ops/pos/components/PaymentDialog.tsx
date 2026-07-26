@@ -8,6 +8,7 @@ import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";;
 import { terminalService } from "@/lib/payment-terminal/PaymentTerminalService";
 import type { PaymentResult } from "@/lib/payment-terminal/types";
+import { printerService } from "@/lib/printing/PrintingService";
 
 interface PaymentDialogProps {
     isOpen: boolean;
@@ -100,6 +101,9 @@ export function PaymentDialog({ isOpen, total, orderId, onClose, onPaymentComple
     const handleDirectPayment = async () => {
         setIsProcessing(true);
         try {
+            if (method === "cash") {
+                printerService.openCashDrawer();
+            }
             const hash = await onPaymentComplete();
             if (hash) setCertifiedHash(hash);
             setIsSuccess(true);

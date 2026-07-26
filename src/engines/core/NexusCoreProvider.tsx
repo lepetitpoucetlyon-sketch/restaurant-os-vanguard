@@ -1,6 +1,7 @@
 "use client";
-import React, { createContext, useContext, useState, useMemo, useCallback, ReactNode } from 'react';
-import { translations, Language } from '@/i18n/translations';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode } from 'react';
+import { loadTranslations, Language } from '@/i18n/translations';
+import { LANGUAGES } from '@/config/languages';
 import { useAtomValue } from 'jotai';
 import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import { unreadNotificationsCountAtom } from '@nexus/state/SovereignGenome';
@@ -31,21 +32,32 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     // 4. LANGUAGE MODULE
     const [currentLanguage, setCurrentLanguage] = useState<Language>('fr');
+    const [activeDictionary, setActiveDictionary] = useState<SovereignData | null>(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        loadTranslations(currentLanguage).then(dict => {
+            if (isMounted) setActiveDictionary(dict);
+        });
+        return () => { isMounted = false; };
+    }, [currentLanguage]);
+
     const t = useCallback((key: string): string => {
+        if (!activeDictionary) return key;
         const keys = key.split('.');
-        let val: SovereignValue | SovereignData = translations[currentLanguage as keyof typeof translations];
+        let val: SovereignValue | SovereignData = activeDictionary;
         for (const k of keys) {
             if (val && typeof val === 'object' && val !== null && k in val) {
                 val = (val as Record<string, SovereignValue | SovereignData>)[k];
             } else return key; 
         }
         return typeof val === 'string' ? val : key;
-    }, [currentLanguage]);
+    }, [activeDictionary]);
 
     const langValue: NexusLangState = useMemo(() => ({
         t, currentLanguage, language: currentLanguage,
         setLanguage: (l: Language) => setCurrentLanguage(l),
-        availableLanguages: Object.keys(translations)
+        availableLanguages: LANGUAGES.map(l => l.code)
     }), [t, currentLanguage]);
 
     const fleetValue = useNexusFleetLogic();

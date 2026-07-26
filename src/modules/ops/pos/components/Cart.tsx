@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X, MoreHorizontal } from "lucide-react";
+import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X, MoreHorizontal, Trash2, Percent } from "lucide-react";
 import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,6 +30,98 @@ interface CartProps {
     /** Called when staff taps the "⋯" action button on a cart item (discount / offer / cancel). */
     onItemContextMenu?: (cartId: string, item: CartItem) => void;
 }
+
+const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemContextMenu }: { item: CartItem, priceMultiplier: number, onUpdateQuantity: (id: string, d: number) => void, onItemContextMenu?: (id: string, item: CartItem) => void }) => {
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="group relative overflow-hidden rounded-[20px] bg-bg-secondary mb-8"
+        >
+            {/* Background Actions (Revealed on Swipe) */}
+            <div className="absolute inset-y-0 right-0 flex items-center justify-end px-4 gap-2 w-[120px] bg-surface-sidebar/50">
+                <button
+                    onClick={() => onItemContextMenu?.(item.cartId, item)}
+                    className="w-10 h-10 rounded-full bg-accent-gold/20 flex items-center justify-center text-accent-gold hover:bg-accent-gold/40 transition-colors"
+                >
+                    <Percent className="w-4 h-4" />
+                </button>
+                <button
+                    onClick={() => onItemContextMenu?.(item.cartId, item)} // The context menu handles cancel/refund
+                    className="w-10 h-10 rounded-full bg-status-error/20 flex items-center justify-center text-status-error hover:bg-status-error/40 transition-colors"
+                >
+                    <Trash2 className="w-4 h-4" />
+                </button>
+            </div>
+
+            {/* Foreground Draggable Content */}
+            <motion.div
+                drag="x"
+                dragConstraints={{ left: -120, right: 0 }}
+                dragElastic={0.1}
+                whileTap={{ cursor: "grabbing" }}
+                className="relative bg-bg-secondary p-4 rounded-[20px] border border-border/30 flex flex-col gap-4 shadow-[0_5px_15px_-10px_rgba(0,0,0,0.3)] z-10"
+            >
+                <div className="flex justify-between items-start">
+                    <div className="flex gap-4">
+                        <div className="w-8 h-8 rounded-xl bg-accent-gold/10 text-accent-gold flex items-center justify-center font-serif font-black italic text-xs">
+                            {item.quantity}
+                        </div>
+                        <div className="min-w-0">
+                            <h4 className="text-[14px] font-black text-text-primary uppercase tracking-tight">{item.name}</h4>
+                            {(item.modifiers?.length || 0) > 0 && (
+                                <p className="text-[8px] text-text-muted mt-1 uppercase font-black tracking-widest">{item.modifiers?.map(m => m.name).join(", ")}</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-end gap-0.5">
+                        {item.originalPriceInMicrounits && (
+                            <span className="text-[10px] line-through opacity-40 font-mono text-status-error">
+                                {formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}
+                            </span>
+                        )}
+                        <span className="text-sm font-serif font-black italic">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}</span>
+                        <span className="text-[10px] opacity-40 font-mono">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))))} unit</span>
+                        
+                        {item.isOffer && (
+                            <span className="text-[8px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                                OFFERT
+                            </span>
+                        )}
+                        {!item.isOffer && (item.discountPercent ?? 0) > 0 && (
+                            <span className="text-[8px] font-black uppercase tracking-widest bg-accent-gold/10 text-accent-gold border border-accent-gold/20 px-2 py-0.5 rounded-full">
+                                -{item.discountPercent}%
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pr-1">
+                    <button onClick={() => onUpdateQuantity(item.cartId, -1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
+                        <Minus className="w-3 h-3" />
+                    </button>
+                    <span className="w-6 text-center text-xs font-mono font-bold">{item.quantity}</span>
+                    <button onClick={() => onUpdateQuantity(item.cartId, 1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
+                        <Plus className="w-3 h-3" />
+                    </button>
+                    {/* Keep the ellipsis button for non-touch users or quick access */}
+                    {onItemContextMenu && (
+                        <button
+                            onClick={() => onItemContextMenu(item.cartId, item)}
+                            className="w-8 h-8 rounded-lg bg-bg-tertiary/60 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors ml-4"
+                            title="Actions (remise / offrir / annuler)"
+                        >
+                            <MoreHorizontal className="w-3.5 h-3.5" />
+                        </button>
+                    )}
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+};
+
 
 export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill: _onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
     const { t } = useLanguage();
@@ -106,71 +198,14 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         </motion.div>
                     ) : (
                         <div className="p-6 lg:p-10 space-y-8">
-                            {items.map((item, _idx) => (
-                                <motion.div
+                            {items.map((item) => (
+                                <SwipeableCartItem
                                     key={item.cartId}
-                                    layout
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    className="group"
-                                >
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="flex gap-4">
-                                            <div className="w-8 h-8 rounded-xl bg-accent-gold/10 text-accent-gold flex items-center justify-center font-serif font-black italic text-xs">
-                                                {item.quantity}
-                                            </div>
-                                            <div className="min-w-0">
-                                                <h4 className="text-[14px] font-black text-text-primary uppercase tracking-tight">{item.name}</h4>
-                                                {(item.modifiers?.length || 0) > 0 && (
-                                                    <p className="text-[8px] text-text-muted mt-1 uppercase font-black tracking-widest">{item.modifiers?.join(", ")}</p>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col items-end gap-0.5">
-                                            {/* Strikethrough original price when a discount is active */}
-                                            {item.originalPriceInMicrounits && (
-                                                <span className="text-[10px] line-through opacity-40 font-mono text-status-error">
-                                                    {formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}
-                                                </span>
-                                            )}
-                                            <span className="text-sm font-serif font-black italic">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}</span>
-                                            <span className="text-[10px] opacity-40 font-mono">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))))} unit</span>
-                                            {/* Offer badge */}
-                                            {item.isOffer && (
-                                                <span className="text-[8px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                                                    OFFERT
-                                                </span>
-                                            )}
-                                            {/* Discount badge */}
-                                            {!item.isOffer && (item.discountPercent ?? 0) > 0 && (
-                                                <span className="text-[8px] font-black uppercase tracking-widest bg-accent-gold/10 text-accent-gold border border-accent-gold/20 px-2 py-0.5 rounded-full">
-                                                    -{item.discountPercent}%
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center justify-end gap-2 pr-1">
-                                        <button onClick={() => onUpdateQuantity(item.cartId, -1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
-                                            <Minus className="w-3 h-3" />
-                                        </button>
-                                        <span className="w-6 text-center text-xs font-mono font-bold">{item.quantity}</span>
-                                        <button onClick={() => onUpdateQuantity(item.cartId, 1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
-                                            <Plus className="w-3 h-3" />
-                                        </button>
-                                        {onItemContextMenu && (
-                                            <button
-                                                onClick={() => onItemContextMenu(item.cartId, item)}
-                                                className="w-8 h-8 rounded-lg bg-bg-tertiary/60 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
-                                                title="Actions (remise / offrir / annuler)"
-                                                aria-label="Options article"
-                                            >
-                                                <MoreHorizontal className="w-3.5 h-3.5" />
-                                            </button>
-                                        )}
-                                    </div>
-                                </motion.div>
+                                    item={item}
+                                    priceMultiplier={priceMultiplier}
+                                    onUpdateQuantity={onUpdateQuantity}
+                                    onItemContextMenu={onItemContextMenu}
+                                />
                             ))}
                         </div>
                     )}

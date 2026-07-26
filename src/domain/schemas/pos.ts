@@ -14,7 +14,13 @@ export const CartLineSchema = z.object({
   taxRate:               TaxRateSchema,
   consumptionMode:       ConsumptionModeSchema.optional(),
   discountInMicrounits:  MicrounitsSchema.default(0 as unknown as import('./primitives').Microunits),
-  modifiers:             z.array(z.string()).default([]),
+  modifiers:             z.array(z.object({
+    id: z.string(),
+    name: z.string(),
+    action: z.enum(['add', 'remove', 'info']),
+    ingredientId: z.string().optional(),
+    quantityImpact: z.number().optional()
+  })).default([]),
   notes:                 sanitized(0, 200).optional(),
 });
 
