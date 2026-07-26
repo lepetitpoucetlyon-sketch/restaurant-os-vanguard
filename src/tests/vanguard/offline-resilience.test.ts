@@ -57,6 +57,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
                     executed.push('BATCH_COMMIT');
                 }),
             }),
+            get: vi.fn(async () => null),
             set: vi.fn(async (path: string) => {
                 if (networkDown) throw new Error('NETWORK_UNAVAILABLE');
                 executed.push(`SET:${path}`);
@@ -77,7 +78,7 @@ function fiscalOp(orderId: string): Omit<SyncOperation, 'status' | 'attempts' | 
         action: 'COMMIT_BATCH',
         collection: 'orders',
         targetId: orderId,
-        payload: { instructions: [{ method: 'SET', path: `tenants/t1/orders/${orderId}`, data: { id: orderId } }] },
+        payload: { instructions: [{ method: 'SET', path: `tenants/t1/journalEntries/${orderId}`, data: { id: orderId } }] },
         priority: 1,
     };
 }
@@ -87,12 +88,24 @@ function stockOp(id: string): Omit<SyncOperation, 'status' | 'attempts' | 'times
 }
 
 describe('🔌 Résilience offline — SyncManager', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
+        vi.clearAllMocks();
         queue = [];
         nextId = 1;
         executed.length = 0;
         online = true;
         networkDown = false;
+        
+        global.fetch = vi.fn().mockImplementation(async (url) => {
+            if (networkDown) {
+                return { ok: false, status: 503, statusText: 'Service Unavailable' };
+            }
+            if (url === '/api/finance/sync') {
+                executed.push('FETCH_API_SYNC');
+                return { ok: true, json: async () => ({ success: true }) };
+            }
+            return { ok: true };
+        });
     });
 
     it('un ticket NF525 enfilé hors-ligne reste en file (zéro perte)', async () => {
@@ -111,7 +124,7 @@ describe('🔌 Résilience offline — SyncManager', () => {
         online = true; // le service se reconnecte
         await SyncManager.processQueue();
 
-        expect(executed).toContain('BATCH_COMMIT');
+        expect(executed).toContain('FETCH_API_SYNC');
         expect(executed).toContain('SET:tenants/t1/stockItems/stock-1');
         expect(queue).toHaveLength(0);
     });
@@ -128,7 +141,7 @@ describe('🔌 Résilience offline — SyncManager', () => {
 
         networkDown = false; // backend de retour
         await SyncManager.processQueue();
-        expect(executed).toContain('BATCH_COMMIT');
+        expect(executed).toContain('FETCH_API_SYNC');
         expect(queue).toHaveLength(0);
     });
 

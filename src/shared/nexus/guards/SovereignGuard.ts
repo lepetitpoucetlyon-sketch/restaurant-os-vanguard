@@ -91,8 +91,8 @@ export const SovereignGuard = {
     const message = `${tenantId}:${this.extractCollectionName(path)}:NF525_WRITE_V1`;
     const secret = process.env.NEXUS_TENANT_SECRET;
     if (!secret) {
-      logger.warn('[SovereignGuard] NEXUS_TENANT_SECRET non configuré — la signature d\'écriture est dérivable publiquement');
-      return message;
+      logger.error('[SovereignGuard] NEXUS_TENANT_SECRET non configuré — arrêt de sécurité P0');
+      throw new NexusError(NexusErrorCode.ACCESS_DENIED, 'Signature d\'écriture impossible sans secret d\'environnement');
     }
     // HMAC serveur uniquement — la vérification des writes se fait server-side
     if (typeof process !== 'undefined' && process.versions?.node) {

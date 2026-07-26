@@ -23,8 +23,14 @@ import { logger } from '@/lib/logger';
 const GATEWAY_TOKEN = process.env.HACCP_GATEWAY_TOKEN;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  // Fail-Closed : Si le serveur n'est pas configuré avec une clé de sécurité, on bloque TOUT.
+  if (!GATEWAY_TOKEN) {
+    logger.error('[IoT Push] HACCP_GATEWAY_TOKEN is missing in environment variables. Denying all requests for security.');
+    return NextResponse.json({ error: 'Server misconfigured. Access denied.' }, { status: 500 });
+  }
+
   const auth = req.headers.get('authorization');
-  if (GATEWAY_TOKEN && auth !== `Bearer ${GATEWAY_TOKEN}`) {
+  if (auth !== `Bearer ${GATEWAY_TOKEN}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

@@ -110,16 +110,14 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
 
   it('écrit JournalEntry dans Nexus (seal écrit via transaction)', async () => {
     const item = makeCartItem();
-    await FinancialNexusBridge.processOrder({
+    const { journalEntry, seal } = await FinancialNexusBridge.processOrder({
       cartItems: [item],
       operatorId: 'op-1',
       tableId: 'table-1',
       tenantId: 'tenant-test',
     });
-    expect(mockBatch).toHaveBeenCalled();
-    expect(mockBatchSet).toHaveBeenCalledTimes(1);
-    expect(mockBatchSet.mock.calls[0][0]).toContain('journalEntries/');
-    expect(mockBatchCommit).toHaveBeenCalled();
+    expect(journalEntry.id).toBeDefined();
+    expect(seal.id).toBeDefined();
     expect(Nexus.adapter.runTransaction).toHaveBeenCalled();
   });
 

@@ -67,9 +67,7 @@ export const FinancialNexusBridge = {
 
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
 
-    // ── 2. Chaîne de scellement ───────────────────────────────────────────────
-    // previousHash is managed atomically inside sealDataAtomically via chainHead —
-    // never read it here to avoid hash-chain forks under concurrent orders.
+    // ── 2. JournalEntry NF525 & PCG Double-Entry ──────────────────────────────
     const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
     const entryId = SharedKernel.generateId('JE');
     const now = new Date().toISOString();
@@ -84,10 +82,27 @@ export const FinancialNexusBridge = {
       timestamp: now,
     } as import("@/shared/nexus-contract").SovereignData);
 
-    const { hash, signature, sealId, previousHash } = await FiscalSealer.sealDataAtomically(dataSnapshot, tenantId, isTrainingMode);
+    const pcgLines = [
+      { account: '512000', direction: 'debit', amountInMicrounits: totalTTCInMicrounits },
+      { account: '701000', direction: 'credit', amountInMicrounits: totalTTCInMicrounits - tvaBreakdown.totalTaxInMicrounits },
+      ...(tvaBreakdown?.rates ? Object.entries(tvaBreakdown.rates).map(([rate, amounts]) => ({
+        account: '445710',
+        direction: 'credit',
+        amountInMicrounits: amounts.tax,
+        metadata: { taxRate: rate }
+      })) : []),
+      ...resolvedItems.map((item) => ({
+        account: 'AUX_PRODUCT',
+        productId: item.productId,
+        name: item.name,
+        quantity: item.quantity,
+        unitPriceInMicrounits: item.unitPriceInMicrounits,
+        taxRate: item.taxRate,
+        totalInMicrounits: item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0),
+      }))
+    ];
 
-    // ── 3. JournalEntry NF525 ─────────────────────────────────────────────────
-    const journalEntry: JournalEntry = {
+    const journalEntryBase = {
       id: entryId,
       date: now,
       pieceNumber: receiptNumber,
@@ -96,27 +111,58 @@ export const FinancialNexusBridge = {
       referenceType: 'order',
       isSystemGenerated: true,
       isValidated: true,
-      fiscalSealHash: hash,
-      sealedAt: now,
-      type: 'revenue' as 'revenue' | 'expense' | 'tax' | 'other',
+      type: 'revenue',
       amountInCents: Math.round(totalTTCInMicrounits / 10000),
       status: 'validated',
-      updatedAt: now,
-      lines: resolvedItems.map((item) => ({
-        productId: item.productId,
-        name: item.name,
-        quantity: item.quantity,
-        unitPriceInMicrounits: item.unitPriceInMicrounits,
-        taxRate: item.taxRate,
-        totalInMicrounits:
-          item.unitPriceInMicrounits * item.quantity -
-          (item.discountInMicrounits ?? 0),
-      })),
-    } as unknown as JournalEntry;
+      lines: pcgLines,
+    };
 
-    // ── 4. FiscalSeal ─────────────────────────────────────────────────────────
-    // sealId comes from sealDataAtomically; the seal document is already written
-    // to Nexus atomically (with correct previousHash) — do NOT re-write it here.
+    // ── 3. Écriture Atomique Triptyque ou Mode Hors-Ligne ────────────────────
+    let hash: string, signature: string, sealId: string, previousHash: string;
+    let finalJournalEntry: JournalEntry;
+
+    // TODO: Importer checkOnlineStatus en haut du fichier
+    // import { checkOnlineStatus } from '@/lib/offline/connectivity-hooks';
+    // import { SyncManager } from '@/lib/offline/sync-manager';
+    const isOnline = typeof window !== 'undefined' ? window.navigator.onLine : true;
+
+    if (isOnline) {
+      const sealResult = await FiscalSealer.sealDataAtomically(
+        dataSnapshot,
+        tenantId,
+        isTrainingMode,
+        journalEntryBase
+      );
+      hash = sealResult.hash;
+      signature = sealResult.signature;
+      sealId = sealResult.sealId;
+      previousHash = sealResult.previousHash;
+
+      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now } as unknown as JournalEntry;
+    } else {
+      // Mode Hors-Ligne : Création d'un Draft et Envoi au SyncManager
+      hash = 'OFFLINE_DRAFT_HASH';
+      signature = 'OFFLINE_DRAFT_SIGNATURE';
+      sealId = SharedKernel.generateId('seal_draft');
+      previousHash = 'OFFLINE';
+
+      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now, status: 'offline_draft' } as unknown as JournalEntry;
+      
+      const syncManagerModule = await import('@/lib/offline/sync-manager');
+      await syncManagerModule.SyncManager.enqueue({
+        type: 'NF525_PAYMENT',
+        priority: 1,
+        collection: `tenants/${tenantId}/journalEntries`,
+        targetId: entryId,
+        action: 'COMMIT_BATCH',
+        payload: {
+          instructions: [
+            { method: 'SET', path: `tenants/${tenantId}/journalEntries/${entryId}`, data: finalJournalEntry }
+          ]
+        }
+      });
+    }
+
     const seal: FiscalSeal = {
       id: sealId,
       transactionId: entryId,
@@ -127,12 +173,6 @@ export const FinancialNexusBridge = {
       signature,
       updatedAt: now,
     };
-
-    // ── 5. Écriture atomique Nexus ────────────────────────────────────────────
-    // Only journalEntry is written here — fiscalSeal was already committed by sealDataAtomically.
-    const batch = Nexus.adapter.batch();
-    batch.set(`tenants/${tenantId}/journalEntries/${entryId}`, journalEntry);
-    await batch.commit();
 
     // Émission de l'événement — déclenche stock, Ticket Z, IA en parallèle
     NexusEventBus.emit('order.paid', {
@@ -160,6 +200,6 @@ export const FinancialNexusBridge = {
       timestamp: new Date(),
     });
 
-    return { journalEntry, seal };
+    return { journalEntry: finalJournalEntry, seal };
   },
 };

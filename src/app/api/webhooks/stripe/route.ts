@@ -89,14 +89,15 @@ export async function POST(req: NextRequest) {
   // Lire le body en texte pour la vérification de signature
   const rawBody = await req.text();
 
-  if (STRIPE_WEBHOOK_SECRET) {
-    const isValid = verifyStripeSignature(rawBody, signatureHeader, STRIPE_WEBHOOK_SECRET);
-    if (!isValid) {
-      logger.warn('[Stripe Webhook] Signature invalide — requête rejetée');
-      return NextResponse.json({ error: 'Signature invalide' }, { status: 400 });
-    }
-  } else {
-    logger.warn('[Stripe Webhook] STRIPE_WEBHOOK_SECRET non configuré — vérification de signature ignorée');
+  if (!STRIPE_WEBHOOK_SECRET) {
+    logger.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET non configuré — requête rejetée (Sécurité P0)');
+    return NextResponse.json({ error: 'Configuration serveur invalide' }, { status: 500 });
+  }
+
+  const isValid = verifyStripeSignature(rawBody, signatureHeader, STRIPE_WEBHOOK_SECRET);
+  if (!isValid) {
+    logger.warn('[Stripe Webhook] Signature invalide — requête rejetée');
+    return NextResponse.json({ error: 'Signature invalide' }, { status: 400 });
   }
 
   let event: StripeEvent;

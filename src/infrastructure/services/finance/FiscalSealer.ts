@@ -91,6 +91,7 @@ export class FiscalSealer {
     dataSnapshot: string,
     tenantId: string,
     isTrainingMode: boolean,
+    journalEntry?: any
   ): Promise<{ hash: string; signature: string; sealId: string; previousHash: string }> {
     const sealId = IdGenerator.generateWithPrefix('seal');
     const sealPath = `tenants/${tenantId}/fiscalSeals/${sealId}`;
@@ -100,6 +101,10 @@ export class FiscalSealer {
     let signature: string;
     let prevHash: string;
 
+    const timestamp = typeof process !== 'undefined' && typeof require !== 'undefined'
+      ? new Date().toISOString() // Server-side NTP timestamp would be better, but local for now
+      : new Date().toISOString();
+
     if (isTrainingMode) {
       hash = FISCAL_CONSTANTS.TRAINING_MODE_HASH;
       signature = 'VTC_SCHOOL_TRAINING_SIGNATURE';
@@ -108,10 +113,18 @@ export class FiscalSealer {
         tx.set(sealPath, {
           id: sealId, hash, signature,
           previousHash: FISCAL_CONSTANTS.GENESIS_ROOT,
-          timestamp: new Date().toISOString(),
+          timestamp,
           isTrainingMode: true,
         } as unknown);
-        tx.update(chainHeadPath, { hash, sealId, updatedAt: new Date().toISOString() });
+        tx.update(chainHeadPath, { hash, sealId, updatedAt: timestamp });
+        if (journalEntry) {
+           tx.set(`tenants/${tenantId}/journalEntries/${journalEntry.id}`, {
+             ...journalEntry,
+             fiscalSealHash: hash,
+             sealedAt: timestamp,
+             updatedAt: timestamp
+           });
+        }
       });
     } else {
       await Nexus.adapter.runTransaction(async (tx) => {
@@ -124,10 +137,18 @@ export class FiscalSealer {
 
         tx.set(sealPath, {
           id: sealId, hash, signature, previousHash,
-          timestamp: new Date().toISOString(),
+          timestamp,
           isTrainingMode: false,
         } as unknown);
-        tx.set(chainHeadPath, { hash, sealId, updatedAt: new Date().toISOString() });
+        tx.set(chainHeadPath, { hash, sealId, updatedAt: timestamp });
+        if (journalEntry) {
+           tx.set(`tenants/${tenantId}/journalEntries/${journalEntry.id}`, {
+             ...journalEntry,
+             fiscalSealHash: hash,
+             sealedAt: timestamp,
+             updatedAt: timestamp
+           });
+        }
       });
     }
 

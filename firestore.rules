@@ -32,7 +32,7 @@ service cloud.firestore {
     // Doit rester aligné avec SovereignGuard.IMMUTABLE_COLLECTIONS (barrière client).
     function isImmutableCollection(c) {
       return c in ['journalEntries', 'fiscalSeals', 'fiscalLedger',
-                   'fiscal_ledger', 'audit_logs', 'auditTrails', 'ticketZ', 'haccpLogs'];
+                   'fiscal_ledger', 'audit_logs', 'auditTrails', 'ticketZ', 'haccpLogs', 'fiscalMeta'];
     }
 
     // --- 🏛️ USERS & DEVICES CORE ---
@@ -45,6 +45,10 @@ service cloud.firestore {
         allow create: if isSignedIn() && request.auth.uid == userId;
         allow update, delete: if isFleetAdmin();
       }
+    }
+
+    function isOperationalCollection(c) {
+      return c in ['orders', 'tables', 'kds_tickets', 'pos_sessions'];
     }
 
     // --- 🏛️ TENANT ISOLATION CORE ---
@@ -65,9 +69,20 @@ service cloud.firestore {
       // update/delete interdits pour TOUT LE MONDE.
       match /{collection}/{document=**} {
         allow read: if isTenantStaff(tenantId) || isFleetAdmin();
-        allow create: if isTenantStaff(tenantId) || isFleetAdmin();
-        allow update, delete: if !isImmutableCollection(collection) &&
-                                 (isTenantManager(tenantId) || isFleetAdmin());
+        allow create: if !isImmutableCollection(collection) && (isTenantStaff(tenantId) || isFleetAdmin());
+        
+        // UPDATE : Autorisé pour les employés (Staff) SI c'est une collection opérationnelle chaude.
+        // Sinon, réservé aux Managers (pour products, users, config, etc.)
+        allow update: if !isImmutableCollection(collection) &&
+                         (
+                           isTenantManager(tenantId) || 
+                           isFleetAdmin() || 
+                           (isTenantStaff(tenantId) && isOperationalCollection(collection))
+                         );
+                         
+        // DELETE : Toujours réservé aux Managers pour éviter les suppressions sauvages
+        allow delete: if !isImmutableCollection(collection) &&
+                         (isTenantManager(tenantId) || isFleetAdmin());
       }
     }
 

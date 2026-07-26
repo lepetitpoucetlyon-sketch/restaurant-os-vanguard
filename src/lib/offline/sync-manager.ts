@@ -116,14 +116,30 @@ export class SyncManager {
                 }
             }
 
-            const batch = Nexus.adapter.batch();
-            for (const ins of instructions) {
-                if (ins.method === 'SET') batch.set(ins.path, ins.data);
-                if (ins.method === 'UPDATE') batch.update(ins.path, ins.data);
-                if (ins.method === 'DELETE') batch.delete(ins.path);
-            }
+            // Call the sync API instead of writing directly, to perform server-side atomic sealing
+            const journalEntries = instructions
+                .filter(ins => ins.path.includes('/journalEntries/') && ins.method === 'SET')
+                .map(ins => ins.data);
 
-            await batch.commit();
+            if (journalEntries.length > 0) {
+                // Extract tenantId from path (e.g. 'tenants/tenant-1/journalEntries/JE-123')
+                const pathParts = instructions[0].path.split('/');
+                const tenantId = pathParts[1];
+
+                const response = await fetch('/api/finance/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tenantId,
+                        journalEntries,
+                        isTrainingMode: false,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Sync API failed: ${response.status} ${response.statusText}`);
+                }
+            }
         } else {
             // Logique générique pour les opérations simples
             const fullPath = `${op.collection}/${op.targetId}`;

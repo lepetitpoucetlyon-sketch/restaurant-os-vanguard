@@ -17,6 +17,9 @@ export default defineConfig({
                 lines: 70,
             },
         },
+        env: {
+            NEXUS_TENANT_SECRET: 'test-secret-for-vitest'
+        }
     },
     resolve: {
         alias: {
