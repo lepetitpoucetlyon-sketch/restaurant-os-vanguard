@@ -101,7 +101,13 @@ export function useNexusAuthLogic(
         rolePermissions: access.rolePermissions,
         require2FAChallenge: false, 
         verifyTwoFactor: async () => true,
-        verifyPin: async (pin: string) => pin === '9999',
+        // Confirmation d'action privilégiée (remise, annulation, clôture) : on
+        // vérifie le VRAI PIN de l'opérateur courant. Plus de PIN universel « 9999 »
+        // (qui, en prod, était à la fois un bypass et un bug : les vrais PIN étaient refusés).
+        verifyPin: async (pin: string) => {
+            if (!currentUser) return false;
+            return IdentityManager.matchesPin(currentUser, pin);
+        },
         switchProfile: (uid: string) => logger.debug('Profile switch', uid),
         updateUser: async (id: string, data: Partial<User>) => {
             if (!activeTenantId) return;

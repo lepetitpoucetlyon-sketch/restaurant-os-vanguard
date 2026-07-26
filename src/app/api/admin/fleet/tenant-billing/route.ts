@@ -11,7 +11,7 @@ import { logger } from '@/lib/logger';
 
 // Initialisation de Stripe (le SDK est présent)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-01-27.acacia' as any,
+  apiVersion: '2026-05-27.dahlia',
 });
 
 interface TenantConfig {
@@ -35,7 +35,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   
   let realStatus = config?.billing?.status ?? 'unknown';
   let realNextDate = config?.billing?.nextBillingDate ?? null;
-  let realPlan = config?.billing?.plan ?? 'STANDARD';
+  const realPlan = config?.billing?.plan ?? 'STANDARD';
 
   // Consolidation MCC : Interrogation REELLE de Stripe
   if (config?.billing?.stripeCustomerId && process.env.STRIPE_SECRET_KEY) {
@@ -49,7 +49,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       if (subscriptions.data.length > 0) {
         const sub = subscriptions.data[0];
         realStatus = sub.status === 'active' ? 'ACTIVE' : sub.status;
-        realNextDate = new Date(sub.current_period_end * 1000).toISOString();
+        // Depuis l'API Stripe 2025+ (SDK v22), `current_period_end` est porté par
+        // chaque item d'abonnement, plus par l'objet Subscription lui-même.
+        const periodEndUnix =
+          sub.items?.data?.[0]?.current_period_end ??
+          (sub as unknown as { current_period_end?: number }).current_period_end;
+        realNextDate = periodEndUnix ? new Date(periodEndUnix * 1000).toISOString() : realNextDate;
         
         // Synchroniser Firestore avec la réalité Stripe
         await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {

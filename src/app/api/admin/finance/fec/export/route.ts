@@ -30,17 +30,28 @@ export async function POST(request: NextRequest) {
         }
 
         // 1. Lecture server-side du ledger scellé (jamais depuis le body client)
+        //
+        // Bornes de période EXCLUSIVES en fin de mois : les dates sont stockées en
+        // ISO complet (ex. "2026-07-31T09:12:00Z"). Un `<= "2026-07-31"` exclurait
+        // toutes les écritures du 31 (comparaison lexicale : "...T09" > "...-31").
+        // On borne donc par `< 1er du mois suivant`, ce qui inclut toute la
+        // journée du dernier jour, quelle que soit l'heure — et évite le faux
+        // "-31" pour les mois de 28/30 jours.
         const [year, month] = yearMonth.split('-');
+        const y = parseInt(year, 10);
+        const m = parseInt(month, 10);
         const monthPadded = month.padStart(2, '0');
         const startOfMonth = `${year}-${monthPadded}-01`;
-        const endOfMonth = `${year}-${monthPadded}-31`;
+        const startOfNextMonth = m === 12
+            ? `${y + 1}-01-01`
+            : `${y}-${String(m + 1).padStart(2, '0')}-01`;
 
         const entries = await Nexus.adapter.query<JournalEntry>(
             `tenants/${tenantId}/journalEntries`,
             {
                 where: [
                     { field: 'date', operator: '>=', value: startOfMonth },
-                    { field: 'date', operator: '<=', value: endOfMonth },
+                    { field: 'date', operator: '<', value: startOfNextMonth },
                 ],
                 orderBy: { field: 'date', direction: 'asc' },
             }

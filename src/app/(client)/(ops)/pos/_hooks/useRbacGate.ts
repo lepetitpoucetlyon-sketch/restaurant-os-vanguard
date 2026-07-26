@@ -50,7 +50,7 @@ export function useRbacGate(
 
     const handlePinConfirm = useCallback(
         async (pin: string) => {
-            const ok = verifyPin ? await verifyPin(pin) : pin === "9999";
+            const ok = verifyPin ? await verifyPin(pin) : false;
             if (!ok) { setPinError("PIN incorrect. Réessayez."); return; }
             setPinError(undefined);
             if (pendingAction) executeAction(pendingAction);

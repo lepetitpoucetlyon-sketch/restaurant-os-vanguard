@@ -2,7 +2,7 @@
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { FECMapper } from './FECMapper';
 import { FECExportResult, FECLine } from './types';
-import { QuantumCrypto } from '@/lib/QuantumCrypto';
+import { CryptoService } from '@/domain/services/CryptoService';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 
 /**
@@ -35,8 +35,9 @@ export class FECGenerator {
                 // Préparer les données pour le scellement
                 const lineDataString = Object.values(partialFecLine).join('|');
                 
-                // Génération du Hash NF525 via signature Lattice
-                const currentHash = await QuantumCrypto.sign(lineDataString, previousHash);
+                // Hash NF525 réel : SHA-256 chaîné (EcritureHash_n = SHA256(ligne_n + hash_{n-1})).
+                // Remplace l'ancienne "signature Lattice" simulée (non cryptographique).
+                const currentHash = await CryptoService.generateHash(lineDataString, previousHash);
                 
                 const completeFecLine: FECLine = {
                     ...partialFecLine,

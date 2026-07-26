@@ -23,6 +23,8 @@ export default defineConfig({
     },
     resolve: {
         alias: {
+            // Next.js "server-only" n'est pas résoluble sous vitest → stub vide.
+            'server-only': path.resolve(__dirname, './tests/stubs/empty-module.ts'),
             '@': path.resolve(__dirname, './src'),
             '@app': path.resolve(__dirname, './src/app'),
             '@components': path.resolve(__dirname, './src/components'),

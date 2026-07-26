@@ -26,23 +26,35 @@ export async function POST(req: NextRequest) {
 
     // On traite chaque ticket hors-ligne un par un pour garantir l'atomicité de la chaîne
     for (const entry of journalEntries as JournalEntry[]) {
+      // Le brouillon hors-ligne portait un numéro provisoire ("OFFLINE-…") : on
+      // attribue ici le VRAI numéro séquentiel NF525 côté serveur, de façon
+      // transactionnelle (le compteur est incrémenté atomiquement).
+      const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
+
+      const sealedEntry = {
+        ...entry,
+        pieceNumber: receiptNumber,
+        isValidated: true,
+        status: 'validated',
+      } as Record<string, unknown> & { id: string };
+
       const dataSnapshot = CryptoService.canonicalStringify({
         id: entry.id,
-        receiptNumber: entry.pieceNumber,
+        receiptNumber,
         operatorId: 'OFFLINE_SYNC', // On pourrait récupérer l'opérateur d'origine
         tableId: entry.referenceId,
         totalTTCInMicrounits: (entry.amountInCents ?? 0) * 10000,
         timestamp: entry.date,
       });
 
-      const { hash, signature, sealId, previousHash } = await FiscalSealer.sealDataAtomically(
+      const { hash, sealId } = await FiscalSealer.sealDataAtomically(
         dataSnapshot,
         tenantId,
         isTrainingMode,
-        entry
+        sealedEntry
       );
 
-      sealedEntries.push({ id: entry.id, sealId, hash });
+      sealedEntries.push({ id: entry.id, receiptNumber, sealId, hash });
     }
 
     logger.info(`[Sync API] Synchro réussie pour ${sealedEntries.length} tickets.`);

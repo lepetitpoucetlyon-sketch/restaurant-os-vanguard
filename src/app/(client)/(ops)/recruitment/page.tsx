@@ -114,7 +114,7 @@ export default function RecruitmentPage() {
             <AddCandidateModal 
                 isOpen={isAddModalOpen} 
                 onClose={() => setIsAddModalOpen(false)} 
-                onAdd={addCandidate as any}
+                onAdd={addCandidate as React.ComponentProps<typeof AddCandidateModal>['onAdd']}
             />
         </div>
     );

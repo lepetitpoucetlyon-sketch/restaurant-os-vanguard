@@ -9,8 +9,7 @@ import { toMicrounits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../engine/types";
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
-import { useStockDeduction } from "@modules/logistics/hooks/useStockDeduction";
-import type { OrderLine, ConsumptionMode } from "@/domain/schemas/orders";
+import type { ConsumptionMode } from "@/domain/schemas/orders";
 
 import { POSService } from "../domain";
 
@@ -28,7 +27,6 @@ export function usePOSController() {
     const { data: categories, isLoading: categoriesLoading } = useCategories();
 
     const { showToast } = useToast();
-    const { deductForOrder } = useStockDeduction();
 
     // --- POS STATE ---
     const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
@@ -204,18 +202,11 @@ export function usePOSController() {
                 consumptionMode,
             });
 
-            // pos-4: déduction stock cascade — parcourt les recettes des produits vendus,
-            // décrémente les ingrédients dans stockItems, alerte sur les seuils bas.
-            // Volontairement fire-and-log : un échec de déduction ne doit pas annuler
-            // un paiement déjà scellé fiscalement (NF525 immuable).
-            const orderLines = cartItems.map(item => ({
-                productId: item.productId,
-                quantity: item.quantity,
-            })) as unknown as OrderLine[];
-            deductForOrder(orderLines).catch(err => {
-                showToast("Stock non déduit — voir console", "error");
-                console.error("[usePOS] stock deduction failed", err);
-            });
+            // Déduction stock : gérée par un SEUL chemin — le handler événementiel
+            // `StockDeductionHandler` sur `order.paid` (émis par processOrder),
+            // tenant-scoped et aligné sur le schéma (product.recipeId → recipe).
+            // On a retiré l'ancien appel direct `deductForOrder` (chemins racine)
+            // qui causait une DOUBLE déduction sur chaque paiement.
 
             showToast(
                 `Table ${currentTable.number} — Paiement validé & scellé NF525`,
@@ -228,7 +219,7 @@ export function usePOSController() {
         } catch (_error) {
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, deductForOrder, handleClearCart, updateTable, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, handleClearCart, updateTable, showToast]);
 
     const handleCheckout = useCallback(() => {
         if (cartItems.length === 0) return;
@@ -236,8 +227,39 @@ export function usePOSController() {
     }, [cartItems]);
 
     const handlePaySplit = useCallback((amountInCents: number, guestIndex: number) => {
+        // Accusé de réception par convive (feedback UI). Le scellement fiscal de la
+        // vente a lieu une seule fois, au terme du fractionnement, via handleSplitComplete.
         showToast(`Client ${guestIndex + 1} : ${amountInCents / 100}€ réglés`, "success");
     }, [showToast]);
+
+    /**
+     * Clôture d'un paiement fractionné : une fois toutes les parts collectées,
+     * on scelle la vente UNE seule fois (un ticket NF525 pour toute la table),
+     * comme un paiement classique. Avant, le split ne persistait rien (simple toast).
+     */
+    const handleSplitComplete = useCallback(async () => {
+        if (!currentTable) return;
+        try {
+            const tenantId = activeTenantId ?? "restaurant-os";
+            await FinancialNexusBridge.processOrder({
+                cartItems,
+                operatorId: currentUser?.id ?? "unknown",
+                tableId: selectedTableId,
+                tenantId,
+                consumptionMode,
+            });
+            showToast(
+                `Table ${currentTable.number} — Paiement fractionné validé & scellé NF525`,
+                "success"
+            );
+            handleClearCart();
+            setSelectedTableId(null);
+            setIsSplitOpen(false);
+            await updateTable(currentTable.id, { status: "dirty" });
+        } catch (_error) {
+            showToast("Transaction Échouée", "error");
+        }
+    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, handleClearCart, updateTable, showToast]);
 
     /**
      * Assign or remove a course from a cart item (pos-3).
@@ -339,6 +361,7 @@ export function usePOSController() {
         handlePaymentComplete,
         handleCheckout,
         handlePaySplit,
+        handleSplitComplete,
         handleSetItemCourse,
         handleSendCourse,
         handleSetItemNote,

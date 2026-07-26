@@ -1,8 +1,7 @@
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
-import type { JournalEntry, FiscalSeal } from '@nexus/contracts';
+import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/engine/types';
 import { NexusEventBus } from '@/lib/events/NexusEventBus';
 import { TaxCalculator } from '../services/finance/TaxCalculator';
@@ -32,14 +31,33 @@ const _DEVICE_ID = 'MAIN_POS';
 const _SCHEMA_VERSION = '1.0.0';
 
 /**
+ * Comptes PCG d'encaissement par mode de paiement (débit de la contrepartie).
+ * La contrepartie crédit est toujours 701 (ventes HT) + 44571 (TVA collectée).
+ */
+const PCG_PAYMENT_ACCOUNTS: Record<PaymentMode, { code: string; name: string }> = {
+  cash:         { code: '531000', name: 'Caisse' },
+  card:         { code: '512000', name: 'Banque (CB)' },
+  check:        { code: '511200', name: 'Chèques à encaisser' },
+  ticket_resto: { code: '511500', name: 'Titres-restaurant à encaisser' },
+  transfer:     { code: '512000', name: 'Banque (virement)' },
+};
+
+const microToCents = (mu: number): number => Math.round(mu / 10_000);
+
+/**
  * FinancialNexusBridge — Grade X "NF525 Suture"
  *
- * Converts a validated POS cart into:
- *  1. A NF525-compliant JournalEntry (immutable ledger record)
- *  2. A FiscalSeal (hash chain link)
+ * Convertit un panier POS validé en :
+ *  1. Un JournalEntry NF525 en PARTIE DOUBLE (comptes PCG débit/crédit équilibrés)
+ *  2. Un FiscalSeal (maillon de la chaîne de hash)
  *
- * Both records are written atomically to Nexus before returning.
- * Designed to be called from handlePaymentComplete — never blocks UI.
+ * En ligne : le JournalEntry et le sceau sont écrits ATOMIQUEMENT dans une seule
+ * runTransaction (via FiscalSealer.sealDataAtomically) — numéro séquentiel inclus.
+ *
+ * Hors-ligne : aucune runTransaction n'est possible (Firestore l'interdit offline).
+ * On produit donc un brouillon `draft` SANS numéro séquentiel ni sceau, mis en file
+ * via le SyncManager ; le vrai numéro et le vrai sceau NF525 sont attribués
+ * côté serveur (Admin SDK) par /api/finance/sync au retour du réseau.
  */
 export const FinancialNexusBridge = {
   async processOrder(payload: BridgePayload): Promise<BridgeResult> {
@@ -67,71 +85,107 @@ export const FinancialNexusBridge = {
 
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
 
-    // ── 2. JournalEntry NF525 & PCG Double-Entry ──────────────────────────────
-    const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
+    // TTC ventilé par taux (pour dériver le HT par taux : HT = TTC − TVA).
+    const ttcByRate: Record<string, number> = {};
+    for (const item of resolvedItems) {
+      const rate = String(item.taxRate ?? '0.10');
+      const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
+      ttcByRate[rate] = (ttcByRate[rate] ?? 0) + lineTTC;
+    }
+
     const entryId = SharedKernel.generateId('JE');
     const now = new Date().toISOString();
+    const payAcct = PCG_PAYMENT_ACCOUNTS[paymentMode] ?? PCG_PAYMENT_ACCOUNTS.card;
 
-    const dataSnapshot = CryptoService.canonicalStringify({
-      id: entryId,
-      receiptNumber,
-      operatorId,
-      tableId,
-      totalTTCInMicrounits,
-      tvaBreakdown,
-      timestamp: now,
-    } as import("@/shared/nexus-contract").SovereignData);
-
-    const pcgLines = [
-      { account: '512000', direction: 'debit', amountInMicrounits: totalTTCInMicrounits },
-      { account: '701000', direction: 'credit', amountInMicrounits: totalTTCInMicrounits - tvaBreakdown.totalTaxInMicrounits },
-      ...(tvaBreakdown?.rates ? Object.entries(tvaBreakdown.rates).map(([rate, amounts]) => ({
-        account: '445710',
-        direction: 'credit',
-        amountInMicrounits: amounts.tax,
-        metadata: { taxRate: rate }
-      })) : []),
-      ...resolvedItems.map((item) => ({
-        account: 'AUX_PRODUCT',
-        productId: item.productId,
-        name: item.name,
-        quantity: item.quantity,
-        unitPriceInMicrounits: item.unitPriceInMicrounits,
-        taxRate: item.taxRate,
-        totalInMicrounits: item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0),
-      }))
-    ];
-
-    const journalEntryBase = {
-      id: entryId,
+    const makeLine = (
+      accountCode: string,
+      accountName: string,
+      side: 'debit' | 'credit',
+      cents: number,
+      description: string,
+      pieceNumber: string,
+    ): JournalLine => ({
+      accountId: accountCode,
+      accountCode,
+      accountName,
+      description,
+      side,
+      amountInCents: cents,
       date: now,
-      pieceNumber: receiptNumber,
-      description: `Vente POS — Table ${tableId ?? 'Emporté'} — ${receiptNumber}`,
-      referenceId: tableId ?? undefined,
-      referenceType: 'order',
-      isSystemGenerated: true,
-      isValidated: true,
-      type: 'revenue',
-      amountInCents: Math.round(totalTTCInMicrounits / 10000),
-      status: 'validated',
-      lines: pcgLines,
+      pieceNumber,
+      debitInCents: side === 'debit' ? cents : 0,
+      creditInCents: side === 'credit' ? cents : 0,
+      runningBalanceInCents: 0,
+    });
+
+    // Partie double : 1 débit d'encaissement = Σ (crédits 701 HT + 445710 TVA) par taux.
+    const buildLines = (pieceNumber: string): JournalLine[] => {
+      const credits: JournalLine[] = [];
+      let totalCreditCents = 0;
+      for (const [rate, ttcMu] of Object.entries(ttcByRate)) {
+        const tvaMu = tvaBreakdown[rate] ?? 0;
+        const htCents = microToCents(ttcMu - tvaMu);
+        const tvaCents = microToCents(tvaMu);
+        const ratePct = (parseFloat(rate) * 100).toFixed(1);
+        if (htCents > 0) {
+          credits.push(makeLine('701000', 'Ventes de marchandises', 'credit', htCents, `Ventes HT (TVA ${ratePct}%)`, pieceNumber));
+          totalCreditCents += htCents;
+        }
+        if (tvaCents > 0) {
+          credits.push(makeLine('445710', 'TVA collectée', 'credit', tvaCents, `TVA collectée ${ratePct}%`, pieceNumber));
+          totalCreditCents += tvaCents;
+        }
+      }
+      // Le débit d'encaissement = somme des crédits → équilibre garanti au centime.
+      const debit = makeLine(payAcct.code, payAcct.name, 'debit', totalCreditCents, `Encaissement ${payAcct.name}`, pieceNumber);
+      return [debit, ...credits];
     };
 
-    // ── 3. Écriture Atomique Triptyque ou Mode Hors-Ligne ────────────────────
+    const buildSnapshot = (pieceNumber: string): string =>
+      CryptoService.canonicalStringify({
+        id: entryId,
+        receiptNumber: pieceNumber,
+        operatorId,
+        tableId,
+        totalTTCInMicrounits,
+        tvaBreakdown,
+        timestamp: now,
+      } as import('@/shared/nexus-contract').SovereignData);
+
+    const buildEntryBase = (pieceNumber: string, status: string) => ({
+      id: entryId,
+      date: now,
+      pieceNumber,
+      description: `Vente POS — Table ${tableId ?? 'Emporté'} — ${pieceNumber}`,
+      referenceId: tableId ?? undefined,
+      referenceType: 'order' as const,
+      isSystemGenerated: true,
+      isValidated: status === 'validated',
+      type: 'revenue' as const,
+      amountInCents: microToCents(totalTTCInMicrounits),
+      status,
+      lines: buildLines(pieceNumber),
+    });
+
+    // ── 2. Écriture atomique (en ligne) ou brouillon mis en file (hors-ligne) ─
     let hash: string, signature: string, sealId: string, previousHash: string;
     let finalJournalEntry: JournalEntry;
+    let finalReceiptNumber: string;
+    let finalSnapshot: string;
 
-    // TODO: Importer checkOnlineStatus en haut du fichier
-    // import { checkOnlineStatus } from '@/lib/offline/connectivity-hooks';
-    // import { SyncManager } from '@/lib/offline/sync-manager';
-    const isOnline = typeof window !== 'undefined' ? window.navigator.onLine : true;
+    const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
 
     if (isOnline) {
+      // Numéro séquentiel + scellement + écriture du JournalEntry : tout atomique.
+      const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
+      const journalEntryBase = buildEntryBase(receiptNumber, 'validated');
+      const dataSnapshot = buildSnapshot(receiptNumber);
+
       const sealResult = await FiscalSealer.sealDataAtomically(
         dataSnapshot,
         tenantId,
         isTrainingMode,
-        journalEntryBase
+        journalEntryBase,
       );
       hash = sealResult.hash;
       signature = sealResult.signature;
@@ -139,17 +193,25 @@ export const FinancialNexusBridge = {
       previousHash = sealResult.previousHash;
 
       finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now } as unknown as JournalEntry;
+      finalReceiptNumber = receiptNumber;
+      finalSnapshot = dataSnapshot;
     } else {
-      // Mode Hors-Ligne : Création d'un Draft et Envoi au SyncManager
-      hash = 'OFFLINE_DRAFT_HASH';
-      signature = 'OFFLINE_DRAFT_SIGNATURE';
-      sealId = SharedKernel.generateId('seal_draft');
-      previousHash = 'OFFLINE';
+      // Hors-ligne : PAS de numéro séquentiel (runTransaction Firestore indisponible).
+      // Brouillon provisoire → SyncManager → /api/finance/sync scelle côté serveur.
+      const provisional = `OFFLINE-${entryId}`;
+      const journalEntryBase = buildEntryBase(provisional, 'draft');
 
-      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now, status: 'offline_draft' } as unknown as JournalEntry;
-      
-      const syncManagerModule = await import('@/lib/offline/sync-manager');
-      await syncManagerModule.SyncManager.enqueue({
+      hash = 'PENDING_OFFLINE_SEAL';
+      signature = 'PENDING_OFFLINE_SEAL';
+      sealId = SharedKernel.generateId('seal_pending');
+      previousHash = 'PENDING_OFFLINE';
+
+      finalJournalEntry = { ...journalEntryBase, updatedAt: now } as unknown as JournalEntry;
+      finalReceiptNumber = provisional;
+      finalSnapshot = buildSnapshot(provisional);
+
+      const { SyncManager } = await import('@/lib/offline/sync-manager');
+      await SyncManager.enqueue({
         type: 'NF525_PAYMENT',
         priority: 1,
         collection: `tenants/${tenantId}/journalEntries`,
@@ -157,9 +219,9 @@ export const FinancialNexusBridge = {
         action: 'COMMIT_BATCH',
         payload: {
           instructions: [
-            { method: 'SET', path: `tenants/${tenantId}/journalEntries/${entryId}`, data: finalJournalEntry }
-          ]
-        }
+            { method: 'SET', path: `tenants/${tenantId}/journalEntries/${entryId}`, data: finalJournalEntry },
+          ],
+        },
       });
     }
 
@@ -167,7 +229,7 @@ export const FinancialNexusBridge = {
       id: sealId,
       transactionId: entryId,
       timestamp: now,
-      dataSnapshot,
+      dataSnapshot: finalSnapshot,
       hash,
       previousHash,
       signature,
@@ -193,8 +255,9 @@ export const FinancialNexusBridge = {
         sealId,
         hash: hash.substring(0, 8),
         totalTTC: totalTTCInMicrounits,
-        receiptNumber,
+        receiptNumber: finalReceiptNumber,
         isTrainingMode,
+        offline: !isOnline,
       },
       severity: 'low',
       timestamp: new Date(),

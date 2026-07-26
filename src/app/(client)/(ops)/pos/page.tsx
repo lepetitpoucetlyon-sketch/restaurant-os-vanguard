@@ -47,7 +47,7 @@ export default function POSPage() {
         handleAddToCart,
         handleUpdateQuantity, handleClearCart,
         handleSendToKitchen, handlePaymentComplete,
-        handlePaySplit,
+        handlePaySplit, handleSplitComplete,
         handleSetItemCourse, handleSendCourse,
         handleSetItemNote,
         consumptionMode, setConsumptionMode,
@@ -256,7 +256,7 @@ export default function POSPage() {
             />
 
             <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
-            <SplitBillDialog isOpen={isSplitOpen} items={cartItems} total={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInCents, guestIndex) => handlePaySplit(amountInCents, guestIndex)} />
+            <SplitBillDialog isOpen={isSplitOpen} items={cartItems} total={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInCents, guestIndex) => handlePaySplit(amountInCents, guestIndex)} onSplitComplete={handleSplitComplete} />
             <PinModal isOpen={pendingAction !== null} title={pinModalTitle} onConfirm={handlePinConfirm} onClose={handlePinClose} error={pinError} />
             <CashDrawerModal isOpen={isCashDrawerOpen} onClose={() => setIsCashDrawerOpen(false)} tenantId={activeTenantId ?? ""} userId={posUser?.id ?? "unknown"} />
             <VoidModal isOpen={isVoidModalOpen} onClose={() => setIsVoidModalOpen(false)} tenantId={activeTenantId ?? ""} operatorId={posUser?.id ?? "unknown"} />

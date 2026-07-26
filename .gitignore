@@ -137,3 +137,8 @@ Ki_Map.md
 
 # Scratch / working files (scripts d'analyse jetables, non versionnés)
 scratch/
+
+# Cache de déploiement Firebase (build .next + node_modules complets).
+# NE DOIT PAS être versionné : ~66k fichiers, pollue le gate sentrux.
+# Déjà suivi par erreur → à dé-tracker : `git rm -r --cached .firebase/`
+.firebase/

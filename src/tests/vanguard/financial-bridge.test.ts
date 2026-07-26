@@ -21,6 +21,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
     adapter: {
       query: vi.fn().mockResolvedValue([]),
       batch: mockBatch,
+      serverTimestamp: vi.fn(() => 'SERVER_TS'),
       runTransaction: vi.fn(async (cb: (tx: any) => Promise<any>) => {
         const tx = {
           get: vi.fn().mockResolvedValue(null),

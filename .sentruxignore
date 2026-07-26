@@ -2,8 +2,13 @@
 
 # Artefacts de build
 .next/
+.next-mcc/
 out/
 dist/
+
+# Cache de déploiement Firebase (contient un node_modules complet :
+# scanné par erreur, il générait 87 faux "cycles" et des god-files fantômes).
+.firebase/
 
 # Tests (mocks, fixtures, benchmarks) — leur couplage est volontairement large
 src/tests/

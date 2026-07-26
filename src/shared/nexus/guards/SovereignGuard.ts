@@ -31,6 +31,7 @@ export const SovereignGuard = {
   IMMUTABLE_COLLECTIONS: new Set<string>([
     'fiscalLedger',
     'haccpLogs',
+    'iotHistory',  // Registre sanitaire des relevés de température (append-only)
     'auditTrails',
     'tenantConfig',
     'ledger',      // Legacy mapping
@@ -182,6 +183,17 @@ export const SovereignGuard = {
     await this.validateAccess(path, anchoredTenantId);
 
     if (!this.requiresSignedWrite(path)) {
+      return data;
+    }
+
+    // La signature HMAC des écritures est une barrière SERVEUR : le secret
+    // NEXUS_TENANT_SECRET n'existe (et ne doit exister) que côté serveur. Dans le
+    // navigateur on ne peut pas — et on ne doit pas — le détenir. L'accès a déjà
+    // été validé ci-dessus, et l'intégrité NF525 est garantie par le scellement
+    // (FiscalSealer, HMAC serveur). On laisse donc passer les données non signées
+    // côté client plutôt que d'échouer en dur sur chaque écriture (POS inutilisable).
+    const isServer = typeof process !== 'undefined' && !!process.versions?.node;
+    if (!isServer) {
       return data;
     }
 

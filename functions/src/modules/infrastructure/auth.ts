@@ -45,6 +45,11 @@ const ROLE_LEVELS: Record<UserRole, number> = {
 const ROOT_ADMIN_DEFAULT_PIN = '0404';
 const ROOT_ADMIN_ID = 'user_root';
 
+// 🔒 Anti-brute-force : un PIN à 4 chiffres = 10 000 combinaisons. Argon2 ralentit
+// chaque tentative, mais seul un verrouillage borne réellement l'attaque.
+const MAX_PIN_ATTEMPTS = 5;
+const PIN_LOCKOUT_MS = 15 * 60 * 1000; // 15 minutes
+
 function hashPin(pin: string, salt: string): string {
     return createHash('sha256').update(`${pin}${salt}`).digest('hex');
 }
@@ -96,21 +101,41 @@ export const loginWithPin = onCall({ cors: true }, async (request) => {
         throw new HttpsError('not-found', 'Utilisateur introuvable.');
     }
 
-    const user = snapshot.data() as StaffUserDoc;
-    let needsMigration = false;
+    const user = snapshot.data() as StaffUserDoc & {
+        failedPinAttempts?: number;
+        pinLockedUntil?: number;
+    };
+    const now = Date.now();
 
+    // Verrouillage actif : on refuse sans même tester le PIN.
+    if ((user.pinLockedUntil ?? 0) > now) {
+        throw new HttpsError(
+            'resource-exhausted',
+            'Trop de tentatives. Compte temporairement verrouillé, réessayez plus tard.',
+        );
+    }
+
+    // Vérification (Argon2 prioritaire, repli legacy SHA-256 puis clair, avec migration).
+    let valid = false;
+    let needsMigration = false;
     if (user.pinHashArgon2) {
-        if (!(await verifyPinArgon2(user.pinHashArgon2, pin))) {
-            throw new HttpsError('unauthenticated', 'PIN invalide.');
-        }
+        valid = await verifyPinArgon2(user.pinHashArgon2, pin);
     } else if (user.pinHash) {
-        if (hashPin(pin, userId) !== user.pinHash) {
-            throw new HttpsError('unauthenticated', 'PIN invalide.');
-        }
-        needsMigration = true;
-    } else if (user.pin === pin) {
-        needsMigration = true;
-    } else {
+        valid = hashPin(pin, userId) === user.pinHash;
+        needsMigration = valid;
+    } else if (user.pin != null) {
+        valid = user.pin === pin;
+        needsMigration = valid;
+    }
+
+    if (!valid) {
+        // Échec : incrémente le compteur, verrouille au-delà du seuil.
+        const attempts = (user.failedPinAttempts ?? 0) + 1;
+        const update: Record<string, unknown> =
+            attempts >= MAX_PIN_ATTEMPTS
+                ? { failedPinAttempts: 0, pinLockedUntil: now + PIN_LOCKOUT_MS }
+                : { failedPinAttempts: attempts };
+        await ref.update(update);
         throw new HttpsError('unauthenticated', 'PIN invalide.');
     }
 
@@ -120,8 +145,16 @@ export const loginWithPin = onCall({ cors: true }, async (request) => {
             pinHashArgon2,
             pin: FieldValue.delete(),
             pinHash: FieldValue.delete(),
+            failedPinAttempts: FieldValue.delete(),
+            pinLockedUntil: FieldValue.delete(),
         });
         user.pinHashArgon2 = pinHashArgon2;
+    } else if ((user.failedPinAttempts ?? 0) > 0 || (user.pinLockedUntil ?? 0) > 0) {
+        // Succès : on efface les compteurs d'échec résiduels.
+        await ref.update({
+            failedPinAttempts: FieldValue.delete(),
+            pinLockedUntil: FieldValue.delete(),
+        });
     }
 
     const token = await adminAuth.createCustomToken(userId, {

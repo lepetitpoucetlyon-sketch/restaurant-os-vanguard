@@ -69,7 +69,7 @@ export const OverviewTab = () => {
                     {livePages.map((page, idx) => (
                         <PageCard
                             key={page.id}
-                            page={page as any}
+                            page={page as React.ComponentProps<typeof PageCard>['page']}
                             onEdit={() => { }}
                             id={idx === 0 ? "seo-page-to-optimize-0" : undefined}
                         />

@@ -219,3 +219,18 @@ Les **32 Catégories Fonctionnelles** (Plan de salle, POS Caisse, Mobile POS, KD
 
 ### 🏆 CONCLUSION DE L'AUDIT
 Le projet **RESTAURANT-OS-CORE** possède un niveau d'ingénierie, de typage et de couverture de tests exceptionnel (**64/64 suites Vitest vertes, 0 erreur TypeScript**). L'application des correctifs priorisés (P0, P1, P2) garantira une inviolabilité totale de la chaîne fiscale NF525 et des règles de sécurité Cloud en production.
+
+---
+
+## 🔧 ADDENDUM — Vérification & complétion des remédiations (2026-07-26, session `audit-360-fix`)
+
+Le commit de remédiation `b17b4e20c` a été **audité contradictoirement**. Plusieurs correctifs étaient bons (webhook Stripe fail-closed, IoT fail-closed, écriture atomique sceau+journal), mais **cinq régressions P0 et plusieurs P1 rendaient le parcours d'encaissement non fonctionnel** — invisibles depuis les tests (verts car exécutés en Node/Mock avec secret injecté). Elles ont été corrigées :
+
+- **[P0] Règles fiscales auto-bloquantes** — `fiscalMeta` ajouté à `isImmutableCollection` bloquait le compteur séquentiel et la tête de chaîne (donc **toute vente**). L'item P1.4 de ce backlog (« étendre isImmutableCollection à fiscalMeta ») était lui-même la cause. Corrigé : `fiscalMeta` reste non-supprimable mais redevient inscriptible par la caisse (règle spécifique, `firestore.rules`).
+- **[P0] Création fiscale interdite à l'app** — `allow create: if !isImmutableCollection` bloquait aussi les écritures légitimes online de `journalEntries`/`fiscalSeals` (écrites côté client). Corrigé : write-once (create autorisé, update/delete interdits).
+- **[P0] `SovereignGuard` fail-closed côté navigateur** — `getWriteSignatureSecret` levait une exception sur chaque écriture signée dans le navigateur (secret serveur absent du bundle client). Corrigé : la signature HMAC est désormais une barrière **serveur uniquement** ; côté client on ne signe pas (l'intégrité vient du scellement).
+- **[P0] Chemin hors-ligne mort + faux sceaux** — `generateSequentialReceiptNumber` (runTransaction) s'exécutait avant le test online → throw offline. Corrigé : détection online **avant** toute transaction ; le brouillon offline part sans numéro, et `/api/finance/sync` attribue le **vrai** numéro séquentiel + scellement côté serveur.
+- **[P0] Build cassé** — `sub.current_period_end` (obsolète en SDK Stripe v22) → 1 erreur TSC. Corrigé (lecture via `sub.items.data[0]`) + version d'API alignée sur le reste du repo.
+- **[P1] Partie double PCG numériquement fausse** — lecture de champs inexistants (`tvaBreakdown.totalTaxInMicrounits`, `.rates`) → montants NaN / aucune ligne TVA, et noms de champs incompatibles avec `FECMapper`/`FECExporter`. Réécrit : lignes `JournalLine` canoniques (`accountCode`/`side`/`debitInCents`/`creditInCents`), débit d'encaissement par mode de paiement (531/512/511…), crédits 701 (HT) + 445710 (TVA) par taux, équilibrés au centime. Détail produit retiré des `lines` comptables.
+
+**État vérifié après correction :** `npx tsc --noEmit` = **0 erreur** · `npx vitest run` = **445/445** · ESLint propre sur les fichiers touchés.

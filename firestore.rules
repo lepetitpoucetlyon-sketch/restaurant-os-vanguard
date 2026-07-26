@@ -32,7 +32,8 @@ service cloud.firestore {
     // Doit rester aligné avec SovereignGuard.IMMUTABLE_COLLECTIONS (barrière client).
     function isImmutableCollection(c) {
       return c in ['journalEntries', 'fiscalSeals', 'fiscalLedger',
-                   'fiscal_ledger', 'audit_logs', 'auditTrails', 'ticketZ', 'haccpLogs', 'fiscalMeta'];
+                   'fiscal_ledger', 'audit_logs', 'auditTrails', 'ticketZ', 'haccpLogs',
+                   'iotHistory', 'fiscalMeta'];
     }
 
     // --- 🏛️ USERS & DEVICES CORE ---
@@ -48,7 +49,7 @@ service cloud.firestore {
     }
 
     function isOperationalCollection(c) {
-      return c in ['orders', 'tables', 'kds_tickets', 'pos_sessions'];
+      return c in ['orders', 'tables', 'kds_tickets', 'pos_sessions', 'nonConformities'];
     }
 
     // --- 🏛️ TENANT ISOLATION CORE ---
@@ -63,24 +64,40 @@ service cloud.firestore {
         allow write: if isTenantManager(tenantId) || isFleetAdmin();
       }
 
+      // 🔢 Métadonnées fiscales (compteur séquentiel + tête de chaîne de hash).
+      // La caisse (staff) DOIT pouvoir créer/incrémenter ces documents à chaque
+      // vente, mais ils ne doivent JAMAIS être supprimés (rupture de séquence /
+      // fork de chaîne). fiscalMeta reste dans isImmutableCollection pour que la
+      // règle générique en interdise le delete ; cette règle spécifique réautorise
+      // create + update (Firestore combine les règles en OR).
+      match /fiscalMeta/{docId} {
+        allow read:           if isTenantStaff(tenantId) || isFleetAdmin();
+        allow create, update: if isTenantStaff(tenantId) || isFleetAdmin();
+        allow delete:         if false;
+      }
+
       // Générique : couvre orders, tables, floors, zones, products, stockItems,
       // accounts, haccp, candidates, users (sous-collection tenant), etc.
-      // Les collections immuables NF525 sont write-once : create autorisé,
-      // update/delete interdits pour TOUT LE MONDE.
+      // Les collections immuables NF525 sont WRITE-ONCE : create autorisé (la
+      // caisse doit pouvoir écrire un journalEntry/fiscalSeal ; l'intégrité vient
+      // de la chaîne de hash scellée), mais update/delete interdits pour TOUS.
       match /{collection}/{document=**} {
         allow read: if isTenantStaff(tenantId) || isFleetAdmin();
-        allow create: if !isImmutableCollection(collection) && (isTenantStaff(tenantId) || isFleetAdmin());
-        
-        // UPDATE : Autorisé pour les employés (Staff) SI c'est une collection opérationnelle chaude.
-        // Sinon, réservé aux Managers (pour products, users, config, etc.)
+
+        // CREATE : autorisé pour le staff/MCC, y compris sur les collections
+        // immuables (write-once). Sans ça, la caisse ne peut pas sceller ses ventes.
+        allow create: if isTenantStaff(tenantId) || isFleetAdmin();
+
+        // UPDATE : jamais sur une collection immuable (NF525). Sinon staff sur
+        // collections opérationnelles chaudes, manager/MCC sur le reste.
         allow update: if !isImmutableCollection(collection) &&
                          (
-                           isTenantManager(tenantId) || 
-                           isFleetAdmin() || 
+                           isTenantManager(tenantId) ||
+                           isFleetAdmin() ||
                            (isTenantStaff(tenantId) && isOperationalCollection(collection))
                          );
-                         
-        // DELETE : Toujours réservé aux Managers pour éviter les suppressions sauvages
+
+        // DELETE : jamais sur une collection immuable ; réservé manager/MCC.
         allow delete: if !isImmutableCollection(collection) &&
                          (isTenantManager(tenantId) || isFleetAdmin());
       }

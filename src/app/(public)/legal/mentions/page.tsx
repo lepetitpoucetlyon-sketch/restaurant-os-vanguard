@@ -1,5 +1,6 @@
 // NO 'use client' — Page serveur statique.
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Mentions légales | Restaurant OS',
@@ -110,9 +111,9 @@ export default function MentionsPage() {
           États-Unis. Le transfert de données vers les États-Unis est encadré par les Clauses
           Contractuelles Types (CCT) approuvées par la Commission Européenne. Pour plus
           d'informations, consultez notre{' '}
-          <a href="/legal/rgpd" className="text-blue-600 hover:underline">
+          <Link href="/legal/rgpd" className="text-blue-600 hover:underline">
             politique de confidentialité
-          </a>
+          </Link>
           .
         </p>
       </section>
@@ -140,9 +141,9 @@ export default function MentionsPage() {
         <p className="text-gray-700 leading-relaxed">
           La collecte et le traitement de données à caractère personnel effectués dans le cadre de
           l'utilisation de la plateforme sont détaillés dans notre{' '}
-          <a href="/legal/rgpd" className="text-blue-600 hover:underline">
+          <Link href="/legal/rgpd" className="text-blue-600 hover:underline">
             politique de confidentialité
-          </a>
+          </Link>
           . La plateforme n'utilise que des cookies strictement nécessaires à son fonctionnement.
         </p>
       </section>

@@ -1,5 +1,6 @@
 
 <title>Restaurant OS — Plan Opérationnel Profond</title>
+<meta charset="utf-8">
 <style>
 :root {
   --bg:          #0B0B10;
@@ -258,6 +259,7 @@ details>summary+*{margin-top:8px}
     <a href="#audit-profond" style="color:var(--danger)">22 — Audit Profond (74 bugs)</a>
     <a href="#sprint7" style="color:var(--success)">23 — Sprint 7 (RAG + Bugs)</a>
     <a href="#audit-2026-07" style="color:var(--warn)">24 — Audit Complet 2026-07-20</a>
+    <a href="#audit-360-remediation" style="color:var(--success)">25 — Audit 360 & Remédiations 2026-07-26</a>
     <a href="#checklist">19 — Checklist Complète</a>
   </div>
 </nav>
@@ -269,11 +271,11 @@ details>summary+*{margin-top:8px}
 <div class="doc-header">
   <div class="doc-eyebrow">Restaurant OS · Audit Technique Complet</div>
   <h1 class="doc-title">Plan Opérationnel Profond<br>Vers le Premier Client</h1>
-  <div class="doc-meta">V10 · Mis à jour le 19 juillet 2026 · Branche grade-x-vanguard · Sprint 7 completé · 59/74 bugs corrigés</div>
+  <div class="doc-meta">V11 · Mis à jour le 26 juillet 2026 · Branche main · Audit 360 remédié (voir ch. 25) · 454/454 tests · 0 erreur TS</div>
   <div class="audit-bar">
     <div class="audit-stat"><div class="dot dot-green"></div><div class="label">TypeScript</div><div class="value">0 erreurs</div></div>
-    <div class="audit-stat"><div class="dot dot-green"></div><div class="label">Tests Vitest</div><div class="value">240 passing</div></div>
-    <div class="audit-stat"><div class="dot dot-green"></div><div class="label">Sentrux</div><div class="value">Actif</div></div>
+    <div class="audit-stat"><div class="dot dot-green"></div><div class="label">Tests Vitest</div><div class="value">454 passing</div></div>
+    <div class="audit-stat"><div class="dot dot-green"></div><div class="label">Sentrux</div><div class="value">0 cycle</div></div>
     <div class="audit-stat"><div class="dot dot-yellow"></div><div class="label">Stripe</div><div class="value">Env vides</div></div>
     <div class="audit-stat"><div class="dot dot-green"></div><div class="label">ESC/POS</div><div class="value">Implémenté</div></div>
     <div class="audit-stat"><div class="dot dot-green"></div><div class="label">RAG Oracle</div><div class="value">4 edge cases</div></div>
@@ -3124,6 +3126,54 @@ reader.readAsText(file, <span class="c-warn">'iso-8859-1'</span>); <span class="
     <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">0 tenantId hardcodé illégitime</div><div class="desc">Les 7 "hardcodés" trouvés sont dans des contextes tests/simulation — aucun en chemin de prod NF525.</div></div></div>
     <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Sécurité API (remédiations 18/07 tiennent)</div><div class="desc"><code>requireTenantAdmin</code> sur CRM et gemini-live · secret push · state signé callback bancaire. Les 7 routes sans guard sont légitimement publiques.</div></div></div>
     <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">FEC réel câblé</div><div class="desc"><code>FECGenerator.ts</code> existe et est branché à sa route admin — pas un stub.</div></div></div>
+  </div>
+</section>
+
+<!-- ─── 25 AUDIT 360 & REMÉDIATIONS ─── -->
+<section class="chapter" id="audit-360-remediation">
+  <div class="chapter-header">
+    <span class="chapter-num">25</span>
+    <div>
+      <div class="chapter-title">Audit 360° &amp; Remédiations — 2026-07-26</div>
+      <div class="chapter-sub">Vérification contradictoire du commit « Grade X remediations » + durcissement Tier A/B + infrastructure · 0 erreur TS · 454/454 tests · 0 cycle réel</div>
+    </div>
+  </div>
+
+  <table class="data-table" style="margin-bottom:24px">
+    <thead><tr><th>Axe</th><th>Résultat</th></tr></thead>
+    <tbody>
+      <tr><td>TypeScript <code>tsc --noEmit</code></td><td style="color:var(--success)">✅ 0 erreur (était 1 — build cassé)</td></tr>
+      <tr><td>Tests Vitest</td><td style="color:var(--success)">✅ 454/454 · 66 suites (+HACCP, +server-adapter)</td></tr>
+      <tr><td>ESLint</td><td style="color:var(--success)">✅ 0 erreur (était 15)</td></tr>
+      <tr><td>Sentrux — cycles</td><td style="color:var(--success)">✅ 0 cycle réel (les 87 « cycles » étaient dans <code>.firebase/node_modules</code>)</td></tr>
+      <tr><td>Sentrux — dette visible</td><td style="color:var(--warn)">🟡 10 fonctions cc&gt;20 · 3 god-files (Providers)</td></tr>
+      <tr><td>Adapter Nexus serveur</td><td style="color:var(--warn)">🟡 livré (firebase-admin) — activer via <code>FIREBASE_SERVICE_ACCOUNT_JSON</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--danger)">🔴 Régressions du commit remédiation — corrigées</span></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Partie double PCG réelle — <code>FinancialNexusBridge.ts</code></div><div class="desc">Lignes 512/701/445710 débit/crédit équilibrées au centime (avant : montants NaN, champs incompatibles avec <code>FECMapper</code>). FEC des ventes de nouveau exploitable.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Règles Firestore auto-bloquantes — <code>firestore.rules</code></div><div class="desc"><code>fiscalMeta</code> (compteur + tête de chaîne) redevenu inscriptible par la caisse mais non-supprimable ; immuables en write-once. Avant : toute vente rejetée.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">SovereignGuard fail-closed côté navigateur — <code>SovereignGuard.ts</code></div><div class="desc">Signature HMAC désormais barrière SERVEUR uniquement (le secret n'existe pas dans le bundle client). Avant : crash sur chaque écriture signée (POS inutilisable).</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Bug période FEC + crypto simulée — <code>fec/export/route.ts</code>, <code>FECGenerator.ts</code></div><div class="desc">Bornes exclusives fin de mois (le 31 n'est plus exclu) ; chaînage FEC en vrai SHA-256 (fin de la « signature Lattice » simulée).</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Offline &amp; build Stripe — <code>finance/sync/route.ts</code>, <code>tenant-billing/route.ts</code></div><div class="desc">Numéro séquentiel NF525 attribué côté serveur au retour réseau ; <code>current_period_end</code> lu via <code>sub.items</code> (SDK Stripe v22) — build réparé.</div></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--success)">🟢 Durcissement (Tier A) &amp; fonctionnalités (Tier B)</span></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Backdoor PIN « 9999 » supprimé + lockout serveur</div><div class="desc"><code>verifyPin</code> vérifie le vrai PIN de l'opérateur. <code>loginWithPin</code> (Argon2id) : verrouillage 15 min après 5 échecs.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Horodatage NF525 autoritaire serveur — <code>FiscalSealer.ts</code></div><div class="desc"><code>serverRecordedAt</code> via <code>serverTimestamp()</code> Firestore (résolu serveur même écrit depuis le client) sur sceau + écriture comptable. Immunité contre l'horloge locale falsifiée.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Paiement fractionné persistant — <code>usePos.ts</code>, <code>SplitBillDialog.tsx</code></div><div class="desc"><code>handleSplitComplete</code> : la vente est scellée (1 ticket NF525) au terme du fractionnement. Avant : simple toast, rien n'était enregistré.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Déduction stock unifiée — <code>usePos.ts</code></div><div class="desc">Fin de la double déduction : un seul chemin, le handler <code>order.paid</code> (tenant-scoped, aligné <code>product.recipeId</code>).</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Backend HACCP — <code>HACCPLogService.ts</code></div><div class="desc"><code>iotHistory</code> immuable (registre T° append-only) + <code>haccpLogs</code> immuable (événement) + <code>nonConformities</code> auto sur dépassement de seuil (visible dans le registre manager). +test.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Cookie banner mort supprimé + lint 15→0</div><div class="desc">Banner jamais monté et aucun cookie non-essentiel/tracking → retiré. 11 <code>any</code> / <code>&lt;a&gt;</code>→<code>&lt;Link&gt;</code> restants corrigés.</div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title" style="color:var(--info)">🛰️ Infrastructure</span></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Adapter Nexus serveur — <code>FirestoreServerAdapter.ts</code> + <code>instrumentation.ts</code></div><div class="desc">firebase-admin, tout <code>INexusAdapter</code>. Enregistré au démarrage (raw, sans le guard client). Débloque ~75 routes API, <code>/api/haccp/iot-push</code>, <code>/api/finance/sync</code>. Activer : <code>FIREBASE_SERVICE_ACCOUNT_JSON</code>.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Cache <code>.firebase/</code> dé-tracké — gate sentrux propre</div><div class="desc">66 930 fichiers de cache de déploiement retirés du suivi git + gitignorés + supprimés du disque. Les 87 faux « cycles » disparaissent → 0 cycle réel dans le code source.</div></div></div>
   </div>
 </section>
 

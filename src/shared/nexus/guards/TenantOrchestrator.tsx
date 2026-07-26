@@ -34,12 +34,12 @@ export const TenantOrchestrator: React.FC = () => {
         { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { dailyRevenue: 1200, alerts: 8, errorRate: 0.15, uptime: 95.0 } },
         { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
     ].map(inst => {
-        const metrics = (inst as any).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
+        const metrics = (inst as { metrics?: { alerts?: number; errorRate?: number; uptime?: number } }).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(metrics.alerts || 0, metrics.errorRate || 0, metrics.uptime || 0);
         return {
             ...inst,
             metrics: { ...metrics, healthScore: health }
-        } as any;
+        } as (typeof fleet)[number];
     });
 
     const handleSwitch = (tenantId: string, name: string) => {

@@ -91,7 +91,7 @@ export class FiscalSealer {
     dataSnapshot: string,
     tenantId: string,
     isTrainingMode: boolean,
-    journalEntry?: any
+    journalEntry?: Record<string, unknown> & { id: string }
   ): Promise<{ hash: string; signature: string; sealId: string; previousHash: string }> {
     const sealId = IdGenerator.generateWithPrefix('seal');
     const sealPath = `tenants/${tenantId}/fiscalSeals/${sealId}`;
@@ -101,9 +101,13 @@ export class FiscalSealer {
     let signature: string;
     let prevHash: string;
 
-    const timestamp = typeof process !== 'undefined' && typeof require !== 'undefined'
-      ? new Date().toISOString() // Server-side NTP timestamp would be better, but local for now
-      : new Date().toISOString();
+    // Horodatage déclaré (entre dans le hash/snapshot — compatibilité chaîne).
+    const timestamp = new Date().toISOString();
+    // Horodatage AUTORITAIRE serveur : Firestore résout serverTimestamp() côté
+    // serveur au moment de l'écriture — même émis depuis le client, il est donc
+    // immunisé contre une horloge locale falsifiée. C'est la référence probante
+    // NF525 pour dater la pièce (l'horloge client n'est plus la seule source).
+    const serverRecordedAt = Nexus.adapter.serverTimestamp();
 
     if (isTrainingMode) {
       hash = FISCAL_CONSTANTS.TRAINING_MODE_HASH;
@@ -114,6 +118,7 @@ export class FiscalSealer {
           id: sealId, hash, signature,
           previousHash: FISCAL_CONSTANTS.GENESIS_ROOT,
           timestamp,
+          serverRecordedAt,
           isTrainingMode: true,
         } as unknown);
         tx.update(chainHeadPath, { hash, sealId, updatedAt: timestamp });
@@ -122,6 +127,7 @@ export class FiscalSealer {
              ...journalEntry,
              fiscalSealHash: hash,
              sealedAt: timestamp,
+             serverRecordedAt,
              updatedAt: timestamp
            });
         }
@@ -138,6 +144,7 @@ export class FiscalSealer {
         tx.set(sealPath, {
           id: sealId, hash, signature, previousHash,
           timestamp,
+          serverRecordedAt,
           isTrainingMode: false,
         } as unknown);
         tx.set(chainHeadPath, { hash, sealId, updatedAt: timestamp });
@@ -146,6 +153,7 @@ export class FiscalSealer {
              ...journalEntry,
              fiscalSealHash: hash,
              sealedAt: timestamp,
+             serverRecordedAt,
              updatedAt: timestamp
            });
         }

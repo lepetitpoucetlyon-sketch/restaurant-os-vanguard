@@ -40,6 +40,19 @@ class NexusManager {
     }
 
     /**
+     * 🛰️ Enregistre un adapter SERVEUR brut (sans NexusInterceptor / SovereignGuard).
+     * Côté serveur, l'isolation multi-tenant est assurée par `adminAuthGuard`
+     * (tenantId du JWT) + les chemins `tenants/{tenantId}/…` explicites, et l'Admin
+     * SDK outrepasse les règles Firestore. Le garde client (store Jotai, fail-safe
+     * logout, MessageChannel) n'a aucun sens hors navigateur — on ne l'applique donc pas.
+     */
+    registerServerAdapter(adapter: INexusAdapter) {
+        this._adapter = adapter;
+        this._realAdapter = adapter;
+        logger.info(`[Nexus] Server adapter registered (raw, no interceptor): ${adapter.constructor.name}`);
+    }
+
+    /**
      * 🌀 SIMULACRA MODE (Grade X)
      * Enters a parallel reality where all writes are redirected to IndexedDB.
      */

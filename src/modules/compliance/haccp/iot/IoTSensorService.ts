@@ -19,6 +19,7 @@
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { HACCPLogService, type ConformityStatus } from '../HACCPLogService';
 
 export type SensorTransport = 'http_gateway' | 'ble' | 'push';
 
@@ -146,23 +147,42 @@ export const IoTSensorService = {
   async storeReading(reading: SensorReading): Promise<void> {
     const { tenantId, sensorId } = reading;
 
+    // Dernière lecture (affichage temps réel — volontairement écrasée).
     await Nexus.adapter.set(
       `tenants/${tenantId}/iotReadings/${sensorId}`,
       { ...reading, updatedAt: Date.now() },
     );
 
-    // Alertes température
+    // Seuils du capteur → détermination de la conformité.
     const sensor = await Nexus.adapter.get(`tenants/${tenantId}/iotSensors/${sensorId}`) as IoTSensor | null;
-    if (sensor) {
-      const tooHot  = sensor.alertMaxTemp !== undefined && reading.temperature > sensor.alertMaxTemp;
-      const tooCold = sensor.alertMinTemp !== undefined && reading.temperature < sensor.alertMinTemp;
-      if (tooHot || tooCold) {
-        logger.warn(`[IoT] ALERTE température ${reading.temperature}°C sur capteur ${sensorId} (tenant ${tenantId})`);
-        await Nexus.adapter.set(
-          `tenants/${tenantId}/iotAlerts/${sensorId}_${reading.timestamp}`,
-          { ...reading, alertType: tooHot ? 'TOO_HOT' : 'TOO_COLD', acknowledgedAt: null },
-        );
-      }
+    const tooHot  = sensor?.alertMaxTemp !== undefined && reading.temperature > sensor.alertMaxTemp;
+    const tooCold = sensor?.alertMinTemp !== undefined && reading.temperature < sensor.alertMinTemp;
+    const status: ConformityStatus = (tooHot || tooCold) ? 'NON_CONFORM' : 'CONFORM';
+
+    // Historique IMMUABLE (registre sanitaire append-only) — désormais persisté.
+    await HACCPLogService.appendTemperatureHistory(reading, status);
+
+    if (sensor && (tooHot || tooCold)) {
+      logger.warn(`[IoT] ALERTE température ${reading.temperature}°C sur capteur ${sensorId} (tenant ${tenantId})`);
+
+      // Alerte temps réel (dashboard).
+      await Nexus.adapter.set(
+        `tenants/${tenantId}/iotAlerts/${sensorId}_${reading.timestamp}`,
+        { ...reading, alertType: tooHot ? 'TOO_HOT' : 'TOO_COLD', acknowledgedAt: null },
+      );
+
+      // Non-conformité : événement immuable (haccpLogs) + dossier d'action corrective
+      // (visible/résoluble dans le registre manager NonConformityForm).
+      await HACCPLogService.recordNonConformity({
+        tenantId,
+        ncType: 'température hors norme',
+        severity: 'critical',
+        description: `Température ${reading.temperature}°C hors seuil sur ${sensor.name ?? sensorId} `
+          + `(seuils ${sensor.alertMinTemp ?? '—'}…${sensor.alertMaxTemp ?? '—'}°C)`,
+        sensorId,
+        temperature: reading.temperature,
+        source: reading.source,
+      });
     }
   },
 

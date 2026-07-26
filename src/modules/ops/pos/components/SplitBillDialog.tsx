@@ -19,6 +19,8 @@ interface SplitBillDialogProps {
     coverCount: number;
     onClose: () => void;
     onPaySplit: (amount: number, conviveIndex: number) => void;
+    /** Appelé quand toutes les parts sont réglées → scelle la vente (NF525). */
+    onSplitComplete?: () => void;
 }
 
 export type SplitMode = 'equal' | 'by-item' | 'custom';
@@ -40,7 +42,7 @@ function createEqualPayments(count: number, total: number): ConvivePayment[] {
     }));
 }
 
-export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onPaySplit }: SplitBillDialogProps) {
+export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onPaySplit, onSplitComplete }: SplitBillDialogProps) {
     const [mode, setMode] = useState<SplitMode>('equal');
     const [splitCount, setSplitCount] = useState(coverCount || 2);
     const [convivePayments, setConvivePayments] = useState<ConvivePayment[]>(() => createEqualPayments(coverCount || 2, total));
@@ -329,7 +331,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
 
                             {allPaid ? (
                                 <button
-                                    onClick={onClose}
+                                    onClick={() => { if (onSplitComplete) onSplitComplete(); else onClose(); }}
                                     className="h-16 px-12 rounded-[28px] bg-accent-gold text-primary font-black text-[12px] uppercase tracking-[0.4em] hover:bg-surface-card shadow-glow transition-all duration-700 flex items-center gap-5 group relative overflow-hidden"
                                 >
                                     <CheckCircle2 className="w-6 h-6 group-hover:scale-125 transition-transform duration-500" />
