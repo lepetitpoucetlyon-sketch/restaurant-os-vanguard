@@ -15,7 +15,7 @@ import {
 } from "./panelsCore";
 import {
     IntegrationSettings, ReviewsSettings, TablesSettings, MigrationHub,
-    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel,
+    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel, ApiKeysPanel, CustomDomainPanel,
 } from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
@@ -196,7 +196,13 @@ export default function SettingsPage() {
                 </div>
             );
             case 'customer': return <StandardSettingsEngine schema={Customer_SCHEMA} />;
-            case 'integrations': return <IntegrationSettings />;
+            case 'integrations': return (
+                <div className="space-y-12">
+                    <IntegrationSettings />
+                    <CustomDomainPanel />
+                    <ApiKeysPanel />
+                </div>
+            );
             case 'reviews': return <ReviewsSettings />;
             case 'legal': return <StandardSettingsEngine schema={LEGAL_SCHEMA} />;
             case 'menu': return <MenuSettings />;

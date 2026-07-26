@@ -127,8 +127,3 @@ const _inventoryMovements = createProxyDomain<InventoryMovement>('inventoryMovem
 export const inventoryMovementsNodeAtom = _inventoryMovements.node;
 export const inventoryMovementsAtom = _inventoryMovements.data;
 
-// --- 🔄 STOCK TRANSFER FLOW (Grade X) ---
-export const stockTransferSelectedItemAtom = atom<string | null>(null);
-export const stockTransferTargetLocationAtom = atom<string>('');
-export const stockTransferIsSubmittingAtom = atom<boolean>(false);
-export const stockTransferSuccessAtom = atom<boolean>(false);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
     Plus,
@@ -11,6 +12,7 @@ import {
     FileText,
 } from "lucide-react";
 import { staggerContainer, staggerItem } from "@/lib/motion";
+import { useInfiniteScroll } from "@/hooks/useVirtualization";
 import { User } from "@nexus/contracts";
 
 interface StaffCardProps {
@@ -109,15 +111,27 @@ interface StaffListProps {
     onOpenModal: (user?: User) => void;
 }
 
+const BATCH = 20;
+
 export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
+    const [limit, setLimit] = useState(BATCH);
+    const onLoadMore = useCallback(() => setLimit(l => l + BATCH), []);
+    const { sentinelRef } = useInfiniteScroll({
+        hasMore: limit < users.length,
+        loading: false,
+        onLoadMore,
+    });
+    const visible = users.slice(0, limit);
+
     return (
+        <>
         <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8"
         >
-            {users.map(user => (
+            {visible.map(user => (
                 <StaffCard
                     key={user.id}
                     user={user}
@@ -140,5 +154,7 @@ export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
                 </p>
             </motion.button>
         </motion.div>
+        <div ref={sentinelRef} />
+        </>
     );
 };

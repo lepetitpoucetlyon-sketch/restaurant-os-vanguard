@@ -20,7 +20,11 @@ import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
 import { useHACCP } from "@modules/compliance";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
-import { ProductFormModal } from "@/components/modals/ProductFormModal";
+import dynamic from "next/dynamic";
+const ProductFormModal = dynamic(
+  () => import("@/components/modals/ProductFormModal").then(m => m.ProductFormModal),
+  { ssr: false, loading: () => null }
+);
 import { PrepTaskDetailDialog } from "@modules/ops";
 import { RecipeDetailDialog } from "@modules/ops";
 import { cinematicContainer, fadeInUp } from "@/lib/motion";

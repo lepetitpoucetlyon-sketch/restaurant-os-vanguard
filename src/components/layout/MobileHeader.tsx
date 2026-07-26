@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { UserCircle, Search } from "lucide-react";
 ;
@@ -77,7 +78,7 @@ export function MobileHeader() {
                     className="w-10 h-10 rounded-full bg-bg-tertiary border border-border flex items-center justify-center overflow-hidden"
                 >
                     {currentUser?.avatar ? (
-                        <img src={currentUser.avatar} alt="Profile" className="w-full h-full object-cover" />
+                        <Image src={currentUser.avatar} alt="Profile" width={40} height={40} className="w-full h-full object-cover" unoptimized />
                     ) : (
                         <UserCircle className="w-6 h-6 text-text-muted" />
                     )}

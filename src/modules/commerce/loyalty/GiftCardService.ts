@@ -1,8 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { GiftCardSchema, GiftCardTransactionSchema, type GiftCard, type GiftCardTransaction } from '@/domain/schemas/giftcard';
 import { toMicrounits, type Microunits } from '@/domain/schemas/primitives';
-import { CryptoService } from '@domain/services/CryptoService';
-import { empireAudit } from '@/lib/audit';
 
 function generateCode(): string {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

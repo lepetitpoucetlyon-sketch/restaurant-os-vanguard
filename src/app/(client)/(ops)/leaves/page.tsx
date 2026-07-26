@@ -14,7 +14,6 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import {
     LeaveRequest,
-    LeaveBalance,
     LeaveRequestStatus,
     RejectionReason
 } from '@nexus/contracts';
@@ -25,7 +24,6 @@ import { LeaveBalanceCard } from '@modules/human/hr/components/leaves/LeaveBalan
 import { LeaveRequestCard } from '@modules/human/hr/components/leaves/LeaveRequestCard';
 import { NewRequestModal } from '@modules/human/hr/components/leaves/NewRequestModal';
 import { TeamCalendar } from '@modules/human/hr/components/leaves/TeamCalendar';
-import { useAtomValue } from 'jotai';
 
 import { useAuth } from '@/hooks';
 import { useHumanResources } from '@modules/human/hr';

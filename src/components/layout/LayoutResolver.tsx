@@ -40,14 +40,18 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
             return (
                 <>
                     <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
-                        <DesktopSidebar />
+                        <div className="hidden lg:block">
+                            <DesktopSidebar />
+                        </div>
                         <div className="flex-1 flex flex-col min-w-0 relative">
                             <Header />
+                            <MobileHeader />
                             <ConnectivityBanner />
-                            <main className="flex-1 overflow-auto relative scroll-smooth">
+                            <main className={cn("flex-1 overflow-auto relative scroll-smooth", "pb-24 lg:pb-0")}>
                                 {children}
                                 <GlobalFAB />
                             </main>
+                            <MobileNavBar />
                         </div>
                     </div>
                     {launchpad}
@@ -56,12 +60,17 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
 
         case 'topbar':
             return (
-                <div className="min-h-screen pt-20 bg-bg-primary">
-                    <DesktopTopbar />
-                    <main className="relative">
+                <div className="min-h-screen bg-bg-primary">
+                    <div className="hidden lg:block">
+                        <DesktopTopbar />
+                    </div>
+                    <MobileHeader />
+                    <ConnectivityBanner />
+                    <main className={cn("relative", "pb-24 lg:pb-0 lg:pt-20")}>
                         {children}
                         <GlobalFAB />
                     </main>
+                    <MobileNavBar />
                 </div>
             );
 

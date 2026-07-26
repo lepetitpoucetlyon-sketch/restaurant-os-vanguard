@@ -14,7 +14,7 @@ import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { Ingredient, StockItem, Preparation, StorageLocation } from "@shared/nexus/contracts/logistics";
+import { StockItem, Preparation, StorageLocation } from "@shared/nexus/contracts/logistics";
 import { mapNodeToIngredient } from "./inventoryMappers";
 import { logger } from "@/lib/logger";
 
@@ -25,8 +25,7 @@ import { logger } from "@/lib/logger";
 export function useInventory() {
     useVisibilityPurge('stockItems');
     const tenantId = useAtomValue(tenantIdAtom);
-    const now = new Date().toISOString();
-    
+
     const stockNode = useAtomValue(stockItemsNodeAtom);
     const ingredientsNode = useAtomValue(ingredientsNodeAtom);
     const preparationsNode = useAtomValue(preparationsNodeAtom);
@@ -34,14 +33,20 @@ export function useInventory() {
     const wasteNode = useAtomValue(wasteLogsNodeAtom);
 
     const stockItems = (stockNode.data || []) as StockItem[];
-    const ingredients = (ingredientsNode.data || []) as Ingredient[];
     const preparations = (preparationsNode.data || []) as Preparation[];
     const storageLocations = (storageNode.data || []) as StorageLocation[];
     const wasteLogs = (wasteNode.data || []) as unknown[]; // WasteLog mapping later
 
-    const lowStockItems = useMemo(() => 
-        stockItems.filter((i: StockItem) => i.quantity <= (i.minQuantity || 0)), 
+    const lowStockItems = useMemo(() =>
+        stockItems.filter((i: StockItem) => i.quantity <= (i.minQuantity || 0)),
         [stockItems]
+    );
+
+    // Mémoïsé sur ingredientsNode.data : re-calcule seulement quand les données changent,
+    // pas à chaque render. Le timestamp est capturé au moment du changement de données.
+    const ingredients = useMemo(() =>
+        (ingredientsNode.data || []).map(i => mapNodeToIngredient(i as unknown as SovereignNode, new Date().toISOString())),
+        [ingredientsNode.data]
     );
 
     const receiveOrder = useCallback((id: string, data: SovereignData) => {
@@ -55,19 +60,19 @@ export function useInventory() {
     const addStockItem = async (data: Partial<SovereignNode>) => {
         if (!tenantId) return;
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
-        await Nexus.adapter.create(path, { ...data, updatedAt: now });
+        await Nexus.adapter.create(path, { ...data, updatedAt: new Date().toISOString() });
     };
 
     const addPreparation = async (data: Partial<SovereignNode>) => {
         if (!tenantId) return;
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
-        await Nexus.adapter.create(path, { ...data, updatedAt: now });
+        await Nexus.adapter.create(path, { ...data, updatedAt: new Date().toISOString() });
     };
 
     const addWaste = async (data: Partial<SovereignNode>) => {
         if (!tenantId) return;
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`;
-        await Nexus.adapter.create(path, { ...data, updatedAt: now });
+        await Nexus.adapter.create(path, { ...data, updatedAt: new Date().toISOString() });
     };
 
     const transferStock = async (id: string, locationId: string, _qty: number) => {
@@ -75,7 +80,7 @@ export function useInventory() {
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`;
         await Nexus.adapter.update(path, {
             locationId,
-            updatedAt: now
+            updatedAt: new Date().toISOString(),
         });
     };
 
@@ -85,7 +90,7 @@ export function useInventory() {
         await Nexus.adapter.update(path, {
             lastConsumption: qty,
             lastReason: reason,
-            updatedAt: now
+            updatedAt: new Date().toISOString(),
         });
     };
 
@@ -109,7 +114,7 @@ export function useInventory() {
                     const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
                     if (!stockItem) return;
                     const newQty = Math.max(0, (stockItem.quantity ?? 0) - ing.quantity * quantity);
-                    await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: now });
+                    await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: new Date().toISOString() });
                 })
             );
         } else if (product.linkedStockItemId) {
@@ -117,7 +122,7 @@ export function useInventory() {
             const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
             if (stockItem) {
                 const newQty = Math.max(0, (stockItem.quantity ?? 0) - quantity);
-                await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: now });
+                await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: new Date().toISOString() });
             }
         }
     };
@@ -125,7 +130,7 @@ export function useInventory() {
     return {
         data: stockItems,
         stockItems,
-        ingredients: ingredients.map(i => mapNodeToIngredient(i as unknown as SovereignNode, now)),
+        ingredients,
         preparations,
         storageLocations,
         wasteLogs,

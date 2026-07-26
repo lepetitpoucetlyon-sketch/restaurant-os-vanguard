@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
@@ -65,7 +66,7 @@ export function SidebarProfile({
                         title={canSwitchProfiles ? "Changer de profil" : "Bascule de profil désactivée"}
                     >
                         {currentUser?.avatar ? (
-                            <img src={currentUser.avatar} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="avatar" />
+                            <Image src={currentUser.avatar} width={56} height={56} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="avatar" unoptimized />
                         ) : (
                             <span className="relative z-10 font-serif italic text-lg">{(currentUser?.name || ' ').trim().charAt(0)}</span>
                         )}

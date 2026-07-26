@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
 import { createNexusNode } from '@/store/pillars/core';
+import { currentDateAtom } from '@/store/base';
 import {
     QualityControl,
     ProductQualityConfig,
@@ -181,7 +182,7 @@ export const qualityAlertsAtom = atom((get) => {
 // Selector for today's reception performance
 export const todayReceptionStatsAtom = atom((get) => {
     const controls = get(qualityControlsAtom);
-    const today = new Date().toISOString().split('T')[0];
+    const today = get(currentDateAtom); // dépendance explicite → re-calcule si currentDateAtom est mis à jour à minuit
     const todayControls = (controls || []).filter((c) => c.controlled_at?.startsWith(today));
 
     return {

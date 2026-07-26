@@ -1,5 +1,4 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/lib/audit';
 
 interface WaitlistEntry {
     id: string;

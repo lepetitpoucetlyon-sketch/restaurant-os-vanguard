@@ -6,19 +6,10 @@ import type { User } from "@nexus/contracts";
 import { format, startOfWeek, addDays, isSameDay } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
-    CalendarRange,
-    ChevronLeft,
-    ChevronRight,
     Plus,
-    Clock,
-    MoreHorizontal,
     Bell,
-    X,
     Trash2,
-    Save,
-    MapPin,
-    User as UserIcon,
-    Users
+    User as UserIcon
 } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;

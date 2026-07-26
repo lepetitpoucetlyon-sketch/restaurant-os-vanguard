@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-internal-mapper';
@@ -16,6 +16,23 @@ import { tenantIdAtom } from '@/store/pillars/sovereign';
 export const useOrders = () => {
   const base = createSovereignHook(ordersNodeAtom, OperationalIdentity.FLOWS, toOrder)();
   const tenantId = useAtomValue(tenantIdAtom) as string;
+
+  const getPendingModifications = useCallback(() => {
+    const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string, orderItemId: string }> = [];
+    (base.data || []).forEach((order: Order) => {
+      (order.items || []).forEach((item: import('@nexus/contracts').OrderItem) => {
+        if (item.modification && !item.modification.respondedAt) {
+          mods.push({
+            ...item.modification,
+            orderId: String(order.id),
+            orderItemId: String(item.id),
+          });
+        }
+      });
+    });
+    return mods;
+  }, [base.data]);
+
   return {
     ...base,
     respondToModification: async (orderId: string, itemId: string, approved: boolean, responder: string, note?: string) => {
@@ -24,25 +41,11 @@ export const useOrders = () => {
           [`items.${itemId}.modification.approved`]: approved,
           [`items.${itemId}.modification.respondedBy`]: responder,
           [`items.${itemId}.modification.responseNote`]: note,
-          [`items.${itemId}.modification.respondedAt`]: new Date().toISOString()
+          [`items.${itemId}.modification.respondedAt`]: new Date().toISOString(),
         });
       });
     },
-    getPendingModifications: () => {
-      const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string, orderItemId: string }> = [];
-      (base.data || []).forEach((order: Order) => {
-        (order.items || []).forEach((item: import('@nexus/contracts').OrderItem) => {
-          if (item.modification && !item.modification.respondedAt) {
-            mods.push({
-              ...item.modification,
-              orderId: String(order.id),
-              orderItemId: String(item.id)
-            });
-          }
-        });
-      });
-      return mods;
-    }
+    getPendingModifications,
   };
 };
 
@@ -116,6 +119,9 @@ export const useKitchen = () => {
       });
     },
 
-    getPendingModifications: () => orders.filter((o) => o.status === 'pending_modification'),
+    getPendingModifications: useCallback(
+      () => orders.filter((o) => o.status === 'pending_modification'),
+      [orders]
+    ),
   };
 };

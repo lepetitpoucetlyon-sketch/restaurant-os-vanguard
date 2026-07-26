@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { performanceModeAtom } from '@/store/pillars/sovereign';
 import { useToast } from '@ui/Toast';
 import { logger } from '@/lib/logger';
@@ -11,7 +11,7 @@ import { logger } from '@/lib/logger';
  * Orchestre l'optimisation adaptative de l'UI en fonction du matériel.
  */
 export function PerformanceEngine(): null {
-    const [performanceMode, _setPerformanceMode] = useAtom(performanceModeAtom);
+    const performanceMode = useAtomValue(performanceModeAtom);
     const { showToast } = useToast();
     const frameCount = useRef(0);
     const lastTime = useRef<number | null>(null);

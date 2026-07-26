@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useMemo, ReactNode } from 'react';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { 
     notificationsAtom, 
     unreadNotificationsCountAtom, 
@@ -12,7 +12,7 @@ import { logger } from '@/lib/logger';
 export const NotificationContext = createContext<NexusNotifState | undefined>(undefined);
 
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [notifications] = useAtom(notificationsAtom);
+    const notifications = useAtomValue(notificationsAtom);
     const unreadCount = useAtomValue(unreadNotificationsCountAtom);
     const addToast = useSetAtom(addToastAtom);
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { MosyleClient } from '@/lib/services/MosyleClient';
 
 // Vérification HMAC manuelle — remplacer par stripe.webhooks.constructEvent
 // quand le package stripe sera installé (npm install stripe).
@@ -145,6 +146,23 @@ export async function POST(req: NextRequest) {
         logger.info(
           `[Stripe Webhook] Tenant ${tenantId} restreint (event: ${event.type}, sub: ${subscription.id})`
         );
+
+        // Kill switch MDM : verrouiller les iPads du tenant (fire-and-forget)
+        if (process.env.MOSYLE_API_KEY) {
+          void (async () => {
+            try {
+              const assignment = await Nexus.adapter.get(`mcc/deviceAssignments/${tenantId}`) as { serialNumbers?: string[] } | null;
+              const serials = assignment?.serialNumbers ?? [];
+              await Promise.all(serials.map(sn => MosyleClient.lockDevice(sn)));
+              if (serials.length > 0) {
+                logger.info(`[MDM Kill Switch] ${serials.length} device(s) verrouillé(s) pour tenant ${tenantId}`);
+              }
+            } catch (err) {
+              logger.error(`[MDM Kill Switch] Erreur verrouillage devices tenant ${tenantId}`, err);
+            }
+          })();
+        }
+
         break;
       }
 

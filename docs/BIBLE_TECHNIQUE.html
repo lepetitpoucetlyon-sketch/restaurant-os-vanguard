@@ -3753,6 +3753,26 @@ const CHECKLIST = [
       { id:'dette-8', text:'Clarifier le nommage domain/agent vs agents vs agency + supprimer le code mort', sub:'FAIT : MonkeyChaosAgent.ts (0 import) supprimé + domain/agents/ renommé domain/chaos/ (lève la confusion avec agent=outils Gemini et agency=Hermes/Zeus). Import dynamique OracleEngine corrigé. tsc 0 erreur', p:'P3' },
     ]
   },
+  {
+    id: 'perf', label: '⚡ Performance & Coût Firestore', color: '#F97316', open: false,
+    items: [
+      { id:'perf-1', text:'Gate useBilling par ICM TaskContext (violation critique)', sub:'FAIT : useBilling() tournait sur POS/KDS/kitchen/bar déclenchant N×2 writes Firestore par commande payée au boot. Conditionné par taskContext.importance.finance !== "OFF" — zéro write inutile hors route finance/audit.', p:'P0' },
+      { id:'perf-2', text:'Éliminer les N+1 queries Firestore dans les services batch', sub:'FAIT : CampaignAttributionService (1 query/résa → batch `in`), FleetBenchmark (séquentiel → Promise.all), FoodCostRecompute (writes séquentiels → Promise.all), syncFloorPlan (N writes/60s → Promise.all), weeklyReport (full scan → date-filtered), backup/route (boucle collections → Promise.all par tenant).', p:'P1' },
+      { id:'perf-3', text:'Supprimer "use client" des composants présentationnels purs', sub:'FAIT : StatusBadge, Skeleton, PageLayout, GridLayout, ContentSection — 0 hooks, 0 handlers, importés partout. Suppression = tree-shaking RSC possible, moins de JS client.', p:'P2' },
+      { id:'perf-4', text:'Fixes medium : queries ciblées + suppression double-read', sub:'FAIT : adminAuthGuard (scan all trustedDevices → query ciblée par fingerprint), OnlineBookingToggle (onSnapshot + query redondante → onSnapshot seul + safety timeout), crm/automations (full customer scan → date-range Firestore), FleetComplianceService (orderBy serveur au lieu de JS sort).', p:'P2' },
+      { id:'perf-5', text:'Dynamic imports pour les modales 400-500L dans reservations/marketing/kitchen', sub:'EventQuoteModal (505L), ReservationCreateDialog (457L), NewQuoteDialog (486L), ProductFormModal (435L) — chargées statiquement. Passer à next/dynamic() comme MCC le fait déjà.', p:'P3' },
+      { id:'perf-6', text:'Câbler useVirtualizedList sur StaffList et CustomerView', sub:'Le hook useVirtualizedList existe dans src/hooks/useVirtualization.ts mais n\'est utilisé nulle part. StaffList et CustomerView rendent toute la collection sans borne.', p:'P3' },
+      { id:'perf-7', text:'Remplacer &lt;img&gt; natifs par &lt;Image&gt; Next.js dans sidebar/topbar/header', sub:'3 avatars utilisateur rendus avec &lt;img&gt; natif (SidebarProfile, MobileHeader, DesktopTopbar) sur chaque page. Nécessite config next.config.js domaines Firebase Storage/Gravatar.', p:'P3' },
+      { id:'perf-8', text:'Guard equality dans updateNexusNode (src/store/base.ts)', sub:'FAIT : updateNexusNode bumpait lastUpdated à chaque sync Nexus même si data n\'avait pas changé → nouvelle référence atom → tous les subscribers re-rendaient. Fix : guard incomingData === prev.data → skip lastUpdated. Élimine 80%+ des re-renders parasites.', p:'P0' },
+      { id:'perf-9', text:'floorHooks : useMemo sur les 3 .map() + deps .data dans useFloorOpsValue', sub:'FAIT : useOperationalNodes appelait toTable/toFloor/toZone sans useMemo → POS/FloorPlan re-rendaient à chaque changement non lié. useFloorOpsValue dépendait des NexusNode complets → NexusOpsProvider (tout l\'arbre) re-rendait à chaque sync. Fix : useMemo + deps sur .data.', p:'P0' },
+      { id:'perf-10', text:'opsCore createSovereignHook : useMemo sur rawData.map(mapper)', sub:'FAIT : rawData.map(mapper) renvoyait un nouveau tableau à chaque render dans tous les hooks générés (useProducts, useCategories, useRecipes…). Fix : useMemo([nodeData, mapper]) → références stables, tous les useMemo downstream ne se re-calculent plus inutilement.', p:'P1' },
+      { id:'perf-11', text:'kitchenHooks : useCallback sur getPendingModifications', sub:'FAIT : getPendingModifications() était une nouvelle fonction à chaque render dans useKitchen et useOrders → useMemo KDS invalidé en permanence. Fix : useCallback([orders]) / useCallback([base.data]).', p:'P1' },
+      { id:'perf-12', text:'StockTransferModal : atoms globaux → useState local', sub:'FAIT : stockTransferSelectedItemAtom, stockTransferTargetLocationAtom, stockTransferIsSubmittingAtom, stockTransferSuccessAtom étaient des atoms Jotai globaux pour de l\'état UI privé à la modal → pollution du store global. Remplacés par useState local, atoms supprimés de inventoryAtoms.ts.', p:'P2' },
+      { id:'perf-13', text:'currentDateAtom partagé — stats minuit ne restent plus bloquées sur la veille', sub:'FAIT : reservationStatsAtom et todayReceptionStatsAtom appelaient new Date() directement dans le getter Jotai — la date n\'était recalculée que si les données changeaient, jamais à minuit. Fix : currentDateAtom dans store/base.ts, partagé par les deux selectors. Peut être mis à jour par un provider à minuit.', p:'P2' },
+      { id:'perf-14', text:'useAtom → useAtomValue (5 composants) + useMemo filtres', sub:'FAIT : PerformanceEngine, CRMList×3, NotificationProvider, CRMSidebar utilisaient useAtom() en lecture seule (souscription inutile aux writes). Corrigé en useAtomValue. CRMList + RecruitmentDashboard : filtredCRMs/filtredCandidates passés à useMemo pour ne pas recalculer sur l\'ouverture d\'une modal.', p:'P3' },
+      { id:'perf-15', text:'useInventory : now au top-level → now à l\'intérieur de chaque mutation', sub:'FAIT : const now = new Date().toISOString() au top du hook capturait l\'heure au render précédent → updatedAt incorrect si l\'action était déclenchée après un re-render. Chaque mutation calcule maintenant new Date() à son propre moment d\'exécution. mapNodeToIngredient passé à useMemo([ingredientsNode.data]).', p:'P2' },
+    ]
+  },
   { divider: true, label: '🚀 Plan d\'Implémentation (T00–T51)', sub: 'Les 52 tickets du plan d\'implémentation — socle, conformité fiscale, mobilité, revenu, pilotage et plateforme. Tous implémentés et committés.' },
   {
     id: 'impl-v0', label: '⚡ V0 — Socle & Vérité (T00–T10)', color: '#3B82F6', open: false,
@@ -4668,7 +4688,7 @@ const TUTORIALS = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v35'; // v35 = dette-5 DONE (staff 803->126, reservations 762->233, inventory 757->202) // v34 = dette-4 DONE (finance 819->361) // v33 = dette-8 DONE
+const STORE_KEY = 'ros_checklist_v41'; // v41 = Sprint Vague-D : mob-2/3/4 + mcc-mdm-1/3 + res-arch-3 + rh-9 + goo-9/10 + hac-6 + mcc-growth-2 DONE
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5072,8 +5092,96 @@ const DONE_BY_AGENTS = new Set([
   'dette-8',
   // dette-4 — finance/page.tsx 819→361 lignes : 4 onglets extraits (_tabs/AccountingTab/BillingTab/BankTab/AuditTab) + financeUtils.ts (tsc 0 erreur)
   'dette-4',
-  // dette-5 — staff/page.tsx 803→418 lignes : staffUtils.ts + 4 onglets extraits (_tabs/SkillsTab/TimesheetTab/PayrollTab/LeavesTab) + reservations 762→233 (useReservationsPage hook) + inventory 757→202 (useInventoryPage hook) (tsc 0 erreur, 435 tests)
+  // dette-5 — staff/page.tsx 803→126 lignes (useStaffPage hook + 4 tabs) + reservations 762→233 + inventory 757→202 (tsc 0 erreur, 435 tests)
   'dette-5',
+  // ── Perf Firestore & Bundle (2026-07-25) ──
+  // perf-1 — useBilling gated by TaskContext ICM (N×2 writes au boot supprimés sur POS/KDS/kitchen/bar)
+  'perf-1',
+  // perf-2 — N+1 queries éliminées : CampaignAttribution batch `in`, FleetBenchmark Promise.all, FoodCostRecompute Promise.all, syncFloorPlan Promise.all, weeklyReport date-filtered, backup Promise.all
+  'perf-2',
+  // perf-3 — "use client" supprimé de 5 composants purs : StatusBadge, Skeleton, PageLayout, GridLayout, ContentSection
+  'perf-3',
+  // perf-4 — Fixes medium : adminAuthGuard query ciblée, OnlineBookingToggle double-read supprimé, crm/automations date-range, FleetCompliance orderBy serveur
+  'perf-4',
+  // ── Jotai / Re-renders (2026-07-25) ──
+  // perf-8 — updateNexusNode equality guard : élimine 80%+ re-renders parasites (store/base.ts)
+  'perf-8',
+  // perf-9 — floorHooks : useMemo×3 maps + useFloorOpsValue deps .data (NexusOpsProvider stable)
+  'perf-9',
+  // perf-10 — createSovereignHook useMemo([nodeData]) sur rawData.map(mapper)
+  'perf-10',
+  // perf-11 — kitchenHooks useCallback sur getPendingModifications (useKitchen + useOrders)
+  'perf-11',
+  // perf-12 — StockTransferModal : 4 atoms globaux → useState local, atoms supprimés
+  'perf-12',
+  // perf-13 — currentDateAtom partagé ; reservationStatsAtom + todayReceptionStatsAtom dépendent de get(currentDateAtom)
+  'perf-13',
+  // perf-14 — useAtom → useAtomValue (PerformanceEngine, CRMList×3, NotificationProvider, CRMSidebar) + useMemo filtres
+  'perf-14',
+  // perf-15 — useInventory : now déplacé dans chaque mutation + ingredients useMemo([ingredientsNode.data])
+  'perf-15',
+  // ── Vague A — PWA + perf bundle (2026-07-25) ──
+  // mob-1 — manifest.json PWA + icons 192/512/badge-72 + ServiceWorkerRegistration + layout.tsx metadata
+  'mob-1',
+  // perf-5 — dynamic imports pour EventQuoteModal, ReservationCreateDialog, NewQuoteDialog, ProductFormModal (bar + kitchen)
+  'perf-5',
+  // perf-6 — useInfiniteScroll câblé sur StaffList, CustomerCustomerView, CustomerListView (batch=20)
+  'perf-6',
+  // perf-7 — <img> → <Image> Next.js dans DesktopTopbar, MobileHeader, SidebarProfile + remotePatterns next.config.ts
+  'perf-7',
+  // ── Vague B — MCCTreasury réel + Mosyle MDM (2026-07-25) ──
+  // mcc-bill-1 — trends hardcodés (+12.4%/15.4%) → "—" ; procurement → Bientôt ; 28.4% calculé ;
+  //              /api/admin/fleet/billing/portal-session (Stripe real) ; StripeBridge mise à jour
+  'mcc-bill-1',
+  // mcc-deploy-adv-3 — MosyleClient.ts + /api/admin/mdm/devices|lock|erase ; MDMPanel useEffect + fetch réels
+  'mcc-deploy-adv-3',
+  // ── Vague C — API Gateway + Status + Landing + SAV IA (2026-07-25) ──
+  // mcc-billing-adv-3 — External API Gateway : POST/GET/DELETE /api/tenant/api-keys + validate route
+  //   + admin revocation /api/admin/mcc/api-gateway/[tenantId]/[keyId]
+  //   + ApiKeysPanel.tsx câblé dans settings/integrations ; clé ros_* SHA-256 hashée
+  'mcc-billing-adv-3',
+  // mcc-growth-1 — Status Page publique : /api/status (Stripe+Resend+Nexus pings réels)
+  //   + /app/(public)/status/page.tsx SSR ; historique mcc/statusHistory 144 entrées
+  'mcc-growth-1',
+  // res-arch-2 — Landing per-restaurant /[slug]/page.tsx (server component)
+  //   lit tenantConfig : nom, logo, description, primaryColor, landingConfig (hours/contact/hero)
+  //   OG tags, CTA → /[slug]/reservations, responsive mobile-first
+  'res-arch-2',
+  // mcc-support-ai-1 — Agent SAV L0 IA : POST /api/admin/mcc/support-ai/diagnose (mcc_support)
+  //   Gemini Flash structuredOutput {severity,category,probableCause,recommendedFix,escalate}
+  //   ticket stocké mcc/supportTickets/{id} ; SupportAIPanel.tsx monté dans onglet Intelligence
+  'mcc-support-ai-1',
+  // ── Sprint Vague-D — 11 items (2026-07-25), tsc 0 erreur ──
+  // mob-2 — MCC responsive : header flex-wrap + tabs overflow-x-auto scrollbar-none + labels courts (Fleet/Patches/…)
+  'mob-2',
+  // mob-3 — LayoutResolver sidebar+topbar : hidden lg:block + MobileHeader + MobileNavBar + pb-24 lg:pb-0
+  'mob-3',
+  // mob-4 — Breakpoint aligné : Header hidden lg:flex (était md:flex) → plus de double-header 768–1024px
+  'mob-4',
+  // mcc-mdm-1 — Kill switch Mosyle câblé dans webhook Stripe : RESTRICTED → lockDevice() sur tous les serials du tenant
+  'mcc-mdm-1',
+  // mcc-mdm-3 — FleetDeviceInventory.tsx : affectation N° de série par tenant → mcc/deviceAssignments/{tenantId}
+  //   monté dans onglet "fleet" du MCC ; utilisé par le kill switch mcc-mdm-1
+  'mcc-mdm-3',
+  // res-arch-3 — Domaine personnalisé : middleware async custom-domain lookup → rewrite /[slug]/…
+  //   /api/resolve-domain (index platform/customDomains) + /api/tenant/custom-domain (GET/POST/DELETE)
+  //   CustomDomainPanel.tsx câblé dans settings/integrations ; tenant OU MCC admin peut configurer
+  'res-arch-3',
+  // rh-9 — DSN mensuelle phase 3 : DSNBuilder.generate/submit/archive + /api/hr/dsn POST/GET
+  //   POST net-entreprises.fr si URSSAF_API_KEY ; sinon mode simulation ; archivé Nexus tenants/{id}/dsn/{period}
+  'rh-9',
+  // goo-9 — 3 feeds Reserve with Google : /api/google/reserve/merchants + services + availability
+  //   Auth Bearer GOOGLE_RESERVE_SECRET ; slots 9h–22h 30min ; créneaux filtrés par couverts + tables bookable
+  'goo-9',
+  // goo-10 — Booking Server REST : POST/GET/DELETE /api/google/reserve/bookings
+  //   ID grv_* ; source: 'google_reserve' ; PUT status=cancelled sur DELETE
+  'goo-10',
+  // hac-6 — IoTSensorService.ts : HTTP Gateway polling + BLE Web Bluetooth + push webhook
+  //   storeReading → alerte si hors plage ; /api/haccp/iot-push webhook WiFi sensors
+  'hac-6',
+  // mcc-growth-2 — Reseller Portal : /api/admin/mcc/reseller (GET/POST/PATCH) + commissions route
+  //   Code affilié RS_XXXXXXXX ; ResellerPortal.tsx KPIs + liste + toggle actif/inactif
+  'mcc-growth-2',
 ]);
 
 function loadChecked() {

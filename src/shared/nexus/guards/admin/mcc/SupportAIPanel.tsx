@@ -1,0 +1,172 @@
+'use client';
+
+import { useState } from 'react';
+import { BotMessageSquare, AlertTriangle, CheckCircle2, Loader2, ArrowUpRight, ChevronDown } from 'lucide-react';
+import { toast } from 'sonner';
+
+type Severity = 'critical' | 'high' | 'medium' | 'low';
+
+interface DiagnosticResult {
+  severity: Severity;
+  category: string;
+  probableCause: string;
+  recommendedFix: string;
+  escalate: boolean;
+}
+
+interface DiagnoseResponse {
+  ticketId: string;
+  diagnostic: DiagnosticResult;
+  createdAt: string;
+}
+
+const SEVERITY_STYLES: Record<Severity, { label: string; cls: string }> = {
+  critical: { label: 'Critique',  cls: 'text-red-400 border-red-400/30 bg-red-400/10' },
+  high:     { label: 'Élevée',    cls: 'text-orange-400 border-orange-400/30 bg-orange-400/10' },
+  medium:   { label: 'Moyenne',   cls: 'text-amber-400 border-amber-400/30 bg-amber-400/10' },
+  low:      { label: 'Faible',    cls: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/10' },
+};
+
+export function SupportAIPanel() {
+  const [tenantId, setTenantId] = useState('');
+  const [description, setDescription] = useState('');
+  const [screenshotUrl, setScreenshotUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState<DiagnoseResponse | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  const handleDiagnose = async () => {
+    if (!tenantId.trim() || !description.trim()) return;
+    setIsLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch('/api/admin/mcc/support-ai/diagnose', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tenantId: tenantId.trim(),
+          description: description.trim(),
+          ...(screenshotUrl.trim() ? { screenshotUrl: screenshotUrl.trim() } : {}),
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json() as { error?: string };
+        throw new Error(err.error ?? String(res.status));
+      }
+      setResult(await res.json() as DiagnoseResponse);
+    } catch (err) {
+      toast.error(`Erreur diagnostic : ${String(err)}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEscalate = () => {
+    if (!result) return;
+    toast.info(`Ticket ${result.ticketId.slice(0, 8)}… transmis en L1`);
+  };
+
+  const d = result?.diagnostic;
+  const sevStyle = d ? (SEVERITY_STYLES[d.severity] ?? SEVERITY_STYLES.low) : null;
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-5">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-2xl bg-action-primary/10 border border-action-primary/20 flex items-center justify-center">
+          <BotMessageSquare className="w-5 h-5 text-brand" />
+        </div>
+        <div>
+          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white">SAV L0 — IA</h3>
+          <p className="text-xs text-secondary">Diagnostic automatique • Gemini Flash</p>
+        </div>
+      </div>
+
+      {/* Form */}
+      <div className="space-y-3">
+        <input
+          type="text"
+          placeholder="Tenant ID (ex: brasserie-du-port)"
+          value={tenantId}
+          onChange={e => setTenantId(e.target.value)}
+          className="w-full bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-white focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
+        />
+        <textarea
+          rows={4}
+          placeholder="Décrivez le problème signalé par l'opérateur restaurant…"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          className="w-full bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm text-white resize-none focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
+        />
+
+        {/* Advanced (screenshot URL) */}
+        <button
+          onClick={() => setShowAdvanced(v => !v)}
+          className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted hover:text-secondary transition-colors"
+        >
+          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+          Options avancées
+        </button>
+        {showAdvanced && (
+          <input
+            type="url"
+            placeholder="URL screenshot (optionnel)"
+            value={screenshotUrl}
+            onChange={e => setScreenshotUrl(e.target.value)}
+            className="w-full bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-white focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
+          />
+        )}
+
+        <button
+          onClick={handleDiagnose}
+          disabled={!tenantId.trim() || !description.trim() || isLoading}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-action-primary/20 text-brand border border-focus/30 text-[10px] font-black uppercase tracking-widest disabled:opacity-40 transition-all hover:bg-action-primary/30 active:scale-[0.98]"
+        >
+          {isLoading ? (
+            <><Loader2 className="w-4 h-4 animate-spin" />Analyse en cours…</>
+          ) : (
+            <><BotMessageSquare className="w-4 h-4" />Diagnostiquer</>
+          )}
+        </button>
+      </div>
+
+      {/* Result */}
+      {result && d && sevStyle && (
+        <div className="space-y-4 border-t border-white/5 pt-5">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <span className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-widest ${sevStyle.cls}`}>
+              {d.severity === 'critical' || d.severity === 'high'
+                ? <AlertTriangle className="w-3.5 h-3.5" />
+                : <CheckCircle2 className="w-3.5 h-3.5" />}
+              {sevStyle.label}
+            </span>
+            <span className="text-xs text-secondary font-semibold">{d.category}</span>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted mb-1.5">Cause probable</p>
+              <p className="text-sm text-white/80 leading-relaxed">{d.probableCause}</p>
+            </div>
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted mb-1.5">Résolution recommandée</p>
+              <p className="text-sm text-white/80 leading-relaxed whitespace-pre-wrap">{d.recommendedFix}</p>
+            </div>
+          </div>
+
+          {d.escalate && (
+            <button
+              onClick={handleEscalate}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/20 transition-colors"
+            >
+              <ArrowUpRight className="w-4 h-4" />
+              Escalader en L1
+            </button>
+          )}
+
+          <p className="text-[9px] text-muted text-right font-mono">Ticket #{result.ticketId.slice(0, 8)}</p>
+        </div>
+      )}
+    </div>
+  );
+}

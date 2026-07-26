@@ -19,8 +19,15 @@ import { PinModal } from "@modules/commerce/ui/pos/PinModal";
 import { DailyListView } from "@/modules/commerce/reservations/components/DailyListView";
 import { WeeklyView } from "@/modules/commerce/reservations/components/WeeklyView";
 import { GroupFormModal } from "@/modules/commerce/reservations/components/GroupFormModal";
-import { EventQuoteModal } from "@/modules/commerce/reservations/components/EventQuoteModal";
-import { ReservationCreateDialog } from "@/modules/commerce/reservations/components/ReservationCreateDialog";
+import dynamic from "next/dynamic";
+const EventQuoteModal = dynamic(
+  () => import("@/modules/commerce/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
+  { ssr: false, loading: () => null }
+);
+const ReservationCreateDialog = dynamic(
+  () => import("@/modules/commerce/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
+  { ssr: false, loading: () => null }
+);
 import { ReservationSidebar } from "@modules/commerce";
 import { TableGrid } from "@modules/commerce";
 import { CustomerCustomerView } from "@modules/commerce";

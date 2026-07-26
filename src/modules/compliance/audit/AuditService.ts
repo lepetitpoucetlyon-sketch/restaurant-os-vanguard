@@ -1,5 +1,5 @@
 import { CryptoService } from '@/domain/services/CryptoService';
-import { AuditEventSchema, AUDITED_COLLECTIONS, type AuditAction, type AuditEvent, type AuditedCollection } from '@/domain/schemas/audit';
+import { AuditEventSchema, AUDITED_COLLECTIONS, type AuditAction, type AuditEvent } from '@/domain/schemas/audit';
 import { operationalFlags } from '@/config/features';
 import { logger } from '@/lib/logger';
 

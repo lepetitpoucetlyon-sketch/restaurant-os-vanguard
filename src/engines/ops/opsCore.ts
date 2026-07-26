@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type { Atom } from 'jotai';
 import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
@@ -80,9 +81,11 @@ export const createSovereignHook = <T,>(
   return () => {
     const node = useAtomValue(atom);
     const tenantId = useAtomValue(tenantIdAtom) as string;
-    const rawData = (node.data || []) as SovereignNode[];
+    const nodeData = node.data as SovereignNode[] | undefined;
+    // useMemo stabilise la référence du tableau mappé : ne re-calcule que si nodeData change.
+    const data = useMemo(() => (nodeData || []).map(mapper), [nodeData, mapper]);
     return {
-      data: rawData.map(mapper),
+      data,
       isLoading: node.loading,
       error: node.error,
       add: async (dataToAdd: Partial<SovereignNode>) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { lightragBreaker, geminiBreaker } from './CircuitBreaker';
 import { cn } from '@/lib/ui.foundations';
 

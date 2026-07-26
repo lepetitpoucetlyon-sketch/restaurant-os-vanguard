@@ -5,12 +5,10 @@ import { motion } from 'framer-motion';
 import { 
     Wallet, 
     TrendingUp, 
-    Cpu,
-    ArrowUpRight, 
+    Cpu, 
     Package, 
     Sparkles, 
-    ShoppingBag,
-    ArrowRight
+    ShoppingBag
 } from 'lucide-react';
 import { useFleet } from '@/context/FleetContext';
 import { TreasuryEngine } from '@domain/services/TreasuryEngine';
@@ -28,28 +26,28 @@ export function MCCTreasury() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 
                 {/* Global MRR Card */}
-                <FinancialCard 
+                <FinancialCard
                     label="Empire Monthly Revenue (MRR)"
                     value={`€${Math.round(report.totalMRR).toLocaleString()}`}
-                    trend="+12.4% vs last month"
+                    trend="—"
                     icon={<Wallet className="text-status-success" />}
                     chartColor="rgba(16, 185, 129, 0.2)"
                 />
 
                 {/* AI Consumption Cost */}
-                <FinancialCard 
+                <FinancialCard
                     label="AI Infrastructure Overhead"
                     value={`€${Math.round(report.totalAICosts).toLocaleString()}`}
-                    trend="0.002€ per token (Elite Tier optimized)"
+                    trend="0.002€ par token estimé"
                     icon={<Cpu className="text-brand" />}
                     chartColor="rgba(99, 102, 241, 0.2)"
                 />
 
                 {/* Collective Savings */}
-                <FinancialCard 
+                <FinancialCard
                     label="Collective Bargaining Power"
                     value={`€${Math.round(report.collectiveSavings).toLocaleString()}`}
-                    trend="Coalition discount: 15.4% active"
+                    trend="—"
                     icon={<Sparkles className="text-status-warning" />}
                     chartColor="rgba(245, 158, 11, 0.2)"
                     isSpecial
@@ -71,28 +69,13 @@ export function MCCTreasury() {
                         </div>
                     </div>
 
-                    <div className="space-y-6 relative z-10">
-                        <ProcurementRow 
-                            category="High-End Spirits & Wines" 
-                            volume={42500} 
-                            unit="bottles" 
-                            discount={22} 
-                            status="NEGOTIATED" 
-                        />
-                        <ProcurementRow 
-                            category="Organic Produce (Consolidated)" 
-                            volume={12400} 
-                            unit="kg" 
-                            discount={12} 
-                            status="ACTIVE" 
-                        />
-                        <ProcurementRow 
-                            category="Bio-Degradable Packaging" 
-                            volume={150000} 
-                            unit="units" 
-                            discount={18} 
-                            status="COMPLETED" 
-                        />
+                    <div className="flex flex-col items-center justify-center py-10 gap-4 relative z-10 opacity-60 select-none">
+                        <Package className="w-8 h-8 text-secondary" strokeWidth={1.5} />
+                        <div className="text-center">
+                            <p className="text-xs font-black uppercase tracking-[0.3em] text-secondary">Module Procurement</p>
+                            <p className="text-[10px] text-secondary/60 mt-1">Négociations collectives flotte — disponible prochainement</p>
+                        </div>
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-secondary border border-white/10 px-3 py-1 rounded-full">Bientôt</span>
                     </div>
 
                     <div className="mt-10 p-4 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center justify-between opacity-40 select-none">
@@ -114,7 +97,10 @@ export function MCCTreasury() {
                             €{Math.round(report.netMargin).toLocaleString()}
                         </div>
                         <p className="text-[11px] text-secondary leading-relaxed font-medium">
-                            Calculated after infrastructure overhead, collective procurement savings, and real-time AI consumption. Current margin: <span className="text-status-success font-bold">28.4%</span>.
+                            Après overhead infrastructure, économies procurement collectif et consommation IA.
+                            {report.totalMRR > 0 && (
+                                <> Marge courante : <span className="text-status-success font-bold">{((report.netMargin / report.totalMRR) * 100).toFixed(1)}%</span>.</>
+                            )}
                         </p>
                         
                         <div className="mt-8 pt-8 border-t border-white/5 space-y-4">

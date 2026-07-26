@@ -21,3 +21,5 @@ export const CashDrawerSettings = lazyPanel(() => import("@/components/settings/
 export const PayrollIntegrationPanel = lazyPanel(() =>
     import("@/components/settings/PayrollIntegrationPanel").then(m => ({ default: m.PayrollIntegrationPanel })),
 );
+export const ApiKeysPanel = lazyPanel(() => import("@/components/settings/ApiKeysPanel"));
+export const CustomDomainPanel = lazyPanel(() => import("@/components/settings/CustomDomainPanel"));

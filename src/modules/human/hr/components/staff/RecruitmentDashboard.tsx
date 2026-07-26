@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useAtom } from "jotai";
 import { 
     staffSearchQueryAtom, 
@@ -47,11 +48,11 @@ export const RecruitmentDashboard = () => {
     const [editingCandidate, setEditingCandidate] = useAtom(staffEditingCandidateAtom);
     const { showToast } = useToast();
 
-    const filteredCandidates = candidates.filter(c => {
+    const filteredCandidates = useMemo(() => candidates.filter(c => {
         const matchesSearch = `${c.firstName} ${c.lastName} ${c.appliedRole}`.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
         return matchesSearch && matchesStatus;
-    });
+    }), [candidates, searchQuery, statusFilter]);
 
     const handleOpenModal = (candidate?: Candidate) => {
         setEditingCandidate(candidate ?? null);

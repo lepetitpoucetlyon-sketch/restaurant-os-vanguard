@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 import { Reservation, GroupEvent } from '@nexus/contracts';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
+import { currentDateAtom } from '@/store/base';
 
 // --- 🏨 RESERVATIONS DOMAIN (Grade IX - Industrial) ---
 
@@ -17,7 +18,7 @@ export const groupsLoadingAtom = _groups.loading;
 // --- 📊 INDUSTRIAL STATS ---
 export const reservationStatsAtom = atom((get) => {
     const reservations = get(reservationsAtom);
-    const today = new Date().toISOString().split('T')[0];
+    const today = get(currentDateAtom); // dépendance explicite → re-calcule si currentDateAtom est mis à jour à minuit
     const todayReservations = reservations.filter(r => r.date === today);
 
     return {

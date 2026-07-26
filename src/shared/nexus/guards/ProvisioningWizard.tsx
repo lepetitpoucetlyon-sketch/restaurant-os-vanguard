@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Rocket, ShieldCheck, Zap, Globe, Palette, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Rocket, Zap, Globe, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
 import { ProvisioningDNA } from '@/domain/types/empire';
 import { Button } from '@ui/button';
-import { cn } from '@/lib/ui.foundations';
 
 interface ProvisioningWizardProps {
     onClose: () => void;

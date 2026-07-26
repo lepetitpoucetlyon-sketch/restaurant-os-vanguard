@@ -1,12 +1,6 @@
 "use client";
 
-import { useAtom } from "jotai";
-import { 
-    stockTransferSelectedItemAtom, 
-    stockTransferTargetLocationAtom, 
-    stockTransferIsSubmittingAtom, 
-    stockTransferSuccessAtom 
-} from "@modules/logistics/inventory/store/inventoryAtoms";
+import { useState, useEffect } from "react";
 import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useInventory } from "@/engines/ops/NexusOpsProvider";
@@ -14,7 +8,6 @@ import { StockItem, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
-import { useEffect } from "react";
 
 interface StockTransferModalProps {
     isOpen: boolean;
@@ -25,17 +18,17 @@ interface StockTransferModalProps {
 export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransferModalProps) {
     const { stockItems, transferStock, storageLocations } = useInventory();
 
-    const [selectedItem, setSelectedItem] = useAtom(stockTransferSelectedItemAtom);
-    const [targetLocation, setTargetLocation] = useAtom(stockTransferTargetLocationAtom);
-    const [isSubmitting, setIsSubmitting] = useAtom(stockTransferIsSubmittingAtom);
-    const [success, setSuccess] = useAtom(stockTransferSuccessAtom);
+    const [selectedItem, setSelectedItem] = useState<string | null>(stockItem?.id ?? null);
+    const [targetLocation, setTargetLocation] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [success, setSuccess] = useState(false);
 
-    // Sync selectedItem if stockItem prop changes
+    // Sync selectedItem si la prop stockItem change (ex : réouverture sur un autre article)
     useEffect(() => {
         if (stockItem?.id) {
             setSelectedItem(stockItem.id);
         }
-    }, [stockItem, setSelectedItem]);
+    }, [stockItem]);
 
     const currentItem = stockItems.find(s => s.id === selectedItem);
     const activeLocations = storageLocations.length > 0 ? storageLocations : DEFAULT_STORAGE_LOCATIONS;

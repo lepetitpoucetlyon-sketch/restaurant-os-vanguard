@@ -18,4 +18,10 @@
 | tech-debt | Dette technique : rapatriement, god files, tests POS/fiscal + Bible checklist | 2026-07-25 | terminée |
 | mcc-patch-center | MCC Patch Center : ChangelogService, tenant-override, upgrade, changelog API + UI panels | 2026-07-25 | terminée |
 | structural-5steps | God Files (step2), cents leaks (step3), context rapatriation (step4), duplicate filenames (step5) | 2026-07-25 | terminée |
-| perf-audit-fix | Fixes perf : useBilling ICM, N+1 queries, bundle (use client, dynamic, Image) | 2026-07-25 | active |
+| perf-audit-fix | Fixes perf : useBilling ICM, N+1 queries, bundle (use client, dynamic, Image) | 2026-07-25 | terminée |
+| jotai-perf-audit | Audit lecture seule : src/store/, src/modules/*/store/, composants POS/KDS | 2026-07-25 | terminée |
+| jotai-perf-fix | Fixes re-renders : updateNexusNode guard, floorHooks useMemo, opsCore useMemo, kitchenHooks useCallback, useInventory now, stockTransfer useState, currentDateAtom, useAtomValue×5, filteredCandidates useMemo | 2026-07-25 | terminée |
+| sprint-10-vague-a | Vague A : PWA manifest+icons (mob-1), dynamic imports modales (perf-5), infinite scroll grilles (perf-6), img→Image Next.js (perf-7) | 2026-07-25 | terminée |
+| sprint-10-vague-b | Vague B : MCCTreasury données réelles + portal Stripe (mcc-bill-1), Mosyle MDM routes + MDMPanel (mcc-deploy-adv-3) | 2026-07-25 | terminée |
+| sprint-10-vague-c | Vague C : API Gateway clés externes (mcc-billing-adv-3), status page (mcc-growth-1), landing per-restaurant (res-arch-2), SAV L0 IA (mcc-support-ai-1) | 2026-07-25 | terminée |
+| sprint-vague-d | Vague D : mob-2/3/4, mcc-mdm-1/3, res-arch-3, rh-9, goo-9/10, hac-6, mcc-growth-2 | 2026-07-25 | terminée |

@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { Users, Search, Star, Heart, Plus, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useLanguage } from '@/hooks';
@@ -25,7 +25,7 @@ export function CRMSidebar() {
     const [searchQuery, setSearchQuery] = useAtom(crmSearchQueryAtom);
     const [filterSegment, setFilterSegment] = useAtom(crmFilterSegmentAtom);
     const [, setNewCRMModalOpen] = useAtom(crmNewCRMModalAtom);
-    const [crms] = useAtom(crmsAtom);
+    const crms = useAtomValue(crmsAtom);
 
     const getCount = (key: string | null) => {
         if (!key) return crms.length;

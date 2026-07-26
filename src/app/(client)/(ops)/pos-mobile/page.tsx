@@ -1,15 +1,13 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProductGrid, Cart, TableSelector } from '@modules/ops';
-import { useKitchen, useTables } from '@/engines/ops/NexusOpsProvider';
 import { useAuth, useTenant } from '@/engines/core/NexusCoreProvider';
 import { ArrowLeft, ShoppingCart, Send, X } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { usePOSController } from '@modules/ops';
 import { formatCurrency } from '@/lib/formatters';
-import { toast } from 'sonner';
 import { useStockAlerts } from '../pos/useStockAlerts';
 
 export default function POSMobilePage() {

@@ -11,7 +11,9 @@ const TENANT_ONLY_ROUTES = [
   '/staff', '/inventory', '/haccp', '/finance', '/crm', '/marketing', '/analytics',
 ];
 
-export function middleware(request: NextRequest) {
+const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN ?? 'restaurantos.app';
+
+export async function middleware(request: NextRequest) {
   const url = request.nextUrl.pathname;
 
   // --- APP_MODE route gating ---
@@ -40,6 +42,31 @@ export function middleware(request: NextRequest) {
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return new NextResponse(null, { status: 404 });
+    }
+  }
+
+  // --- Custom domain → slug rewrite (res-arch-3) ---
+  // bistro.com/reservations → /bistroduport/reservations
+  // Only runs when the hostname is NOT a subdomain of the app domain.
+  const host = (request.headers.get('host') ?? '').split(':')[0].toLowerCase();
+  const isAppSubdomain = host === APP_DOMAIN || host.endsWith(`.${APP_DOMAIN}`) || host === 'localhost';
+  if (!isAppSubdomain && !url.startsWith('/api/resolve-domain')) {
+    try {
+      const resolveUrl = new URL(`/api/resolve-domain?domain=${encodeURIComponent(host)}`, request.url);
+      const res = await fetch(resolveUrl.toString());
+      if (res.ok) {
+        const data = await res.json() as { slug?: string | null };
+        if (data.slug) {
+          const rewriteUrl = request.nextUrl.clone();
+          rewriteUrl.pathname = `/${data.slug}${url === '/' ? '' : url}`;
+          const rewrite = NextResponse.rewrite(rewriteUrl);
+          rewrite.headers.set('x-resolved-tenant-id', data.slug);
+          rewrite.headers.set('x-custom-domain', host);
+          return rewrite;
+        }
+      }
+    } catch {
+      // DNS lookup failed — continue normal routing
     }
   }
 

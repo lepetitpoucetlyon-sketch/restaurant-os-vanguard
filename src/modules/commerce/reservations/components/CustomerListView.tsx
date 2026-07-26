@@ -1,21 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import { useLanguage } from "@/hooks";
 import { cinematicContainer, cinematicItem } from "@modules/commerce/reservations/constants";
+import { useInfiniteScroll } from "@/hooks/useVirtualization";
 
 interface CustomerListViewProps {
     customers: import('@modules/commerce/customers').CRM[];
     setSelectedCustomer: (customer: import('@modules/commerce/customers').CRM) => void;
 }
 
-export function CustomerListView({ 
-    customers, 
-    setSelectedCustomer 
+const BATCH = 20;
+
+export function CustomerListView({
+    customers,
+    setSelectedCustomer
 }: CustomerListViewProps) {
     const { t } = useLanguage();
+    const [limit, setLimit] = useState(BATCH);
+    const onLoadMore = useCallback(() => setLimit(l => l + BATCH), []);
+    const { sentinelRef } = useInfiniteScroll({
+        hasMore: limit < customers.length,
+        loading: false,
+        onLoadMore,
+    });
+    const visible = customers.slice(0, limit);
 
     return (
         <div className="p-12 pb-32">
@@ -35,7 +46,7 @@ export function CustomerListView({
                     </div>
                 </div>
                 <motion.div variants={cinematicContainer} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
-                    {customers.map(customer => (
+                    {visible.map(customer => (
                         <motion.div 
                             key={customer.id} 
                             variants={cinematicItem} 
@@ -71,6 +82,7 @@ export function CustomerListView({
                         </motion.div>
                     ))}
                 </motion.div>
+                <div ref={sentinelRef} />
             </div>
         </div>
     );

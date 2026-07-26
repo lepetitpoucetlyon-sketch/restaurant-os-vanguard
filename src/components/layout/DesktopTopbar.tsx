@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { NAV_SECTIONS } from "@/config/navConfig";
 import Link from "next/link";
@@ -43,7 +44,7 @@ export function DesktopTopbar() {
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-bg-tertiary border border-border/40 flex items-center justify-center overflow-hidden shadow-premium">
                     {currentUser?.avatar ? (
-                        <img src={currentUser.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                        <Image src={currentUser.avatar} alt="Avatar" width={40} height={40} className="w-full h-full object-cover" unoptimized />
                     ) : (
                         <span className="font-serif italic text-lg">{currentUser?.name?.charAt(0)}</span>
                     )}

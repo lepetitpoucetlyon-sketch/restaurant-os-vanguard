@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MicrounitsSchema, UUIDSchema, sanitized } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, UUIDSchema } from '@/domain/schemas/primitives';
 
 export const DigitalReceiptSchema = z.object({
     id: UUIDSchema,

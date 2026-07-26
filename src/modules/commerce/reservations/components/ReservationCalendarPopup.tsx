@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { format, isSameDay, isSameMonth, startOfMonth } from "date-fns";
+import { format, isSameDay, isSameMonth } from "date-fns";
 import { fr } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";

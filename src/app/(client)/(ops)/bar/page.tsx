@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 import { useToast } from "@ui/Toast";
-import { ProductFormModal } from "@/components/modals/ProductFormModal";
+import dynamic from "next/dynamic";
+const ProductFormModal = dynamic(
+  () => import("@/components/modals/ProductFormModal").then(m => m.ProductFormModal),
+  { ssr: false, loading: () => null }
+);
 import { RecipeDetailDialog } from "@modules/ops";
 
 // Domain & Constants

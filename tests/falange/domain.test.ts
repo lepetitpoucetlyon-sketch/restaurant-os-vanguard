@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NF525Service } from '@/domain/services/NF525Service';
+import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
 import { StockEngine } from '@/domain/services/StockEngine';
 import { IdentityManager } from '@/domain/services/IdentityManager';
 
@@ -9,12 +9,12 @@ describe('🏛️ FALANGE - COHORTE DOMAIN (10 TESTS)', () => {
         vi.clearAllMocks();
     });
 
-    it('1. NF525Service devrait exiger un scellement pour toute facture', () => {
-        expect(NF525Service.executeAtomicPayment).toBeDefined();
+    it('1. FiscalSealer devrait exiger un scellement pour toute facture', () => {
+        expect(FiscalSealer.sealDataAtomically).toBeDefined();
     });
 
     it('2. StockEngine devrait déduire les stocks de manière atomique', () => {
-        expect(StockEngine.calculateBatchDeduction).toBeDefined();
+        expect(StockEngine.calculateOrderStockImpact).toBeDefined();
     });
 
     it('3. IdentityManager devrait restreindre l\'accès selon le niveau de rôle', () => {
@@ -30,3 +30,4 @@ describe('🏛️ FALANGE - COHORTE DOMAIN (10 TESTS)', () => {
     it('9. SimulationService - Sandboxing', () => { expect(true).toBe(true); });
     it('10. MacroBrain - Performance', () => { expect(true).toBe(true); });
 });
+

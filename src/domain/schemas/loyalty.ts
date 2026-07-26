@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MicrounitsSchema, UUIDSchema, TimestampSchema } from './primitives';
+import { UUIDSchema, TimestampSchema } from './primitives';
 
 export const LoyaltyTierSchema = z.enum(['bronze', 'silver', 'gold', 'platinum']);
 

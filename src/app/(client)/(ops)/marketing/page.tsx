@@ -6,7 +6,11 @@ import { Megaphone, Instagram, FileSpreadsheet, Sparkles, PlusCircle, Users, Glo
 
 import { useMarketing, useQuotes } from "@modules/commerce/marketing/hooks";
 import { NewCampaignModal } from "@modules/commerce/marketing/components/marketing";
-import { NewQuoteDialog } from "@modules/commerce/marketing/components/quotes";
+import dynamic from "next/dynamic";
+const NewQuoteDialog = dynamic(
+  () => import("@modules/commerce/marketing/components/quotes").then(m => m.NewQuoteDialog),
+  { ssr: false, loading: () => null }
+);
 import { ExpertHub } from "@modules/commerce/marketing/components/agency";
 import { SEOManager } from "@modules/commerce/marketing/services/SEOManager";
 

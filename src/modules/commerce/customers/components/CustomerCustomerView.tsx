@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { motion, Variants } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import { Customer } from "@nexus/contracts";
 import { easing } from "@/lib/motion";
+import { useInfiniteScroll } from "@/hooks/useVirtualization";
 
 const cinematicContainer: Variants = {
     hidden: { opacity: 0 },
@@ -39,7 +41,18 @@ interface CustomerCustomerViewProps {
     isLoading?: boolean;
 }
 
+const BATCH = 20;
+
 export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: CustomerCustomerViewProps) {
+    const [limit, setLimit] = useState(BATCH);
+    const onLoadMore = useCallback(() => setLimit(l => l + BATCH), []);
+    const { sentinelRef } = useInfiniteScroll({
+        hasMore: limit < customers.length,
+        loading: false,
+        onLoadMore,
+    });
+    const visible = customers.slice(0, limit);
+
     return (
         <div className="flex-1 w-full bg-bg-primary p-12 pb-32">
             <div className="max-w-7xl mx-auto space-y-16">
@@ -92,7 +105,7 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                                 </div>
                             </div>
                         ))
-                    ) : customers.map((customer) => (
+                    ) : visible.map((customer) => (
                         <motion.div
                             key={customer.id}
                             variants={cinematicItem}
@@ -147,6 +160,7 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                         </motion.div>
                     ))}
                 </motion.div>
+                <div ref={sentinelRef} />
             </div>
         </div>
     );

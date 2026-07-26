@@ -16,9 +16,11 @@ import { tenantIdAtom } from '@/store/pillars/sovereign';
  */
 export const useOperationalNodes = () => {
   const node = useAtomValue(tablesNodeAtom);
-  const nodes = (node.data || []).map(toTable);
-  const layouts = (useAtomValue(floorsAtom) || []).map(toFloor);
-  const zones = (useAtomValue(zonesAtom) || []).map(toZone);
+  const floorsData = useAtomValue(floorsAtom);
+  const zonesData = useAtomValue(zonesAtom);
+  const nodes = useMemo(() => (node.data || []).map(toTable), [node.data]);
+  const layouts = useMemo(() => (floorsData || []).map(toFloor), [floorsData]);
+  const zones = useMemo(() => (zonesData || []).map(toZone), [zonesData]);
   const isZonesLocked = useAtomValue(zonesLockedAtom);
   const setZonesLocked = useSetAtom(zonesLockedAtom);
   const currentLayoutId = useAtomValue(currentFloorIdAtom) as string;
@@ -175,26 +177,28 @@ export const useTables = useOperationalNodes;
 export function useFloorOpsValue(tenantId: string) {
   const operationalNodes = useAtomValue(tablesNodeAtom);
   const allocations = useAtomValue(reservationsNodeAtom);
-  const areas = useAtomValue(zonesAtom) || [];
+  const areasRaw = useAtomValue(zonesAtom);
 
+  // Dépendre de .data (stable si contenu inchangé après le guard updateNexusNode)
+  // plutôt que du NexusNode complet — évite de re-rendre tout NexusOpsProvider à chaque sync.
   return useMemo(() => ({
     operationalNodes: (operationalNodes.data || []).map(toTable),
     allocations: (allocations.data || []).map(toReservation),
-    areas: (areas || []) as SovereignNode[],
+    areas: (areasRaw || []) as SovereignNode[],
     isLoading: operationalNodes.loading || allocations.loading,
     updateNodeStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
       await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, {
         ...status,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
     }),
     updateAreaStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
       await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}/${id}`, {
         ...status,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
     }),
-  }), [tenantId, operationalNodes, allocations, areas]);
+  }), [tenantId, operationalNodes.data, operationalNodes.loading, allocations.data, allocations.loading, areasRaw]);
 }
 
 // Types utilitaires réexportés pour les consommateurs.

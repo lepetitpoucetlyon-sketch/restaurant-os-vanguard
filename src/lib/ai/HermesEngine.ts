@@ -1,7 +1,6 @@
 import { AgentEngine } from './AgentEngine';
-import { AgentDomain, AgentRole } from '@/domain/agency/types';
+import { AgentDomain } from '@/domain/agency/types';
 import { 
-    VanguardAgentConfig, 
     HermesPulseResult, 
     HermesAnomaly, 
     HermesManifest 

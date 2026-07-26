@@ -1,27 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
     UserPlus, 
     Search, 
-    Filter, 
     MoreHorizontal, 
     Mail, 
     Phone, 
-    Calendar, 
     ChevronRight,
-    Briefcase,
     FileText,
     Camera,
     ShieldCheck,
     AlertCircle,
-    CheckCircle2,
-    Clock,
     Trash2,
     Download
 } from 'lucide-react';
-import { cn } from "@/lib/ui.foundations";;
+;
 import { useRecruitment } from '@modules/human/hr';
 import { Candidate, CandidateStatus } from '@nexus/contracts';
 import { PremiumSelect } from '@/components/ui/PremiumSelect';

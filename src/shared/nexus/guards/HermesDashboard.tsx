@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { HermesEngine } from '@/lib/ai/HermesEngine';
-import { HermesPulseResult, VanguardAgentConfig } from '@/domain/agency/hermes.types';
+import { HermesPulseResult } from '@/domain/agency/hermes.types';
 
 /**
  * 🏺 Hermes Dashboard - Grade X Command Center

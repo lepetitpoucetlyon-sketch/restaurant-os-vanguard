@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import { useAtom } from 'jotai';
+import React, { useMemo } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
 import { motion } from 'framer-motion';
 import { 
     crmSearchQueryAtom, 
@@ -21,18 +21,18 @@ const getEmail = (c: CRM): string => c?.email ?? '';
 
 export function CRMList() {
     const { t } = useLanguage();
-    const [searchQuery] = useAtom(crmSearchQueryAtom);
-    const [filterSegment] = useAtom(crmFilterSegmentAtom);
-    const [crms] = useAtom(crmsAtom);
+    const searchQuery = useAtomValue(crmSearchQueryAtom);
+    const filterSegment = useAtomValue(crmFilterSegmentAtom);
+    const crms = useAtomValue(crmsAtom);
     const [_selectedCRM, setSelectedCRM] = useAtom(selectedCRMAtom) as [CRM | null, (crm: CRM | null) => void];
 
-    const filteredCRMs = crms.filter(c => {
+    const filteredCRMs = useMemo(() => crms.filter(c => {
         const cName = c.name || `${getFirstName(c)} ${getLastName(c)}`;
         const cEmail = getEmail(c);
         const cPhone = getPhone(c);
-        
+
         if (filterSegment && c.segment !== filterSegment) return false;
-        
+
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             return (
@@ -42,7 +42,7 @@ export function CRMList() {
             );
         }
         return true;
-    });
+    }), [crms, searchQuery, filterSegment]);
 
     if (filteredCRMs.length === 0) {
         return (

@@ -31,6 +31,10 @@ const TrustedDevicePanel = dynamic(() => import('@nexus/guards/admin/mcc/Trusted
 const TenantOverridePanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantOverridePanel').then(m => m.TenantOverridePanel), { loading: () => <MCCWidgetSkeleton /> });
 const TenantChangelogPanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantChangelogPanel').then(m => m.TenantChangelogPanel), { loading: () => <MCCWidgetSkeleton /> });
 const FleetUpgradePanel = dynamic(() => import('@nexus/guards/admin/mcc/FleetUpgradePanel').then(m => m.FleetUpgradePanel), { loading: () => <MCCWidgetSkeleton /> });
+const SupportAIPanel       = dynamic(() => import('@nexus/guards/admin/mcc/SupportAIPanel').then(m => m.SupportAIPanel), { loading: () => <MCCWidgetSkeleton /> });
+const FleetDeviceInventory = dynamic(() => import('@nexus/guards/admin/mcc/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
+const ResellerPortal       = dynamic(() => import('@nexus/guards/admin/mcc/ResellerPortal').then(m => m.ResellerPortal), { loading: () => <MCCWidgetSkeleton /> });
+const TenantBillingPanel   = dynamic(() => import('@nexus/guards/admin/mcc/TenantBillingPanel').then(m => m.TenantBillingPanel), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     const {
@@ -56,7 +60,7 @@ export default function MCCDashboard() {
                 <div className="relative z-10 p-8">
                     <VoiceAssistantOverlay />
 
-                    <header className="flex justify-between items-center mb-10">
+                    <header className="flex flex-wrap gap-4 justify-between items-center mb-10">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-gradient-to-tr from-action-primary to-action-primary rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                 <Rocket className="text-white w-7 h-7" />
@@ -66,27 +70,28 @@ export default function MCCDashboard() {
                                 <p className="text-secondary text-sm font-medium">Empire Orchestrator • v4.0.0-NEXUS</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 flex-wrap">
                             <AmbientAudio />
-                            <button onClick={() => refreshFleet()} disabled={isLoading} className={`flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}>
+                            <button onClick={() => refreshFleet()} disabled={isLoading} className={`flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all active:scale-95 ${isLoading ? 'opacity-50' : ''}`}>
                                 <RefreshCw className={`w-4 h-4 text-brand ${isLoading ? 'animate-spin' : ''}`} />
-                                <span className="text-xs font-bold uppercase tracking-widest text-muted">Global Sync</span>
+                                <span className="hidden sm:inline text-xs font-bold uppercase tracking-widest text-muted">Global Sync</span>
                             </button>
-                            <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl">
+                            <div className="hidden sm:flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-3 py-2.5 rounded-xl">
                                 <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
-                                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Axiom Bridge Connected</span>
+                                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Axiom Bridge</span>
                             </div>
-                            <div className="w-px h-10 bg-surface-card/5 mx-2" />
                             <div className="w-10 h-10 rounded-full bg-action-primary/20 border border-focus/30 flex items-center justify-center font-bold text-brand">{userInitials}</div>
                         </div>
                     </header>
 
-                    <div className="flex gap-8 border-b border-white/5 mb-10">
-                        <TabButton active={activeTab === 'fleet'}        onClick={() => setActiveTab('fleet')}        label="Fleet Management"         icon={<LayoutGrid className="w-4 h-4" />} />
-                        <TabButton active={activeTab === 'compliance'}   onClick={() => setActiveTab('compliance')}   label="Compliance & Certification" icon={<ShieldCheck className="w-4 h-4" />} />
-                        <TabButton active={activeTab === 'intelligence'} onClick={() => setActiveTab('intelligence')} label="Empire Oracle"              icon={<BrainCircuit className="w-4 h-4" />} />
-                        <TabButton active={activeTab === 'treasury'}     onClick={() => setActiveTab('treasury')}     label="Treasury & Logistics"       icon={<Wallet className="w-4 h-4" />} />
-                        <TabButton active={activeTab === 'patchcenter'}  onClick={() => setActiveTab('patchcenter')}  label="Patch Center"               icon={<GitMerge className="w-4 h-4" />} />
+                    <div className="overflow-x-auto scrollbar-none -mx-8 px-8 mb-10">
+                        <div className="flex gap-6 border-b border-white/5 min-w-max">
+                            <TabButton active={activeTab === 'fleet'}        onClick={() => setActiveTab('fleet')}        label="Fleet"       icon={<LayoutGrid className="w-4 h-4" />} />
+                            <TabButton active={activeTab === 'compliance'}   onClick={() => setActiveTab('compliance')}   label="Compliance"  icon={<ShieldCheck className="w-4 h-4" />} />
+                            <TabButton active={activeTab === 'intelligence'} onClick={() => setActiveTab('intelligence')} label="Oracle"      icon={<BrainCircuit className="w-4 h-4" />} />
+                            <TabButton active={activeTab === 'treasury'}     onClick={() => setActiveTab('treasury')}     label="Treasury"    icon={<Wallet className="w-4 h-4" />} />
+                            <TabButton active={activeTab === 'patchcenter'}  onClick={() => setActiveTab('patchcenter')}  label="Patches"     icon={<GitMerge className="w-4 h-4" />} />
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-12 gap-8">
@@ -108,6 +113,7 @@ export default function MCCDashboard() {
                                         </div>
                                         <FleetCommandTable />
                                         {instances.length > 0 && <TenantUsersPanel instance={instances[0]} />}
+                                        <FleetDeviceInventory instances={instances.map(i => ({ tenantId: i.id, name: i.name }))} />
                                     </motion.div>
                                 )}
 
@@ -126,13 +132,16 @@ export default function MCCDashboard() {
                                     <motion.div key="intelligence" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
                                         <StrategyOracle />
                                         <AIWorkshop />
+                                        <SupportAIPanel />
                                         <DeviceManagerPanel />
                                     </motion.div>
                                 )}
 
                                 {activeTab === 'treasury' && (
-                                    <motion.div key="treasury" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                    <motion.div key="treasury" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
                                         <MCCTreasury />
+                                        <TenantBillingPanel />
+                                        <ResellerPortal />
                                     </motion.div>
                                 )}
 

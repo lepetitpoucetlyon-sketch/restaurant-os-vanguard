@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { CustomerAccountSchema, AccountChargeSchema, type CustomerAccount, type AccountCharge } from '@/domain/schemas/customerAccount';
+import { AccountChargeSchema, type CustomerAccount, type AccountCharge } from '@/domain/schemas/customerAccount';
 import type { Microunits } from '@/domain/schemas/primitives';
 
 export const CustomerAccountService = {

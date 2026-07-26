@@ -11,7 +11,6 @@ import {
     ArrowRight,
     ArrowUpRight,
     Utensils,
-    Home,
     Users,
     Activity
 } from 'lucide-react';

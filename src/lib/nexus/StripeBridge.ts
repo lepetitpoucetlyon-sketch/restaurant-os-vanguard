@@ -39,10 +39,27 @@ export const calculateEngineMRR = (
  * 2. PORTAIL EXTERNE STRIPE (Agnostic Redirection)
  * Redirige le vassal vers Stripe pour la gestion d'abonnement.
  */
-export const redirectToStripePortal = async (tenantId: string, _returnUrl: string) => {
-  // Dans un cas d'usage réel, ici on appellerait l'API MCC pour obtenir la Stripe Session URL.
-  const STRIPE_PORTAL_MOCK_URL = `https://billing.stripe.com/p/session/mock_${tenantId}`;
-  
-  logger.info(`[Empire Economy] Redirecting Node ${tenantId} to Sovereign Portal...`);
-  window.location.href = STRIPE_PORTAL_MOCK_URL;
+export const redirectToStripePortal = async (tenantId: string, returnUrl: string) => {
+  logger.info(`[Empire Economy] Fetching Stripe portal session for ${tenantId}…`);
+
+  const authHeader = typeof window !== 'undefined'
+    ? (window as Window & { __nexusAuthToken?: string }).__nexusAuthToken
+    : undefined;
+
+  const res = await fetch('/api/admin/fleet/billing/portal-session', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(authHeader ? { Authorization: `Bearer ${authHeader}` } : {}),
+    },
+    body: JSON.stringify({ tenantId, returnUrl }),
+  });
+
+  if (!res.ok) {
+    logger.warn(`[Empire Economy] Portal session failed ${res.status} — fallback suppressed`);
+    throw new Error(`Stripe portal session error: ${res.status}`);
+  }
+
+  const { url } = await res.json() as { url: string };
+  window.location.href = url;
 };

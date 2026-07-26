@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { cn } from "@/lib/ui.foundations";
 import {
     Calendar, Clock, Gift, FileText, GraduationCap,
-    CreditCard, ChevronRight, User,
+    CreditCard, User,
 } from "lucide-react";
 import { TipDistributionService } from "@/modules/human/hr/services/tipDistribution";
 

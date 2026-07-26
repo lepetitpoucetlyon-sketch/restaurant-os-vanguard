@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Wifi, WifiOff, RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
+import { WifiOff, RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useConnectivity } from '@/lib/offline/connectivity-hooks';
 import { useTenant } from '@/hooks';

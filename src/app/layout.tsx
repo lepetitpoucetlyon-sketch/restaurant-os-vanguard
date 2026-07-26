@@ -7,6 +7,7 @@ import { whiteLabelInstanceConfig } from "@/config/instance";
 import { ErrorBoundary } from "@/components/system/ErrorBoundary";
 import { NexusProviderStack } from "@/components/layout/NexusProviderStack";
 import { ImpersonationBanner } from "@/components/layout/ImpersonationBanner";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -21,6 +22,16 @@ const jetbrainsMono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin
 export const metadata: Metadata = {
   title: `Restaurant OS | Premium Intelligence`,
   description: whiteLabelInstanceConfig.appDescription,
+  manifest: "/manifest.json",
+  themeColor: "#C5A059",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Restaurant OS",
+  },
+  icons: {
+    apple: "/icons/icon-192.png",
+  },
 };
 
 export const viewport = {
@@ -49,6 +60,7 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
+        <ServiceWorkerRegistration />
         <ErrorBoundary>
           <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
             <NexusProviderStack>
