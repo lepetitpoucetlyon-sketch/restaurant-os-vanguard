@@ -8,7 +8,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
-import { MosyleClient } from '@/lib/services/MosyleClient';
+import { MosyleClient } from '@/infrastructure/services/MosyleClient';
 import { logger } from '@/lib/logger';
 
 const REQUIRED_CONFIRMATION = 'ERASE CONFIRMED';

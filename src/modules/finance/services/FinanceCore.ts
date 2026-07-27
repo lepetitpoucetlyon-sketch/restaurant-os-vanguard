@@ -122,7 +122,7 @@ export class FinanceCore {
      * Scelle une transaction ou un rapport de clôture avec un Hash Post-Quantum.
      */
     static async sealRecordWithHash(id: string, data: SovereignData): Promise<FiscalSeal> {
-        const { QuantumCrypto } = await import('@/lib/QuantumCrypto');
+        const { QuantumCrypto } = await import('@/infrastructure/services/QuantumCrypto');
         const serialized = JSON.stringify(data);
         const secret = process.env.FISCAL_SIGNING_SECRET;
         if (!secret) {

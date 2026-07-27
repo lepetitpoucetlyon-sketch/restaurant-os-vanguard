@@ -4,7 +4,7 @@ import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
-import { ErrorBoundary } from "@/components/system/ErrorBoundary";
+import { ErrorBoundary } from "@/shared/components/ErrorBoundary";
 import { NexusProviderStack } from "@/components/layout/NexusProviderStack";
 import { ImpersonationBanner } from "@/components/layout/ImpersonationBanner";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";

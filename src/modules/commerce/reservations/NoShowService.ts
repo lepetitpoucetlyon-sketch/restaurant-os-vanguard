@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { toMicrounits } from '@/domain/schemas/primitives';
 import type { ReservationSettings } from '@/shared/nexus/contracts/settings/reservations';
 

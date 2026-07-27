@@ -1,7 +1,7 @@
 // Vercel Cron: schedule: "0 8 * * 1" (chaque lundi à 8h)
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { buildWeeklyReportHTML } from '@/lib/reports/weeklyReport';
+import { buildWeeklyReportHTML } from '@/modules/intelligence/reports/weeklyReport';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'rapports@restaurant-os.app';

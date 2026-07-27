@@ -6,7 +6,7 @@ import {
     journalEntriesNodeAtom 
 } from '@/store/pillars';
 import { qualityActiveControlAtom } from '@modules/compliance';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
+import { SelfHealingEngine } from '@/infrastructure/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 

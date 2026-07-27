@@ -8,7 +8,7 @@ import { BillingService } from '@/modules/finance/services/BillingService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
-import { sendEmail } from '@/lib/services/email-service';
+import { sendEmail } from '@/infrastructure/services/email-service';
 
 const SignupSchema = z.object({
   email: z.string().email().max(254),

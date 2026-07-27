@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusTransaction } from '@/lib/NexusTransaction';
+import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 

@@ -7,7 +7,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getBackupProvider } from '@/infrastructure/services/backup/BackupProvider';
 import type { BackupManifest } from '@/infrastructure/services/backup/BackupProvider';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
 /**

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Shield, AlertCircle, Info, Database } from 'lucide-react';
-import { empireAudit, AuditEvent } from '@/lib/audit';
+import { empireAudit, AuditEvent } from '@/infrastructure/services/audit';
 import { cn } from '@/lib/ui.foundations';
 
 interface LogEntry {

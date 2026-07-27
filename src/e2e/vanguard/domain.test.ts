@@ -3,7 +3,7 @@ import './mocks'; // Charge l'infrastructure de mocks
 
 import { SharedKernel } from '@/lib/shared-kernel';
 import { POSService } from '@/infrastructure/adapters/POSAdapter';
-import { QuantumCrypto } from '@/lib/QuantumCrypto';
+import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
 const SyncCompliance = { 
     init: vi.fn().mockResolvedValue(undefined) 
 };

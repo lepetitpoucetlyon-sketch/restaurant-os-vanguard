@@ -1,11 +1,11 @@
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
-import { sovereignCreateWorkspace } from '@/lib/rag/SovereignRAGClient';
+import { sovereignCreateWorkspace } from '@/modules/intelligence/rag/SovereignRAGClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
+import { injectBrandingVars } from '@/infrastructure/branding/WhiteLabelBrandingInjector';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"

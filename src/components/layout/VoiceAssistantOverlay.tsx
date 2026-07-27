@@ -11,11 +11,11 @@ import { useSettings } from "@/shared/contexts/SettingsContext";
 
 import { cn } from "@/lib/ui.foundations";
 
-import { NexusSphere } from './voice/NexusSphere';
-import { ChatThread } from './voice/ChatThread';
-import { SessionHistory } from './voice/SessionHistory';
-import { ChatInput } from './voice/ChatInput';
-import { formatAssistantText } from './voice/voice-utils';
+import { NexusSphere } from '@/shared/components/voice/ui/NexusSphere';
+import { ChatThread } from '@/shared/components/voice/ui/ChatThread';
+import { SessionHistory } from '@/shared/components/voice/ui/SessionHistory';
+import { ChatInput } from '@/shared/components/voice/ui/ChatInput';
+import { formatAssistantText } from '@/shared/components/voice/ui/voice-utils';
 
 export function VoiceAssistantOverlay() {
     // ✅ SSR-safe mount detection via lazy initializer (avoids setState-in-effect)

@@ -11,7 +11,7 @@ import { IngredientCategory, IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
-import { VisionScanner } from "@/components/shared/VisionScanner";
+import { VisionScanner } from "@/shared/components/VisionScanner";
 import type { ExtractedInvoice } from "@domain/services/VisionService";
 
 interface SupplierRecord {

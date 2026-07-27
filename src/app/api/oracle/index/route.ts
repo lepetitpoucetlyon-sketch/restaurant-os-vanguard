@@ -9,7 +9,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { sovereignIngest } from '@/lib/rag/SovereignRAGClient';
+import { sovereignIngest } from '@/modules/intelligence/rag/SovereignRAGClient';
 import { logger } from '@/lib/logger';
 
 interface IndexRequest {

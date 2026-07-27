@@ -22,7 +22,7 @@ import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
 import { SLMExpert } from "@nexus/contracts";
 import { AgentDomain } from "@/modules/intelligence/domain/agency/types";
-import { AI_MODELS } from "@/lib/ai/types";
+import { AI_MODELS } from "@/modules/intelligence/ai/types";
 
 const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; description: string }> = {
     inventory: { 

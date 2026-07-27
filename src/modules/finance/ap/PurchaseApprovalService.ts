@@ -1,5 +1,5 @@
 import { policyEngine } from '@/domain/services/PolicyEngine';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 interface ApprovalResult {

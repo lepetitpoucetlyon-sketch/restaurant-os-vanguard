@@ -6,9 +6,9 @@ import { Globe, Settings2, Eye, Save, Loader2, Clock, CalendarDays } from 'lucid
 import { useTenant } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toast } from 'sonner';
-import EmbedSnippets from '@/components/widget/EmbedSnippets';
-import ROICalculator from '@/components/widget/ROICalculator';
-import OnlineBookingToggle from '@/components/widget/OnlineBookingToggle';
+import EmbedSnippets from '@/modules/commerce/widgets/EmbedSnippets';
+import ROICalculator from '@/modules/commerce/widgets/ROICalculator';
+import OnlineBookingToggle from '@/modules/commerce/widgets/OnlineBookingToggle';
 
 interface WidgetSettings {
   slotDuration: 15 | 30 | 60;

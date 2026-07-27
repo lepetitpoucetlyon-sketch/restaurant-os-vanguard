@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/lib/ai/LLMManager';
+import { LLMManager } from '@/modules/intelligence/ai/LLMManager';
 import {
     IdentityExtractionSchema,
     ComplianceExtractionErrorSchema,
@@ -7,7 +7,7 @@ import {
     type ComplianceExtractionError
 } from '@/domain/schemas/compliance.schemas';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
-import { AI_MODELS } from '@/lib/ai/types';
+import { AI_MODELS } from '@/modules/intelligence/ai/types';
 
 export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }

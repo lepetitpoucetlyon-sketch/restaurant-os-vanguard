@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { getDefaultStore } from 'jotai';
-import { MasterBridge } from '@/lib/MasterBridge';
+import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 import { logger } from '@/lib/logger';
 import { checkOnlineStatus } from '@/infrastructure/services/offline/status';
 import { commanderSignatureAtom } from '@nexus/state/SovereignGenome';

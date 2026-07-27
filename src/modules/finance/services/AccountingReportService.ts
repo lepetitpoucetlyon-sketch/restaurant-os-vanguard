@@ -475,7 +475,7 @@ export class AccountingReportService {
      */
     static async exportFacturX(journalEntryId: string): Promise<string> {
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-        const { FacturXGenerator } = await import('@/lib/documents/FacturXGenerator');
+        const { FacturXGenerator } = await import('@/modules/finance/documents/FacturXGenerator');
 
         const entry = await Nexus.adapter.get<JournalEntry>(`journalEntries/${journalEntryId}`);
         if (!entry) throw new Error(`JournalEntry introuvable : ${journalEntryId}`);

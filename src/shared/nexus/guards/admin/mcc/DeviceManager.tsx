@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { revokeDevice } from '@/lib/sovereign/lockdown';
+import { revokeDevice } from '@/infrastructure/services/sovereign/lockdown';
 import { ShieldAlert, ShieldCheck, Smartphone, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { logger } from '@/lib/logger';

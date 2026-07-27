@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useToast } from "@ui/Toast";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
-  () => import("@/components/modals/ProductFormModal").then(m => m.ProductFormModal),
+  () => import("@/modules/ops/pos/components/ProductFormModal").then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
 import { RecipeDetailDialog } from "@modules/ops";

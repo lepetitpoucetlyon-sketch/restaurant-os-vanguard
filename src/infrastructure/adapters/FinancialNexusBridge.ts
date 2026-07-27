@@ -1,6 +1,6 @@
 import { CryptoService } from '@domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/engine/types';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';

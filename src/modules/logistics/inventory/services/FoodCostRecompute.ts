@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Recipe, RecipeIngredient, StockItem } from '@nexus/contracts';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
 interface CostAlert {

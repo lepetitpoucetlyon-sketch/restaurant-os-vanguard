@@ -1,7 +1,7 @@
 import { IFinanceRepository } from '@domain/repositories/IFinanceRepository';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { INexusAdapter, Nexus } from '@/lib/nexus/NexusAdapter';
-import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
+import { FirestoreHydrator } from '@/infrastructure/services/sovereign/firestoreHydrator';
 
 /**
  * 🏛️ FirestoreFinanceRepository - Grade X Adapter

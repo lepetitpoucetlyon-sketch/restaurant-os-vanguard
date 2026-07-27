@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
-import { MasterBridge } from '@/lib/MasterBridge';
+import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';

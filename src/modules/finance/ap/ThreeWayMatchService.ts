@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PurchaseOrder, DeliveryNote } from '@/modules/logistics/domain/procurement/types';
 import type { ExtractedSupplierInvoice } from '@/domain/schemas/supplier-invoice.schemas';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 type MatchStatus = 'matched' | 'quantity_discrepancy' | 'price_discrepancy' | 'missing_delivery' | 'missing_po' | 'blocked';
 

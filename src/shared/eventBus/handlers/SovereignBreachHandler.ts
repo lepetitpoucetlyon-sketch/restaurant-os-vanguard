@@ -1,5 +1,5 @@
 import { NexusEventBus } from '../NexusEventBus';
-import { MasterBridge } from '@/lib/MasterBridge';
+import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 import { logger } from '@/lib/logger';
 
 /**

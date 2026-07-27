@@ -13,9 +13,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/lib/rag/SovereignRAGClient';
+import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/modules/intelligence/rag/SovereignRAGClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
 type RagAction = 'health' | 'reindex' | 'push_version' | 'rollback_version' | 'stats';

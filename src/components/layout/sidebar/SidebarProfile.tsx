@@ -6,7 +6,7 @@ import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
-import { empireAudit } from "@/lib/audit";
+import { empireAudit } from "@/infrastructure/services/audit";
 
 interface SidebarProfileProps {
     currentUser: import('@nexus/contracts').User | null;

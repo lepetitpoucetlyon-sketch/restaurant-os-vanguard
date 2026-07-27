@@ -1,7 +1,7 @@
 import { Firestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, increment, serverTimestamp as firestoreServerTimestamp } from 'firebase/firestore';
 import { SovereignSecurityViolation } from '@/shared/nexus/contracts/security.errors';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
-import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
+import { FirestoreHydrator } from '@/infrastructure/services/sovereign/firestoreHydrator';
 import { IDocumentStore } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
 function hydrateBasedOnPath(pathOrCollection: string, data: Record<string, unknown>) {

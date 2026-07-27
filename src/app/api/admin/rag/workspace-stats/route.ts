@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { LightRAGClient } from '@/modules/intelligence/rag/LightRAGClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
 async function getWorkspaceStats(tenantId: string): Promise<{

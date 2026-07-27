@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MosyleClient } from '@/lib/services/MosyleClient';
+import { MosyleClient } from '@/infrastructure/services/MosyleClient';
 
 // Vérification HMAC manuelle — remplacer par stripe.webhooks.constructEvent
 // quand le package stripe sera installé (npm install stripe).

@@ -20,7 +20,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { aiRouter } from '@/lib/ai/AIProviderRouter';
+import { aiRouter } from '@/modules/intelligence/ai/AIProviderRouter';
 import { logger } from '@/lib/logger';
 
 interface TenantSnapshot {

@@ -1,6 +1,6 @@
 import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
-import { MasterBridge } from '@/lib/MasterBridge';
+import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 type HealItem = { id?: string;[k: string]: unknown };

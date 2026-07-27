@@ -6,7 +6,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
-import { MosyleClient, type MosyleDevice } from '@/lib/services/MosyleClient';
+import { MosyleClient, type MosyleDevice } from '@/infrastructure/services/MosyleClient';
 import { logger } from '@/lib/logger';
 
 const MOCK_DEVICES: MosyleDevice[] = [

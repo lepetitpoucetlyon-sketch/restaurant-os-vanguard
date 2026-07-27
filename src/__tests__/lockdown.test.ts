@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { verifyDevice } from '../lib/sovereign/lockdown';
+import { verifyDevice } from '../infrastructure/services/sovereign/lockdown';
 
 vi.mock('@/lib/nexus/NexusAdapter', () => {
   const mockAdapter = {

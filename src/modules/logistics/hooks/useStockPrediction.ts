@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { inventoryMovementsAtom } from '../inventory/store/inventoryAtoms';
 import { OracleEngine, OraclePrediction } from '@/domain/services/OracleEngine';
-import type { Quantity } from '@/lib/brands';
+import type { Quantity } from '@/infrastructure/branding/brands';
 
 interface UseOraclePredictionResult {
     prediction: OraclePrediction | null;

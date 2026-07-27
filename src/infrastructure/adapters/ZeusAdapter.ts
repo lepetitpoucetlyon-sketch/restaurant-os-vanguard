@@ -1,4 +1,4 @@
-import { AgentEngine } from '@/lib/ai/AgentEngine';
+import { AgentEngine } from '@/modules/intelligence/ai/AgentEngine';
 import { AgentDomain } from '@/modules/intelligence/domain/agency/types';
 import {
     ZeusPulseResult,

@@ -11,3 +11,5 @@ export { useQuotes } from './marketing/hooks/useQuotes';
 export { useReservations } from '@/modules/ops/providers/hooks/commerceHooks';
 
 
+export { LandingDashboard } from './landing/components/LandingDashboard';
+export { ProspectingDashboard } from './crm/components/ProspectingDashboard';

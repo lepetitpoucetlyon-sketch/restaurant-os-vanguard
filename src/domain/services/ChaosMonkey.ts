@@ -10,7 +10,7 @@ import {
 } from '@/store/pillars';
 import { qualityActiveControlAtom } from '@modules/compliance';
 import { logger } from '@/lib/logger';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
+import { SelfHealingEngine } from '@/infrastructure/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 import { WritableAtom } from 'jotai';

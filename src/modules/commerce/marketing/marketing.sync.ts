@@ -9,7 +9,7 @@ import {
     seoProfileAtom
 } from './store/marketingAtoms';
 import { logger } from '@/lib/logger';
-import { MarketingEngine } from "@/lib/marketing-engine";
+import { MarketingEngine } from "@/modules/commerce/marketing/marketing-engine";
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { getDefaultStore } from 'jotai';
 

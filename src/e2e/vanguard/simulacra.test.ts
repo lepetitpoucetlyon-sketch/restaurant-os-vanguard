@@ -11,7 +11,7 @@ import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetrySe
  */
 const virtualMap = new Map<string, any>();
 
-vi.mock('@/lib/simulator/SimulatorDB', () => {
+vi.mock('@/modules/intelligence/simulator/SimulatorDB', () => {
     const makeTable = () => ({
         get: async (path: string) => virtualMap.get(path) ?? undefined,
         put: async (doc: any) => { virtualMap.set(doc.path, doc); },

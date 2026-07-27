@@ -9,15 +9,15 @@ import { SovereignLock } from "@/components/layout/SovereignLock";
 
 // Lazy load system components
 const VoiceCommandListener = dynamic(
-    () => import("@/components/system/VoiceCommandListener").then(mod => ({ default: mod.VoiceCommandListener })),
+    () => import("@/shared/components/voice/VoiceCommandListener").then(mod => ({ default: mod.VoiceCommandListener })),
     { ssr: false }
 );
 const DocumentationPortal = dynamic(
-    () => import("@/components/system/DocumentationPortal").then(mod => ({ default: mod.DocumentationPortal })),
+    () => import("@/shared/components/DocumentationPortal").then(mod => ({ default: mod.DocumentationPortal })),
     { ssr: false }
 );
 const TutorialBubble = dynamic(
-    () => import("@/components/system/TutorialBubble").then(mod => ({ default: mod.TutorialBubble })),
+    () => import("@/shared/components/TutorialBubble").then(mod => ({ default: mod.TutorialBubble })),
     { ssr: false }
 );
 

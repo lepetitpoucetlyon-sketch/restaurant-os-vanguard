@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
+import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
 import type { ModuleId } from '@shared/genome.types';
 
 // --- 🧹 MEMORY PROTECTION (PHASE 4 - ZERO LEAK) ---

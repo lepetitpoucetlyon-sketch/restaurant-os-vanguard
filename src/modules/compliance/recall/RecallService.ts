@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 interface RecallImpact {
     lotId: string;

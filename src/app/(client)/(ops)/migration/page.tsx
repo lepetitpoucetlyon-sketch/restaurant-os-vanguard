@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import MigrationPlaceholder from '@/components/system/MigrationPlaceholder';
+import MigrationPlaceholder from '@/modules/onboarding/components/MigrationPlaceholder';
 
 function MigrationContent() {
     const searchParams = useSearchParams();

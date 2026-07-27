@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Microunits } from '@/domain/schemas/primitives';
 import { toMicrounits } from '@/domain/schemas/primitives';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 type DistributionRule = 'equal' | 'hours_worked' | 'rank_weighted';
 

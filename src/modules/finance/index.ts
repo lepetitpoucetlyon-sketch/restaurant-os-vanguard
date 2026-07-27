@@ -15,3 +15,4 @@ export { BillingService } from './services/BillingService';
 // 🏛️ SUTURE NEXUS
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
 export * from './types';
+export { FinanceDashboard } from './components/FinanceDashboard';

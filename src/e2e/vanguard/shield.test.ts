@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
-import { QuantumCrypto } from '@/lib/QuantumCrypto';
-import { ShieldedContext, SovereignSecurityViolation } from '@/lib/ai/ShieldedContext';
-import { DNAInjector } from '@/lib/ai/DNAInjector';
+import { SelfHealingEngine } from '@/infrastructure/services/SelfHealingEngine';
+import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
+import { ShieldedContext, SovereignSecurityViolation } from '@/modules/intelligence/ai/ShieldedContext';
+import { DNAInjector } from '@/modules/intelligence/ai/DNAInjector';
 
 describe('Sovereign Grade X++ - Deep Core Refortification Tests', () => {
 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Zap, Cpu, ShieldCheck, Trash2 } from 'lucide-react';
-import { GlobalRegistryService } from '@/lib/services/GlobalRegistryService';
+import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
 import { useStore } from 'jotai';
 
 // mcc-tel-6 — classes statiques (JIT purge les interpolations bg-${color}-500/10)

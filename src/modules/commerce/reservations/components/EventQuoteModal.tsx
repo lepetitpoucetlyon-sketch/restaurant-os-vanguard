@@ -17,7 +17,7 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 
-import type { PrivatisationFormule, PrivatisationData } from "@/lib/documents/PrivatisationContract";
+import type { PrivatisationFormule, PrivatisationData } from "@/modules/finance/documents/PrivatisationContract";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -156,7 +156,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
             }
 
             // Lazy-load jsPDF-dependent generator (client-only)
-            const { generatePrivatisationContract } = await import("@/lib/documents/PrivatisationContract");
+            const { generatePrivatisationContract } = await import("@/modules/finance/documents/PrivatisationContract");
 
             const restaurantNom = whiteLabelInstanceConfig.identityDefaults.name || whiteLabelInstanceConfig.appName;
 

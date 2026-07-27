@@ -9,3 +9,6 @@ export type { Order, OrderItem } from './engine';
 // Import the RUNTIME component directly from '@modules/ops/engine/components/floor-plan/FloorPlanEditor'.
 // Only the TYPES are re-exported here — types are erased at compile time so they don't drag konva into the bundle.
 export type { FloorPlanEditorRef } from './engine/components/floor-plan/FloorPlanEditor';
+export { OperationsDashboard } from './engine/components/OperationsDashboard';
+export { KDSDashboard } from './kds/components/KDSDashboard';
+export { KitchenDashboard } from './kitchen/components/KitchenDashboard';

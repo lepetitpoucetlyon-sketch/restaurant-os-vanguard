@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusTransaction } from '@/lib/NexusTransaction';
+import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
 import { ShiftEntrySchema, ShiftEntry } from "@domain/schemas/hr";
 import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
 import { logger } from '@/lib/logger';

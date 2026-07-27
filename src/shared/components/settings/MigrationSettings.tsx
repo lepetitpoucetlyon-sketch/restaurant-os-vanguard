@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Play, Loader2, ChevronRight, AlertTriangle } from "lucide-react";
 import { useToast } from "@ui/Toast";
 import { useDataMigration } from "@/shared/hooks/useDataMigration";
-import { UniversalImportDropzone } from "@/lib/migration/UniversalImportDropzone";
-import { OnboardingProgress } from "@/lib/migration/OnboardingProgress";
-import { CATEGORY_CONFIGS } from "@/lib/migration/types";
-import type { ImportCategory } from "@/lib/migration/types";
+import { UniversalImportDropzone } from "@/modules/onboarding/migration/UniversalImportDropzone";
+import { OnboardingProgress } from "@/modules/onboarding/migration/OnboardingProgress";
+import { CATEGORY_CONFIGS } from "@/modules/onboarding/migration/types";
+import type { ImportCategory } from "@/modules/onboarding/migration/types";
 
 const IMPORT_CATEGORIES: ImportCategory[] = [
   'floorplan',

@@ -7,7 +7,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { IdentityManager, ROOT_ADMIN, FLEET_OPERATOR } from '@domain/services/IdentityManager';
 import { isMCCMode } from '@/config/instance';
 import { User } from '@nexus/contracts';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { hashPin } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 

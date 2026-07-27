@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { notFound } from 'next/navigation';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
-import ReservationWidget from '@/components/widget/ReservationWidget';
+import ReservationWidget from '@/modules/commerce/widgets/ReservationWidget';
 
 interface PageProps {
   params: Promise<{ slug: string }>;

@@ -1,5 +1,5 @@
 import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
-import { QuantumCrypto } from '@/lib/QuantumCrypto';
+import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
 import { PurchaseOrder, DeliveryNote } from './types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { DocumentVault } from '@/domain/shared/DocumentVault';

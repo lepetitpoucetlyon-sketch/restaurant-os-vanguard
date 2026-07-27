@@ -7,7 +7,7 @@ import {
     updateNexusNode, 
     tenantIdAtom
 } from '@/store/pillars';
-import { NexusSyncService } from '@/lib/NexusSyncService';
+import { NexusSyncService } from '@/infrastructure/services/NexusSyncService';
 
 
 describe('💎 OMNI-VANGUARD : BLOC 2 – NEXUS & ATOMS', () => {

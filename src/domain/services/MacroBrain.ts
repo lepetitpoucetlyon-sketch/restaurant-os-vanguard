@@ -2,7 +2,7 @@ export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/c
 import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
 import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 /**
  * 👑 MACRO BRAIN (Empire Industrial Grade)

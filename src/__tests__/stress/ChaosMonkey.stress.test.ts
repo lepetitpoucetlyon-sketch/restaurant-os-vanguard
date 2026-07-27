@@ -19,7 +19,7 @@ vi.mock('@modules/compliance', () => ({
     qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
 }));
 
-vi.mock('@/lib/SelfHealingEngine', () => ({
+vi.mock('@/infrastructure/services/SelfHealingEngine', () => ({
     SelfHealingEngine: {
         calculateCRC: vi.fn().mockReturnValue('mock-crc'),
         auditAndHeal: vi.fn()

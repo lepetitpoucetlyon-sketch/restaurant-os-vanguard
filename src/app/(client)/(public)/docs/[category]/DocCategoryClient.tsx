@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
-import { DocumentationPortal } from "@/components/system/DocumentationPortal";
+import { DocumentationPortal } from "@/shared/components/DocumentationPortal";
 import { CATEGORY_DOCS } from "@/lib/docs-data";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";

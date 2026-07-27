@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/lib/audit';
+import { empireAudit } from '@/infrastructure/services/audit';
 import type { Recipe } from '@shared/nexus/contracts/logistics';
 
 type StockProduct = {

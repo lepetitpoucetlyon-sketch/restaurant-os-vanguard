@@ -18,7 +18,7 @@ import {
   ComplianceGate, 
   RoleGate 
 } from "@nexus/guards";
-import { AlertSync } from "@/components/system/AlertSync";
+import { AlertSync } from "@/shared/components/AlertSync";
 import { ClientComponents } from "@/components/layout/ClientComponents";
 import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
 import { SovereignLockout } from "@/components/layout/SovereignLockout";

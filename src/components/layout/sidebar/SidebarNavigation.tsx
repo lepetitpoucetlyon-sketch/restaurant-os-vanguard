@@ -8,7 +8,7 @@ import { useLanguage } from "@/shared/hooks";
 import { accordionContent } from "@/shared/utils/motion";
 import { NavSection } from "@/config/navConfig";
 import { useState } from "react";
-import { empireAudit } from "@/lib/audit";
+import { empireAudit } from "@/infrastructure/services/audit";
 
 interface SidebarNavigationProps {
     accessibleSections: NavSection[];

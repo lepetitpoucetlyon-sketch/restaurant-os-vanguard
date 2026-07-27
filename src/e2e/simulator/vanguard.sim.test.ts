@@ -7,7 +7,7 @@ import '../vanguard/mocks';
 // We replace it with a synchronous in-memory Map exposing the same API.
 const virtualMap = new Map<string, { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }>();
 
-vi.mock('@/lib/simulator/SimulatorDB', () => {
+vi.mock('@/modules/intelligence/simulator/SimulatorDB', () => {
   const makeTable = () => ({
     get: async (path: string) => virtualMap.get(path) ?? undefined,
     put: async (doc: { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }) => {
@@ -45,7 +45,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
 }));
 
 // ── empireAudit: silence in tests ─────────────────────────────────────────
-vi.mock('@/lib/audit', () => ({
+vi.mock('@/infrastructure/services/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
 

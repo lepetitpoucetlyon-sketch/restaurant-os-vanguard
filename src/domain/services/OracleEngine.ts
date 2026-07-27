@@ -1,5 +1,5 @@
 import { InventoryMovement as StockEvent } from '@nexus/contracts';
-import { Quantity } from '@/lib/brands';
+import { Quantity } from '@/infrastructure/branding/brands';
 import { logger } from '@/lib/logger';
 
 /**
