@@ -70,10 +70,11 @@ export class AccountingReportService {
      *   6xx = charges (costs)
      *   7xx = produits (revenue)
      */
-    static async buildPnL(startDate: number, endDate: number): Promise<PnLResult> {
+    static async buildPnL(startDate: number, endDate: number, tenantId?: string): Promise<PnLResult> {
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const path = tenantId ? `tenants/${tenantId}/journalEntries` : Nexus.getTenantPath('journalEntries');
 
-        const entries = await Nexus.adapter.query<JournalEntry>('journalEntries', {
+        const entries = await Nexus.adapter.query<JournalEntry>(path, {
             where: [
                 { field: 'date', operator: '>=', value: startDate },
                 { field: 'date', operator: '<=', value: endDate },
@@ -309,10 +310,11 @@ export class AccountingReportService {
      *   Classes 1-5 → Bilan (passif/actif)
      *   1xx, 2xx, 3xx, 4xx, 5xx → actif or passif depending on normal side
      */
-    static async buildBalanceSheet(asOfDate: number): Promise<BalanceSheetResult> {
+    static async buildBalanceSheet(asOfDate: number, tenantId?: string): Promise<BalanceSheetResult> {
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const path = tenantId ? `tenants/${tenantId}/journalEntries` : Nexus.getTenantPath('journalEntries');
 
-        const entries = await Nexus.adapter.query<JournalEntry>('journalEntries', {
+        const entries = await Nexus.adapter.query<JournalEntry>(path, {
             where: [{ field: 'date', operator: '<=', value: asOfDate }],
             orderBy: { field: 'date', direction: 'asc' },
         });

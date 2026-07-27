@@ -44,8 +44,21 @@ export function useAccounting() {
 
     // Computed Metrics (Grade X logic)
     const metrics = useMemo<FinancialMetrics>(() => {
-        const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' ? Number(tx.amountInMicrounits) : 0), 0);
-        const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' ? Number(tx.amountInMicrounits) : 0), 0);
+        const getAmountInMu = (tx: any) => {
+            if (tx.amountInMicrounits !== undefined && tx.amountInMicrounits !== null) {
+                return Number(tx.amountInMicrounits);
+            }
+            if (tx.amountInCents !== undefined && tx.amountInCents !== null) {
+                return Number(tx.amountInCents) * 10_000;
+            }
+            if (tx.credit || tx.debit) {
+                return (Number(tx.credit || 0) + Number(tx.debit || 0)) * 10_000;
+            }
+            return 0;
+        };
+
+        const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' || (tx.type as string) === 'DEBIT' ? getAmountInMu(tx) : 0), 0);
+        const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' || (tx.type as string) === 'CREDIT' ? getAmountInMu(tx) : 0), 0);
         const netProfit = revenue - expenses;
         
         return {
@@ -180,8 +193,8 @@ export function useAccounting() {
             const id = entry.id || `tx_${Date.now()}`;
             return accountingForge.mutate('SET', id, entry);
         },
-        validateJournalEntry: async (id: string) => {
-            return accountingForge.mutate('UPDATE', id, { status: 'validated' });
+        validateJournalEntry: async (_id: string) => {
+            throw new Error('[NF525_VIOLATION] Les entrées du grand livre sont immuables et ne peuvent pas être modifiées directement.');
         },
     };
 }

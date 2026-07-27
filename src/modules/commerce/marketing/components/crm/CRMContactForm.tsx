@@ -19,10 +19,30 @@ export function CRMContactForm() {
         setFormState(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleSave = () => {
-        // Logic to save crm will go here or in a hook
-        // For now, just close
-        setShowModal(false);
+    const handleSave = async () => {
+        if (!formState.name) return;
+        try {
+            const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+            const { activeTenantIdAtom } = await import('@/store/tenantAtoms');
+            const { getDefaultStore } = await import('jotai');
+            const tenantId = getDefaultStore().get(activeTenantIdAtom);
+            
+            const path = tenantId ? `tenants/${tenantId}/customers` : 'customers';
+            const id = `crm_${Date.now()}`;
+            await Nexus.adapter.set(`${path}/${id}`, {
+                id,
+                name: formState.name,
+                phone: formState.phone,
+                notes: formState.notes,
+                tags: (formState as any).tags || [],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+            setShowModal(false);
+            setFormState(prev => ({ ...prev, name: '', phone: '', notes: '' }));
+        } catch {
+            setShowModal(false);
+        }
     };
 
     const formContent = (

@@ -70,11 +70,26 @@ export function useHumanResources() {
     
     const approveLeaveRequest = useCallback(async (id: string) => {
         const now = new Date().toISOString();
+        const request = leaveRequests.find(r => r.id === id);
+        if (request) {
+            const userBalance = leaveBalances.find(b => b.userId === request.userId);
+            if (userBalance) {
+                const days = (request as any).daysCount || (request as any).days || 1;
+                const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+                const tenantId = (request as any).tenantId;
+                const balanceId = (userBalance as any).id || userBalance.userId;
+                const balancePath = tenantId ? `tenants/${tenantId}/leaveBalances/${balanceId}` : `leaveBalances/${balanceId}`;
+                await Nexus.adapter.update(balancePath, {
+                    remaining: Math.max(0, (userBalance.remaining || 0) - days),
+                    updatedAt: now
+                });
+            }
+        }
         return leaveForge.mutate('UPDATE', id, { 
             status: 'approved',
             updatedAt: now
         } as unknown as SovereignData);
-    }, [leaveForge]);
+    }, [leaveForge, leaveRequests, leaveBalances]);
 
     const rejectLeaveRequest = useCallback(async (id: string, reason: RejectionReason, _details?: string) => {
         const now = new Date().toISOString();

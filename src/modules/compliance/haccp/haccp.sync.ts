@@ -7,6 +7,9 @@ import { getDefaultStore } from 'jotai';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;
 
+import { updateNexusNode } from '@/store/nexusNodeFactory';
+import { hygieneLabelsNodeAtom, maintenanceLogsNodeAtom } from './store/complianceAtoms';
+
 /**
  * 🛡️ HACCP Sovereign Sync Service
  * Handles real-time synchronization for the Hygiene and Maintenance domain.
@@ -14,13 +17,14 @@ type JotaiStore = ReturnType<typeof getDefaultStore>;
 export const HACCPSyncService = {
   private_listeners: {} as Record<string, () => void>,
 
-  init(tenantId: string, _store: JotaiStore) {
+  init(tenantId: string, store: JotaiStore) {
     const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
     
     // 1. HYGIENE LABELS SYNC
     this.private_listeners.hygiene = Nexus.adapter.onSnapshot(
       path('hygieneLabels'),
-      (_data: HygieneLabel[]) => {
+      (data: HygieneLabel[]) => {
+        if (store) store.set(hygieneLabelsNodeAtom, (prev) => updateNexusNode(prev, { data: data || [], loading: false }));
       },
       {
         orderBy: { field: 'createdAt', direction: 'desc' },
@@ -34,7 +38,8 @@ export const HACCPSyncService = {
     // 2. MAINTENANCE LOGS SYNC
     this.private_listeners.maintenance = Nexus.adapter.onSnapshot(
       path('maintenanceLogs'),
-      (_data: MaintenanceLog[]) => {
+      (data: MaintenanceLog[]) => {
+        if (store) store.set(maintenanceLogsNodeAtom, (prev) => updateNexusNode(prev, { data: data || [], loading: false }));
       },
       {
         orderBy: { field: 'date', direction: 'desc' },

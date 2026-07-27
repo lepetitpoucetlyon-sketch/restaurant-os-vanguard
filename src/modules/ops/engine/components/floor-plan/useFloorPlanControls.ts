@@ -150,10 +150,13 @@ export function useFloorPlanControls({
         });
     }, [mode, floorTables, floorZones, currentFloorId, addTable]);
 
-    const handleCheckout = useCallback((total: number) => {
-        setCheckoutTotal(total);
+    const handleCheckout = useCallback((total?: number) => {
+        const calculated = (typeof total === 'number' && total > 0)
+            ? total
+            : (selectedTable as any)?.currentOrderTotal || (selectedTable as any)?.currentTotal || 0;
+        setCheckoutTotal(calculated);
         setIsPaymentOpen(true);
-    }, []);
+    }, [selectedTable]);
 
     const handlePaymentComplete = useCallback(async () => {
         if (selectedId) {

@@ -68,11 +68,12 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
 
     useEffect(() => {
         if (!isOpen) return;
+        const path = tenantId ? `tenants/${tenantId}/suppliers` : Nexus.getTenantPath('suppliers');
         Nexus.adapter
-            .query<SupplierRecord>('suppliers')
+            .query<SupplierRecord>(path)
             .then((results) => setSuppliers(results ?? []))
             .catch((err) => logger.warn('[StockReceptionModal] Failed to load suppliers', err));
-    }, [isOpen]);
+    }, [isOpen, tenantId]);
 
     // Auto-fill based on selected ingredient
     const handleIngredientChange = (ingredientId: string) => {

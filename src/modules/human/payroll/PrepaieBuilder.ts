@@ -198,7 +198,7 @@ export const PrepaieBuilder = {
         const endTs = endDate.getTime();
 
         // ── Requêtes Nexus ─────────────────────────────────────────────────────
-        const tenantPath = Nexus.getTenantPath.bind(Nexus);
+        const tenantPath = (coll: string) => Nexus.getTenantPath(coll, tenantId);
 
         const [usersRaw, entriesRaw, leavesRaw] = await Promise.all([
             Nexus.adapter.query<User>(tenantPath('users')),

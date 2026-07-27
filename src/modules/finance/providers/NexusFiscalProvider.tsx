@@ -137,7 +137,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
             Sentry.setTag("fiscal.idempotency_key", idempotencyKey);
             Sentry.setTag("nexus.grade", "X+++");
 
-            const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`;
+            const path = `tenants/${tenantId}/expenseClaims`;
             const id = Nexus.adapter.generateId(path);
 
             await Nexus.adapter.set(`${path}/${id}`, {

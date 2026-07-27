@@ -67,6 +67,34 @@ export class TransactionService {
             const sealId = Nexus.adapter.generateId(fiscalPath);
             batch.set(`${fiscalPath}/${sealId}`, seal);
 
+            // 2b. JOURNAL ENTRY CREATION (Double-Entry PCG Accounting)
+            const journalEntriesPath = `tenants/${tenantId}/journalEntries`;
+            const entryId = Nexus.adapter.generateId(journalEntriesPath);
+            const amountInMu = SovereignMath.multiply(orderTotalInCents, 10_000).toString();
+
+            batch.set(`${journalEntriesPath}/${entryId}`, {
+                id: entryId,
+                date: timestamp.getTime(),
+                pieceNumber: `REC-${orderId}`,
+                description: `Vente Encaissée - Commande #${orderId}`,
+                referenceId: orderId,
+                referenceType: 'order',
+                type: 'revenue',
+                amountInCents: orderTotalInCents,
+                amountInMicrounits: amountInMu,
+                isSystemGenerated: true,
+                isValidated: true,
+                fiscalSealHash: seal.hash,
+                sealedAt: timestamp.toISOString(),
+                status: 'posted',
+                lines: [
+                    { accountCode: '512000', accountName: 'Banque / Caisse', debit: orderTotalInCents, credit: 0 },
+                    { accountCode: '707000', accountName: 'Ventes de marchandises', debit: 0, credit: orderTotalInCents }
+                ],
+                createdAt: timestamp.toISOString(),
+                updatedAt: timestamp.toISOString()
+            });
+
             // 3. STOCK DEDUCTION (Powered by StockEngine)
             const stockImpact = await StockEngine.calculateOrderStockImpact(
                 order, 

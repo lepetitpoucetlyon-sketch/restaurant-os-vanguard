@@ -53,7 +53,8 @@ export function useStockDeduction() {
         // Fetch all recipes once and build a productId → RecipeDoc map
         let recipeMap: Map<string, RecipeDoc> = new Map();
         try {
-            const recipes = await Nexus.adapter.query<RecipeDoc>("recipes");
+            const recipePath = tenantId ? `tenants/${tenantId}/recipes` : "recipes";
+            const recipes = await Nexus.adapter.query<RecipeDoc>(recipePath);
             recipeMap = new Map(
                 (recipes ?? [])
                     .filter((r) => r.productId)
@@ -79,12 +80,11 @@ export function useStockDeduction() {
                 if (!stockId) continue;
 
                 try {
-                    const stockItem = await Nexus.adapter.get<StockItemDoc>(
-                        `stockItems/${stockId}`
-                    );
+                    const itemPath = tenantId ? `tenants/${tenantId}/stockItems/${stockId}` : `stockItems/${stockId}`;
+                    const stockItem = await Nexus.adapter.get<StockItemDoc>(itemPath);
                     if (!stockItem) {
                         logger.debug(
-                            `[useStockDeduction] stockItems/${stockId} not found — skipping`
+                            `[useStockDeduction] ${itemPath} not found — skipping`
                         );
                         continue;
                     }
@@ -97,7 +97,7 @@ export function useStockDeduction() {
                         ing.quantity * line.quantity * (1 + (ing.lossRate ?? 0));
                     const newQty = Math.max(0, currentQty - deductQty);
 
-                    await Nexus.adapter.update(`stockItems/${stockId}`, {
+                    await Nexus.adapter.update(itemPath, {
                         quantityInStock: newQty,
                         quantity: newQty,
                         lastDeductionAt: new Date().toISOString(),

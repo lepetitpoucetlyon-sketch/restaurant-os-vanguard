@@ -54,38 +54,67 @@ export const AgentEngine = {
                 }
             ];
 
-            // Real fetch would go here
-            /*
-            const response = await fetch(request.endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${request.apiKey}` },
-                body: JSON.stringify({ 
-                    model: request.modelId,
-                    system_instruction: systemPrompt,
-                    contents: [{ parts: [{ text: request.userPrompt + dataContext }] }]
-                })
-            });
-            const data = await response.json();
-            */
+            let rawText = '';
+            let attempts = 0;
+            const maxAttempts = 3;
+            let responseData: any = null;
 
-            // Mocked "Expert" response based on domain
-            const mockInsight: AgentInsight = {
+            while (attempts < maxAttempts) {
+                attempts++;
+                try {
+                    const fetchUrl = request.endpoint.includes('key=')
+                        ? request.endpoint
+                        : `${request.endpoint}?key=${request.apiKey}`;
+
+                    const res = await fetch(fetchUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(request.apiKey && !fetchUrl.includes('key=') ? { 'Authorization': `Bearer ${request.apiKey}` } : {})
+                        },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `${_systemPrompt}\n\n${_dataContext}\n\nREQUÊTE UTILISATEUR :\n${request.userPrompt}` }] }]
+                        })
+                    });
+
+                    if (res.status === 429 && attempts < maxAttempts) {
+                        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
+                        continue;
+                    }
+
+                    if (res.ok) {
+                        responseData = await res.json();
+                        rawText = responseData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                        break;
+                    } else if (attempts >= maxAttempts) {
+                        const errBody = await res.text();
+                        rawText = `[Erreur API ${res.status}] ${errBody}`;
+                    }
+                } catch (fetchErr) {
+                    if (attempts >= maxAttempts) {
+                        rawText = `[Erreur Réseau] ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`;
+                    } else {
+                        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
+                    }
+                }
+            }
+
+            const dynamicInsight: AgentInsight = {
                 id: `ins_${Date.now()}`,
                 domain: request.domain,
                 type: 'info',
                 title: `Diagnostic Expert : ${request.domain}`,
-                description: `L'audit système du domaine ${request.domain} est finalisé via le moteur ${request.modelId}. En tant que partenaire expert, voici mes observations...`,
+                description: rawText || `Analyse exécutée via le moteur ${request.modelId}.`,
                 reasoning: reasoning
             };
 
-
             return {
-                insight: mockInsight,
-                rawText: "Analyse terminée."
+                insight: dynamicInsight,
+                rawText: rawText || "Analyse terminée."
             };
 
-        } catch {
-            throw new Error('Échec du moteur de raisonnement expert.');
+        } catch (err) {
+            throw new Error(`Échec du moteur de raisonnement expert: ${err instanceof Error ? err.message : String(err)}`);
         }
 
     }

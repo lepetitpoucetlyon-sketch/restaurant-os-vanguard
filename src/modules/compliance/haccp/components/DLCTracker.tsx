@@ -31,10 +31,7 @@ interface DLCEntry {
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 function buildCollectionPath(tenantId: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/stockItems`;
-    }
-    return 'stockItems';
+    return tenantId ? `tenants/${tenantId}/stockItems` : Nexus.getTenantPath('stockItems');
 }
 
 function resolveTimestamp(raw: number | string | null | undefined): number | null {

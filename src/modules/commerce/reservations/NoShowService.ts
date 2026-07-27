@@ -57,7 +57,7 @@ export const NoShowService = {
         if (settings?.cardImprintEnabled && reservation.stripePaymentMethodId) {
             const penaltyEuros = settings.cardImprintPenaltyAmount ?? 0;
             if (penaltyEuros > 0) {
-                amountInMicrounits = toMicrounits(Math.round(penaltyEuros * 1_000_000));
+                amountInMicrounits = toMicrounits(penaltyEuros);
 
                 await Nexus.adapter.create(
                     `tenants/${tenantId}/noShowCharges/${reservationId}`,

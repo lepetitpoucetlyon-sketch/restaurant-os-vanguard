@@ -26,12 +26,13 @@ export interface PayrollRow {
  */
 export function computePayroll(
     members: User[],
-    allLogs: { performedBy: string; action: string; timestamp: string }[],
+    allLogs: { performedBy?: string; userId?: string; action?: string; type?: string; timestamp: string }[],
     month: string // "YYYY-MM"
 ): PayrollRow[] {
     return members.map(user => {
         const monthLogs = allLogs.filter(
-            l => l.performedBy === user.id && l.timestamp.startsWith(month)
+            l => ((l.userId && l.userId === user.id) || (l.performedBy && l.performedBy === user.id)) &&
+                 l.timestamp && l.timestamp.startsWith(month)
         );
         const sorted = [...monthLogs].sort(
             (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
@@ -40,15 +41,17 @@ export function computePayroll(
         let pendingIn: number | null = null;
         for (const log of sorted) {
             const ts = new Date(log.timestamp).getTime();
-            if (log.action === "clock_in") {
+            const act = (log.action || log.type || '').toUpperCase();
+            if (act === "CLOCK_IN") {
                 pendingIn = ts;
-            } else if (log.action === "clock_out" && pendingIn !== null) {
+            } else if (act === "CLOCK_OUT" && pendingIn !== null) {
                 totalMinutes += (ts - pendingIn) / 60_000;
                 pendingIn = null;
             }
         }
         const hours = totalMinutes / 60;
-        const hourlyRateEur = (user.hourlyRateInMicrounits ?? 0) / MU_TO_EUR;
+        const rateInMu = user.hourlyRateInMicrounits ?? 0;
+        const hourlyRateEur = rateInMu / MU_TO_EUR;
         const grossEur = hours * hourlyRateEur;
         return { user, hours, hourlyRateEur, grossEur };
     }).filter(r => r.hours > 0 || r.hourlyRateEur > 0);

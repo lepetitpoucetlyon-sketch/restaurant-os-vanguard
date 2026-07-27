@@ -57,7 +57,7 @@ export class MacroBrainRadar {
         // 3. Injection dans le workspace global du MCC
         const ragClient = new LightRAGClient({ workspace: 'MCC_GLOBAL_WORKSPACE' });
         try {
-            await ragClient.insert('MCC_GLOBAL_WORKSPACE', ragPayload);
+            await ragClient.insert(ragPayload, 'MCC_GLOBAL_WORKSPACE');
             logger.info('✅ [MacroBrain] Flux externes insérés dans le Knowledge Graph avec succès.');
         } catch (error) {
             logger.error('❌ [MacroBrain] Échec d\'insertion RAG', error);

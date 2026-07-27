@@ -79,6 +79,10 @@ export class AuditService {
         }
 
         const { tenantId, before, after, ...rest } = payload;
+
+        if (!this.initialized && tenantId) {
+            await this.init(tenantId);
+        }
         const sanitizedBefore = this.stripPii(before);
         const sanitizedAfter = this.stripPii(after);
 
@@ -116,6 +120,24 @@ export class AuditService {
         this.previousHash = hash;
 
         return parsed;
+    }
+
+    /**
+     * Exports tenant-scoped audit logs in CSV format.
+     */
+    async exportAuditLogs(tenantId: string): Promise<string> {
+        if (!this.nexus) throw new Error('[AuditService] Nexus adapter not initialized');
+        const collectionPath = `tenants/${tenantId}/auditLog`;
+        const events = await this.nexus.query<AuditEvent>(collectionPath, {
+            orderBy: { field: 'ts', direction: 'asc' } as any
+        });
+
+        const header = 'id,ts,action,collection,entityId,userId,hash,previousHash\n';
+        const rows = (events || []).map(e => 
+            `"${e.id}","${new Date(e.ts).toISOString()}","${e.action}","${e.collection}","${e.entityId || ''}","${(e as any).actorId || (e as any).userId || ''}","${e.hash}","${e.previousHash}"`
+        ).join('\n');
+
+        return header + rows;
     }
 }
 

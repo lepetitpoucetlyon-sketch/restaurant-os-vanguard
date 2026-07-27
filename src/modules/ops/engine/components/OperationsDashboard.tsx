@@ -67,8 +67,15 @@ const HandDrawnBorder = ({ children, className }: { children: React.ReactNode, c
     </div>
 );
 export function OperationsDashboard() {
-    const floorOps = useOMS(); const areas = floorOps?.areas ?? [];
-    const updateAreaStatus = (id: string, status: string) => logger.debug('Update area', id, status);
+    const floorOps = useOMS();
+    const areas = floorOps?.areas ?? [];
+    const updateAreaStatus = (id: string, status: string) => {
+        if (floorOps?.updateAreaStatus) {
+            floorOps.updateAreaStatus(id, { status } as any);
+        } else {
+            logger.debug('Update area', id, status);
+        }
+    };
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();

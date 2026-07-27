@@ -103,6 +103,27 @@ export class PiiVault {
         );
         return true;
     }
+
+    /**
+     * RGPD Data Export - Strips sensitive credentials (passwordHash, pin) before export.
+     */
+    async exportSubjectData(tenantId: string, subjectId: string): Promise<Record<string, unknown> | null> {
+        const fields = await this.retrieve(tenantId, subjectId);
+        if (!fields) return null;
+
+        const sanitized = { ...(fields as Record<string, unknown>) };
+        delete sanitized.passwordHash;
+        delete sanitized.password;
+        delete sanitized.pin;
+        delete sanitized.secretKey;
+
+        return {
+            subjectId,
+            tenantId,
+            exportedAt: new Date().toISOString(),
+            piiData: sanitized
+        };
+    }
 }
 
 export const piiVault = new PiiVault();

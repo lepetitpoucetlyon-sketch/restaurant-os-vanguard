@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useAtom } from "jotai";
+import { activeTenantIdAtom } from "@/store/tenantAtoms";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -60,11 +62,14 @@ function getInitials(name: string): string {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function TimeclockDashboard() {
+    const [tenantId] = useAtom(activeTenantIdAtom);
     const [now, setNow] = useState(new Date());
     const [pin, setPin] = useState("");
     const [foundUser, setFoundUser] = useState<User | null>(null);
     const [isLooking, setIsLooking] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [failedAttempts, setFailedAttempts] = useState(0);
+    const [lockedUntil, setLockedUntil] = useState<number | null>(null);
 
     // Update clock every second
     useEffect(() => {
@@ -74,16 +79,33 @@ export function TimeclockDashboard() {
 
     // Look up user when 4 digits are entered
     const lookupUser = useCallback(async (enteredPin: string) => {
+        if (lockedUntil && Date.now() < lockedUntil) {
+            const waitSec = Math.ceil((lockedUntil - Date.now()) / 1000);
+            toast.error(`Verrouillage sécurité — réessayez dans ${waitSec}s`);
+            setPin("");
+            return;
+        }
+
         setIsLooking(true);
         try {
-            const results = (await Nexus.adapter.query("users", {
+            const path = tenantId ? `tenants/${tenantId}/staff` : "staff";
+            const results = (await Nexus.adapter.query(path, {
                 where: [{ field: "pin", operator: "==", value: enteredPin }],
             })) as User[];
 
             if (results && results.length > 0) {
                 setFoundUser(results[0]);
+                setFailedAttempts(0);
             } else {
-                toast.error("PIN incorrect — réessayez");
+                const nextAttempts = failedAttempts + 1;
+                setFailedAttempts(nextAttempts);
+                if (nextAttempts >= 5) {
+                    const lockTime = Date.now() + 30000;
+                    setLockedUntil(lockTime);
+                    toast.error("Trop de tentatives incorrectes — Bloqué 30s");
+                } else {
+                    toast.error(`PIN incorrect (${nextAttempts}/5) — réessayez`);
+                }
                 setPin("");
             }
         } catch {
@@ -92,7 +114,7 @@ export function TimeclockDashboard() {
         } finally {
             setIsLooking(false);
         }
-    }, []);
+    }, [tenantId, failedAttempts, lockedUntil]);
 
     useEffect(() => {
         if (pin.length === 4) {
@@ -123,7 +145,8 @@ export function TimeclockDashboard() {
             const idArr = crypto.getRandomValues(new Uint32Array(1));
             const id = `shiftentry_${Date.now()}_${idArr[0].toString(36)}`;
 
-            await Nexus.adapter.set(`shiftEntries/${id}`, {
+            const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${id}` : `shiftEntries/${id}`;
+            await Nexus.adapter.set(shiftPath, {
                 id,
                 userId: foundUser.id,
                 userName: foundUser.name,

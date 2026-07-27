@@ -27,7 +27,8 @@ interface ReservationRecord {
  */
 export async function buildWeeklyReportHTML(
   startDate: number,
-  endDate: number
+  endDate: number,
+  tenantId?: string
 ): Promise<string> {
   // Dynamic import so this module can be used without bundling Nexus at module level
   const { Nexus } = await import('@/lib/nexus/NexusAdapter');
@@ -35,15 +36,18 @@ export async function buildWeeklyReportHTML(
   const startISO = new Date(startDate).toISOString().split('T')[0];
   const endISO = new Date(endDate).toISOString().split('T')[0];
 
+  const ordersPath = tenantId ? `tenants/${tenantId}/orders` : Nexus.getTenantPath('orders');
+  const resPath = tenantId ? `tenants/${tenantId}/reservations` : Nexus.getTenantPath('reservations');
+
   const [orders, reservations] = await Promise.all([
-    Nexus.adapter.query<OrderRecord>('orders', {
+    Nexus.adapter.query<OrderRecord>(ordersPath, {
       where: [
         { field: 'createdAt', operator: '>=', value: startDate },
         { field: 'createdAt', operator: '<=', value: endDate },
       ],
     }).catch(() => [] as OrderRecord[]),
     Nexus.adapter
-      .query<ReservationRecord>('reservations', {
+      .query<ReservationRecord>(resPath, {
         where: [
           { field: 'date', operator: '>=', value: startISO },
           { field: 'date', operator: '<=', value: endISO },

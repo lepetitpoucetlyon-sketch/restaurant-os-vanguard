@@ -17,7 +17,9 @@ export class NexusInterceptor implements INexusAdapter {
         private readonly adapter: INexusAdapter,
         private readonly guard: typeof SovereignGuard,
         private readonly tenantProvider: () => string | null
-    ) {}
+    ) {
+        auditService.setNexus(this.adapter as any);
+    }
 
     async get<T = unknown>(path: string, context?: NexusContext): Promise<T | null> {
         const ctx = this.ensureContext(context);

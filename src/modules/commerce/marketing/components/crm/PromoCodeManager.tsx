@@ -5,6 +5,7 @@ import { Tag, PlusCircle, Power, AlertCircle, Loader2, Gift, Percent, Euro } fro
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { toMicrounits } from "@/domain/schemas/primitives";
+import { useTenant } from "@/shared/hooks";
 
 export interface PromoCodeRecord {
   id: string;
@@ -68,6 +69,12 @@ const DEFAULT_FORM = {
 };
 
 export function PromoCodeManager() {
+  const { tenantId } = useTenant();
+  const getPath = useCallback((id?: string) => {
+    const coll = tenantId ? `tenants/${tenantId}/promoCodes` : "promoCodes";
+    return id ? `${coll}/${id}` : coll;
+  }, [tenantId]);
+
   const [codes, setCodes] = useState<PromoCodeRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -77,16 +84,17 @@ export function PromoCodeManager() {
   const loadCodes = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await Nexus.adapter.query<PromoCodeRecord>("promoCodes");
+      const collPath = getPath();
+      const data = await Nexus.adapter.query<PromoCodeRecord>(collPath);
       if (data.length === 0) {
         // Seed default codes if none exist
         const now = new Date().toISOString();
         for (const seed of SEED_CODES) {
-          const id = Nexus.adapter.generateId("promoCodes");
+          const id = Nexus.adapter.generateId(collPath);
           const record: PromoCodeRecord = { ...seed, id, createdAt: now, updatedAt: now };
-          await Nexus.adapter.set(`promoCodes/${id}`, record);
+          await Nexus.adapter.set(getPath(id), record);
         }
-        const seeded = await Nexus.adapter.query<PromoCodeRecord>("promoCodes");
+        const seeded = await Nexus.adapter.query<PromoCodeRecord>(collPath);
         setCodes(seeded);
       } else {
         setCodes(data);
@@ -96,7 +104,7 @@ export function PromoCodeManager() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getPath]);
 
   useEffect(() => {
     loadCodes();
@@ -110,7 +118,8 @@ export function PromoCodeManager() {
     setSaving(true);
     try {
       const now = new Date().toISOString();
-      const id = Nexus.adapter.generateId("promoCodes");
+      const collPath = getPath();
+      const id = Nexus.adapter.generateId(collPath);
       const record: PromoCodeRecord = {
         id,
         code: form.code.trim().toUpperCase(),
@@ -125,7 +134,7 @@ export function PromoCodeManager() {
         createdAt: now,
         updatedAt: now,
       };
-      await Nexus.adapter.set(`promoCodes/${id}`, record);
+      await Nexus.adapter.set(getPath(id), record);
       setCodes((prev) => [record, ...prev]);
       setForm(DEFAULT_FORM);
       setShowForm(false);
@@ -140,7 +149,7 @@ export function PromoCodeManager() {
   const toggleActive = async (promo: PromoCodeRecord) => {
     try {
       const updated = { ...promo, isActive: !promo.isActive, updatedAt: new Date().toISOString() };
-      await Nexus.adapter.update(`promoCodes/${promo.id}`, { isActive: updated.isActive, updatedAt: updated.updatedAt });
+      await Nexus.adapter.update(getPath(promo.id), { isActive: updated.isActive, updatedAt: updated.updatedAt });
       setCodes((prev) => prev.map((c) => (c.id === promo.id ? updated : c)));
       toast.success(updated.isActive ? `${promo.code} réactivé` : `${promo.code} désactivé`);
     } catch {
