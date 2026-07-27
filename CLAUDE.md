@@ -28,6 +28,13 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 **i18n** : `src/i18n/` existe (domains/ 464 lignes) mais **0 composant UI ne l'utilise** — l'app est monolingue français en dur. Infrastructure conservée en squelette pour une future internationalisation, mais inactive. Ne pas câbler i18n dans de nouveaux composants sans décision explicite.
 
+**Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture.
+
+### Les 3 canaux légitimes de communication cross-module
+1. `import { X } from '@/modules/<pilier>'` (Types, hooks, composants publics)
+2. `Nexus.adapter.get/set(...)` (Données persistées)
+3. `NexusEventBus.emit/on(...)` (Effets de bord async)
+
 **Rapatriement progressif** : Le code métier est encore dispersé sur 8 racines (`components/`, `domain/`, `engines/`, etc.). Règle de non-régression : **tout nouveau code d'un pilier va dans `src/modules/<pilier>/`**. À chaque passage sur un fichier orphelin dans `components/` ou `domain/`, le rapatrier vers le bon pilier. Ne jamais créer de nouveau fichier dans `components/<pilier>/` ou `domain/<pilier>/` si `modules/<pilier>/` peut l'accueillir.
 
 ## Conventions critiques

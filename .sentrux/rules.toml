@@ -207,8 +207,8 @@ reason = "store/pillars n'importe pas les barrels d'engines — risque TDZ SSR i
 
 # ────────────────────────────────────────────────────────────────────────────
 # [5] MATRICE PILIERS — isolation complète inter-piliers
-# Le couplage légitime entre piliers passe TOUJOURS par un bridge infrastructure
-# (FinancialNexusBridge, NexusAdapter) — jamais par import direct de module.
+# Le couplage légitime entre piliers passe TOUJOURS par `modules/<pilier>/index.ts` uniquement.
+# (La règle ESLint no-restricted-imports bloque les imports profonds inter-modules).
 # ────────────────────────────────────────────────────────────────────────────
 
 # --- OPS ne dépend d'aucun autre pilier ---

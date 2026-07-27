@@ -16,7 +16,12 @@ const eslintConfig = defineConfig([
       "vanguard/no-cross-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
-      // unused-imports plugin: auto-removes unused import statements with --fix
+      "no-restricted-imports": ["warn", {
+        "patterns": [{
+          "group": ["@/modules/*/*"],
+          "message": "Violation de frontière architecturale (Barrel Contract). Importez uniquement la racine du module : '@/modules/<pilier>'."
+        }]
+      }],
       "unused-imports/no-unused-imports": "error",
       // Unused vars: warn level, underscore prefix silences intentional non-use
       "@typescript-eslint/no-unused-vars": ["warn", {
@@ -46,7 +51,7 @@ const eslintConfig = defineConfig([
   },
   {
     // Test files legitimately use `any` for mocks/fixtures/stubs — not shipped code.
-    files: ["**/*.test.{ts,tsx}", "tests/**", "src/tests/**", "src/__tests__/**"],
+    files: ["**/*.test.{ts,tsx}", "tests/**", "src/e2e/**", "src/__tests__/**"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
     },

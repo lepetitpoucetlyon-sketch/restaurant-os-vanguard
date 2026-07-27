@@ -4738,7 +4738,7 @@ const TUTORIALS = {
 };
 
 // ─── CHECKLIST ENGINE ─────────────────────────────────────────────────────────
-const STORE_KEY = 'ros_checklist_v41'; // v41 = Sprint Vague-D : mob-2/3/4 + mcc-mdm-1/3 + res-arch-3 + rh-9 + goo-9/10 + hac-6 + mcc-growth-2 DONE
+const STORE_KEY = 'ros_checklist_v42'; // v42 = Grade X audit : 7 fissures tsc éradiquées + ESC/POS Bluetooth + i18n lazy-loading + 0 cycle madge
 const TUTO_STORE_KEY = 'ros_tuto_steps_v1';
 
 function loadTutoSteps() {
@@ -5232,6 +5232,25 @@ const DONE_BY_AGENTS = new Set([
   // mcc-growth-2 — Reseller Portal : /api/admin/mcc/reseller (GET/POST/PATCH) + commissions route
   //   Code affilié RS_XXXXXXXX ; ResellerPortal.tsx KPIs + liste + toggle actif/inactif
   'mcc-growth-2',
+  // ── Audit Grade X — 2026-07-27 — commit 2d4b562fe + 128a0ed29 ──
+  // grade-x-tsc-1 — 7 fissures TypeScript éradiquées (tsc --noEmit → 0 erreur) :
+  //   · orders.ts : modifiers string[] → z.union([z.string(), z.object({id,name,action})]) (rétrocompat POS↔KDS)
+  //   · FinancialNexusBridge.ts : BridgePayload += partialPayments?: {amount,guest,method}[] (paiement fractionné)
+  //   · KDSTicket.tsx L448 + L70 : discriminant typeof m==='string'?m:m.name (modifiers union)
+  //   · KdsTab.tsx L242 : même pattern discriminant modifier union
+  //   · menu-builder/page.tsx L39 : badge supprimé (absent de PageHeaderProps)
+  //   · menu-builder/page.tsx L80 : onChange=(e)=>setSearchQuery(e.target.value) (ChangeEventHandler<HTMLInputElement>)
+  'grade-x-tsc-1',
+  // grade-x-madge-1 — Audit dépendances circulaires : madge --circular → 0 cycle
+  //   Arbre d'imports unidirectionnel confirmé : domain ← infrastructure ← app ← modules
+  'grade-x-madge-1',
+  // hardware-ble-1 — ESC/POS Bluetooth implémenté (commit 128a0ed29)
+  //   Impression ticket caisse via Web Bluetooth GATT + fallback HTTP ePOS-Print
+  'hardware-ble-1',
+  // i18n-lazy-1 — i18n lazy-loading activé (commit 128a0ed29)
+  //   src/i18n/domains/ : chargement dynamique des bundles par langue à la demande
+  //   Décision explicite de l'utilisateur (hors du gel i18n CLAUDE.md)
+  'i18n-lazy-1',
 ]);
 
 function loadChecked() {

@@ -57,3 +57,33 @@ export type ReceptionData = z.infer<typeof ReceptionSchema>;
 export type CleaningData = z.infer<typeof CleaningSchema>;
 export type OilCheckData = z.infer<typeof OilCheckSchema>;
 export type WasteData = z.infer<typeof WasteSchema>;
+
+/** 🌡️ IoT Sensors & Readings */
+export const SensorTransportSchema = z.enum(['http_gateway', 'ble', 'push']);
+
+export const IoTSensorSchema = z.object({
+  id: z.string(),
+  tenantId: z.string(),
+  name: z.string(),
+  zone: z.string(),
+  transport: SensorTransportSchema,
+  gatewayDeviceId: z.string().optional(),
+  bleServiceUUID: z.string().optional(),
+  alertMinTemp: z.number().optional(),
+  alertMaxTemp: z.number().optional(),
+  active: z.boolean(),
+});
+
+export const SensorReadingSchema = z.object({
+  sensorId: z.string(),
+  tenantId: z.string(),
+  temperature: z.number(),
+  humidity: z.number().optional(),
+  battery: z.number().optional(),
+  timestamp: z.number(),
+  source: SensorTransportSchema,
+});
+
+export type SensorTransport = z.infer<typeof SensorTransportSchema>;
+export type IoTSensor = z.infer<typeof IoTSensorSchema>;
+export type SensorReading = z.infer<typeof SensorReadingSchema>;

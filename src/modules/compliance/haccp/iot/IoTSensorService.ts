@@ -21,30 +21,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { HACCPLogService, type ConformityStatus } from '../HACCPLogService';
 
-export type SensorTransport = 'http_gateway' | 'ble' | 'push';
-
-export interface IoTSensor {
-  id: string;
-  tenantId: string;
-  name: string;            // "Frigo 1", "Chambre froide", etc.
-  zone: string;            // id de la zone HACCP
-  transport: SensorTransport;
-  gatewayDeviceId?: string; // ID du capteur côté gateway HTTP
-  bleServiceUUID?: string;   // UUID BLE service (default: 0x181A)
-  alertMinTemp?: number;     // °C — alerte si en dessous
-  alertMaxTemp?: number;     // °C — alerte si au dessus
-  active: boolean;
-}
-
-export interface SensorReading {
-  sensorId: string;
-  tenantId: string;
-  temperature: number;      // °C
-  humidity?: number;        // %
-  battery?: number;         // %
-  timestamp: number;        // ms epoch
-  source: SensorTransport;
-}
+import { SensorTransport, IoTSensor, SensorReading } from '@/domain/schemas/haccp';
 
 const GATEWAY_URL = process.env.HACCP_GATEWAY_URL;
 const GATEWAY_TOKEN = process.env.HACCP_GATEWAY_TOKEN;

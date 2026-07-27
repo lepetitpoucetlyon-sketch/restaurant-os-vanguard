@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import type { SensorReading } from './iot/IoTSensorService';
+import type { SensorReading } from '@/domain/schemas/haccp';
 
 /**
  * HACCPLogService — backend du registre sanitaire (hac-6).
