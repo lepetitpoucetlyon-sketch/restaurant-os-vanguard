@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
 import { cn } from "@/lib/ui.foundations";
-import { Users, LayoutGrid, Layers } from "lucide-react";
+import { Users, LayoutGrid, Layers, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Table } from "@/domain/schemas/ops";
 
@@ -92,12 +92,12 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     };
                 case 'dirty':
                     return {
-                        container: "bg-surface-bg border-border/40 hover:border-accent-gold/30 hover:-translate-y-1 backdrop-blur-xl opacity-80",
-                        circle: "bg-surface-bg text-muted border-default",
-                        icon: "text-muted",
-                        indicator: "bg-surface-tertiary",
-                        bar: "bg-surface-tertiary",
-                        spotlight: "bg-transparent"
+                        container: "bg-amber-500/5 border-amber-500/30 hover:border-amber-400/60 hover:-translate-y-2 backdrop-blur-xl shadow-inner",
+                        circle: "bg-amber-500/10 text-amber-400 border-amber-500/30",
+                        icon: "text-amber-400",
+                        indicator: "bg-amber-400",
+                        bar: "bg-amber-400",
+                        spotlight: "bg-gradient-to-br from-amber-500/8 to-transparent"
                     };
                 default:
                     return {
@@ -158,6 +158,14 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                             "w-2.5 h-2.5 rounded-full animate-pulse shadow-glow",
                             styles.indicator
                         )} />
+                    </div>
+                )}
+
+                {/* Dirty — badge activable */}
+                {table.status === 'dirty' && (
+                    <div className="absolute top-5 right-5 flex items-center gap-1.5 bg-amber-500/15 border border-amber-500/30 rounded-full px-3 py-1">
+                        <Sparkles className="w-3 h-3 text-amber-400" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.15em] text-amber-400">À nettoyer</span>
                     </div>
                 )}
 
