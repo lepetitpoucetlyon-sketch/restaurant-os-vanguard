@@ -36,7 +36,6 @@ export default function MenuBuilderPage() {
                 title="Menu Builder" 
                 subtitle="Gestion de la carte, des prix et liaison avec les recettes du chef."
                 icon={ChefHat}
-                badge="Grade X"
             />
 
             <div className="flex flex-1 overflow-hidden mt-6 gap-6 px-6 pb-6">
@@ -77,7 +76,7 @@ export default function MenuBuilderPage() {
                             <div className="w-64">
                                 <SearchInput 
                                     value={searchQuery} 
-                                    onChange={setSearchQuery} 
+                                    onChange={(e) => setSearchQuery(e.target.value)} 
                                     placeholder="Rechercher un plat..." 
                                 />
                             </div>

@@ -67,7 +67,8 @@ export function hasAllergens(items: Order['items']): string[] {
     const found: string[] = [];
     for (const item of items) {
         for (const mod of item.modifiers ?? []) {
-            if (ALLERGEN_REGEX.test(mod)) found.push(mod);
+            const modStr = typeof mod === 'string' ? mod : mod.name;
+            if (ALLERGEN_REGEX.test(modStr)) found.push(modStr);
         }
         const extra = item as unknown as { allergens?: unknown };
         if (Array.isArray(extra.allergens)) {
@@ -445,10 +446,10 @@ export function KDSTicket({
 
                                             {item.modifiers && item.modifiers.length > 0 ? (
                                                 <div className="flex flex-col gap-1.5 mt-2">
-                                                    {item.modifiers.map((m: { name: string }, mi: number) => (
+                                                    {item.modifiers.map((m: string | { name: string }, mi: number) => (
                                                         <span key={mi} className="text-xs font-bold text-status-warning flex items-start gap-2">
                                                             <span className="w-1.5 h-1.5 rounded-full bg-status-warning mt-1.5 shrink-0 animate-pulse" />
-                                                            {m.name}
+                                                            {typeof m === 'string' ? m : m.name}
                                                         </span>
                                                     ))}
                                                 </div>

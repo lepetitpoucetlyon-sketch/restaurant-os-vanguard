@@ -24,7 +24,16 @@ export const OrderLineSchema = z.object({
   id:           UUIDSchema.optional(),
   productId:    UUIDSchema,
   categoryId:   z.string().optional(),
-  modifiers:    z.array(z.string()).default([]),
+  modifiers:    z.array(z.union([
+    z.string(),
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      action: z.enum(['add', 'remove', 'info']),
+      ingredientId: z.string().optional(),
+      quantityImpact: z.number().optional(),
+    }),
+  ])).default([]),
   name:         z.string().min(1).pipe(SanitizedStringSchema),
   quantity:     z.number().int().min(1, 'Quantité minimale : 1'),
   unitPriceInMicrounits: MicrounitsSchema,

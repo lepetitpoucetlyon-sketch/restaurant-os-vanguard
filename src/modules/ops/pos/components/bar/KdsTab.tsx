@@ -236,10 +236,10 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                             
                                             {item.modifiers && item.modifiers.length > 0 && (
                                                 <div className="flex flex-col gap-1 mt-3">
-                                                    {item.modifiers.map((m, mi) => (
+                                                    {item.modifiers.map((m: string | { name: string }, mi: number) => (
                                                         <span key={mi} className="text-xs font-bold text-status-warning flex items-center gap-2">
                                                             <span className="w-1 h-1 rounded-full bg-status-warning" />
-                                                            {m.name}
+                                                            {typeof m === 'string' ? m : m.name}
                                                         </span>
                                                     ))}
                                                 </div>

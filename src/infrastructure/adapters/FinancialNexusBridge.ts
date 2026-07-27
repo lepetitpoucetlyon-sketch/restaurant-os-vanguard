@@ -20,6 +20,7 @@ export interface BridgePayload {
   paymentMode?: PaymentMode;
   covers?: number;
   isTrainingMode?: boolean;
+  partialPayments?: { amount: number; guest: number; method?: string }[];
 }
 
 export interface BridgeResult {
