@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import {
     ALL_CATEGORIES,
     CATEGORY_LABELS,

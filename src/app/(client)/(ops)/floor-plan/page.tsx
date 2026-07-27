@@ -8,7 +8,7 @@ import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
 import { motion, AnimatePresence } from "framer-motion";
-import { useIsMobile } from "@/hooks";
+import { useIsMobile } from "@/shared/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
 import { Table, TableStatus } from "@nexus/contracts";

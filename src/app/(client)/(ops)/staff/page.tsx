@@ -2,7 +2,7 @@
 
 import { Users, CalendarRange, Palmtree, UserPlus, Plus, Clock, Euro, GraduationCap } from "lucide-react";
 
-import { useStaffPage } from "@/modules/human/hooks/useStaffPage";
+import { useStaffPage } from "@/modules/human/hr/hooks/useStaffPage";
 import { BadgeControl } from "@modules/human/hr/components/staff/BadgeControl";
 import {
     StaffList, StaffMemberForm, StaffRecentActivity,

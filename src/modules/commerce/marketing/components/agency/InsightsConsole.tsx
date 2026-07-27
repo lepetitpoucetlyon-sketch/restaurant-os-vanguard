@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ShieldCheck, Database, Zap, Activity } from 'lucide-react';
-import { AgentReasoningStep } from '@/modules/intelligence/agency/types';
+import { AgentReasoningStep } from '@/modules/intelligence/domain/agency/types';
 
 interface InsightsConsoleProps {
     reasoning: AgentReasoningStep[];

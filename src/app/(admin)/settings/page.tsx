@@ -3,7 +3,7 @@
 import { useState, Suspense, useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSettings } from "@/context/SettingsContext";
+import { useSettings } from "@/shared/contexts/SettingsContext";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
@@ -19,7 +19,7 @@ import {
 } from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
-import { StandardSettingsEngine } from "@/components/settings/ui/StandardSettingsEngine";
+import { StandardSettingsEngine } from "@/shared/components/settings/ui/StandardSettingsEngine";
 import { 
     IDENTITY_SCHEMA, 
     CONTACT_SCHEMA, 
@@ -135,7 +135,7 @@ export default function SettingsPage() {
                 label: 'Confirmer',
                 onClick: async () => {
                     try {
-                        const { defaultSettings } = await import('@/context/settings/defaults');
+                        const { defaultSettings } = await import('@/shared/contexts/settings/defaults');
                         await updateSettings?.(defaultSettings);
                         toast.success('Réglages réinitialisés aux valeurs par défaut');
                     } catch {

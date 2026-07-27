@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle, Eye, EyeOff, Lock, ArrowRight, UtensilsCrossed, ChefHat, GlassWater, Coffee } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import { toast } from "sonner";
 import type { UserRole } from "@nexus/contracts";
 

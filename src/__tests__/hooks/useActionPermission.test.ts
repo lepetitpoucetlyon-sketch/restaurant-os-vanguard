@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { useActionPermission } from '@/hooks/useActionPermission';
+import { useActionPermission } from '@/shared/hooks/useActionPermission';
 
 const mockUseAuth = vi.fn();
 

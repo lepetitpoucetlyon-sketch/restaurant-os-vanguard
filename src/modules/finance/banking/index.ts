@@ -4,6 +4,6 @@
  * Manual changes will be overwritten unless you remove this header.
  */
 
-export * from './FinancialNexusBridge';
+export * from './BankingNexusBridge';
 export * from './providers';
 export * from './types';

@@ -1,7 +1,7 @@
 // Barrel — manual (Grade X Smart Seal removed intentionally).
 // Adding transplanted views + reconciliation from origin/main.
 
-export * from './AccountingConfig';
+// AccountingConfig moved to finance/accounting/
 export * from './ExpenseClaimDialog';
 export * from './FiscalAuditView';
 export * from './PlaceholderView';

@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion";
 import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/shared/utils/motion";
-import { useHasMounted, useIsMobile } from "@/hooks";
+import { useHasMounted, useIsMobile } from "@/shared/hooks";
 
 interface ModalProps {
     isOpen: boolean;

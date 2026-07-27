@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
-import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 

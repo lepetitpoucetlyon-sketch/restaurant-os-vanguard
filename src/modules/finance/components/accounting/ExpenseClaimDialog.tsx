@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { useAccounting } from "@/modules/finance/providers/NexusFiscalProvider";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
-import { useUI } from "@/hooks";
+import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ListFilter } from "lucide-react";

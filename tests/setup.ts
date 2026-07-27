@@ -110,7 +110,7 @@ vi.mock('dexie', () => {
     return { default: MockDexie, Dexie: MockDexie };
 });
 
-vi.mock('@/lib/offline/offline-store', () => ({
+vi.mock('@/infrastructure/services/offline/offline-store', () => ({
     db: mockDb
 }));
 

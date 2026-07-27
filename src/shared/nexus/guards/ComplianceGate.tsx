@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 
 interface ComplianceGateProps {
     children: React.ReactNode;

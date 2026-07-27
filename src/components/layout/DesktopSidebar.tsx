@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
-import { useNexusCore } from "@/hooks";
+import { useNexusCore } from "@/shared/hooks";
 import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 import { SidebarBranding } from "./sidebar/SidebarBranding";

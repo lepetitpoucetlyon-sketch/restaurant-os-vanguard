@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
 import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
-import { useFirestoreBrand } from '@/hooks/useFirestoreBrand';
+import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
 
 export function BrandingProvider() {
   const tenantId = useAtomValue(tenantIdAtom);

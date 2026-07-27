@@ -26,7 +26,7 @@ import {
   type FECImportResult,
   parseFECAmount,
 } from "@/modules/finance/migration/FECImporter";
-import { useTenant } from "@/hooks";
+import { useTenant } from "@/shared/hooks";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 

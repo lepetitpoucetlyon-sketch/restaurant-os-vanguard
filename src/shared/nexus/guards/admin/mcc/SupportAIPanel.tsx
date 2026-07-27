@@ -40,7 +40,7 @@ export function SupportAIPanel() {
     setIsLoading(true);
     setResult(null);
     try {
-      const res = await fetch('/api/admin/mcc/support-ai/diagnose', {
+      const res = await fetch('/api/admin/fleet/support-ai/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

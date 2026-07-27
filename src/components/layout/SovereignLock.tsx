@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useNexusCore } from '@/hooks';
+import { useNexusCore } from '@/shared/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, CreditCard } from 'lucide-react';
 

@@ -13,7 +13,7 @@ interface CategoryListProps {
     onBack: () => void;
 }
 
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 
 const ICON_MAP: Record<string, import('lucide-react').LucideIcon> = {
     all: Star,

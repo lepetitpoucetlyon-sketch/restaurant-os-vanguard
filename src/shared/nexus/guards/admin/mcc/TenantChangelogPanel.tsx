@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { History, Filter, ChevronDown, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
-import type { ChangeCategory, ChangelogEntry } from '@/lib/mcc/ChangelogService';
+import { useNexusFleet } from '@/modules/intelligence';
+import type { ChangeCategory, ChangelogEntry } from '@/shared/nexus/engines/mcc/ChangelogService';
 
 const CATEGORY_META: Record<ChangeCategory, { label: string; color: string }> = {
   UI_OVERRIDE:  { label: 'UI',          color: 'text-violet-400 bg-violet-500/10 border-violet-500/30' },

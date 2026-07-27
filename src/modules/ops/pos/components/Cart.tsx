@@ -6,12 +6,12 @@ import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
-import { usePageSetting } from "@/components/settings/ContextualSettings";
+import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useIntelligence } from "@/modules/ops/providers/NexusOpsProvider";
-import { useNexusFleet } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
-import { useLanguage } from "@/hooks";
+import { useNexusFleet } from "@/modules/intelligence/fleet/NexusFleetProvider";
+import { useLanguage } from "@/shared/hooks";
 import { formatCurrency } from "@/lib/formatters";
-import { useIsMobile } from "@/hooks";
+import { useIsMobile } from "@/shared/hooks";
 import { POSService } from "@/infrastructure/adapters/POSAdapter";
 import { CartItem } from "@modules/ops/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";

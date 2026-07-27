@@ -11,7 +11,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
-import { ChangelogService, type ChangeCategory } from '@/lib/mcc/ChangelogService';
+import { ChangelogService, type ChangeCategory } from '@/shared/nexus/engines/mcc/ChangelogService';
 
 const VALID_CATEGORIES = new Set<ChangeCategory>([
   'UI_OVERRIDE', 'FEATURE_FLAG', 'BILLING', 'UPGRADE',

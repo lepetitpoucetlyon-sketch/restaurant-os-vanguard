@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { Users } from "lucide-react";
 import { cinematicItem, TABLES_DATA } from "@modules/commerce/reservations/constants";
 

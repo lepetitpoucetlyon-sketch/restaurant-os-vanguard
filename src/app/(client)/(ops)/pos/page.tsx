@@ -10,7 +10,7 @@ import {
 
 import { ProductGrid, Cart, TableSelector, PaymentDialog, SplitBillDialog } from "@modules/ops";
 import { BottomSheet } from "@ui/BottomSheet";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { formatCurrency } from "@/lib/formatters";

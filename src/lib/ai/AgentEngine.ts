@@ -1,4 +1,4 @@
-import { AgentDomain, AgentRole, AgentResponse, AgentInsight, AgentReasoningStep } from '@/modules/intelligence/agency/types';
+import { AgentDomain, AgentRole, AgentResponse, AgentInsight, AgentReasoningStep } from '@/modules/intelligence/domain/agency/types';
 import { generateSystemPrompt } from '@/config/prompts';
 
 export interface AgentRequest {

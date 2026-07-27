@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { db } from '@/lib/offline/offline-store';
+import { db } from '@/infrastructure/services/offline/offline-store';
 
 /**
  * 🛰️ Tenant Transition Benchmark - Restaurant OS

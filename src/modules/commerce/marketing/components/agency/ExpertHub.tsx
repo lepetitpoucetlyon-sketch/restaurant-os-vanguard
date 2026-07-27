@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useExpert } from '@/modules/intelligence/agency/useExpert';
+import { useExpert } from '@/modules/intelligence/domain/agency/useExpert';
 import { Target, Search, X, Zap, Activity } from 'lucide-react';
 import { InsightsConsole } from './InsightsConsole';
-import { AgentReasoningStep, AgentDomain } from '@/modules/intelligence/agency/types';
+import { AgentReasoningStep, AgentDomain } from '@/modules/intelligence/domain/agency/types';
 
 interface ExpertHubProps {
     domain: AgentDomain;

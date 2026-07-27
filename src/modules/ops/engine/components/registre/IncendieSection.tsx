@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/context/RegistreContext";
+import { useRegistre } from "@/shared/contexts/RegistreContext";
 import { Flame, MapPin, Calendar, Clock, CheckCircle2, AlertTriangle, Users, Plus } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;

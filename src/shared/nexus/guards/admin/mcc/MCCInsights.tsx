@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
-import { useFleet } from '@/context/FleetContext';
+import { useFleet } from '@/shared/contexts/FleetContext';
 import { FleetInsight, MacroBrain } from '@domain/services/MacroBrain';
 import { logger } from '@/lib/logger';
 

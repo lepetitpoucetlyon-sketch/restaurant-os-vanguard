@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks';
+import { useAuth } from '@/shared/hooks';
 import { Lock, Home, AlertTriangle } from 'lucide-react';
 import { Button } from '@ui/button';
 import { motion } from 'framer-motion';

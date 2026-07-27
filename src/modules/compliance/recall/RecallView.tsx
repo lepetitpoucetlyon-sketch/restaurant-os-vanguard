@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { AlertTriangle, Search, Package, Utensils, Users, FileText } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useTenant, useAuth } from '@/hooks';
+import { useTenant, useAuth } from '@/shared/hooks';
 import { RecallService } from './RecallService';
 import { toast } from 'sonner';
 

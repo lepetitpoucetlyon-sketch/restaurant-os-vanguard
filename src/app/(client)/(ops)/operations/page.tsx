@@ -18,9 +18,9 @@ import {
     TrendingUp
 } from 'lucide-react';
 // import { upsertReservationAction, deleteReservationAction, cancelReservationAction } from '@/app/(admin)/actions/reservations';
-import { useFloorOps as useOMS } from '@/context/FloorContext';
+import { useFloorOps as useOMS } from '@/shared/contexts/FloorContext';
 import { cn } from "@/lib/ui.foundations";
-import { useTenant } from '@/hooks';
+import { useTenant } from '@/shared/hooks';
 // import { arrivalAreaAction } from '@/app/actions/operations';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';

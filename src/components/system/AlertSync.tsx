@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useInventory } from '@/modules/ops/providers/NexusOpsProvider';
-import { useNotifications } from '@/context/NotificationsContext';
+import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { useHACCP } from '@nexus/guards/NexusGuardProvider';
 
 /**

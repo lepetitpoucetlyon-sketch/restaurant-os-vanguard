@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/context/RegistreContext";
+import { useRegistre } from "@/shared/contexts/RegistreContext";
 import { 
     Calendar, 
     Clock, 

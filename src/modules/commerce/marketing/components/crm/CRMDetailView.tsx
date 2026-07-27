@@ -7,9 +7,9 @@ import {
     X, Phone, Mail, Users, DollarSign, TrendingUp, Calendar, Send
 } from 'lucide-react';
 import { crmSelectedCRMAtom } from '@modules/commerce/marketing/store/crmAtoms';
-import { useLanguage } from '@/hooks';
+import { useLanguage } from '@/shared/hooks';
 import { cn } from '@/lib/ui.foundations';
-import { useIsMobile } from '@/hooks';
+import { useIsMobile } from '@/shared/hooks';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 import { CRM } from '@nexus/contracts';

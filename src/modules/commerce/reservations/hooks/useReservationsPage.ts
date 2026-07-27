@@ -7,7 +7,7 @@ import { fr } from "date-fns/locale";
 import { toast } from "sonner";
 
 import { useReservations, useCRM, useTables, useGroups } from "@/modules/ops/providers/NexusOpsProvider";
-import { useActionPermission } from "@/hooks/useActionPermission";
+import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";

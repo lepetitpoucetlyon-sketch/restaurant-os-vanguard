@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import type { User } from "@nexus/contracts";
 import { format, startOfWeek, addDays, isSameDay } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -15,10 +15,10 @@ import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { usePlanning } from "@modules/human/hr";
 import type { Shift as ContextShift } from "@modules/human/hr/types";
-import { useIsMobile } from "@/hooks";
+import { useIsMobile } from "@/shared/hooks";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { TimePicker } from "@/components/ui/TimePicker";
 

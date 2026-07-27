@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { useTenant } from '@/hooks/useTenant';
+import { useTenant } from '@/shared/hooks/useTenant';
 import type { AuditEvent } from '@/domain/schemas/audit';
 
 const OVERRIDE_ACTIONS = ['override', 'elevation'] as const;

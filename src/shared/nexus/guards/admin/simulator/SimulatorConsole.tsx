@@ -14,7 +14,7 @@ import { NexusStaffingOracle as StaffingOracle } from '@domain/services/NexusSta
 import { SovereignLedger } from '@/infrastructure/adapters/SovereignLedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { cn } from '@/lib/ui.foundations';
-import { useTenant } from '@/hooks';
+import { useTenant } from '@/shared/hooks';
 
 export function SimulatorConsole() {
     const { activeTenantId } = useTenant();

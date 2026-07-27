@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
 import { authedFetch } from '@/lib/client/authedFetch';
 import {
   Activity,

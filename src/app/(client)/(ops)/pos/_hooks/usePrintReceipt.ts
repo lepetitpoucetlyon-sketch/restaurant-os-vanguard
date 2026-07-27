@@ -2,8 +2,8 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { EpsonPrinter } from "@/lib/printing/EpsonPrinter";
-import type { ReceiptTicket } from "@/lib/printing/EpsonPrinter";
+import { EpsonPrinter } from "@/infrastructure/hardware/printers/EpsonPrinter";
+import type { ReceiptTicket } from "@/infrastructure/hardware/printers/EpsonPrinter";
 import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 import type { CartItem } from "@modules/ops/engine/types";
 

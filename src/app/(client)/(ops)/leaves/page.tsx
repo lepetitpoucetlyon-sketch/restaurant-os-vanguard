@@ -25,7 +25,7 @@ import { LeaveRequestCard } from '@modules/human/hr/components/leaves/LeaveReque
 import { NewRequestModal } from '@modules/human/hr/components/leaves/NewRequestModal';
 import { TeamCalendar } from '@modules/human/hr/components/leaves/TeamCalendar';
 
-import { useAuth } from '@/hooks';
+import { useAuth } from '@/shared/hooks';
 import { useHumanResources } from '@modules/human/hr';
 
 export default function LeavesPage() {

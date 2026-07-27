@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { useInventory } from "@modules/logistics/inventory";
-import { useActionPermission } from "@/hooks/useActionPermission";
+import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 
 import type { StockItem } from "@modules/logistics/inventory/types";

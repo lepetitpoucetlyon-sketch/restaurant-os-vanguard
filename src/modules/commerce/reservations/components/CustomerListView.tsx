@@ -3,9 +3,9 @@
 import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Search, Star } from "lucide-react";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { cinematicContainer, cinematicItem } from "@modules/commerce/reservations/constants";
-import { useInfiniteScroll } from "@/hooks/useVirtualization";
+import { useInfiniteScroll } from "@/shared/hooks/useVirtualization";
 
 interface CustomerListViewProps {
     customers: import('@modules/commerce/customers').CRM[];

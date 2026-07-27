@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
-import { useAuth, useUI } from "@/hooks";
+import { useAuth, useUI } from "@/shared/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";

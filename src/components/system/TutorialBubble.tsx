@@ -3,10 +3,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { useTutorial } from '@/context/TutorialContext';
+import { useTutorial } from '@/shared/contexts/TutorialContext';
 import { ChevronRight, X } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
-import { useHasMounted } from '@/hooks';
+import { useHasMounted } from '@/shared/hooks';
 import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 import { usePathname, useRouter } from 'next/navigation';

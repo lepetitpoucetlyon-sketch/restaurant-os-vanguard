@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import '@/tests/vanguard/mocks';
-import { db } from '@/lib/offline/offline-store';
+import '@/e2e/vanguard/mocks';
+import { db } from '@/infrastructure/services/offline/offline-store';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';

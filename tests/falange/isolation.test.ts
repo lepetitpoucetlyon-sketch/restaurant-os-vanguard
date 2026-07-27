@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getDefaultStore } from 'jotai';
-import '@/tests/vanguard/mocks';
+import '@/e2e/vanguard/mocks';
 
 // Chemins corrigés après réorganisation de l'archi (le barrel @/store/operationalAtoms n'existe plus).
 import { tenantIdAtom, activeFleetTenantAtom } from '@/shared/nexus/state/SovereignGenome';

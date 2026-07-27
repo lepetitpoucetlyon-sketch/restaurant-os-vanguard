@@ -3,7 +3,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import type { StockItem } from '@modules/logistics/inventory/types';
-import { useOraclePrediction } from '@/modules/logistics/hooks/useOraclePrediction';
+import { useStockPrediction } from '@/modules/logistics/hooks/useStockPrediction';
 import { OraclePredictor } from '@/modules/intelligence/analytics/components/OraclePredictor';
 
 interface OracleModalProps {
@@ -13,7 +13,7 @@ interface OracleModalProps {
 
 export function OracleModal({ item, onClose }: OracleModalProps) {
     const itemName = item.name ?? item.ingredientName ?? 'Article';
-    const { prediction, loading } = useOraclePrediction(item.id, item.quantity);
+    const { prediction, loading } = useStockPrediction(item.id, item.quantity);
 
     return (
         <div

@@ -9,11 +9,11 @@ import { cn } from "@/lib/ui.foundations";
 import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from "@modules/ops/pos/store/posAtoms";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
-import { usePageSetting } from "@/components/settings/ContextualSettings";
-import { useLanguage } from "@/hooks";
+import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
+import { useLanguage } from "@/shared/hooks";
 import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 import { AlertTriangle, Clock } from "lucide-react";
-import { useNexusFleet } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
+import { useNexusFleet } from "@/modules/intelligence/fleet/NexusFleetProvider";
 import { useAtomValue } from "jotai";
 
 // ==========================================

@@ -12,12 +12,12 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { useHygieneLabels, useCreateHygieneLabel, useDeleteHygieneLabel } from '@nexus/guards/NexusGuardProvider';
-import { useNotifications } from '@/context/NotificationsContext';
+import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 import { CameraCapture } from './CameraCapture';
 import { StorageService } from '@domain/services/Storage';
-import { useTenant } from '@/hooks';
+import { useTenant } from '@/shared/hooks';
 import { Loader2 } from 'lucide-react';
 
 export function TracabiliteEtiquettes() {

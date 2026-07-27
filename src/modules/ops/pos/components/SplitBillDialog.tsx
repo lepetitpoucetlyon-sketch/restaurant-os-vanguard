@@ -5,14 +5,14 @@ import { X, Users, DivideCircle, Check, ArrowRight, User, Minus, Plus, CheckCirc
 import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import { motion } from "framer-motion";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { formatCurrency } from "@/lib/formatters";
 
 import { CartItem } from "@modules/ops/engine/types";
 export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
-import { printerService } from "@/lib/printing/PrintingService";
+import { printerService } from "@/infrastructure/hardware/printers/PrintingService";
 import { Loader2, AlertCircle } from "lucide-react";
 
 interface SplitBillDialogProps {

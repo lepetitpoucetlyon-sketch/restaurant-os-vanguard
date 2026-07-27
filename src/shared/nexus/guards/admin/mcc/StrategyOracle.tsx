@@ -12,8 +12,8 @@ import {
     AlertTriangle,
     CheckCircle2
 } from 'lucide-react';
-import { useStrategicOracle } from '@/hooks/useStrategicOracle';
-import { useFleet } from '@/context/FleetContext';
+import { useStrategicOracle } from '@/shared/hooks/useStrategicOracle';
+import { useFleet } from '@/shared/contexts/FleetContext';
 import { FleetInsight } from '@domain/services/MacroBrain';
 
 export function StrategyOracle() {

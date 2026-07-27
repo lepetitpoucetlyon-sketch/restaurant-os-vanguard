@@ -13,7 +13,7 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 import { EQUIPMENT_CONFIG, EquipmentConfig } from '@modules/compliance/haccp/types';
 import { useHygieneLogs, useCreateHygieneLog } from '@nexus/guards/NexusGuardProvider';
-import { useNotifications } from '@/context/NotificationsContext';
+import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Bot } from "lucide-react";
-import { useUI } from "@/hooks";
+import { useUI } from "@/shared/hooks";
 ;
 
 export function GlobalFAB() {

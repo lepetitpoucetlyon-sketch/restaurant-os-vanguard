@@ -10,7 +10,7 @@ import { QualityEngine } from '@domain/services/QualityEngine';
 import { QualityControl } from '@domain/types/quality';
 import type { ActiveQualityControl } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import { useTenant } from '@/hooks';
+import { useTenant } from '@/shared/hooks';
 
 /**
  * 🛰️ useQualityMapper - Grade VI

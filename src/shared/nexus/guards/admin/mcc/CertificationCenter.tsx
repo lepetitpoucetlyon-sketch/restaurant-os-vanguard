@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu } from 'lucide-react';
-import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
 import { logger } from '@/lib/logger';
 import { auth } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

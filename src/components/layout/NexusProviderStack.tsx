@@ -6,9 +6,9 @@ import { NexusCoreProvider } from "@/shared/providers/NexusCoreProvider";
 import { NexusOpsProvider } from "@/modules/ops/providers/NexusOpsProvider";
 import { NexusFiscalProvider } from "@/modules/finance/providers/NexusFiscalProvider";
 import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
-import { NexusFleetProvider } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
+import { NexusFleetProvider } from "@/modules/intelligence/fleet/NexusFleetProvider";
 import { ToastProvider } from "@ui/Toast";
-import { ContextualSettingsProvider } from "@/components/settings/ContextualSettings";
+import { ContextualSettingsProvider } from "@/shared/components/settings/ContextualSettings";
 
 // Gates & Orchestrators
 import { 

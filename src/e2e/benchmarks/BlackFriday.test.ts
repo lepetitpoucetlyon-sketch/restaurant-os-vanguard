@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import '@/tests/vanguard/mocks';
+import '@/e2e/vanguard/mocks';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
 
 /**

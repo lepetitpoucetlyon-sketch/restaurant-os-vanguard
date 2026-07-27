@@ -1,7 +1,7 @@
 import { AccessPolicyManager, CategoryKey, RolePermissions } from "@domain/services/AccessPolicyManager";
 import { User } from '@nexus/contracts';
 import { AGENT_TOOLS } from '@/modules/intelligence/tools';
-import { ToolDefinition } from '@/modules/intelligence/tools/types';
+import { ToolDefinition } from '@/modules/intelligence/domain/agent/tools/types';
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 import { ShieldedContext } from '../../lib/ai/ShieldedContext';
 import { logger } from '@/lib/logger';

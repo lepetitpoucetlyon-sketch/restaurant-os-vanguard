@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Globe, Palette, Loader2, ArrowRight, Check, AlertTriangle, RefreshCcw, Wand2 } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useToast } from '@ui/Toast';
-import { useBrandEditor } from '@/hooks/useBrandEditor';
+import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { BrandingUI } from '@domain/services/BrandingUI';
-import { useSettings } from '@/context/SettingsContext';
+import { useSettings } from '@/shared/contexts/SettingsContext';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 import type { BrandInput } from '@/domain/services/BrandingService';
 

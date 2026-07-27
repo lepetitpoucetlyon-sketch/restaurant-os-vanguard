@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { empireAudit } from "@/lib/audit";
 

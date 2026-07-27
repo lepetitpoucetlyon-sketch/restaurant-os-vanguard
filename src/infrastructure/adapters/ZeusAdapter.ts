@@ -1,10 +1,10 @@
 import { AgentEngine } from '@/lib/ai/AgentEngine';
-import { AgentDomain } from '@/modules/intelligence/agency/types';
+import { AgentDomain } from '@/modules/intelligence/domain/agency/types';
 import {
     ZeusPulseResult,
     ZeusAnomaly,
     ZeusManifest,
-} from '@/modules/intelligence/agency/Zeus';
+} from '@/modules/intelligence/domain/agency/Zeus';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalHACCPMapper } from '@modules/finance';
@@ -152,7 +152,7 @@ export class ZeusEngine {
         domain: AgentDomain,
         prompt: string,
         context?: import('@/shared/nexus-contract').SovereignValue,
-    ): Promise<import('@/modules/intelligence/agency/types').AgentResponse> {
+    ): Promise<import('@/modules/intelligence/domain/agency/types').AgentResponse> {
         const agent =
             this.manifest.activeAgents.find((a) => a.domain === domain) ||
             this.manifest.activeAgents[0];

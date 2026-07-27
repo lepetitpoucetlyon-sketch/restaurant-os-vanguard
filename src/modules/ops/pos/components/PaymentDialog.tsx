@@ -4,11 +4,11 @@ import { useState, useRef } from "react";
 import { CreditCard, Banknote, Smartphone, CheckCircle, Loader2, Sparkles, Receipt, X, ArrowRight, AlertCircle, Terminal } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
-import { useLanguage } from "@/hooks";
+import { useLanguage } from "@/shared/hooks";
 import { formatCurrency } from "@/lib/formatters";;
 import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
 import type { PaymentResult } from "@/infrastructure/hardware/payment-terminal/types";
-import { printerService } from "@/lib/printing/PrintingService";
+import { printerService } from "@/infrastructure/hardware/printers/PrintingService";
 
 interface PaymentDialogProps {
     isOpen: boolean;

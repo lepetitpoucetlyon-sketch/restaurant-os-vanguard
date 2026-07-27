@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import '@/tests/vanguard/mocks';
+import '@/e2e/vanguard/mocks';
 import { QualityEngine } from './QualityEngine';
 
 // Mock dependencies

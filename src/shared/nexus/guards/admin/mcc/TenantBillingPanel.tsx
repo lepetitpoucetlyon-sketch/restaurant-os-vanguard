@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { CreditCard, Calendar, AlertTriangle, CheckCircle, Lock, RefreshCw } from 'lucide-react';
-import { useFleet } from '@/context/FleetContext';
+import { useFleet } from '@/shared/contexts/FleetContext';
 
 interface BillingInfo {
   tenantId:   string;

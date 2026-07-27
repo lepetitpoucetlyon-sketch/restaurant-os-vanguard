@@ -8,7 +8,9 @@ export { useFinanceReflex } from './hooks/useFinanceReflex';
 export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
 export { BlockchainLedgerService } from './accounting/domain/BlockchainLedgerService';
 export { PayrollAccountingMapper } from './accounting/domain/PayrollAccountingMapper';
-export * from './services';
+export { FinanceCore } from './services/FinanceCore';
+export { TransactionService } from './services/TransactionService';
+export { BillingService } from './services/BillingService';
 
 // 🏛️ SUTURE NEXUS
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';

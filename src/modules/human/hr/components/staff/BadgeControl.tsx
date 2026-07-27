@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useAuth } from '@/hooks';
+import { useAuth } from '@/shared/hooks';
 import { useAtomValue } from 'jotai';
 import { activeShiftsAtom } from '../../store/staffAtoms';
 import { hrLoadingAtom } from '../../store/hrAtoms';

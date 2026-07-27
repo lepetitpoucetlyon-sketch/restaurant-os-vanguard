@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, ShieldAlert, XCircle } from 'lucide-react';
-import { useFleet } from '@/context/FleetContext';
+import { useFleet } from '@/shared/contexts/FleetContext';
 import { Button } from '@ui/button';
 
 export function TrainingOverlay() {

@@ -10,7 +10,7 @@ import {
     Sparkles, 
     ShoppingBag
 } from 'lucide-react';
-import { useFleet } from '@/context/FleetContext';
+import { useFleet } from '@/shared/contexts/FleetContext';
 import { TreasuryEngine } from '@domain/services/TreasuryEngine';
 
 export function MCCTreasury() {

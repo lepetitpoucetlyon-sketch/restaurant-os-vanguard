@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
-import { useAuth, useTenant } from '@/hooks';
+import { useAuth, useTenant } from '@/shared/hooks';
 async function hiredCandidateAction(tenantId: string, candidate: Candidate): Promise<{ success: boolean; id: string }> {
     const now = new Date().toISOString();
     const staffPath = `tenants/${tenantId}/staff`;

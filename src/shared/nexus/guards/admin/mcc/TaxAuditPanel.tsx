@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { FileText, ShieldCheck, AlertTriangle, Download, Search, ChevronDown, Lock } from 'lucide-react';
-import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 
 interface JournalEntry {

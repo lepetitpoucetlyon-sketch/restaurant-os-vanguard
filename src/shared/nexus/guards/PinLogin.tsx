@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
-import { useUI } from "@/hooks";
+import { useUI } from "@/shared/hooks";
 import { Delete, LogIn, Fingerprint, ShieldCheck, ChevronLeft, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 

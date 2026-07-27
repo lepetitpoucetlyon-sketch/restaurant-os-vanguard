@@ -7,14 +7,12 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-import { MCCWidgetSkeleton } from '@nexus/guards/admin/mcc/MCCWidgetSkeleton';
+import { MCCWidgetSkeleton, TenantUsersPanel, MFAGate } from '@nexus/guards/admin/mcc';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
-import { StatCard, DeviceManagerPanel, TabButton, StatusItem, SwitchboardItem } from './_components';
+import { StatCard, DeviceManagerPanel, TabButton, StatusItem, SwitchboardItem } from '@nexus/guards/admin/mcc';
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
-import { MFAGate } from '@/shared/nexus/guards/admin/mcc/components/MFAGate';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
-import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
-import { TenantUsersPanel } from '@nexus/guards/admin/mcc/TenantUsersPanel';
+import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 
 const MCCAuditStream    = dynamic(() => import('@nexus/guards/admin/mcc/MCCAuditStream').then(m => m.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });
 const MCCInsights       = dynamic(() => import('@nexus/guards/admin/mcc/MCCInsights').then(m => m.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });

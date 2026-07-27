@@ -4,7 +4,7 @@ import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ChefHat, X, Check, MapPin, Package, RefreshCw, Plus, Minus, Calendar } from "lucide-react";
 import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";;
 

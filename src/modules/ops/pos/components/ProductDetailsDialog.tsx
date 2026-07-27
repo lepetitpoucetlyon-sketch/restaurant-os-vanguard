@@ -5,8 +5,8 @@ import { X, Check, Minus, Plus, ShoppingCart, Sparkles, AlertTriangle } from "lu
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { Product, OptionGroup, Option } from "@nexus/contracts";
-import { useLanguage } from "@/hooks";
-import { useNexusFleet } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
+import { useLanguage } from "@/shared/hooks";
+import { useNexusFleet } from "@/modules/intelligence/fleet/NexusFleetProvider";
 
 // Standard EU allergens list
 const COMMON_ALLERGENS = [

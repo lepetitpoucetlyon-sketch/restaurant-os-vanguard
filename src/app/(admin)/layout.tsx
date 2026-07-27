@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import { Shield } from "lucide-react";
 import { isMCCMode } from "@/config/instance";
 

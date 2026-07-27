@@ -10,8 +10,8 @@ import {
     NexusLangState,
 } from '@nexus/contracts/nexus.types';
 
-import { UIThemeProvider, UIThemeContext } from './providers/UIThemeProvider';
-import { NotificationProvider, NotificationContext } from './providers/NotificationProvider';
+import { UIThemeProvider, UIThemeContext } from './UIThemeProvider';
+import { NotificationProvider, NotificationContext } from './NotificationProvider';
 import { useNexusTenantLogic } from './hooks/useNexusTenantLogic';
 import { useNexusAuthLogic } from './hooks/useNexusAuthLogic';
 import { useNexusFleetLogic } from './hooks/useNexusFleetLogic';

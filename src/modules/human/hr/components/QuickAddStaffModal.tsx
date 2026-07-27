@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, UserPlus, Copy, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useAuth } from "@/hooks";
+import { useAuth } from "@/shared/hooks";
 import { toast } from "sonner";
 import type { UserRole } from "@nexus/contracts";
 

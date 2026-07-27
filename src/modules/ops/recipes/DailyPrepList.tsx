@@ -16,7 +16,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Reservation, Recipe } from '@nexus/contracts';
 import { fadeInUp, cinematicContainer, cinematicItem } from '@/shared/utils/motion';
 import { smartQuantity } from './recipeUtils';
-import { useNotifications } from '@/context/NotificationsContext';
+import { useNotifications } from '@/shared/contexts/NotificationsContext';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

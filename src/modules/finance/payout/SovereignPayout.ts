@@ -1,5 +1,5 @@
 import { PayoutInvoice, PayoutRequest } from './types';
-import { FinancialNexusBridge } from '@/modules/finance/banking/FinancialNexusBridge';
+import { BankingNexusBridge } from '@/modules/finance/banking/BankingNexusBridge';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
@@ -19,7 +19,7 @@ export class SovereignPayout {
             throw new Error('PAYOUT_001: Invoice must be validated before payout.');
         }
 
-        const currentBalance = await FinancialNexusBridge.getBalance();
+        const currentBalance = await BankingNexusBridge.getBalance();
         if (currentBalance < invoice.amountInCents) {
             throw new Error('PAYOUT_002: Insufficient funds for payout.');
         }
@@ -101,7 +101,7 @@ export class SovereignPayout {
 
         try {
             // Exécution du virement SCT SEPA via le Bridge BaaS
-            const sepaRef = await FinancialNexusBridge.executeSepaTransfer(
+            const sepaRef = await BankingNexusBridge.executeSepaTransfer(
                 invoice.bankAccountIban, 
                 request.amountInCents, 
                 `INV-${invoice.id}`

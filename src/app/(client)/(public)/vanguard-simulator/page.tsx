@@ -11,11 +11,11 @@ import {
     Zap,
     BarChart3
 } from "lucide-react";
-import { useIntelligence } from "@/context/IntelligenceContext";
+import { useIntelligence } from "@/shared/contexts/IntelligenceContext";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
-import { useNotifications } from "@/context/NotificationsContext";
+import { useNotifications } from "@/shared/contexts/NotificationsContext";
 import { Modal } from "@ui/Modal";
 
 export default function SimulatorPage() {

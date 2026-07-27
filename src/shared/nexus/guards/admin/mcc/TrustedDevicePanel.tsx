@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Shield, ShieldCheck, ShieldX, Smartphone, Plus, Trash2, Edit3, Wifi, WifiOff, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import type { MccRole } from '@/lib/server/adminAuthGuard';
-import type { TrustedDevice } from '@/app/api/admin/mcc/trusted-devices/route';
+import type { TrustedDevice } from '@/app/api/admin/fleet/trusted-devices/route';
 
 /**
  * Génère une empreinte déterministe de l'appareil courant (client-side uniquement).
@@ -56,7 +56,7 @@ export function TrustedDevicePanel() {
         setError(null);
         try {
             const token = await getToken();
-            const res = await fetch('/api/admin/mcc/trusted-devices', {
+            const res = await fetch('/api/admin/fleet/trusted-devices', {
                 headers: { Authorization: `Bearer ${token}` },
             });
             if (!res.ok) throw new Error((await res.json()).error ?? 'Erreur serveur');
@@ -89,7 +89,7 @@ export function TrustedDevicePanel() {
         if (!myFingerprint || !registerName.trim()) return;
         try {
             const token = await getToken();
-            const res = await fetch('/api/admin/mcc/trusted-devices', {
+            const res = await fetch('/api/admin/fleet/trusted-devices', {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -112,7 +112,7 @@ export function TrustedDevicePanel() {
     const handleRevoke = async (deviceId: string) => {
         try {
             const token = await getToken();
-            const res = await fetch(`/api/admin/mcc/trusted-devices?deviceId=${deviceId}`, {
+            const res = await fetch(`/api/admin/fleet/trusted-devices?deviceId=${deviceId}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -127,7 +127,7 @@ export function TrustedDevicePanel() {
         if (!editingDevice) return;
         try {
             const token = await getToken();
-            const res = await fetch('/api/admin/mcc/trusted-devices', {
+            const res = await fetch('/api/admin/fleet/trusted-devices', {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ deviceId: editingDevice.deviceId, role: editRole }),
