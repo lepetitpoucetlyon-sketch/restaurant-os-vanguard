@@ -29,7 +29,7 @@ import {
     computeDLCStatus,
 } from "@/modules/logistics/inventory/components/InventoryInlineModals";
 import { SecurityPinModal } from "@/components/ui";
-import { RotatingCount } from "@/components/inventory/RotatingCount";
+import { RotatingCount } from "@/modules/logistics/inventory/components/RotatingCount";
 
 export default function InventoryPage() {
     const {

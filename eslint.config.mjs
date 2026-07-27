@@ -16,7 +16,7 @@ const eslintConfig = defineConfig([
       "vanguard/no-cross-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
-      "no-restricted-imports": ["warn", {
+      "no-restricted-imports": ["error", {
         "patterns": [{
           "group": ["@/modules/*/*"],
           "message": "Violation de frontière architecturale (Barrel Contract). Importez uniquement la racine du module : '@/modules/<pilier>'."

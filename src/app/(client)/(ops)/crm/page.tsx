@@ -15,7 +15,7 @@ import { PromoCodeManager } from "@/modules/commerce/marketing/components/crm/Pr
 import { EmailCampaign } from "@/modules/commerce/marketing/components/crm/EmailCampaign";
 import { BasketAnalysis } from "@/modules/commerce/marketing/components/crm/BasketAnalysis";
 import { VisitHistory } from "@/modules/commerce/marketing/components/crm/VisitHistory";
-import { CustomerImportPanel } from "@/components/migration/CustomerImportPanel";
+import { CustomerImportPanel } from "@/lib/migration/CustomerImportPanel";
 import { RFMSegmentation } from "@/modules/commerce/marketing/components/crm/RFMSegmentation";
 import { EmailAutomations } from "@/modules/commerce/marketing/components/crm/EmailAutomations";
 

@@ -4,13 +4,9 @@ const path = require('path');
 const directoryPath = path.join(__dirname, '../src');
 
 const replacements = [
-  { from: /@\/engines\/ops/g, to: '@/modules/ops/providers' },
-  { from: /@\/engines\/fiscal/g, to: '@/modules/finance/providers' },
-  { from: /@\/engines\/fleet/g, to: '@/modules/intelligence/fleet/providers' },
-  { from: /@\/engines\/core/g, to: '@/shared/providers' },
-  { from: /@\/engines\/mcc/g, to: '@/shared/nexus/engines/mcc' },
-  { from: /@\/engines\/Simulacra/g, to: '@/infrastructure/adapters/Simulacra' },
-  { from: /@\/engines\/NexusPulseOrchestrator/g, to: '@/shared/providers/NexusPulseOrchestrator' }
+  { from: /@\/components\/inventory/g, to: '@/modules/logistics/inventory/components' },
+  { from: /@\/components\/migration/g, to: '@/lib/migration' },
+  { from: /@\/components\/a11y/g, to: '@/shared/utils/a11y' }
 ];
 
 function processDirectory(dir) {
@@ -37,4 +33,4 @@ function processDirectory(dir) {
 }
 
 processDirectory(directoryPath);
-console.log("Done updating imports for Engines.");
+console.log("Done updating imports for Phase 6.");
