@@ -90,6 +90,15 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                         bar: "bg-action-primary",
                         spotlight: "bg-gradient-to-br from-action-primary/10 to-transparent"
                     };
+                case 'dirty':
+                    return {
+                        container: "bg-surface-bg border-border/40 hover:border-accent-gold/30 hover:-translate-y-1 backdrop-blur-xl opacity-80",
+                        circle: "bg-surface-bg text-muted border-default",
+                        icon: "text-muted",
+                        indicator: "bg-surface-tertiary",
+                        bar: "bg-surface-tertiary",
+                        spotlight: "bg-transparent"
+                    };
                 default:
                     return {
                         container: "bg-surface-bg dark:bg-surface-card/[0.01] border-border opacity-60 grayscale cursor-not-allowed",

@@ -42,7 +42,7 @@ export default function POSPage() {
         isMobileCartOpen, setIsMobileCartOpen,
         isPaymentOpen, setIsPaymentOpen,
         isSplitOpen, setIsSplitOpen,
-        cartItems, cartTotal, cartGrandTotal, cartCount,
+        cartItems, cartTotal, cartGrandTotal, cartCount, cartTvaInCents,
         currentTable,
         handleAddToCart,
         handleUpdateQuantity, handleClearCart,
@@ -255,7 +255,7 @@ export default function POSPage() {
                 onToggleDoggyBag={handleToggleDoggyBag}
             />
 
-            <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
+            <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} tvaInCents={cartTvaInCents} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
             <SplitBillDialog isOpen={isSplitOpen} items={cartItems} total={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInCents, guestIndex) => handlePaySplit(amountInCents, guestIndex)} onSplitComplete={handleSplitComplete} />
             <PinModal isOpen={pendingAction !== null} title={pinModalTitle} onConfirm={handlePinConfirm} onClose={handlePinClose} error={pinError} />
             <CashDrawerModal isOpen={isCashDrawerOpen} onClose={() => setIsCashDrawerOpen(false)} tenantId={activeTenantId ?? ""} userId={posUser?.id ?? "unknown"} />

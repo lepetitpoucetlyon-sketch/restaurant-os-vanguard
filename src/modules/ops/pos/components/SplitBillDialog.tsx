@@ -336,6 +336,75 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                 </div>
                             )}
 
+                            {mode === 'by-item' && (
+                                <div className="px-12 py-8 border-b border-white/5 shrink-0 overflow-y-auto max-h-56 elegant-scrollbar">
+                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 mb-4">{t('pos.split.assign_items')}</p>
+                                    <div className="space-y-2">
+                                        {items.map((item) => (
+                                            <div key={item.cartId} className="flex items-center justify-between gap-4 px-5 py-3 rounded-2xl bg-surface-card/[0.04] border border-white/5">
+                                                <span className="text-xs font-semibold text-white/80 truncate max-w-[140px]">{item.name} ×{item.quantity}</span>
+                                                <div className="flex gap-2 shrink-0">
+                                                    {convivePayments.map((_, idx) => {
+                                                        const isAssigned = (selectedItems[idx] || []).includes(item.cartId);
+                                                        return (
+                                                            <button
+                                                                key={idx}
+                                                                onClick={() => {
+                                                                    setSelectedItems(prev => {
+                                                                        const updated: Record<number, string[]> = {};
+                                                                        for (const k in prev) updated[k] = prev[k].filter((id: string) => id !== item.cartId);
+                                                                        if (!isAssigned) updated[idx] = [...(updated[idx] || []), item.cartId];
+                                                                        return updated;
+                                                                    });
+                                                                }}
+                                                                className={cn(
+                                                                    "w-7 h-7 rounded-xl text-[10px] font-black transition-all duration-300 border",
+                                                                    isAssigned
+                                                                        ? "bg-accent-gold text-primary border-accent-gold"
+                                                                        : "bg-transparent border-white/10 text-white/40 hover:border-accent-gold/40 hover:text-accent-gold"
+                                                                )}
+                                                            >{idx + 1}</button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {mode === 'custom' && (
+                                <div className="px-12 py-8 border-b border-white/5 shrink-0">
+                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 mb-4">{t('pos.split.custom_amounts')}</p>
+                                    <div className="space-y-3">
+                                        {convivePayments.map((_, idx) => (
+                                            <div key={idx} className="flex items-center justify-between gap-4">
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{t('pos.split.master')} {idx + 1}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="number"
+                                                        min={0}
+                                                        step={0.01}
+                                                        value={(customAmounts[idx] / 1_000_000).toFixed(2)}
+                                                        onChange={e => {
+                                                            const euros = parseFloat(e.target.value);
+                                                            if (isNaN(euros)) return;
+                                                            setCustomAmounts(prev => {
+                                                                const updated = [...prev];
+                                                                updated[idx] = Math.round(euros * 1_000_000);
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        className="w-24 text-right bg-surface-card/[0.04] border border-white/10 rounded-xl px-3 py-2 text-accent-gold font-serif font-black text-base focus:outline-none focus:border-accent-gold/60"
+                                                    />
+                                                    <span className="text-white/40 text-sm font-black">€</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="flex-1 p-12 overflow-y-auto elegant-scrollbar">
                                 <div className="grid grid-cols-2 gap-8">
                                     {convivePayments.map((convive, index) => (

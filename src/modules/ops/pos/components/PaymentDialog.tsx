@@ -14,6 +14,8 @@ interface PaymentDialogProps {
     isOpen: boolean;
     /** Amount in cents */
     total: number;
+    /** TVA réelle du panier en cents (calculée par usePOSController) */
+    tvaInCents?: number;
     orderId?: string;
     onClose: () => void;
     onPaymentComplete: () => Promise<string | void>;
@@ -23,7 +25,7 @@ type PaymentMethod = "card" | "cash" | "mobile";
 
 type TerminalState = "idle" | "pending" | "manual_wait" | "error";
 
-export function PaymentDialog({ isOpen, total, orderId, onClose, onPaymentComplete }: PaymentDialogProps) {
+export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onPaymentComplete }: PaymentDialogProps) {
     const [method, setMethod] = useState<PaymentMethod | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -205,10 +207,12 @@ export function PaymentDialog({ isOpen, total, orderId, onClose, onPaymentComple
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">Montant à régler</span>
                                 <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
                             </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">TVA (Auto)</span>
-                                <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(total - Math.round(total / 1.2))}</span>
-                            </div>
+                            {tvaInCents !== undefined && (
+                                <div className="flex flex-col items-center">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">TVA incluse</span>
+                                    <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(tvaInCents)}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="p-10 md:p-14 space-y-8 flex-1 overflow-auto elegant-scrollbar">

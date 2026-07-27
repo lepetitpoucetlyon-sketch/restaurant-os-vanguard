@@ -111,17 +111,17 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
     };
 
     const calculateTotal = () => {
-        let total = product.priceInMicrounits / 1_000_000 || 0;
+        let total = product.priceInMicrounits || 0; // en microunits
         (product.optionGroups as OptionGroup[] | undefined)?.forEach(group => {
             const selectedIds = selections[group.id] || [];
             selectedIds.forEach(id => {
                 const option = group.options.find(opt => opt.id === id);
                 if (option) {
-                    total += option.priceModifierInCents;
+                    total += option.priceModifierInCents * 10_000; // cents → µ
                 }
             });
         });
-        return total * priceMultiplier * quantity;
+        return total * priceMultiplier * quantity; // retourne des µ
     };
 
     const isValid = () => {
@@ -410,7 +410,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                         <div className="flex items-center gap-8 h-full">
                             <div className="w-px h-8 bg-surface-card/10 dark:bg-surface-sidebar/10" />
                             <span className="text-2xl font-sans font-black tracking-tight text-white dark:text-primary">
-                                {calculateTotal() / 100}€
+                                {(calculateTotal() / 1_000_000).toFixed(2)}€
                             </span>
                         </div>
                     </button>

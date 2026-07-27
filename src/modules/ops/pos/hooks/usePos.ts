@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useSetAtom } from "jotai";
+import { activeCartAtom } from "../store/orderAtoms";
 import { useOrders, useTables, useProducts, useCategories } from "@/modules/ops/providers/NexusOpsProvider";
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
@@ -27,6 +29,7 @@ export function usePOSController() {
     const { data: categories, isLoading: categoriesLoading } = useCategories();
 
     const { showToast } = useToast();
+    const setActiveCart = useSetAtom(activeCartAtom);
 
     // --- POS STATE ---
     const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
@@ -62,6 +65,22 @@ export function usePOSController() {
     const cartCount = useMemo(() =>
         cartItems.reduce((sum, item) => sum + item.quantity, 0),
         [cartItems]);
+
+    /** TVA réelle du panier en cents (multi-taux : food 10/5.5%, alcool 20%). */
+    const cartTvaInCents = useMemo(() => {
+        let tvaMu = 0;
+        for (const item of cartItems) {
+            const rate = parseFloat(String(item.taxRate ?? '0.10'));
+            const ttcMu = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
+            tvaMu += ttcMu - Math.round(ttcMu / (1 + rate));
+        }
+        return Math.round(tvaMu / 10_000); // µ → cents
+    }, [cartItems]);
+
+    // Sync cartItems vers activeCartAtom pour que posCartCountSelector/posCartTotalSelector soient à jour.
+    useEffect(() => {
+        setActiveCart(cartItems.length > 0 ? { items: cartItems as unknown as OrderItem[] } : null);
+    }, [cartItems, setActiveCart]);
 
     // --- ACTIONS ---
 
@@ -371,6 +390,7 @@ export function usePOSController() {
         cartTotal,
         cartGrandTotal,
         cartCount,
+        cartTvaInCents,
 
         // Actions
         handleAddToCart,
