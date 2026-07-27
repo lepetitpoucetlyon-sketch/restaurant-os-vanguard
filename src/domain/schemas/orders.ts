@@ -42,6 +42,8 @@ export const OrderLineSchema = z.object({
   discountInMicrounits:  MicrounitsSchema.default(toMicrounits(0)),
   notes:        z.string().max(200).pipe(SanitizedStringSchema).optional(),
   status:       z.enum(['pending', 'cooking', 'ready', 'served', 'cancelled']).default('pending'),
+  station:      z.string().optional(),
+  course:       z.string().optional(),
   createdAt:    TimestampSchema.optional(),
   updatedAt:    TimestampSchema.optional(),
   modification: OrderItemModificationSchema.optional(),

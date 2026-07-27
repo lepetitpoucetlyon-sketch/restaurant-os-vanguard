@@ -11,14 +11,13 @@ import { RecipeDetailDialog } from "@modules/ops";
 
 // Domain & Constants
 import { BarTab, Wine, Cocktail } from "@domain/types/bar";
-import { 
-  WINE_REGIONS, 
-  WINE_CELLAR, 
-  COCKTAILS, 
-  BAR_ORDERS 
+import {
+  WINE_REGIONS,
+  WINE_CELLAR,
+  COCKTAILS,
 } from "@domain/constants/bar-data";
 import { Recipe } from "@nexus/contracts";
-import { BarOrder } from "@domain/types/bar";
+import { useKitchen } from "@/modules/ops/providers/NexusOpsProvider";
 
 // Components
 import { BarSidebar } from "@modules/ops";
@@ -31,18 +30,47 @@ import { WineDetailPanel } from "@modules/ops";
 
 export default function BarPage() {
     const { showToast } = useToast();
-    
+    const { orders: kitchenOrders, updateOrderStatus: nexusUpdateOrderStatus } = useKitchen();
+
     // UI State
     const [activeTab, setActiveTab] = useState<BarTab>('kds');
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryKDS, setSearchQueryKDS] = useState('');
     const [rushMode, setRushMode] = useState(false);
-    
-    // Data State
-    const [orders, setOrders] = useState<BarOrder[]>(BAR_ORDERS.map(o => ({ 
-      ...o, 
-      status: (o.items?.[0]?.status === 'done' ? 'ready' : (o.items?.[0]?.status === 'preparing' ? 'preparing' : 'new')) as 'ready' | 'preparing' | 'new'
-    })) as BarOrder[]);
+
+    // Bar orders: real-time Firestore orders filtered to bar station
+    const orders = React.useMemo(() => {
+      return kitchenOrders
+        .filter(o => o.status !== 'delivered' && o.status !== 'paid' && o.items.some(item => {
+          const extra = item as unknown as { station?: string; category?: string };
+          if (extra.station === 'bar' || extra.category === 'boissons') return true;
+          const lower = item.name.toLowerCase();
+          return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
+        }))
+        .map(o => ({
+          id: o.id,
+          table: o.tableNumber ?? 'T?',
+          serverName: o.serverName ?? '—',
+          status: (['new','preparing','ready','delivered'].includes(o.status) ? o.status : 'new') as 'new' | 'preparing' | 'ready' | 'delivered',
+          priority: 'normal',
+          elapsed: o.createdAt ? Math.floor((Date.now() - new Date(o.createdAt as string | number).getTime()) / 1000) : 0,
+          items: o.items
+            .filter(item => {
+              const extra = item as unknown as { station?: string; category?: string };
+              if (extra.station === 'bar' || extra.category === 'boissons') return true;
+              const lower = item.name.toLowerCase();
+              return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
+            })
+            .map(item => ({
+              name: item.name,
+              qty: item.quantity,
+              station: 'bar' as const,
+              modifiers: (item.modifiers ?? []).map(m => typeof m === 'string' ? m : m.name),
+              notes: item.notes,
+            })),
+        }))
+        .filter(o => o.items.length > 0);
+    }, [kitchenOrders]);
     
     // Selection State
     const [selectedWine, setSelectedWine] = useState<Wine | null>(null);
@@ -51,8 +79,8 @@ export default function BarPage() {
     const [editingCocktail, setEditingCocktail] = useState<Cocktail | null>(null);
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
-    const updateOrderStatus = (orderId: string, nextStatus: BarOrder['status']) => {
-        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: nextStatus } : o));
+    const updateOrderStatus = async (orderId: string, nextStatus: string) => {
+        await nexusUpdateOrderStatus(orderId, nextStatus);
         showToast(`Commande ${nextStatus === 'delivered' ? 'terminée' : nextStatus === 'preparing' ? 'lancée' : 'prête'}`, "success");
     };
 

@@ -94,25 +94,38 @@ export const VisionService = {
     },
 
     /**
-     * Compares a prepared plate photo with the recipe gold standard
+     * Compares a prepared plate photo with the recipe gold standard via Gemini Vision.
      */
-    async comparePlateToStandard(plateBase64: string, standardBase64: string, recipeName: string): Promise<PlateAuditResult> {
+    async comparePlateToStandard(plateBase64: string, _standardBase64: string, recipeName: string): Promise<PlateAuditResult> {
         logger.info(`VisionService: Auditing plate for ${recipeName}...`);
 
+        if (typeof window !== 'undefined') {
+            const response = await authedFetch('/api/admin/intelligence/vision', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'COMPARE_PLATE', payload: { base64Image: plateBase64, recipeName } })
+            });
+            const result = await response.json() as { success: boolean; data?: PlateAuditResult; error?: string };
+            if (result.success && result.data) return result.data;
+            throw new Error(`Plate audit failed: ${result.error ?? 'unknown error'}`);
+        }
+
+        // Server-side: call LLMManager directly
         try {
-            // AI INJECTION POINT (Gemini 1.5 Pro)
-            return {
-                score: 8.5,
-                isCompliant: true,
-                feedback: [
-                    "Dressage conforme au standard",
-                    "Couleurs vives et fraîches détectées",
-                    "Disposition des herbes correcte"
-                ],
-                detectedIssues: [
-                    "Manque un léger filet d'huile sur le bord droit"
-                ]
-            };
+            const { LLMManager } = await import('@/modules/intelligence/ai/LLMManager');
+            const { AI_MODELS } = await import('@/modules/intelligence/ai/types');
+            const imageData = plateBase64.includes(',') ? plateBase64.split(',')[1] : plateBase64;
+            const response = await LLMManager.provider.generateFromImage({
+                model: AI_MODELS.visionFast,
+                systemPrompt: `Tu es un chef de cuisine expert en contrôle qualité. Analyse la photo d'un plat et réponds UNIQUEMENT en JSON valide.`,
+                userPrompt: `Évalue ce plat "${recipeName}". Réponds en JSON: {"score": number (1-10), "isCompliant": boolean, "feedback": string[], "detectedIssues": string[]}`,
+                image: { base64: imageData, mimeType: 'image/jpeg' },
+                temperature: 0.2,
+                maxTokens: 512,
+                responseMimeType: 'application/json',
+            });
+            const parsed = JSON.parse(response.text) as PlateAuditResult;
+            return parsed;
         } catch (error: unknown) {
             logger.error('VisionService: Plate audit failed', { error: String(error) });
             throw new Error('Échec de l\'audit visuel de l\'assiette.');

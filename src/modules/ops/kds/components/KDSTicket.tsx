@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
-import { ITEM_STATION_MAP } from "@modules/ops/kds";
+import { resolveStation } from "@modules/ops/kds";
 import {
     DndContext,
     closestCenter,
@@ -342,7 +342,7 @@ export function KDSTicket({
                         strategy={verticalListSortingStrategy}
                     >
                         {sortedItems.map((item) => {
-                            const itemStation = ITEM_STATION_MAP[item.name] || 'hot';
+                            const itemStation = resolveStation(item.name);
                             const product = recipes.find(p =>
                                 p.name.includes(item.name) || item.name.includes(p.name)
                             );
@@ -467,7 +467,7 @@ export function KDSTicket({
                                             <div className="mt-4 pt-3 border-t border-dashed border-subtle flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-secondary">
                                                 <div className="flex items-center gap-1.5">
                                                     <Clock className="w-3 h-3" />
-                                                    <span>15 MIN</span>
+                                                    <span>{product?.prepTime ?? 15} MIN</span>
                                                 </div>
                                                 <span>{item.modifiers?.length || 0} OPT.</span>
                                             </div>

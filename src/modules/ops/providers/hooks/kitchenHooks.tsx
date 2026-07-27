@@ -107,21 +107,45 @@ export const useKitchen = () => {
           ...sanitized,
           updatedAt: new Date().toISOString()
         });
+        if (typeof window !== 'undefined') {
+          import('@/infrastructure/hardware/printers/PrintingService').then(({ printerService }) => {
+            printerService.printKitchen({
+              orderId: String(order.id ?? 'new'),
+              tableLabel: order.tableNumber ?? 'Table ?',
+              items: (order.items ?? []).map(item => ({
+                name: item.name,
+                qty: item.quantity,
+                modifiers: (item.modifiers ?? []).map((m) => typeof m === 'string' ? m : m.name),
+                course: (item as unknown as { course?: string }).course,
+              })),
+              serverName: order.serverName,
+              timestamp: new Date(),
+            }).catch(() => { /* ignore print errors */ });
+          }).catch(() => { /* ignore import errors */ });
+        }
       });
     },
 
     updateOrderStatus: async (id: string, status: string) => {
       await guardedAction('KITCHEN', 'FIRE_KDS', async () => {
         await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}/${id}`, {
+          status,
           attributes: { status },
           updatedAt: new Date().toISOString()
         });
       });
     },
 
-    getPendingModifications: useCallback(
-      () => orders.filter((o) => o.status === 'pending_modification'),
-      [orders]
-    ),
+    getPendingModifications: useCallback(() => {
+      const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string; orderItemId: string }> = [];
+      orders.forEach((order: Order) => {
+        (order.items || []).forEach((item) => {
+          if (item.modification && !item.modification.respondedAt) {
+            mods.push({ ...item.modification, orderId: String(order.id), orderItemId: String(item.id) });
+          }
+        });
+      });
+      return mods;
+    }, [orders]),
   };
 };

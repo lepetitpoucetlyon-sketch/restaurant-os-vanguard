@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useKitchen } from '@/modules/ops/providers/NexusOpsProvider';
-import { KitchenStation, ITEM_STATION_MAP } from '../contracts/kds-constants';
+import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import { Order } from '@nexus/contracts';
 
 /**
@@ -21,10 +21,10 @@ export const useKDSController = () => {
 
         if (activeStation !== 'all') {
             result = result.filter(order =>
-                order.items.some(item => (ITEM_STATION_MAP[item.name] || 'hot') === activeStation)
+                order.items.some(item => (resolveStation(item.name)) === activeStation)
             ).map(order => ({
                 ...order,
-                items: order.items.filter(item => (ITEM_STATION_MAP[item.name] || 'hot') === activeStation)
+                items: order.items.filter(item => (resolveStation(item.name)) === activeStation)
             }));
         }
 

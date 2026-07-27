@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { useRecipes } from "@/modules/ops/providers/NexusOpsProvider";
 import { useKDSController } from "@modules/ops/kds";
@@ -90,7 +90,6 @@ export function KDSDashboard() {
     const [isRecallLoading, setIsRecallLoading] = useState(false);
     const tenantId = useAtomValue(tenantIdAtom) as string | undefined;
 
-    const audioRef = useRef<HTMLAudioElement | null>(null);
     const [lastOrderCount, setLastOrderCount] = useState(orders.length);
 
     // Sync settings
@@ -102,16 +101,22 @@ export function KDSDashboard() {
         return () => clearInterval(timer);
     }, []);
 
-    // Audio Initialization
-    useEffect(() => {
-        audioRef.current = new Audio('https://cdn.freesound.org/previews/536/536108_1415754-lq.mp3');
-        audioRef.current.volume = 0.5;
-    }, []);
-
-    // Notification Sound
+    // Notification Sound — generated via Web Audio API (no CDN dependency)
     useEffect(() => {
         if (orders.length > lastOrderCount) {
-            audioRef.current?.play().catch(() => {});
+            try {
+                const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.setValueAtTime(660, ctx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.28);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.28);
+            } catch { /* ignore if AudioContext unavailable */ }
         }
         setLastOrderCount(orders.length);
     }, [orders.length, lastOrderCount]);
