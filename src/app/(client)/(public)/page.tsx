@@ -16,9 +16,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useTables } from "@/engines/ops/NexusOpsProvider";
-import { useOrders } from "@/engines/ops/NexusOpsProvider";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
+import { useOrders } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 import { useAuth } from "@/hooks";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
@@ -26,7 +26,7 @@ import { useLanguage } from "@/hooks";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useIsMobile } from "@/hooks";
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { kpiContainerVariants, kpiCardVariants, fadeInUp } from "@/lib/motion";
+import { kpiContainerVariants, kpiCardVariants, fadeInUp } from "@/shared/utils/motion";
 
 interface KpiCardProps {
   title: string;

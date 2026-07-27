@@ -1,6 +1,6 @@
 "use client";
 
-import { useNexusFleet as useNexusFleetContext } from "@/engines/fleet/NexusFleetProvider";
+import { useNexusFleet as useNexusFleetContext } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
 
 /**
  * 🛰️ useNexusFleet - Grade VI Atomic Bridge (Proxy)

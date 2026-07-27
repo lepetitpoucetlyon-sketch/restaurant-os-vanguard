@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, AlertTriangle, CheckCircle2, AlertCircle, Globe, Target } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
 
 type TargetState = 'stable' | 'beta' | 'bleeding-edge';
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { getRateLimiter } from '@/lib/rate-limiter';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 
 const BookSchema = z.object({
   tenantId: z.string().min(1).max(80),

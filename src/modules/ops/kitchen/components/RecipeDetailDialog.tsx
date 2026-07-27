@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { Button } from "@ui/button";
 import { motion } from "framer-motion";
-import { staggerContainer, staggerItem } from "@/lib/motion";
+import { staggerContainer, staggerItem } from "@/shared/utils/motion";
 import { Modal } from "@ui/Modal";
 import { Recipe, RecipeIngredient } from "@nexus/contracts";
 import { RecipeCostBadge } from "@/modules/ops/recipes";

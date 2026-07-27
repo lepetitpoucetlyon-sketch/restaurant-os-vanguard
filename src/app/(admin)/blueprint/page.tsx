@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { staggerContainer, fadeInUp } from "@/lib/motion";
+import { staggerContainer, fadeInUp } from "@/shared/utils/motion";
 import { BlueprintHeader } from "@/components/blueprint/BlueprintHeader";
 import { MindMapDependencies } from "@/components/blueprint/MindMapDependencies";
 import { ActionImpactMap } from "@/components/blueprint/ActionImpactMap";

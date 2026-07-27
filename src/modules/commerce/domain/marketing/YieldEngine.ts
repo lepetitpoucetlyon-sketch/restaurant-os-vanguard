@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/lib/events/NexusEventBus';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { SecurityGuard } from '@/domain/services/SecurityGuard';
 
 /**

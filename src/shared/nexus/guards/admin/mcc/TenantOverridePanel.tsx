@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sliders, Bug, CheckCircle2, AlertCircle, ChevronDown, RotateCcw, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
 import type { TenantOverrides } from '@/domain/schemas/tenant';
 
 const BUTTON_RADIUS_PRESETS = [

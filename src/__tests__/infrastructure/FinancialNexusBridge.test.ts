@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
 import { TaxCalculator } from '@/infrastructure/services/finance/TaxCalculator';
 import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
-import { NexusEventBus } from '@/lib/events/NexusEventBus';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 vi.mock('@/lib/nexus/NexusAdapter', () => ({
   Nexus: {
@@ -37,7 +37,7 @@ vi.mock('@/infrastructure/services/finance/FiscalSealer', () => ({
   },
 }));
 
-vi.mock('@/lib/events/NexusEventBus', () => ({
+vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: {
     emit: vi.fn().mockResolvedValue(undefined),
   },

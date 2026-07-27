@@ -1,13 +1,13 @@
 import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { db } from './offline/offline-store';
-import { bootSyncManager } from './offline/sync-manager';
+import { db } from '@/infrastructure/services/offline/offline-store';
+import { bootSyncManager } from '@/infrastructure/services/offline/sync-manager';
 import { NexusBridge } from './nexus/NexusBridge';
 import { TelemetryService } from './nexus/TelemetryService';
 import { Mutex } from './utils/Mutex';
 import { TaskContext, TASK_MAPS } from './icm/TaskContext';
-import { registerNexusHandlers, unregisterNexusHandlers } from './events/registerHandlers';
+import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
 import { readZcpoState, degradeImportanceMap } from './icm/zcpoBridge';
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';

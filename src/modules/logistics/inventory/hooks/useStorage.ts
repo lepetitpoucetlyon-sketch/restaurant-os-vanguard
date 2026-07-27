@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Storage } from "@domain/services/Storage";
-import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 
 interface UseLocalStorageOptions<T> {
     serializer?: (value: T) => string;

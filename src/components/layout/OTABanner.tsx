@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
 

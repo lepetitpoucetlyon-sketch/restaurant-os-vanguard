@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { History, Filter, ChevronDown, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
 import type { ChangeCategory, ChangelogEntry } from '@/lib/mcc/ChangelogService';
 
 const CATEGORY_META: Record<ChangeCategory, { label: string; color: string }> = {

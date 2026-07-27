@@ -11,7 +11,7 @@ import { fr } from "date-fns/locale";
 
 import { useQuality } from "@modules/compliance";
 import type { ComplianceAlert } from "@modules/intelligence/analytics/types";
-import { useOrders, useTables } from "@/engines/ops/NexusOpsProvider";
+import { useOrders, useTables } from "@/modules/ops/providers/NexusOpsProvider";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { predictAttendance } from "@/modules/intelligence/attendance/AttendancePrediction";

@@ -1,1 +1,1 @@
-export * from '@/domain/agency/Zeus';
+export * from '@/modules/intelligence/domain/agency/Zeus';

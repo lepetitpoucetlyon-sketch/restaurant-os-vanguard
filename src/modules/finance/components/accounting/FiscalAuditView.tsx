@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFiscal } from '@/engines/ops/NexusOpsProvider';
+import { useFiscal } from '@/modules/ops/providers/NexusOpsProvider';
 import { BlockchainLedgerService } from '@modules/finance/accounting/domain/BlockchainLedgerService';
 import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

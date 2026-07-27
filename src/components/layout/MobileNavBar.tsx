@@ -24,7 +24,7 @@ import {
     Zap,
     Mic
 } from "lucide-react";
-import { mobileSpring } from "@/lib/motion";
+import { mobileSpring } from "@/shared/utils/motion";
 
 const PRIMARY_NAV = [
     { label: "dashboard", href: "/", icon: LayoutDashboard },

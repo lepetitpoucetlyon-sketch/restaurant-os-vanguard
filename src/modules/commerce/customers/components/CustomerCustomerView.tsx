@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { motion, Variants } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import { Customer } from "@nexus/contracts";
-import { easing } from "@/lib/motion";
+import { easing } from "@/shared/utils/motion";
 import { useInfiniteScroll } from "@/hooks/useVirtualization";
 
 const cinematicContainer: Variants = {

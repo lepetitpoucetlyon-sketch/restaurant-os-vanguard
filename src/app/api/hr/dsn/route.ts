@@ -15,7 +15,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { DSNBuilder } from '@/lib/payroll/DSNBuilder';
+import { DSNBuilder } from '@/modules/human/payroll/DSNBuilder';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {

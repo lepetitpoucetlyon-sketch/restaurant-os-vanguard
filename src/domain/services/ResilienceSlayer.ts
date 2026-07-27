@@ -8,7 +8,7 @@ import {
 import { qualityActiveControlAtom } from '@modules/compliance';
 import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 
 /**
  * 🐉 ResilienceSlayer - Grade X

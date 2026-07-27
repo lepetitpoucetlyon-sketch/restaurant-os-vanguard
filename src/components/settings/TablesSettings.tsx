@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useTables } from "@/engines/ops/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
 import {
     LayoutGrid,
     Users,

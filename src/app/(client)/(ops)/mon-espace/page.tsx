@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
+import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { cn } from "@/lib/ui.foundations";
 import {

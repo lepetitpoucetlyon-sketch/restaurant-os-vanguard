@@ -7,7 +7,7 @@ import { useSettings } from '@/context/SettingsContext';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { GoldSwitch } from '@/components/shared/atomic/GoldSwitch';
 import { GlassInput } from '@/components/shared/atomic/GlassInput';
-import { fadeInUp, staggerContainer } from '@/lib/motion';
+import { fadeInUp, staggerContainer } from '@/shared/utils/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { SovereignData, SovereignValue, SovereignField } from '@/shared/nexus-contract';

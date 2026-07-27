@@ -11,7 +11,7 @@ import { formatCurrency } from "@/lib/formatters";
 import { CartItem } from "@modules/ops/engine/types";
 export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { terminalService } from "@/lib/payment-terminal/PaymentTerminalService";
+import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
 import { printerService } from "@/lib/printing/PrintingService";
 import { Loader2, AlertCircle } from "lucide-react";
 

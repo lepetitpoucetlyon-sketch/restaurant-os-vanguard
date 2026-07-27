@@ -7,8 +7,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
 import { usePageSetting } from "@/components/settings/ContextualSettings";
-import { useIntelligence } from "@/engines/ops/NexusOpsProvider";
-import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
+import { useIntelligence } from "@/modules/ops/providers/NexusOpsProvider";
+import { useNexusFleet } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
 import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/hooks";

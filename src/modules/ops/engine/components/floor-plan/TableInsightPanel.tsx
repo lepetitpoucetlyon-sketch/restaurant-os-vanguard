@@ -12,7 +12,7 @@ import {
     Wallet,
     Clock,
 } from "lucide-react";
-import { useOrders, useReservations } from "@/engines/ops/NexusOpsProvider";
+import { useOrders, useReservations } from "@/modules/ops/providers/NexusOpsProvider";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { cn } from "@/lib/ui.foundations";

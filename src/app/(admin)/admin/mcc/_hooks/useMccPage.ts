@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
-import { useNexusFleet } from '@/engines/fleet/NexusFleetProvider';
-import { useAuth } from '@/engines/core/NexusCoreProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet/providers/NexusFleetProvider';
+import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 
 export const PROV_STEPS = [

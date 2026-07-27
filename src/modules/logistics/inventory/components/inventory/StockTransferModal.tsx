@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 import { StockItem, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";

@@ -8,7 +8,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { MergePayrollClient } from '@/lib/payroll/MergePayrollClient';
+import { MergePayrollClient } from '@/modules/human/payroll/MergePayrollClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

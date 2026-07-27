@@ -1,6 +1,6 @@
 "use client";
 
-import { useNexusCore } from '@/engines/core/NexusCoreProvider';
+import { useNexusCore } from '@/shared/providers/NexusCoreProvider';
 
 /**
  * 🔔 useNotifications - Grade X

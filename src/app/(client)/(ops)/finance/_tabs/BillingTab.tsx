@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
-import { FacturXDownloadButton } from "@/components/finance/FacturXDownloadButton";
+import { FacturXDownloadButton } from "@/modules/finance/components/FacturXDownloadButton";
 import type { Order } from "@modules/ops/engine/types";
 
 /**

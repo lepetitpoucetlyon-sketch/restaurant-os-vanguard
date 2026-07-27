@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X, Truck } from "lucide-react";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 // import { receiveStockAction } from "@/app/actions/inventory";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";

@@ -11,7 +11,7 @@ import { MCCWidgetSkeleton } from '@nexus/guards/admin/mcc/MCCWidgetSkeleton';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { StatCard, DeviceManagerPanel, TabButton, StatusItem, SwitchboardItem } from './_components';
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
-import { MFAGate } from '@/components/mcc/MFAGate';
+import { MFAGate } from '@/shared/nexus/guards/admin/mcc/components/MFAGate';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
 import { useSovereignSwitchboard } from '@/hooks/useSovereignSwitchboard';
 import { TenantUsersPanel } from '@nexus/guards/admin/mcc/TenantUsersPanel';

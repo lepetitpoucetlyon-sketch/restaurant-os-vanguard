@@ -3,7 +3,7 @@ import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/engine/types';
-import { NexusEventBus } from '@/lib/events/NexusEventBus';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../services/finance/TaxCalculator';
 import { FiscalSealer } from '../services/finance/FiscalSealer';
 import { resolveVatRate, inferCategory } from '@/modules/finance/tax/vatResolver';
@@ -211,7 +211,7 @@ export const FinancialNexusBridge = {
       finalReceiptNumber = provisional;
       finalSnapshot = buildSnapshot(provisional);
 
-      const { SyncManager } = await import('@/lib/offline/sync-manager');
+      const { SyncManager } = await import('@/infrastructure/services/offline/sync-manager');
       await SyncManager.enqueue({
         type: 'NF525_PAYMENT',
         priority: 1,

@@ -21,7 +21,7 @@ import {
 const _upsertReservationAction = async (..._args: unknown[]) => ({ success: true });
 const _deleteReservationAction = async (..._args: unknown[]) => ({ success: true });
 const _cancelReservationAction = async (..._args: unknown[]) => ({ success: true });
-import { useNexusOps } from '@/engines/ops/NexusOpsProvider';
+import { useNexusOps } from '@/modules/ops/providers/NexusOpsProvider';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 // import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
 const receiveStockAction = async (_tenantId: string, _ingredient: import('@nexus/contracts').Ingredient, _data: unknown) => ({ success: true });

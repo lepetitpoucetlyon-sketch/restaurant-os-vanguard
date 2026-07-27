@@ -40,7 +40,7 @@ vi.mock('@/lib/simulator/SimulatorDB', () => {
 });
 
 // ── NexusEventBus: fire-and-forget — silence side-effects ─────────────────
-vi.mock('@/lib/events/NexusEventBus', () => ({
+vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { emit: vi.fn().mockResolvedValue(undefined) },
 }));
 

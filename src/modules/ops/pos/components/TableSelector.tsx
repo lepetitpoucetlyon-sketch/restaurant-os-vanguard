@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTables } from "@/engines/ops/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
 import { cn } from "@/lib/ui.foundations";
 import { Users, LayoutGrid, Layers } from "lucide-react";
 import { motion } from "framer-motion";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTenant as useNexusTenant } from '@/engines/core/NexusCoreProvider';
+import { useTenant as useNexusTenant } from '@/shared/providers/NexusCoreProvider';
 
 /**
  * 🏢 useTenant - Grade VI

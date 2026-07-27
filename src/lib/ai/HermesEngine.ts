@@ -1,10 +1,10 @@
 import { AgentEngine } from './AgentEngine';
-import { AgentDomain } from '@/domain/agency/types';
+import { AgentDomain } from '@/modules/intelligence/domain/agency/types';
 import { 
     HermesPulseResult, 
     HermesAnomaly, 
     HermesManifest 
-} from '@/domain/agency/hermes.types';
+} from '@/modules/intelligence/domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalHACCPMapper } from '@/modules/finance/services/FiscalHACCPMapper';
@@ -139,7 +139,7 @@ export class HermesEngine {
      * 🔱 Delegate
      * Routes a specific problem to the correct Vanguard Agent.
      */
-    static async delegate(domain: AgentDomain, prompt: string, context?: import('@/shared/nexus-contract').SovereignValue): Promise<import('@/domain/agency/types').AgentResponse> {
+    static async delegate(domain: AgentDomain, prompt: string, context?: import('@/shared/nexus-contract').SovereignValue): Promise<import('@/modules/intelligence/domain/agency/types').AgentResponse> {
 
         const agent = this.manifest.activeAgents.find(a => a.domain === domain) || this.manifest.activeAgents[0];
         

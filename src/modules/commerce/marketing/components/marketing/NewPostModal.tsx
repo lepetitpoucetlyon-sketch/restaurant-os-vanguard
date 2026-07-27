@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Edit3, Trash2, ImageIcon, Settings, Calendar, Clock, Check } from "lucide-react";
 import { Button } from "@ui/button";
 
-import { useMarketing } from "@/engines/ops/NexusOpsProvider";
+import { useMarketing } from "@/modules/ops/providers/NexusOpsProvider";
 
 interface NewPostModalProps {
     isOpen: boolean;

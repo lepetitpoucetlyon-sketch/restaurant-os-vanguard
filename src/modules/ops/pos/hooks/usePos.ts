@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { useOrders, useTables, useProducts, useCategories } from "@/engines/ops/NexusOpsProvider";
-import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
+import { useOrders, useTables, useProducts, useCategories } from "@/modules/ops/providers/NexusOpsProvider";
+import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Table, OrderItem } from "@nexus/contracts";
 import { toMicrounits } from "@/domain/schemas/primitives";

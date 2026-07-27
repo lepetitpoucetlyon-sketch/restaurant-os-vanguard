@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProductGrid, Cart, TableSelector } from '@modules/ops';
-import { useAuth, useTenant } from '@/engines/core/NexusCoreProvider';
+import { useAuth, useTenant } from '@/shared/providers/NexusCoreProvider';
 import { ArrowLeft, ShoppingCart, Send, X } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { usePOSController } from '@modules/ops';

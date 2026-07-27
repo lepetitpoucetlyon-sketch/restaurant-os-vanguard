@@ -7,7 +7,7 @@ import { BrandingService } from '@/domain/services/BrandingService';
 import { BillingService } from '@/modules/finance/services/BillingService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { getRateLimiter } from '@/lib/rate-limiter';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { sendEmail } from '@/lib/services/email-service';
 
 const SignupSchema = z.object({

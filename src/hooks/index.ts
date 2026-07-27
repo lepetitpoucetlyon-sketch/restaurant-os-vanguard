@@ -29,4 +29,4 @@ export {
     useSettings,
     useLanguage,
     useNotifications
-} from "@/engines/core/NexusCoreProvider";
+} from "@/shared/providers/NexusCoreProvider";

@@ -482,3 +482,19 @@ reason = "Les piliers n'utilisent pas les guards admin — réservés à src/app
 from = "src/app/(client)/*"
 to = "src/lib/server/*"
 reason = "adminAuthGuard est server-only — routes client ne l'importent pas directement"
+
+# ────────────────────────────────────────────────────────────────────────────
+# [10] BARREL CONTRACT
+# Un module ne peut être consommé que via son index.ts.
+# ────────────────────────────────────────────────────────────────────────────
+
+[[boundaries]]
+from = "src/modules/*"
+to = "src/modules/*/*"
+reason = "Un module n'exporte que ce que son index.ts expose."
+
+[[boundaries]]
+from = "src/app/*"
+to = "src/modules/*/*"
+reason = "Les routes n'importent que le barrel des modules."
+

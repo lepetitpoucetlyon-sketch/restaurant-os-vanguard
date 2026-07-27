@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { getDefaultStore } from 'jotai';
 import { MasterBridge } from '@/lib/MasterBridge';
 import { logger } from '@/lib/logger';
-import { checkOnlineStatus } from '@/lib/offline/status';
+import { checkOnlineStatus } from '@/infrastructure/services/offline/status';
 import { commanderSignatureAtom } from '@nexus/state/SovereignGenome';
 
 /**

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ChefHat, X, Check, MapPin, Package, RefreshCw, Plus, Minus, Calendar } from "lucide-react";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 import { useAuth } from "@/hooks";
 import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";;

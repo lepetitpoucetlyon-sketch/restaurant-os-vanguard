@@ -11,9 +11,9 @@ import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { usePageSetting } from "@/components/settings/ContextualSettings";
 import { useLanguage } from "@/hooks";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 import { AlertTriangle, Clock } from "lucide-react";
-import { useNexusFleet } from "@/engines/fleet/NexusFleetProvider";
+import { useNexusFleet } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
 import { useAtomValue } from "jotai";
 
 // ==========================================

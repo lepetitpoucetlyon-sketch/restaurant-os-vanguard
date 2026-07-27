@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { drawerVariants, mobileBackdrop } from "@/lib/motion";
+import { drawerVariants, mobileBackdrop } from "@/shared/utils/motion";
 import { X } from "lucide-react";
 import { useHasMounted } from "@/hooks";
 

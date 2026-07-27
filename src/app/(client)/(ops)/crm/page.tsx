@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, TrendingUp, Zap } from "lucide-react";
 import type { Customer } from "@nexus/contracts";
 
-import { useCRM } from "@modules/ops";
+import { useCRM } from "@/modules/ops/providers/NexusOpsProvider";
 import { CRMSidebar, CRMList, CRMDetailView } from "@modules/commerce/marketing/components/crm";
 import {
     CustomerCustomerView,

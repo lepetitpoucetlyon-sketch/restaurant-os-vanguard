@@ -2,7 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
 export function AllergensTab() {
     return (

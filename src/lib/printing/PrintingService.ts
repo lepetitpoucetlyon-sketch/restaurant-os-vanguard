@@ -5,7 +5,7 @@ import { printBluetooth } from './adapters/BluetoothAdapter';
 import { printUSB } from './adapters/USBAdapter';
 import { printSerial } from './adapters/SerialAdapter';
 import { printReceiptBrowser, printKitchenBrowser } from './adapters/BrowserAdapter';
-import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 
 const STORAGE_KEY_BASE = 'ros_printers_v1';
 const storageKey = () => tenantScopedKey(STORAGE_KEY_BASE);

@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { Search, Plus, Edit2, Trash2, Package, Tag, Truck } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 
 export function IngredientsTab() {
     const { data: ingredients, isLoading, error } = useInventory();

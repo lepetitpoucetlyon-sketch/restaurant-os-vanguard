@@ -20,7 +20,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from "@domain/services/SimulationService";
-import { useInventory } from "@/engines/ops/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {

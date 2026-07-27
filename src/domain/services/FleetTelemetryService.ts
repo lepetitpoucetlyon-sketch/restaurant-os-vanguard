@@ -1,5 +1,5 @@
 import { TenantID, SiteTelemetry } from '@domain/types/brands';
-import { TelemetryStream, TelemetryEvent } from '@/lib/telemetry/TelemetryStream';
+import { TelemetryStream, TelemetryEvent } from '@/infrastructure/services/telemetry/TelemetryStream';
 import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';

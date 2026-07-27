@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp } from "@/shared/utils/motion";
 import { 
     Folder, Layers, 
     Monitor, Database, Brain

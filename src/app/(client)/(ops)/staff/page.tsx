@@ -8,8 +8,8 @@ import {
     StaffList, StaffMemberForm, StaffRecentActivity,
     TeamCalendar, NewRequestModal, PlanningWeekView,
 } from "@modules/human/hr/components";
-import { RecruitmentBoard } from "@/components/staff/RecruitmentBoard";
-import { QuickAddStaffModal } from "@/components/staff/QuickAddStaffModal";
+import { RecruitmentBoard } from "@/modules/human/hr/components/RecruitmentBoard";
+import { QuickAddStaffModal } from "@/modules/human/hr/components/QuickAddStaffModal";
 import { SkillsTab } from "./_tabs/SkillsTab";
 import { TimesheetTab } from "./_tabs/TimesheetTab";
 import { PayrollTab } from "./_tabs/PayrollTab";

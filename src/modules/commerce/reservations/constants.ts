@@ -1,5 +1,5 @@
 import { Variants } from "framer-motion";
-import { easing } from "@/lib/motion";
+import { easing } from "@/shared/utils/motion";
 
 export const cinematicContainer: Variants = {
     hidden: { opacity: 0 },

@@ -110,7 +110,7 @@ const mockTables: Record<string, ReturnType<typeof createTableMock>> = {
     recipes: createTableMock(),
 };
 
-vi.mock('@/lib/offline/offline-store', () => ({
+vi.mock('@/infrastructure/services/offline/offline-store', () => ({
     db: {
         ...mockTables,
         clearAll: vi.fn(async () => {

@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from '@ui/Modal';
 import { PremiumSelect } from '@ui/PremiumSelect';
-import { useInventory, useQuotes, useCRM } from '@/engines/ops/NexusOpsProvider';
+import { useInventory, useQuotes, useCRM } from '@/modules/ops/providers/NexusOpsProvider';
 import { QuoteLine } from '@modules/commerce/marketing/types';
 import { Quote } from '@nexus/contracts';
 import { logger } from '@/lib/logger';

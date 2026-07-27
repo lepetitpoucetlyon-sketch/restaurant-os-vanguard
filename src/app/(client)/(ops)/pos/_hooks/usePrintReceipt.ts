@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { toast } from "sonner";
 import { EpsonPrinter } from "@/lib/printing/EpsonPrinter";
 import type { ReceiptTicket } from "@/lib/printing/EpsonPrinter";
-import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 import type { CartItem } from "@modules/ops/engine/types";
 
 export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {

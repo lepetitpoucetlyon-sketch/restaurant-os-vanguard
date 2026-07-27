@@ -11,7 +11,7 @@ import { Wine, GlassWater, Layers, RotateCcw, Droplets, Zap } from 'lucide-react
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/ui.foundations';
 import type { Recipe } from '@nexus/contracts';
-import { cinematicItem } from '@/lib/motion';
+import { cinematicItem } from '@/shared/utils/motion';
 import type { ComponentType, SVGProps } from 'react';
 
 // ─── Serving method metadata ─────────────────────────────────────────────────

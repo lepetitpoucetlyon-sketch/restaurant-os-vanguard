@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useAtomValue } from "jotai";
-import { useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useRecipes } from "@/modules/ops/providers/NexusOpsProvider";
 import { useKDSController } from "@modules/ops/kds";
 import { useNexusOps } from "@modules/ops";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,7 +14,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
-import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 
 // Components
 import { KDSHeader, ServiceStation } from "./components/KDSHeader";

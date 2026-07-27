@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from 'react';
-import { useOrders } from '@/engines/ops/NexusOpsProvider';
+import { useOrders } from '@/modules/ops/providers/NexusOpsProvider';
 import type { Order } from '@modules/ops/engine/types';
 import type { JournalEntry } from '@modules/finance/types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';

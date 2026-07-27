@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 
 /**
  * Hook pour persister des valeurs dans le localStorage.

@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/hooks";
-import { accordionContent } from "@/lib/motion";
+import { accordionContent } from "@/shared/utils/motion";
 import { NavSection } from "@/config/navConfig";
 import { useState } from "react";
 import { empireAudit } from "@/lib/audit";

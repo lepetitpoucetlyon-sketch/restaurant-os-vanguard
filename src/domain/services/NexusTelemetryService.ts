@@ -10,7 +10,7 @@ import { logger } from "@/lib/logger";
 import { fleetTelemetry } from "./FleetTelemetryService";
 import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
-import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 
 class TelemetryService {
   private intervalId: NodeJS.Timeout | null = null;

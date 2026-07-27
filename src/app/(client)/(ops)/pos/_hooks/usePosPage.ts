@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { usePOSController } from "@modules/ops";
-import { useKitchen, useTables } from "@/engines/ops/NexusOpsProvider";
-import { useAuth, useTenant } from "@/engines/core/NexusCoreProvider";
+import { useKitchen, useTables } from "@/modules/ops/providers/NexusOpsProvider";
+import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useIsMobile } from "@/hooks";
 import { useAmbiance, useTabletMode, usePrintReceipt, useRbacGate } from "../_posSlices";
 import { useActionPermission } from "@/hooks/useActionPermission";

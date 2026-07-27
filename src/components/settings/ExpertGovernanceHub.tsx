@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { staggerContainer, fadeInUp } from "@/lib/motion";
+import { staggerContainer, fadeInUp } from "@/shared/utils/motion";
 import { 
     Save, 
     ShieldCheck, 

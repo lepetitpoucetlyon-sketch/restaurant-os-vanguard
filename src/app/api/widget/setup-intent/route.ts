@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
 import { logger } from '@/lib/logger';
-import { getRateLimiter } from '@/lib/rate-limiter';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 
 const QuerySchema = z.object({
   tenantId: z.string().min(1).max(80),

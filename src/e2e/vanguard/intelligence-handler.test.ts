@@ -17,7 +17,7 @@ vi.mock('@/modules/intelligence/rag/HermesKnowledgeManager', () => ({
   })),
 }));
 
-vi.mock('@/lib/events/NexusEventBus', () => {
+vi.mock('@/shared/eventBus/NexusEventBus', () => {
   const handlers: Record<string, (...args: unknown[]) => Promise<void>> = {};
   return {
     NexusEventBus: {
@@ -30,8 +30,8 @@ vi.mock('@/lib/events/NexusEventBus', () => {
   };
 });
 
-import { registerIntelligenceHandler } from '@/lib/events/handlers/IntelligenceHandler';
-import { NexusEventBus } from '@/lib/events/NexusEventBus';
+import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/IntelligenceHandler';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 describe('IntelligenceHandler', () => {
   beforeEach(() => {

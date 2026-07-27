@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 
 import { SovereignData } from '@/shared/nexus-contract';
 import { logger } from '@/lib/logger';
-import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 
 const AGENT_SESSIONS_KEY_BASE = 'nexus_agent_sessions';
 

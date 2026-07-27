@@ -6,8 +6,7 @@ import { startOfWeek, addDays, addWeeks, subWeeks, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
 
-import { useReservations, useCRM, useTables } from "@modules/ops";
-import { useGroups } from "@/engines/ops/NexusOpsProvider";
+import { useReservations, useCRM, useTables, useGroups } from "@/modules/ops/providers/NexusOpsProvider";
 import { useActionPermission } from "@/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
@@ -72,7 +71,7 @@ export function useReservationsPage() {
 
     const weekDays = useMemo(() => getWeekDays(weekAnchor), [weekAnchor]);
     const dayStr = format(selectedDate, "yyyy-MM-dd");
-    const todayReservations = useMemo(() => reservations.filter((r) => r.date === dayStr), [reservations, dayStr]);
+    const todayReservations = useMemo(() => reservations.filter((r: Reservation) => r.date === dayStr), [reservations, dayStr]);
     const weekLabel = useMemo(() => {
         const start = weekDays[0];
         const end = weekDays[6];
@@ -148,9 +147,9 @@ export function useReservationsPage() {
     const handleMarkNoShow = useCallback(async (id: string) => {
         try {
             await updateReservation(id, { status: "no_show", noShowAt: Date.now() } as Partial<Reservation> & { noShowAt: number });
-            const res = reservations.find((r) => r.id === id);
+            const res = reservations.find((r: Reservation) => r.id === id);
             if (res?.customerId) {
-                const crmRecord = customers.find((c) => c.id === res.customerId);
+                const crmRecord = customers.find((c: Customer) => c.id === res.customerId);
                 if (crmRecord) {
                     const currentNoShows = (crmRecord as Record<string, unknown>)["noShows"] as number ?? 0;
                     await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
@@ -183,7 +182,7 @@ export function useReservationsPage() {
             const { suggestedTable: _st, ...resData } = data;
             await addReservation({ ...resData, type: "reservation", updatedAt: new Date().toISOString() } as Parameters<typeof addReservation>[0]);
             toast.success(`Réservation confirmée pour ${resData.customerName}`);
-            const customer = customers.find((c) => c.id === resData.customerId);
+            const customer = customers.find((c: Customer) => c.id === resData.customerId);
             if (customer?.email) {
                 authedFetch("/api/email/reservation-confirm", {
                     method: "POST",

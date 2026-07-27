@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { runGradeXProof } from '@/engines/Simulacra/SinfoniaGradeXProof';
+import { runGradeXProof } from '@/infrastructure/adapters/Simulacra/SinfoniaGradeXProof';
 import { FiscalHACCPMapper } from '@modules/finance';
 
 // Mock FiscalHACCPMapper

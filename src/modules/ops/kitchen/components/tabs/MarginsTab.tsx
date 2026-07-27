@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { TrendingUp, Package, AlertTriangle, Calculator, ChefHat } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
 interface MarginsTabProps {
     recipes: import('@nexus/contracts').Recipe[];

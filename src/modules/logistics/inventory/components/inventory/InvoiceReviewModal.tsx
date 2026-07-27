@@ -7,7 +7,7 @@ import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
 import { ExtractedInvoice } from '@domain/services/VisionService';
 import { InventoryVisionService, VisionMatchResult } from '@domain/services/InventoryVisionService';
-import { useInventory } from '@/engines/ops/NexusOpsProvider';
+import { useInventory } from '@/modules/ops/providers/NexusOpsProvider';
 
 interface InvoiceReviewModalProps {
     data: ExtractedInvoice;

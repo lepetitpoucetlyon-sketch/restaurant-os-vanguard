@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Shield, ShieldCheck, ShieldX, Smartphone, Plus, Trash2, Edit3, Wifi, WifiOff, AlertTriangle } from 'lucide-react';
-import { useAuth } from '@/engines/core/NexusCoreProvider';
+import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import type { MccRole } from '@/lib/server/adminAuthGuard';
 import type { TrustedDevice } from '@/app/api/admin/mcc/trusted-devices/route';
 

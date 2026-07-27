@@ -9,7 +9,7 @@ import {
     Users,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { easing } from "@/lib/motion";
+import { easing } from "@/shared/utils/motion";
 
 interface ReservationToolbarProps {
     activeSection: "reservations" | "customers";

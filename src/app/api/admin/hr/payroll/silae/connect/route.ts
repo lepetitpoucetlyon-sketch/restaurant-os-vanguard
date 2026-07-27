@@ -7,10 +7,10 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { SilaeClient } from '@/lib/payroll/SilaeClient';
+import { SilaeClient } from '@/modules/human/payroll/SilaeClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import type { PayrollProviderConfig } from '@/lib/payroll/types';
+import type { PayrollProviderConfig } from '@/modules/human/payroll/types';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     const caller = await requireTenantAdmin(req);

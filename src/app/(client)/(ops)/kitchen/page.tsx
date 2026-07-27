@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { useKitchen, useInventory, useRecipes } from "@/engines/ops/NexusOpsProvider";
+import { useKitchen, useInventory, useRecipes } from "@/modules/ops/providers/NexusOpsProvider";
 import { useHACCP } from "@modules/compliance";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
@@ -27,7 +27,7 @@ const ProductFormModal = dynamic(
 );
 import { PrepTaskDetailDialog } from "@modules/ops";
 import { RecipeDetailDialog } from "@modules/ops";
-import { cinematicContainer, fadeInUp } from "@/lib/motion";
+import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 import { ExpertHub } from "@modules/commerce";
 
 import { MiseEnPlaceTab } from "@modules/ops";

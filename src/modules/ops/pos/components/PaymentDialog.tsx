@@ -6,8 +6,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/hooks";
 import { formatCurrency } from "@/lib/formatters";;
-import { terminalService } from "@/lib/payment-terminal/PaymentTerminalService";
-import type { PaymentResult } from "@/lib/payment-terminal/types";
+import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
+import type { PaymentResult } from "@/infrastructure/hardware/payment-terminal/types";
 import { printerService } from "@/lib/printing/PrintingService";
 
 interface PaymentDialogProps {

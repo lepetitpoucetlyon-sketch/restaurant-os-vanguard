@@ -2,11 +2,11 @@
 import React from 'react';
 
 // Providers Layers
-import { NexusCoreProvider } from "@/engines/core/NexusCoreProvider";
-import { NexusOpsProvider } from "@/engines/ops/NexusOpsProvider";
-import { NexusFiscalProvider } from "@/engines/fiscal/NexusFiscalProvider";
+import { NexusCoreProvider } from "@/shared/providers/NexusCoreProvider";
+import { NexusOpsProvider } from "@/modules/ops/providers/NexusOpsProvider";
+import { NexusFiscalProvider } from "@/modules/finance/providers/NexusFiscalProvider";
 import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
-import { NexusFleetProvider } from "@/engines/fleet/NexusFleetProvider";
+import { NexusFleetProvider } from "@/modules/intelligence/fleet/providers/NexusFleetProvider";
 import { ToastProvider } from "@ui/Toast";
 import { ContextualSettingsProvider } from "@/components/settings/ContextualSettings";
 
@@ -24,7 +24,7 @@ import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
 import { SovereignLockout } from "@/components/layout/SovereignLockout";
 import { BrandingProvider } from "@/infrastructure/components/BrandingProvider";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
-import { NexusPulseOrchestrator } from "@/engines/NexusPulseOrchestrator";
+import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";
 
 export function NexusProviderStack({ children }: { children: React.ReactNode }) {
     return (

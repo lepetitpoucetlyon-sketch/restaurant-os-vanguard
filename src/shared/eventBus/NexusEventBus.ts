@@ -61,6 +61,28 @@ export interface NexusEvents {
     headcount: number;
     bonusInMicrounits: number;
   };
+  'reservation.confirmed': {
+    tenantId: string;
+    reservationId: string;
+    customerName: string;
+    covers: number;
+    date: string;
+    time: string;
+  };
+  'haccp.alert': {
+    tenantId: string;
+    sensorId: string;
+    readingId: string;
+    alertType: string;
+    severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    message: string;
+  };
+  'payroll.submitted': {
+    tenantId: string;
+    period: string;
+    submissionId: string;
+    employeeCount: number;
+  };
 }
 
 export type NexusEventName = keyof NexusEvents;

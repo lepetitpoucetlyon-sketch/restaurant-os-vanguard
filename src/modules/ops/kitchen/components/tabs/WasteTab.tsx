@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { Button } from "@ui/button";
 import { formatCurrency } from "@/lib/formatters";;
-import { cinematicContainer, fadeInUp } from "@/lib/motion";
+import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 import { useToast } from "@ui/Toast";
 import React, { useState } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";

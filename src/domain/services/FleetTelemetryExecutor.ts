@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantID, SiteTelemetry } from '@domain/types/brands';
-import { TelemetryEvent } from '@/lib/telemetry/TelemetryStream';
+import { TelemetryEvent } from '@/infrastructure/services/telemetry/TelemetryStream';
 import { logger } from '@/lib/logger';
 
 interface PerformanceMemory extends Performance {

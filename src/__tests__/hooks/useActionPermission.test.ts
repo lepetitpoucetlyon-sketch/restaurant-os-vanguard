@@ -4,7 +4,7 @@ import { useActionPermission } from '@/hooks/useActionPermission';
 
 const mockUseAuth = vi.fn();
 
-vi.mock('@/engines/core/NexusCoreProvider', () => ({
+vi.mock('@/shared/providers/NexusCoreProvider', () => ({
   useAuth: () => mockUseAuth(),
 }));
 

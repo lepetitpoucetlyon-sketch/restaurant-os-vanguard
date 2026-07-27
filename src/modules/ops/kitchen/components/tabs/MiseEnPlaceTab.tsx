@@ -4,7 +4,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Clock, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/lib/motion";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
 import { MiseEnPlaceTask } from "@nexus/contracts";
 

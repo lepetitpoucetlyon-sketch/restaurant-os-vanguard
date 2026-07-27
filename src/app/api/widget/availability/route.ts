@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TableSchema, ReservationSchema } from '@/domain/schemas/ops';
 import { logger } from '@/lib/logger';
-import { getRateLimiter } from '@/lib/rate-limiter';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 
 const QuerySchema = z.object({
   tenantId: z.string().min(1).max(80),

@@ -1,1 +1,1 @@
-export * from '@/domain/agent/tools';
+export * from '@/modules/intelligence/domain/agent/tools';

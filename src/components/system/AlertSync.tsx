@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
-import { useInventory } from '@/engines/ops/NexusOpsProvider';
+import { useInventory } from '@/modules/ops/providers/NexusOpsProvider';
 import { useNotifications } from '@/context/NotificationsContext';
 import { useHACCP } from '@nexus/guards/NexusGuardProvider';
 
