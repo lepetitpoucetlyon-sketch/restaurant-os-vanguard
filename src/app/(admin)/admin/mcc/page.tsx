@@ -33,6 +33,7 @@ const SupportAIPanel       = dynamic(() => import('@nexus/guards/admin/mcc/Suppo
 const FleetDeviceInventory = dynamic(() => import('@nexus/guards/admin/mcc/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
 const ResellerPortal       = dynamic(() => import('@nexus/guards/admin/mcc/ResellerPortal').then(m => m.ResellerPortal), { loading: () => <MCCWidgetSkeleton /> });
 const TenantBillingPanel   = dynamic(() => import('@nexus/guards/admin/mcc/TenantBillingPanel').then(m => m.TenantBillingPanel), { loading: () => <MCCWidgetSkeleton /> });
+const SupportDraftsPanel   = dynamic(() => import('@nexus/guards/admin/mcc/SupportDraftsPanel').then(m => m.SupportDraftsPanel), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     const {
@@ -150,7 +151,10 @@ export default function MCCDashboard() {
                                                 <TenantOverridePanel />
                                                 <FleetUpgradePanel />
                                             </div>
-                                            <div className="col-span-12 xl:col-span-7"><TenantChangelogPanel /></div>
+                                            <div className="col-span-12 xl:col-span-7 space-y-6">
+                                                <SupportDraftsPanel />
+                                                <TenantChangelogPanel />
+                                            </div>
                                         </div>
                                     </motion.div>
                                 )}

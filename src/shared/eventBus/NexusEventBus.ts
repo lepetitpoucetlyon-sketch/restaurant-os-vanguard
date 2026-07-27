@@ -83,6 +83,18 @@ export interface NexusEvents {
     submissionId: string;
     employeeCount: number;
   };
+  /**
+   * Émis par une route API serveur (pas par le client) : première émission
+   * SSR du bus. Le handler doit donc être enregistré à portée module dans
+   * la route elle-même, pas via registerHandlers.ts (100% client).
+   */
+  'support.ticket_submitted': {
+    ticketId: string;
+    tenantId: string;
+    description: string;
+    screenshotUrl?: string;
+    submittedBy: string;
+  };
 }
 
 export type NexusEventName = keyof NexusEvents;

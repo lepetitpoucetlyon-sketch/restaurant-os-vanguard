@@ -16,6 +16,7 @@ export * from './TrustedDevicePanel';
 export * from './TenantBillingPanel';
 export * from './TenantChangelogPanel';
 export * from './TenantOverridePanel';
+export * from './SupportDraftsPanel';
 export * from './TenantUsersPanel';
 export * from './FleetUpgradePanel';
 export * from './AIWorkshop';

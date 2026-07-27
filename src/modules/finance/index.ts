@@ -10,7 +10,6 @@ export { BlockchainLedgerService } from './accounting/domain/BlockchainLedgerSer
 export { PayrollAccountingMapper } from './accounting/domain/PayrollAccountingMapper';
 export { FinanceCore } from './services/FinanceCore';
 export { TransactionService } from './services/TransactionService';
-export { BillingService } from './services/BillingService';
 
 // 🏛️ SUTURE NEXUS
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
