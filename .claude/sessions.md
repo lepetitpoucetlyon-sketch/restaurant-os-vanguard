@@ -41,4 +41,4 @@
 | human-audit | Audit lecture seule : src/modules/human/, src/app/(client)/(ops)/staff/, src/domain/schemas/hr.ts+employeeDocument.ts, store/pillars/human.ts | 2026-07-27 | terminée |
 | logistics-audit | Audit lecture seule : src/modules/logistics/, domain/schemas stocks/fournisseurs, store/pillars/logistics*, app logistics pages, lien POS→stock | 2026-07-27 | terminée |
 | intelligence-audit | Audit lecture seule : src/modules/intelligence/, api/ routes IA, domain/services/, app intelligence pages | 2026-07-27 | terminée |
-| full-rewire | Câblage réel de tous les stubs/no-ops/cross-tenant sur les 7 piliers — 263 findings, 6 patterns | 2026-07-27 | active |
+| full-rewire | Câblage réel de tous les stubs/no-ops/cross-tenant sur les 7 piliers — 263 findings, 6 patterns | 2026-07-27 | terminée |
