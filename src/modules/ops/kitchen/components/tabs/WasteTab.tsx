@@ -7,8 +7,10 @@ import { Button } from "@ui/button";
 import { formatCurrency } from "@/lib/formatters";;
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 import { useToast } from "@ui/Toast";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { useTenant } from "@/shared/hooks";
 
 import { Ingredient, RegulatoryWasteLog } from "@nexus/contracts";
 
@@ -19,7 +21,10 @@ interface WasteTabProps {
 
 export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) {
     const { showToast } = useToast();
+    const { tenantId } = useTenant();
     const [selectedIngredient, setSelectedIngredient] = useState("");
+    const [quantity, setQuantity] = useState("");
+    const [selectedReason, setSelectedReason] = useState<string>("");
 
     const ingredientOptions = ingredients.map(i => ({
         value: i.id || i.name,
@@ -28,11 +33,34 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
         icon: <div className="w-4 h-4 rounded-full bg-accent-gold" />
     }));
 
-    const handleWasteSubmit = (e: React.FormEvent) => {
+    const handleWasteSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, we'd have a form state here
-        showToast("Perte enregistrée avec succès", "success");
-    };
+        if (!selectedIngredient || !quantity || parseFloat(quantity) <= 0) {
+            showToast("Sélectionnez un article et saisissez une quantité", "error");
+            return;
+        }
+        if (!tenantId) return;
+        try {
+            const ingredient = ingredients.find(i => (i.id || i.name) === selectedIngredient);
+            const path = `tenants/${tenantId}/wasteEntries`;
+            const id = Nexus.adapter.generateId(path);
+            await Nexus.adapter.set(`${path}/${id}`, {
+                id,
+                ingredientId: selectedIngredient,
+                ingredientName: ingredient?.name ?? selectedIngredient,
+                quantity: parseFloat(quantity),
+                unit: ingredient?.unit ?? 'kg',
+                reason: selectedReason || 'Autre',
+                recordedAt: new Date().toISOString(),
+            });
+            showToast("Perte enregistrée avec succès", "success");
+            setSelectedIngredient("");
+            setQuantity("");
+            setSelectedReason("");
+        } catch {
+            showToast("Erreur lors de l'enregistrement", "error");
+        }
+    }, [tenantId, selectedIngredient, quantity, selectedReason, ingredients, showToast]);
 
     return (
         <motion.div
@@ -80,6 +108,10 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                         <input
                                             type="number"
                                             placeholder="0.00"
+                                            value={quantity}
+                                            onChange={e => setQuantity(e.target.value)}
+                                            min="0"
+                                            step="0.01"
                                             className="w-full h-[60px] pl-6 pr-20 bg-surface-bg dark:bg-surface-card/[0.03] border border-subtle dark:border-subtle rounded-[1.25rem] font-mono font-black text-xl focus:ring-4 focus:ring-error/10 focus:border-error outline-none transition-all shadow-inner placeholder:text-muted dark:placeholder:text-white/10"
                                         />
                                         <div className="absolute right-2 top-2 bottom-2 w-14 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-xl flex items-center justify-center font-black text-white text-[11px] uppercase tracking-widest shadow-xl pointer-events-none">
@@ -108,7 +140,8 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                             whileTap={{ scale: 0.98 }}
                                             type="button"
                                             key={reason.label}
-                                            className="h-24 flex flex-col items-center justify-center gap-3 border border-subtle dark:border-white/5 bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-sidebar dark:hover:bg-surface-card hover:border-transparent hover:text-white dark:hover:text-primary rounded-[2rem] font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm"
+                                            onClick={() => setSelectedReason(reason.label)}
+                                            className={`h-24 flex flex-col items-center justify-center gap-3 border bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-sidebar dark:hover:bg-surface-card hover:border-transparent hover:text-white dark:hover:text-primary rounded-[2rem] font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm ${selectedReason === reason.label ? 'border-error bg-error/10 text-error' : 'border-subtle dark:border-white/5'}`}
                                         >
                                             <span className="text-2xl opacity-40 group-hover/btn:opacity-100 group-hover/btn:scale-125 transition-all duration-300">{reason.icon}</span>
                                             {reason.label}

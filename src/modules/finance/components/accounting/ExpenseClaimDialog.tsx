@@ -70,7 +70,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
 
         try {
             await submitExpense({
-                amountInMicrounits: toMicrounits(Math.round(parseFloat(formData.amount) * 1000000)), // Convert to Microunits
+                amountInMicrounits: toMicrounits(parseFloat(formData.amount)),
                 category: formData.category,
                 description: formData.description,
                 receiptUrl: formData.receiptImage || undefined,

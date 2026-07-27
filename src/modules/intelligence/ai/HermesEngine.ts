@@ -150,7 +150,7 @@ export class HermesEngine {
             userRole: agent.role,
             userPrompt: prompt,
             contextData: context,
-            apiKey: process.env.VITE_GEMINI_API_KEY || 'NEXUS_INTERNAL',
+            apiKey: process.env.GEMINI_API_KEY || process.env.LLM_API_KEY || 'NEXUS_INTERNAL',
             endpoint: 'https://generativelanguage.googleapis.com', // Base URL
             modelId: 'gemini-1.5-pro'
         });

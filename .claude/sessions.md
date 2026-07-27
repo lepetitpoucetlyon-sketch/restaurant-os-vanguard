@@ -33,3 +33,12 @@
 | support-ai-flow | Support self-service : supportTicket schema, tickets route, SupportTicketAnalysisHandler, drafts route, SupportDraftsPanel, MCC page.tsx | 2026-07-27 | terminée |
 | mcc-support-drafts | Implémentation : requêtes tenant self-service → agent IA (Gemini) → brouillon évolution/bug dans MCC (approve/correct/reject). Fichiers : domain/schemas/supportTicket.ts, api/tenant/support/tickets, shared/eventBus/handlers/SupportTicketAnalysisHandler.ts, api/admin/fleet/support-ai/drafts, shared/nexus/guards/admin/mcc/SupportDraftsPanel.tsx + wiring page.tsx/index.ts. Suppression SupportEngine.ts (mort/cassé) | 2026-07-27 | terminée |
 | pos-audit | Audit POS + 6 corrections critiques : prix options (microunits/cents), statut dirty TableSelector, activeCartAtom sync Jotai, split by-item/custom UI, TVA PaymentDialog, nom restaurant ticket + TVA effective usePrintReceipt. TSC 0 / 426 tests OK | 2026-07-27 | terminée |
+| kds-audit | Audit complet KDS : src/modules/ops/kds/, src/app/(client)/(ops)/kds/, composants écran cuisine | 2026-07-27 | terminée |
+| ops-audit | Audit ops (hors KDS) : ops/engine, ops/kitchen, ops/prep, ops/pos, ops/recipes, store/pillars/ops.ts, pages kitchen/prep/tables/floor | 2026-07-27 | terminée |
+| commerce-audit | Audit lecture seule : src/modules/commerce/, app/(client)/(commerce)/, domain/schemas liés commerce | 2026-07-27 | terminée |
+| finance-audit | Audit lecture seule : src/modules/finance/, src/infrastructure/adapters/Financial*, src/engines/fiscal/, src/domain/schemas/finance.ts, finance pages | 2026-07-27 | terminée |
+| compliance-audit | Audit lecture seule : src/modules/compliance/, src/app/(client)/(compliance)/, src/domain/schemas/ (HACCP, audit, RGPD, rappels), src/infrastructure/adapters/ (compliance) | 2026-07-27 | terminée |
+| human-audit | Audit lecture seule : src/modules/human/, src/app/(client)/(ops)/staff/, src/domain/schemas/hr.ts+employeeDocument.ts, store/pillars/human.ts | 2026-07-27 | terminée |
+| logistics-audit | Audit lecture seule : src/modules/logistics/, domain/schemas stocks/fournisseurs, store/pillars/logistics*, app logistics pages, lien POS→stock | 2026-07-27 | terminée |
+| intelligence-audit | Audit lecture seule : src/modules/intelligence/, api/ routes IA, domain/services/, app intelligence pages | 2026-07-27 | terminée |
+| full-rewire | Câblage réel de tous les stubs/no-ops/cross-tenant sur les 7 piliers — 263 findings, 6 patterns | 2026-07-27 | active |

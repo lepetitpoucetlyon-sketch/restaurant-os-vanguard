@@ -14,6 +14,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { EQUIPMENT_CONFIG, EquipmentConfig } from '@modules/compliance/haccp/types';
 import { useHygieneLogs, useCreateHygieneLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useTenant } from '@/shared/hooks';
+import { HACCPLogService } from '@modules/compliance/haccp/HACCPLogService';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 
@@ -21,6 +23,7 @@ export function ReleveTemperatures() {
     const { data: logs = [] } = useHygieneLogs();
     const { mutateAsync: createLog } = useCreateHygieneLog();
     const { addNotification } = useNotifications();
+    const { tenantId } = useTenant();
 
     const [recordingEq, setRecordingEq] = useState<EquipmentConfig | null>(null);
     const [tempValue, setTempValue] = useState<number>(0);
@@ -59,6 +62,17 @@ export function ReleveTemperatures() {
             });
             if (isAlert) {
                 addNotification({ type: 'critical', title: 'Température Anormale', message: `Alerte de température sur ${recordingEq.label}.` });
+                if (tenantId) {
+                    await HACCPLogService.recordNonConformity({
+                        tenantId,
+                        ncType: 'température hors norme',
+                        severity: 'critical',
+                        description: `Température ${tempValue}°C hors norme sur ${recordingEq.label} (zone ${recordingEq.zone}). Plage admise : ${recordingEq.min}°C à ${recordingEq.max}°C.`,
+                        temperature: tempValue,
+                        sensorId: recordingEq.id,
+                        source: 'ReleveTemperatures',
+                    });
+                }
             } else {
                 addNotification({ type: 'success', title: 'Relevé enregistré', message: `Température de ${recordingEq.label} validée.` });
             }

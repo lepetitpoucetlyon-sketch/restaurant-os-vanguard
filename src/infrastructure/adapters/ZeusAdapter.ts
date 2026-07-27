@@ -166,7 +166,7 @@ export class ZeusEngine {
             userRole: agent.role,
             userPrompt: prompt,
             contextData: context,
-            apiKey: process.env.VITE_GEMINI_API_KEY || 'NEXUS_INTERNAL',
+            apiKey: process.env.GEMINI_API_KEY || process.env.LLM_API_KEY || 'NEXUS_INTERNAL',
             endpoint: process.env.LLM_BASE_URL || 'https://generativelanguage.googleapis.com',
             modelId: process.env.LLM_MODEL_REASONING || 'gemini-1.5-pro',
         });

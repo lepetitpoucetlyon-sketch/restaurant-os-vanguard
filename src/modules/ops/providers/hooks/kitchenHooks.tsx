@@ -94,7 +94,7 @@ export const useKitchen = () => {
       const task = tasks.find(t => t.id === id);
       if (!task) return;
       const currentStatus = (task.attributes as Record<string, SovereignField>)?.status === 'completed';
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, {
+      await Nexus.adapter.update(`tenants/${tenantId}/prepTasks/${id}`, {
         attributes: { status: currentStatus ? 'pending' : 'completed' },
         updatedAt: new Date().toISOString()
       });

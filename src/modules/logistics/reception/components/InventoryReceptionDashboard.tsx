@@ -23,8 +23,7 @@ const _deleteReservationAction = async (..._args: unknown[]) => ({ success: true
 const _cancelReservationAction = async (..._args: unknown[]) => ({ success: true });
 import { useNexusOps } from '@/modules/ops/providers/NexusOpsProvider';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-// import { receiveStockAction, searchIngredientsAction } from '@/app/(admin)/actions/inventory';
-const receiveStockAction = async (_tenantId: string, _ingredient: import('@nexus/contracts').Ingredient, _data: unknown) => ({ success: true });
+// import { searchIngredientsAction } from '@/app/(admin)/actions/inventory';
 const searchIngredientsAction = async (_tenantId: string, _query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
 import { toast } from 'sonner';
 
@@ -194,24 +193,33 @@ export function InventoryReceptionDashboard() {
   const handleSaveToStock = async () => {
     if (!tenantId || !scanResult) return;
     setIsSaving(true);
-    
+
     try {
       for (const item of scanResult) {
-        await receiveStockAction(tenantId, (item.ingredient || {
-            id: item.id,
-            name: item.name,
-            unit: item.unit as unknown,
-            category: 'other',
-            costInCents: Math.round(item.price * 100),
-            minQuantity: 0,
-            supplier: 'Inconnu',
-            defaultStorageLocation: 'frigo_1',
-            shelfLifeDays: 3
-        }) as import('@nexus/contracts').Ingredient, {
-            quantity: item.qty,
-            cost: Math.round(item.price * 100),
-            manualDlc: item.dlc,
-            chefNotes: "Réception via Empire Vision OCR (Certified Real)"
+        const stockPath = `tenants/${tenantId}/stockItems/${item.id}`;
+        const existing = await Nexus.adapter.get<{ quantity?: number }>(stockPath);
+        const currentQty = existing?.quantity ?? 0;
+        await Nexus.adapter.set(stockPath, {
+          id: item.id,
+          name: item.name,
+          quantity: currentQty + item.qty,
+          unit: item.unit,
+          dlc: item.dlc,
+          updatedAt: new Date().toISOString(),
+        });
+
+        const movPath = `tenants/${tenantId}/inventoryMovements`;
+        const movId = Nexus.adapter.generateId(movPath);
+        await Nexus.adapter.set(`${movPath}/${movId}`, {
+          id: movId,
+          type: 'reception',
+          ingredientId: item.id,
+          ingredientName: item.name,
+          quantity: item.qty,
+          unit: item.unit,
+          costInCents: Math.round(item.price * 100),
+          dlc: item.dlc,
+          recordedAt: new Date().toISOString(),
         });
       }
 
