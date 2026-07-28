@@ -46,4 +46,4 @@
 | prod-blockers-phase1 | Phase 1 bloquants prod : page /login, branding dans Apparence, welcome successUrl | 2026-07-28 | terminée |
 | prod-blockers-phase2 | Phase 2 bloquants prod : .env.production secrets documentés, deploy-prod.sh, fix .env.example STRIPE_PRODUCT | 2026-07-28 | terminée |
 | bible-deploy-tutos | Ajout Bible §08 : 4 tutoriels déploiement (Firebase SA, Stripe, Resend, Functions) + checklist §19 items inf-9→inf-15 | 2026-07-28 | terminée |
-| connectors-arch | Implémentation plan connecteurs : types + factories + providers (P1) pour toutes les catégories + routes API | 2026-07-28 | active |
+| connectors-arch | Implémentation plan connecteurs : types + factories + providers (P1) pour toutes les catégories + routes API | 2026-07-28 | terminée |
