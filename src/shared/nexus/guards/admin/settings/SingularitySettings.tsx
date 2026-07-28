@@ -68,13 +68,13 @@ export function SingularitySettings() {
                         <Cpu size={24} />
                     </div>
                     <div>
-                        <h1 className="text-xl font-serif italic text-white">Paramètres de Singularité</h1>
+                        <h1 className="text-xl font-serif italic text-text-primary">Paramètres de Singularité</h1>
                         <p className="text-[10px] uppercase tracking-widest text-text-muted font-black">Grade X : Contrôle Operationnel</p>
                     </div>
                 </div>
                 <Button 
                     onClick={handleSave} 
-                    className="bg-accent hover:bg-accent/90 text-white gap-2 px-6"
+                    className="bg-accent hover:bg-accent/90 text-text-primary gap-2 px-6"
                     disabled={saving}
                 >
                     {saving ? <div className="w-4 h-4 rounded-full border-2 border-default border-t-white animate-spin" /> : <Save size={16} />}
@@ -129,8 +129,8 @@ export function SingularitySettings() {
                                         })}
                                         className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
                                             settings?.accountingConfig?.complexityMode === mode 
-                                            ? 'bg-accent text-white shadow-lg' 
-                                            : 'text-text-muted hover:text-white'
+                                            ? 'bg-accent text-text-primary shadow-lg' 
+                                            : 'text-text-muted hover:text-text-primary'
                                         }`}
                                     >
                                         {mode === 'SIMPLE' ? 'Flux (Simple)' : 'Ledger (Expert)'}

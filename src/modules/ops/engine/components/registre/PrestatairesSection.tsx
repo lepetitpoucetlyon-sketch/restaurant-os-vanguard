@@ -17,7 +17,7 @@ const TYPE_LABELS: Record<string, string> = {
 
 const TYPE_COLORS: Record<string, string> = {
     nettoyage: 'bg-action-primary/10 text-brand border-focus/10',
-    maintenance: 'bg-status-warning/10 text-status-warning border-amber-500/10',
+    maintenance: 'bg-status-warning/10 text-status-warning border-action-primary/10',
     deratisation: 'bg-status-success/10 text-status-success border-green-500/10',
     securite: 'bg-status-danger/10 text-status-danger border-red-500/10',
     hottes: 'bg-status-warning/10 text-status-warning border-orange-500/10',
@@ -32,7 +32,7 @@ export function PrestatairesSection() {
         <div className="max-w-5xl mx-auto space-y-8">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-status-warning/10 flex items-center justify-center border border-amber-500/10">
+                    <div className="w-12 h-12 rounded-2xl bg-status-warning/10 flex items-center justify-center border border-action-primary/10">
                         <BadgeCheck strokeWidth={1.5} className="w-6 h-6 text-status-warning" />
                     </div>
                     <div>

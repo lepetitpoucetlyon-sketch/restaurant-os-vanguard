@@ -90,12 +90,12 @@ export default function ReserveWithGoogle() {
         <div className="flex items-center gap-2 mb-1">
           {isConfigured ? (
             <>
-              <CheckCircle className="w-4 h-4 text-emerald-500" />
+              <CheckCircle className="w-4 h-4 text-status-success" />
               <span className="text-sm font-semibold text-text-primary">Configuré</span>
             </>
           ) : (
             <>
-              <AlertCircle className="w-4 h-4 text-amber-500" />
+              <AlertCircle className="w-4 h-4 text-action-primary" />
               <span className="text-sm font-semibold text-text-primary">Non configuré</span>
             </>
           )}
@@ -177,8 +177,8 @@ export default function ReserveWithGoogle() {
                   >
                     {widgetCopied ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-500" />
-                        <span className="text-emerald-500">Copié</span>
+                        <Check className="w-3.5 h-3.5 text-status-success" />
+                        <span className="text-status-success">Copié</span>
                       </>
                     ) : (
                       <>
@@ -198,7 +198,7 @@ export default function ReserveWithGoogle() {
       </div>
 
       {/* Note */}
-      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+      <div className="rounded-xl border border-blue-500/20 bg-status-info/5 p-4">
         <p className="text-xs text-blue-600 dark:text-blue-400">
           Reserve with Google nécessite une approbation de Google (délai habituel : 1 à 4 semaines
           après soumission via le Actions Center). Votre restaurant doit être vérifié sur Google

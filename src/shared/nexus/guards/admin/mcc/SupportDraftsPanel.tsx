@@ -9,19 +9,19 @@ import { authedFetch } from '@/lib/client/authedFetch';
 import type { SupportTicket, SupportDraft, SupportTicketStatus } from '@/domain/schemas/supportTicket';
 
 const STATUS_META: Record<SupportTicketStatus, { label: string; color: string }> = {
-  new:              { label: 'Nouveau',       color: 'text-slate-400 bg-slate-500/10 border-slate-500/30' },
-  analyzing:        { label: 'Analyse…',      color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
-  draft_ready:      { label: 'À valider',     color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' },
-  analysis_failed:  { label: 'Échec IA',      color: 'text-red-400 bg-red-500/10 border-red-500/30' },
-  approved:         { label: 'Approuvé',      color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
-  rejected:         { label: 'Refusé',        color: 'text-red-400 bg-red-500/10 border-red-500/30' },
+  new:              { label: 'Nouveau',       color: 'text-text-secondary bg-slate-500/10 border-slate-500/30' },
+  analyzing:        { label: 'Analyse…',      color: 'text-blue-400 bg-status-info/10 border-blue-500/30' },
+  draft_ready:      { label: 'À valider',     color: 'text-action-primary bg-action-primary/10 border-action-primary/30' },
+  analysis_failed:  { label: 'Échec IA',      color: 'text-status-danger bg-status-danger/10 border-red-500/30' },
+  approved:         { label: 'Approuvé',      color: 'text-status-success bg-status-success/10 border-emerald-500/30' },
+  rejected:         { label: 'Refusé',        color: 'text-status-danger bg-status-danger/10 border-red-500/30' },
   applied:          { label: 'Appliqué',      color: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30' },
 };
 
 const RISK_COLOR: Record<SupportDraft['riskLevel'], string> = {
-  low:    'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  medium: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
-  high:   'text-red-400 bg-red-500/10 border-red-500/30',
+  low:    'text-status-success bg-status-success/10 border-emerald-500/30',
+  medium: 'text-action-primary bg-action-primary/10 border-action-primary/30',
+  high:   'text-status-danger bg-status-danger/10 border-red-500/30',
 };
 
 interface EditState {
@@ -141,8 +141,8 @@ export function SupportDraftsPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-            <Wand2 className="w-5 h-5 text-amber-400" />
+          <div className="w-10 h-10 rounded-2xl bg-action-primary/10 flex items-center justify-center border border-action-primary/20">
+            <Wand2 className="w-5 h-5 text-action-primary" />
           </div>
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Brouillons SAV IA</h3>
@@ -195,7 +195,7 @@ export function SupportDraftsPanel() {
                     {draft?.title ?? ticket.description}
                   </p>
                   {ticket.status === 'analysis_failed' && ticket.analysisError && (
-                    <p className="text-[9px] text-red-400/80 mt-0.5">{ticket.analysisError}</p>
+                    <p className="text-[9px] text-status-danger/80 mt-0.5">{ticket.analysisError}</p>
                   )}
                 </div>
                 <ChevronDown className={cn('w-3.5 h-3.5 text-secondary shrink-0 mt-1 transition-transform', isOpen && 'rotate-180')} />
@@ -204,7 +204,7 @@ export function SupportDraftsPanel() {
               {isOpen && draft && edit && (
                 <div className="mt-3 pt-3 border-t border-white/5 space-y-3" onClick={e => e.stopPropagation()}>
                   <p className="text-[9px] text-secondary">
-                    <span className="text-white/30">Requête originale : </span>{ticket.description}
+                    <span className="text-text-primary/30">Requête originale : </span>{ticket.description}
                   </p>
 
                   <div className="space-y-2">
@@ -214,7 +214,7 @@ export function SupportDraftsPanel() {
                         value={edit.title}
                         onChange={e => updateEdit(ticket.id, 'title', e.target.value)}
                         disabled={ticket.status !== 'draft_ready'}
-                        className="w-full mt-1 bg-slate-950 border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-white focus:outline-none focus:border-focus/50 disabled:opacity-50"
+                        className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-text-primary focus:outline-none focus:border-focus/50 disabled:opacity-50"
                       />
                     </label>
                     <label className="block">
@@ -224,7 +224,7 @@ export function SupportDraftsPanel() {
                         value={edit.summary}
                         onChange={e => updateEdit(ticket.id, 'summary', e.target.value)}
                         disabled={ticket.status !== 'draft_ready'}
-                        className="w-full mt-1 bg-slate-950 border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-white resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
+                        className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-text-primary resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
                       />
                     </label>
                     <label className="block">
@@ -234,7 +234,7 @@ export function SupportDraftsPanel() {
                         value={edit.rootCause}
                         onChange={e => updateEdit(ticket.id, 'rootCause', e.target.value)}
                         disabled={ticket.status !== 'draft_ready'}
-                        className="w-full mt-1 bg-slate-950 border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-white resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
+                        className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-text-primary resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
                       />
                     </label>
                     {draft.kind === 'config_patch' && (
@@ -245,7 +245,7 @@ export function SupportDraftsPanel() {
                           value={edit.proposedPatchText}
                           onChange={e => updateEdit(ticket.id, 'proposedPatchText', e.target.value)}
                           disabled={ticket.status !== 'draft_ready'}
-                          className="w-full mt-1 bg-slate-950 border border-subtle rounded-lg py-1.5 px-2.5 text-[10px] font-mono text-white resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
+                          className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-[10px] font-mono text-text-primary resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
                         />
                       </label>
                     )}
@@ -257,7 +257,7 @@ export function SupportDraftsPanel() {
                           value={edit.codeBrief}
                           onChange={e => updateEdit(ticket.id, 'codeBrief', e.target.value)}
                           disabled={ticket.status !== 'draft_ready'}
-                          className="w-full mt-1 bg-slate-950 border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-white resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
+                          className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-xs text-text-primary resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
                         />
                       </label>
                     )}
@@ -279,21 +279,21 @@ export function SupportDraftsPanel() {
                         <button
                           onClick={() => handleCorrect(ticket)}
                           disabled={isBusy}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-blue-500/20 transition-colors disabled:opacity-40"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-info/10 text-blue-400 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-info/20 transition-colors disabled:opacity-40"
                         >
                           <FileEdit className="w-3.5 h-3.5" />Corriger
                         </button>
                         <button
                           onClick={() => handleApprove(ticket)}
                           disabled={isBusy}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500/20 transition-colors disabled:opacity-40"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-success/10 text-status-success border border-emerald-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-success/20 transition-colors disabled:opacity-40"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />Approuver
                         </button>
                         <button
                           onClick={() => handleReject(ticket)}
                           disabled={isBusy}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/20 transition-colors disabled:opacity-40"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-danger/10 text-status-danger border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-danger/20 transition-colors disabled:opacity-40"
                         >
                           <XCircle className="w-3.5 h-3.5" />Refuser
                         </button>

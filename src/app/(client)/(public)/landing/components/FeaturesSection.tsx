@@ -19,10 +19,10 @@ export function FeaturesSection() {
                     className="text-center mb-20"
                 >
                     <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Fonctionnalités</span>
-                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
+                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                         Tout ce dont vous avez besoin
                     </h2>
-                    <p className="text-xl text-white/50 max-w-2xl mx-auto">
+                    <p className="text-xl text-text-primary/50 max-w-2xl mx-auto">
                         Une suite complète d'outils conçus pour l'excellence opérationnelle.
                     </p>
                 </motion.div>
@@ -62,8 +62,8 @@ export function FeaturesSection() {
                                 >
                                     <feature.icon className="w-7 h-7" style={{ color: feature.color }} />
                                 </div>
-                                <h3 className="text-2xl font-brand font-semibold text-white mb-3">{feature.title}</h3>
-                                <p className="text-white/50 leading-relaxed">{feature.description}</p>
+                                <h3 className="text-2xl font-brand font-semibold text-text-primary mb-3">{feature.title}</h3>
+                                <p className="text-text-primary/50 leading-relaxed">{feature.description}</p>
 
                                 <div className="mt-6 flex items-center gap-2 text-[#C9A227] opacity-0 group-hover:opacity-100 transition-opacity">
                                     <span className="text-sm font-bold uppercase tracking-widest">En savoir plus</span>

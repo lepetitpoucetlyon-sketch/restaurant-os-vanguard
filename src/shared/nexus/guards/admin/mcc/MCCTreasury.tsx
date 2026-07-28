@@ -106,7 +106,7 @@ export function MCCTreasury() {
                         <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
                              <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-secondary">
                                  <span>Operational Health</span>
-                                 <span className="text-white">OPTIMAL</span>
+                                 <span className="text-text-primary">OPTIMAL</span>
                              </div>
                              <div className="w-full h-1 bg-surface-card/5 rounded-full overflow-hidden">
                                  <motion.div 

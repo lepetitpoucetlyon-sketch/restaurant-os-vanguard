@@ -231,7 +231,7 @@ export function OperationsDashboard() {
                                                     <p className="text-[10px] text-muted font-sans font-bold uppercase tracking-widest mb-1 italic">Tarif / Service</p>
                                                     <p className="text-xl font-sans font-black">€{area.price}</p>
                                                 </div>
-                                                <button className="w-10 h-10 rounded-2xl bg-surface-sidebar text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg">
+                                                <button className="w-10 h-10 rounded-2xl bg-surface-sidebar text-text-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg">
                                                     <ArrowRight className="w-5 h-5" />
                                                 </button>
                                             </div>
@@ -250,7 +250,7 @@ export function OperationsDashboard() {
                                     onClick={() => toast.info("Gérez vos unités depuis Admin → Paramètres → Plan de salle")}
                                     className="border-2 border-dashed border-default rounded-[2.5rem] flex flex-col items-center justify-center gap-4 hover:border-default hover:bg-surface-bg transition-all min-h-[220px] group"
                                 >
-                                    <div className="w-12 h-12 rounded-full bg-surface-bg flex items-center justify-center text-muted group-hover:bg-surface-sidebar group-hover:text-white transition-all">
+                                    <div className="w-12 h-12 rounded-full bg-surface-bg flex items-center justify-center text-muted group-hover:bg-surface-sidebar group-hover:text-text-primary transition-all">
                                         <Plus className="w-6 h-6" />
                                     </div>
                                     <span className="text-xs font-black uppercase tracking-widest text-muted group-hover:text-primary">Ajouter une Unité</span>
@@ -303,7 +303,7 @@ export function OperationsDashboard() {
                                                 ))}
                                             </div>
                                             <ArrowRight className="w-4 h-4 text-muted" />
-                                            <div className="text-[10px] font-black uppercase tracking-widest bg-surface-sidebar text-white px-3 py-1 rounded-full">Dashboard Global</div>
+                                            <div className="text-[10px] font-black uppercase tracking-widest bg-surface-sidebar text-text-primary px-3 py-1 rounded-full">Dashboard Global</div>
                                         </div>
                                     </div>
                                 </div>
@@ -376,7 +376,7 @@ export function OperationsDashboard() {
                                         <div>
                                             <h2 className="text-4xl font-black italic tracking-tighter mb-2">Détails de l'Espace {selectedArea.number}</h2>
                                             <div className="flex gap-4 items-center">
-                                                <div className="px-3 py-1 bg-surface-sidebar text-white rounded-full text-[10px] font-bold uppercase tracking-widest italic">{selectedArea?.status}</div>
+                                                <div className="px-3 py-1 bg-surface-sidebar text-text-primary rounded-full text-[10px] font-bold uppercase tracking-widest italic">{selectedArea?.status}</div>
                                                 <p className="text-xs text-muted font-sans font-bold uppercase tracking-widest">{selectedArea.type} Premium</p>
                                             </div>
                                         </div>
@@ -417,7 +417,7 @@ export function OperationsDashboard() {
                                     <div className="pt-8 border-t border-dashed border-subtle flex gap-4">
                                         <button
                                             onClick={() => handleArrival(selectedArea)}
-                                            className="h-14 px-8 bg-surface-sidebar text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                                            className="h-14 px-8 bg-surface-sidebar text-text-primary rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
                                         >
                                             <User className="w-4 h-4" /> Accueil Client
                                         </button>
@@ -448,10 +448,10 @@ const MindMapNode = ({ x, y, label, icon: Icon, color, description }: { x: numbe
         style={{ left: x, top: y }}
         className="absolute flex flex-col items-center group cursor-pointer"
     >
-        <div className={cn("w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-white shadow-xl transition-all group-hover:scale-110 group-hover:shadow-2xl relative z-10", color)}>
+        <div className={cn("w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-text-primary shadow-xl transition-all group-hover:scale-110 group-hover:shadow-2xl relative z-10", color)}>
             <Icon className="w-8 h-8" />
         </div>
-        <div className="mt-4 bg-surface-card px-4 py-2 rounded-2xl border border-subtle shadow-xl transition-all group-hover:bg-surface-sidebar group-hover:text-white relative z-10 w-48 text-center">
+        <div className="mt-4 bg-surface-card px-4 py-2 rounded-2xl border border-subtle shadow-xl transition-all group-hover:bg-surface-sidebar group-hover:text-text-primary relative z-10 w-48 text-center">
             <span className="text-[10px] font-black uppercase tracking-widest block mb-1">{label}</span>
             {description && <p className="text-[9px] opacity-60 font-sans leading-tight hidden group-hover:block">{description}</p>}
         </div>
@@ -479,7 +479,7 @@ const ExplanatoryCard = ({ title, description, icon: Icon }: { title: string, de
         <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <Icon className="w-24 h-24 rotate-12" />
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-surface-bg flex items-center justify-center mb-6 group-hover:bg-surface-sidebar group-hover:text-white transition-colors">
+        <div className="w-12 h-12 rounded-2xl bg-surface-bg flex items-center justify-center mb-6 group-hover:bg-surface-sidebar group-hover:text-text-primary transition-colors">
             <Icon className="w-6 h-6" />
         </div>
         <h4 className="text-lg font-black italic mb-3">{title}</h4>

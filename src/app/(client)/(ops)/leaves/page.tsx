@@ -135,7 +135,7 @@ export default function LeavesPage() {
                                         <tab.icon className="w-4 h-4" />
                                         {tab.label}
                                         {tab.count !== undefined && tab.count > 0 && (
-                                            <span className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[9px] shadow-sm">
+                                            <span className="w-5 h-5 rounded-full bg-action-primary text-text-primary flex items-center justify-center text-[9px] shadow-sm">
                                                 {tab.count}
                                             </span>
                                         )}
@@ -145,7 +145,7 @@ export default function LeavesPage() {
 
                             <button
                                 onClick={() => setIsNewRequestOpen(true)}
-                                className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-accent text-white hover:bg-black hover:text-white transition-all flex items-center justify-center shadow-lg shadow-accent/20 group ml-auto md:ml-0"
+                                className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-accent text-text-primary hover:bg-black hover:text-text-primary transition-all flex items-center justify-center shadow-lg shadow-accent/20 group ml-auto md:ml-0"
                                 title="Nouvelle Demande"
                             >
                                 <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -243,7 +243,7 @@ export default function LeavesPage() {
                                 {pendingApprovals.length === 0 ? (
                                     <div className="text-center py-20 bg-bg-secondary/50 rounded-[3rem] border border-border mt-8">
                                         <div className="w-20 h-20 bg-bg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-border">
-                                            <CheckCircle2 className="w-8 h-8 text-emerald-500/50" />
+                                            <CheckCircle2 className="w-8 h-8 text-status-success/50" />
                                         </div>
                                         <h3 className="font-serif italic text-2xl text-text-primary mb-2">Tout est à jour</h3>
                                         <p className="text-text-muted text-sm uppercase tracking-widest">Aucune demande en attente de validation</p>

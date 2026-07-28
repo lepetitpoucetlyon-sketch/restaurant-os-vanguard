@@ -65,7 +65,7 @@ export function FacturXDownloadButton({
             className={[
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border",
                 "text-xs font-medium transition-colors",
-                "hover:bg-action-primary hover:text-white hover:border-action-primary",
+                "hover:bg-action-primary hover:text-text-primary hover:border-action-primary",
                 "disabled:opacity-50 disabled:cursor-not-allowed",
                 className,
             ]

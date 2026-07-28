@@ -264,7 +264,7 @@ export default function ReviewsSettings() {
                                     value={templates.neutral}
                                     onChange={(e) => setTemplates(t => ({ ...t, neutral: e.target.value }))}
                                     rows={3}
-                                    className="w-full px-6 py-5 bg-bg-tertiary border border-border rounded-2xl text-sm font-serif italic text-text-primary focus:bg-bg-primary focus:border-amber-500/30 transition-all outline-none resize-none"
+                                    className="w-full px-6 py-5 bg-bg-tertiary border border-border rounded-2xl text-sm font-serif italic text-text-primary focus:bg-bg-primary focus:border-action-primary/30 transition-all outline-none resize-none"
                                 />
                             </div>
 

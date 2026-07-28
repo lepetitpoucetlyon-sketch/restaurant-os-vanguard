@@ -126,7 +126,7 @@ export function Spinner({ size = "md", color = "accent", className }: SpinnerPro
 
     const colorClasses = {
         accent: "text-accent",
-        white: "text-white",
+        white: "text-text-primary",
         muted: "text-text-muted",
     };
 

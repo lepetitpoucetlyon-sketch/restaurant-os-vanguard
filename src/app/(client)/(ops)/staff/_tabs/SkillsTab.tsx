@@ -66,7 +66,7 @@ export function SkillsTab({
                                                         title={isManager ? (has ? "Retirer" : "Ajouter") : "Lecture seule"}
                                                         className={`w-6 h-6 rounded-full border-2 transition-colors ${
                                                             has
-                                                                ? "bg-status-success border-status-success text-white"
+                                                                ? "bg-status-success border-status-success text-text-primary"
                                                                 : "border-border text-transparent"
                                                         } ${isManager ? "hover:opacity-70 cursor-pointer" : "cursor-default"}`}
                                                     >
@@ -125,7 +125,7 @@ export function SkillsTab({
                                     {isManager && !docForm && (
                                         <button
                                             onClick={() => setDocForm({ name: "", url: "" })}
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-action-primary text-white text-xs font-medium hover:opacity-90"
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-action-primary text-text-primary text-xs font-medium hover:opacity-90"
                                         >
                                             <FileText className="w-3.5 h-3.5" /> Ajouter un document
                                         </button>
@@ -150,7 +150,7 @@ export function SkillsTab({
                                         />
                                         <div className="flex gap-2 justify-end">
                                             <button onClick={() => setDocForm(null)} className="px-3 py-1.5 text-sm text-text-muted hover:text-text-primary">Annuler</button>
-                                            <button onClick={() => onAddDoc()} className="px-3 py-1.5 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90">Enregistrer</button>
+                                            <button onClick={() => onAddDoc()} className="px-3 py-1.5 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90">Enregistrer</button>
                                         </div>
                                     </div>
                                 )}
@@ -183,7 +183,7 @@ export function SkillsTab({
                                                 {isManager && (
                                                     <button
                                                         onClick={() => onDeleteDoc(doc)}
-                                                        className="p-1 rounded hover:bg-surface-hover text-red-500"
+                                                        className="p-1 rounded hover:bg-surface-hover text-status-danger"
                                                     >
                                                         <Trash2 className="w-3.5 h-3.5" />
                                                     </button>

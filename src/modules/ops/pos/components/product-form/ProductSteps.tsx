@@ -47,7 +47,7 @@ export function ProductSteps({
                 ) : (
                     recipeSteps.map((step, i) => (
                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} key={i} className="flex gap-6 p-6 bg-surface-card rounded-[2rem] border border-border relative group">
-                            <div className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center font-serif font-black text-lg shrink-0">
+                            <div className="w-10 h-10 rounded-xl bg-accent text-text-primary flex items-center justify-center font-serif font-black text-lg shrink-0">
                                 {step.order}
                             </div>
                             <div className="flex-1 space-y-4">

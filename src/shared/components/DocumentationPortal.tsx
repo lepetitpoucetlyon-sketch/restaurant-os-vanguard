@@ -110,7 +110,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                         return (
                                                             <div key={pidx} className="rounded-2xl border border-subtle dark:border-border shadow-sm overflow-hidden">
                                                                 <div
-                                                                    className="flex items-center gap-4 px-5 py-4 bg-surface-sidebar dark:bg-surface-sidebar text-white cursor-pointer hover:bg-surface-sidebar dark:hover:bg-surface-sidebar transition-colors group/banner"
+                                                                    className="flex items-center gap-4 px-5 py-4 bg-surface-sidebar dark:bg-surface-sidebar text-text-primary cursor-pointer hover:bg-surface-sidebar dark:hover:bg-surface-sidebar transition-colors group/banner"
                                                                     onClick={() => {
                                                                         const tutorialSection: import('@nexus/contracts/nexus.types').NexusTutorialSection = {
                                                                             id: activeCategory as string,
@@ -241,7 +241,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                             {!isPage && (
                                 <button
                                     onClick={closeDocumentation}
-                                    className="h-12 px-8 bg-surface-sidebar dark:bg-surface-card hover:bg-surface-sidebar dark:hover:bg-surface-bg text-white dark:text-primary rounded-full font-black text-[9px] uppercase tracking-widest transition-all shadow-xl shadow-neutral-900/10 dark:shadow-black/40"
+                                    className="h-12 px-8 bg-surface-sidebar dark:bg-surface-card hover:bg-surface-sidebar dark:hover:bg-surface-bg text-text-primary dark:text-primary rounded-full font-black text-[9px] uppercase tracking-widest transition-all shadow-xl shadow-neutral-900/10 dark:shadow-black/40"
                                 >
                                     Compris, Fermer
                                 </button>

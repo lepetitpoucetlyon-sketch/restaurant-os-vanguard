@@ -27,7 +27,7 @@ export function JournalEntriesView() {
                             onClick={() => setFilter(f as 'all' | 'pending' | 'validated')}
                             className={cn(
                                 "px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all",
-                                filter === f ? "bg-accent text-white" : "text-text-muted hover:text-text-primary"
+                                filter === f ? "bg-accent text-text-primary" : "text-text-muted hover:text-text-primary"
                             )}
                         >
                             {f === 'all' ? 'Toutes' : f === 'pending' ? 'En attente' : 'Validées'}
@@ -89,7 +89,7 @@ export function JournalEntriesView() {
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
                                             <Button size="sm" variant="ghost" className="h-8 px-3 rounded-lg"><Eye className="w-4 h-4" /></Button>
                                             {!entry.isValidated && (
-                                                <Button size="sm" className="h-8 px-3 bg-success text-white rounded-lg text-[10px] font-bold" onClick={() => validateJournalEntry(entry.id)}>
+                                                <Button size="sm" className="h-8 px-3 bg-success text-text-primary rounded-lg text-[10px] font-bold" onClick={() => validateJournalEntry(entry.id)}>
                                                     Valider
                                                 </Button>
                                             )}

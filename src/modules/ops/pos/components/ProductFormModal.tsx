@@ -17,7 +17,7 @@ import {
 import type { ServingMethod } from "@nexus/contracts";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { useRecipes, useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useRecipes, useInventory } from "@/modules/ops/providers";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
@@ -221,7 +221,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
         <Modal isOpen={isOpen} onClose={onClose} size="xl" className="p-0 border-none bg-transparent" showClose={false} noPadding>
             <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.3)] border border-default">
                 {/* Premium Header */}
-                <div className={cn("px-10 py-8 text-white relative overflow-hidden", productType === 'dish' ? "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F]" : "bg-gradient-to-br from-[#4C1D95] to-[#7C3AED]")}>
+                <div className={cn("px-10 py-8 text-text-primary relative overflow-hidden", productType === 'dish' ? "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F]" : "bg-gradient-to-br from-[#4C1D95] to-[#7C3AED]")}>
                     <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")` }} />
                     <div className="relative z-10 flex items-center justify-between">
                         <div className="flex items-center gap-6">
@@ -233,7 +233,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                                     {editProduct ? 'Modifier' : 'Nouveau'} {productType === 'dish' ? 'Plat Signature' : 'Cocktail Signature'}
                                     <Sparkles className="w-5 h-5 text-accent/80" />
                                 </h2>
-                                <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Configuration de la Fiche Technique de Vente</p>
+                                <p className="text-text-primary/60 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Configuration de la Fiche Technique de Vente</p>
                             </div>
                         </div>
                         <button onClick={onClose} className="w-12 h-12 rounded-2xl bg-surface-card/10 hover:bg-surface-card/20 border border-subtle flex items-center justify-center transition-all"><X className="w-6 h-6" /></button>
@@ -366,7 +366,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                                                 setNewMixerInput("");
                                             }
                                         }}
-                                        className="h-14 px-6 bg-accent text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-accent/90 transition-all"
+                                        className="h-14 px-6 bg-accent text-text-primary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-accent/90 transition-all"
                                     >
                                         <Plus className="w-4 h-4" />
                                     </button>
@@ -404,7 +404,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                                     { id: 'vegan', label: 'VÉGAN', icon: '🌱', state: isVegan, setState: setIsVegan },
                                     { id: 'glutenFree', label: 'NO GLUTEN', icon: '🌾', state: isGlutenFree, setState: setIsGlutenFree },
                                 ].map(opt => (
-                                    <button key={opt.id} type="button" onClick={() => opt.setState(!opt.state)} className={cn("px-5 py-3 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all", opt.state ? "bg-success text-white border-success shadow-lg shadow-success/20" : "bg-surface-card border-border text-text-muted hover:border-text-muted/30")}>{opt.label}</button>
+                                    <button key={opt.id} type="button" onClick={() => opt.setState(!opt.state)} className={cn("px-5 py-3 rounded-2xl border-2 font-black text-[10px] uppercase tracking-widest transition-all", opt.state ? "bg-success text-text-primary border-success shadow-lg shadow-success/20" : "bg-surface-card border-border text-text-muted hover:border-text-muted/30")}>{opt.label}</button>
                                 ))}
                             </div>
                         </div>
@@ -424,7 +424,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
 
                 <div className="px-10 py-8 border-t border-border bg-surface-card dark:bg-bg-secondary flex gap-6 shrink-0">
                     <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-border bg-surface-card hover:bg-bg-tertiary transition-all">Abandonner</Button>
-                    <Button disabled={isSubmitting} onClick={handleSubmit} className={cn("flex-2 px-12 h-14 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all transform hover:scale-[1.02]", productType === 'dish' ? "bg-[#1B4332] hover:bg-surface-sidebar shadow-[#1B4332]/20" : "bg-[#4C1D95] hover:bg-surface-sidebar shadow-[#4C1D95]/20")}>
+                    <Button disabled={isSubmitting} onClick={handleSubmit} className={cn("flex-2 px-12 h-14 text-text-primary rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all transform hover:scale-[1.02]", productType === 'dish' ? "bg-[#1B4332] hover:bg-surface-sidebar shadow-[#1B4332]/20" : "bg-[#4C1D95] hover:bg-surface-sidebar shadow-[#4C1D95]/20")}>
                         {isSubmitting ? <Sparkles className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                         {editProduct ? 'Sauvegarder les modifications' : 'Consigner la Fiche Technique'}
                     </Button>

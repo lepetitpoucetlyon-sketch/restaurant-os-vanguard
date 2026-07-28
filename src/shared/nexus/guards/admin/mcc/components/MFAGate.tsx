@@ -112,7 +112,7 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
     // -- Enrollment gate --
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm">
-            <div className="w-full max-w-lg mx-4 bg-zinc-900 border border-orange-500/40 rounded-2xl shadow-2xl shadow-orange-900/20 p-8">
+            <div className="w-full max-w-lg mx-4 bg-surface-bg border border-orange-500/40 rounded-2xl shadow-2xl shadow-orange-900/20 p-8">
 
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-6">
@@ -120,12 +120,12 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
                         <ShieldAlert className="text-orange-400" size={24} />
                     </div>
                     <div>
-                        <h2 className="text-white font-semibold text-lg">Authentification 2 facteurs requise</h2>
-                        <p className="text-zinc-400 text-sm">Accès MCC — fleet_admin</p>
+                        <h2 className="text-text-primary font-semibold text-lg">Authentification 2 facteurs requise</h2>
+                        <p className="text-text-secondary text-sm">Accès MCC — fleet_admin</p>
                     </div>
                 </div>
 
-                <p className="text-zinc-300 text-sm mb-6 leading-relaxed">
+                <p className="text-text-secondary text-sm mb-6 leading-relaxed">
                     Un compte admin compromis donne accès à <strong className="text-orange-400">tous les restaurants</strong> de la flotte.
                     Vous devez activer le TOTP (Google Authenticator, Authy, 1Password) pour continuer.
                 </p>
@@ -133,7 +133,7 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
                 {status === 'needs_enrollment' && (
                     <button
                         onClick={handleStartEnrollment}
-                        className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl transition-colors"
+                        className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 text-text-primary font-medium rounded-xl transition-colors"
                     >
                         Configurer l&apos;authentificateur
                     </button>
@@ -141,52 +141,52 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
 
                 {status === 'enrolling' && session && (
                     <div className="space-y-5">
-                        <div className="bg-zinc-800 rounded-xl p-4 space-y-4">
-                            <p className="text-zinc-300 text-sm font-medium">
+                        <div className="bg-surface-card rounded-xl p-4 space-y-4">
+                            <p className="text-text-secondary text-sm font-medium">
                                 1 — Ouvrez votre application (Google Authenticator · Authy · 1Password)
                             </p>
-                            <p className="text-zinc-300 text-sm font-medium">
+                            <p className="text-text-secondary text-sm font-medium">
                                 2 — Ajoutez un compte manuellement et copiez cette clé secrète :
                             </p>
 
                             {/* Manual key */}
                             <div className="flex items-center gap-2">
-                                <code className="flex-1 bg-zinc-900 text-orange-300 text-xs font-mono px-3 py-2 rounded-lg break-all select-all">
+                                <code className="flex-1 bg-surface-bg text-orange-300 text-xs font-mono px-3 py-2 rounded-lg break-all select-all">
                                     {session.manualKey}
                                 </code>
                                 <button
                                     onClick={() => copy(session.manualKey, 'key')}
-                                    className="shrink-0 p-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
+                                    className="shrink-0 p-2 bg-surface-elevated hover:bg-zinc-600 rounded-lg transition-colors"
                                     title="Copier la clé"
                                 >
-                                    {copied === 'key' ? <Check size={14} className="text-green-400" /> : <Copy size={14} className="text-zinc-300" />}
+                                    {copied === 'key' ? <Check size={14} className="text-green-400" /> : <Copy size={14} className="text-text-secondary" />}
                                 </button>
                             </div>
 
-                            <p className="text-zinc-500 text-xs">
+                            <p className="text-text-muted text-xs">
                                 Type : TOTP · Algorithme : SHA-1 · Période : 30 s · Chiffres : 6
                             </p>
 
-                            <p className="text-zinc-300 text-sm font-medium mt-2">
+                            <p className="text-text-secondary text-sm font-medium mt-2">
                                 Ou scannez l&apos;URI otpauth (mode avancé) :
                             </p>
                             <div className="flex items-center gap-2">
-                                <code className="flex-1 bg-zinc-900 text-zinc-400 text-xs font-mono px-3 py-2 rounded-lg break-all select-all">
+                                <code className="flex-1 bg-surface-bg text-text-secondary text-xs font-mono px-3 py-2 rounded-lg break-all select-all">
                                     {session.qrUrl}
                                 </code>
                                 <button
                                     onClick={() => copy(session.qrUrl, 'url')}
-                                    className="shrink-0 p-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
+                                    className="shrink-0 p-2 bg-surface-elevated hover:bg-zinc-600 rounded-lg transition-colors"
                                     title="Copier l'URI"
                                 >
-                                    {copied === 'url' ? <Check size={14} className="text-green-400" /> : <Copy size={14} className="text-zinc-300" />}
+                                    {copied === 'url' ? <Check size={14} className="text-green-400" /> : <Copy size={14} className="text-text-secondary" />}
                                 </button>
                             </div>
                         </div>
 
                         {/* OTP input */}
                         <div className="space-y-2">
-                            <label className="text-zinc-300 text-sm font-medium">
+                            <label className="text-text-secondary text-sm font-medium">
                                 3 — Entrez le code à 6 chiffres affiché dans l&apos;app :
                             </label>
                             <input
@@ -198,12 +198,12 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
                                 value={otp}
                                 onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                                 onKeyDown={e => e.key === 'Enter' && handleVerifyOTP()}
-                                className="w-full bg-zinc-800 border border-zinc-600 text-white text-center text-xl font-mono tracking-widest rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors"
+                                className="w-full bg-surface-card border border-zinc-600 text-text-primary text-center text-xl font-mono tracking-widest rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors"
                             />
                         </div>
 
                         {error && (
-                            <div className="flex items-center gap-2 text-red-400 text-sm">
+                            <div className="flex items-center gap-2 text-status-danger text-sm">
                                 <AlertCircle size={14} />
                                 <span>{error}</span>
                             </div>
@@ -212,7 +212,7 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
                         <button
                             onClick={handleVerifyOTP}
                             disabled={otp.length !== 6}
-                            className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 disabled:bg-zinc-700 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors"
+                            className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 disabled:bg-surface-elevated disabled:cursor-not-allowed text-text-primary font-medium rounded-xl transition-colors"
                         >
                             Vérifier et activer le 2FA
                         </button>
@@ -220,7 +220,7 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
                 )}
 
                 {status === 'verifying' && (
-                    <div className="flex items-center justify-center gap-3 py-8 text-zinc-400">
+                    <div className="flex items-center justify-center gap-3 py-8 text-text-secondary">
                         <Loader2 className="animate-spin" size={20} />
                         <span>Vérification en cours…</span>
                     </div>
@@ -228,7 +228,7 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
 
                 {/* Footer */}
                 <div className="mt-6 pt-4 border-t border-zinc-800">
-                    <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                    <div className="flex items-center gap-2 text-text-muted text-xs">
                         <ShieldCheck size={12} />
                         <span>Le secret TOTP n&apos;est jamais stocké sur nos serveurs — clé locale dans l&apos;app uniquement.</span>
                     </div>

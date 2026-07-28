@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers";
 import { StockItem, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
@@ -96,7 +96,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 animate={{ scale: 1, rotate: 0 }}
                                 className="w-24 h-24 rounded-full bg-accent-gold flex items-center justify-center mb-10 shadow-glow"
                             >
-                                <Check className="w-12 h-12 text-white" strokeWidth={3} />
+                                <Check className="w-12 h-12 text-text-primary" strokeWidth={3} />
                             </motion.div>
                             <p className="text-3xl font-serif font-black text-text-primary italic tracking-tight">Transfert Scellé</p>
                             <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-4 opacity-50">L&apos;Archive a rejoint son nouvel emplacement</p>
@@ -187,7 +187,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                             className={cn(
                                 "flex items-center gap-4 px-12 py-5 rounded-[22px] text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-700 relative overflow-hidden group/btn shadow-premium",
                                 selectedItem && targetLocation
-                                    ? "bg-text-primary text-white hover:bg-accent-gold hover:text-white"
+                                    ? "bg-text-primary text-text-primary hover:bg-accent-gold hover:text-text-primary"
                                     : "bg-bg-tertiary text-text-muted/40 cursor-not-allowed border border-border/20"
                             )}
                         >

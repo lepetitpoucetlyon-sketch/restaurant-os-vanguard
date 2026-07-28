@@ -158,7 +158,7 @@ export default function PaymentTerminalSettings() {
                 </div>
                 <button
                     onClick={handleAdd}
-                    className="flex items-center gap-2 px-4 h-9 rounded-xl bg-accent-gold text-white text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
+                    className="flex items-center gap-2 px-4 h-9 rounded-xl bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
                 >
                     <Plus className="w-3.5 h-3.5" />
                     Ajouter
@@ -375,7 +375,7 @@ export default function PaymentTerminalSettings() {
                                 <button
                                     onClick={handleSave}
                                     disabled={!form.name.trim()}
-                                    className="flex-1 h-10 rounded-xl bg-accent-gold text-white text-[11px] font-black uppercase tracking-widest hover:bg-accent-gold/90 transition-colors disabled:opacity-40"
+                                    className="flex-1 h-10 rounded-xl bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-widest hover:bg-accent-gold/90 transition-colors disabled:opacity-40"
                                 >
                                     Enregistrer le terminal
                                 </button>

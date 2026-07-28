@@ -1,7 +1,7 @@
 "use client";
 
 import { Table, TableStatus } from "@nexus/contracts";
-import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers";
 import {
     Trash2,
     Armchair,
@@ -196,7 +196,7 @@ export const EditPanel = ({
                         <motion.button
                             whileTap={{ scale: 0.9 }}
                             onClick={async () => await updateTable(selectedTable.id, { seats: Math.min(20, selectedTable.seats + 1) })}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-text-primary hover:bg-surface-sidebar text-white transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-text-primary hover:bg-surface-sidebar text-text-primary transition-colors"
                         >
                             <Plus className="w-4 h-4" />
                         </motion.button>

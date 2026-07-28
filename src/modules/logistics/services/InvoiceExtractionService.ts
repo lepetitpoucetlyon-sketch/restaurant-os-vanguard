@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence/ai/LLMManager';
+import { LLMManager } from '@/modules/intelligence/ai';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import {
@@ -28,7 +28,7 @@ export interface InvoiceExtractionOptions {
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
-import { AI_MODELS } from '@/modules/intelligence/ai/types';
+import { AI_MODELS } from '@/modules/intelligence/ai';
 
 const MODELS = {
     flash: AI_MODELS.visionFast,

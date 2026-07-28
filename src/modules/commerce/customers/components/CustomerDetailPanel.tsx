@@ -91,7 +91,7 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center py-16 text-white/30">
+            <div className="flex items-center justify-center py-16 text-text-primary/30">
                 <Clock className="w-5 h-5 animate-pulse mr-2" />
                 <span className="text-sm">Chargement...</span>
             </div>
@@ -108,22 +108,22 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
             <div className="grid grid-cols-3 gap-4">
                 <div className="p-5 rounded-2xl bg-surface-card/5 border border-subtle text-center">
                     <p className="text-2xl font-mono font-light text-accent italic">{totalVisits}</p>
-                    <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1">Visites</p>
+                    <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-1">Visites</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-card/5 border border-subtle text-center">
-                    <p className="text-2xl font-mono font-light text-white italic">{data.avgSpend.toFixed(0)}€</p>
-                    <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1">Moy. ticket</p>
+                    <p className="text-2xl font-mono font-light text-text-primary italic">{data.avgSpend.toFixed(0)}€</p>
+                    <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-1">Moy. ticket</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-card/5 border border-subtle text-center">
-                    <p className="text-2xl font-mono font-light text-white italic">{data.orders.length}</p>
-                    <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1">Commandes</p>
+                    <p className="text-2xl font-mono font-light text-text-primary italic">{data.orders.length}</p>
+                    <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-1">Commandes</p>
                 </div>
             </div>
 
             {/* Top Products */}
             {data.topProducts.length > 0 && (
                 <div>
-                    <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <TrendingUp className="w-3.5 h-3.5 text-accent" /> Top 3 plats
                     </h4>
                     <div className="space-y-2">
@@ -133,9 +133,9 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
                                     <span className="w-5 h-5 rounded-full bg-accent/10 text-accent text-[10px] font-black flex items-center justify-center">
                                         {i + 1}
                                     </span>
-                                    <span className="text-sm text-white font-medium">{p.name}</span>
+                                    <span className="text-sm text-text-primary font-medium">{p.name}</span>
                                 </div>
-                                <span className="text-xs font-mono text-white/50">{p.count}×</span>
+                                <span className="text-xs font-mono text-text-primary/50">{p.count}×</span>
                             </div>
                         ))}
                     </div>
@@ -145,7 +145,7 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
             {/* Reservations Timeline */}
             {data.reservations.length > 0 && (
                 <div>
-                    <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-accent" /> Réservations récentes
                     </h4>
                     <div className="space-y-2">
@@ -161,11 +161,11 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
                                         isUpcoming ? "bg-accent" : "bg-white/20"
                                     }`} />
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm text-white font-mono">
+                                        <p className="text-sm text-text-primary font-mono">
                                             {date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })}
-                                            {" "}<span className="text-white/40">{r.time}</span>
+                                            {" "}<span className="text-text-primary/40">{r.time}</span>
                                         </p>
-                                        <p className="text-[10px] text-white/40 mt-0.5 capitalize">
+                                        <p className="text-[10px] text-text-primary/40 mt-0.5 capitalize">
                                             {r.status} · {r.partySize} pers.
                                         </p>
                                     </div>
@@ -182,7 +182,7 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
             )}
 
             {data.reservations.length === 0 && data.orders.length === 0 && (
-                <div className="text-center py-10 text-white/30">
+                <div className="text-center py-10 text-text-primary/30">
                     <ShoppingBag className="w-8 h-8 mx-auto mb-2 opacity-40" />
                     <p className="text-sm">Aucun historique trouvé</p>
                 </div>
@@ -216,14 +216,14 @@ export function CustomerDetailPanel({
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="bg-[#121212] p-6 md:p-10 relative overflow-hidden text-white border-b border-white/5">
+                <div className="bg-[#121212] p-6 md:p-10 relative overflow-hidden text-text-primary border-b border-white/5">
                     <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 relative z-10">
                         <div className="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] bg-surface-card/5 backdrop-blur-md border border-subtle flex items-center justify-center text-2xl md:text-4xl font-serif font-light italic shadow-2xl text-accent">
                             {(customer.firstName || "").charAt(0)}
                             {(customer.lastName || "").charAt(0)}
                         </div>
                         <div className="flex-1 text-center md:text-left">
-                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-2">
+                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-2">
                                 Profil Client Executive Intelligence
                             </p>
                             <h2 className="text-2xl md:text-4xl font-serif font-light tracking-tight italic">
@@ -256,7 +256,7 @@ export function CustomerDetailPanel({
                                 className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-black uppercase tracking-widest transition-colors ${
                                     active
                                         ? "text-accent border-b-2 border-accent"
-                                        : "text-white/30 hover:text-white/60"
+                                        : "text-text-primary/30 hover:text-text-primary/60"
                                 }`}
                             >
                                 <Icon className="w-3.5 h-3.5" />
@@ -275,23 +275,23 @@ export function CustomerDetailPanel({
                                     <p className="text-3xl font-mono font-light text-accent italic">
                                         {customer.visitCount}
                                     </p>
-                                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
+                                    <p className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-3">
                                         Passages
                                     </p>
                                 </div>
                                 <div className="p-10 text-center border-r border-white/5">
-                                    <p className="text-3xl font-mono font-light text-white italic">
+                                    <p className="text-3xl font-mono font-light text-text-primary italic">
                                         {((customer.totalSpentInMicrounits ?? (customer.totalSpentInCents ? customer.totalSpentInCents * 10_000 : 0)) / 1_000_000).toFixed(0)}€
                                     </p>
-                                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
+                                    <p className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-3">
                                         CA Réalisé
                                     </p>
                                 </div>
                                 <div className="p-10 text-center">
-                                    <p className="text-3xl font-mono font-light text-white italic">
+                                    <p className="text-3xl font-mono font-light text-text-primary italic">
                                         {((customer.averageSpendInMicrounits ?? (customer.averageSpendInCents ? customer.averageSpendInCents * 10_000 : 0)) / 1_000_000).toFixed(0)}€
                                     </p>
-                                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-3">
+                                    <p className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-3">
                                         Engagement
                                     </p>
                                 </div>
@@ -301,27 +301,27 @@ export function CustomerDetailPanel({
                             <div className="p-10 space-y-12">
                                 <div className="grid grid-cols-2 gap-8">
                                     <div className="p-8 rounded-3xl bg-surface-card/5 border border-subtle shadow-sm group hover:border-accent/40 transition-all">
-                                        <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-4">
+                                        <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mb-4">
                                             Ligne Directe
                                         </p>
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-2xl bg-surface-card/5 flex items-center justify-center">
                                                 <Phone strokeWidth={1.5} className="w-5 h-5 text-accent" />
                                             </div>
-                                            <span className="text-base font-mono font-bold text-white tracking-tight">
+                                            <span className="text-base font-mono font-bold text-text-primary tracking-tight">
                                                 {customer.phone}
                                             </span>
                                         </div>
                                     </div>
                                     <div className="p-8 rounded-3xl bg-surface-card/5 border border-subtle shadow-sm group hover:border-accent/40 transition-all">
-                                        <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-4">
+                                        <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mb-4">
                                             Canal Privilégié
                                         </p>
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-2xl bg-surface-card/5 flex items-center justify-center">
                                                 <Mail strokeWidth={1.5} className="w-5 h-5 text-accent" />
                                             </div>
-                                            <span className="text-base font-bold text-white truncate italic">
+                                            <span className="text-base font-bold text-text-primary truncate italic">
                                                 {customer.email || "Non renseigné"}
                                             </span>
                                         </div>
@@ -330,7 +330,7 @@ export function CustomerDetailPanel({
 
                                 {/* Preferences */}
                                 <div>
-                                    <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.2em] mb-8 flex items-center gap-4">
+                                    <h3 className="text-[11px] font-black text-text-primary/40 uppercase tracking-[0.2em] mb-8 flex items-center gap-4">
                                         <Star strokeWidth={2} className="w-4 h-4 text-accent" />
                                         ANALYSE DES HABITUDES &amp; PRÉFÉRENCES
                                     </h3>
@@ -338,7 +338,7 @@ export function CustomerDetailPanel({
                                         {customer.preferences.map((pref, i) => (
                                             <span
                                                 key={i}
-                                                className="px-6 py-3 bg-surface-card/5 rounded-2xl text-[12px] font-bold text-white border border-subtle shadow-sm italic"
+                                                className="px-6 py-3 bg-surface-card/5 rounded-2xl text-[12px] font-bold text-text-primary border border-subtle shadow-sm italic"
                                             >
                                                 {pref}
                                             </span>
@@ -363,7 +363,7 @@ export function CustomerDetailPanel({
                     <Button
                         variant="ghost"
                         onClick={onClose}
-                        className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white border border-subtle transition-all"
+                        className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-text-primary/40 hover:text-text-primary border border-subtle transition-all"
                     >
                         Fermer le Profil
                     </Button>

@@ -184,7 +184,7 @@ export default function ReservationWidgetSettings() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-accent text-white font-semibold text-sm hover:bg-accent/90 transition disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-accent text-text-primary font-semibold text-sm hover:bg-accent/90 transition disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Sauvegarder

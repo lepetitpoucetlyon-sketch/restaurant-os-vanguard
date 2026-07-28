@@ -241,7 +241,7 @@ export function VoidModal({
                                         className={cn(
                                             "h-11 rounded-2xl border text-[11px] font-black uppercase tracking-wider transition-all",
                                             mode === m
-                                                ? "bg-status-error border-status-error/50 text-white"
+                                                ? "bg-status-error border-status-error/50 text-text-primary"
                                                 : "bg-bg-primary border-border text-text-muted hover:border-status-error/30"
                                         )}
                                     >
@@ -347,7 +347,7 @@ export function VoidModal({
                             <button
                                 onClick={handleSubmit}
                                 disabled={!canSubmit}
-                                className="w-full h-14 rounded-2xl bg-status-error text-white text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-status-error/90 active:scale-98 transition-all disabled:opacity-40"
+                                className="w-full h-14 rounded-2xl bg-status-error text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-status-error/90 active:scale-98 transition-all disabled:opacity-40"
                             >
                                 {isSubmitting ? (
                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

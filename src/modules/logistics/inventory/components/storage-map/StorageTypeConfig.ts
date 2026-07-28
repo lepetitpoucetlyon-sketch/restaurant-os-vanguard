@@ -30,7 +30,7 @@ export const STORAGE_TYPE_CONFIG: Record<string, { icon: LucideIcon; color: stri
         icon: Archive,
         color: '#F59E0B',
         bgColor: 'bg-status-warning/10',
-        borderColor: 'border-amber-500/30',
+        borderColor: 'border-action-primary/30',
         label: 'Épicerie',
         gradient: 'from-status-warning/20 to-status-warning/5'
     },

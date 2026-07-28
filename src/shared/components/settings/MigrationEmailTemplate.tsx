@@ -227,7 +227,7 @@ export default function MigrationEmailTemplate() {
         <button
           onClick={handleSend}
           disabled={saving || sending || !template.subject.trim() || !template.body.trim()}
-          className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-accent text-white font-semibold text-sm hover:bg-accent/90 transition disabled:opacity-50"
+          className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-accent text-text-primary font-semibold text-sm hover:bg-accent/90 transition disabled:opacity-50"
         >
           {sending ? (
             <Loader2 className="w-4 h-4 animate-spin" />

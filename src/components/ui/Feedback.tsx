@@ -37,7 +37,7 @@ const feedbackConfig = {
     warning: {
         icon: AlertCircle,
         bg: "bg-status-warning dark:bg-status-warning/10",
-        border: "border-amber-200 dark:border-amber-500/20",
+        border: "border-amber-200 dark:border-action-primary/20",
         iconColor: "text-status-warning",
         titleColor: "text-status-warning dark:text-status-warning",
         textColor: "text-status-warning dark:text-status-warning",
@@ -175,8 +175,8 @@ export function ConfirmationDialog({
     loading = false,
 }: ConfirmationDialogProps) {
     const variantClasses = {
-        danger: "bg-status-danger hover:bg-status-danger text-white",
-        warning: "bg-status-warning hover:bg-status-warning text-white",
+        danger: "bg-status-danger hover:bg-status-danger text-text-primary",
+        warning: "bg-status-warning hover:bg-status-warning text-text-primary",
         default: "bg-accent hover:bg-accent/90 text-[#0A0A0A]",
     };
 

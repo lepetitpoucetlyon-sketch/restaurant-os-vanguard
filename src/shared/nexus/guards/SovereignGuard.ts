@@ -17,6 +17,7 @@ export const SovereignGuard = {
     'inventoryMovements',
     'journalEntries',
     'fiscalSeals',
+    'fiscalLedger',
     'wasteLogs',
     'hygieneLogs',
     'receptionLogs',

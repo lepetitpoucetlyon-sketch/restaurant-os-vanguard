@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { activeCartAtom } from "../store/orderAtoms";
-import { useOrders, useTables, useProducts, useCategories } from "@/modules/ops/providers/NexusOpsProvider";
+import { useOrders, useTables, useProducts, useCategories } from "@/modules/ops/providers";
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useToast } from "@/components/ui/Toast";
 import { Table, OrderItem } from "@nexus/contracts";

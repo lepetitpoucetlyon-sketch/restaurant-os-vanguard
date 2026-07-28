@@ -11,9 +11,9 @@ import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useLanguage } from "@/shared/hooks";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers";
 import { AlertTriangle, Clock } from "lucide-react";
-import { useNexusFleet } from "@/modules/intelligence/fleet/NexusFleetProvider";
+import { useNexusFleet } from "@/modules/intelligence/fleet";
 import { useAtomValue } from "jotai";
 
 // ==========================================
@@ -76,10 +76,10 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                             <AlertTriangle className="w-8 h-8 text-status-danger" />
                         )}
                     </div>
-                    <span className="text-white font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg">
+                    <span className="text-text-primary font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg">
                         {disabledReason === 'expired' ? 'DLC CRITIQUE' : 'RUPTURE STOCK'}
                     </span>
-                    <p className="text-white/70 text-sm mt-2 font-medium">
+                    <p className="text-text-primary/70 text-sm mt-2 font-medium">
                         {disabledReason === 'expired' 
                             ? "Produit retiré par mesure d'hygiène" 
                             : "Ingrédients manquants pour ce plat"}
@@ -137,7 +137,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                             whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}
                             className={cn(
-                                "rounded-full bg-text-primary text-white dark:bg-surface-card dark:text-primary flex items-center justify-center shadow-premium hover:bg-accent-gold hover:text-white transition-all duration-500",
+                                "rounded-full bg-text-primary text-text-primary dark:bg-surface-card dark:text-primary flex items-center justify-center shadow-premium hover:bg-accent-gold hover:text-text-primary transition-all duration-500",
                                 buttonSize === 'small' ? 'w-10 h-10' :
                                 buttonSize === 'large' ? 'w-14 h-14' : 'w-12 h-12'
                             )}

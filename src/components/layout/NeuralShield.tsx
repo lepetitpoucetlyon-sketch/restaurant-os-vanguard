@@ -84,7 +84,7 @@ export function NeuralShield() {
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-status-danger text-white rounded-full shadow-[0_0_30px_rgba(220,38,38,0.5)] flex items-center justify-center border-2 border-default hover:bg-status-danger transition-colors group"
+                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-status-danger text-text-primary rounded-full shadow-[0_0_30px_rgba(220,38,38,0.5)] flex items-center justify-center border-2 border-default hover:bg-status-danger transition-colors group"
             >
                 <ShieldAlert className="w-7 h-7 group-hover:animate-pulse" />
                 <span className="absolute -top-1 -right-1 flex h-4 w-4">
@@ -114,15 +114,15 @@ export function NeuralShield() {
                             <div className="bg-status-danger p-8 flex justify-between items-center">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-surface-card/20 rounded-2xl">
-                                        <AlertOctagon className="text-white w-8 h-8" />
+                                        <AlertOctagon className="text-text-primary w-8 h-8" />
                                     </div>
                                     <div>
-                                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Neural Shield SOS<span className="text-status-danger">.</span></h2>
+                                        <h2 className="text-2xl font-black text-text-primary uppercase tracking-tighter italic">Neural Shield SOS<span className="text-status-danger">.</span></h2>
                                         <p className="text-status-danger text-[10px] font-bold uppercase tracking-[0.3em]">Protocole de Maintenance Prioritaire</p>
                                     </div>
                                 </div>
                                 <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-surface-card/10 rounded-full transition-colors">
-                                    <X className="text-white w-6 h-6" />
+                                    <X className="text-text-primary w-6 h-6" />
                                 </button>
                             </div>
 
@@ -164,7 +164,7 @@ export function NeuralShield() {
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
                                         placeholder="Que se passe-t-il ? Soyez le plus précis possible..."
-                                        className="w-full h-32 bg-surface-sidebar/50 border border-default rounded-2xl p-4 text-white placeholder:text-secondary focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all outline-none resize-none"
+                                        className="w-full h-32 bg-surface-sidebar/50 border border-default rounded-2xl p-4 text-text-primary placeholder:text-secondary focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all outline-none resize-none"
                                     />
                                 </div>
 
@@ -185,7 +185,7 @@ export function NeuralShield() {
                                         "w-full py-5 rounded-2xl flex items-center justify-center gap-4 transition-all font-black text-sm uppercase tracking-[0.3em] shadow-xl",
                                         isSubmitting || !description.trim() 
                                             ? "bg-surface-sidebar text-secondary cursor-not-allowed" 
-                                            : "bg-status-danger text-white hover:bg-status-danger shadow-red-900/20"
+                                            : "bg-status-danger text-text-primary hover:bg-status-danger shadow-red-900/20"
                                     )}
                                 >
                                     <Send size={18} className={isSubmitting ? 'animate-bounce' : ''} />
@@ -207,8 +207,8 @@ function TypeButton({ active, onClick, label, icon }: { active: boolean, onClick
             className={cn(
                 "flex items-center gap-3 p-4 rounded-xl border transition-all text-xs font-bold uppercase tracking-widest",
                 active 
-                    ? "bg-status-danger border-red-500 text-white shadow-lg" 
-                    : "bg-surface-sidebar/50 border-default text-secondary hover:border-default hover:text-white"
+                    ? "bg-status-danger border-red-500 text-text-primary shadow-lg" 
+                    : "bg-surface-sidebar/50 border-default text-secondary hover:border-default hover:text-text-primary"
             )}
         >
             {icon}

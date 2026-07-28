@@ -63,7 +63,7 @@ export function CRMDetailView() {
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-6">
-                        <Button className="h-16 rounded-2xl bg-text-primary text-white text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        <Button className="h-16 rounded-2xl bg-text-primary text-text-primary text-[10px] font-black uppercase tracking-widest shadow-lg">
                             <Calendar className="w-4 h-4 mr-2" />
                             Réserver
                         </Button>
@@ -85,7 +85,7 @@ export function CRMDetailView() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed right-0 top-[70px] h-[calc(100vh-70px)] w-[450px] bg-bg-secondary border-l border-border z-40 shadow-2xl overflow-auto elegant-scrollbar"
         >
-            <div className="p-10 border-b border-border bg-text-primary text-white relative overflow-hidden">
+            <div className="p-10 border-b border-border bg-text-primary text-text-primary relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent-gold/20 to-transparent pointer-events-none" />
                 
                 <button 
@@ -114,7 +114,7 @@ export function CRMDetailView() {
                     </motion.h3>
                     <div className="flex items-center gap-4">
                         <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/40">
+                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-text-primary/40">
                             VIP • {(selectedCRM.id || '').slice(0, 8)}
                         </p>
                     </div>
@@ -144,7 +144,7 @@ export function CRMDetailView() {
                 </div>
 
                 <div className="pt-6 grid grid-cols-1 gap-4">
-                     <Button className="h-16 rounded-[2rem] bg-text-primary text-white text-[10px] font-black uppercase tracking-[0.3em] shadow-xl hover:-translate-y-1 transition-all">
+                     <Button className="h-16 rounded-[2rem] bg-text-primary text-text-primary text-[10px] font-black uppercase tracking-[0.3em] shadow-xl hover:-translate-y-1 transition-all">
                         {t('crm.book_reservation') || 'RÉSERVER MAINTENANT'}
                      </Button>
                 </div>

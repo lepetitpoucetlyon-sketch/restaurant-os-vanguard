@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { authedFetch } from '@/lib/client/authedFetch';
 import {
   Activity,
@@ -107,7 +107,7 @@ export function FleetCommandTable() {
         <div className="bg-[#0f0f11] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
             <div className="p-8 border-b border-white/5 flex items-center justify-between bg-gradient-to-r from-action-primary/5 to-transparent">
                 <div>
-                    <h2 className="text-xl font-serif font-black text-white tracking-tighter">Fleet Command Center</h2>
+                    <h2 className="text-xl font-serif font-black text-text-primary tracking-tighter">Fleet Command Center</h2>
                     <p className="text-[10px] text-secondary uppercase font-bold tracking-widest mt-1">Orchestration en temps réel des actifs de l'empire</p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -118,7 +118,7 @@ export function FleetCommandTable() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="RECHERCHER UN SITE..."
-                            className="bg-transparent border-none outline-none text-[10px] font-bold text-white placeholder:text-secondary w-32"
+                            className="bg-transparent border-none outline-none text-[10px] font-bold text-text-primary placeholder:text-secondary w-32"
                         />
                     </div>
                     <div className="relative" ref={filterRef}>
@@ -126,7 +126,7 @@ export function FleetCommandTable() {
                             onClick={() => setFilterOpen(o => !o)}
                             className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl transition-all text-[9px] font-black uppercase tracking-widest ${
                                 statusFilter !== 'ALL'
-                                    ? 'bg-action-primary text-white border-focus/40'
+                                    ? 'bg-action-primary text-text-primary border-focus/40'
                                     : 'bg-action-primary/10 text-brand border-focus/20 hover:bg-action-primary/20'
                             }`}
                         >
@@ -187,7 +187,7 @@ export function FleetCommandTable() {
                             >
                                 <td className="px-6 py-5">
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-white tracking-tight">{instance.name}</span>
+                                        <span className="text-sm font-bold text-text-primary tracking-tight">{instance.name}</span>
                                         <span className="text-[10px] text-secondary font-mono">ID: {instance.id} • {instance.key}</span>
                                     </div>
                                 </td>
@@ -213,7 +213,7 @@ export function FleetCommandTable() {
                                     <div className="flex flex-col items-end">
                                         {instance.security?.supportAccessGranted ? (
                                             <>
-                                                <span className="text-sm font-black text-white">{(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                                                <span className="text-sm font-black text-text-primary">{(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                                             </>
                                         ) : (
                                             <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-card/5 rounded-md border border-white/5 opacity-40">
@@ -241,7 +241,7 @@ export function FleetCommandTable() {
                                 </td>
                                 <td className="px-6 py-5 text-right">
                                     <div className="flex flex-col items-end">
-                                        <span className="text-sm font-bold text-white">{instance.metrics.activeUsers}</span>
+                                        <span className="text-sm font-bold text-text-primary">{instance.metrics.activeUsers}</span>
                                         <span className="text-[9px] font-bold text-secondary uppercase tracking-tighter">Sessions</span>
                                     </div>
                                 </td>
@@ -260,7 +260,7 @@ export function FleetCommandTable() {
                                         <div className="flex flex-col gap-1">
                                             <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase border w-fit ${
                                                 instance.rag.status === 'online'   ? 'bg-status-success/10 text-status-success border-emerald-500/20' :
-                                                instance.rag.status === 'indexing' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse' :
+                                                instance.rag.status === 'indexing' ? 'bg-action-primary/10 text-action-primary border-action-primary/20 animate-pulse' :
                                                 instance.rag.status === 'offline'  ? 'bg-status-danger/10 text-status-danger border-red-500/20' :
                                                 'bg-surface-card/5 text-secondary border-white/5'
                                             }`}>
@@ -286,14 +286,14 @@ export function FleetCommandTable() {
                                         >
                                             <RotateCcw className={`w-3.5 h-3.5 ${reindexing[instance.id] ? 'animate-spin' : ''}`} />
                                         </button>
-                                        <button className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-white hover:border-default transition-all opacity-0 group-hover:opacity-100">
+                                        <button className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-text-primary hover:border-default transition-all opacity-0 group-hover:opacity-100">
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </button>
                                         <div className="relative">
                                             <button
                                                 onClick={() => setCommandMenuId(commandMenuId === instance.id ? null : instance.id)}
                                                 disabled={commanding[instance.id]}
-                                                className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary hover:text-white transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100 disabled:opacity-40"
+                                                className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary hover:text-text-primary transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100 disabled:opacity-40"
                                             >
                                                 {commanding[instance.id]
                                                     ? <><RefreshCw className="w-3 h-3 animate-spin" /> EN COURS</>
@@ -316,7 +316,7 @@ export function FleetCommandTable() {
                                                             <button
                                                                 key={key}
                                                                 onClick={() => handleCommand(instance.id, key)}
-                                                                className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors ${danger ? 'text-error hover:bg-red-500/10' : 'text-muted hover:text-white'}`}
+                                                                className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors ${danger ? 'text-error hover:bg-status-danger/10' : 'text-muted hover:text-text-primary'}`}
                                                             >
                                                                 <Icon className="w-3 h-3" />
                                                                 {label}

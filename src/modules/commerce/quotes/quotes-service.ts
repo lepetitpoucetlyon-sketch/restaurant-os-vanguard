@@ -17,9 +17,9 @@ export const QuotesService = {
         const pending = quotes.filter(q => ['draft', 'sent', 'viewed'].includes(q.status));
         const accepted = quotes.filter(q => q.status === 'accepted' || q.status === 'converted');
         
-        const totalValueInCents = accepted.reduce((sum, q) => sum + q.totals.totalTTCInCents, 0);
-        const pendingValueInCents = pending.reduce((sum, q) => sum + q.totals.totalTTCInCents, 0);
-        
+        const totalValueInMicrounits = accepted.reduce((sum, q) => sum + q.totals.totalTTCInMicrounits, 0);
+        const pendingValueInMicrounits = pending.reduce((sum, q) => sum + q.totals.totalTTCInMicrounits, 0);
+
         const conversionRate = quotes.filter(q => q.status !== 'draft').length > 0
             ? (accepted.length / quotes.filter(q => q.status !== 'draft').length * 100).toFixed(0)
             : '0';
@@ -27,8 +27,8 @@ export const QuotesService = {
         return {
             thisMonthCount: thisMonth.length,
             pendingCount: pending.length,
-            acceptedCapitalTTCInCents: totalValueInCents,
-            pendingCapitalTTCInCents: pendingValueInCents,
+            acceptedCapitalTTCInMicrounits: totalValueInMicrounits,
+            pendingCapitalTTCInMicrounits: pendingValueInMicrounits,
             conversionRate: parseInt(conversionRate)
         };
     },
@@ -47,14 +47,15 @@ export const QuotesService = {
         }
 
         // 1. Discount Factor (more discount, more chance)
-        const totalHT = quote.totals.totalHTInCents || 0;
-        const totalDiscount = quote.totals.totalDiscountInCents || 0;
+        const totalHT = quote.totals.totalHTInMicrounits || 0;
+        const totalDiscount = quote.totals.totalDiscountInMicrounits || 0;
         const discountPercent = (totalDiscount / (totalHT + totalDiscount)) * 100;
         score += discountPercent * 1.5;
 
         // 2. Amount Factor (larger amounts are harder to sign)
-        if (quote.totals.totalTTCInCents > 1000000) score -= 15;
-        else if (quote.totals.totalTTCInCents > 500000) score -= 5;
+        // Thresholds: 10_000_000_000 µ = 10 000€ ; 5_000_000_000 µ = 5 000€
+        if (quote.totals.totalTTCInMicrounits > 10_000_000_000) score -= 15;
+        else if (quote.totals.totalTTCInMicrounits > 5_000_000_000) score -= 5;
 
         // 3. Status Bonus
         if (quote.status === 'viewed') score += 10;

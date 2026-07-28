@@ -286,7 +286,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                                             : "bg-bg-secondary border-border hover:border-accent/20 hover:bg-bg-tertiary"
                                                     )}
                                                 >
-                                                    <p className={cn("text-[9px] font-black tracking-widest mb-2 transition-colors", formData.tableId === tId ? "text-bg-primary/60" : "text-white/40")}>UNITÉ D'ACCUEIL</p>
+                                                    <p className={cn("text-[9px] font-black tracking-widest mb-2 transition-colors", formData.tableId === tId ? "text-bg-primary/60" : "text-text-primary/40")}>UNITÉ D'ACCUEIL</p>
                                                     <p className="text-3xl font-serif font-black italic">#{tId.replace('t', '')}</p>
 
                                                     {formData.tableId === tId && (
@@ -320,7 +320,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                         </p>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedCustomer.preferences.map((pref: string, i: number) => (
-                                                <span key={i} className="px-4 py-2 bg-surface-card dark:bg-surface-card/5 text-[10px] font-black text-text-primary dark:text-white rounded-xl border border-border dark:border-white/5 uppercase tracking-widest shadow-sm">
+                                                <span key={i} className="px-4 py-2 bg-surface-card dark:bg-surface-card/5 text-[10px] font-black text-text-primary dark:text-text-primary rounded-xl border border-border dark:border-white/5 uppercase tracking-widest shadow-sm">
                                                     {pref}
                                                 </span>
                                             ))}
@@ -332,7 +332,7 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                         <p className="text-[9px] font-black text-accent uppercase tracking-[0.2em] mb-4 flex items-center gap-2 italic">
                                             <Sparkles className="w-3.5 h-3.5" /> Note de Service
                                         </p>
-                                        <p className="text-[13px] text-text-primary dark:text-white font-serif italic leading-relaxed">
+                                        <p className="text-[13px] text-text-primary dark:text-text-primary font-serif italic leading-relaxed">
                                             "Client habitué de la zone Alpha. Préfère l'eau minérale à température ambiante. Attention particulière sur le timing du service."
                                         </p>
                                     </div>

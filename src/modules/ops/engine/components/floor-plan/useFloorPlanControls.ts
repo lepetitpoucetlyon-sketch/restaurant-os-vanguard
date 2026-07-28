@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useTables, useReservations } from "@/modules/ops/providers/NexusOpsProvider";
+import { useTables, useReservations } from "@/modules/ops/providers";
 import { Table } from "@nexus/contracts";
 import Konva from 'konva';
 import { FloorPlanGeometry } from './FloorPlanGeometry';

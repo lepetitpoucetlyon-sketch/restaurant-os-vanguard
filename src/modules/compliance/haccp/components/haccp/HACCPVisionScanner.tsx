@@ -53,7 +53,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                 className="w-full max-w-lg bg-[#0B0B0C] border border-subtle rounded-[3rem] p-10 text-center relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
-                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-secondary hover:text-white transition-colors">
+                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-secondary hover:text-text-primary transition-colors">
                     <X size={20} />
                 </button>
 
@@ -61,8 +61,8 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                     <div className={cn(
                         "w-24 h-24 rounded-3xl flex items-center justify-center transition-all duration-700",
                         isProcessing ? "bg-status-warning text-primary animate-pulse" : 
-                        result?.isCompliant ? "bg-status-success text-white shadow-2xl shadow-emerald-500/20" :
-                        result ? "bg-status-danger text-white" : "bg-surface-card/5 text-muted"
+                        result?.isCompliant ? "bg-status-success text-text-primary shadow-2xl shadow-emerald-500/20" :
+                        result ? "bg-status-danger text-text-primary" : "bg-surface-card/5 text-muted"
                     )}>
                         {isProcessing ? <Loader2 size={40} className="animate-spin" /> : 
                          result?.isCompliant ? <ShieldCheck size={40} /> :
@@ -70,7 +70,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                     </div>
 
                     <div>
-                        <h3 className="text-2xl font-serif italic text-white mb-2 uppercase tracking-tighter">Audit Sanitaire</h3>
+                        <h3 className="text-2xl font-serif italic text-text-primary mb-2 uppercase tracking-tighter">Audit Sanitaire</h3>
                         <p className="text-[10px] font-black text-secondary uppercase tracking-[0.4em] mb-4">{taskName}</p>
                         
                         <AnimatePresence>

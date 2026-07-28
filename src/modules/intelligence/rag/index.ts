@@ -43,4 +43,18 @@ export type {
     TierAccess,
 } from './types';
 export { K_ANONYMITY_THRESHOLD, PULSE_SCHEDULE, MONETIZATION_TIERS } from './types';
-export { sovereignQuery } from './SovereignRAGClient';
+export {
+    sovereignQuery,
+    sovereignIngest,
+    sovereignHealth,
+    sovereignCreateWorkspace,
+    sovereignAdminReindex,
+    sovereignAdminStats,
+} from './SovereignRAGClient';
+export type {
+    RAGQueryOptions,
+    RAGQueryResult,
+    RAGIngestOptions,
+    RAGIndexResult,
+    RAGHealthResult,
+} from './SovereignRAGClient';

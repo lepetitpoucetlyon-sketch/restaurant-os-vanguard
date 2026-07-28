@@ -27,7 +27,7 @@ const CONN_ICON: Record<PrinterConnectionType, React.ReactNode> = {
 };
 
 const ROLE_COLORS: Record<PrinterRole, string> = {
-  receipt: "text-emerald-500",
+  receipt: "text-status-success",
   kitchen: "text-orange-500",
   bar:     "text-sky-500",
   label:   "text-purple-500",
@@ -146,7 +146,7 @@ function PrinterCard({
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-semibold text-text-primary">{printer.name}</span>
             {printer.isDefault && (
-              <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-action-primary bg-action-primary/10 border border-action-primary/20 px-2 py-0.5 rounded-full">
                 <Star className="w-2.5 h-2.5" /> Défaut
               </span>
             )}
@@ -169,7 +169,7 @@ function PrinterCard({
             <button
               onClick={onSetDefault}
               title="Définir par défaut"
-              className="w-8 h-8 rounded-lg hover:bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-amber-500 transition-colors"
+              className="w-8 h-8 rounded-lg hover:bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-action-primary transition-colors"
             >
               <Star className="w-3.5 h-3.5" />
             </button>

@@ -263,7 +263,7 @@ export function ProspectingDashboard() {
                                 <Button
                                     onClick={handleApply}
                                     disabled={isSaving || isApplying}
-                                    className="h-9 px-5 rounded-full bg-status-success text-white font-bold uppercase tracking-widest text-[10px] hover:opacity-90 flex items-center gap-2"
+                                    className="h-9 px-5 rounded-full bg-status-success text-text-primary font-bold uppercase tracking-widest text-[10px] hover:opacity-90 flex items-center gap-2"
                                 >
                                     {isApplying
                                         ? <Loader2 className="w-3 h-3 animate-spin" />
@@ -380,7 +380,7 @@ export function ProspectingDashboard() {
                         className="bg-status-success/10 border border-status-success/20 rounded-[2rem] p-8 flex items-center justify-between"
                     >
                         <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-full bg-status-success flex items-center justify-center text-white">
+                            <div className="w-14 h-14 rounded-full bg-status-success flex items-center justify-center text-text-primary">
                                 <Check className="w-7 h-7" />
                             </div>
                             <div>

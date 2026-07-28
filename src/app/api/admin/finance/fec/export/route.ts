@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FECGenerator } from '@/modules/finance/fec/FECGenerator';
+import { FECGenerator } from '@/modules/finance/fec';
 import { DocumentVault } from '@/domain/shared/DocumentVault';
 import { FinanceErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 
 /**
  * 🏛️ Route: Export FEC - Grade X+++
@@ -57,7 +58,10 @@ export async function POST(request: NextRequest) {
             }
         );
 
+        logger.info(`[FEC] Export demandé — tenant ${tenantId}, période ${yearMonth}`);
+
         if (entries.length === 0) {
+            logger.warn(`[FEC] Aucune écriture pour ${tenantId} sur ${yearMonth}`);
             return NextResponse.json({
                 success: false,
                 error: FinanceErrorCode.TRANSACTION_FAILED,
@@ -69,11 +73,13 @@ export async function POST(request: NextRequest) {
         const result = await FECGenerator.generate(entries, siren, yearMonth);
 
         // 3. Archivage immuable des preuves fiscales
-        await DocumentVault.archive(result.filename, result.content, { 
-            tenantId, 
+        await DocumentVault.archive(result.filename, result.content, {
+            tenantId,
             type: 'FEC_EXPORT',
-            finalHash: result.finalHash 
+            finalHash: result.finalHash
         });
+
+        logger.info(`[FEC] Export généré — tenant ${tenantId}, ${entries.length} écritures, fichier ${result.filename}`);
 
         // 4. Retour du Fichier (Headers stricts DGFiP)
         return new NextResponse(result.content, {
@@ -84,7 +90,8 @@ export async function POST(request: NextRequest) {
             }
         });
 
-    } catch (_error) {
+    } catch (err) {
+        logger.error('[FEC] Erreur lors de la génération', err);
         return NextResponse.json({
             success: false,
             error: CoreErrorCode.INTERNAL_CRASH,

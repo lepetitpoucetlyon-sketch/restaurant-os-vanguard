@@ -1,5 +1,6 @@
 import type { IDeliveryProvider, DeliveryOrder, DeliveryMenuItem, DeliveryStatus } from '../types';
 import { logger } from '@/lib/logger';
+import { computeHmacHex, timingSafeCompareHex } from '@/lib/server/webhookVerify';
 
 /**
  * Uber Eats — Restaurant Manager API.
@@ -69,6 +70,16 @@ export class UberEatsProvider implements IDeliveryProvider {
     onWebhook(payload: unknown): DeliveryOrder {
         const p = payload as { order: unknown };
         return this.normalizeOrder(p.order);
+    }
+
+    verifySignature(rawBody: string, headers: Headers): boolean {
+        const secret = process.env.UBEREATS_WEBHOOK_SECRET;
+        if (!secret) return false;
+        const header = headers.get('x-uber-signature') ?? '';
+        // Uber envoie "sha256=<hex>" — on strip le préfixe avant comparaison
+        const incoming = header.startsWith('sha256=') ? header.slice(7) : header;
+        const expected = computeHmacHex(secret, rawBody);
+        return timingSafeCompareHex(incoming, expected);
     }
 
     async getMenu(_tenantId: string): Promise<DeliveryMenuItem[]> {

@@ -107,7 +107,7 @@ export function CameraCapture({ onCapture, onClose, title = "Capturer une Photo"
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-bg-primary/50 backdrop-blur-sm">
                                 <Button 
                                     onClick={startCamera}
-                                    className="bg-accent-gold text-white rounded-full px-8 py-6 h-auto font-black uppercase tracking-widest text-[10px]"
+                                    className="bg-accent-gold text-text-primary rounded-full px-8 py-6 h-auto font-black uppercase tracking-widest text-[10px]"
                                 >
                                     Activer la Caméra
                                 </Button>
@@ -158,7 +158,7 @@ export function CameraCapture({ onCapture, onClose, title = "Capturer une Photo"
                             Recommencer
                         </Button>
                         <Button 
-                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] bg-status-success text-white hover:bg-status-success"
+                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] bg-status-success text-text-primary hover:bg-status-success"
                             onClick={confirmCapture}
                         >
                             <Check size={16} className="mr-2" />

@@ -113,7 +113,7 @@ export function MaasComponentGuard({ moduleName, claims, importFn, fallback, ...
     }, [moduleName, claims.plan, claims.orgId]); // Don't put importFn in deps to avoid loops
 
     if (isAllowed === false) {
-        return React.createElement(React.Fragment, null, fallback || React.createElement('div', { className: "p-4 border border-red-500 text-red-500 rounded bg-red-50" }, `Module ${moduleName} non inclus dans votre plan.`));
+        return React.createElement(React.Fragment, null, fallback || React.createElement('div', { className: "p-4 border border-red-500 text-status-danger rounded bg-red-50" }, `Module ${moduleName} non inclus dans votre plan.`));
     }
 
     if (!Component) {

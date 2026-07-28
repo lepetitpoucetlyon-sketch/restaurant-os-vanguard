@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useReservationsPage } from "@/modules/commerce/reservations/hooks/useReservationsPage";
+import { useReservationsPage } from "@/modules/commerce/reservations/hooks";
 import { PinModal } from "@modules/commerce/ui/pos/PinModal";
 import { DailyListView } from "@/modules/commerce/reservations/components/DailyListView";
 import { WeeklyView } from "@/modules/commerce/reservations/components/WeeklyView";

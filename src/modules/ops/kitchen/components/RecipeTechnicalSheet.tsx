@@ -105,7 +105,7 @@ export function RecipeTechnicalSheet({
 
                 {/* Footer Action */}
                 <div className="sticky bottom-0 p-8 bg-gradient-to-t from-[#fdfdfa] dark:from-bg-secondary via-[#fdfdfa] dark:via-bg-secondary to-transparent pt-12">
-                    <button className="w-full h-14 bg-surface-card dark:bg-bg-tertiary border border-default dark:border-border text-primary dark:text-text-primary rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-surface-sidebar dark:hover:bg-accent-gold dark:hover:text-primary hover:text-white transition-all shadow-lg flex items-center justify-center gap-4 group">
+                    <button className="w-full h-14 bg-surface-card dark:bg-bg-tertiary border border-default dark:border-border text-primary dark:text-text-primary rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-surface-sidebar dark:hover:bg-accent-gold dark:hover:text-primary hover:text-text-primary transition-all shadow-lg flex items-center justify-center gap-4 group">
                         <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
                         Télécharger Fiche PDF
                     </button>

@@ -52,7 +52,7 @@ export function MCCInsights() {
                         <span className="text-[9px] font-bold text-brand uppercase tracking-tighter">Impact: {insight.impact}</span>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white mb-2 leading-tight">{insight.title}</h4>
+                    <h4 className="text-sm font-bold text-text-primary mb-2 leading-tight">{insight.title}</h4>
                     <p className="text-[11px] text-secondary mb-6 leading-relaxed">
                         {insight.description}
                     </p>

@@ -72,7 +72,7 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                     <div className="flex items-center gap-10 pr-4">
                         <div className="h-10 w-px bg-surface-card/5" />
                         <div>
-                            <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.4em] mb-1 italic">
+                            <p className="text-[8px] font-black text-text-primary/20 uppercase tracking-[0.4em] mb-1 italic">
                                 REGISTRE
                             </p>
                             <span className="text-sm font-mono font-bold text-accent">

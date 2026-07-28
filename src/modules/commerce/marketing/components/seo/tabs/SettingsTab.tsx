@@ -14,7 +14,7 @@ export const SettingsTab = () => {
         >
             <div className="p-8 rounded-[2.5rem] bg-bg-secondary border border-border">
                 <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-status-info/10 flex items-center justify-center">
                         <Link2 className="w-5 h-5 text-blue-500" />
                     </div>
                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Intégrations</h3>

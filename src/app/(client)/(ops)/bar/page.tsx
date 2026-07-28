@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useToast } from "@ui/Toast";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
-  () => import("@/modules/ops/pos/components/ProductFormModal").then(m => m.ProductFormModal),
+  () => import("@/modules/ops/pos/components").then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
 import { RecipeDetailDialog } from "@modules/ops";
@@ -17,7 +17,7 @@ import {
   COCKTAILS,
 } from "@domain/constants/bar-data";
 import { Recipe } from "@nexus/contracts";
-import { useKitchen } from "@/modules/ops/providers/NexusOpsProvider";
+import { useKitchen } from "@/modules/ops/providers";
 
 // Components
 import { BarSidebar } from "@modules/ops";

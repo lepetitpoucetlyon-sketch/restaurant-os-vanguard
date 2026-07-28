@@ -64,7 +64,7 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
                 
                 <div className={cn(
                     "w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm",
-                    isCompliant ? "bg-status-success text-status-success border border-emerald-100" : "bg-status-danger text-white shadow-lg shadow-rose-500/20"
+                    isCompliant ? "bg-status-success text-status-success border border-emerald-100" : "bg-status-danger text-text-primary shadow-lg shadow-rose-500/20"
                 )}>
                     {isCompliant ? <CheckCircle2 className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
                 </div>

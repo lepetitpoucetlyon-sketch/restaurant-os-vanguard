@@ -63,7 +63,7 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
                 onClick={() => setFilterRegion(null)}
                 className={cn(
                     "px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap",
-                    !filterRegion ? "bg-accent text-white" : "bg-bg-secondary dark:bg-bg-tertiary hover:bg-bg-tertiary text-text-primary"
+                    !filterRegion ? "bg-accent text-text-primary" : "bg-bg-secondary dark:bg-bg-tertiary hover:bg-bg-tertiary text-text-primary"
                 )}
             >
                 Toutes régions
@@ -74,7 +74,7 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
                     onClick={() => setFilterRegion(filterRegion === region.id ? null : region.id)}
                     className={cn(
                         "px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2",
-                        filterRegion === region.id ? "bg-accent text-white" : "bg-bg-secondary dark:bg-bg-tertiary hover:bg-bg-tertiary text-text-primary"
+                        filterRegion === region.id ? "bg-accent text-text-primary" : "bg-bg-secondary dark:bg-bg-tertiary hover:bg-bg-tertiary text-text-primary"
                     )}
                 >
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: region.color }} />

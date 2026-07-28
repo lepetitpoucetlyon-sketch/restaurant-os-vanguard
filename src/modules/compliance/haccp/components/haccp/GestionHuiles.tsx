@@ -70,7 +70,7 @@ export function GestionHuiles() {
                         <Droplet size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Gestion des Huiles</h2>
+                        <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Gestion des Huiles</h2>
                         <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Suivi des composés polaires (TPOM)</p>
                     </div>
                 </div>
@@ -255,7 +255,7 @@ export function GestionHuiles() {
 
                     <Button
                         onClick={handleSubmit}
-                        className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-status-warning text-white hover:bg-status-warning border border-amber-500/20"
+                        className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-status-warning text-text-primary hover:bg-status-warning border border-action-primary/20"
                     >
                         Valider l'Intervention
                     </Button>

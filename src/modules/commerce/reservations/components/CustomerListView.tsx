@@ -41,7 +41,7 @@ export function CustomerListView({
                         />
                     </div>
                     <div className="pr-4 border-l border-white/5 pl-10">
-                        <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.4em] mb-1 italic">{t('reservations.list.registry')}</p>
+                        <p className="text-[8px] font-black text-text-primary/20 uppercase tracking-[0.4em] mb-1 italic">{t('reservations.list.registry')}</p>
                         <span className="text-sm font-mono font-bold text-accent">{customers.length} {t('reservations.list.profiles')}</span>
                     </div>
                 </div>

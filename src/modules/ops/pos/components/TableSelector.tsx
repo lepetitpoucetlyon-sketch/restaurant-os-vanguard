@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers";
 import { cn } from "@/lib/ui.foundations";
 import { Users, LayoutGrid, Layers, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
@@ -39,7 +39,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                 case 'free':
                     return {
                         container: "bg-surface-card/80 dark:bg-surface-card/[0.03] border-default dark:border-white/5 hover:border-accent-gold/50 hover:-translate-y-2 backdrop-blur-xl",
-                        circle: "bg-bg-primary text-text-primary border-accent-gold/20 group-hover:bg-accent-gold group-hover:text-white",
+                        circle: "bg-bg-primary text-text-primary border-accent-gold/20 group-hover:bg-accent-gold group-hover:text-text-primary",
                         icon: "text-accent-gold",
                         indicator: "bg-accent-gold",
                         bar: "bg-accent-gold",
@@ -92,11 +92,11 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                     };
                 case 'dirty':
                     return {
-                        container: "bg-amber-500/5 border-amber-500/30 hover:border-amber-400/60 hover:-translate-y-2 backdrop-blur-xl shadow-inner",
-                        circle: "bg-amber-500/10 text-amber-400 border-amber-500/30",
-                        icon: "text-amber-400",
-                        indicator: "bg-amber-400",
-                        bar: "bg-amber-400",
+                        container: "bg-action-primary/5 border-action-primary/30 hover:border-amber-400/60 hover:-translate-y-2 backdrop-blur-xl shadow-inner",
+                        circle: "bg-action-primary/10 text-action-primary border-action-primary/30",
+                        icon: "text-action-primary",
+                        indicator: "bg-action-primary",
+                        bar: "bg-action-primary",
                         spotlight: "bg-gradient-to-br from-amber-500/8 to-transparent"
                     };
                 default:
@@ -163,9 +163,9 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
 
                 {/* Dirty — badge activable */}
                 {table.status === 'dirty' && (
-                    <div className="absolute top-5 right-5 flex items-center gap-1.5 bg-amber-500/15 border border-amber-500/30 rounded-full px-3 py-1">
-                        <Sparkles className="w-3 h-3 text-amber-400" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.15em] text-amber-400">À nettoyer</span>
+                    <div className="absolute top-5 right-5 flex items-center gap-1.5 bg-action-primary/15 border border-action-primary/30 rounded-full px-3 py-1">
+                        <Sparkles className="w-3 h-3 text-action-primary" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.15em] text-action-primary">À nettoyer</span>
                     </div>
                 )}
 
@@ -235,7 +235,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                     "flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
                                     viewMode === 'grid'
                                         ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
-                                        : "text-text-muted dark:text-white/60 hover:text-text-primary dark:hover:text-white"
+                                        : "text-text-muted dark:text-text-primary/60 hover:text-text-primary dark:hover:text-text-primary"
                                 )}
                             >
                                 <LayoutGrid strokeWidth={2} className="w-3.5 h-3.5" />
@@ -247,7 +247,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                     "flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
                                     viewMode === 'zones'
                                         ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
-                                        : "text-text-muted dark:text-white/60 hover:text-text-primary dark:hover:text-white"
+                                        : "text-text-muted dark:text-text-primary/60 hover:text-text-primary dark:hover:text-text-primary"
                                 )}
                             >
                                 <Layers strokeWidth={2} className="w-3.5 h-3.5" />

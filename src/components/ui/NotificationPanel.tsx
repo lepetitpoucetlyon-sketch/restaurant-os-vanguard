@@ -119,7 +119,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                             )}
                         </div>
                         <div>
-                            <h2 className="text-lg md:text-2xl font-serif font-black italic text-primary dark:text-white tracking-tighter">Archive<br />des Alertes</h2>
+                            <h2 className="text-lg md:text-2xl font-serif font-black italic text-primary dark:text-text-primary tracking-tighter">Archive<br />des Alertes</h2>
                             <p className="text-[9px] md:text-[10px] font-black text-muted dark:text-accent-gold/60 uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">
                                 {unreadCount > 0 ? `${unreadCount} TRANSMISSIONS ACTIVES` : 'AUCUN SIGNAL'}
                             </p>
@@ -128,7 +128,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                     <div className="flex flex-col gap-2">
                         <button
                             onClick={onClose}
-                            className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-surface-bg dark:bg-surface-card/5 border border-subtle dark:border-subtle flex items-center justify-center text-muted dark:text-white/40 hover:text-primary dark:hover:text-white hover:bg-surface-bg dark:hover:bg-surface-card/10 hover:rotate-90 transition-all duration-500"
+                            className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-surface-bg dark:bg-surface-card/5 border border-subtle dark:border-subtle flex items-center justify-center text-muted dark:text-text-primary/40 hover:text-primary dark:hover:text-text-primary hover:bg-surface-bg dark:hover:bg-surface-card/10 hover:rotate-90 transition-all duration-500"
                         >
                             <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
                         </button>
@@ -142,7 +142,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                             <div className="w-24 h-24 rounded-full bg-surface-bg dark:bg-accent-gold/5 mb-10 flex items-center justify-center border border-subtle dark:border-accent-gold/10">
                                 <CheckCircle2 className="w-10 h-10 text-muted dark:text-accent-gold/20" strokeWidth={1} />
                             </div>
-                            <p className="text-muted dark:text-white/40 font-serif italic text-2xl">L'Établissement est en Paix</p>
+                            <p className="text-muted dark:text-text-primary/40 font-serif italic text-2xl">L'Établissement est en Paix</p>
                             <p className="text-[10px] font-black text-muted dark:text-accent-gold/40 uppercase tracking-[0.3em] mt-4">Tout est sous contrôle exécutif</p>
                         </div>
                     ) : (
@@ -163,14 +163,14 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                     <div className="p-10 border-t border-subtle dark:border-white/5 bg-surface-card dark:bg-surface-card/[0.02] flex items-center justify-between relative z-10">
                         <button
                             onClick={markAllAsRead}
-                            className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-accent-gold hover:text-secondary dark:hover:text-white transition-colors uppercase tracking-[0.2em]"
+                            className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-accent-gold hover:text-secondary dark:hover:text-text-primary transition-colors uppercase tracking-[0.2em]"
                         >
                             <CheckCheck className="w-4 h-4" />
                             Tout archiver
                         </button>
                         <button
                             onClick={clearAll}
-                            className="flex items-center gap-3 text-[10px] font-black text-muted dark:text-white/20 hover:text-status-danger transition-colors uppercase tracking-[0.2em]"
+                            className="flex items-center gap-3 text-[10px] font-black text-muted dark:text-text-primary/20 hover:text-status-danger transition-colors uppercase tracking-[0.2em]"
                         >
                             <Trash2 className="w-4 h-4" />
                             Purge Totale
@@ -206,21 +206,21 @@ function NotificationCategory({
                     <div className={cn(
                         "w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm border",
                         unreadCount > 0
-                            ? "bg-surface-sidebar dark:bg-accent-gold text-white dark:text-primary border-transparent"
-                            : "bg-surface-bg dark:bg-surface-card/5 text-muted dark:text-white/40 border-subtle dark:border-subtle"
+                            ? "bg-surface-sidebar dark:bg-accent-gold text-text-primary dark:text-primary border-transparent"
+                            : "bg-surface-bg dark:bg-surface-card/5 text-muted dark:text-text-primary/40 border-subtle dark:border-subtle"
                     )}>
                         <Layers className="w-5 h-5" strokeWidth={1.5} />
                     </div>
                     <div className="text-left">
-                        <h3 className="text-sm font-black uppercase tracking-widest text-primary dark:text-white">{title}</h3>
-                        <p className="text-[10px] font-bold text-muted dark:text-white/40 mt-1">
+                        <h3 className="text-sm font-black uppercase tracking-widest text-primary dark:text-text-primary">{title}</h3>
+                        <p className="text-[10px] font-bold text-muted dark:text-text-primary/40 mt-1">
                             {notifications.length} Notification{notifications.length > 1 ? 's' : ''}
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
                     {unreadCount > 0 && (
-                        <span className="px-3 py-1 rounded-full bg-status-danger text-white text-[10px] font-black">
+                        <span className="px-3 py-1 rounded-full bg-status-danger text-text-primary text-[10px] font-black">
                             {unreadCount} NEW
                         </span>
                     )}
@@ -290,13 +290,13 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
                     <div className="flex items-start justify-between gap-4 mb-2">
                         <h4 className={cn(
                             "font-serif text-sm leading-tight italic",
-                            !notification.read ? "font-black text-primary dark:text-white" : "font-bold text-secondary dark:text-white/60"
+                            !notification.read ? "font-black text-primary dark:text-text-primary" : "font-bold text-secondary dark:text-text-primary/60"
                         )}>
                             {notification.title}
                         </h4>
                         <span className="text-[9px] font-black text-muted dark:text-accent-gold/40 uppercase tracking-widest whitespace-nowrap mt-1">{timeAgo}</span>
                     </div>
-                    <p className="text-[11px] text-secondary dark:text-white/40 leading-relaxed font-sans line-clamp-2 uppercase tracking-wide">
+                    <p className="text-[11px] text-secondary dark:text-text-primary/40 leading-relaxed font-sans line-clamp-2 uppercase tracking-wide">
                         {notification.message}
                     </p>
 
@@ -316,7 +316,7 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
                             e.stopPropagation();
                             onRemove(notification.id);
                         }}
-                        className="w-8 h-8 rounded-lg bg-surface-bg dark:bg-status-danger/10 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-white transition-all shadow-sm"
+                        className="w-8 h-8 rounded-lg bg-surface-bg dark:bg-status-danger/10 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-text-primary transition-all shadow-sm"
                     >
                         <Trash2 className="w-3.5 h-3.5" />
                     </button>

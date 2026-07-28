@@ -29,7 +29,7 @@ export const QuantumDashboard: React.FC = () => {
     };
 
     return (
-        <div className="p-8 bg-slate-950 text-muted min-h-screen font-sans">
+        <div className="p-8 bg-surface-bg text-muted min-h-screen font-sans">
             {/* 🛰️ HEADER - Real-time Status */}
             <header className="flex justify-between items-end mb-12">
                 <div>
@@ -105,7 +105,7 @@ const MetricCard: React.FC<{ label: string, value: string | number, trend: strin
     <div className="bg-surface-sidebar/80 border border-default p-6 rounded-2xl shadow-xl">
         <p className="text-muted text-xs font-bold uppercase tracking-widest mb-1">{label}</p>
         <div className="flex items-baseline gap-2">
-            <h3 className={`text-2xl font-bold ${color || 'text-white'}`}>{value}</h3>
+            <h3 className={`text-2xl font-bold ${color || 'text-text-primary'}`}>{value}</h3>
             <span className="text-[10px] font-mono text-status-success">{trend}</span>
         </div>
     </div>
@@ -114,6 +114,6 @@ const MetricCard: React.FC<{ label: string, value: string | number, trend: strin
 const InsightLine: React.FC<{ label: string, value: string | number, color?: string }> = ({ label, value, color }) => (
     <div className="flex justify-between items-center py-2 border-b border-default/50 last:border-0">
         <span className="text-muted text-sm">{label}</span>
-        <span className={`font-mono font-bold ${color || 'text-white'}`}>{value}</span>
+        <span className={`font-mono font-bold ${color || 'text-text-primary'}`}>{value}</span>
     </div>
 );

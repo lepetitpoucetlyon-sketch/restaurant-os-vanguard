@@ -39,7 +39,7 @@ export function GoogleProfileCard() {
         <div className="p-6 rounded-[2rem] bg-bg-secondary border border-border">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-status-info/10 flex items-center justify-center">
                         <MapPin className="w-5 h-5 text-blue-500" />
                     </div>
                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Google Business Profile</h3>
@@ -63,7 +63,7 @@ export function GoogleProfileCard() {
                 <div className="flex items-center justify-between py-3 border-b border-border">
                     <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Note moyenne</span>
                     <div className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                        <Star className="w-4 h-4 text-action-primary fill-amber-500" />
                         <span className="text-sm font-bold text-text-primary">{profile.rating}</span>
                         <span className="text-[10px] text-text-muted">({profile.reviewCount})</span>
                     </div>
@@ -76,7 +76,7 @@ export function GoogleProfileCard() {
                 </div>
             </div>
 
-            <button className="w-full mt-6 h-12 rounded-xl bg-[#00D9A6] text-white hover:bg-[#00C090] transition-colors text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,217,166,0.25)]">
+            <button className="w-full mt-6 h-12 rounded-xl bg-[#00D9A6] text-text-primary hover:bg-[#00C090] transition-colors text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,217,166,0.25)]">
                 <RefreshCw className="w-4 h-4" />
                 Synchroniser maintenant
             </button>

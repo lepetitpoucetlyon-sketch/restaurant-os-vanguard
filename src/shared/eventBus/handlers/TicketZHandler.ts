@@ -2,6 +2,8 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
+import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
+import { CryptoService } from '@domain/services/CryptoService';
 import type { SovereignData } from '@shared/nexus-contract';
 
 type TicketZDoc = {
@@ -81,56 +83,78 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
   const entryId = `Z_${date.replace(/-/g, '')}`;
   const entryPath = `tenants/${tenantId}/journalEntries/${entryId}`;
 
-  await Nexus.adapter.runTransaction(async (tx) => {
-    const ticketZ = await tx.get<TicketZDoc>(ticketPath);
+  // Idempotence : si le JournalEntry scellé existe déjà, rien à faire.
+  // Cela couvre aussi le cas d'un échec partiel (ticketZ clôturé mais JE non scellé).
+  const existingEntry = await Nexus.adapter.get(entryPath);
+  if (existingEntry) {
+    logger.info(`[TicketZ] JournalEntry ${entryId} déjà scellé — no-op`);
+    return;
+  }
 
-    if (!ticketZ) {
-      logger.warn(`[TicketZ] Aucun Ticket Z trouvé pour ${date} — clôture annulée`);
-      return;
-    }
-    if (ticketZ.closed) {
-      logger.info(`[TicketZ] Ticket Z ${date} déjà clôturé — no-op`);
-      return;
-    }
+  const ticketZ = await Nexus.adapter.get<TicketZDoc>(ticketPath);
 
-    const closedAt = new Date().toISOString();
-    const totalTVAInMicrounits = Object.values(ticketZ.taxBreakdown ?? {}).reduce((a, b) => a + b, 0);
+  if (!ticketZ) {
+    logger.warn(`[TicketZ] Aucun Ticket Z trouvé pour ${date} — clôture annulée`);
+    return;
+  }
 
-    // Sceller le Ticket Z (immuable après clôture)
-    tx.update(ticketPath, {
-      closed: true,
-      closedAt,
-      updatedAt: closedAt,
-    } as unknown as SovereignData);
+  const closedAt = new Date().toISOString();
+  const totalTVAInMicrounits = Object.values(ticketZ.taxBreakdown ?? {}).reduce((a, b) => a + b, 0);
 
-    // Écriture JournalEntry agrégée — pont vers la comptabilité
-    tx.set(entryPath, {
-      id: entryId,
-      date: date,
-      pieceNumber: `Z-${date}`,
-      description: `Clôture Z — ${date} — ${ticketZ.ordersCount} tickets`,
-      lines: [],
-      referenceType: 'order',
-      isSystemGenerated: true,
-      isValidated: true,
-      type: 'revenue',
-      amountInCents: Math.round(ticketZ.totalInMicrounits / 10000),
-      totalInMicrounits: ticketZ.totalInMicrounits,
-      totalTVAInMicrounits,
-      taxBreakdown: ticketZ.taxBreakdown,
-      ordersCount: ticketZ.ordersCount,
-      status: 'validated',
-      updatedAt: closedAt,
-    } as unknown as SovereignData);
-  });
+  // Numéro séquentiel NF525
+  const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
+
+  const journalEntryBase = {
+    id: entryId,
+    date,
+    pieceNumber: receiptNumber,
+    description: `Clôture Z — ${date} — ${ticketZ.ordersCount} tickets`,
+    lines: [],
+    referenceType: 'order' as const,
+    isSystemGenerated: true,
+    isValidated: true,
+    type: 'revenue' as const,
+    totalInMicrounits: ticketZ.totalInMicrounits,
+    totalTVAInMicrounits,
+    taxBreakdown: ticketZ.taxBreakdown,
+    ordersCount: ticketZ.ordersCount,
+    status: 'validated' as const,
+    updatedAt: closedAt,
+  };
+
+  const dataSnapshot = CryptoService.canonicalStringify({
+    id: entryId,
+    receiptNumber,
+    totalInMicrounits: ticketZ.totalInMicrounits,
+    totalTVAInMicrounits,
+    taxBreakdown: ticketZ.taxBreakdown,
+    ordersCount: ticketZ.ordersCount,
+    date,
+  } as unknown as SovereignData);
+
+  // Scellement NF525 : écrit JournalEntry + FiscalSeal atomiquement dans la chaîne
+  const sealResult = await FiscalSealer.sealDataAtomically(
+    dataSnapshot,
+    tenantId,
+    false,
+    journalEntryBase,
+  );
+
+  // Marquer le Ticket Z clôturé (opération séparée — évite les transactions imbriquées)
+  await Nexus.adapter.update(ticketPath, {
+    closed: true,
+    closedAt,
+    fiscalSealId: sealResult.sealId,
+    updatedAt: closedAt,
+  } as unknown as SovereignData);
 
   empireAudit.log({
     module: 'accounting',
     action: 'TICKET_Z_CLOSED',
-    details: { date, entryId, tenantId },
+    details: { date, entryId, tenantId, sealId: sealResult.sealId, hash: sealResult.hash.substring(0, 8) },
     severity: 'low',
     timestamp: new Date(),
   });
 
-  logger.info(`[TicketZ] Clôture Z ${date} — JournalEntry ${entryId} créé`);
+  logger.info(`[TicketZ] Clôture Z ${date} — JournalEntry ${entryId} scellé NF525 (hash: ${sealResult.hash.substring(0, 8)})`);
 }

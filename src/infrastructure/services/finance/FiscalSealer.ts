@@ -121,7 +121,7 @@ export class FiscalSealer {
           serverRecordedAt,
           isTrainingMode: true,
         } as unknown);
-        tx.update(chainHeadPath, { hash, sealId, updatedAt: timestamp });
+        tx.set(chainHeadPath, { hash, sealId, updatedAt: timestamp });
         if (journalEntry) {
            tx.set(`tenants/${tenantId}/journalEntries/${journalEntry.id}`, {
              ...journalEntry,

@@ -78,7 +78,7 @@ export function ProductIngredients({
                                 <button
                                     type="button"
                                     onClick={() => removeIngredient(i)}
-                                    className="w-14 h-16 rounded-2xl bg-error/5 hover:bg-error text-error hover:text-white flex items-center justify-center transition-all border-2 border-transparent hover:border-error/20"
+                                    className="w-14 h-16 rounded-2xl bg-error/5 hover:bg-error text-error hover:text-text-primary flex items-center justify-center transition-all border-2 border-transparent hover:border-error/20"
                                 >
                                     <Trash2 className="w-5 h-5" />
                                 </button>

@@ -24,7 +24,7 @@ export default function DocCategoryClient() {
                 </p>
                 <Link
                     href="/dashboard"
-                    className="px-10 py-4 bg-surface-sidebar dark:bg-surface-card text-white dark:text-primary rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-transform"
+                    className="px-10 py-4 bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-transform"
                 >
                     Retour au Dashboard
                 </Link>

@@ -48,7 +48,7 @@ export function RecruitmentDashboard() {
                         Pipeline de <span className="text-accent-gold not-italic">Recrutement</span>
                     </h1>
                     <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                        <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-status-success bg-status-success/10 px-3 py-1 rounded-full border border-emerald-500/20">
                             <ShieldCheck className="w-3 h-3" />
                             RGPD : Conforme
                         </span>
@@ -71,7 +71,7 @@ export function RecruitmentDashboard() {
                     </div>
                     <button 
                         onClick={() => setIsAddModalOpen(true)}
-                        className="h-12 px-6 bg-text-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2 shadow-xl hover:-translate-y-0.5"
+                        className="h-12 px-6 bg-text-primary text-text-primary rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2 shadow-xl hover:-translate-y-0.5"
                     >
                         <UserPlus className="w-4 h-4" />
                         Nouveau Candidat
@@ -158,16 +158,16 @@ function CandidateCard({ candidate, onStatusChange }: {
             <div className="flex items-center justify-between pt-3 border-t border-border/50 mt-auto">
                 <div className="flex -space-x-1.5">
                     {candidate.gdpr.consented ? (
-                        <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-600" title="Consentement RGPD validé">
+                        <div className="w-6 h-6 rounded-full bg-status-success/10 flex items-center justify-center border border-emerald-500/20 text-emerald-600" title="Consentement RGPD validé">
                             <ShieldCheck className="w-3 h-3" />
                         </div>
                     ) : (
-                        <div className="w-6 h-6 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20 text-rose-600" title="Consentement RGPD manquant">
+                        <div className="w-6 h-6 rounded-full bg-status-danger/10 flex items-center justify-center border border-rose-500/20 text-rose-600" title="Consentement RGPD manquant">
                             <AlertCircle className="w-3 h-3" />
                         </div>
                     )}
                     {candidate.cvUrl && (
-                        <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20 text-blue-600" title="CV disponible">
+                        <div className="w-6 h-6 rounded-full bg-status-info/10 flex items-center justify-center border border-blue-500/20 text-blue-600" title="CV disponible">
                             <FileText className="w-3 h-3" />
                         </div>
                     )}
@@ -349,7 +349,7 @@ function AddCandidateModal({ isOpen, onClose, onAdd }: {
                         {step === 1 ? 'Annuler' : 'Précédent'}
                     </button>
                     <button 
-                        className="h-16 px-12 bg-text-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] hover:bg-black transition-all shadow-2xl flex items-center gap-3"
+                        className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] hover:bg-black transition-all shadow-2xl flex items-center gap-3"
                         onClick={() => step === 1 ? setStep(2) : handleSubmit()}
                     >
                         {step === 1 ? 'Suivant' : 'Finaliser le Dossier'}

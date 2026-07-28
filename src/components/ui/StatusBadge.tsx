@@ -15,17 +15,17 @@ interface StatusBadgeProps {
 
 const statusColors = {
     success: {
-        solid: "bg-status-success text-white",
+        solid: "bg-status-success text-text-primary",
         outline: "border-status-success text-status-success",
         soft: "bg-status-success/10 text-status-success border-status-success/20",
     },
     warning: {
-        solid: "bg-status-warning text-white",
+        solid: "bg-status-warning text-text-primary",
         outline: "border-status-warning text-status-warning",
         soft: "bg-status-warning/10 text-status-warning border-status-warning/20",
     },
     error: {
-        solid: "bg-status-danger text-white",
+        solid: "bg-status-danger text-text-primary",
         outline: "border-status-danger text-status-danger",
         soft: "bg-status-danger/10 text-status-danger border-status-danger/20",
     },
@@ -35,7 +35,7 @@ const statusColors = {
         soft: "bg-action-primary/10 text-action-primary border-action-primary/20",
     },
     neutral: {
-        solid: "bg-surface-tertiary text-white",
+        solid: "bg-surface-tertiary text-text-primary",
         outline: "border-border-default text-text-secondary",
         soft: "bg-surface-card text-text-secondary border-border-default",
     },

@@ -113,7 +113,7 @@ export default function POSPage() {
                                     <div className="absolute top-full mt-2 left-0 z-50 bg-surface-card border border-border rounded-2xl shadow-xl p-3 w-64 grid grid-cols-4 gap-1.5">
                                         {allTables.map((t) => (
                                             <button key={t.id} onClick={() => { setSelectedTableId(t.id); setIsTablePickerOpen(false); }}
-                                                className={cn("h-10 rounded-xl border text-[11px] font-black uppercase tracking-wider transition-all", t.id === selectedTableId ? "bg-accent-gold border-accent-gold text-white" : "border-border text-text-muted hover:border-accent-gold/40 hover:text-accent-gold")}>
+                                                className={cn("h-10 rounded-xl border text-[11px] font-black uppercase tracking-wider transition-all", t.id === selectedTableId ? "bg-accent-gold border-accent-gold text-text-primary" : "border-border text-text-muted hover:border-accent-gold/40 hover:text-accent-gold")}>
                                                 {t.number ?? t.id.slice(-3)}
                                             </button>
                                         ))}
@@ -134,12 +134,12 @@ export default function POSPage() {
                     </div>
                     <div className="flex items-center gap-2">
                         <button onClick={() => setConsumptionMode(consumptionMode === 'dine_in' ? 'takeaway' : 'dine_in')} title={consumptionMode === 'dine_in' ? 'Sur place' : 'À emporter'}
-                            className={cn("h-10 px-3 rounded-full flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-all border", consumptionMode === 'dine_in' ? "bg-action-primary/10 border-action-primary/30 text-action-primary" : "bg-amber-500/10 border-amber-500/30 text-amber-500")}>
+                            className={cn("h-10 px-3 rounded-full flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-all border", consumptionMode === 'dine_in' ? "bg-action-primary/10 border-action-primary/30 text-action-primary" : "bg-action-primary/10 border-action-primary/30 text-action-primary")}>
                             {consumptionMode === 'dine_in' ? <Store className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
                             {consumptionMode === 'dine_in' ? 'Sur place' : 'Emporter'}
                         </button>
                         <button onClick={() => setIsCourseViewOpen((v) => !v)} title="Vue par cours"
-                            className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isCourseViewOpen ? "bg-accent-gold text-white" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
+                            className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isCourseViewOpen ? "bg-accent-gold text-text-primary" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
                             <BookOpen className="w-4 h-4" />
                         </button>
                         <button onClick={() => setIsCashDrawerOpen(true)} title="Fond de caisse" className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-accent-gold transition-colors">
@@ -152,20 +152,20 @@ export default function POSPage() {
                             <RotateCcw className="w-4 h-4" />
                         </button>
                         <button onClick={() => setIsTabletMode((v) => !v)} title={isTabletMode ? "Quitter le mode tablette" : "Mode tablette"}
-                            className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isTabletMode ? "bg-text-primary text-bg-primary dark:bg-accent-gold dark:text-white" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
+                            className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isTabletMode ? "bg-text-primary text-bg-primary dark:bg-accent-gold dark:text-text-primary" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
                             <Tablet className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
 
                 <div className={cn("flex gap-2 overflow-x-auto no-scrollbar py-1", isRushMode && "grayscale-[0.3]")}>
-                    <button onClick={() => setSelectedCategory("all")} className={cn("flex items-center gap-2 h-10 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap", selectedCategory === "all" ? "bg-accent-gold text-white shadow-lg scale-105" : "bg-bg-tertiary text-text-muted")}>
+                    <button onClick={() => setSelectedCategory("all")} className={cn("flex items-center gap-2 h-10 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap", selectedCategory === "all" ? "bg-accent-gold text-text-primary shadow-lg scale-105" : "bg-bg-tertiary text-text-muted")}>
                         <Star className="w-3.5 h-3.5" /> Favoris
                     </button>
                     {categories.map((cat) => {
                         const Icon = ICON_MAP[cat.id] || UtensilsCrossed;
                         return (
-                            <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={cn("flex items-center gap-2 h-10 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap", selectedCategory === cat.id ? "bg-accent-gold text-white shadow-lg scale-105" : "bg-bg-tertiary text-text-muted")}>
+                            <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={cn("flex items-center gap-2 h-10 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap", selectedCategory === cat.id ? "bg-accent-gold text-text-primary shadow-lg scale-105" : "bg-bg-tertiary text-text-muted")}>
                                 <Icon className="w-3.5 h-3.5" /> {cat.name}
                             </button>
                         );
@@ -203,12 +203,12 @@ export default function POSPage() {
                         <button onClick={() => setIsMobileCartOpen(true)} className={cn("pointer-events-auto w-full h-16 rounded-[2rem] px-8 flex items-center justify-between shadow-2xl border transition-all relative overflow-hidden group", isRushMode ? "bg-status-success border-emerald-400" : "bg-text-primary dark:bg-accent-gold border-subtle")}>
                             <div className="absolute inset-0 bg-surface-card/5 opacity-0 group-active:opacity-100 transition-opacity" />
                             <div className="flex items-center gap-4 relative z-10">
-                                <div className="w-10 h-10 bg-surface-card/20 rounded-2xl flex items-center justify-center font-black text-xs text-white">{cartCount}</div>
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Ouvrir le Panier</span>
+                                <div className="w-10 h-10 bg-surface-card/20 rounded-2xl flex items-center justify-center font-black text-xs text-text-primary">{cartCount}</div>
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-primary">Ouvrir le Panier</span>
                             </div>
                             <div className="flex items-center gap-4 relative z-10">
-                                <span className="text-xl font-mono font-bold italic text-white">{formatCurrency(cartTotal)}</span>
-                                <Plus className="w-6 h-6 rotate-45 opacity-40 text-white" />
+                                <span className="text-xl font-mono font-bold italic text-text-primary">{formatCurrency(cartTotal)}</span>
+                                <Plus className="w-6 h-6 rotate-45 opacity-40 text-text-primary" />
                             </div>
                         </button>
                     </motion.div>

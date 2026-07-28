@@ -17,7 +17,7 @@ interface AIPatch {
 }
 
 const STATUS_STYLES: Record<AIPatch['status'], string> = {
-  PENDING:  'bg-status-warning/10 text-status-warning border-amber-500/30',
+  PENDING:  'bg-status-warning/10 text-status-warning border-action-primary/30',
   DEPLOYED: 'bg-status-success/10 text-status-success border-emerald-500/30',
   REJECTED: 'bg-status-danger/10 text-status-danger border-rose-500/30',
 };
@@ -65,7 +65,7 @@ export const AIWorkshop: React.FC = () => {
           </div>
           <div>
             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">NAM Workshop</h3>
-            <p className="text-sm font-bold text-white">Neural Patches</p>
+            <p className="text-sm font-bold text-text-primary">Neural Patches</p>
           </div>
         </div>
         <button
@@ -90,7 +90,7 @@ export const AIWorkshop: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono text-brand">{patch.ticketId}</span>
-                  <p className="text-sm font-bold text-white mt-0.5">{patch.description}</p>
+                  <p className="text-sm font-bold text-text-primary mt-0.5">{patch.description}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase border tracking-widest ${STATUS_STYLES[patch.status]}`}>

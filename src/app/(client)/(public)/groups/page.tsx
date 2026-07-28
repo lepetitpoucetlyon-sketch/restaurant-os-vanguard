@@ -25,7 +25,7 @@ const GroupFilters = (_props: {
 }): null => null;
 
 // Constants
-import { useGroups } from '@/modules/ops/providers/NexusOpsProvider';
+import { useGroups } from '@/modules/ops/providers';
 import { Calendar, BarChart3, Star } from 'lucide-react';
 
 export default function GroupsPage() {
@@ -77,7 +77,7 @@ export default function GroupsPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-action-primary text-white hover:bg-action-primary rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
+                        className="h-12 px-8 bg-action-primary text-text-primary hover:bg-action-primary rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
                         id="groups-create-button"
                     >
                         <Plus className="w-4 h-4" />

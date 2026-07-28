@@ -52,7 +52,7 @@ export function ConnectivityBanner() {
         <div className={cn(
             'flex items-center justify-center gap-3 px-4 py-2 text-[11px] font-bold tracking-wider transition-all',
             syncState === 'offline' && 'bg-status-error/10 text-status-error border-b border-status-error/20',
-            syncState === 'syncing' && 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-b border-amber-500/20',
+            syncState === 'syncing' && 'bg-action-primary/10 text-amber-600 dark:text-action-primary border-b border-action-primary/20',
             syncState === 'synced' && 'bg-status-success/10 text-status-success border-b border-status-success/20',
             syncState === 'error' && 'bg-status-error/10 text-status-error border-b border-status-error/20',
         )}>

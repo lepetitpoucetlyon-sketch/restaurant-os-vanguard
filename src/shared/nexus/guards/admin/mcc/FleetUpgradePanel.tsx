@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, AlertTriangle, CheckCircle2, AlertCircle, Globe, Target } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 
 type TargetState = 'stable' | 'beta' | 'bleeding-edge';
 
 const STATE_META: Record<TargetState, { label: string; color: string }> = {
-  'stable':        { label: 'Stable',        color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' },
-  'beta':          { label: 'Beta',          color: 'text-amber-400   border-amber-500/30   bg-amber-500/10'   },
-  'bleeding-edge': { label: 'Bleeding Edge', color: 'text-red-400     border-red-500/30     bg-red-500/10'     },
+  'stable':        { label: 'Stable',        color: 'text-status-success border-emerald-500/30 bg-status-success/10' },
+  'beta':          { label: 'Beta',          color: 'text-action-primary   border-action-primary/30   bg-action-primary/10'   },
+  'bleeding-edge': { label: 'Bleeding Edge', color: 'text-status-danger     border-red-500/30     bg-status-danger/10'     },
 };
 
 export function FleetUpgradePanel() {
@@ -81,8 +81,8 @@ export function FleetUpgradePanel() {
     <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-          <Rocket className="w-5 h-5 text-amber-400" />
+        <div className="w-10 h-10 rounded-2xl bg-action-primary/10 flex items-center justify-center border border-action-primary/20">
+          <Rocket className="w-5 h-5 text-action-primary" />
         </div>
         <div>
           <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Fleet Upgrade</h3>
@@ -151,22 +151,22 @@ export function FleetUpgradePanel() {
         className={cn(
           'flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all',
           breaking
-            ? 'bg-red-500/10 border-red-500/30'
+            ? 'bg-status-danger/10 border-red-500/30'
             : 'bg-bg-primary/30 border-white/5 hover:border-white/10'
         )}
       >
-        <AlertTriangle className={cn('w-4 h-4 shrink-0', breaking ? 'text-red-400' : 'text-secondary')} />
+        <AlertTriangle className={cn('w-4 h-4 shrink-0', breaking ? 'text-status-danger' : 'text-secondary')} />
         <div className="flex-1">
-          <p className={cn('text-[10px] font-black uppercase tracking-widest', breaking ? 'text-red-400' : 'text-secondary')}>
+          <p className={cn('text-[10px] font-black uppercase tracking-widest', breaking ? 'text-status-danger' : 'text-secondary')}>
             Breaking change
           </p>
           <p className="text-[9px] text-secondary">Déclenche une alerte critique dans l'audit</p>
         </div>
         <div className={cn(
           'w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
-          breaking ? 'bg-red-500 border-red-400' : 'border-white/20'
+          breaking ? 'bg-status-danger border-red-400' : 'border-white/20'
         )}>
-          {breaking && <span className="text-white text-[8px]">✓</span>}
+          {breaking && <span className="text-text-primary text-[8px]">✓</span>}
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export function FleetUpgradePanel() {
             onClick={() => setScope('fleet')}
             className={cn(
               'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all',
-              scope === 'fleet' ? 'bg-amber-500/20 border-amber-500/40 text-amber-300' : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+              scope === 'fleet' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
             )}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export function FleetUpgradePanel() {
             onClick={() => setScope('select')}
             className={cn(
               'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all',
-              scope === 'select' ? 'bg-amber-500/20 border-amber-500/40 text-amber-300' : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+              scope === 'select' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
             )}
           >
             <Target className="w-3.5 h-3.5" />
@@ -206,15 +206,15 @@ export function FleetUpgradePanel() {
                 className={cn(
                   'w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-xs transition-all',
                   selectedIds.has(inst.id)
-                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                    ? 'bg-action-primary/10 border-action-primary/30 text-amber-300'
                     : 'bg-bg-primary/20 border-white/5 text-secondary hover:border-white/10'
                 )}
               >
                 <div className={cn(
                   'w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0',
-                  selectedIds.has(inst.id) ? 'bg-amber-500 border-amber-400' : 'border-white/20'
+                  selectedIds.has(inst.id) ? 'bg-action-primary border-amber-400' : 'border-white/20'
                 )}>
-                  {selectedIds.has(inst.id) && <span className="text-[7px] text-white">✓</span>}
+                  {selectedIds.has(inst.id) && <span className="text-[7px] text-text-primary">✓</span>}
                 </div>
                 <span className="truncate">{inst.name ?? inst.id}</span>
                 <span className="font-mono text-[9px] text-secondary/60 ml-auto">{inst.id}</span>
@@ -230,7 +230,7 @@ export function FleetUpgradePanel() {
         disabled={isPushing || !version.trim() || (scope === 'select' && selectedIds.size === 0)}
         className={cn(
           'w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all',
-          'bg-amber-500 hover:bg-amber-400 text-black',
+          'bg-action-primary hover:bg-action-primary text-black',
           'disabled:opacity-40 disabled:cursor-not-allowed',
           isPushing && 'animate-pulse'
         )}

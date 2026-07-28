@@ -31,7 +31,7 @@ export function GlobalFAB() {
                         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
                         
                         {/* The Golden Bot on top */}
-                        <div className="w-14 h-14 rounded-2xl bg-accent shadow-[0_0_20px_rgba(197,160,89,0.3)] flex items-center justify-center text-white transform group-hover:scale-105 transition-all">
+                        <div className="w-14 h-14 rounded-2xl bg-accent shadow-[0_0_20px_rgba(197,160,89,0.3)] flex items-center justify-center text-text-primary transform group-hover:scale-105 transition-all">
                             <Bot className="w-8 h-8" strokeWidth={1.5} />
                             
                             {/* Oracle Status Pulse */}

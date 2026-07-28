@@ -55,7 +55,7 @@ export function DeviceManager({ uid }: { uid: string }) {
     <div className="bg-[#0f0f11] border border-white/5 rounded-2xl p-6">
       <div className="flex items-center gap-3 mb-6">
         <Smartphone className="w-5 h-5 text-brand" />
-        <h3 className="text-lg font-bold text-white uppercase tracking-tight">Certified Devices</h3>
+        <h3 className="text-lg font-bold text-text-primary uppercase tracking-tight">Certified Devices</h3>
       </div>
       
       {devices.length === 0 ? (
@@ -76,7 +76,7 @@ export function DeviceManager({ uid }: { uid: string }) {
                   <ShieldCheck className="w-8 h-8 text-status-success" />
                 )}
                 <div>
-                  <p className="text-sm font-bold text-white font-mono">{device.fingerprint.substring(0, 12)}...</p>
+                  <p className="text-sm font-bold text-text-primary font-mono">{device.fingerprint.substring(0, 12)}...</p>
                   <p className="text-[10px] text-secondary uppercase tracking-widest mt-1">
                     {device.userAgent.substring(0, 40)}...
                   </p>

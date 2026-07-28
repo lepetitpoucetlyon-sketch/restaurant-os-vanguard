@@ -133,7 +133,7 @@ export function ReceptionWizard() {
                                     className={cn(
                                         "flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all",
                                         session?.delivery_conditions?.vehicle_cleanliness === status 
-                                            ? "bg-surface-sidebar text-white border-transparent shadow-lg"
+                                            ? "bg-surface-sidebar text-text-primary border-transparent shadow-lg"
                                             : "bg-surface-card border-default hover:border-emerald-500/40 text-muted"
                                     )}
                                 >
@@ -197,7 +197,7 @@ export function ReceptionWizard() {
             >
                 <div className={cn(
                     "w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-xl",
-                    stats.status === 'pass' ? "bg-status-success text-white shadow-emerald-500/20" : "bg-status-danger text-white shadow-rose-500/20"
+                    stats.status === 'pass' ? "bg-status-success text-text-primary shadow-emerald-500/20" : "bg-status-danger text-text-primary shadow-rose-500/20"
                 )}>
                     <CheckIcon className="w-12 h-12" />
                 </div>
@@ -217,7 +217,7 @@ export function ReceptionWizard() {
                 </div>
 
                 <div className="mt-10 p-6 rounded-[2rem] border border-emerald-500/20 bg-status-success flex items-center gap-4 w-full max-w-md group cursor-pointer hover:bg-status-success/50 transition-colors">
-                    <div className="w-12 h-12 rounded-xl bg-status-success text-white flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <div className="w-12 h-12 rounded-xl bg-status-success text-text-primary flex items-center justify-center shadow-lg shadow-emerald-500/20">
                         <PenIcon className="w-6 h-6" />
                     </div>
                    <div className="text-left">
@@ -250,7 +250,7 @@ export function ReceptionWizard() {
             disabled={isSubmitting}
             className={cn(
                 "px-8 rounded-xl font-black uppercase tracking-widest text-[9px] flex items-center gap-2 shadow-xl transition-all",
-                step === 3 ? "bg-status-success hover:bg-status-success text-white" : "bg-surface-sidebar hover:bg-surface-sidebar text-white"
+                step === 3 ? "bg-status-success hover:bg-status-success text-text-primary" : "bg-surface-sidebar hover:bg-surface-sidebar text-text-primary"
             )}
         >
             {isSubmitting ? (

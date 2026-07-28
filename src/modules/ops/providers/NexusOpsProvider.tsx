@@ -22,7 +22,7 @@ import { isMCCMode } from '@/config/instance';
  * Découpé (god file, fan-out 27) : les helpers vivent dans `opsCore`, les hooks de
  * données dans `hooks/{floor,kitchen,commerce,catalog}Hooks`. Ce fichier ne garde que
  * le Provider (cycle de vie sync + switch tenant + floorOps) et réexporte les hooks
- * pour préserver la compatibilité des imports `@/modules/ops/providers/NexusOpsProvider`.
+ * pour préserver la compatibilité des imports `@/modules/ops/providers`.
  */
 
 export interface NexusOpsState {

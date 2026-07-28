@@ -16,24 +16,27 @@
  * Protégé : requireTenantAdmin.
  */
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
-interface EmployeeInput {
-  firstName:       string;
-  lastName:        string;
-  birthDate:       string;
-  birthCity:       string;
-  birthCountry:    string;
-  socialSecurityNumber: string;
-  contractType:    'CDI' | 'CDD' | 'Interim' | 'Apprentissage';
-  startDate:       string;
-  role:            string;
-  email?:          string;
-  phone?:          string;
-}
+const EmployeeSchema = z.object({
+  firstName:            z.string().min(1).max(80).trim(),
+  lastName:             z.string().min(1).max(80).trim(),
+  birthDate:            z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis'),
+  birthCity:            z.string().min(1).max(100).trim(),
+  birthCountry:         z.string().min(1).max(80).trim(),
+  socialSecurityNumber: z.string().regex(/^\d{13,15}$/, 'NIR invalide (13-15 chiffres)'),
+  contractType:         z.enum(['CDI', 'CDD', 'Interim', 'Apprentissage']),
+  startDate:            z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis'),
+  role:                 z.string().min(1).max(80).trim(),
+  email:                z.string().email().max(254).optional(),
+  phone:                z.string().max(30).optional(),
+});
+
+type EmployeeInput = z.infer<typeof EmployeeSchema>;
 
 function buildDPAEXml(employee: EmployeeInput, tenantId: string, siret: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -100,26 +103,31 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  let body: EmployeeInput;
-  try {
-    body = await req.json() as EmployeeInput;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  const raw = await req.json().catch(() => null);
+  const parsed = EmployeeSchema.safeParse(raw);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Données invalides', details: parsed.error.flatten() }, { status: 400 });
   }
-
-  const required: (keyof EmployeeInput)[] = ['firstName', 'lastName', 'birthDate', 'socialSecurityNumber', 'contractType', 'startDate', 'role'];
-  for (const field of required) {
-    if (!body[field]) return NextResponse.json({ error: `${field} requis` }, { status: 400 });
-  }
+  const body: EmployeeInput = parsed.data;
 
   const employeeId = crypto.randomUUID();
   const createdAt  = new Date().toISOString();
 
   const employee = {
-    id: employeeId,
-    ...body,
+    id:                   employeeId,
+    firstName:            body.firstName,
+    lastName:             body.lastName,
+    birthDate:            body.birthDate,
+    birthCity:            body.birthCity,
+    birthCountry:         body.birthCountry,
+    socialSecurityNumber: body.socialSecurityNumber,
+    contractType:         body.contractType,
+    startDate:            body.startDate,
+    role:                 body.role,
+    ...(body.email ? { email: body.email } : {}),
+    ...(body.phone ? { phone: body.phone } : {}),
     tenantId,
-    status: 'active',
+    status:     'active',
     createdAt,
     dpaeStatus: 'pending',
   };

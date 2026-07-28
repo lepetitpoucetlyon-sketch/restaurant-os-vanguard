@@ -71,7 +71,7 @@ export function AccountingTab({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
-                        <TrendingUp className="w-4 h-4 text-emerald-500" /> Chiffre d&apos;affaires
+                        <TrendingUp className="w-4 h-4 text-status-success" /> Chiffre d&apos;affaires
                     </div>
                     <p className="text-2xl font-serif font-bold mt-2 tabular-nums">
                         {formatEur(metrics.totalRevenue)}
@@ -79,7 +79,7 @@ export function AccountingTab({
                 </div>
                 <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
-                        <TrendingDown className="w-4 h-4 text-red-500" /> Dépenses
+                        <TrendingDown className="w-4 h-4 text-status-danger" /> Dépenses
                     </div>
                     <p className="text-2xl font-serif font-bold mt-2 tabular-nums">
                         {formatEur(metrics.totalExpenses)}
@@ -95,7 +95,7 @@ export function AccountingTab({
                 </div>
                 <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
-                        <TrendingUp className="w-4 h-4 text-emerald-500" /> Marge
+                        <TrendingUp className="w-4 h-4 text-status-success" /> Marge
                     </div>
                     <p className="text-2xl font-serif font-bold mt-2 tabular-nums">
                         {(metrics.margin ?? 0).toFixed(1)}%
@@ -122,7 +122,7 @@ export function AccountingTab({
             {/* fin-10: TVA multi-taux recap */}
             <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-text-muted mb-3 flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                    <ShieldCheck className="w-4 h-4 text-status-success" />
                     Récapitulatif TVA
                 </h3>
                 <div className="overflow-x-auto">
@@ -185,7 +185,7 @@ export function AccountingTab({
                             ? closePeriodPermission.reason
                             : undefined
                     }
-                    className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <Lock className="w-4 h-4" />
                     {closingZ ? "Clôture en cours…" : "Clôture Z"}
@@ -218,7 +218,7 @@ export function AccountingTab({
                     <button
                         onClick={onExportPnL}
                         disabled={pnlExporting}
-                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-action-primary hover:text-white hover:border-action-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-action-primary hover:text-text-primary hover:border-action-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FileText className="w-4 h-4" />
                         {pnlExporting ? "Export…" : "Exporter P&L"}
@@ -227,7 +227,7 @@ export function AccountingTab({
                     <button
                         onClick={onExportBilan}
                         disabled={bilanExporting}
-                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-action-primary hover:text-white hover:border-action-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-action-primary hover:text-text-primary hover:border-action-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FileText className="w-4 h-4" />
                         {bilanExporting ? "Export…" : "Exporter Bilan"}
@@ -236,7 +236,7 @@ export function AccountingTab({
                     <button
                         onClick={onExportPayroll}
                         disabled={payrollExporting}
-                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-action-primary hover:text-white hover:border-action-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-action-primary hover:text-text-primary hover:border-action-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <Download className="w-4 h-4" />
                         {payrollExporting ? "Export…" : "Exporter variables de paie"}

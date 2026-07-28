@@ -66,8 +66,8 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'COMPARE_PLATE') {
-      const { LLMManager } = await import('@/modules/intelligence/ai/LLMManager');
-      const { AI_MODELS } = await import('@/modules/intelligence/ai/types');
+      const { LLMManager } = await import('@/modules/intelligence/ai');
+      const { AI_MODELS } = await import('@/modules/intelligence/ai');
       const imageData = payload.base64Image.includes(',') ? payload.base64Image.split(',')[1] : payload.base64Image;
       const response = await LLMManager.provider.generateFromImage({
         model: AI_MODELS.visionFast,

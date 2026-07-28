@@ -41,7 +41,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                 isOver
                     ? "border-emerald-500 bg-status-success shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-200 scale-105"
                     : isSelected
-                        ? "border-default bg-surface-sidebar dark:border-white dark:bg-surface-card text-white dark:text-primary shadow-xl"
+                        ? "border-default bg-surface-sidebar dark:border-white dark:bg-surface-card text-text-primary dark:text-primary shadow-xl"
                         : isHighlighted
                             ? "border-emerald-500 bg-status-success/5 shadow-2xl shadow-emerald-500/20 ring-4 ring-emerald-500/20"
                             : cn(config.borderColor, "bg-surface-card dark:bg-bg-secondary hover:shadow-lg")
@@ -77,7 +77,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                                 animate={{ scale: 1 }}
                                 className="w-14 h-14 mx-auto mb-2 rounded-full bg-status-success flex items-center justify-center"
                             >
-                                <Plus className="w-7 h-7 text-white" />
+                                <Plus className="w-7 h-7 text-text-primary" />
                             </motion.div>
                             <p className="text-sm font-black text-status-success uppercase tracking-tight">Déposer ici</p>
                         </div>
@@ -88,7 +88,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
             {/* Expiring warning badge */}
             {expiringCount > 0 && !isOver && (
                 <div className="absolute top-3 right-3 w-6 h-6 bg-status-danger rounded-full flex items-center justify-center animate-pulse z-10">
-                    <span className="text-[10px] font-black text-white">{expiringCount}</span>
+                    <span className="text-[10px] font-black text-text-primary">{expiringCount}</span>
                 </div>
             )}
 
@@ -103,7 +103,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                     {location.temperature !== undefined && (
                         <div className={cn(
                             "flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-mono font-bold",
-                            isSelected ? "bg-surface-card/20 text-white dark:text-primary" : "bg-surface-card dark:bg-bg-tertiary text-primary dark:text-muted"
+                            isSelected ? "bg-surface-card/20 text-text-primary dark:text-primary" : "bg-surface-card dark:bg-bg-tertiary text-primary dark:text-muted"
                         )}>
                             <Thermometer className="w-3 h-3" />
                             {location.temperature}°C
@@ -113,14 +113,14 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
 
                 <h3 className={cn(
                     "font-black text-sm uppercase tracking-tight truncate",
-                    isSelected ? "text-white dark:text-primary" : "text-primary dark:text-text-primary"
+                    isSelected ? "text-text-primary dark:text-primary" : "text-primary dark:text-text-primary"
                 )}>
                     {location.name.replace(/ - .*/, '')}
                 </h3>
 
                 <p className={cn(
                     "text-[9px] font-bold uppercase tracking-widest mt-1 truncate",
-                    isSelected ? "text-white/70 dark:text-primary/70" : "text-secondary dark:text-muted"
+                    isSelected ? "text-text-primary/70 dark:text-primary/70" : "text-secondary dark:text-muted"
                 )}>
                     {location.name.includes(' - ') ? location.name.split(' - ')[1] : config.label}
                 </p>
@@ -128,14 +128,14 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                 <div className="flex items-center gap-3 mt-3">
                     <div className={cn(
                         "flex items-center gap-1.5",
-                        isSelected ? "text-white/80" : "text-secondary"
+                        isSelected ? "text-text-primary/80" : "text-secondary"
                     )}>
                         <Package className="w-3.5 h-3.5" />
                         <span className="text-xs font-bold">{stockCount}</span>
                     </div>
                     <div className={cn(
                         "flex items-center gap-1.5",
-                        isSelected ? "text-white/80" : "text-secondary"
+                        isSelected ? "text-text-primary/80" : "text-secondary"
                     )}>
                         <ChefHat className="w-3.5 h-3.5" />
                         <span className="text-xs font-bold">{prepCount}</span>
@@ -149,7 +149,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                     "absolute right-3 bottom-3 w-8 h-8 rounded-full flex items-center justify-center transition-all",
                     isSelected ? "bg-surface-card/20" : "bg-surface-bg group-hover:bg-surface-bg"
                 )}>
-                    <ArrowRight className={cn("w-4 h-4", isSelected ? "text-white" : "text-secondary")} />
+                    <ArrowRight className={cn("w-4 h-4", isSelected ? "text-text-primary" : "text-secondary")} />
                 </div>
             )}
         </motion.div>

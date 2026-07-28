@@ -3,10 +3,10 @@ import React from 'react';
 
 // Providers Layers
 import { NexusCoreProvider } from "@/shared/providers/NexusCoreProvider";
-import { NexusOpsProvider } from "@/modules/ops/providers/NexusOpsProvider";
+import { NexusOpsProvider } from "@/modules/ops/providers";
 import { NexusFiscalProvider } from "@/modules/finance/providers/NexusFiscalProvider";
 import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
-import { NexusFleetProvider } from "@/modules/intelligence/fleet/NexusFleetProvider";
+import { NexusFleetProvider } from "@/modules/intelligence/fleet";
 import { ToastProvider } from "@ui/Toast";
 import { ContextualSettingsProvider } from "@/shared/components/settings/ContextualSettings";
 

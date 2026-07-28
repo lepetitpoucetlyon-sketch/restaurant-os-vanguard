@@ -69,7 +69,7 @@ export function LeaveRequestCard({
                     <div>
                         {isManager && (
                             <div className="flex items-center gap-2 mb-1">
-                                <div className="w-5 h-5 rounded-full bg-accent text-white flex items-center justify-center text-[10px] font-bold">
+                                <div className="w-5 h-5 rounded-full bg-accent text-text-primary flex items-center justify-center text-[10px] font-bold">
                                     {(request.employeeName || '').charAt(0)}
                                 </div>
                                 <span className="text-xs font-bold text-text-muted uppercase tracking-wider">{request.employeeName}</span>
@@ -143,7 +143,7 @@ export function LeaveRequestCard({
                         </button>
                         <button
                             onClick={onApprove}
-                            className="px-4 py-2 rounded-xl bg-text-primary text-bg-primary text-xs font-bold uppercase tracking-wider hover:bg-accent hover:text-white transition-all shadow-md flex items-center gap-2"
+                            className="px-4 py-2 rounded-xl bg-text-primary text-bg-primary text-xs font-bold uppercase tracking-wider hover:bg-accent hover:text-text-primary transition-all shadow-md flex items-center gap-2"
                         >
                             <CheckCircle2 className="w-4 h-4" />
                             Approuver

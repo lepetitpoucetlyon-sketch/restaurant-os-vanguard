@@ -14,7 +14,7 @@ export default function RGPDPage() {
       <h1 className="text-3xl font-bold text-gray-900 mb-2">
         Politique de confidentialité et protection des données personnelles
       </h1>
-      <p className="text-sm text-gray-500 mb-8">Dernière mise à jour : {lastUpdate}</p>
+      <p className="text-sm text-text-muted mb-8">Dernière mise à jour : {lastUpdate}</p>
 
       <p className="text-gray-700 leading-relaxed mb-8">
         La présente politique décrit comment les données à caractère personnel sont collectées,
@@ -70,7 +70,7 @@ export default function RGPDPage() {
         <div className="space-y-6">
           {/* Clients restaurant */}
           <div className="border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-gray-900 text-white px-4 py-2 font-semibold text-sm">
+            <div className="bg-surface-bg text-text-primary px-4 py-2 font-semibold text-sm">
               Clients du restaurant
             </div>
             <div className="p-4 text-sm">
@@ -100,7 +100,7 @@ export default function RGPDPage() {
 
           {/* Collaborateurs */}
           <div className="border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-gray-900 text-white px-4 py-2 font-semibold text-sm">
+            <div className="bg-surface-bg text-text-primary px-4 py-2 font-semibold text-sm">
               Collaborateurs (données RH)
             </div>
             <div className="p-4 text-sm">
@@ -131,7 +131,7 @@ export default function RGPDPage() {
 
           {/* Données fiscales */}
           <div className="border border-red-200 rounded-lg overflow-hidden">
-            <div className="bg-red-900 text-white px-4 py-2 font-semibold text-sm">
+            <div className="bg-red-900 text-text-primary px-4 py-2 font-semibold text-sm">
               Données fiscales NF525 (IMMUABLES)
             </div>
             <div className="p-4 text-sm">
@@ -169,7 +169,7 @@ export default function RGPDPage() {
 
           {/* Données analytiques */}
           <div className="border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-gray-900 text-white px-4 py-2 font-semibold text-sm">
+            <div className="bg-surface-bg text-text-primary px-4 py-2 font-semibold text-sm">
               Données analytiques et opérationnelles
             </div>
             <div className="p-4 text-sm">
@@ -204,7 +204,7 @@ export default function RGPDPage() {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-gray-900 text-white">
+              <tr className="bg-surface-bg text-text-primary">
                 <th className="px-4 py-3 text-left font-semibold">Catégorie de données</th>
                 <th className="px-4 py-3 text-left font-semibold">Durée de conservation</th>
                 <th className="px-4 py-3 text-left font-semibold">Fondement</th>
@@ -294,7 +294,7 @@ export default function RGPDPage() {
         <div className="overflow-x-auto mb-4">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-gray-900 text-white">
+              <tr className="bg-surface-bg text-text-primary">
                 <th className="px-4 py-3 text-left font-semibold">Prestataire</th>
                 <th className="px-4 py-3 text-left font-semibold">Pays</th>
                 <th className="px-4 py-3 text-left font-semibold">Garantie</th>
@@ -341,7 +341,7 @@ export default function RGPDPage() {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-gray-900 text-white">
+              <tr className="bg-surface-bg text-text-primary">
                 <th className="px-4 py-3 text-left font-semibold">Cookie</th>
                 <th className="px-4 py-3 text-left font-semibold">Finalité</th>
                 <th className="px-4 py-3 text-left font-semibold">Durée</th>

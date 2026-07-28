@@ -84,7 +84,7 @@ export function CRMContactForm() {
             </div>
             <Button 
                 onClick={handleSave} 
-                className="w-full h-16 bg-success hover:bg-success/90 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl transition-all"
+                className="w-full h-16 bg-success hover:bg-success/90 text-text-primary rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl transition-all"
             >
                 {t('crm.approve_profile') || 'Homologuer Profil'}
             </Button>

@@ -42,18 +42,18 @@ const STATUS_CONFIG: Record<
   { icon: React.ReactNode; badgeClass: string; label: string }
 > = {
   ok: {
-    icon: <CheckCircle2 className="w-4 h-4 text-emerald-500" />,
-    badgeClass: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    icon: <CheckCircle2 className="w-4 h-4 text-status-success" />,
+    badgeClass: 'bg-status-success/10 text-emerald-600 dark:text-status-success border-emerald-500/20',
     label: 'Conforme',
   },
   error: {
-    icon: <XCircle className="w-4 h-4 text-red-500" />,
-    badgeClass: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
+    icon: <XCircle className="w-4 h-4 text-status-danger" />,
+    badgeClass: 'bg-status-danger/10 text-red-600 dark:text-status-danger border-red-500/20',
     label: 'Non conforme',
   },
   warning: {
-    icon: <AlertCircle className="w-4 h-4 text-amber-500" />,
-    badgeClass: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    icon: <AlertCircle className="w-4 h-4 text-action-primary" />,
+    badgeClass: 'bg-action-primary/10 text-amber-600 dark:text-action-primary border-action-primary/20',
     label: 'A vérifier',
   },
   pending: {
@@ -330,7 +330,7 @@ export default function NF525SelfAudit() {
         </div>
         <div className="flex gap-4">
           {errorCount > 0 && (
-            <span className="flex items-center gap-1.5 text-xs font-semibold text-red-500">
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-status-danger">
               <XCircle className="w-3.5 h-3.5" />
               {errorCount} non conforme{errorCount > 1 ? 's' : ''}
             </span>
@@ -382,8 +382,8 @@ export default function NF525SelfAudit() {
                   </p>
 
                   {check.howToFix && check.status !== 'ok' && (
-                    <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3">
-                      <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                    <div className="rounded-xl bg-action-primary/5 border border-action-primary/20 p-3">
+                      <p className="text-xs text-amber-600 dark:text-action-primary font-medium">
                         Correction : {check.howToFix}
                       </p>
                     </div>
@@ -394,7 +394,7 @@ export default function NF525SelfAudit() {
                       onClick={() => toggleManualCheck(check.id)}
                       className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-colors ${
                         check.status === 'ok'
-                          ? 'border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10'
+                          ? 'border-emerald-500/30 text-emerald-600 dark:text-status-success hover:bg-status-success/10'
                           : 'border-border text-text-muted hover:bg-bg-primary'
                       }`}
                     >

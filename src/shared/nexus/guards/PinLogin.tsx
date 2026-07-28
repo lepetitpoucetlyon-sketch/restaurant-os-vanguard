@@ -170,7 +170,7 @@ export function PinLogin() {
                                             className={cn(
                                                 "h-20 w-full rounded-[2rem] flex items-center justify-center transition-all duration-300 border",
                                                 pin.length === 4
-                                                    ? "bg-accent border-accent text-white hover:bg-[#B8934C] shadow-glow-accent cursor-pointer hover:scale-105"
+                                                    ? "bg-accent border-accent text-text-primary hover:bg-[#B8934C] shadow-glow-accent cursor-pointer hover:scale-105"
                                                     : "bg-transparent border-border text-text-muted/20 cursor-not-allowed"
                                             )}
                                         >

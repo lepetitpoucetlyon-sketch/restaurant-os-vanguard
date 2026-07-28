@@ -61,8 +61,8 @@ export function resolveStation(itemName: string): KitchenStation {
 
 export const STATION_CONFIG = {
     all: { label: 'TOUS', icon: Utensils, activeBg: 'bg-text-primary', activeText: 'text-bg-primary', iconColor: 'text-text-primary' },
-    cold: { label: 'FROID', icon: Snowflake, activeBg: 'bg-info', activeText: 'text-white', iconColor: 'text-info' },
-    hot: { label: 'CHAUD', icon: Flame, activeBg: 'bg-error', activeText: 'text-white', iconColor: 'text-error' },
-    bar: { label: 'BAR', icon: Beer, activeBg: 'bg-warning', activeText: 'text-white', iconColor: 'text-warning' },
-    pastry: { label: 'PÂTISSERIE', icon: Utensils, activeBg: 'bg-action-primary', activeText: 'text-white', iconColor: 'text-brand' },
+    cold: { label: 'FROID', icon: Snowflake, activeBg: 'bg-info', activeText: 'text-text-primary', iconColor: 'text-info' },
+    hot: { label: 'CHAUD', icon: Flame, activeBg: 'bg-error', activeText: 'text-text-primary', iconColor: 'text-error' },
+    bar: { label: 'BAR', icon: Beer, activeBg: 'bg-warning', activeText: 'text-text-primary', iconColor: 'text-warning' },
+    pastry: { label: 'PÂTISSERIE', icon: Utensils, activeBg: 'bg-action-primary', activeText: 'text-text-primary', iconColor: 'text-brand' },
 };

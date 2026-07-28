@@ -59,7 +59,7 @@ export function DraggableIngredient({ ingredient, stockCount, highlightQuery, on
 
             <div className={cn(
                 "w-10 h-10 rounded-lg flex items-center justify-center transition-colors shadow-sm border border-black/5 dark:border-white/5",
-                isSelected ? "bg-accent text-white" : "bg-bg-tertiary text-text-muted group-hover:text-accent"
+                isSelected ? "bg-accent text-text-primary" : "bg-bg-tertiary text-text-muted group-hover:text-accent"
             )}>
                 <GripVertical className="w-4 h-4" />
             </div>
@@ -79,7 +79,7 @@ export function DraggableIngredient({ ingredient, stockCount, highlightQuery, on
             <div className="flex flex-col items-end gap-1">
                 <div className={cn(
                     "px-2.5 py-1 rounded-lg text-[10px] font-black transition-colors shadow-sm border border-black/5",
-                    isSelected ? "bg-accent text-white border-accent" : "bg-bg-tertiary text-text-primary"
+                    isSelected ? "bg-accent text-text-primary border-accent" : "bg-bg-tertiary text-text-primary"
                 )}>
                     {stockCount}
                 </div>

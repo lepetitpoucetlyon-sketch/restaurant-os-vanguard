@@ -8,7 +8,8 @@ export { useQuotes } from './marketing/hooks/useQuotes';
 // Ré-export depuis la source (commerceHooks) et non le barrel NexusOpsProvider :
 // passer par le Provider crée un cycle SSR commerce → Provider → NexusSyncService → commerce
 // (TDZ « Cannot access 'p' before initialization » au prerender).
-export { useReservations } from '@/modules/ops/providers/hooks/commerceHooks';
+export { useReservations, useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
+export { CustomerImportPanel } from '@/modules/onboarding/migration';
 
 
 export { LandingDashboard } from './landing/components/LandingDashboard';

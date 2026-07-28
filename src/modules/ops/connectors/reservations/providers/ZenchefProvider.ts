@@ -1,5 +1,6 @@
 import type { IReservationProvider, Reservation } from '../types';
 import { logger } from '@/lib/logger';
+import { computeHmacHex, timingSafeCompareHex } from '@/lib/server/webhookVerify';
 
 const ZENCHEF_BASE = 'https://api.zenchef.com/v1';
 
@@ -89,5 +90,13 @@ export class ZenchefProvider implements IReservationProvider {
         const reservations = await this.listUpcoming(tenantId);
         logger.info(`[ZenchefProvider] syncAll → ${reservations.length} réservations`);
         return reservations.length;
+    }
+
+    verifySignature(rawBody: string, headers: Headers): boolean {
+        const secret = process.env.ZENCHEF_WEBHOOK_SECRET;
+        if (!secret) return false;
+        const incoming = headers.get('x-zenchef-signature') ?? '';
+        const expected = computeHmacHex(secret, rawBody);
+        return timingSafeCompareHex(incoming, expected);
     }
 }

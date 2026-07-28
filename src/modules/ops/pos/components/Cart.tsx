@@ -7,8 +7,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
-import { useIntelligence } from "@/modules/ops/providers/NexusOpsProvider";
-import { useNexusFleet } from "@/modules/intelligence/fleet/NexusFleetProvider";
+import { useIntelligence } from "@/modules/ops/providers";
+import { useNexusFleet } from "@/modules/intelligence/fleet";
 import { useLanguage } from "@/shared/hooks";
 import { formatCurrency } from "@/lib/formatters";
 import { useIsMobile } from "@/shared/hooks";
@@ -86,7 +86,7 @@ const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemCont
                         <span className="text-[10px] opacity-40 font-mono">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))))} unit</span>
                         
                         {item.isOffer && (
-                            <span className="text-[8px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                            <span className="text-[8px] font-black uppercase tracking-widest bg-status-success/10 text-status-success border border-emerald-500/20 px-2 py-0.5 rounded-full">
                                 OFFERT
                             </span>
                         )}
@@ -232,7 +232,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     </div>
                     <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
                         <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
-                        <span className="text-4xl font-serif font-black italic text-white tracking-tighter drop-shadow-glow">
+                        <span className="text-4xl font-serif font-black italic text-text-primary tracking-tighter drop-shadow-glow">
                             {formatCurrency(totalInCents)}
                         </span>
                     </div>
@@ -250,7 +250,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     <button
                         onClick={onCheckout}
                         disabled={items.length === 0}
-                        className="h-16 flex flex-col items-center justify-center gap-1.5 bg-accent-gold text-white rounded-[2rem] shadow-xl shadow-accent-gold/20 disabled:opacity-30"
+                        className="h-16 flex flex-col items-center justify-center gap-1.5 bg-accent-gold text-text-primary rounded-[2rem] shadow-xl shadow-accent-gold/20 disabled:opacity-30"
                     >
                         <CreditCard className="w-6 h-6" />
                         <span className="text-[8px] font-black uppercase tracking-[0.2em]">{t('pos.cart.checkout')}</span>

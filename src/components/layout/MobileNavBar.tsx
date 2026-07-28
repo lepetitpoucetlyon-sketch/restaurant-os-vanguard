@@ -69,7 +69,7 @@ export function MobileNavBar() {
                                         whileTap={{ scale: 0.9 }}
                                         className={cn(
                                             "w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300",
-                                            isActive ? "bg-text-primary text-white dark:bg-accent-gold dark:text-bg-primary shadow-lg" : "text-text-muted"
+                                            isActive ? "bg-text-primary text-text-primary dark:bg-accent-gold dark:text-bg-primary shadow-lg" : "text-text-muted"
                                         )}
                                     >
                                         <Icon strokeWidth={isActive ? 2 : 1.5} className="w-5 h-5" />
@@ -123,7 +123,7 @@ export function MobileNavBar() {
                                 {GRID_ITEMS.map((item, idx) => (
                                     <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
                                         <Link href={item.href} prefetch={false} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-3">
-                                            <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center border border-border shadow-soft", pathname === item.href ? "bg-accent-gold text-white border-transparent" : "bg-bg-primary")}>
+                                            <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center border border-border shadow-soft", pathname === item.href ? "bg-accent-gold text-text-primary border-transparent" : "bg-bg-primary")}>
                                                 <item.icon className="w-6 h-6" />
                                             </div>
                                             <span className="text-[8px] font-black uppercase tracking-widest text-text-muted text-center">{t(`common.navigation.${item.label}`)}</span>

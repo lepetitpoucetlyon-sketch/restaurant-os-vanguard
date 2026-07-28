@@ -35,7 +35,7 @@ const accentColors = {
     warning: {
         icon: "text-status-warning",
         bg: "bg-status-warning/10",
-        border: "border-amber-500/20",
+        border: "border-action-primary/20",
         trend: "text-status-warning",
     },
     error: {

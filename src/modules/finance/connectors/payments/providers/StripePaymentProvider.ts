@@ -1,4 +1,5 @@
 import type { IPaymentProvider, PaymentEvent, Transaction, CheckoutOrder } from '../types';
+import { toMicrounits } from '@/domain/schemas/primitives';
 import type { Microunits } from '@/domain/schemas/primitives';
 import { logger } from '@/lib/logger';
 
@@ -56,7 +57,7 @@ export class StripePaymentProvider implements IPaymentProvider {
                                : event.type === 'payment_intent.payment_failed' ? 'payment.failed'
                                : 'refund.succeeded',
             transactionId:       String(obj['id'] ?? ''),
-            amountInMicrounits:  BigInt(Math.round(Number(obj['amount'] ?? 0) * 10_000)) as unknown as Microunits,
+            amountInMicrounits:  toMicrounits(Math.round(Number(obj['amount'] ?? 0) * 10_000)),
             currency:            String(obj['currency'] ?? 'eur').toUpperCase(),
         };
     }
@@ -72,7 +73,7 @@ export class StripePaymentProvider implements IPaymentProvider {
         return data.data.map(c => ({
             id:                  `stripe_${c['id']}`,
             externalId:          String(c['id'] ?? ''),
-            amountInMicrounits:  BigInt(Math.round(Number(c['amount'] ?? 0) * 10_000)) as unknown as Microunits,
+            amountInMicrounits:  toMicrounits(Math.round(Number(c['amount'] ?? 0) * 10_000)),
             currency:            String(c['currency'] ?? 'eur').toUpperCase(),
             status:              c['status'] === 'succeeded' ? 'succeeded' : c['status'] === 'failed' ? 'failed' : 'pending',
             createdAt:           new Date(Number(c['created']) * 1000).toISOString(),

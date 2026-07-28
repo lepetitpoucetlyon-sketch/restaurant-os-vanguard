@@ -114,7 +114,7 @@ export function CartItemContextMenu({
                                             className={cn(
                                                 "h-10 rounded-2xl border text-[11px] font-black uppercase tracking-wider transition-all",
                                                 isActive
-                                                    ? "bg-accent-gold border-accent-gold text-white shadow-md shadow-accent-gold/20"
+                                                    ? "bg-accent-gold border-accent-gold text-text-primary shadow-md shadow-accent-gold/20"
                                                     : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
                                             )}
                                         >
@@ -139,7 +139,7 @@ export function CartItemContextMenu({
                                 <button
                                     onClick={onDiscountCustom}
                                     disabled={!customDiscountValue.trim()}
-                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-white transition-all disabled:opacity-30"
+                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-text-primary transition-all disabled:opacity-30"
                                     aria-label="Appliquer"
                                 >
                                     <Check className="w-4 h-4" />
@@ -179,7 +179,7 @@ export function CartItemContextMenu({
                                 </div>
                                 <button
                                     onClick={() => onNoteSave(contextMenuItem.cartId, noteValue)}
-                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-white transition-all"
+                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-text-primary transition-all"
                                     aria-label="Valider la note"
                                 >
                                     <Check className="w-4 h-4" />
@@ -215,7 +215,7 @@ export function CartItemContextMenu({
                                                 className={cn(
                                                     "h-10 rounded-2xl border text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
                                                     isActive
-                                                        ? "bg-accent-gold border-accent-gold text-white shadow-md shadow-accent-gold/20"
+                                                        ? "bg-accent-gold border-accent-gold text-text-primary shadow-md shadow-accent-gold/20"
                                                         : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
                                                 )}
                                             >
@@ -238,8 +238,8 @@ export function CartItemContextMenu({
                                     className={cn(
                                         "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider transition-all",
                                         contextMenuItem.doggyBag
-                                            ? "bg-amber-500/10 border-amber-500/30 text-amber-500"
-                                            : "border-border bg-bg-primary text-text-muted hover:border-amber-500/40 hover:text-amber-500"
+                                            ? "bg-action-primary/10 border-action-primary/30 text-action-primary"
+                                            : "border-border bg-bg-primary text-text-muted hover:border-action-primary/40 hover:text-action-primary"
                                     )}
                                 >
                                     <PackageOpen className="w-4 h-4 shrink-0" />
@@ -256,8 +256,8 @@ export function CartItemContextMenu({
                                 className={cn(
                                     "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider transition-all",
                                     contextMenuItem.isOffer
-                                        ? "border-emerald-500/20 bg-emerald-500/5 text-emerald-400 cursor-not-allowed"
-                                        : "border-border bg-bg-primary text-text-muted hover:border-emerald-500/40 hover:text-emerald-400"
+                                        ? "border-emerald-500/20 bg-status-success/5 text-status-success cursor-not-allowed"
+                                        : "border-border bg-bg-primary text-text-muted hover:border-emerald-500/40 hover:text-status-success"
                                 )}
                             >
                                 <Gift className="w-4 h-4 shrink-0" />

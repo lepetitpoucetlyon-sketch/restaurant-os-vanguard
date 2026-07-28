@@ -72,7 +72,7 @@ export function ProfileSwitcher({ isOpen, onClose }: ProfileSwitcherProps) {
                                 >
                                     <div className={cn(
                                         "w-16 h-16 rounded-[1.5rem] flex items-center justify-center mb-5 shadow-inner transition-transform group-hover:scale-110",
-                                        isActive ? "bg-accent-gold text-white" : "bg-bg-secondary dark:bg-bg-primary text-text-primary"
+                                        isActive ? "bg-accent-gold text-text-primary" : "bg-bg-secondary dark:bg-bg-primary text-text-primary"
                                     )}>
                                         <span className="text-2xl font-black tracking-tighter">
                                             {initials}

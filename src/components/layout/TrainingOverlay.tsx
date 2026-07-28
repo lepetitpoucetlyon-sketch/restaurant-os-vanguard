@@ -19,7 +19,7 @@ export function TrainingOverlay() {
                 exit={{ y: -100, opacity: 0 }}
                 className="fixed top-0 left-0 right-0 z-[100] p-4 flex justify-center pointer-events-none"
             >
-                <div className="bg-status-warning/10 backdrop-blur-2xl border border-amber-500/20 px-8 py-3 rounded-full flex items-center gap-6 shadow-[0_10px_40px_rgba(245,158,11,0.2)] pointer-events-auto">
+                <div className="bg-status-warning/10 backdrop-blur-2xl border border-action-primary/20 px-8 py-3 rounded-full flex items-center gap-6 shadow-[0_10px_40px_rgba(245,158,11,0.2)] pointer-events-auto">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-status-warning rounded-lg flex items-center justify-center animate-pulse">
                             <GraduationCap className="w-5 h-5 text-bg-primary" />
@@ -42,7 +42,7 @@ export function TrainingOverlay() {
                             variant="ghost"
                             size="sm"
                             onClick={toggleTrainingMode}
-                            className="h-8 bg-status-warning/20 hover:bg-status-warning/30 text-status-warning border border-amber-500/10 rounded-lg text-[9px] font-black uppercase tracking-widest group transition-all"
+                            className="h-8 bg-status-warning/20 hover:bg-status-warning/30 text-status-warning border border-action-primary/10 rounded-lg text-[9px] font-black uppercase tracking-widest group transition-all"
                         >
                             Quitter le Mode École
                             <XCircle className="w-3 h-3 ml-2 group-hover:rotate-90 transition-transform" />

@@ -33,8 +33,18 @@ export const MenuTool: ToolDefinition<UpdateMenuArgs> = {
     },
     schema: UpdateMenuSchema,
     category: "inventory",
-    execute: async (args, _user): Promise<SovereignValue> => {
+    execute: async (args, user): Promise<SovereignValue> => {
         try {
+            // Prompt-injection guard: LLM-supplied tenantId must match the authenticated session.
+            if (user.tenantId && user.tenantId !== args.tenantId) {
+                logger.error('[MenuTool] Cross-tenant injection attempt blocked', {
+                    sessionTenant: user.tenantId,
+                    requestedTenant: args.tenantId,
+                    actor: user.id,
+                });
+                return { error: 'Accès refusé — le tenant demandé ne correspond pas à la session active.' };
+            }
+
             const productName = args.productName;
             const newDescription = args.newDescription;
             const newPrice = args.newPriceInCents;

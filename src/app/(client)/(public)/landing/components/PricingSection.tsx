@@ -21,10 +21,10 @@ export function PricingSection() {
                     className="text-center mb-20"
                 >
                     <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Tarifs</span>
-                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
+                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                         Investissez dans l'excellence
                     </h2>
-                    <p className="text-xl text-white/50 max-w-2xl mx-auto">
+                    <p className="text-xl text-text-primary/50 max-w-2xl mx-auto">
                         Des formules adaptées à chaque ambition. Sans engagement, sans surprise.
                     </p>
                 </motion.div>
@@ -53,20 +53,20 @@ export function PricingSection() {
                             )}
 
                             <div className="mb-8">
-                                <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
-                                <p className="text-white/50 text-sm">{plan.description}</p>
+                                <h3 className="text-xl font-bold text-text-primary mb-2">{plan.name}</h3>
+                                <p className="text-text-primary/50 text-sm">{plan.description}</p>
                             </div>
 
                             <div className="mb-8">
-                                <span className="text-5xl font-mono font-bold text-white">{plan.price}</span>
-                                {plan.period && <span className="text-white/50 text-lg">{plan.period}</span>}
+                                <span className="text-5xl font-mono font-bold text-text-primary">{plan.price}</span>
+                                {plan.period && <span className="text-text-primary/50 text-lg">{plan.period}</span>}
                             </div>
 
                             <ul className="space-y-4 mb-8">
                                 {plan.features.map((feature, fIdx) => (
                                     <li key={fIdx} className="flex items-start gap-3">
-                                        <Check className={cn("w-5 h-5 mt-0.5 flex-shrink-0", plan.highlighted ? "text-[#C9A227]" : "text-white/40")} />
-                                        <span className="text-white/80 text-sm">{feature}</span>
+                                        <Check className={cn("w-5 h-5 mt-0.5 flex-shrink-0", plan.highlighted ? "text-[#C9A227]" : "text-text-primary/40")} />
+                                        <span className="text-text-primary/80 text-sm">{feature}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -78,7 +78,7 @@ export function PricingSection() {
                                     "w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all",
                                     plan.highlighted
                                         ? "bg-[#C9A227] text-primary shadow-lg shadow-[#C9A227]/30"
-                                        : "bg-surface-card text-white hover:bg-surface-card"
+                                        : "bg-surface-card text-text-primary hover:bg-surface-card"
                                 )}
                             >
                                 {plan.cta}

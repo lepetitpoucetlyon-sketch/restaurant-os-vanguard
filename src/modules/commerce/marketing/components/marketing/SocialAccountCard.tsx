@@ -29,7 +29,7 @@ export function SocialAccountCard({ account }: SocialAccountCardProps) {
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-5">
                         <div className={cn(
-                            "w-20 h-20 rounded-[2rem] flex items-center justify-center text-white shadow-lg bg-gradient-to-br transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500",
+                            "w-20 h-20 rounded-[2rem] flex items-center justify-center text-text-primary shadow-lg bg-gradient-to-br transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500",
                             account.gradient
                         )}>
                             { Icon ? <Icon size={40} strokeWidth={1.5} /> : null }

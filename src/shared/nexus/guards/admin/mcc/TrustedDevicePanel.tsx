@@ -31,8 +31,8 @@ const STORAGE_KEY = 'mcc_device_fp';
 const ROLE_LABELS: Record<MccRole, { label: string; color: string }> = {
     fleet_admin:    { label: 'Fleet Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
     SUPER_ADMIN:    { label: 'Super Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
-    mcc_support:    { label: 'MCC Support',    color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-    mcc_junior_dev: { label: 'Junior Dev',     color: 'text-slate-400 bg-white/5 border-white/10' },
+    mcc_support:    { label: 'MCC Support',    color: 'text-blue-400 bg-status-info/10 border-blue-500/20' },
+    mcc_junior_dev: { label: 'Junior Dev',     color: 'text-text-secondary bg-white/5 border-white/10' },
 };
 
 export function TrustedDevicePanel() {
@@ -152,29 +152,29 @@ export function TrustedDevicePanel() {
             {/* En-tête */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-emerald-500/10 rounded-xl">
-                        <Shield className="w-5 h-5 text-emerald-400" />
+                    <div className="p-2 bg-status-success/10 rounded-xl">
+                        <Shield className="w-5 h-5 text-status-success" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Trusted Device Registry</h3>
-                        <p className="text-[10px] text-slate-500">Appareils autorisés à accéder au MCC • ZTNA Layer 2</p>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Trusted Device Registry</h3>
+                        <p className="text-[10px] text-text-muted">Appareils autorisés à accéder au MCC • ZTNA Layer 2</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-lg text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
                     <Wifi className="w-3 h-3" />
                     {activeDevices.length} actif{activeDevices.length !== 1 ? 's' : ''}
                 </div>
             </div>
 
             {/* Statut de l'appareil courant */}
-            <div className={`flex items-center gap-3 px-4 py-3 border rounded-xl ${myDeviceRegistered ? 'border-emerald-500/20 bg-emerald-500/5' : 'border-amber-500/20 bg-amber-500/5'}`}>
-                <Smartphone className={`w-4 h-4 shrink-0 ${myDeviceRegistered ? 'text-emerald-400' : 'text-amber-400'}`} />
+            <div className={`flex items-center gap-3 px-4 py-3 border rounded-xl ${myDeviceRegistered ? 'border-emerald-500/20 bg-status-success/5' : 'border-action-primary/20 bg-action-primary/5'}`}>
+                <Smartphone className={`w-4 h-4 shrink-0 ${myDeviceRegistered ? 'text-status-success' : 'text-action-primary'}`} />
                 <div className="flex-1 min-w-0">
-                    <p className={`text-xs font-bold ${myDeviceRegistered ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    <p className={`text-xs font-bold ${myDeviceRegistered ? 'text-status-success' : 'text-action-primary'}`}>
                         {myDeviceRegistered ? 'Cet appareil est dans le registre de confiance' : 'Cet appareil n\'est pas encore enregistré'}
                     </p>
                     {myFingerprint && (
-                        <p className="text-[9px] text-slate-500 font-mono mt-0.5 truncate">
+                        <p className="text-[9px] text-text-muted font-mono mt-0.5 truncate">
                             fp: {myFingerprint.slice(0, 16)}…
                         </p>
                     )}
@@ -182,7 +182,7 @@ export function TrustedDevicePanel() {
                 {!myDeviceRegistered && (
                     <button
                         onClick={() => setShowRegisterForm(true)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded-lg text-[10px] font-bold text-amber-400 hover:bg-amber-500/30 transition-all uppercase tracking-widest shrink-0"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-action-primary/20 border border-action-primary/30 rounded-lg text-[10px] font-bold text-action-primary hover:bg-action-primary/30 transition-all uppercase tracking-widest shrink-0"
                     >
                         <Plus className="w-3 h-3" />
                         Enregistrer
@@ -193,19 +193,19 @@ export function TrustedDevicePanel() {
             {/* Formulaire d'enregistrement */}
             {showRegisterForm && (
                 <div className="p-4 bg-[#0a0a0b] border border-emerald-500/20 rounded-2xl space-y-3">
-                    <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Enregistrer cet appareil</p>
+                    <p className="text-xs font-bold text-status-success uppercase tracking-widest">Enregistrer cet appareil</p>
                     <input
                         type="text"
                         value={registerName}
                         onChange={e => setRegisterName(e.target.value)}
                         placeholder="Nom de l'appareil (ex: MacBook Pro Mohammed)"
-                        className="w-full bg-[#161618] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                        className="w-full bg-[#161618] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-emerald-500/50"
                     />
                     <div className="flex gap-3">
                         <select
                             value={registerRole}
                             onChange={e => setRegisterRole(e.target.value as MccRole)}
-                            className="flex-1 bg-[#161618] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white appearance-none focus:outline-none focus:border-emerald-500/50"
+                            className="flex-1 bg-[#161618] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-emerald-500/50"
                         >
                             <option value="fleet_admin">Fleet Admin (accès complet)</option>
                             <option value="mcc_support">MCC Support (+reset, RAG)</option>
@@ -214,13 +214,13 @@ export function TrustedDevicePanel() {
                         <button
                             onClick={handleRegister}
                             disabled={!registerName.trim()}
-                            className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl uppercase tracking-widest transition-all"
+                            className="px-4 py-2.5 bg-status-success hover:bg-emerald-700 disabled:opacity-40 text-text-primary text-xs font-bold rounded-xl uppercase tracking-widest transition-all"
                         >
                             Confirmer
                         </button>
                         <button
                             onClick={() => setShowRegisterForm(false)}
-                            className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-slate-400 text-xs font-bold rounded-xl uppercase tracking-widest transition-all"
+                            className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-text-secondary text-xs font-bold rounded-xl uppercase tracking-widest transition-all"
                         >
                             Annuler
                         </button>
@@ -229,7 +229,7 @@ export function TrustedDevicePanel() {
             )}
 
             {error && (
-                <div className="flex items-center gap-2 px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">
+                <div className="flex items-center gap-2 px-4 py-3 bg-status-danger/10 border border-red-500/20 rounded-xl text-xs text-status-danger">
                     <AlertTriangle className="w-4 h-4 shrink-0" />
                     {error}
                 </div>
@@ -237,7 +237,7 @@ export function TrustedDevicePanel() {
 
             {/* Liste des appareils actifs */}
             {loading ? (
-                <div className="text-center text-xs text-slate-500 py-8">Chargement du registre…</div>
+                <div className="text-center text-xs text-text-muted py-8">Chargement du registre…</div>
             ) : (
                 <div className="space-y-3">
                     <p className="text-[9px] uppercase tracking-widest text-slate-600 font-bold">Appareils actifs ({activeDevices.length})</p>
@@ -254,13 +254,13 @@ export function TrustedDevicePanel() {
                                 <div key={device.deviceId} className={`p-4 bg-[#0a0a0b] border rounded-2xl space-y-2 ${isMine ? 'border-emerald-500/20' : 'border-white/5'}`}>
                                     <div className="flex items-center justify-between gap-3">
                                         <div className="flex items-center gap-2 min-w-0">
-                                            <ShieldCheck className={`w-4 h-4 shrink-0 ${isMine ? 'text-emerald-400' : 'text-slate-400'}`} />
+                                            <ShieldCheck className={`w-4 h-4 shrink-0 ${isMine ? 'text-status-success' : 'text-text-secondary'}`} />
                                             <div className="min-w-0">
-                                                <p className="text-xs font-bold text-white truncate">
+                                                <p className="text-xs font-bold text-text-primary truncate">
                                                     {device.name}
-                                                    {isMine && <span className="ml-2 text-[9px] text-emerald-400 font-normal">(cet appareil)</span>}
+                                                    {isMine && <span className="ml-2 text-[9px] text-status-success font-normal">(cet appareil)</span>}
                                                 </p>
-                                                <p className="text-[9px] text-slate-500 font-mono">{device.fingerprint}</p>
+                                                <p className="text-[9px] text-text-muted font-mono">{device.fingerprint}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
@@ -269,14 +269,14 @@ export function TrustedDevicePanel() {
                                             </span>
                                             <button
                                                 onClick={() => { setEditingDevice(device); setEditRole(device.role); }}
-                                                className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-slate-500 hover:text-white"
+                                                className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-text-muted hover:text-text-primary"
                                                 title="Modifier le rôle"
                                             >
                                                 <Edit3 className="w-3 h-3" />
                                             </button>
                                             <button
                                                 onClick={() => handleRevoke(device.deviceId)}
-                                                className="p-1.5 hover:bg-red-500/10 rounded-lg transition-all text-slate-500 hover:text-red-400"
+                                                className="p-1.5 hover:bg-status-danger/10 rounded-lg transition-all text-text-muted hover:text-status-danger"
                                                 title="Révoquer l'appareil"
                                             >
                                                 <Trash2 className="w-3 h-3" />
@@ -296,7 +296,7 @@ export function TrustedDevicePanel() {
                                     {device.allowedRoutes.length > 0 && (
                                         <div className="flex flex-wrap gap-1 pt-1">
                                             {device.allowedRoutes.map(route => (
-                                                <span key={route} className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] font-mono text-slate-500">
+                                                <span key={route} className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] font-mono text-text-muted">
                                                     {route}
                                                 </span>
                                             ))}
@@ -317,8 +317,8 @@ export function TrustedDevicePanel() {
                             <div className="mt-2 space-y-2">
                                 {revokedDevices.map(device => (
                                     <div key={device.deviceId} className="flex items-center gap-3 px-4 py-2.5 bg-[#0a0a0b] border border-white/5 rounded-xl opacity-50">
-                                        <ShieldX className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                                        <span className="text-xs text-slate-500 line-through">{device.name}</span>
+                                        <ShieldX className="w-3.5 h-3.5 text-status-danger shrink-0" />
+                                        <span className="text-xs text-text-muted line-through">{device.name}</span>
                                         <span className="text-[9px] text-slate-600 ml-auto">{device.ownerEmail}</span>
                                     </div>
                                 ))}
@@ -332,22 +332,22 @@ export function TrustedDevicePanel() {
             {editingDevice && (
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setEditingDevice(null)}>
                     <div className="bg-[#161618] border border-white/10 rounded-2xl p-6 w-80 space-y-4" onClick={e => e.stopPropagation()}>
-                        <p className="text-sm font-bold text-white">Modifier le rôle</p>
-                        <p className="text-xs text-slate-400">{editingDevice.name}</p>
+                        <p className="text-sm font-bold text-text-primary">Modifier le rôle</p>
+                        <p className="text-xs text-text-secondary">{editingDevice.name}</p>
                         <select
                             value={editRole}
                             onChange={e => setEditRole(e.target.value as MccRole)}
-                            className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white appearance-none focus:outline-none focus:border-violet-500/50"
+                            className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
                         >
                             <option value="fleet_admin">Fleet Admin (accès complet)</option>
                             <option value="mcc_support">MCC Support (+reset, RAG)</option>
                             <option value="mcc_junior_dev">Junior Dev (lecture seule)</option>
                         </select>
                         <div className="flex gap-3">
-                            <button onClick={handleUpdateRole} className="flex-1 px-4 py-2.5 bg-violet-600 text-white text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-violet-700 transition-all">
+                            <button onClick={handleUpdateRole} className="flex-1 px-4 py-2.5 bg-violet-600 text-text-primary text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-violet-700 transition-all">
                                 Sauvegarder
                             </button>
-                            <button onClick={() => setEditingDevice(null)} className="flex-1 px-4 py-2.5 bg-white/5 text-slate-400 text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-white/10 transition-all">
+                            <button onClick={() => setEditingDevice(null)} className="flex-1 px-4 py-2.5 bg-white/5 text-text-secondary text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-white/10 transition-all">
                                 Annuler
                             </button>
                         </div>

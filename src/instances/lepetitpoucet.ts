@@ -1,5 +1,5 @@
 import type { TenantConfig } from '@/shared/nexus-contract';
-import { AI_MODELS } from '@/modules/intelligence/ai/types';
+import { AI_MODELS } from '@/modules/intelligence/ai';
 
 /**
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X

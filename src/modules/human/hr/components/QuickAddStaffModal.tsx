@@ -170,7 +170,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                             <button
                                 onClick={handleCreate}
                                 disabled={isSaving || !name.trim()}
-                                className="w-full h-12 rounded-2xl bg-accent-gold text-white text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 active:scale-98 transition-all disabled:opacity-40"
+                                className="w-full h-12 rounded-2xl bg-accent-gold text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 active:scale-98 transition-all disabled:opacity-40"
                             >
                                 {isSaving ? (
                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -225,7 +225,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
 
                             <button
                                 onClick={handleClose}
-                                className="w-full h-12 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest hover:opacity-90 transition-opacity dark:bg-accent-gold dark:text-white"
+                                className="w-full h-12 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest hover:opacity-90 transition-opacity dark:bg-accent-gold dark:text-text-primary"
                             >
                                 Terminé
                             </button>

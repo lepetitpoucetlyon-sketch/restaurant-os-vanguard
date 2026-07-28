@@ -169,7 +169,7 @@ export default function RegistrePage() {
                             >
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-status-warning/10 text-status-warning flex items-center justify-center border border-amber-500/10">
+                                        <div className="w-12 h-12 rounded-xl bg-status-warning/10 text-status-warning flex items-center justify-center border border-action-primary/10">
                                             <BadgeCheck strokeWidth={1.5} className="w-6 h-6" />
                                         </div>
                                         <div>

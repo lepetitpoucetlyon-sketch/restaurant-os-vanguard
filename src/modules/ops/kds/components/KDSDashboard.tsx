@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
-import { useRecipes } from "@/modules/ops/providers/NexusOpsProvider";
+import { useRecipes } from "@/modules/ops/providers";
 import { useKDSController } from "@modules/ops/kds";
 import { useNexusOps } from "@modules/ops";
 import { AnimatePresence, motion } from "framer-motion";
@@ -325,7 +325,7 @@ export function KDSDashboard() {
                                             <div className="p-3 pt-0">
                                                 <button
                                                     onClick={() => handleRenvoyer(ticket)}
-                                                    className="w-full h-10 rounded-[14px] font-black text-[10px] uppercase tracking-[0.2em] bg-action-primary/10 text-action-primary border border-action-primary/30 hover:bg-action-primary hover:text-white transition-all duration-200 active:scale-95"
+                                                    className="w-full h-10 rounded-[14px] font-black text-[10px] uppercase tracking-[0.2em] bg-action-primary/10 text-action-primary border border-action-primary/30 hover:bg-action-primary hover:text-text-primary transition-all duration-200 active:scale-95"
                                                 >
                                                     Renvoyer
                                                 </button>

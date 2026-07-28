@@ -84,13 +84,13 @@ export function TenantUsersPanel({ instance }: Props) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <User className="w-5 h-5 text-brand" />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">
             Utilisateurs — {instance.name}
           </h3>
         </div>
         <button
           onClick={load}
-          className="flex items-center gap-1.5 text-xs text-secondary hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-xs text-secondary hover:text-text-primary transition-colors"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           Actualiser
@@ -102,7 +102,7 @@ export function TenantUsersPanel({ instance }: Props) {
       )}
 
       {pinResult && (
-        <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl flex items-center gap-2">
+        <div className="mb-4 p-3 bg-action-primary/10 border border-yellow-500/20 rounded-xl flex items-center gap-2">
           <Shield className="w-4 h-4 text-yellow-400 shrink-0" />
           <p className="text-xs text-yellow-200">
             PIN temporaire pour l&apos;utilisateur : <strong className="font-mono tracking-widest">{pinResult.tempPin}</strong>
@@ -131,7 +131,7 @@ export function TenantUsersPanel({ instance }: Props) {
                   {u.name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">{u.name}</p>
+                  <p className="text-sm font-semibold text-text-primary truncate">{u.name}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className="text-[10px] text-secondary truncate">{u.email ?? '—'}</span>
                     {u.lastActive && (
@@ -149,7 +149,7 @@ export function TenantUsersPanel({ instance }: Props) {
                 <div className="relative">
                   <button
                     onClick={() => setRoleEditing(roleEditing === u.id ? null : u.id)}
-                    className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-secondary hover:text-white transition-colors"
+                    className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-secondary hover:text-text-primary transition-colors"
                   >
                     {ROLE_LABELS[u.role] ?? u.role}
                     <ChevronDown className="w-3 h-3" />
@@ -160,7 +160,7 @@ export function TenantUsersPanel({ instance }: Props) {
                         <button
                           key={role}
                           onClick={() => handleRoleChange(u.id, role)}
-                          className="w-full text-left px-3 py-2 text-xs hover:bg-white/5 text-secondary hover:text-white transition-colors"
+                          className="w-full text-left px-3 py-2 text-xs hover:bg-white/5 text-secondary hover:text-text-primary transition-colors"
                         >
                           {label}
                         </button>
@@ -171,7 +171,7 @@ export function TenantUsersPanel({ instance }: Props) {
 
                 <button
                   onClick={() => handleResetPin(u.id)}
-                  className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+                  className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-action-primary/10 border border-yellow-500/20 text-yellow-400 hover:bg-action-primary/20 transition-colors"
                 >
                   Reset PIN
                 </button>

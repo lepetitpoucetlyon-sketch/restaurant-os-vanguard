@@ -243,7 +243,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                                 <Button 
                                     variant="outline" 
                                     size="sm" 
-                                    className="bg-[--color-surface-primary]/10 text-white border-default hover:bg-[--color-surface-primary]/20"
+                                    className="bg-[--color-surface-primary]/10 text-text-primary border-default hover:bg-[--color-surface-primary]/20"
                                     onClick={() => setCvFileDraft(null)}
                                 >
                                     Remplacer
@@ -302,7 +302,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                                     className={cn(
                                         "h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2",
                                         formData.gdpr?.consented 
-                                            ? "bg-success text-white shadow-lg shadow-success/20" 
+                                            ? "bg-success text-text-primary shadow-lg shadow-success/20" 
                                             : "bg-bg-tertiary text-text-muted border border-border hover:border-error"
                                     )}
                                 >
@@ -335,7 +335,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                         className={cn(
                             "w-full h-14 rounded-2xl font-black uppercase text-[11px] tracking-[0.25em] transition-all",
                             formData.gdpr?.consented 
-                                ? "bg-accent hover:bg-surface-sidebar text-white shadow-xl shadow-accent/10" 
+                                ? "bg-accent hover:bg-surface-sidebar text-text-primary shadow-xl shadow-accent/10" 
                                 : "bg-bg-tertiary text-text-muted cursor-not-allowed border border-border"
                         )}
                         onClick={handleSave}
@@ -353,7 +353,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                         <CameraCapture onCapture={handleCapture} />
                         <button 
                             onClick={() => setIsCameraOpen(false)}
-                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 text-white flex items-center justify-center transition-all backdrop-blur-md z-10"
+                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 text-text-primary flex items-center justify-center transition-all backdrop-blur-md z-10"
                         >
                             <X className="w-6 h-6" />
                         </button>

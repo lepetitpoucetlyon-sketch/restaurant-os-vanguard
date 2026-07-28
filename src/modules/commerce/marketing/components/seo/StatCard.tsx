@@ -31,7 +31,7 @@ export function StatCard({
             {change && (
                 <p className={cn(
                     "text-[10px] font-bold uppercase tracking-widest mt-2",
-                    change.isPositive ? 'text-[#00D9A6]' : 'text-rose-500'
+                    change.isPositive ? 'text-[#00D9A6]' : 'text-status-danger'
                 )}>
                     {change.isPositive ? '↑' : '↓'} {Math.abs(change.value)}% vs semaine dernière
                 </p>

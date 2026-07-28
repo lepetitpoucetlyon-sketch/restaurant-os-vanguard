@@ -8,7 +8,7 @@ import {
     preparationsNodeAtom, 
     storageLocationsNodeAtom 
 } from "../store/inventoryAtoms";
-import { wasteLogsNodeAtom } from "@/modules/compliance/haccp/store/complianceAtoms";
+import { wasteLogsNodeAtom } from "@/modules/compliance/haccp/store";
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
 import { tenantIdAtom } from "@/store/pillars/sovereign";

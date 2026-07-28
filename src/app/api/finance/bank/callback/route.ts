@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { OpenBankingProviderFactory, BankConnectionStore, verifyBankConnectState } from '@/modules/finance/banking/openBanking';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/finance/bank/callback
@@ -21,8 +22,10 @@ export async function GET(request: NextRequest) {
         const provider = OpenBankingProviderFactory.get();
         const { userToken } = await provider.exchangeCode(code);
         await BankConnectionStore.saveUserToken(tenantId, provider.id, userToken);
+        logger.info(`[BankCallback] Connexion bancaire établie — tenant ${tenantId}, provider ${provider.id}`);
         return NextResponse.redirect(new URL('/finance?bank_connect=success', request.url));
-    } catch {
+    } catch (err) {
+        logger.error('[BankCallback] Échec de la connexion bancaire', err);
         return NextResponse.redirect(new URL('/finance?bank_connect=error', request.url));
     }
 }

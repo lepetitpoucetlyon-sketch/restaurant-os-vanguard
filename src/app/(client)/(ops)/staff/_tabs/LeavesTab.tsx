@@ -35,7 +35,7 @@ export function LeavesTab({
                 </h2>
                 <button
                     onClick={onRequestLeave}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-action-primary text-white text-sm font-bold hover:opacity-90 transition-opacity shadow"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-action-primary text-text-primary text-sm font-bold hover:opacity-90 transition-opacity shadow"
                 >
                     <Plus className="w-4 h-4" />
                     Demander un congé

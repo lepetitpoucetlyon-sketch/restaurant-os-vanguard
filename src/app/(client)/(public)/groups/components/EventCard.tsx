@@ -52,7 +52,7 @@ export function EventCard({ group }: { group: Group }) {
                             {tag}
                         </span>
                     ))}
-                    <button className="w-14 h-14 rounded-full bg-bg-tertiary border border-border flex items-center justify-center hover:bg-action-primary hover:text-white transition-all duration-500 group/btn">
+                    <button className="w-14 h-14 rounded-full bg-bg-tertiary border border-border flex items-center justify-center hover:bg-action-primary hover:text-text-primary transition-all duration-500 group/btn">
                         <ArrowUpRight className="w-6 h-6 group-hover:scale-110 transition-transform" />
                     </button>
                 </div>

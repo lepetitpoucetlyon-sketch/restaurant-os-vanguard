@@ -110,10 +110,10 @@ export default function ApiKeysPanel() {
 
       {/* One-time key display */}
       {createdKey && (
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 space-y-3">
+        <div className="rounded-xl border border-emerald-500/30 bg-status-success/5 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-            <p className="text-sm font-semibold text-emerald-500">Clé générée — copiez-la maintenant</p>
+            <Shield className="w-4 h-4 text-status-success flex-shrink-0" />
+            <p className="text-sm font-semibold text-status-success">Clé générée — copiez-la maintenant</p>
           </div>
           <p className="text-xs text-text-muted">Cette clé ne sera plus affichée après fermeture de cette section.</p>
           <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export default function ApiKeysPanel() {
             </button>
             <button
               onClick={() => copyToClipboard(createdKey.key)}
-              className="p-2 rounded-lg border border-border text-text-muted hover:text-emerald-500 transition-colors"
+              className="p-2 rounded-lg border border-border text-text-muted hover:text-status-success transition-colors"
             >
               <Copy className="w-3.5 h-3.5" />
             </button>
@@ -203,7 +203,7 @@ export default function ApiKeysPanel() {
               <button
                 onClick={() => handleRevoke(k.id, k.name)}
                 disabled={revokingId === k.id}
-                className="p-2 rounded-lg border border-border text-text-muted hover:text-red-500 hover:border-red-500/30 hover:bg-red-500/5 transition-colors disabled:opacity-40"
+                className="p-2 rounded-lg border border-border text-text-muted hover:text-status-danger hover:border-red-500/30 hover:bg-status-danger/5 transition-colors disabled:opacity-40"
               >
                 {revokingId === k.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
               </button>

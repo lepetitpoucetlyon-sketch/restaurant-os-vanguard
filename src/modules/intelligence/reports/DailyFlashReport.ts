@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { LaborCostService } from '@/modules/human/hr/services/laborCost';
+import { LaborCostService } from '@/modules/human/hr/services';
 
 interface FlashMetrics {
     date: string;

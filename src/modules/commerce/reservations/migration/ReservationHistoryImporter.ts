@@ -11,7 +11,7 @@
  */
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { isMaskedEmail } from '@/modules/onboarding/migration/emailFilters';
+import { isMaskedEmail } from '@/modules/onboarding/migration';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 

@@ -70,12 +70,12 @@ export function StructureOverview() {
                     <Folder className="w-3 h-3" /> Structure Racine
                 </div>
                 <div className="space-y-1">
-                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> app/ <span className="text-white/20 italic">{"// Routage & Navigation"}</span></p>
-                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> components/ <span className="text-white/20 italic">{"// UI Atomique"}</span></p>
-                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> context/ <span className="text-white/20 italic">{"// État Cloud Global"}</span></p>
-                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> hooks/ <span className="text-white/20 italic">{"// Logique Hooks"}</span></p>
-                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> lib/ <span className="text-white/20 italic">{"// SDKs & Utilitaires"}</span></p>
-                    <p className="flex items-center gap-2"><span className="text-border">└──</span> <Folder className="w-3 h-3" /> types/ <span className="text-white/20 italic">{"// Interfaces TS Strict"}</span></p>
+                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> app/ <span className="text-text-primary/20 italic">{"// Routage & Navigation"}</span></p>
+                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> components/ <span className="text-text-primary/20 italic">{"// UI Atomique"}</span></p>
+                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> context/ <span className="text-text-primary/20 italic">{"// État Cloud Global"}</span></p>
+                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> hooks/ <span className="text-text-primary/20 italic">{"// Logique Hooks"}</span></p>
+                    <p className="flex items-center gap-2"><span className="text-border">├──</span> <Folder className="w-3 h-3" /> lib/ <span className="text-text-primary/20 italic">{"// SDKs & Utilitaires"}</span></p>
+                    <p className="flex items-center gap-2"><span className="text-border">└──</span> <Folder className="w-3 h-3" /> types/ <span className="text-text-primary/20 italic">{"// Interfaces TS Strict"}</span></p>
                 </div>
             </div>
         </GlassCard>

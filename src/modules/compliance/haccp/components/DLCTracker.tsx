@@ -197,7 +197,7 @@ export function DLCTracker() {
                                         <span
                                             className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${
                                                 entry.daysLeft <= 0
-                                                    ? 'bg-status-danger text-white'
+                                                    ? 'bg-status-danger text-text-primary'
                                                     : entry.urgency === 'critical'
                                                     ? 'bg-status-danger/20 text-status-danger'
                                                     : 'bg-status-warning/20 text-status-warning'

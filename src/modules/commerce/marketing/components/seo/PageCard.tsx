@@ -8,14 +8,14 @@ import { PageSEO } from "@nexus/contracts";
 export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => void; id?: string }) {
     const getScoreColor = (score: number) => {
         if (score >= 80) return 'text-[#00D9A6]';
-        if (score >= 60) return 'text-amber-500';
-        return 'text-rose-500';
+        if (score >= 60) return 'text-action-primary';
+        return 'text-status-danger';
     };
 
     const getScoreBg = (score: number) => {
         if (score >= 80) return 'bg-[#00D9A6]/10 border-[#00D9A6]/30';
-        if (score >= 60) return 'bg-amber-500/10 border-amber-500/30';
-        return 'bg-rose-500/10 border-rose-500/30';
+        if (score >= 60) return 'bg-action-primary/10 border-action-primary/30';
+        return 'bg-status-danger/10 border-rose-500/30';
     };
 
     const pageTypeLabels: Record<string, string> = {
@@ -49,7 +49,7 @@ export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => vo
                     {page.score.issues.length > 0 && (
                         <div className="mt-4 flex items-center gap-2 flex-wrap">
                             {page.score.issues.slice(0, 2).map((issue, i) => (
-                                <span key={i} className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                                <span key={i} className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg bg-action-primary/10 text-amber-600 dark:text-action-primary border border-action-primary/20">
                                     {issue}
                                 </span>
                             ))}

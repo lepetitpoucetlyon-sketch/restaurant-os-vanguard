@@ -146,7 +146,7 @@ export function TeamCalendar() {
                     <span className="text-xs font-bold text-text-muted uppercase tracking-wide">Congés Payés</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-status-warning ring-2 ring-amber-400/20" />
+                    <div className="w-3 h-3 rounded-full bg-status-warning ring-2 ring-action-primary/20" />
                     <span className="text-xs font-bold text-text-muted uppercase tracking-wide">RTT</span>
                 </div>
                 <div className="flex items-center gap-2">

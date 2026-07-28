@@ -269,7 +269,7 @@ export function CashDrawerModal({
                             <button
                                 onClick={handleOpen}
                                 disabled={isOpening || !openingInput.trim()}
-                                className="w-full h-14 rounded-2xl bg-accent-gold text-white text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 active:scale-98 transition-all disabled:opacity-40"
+                                className="w-full h-14 rounded-2xl bg-accent-gold text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 active:scale-98 transition-all disabled:opacity-40"
                             >
                                 {isOpening ? (
                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -385,7 +385,7 @@ export function CashDrawerModal({
                             <button
                                 onClick={handleClose}
                                 disabled={isClosing || !actualInput.trim()}
-                                className="w-full h-14 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 active:scale-98 transition-all disabled:opacity-40 dark:bg-accent-gold dark:text-white"
+                                className="w-full h-14 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 active:scale-98 transition-all disabled:opacity-40 dark:bg-accent-gold dark:text-text-primary"
                             >
                                 {isClosing ? (
                                     <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />

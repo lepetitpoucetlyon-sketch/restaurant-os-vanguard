@@ -49,7 +49,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                             animate={{ scale: 1, rotate: 0 }}
                             className="w-20 h-20 rounded-[2rem] bg-accent flex items-center justify-center shadow-2xl shadow-accent/20"
                         >
-                            <Utensils className="w-10 h-10 text-white" />
+                            <Utensils className="w-10 h-10 text-text-primary" />
                         </motion.div>
                         <div>
                             <div className="flex items-center gap-3 mb-3">
@@ -88,8 +88,8 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                     )}
                                 >
                                     <div className="flex items-center gap-4 mb-4">
-                                        <div className={cn("w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all duration-300 shadow-inner")}>
-                                            <card.icon className={cn("w-5 h-5", card.color, "group-hover:text-white")} />
+                                        <div className={cn("w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center group-hover:bg-accent group-hover:text-text-primary transition-all duration-300 shadow-inner")}>
+                                            <card.icon className={cn("w-5 h-5", card.color, "group-hover:text-text-primary")} />
                                         </div>
                                         <span className="text-[10px] font-black uppercase text-text-muted tracking-[0.2em]">{card.label}</span>
                                     </div>
@@ -133,7 +133,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                         >
                                             <div className={cn(
                                                 "w-10 h-10 rounded-[1rem] flex items-center justify-center font-black text-sm shrink-0 transition-all duration-500",
-                                                item.done ? "bg-success text-white scale-110 shadow-lg shadow-success/20" : "bg-bg-tertiary text-text-primary group-hover:bg-accent group-hover:text-white"
+                                                item.done ? "bg-success text-text-primary scale-110 shadow-lg shadow-success/20" : "bg-bg-tertiary text-text-primary group-hover:bg-accent group-hover:text-text-primary"
                                             )}>
                                                 {item.done ? <CheckCircle2 className="w-5 h-5" /> : item.step}
                                             </div>
@@ -206,8 +206,8 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                         className={cn(
                             "w-full md:w-auto h-16 px-12 rounded-2xl font-black transition-all duration-500 transform hover:scale-105 shadow-2xl text-[12px] uppercase tracking-[0.2em]",
                             task.isCompleted
-                                ? "bg-text-muted hover:bg-text-primary text-white"
-                                : "bg-success hover:bg-success/90 text-white shadow-success/20"
+                                ? "bg-text-muted hover:bg-text-primary text-text-primary"
+                                : "bg-success hover:bg-success/90 text-text-primary shadow-success/20"
                         )}
                         onClick={() => onToggleStatus(task.id)}
                     >

@@ -106,7 +106,7 @@ export function TutorialBubble() {
             <div className="fixed inset-0 z-[9999] bg-surface-sidebar/50 backdrop-blur-sm flex items-center justify-center">
                 <div className="bg-surface-card dark:bg-bg-secondary p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin" />
-                    <p className="font-serif italic text-lg text-white">Navigation vers l'étape suivante...</p>
+                    <p className="font-serif italic text-lg text-text-primary">Navigation vers l'étape suivante...</p>
                 </div>
             </div>,
             document.body
@@ -204,7 +204,7 @@ export function TutorialBubble() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6 relative z-10">
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#00D9A6] flex items-center justify-center text-white text-sm font-black shadow-lg shadow-[#00D9A6]/20">
+                        <div className="w-10 h-10 rounded-full bg-[#00D9A6] flex items-center justify-center text-text-primary text-sm font-black shadow-lg shadow-[#00D9A6]/20">
                             {currentPointIndex + 1}
                         </div>
                         <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">
@@ -234,7 +234,7 @@ export function TutorialBubble() {
                     {/* We prioritize Next button visibility as per screenshot style */}
                     <button
                         onClick={nextStep}
-                        className="h-12 px-8 bg-surface-sidebar hover:bg-surface-sidebar text-white rounded-full font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
+                        className="h-12 px-8 bg-surface-sidebar hover:bg-surface-sidebar text-text-primary rounded-full font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
                     >
                         {isLastStep ? "Terminer" : "Suivant"}
                         <ChevronRight className="w-3 h-3" />

@@ -102,7 +102,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                         <button 
                                             onClick={handleRun}
                                             disabled={!prompt || isAnalyzing || !isConfigured}
-                                            className="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-accent-gold text-white flex items-center justify-center shadow-lg disabled:opacity-30 transition-all hover:scale-105 active:scale-95"
+                                            className="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-accent-gold text-text-primary flex items-center justify-center shadow-lg disabled:opacity-30 transition-all hover:scale-105 active:scale-95"
                                         >
                                             <Zap className="w-5 h-5" />
                                         </button>

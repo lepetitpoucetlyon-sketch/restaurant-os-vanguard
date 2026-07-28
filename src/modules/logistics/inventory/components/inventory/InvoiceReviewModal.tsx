@@ -7,7 +7,7 @@ import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
 import { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
 import { InventoryVisionService, VisionMatchResult } from '@modules/logistics/services/InventoryVisionService';
-import { useInventory } from '@/modules/ops/providers/NexusOpsProvider';
+import { useInventory } from '@/modules/ops/providers';
 
 interface InvoiceReviewModalProps {
     data: ExtractedInvoice;
@@ -65,10 +65,10 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                                     <span className="text-[8px] font-bold text-status-success uppercase tracking-widest">IA Verified</span>
                                 </div>
                             </div>
-                            <h2 className="text-4xl font-serif italic text-white uppercase tracking-tighter">Revue de Facture : {data.supplierName}</h2>
+                            <h2 className="text-4xl font-serif italic text-text-primary uppercase tracking-tighter">Revue de Facture : {data.supplierName}</h2>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-4 hover:bg-surface-card/5 rounded-full transition-colors text-secondary hover:text-white">
+                    <button onClick={onClose} className="p-4 hover:bg-surface-card/5 rounded-full transition-colors text-secondary hover:text-text-primary">
                         <X size={24} />
                     </button>
                 </div>
@@ -94,14 +94,14 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                                     transition={{ delay: i * 0.1 }}
                                     className="group bg-surface-card/[0.03] hover:bg-surface-card/[0.05] transition-all rounded-2xl overflow-hidden"
                                 >
-                                    <td className="px-6 py-6 rounded-l-2xl border-l-2 border-transparent group-hover:border-amber-500 transition-all">
-                                        <p className="text-sm font-serif italic text-white/90">{match.extracted.name}</p>
+                                    <td className="px-6 py-6 rounded-l-2xl border-l-2 border-transparent group-hover:border-action-primary transition-all">
+                                        <p className="text-sm font-serif italic text-text-primary/90">{match.extracted.name}</p>
                                     </td>
                                     <td className="px-6 py-6">
                                         <div className={cn(
                                             "flex items-center gap-3 p-2 rounded-xl border transition-all",
                                             match.isNewProduct 
-                                                ? "bg-status-warning/5 border-amber-500/20 text-status-warning" 
+                                                ? "bg-status-warning/5 border-action-primary/20 text-status-warning" 
                                                 : "bg-status-success/5 border-emerald-500/20 text-status-success"
                                         )}>
                                             {match.isNewProduct ? <HelpCircle size={14} /> : <Check size={14} />}
@@ -111,18 +111,18 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                                         </div>
                                     </td>
                                     <td className="px-6 py-6 text-center">
-                                        <span className="text-sm font-mono text-white opacity-60">{match.extracted.quantity} {match.extracted.unit}</span>
+                                        <span className="text-sm font-mono text-text-primary opacity-60">{match.extracted.quantity} {match.extracted.unit}</span>
                                     </td>
                                     <td className="px-6 py-6 text-right">
                                         <div className="flex flex-col items-end">
-                                            <span className="text-sm font-mono text-white">{match.extracted.unitPriceHT.toFixed(2)}€</span>
+                                            <span className="text-sm font-mono text-text-primary">{match.extracted.unitPriceHT.toFixed(2)}€</span>
                                             <div className="flex items-center gap-1 text-[8px] text-status-success font-bold uppercase">
                                                 <TrendingUp size={10} />
                                                 Stable
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-6 text-right rounded-r-2xl font-mono text-white text-base">
+                                    <td className="px-6 py-6 text-right rounded-r-2xl font-mono text-text-primary text-base">
                                         {match.extracted.totalHT.toFixed(2)}€
                                     </td>
                                 </motion.tr>
@@ -135,11 +135,11 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                 <div className="p-10 border-t border-white/5 flex items-center justify-between bg-surface-card/[0.02]">
                     <div className="space-y-1">
                         <p className="text-[9px] font-bold text-secondary uppercase tracking-widest">Total Facture (Estimé)</p>
-                        <p className="text-4xl font-serif italic text-white leading-none">{data.totalTTC.toFixed(2)}€ <span className="text-xs not-italic opacity-40">TTC</span></p>
+                        <p className="text-4xl font-serif italic text-text-primary leading-none">{data.totalTTC.toFixed(2)}€ <span className="text-xs not-italic opacity-40">TTC</span></p>
                     </div>
 
                     <div className="flex gap-4">
-                        <Button onClick={onClose} variant="ghost" className="px-8 py-6 text-[10px] uppercase font-black tracking-widest text-secondary hover:text-white">Annuler</Button>
+                        <Button onClick={onClose} variant="ghost" className="px-8 py-6 text-[10px] uppercase font-black tracking-widest text-secondary hover:text-text-primary">Annuler</Button>
                         <Button 
                             onClick={handleSave}
                             className="px-10 py-6 bg-surface-card text-primary text-[10px] uppercase font-black tracking-[0.2em] rounded-2xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.1)]"

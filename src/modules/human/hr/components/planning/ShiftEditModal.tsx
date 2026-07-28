@@ -199,7 +199,7 @@ export function ShiftEditModal({
                 className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-subtle"
             >
                 {/* Modal Header */}
-                <div className="bg-[#111] p-10 text-white relative overflow-hidden">
+                <div className="bg-[#111] p-10 text-text-primary relative overflow-hidden">
                     <div className="flex items-center justify-between relative z-10">
                         <div className="flex items-center gap-6">
                             <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary]/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
@@ -210,7 +210,7 @@ export function ShiftEditModal({
                                         alt={user.name}
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center font-serif text-3xl italic text-white/50">
+                                    <div className="w-full h-full flex items-center justify-center font-serif text-3xl italic text-text-primary/50">
                                         {(user.name || '').charAt(0)}
                                     </div>
                                 )}
@@ -219,7 +219,7 @@ export function ShiftEditModal({
                                 <h2 className="text-3xl font-serif italic tracking-tight">
                                     {isNew ? "Nouveau Protocole" : "Rectification Shift"}
                                 </h2>
-                                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mt-2">
+                                <p className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.3em] mt-2">
                                     {user.name} • {format(date, "EEEE d MMMM", { locale: fr })}
                                 </p>
                             </div>
@@ -228,7 +228,7 @@ export function ShiftEditModal({
                             onClick={onClose}
                             className="w-12 h-12 rounded-full bg-[--color-surface-primary]/5 hover:bg-[--color-surface-primary]/10 flex items-center justify-center transition-all"
                         >
-                            <X className="w-5 h-5 text-white/50" />
+                            <X className="w-5 h-5 text-text-primary/50" />
                         </button>
                     </div>
                 </div>
@@ -241,7 +241,7 @@ export function ShiftEditModal({
                             {legalWarnings.map((w, i) => (
                                 <div
                                     key={i}
-                                    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                                    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-action-primary/10 border border-action-primary/30 text-action-primary"
                                 >
                                     <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                                     <span className="text-xs font-bold uppercase tracking-widest">
@@ -270,7 +270,7 @@ export function ShiftEditModal({
                                         "p-6 rounded-[2rem] border transition-all group flex flex-col items-center",
                                         formData.type === type.id
                                             ? "border-accent bg-accent text-bg-primary shadow-2xl"
-                                            : "border-white/5 bg-[--color-surface-primary]/5 text-white hover:border-accent/30"
+                                            : "border-white/5 bg-[--color-surface-primary]/5 text-text-primary hover:border-accent/30"
                                     )}
                                 >
                                     <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">
@@ -286,11 +286,11 @@ export function ShiftEditModal({
 
                     <div className="grid grid-cols-2 gap-8">
                         <div>
-                            <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-4 block italic">
+                            <label className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-4 block italic">
                                 Déclenchement
                             </label>
                             <div className="relative group">
-                                <Clock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-hover:text-accent transition-colors" />
+                                <Clock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-text-primary/20 group-hover:text-accent transition-colors" />
                                 <input
                                     type="time"
                                     value={formData.startTime}
@@ -300,16 +300,16 @@ export function ShiftEditModal({
                                             startTime: e.target.value,
                                         }))
                                     }
-                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-subtle text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
+                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-subtle text-sm font-black text-text-primary focus:outline-none focus:border-accent/40 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-4 block italic">
+                            <label className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-4 block italic">
                                 Clôture
                             </label>
                             <div className="relative group">
-                                <Clock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-hover:text-accent transition-colors" />
+                                <Clock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-text-primary/20 group-hover:text-accent transition-colors" />
                                 <input
                                     type="time"
                                     value={formData.endTime}
@@ -319,7 +319,7 @@ export function ShiftEditModal({
                                             endTime: e.target.value,
                                         }))
                                     }
-                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-subtle text-sm font-black text-white focus:outline-none focus:border-accent/40 transition-all shadow-sm"
+                                    className="w-full pl-14 pr-6 py-5 rounded-[1.5rem] bg-[--color-surface-primary]/5 border border-subtle text-sm font-black text-text-primary focus:outline-none focus:border-accent/40 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -362,7 +362,7 @@ export function ShiftEditModal({
                         </button>
                         <button
                             onClick={handleSave}
-                            className="h-16 px-12 bg-surface-sidebar text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
+                            className="h-16 px-12 bg-surface-sidebar text-text-primary rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
                         >
                             <Save className="w-4 h-4 text-accent" />
                             {isNew ? "SCELLER SHIFT" : "MAINTENIR MODIFICATIONS"}

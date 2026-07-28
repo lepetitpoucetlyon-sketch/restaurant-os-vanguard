@@ -38,7 +38,7 @@ export default function MCCDashboard() {
 
     return (
         <MFAGate>
-            <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-action-primary/30 relative overflow-hidden">
+            <div className="min-h-screen bg-surface-bg text-text-primary font-sans selection:bg-action-primary/30 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none" />
                 <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-action-primary/5 blur-[120px] rounded-full pointer-events-none" />
                 <div className="relative z-10 p-8">
@@ -47,7 +47,7 @@ export default function MCCDashboard() {
                     <header className="flex flex-wrap gap-4 justify-between items-center mb-10">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-gradient-to-tr from-action-primary to-action-primary rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                <Rocket className="text-white w-7 h-7" />
+                                <Rocket className="text-text-primary w-7 h-7" />
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold tracking-tight uppercase">Master Console</h1>
@@ -78,7 +78,7 @@ export default function MCCDashboard() {
                                 { id: 'patchcenter',  label: 'Patches',    icon: <GitMerge className="w-4 h-4" /> },
                             ] as const).map(tab => (
                                 <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                                    className={`flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-action-primary text-brand' : 'border-transparent text-secondary hover:text-white'}`}>
+                                    className={`flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-action-primary text-brand' : 'border-transparent text-secondary hover:text-text-primary'}`}>
                                     {tab.icon}{tab.label}
                                 </button>
                             ))}
@@ -127,7 +127,7 @@ export default function MCCDashboard() {
                         {showCloneModal && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => !provisioningStatus && setShowCloneModal(false)} className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-sm" />
-                                <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="relative w-full max-w-lg bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden">
+                                <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="relative w-full max-w-lg bg-surface-bg/90 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden">
                                     <div className="flex items-center gap-4 mb-8">
                                         <div className="w-12 h-12 bg-action-primary/20 rounded-2xl flex items-center justify-center">
                                             <Rocket className="text-brand w-6 h-6" />
@@ -140,21 +140,21 @@ export default function MCCDashboard() {
                                     <div className="space-y-6">
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Instance Name</label>
-                                            <input type="text" placeholder="ex: Le Grand Paris" className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-medium" value={newCloneName} onChange={(e) => { setNewCloneName(e.target.value); setNewCloneKey(e.target.value.toLowerCase().replace(/\s+/g, '-')); }} />
+                                            <input type="text" placeholder="ex: Le Grand Paris" className="w-full bg-surface-bg border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-medium" value={newCloneName} onChange={(e) => { setNewCloneName(e.target.value); setNewCloneKey(e.target.value.toLowerCase().replace(/\s+/g, '-')); }} />
                                         </div>
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Subdomain Slug</label>
-                                            <input type="text" placeholder="ex: le-grand-paris" className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-mono" value={newCloneKey} onChange={(e) => setNewCloneKey(e.target.value)} />
+                                            <input type="text" placeholder="ex: le-grand-paris" className="w-full bg-surface-bg border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all font-mono" value={newCloneKey} onChange={(e) => setNewCloneKey(e.target.value)} />
                                         </div>
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Owner Email</label>
-                                            <input type="email" placeholder="owner@restaurant.fr" className="w-full bg-slate-950 border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all" value={newCloneEmail} onChange={(e) => setNewCloneEmail(e.target.value)} required />
+                                            <input type="email" placeholder="owner@restaurant.fr" className="w-full bg-surface-bg border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all" value={newCloneEmail} onChange={(e) => setNewCloneEmail(e.target.value)} required />
                                         </div>
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Tier</label>
                                             <div className="grid grid-cols-3 gap-2">
                                                 {(['STANDARD', 'PREMIUM', 'ENTERPRISE'] as const).map((t) => (
-                                                    <button key={t} type="button" onClick={() => setNewCloneTier(t)} className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${newCloneTier === t ? 'bg-action-primary/20 border-focus/50 text-brand' : 'bg-slate-950 border-subtle text-secondary hover:border-white/20'}`}>{t}</button>
+                                                    <button key={t} type="button" onClick={() => setNewCloneTier(t)} className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${newCloneTier === t ? 'bg-action-primary/20 border-focus/50 text-brand' : 'bg-surface-bg border-subtle text-secondary hover:border-white/20'}`}>{t}</button>
                                                 ))}
                                             </div>
                                         </div>
@@ -167,15 +167,15 @@ export default function MCCDashboard() {
                                                 {PROV_STEPS.map((step, i) => (
                                                     <div key={step} className="flex items-center gap-3">
                                                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${i < provisionStep ? 'bg-status-success border-emerald-500' : i === provisionStep ? 'border-brand animate-pulse bg-action-primary/20' : 'border-white/10'}`}>
-                                                            {i < provisionStep && <span className="text-[8px] text-white">✓</span>}
+                                                            {i < provisionStep && <span className="text-[8px] text-text-primary">✓</span>}
                                                         </div>
-                                                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${i === provisionStep ? 'text-brand' : i < provisionStep ? 'text-status-success/60' : 'text-white/20'}`}>{step}</span>
+                                                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${i === provisionStep ? 'text-brand' : i < provisionStep ? 'text-status-success/60' : 'text-text-primary/20'}`}>{step}</span>
                                                     </div>
                                                 ))}
                                             </div>
                                         ) : (
                                             <div className="flex gap-4 pt-4">
-                                                <button onClick={() => setShowCloneModal(false)} className="flex-1 py-4 font-bold text-secondary hover:text-white transition-all text-xs uppercase tracking-[0.2em]">Cancel</button>
+                                                <button onClick={() => setShowCloneModal(false)} className="flex-1 py-4 font-bold text-secondary hover:text-text-primary transition-all text-xs uppercase tracking-[0.2em]">Cancel</button>
                                                 <button onClick={handleCreateClone} className="flex-1 bg-surface-card text-primary font-black py-4 rounded-2xl hover:bg-surface-bg transition-all active:scale-95 text-xs uppercase tracking-[0.2em]">Launch Birth</button>
                                             </div>
                                         )}

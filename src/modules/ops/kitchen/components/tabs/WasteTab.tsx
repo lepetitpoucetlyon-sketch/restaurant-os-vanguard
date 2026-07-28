@@ -78,7 +78,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                 <Trash2 className="w-6 h-6 text-error" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-serif font-black text-primary dark:text-white tracking-tight italic">
+                                <h3 className="text-2xl font-serif font-black text-primary dark:text-text-primary tracking-tight italic">
                                     Déclarer une <span className="text-secondary">Perte</span>
                                 </h3>
                                 <p className="text-[10px] uppercase tracking-[0.3em] font-black text-muted mt-1">
@@ -112,9 +112,9 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                             onChange={e => setQuantity(e.target.value)}
                                             min="0"
                                             step="0.01"
-                                            className="w-full h-[60px] pl-6 pr-20 bg-surface-bg dark:bg-surface-card/[0.03] border border-subtle dark:border-subtle rounded-[1.25rem] font-mono font-black text-xl focus:ring-4 focus:ring-error/10 focus:border-error outline-none transition-all shadow-inner placeholder:text-muted dark:placeholder:text-white/10"
+                                            className="w-full h-[60px] pl-6 pr-20 bg-surface-bg dark:bg-surface-card/[0.03] border border-subtle dark:border-subtle rounded-[1.25rem] font-mono font-black text-xl focus:ring-4 focus:ring-error/10 focus:border-error outline-none transition-all shadow-inner placeholder:text-muted dark:placeholder:text-text-primary/10"
                                         />
-                                        <div className="absolute right-2 top-2 bottom-2 w-14 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-xl flex items-center justify-center font-black text-white text-[11px] uppercase tracking-widest shadow-xl pointer-events-none">
+                                        <div className="absolute right-2 top-2 bottom-2 w-14 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-xl flex items-center justify-center font-black text-text-primary text-[11px] uppercase tracking-widest shadow-xl pointer-events-none">
                                             KG
                                         </div>
                                     </div>
@@ -141,7 +141,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                             type="button"
                                             key={reason.label}
                                             onClick={() => setSelectedReason(reason.label)}
-                                            className={`h-24 flex flex-col items-center justify-center gap-3 border bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-sidebar dark:hover:bg-surface-card hover:border-transparent hover:text-white dark:hover:text-primary rounded-[2rem] font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm ${selectedReason === reason.label ? 'border-error bg-error/10 text-error' : 'border-subtle dark:border-white/5'}`}
+                                            className={`h-24 flex flex-col items-center justify-center gap-3 border bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-sidebar dark:hover:bg-surface-card hover:border-transparent hover:text-text-primary dark:hover:text-primary rounded-[2rem] font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm ${selectedReason === reason.label ? 'border-error bg-error/10 text-error' : 'border-subtle dark:border-white/5'}`}
                                         >
                                             <span className="text-2xl opacity-40 group-hover/btn:opacity-100 group-hover/btn:scale-125 transition-all duration-300">{reason.icon}</span>
                                             {reason.label}
@@ -155,7 +155,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                 whileHover={{ scale: 1.01 }}
                                 whileTap={{ scale: 0.99 }}
                             >
-                                <Button className="w-full h-[72px] bg-surface-sidebar dark:bg-surface-card dark:text-primary text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:shadow-error/20 dark:hover:shadow-white/20 transition-all flex items-center justify-center gap-4 overflow-hidden relative group">
+                                <Button className="w-full h-[72px] bg-surface-sidebar dark:bg-surface-card dark:text-primary text-text-primary rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:shadow-error/20 dark:hover:shadow-white/20 transition-all flex items-center justify-center gap-4 overflow-hidden relative group">
                                     <div className="absolute inset-x-0 bottom-0 h-1 bg-error translate-y-full group-hover:translate-y-0 transition-transform" />
                                     Enregistrer la Perte <Trash2 className="w-5 h-5 ml-1 opacity-30 group-hover:opacity-100 group-hover:rotate-12 transition-all" />
                                 </Button>
@@ -186,7 +186,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.5 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="text-5xl font-mono font-black text-white dark:text-primary flex items-baseline gap-1"
+                                    className="text-5xl font-mono font-black text-text-primary dark:text-primary flex items-baseline gap-1"
                                 >
                                     <span className="text-error text-[0.6em] font-black">-</span>
                                     {formatCurrency(124.50)}

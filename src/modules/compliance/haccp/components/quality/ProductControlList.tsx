@@ -53,8 +53,8 @@ export const ProductControlList: React.FC = () => {
                         <div className="flex items-start gap-6">
                             <div className={cn(
                                 "w-16 h-16 rounded-[1.5rem] flex items-center justify-center transition-all shadow-inner relative shrink-0",
-                                item.is_rejected ? "bg-status-danger text-white" : 
-                                item.decision === 'accepted' ? "bg-status-success text-white shadow-emerald-500/20" : "bg-surface-bg text-muted"
+                                item.is_rejected ? "bg-status-danger text-text-primary" : 
+                                item.decision === 'accepted' ? "bg-status-success text-text-primary shadow-emerald-500/20" : "bg-surface-bg text-muted"
                             )}>
                                 <Package className="w-8 h-8" />
                                 {item.is_rejected && (
@@ -111,7 +111,7 @@ export const ProductControlList: React.FC = () => {
                                     className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md group-active:scale-95",
                                         item.decision === 'accepted' && !item.is_rejected
-                                            ? "bg-status-success text-white shadow-emerald-500/30" 
+                                            ? "bg-status-success text-text-primary shadow-emerald-500/30" 
                                             : "bg-surface-bg text-muted hover:bg-status-success hover:text-status-success border border-subtle"
                                     )}
                                 >
@@ -122,7 +122,7 @@ export const ProductControlList: React.FC = () => {
                                     className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md group-active:scale-95",
                                         item.is_rejected
-                                            ? "bg-status-danger text-white shadow-rose-500/30" 
+                                            ? "bg-status-danger text-text-primary shadow-rose-500/30" 
                                             : "bg-surface-bg text-muted hover:bg-status-danger hover:text-status-danger border border-subtle"
                                     )}
                                 >

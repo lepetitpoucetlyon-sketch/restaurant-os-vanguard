@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
 
@@ -32,7 +32,7 @@ export const OTABanner: React.FC = () => {
                                 <RefreshCw className="w-5 h-5 text-primary animate-spin-slow" />
                             </div>
                             <div>
-                                <h4 className="text-white font-semibold text-sm">Mise à jour disponible (v{updateInfo?.version || '?.?.?'})</h4>
+                                <h4 className="text-text-primary font-semibold text-sm">Mise à jour disponible (v{updateInfo?.version || '?.?.?'})</h4>
                                 <p className="text-muted text-xs">Une mise à jour Over-the-Air a été déployée par le Suzerain.</p>
                             </div>
                         </div>

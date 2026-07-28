@@ -72,7 +72,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                                         task.isCompleted ? "bg-success border-success" : "border-border dark:border-border hover:border-accent group-hover:border-accent"
                                     )}
                                 >
-                                    {task.isCompleted && <CheckCircle2 strokeWidth={2.5} className="w-4 h-4 text-white" />}
+                                    {task.isCompleted && <CheckCircle2 strokeWidth={2.5} className="w-4 h-4 text-text-primary" />}
                                 </motion.div>
                                 <div>
                                     <h4 className={cn("font-serif font-semibold text-xl transition-all", task.isCompleted ? "text-text-muted line-through" : "text-text-primary group-hover:text-accent")}>
@@ -91,7 +91,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                                 whileHover={{ scale: 1.1, x: 5 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() => onSelectTask(task)}
-                                className="w-11 h-11 rounded-lg bg-bg-tertiary/50 hover:bg-accent hover:text-white flex items-center justify-center transition-all duration-300"
+                                className="w-11 h-11 rounded-lg bg-bg-tertiary/50 hover:bg-accent hover:text-text-primary flex items-center justify-center transition-all duration-300"
                             >
                                 <ArrowRight strokeWidth={1.5} className={cn(
                                     "w-5 h-5 transition-all text-text-muted group-hover:text-inherit"

@@ -125,7 +125,7 @@ export function DailyListView({
                                                     </span>
                                                     <button
                                                         onClick={() => { onMarkNoShow(res.id); setNoShowConfirmId(null); }}
-                                                        className="w-6 h-6 rounded-lg bg-status-error flex items-center justify-center text-white transition-all hover:opacity-80"
+                                                        className="w-6 h-6 rounded-lg bg-status-error flex items-center justify-center text-text-primary transition-all hover:opacity-80"
                                                         title="Confirmer no-show"
                                                     >
                                                         <UserX className="w-3 h-3" />

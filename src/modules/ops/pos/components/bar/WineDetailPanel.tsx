@@ -28,18 +28,18 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
   return (
     <div className="w-96 bg-surface-card dark:bg-bg-secondary border-l border-subtle dark:border-border overflow-auto h-full fixed right-0 top-[80px] md:top-[100px] z-30 shadow-2xl animate-in slide-in-from-right duration-300">
         <div
-            className="p-6 text-white relative"
+            className="p-6 text-text-primary relative"
             style={{ backgroundColor: region?.color || '#722F37' }}
         >
             <button
                 onClick={onClose}
-                className="absolute top-4 right-4 p-2 hover:bg-surface-card/10 rounded-lg text-white text-2xl leading-none"
+                className="absolute top-4 right-4 p-2 hover:bg-surface-card/10 rounded-lg text-text-primary text-2xl leading-none"
             >
                 &times;
             </button>
-            <Wine className="w-12 h-12 mb-4 text-white/60" />
+            <Wine className="w-12 h-12 mb-4 text-text-primary/60" />
             <h3 className="text-xl font-black">{selectedWine.name}</h3>
-            <p className="text-white/60 mt-1">{selectedWine.vintage} • {selectedWine.type}</p>
+            <p className="text-text-primary/60 mt-1">{selectedWine.vintage} • {selectedWine.type}</p>
         </div>
 
         <div className="p-6 space-y-6">
@@ -84,7 +84,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
             </div>
 
             {/* Notes */}
-            <div className="p-4 bg-status-warning dark:bg-status-warning/10 rounded-xl border border-amber-100 dark:border-amber-500/30">
+            <div className="p-4 bg-status-warning dark:bg-status-warning/10 rounded-xl border border-amber-100 dark:border-action-primary/30">
                 <p className="text-sm text-text-primary italic">"{selectedWine.notes}"</p>
             </div>
 
@@ -94,7 +94,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
                     <Edit3 className="w-4 h-4 mr-2" />
                     Modifier
                 </Button>
-                <Button className="flex-1 h-11 bg-[#722F37] hover:bg-[#5A252C] rounded-xl text-white">
+                <Button className="flex-1 h-11 bg-[#722F37] hover:bg-[#5A252C] rounded-xl text-text-primary">
                     <Plus className="w-4 h-4 mr-2" />
                     Commander
                 </Button>

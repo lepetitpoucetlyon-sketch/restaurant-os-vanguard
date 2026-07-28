@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { piiVault } from '@/modules/compliance/rgpd/PiiVault';
+import { piiVault } from '@/modules/compliance/rgpd';
 
 interface GuestProfile {
     subjectId: string;

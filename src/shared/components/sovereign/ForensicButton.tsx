@@ -56,7 +56,7 @@ export function ForensicButton() {
     <button
       onClick={handleForensicCapture}
       disabled={loading}
-      className="fixed bottom-4 right-4 z-50 bg-status-danger hover:bg-status-danger text-white font-bold py-2 px-4 rounded shadow-lg flex items-center gap-2 transition-colors disabled:opacity-60"
+      className="fixed bottom-4 right-4 z-50 bg-status-danger hover:bg-status-danger text-text-primary font-bold py-2 px-4 rounded shadow-lg flex items-center gap-2 transition-colors disabled:opacity-60"
       aria-label="Export FEC Forensic"
     >
       <span>{loading ? '⏳ Export…' : '📋 Export FEC'}</span>

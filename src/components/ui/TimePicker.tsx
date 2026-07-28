@@ -100,7 +100,7 @@ export function TimePicker({
                 <div className="flex items-center gap-4">
                     <div className={cn(
                         "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
-                        isOpen ? "bg-accent-gold text-white" : "bg-bg-tertiary text-text-muted"
+                        isOpen ? "bg-accent-gold text-text-primary" : "bg-bg-tertiary text-text-muted"
                     )}>
                         <Clock className="w-5 h-5" />
                     </div>
@@ -178,9 +178,9 @@ export function TimePicker({
                         <div className="p-2 pt-0 mt-2">
                             <button
                                 onClick={handleConfirm}
-                                className="w-full h-14 bg-text-primary text-white dark:bg-accent-gold dark:text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3 hover:scale-[1.02] shadow-xl transition-all active:scale-[0.98]"
+                                className="w-full h-14 bg-text-primary text-text-primary dark:bg-accent-gold dark:text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3 hover:scale-[1.02] shadow-xl transition-all active:scale-[0.98]"
                             >
-                                Confirmer <Check className="w-4 h-4 text-accent-gold dark:text-white" />
+                                Confirmer <Check className="w-4 h-4 text-accent-gold dark:text-text-primary" />
                             </button>
                         </div>
                     </motion.div>

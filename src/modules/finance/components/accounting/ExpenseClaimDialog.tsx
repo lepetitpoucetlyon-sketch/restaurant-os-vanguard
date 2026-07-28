@@ -102,7 +102,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
             <div className="flex flex-col h-[85vh] bg-bg-primary rounded-[3rem] overflow-hidden shadow-[0_32px_128px_rgba(0,0,0,0.4)] border border-default">
                 {/* Premium Accounting Header */}
                 <div className={cn(
-                    "px-12 py-10 text-white relative overflow-hidden shrink-0 transition-all duration-500",
+                    "px-12 py-10 text-text-primary relative overflow-hidden shrink-0 transition-all duration-500",
                     isDark ? "bg-gradient-to-br from-[#1A1A1B] to-[#2D2D2E]" : "bg-gradient-to-br from-[#2D2D2E] to-[#1A1A1B]"
                 )}>
                     <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -115,7 +115,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                     <div className="relative z-10 flex items-center justify-between">
                         <div className="flex items-center gap-8">
                             <div className="w-16 h-16 rounded-3xl bg-accent flex items-center justify-center shadow-xl shadow-accent/20">
-                                <ReceiptEuro strokeWidth={1.5} className="w-8 h-8 text-white" />
+                                <ReceiptEuro strokeWidth={1.5} className="w-8 h-8 text-text-primary" />
                             </div>
                             <div>
                                 <h2 className="text-3xl font-serif font-black tracking-tight flex items-center gap-3">
@@ -123,7 +123,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
-                                    <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">Validation Administrative Requise</span>
+                                    <span className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.3em]">Validation Administrative Requise</span>
                                     <div className="h-1 w-1 rounded-full bg-accent/40" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
@@ -136,7 +136,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                             onClick={onClose}
                             className="w-12 h-12 rounded-2xl bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 border border-subtle flex items-center justify-center transition-all"
                         >
-                            <X className="w-6 h-6 text-white/50" />
+                            <X className="w-6 h-6 text-text-primary/50" />
                         </button>
                     </div>
                 </div>
@@ -266,12 +266,12 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         <Button
                             disabled={isSubmitting}
                             onClick={handleSubmit}
-                            className="h-16 px-16 bg-accent hover:bg-surface-sidebar text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
+                            className="h-16 px-16 bg-accent hover:bg-surface-sidebar text-text-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
                         >
                             {isSubmitting ? (
                                 <Sparkles className="w-5 h-5 animate-spin" />
                             ) : (
-                                <Save className="w-5 h-5 text-white" />
+                                <Save className="w-5 h-5 text-text-primary" />
                             )}
                             Soumettre pour Clôture
                         </Button>

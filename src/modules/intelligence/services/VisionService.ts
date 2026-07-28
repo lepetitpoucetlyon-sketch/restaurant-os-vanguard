@@ -112,8 +112,8 @@ export const VisionService = {
 
         // Server-side: call LLMManager directly
         try {
-            const { LLMManager } = await import('@/modules/intelligence/ai/LLMManager');
-            const { AI_MODELS } = await import('@/modules/intelligence/ai/types');
+            const { LLMManager } = await import('@/modules/intelligence/ai');
+            const { AI_MODELS } = await import('@/modules/intelligence/ai');
             const imageData = plateBase64.includes(',') ? plateBase64.split(',')[1] : plateBase64;
             const response = await LLMManager.provider.generateFromImage({
                 model: AI_MODELS.visionFast,

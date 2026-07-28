@@ -77,7 +77,7 @@ export const VisualInspection: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4 mb-10 relative z-10">
-                <div className="w-12 h-12 rounded-2xl bg-surface-sidebar text-white flex items-center justify-center shadow-lg shadow-slate-900/20">
+                <div className="w-12 h-12 rounded-2xl bg-surface-sidebar text-text-primary flex items-center justify-center shadow-lg shadow-slate-900/20">
                     <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
@@ -111,8 +111,8 @@ export const VisualInspection: React.FC = () => {
                         <div className={cn(
                             "w-12 h-12 rounded-2xl flex items-center justify-center shadow-md transition-all",
                             c.status === 'pass' 
-                                ? "bg-status-success text-white" 
-                                : "bg-status-danger text-white shadow-rose-500/30"
+                                ? "bg-status-success text-text-primary" 
+                                : "bg-status-danger text-text-primary shadow-rose-500/30"
                         )}>
                             {c.status === 'pass' ? <Check className="w-6 h-6" /> : <X className="w-6 h-6" />}
                         </div>

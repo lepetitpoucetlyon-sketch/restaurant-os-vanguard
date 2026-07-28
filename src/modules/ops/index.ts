@@ -2,6 +2,7 @@ export * from './engine';
 export * from './pos';
 export * from './kitchen';
 export * from './kds';
+export { NexusOpsProvider, useOrders, useTables, useKitchen } from './providers';
 export { usePOSController } from './pos/hooks/usePos';
 // 🛒 usePOSController is now imported from @modules/ops/pos
 export type { Order, OrderItem } from './engine';

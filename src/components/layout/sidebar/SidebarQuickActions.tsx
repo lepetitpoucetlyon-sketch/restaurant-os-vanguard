@@ -52,7 +52,7 @@ export function SidebarQuickActions({
                 onClick={() => setIsExpenseModalOpen(true)}
                 className={cn(
                     "w-full flex items-center gap-3 p-4 rounded-2xl transition-all duration-500 group outline-none mb-3",
-                    "bg-accent-gold/5 hover:bg-accent-gold text-accent-gold hover:text-white border border-accent-gold/20 hover:border-transparent shadow-premium",
+                    "bg-accent-gold/5 hover:bg-accent-gold text-accent-gold hover:text-text-primary border border-accent-gold/20 hover:border-transparent shadow-premium",
                     isSidebarCollapsed && "justify-center"
                 )}
             >

@@ -9,7 +9,7 @@ import { useStore } from 'jotai';
 // mcc-tel-6 — classes statiques (JIT purge les interpolations bg-${color}-500/10)
 const GAUGE_COLORS = {
     indigo: {
-        wrap:     'bg-indigo-500/10 border border-indigo-500/20 text-indigo-400',
+        wrap:     'bg-status-info/10 border border-indigo-500/20 text-indigo-400',
         gradient: 'bg-gradient-to-r from-indigo-600 to-indigo-400',
     },
     violet: {
@@ -65,7 +65,7 @@ export const PerformanceMonitor: React.FC = () => {
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Build Status</span>
-                    <span className="text-sm font-bold text-white flex items-center gap-2">
+                    <span className="text-sm font-bold text-text-primary flex items-center gap-2">
                         <ShieldCheck className="w-3.5 h-3.5 text-brand" />
                         PROD_READY
                     </span>
@@ -146,7 +146,7 @@ const ContextSlot: React.FC<{ label: string }> = ({ label }) => (
     <div className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-status-success group-hover:animate-pulse" />
-            <span className="text-xs font-medium text-muted group-hover:text-white transition-colors truncate max-w-[140px]" title={label}>
+            <span className="text-xs font-medium text-muted group-hover:text-text-primary transition-colors truncate max-w-[140px]" title={label}>
                 {label}
             </span>
         </div>

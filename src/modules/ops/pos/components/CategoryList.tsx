@@ -40,7 +40,7 @@ export function CategoryList({ selectedCategory, onSelectCategory, onBack }: Cat
                     onClick={onBack}
                     className="w-full flex flex-col items-center gap-3 p-4 md:p-6 rounded-[24px] text-text-muted hover:bg-bg-tertiary/60 transition-all duration-500 group relative overflow-hidden mb-2"
                 >
-                    <div className="w-8 h-8 rounded-full bg-surface-card dark:bg-surface-card/5 flex items-center justify-center border border-border/50 shadow-sm group-hover:bg-accent-gold group-hover:text-white transition-all">
+                    <div className="w-8 h-8 rounded-full bg-surface-card dark:bg-surface-card/5 flex items-center justify-center border border-border/50 shadow-sm group-hover:bg-accent-gold group-hover:text-text-primary transition-all">
                         <ArrowLeft strokeWidth={1.5} className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
                     </div>
                     <span className="hidden md:block text-[9px] font-black uppercase tracking-[0.3em] group-hover:text-accent-gold transition-colors">{t('pos.back')}</span>
@@ -106,7 +106,7 @@ export function CategoryList({ selectedCategory, onSelectCategory, onBack }: Cat
 
                 {/* Executive Logo Mark */}
                 <div className="flex flex-col items-center gap-2 group cursor-default">
-                    <div className="w-11 h-11 rounded-full bg-text-primary text-white flex items-center justify-center shadow-premium group-hover:rotate-12 transition-all">
+                    <div className="w-11 h-11 rounded-full bg-text-primary text-text-primary flex items-center justify-center shadow-premium group-hover:rotate-12 transition-all">
                         <span className="font-serif italic font-bold text-xl">R</span>
                     </div>
                     <div className="flex flex-col items-center opacity-40">

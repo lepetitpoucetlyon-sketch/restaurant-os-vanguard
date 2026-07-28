@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useKitchen } from '@/modules/ops/providers/NexusOpsProvider';
+import { useKitchen } from '@/modules/ops/providers';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import { Order } from '@nexus/contracts';
 

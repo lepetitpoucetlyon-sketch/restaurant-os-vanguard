@@ -65,7 +65,7 @@ export function QuantitySelector({
             </motion.button>
 
             {/* Value Display */}
-            <div className="flex-1 text-center font-bold text-lg text-primary dark:text-white">
+            <div className="flex-1 text-center font-bold text-lg text-primary dark:text-text-primary">
                 <AnimatePresence mode="wait">
                     <motion.span
                         key={value}
@@ -88,7 +88,7 @@ export function QuantitySelector({
                 disabled={value >= max}
                 className={cn(
                     "relative flex items-center justify-center w-10 h-10 rounded-full transition-shadow",
-                    "bg-accent text-white shadow-[0_0_15px_-3px_#C5A059]",
+                    "bg-accent text-text-primary shadow-[0_0_15px_-3px_#C5A059]",
                     "hover:shadow-[0_0_20px_-2px_#C5A059]",
                     // Liquid glass highlight on the button itself
                     "after:absolute after:top-1 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[1px] after:bg-surface-card/40 after:rounded-full after:blur-[0.5px]"

@@ -103,7 +103,7 @@ export function MCCAuditStream() {
                                         >
                                             [{log.module}]
                                         </motion.span>
-                                        <span className="text-[10px] font-medium text-muted group-hover:text-white transition-colors">{log.action}</span>
+                                        <span className="text-[10px] font-medium text-muted group-hover:text-text-primary transition-colors">{log.action}</span>
                                         <span className="text-[9px] text-secondary ml-auto">{log.timestamp.toLocaleTimeString()}</span>
                                     </div>
                                     {log.details ? (

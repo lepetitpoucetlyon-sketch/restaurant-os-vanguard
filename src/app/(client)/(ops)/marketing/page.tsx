@@ -50,7 +50,7 @@ export default function MarketingPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => setCampaignModalOpen(true)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90"
+                        className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90"
                     >
                         <PlusCircle className="w-4 h-4" /> Campagne
                     </button>

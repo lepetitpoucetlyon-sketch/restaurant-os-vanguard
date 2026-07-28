@@ -38,7 +38,7 @@ export function AIStatusBanner() {
         <div
             className={cn(
                 "flex items-center gap-3 px-4 py-2 text-sm border-b",
-                "bg-amber-500/10 border-amber-500/20 text-amber-300"
+                "bg-action-primary/10 border-action-primary/20 text-amber-300"
             )}
             role="alert"
             aria-live="polite"

@@ -36,15 +36,15 @@ export const ProductControlCard: React.FC<ProductControlCardProps> = ({
           </span>
         </div>
         {item.is_rejected ? (
-          <div className="bg-status-danger text-white p-1.5 rounded-lg">
+          <div className="bg-status-danger text-text-primary p-1.5 rounded-lg">
             <AlertOctagon className="w-4 h-4" />
           </div>
         ) : isHealthy ? (
-          <div className="bg-status-success text-white p-1.5 rounded-lg">
+          <div className="bg-status-success text-text-primary p-1.5 rounded-lg">
             <CheckCircle2 className="w-4 h-4" />
           </div>
         ) : (
-          <div className="bg-status-warning text-white p-1.5 rounded-lg">
+          <div className="bg-status-warning text-text-primary p-1.5 rounded-lg">
             <Timer className="w-4 h-4" />
           </div>
         )}

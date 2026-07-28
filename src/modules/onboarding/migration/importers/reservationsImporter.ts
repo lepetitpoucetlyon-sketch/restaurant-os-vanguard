@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { ParsedFile, ImportResult } from '../types';
-import { isMaskedEmail } from '@/modules/onboarding/migration/emailFilters';
+import { isMaskedEmail } from '../emailFilters';
 
 // Cross-impact: historical reservations go to CRM.visitHistory ONLY.
 // They must NOT be injected into reservations/ collection (would appear as active bookings).

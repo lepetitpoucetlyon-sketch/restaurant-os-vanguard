@@ -39,7 +39,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                                 {(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€
                             </div>
                         </div>
-                        <Button className="h-11 px-8 bg-text-primary text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">
+                        <Button className="h-11 px-8 bg-text-primary text-text-primary rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">
                             Appliquer
                         </Button>
                     </div>
@@ -79,7 +79,7 @@ export const SimulatorView: React.FC = () => {
                 </div>
                 <Button
                     onClick={() => setShowSimulationSheet(true)}
-                    className="h-16 px-12 bg-text-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all"
+                    className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all"
                 >
                     Configurer Simulation
                 </Button>

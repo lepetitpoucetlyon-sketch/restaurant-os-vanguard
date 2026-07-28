@@ -326,11 +326,11 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
 
   // ── Shared styles ─────────────────────────────────────────────────────────
   const inputClass =
-    'w-full rounded-2xl border border-gray-200 bg-white px-4 py-4 text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition';
+    'w-full rounded-2xl border border-gray-200 bg-white px-4 py-4 text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-action-primary focus:border-transparent transition';
   const btnPrimary =
-    'w-full rounded-2xl bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-white font-semibold py-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2';
+    'w-full rounded-2xl bg-action-primary hover:bg-action-primary active:scale-[0.98] text-text-primary font-semibold py-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2';
   const btnSecondary =
-    'flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition py-2 px-3 rounded-xl hover:bg-gray-100';
+    'flex items-center gap-1.5 text-sm text-text-muted hover:text-gray-800 transition py-2 px-3 rounded-xl hover:bg-gray-100';
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -342,7 +342,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
             <div
               key={s.id}
               className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                s.id <= step ? 'bg-amber-500' : 'bg-gray-100'
+                s.id <= step ? 'bg-action-primary' : 'bg-gray-100'
               }`}
             />
           ))}
@@ -363,7 +363,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
               </div>
               <div>
                 <h2 className="text-xl font-serif font-semibold text-gray-900">Garantie de réservation</h2>
-                <p className="text-xs text-gray-400">Aucun débit immédiat</p>
+                <p className="text-xs text-text-secondary">Aucun débit immédiat</p>
               </div>
             </div>
 
@@ -379,8 +379,8 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
             </div>
 
             {stripeLoading && (
-              <div className="flex flex-col items-center gap-3 py-8 text-gray-400">
-                <Loader2 className="w-7 h-7 animate-spin text-amber-500" />
+              <div className="flex flex-col items-center gap-3 py-8 text-text-secondary">
+                <Loader2 className="w-7 h-7 animate-spin text-action-primary" />
                 <p className="text-sm">Chargement du formulaire sécurisé…</p>
               </div>
             )}
@@ -421,7 +421,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
               </button>
             </div>
 
-            <p className="text-center text-[10px] text-gray-400">
+            <p className="text-center text-[10px] text-text-secondary">
               Paiement sécurisé par Stripe · PCI DSS Level 1
             </p>
           </motion.div>
@@ -451,7 +451,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                           onClick={() => setField('date', iso)}
                           className={`rounded-2xl border px-3 py-4 text-sm font-medium transition-all capitalize ${
                             selected
-                              ? 'border-amber-500 bg-amber-50 text-amber-700 ring-2 ring-amber-300'
+                              ? 'border-action-primary bg-amber-50 text-amber-700 ring-2 ring-amber-300'
                               : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:bg-amber-50'
                           }`}
                         >
@@ -469,7 +469,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
               {step === 2 && (
                 <div className="space-y-4">
                   <h2 className="text-xl font-serif font-semibold text-gray-900">Nombre de couverts</h2>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-text-muted">
                     {form.date ? format(parseISO(form.date), 'EEEE d MMMM', { locale: fr }) : ''}
                   </p>
                   <div className="flex items-center justify-center gap-6 py-6">
@@ -508,10 +508,10 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                   <h2 className="text-xl font-serif font-semibold text-gray-900">Choisissez un horaire</h2>
                   {loadingSlots ? (
                     <div className="flex justify-center py-12">
-                      <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+                      <Loader2 className="w-8 h-8 animate-spin text-action-primary" />
                     </div>
                   ) : slots.length === 0 ? (
-                    <p className="text-center text-gray-500 py-10 text-sm">
+                    <p className="text-center text-text-muted py-10 text-sm">
                       Aucune disponibilité pour cette date. Essayez un autre jour.
                     </p>
                   ) : (
@@ -523,9 +523,9 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                           onClick={() => setField('time', s.time)}
                           className={`rounded-2xl border py-4 text-sm font-medium transition-all ${
                             !s.available
-                              ? 'border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed'
+                              ? 'border-gray-100 bg-gray-50 text-text-secondary cursor-not-allowed'
                               : form.time === s.time
-                              ? 'border-amber-500 bg-amber-50 text-amber-700 ring-2 ring-amber-300'
+                              ? 'border-action-primary bg-amber-50 text-amber-700 ring-2 ring-amber-300'
                               : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:bg-amber-50'
                           }`}
                         >
@@ -625,21 +625,21 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                   {/* Summary recap */}
                   <div className="rounded-2xl bg-gray-50 border border-gray-100 px-4 py-3 space-y-1 text-sm text-gray-600">
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Date</span>
+                      <span className="text-text-secondary">Date</span>
                       <span className="font-medium">
                         {form.date ? format(parseISO(form.date), 'EEE d MMM yyyy', { locale: fr }) : '—'}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Horaire</span>
+                      <span className="text-text-secondary">Horaire</span>
                       <span className="font-medium">{form.time || '—'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Couverts</span>
+                      <span className="text-text-secondary">Couverts</span>
                       <span className="font-medium">{form.covers}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Nom</span>
+                      <span className="text-text-secondary">Nom</span>
                       <span className="font-medium">{form.firstName} {form.lastName}</span>
                     </div>
                   </div>
@@ -685,7 +685,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                   </motion.div>
                   <div className="space-y-2">
                     <h2 className="text-2xl font-serif font-bold text-gray-900">Réservation confirmée !</h2>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-text-muted text-sm">
                       Merci {form.firstName}, votre table est réservée chez {restaurantName}.
                     </p>
                   </div>
@@ -698,7 +698,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                       {form.date ? format(parseISO(form.date), 'EEE d MMMM yyyy', { locale: fr }) : ''} • {form.time} • {form.covers} couvert{form.covers > 1 ? 's' : ''}
                     </p>
                   </div>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-text-secondary">
                     Un email de confirmation a été envoyé à {form.email}
                   </p>
                   {bookingRef && form.date && form.time && (

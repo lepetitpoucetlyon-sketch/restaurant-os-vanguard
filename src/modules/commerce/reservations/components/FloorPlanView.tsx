@@ -25,7 +25,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                             {zone === 'STANDARD' && <div className="w-2.5 h-2.5 rounded-full bg-text-muted/20" />}
                             <span className={cn(
                                 "text-[10px] font-black uppercase tracking-[0.3em]",
-                                zone === 'VIP' ? "text-accent" : zone === 'TERRACE' ? "text-emerald-500" : "text-text-muted/60"
+                                zone === 'VIP' ? "text-accent" : zone === 'TERRACE' ? "text-status-success" : "text-text-muted/60"
                             )}>{t('reservations.zones.zone')} {zone}</span>
                             <div className="h-px flex-1 bg-border/40" />
                         </div>
@@ -42,7 +42,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                                         case 'free':
                                             return {
                                                 container: "bg-white/80 dark:bg-white/[0.03] border-white/20 dark:border-white/5 hover:border-accent/50 hover:-translate-y-2 backdrop-blur-xl",
-                                                circle: "bg-bg-primary text-text-primary border-accent/20 group-hover:bg-accent group-hover:text-white",
+                                                circle: "bg-bg-primary text-text-primary border-accent/20 group-hover:bg-accent group-hover:text-text-primary",
                                                 icon: "text-accent",
                                                 indicator: "bg-accent",
                                                 bar: "bg-accent",
@@ -69,8 +69,8 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                                         default:
                                             return {
                                                 container: "bg-neutral-100 dark:bg-white/[0.01] border-border opacity-60 grayscale cursor-not-allowed",
-                                                circle: "bg-neutral-200 text-neutral-400 border-neutral-300",
-                                                icon: "text-neutral-400",
+                                                circle: "bg-neutral-200 text-text-secondary border-neutral-300",
+                                                icon: "text-text-secondary",
                                                 indicator: "bg-neutral-400",
                                                 bar: "bg-neutral-400",
                                                 spotlight: "bg-transparent"

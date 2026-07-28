@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { useKitchen, useInventory, useRecipes } from "@/modules/ops/providers/NexusOpsProvider";
+import { useKitchen, useInventory, useRecipes } from "@/modules/ops/providers";
 import { useHACCP } from "@modules/compliance";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";

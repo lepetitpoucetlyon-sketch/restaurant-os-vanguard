@@ -136,7 +136,7 @@ export class TinkProvider implements IOpenBankingProvider {
         if (!res.ok) throw new Error('TinkProvider: getTransactions failed');
 
         const data  = await res.json() as { transactions?: TinkTransactionDTO[] };
-        const { StatementIngestionService } = await import('@/modules/finance/accounting/domain/StatementIngestionService');
+        const { StatementIngestionService } = await import('@/modules/finance/accounting/domain');
 
         const out: Omit<BankTransaction, 'id'>[] = [];
         for (const tx of data.transactions ?? []) {

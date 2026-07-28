@@ -25,10 +25,10 @@ const ACTION_CONFIG: Record<
     ClockAction,
     { label: string; icon: React.ElementType; color: string }
 > = {
-    CLOCK_IN:    { label: "Arrivée",      icon: LogIn,   color: "bg-emerald-600 hover:bg-emerald-500" },
-    CLOCK_OUT:   { label: "Départ",       icon: LogOut,  color: "bg-rose-600 hover:bg-rose-500" },
-    BREAK_START: { label: "Début pause",  icon: Coffee,  color: "bg-amber-600 hover:bg-amber-500" },
-    BREAK_END:   { label: "Fin pause",    icon: Play,    color: "bg-sky-600 hover:bg-sky-500" },
+    CLOCK_IN:    { label: "Arrivée",      icon: LogIn,   color: "bg-status-success hover:bg-status-success" },
+    CLOCK_OUT:   { label: "Départ",       icon: LogOut,  color: "bg-rose-600 hover:bg-status-danger" },
+    BREAK_START: { label: "Début pause",  icon: Coffee,  color: "bg-action-primary hover:bg-action-primary" },
+    BREAK_END:   { label: "Fin pause",    icon: Play,    color: "bg-sky-600 hover:bg-status-info" },
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -183,7 +183,7 @@ export function TimeclockDashboard() {
     ];
 
     return (
-        <div className="fixed inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center text-white overflow-hidden">
+        <div className="fixed inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center text-text-primary overflow-hidden">
             {/* Ambient gradient */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-emerald-900/10 rounded-full blur-[120px]" />
@@ -192,10 +192,10 @@ export function TimeclockDashboard() {
 
             {/* Clock */}
             <div className="relative z-10 text-center mb-12">
-                <div className="text-[clamp(4rem,12vw,9rem)] font-mono font-extralight tracking-tight leading-none text-white/90 tabular-nums">
+                <div className="text-[clamp(4rem,12vw,9rem)] font-mono font-extralight tracking-tight leading-none text-text-primary/90 tabular-nums">
                     {formatTime(now)}
                 </div>
-                <p className="text-white/30 text-sm font-medium tracking-widest capitalize mt-3">
+                <p className="text-text-primary/30 text-sm font-medium tracking-widest capitalize mt-3">
                     {formatDate(now)}
                 </p>
             </div>
@@ -221,15 +221,15 @@ export function TimeclockDashboard() {
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
-                                    <div className="w-full h-full bg-white/10 flex items-center justify-center text-3xl font-serif italic text-white/60">
+                                    <div className="w-full h-full bg-white/10 flex items-center justify-center text-3xl font-serif italic text-text-primary/60">
                                         {getInitials(foundUser.name)}
                                     </div>
                                 )}
                             </div>
-                            <h2 className="text-2xl font-serif italic text-white">
+                            <h2 className="text-2xl font-serif italic text-text-primary">
                                 {foundUser.name}
                             </h2>
-                            <p className="text-xs text-white/30 uppercase tracking-widest mt-1 font-bold">
+                            <p className="text-xs text-text-primary/30 uppercase tracking-widest mt-1 font-bold">
                                 {foundUser.role}
                             </p>
                         </div>
@@ -256,7 +256,7 @@ export function TimeclockDashboard() {
 
                         <button
                             onClick={reset}
-                            className="flex items-center gap-2 mx-auto mt-6 px-5 py-2 rounded-xl text-white/30 hover:text-white/60 text-xs uppercase tracking-widest transition-colors"
+                            className="flex items-center gap-2 mx-auto mt-6 px-5 py-2 rounded-xl text-text-primary/30 hover:text-text-primary/60 text-xs uppercase tracking-widest transition-colors"
                         >
                             <RotateCcw className="w-3 h-3" />
                             Annuler
@@ -285,7 +285,7 @@ export function TimeclockDashboard() {
                             ))}
                         </div>
 
-                        <p className="text-center text-white/30 text-xs uppercase tracking-[0.3em] mb-6 font-bold">
+                        <p className="text-center text-text-primary/30 text-xs uppercase tracking-[0.3em] mb-6 font-bold">
                             {isLooking ? "Identification..." : "Entrez votre PIN"}
                         </p>
 
@@ -301,8 +301,8 @@ export function TimeclockDashboard() {
                                         disabled={isLooking}
                                         className={`h-16 rounded-2xl font-mono text-xl font-bold transition-all active:scale-95 disabled:opacity-30 ${
                                             isSpecial
-                                                ? "bg-white/5 text-white/40 hover:bg-white/10 text-sm"
-                                                : "bg-white/10 text-white hover:bg-white/20"
+                                                ? "bg-white/5 text-text-primary/40 hover:bg-white/10 text-sm"
+                                                : "bg-white/10 text-text-primary hover:bg-white/20"
                                         }`}
                                     >
                                         {Icon ? (
@@ -315,7 +315,7 @@ export function TimeclockDashboard() {
                             })}
                         </div>
 
-                        <div className="flex items-center justify-center gap-2 mt-8 text-white/15">
+                        <div className="flex items-center justify-center gap-2 mt-8 text-text-primary/15">
                             <Clock className="w-3 h-3" />
                             <span className="text-[10px] uppercase tracking-widest font-bold">
                                 Pointeuse Kiosque

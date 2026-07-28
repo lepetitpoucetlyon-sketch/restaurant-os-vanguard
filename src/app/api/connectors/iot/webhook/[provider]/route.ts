@@ -1,37 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { IoTProviderFactory } from '@/modules/compliance/connectors/iot/IoTProviderFactory';
+import { IoTProviderFactory } from '@/modules/compliance/connectors/iot';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
 
 /**
  * POST /api/connectors/iot/webhook/{provider}
  * Reçoit les relevés capteurs HACCP depuis les providers IoT (Lacroix, Monnit, webhook générique).
  * Body : { sensorId, tenantId, value, unit?, timestamp?, zoneId?, zoneName? }
  *
- * Si hors norme → HACCPLogService.recordNonConformity() automatique.
+ * Sécurité : provider.verifySignature() si disponible, sinon fallback CONNECTORS_WEBHOOK_SECRET.
  */
 export async function POST(
     req: NextRequest,
     { params }: { params: { provider: string } }
 ) {
     const providerId = params.provider;
+
+    const rawBody = await req.text();
     let payload: unknown;
     try {
-        payload = await req.json();
+        payload = JSON.parse(rawBody);
     } catch {
         return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
     }
 
-    const body = payload as Record<string, unknown>;
+    let p: ReturnType<typeof IoTProviderFactory.get>;
+    try {
+        p = IoTProviderFactory.get(providerId);
+    } catch {
+        return NextResponse.json({ error: `Provider inconnu : ${providerId}` }, { status: 404 });
+    }
+
+    const verified = p.verifySignature
+        ? p.verifySignature(rawBody, req.headers)
+        : checkFallbackWebhookSecret(req.headers, providerId);
+
+    if (!verified) {
+        logger.warn(`[iot/webhook] Signature invalide — provider=${providerId}`);
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!p.verifySignature && !process.env.CONNECTORS_WEBHOOK_SECRET) {
+        logger.warn(`[iot/webhook] provider=${providerId} sans HMAC et sans CONNECTORS_WEBHOOK_SECRET — webhook non sécurisé`);
+    }
+
+    const body     = payload as Record<string, unknown>;
     const tenantId = body['tenantId'] ? String(body['tenantId']) : undefined;
     if (!tenantId) {
         return NextResponse.json({ error: 'tenantId requis dans le payload' }, { status: 422 });
     }
 
     try {
-        // Normalisation via le provider
-        const _ = IoTProviderFactory.get(providerId);
-
         const reading = {
             sensorId:  String(body['sensorId'] ?? ''),
             tenantId,
@@ -42,11 +62,9 @@ export async function POST(
             zoneName:  body['zoneName'] ? String(body['zoneName']) : undefined,
         };
 
-        // Écrire dans iotHistory (immuable, collection NF525-like)
         const histKey = `iotHistory/${reading.sensorId}/${Date.now()}`;
         await Nexus.adapter.set(histKey, reading);
 
-        // Vérifier les seuils HACCP
         const sensor = await Nexus.adapter.get(
             `tenants/${tenantId}/sensors/${reading.sensorId}`
         ) as { minThreshold?: number; maxThreshold?: number; zoneName?: string } | null;
@@ -74,7 +92,7 @@ export async function POST(
         logger.info(`[iot/webhook] provider=${providerId} sensor=${reading.sensorId} value=${reading.value}${reading.unit}`);
         return NextResponse.json({ received: true, sensorId: reading.sensorId });
     } catch (err) {
-        logger.error(`[iot/webhook] provider=${providerId}`, String(err));
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        logger.error(`[iot/webhook] provider=${providerId}`, err);
+        return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
     }
 }

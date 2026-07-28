@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
 import { ShiftEntrySchema, ShiftEntry } from "@domain/schemas/hr";
-import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
+import { FiscalEngine } from '@/modules/finance/services';
 import { logger } from '@/lib/logger';
 import { FiscalSeal } from '@nexus/contracts';
 

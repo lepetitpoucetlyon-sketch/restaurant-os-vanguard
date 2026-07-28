@@ -6,7 +6,7 @@ import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardLi
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
-import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/shared/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
@@ -152,13 +152,13 @@ export default function FloorPlanPage() {
                         {!isMobile ? (
                             <div className="flex items-center gap-3">
                                 <div className="flex bg-bg-tertiary/50 rounded-full p-1 border border-border">
-                                    <button onClick={() => setMode('select')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'select' ? "bg-accent-gold text-white" : "text-text-muted")}>SÉLECTEUR</button>
-                                    <button onClick={() => setMode('add')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'add' ? "bg-accent-gold text-white" : "text-text-muted")}>CONSTRUIRE</button>
+                                    <button onClick={() => setMode('select')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'select' ? "bg-accent-gold text-text-primary" : "text-text-muted")}>SÉLECTEUR</button>
+                                    <button onClick={() => setMode('add')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'add' ? "bg-accent-gold text-text-primary" : "text-text-muted")}>CONSTRUIRE</button>
                                 </div>
-                                <button onClick={handleSave} className="h-10 px-8 bg-text-primary text-white rounded-full text-[9px] font-black tracking-widest">HOMOLOGUER</button>
+                                <button onClick={handleSave} className="h-10 px-8 bg-text-primary text-text-primary rounded-full text-[9px] font-black tracking-widest">HOMOLOGUER</button>
                             </div>
                         ) : (
-                            <button onClick={toggleZonesLock} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-all border", isZonesLocked ? "bg-accent text-white border-transparent" : "bg-bg-tertiary border-border text-text-muted")}>
+                            <button onClick={toggleZonesLock} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-all border", isZonesLocked ? "bg-accent text-text-primary border-transparent" : "bg-bg-tertiary border-border text-text-muted")}>
                                 <Layers className="w-4 h-4" />
                             </button>
                         )}
@@ -192,7 +192,7 @@ export default function FloorPlanPage() {
                     <motion.button
                         layoutId="floor-fab"
                         onClick={() => setShowTemplateModal(true)}
-                        className="fixed bottom-28 right-6 w-14 h-14 bg-accent-gold text-white rounded-full flex items-center justify-center shadow-2xl z-40"
+                        className="fixed bottom-28 right-6 w-14 h-14 bg-accent-gold text-text-primary rounded-full flex items-center justify-center shadow-2xl z-40"
                     >
                         <LayoutTemplate className="w-6 h-6" />
                     </motion.button>
@@ -231,7 +231,7 @@ export default function FloorPlanPage() {
                                 <button
                                     key={s}
                                     onClick={() => { updateTable(selectedTableId!, { status: s as TableStatus }); setSelectedTableId(null); }}
-                                    className={cn("h-10 rounded-xl text-[8px] font-black uppercase tracking-tighter border", selectedTable?.status === s ? "bg-accent-gold text-white border-transparent" : "bg-bg-primary text-text-muted border-border")}
+                                    className={cn("h-10 rounded-xl text-[8px] font-black uppercase tracking-tighter border", selectedTable?.status === s ? "bg-accent-gold text-text-primary border-transparent" : "bg-bg-primary text-text-muted border-border")}
                                 >
                                     {s}
                                 </button>

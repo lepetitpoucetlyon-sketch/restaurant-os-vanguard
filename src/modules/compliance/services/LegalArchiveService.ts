@@ -1,4 +1,4 @@
-import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
+import { FiscalEngine } from '@/modules/finance/services';
 import { FiscalSeal } from '@nexus/contracts';
 
 /**

@@ -21,7 +21,7 @@ import {
 const _upsertReservationAction = async (..._args: unknown[]) => ({ success: true });
 const _deleteReservationAction = async (..._args: unknown[]) => ({ success: true });
 const _cancelReservationAction = async (..._args: unknown[]) => ({ success: true });
-import { useNexusOps } from '@/modules/ops/providers/NexusOpsProvider';
+import { useNexusOps } from '@/modules/ops/providers';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 // import { searchIngredientsAction } from '@/app/(admin)/actions/inventory';
 const searchIngredientsAction = async (_tenantId: string, _query: string): Promise<import('@nexus/contracts').Ingredient[]> => ([]);
@@ -236,7 +236,7 @@ export function InventoryReceptionDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white p-6 md:p-10 font-ui">
+    <div className="min-h-screen bg-[#0a0a0b] text-text-primary p-6 md:p-10 font-ui">
       {/* ── log-5: Barcode scan strip ───────────────────────────────────────── */}
       <div className="mb-8 bg-[#161618] border border-border-subtle rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-text-secondary shrink-0">
@@ -251,7 +251,7 @@ export function InventoryReceptionDashboard() {
             onChange={(e) => setBarcodeValue(e.target.value)}
             onKeyDown={handleBarcodeKeyDown}
             placeholder="Scannez ou saisissez un code-barres / SKU, puis Entrée…"
-            className="w-full bg-[#0a0a0b] border border-border-default rounded-xl px-4 py-3 text-sm font-medium text-white placeholder:text-text-secondary focus:outline-none focus:border-status-success transition-all"
+            className="w-full bg-[#0a0a0b] border border-border-default rounded-xl px-4 py-3 text-sm font-medium text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-status-success transition-all"
             autoComplete="off"
           />
           {barcodeSearching && (
@@ -274,7 +274,7 @@ export function InventoryReceptionDashboard() {
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-status-success mb-1">
               Produit identifié
             </p>
-            <p className="font-bold text-white">{barcodeResult.name}</p>
+            <p className="font-bold text-text-primary">{barcodeResult.name}</p>
             <div className="flex gap-4 mt-1 text-[10px] text-text-secondary font-bold uppercase">
               {barcodeResult.unit && <span>Unité : {barcodeResult.unit}</span>}
               {barcodeResult.sku && <span>SKU : {barcodeResult.sku}</span>}
@@ -283,7 +283,7 @@ export function InventoryReceptionDashboard() {
           </div>
           <button
             onClick={() => { setBarcodeResult(null); setBarcodeValue(''); }}
-            className="text-text-secondary hover:text-white text-xs font-black uppercase tracking-widest shrink-0"
+            className="text-text-secondary hover:text-text-primary text-xs font-black uppercase tracking-widest shrink-0"
           >
             Effacer
           </button>
@@ -378,7 +378,7 @@ export function InventoryReceptionDashboard() {
                           <p className="text-[10px] text-status-success font-bold">€{item.price.toFixed(2)}</p>
                         </div>
                         <div className="flex gap-2">
-                          <button className={`p-2 rounded-lg transition-all ${item.forceScan ? 'bg-status-warning text-status-warning' : 'bg-surface-card text-text-secondary hover:text-white'}`}>
+                          <button className={`p-2 rounded-lg transition-all ${item.forceScan ? 'bg-status-warning text-status-warning' : 'bg-surface-card text-text-secondary hover:text-text-primary'}`}>
                             <ShieldAlert className="w-5 h-5" />
                           </button>
                           <button className="p-2 bg-status-success text-status-success rounded-lg">
@@ -450,7 +450,7 @@ export function InventoryReceptionDashboard() {
                         <button 
                             onClick={handleSaveToStock}
                             disabled={isSaving}
-                            className="w-full bg-surface-bg text-white py-5 rounded-2xl font-black uppercase text-sm flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50"
+                            className="w-full bg-surface-bg text-text-primary py-5 rounded-2xl font-black uppercase text-sm flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50"
                         >
                             {isSaving ? (
                                 <span className="animate-pulse">Synchronisation...</span>
@@ -481,7 +481,7 @@ export function InventoryReceptionDashboard() {
 
 function StepIndicator({ step, active, label }: { step: string, active: boolean, label: string }) {
     return (
-        <div className={`px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${active ? 'bg-action-primary text-white shadow-lg' : 'text-text-secondary'}`}>
+        <div className={`px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${active ? 'bg-action-primary text-text-primary shadow-lg' : 'text-text-secondary'}`}>
             <span className="opacity-50">{step === 'scan' ? '01' : step === 'verify' ? '02' : '03'}</span>
             {label}
         </div>

@@ -133,7 +133,7 @@ export default function PublicMenuPage() {
                         onClick={() => setSelectedCategory('all')}
                         className={cn(
                             'h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
-                            selectedCategory === 'all' ? 'bg-accent-gold text-white' : 'bg-bg-tertiary text-text-muted'
+                            selectedCategory === 'all' ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                         )}
                     >
                         Tout
@@ -144,7 +144,7 @@ export default function PublicMenuPage() {
                             onClick={() => setSelectedCategory(cat.id)}
                             className={cn(
                                 'h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
-                                selectedCategory === cat.id ? 'bg-accent-gold text-white' : 'bg-bg-tertiary text-text-muted'
+                                selectedCategory === cat.id ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                             )}
                         >
                             {cat.name}
@@ -211,7 +211,7 @@ export default function PublicMenuPage() {
                                     {product.allergens && product.allergens.length > 0 && (
                                         <div className="flex flex-wrap gap-1 mt-2">
                                             {product.allergens.map(a => (
-                                                <span key={a} className="text-[7px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                                                <span key={a} className="text-[7px] font-bold uppercase tracking-wider text-amber-600 dark:text-action-primary bg-action-primary/10 px-1.5 py-0.5 rounded">
                                                     {ALLERGEN_LABELS[a] ?? a}
                                                 </span>
                                             ))}

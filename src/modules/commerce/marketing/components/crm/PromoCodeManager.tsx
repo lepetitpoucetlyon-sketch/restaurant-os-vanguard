@@ -173,7 +173,7 @@ export function PromoCodeManager() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-action-primary text-white text-sm font-medium hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 transition-opacity"
         >
           <PlusCircle className="w-4 h-4" />
           Nouveau code
@@ -266,7 +266,7 @@ export function PromoCodeManager() {
             <button
               onClick={handleCreate}
               disabled={saving}
-              className="flex-1 h-10 rounded-lg bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 h-10 rounded-lg bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Gift className="w-4 h-4" />}
               Créer le code
@@ -299,12 +299,12 @@ export function PromoCodeManager() {
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  promo.discountType === "percent" ? "bg-blue-500/10" : "bg-green-500/10"
+                  promo.discountType === "percent" ? "bg-status-info/10" : "bg-status-success/10"
                 }`}>
                   {promo.discountType === "percent" ? (
                     <Percent className="w-5 h-5 text-blue-500" />
                   ) : (
-                    <Euro className="w-5 h-5 text-green-500" />
+                    <Euro className="w-5 h-5 text-status-success" />
                   )}
                 </div>
 
@@ -312,12 +312,12 @@ export function PromoCodeManager() {
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-sm text-text-primary">{promo.code}</span>
                     {expired && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/10 text-red-500 font-medium">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-status-danger/10 text-status-danger font-medium">
                         Expiré
                       </span>
                     )}
                     {!promo.isActive && !expired && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-500/10 text-gray-500 font-medium">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-500/10 text-text-muted font-medium">
                         Inactif
                       </span>
                     )}
@@ -346,7 +346,7 @@ export function PromoCodeManager() {
 
                 <div className="flex items-center gap-2 shrink-0">
                   {expired && (
-                    <AlertCircle className="w-4 h-4 text-red-400" />
+                    <AlertCircle className="w-4 h-4 text-status-danger" />
                   )}
                   <button
                     onClick={() => toggleActive(promo)}

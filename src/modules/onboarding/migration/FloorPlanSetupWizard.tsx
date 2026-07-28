@@ -114,7 +114,7 @@ function BatchTableForm({ zone, onAdd }: BatchFormProps) {
       </div>
       <button
         onClick={handleGenerate}
-        className="flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+        className="flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-text-primary hover:opacity-90 transition-opacity"
       >
         <Plus className="w-4 h-4" />
         Générer {to >= from ? to - from + 1 : 0} table(s)
@@ -262,8 +262,8 @@ export default function FloorPlanSetupWizard() {
   if (done) {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-        <div className="w-16 h-16 rounded-full bg-green-500/15 flex items-center justify-center">
-          <Check className="w-8 h-8 text-green-500" />
+        <div className="w-16 h-16 rounded-full bg-status-success/15 flex items-center justify-center">
+          <Check className="w-8 h-8 text-status-success" />
         </div>
         <h2 className="text-xl font-semibold text-text-primary">Plan de salle enregistré</h2>
         <p className="text-sm text-text-muted max-w-sm">
@@ -301,7 +301,7 @@ export default function FloorPlanSetupWizard() {
               <span
                 className={[
                   'px-3 py-1 rounded-full font-medium transition-colors',
-                  isActive ? 'bg-accent text-white' : isPast ? 'bg-accent/20 text-accent' : 'bg-bg-secondary text-text-muted',
+                  isActive ? 'bg-accent text-text-primary' : isPast ? 'bg-accent/20 text-accent' : 'bg-bg-secondary text-text-muted',
                 ].join(' ')}
               >
                 {labels[s]}
@@ -439,7 +439,7 @@ export default function FloorPlanSetupWizard() {
                     <td className="px-4 py-2">
                       <button
                         onClick={() => removeTable(t._key)}
-                        className="text-red-400 hover:text-red-600 transition-colors"
+                        className="text-status-danger hover:text-red-600 transition-colors"
                         title="Supprimer cette table"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -461,7 +461,7 @@ export default function FloorPlanSetupWizard() {
             <button
               onClick={handleSave}
               disabled={saving || tables.length === 0}
-              className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 text-sm font-semibold text-white disabled:opacity-50 hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 text-sm font-semibold text-text-primary disabled:opacity-50 hover:opacity-90 transition-opacity"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {saving ? 'Sauvegarde…' : `Sauvegarder ${tables.length} table(s)`}

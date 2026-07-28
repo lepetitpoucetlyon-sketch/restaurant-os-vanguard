@@ -321,7 +321,7 @@ export function NewRequestModal({
                             <button
                                 onClick={() => setStep(step + 1)}
                                 disabled={step === 2 && (!startDate || !endDate)}
-                                className="px-8 py-3 rounded-[1rem] bg-text-primary text-bg-primary font-bold uppercase tracking-widest hover:bg-accent hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-300"
+                                className="px-8 py-3 rounded-[1rem] bg-text-primary text-bg-primary font-bold uppercase tracking-widest hover:bg-accent hover:text-text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-300"
                             >
                                 Continuer
                                 <ChevronRight className="w-4 h-4" />
@@ -345,7 +345,7 @@ export function NewRequestModal({
                                     }
                                 }}
                                 disabled={isSubmitting}
-                                className="px-8 py-3 rounded-[1rem] bg-accent text-white font-bold uppercase tracking-widest hover:bg-accent-hover transition-all flex items-center gap-3 shadow-lg shadow-accent/20 hover:shadow-xl shadow-accent/30 hover:-translate-y-0.5 duration-300 disabled:opacity-50"
+                                className="px-8 py-3 rounded-[1rem] bg-accent text-text-primary font-bold uppercase tracking-widest hover:bg-accent-hover transition-all flex items-center gap-3 shadow-lg shadow-accent/20 hover:shadow-xl shadow-accent/30 hover:-translate-y-0.5 duration-300 disabled:opacity-50"
                             >
                                 {isSubmitting ? (
                                     <motion.div 

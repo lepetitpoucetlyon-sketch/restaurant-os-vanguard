@@ -33,7 +33,7 @@ const roundedClasses = {
 const glowClasses = {
     accent: "hover:shadow-accent/10 hover:border-accent/40",
     success: "hover:shadow-emerald-500/10 hover:border-emerald-500/40",
-    warning: "hover:shadow-amber-500/10 hover:border-amber-500/40",
+    warning: "hover:shadow-amber-500/10 hover:border-action-primary/40",
     error: "hover:shadow-rose-500/10 hover:border-rose-500/40",
     none: "",
 };

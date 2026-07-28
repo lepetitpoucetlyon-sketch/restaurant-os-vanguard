@@ -147,7 +147,7 @@ export function SimulatorConsole() {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setSpeed(s)} 
-                                    className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${speed === s ? 'bg-accent text-white shadow-[0_0_15px_rgba(255,46,99,0.4)]' : 'bg-bg-secondary text-text-muted hover:bg-bg-tertiary'}`}
+                                    className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${speed === s ? 'bg-accent text-text-primary shadow-[0_0_15px_rgba(255,46,99,0.4)]' : 'bg-bg-secondary text-text-muted hover:bg-bg-tertiary'}`}
                                 >
                                     {s}x
                                 </motion.button>
@@ -159,7 +159,7 @@ export function SimulatorConsole() {
                             <Cpu size={10} />
                             Singularity Status
                         </span>
-                        <span className="text-xs font-mono text-white/90">ACTIVE_RESONANCE</span>
+                        <span className="text-xs font-mono text-text-primary/90">ACTIVE_RESONANCE</span>
                     </div>
                 </div>
 
@@ -168,7 +168,7 @@ export function SimulatorConsole() {
                         variant="ghost" 
                         size="sm"
                         onClick={() => setIsOverridesOpen(!isOverridesOpen)}
-                        className={`gap-2 text-[10px] uppercase font-black tracking-widest transition-all ${isOverridesOpen ? 'bg-accent/20 text-accent border border-accent/30' : 'text-text-muted hover:text-white'}`}
+                        className={`gap-2 text-[10px] uppercase font-black tracking-widest transition-all ${isOverridesOpen ? 'bg-accent/20 text-accent border border-accent/30' : 'text-text-muted hover:text-text-primary'}`}
                     >
                         <Settings size={14} />
                         Overrides
@@ -182,7 +182,7 @@ export function SimulatorConsole() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                             >
-                                <Button onClick={handleStart} className="bg-success hover:bg-success/90 text-white gap-2 px-8 shadow-xl shadow-success/20 group overflow-hidden relative">
+                                <Button onClick={handleStart} className="bg-success hover:bg-success/90 text-text-primary gap-2 px-8 shadow-xl shadow-success/20 group overflow-hidden relative">
                                     <motion.div className="absolute inset-0 bg-surface-card/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                     <Play size={16} className="relative z-10" /> 
                                     <span className="relative z-10">Initier l'Oracle</span>
@@ -311,7 +311,7 @@ export function SimulatorConsole() {
                     >
                         <GlassCard className="p-6 border-accent/30 bg-surface-sidebar/80 backdrop-blur-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-1">
-                                <Button variant="ghost" size="sm" onClick={() => setIsOverridesOpen(false)} className="h-6 w-6 p-0 text-text-muted hover:text-white">
+                                <Button variant="ghost" size="sm" onClick={() => setIsOverridesOpen(false)} className="h-6 w-6 p-0 text-text-muted hover:text-text-primary">
                                     <ChevronRight size={14} />
                                 </Button>
                             </div>
@@ -319,7 +319,7 @@ export function SimulatorConsole() {
                             <div className="flex flex-col gap-8 relative z-10">
                                 <div className="flex items-center gap-3 border-b border-subtle pb-4">
                                     <Cpu size={18} className="text-accent animate-pulse" />
-                                    <span className="text-sm font-black uppercase tracking-widest text-white">Singularity Overrides</span>
+                                    <span className="text-sm font-black uppercase tracking-widest text-text-primary">Singularity Overrides</span>
                                 </div>
 
                                 {/* Ratio Tuning */}
@@ -354,8 +354,8 @@ export function SimulatorConsole() {
                                                 onClick={() => toggleAccountingMode()}
                                                 className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
                                                     accountingMode === mode 
-                                                    ? 'bg-accent text-white shadow-lg shadow-accent/20' 
-                                                    : 'text-text-muted hover:text-white'
+                                                    ? 'bg-accent text-text-primary shadow-lg shadow-accent/20' 
+                                                    : 'text-text-muted hover:text-text-primary'
                                                 }`}
                                             >
                                                 {mode}
@@ -371,12 +371,12 @@ export function SimulatorConsole() {
                                         )}>
                                             <Calculator size={10} className={cn(
                                                 integrityStatus === 'SECURE' ? "text-success" : 
-                                                integrityStatus === 'BREACH' ? "text-error" : "text-white/50"
+                                                integrityStatus === 'BREACH' ? "text-error" : "text-text-primary/50"
                                             )} />
                                             <span className={cn(
                                                 "text-[8px] font-black uppercase tracking-widest",
                                                 integrityStatus === 'SECURE' ? "text-success" : 
-                                                integrityStatus === 'BREACH' ? "text-error" : "text-white/50"
+                                                integrityStatus === 'BREACH' ? "text-error" : "text-text-primary/50"
                                             )}>
                                                 {integrityStatus === 'VERIFYING' ? 'Reconing...' : 
                                                  integrityStatus === 'SECURE' ? 'Inquisiteur QA: SECURE' : 
@@ -501,7 +501,7 @@ export function SimulatorConsole() {
                             {logs.map(log => (
                                 <motion.div key={log.id} initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className={`flex gap-4 ${log.type === 'warn' ? 'text-warning' : log.type === 'error' ? 'text-error' : 'text-text-muted/80'}`}>
                                     <span className="opacity-20 select-none">[{log.timestamp}]</span>
-                                    <span className="text-white/90">
+                                    <span className="text-text-primary/90">
                                         <span className="text-accent mr-2 font-bold opacity-70">{" >> "}</span>
                                         {log.message}
                                     </span>

@@ -31,13 +31,13 @@ export const SovereignLock: React.FC = () => {
                             <ShieldAlert className="w-10 h-10 text-status-danger" />
                         </div>
                         
-                        <h2 className="text-3xl font-serif italic text-white mb-4">Accès Suspendu</h2>
+                        <h2 className="text-3xl font-serif italic text-text-primary mb-4">Accès Suspendu</h2>
                         <p className="text-muted mb-10 leading-relaxed">
-                            Votre abonnement pour l'instance <strong className="text-white">{tenantConfig?.name || tenantConfig?.metadata?.name || 'Nexus Node'}</strong> est actuellement suspendu suite à un incident de facturation.
+                            Votre abonnement pour l'instance <strong className="text-text-primary">{tenantConfig?.name || tenantConfig?.metadata?.name || 'Nexus Node'}</strong> est actuellement suspendu suite à un incident de facturation.
                         </p>
                         
                         <button 
-                            className="w-full h-14 bg-status-danger hover:bg-status-danger text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-colors flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(239,68,68,0.2)]"
+                            className="w-full h-14 bg-status-danger hover:bg-status-danger text-text-primary rounded-2xl font-bold uppercase tracking-widest text-xs transition-colors flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(239,68,68,0.2)]"
                         >
                             <CreditCard className="w-4 h-4" />
                             Régulariser l'Abonnement

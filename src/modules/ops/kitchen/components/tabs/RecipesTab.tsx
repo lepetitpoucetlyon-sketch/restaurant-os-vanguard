@@ -55,7 +55,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full md:w-auto">
                         <Button
                             onClick={onNewRecipe}
-                            className="w-full md:w-auto h-12 px-8 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold text-[11px] uppercase tracking-widest shadow-xl shadow-accent/20"
+                            className="w-full md:w-auto h-12 px-8 bg-accent hover:bg-accent/90 text-text-primary rounded-xl font-bold text-[11px] uppercase tracking-widest shadow-xl shadow-accent/20"
                         >
                             <ChefHat strokeWidth={1.5} className="w-4 h-4 mr-2" />
                             Nouveau Plat
@@ -71,7 +71,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                     className={cn(
                         "whitespace-nowrap px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
                         selectedCategory === null
-                            ? "bg-accent text-white shadow-lg shadow-accent/20"
+                            ? "bg-accent text-text-primary shadow-lg shadow-accent/20"
                             : "bg-bg-secondary text-text-muted hover:text-text-primary hover:bg-bg-tertiary border border-border"
                     )}
                 >
@@ -84,7 +84,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                         className={cn(
                             "whitespace-nowrap px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
                             selectedCategory === cat
-                                ? "bg-accent text-white shadow-lg shadow-accent/20"
+                                ? "bg-accent text-text-primary shadow-lg shadow-accent/20"
                                 : "bg-bg-secondary text-text-muted hover:text-text-primary hover:bg-bg-tertiary border border-border"
                         )}
                     >
@@ -127,13 +127,13 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                     <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onEditRecipe(recipe); }}
-                                            className="w-8 h-8 rounded-lg bg-bg-primary/80 flex items-center justify-center border border-border hover:bg-accent hover:text-white transition-all"
+                                            className="w-8 h-8 rounded-lg bg-bg-primary/80 flex items-center justify-center border border-border hover:bg-accent hover:text-text-primary transition-all"
                                         >
                                             <Edit2 className="w-3.5 h-3.5" />
                                         </button>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onDeleteRecipe?.(recipe.id); }}
-                                            className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center border border-error/20 hover:bg-error hover:text-white transition-all text-error"
+                                            className="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center border border-error/20 hover:bg-error hover:text-text-primary transition-all text-error"
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -157,18 +157,18 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                     <div className="absolute top-4 left-4 flex gap-2 z-20">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onEditRecipe(recipe); }}
-                                            className="w-8 h-8 rounded-lg bg-bg-primary/20 backdrop-blur-md flex items-center justify-center border border-default hover:bg-accent hover:text-white transition-all shadow-xl"
+                                            className="w-8 h-8 rounded-lg bg-bg-primary/20 backdrop-blur-md flex items-center justify-center border border-default hover:bg-accent hover:text-text-primary transition-all shadow-xl"
                                         >
                                             <Edit2 className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onDeleteRecipe?.(recipe.id); }}
-                                            className="w-8 h-8 rounded-lg bg-error/20 backdrop-blur-md flex items-center justify-center border border-error/20 hover:bg-error hover:text-white transition-all shadow-xl"
+                                            className="w-8 h-8 rounded-lg bg-error/20 backdrop-blur-md flex items-center justify-center border border-error/20 hover:bg-error hover:text-text-primary transition-all shadow-xl"
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </button>
                                     </div>
-                                    <div className="absolute top-4 right-4 w-10 h-10 rounded-lg bg-bg-primary/10 backdrop-blur-md flex items-center justify-center border border-border/20 group-hover:bg-accent group-hover:text-white transition-all duration-300 shadow-xl">
+                                    <div className="absolute top-4 right-4 w-10 h-10 rounded-lg bg-bg-primary/10 backdrop-blur-md flex items-center justify-center border border-border/20 group-hover:bg-accent group-hover:text-text-primary transition-all duration-300 shadow-xl">
                                         <Book strokeWidth={1.5} className="w-5 h-5 text-bg-primary" />
                                     </div>
                                 </div>
@@ -179,19 +179,19 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                         className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
                                         style={{ backgroundColor: (recipe.color as string | undefined) ?? "#C5A059" }}
                                     >
-                                        <Book strokeWidth={1.5} className="w-8 h-8 text-white" />
+                                        <Book strokeWidth={1.5} className="w-8 h-8 text-text-primary" />
                                     </div>
                                     {/* Action buttons for no-image cards */}
                                     <div className="absolute top-3 left-3 flex gap-2 z-20">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onEditRecipe(recipe); }}
-                                            className="w-7 h-7 rounded-lg bg-bg-primary/80 flex items-center justify-center border border-border hover:bg-accent hover:text-white transition-all"
+                                            className="w-7 h-7 rounded-lg bg-bg-primary/80 flex items-center justify-center border border-border hover:bg-accent hover:text-text-primary transition-all"
                                         >
                                             <Edit2 className="w-3.5 h-3.5" />
                                         </button>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onDeleteRecipe?.(recipe.id); }}
-                                            className="w-7 h-7 rounded-lg bg-error/10 flex items-center justify-center border border-error/20 hover:bg-error hover:text-white transition-all text-error"
+                                            className="w-7 h-7 rounded-lg bg-error/10 flex items-center justify-center border border-error/20 hover:bg-error hover:text-text-primary transition-all text-error"
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -215,7 +215,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                     )}
                                     {/* cui-1: Food cost + margin display */}
                                     <RecipeCostBadge recipe={recipe} compact />
-                                    <Button className="w-full h-12 bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-white rounded-lg font-bold text-[11px] uppercase tracking-widest border border-border/50 group-hover:border-accent transition-all duration-300">
+                                    <Button className="w-full h-12 bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-text-primary rounded-lg font-bold text-[11px] uppercase tracking-widest border border-border/50 group-hover:border-accent transition-all duration-300">
                                         Détails Techniques
                                     </Button>
                                 </div>

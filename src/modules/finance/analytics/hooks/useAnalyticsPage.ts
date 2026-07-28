@@ -11,10 +11,10 @@ import { fr } from "date-fns/locale";
 
 import { useQuality } from "@modules/compliance";
 import type { ComplianceAlert } from "@modules/intelligence/analytics/types";
-import { useOrders, useTables } from "@/modules/ops/providers/NexusOpsProvider";
+import { useOrders, useTables } from "@/modules/ops";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { predictAttendance } from "@/modules/intelligence/attendance/AttendancePrediction";
+import { predictAttendance } from "@/modules/intelligence/attendance";
 
 export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";
 const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];

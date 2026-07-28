@@ -21,10 +21,10 @@ interface DiagnoseResponse {
 }
 
 const SEVERITY_STYLES: Record<Severity, { label: string; cls: string }> = {
-  critical: { label: 'Critique',  cls: 'text-red-400 border-red-400/30 bg-red-400/10' },
+  critical: { label: 'Critique',  cls: 'text-status-danger border-red-400/30 bg-red-400/10' },
   high:     { label: 'Élevée',    cls: 'text-orange-400 border-orange-400/30 bg-orange-400/10' },
-  medium:   { label: 'Moyenne',   cls: 'text-amber-400 border-amber-400/30 bg-amber-400/10' },
-  low:      { label: 'Faible',    cls: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/10' },
+  medium:   { label: 'Moyenne',   cls: 'text-action-primary border-amber-400/30 bg-action-primary/10' },
+  low:      { label: 'Faible',    cls: 'text-status-success border-emerald-400/30 bg-emerald-400/10' },
 };
 
 export function SupportAIPanel() {
@@ -77,7 +77,7 @@ export function SupportAIPanel() {
           <BotMessageSquare className="w-5 h-5 text-brand" />
         </div>
         <div>
-          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white">SAV L0 — IA</h3>
+          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-text-primary">SAV L0 — IA</h3>
           <p className="text-xs text-secondary">Diagnostic automatique • Gemini Flash</p>
         </div>
       </div>
@@ -89,14 +89,14 @@ export function SupportAIPanel() {
           placeholder="Tenant ID (ex: brasserie-du-port)"
           value={tenantId}
           onChange={e => setTenantId(e.target.value)}
-          className="w-full bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-white focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
+          className="w-full bg-surface-bg border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-text-primary focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
         />
         <textarea
           rows={4}
           placeholder="Décrivez le problème signalé par l'opérateur restaurant…"
           value={description}
           onChange={e => setDescription(e.target.value)}
-          className="w-full bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm text-white resize-none focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
+          className="w-full bg-surface-bg border border-subtle rounded-xl py-2.5 px-4 text-sm text-text-primary resize-none focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
         />
 
         {/* Advanced (screenshot URL) */}
@@ -113,7 +113,7 @@ export function SupportAIPanel() {
             placeholder="URL screenshot (optionnel)"
             value={screenshotUrl}
             onChange={e => setScreenshotUrl(e.target.value)}
-            className="w-full bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-white focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
+            className="w-full bg-surface-bg border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-text-primary focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
           />
         )}
 
@@ -146,18 +146,18 @@ export function SupportAIPanel() {
           <div className="space-y-4">
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted mb-1.5">Cause probable</p>
-              <p className="text-sm text-white/80 leading-relaxed">{d.probableCause}</p>
+              <p className="text-sm text-text-primary/80 leading-relaxed">{d.probableCause}</p>
             </div>
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted mb-1.5">Résolution recommandée</p>
-              <p className="text-sm text-white/80 leading-relaxed whitespace-pre-wrap">{d.recommendedFix}</p>
+              <p className="text-sm text-text-primary/80 leading-relaxed whitespace-pre-wrap">{d.recommendedFix}</p>
             </div>
           </div>
 
           {d.escalate && (
             <button
               onClick={handleEscalate}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/20 transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-status-danger/10 text-status-danger border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-danger/20 transition-colors"
             >
               <ArrowUpRight className="w-4 h-4" />
               Escalader en L1

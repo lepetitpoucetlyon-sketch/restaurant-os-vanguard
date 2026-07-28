@@ -154,7 +154,7 @@ export function VoiceAssistantOverlay() {
                         onClick={() => setIsOpen(true)}
                         className="fixed bottom-6 right-6 z-[190] w-14 h-14 md:w-16 md:h-16 bg-accent rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(197,160,89,0.3)] border border-default hover:scale-110 active:scale-95 transition-all group"
                     >
-                        <Bot className="w-7 h-7 md:w-8 md:h-8 text-white relative z-10" />
+                        <Bot className="w-7 h-7 md:w-8 md:h-8 text-text-primary relative z-10" />
                         <div className="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-bg-primary flex items-center justify-center">
                             <div className="w-1.5 h-1.5 rounded-full bg-surface-card animate-pulse" />
                         </div>
@@ -183,7 +183,7 @@ export function VoiceAssistantOverlay() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <button onClick={() => setIsVoiceMode(!isVoiceMode)} className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all", isVoiceMode ? "bg-accent text-white shadow-lg shadow-accent/20" : "bg-bg-tertiary text-text-muted")}>
+                                <button onClick={() => setIsVoiceMode(!isVoiceMode)} className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all", isVoiceMode ? "bg-accent text-text-primary shadow-lg shadow-accent/20" : "bg-bg-tertiary text-text-muted")}>
                                     {isVoiceMode ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                                 </button>
                                 <button onClick={toggleHistory} className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all", showHistory ? "bg-accent-gold text-primary" : "bg-bg-secondary border border-border/50")}>
@@ -193,7 +193,7 @@ export function VoiceAssistantOverlay() {
                                     {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                                 </button>
                                 <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-primary"><Minus className="w-4 h-4" /></button>
-                                <button onClick={() => { handleClose(); startNewSession?.(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+                                <button onClick={() => { handleClose(); startNewSession?.(); }} className="w-8 h-8 rounded-full bg-error/10 text-error hover:bg-error hover:text-text-primary transition-colors"><X className="w-4 h-4" /></button>
                             </div>
                         </div>
 
@@ -225,7 +225,7 @@ export function VoiceAssistantOverlay() {
                                     <AlertTriangle className="w-6 h-6 animate-pulse" />
                                     <p className="text-sm font-medium text-text-primary">Oracle veut exécuter : <span className="font-bold underline">{pendingAction.name}</span></p>
                                 </div>
-                                <button onClick={() => confirmAction()} className="w-full h-12 rounded-xl bg-success text-white font-black uppercase tracking-widest text-[10px] shadow-lg shadow-success/20">Autoriser</button>
+                                <button onClick={() => confirmAction()} className="w-full h-12 rounded-xl bg-success text-text-primary font-black uppercase tracking-widest text-[10px] shadow-lg shadow-success/20">Autoriser</button>
                             </div>
                         )}
 

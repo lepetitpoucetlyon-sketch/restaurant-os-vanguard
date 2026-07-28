@@ -76,8 +76,8 @@ export const AnalyticsTab = () => {
                                     <td className={cn(
                                         "py-4 px-4 text-right text-sm font-bold",
                                         kw.avgPosition <= 3 ? 'text-[#00D9A6]' :
-                                            kw.avgPosition <= 10 ? 'text-amber-500' :
-                                                'text-rose-500'
+                                            kw.avgPosition <= 10 ? 'text-action-primary' :
+                                                'text-status-danger'
                                     )}>
                                         {kw.avgPosition.toFixed(1)}
                                     </td>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu } from 'lucide-react';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { logger } from '@/lib/logger';
 import { auth } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -104,11 +104,11 @@ export function CertificationCenter() {
     <div className="bg-[#161618] border border-white/5 rounded-3xl p-8 flex flex-col h-full overflow-hidden">
       <div className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-status-warning/10 rounded-2xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+          <div className="w-12 h-12 bg-status-warning/10 rounded-2xl flex items-center justify-center border border-action-primary/20 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
             <Award className="w-6 h-6 text-status-warning" />
           </div>
           <div>
-            <h2 className="text-xl font-bold uppercase tracking-tight text-white">Certification Center</h2>
+            <h2 className="text-xl font-bold uppercase tracking-tight text-text-primary">Certification Center</h2>
             <p className="text-secondary text-xs font-medium">Manufacturer Self-Certification (NF525)</p>
           </div>
         </div>
@@ -116,13 +116,13 @@ export function CertificationCenter() {
         <div className="flex bg-[#0a0a0b] p-1 rounded-xl border border-white/5">
             <button 
                 onClick={() => setActiveTab('generate')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'generate' ? 'bg-[#161618] text-white shadow-lg border border-white/5' : 'text-secondary hover:text-muted'}`}
+                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'generate' ? 'bg-[#161618] text-text-primary shadow-lg border border-white/5' : 'text-secondary hover:text-muted'}`}
             >
                 Generate
             </button>
             <button 
                 onClick={() => setActiveTab('history')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-[#161618] text-white shadow-lg border border-white/5' : 'text-secondary hover:text-muted'}`}
+                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-[#161618] text-text-primary shadow-lg border border-white/5' : 'text-secondary hover:text-muted'}`}
             >
                 Archive {certificates.length > 0 && `(${certificates.length})`}
             </button>
@@ -205,7 +205,7 @@ export function CertificationCenter() {
                                     <button 
                                         onClick={handleCheckAudit}
                                         disabled={!selectedInstanceId}
-                                        className="relative group overflow-hidden text-[10px] font-bold text-white uppercase tracking-widest bg-surface-card/5 hover:bg-surface-card/10 px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
+                                        className="relative group overflow-hidden text-[10px] font-bold text-text-primary uppercase tracking-widest bg-surface-card/5 hover:bg-surface-card/10 px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
                                     >
                                         <span className="relative z-10">Run Global Audit</span>
                                         <div className="absolute inset-0 bg-gradient-to-r from-action-primary/0 via-white/5 to-action-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
@@ -255,11 +255,11 @@ export function CertificationCenter() {
                                         <div className="grid grid-cols-2 gap-2">
                                             <div className="bg-surface-sidebar/40 p-3 rounded-xl border border-white/5">
                                                 <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Seals Verified</p>
-                                                <p className="text-sm font-black text-white">{auditReport?.totalSeals || 0}</p>
+                                                <p className="text-sm font-black text-text-primary">{auditReport?.totalSeals || 0}</p>
                                             </div>
                                             <div className="bg-surface-sidebar/40 p-3 rounded-xl border border-white/5">
                                                 <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Chain Continuity</p>
-                                                <p className="text-sm font-black text-white">SECURED</p>
+                                                <p className="text-sm font-black text-text-primary">SECURED</p>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -363,7 +363,7 @@ export function CertificationCenter() {
                                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                                         className="w-16 h-16 bg-surface-sidebar flex items-center justify-center rounded-2xl shadow-xl"
                                     >
-                                        <Award className="w-10 h-10 text-white" />
+                                        <Award className="w-10 h-10 text-text-primary" />
                                     </motion.div>
                                 </div>
 
@@ -436,7 +436,7 @@ export function CertificationCenter() {
                                             <Award className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h4 className="text-white text-[11px] font-black uppercase tracking-tight">{cert.instanceName}</h4>
+                                            <h4 className="text-text-primary text-[11px] font-black uppercase tracking-tight">{cert.instanceName}</h4>
                                             <p className="text-secondary text-[9px] font-medium uppercase tracking-widest">{cert.year} | {cert.type}</p>
                                         </div>
                                     </div>
@@ -457,7 +457,7 @@ export function CertificationCenter() {
                                 <FileText className="w-10 h-10" />
                             </div>
                             <div className="text-center">
-                                <h3 className="text-sm font-black text-white uppercase tracking-widest mb-1">Archive Légale</h3>
+                                <h3 className="text-sm font-black text-text-primary uppercase tracking-widest mb-1">Archive Légale</h3>
                                 <p className="text-xs text-secondary font-medium">Aucun duplicata ou attestation d'instance trouvée dans l'Empire.</p>
                             </div>
                         </div>
@@ -478,7 +478,7 @@ export function CertificationCenter() {
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                className="fixed bottom-10 right-10 bg-status-success text-white px-8 py-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center gap-6 z-50 border border-default backdrop-blur-xl"
+                className="fixed bottom-10 right-10 bg-status-success text-text-primary px-8 py-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center gap-6 z-50 border border-default backdrop-blur-xl"
             >
                 <div className="w-12 h-12 bg-surface-card/20 rounded-2xl flex items-center justify-center">
                     <CheckCircle className="w-8 h-8" />

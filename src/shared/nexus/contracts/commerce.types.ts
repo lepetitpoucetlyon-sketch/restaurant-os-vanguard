@@ -14,14 +14,18 @@ export interface Quote extends SovereignNode {
     customerName: string;
     validUntil?: string;
     totals: {
-        totalHTInCents: number;
-        totalHTInMicrounits?: number; // microunits = cents × 10 000
-        totalTTCInCents: number;
-        totalTTCInMicrounits?: number; // microunits = cents × 10 000
-        totalTaxInCents: number;
-        totalTaxInMicrounits?: number; // microunits = cents × 10 000
-        totalDiscountInCents: number;
-        totalDiscountInMicrounits?: number; // microunits = cents × 10 000
+        totalHTInMicrounits: number;
+        totalTTCInMicrounits: number;
+        totalTaxInMicrounits: number;
+        totalDiscountInMicrounits: number;
+        /** @deprecated use totalHTInMicrounits */
+        totalHTInCents?: number;
+        /** @deprecated use totalTTCInMicrounits */
+        totalTTCInCents?: number;
+        /** @deprecated use totalTaxInMicrounits */
+        totalTaxInCents?: number;
+        /** @deprecated use totalDiscountInMicrounits */
+        totalDiscountInCents?: number;
     };
     customer?: {
         id: string;

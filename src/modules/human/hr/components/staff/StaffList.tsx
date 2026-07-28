@@ -49,7 +49,7 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                         </p>
                     </div>
                 </div>
-                <button className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent hover:text-white transition-all shadow-sm">
+                <button className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary transition-all shadow-sm">
                     <ChevronRight strokeWidth={1.5} className="w-5 h-5" />
                 </button>
             </div>
@@ -75,10 +75,10 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                 <span className="text-[10px] font-bold text-text-primary uppercase tracking-[0.2em]">En Service</span>
             </div>
             <div className="flex gap-2">
-                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
+                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm">
                     <Mail strokeWidth={1.5} className="w-4 h-4" />
                 </button>
-                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-white hover:border-accent transition-all shadow-sm">
+                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm">
                     <Phone strokeWidth={1.5} className="w-4 h-4" />
                 </button>
                 {/* Bulletin de paie — désactivé volontairement.
@@ -97,7 +97,7 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                     >
                         <FileText strokeWidth={1.5} className="w-4 h-4" />
                     </button>
-                    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/payslip:flex whitespace-nowrap bg-gray-900 text-white text-[9px] font-bold px-2 py-1 rounded z-50 uppercase tracking-wide">
+                    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/payslip:flex whitespace-nowrap bg-surface-bg text-text-primary text-[9px] font-bold px-2 py-1 rounded z-50 uppercase tracking-wide">
                         Paie — intégration prestataire à venir
                     </span>
                 </div>
@@ -145,8 +145,8 @@ export const StaffList = ({ users, onOpenModal }: StaffListProps) => {
                 onClick={() => onOpenModal()}
                 className="h-full min-h-[300px] border-2 border-dashed border-border/60 bg-bg-tertiary/20 rounded-xl flex flex-col items-center justify-center p-10 group hover:border-accent hover:bg-bg-tertiary transition-all duration-500"
             >
-                <div className="w-16 h-16 rounded-2xl bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-accent group-hover:text-white transition-all shadow-sm">
-                    <Plus strokeWidth={1.5} className="w-8 h-8 text-text-muted group-hover:text-white" />
+                <div className="w-16 h-16 rounded-2xl bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-accent group-hover:text-text-primary transition-all shadow-sm">
+                    <Plus strokeWidth={1.5} className="w-8 h-8 text-text-muted group-hover:text-text-primary" />
                 </div>
                 <h4 className="text-xl font-serif font-semibold text-text-primary">Nouveau Profil</h4>
                 <p className="text-[13px] text-text-muted font-medium text-center mt-3 leading-relaxed">

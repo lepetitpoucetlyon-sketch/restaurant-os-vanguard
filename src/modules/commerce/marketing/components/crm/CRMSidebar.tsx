@@ -52,7 +52,7 @@ export function CRMSidebar() {
             <div className="space-y-4 flex-1">
                 <button
                     onClick={() => (setNewCRMModalOpen as (v: boolean) => void)(true)}
-                    className="w-full h-16 bg-accent-gold text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
+                    className="w-full h-16 bg-accent-gold text-text-primary rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
                 >
                     <Plus className="w-4 h-4" />
                     {t('crm.add_crm') || 'Ajouter Client'}

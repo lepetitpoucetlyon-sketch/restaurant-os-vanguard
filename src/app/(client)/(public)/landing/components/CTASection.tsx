@@ -17,10 +17,10 @@ export function CTASection() {
                 transition={{ duration: 0.8 }}
                 className="relative z-10 max-w-4xl mx-auto text-center"
             >
-                <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
+                <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                     Prêt à transformer<br />votre établissement ?
                 </h2>
-                <p className="text-xl text-white/50 max-w-2xl mx-auto mb-12">
+                <p className="text-xl text-text-primary/50 max-w-2xl mx-auto mb-12">
                     Rejoignez les restaurateurs visionnaires qui ont choisi l'excellence opérationnelle.
                 </p>
 
@@ -36,7 +36,7 @@ export function CTASection() {
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="px-10 py-5 text-white/80 font-bold text-lg flex items-center gap-3 hover:text-white transition-colors"
+                        className="px-10 py-5 text-text-primary/80 font-bold text-lg flex items-center gap-3 hover:text-text-primary transition-colors"
                     >
                         <Phone className="w-5 h-5" />
                         Parler à un Expert

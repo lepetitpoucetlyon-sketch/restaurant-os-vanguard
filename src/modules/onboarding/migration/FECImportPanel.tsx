@@ -25,7 +25,7 @@ import {
   type FECEntry,
   type FECImportResult,
   parseFECAmount,
-} from "@/modules/finance/migration/FECImporter";
+} from "@/modules/finance/migration";
 import { useTenant } from "@/shared/hooks";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -390,7 +390,7 @@ export function FECImportPanel() {
       {state.phase === "ready" && state.isValid && (
         <button
           onClick={runImport}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-action-primary text-white text-sm font-semibold py-2.5 px-4 hover:opacity-90 active:scale-[0.98] transition"
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-action-primary text-text-primary text-sm font-semibold py-2.5 px-4 hover:opacity-90 active:scale-[0.98] transition"
         >
           <Upload className="w-4 h-4" />
           Importer le FEC (exercice {exercice})

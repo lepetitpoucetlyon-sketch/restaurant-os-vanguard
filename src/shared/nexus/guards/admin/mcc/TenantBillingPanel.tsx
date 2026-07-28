@@ -55,9 +55,9 @@ export function TenantBillingPanel() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <CreditCard className="w-5 h-5 text-brand" />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Abonnements Flotte</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Abonnements Flotte</h3>
         </div>
-        <button onClick={load} className="flex items-center gap-1.5 text-xs text-secondary hover:text-white transition-colors">
+        <button onClick={load} className="flex items-center gap-1.5 text-xs text-secondary hover:text-text-primary transition-colors">
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           Actualiser
         </button>
@@ -74,7 +74,7 @@ export function TenantBillingPanel() {
             return (
               <div key={b.tenantId} className="flex items-center justify-between p-3 bg-white/[0.03] border border-white/5 rounded-xl">
                 <div>
-                  <p className="text-sm font-semibold text-white">{b.name}</p>
+                  <p className="text-sm font-semibold text-text-primary">{b.name}</p>
                   <p className="text-[10px] text-secondary font-mono">{b.tenantId}</p>
                 </div>
                 <div className="flex items-center gap-4 text-xs">

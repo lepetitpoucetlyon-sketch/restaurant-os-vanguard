@@ -286,7 +286,7 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
 };
 
 import { NexusAIConfig } from '@nexus/contracts/settings/nexus';
-import { AI_MODELS } from '@/modules/intelligence/ai/types';
+import { AI_MODELS } from '@/modules/intelligence/ai';
 
 export const defaultInventory: InventoryConfig = {
     lowStockThreshold: 1000,

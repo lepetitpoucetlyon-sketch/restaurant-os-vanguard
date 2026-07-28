@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { notFound } from 'next/navigation';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
-import ReservationWidget from '@/modules/commerce/widgets/ReservationWidget';
+import { ReservationWidget } from '@/modules/commerce/widgets';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -67,7 +67,7 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
         <h1 className="text-2xl font-serif font-semibold text-gray-900 text-center tracking-tight">
           {restaurantName}
         </h1>
-        <p className="text-sm text-gray-500">Réserver une table</p>
+        <p className="text-sm text-text-muted">Réserver une table</p>
       </div>
 
       <ReservationWidget

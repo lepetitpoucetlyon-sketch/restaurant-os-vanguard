@@ -6,8 +6,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-import { useAnalyticsPage, percentChange } from "@/modules/finance/analytics/hooks/useAnalyticsPage";
-import type { MacroBrainAlert } from "@/modules/finance/analytics/hooks/useAnalyticsPage";
+import { useAnalyticsPage, percentChange } from "@/modules/finance/analytics/hooks";
+import type { MacroBrainAlert } from "@/modules/finance/analytics/hooks";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
 } from "@modules/intelligence/analytics/components";
@@ -19,7 +19,7 @@ function KpiCard({ label, value, change, up }: { label: string; value: string; c
         <div className="rounded-xl border border-border bg-surface-base p-4 flex flex-col gap-2">
             <p className="text-[9px] font-black uppercase tracking-widest text-text-muted">{label}</p>
             <p className="text-2xl font-light tracking-tight text-text-primary">{value}</p>
-            <span className={`inline-flex items-center gap-1 self-start rounded-full px-2 py-0.5 text-[9px] font-bold ${up ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}`}>
+            <span className={`inline-flex items-center gap-1 self-start rounded-full px-2 py-0.5 text-[9px] font-bold ${up ? "bg-status-success/10 text-status-success" : "bg-status-danger/10 text-status-danger"}`}>
                 {up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                 {change}
             </span>
@@ -29,9 +29,9 @@ function KpiCard({ label, value, change, up }: { label: string; value: string; c
 
 function AlertCard({ alert }: { alert: MacroBrainAlert }) {
     const colorMap: Record<MacroBrainAlert["severity"], string> = {
-        critical: "border-red-500/30 bg-red-500/5 text-red-400",
-        warning: "border-yellow-500/30 bg-yellow-500/5 text-yellow-400",
-        info: "border-blue-500/30 bg-blue-500/5 text-blue-400",
+        critical: "border-red-500/30 bg-status-danger/5 text-status-danger",
+        warning: "border-yellow-500/30 bg-action-primary/5 text-yellow-400",
+        info: "border-blue-500/30 bg-status-info/5 text-blue-400",
     };
     const IconMap: Record<MacroBrainAlert["severity"], typeof AlertTriangle> = { critical: AlertTriangle, warning: TrendingUp, info: Zap };
     const Icon = IconMap[alert.severity];

@@ -315,7 +315,7 @@ export default function MenuSettings() {
                                 </button>
                                 <button
                                     onClick={() => deleteCategory(cat.id)}
-                                    className="w-10 h-10 bg-status-danger/5 text-status-danger hover:bg-status-danger hover:text-white rounded-xl flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
+                                    className="w-10 h-10 bg-status-danger/5 text-status-danger hover:bg-status-danger hover:text-text-primary rounded-xl flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </button>

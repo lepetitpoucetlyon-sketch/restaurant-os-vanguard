@@ -16,9 +16,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useTables } from "@/modules/ops/providers/NexusOpsProvider";
-import { useOrders } from "@/modules/ops/providers/NexusOpsProvider";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useTables } from "@/modules/ops/providers";
+import { useOrders } from "@/modules/ops/providers";
+import { useInventory } from "@/modules/ops/providers";
 import { useAuth } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
@@ -55,7 +55,7 @@ const KpiCard = ({ title, value, trend, trendValue, icon: Icon, delay: _delay = 
     <div className="flex flex-col gap-3 md:gap-4 h-full justify-between">
       <div className="flex items-center justify-between">
         <p className="text-[8px] md:text-[10px] font-black text-accent-gold uppercase tracking-[0.25em]">{title}</p>
-        <div className="p-1.5 rounded-full bg-bg-tertiary/50 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+        <div className="p-1.5 rounded-full bg-bg-tertiary/50 text-accent group-hover:bg-accent group-hover:text-text-primary transition-colors">
           <Icon strokeWidth={1} className="w-3.5 h-3.5 md:w-4 md:h-4" />
         </div>
       </div>
@@ -351,7 +351,7 @@ export function LandingDashboard() {
             >
               <div className={cn(
                 "w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all",
-                action.primary ? "bg-accent-gold text-white shadow-lg shadow-accent-gold/20" : "bg-bg-secondary border border-border"
+                action.primary ? "bg-accent-gold text-text-primary shadow-lg shadow-accent-gold/20" : "bg-bg-secondary border border-border"
               )}>
                 <action.icon strokeWidth={1.5} className="w-5 h-5" />
               </div>

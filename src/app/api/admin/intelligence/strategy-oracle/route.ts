@@ -20,7 +20,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { aiRouter } from '@/modules/intelligence/ai/AIProviderRouter';
+import { aiRouter } from '@/modules/intelligence/ai';
 import { logger } from '@/lib/logger';
 
 interface TenantSnapshot {
@@ -94,7 +94,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       generatedAt:    new Date().toISOString(),
     });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 503 });
+    logger.error('[StrategyOracle] GET — AI provider indisponible', err);
+    return NextResponse.json({ error: 'Service IA temporairement indisponible' }, { status: 503 });
   }
 }
 
@@ -139,6 +140,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       generatedAt: new Date().toISOString(),
     });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 503 });
+    logger.error('[StrategyOracle] POST — AI provider indisponible', err);
+    return NextResponse.json({ error: 'Service IA temporairement indisponible' }, { status: 503 });
   }
 }

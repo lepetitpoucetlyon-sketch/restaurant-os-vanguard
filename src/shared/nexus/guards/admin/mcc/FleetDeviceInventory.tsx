@@ -96,7 +96,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
           <Tablet className="w-5 h-5 text-brand" />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Fleet Device Inventory</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Fleet Device Inventory</h3>
         </div>
         <button onClick={load} className="p-1.5 rounded-lg hover:bg-white/10 transition-all">
           <RefreshCw className="w-4 h-4 text-secondary" />
@@ -107,12 +107,12 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
         {rows.map(row => (
           <div key={row.tenantId} className="bg-white/5 border border-white/5 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-white truncate max-w-[60%]">{row.name}</span>
+              <span className="text-sm font-semibold text-text-primary truncate max-w-[60%]">{row.name}</span>
               <span className="text-[10px] text-secondary font-mono">{row.tenantId.slice(0, 12)}</span>
             </div>
 
             {row.error && (
-              <div className="flex items-center gap-2 text-amber-400 text-xs">
+              <div className="flex items-center gap-2 text-action-primary text-xs">
                 <AlertTriangle className="w-3 h-3" /> {row.error}
               </div>
             )}
@@ -125,7 +125,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                     <button
                       onClick={() => removeSerial(row.tenantId, sn)}
                       disabled={saving[row.tenantId]}
-                      className="hover:text-red-400 transition-colors"
+                      className="hover:text-status-danger transition-colors"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>

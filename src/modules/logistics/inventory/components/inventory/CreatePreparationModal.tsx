@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ChefHat, X, Check, MapPin, Package, RefreshCw, Plus, Minus, Calendar } from "lucide-react";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers";
 import { useAuth } from "@/shared/hooks";
 import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";;
@@ -161,7 +161,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
                             <div className="w-16 h-16 rounded-[22px] bg-text-primary flex items-center justify-center shadow-premium">
-                                <ChefHat className="w-8 h-8 text-white" strokeWidth={1.5} />
+                                <ChefHat className="w-8 h-8 text-text-primary" strokeWidth={1.5} />
                             </div>
                             <div>
                                 <h2 className="text-4xl font-serif font-black text-text-primary italic tracking-tight">Sceau de Préparation.</h2>
@@ -186,7 +186,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                 animate={{ scale: 1, rotate: 0 }}
                                 className="w-24 h-24 rounded-[2.5rem] bg-text-primary flex items-center justify-center mb-10 shadow-premium"
                             >
-                                <Check className="w-12 h-12 text-white" strokeWidth={3} />
+                                <Check className="w-12 h-12 text-text-primary" strokeWidth={3} />
                             </motion.div>
                             <p className="text-4xl font-serif font-black text-text-primary italic">Mise en Place Scellée.</p>
                             <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-4">L&apos;œuvre culinaire a été archivée avec succès</p>
@@ -324,7 +324,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                         whileTap={{ scale: 0.95 }}
                                         onClick={addIngredient}
                                         disabled={!selectedStockItem || !ingredientQty}
-                                        className="w-16 h-16 rounded-2xl bg-text-primary text-white flex items-center justify-center disabled:bg-text-muted/10 disabled:text-text-muted/20 transition-all shadow-premium"
+                                        className="w-16 h-16 rounded-2xl bg-text-primary text-text-primary flex items-center justify-center disabled:bg-text-muted/10 disabled:text-text-muted/20 transition-all shadow-premium"
                                     >
                                         <Plus className="w-8 h-8" strokeWidth={2.5} />
                                     </motion.button>
@@ -349,7 +349,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                                         <span className="text-[14px] font-serif italic font-black text-accent-gold">{ing.quantityUsed} {ing.unit.toUpperCase()}</span>
                                                         <button
                                                             onClick={() => removeIngredient(idx)}
-                                                            className="w-10 h-10 rounded-xl bg-error/5 text-error flex items-center justify-center hover:bg-error hover:text-white transition-all opacity-0 group-hover/inv:opacity-100"
+                                                            className="w-10 h-10 rounded-xl bg-error/5 text-error flex items-center justify-center hover:bg-error hover:text-text-primary transition-all opacity-0 group-hover/inv:opacity-100"
                                                         >
                                                             <Minus className="w-5 h-5" />
                                                         </button>
@@ -376,7 +376,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                                 className={cn(
                                                     "flex-1 py-5 rounded-[22px] text-[11px] font-black uppercase tracking-[0.3em] transition-all border shadow-soft",
                                                     dlcDays === d
-                                                        ? "bg-text-primary border-text-primary text-white shadow-premium scale-105"
+                                                        ? "bg-text-primary border-text-primary text-text-primary shadow-premium scale-105"
                                                         : "bg-surface-card/60 border-border/40 text-text-muted hover:bg-surface-card hover:border-accent-gold/20"
                                                 )}
                                             >
@@ -421,7 +421,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                             className={cn(
                                 "flex items-center gap-6 px-16 py-6 rounded-[22px] text-[11px] font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
                                 name && quantity && storageLocation
-                                    ? "bg-text-primary text-white hover:bg-accent-gold"
+                                    ? "bg-text-primary text-text-primary hover:bg-accent-gold"
                                     : "bg-text-muted/10 text-text-muted/20 cursor-not-allowed"
                             )}
                         >

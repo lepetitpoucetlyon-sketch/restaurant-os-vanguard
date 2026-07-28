@@ -62,9 +62,9 @@ export function ElevationPrompt({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-80 rounded-lg bg-white p-6 shadow-xl dark:bg-gray-900">
+            <div className="w-80 rounded-lg bg-white p-6 shadow-xl dark:bg-surface-bg">
                 <h3 className="mb-2 text-lg font-semibold">Élévation requise</h3>
-                <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                <p className="mb-4 text-sm text-gray-600 dark:text-text-secondary">
                     Cette action nécessite le PIN d&apos;un <strong>{requiredRoleName}+</strong>.
                 </p>
                 <input
@@ -74,7 +74,7 @@ export function ElevationPrompt({
                     value={pin}
                     onChange={e => setPin(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-                    className="mb-3 w-full rounded border px-3 py-2 text-center text-2xl tracking-widest dark:border-gray-700 dark:bg-gray-800"
+                    className="mb-3 w-full rounded border px-3 py-2 text-center text-2xl tracking-widest dark:border-border-default dark:bg-surface-card"
                     placeholder="• • • •"
                     autoFocus
                 />
@@ -82,13 +82,13 @@ export function ElevationPrompt({
                 <div className="flex gap-2">
                     <button
                         onClick={onCancel}
-                        className="flex-1 rounded border px-4 py-2 text-sm hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                        className="flex-1 rounded border px-4 py-2 text-sm hover:bg-gray-100 dark:border-border-default dark:hover:bg-surface-card"
                     >
                         Annuler
                     </button>
                     <button
                         onClick={handleSubmit}
-                        className="flex-1 rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                        className="flex-1 rounded bg-status-info px-4 py-2 text-sm text-text-primary hover:bg-blue-700"
                     >
                         Valider
                     </button>

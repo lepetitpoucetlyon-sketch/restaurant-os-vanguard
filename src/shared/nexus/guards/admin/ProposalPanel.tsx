@@ -74,7 +74,7 @@ export function ProposalPanel() {
                                             <Users size={20} />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-xs font-black uppercase tracking-tight text-white/90">
+                                            <span className="text-xs font-black uppercase tracking-tight text-text-primary/90">
                                                 Renfort Suggéré : {proposal.targetDate}
                                             </span>
                                             <span className="text-[10px] text-text-muted font-bold opacity-70">
@@ -90,7 +90,7 @@ export function ProposalPanel() {
                                     </div>
                                 </div>
 
-                                <p className="text-[11px] leading-relaxed italic text-white/80 border-l-2 border-warning/40 pl-3 py-1">
+                                <p className="text-[11px] leading-relaxed italic text-text-primary/80 border-l-2 border-warning/40 pl-3 py-1">
                                     "{proposal.reason}"
                                 </p>
 
@@ -119,7 +119,7 @@ export function ProposalPanel() {
                                         <Button 
                                             size="sm" 
                                             onClick={() => handleApprove(proposal.id)}
-                                            className="h-8 bg-success hover:bg-success/90 text-white gap-2 px-4 shadow-lg shadow-success/20"
+                                            className="h-8 bg-success hover:bg-success/90 text-text-primary gap-2 px-4 shadow-lg shadow-success/20"
                                         >
                                             <Check size={14} />
                                             <span className="text-[10px] font-bold">Approuver</span>

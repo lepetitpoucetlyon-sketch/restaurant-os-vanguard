@@ -1,5 +1,48 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.9.0] - 2026-07-28 - AUDIT MULTI-DIMENSIONNEL & SÉCURISATION WEBHOOKS 🔒🧪
+
+### 🔬 AUDIT 1 — LOGIQUE MÉTIER (BUSINESS LOGIC)
+- **TicketZHandler NF525** : Réécriture de `closeTicketZForDay` — appelle désormais `FiscalSealer.sealDataAtomically()` pour écriture atomique JournalEntry + FiscalSeal ; protection post-clôture contre les accumulations tardives.
+- **SovereignGuard** : `fiscalLedger` ajouté aux collections `SIGNED_WRITE_COLLECTIONS` ; toute écriture sur le grand livre requiert une signature HMAC.
+- **MenuTool** : Guard cross-tenant ajouté — injection impossible depuis un autre `tenantId`.
+- **StripePaymentProvider** : Conversion `BigInt → toMicrounits()` — suppression du cast unsafe.
+- **finance/sync** : `amountInCents` remplacé par `totalInMicrounits` sur toutes les entrées.
+
+### 🛡️ AUDIT 2 — SÉCURITÉ
+- **finance/sync** : `tenantId` extrait depuis le token Firebase (jamais depuis le body) — vecteur d'escalade de privilège éliminé.
+- **Quotes** : Migration `cents → microunits` sur 2 fichiers de types, 1 service et 1 dialog.
+- **Campaign** : `budgetInCents → budgetInMicrounits` (convention microunits stricte).
+- **4× Google Reserve routes** : Passage de `fail-open → fail-closed` — routes refusent si le marchand ou le service est introuvable.
+
+### ✅ AUDIT 3 — VALIDATION ZOD
+- **`/api/reservations`** : Schémas Zod ajoutés ; suppression du `body spread` non validé.
+- **`/api/hr/employees`** : Schéma Zod + regex NIR (numéro de sécurité sociale) ; suppression du `body spread`.
+
+### ⚡ AUDIT 4 — PERFORMANCE (ICM-lite)
+- **3 routes HR sans ICM** : `planning`, `timeclock`, `recruitment` ajoutées dans `TASK_MAPS` avec `staff: 'HIGH'` → les modules RH ne chargent plus en `LAZY` sur ces routes.
+
+### 🧪 AUDIT 5 — TESTS
+- **`TicketZHandler.test.ts`** (nouveau) : 7 cas couvrant `registerTicketZHandler` et `closeTicketZForDay` — protection post-clôture, idempotence, format `Z_YYYYMMDD`.
+- **`SovereignGuard.test.ts`** : +2 cas `requiresSignedWrite` — vérifie que `orders` est signé et que `products`/`reservations`/`categories` ne le sont pas.
+
+### 🏛️ AUDIT 6 — ARCHITECTURE (CYCLES)
+- **2 cycles import circulaires (onboarding/migration)** : `crmImporter` et `reservationsImporter` importaient `isMaskedEmail` via le barrel du module → réimportation directe depuis `../emailFilters`.
+- **1 cycle commerce/marketing** : `NewQuoteDialog` importait `useCRM` via `@/modules/commerce` (barrel circulaire) → import direct depuis `@/modules/ops/providers/hooks/commerceHooks`.
+- **Résultat sentrux** : 3 cycles → 0 cycles après corrections.
+
+### 📡 AUDIT 7 — OBSERVABILITÉ
+- **`/api/admin/finance/fec/export`** : `logger.info` à l'entrée (tenant + période) et en succès (nombre d'entrées + nom de fichier) ; `logger.error` dans le catch (fin du catch vide).
+- **`/api/finance/bank/callback`** : `logger.info` en succès ; `catch {}` remplacé par `logger.error`.
+- **`/api/admin/intelligence/strategy-oracle`** : `String(err)` exposé au client remplacé par message générique + `logger.error` côté serveur (GET + POST).
+
+### 🔐 SÉCURISATION WEBHOOKS (HMAC)
+- **`src/lib/server/webhookVerify.ts`** (nouveau) : Utilitaire partagé — `computeHmacHex`, `timingSafeCompareHex` (comparaison timing-safe via `node:crypto`), `checkFallbackWebhookSecret` (Bearer fallback).
+- **Interfaces providers** : `verifySignature?(rawBody, headers): boolean` ajouté sur `IDeliveryProvider`, `IReservationProvider`, `IIoTProvider`.
+- **UberEatsProvider** : HMAC `UBEREATS_WEBHOOK_SECRET` sur header `x-uber-signature` (strip préfixe `sha256=`).
+- **ZenchefProvider** : HMAC `ZENCHEF_WEBHOOK_SECRET` sur header `x-zenchef-signature`.
+- **3 routes webhook** (`/delivery`, `/reservations`, `/iot`) : Lecture du `rawBody` brut avant parse ; vérification `provider.verifySignature()` ou fallback `CONNECTORS_WEBHOOK_SECRET` (Bearer) ; retour 401 si non vérifié ; avertissement si aucun mécanisme configuré.
+
 ## [1.8.0] - 2026-05-08 - SOVEREIGN RAG & OMNI-REFACTOR 🧠🏛️
 ### 🧠 SOVEREIGN RAG & FAST BRAIN (ATLAS-X)
 - **Fast Brain Architecture** : Déploiement de l'ingestion de données structurées et de la distillation des connaissances via les Sovereign Knowledge Items (KIs).

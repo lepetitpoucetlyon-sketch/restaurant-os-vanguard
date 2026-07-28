@@ -18,7 +18,7 @@ import { useBilling } from "@modules/finance/billing/hooks/useBilling";
 import { FECExporter } from "@modules/finance/accounting/domain/FECExporter";
 import { useTenant, useActionPermission } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
-import { useOrders } from "@/modules/ops/providers/NexusOpsProvider";
+import { useOrders } from "@/modules/ops/providers";
 import type { Order } from "@modules/ops/engine/types";
 import type { BankTransaction } from "@modules/finance/types";
 import type { JournalEntry } from "@nexus/contracts";
@@ -274,7 +274,7 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
                 </div>
                 <button
                     onClick={() => setClaimOpen(true)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90"
+                    className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90"
                 >
                     <PlusCircle className="w-4 h-4" /> Note de frais
                 </button>

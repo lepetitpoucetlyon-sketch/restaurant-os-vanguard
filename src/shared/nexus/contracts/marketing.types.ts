@@ -68,8 +68,8 @@ export interface Campaign extends SovereignNode {
     title: string;
     status: 'draft' | 'active' | 'paused' | 'completed' | 'archived' | 'scheduled';
     budget: number;
-    budgetInCents?: number;
-    spentInCents: number;
+    budgetInMicrounits?: number;
+    spentInMicrounits: number;
     startDate?: string;
     endDate?: string;
     targetAudience?: string;

@@ -59,7 +59,7 @@ function StarRating({ rating }: { rating: number }) {
         <Star
           key={i}
           className={`w-3.5 h-3.5 ${
-            i < rating ? 'fill-amber-400 text-amber-400' : 'text-text-muted'
+            i < rating ? 'fill-amber-400 text-action-primary' : 'text-text-muted'
           }`}
         />
       ))}
@@ -124,7 +124,7 @@ function ReviewCard({ review, restaurantName }: ReviewCardProps) {
           <StarRating rating={review.rating} />
         </div>
         {review.hasResponse && (
-          <span className="flex items-center gap-1 text-xs text-emerald-500 font-medium">
+          <span className="flex items-center gap-1 text-xs text-status-success font-medium">
             <ThumbsUp className="w-3 h-3" />
             Réponse publiée
           </span>
@@ -173,7 +173,7 @@ function ReviewCard({ review, restaurantName }: ReviewCardProps) {
                 <button
                   onClick={handleApprove}
                   disabled={isApproved}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-text-primary text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Check className="w-4 h-4" />
                   {isApproved ? 'Approuvé' : 'Approuver'}

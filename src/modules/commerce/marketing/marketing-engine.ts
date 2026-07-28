@@ -30,7 +30,7 @@ export const MarketingEngine = {
         recommendations: ['Ajouter des balises Schema.org pour le menu']
     }),
     
-    getVisibilityStatus: (_score: SEOScore) => ({ label: 'Excellent', color: 'text-emerald-500' }),
+    getVisibilityStatus: (_score: SEOScore) => ({ label: 'Excellent', color: 'text-status-success' }),
     
     getLivePageAnalysis: () => [
         { 

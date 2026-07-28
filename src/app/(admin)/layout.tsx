@@ -29,10 +29,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     const role = currentUser.role ?? "";
     if (!ADMIN_ROLES.includes(role)) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[#0B0B10] text-white">
-                <Shield className="w-10 h-10 text-red-500" />
-                <p className="text-sm font-bold uppercase tracking-widest text-red-400">Accès refusé</p>
-                <p className="text-xs text-white/40">Ce panneau requiert un rôle administrateur.</p>
+            <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[#0B0B10] text-text-primary">
+                <Shield className="w-10 h-10 text-status-danger" />
+                <p className="text-sm font-bold uppercase tracking-widest text-status-danger">Accès refusé</p>
+                <p className="text-xs text-text-primary/40">Ce panneau requiert un rôle administrateur.</p>
             </div>
         );
     }

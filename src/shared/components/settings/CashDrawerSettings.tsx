@@ -192,7 +192,7 @@ export default function CashDrawerSettings() {
             <div className="flex items-center gap-3 pt-2">
                 <button
                     onClick={handleSave}
-                    className="flex items-center gap-2 px-5 h-10 rounded-xl bg-accent-gold text-white text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
+                    className="flex items-center gap-2 px-5 h-10 rounded-xl bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
                 >
                     <Save className="w-3.5 h-3.5" />
                     Enregistrer

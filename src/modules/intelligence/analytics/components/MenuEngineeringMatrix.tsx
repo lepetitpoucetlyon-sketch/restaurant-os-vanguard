@@ -45,7 +45,7 @@ const QUADRANTS: Record<
         label: "Puzzles",
         help: "Rentables · peu populaires — visibilité, formation service",
         icon: Puzzle,
-        className: "bg-blue-500/10 border-blue-500/30 text-blue-500",
+        className: "bg-status-info/10 border-blue-500/30 text-blue-500",
     },
     dog: {
         label: "Dogs",

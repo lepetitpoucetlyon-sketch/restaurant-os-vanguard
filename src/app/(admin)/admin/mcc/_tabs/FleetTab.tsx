@@ -24,7 +24,7 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
             </div>
             <div className="flex items-center justify-between gap-4">
                 <h3 className="text-sm font-black uppercase tracking-[0.3em] text-secondary">Fleet Tactical Overview</h3>
-                <button onClick={onShowCloneModal} className="bg-action-primary text-white font-bold py-3 px-6 rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95 whitespace-nowrap uppercase tracking-widest text-[10px]">
+                <button onClick={onShowCloneModal} className="bg-action-primary text-text-primary font-bold py-3 px-6 rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95 whitespace-nowrap uppercase tracking-widest text-[10px]">
                     <Plus className="w-4 h-4" /> New Clone
                 </button>
             </div>

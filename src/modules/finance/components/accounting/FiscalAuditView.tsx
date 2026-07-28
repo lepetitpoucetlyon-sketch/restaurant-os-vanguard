@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFiscal } from '@/modules/ops/providers/NexusOpsProvider';
+import { useFiscal } from '@/modules/ops/providers';
 import { BlockchainLedgerService } from '@modules/finance/accounting/domain/BlockchainLedgerService';
 import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -39,7 +39,7 @@ export const FiscalAuditView: React.FC = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center bg-surface-sidebar/50 p-6 rounded-2xl border border-default backdrop-blur-sm">
                 <div>
-                    <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-text-primary flex items-center gap-3">
                         <ShieldCheck className="text-status-success w-8 h-8" />
                         Registre d'Intégrité Fiscale (NF525)
                     </h2>
@@ -48,7 +48,7 @@ export const FiscalAuditView: React.FC = () => {
                 <button 
                     onClick={runAudit}
                     disabled={isVerifying || seals.length === 0}
-                    className="px-6 py-3 bg-status-success hover:bg-status-success disabled:bg-surface-sidebar text-white rounded-xl font-semibold transition-all shadow-lg flex items-center gap-2"
+                    className="px-6 py-3 bg-status-success hover:bg-status-success disabled:bg-surface-sidebar text-text-primary rounded-xl font-semibold transition-all shadow-lg flex items-center gap-2"
                 >
                     {isVerifying ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white" />
@@ -81,7 +81,7 @@ export const FiscalAuditView: React.FC = () => {
                     placeholder="Rechercher par ID de transaction ou hash..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-surface-sidebar/50 border border-default rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                    className="w-full bg-surface-sidebar/50 border border-default rounded-xl py-4 pl-12 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
                 />
             </div>
 
@@ -119,7 +119,7 @@ export const FiscalAuditView: React.FC = () => {
                                     {seal.isValidated ? 'CERTIFIED' : 'PENDING'}
                                 </div>
                                 {seal.isSystemGenerated && (
-                                    <span className="text-[10px] text-status-warning font-bold uppercase italic px-2 py-0.5 bg-status-warning/10 rounded border border-amber-500/20">
+                                    <span className="text-[10px] text-status-warning font-bold uppercase italic px-2 py-0.5 bg-status-warning/10 rounded border border-action-primary/20">
                                         Système
                                     </span>
                                 )}

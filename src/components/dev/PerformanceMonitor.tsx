@@ -46,9 +46,9 @@ export function PerformanceMonitor() {
   }, [cartCount]);
 
   const getStatusColor = () => {
-    if (fps < 30 || latency > 16) return "bg-error text-white";
+    if (fps < 30 || latency > 16) return "bg-error text-text-primary";
     if (fps < 50 || latency > 8) return "bg-warning text-primary";
-    return "bg-success text-white";
+    return "bg-success text-text-primary";
   };
 
   return (

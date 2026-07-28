@@ -28,7 +28,7 @@ export function StrategyOracle() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08)_0%,transparent_70%)]" />
                 
                 <div className="absolute top-6 left-8 z-10">
-                    <h3 className="text-xs font-black text-white/40 uppercase tracking-[0.3em] mb-1">Fleet Constellation</h3>
+                    <h3 className="text-xs font-black text-text-primary/40 uppercase tracking-[0.3em] mb-1">Fleet Constellation</h3>
                     <p className="text-[10px] text-secondary font-medium tracking-tight">Real-time Node Distribution ({instances.length} units)</p>
                 </div>
 
@@ -50,7 +50,7 @@ export function StrategyOracle() {
                             >
                                 <div className={`w-3 h-3 rounded-full blur-[1px] ${inst.metrics.healthScore > 90 ? 'bg-status-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]'}`} />
                                 <div className="absolute top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover/node:opacity-100 transition-all pointer-events-none whitespace-nowrap z-20">
-                                    <div className="bg-surface-sidebar/90 border border-subtle px-2 py-1 rounded text-[8px] font-bold text-white uppercase tracking-tighter">
+                                    <div className="bg-surface-sidebar/90 border border-subtle px-2 py-1 rounded text-[8px] font-bold text-text-primary uppercase tracking-tighter">
                                         {inst.name} • {inst.metrics.healthScore}%
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@ export function StrategyOracle() {
                                 whileTap={{ scale: 0.95 }}
                                 onClick={getExecutiveBriefing}
                                 disabled={isProcessing}
-                                className="px-4 py-2 bg-action-primary hover:bg-action-primary disabled:opacity-50 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                                className="px-4 py-2 bg-action-primary hover:bg-action-primary disabled:opacity-50 text-text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
                             >
                                 <Sparkles className="w-3 h-3" />
                                 {isProcessing ? 'Analyzing...' : 'Refresh Briefing'}
@@ -144,7 +144,7 @@ export function StrategyOracle() {
                             <div className="flex items-center gap-4">
                                 <TrendingUp className="w-4 h-4 text-status-success opacity-50" />
                                 <div>
-                                    <div className="text-[10px] font-black text-white uppercase tracking-tight">Projected Collective Gain</div>
+                                    <div className="text-[10px] font-black text-text-primary uppercase tracking-tight">Projected Collective Gain</div>
                                     <div className="text-xl font-black text-status-success tracking-tighter">€14,200 <span className="text-[10px] text-status-success/50">/ mo</span></div>
                                 </div>
                             </div>
@@ -177,7 +177,7 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
 
             <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-bold uppercase tracking-tight group-hover:text-white transition-colors">
+                    <h4 className="text-sm font-bold uppercase tracking-tight group-hover:text-text-primary transition-colors">
                         {insight.title}
                     </h4>
                     <div className="flex items-center gap-2">
@@ -194,12 +194,12 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
                     <div className="flex items-center gap-4">
                          <div className="flex flex-col">
                              <span className="text-[8px] font-black text-secondary uppercase tracking-widest">Potential RoI</span>
-                             <span className="text-xs font-black text-white">€{insight.potentialRoI.toLocaleString()}</span>
+                             <span className="text-xs font-black text-text-primary">€{insight.potentialRoI.toLocaleString()}</span>
                          </div>
                          <div className="w-px h-6 bg-surface-card/5" />
                          <div className="flex flex-col">
                              <span className="text-[8px] font-black text-secondary uppercase tracking-widest">Target Nodes</span>
-                             <span className="text-xs font-black text-white">{insight.affectedInstances.length} Units</span>
+                             <span className="text-xs font-black text-text-primary">{insight.affectedInstances.length} Units</span>
                          </div>
                     </div>
 

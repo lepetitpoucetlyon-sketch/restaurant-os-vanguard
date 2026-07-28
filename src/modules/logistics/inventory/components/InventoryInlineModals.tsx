@@ -21,9 +21,9 @@ export function computeDLCStatus(dlc: string | undefined): DLCStatus {
     d.setHours(0, 0, 0, 0);
     const daysLeft = Math.round((d.getTime() - today.getTime()) / 86_400_000);
     if (daysLeft < 0) return { daysLeft, label: `Périmé (${Math.abs(daysLeft)}j)`, className: "text-red-600 font-semibold", rank: 0 };
-    if (daysLeft === 0) return { daysLeft, label: "Aujourd'hui", className: "text-red-500 font-semibold", rank: 1 };
+    if (daysLeft === 0) return { daysLeft, label: "Aujourd'hui", className: "text-status-danger font-semibold", rank: 1 };
     if (daysLeft <= 3) return { daysLeft, label: `${daysLeft}j`, className: "text-orange-500 font-semibold", rank: 2 };
-    if (daysLeft <= 7) return { daysLeft, label: `${daysLeft}j`, className: "text-amber-500", rank: 3 };
+    if (daysLeft <= 7) return { daysLeft, label: `${daysLeft}j`, className: "text-action-primary", rank: 3 };
     return { daysLeft, label: `${daysLeft}j`, className: "text-text-muted", rank: 4 };
 }
 
@@ -67,7 +67,7 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
             <input type="number" min="0" step="any" value={reorderQty} onChange={(e) => setReorderQty(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder={`ex: 10 ${item.unit}`} />
             <div className="flex justify-end gap-2">
                 <button onClick={onClose} className="px-4 py-2 rounded-md text-sm text-text-muted hover:bg-surface-hover">Annuler</button>
-                <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Enregistrer"}</button>
+                <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Enregistrer"}</button>
             </div>
         </ModalShell>
     );
@@ -97,7 +97,7 @@ export function PhysicalCountModal({ item, onClose }: { item: StockItem; onClose
             <input type="number" min="0" step="any" value={counted} onChange={(e) => setCounted(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" />
             <div className="flex justify-end gap-2">
                 <button onClick={onClose} className="px-4 py-2 rounded-md text-sm text-text-muted hover:bg-surface-hover">Annuler</button>
-                <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Valider"}</button>
+                <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Valider"}</button>
             </div>
         </ModalShell>
     );
@@ -130,7 +130,7 @@ export function AdjustStockModal({ item, onClose }: { item: StockItem; onClose: 
             <input type="text" value={reason} onChange={(e) => setReason(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder="Perte, correction inventaire…" />
             <div className="flex justify-end gap-2">
                 <button onClick={onClose} className="px-4 py-2 rounded-md text-sm text-text-muted hover:bg-surface-hover">Annuler</button>
-                <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Appliquer"}</button>
+                <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Appliquer"}</button>
             </div>
         </ModalShell>
     );

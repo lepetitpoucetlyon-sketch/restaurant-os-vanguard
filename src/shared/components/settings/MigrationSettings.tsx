@@ -118,7 +118,7 @@ export default function MigrationSettings() {
             <>
               {/* Dependency warning */}
               {CATEGORY_CONFIGS[active].requiresOrder && (
-                <div className="mb-4 flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-700 dark:text-yellow-400">
+                <div className="mb-4 flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-action-primary/10 px-4 py-3 text-sm text-yellow-700 dark:text-yellow-400">
                   <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
                   <span>
                     Conseil : importer d'abord{' '}

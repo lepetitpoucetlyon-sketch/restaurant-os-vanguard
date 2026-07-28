@@ -49,7 +49,7 @@ const STEPS: Step[] = [
       'Ouvrez la page Migration, selectionnez la categorie dans le menu de gauche (ex. "8. Reservations passees"), puis faites glisser votre fichier dans la zone de depot.',
     cta: { label: 'Ouvrir Migration', href: '/admin/settings?tab=migration' },
     iconBg: 'bg-amber-50 dark:bg-amber-950/40',
-    iconColor: 'text-amber-500',
+    iconColor: 'text-action-primary',
   },
   {
     id: 4,
@@ -58,7 +58,7 @@ const STEPS: Step[] = [
     description:
       'Apres l\'import, un rapport affiche le nombre d\'enregistrements crees, mis a jour et ignores. Corrigez les erreurs eventuelles dans votre fichier source avant de recommencer.',
     iconBg: 'bg-green-50 dark:bg-green-950/40',
-    iconColor: 'text-green-500',
+    iconColor: 'text-status-success',
   },
   {
     id: 5,

@@ -1,14 +1,19 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { GoCardlessProvider } from '@/modules/finance/banking/openBanking/GoCardlessProvider';
+import { GoCardlessProvider } from '@/modules/finance/banking/openBanking';
 import { inferPCGAccount } from '@/modules/finance/banking/openBanking';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**
  * GET /api/finance/bank/test-demo
  * Valide la chaîne GoCardlessProvider → PCG heuristics → signature
  * en mode démo (aucune credential GoCardless, aucun Nexus requis).
- * ⚠️ À supprimer avant mise en prod ou protéger derrière requireMccLevel.
+ * Réservé aux opérateurs MCC (mcc_support minimum).
  */
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
+    const caller = await requireMccLevel(request, 'mcc_support');
+    if (isDenied(caller)) return caller;
+
     const provider = new GoCardlessProvider();
 
     if (!provider.isDemoMode()) {

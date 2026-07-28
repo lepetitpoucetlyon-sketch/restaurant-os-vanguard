@@ -54,7 +54,7 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
                         className={cn(
                             "w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-300",
                             activeTab === item.id 
-                                ? "bg-accent text-white shadow-xl shadow-accent/20" 
+                                ? "bg-accent text-text-primary shadow-xl shadow-accent/20" 
                                 : "text-text-muted hover:bg-bg-tertiary hover:text-text-primary"
                         )}
                     >
@@ -66,17 +66,17 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
         </nav>
 
         {/* Quick Stats Overlay */}
-        <div className="mt-auto p-5 bg-gradient-to-br from-accent/90 to-bg-tertiary dark:to-accent/30 rounded-[2rem] text-white shadow-lg relative overflow-hidden group">
+        <div className="mt-auto p-5 bg-gradient-to-br from-accent/90 to-bg-tertiary dark:to-accent/30 rounded-[2rem] text-text-primary shadow-lg relative overflow-hidden group">
             <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-surface-card/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
             
             <div className="flex items-center gap-3 mb-3 relative z-10">
-                <Wine className="w-5 h-5 text-white/60" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/60">Valeur Cave</span>
+                <Wine className="w-5 h-5 text-text-primary/60" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-text-primary/60">Valeur Cave</span>
             </div>
             <p className="text-2xl font-black relative z-10 tracking-tighter">
                 {formatCurrency(cellarValue)}
             </p>
-            <p className="text-[10px] text-white/60 mt-1 relative z-10 font-bold uppercase tracking-wider">
+            <p className="text-[10px] text-text-primary/60 mt-1 relative z-10 font-bold uppercase tracking-wider">
                 {referenceCount} références actives
             </p>
         </div>

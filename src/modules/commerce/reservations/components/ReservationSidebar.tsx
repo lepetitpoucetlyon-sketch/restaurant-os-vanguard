@@ -140,7 +140,7 @@ export function ReservationSidebar({
                                                 <button
                                                     title="Marquer arrivée"
                                                     onClick={(e) => { e.stopPropagation(); onMarkArrived(res.id); }}
-                                                    className="p-2 text-muted hover:text-emerald-500 transition-all"
+                                                    className="p-2 text-muted hover:text-status-success transition-all"
                                                 >
                                                     <UserCheck strokeWidth={1.5} className="w-4 h-4" />
                                                 </button>

@@ -2,7 +2,7 @@
 
 import { Users, CalendarRange, Palmtree, UserPlus, Plus, Clock, Euro, GraduationCap } from "lucide-react";
 
-import { useStaffPage } from "@/modules/human/hr/hooks/useStaffPage";
+import { useStaffPage } from "@/modules/human/hr/hooks";
 import { BadgeControl } from "@modules/human/hr/components/staff/BadgeControl";
 import {
     StaffList, StaffMemberForm, StaffRecentActivity,
@@ -68,7 +68,7 @@ export default function StaffPage() {
                     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2">
                             <div className="flex items-center justify-end mb-3 gap-2">
-                                <button onClick={() => setIsQuickAddOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-gold text-white text-xs font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors shadow">
+                                <button onClick={() => setIsQuickAddOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-gold text-text-primary text-xs font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors shadow">
                                     <Plus className="w-3.5 h-3.5" /> Ajout rapide
                                 </button>
                                 <button onClick={() => openStaffModal()} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-xs font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors">

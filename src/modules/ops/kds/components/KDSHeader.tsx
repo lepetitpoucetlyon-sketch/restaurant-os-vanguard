@@ -149,7 +149,7 @@ export function KDSHeader({
                                         onClick={() => handleSetServiceStation(s)}
                                         className={cn(
                                             "relative px-4 h-9 rounded-full font-bold text-[10px] uppercase tracking-[0.15em] transition-all duration-200 z-10",
-                                            isActive ? "text-white" : "text-secondary hover:text-primary"
+                                            isActive ? "text-text-primary" : "text-secondary hover:text-primary"
                                         )}
                                     >
                                         {isActive && (
@@ -212,7 +212,7 @@ export function KDSHeader({
                                 className={cn(
                                     "flex items-center gap-2.5 px-5 h-12 rounded-full font-bold text-[12px] transition-all border",
                                     isGridDropdownOpen
-                                        ? "bg-surface-sidebar text-white border-transparent shadow-lg"
+                                        ? "bg-surface-sidebar text-text-primary border-transparent shadow-lg"
                                         : "bg-transparent border-transparent hover:bg-surface-bg text-secondary"
                                 )}
                             >
@@ -236,7 +236,7 @@ export function KDSHeader({
                                                 }}
                                                 className={cn(
                                                     "w-full h-8 rounded-xl flex items-center justify-center text-[11px] font-bold transition-all",
-                                                    gridColumns === num ? "bg-accent-gold text-white" : "text-secondary hover:bg-surface-bg"
+                                                    gridColumns === num ? "bg-accent-gold text-text-primary" : "text-secondary hover:bg-surface-bg"
                                                 )}
                                             >
                                                 {num}
@@ -263,7 +263,7 @@ export function KDSHeader({
                                 className={cn(
                                     "flex items-center gap-3 px-6 h-12 rounded-full font-black text-[10px] uppercase tracking-[0.25em] transition-all border duration-300",
                                     rushMode
-                                        ? "bg-status-danger text-white border-red-500 shadow-lg shadow-red-500/20"
+                                        ? "bg-status-danger text-text-primary border-red-500 shadow-lg shadow-red-500/20"
                                         : "bg-surface-card border-subtle text-muted hover:text-accent-gold hover:border-accent-gold/50"
                                 )}
                             >
@@ -277,7 +277,7 @@ export function KDSHeader({
                                 className={cn(
                                     "flex items-center gap-2.5 px-5 h-12 rounded-full font-black text-[10px] uppercase tracking-[0.2em] transition-all border duration-300",
                                     isRecallMode
-                                        ? "bg-action-primary text-white border-action-primary shadow-lg shadow-purple-500/20"
+                                        ? "bg-action-primary text-text-primary border-action-primary shadow-lg shadow-purple-500/20"
                                         : "bg-surface-card border-subtle text-muted hover:text-action-primary hover:border-action-primary/40"
                                 )}
                             >
@@ -291,13 +291,13 @@ export function KDSHeader({
                                     className={cn(
                                         "relative w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 group hover:scale-110 active:scale-95",
                                         pendingModificationsCount > 0
-                                            ? "bg-status-warning text-status-warning ring-2 ring-amber-500/20"
+                                            ? "bg-status-warning text-status-warning ring-2 ring-action-primary/20"
                                             : "bg-surface-bg text-muted hover:bg-surface-bg"
                                     )}
                                 >
                                     <Bell className={cn("w-5 h-5 transition-transform group-hover:rotate-12", pendingModificationsCount > 0 && "animate-pulse")} strokeWidth={2} />
                                     {pendingModificationsCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-status-danger text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm transform group-hover:scale-110 transition-transform">
+                                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-status-danger text-text-primary text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-sm transform group-hover:scale-110 transition-transform">
                                             {pendingModificationsCount}
                                         </span>
                                     )}

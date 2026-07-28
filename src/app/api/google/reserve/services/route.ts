@@ -26,7 +26,7 @@ interface TenantConfig {
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const auth = req.headers.get('authorization');
-  if (RESERVE_SECRET && auth !== `Bearer ${RESERVE_SECRET}`) {
+  if (!RESERVE_SECRET || auth !== `Bearer ${RESERVE_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

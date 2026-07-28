@@ -33,7 +33,7 @@ export const ComplianceView: React.FC<{ alerts: ComplianceAlert[] }> = ({ alerts
                     <div key={alert.id} className="bg-surface-card dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
                         <div className="flex justify-between items-start mb-2">
                             <h4 className="text-lg font-serif font-bold italic text-text-primary">{alert.userName}</h4>
-                            <div className="px-2 py-0.5 bg-error text-white text-[7px] font-black uppercase rounded-full">Violation</div>
+                            <div className="px-2 py-0.5 bg-error text-text-primary text-[7px] font-black uppercase rounded-full">Violation</div>
                         </div>
                         <p className="text-xs text-text-muted mb-4 leading-relaxed">{alert.message}</p>
                         <Button 
@@ -74,7 +74,7 @@ export const IoTView: React.FC<{ metrics: IoTMetric[] }> = ({ metrics }) => {
                     </div>
                 ))}
             </div>
-            <div className="bg-text-primary p-8 rounded-[3rem] text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-text-primary p-8 rounded-[3rem] text-text-primary relative overflow-hidden shadow-2xl">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-accent-gold/20 blur-[60px]" />
                 <h3 className="text-2xl font-serif italic font-black mb-2">Moteur Prédictif</h3>
                 <p className="text-sm opacity-60 font-light mb-6 leading-relaxed">

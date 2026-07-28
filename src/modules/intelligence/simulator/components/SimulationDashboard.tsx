@@ -20,7 +20,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from "@modules/intelligence/simulator/SimulationService";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers";
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {
@@ -79,7 +79,7 @@ export function SimulationDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white p-12 font-sans selection:bg-status-danger/30">
+        <div className="min-h-screen bg-[#050505] text-text-primary p-12 font-sans selection:bg-status-danger/30">
             {/* BACKGROUND EFFECTS */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-status-danger/10 rounded-full blur-[120px]" />
@@ -95,7 +95,7 @@ export function SimulationDashboard() {
                             <Zap className="text-status-danger" size={32} />
                         </div>
                         <div>
-                            <h1 className="text-5xl font-serif italic font-light tracking-tighter">Nexus <span className="font-black not-italic text-white">Hardcore Test</span></h1>
+                            <h1 className="text-5xl font-serif italic font-light tracking-tighter">Nexus <span className="font-black not-italic text-text-primary">Hardcore Test</span></h1>
                             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary mt-2">Empire Mode Audit • Stress-Testing • Chaos Injection v1.2</p>
                         </div>
                     </div>
@@ -113,7 +113,7 @@ export function SimulationDashboard() {
                             onClick={handleRunSimulation}
                             className={cn(
                                 "h-14 px-10 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-2xl",
-                                mode === 'EMPIRE' ? "bg-surface-card text-primary hover:bg-surface-bg" : "bg-status-danger text-white hover:bg-status-danger"
+                                mode === 'EMPIRE' ? "bg-surface-card text-primary hover:bg-surface-bg" : "bg-status-danger text-text-primary hover:bg-status-danger"
                             )}
                         >
                             <Play size={16} className="mr-2" /> Start Huge Audit
@@ -212,7 +212,7 @@ export function SimulationDashboard() {
                     <div className="col-span-2 bg-[#080808] border border-default rounded-[2.5rem] p-10 flex flex-col">
                         <div className="flex items-center justify-between mb-10">
                             <div>
-                                <h3 className="text-2xl font-serif italic text-white mb-1">Analyse Comparative</h3>
+                                <h3 className="text-2xl font-serif italic text-text-primary mb-1">Analyse Comparative</h3>
                                 <p className="text-[9px] font-black uppercase text-secondary tracking-[0.2em] font-mono">Performance Empire (Semaine 1) vs Déclassement Chaos (Semaine 2)</p>
                             </div>
                             <div className="flex gap-4">
@@ -247,7 +247,7 @@ export function SimulationDashboard() {
                             })}
                             
                             <div className="absolute inset-0 flex items-center justify-center -rotate-12 pointer-events-none opacity-10">
-                                <Lock size={200} className="text-white" />
+                                <Lock size={200} className="text-text-primary" />
                             </div>
                         </div>
                         

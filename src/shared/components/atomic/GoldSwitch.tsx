@@ -30,7 +30,7 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
             
             <div className={cn(
                 "relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out",
-                checked ? "bg-status-warning/20 ring-1 ring-amber-500/50" : "bg-surface-sidebar ring-1 ring-default",
+                checked ? "bg-status-warning/20 ring-1 ring-action-primary/50" : "bg-surface-sidebar ring-1 ring-default",
                 disabled && "opacity-50 cursor-not-allowed"
             )}>
                 <motion.div

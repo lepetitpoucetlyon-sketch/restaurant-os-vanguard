@@ -6,7 +6,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { PrepaieBuilder } from '@/modules/human/payroll/PrepaieBuilder';
+import { PrepaieBuilder } from '@/modules/human/payroll';
 import { logger } from '@/lib/logger';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

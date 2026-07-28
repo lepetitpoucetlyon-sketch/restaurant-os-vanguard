@@ -76,7 +76,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                         {/* Header */}
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-status-success to-status-success text-white flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-status-success to-status-success text-text-primary flex items-center justify-center shadow-lg">
                                     <Filter size={24} />
                                 </div>
                                 <div>
@@ -132,7 +132,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                                         onClick={() => toggleCriteria(criterion.id, opt)}
                                                         className={`px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider border transition-all ${
                                                             criteria[criterion.id] === opt
-                                                                ? 'bg-status-success text-white border-emerald-500 shadow-lg shadow-emerald-500/20'
+                                                                ? 'bg-status-success text-text-primary border-emerald-500 shadow-lg shadow-emerald-500/20'
                                                                 : 'border-border/50 text-text-muted hover:border-emerald-500/30 hover:text-status-success'
                                                         }`}
                                                     >
@@ -167,7 +167,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                 Annuler
                             </Button>
                             <Button
-                                className="flex-[2] h-16 bg-gradient-to-r from-status-success to-status-success text-white hover:from-status-success hover:to-status-success rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
+                                className="flex-[2] h-16 bg-gradient-to-r from-status-success to-status-success text-text-primary hover:from-status-success hover:to-status-success rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl"
                                 onClick={handleSubmit}
                                 disabled={!name.trim()}
                             >

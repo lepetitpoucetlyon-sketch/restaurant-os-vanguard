@@ -168,8 +168,8 @@ export function RotatingCount() {
                                         <CheckCircle
                                             className={`w-4 h-4 shrink-0 ${
                                                 isDifferent
-                                                    ? "text-amber-500"
-                                                    : "text-green-500"
+                                                    ? "text-action-primary"
+                                                    : "text-status-success"
                                             }`}
                                         />
                                     )}
@@ -185,7 +185,7 @@ export function RotatingCount() {
                         <button
                             onClick={handleSubmit}
                             disabled={submitting || !hasCounts}
-                            className="px-4 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
+                            className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
                         >
                             {submitting ? "Enregistrement…" : "Valider le comptage"}
                         </button>

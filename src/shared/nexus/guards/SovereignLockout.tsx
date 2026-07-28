@@ -16,7 +16,7 @@ export function SovereignLockout() {
     const tenantConfig = useAtomValue(tenantConfigAtom);
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505] text-white overflow-hidden">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505] text-text-primary overflow-hidden">
             {/* Background Cybernetic Decor */}
             <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-status-error/30 blur-[120px] rounded-full" />
@@ -76,7 +76,7 @@ export function SovereignLockout() {
                     className="group relative w-full py-4 bg-surface-card text-primary font-bold rounded-2xl overflow-hidden active:scale-95 transition-all"
                 >
                     <div className="absolute inset-0 bg-status-error translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                    <span className="relative flex items-center justify-center gap-2 group-hover:text-white transition-colors">
+                    <span className="relative flex items-center justify-center gap-2 group-hover:text-text-primary transition-colors">
                         <LogOut className="w-5 h-5" />
                         DÉCONNEXION DE SESSION
                     </span>

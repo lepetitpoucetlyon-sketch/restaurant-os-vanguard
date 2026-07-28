@@ -65,7 +65,7 @@ export function SimpleDashboardView() {
 
                     <div className="flex items-center gap-6 mt-6">
                         <div className="flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4 text-emerald-500" />
+                            <TrendingUp className="w-4 h-4 text-status-success" />
                             <span className="text-xl font-bold">{formatCurrency(pnl.totalRevenueInCents)}</span>
                         </div>
                         <div className="w-px h-6 bg-border" />
@@ -83,7 +83,7 @@ export function SimpleDashboardView() {
                         <div className="flex items-end gap-4">
                             <span className={cn(
                                 "text-7xl font-sans font-black tracking-tighter",
-                                profitMargin >= 10 ? "text-emerald-500" : profitMargin > 0 ? "text-accent" : "text-error"
+                                profitMargin >= 10 ? "text-status-success" : profitMargin > 0 ? "text-accent" : "text-error"
                             )}>
                                 {profitMargin.toFixed(1)}%
                             </span>
@@ -99,7 +99,7 @@ export function SimpleDashboardView() {
                                 transition={{ duration: 1.5, ease: "easeOut" }}
                                 className={cn(
                                     "h-full rounded-full",
-                                    profitMargin >= 10 ? "bg-emerald-500" : "bg-accent"
+                                    profitMargin >= 10 ? "bg-status-success" : "bg-accent"
                                 )}
                             />
                         </div>
@@ -115,7 +115,7 @@ export function SimpleDashboardView() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-bg-secondary rounded-[2.5rem] p-8 border border-border shadow-sm">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="p-3 bg-blue-500/10 rounded-2xl text-blue-500">
+                        <div className="p-3 bg-status-info/10 rounded-2xl text-blue-500">
                             <Wallet className="w-5 h-5" />
                         </div>
                         <h4 className="text-xs font-black tracking-widest uppercase">Trésorerie Banq</h4>
@@ -123,14 +123,14 @@ export function SimpleDashboardView() {
                     <p className="text-3xl font-black font-mono">
                         {formatCurrency(bankTransactions.reduce((s, t) => s + (t.amountInCents || 0), 0))}
                     </p>
-                    <div className="flex items-center gap-2 mt-2 text-[10px] text-emerald-500 font-bold uppercase">
+                    <div className="flex items-center gap-2 mt-2 text-[10px] text-status-success font-bold uppercase">
                         <Activity className="w-3 h-3" /> Connecté en direct
                     </div>
                 </div>
 
                 <div className="bg-bg-secondary rounded-[2.5rem] p-8 border border-border shadow-sm">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-500">
+                        <div className="p-3 bg-status-success/10 rounded-2xl text-status-success">
                             <Utensils className="w-5 h-5" />
                         </div>
                         <h4 className="text-xs font-black tracking-widest uppercase">Ratio Food Cost</h4>

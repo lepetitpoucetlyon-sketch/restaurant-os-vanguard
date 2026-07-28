@@ -6,7 +6,7 @@ import { Search, Plus, Edit2, Trash2, Package, Tag, Truck } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers";
 
 export function IngredientsTab() {
     const { data: ingredients, isLoading, error } = useInventory();
@@ -46,7 +46,7 @@ export function IngredientsTab() {
                                 className={cn(
                                     "px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
                                     selectedCategory === String(cat)
-                                        ? "bg-accent text-white shadow-lg shadow-accent/20"
+                                        ? "bg-accent text-text-primary shadow-lg shadow-accent/20"
                                         : "text-text-muted hover:text-text-primary"
                                 )}
                             >
@@ -77,7 +77,7 @@ export function IngredientsTab() {
                     >
                         <div className="flex items-start justify-between mb-6">
                             <div className="w-12 h-12 rounded-xl bg-bg-tertiary flex items-center justify-center group-hover:bg-accent transition-colors">
-                                <Package className="w-6 h-6 text-text-muted group-hover:text-white transition-colors" />
+                                <Package className="w-6 h-6 text-text-muted group-hover:text-text-primary transition-colors" />
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button className="p-2 rounded-lg bg-bg-tertiary text-text-muted hover:text-accent border border-border">
@@ -123,7 +123,7 @@ export function IngredientsTab() {
                     className="h-full min-h-[280px] rounded-2xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-4 hover:border-accent group transition-all"
                 >
                     <div className="w-16 h-16 rounded-full bg-accent/5 flex items-center justify-center group-hover:bg-accent transition-colors">
-                        <Plus className="w-8 h-8 text-accent group-hover:text-white transition-colors" />
+                        <Plus className="w-8 h-8 text-accent group-hover:text-text-primary transition-colors" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted group-hover:text-accent">Ajouter au Catalogue</span>
                 </motion.button>

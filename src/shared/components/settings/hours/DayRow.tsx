@@ -81,7 +81,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                     <div className="space-y-6">
                         <div className="flex items-center gap-3 px-2">
                             <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shadow-sm border",
-                                day.isOpen ? "bg-status-warning/10 border-amber-500/20 text-status-warning" : "bg-surface-bg dark:bg-surface-card/5 border-transparent text-text-muted")}>
+                                day.isOpen ? "bg-status-warning/10 border-action-primary/20 text-status-warning" : "bg-surface-bg dark:bg-surface-card/5 border-transparent text-text-muted")}>
                                 <Sun strokeWidth={2.5} className="w-4 h-4" />
                             </div>
                             <span className="text-[11px] font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Matinée & Midi</span>

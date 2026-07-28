@@ -140,7 +140,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                         className={cn(
                             "flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
                             activeTab === 'preparations'
-                                ? "bg-surface-card dark:bg-surface-card/10 shadow-md text-primary dark:text-white"
+                                ? "bg-surface-card dark:bg-surface-card/10 shadow-md text-primary dark:text-text-primary"
                                 : "text-secondary dark:text-muted hover:text-primary dark:hover:text-muted hover:bg-surface-card/50 dark:hover:bg-surface-card/5"
                         )}
                     >
@@ -243,7 +243,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                                                             ) : (
                                                                 <button
                                                                     onClick={() => setMovingItemId(item.id)}
-                                                                    className="flex items-center gap-2 px-4 py-2 bg-text-primary text-bg-primary rounded-xl hover:bg-accent hover:text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg"
+                                                                    className="flex items-center gap-2 px-4 py-2 bg-text-primary text-bg-primary rounded-xl hover:bg-accent hover:text-text-primary transition-all text-[10px] font-black uppercase tracking-widest shadow-lg"
                                                                 >
                                                                     <ArrowRight className="w-3.5 h-3.5" />
                                                                     Déplacer
@@ -350,7 +350,7 @@ export function StorageDetailBubble({ location, stockItems, preparations, onClos
                                                             ) : (
                                                                 <button
                                                                     onClick={() => setMovingPrepId(prep.id)}
-                                                                    className="flex items-center gap-2 px-4 py-2 bg-text-primary text-bg-primary rounded-xl hover:bg-accent hover:text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-lg"
+                                                                    className="flex items-center gap-2 px-4 py-2 bg-text-primary text-bg-primary rounded-xl hover:bg-accent hover:text-text-primary transition-all text-[10px] font-black uppercase tracking-widest shadow-lg"
                                                                 >
                                                                     <ArrowRight className="w-3.5 h-3.5" />
                                                                     Déplacer

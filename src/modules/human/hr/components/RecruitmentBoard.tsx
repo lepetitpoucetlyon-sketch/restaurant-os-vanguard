@@ -32,9 +32,9 @@ const COLUMNS: {
 }[] = [
     { id: "new",       label: "Candidatures",  accent: "text-blue-400",    border: "border-blue-800/40" },
     { id: "interview", label: "Entretien",      accent: "text-purple-400",  border: "border-purple-800/40" },
-    { id: "trial",     label: "Test pratique",  accent: "text-amber-400",   border: "border-amber-800/40" },
+    { id: "trial",     label: "Test pratique",  accent: "text-action-primary",   border: "border-amber-800/40" },
     { id: "offer",     label: "Offre",          accent: "text-sky-400",     border: "border-sky-800/40" },
-    { id: "hired",     label: "Embauché",       accent: "text-emerald-400", border: "border-emerald-800/40" },
+    { id: "hired",     label: "Embauché",       accent: "text-status-success", border: "border-emerald-800/40" },
     { id: "refused",   label: "Refusé",         accent: "text-rose-400",    border: "border-rose-800/40" },
 ];
 
@@ -265,7 +265,7 @@ export function RecruitmentBoard({ onHireCandidate }: RecruitmentBoardProps) {
                 </h3>
                 <button
                     onClick={() => openModal()}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-action-primary text-white text-[11px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity shadow"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-action-primary text-text-primary text-[11px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity shadow"
                 >
                     <Plus className="w-3.5 h-3.5" />
                     Nouveau candidat

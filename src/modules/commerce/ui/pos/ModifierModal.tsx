@@ -116,7 +116,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                                         className={cn(
                                             "flex items-center gap-2 px-4 py-2.5 rounded-full border text-[11px] font-black uppercase tracking-wider transition-all duration-200",
                                             isActive
-                                                ? "bg-accent-gold text-white border-accent-gold shadow-lg shadow-accent-gold/20"
+                                                ? "bg-accent-gold text-text-primary border-accent-gold shadow-lg shadow-accent-gold/20"
                                                 : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40 hover:text-text-primary"
                                         )}
                                     >
@@ -140,7 +140,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                             <button
                                 onClick={addFreeText}
                                 disabled={!freeText.trim()}
-                                className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-white transition-all disabled:opacity-30"
+                                className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent-gold hover:text-text-primary transition-all disabled:opacity-30"
                                 aria-label="Ajouter"
                             >
                                 <Plus className="w-4 h-4" />
@@ -169,7 +169,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex-1 h-12 rounded-full bg-accent-gold text-white text-[11px] font-black uppercase tracking-wider shadow-lg shadow-accent-gold/20 hover:brightness-110 transition-all"
+                                className="flex-1 h-12 rounded-full bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider shadow-lg shadow-accent-gold/20 hover:brightness-110 transition-all"
                             >
                                 Confirmer
                             </button>

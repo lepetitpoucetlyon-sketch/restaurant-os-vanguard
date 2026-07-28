@@ -79,7 +79,7 @@ export function RecipeAnalyticTab({
                                 className={cn(
                                     "px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border-2",
                                     formData.allergens?.includes(a)
-                                        ? "bg-error text-white border-error shadow-lg shadow-error/20"
+                                        ? "bg-error text-text-primary border-error shadow-lg shadow-error/20"
                                         : "bg-surface-card text-text-muted border-border hover:border-text-muted/30"
                                 )}
                             >
@@ -98,7 +98,7 @@ export function RecipeAnalyticTab({
                                 className={cn(
                                     "px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border-2",
                                     formData.dietaryInfo?.includes(d)
-                                        ? "bg-success text-white border-success shadow-lg shadow-success/20"
+                                        ? "bg-success text-text-primary border-success shadow-lg shadow-success/20"
                                         : "bg-surface-card text-text-muted border-border hover:border-text-muted/30"
                                 )}
                             >

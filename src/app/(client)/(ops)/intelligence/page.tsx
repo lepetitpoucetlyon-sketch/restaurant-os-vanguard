@@ -35,14 +35,14 @@ const CARDS: HubCard[] = [
         description: "Menu Engineering, rentabilité, réputation, conformité. Vue multi-tabs par pilier.",
         href: "/analytics",
         icon: BarChart3,
-        accent: "text-emerald-500 bg-emerald-500/10",
+        accent: "text-status-success bg-status-success/10",
     },
     {
         title: "Cartographie 3D",
         description: "System Map — vue mentale 3D du système Restaurant OS et des dépendances Nexus.",
         href: "/system-map",
         icon: Map,
-        accent: "text-blue-500 bg-blue-500/10",
+        accent: "text-blue-500 bg-status-info/10",
     },
     {
         title: "Registre & Prévisionnel",

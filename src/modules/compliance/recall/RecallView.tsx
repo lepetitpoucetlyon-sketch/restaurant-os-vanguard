@@ -89,7 +89,7 @@ export function RecallView() {
                 <button
                     onClick={handleTrace}
                     disabled={loading || !lotId.trim()}
-                    className="h-11 px-5 rounded-xl bg-status-error text-white text-[10px] font-black uppercase tracking-widest hover:bg-status-error/90 transition-colors disabled:opacity-30"
+                    className="h-11 px-5 rounded-xl bg-status-error text-text-primary text-[10px] font-black uppercase tracking-widest hover:bg-status-error/90 transition-colors disabled:opacity-30"
                 >
                     <Search className="w-4 h-4" />
                 </button>
@@ -165,7 +165,7 @@ export function RecallView() {
                                 disabled={!reason.trim() || loading}
                                 className={cn(
                                     "w-full h-12 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all",
-                                    "bg-status-error text-white hover:bg-status-error/90 disabled:opacity-30"
+                                    "bg-status-error text-text-primary hover:bg-status-error/90 disabled:opacity-30"
                                 )}
                             >
                                 Initier la procédure de rappel

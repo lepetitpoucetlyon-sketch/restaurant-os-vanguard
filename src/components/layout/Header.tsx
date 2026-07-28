@@ -162,7 +162,7 @@ export function Header() {
                             <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
                             <Bell strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold group-hover:rotate-12 transition-all duration-300" />
                             {unreadCount > 0 && (
-                                <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 px-1.5 py-0.5 min-w-[20px] bg-status-danger text-white flex items-center justify-center text-[9px] font-black rounded-full border-2 border-white dark:border-bg-primary shadow-sm z-20">
+                                <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 px-1.5 py-0.5 min-w-[20px] bg-status-danger text-text-primary flex items-center justify-center text-[9px] font-black rounded-full border-2 border-white dark:border-bg-primary shadow-sm z-20">
                                     {unreadCount > 99 ? '99' : unreadCount}
                                 </div>
                             )}

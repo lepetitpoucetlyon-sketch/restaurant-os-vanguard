@@ -51,7 +51,7 @@ function EraseConfirmDialog({ device, onConfirm, onCancel }: EraseConfirmDialogP
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-md rounded-2xl border border-red-500/30 bg-bg-primary p-6 space-y-5 shadow-2xl">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="w-6 h-6 text-status-danger flex-shrink-0 mt-0.5" />
           <div>
             <h4 className="text-base font-bold text-text-primary">Action irréversible</h4>
             <p className="text-sm text-text-secondary mt-1">
@@ -62,9 +62,9 @@ function EraseConfirmDialog({ device, onConfirm, onCancel }: EraseConfirmDialogP
           </div>
         </div>
 
-        <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3">
-          <p className="text-xs text-red-500 font-semibold">
-            Cette action nécessite le rôle <code className="bg-red-500/10 px-1 rounded">super_admin</code> et ne peut pas être annulée.
+        <div className="rounded-xl bg-status-danger/10 border border-red-500/20 p-3">
+          <p className="text-xs text-status-danger font-semibold">
+            Cette action nécessite le rôle <code className="bg-status-danger/10 px-1 rounded">super_admin</code> et ne peut pas être annulée.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ function EraseConfirmDialog({ device, onConfirm, onCancel }: EraseConfirmDialogP
           <button
             onClick={onConfirm}
             disabled={!isReady}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-status-danger text-text-primary text-sm font-bold hover:bg-status-danger transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Trash2 className="w-4 h-4" />
             Effacer
@@ -132,7 +132,7 @@ function DeviceRow({ device, onLock, onEraseRequest, isLocking }: DeviceRowProps
           </span>
           <span
             className={`flex items-center gap-1 text-xs font-medium flex-shrink-0 ${
-              isOnline ? 'text-emerald-500' : 'text-text-muted'
+              isOnline ? 'text-status-success' : 'text-text-muted'
             }`}
           >
             {isOnline ? (
@@ -157,7 +157,7 @@ function DeviceRow({ device, onLock, onEraseRequest, isLocking }: DeviceRowProps
           onClick={() => onLock(device)}
           disabled={isLocking}
           title="Verrouiller l'appareil"
-          className="p-2 rounded-lg border border-border text-text-muted hover:text-amber-500 hover:border-amber-500/30 hover:bg-amber-500/5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg border border-border text-text-muted hover:text-action-primary hover:border-action-primary/30 hover:bg-action-primary/5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {isLocking ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -168,7 +168,7 @@ function DeviceRow({ device, onLock, onEraseRequest, isLocking }: DeviceRowProps
         <button
           onClick={() => onEraseRequest(device)}
           title="Effacer l'appareil (super_admin requis)"
-          className="p-2 rounded-lg border border-border text-text-muted hover:text-red-500 hover:border-red-500/30 hover:bg-red-500/5 transition-colors"
+          className="p-2 rounded-lg border border-border text-text-muted hover:text-status-danger hover:border-red-500/30 hover:bg-status-danger/5 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -261,7 +261,7 @@ export default function MDMPanel() {
             </p>
           </div>
           <div className="ml-auto flex items-center gap-1.5 text-xs text-text-muted">
-            <Wifi className="w-3.5 h-3.5 text-emerald-500" />
+            <Wifi className="w-3.5 h-3.5 text-status-success" />
             <span>{onlineCount}/{devices.length} en ligne</span>
             {isDemoMode && (
               <span className="ml-1 text-[9px] font-bold uppercase tracking-widest text-text-muted border border-border rounded-full px-1.5 py-0.5">

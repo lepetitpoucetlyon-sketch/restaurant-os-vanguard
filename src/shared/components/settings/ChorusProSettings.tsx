@@ -115,7 +115,7 @@ export default function ChorusProSettings() {
             vos factures vers les entités publiques.
           </p>
           {siret.length > 0 && !siretIsValid && (
-            <p className="text-xs text-red-500 mt-1 font-medium">
+            <p className="text-xs text-status-danger mt-1 font-medium">
               Format invalide — le SIRET doit contenir exactement 14 chiffres.
             </p>
           )}

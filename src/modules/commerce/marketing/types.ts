@@ -9,8 +9,8 @@ export interface MarketingCampaign {
     name: string;
     type: 'email' | 'sms' | 'social';
     status: 'planned' | 'active' | 'completed' | 'draft' | 'scheduled';
-    budgetInCents: number;
-    spentInCents: number;
+    budgetInMicrounits: number;
+    spentInMicrounits: number;
     targetSegment: string;
     audience?: string;
     audienceSize?: number;

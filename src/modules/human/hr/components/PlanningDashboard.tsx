@@ -130,7 +130,7 @@ export function PlanningDashboard() {
                                         showToast("Aucun shift en attente de publication", "info");
                                     }
                                 }}
-                                className="h-12 px-8 bg-accent text-white rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-accent/20"
+                                className="h-12 px-8 bg-accent text-text-primary rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-accent/20"
                             >
                                 <Bell className="w-4 h-4" />
                                 Publier la semaine
@@ -153,7 +153,7 @@ export function PlanningDashboard() {
                                 onClick={() => setSelectedDay(day)}
                                 className={cn(
                                     "flex flex-col items-center justify-center min-w-[64px] h-20 rounded-2xl border transition-all",
-                                    isSelected ? "bg-text-primary text-white border-transparent shadow-xl scale-105" : "bg-bg-tertiary/50 text-text-muted border-border"
+                                    isSelected ? "bg-text-primary text-text-primary border-transparent shadow-xl scale-105" : "bg-bg-tertiary/50 text-text-muted border-border"
                                 )}
                             >
                                 <span className="text-[8px] font-black uppercase tracking-widest opacity-60 mb-1">{format(day, "EEE", { locale: fr })}</span>
@@ -256,7 +256,7 @@ export function PlanningDashboard() {
                                     className={cn(
                                         "h-12 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all", 
                                         editType === type 
-                                            ? "bg-text-primary text-white border-transparent shadow-lg scale-105" 
+                                            ? "bg-text-primary text-text-primary border-transparent shadow-lg scale-105" 
                                             : "bg-bg-tertiary text-text-muted border-border hover:border-accent-gold/50"
                                     )}
                                 >
@@ -268,11 +268,11 @@ export function PlanningDashboard() {
 
                     <div className="pt-6 flex gap-3">
                         {activeShift && (
-                            <Button variant="ghost" onClick={() => { deleteShift(activeShift.id); setIsEditOpen(false); }} title="Supprimer" className="h-16 w-16 bg-error/10 text-error rounded-2xl hover:bg-error hover:text-white transition-all">
+                            <Button variant="ghost" onClick={() => { deleteShift(activeShift.id); setIsEditOpen(false); }} title="Supprimer" className="h-16 w-16 bg-error/10 text-error rounded-2xl hover:bg-error hover:text-text-primary transition-all">
                                 <Trash2 className="w-6 h-6" />
                             </Button>
                         )}
-                        <Button className="flex-1 h-16 bg-text-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black shadow-premium active:scale-[0.98] transition-all" onClick={handleHomologuer}>
+                        <Button className="flex-1 h-16 bg-text-primary text-text-primary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black shadow-premium active:scale-[0.98] transition-all" onClick={handleHomologuer}>
                             Homologuer le shift
                         </Button>
                     </div>
@@ -295,7 +295,7 @@ export function PlanningDashboard() {
                             showToast("Aucun shift en attente de publication", "info");
                         }
                     }}
-                    className="fixed bottom-28 right-6 w-14 h-14 bg-accent text-white rounded-full flex items-center justify-center shadow-2xl z-40 border-4 border-white dark:border-bg-primary"
+                    className="fixed bottom-28 right-6 w-14 h-14 bg-accent text-text-primary rounded-full flex items-center justify-center shadow-2xl z-40 border-4 border-white dark:border-bg-primary"
                 >
                     <Bell className="w-6 h-6" />
                 </motion.button>

@@ -9,16 +9,17 @@
 export type ICMPriority = 'HIGH' | 'MEDIUM' | 'LAZY' | 'OFF';
 
 export interface ICMImportanceMap {
-  orders:      ICMPriority;
-  tables:      ICMPriority;
-  products:    ICMPriority;
-  categories:  ICMPriority;
-  stocks:      ICMPriority;
-  recipes:     ICMPriority;
-  finance:     ICMPriority;
-  compliance:  ICMPriority;
-  marketing:   ICMPriority;
-  staff:       ICMPriority;
+  orders:       ICMPriority;
+  tables:       ICMPriority;
+  products:     ICMPriority;
+  categories:   ICMPriority;
+  stocks:       ICMPriority;
+  recipes:      ICMPriority;
+  finance:      ICMPriority;
+  compliance:   ICMPriority;
+  marketing:    ICMPriority;
+  staff:        ICMPriority;
+  intelligence: ICMPriority;
 }
 
 export interface TaskContext {
@@ -31,7 +32,7 @@ export interface TaskContext {
 const OFF_ALL: ICMImportanceMap = {
   orders: 'OFF', tables: 'OFF', products: 'OFF', categories: 'OFF',
   stocks: 'OFF', recipes: 'OFF', finance: 'OFF', compliance: 'OFF',
-  marketing: 'OFF', staff: 'OFF',
+  marketing: 'OFF', staff: 'OFF', intelligence: 'OFF',
 };
 
 export const TASK_MAPS: Record<string, TaskContext> = {
@@ -99,6 +100,16 @@ export const TASK_MAPS: Record<string, TaskContext> = {
       compliance: 'HIGH',
       stocks:     'MEDIUM',
       orders:     'LAZY',
+    },
+  },
+
+  reservations: {
+    taskId: 'reservations',
+    importance: {
+      ...OFF_ALL,
+      tables:    'HIGH',
+      orders:    'MEDIUM',
+      marketing: 'MEDIUM',
     },
   },
 
@@ -195,9 +206,24 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: { ...OFF_ALL, staff: 'HIGH', orders: 'LAZY' },
   },
 
+  planning: {
+    taskId: 'planning',
+    importance: { ...OFF_ALL, staff: 'HIGH', orders: 'LAZY' },
+  },
+
+  timeclock: {
+    taskId: 'timeclock',
+    importance: { ...OFF_ALL, staff: 'HIGH' },
+  },
+
+  recruitment: {
+    taskId: 'recruitment',
+    importance: { ...OFF_ALL, staff: 'HIGH' },
+  },
+
   analytics: {
     taskId: 'analytics',
-    importance: { ...OFF_ALL, finance: 'MEDIUM', compliance: 'LAZY', marketing: 'LAZY', orders: 'LAZY' },
+    importance: { ...OFF_ALL, finance: 'MEDIUM', intelligence: 'MEDIUM', compliance: 'LAZY', marketing: 'LAZY', orders: 'LAZY' },
   },
 
   admin: {
@@ -205,7 +231,7 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: {
       orders: 'HIGH', tables: 'HIGH', products: 'HIGH', categories: 'HIGH',
       stocks: 'HIGH', recipes: 'HIGH', finance: 'HIGH', compliance: 'HIGH',
-      marketing: 'HIGH', staff: 'HIGH',
+      marketing: 'HIGH', staff: 'HIGH', intelligence: 'HIGH',
     },
   },
 
@@ -214,7 +240,7 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: {
       orders: 'MEDIUM', tables: 'MEDIUM', products: 'MEDIUM', categories: 'MEDIUM',
       stocks: 'LAZY', recipes: 'LAZY', finance: 'LAZY', compliance: 'LAZY',
-      marketing: 'OFF', staff: 'LAZY',
+      marketing: 'OFF', staff: 'LAZY', intelligence: 'OFF',
     },
   },
 };
@@ -232,7 +258,11 @@ export function resolveTaskContext(pathname: string): TaskContext {
   if (pathname.includes('/finance') || pathname.includes('/audit'))           return TASK_MAPS.finance;
   if (pathname.includes('/operations'))                                       return TASK_MAPS.operations;
   if (pathname.includes('/compliance'))                                       return TASK_MAPS.compliance;
-  if (pathname.includes('/reservations') || pathname.includes('/commerce'))   return TASK_MAPS.commerce;
+  if (pathname.includes('/reservations'))                                       return TASK_MAPS.reservations;
+  if (pathname.includes('/commerce'))                                           return TASK_MAPS.commerce;
+  if (pathname.includes('/planning'))                                         return TASK_MAPS.planning;
+  if (pathname.includes('/timeclock'))                                        return TASK_MAPS.timeclock;
+  if (pathname.includes('/recruitment'))                                      return TASK_MAPS.recruitment;
   if (pathname.includes('/staff'))                                            return TASK_MAPS.staff;
   if (pathname.includes('/inventory'))                                        return TASK_MAPS.inventory;
   if (pathname.includes('/haccp'))                                            return TASK_MAPS.haccp;

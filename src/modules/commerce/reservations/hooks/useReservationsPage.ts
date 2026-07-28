@@ -6,7 +6,8 @@ import { startOfWeek, addDays, addWeeks, subWeeks, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
 
-import { useReservations, useCRM, useTables, useGroups } from "@/modules/ops/providers/NexusOpsProvider";
+import { useReservations, useTables, useGroups } from "@/modules/ops/providers";
+import { useCRM } from "@/modules/commerce";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";

@@ -102,7 +102,7 @@ function ShiftCard({ shift, warnings }: { shift: Shift; warnings: LegalWarning[]
                 hasRed
                     ? 'border-status-danger/30 bg-status-danger/5'
                     : hasAmber
-                    ? 'border-amber-500/30 bg-amber-500/5'
+                    ? 'border-action-primary/30 bg-action-primary/5'
                     : 'border-border bg-bg-secondary'
             )}
         >
@@ -136,7 +136,7 @@ function ShiftCard({ shift, warnings }: { shift: Shift; warnings: LegalWarning[]
                         'flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded',
                         w.level === 'red'
                             ? 'bg-status-danger/15 text-status-danger'
-                            : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                            : 'bg-action-primary/10 text-amber-600 dark:text-action-primary'
                     )}
                 >
                     {w.level === 'red' ? (
@@ -264,7 +264,7 @@ export function PlanningWeekView({
                     <button
                         onClick={() => void onPublish(draftIds)}
                         disabled={isPublishing}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-action-primary text-white text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 shadow"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-action-primary text-text-primary text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 shadow"
                     >
                         <Send className="w-4 h-4" />
                         {isPublishing
@@ -277,7 +277,7 @@ export function PlanningWeekView({
             {/* Legend */}
             <div className="flex flex-wrap gap-4 text-[10px] font-bold text-text-muted uppercase tracking-widest">
                 <span className="flex items-center gap-1.5">
-                    <AlertTriangle className="w-3 h-3 text-amber-500" />
+                    <AlertTriangle className="w-3 h-3 text-action-primary" />
                     Avertissement (non bloquant)
                 </span>
                 <span className="flex items-center gap-1.5">

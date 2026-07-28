@@ -340,7 +340,7 @@ export function CleaningPlan() {
                             <button
                                 onClick={handleSign}
                                 disabled={pinInput.length < 4 || !nameInput.trim()}
-                                className="flex-1 px-4 py-2 rounded-lg bg-action-primary text-white text-sm font-medium disabled:opacity-40 hover:opacity-90 transition-opacity"
+                                className="flex-1 px-4 py-2 rounded-lg bg-action-primary text-text-primary text-sm font-medium disabled:opacity-40 hover:opacity-90 transition-opacity"
                             >
                                 Signer
                             </button>

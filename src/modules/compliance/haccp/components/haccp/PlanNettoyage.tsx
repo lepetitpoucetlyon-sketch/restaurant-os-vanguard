@@ -88,7 +88,7 @@ export function PlanNettoyage() {
                     <ClipboardCheck size={24} />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Plan de Nettoyage</h2>
+                    <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Plan de Nettoyage</h2>
                     <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Maintenance sanitaire des zones de production</p>
                 </div>
             </div>
@@ -175,7 +175,7 @@ export function PlanNettoyage() {
                                     <div className={cn(
                                         "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
                                         isDone
-                                            ? "bg-status-success text-white shadow-lg shadow-emerald-500/20"
+                                            ? "bg-status-success text-text-primary shadow-lg shadow-emerald-500/20"
                                             : "bg-surface-card dark:bg-bg-secondary border border-border text-text-muted group-hover:border-emerald-500/30"
                                     )}>
                                         {isDone ? <CheckCircle2 size={20} /> : <div className="w-5 h-5 rounded-md border-2 border-current opacity-20" />}
@@ -212,7 +212,7 @@ export function PlanNettoyage() {
                                                 e.stopPropagation();
                                                 setActiveVisionTask({ id: task.id, name: task.label });
                                             }}
-                                            className="w-10 h-10 rounded-xl bg-status-warning/10 text-status-warning flex items-center justify-center hover:bg-status-warning hover:text-white transition-all shadow-lg shadow-amber-500/5 group/vision"
+                                            className="w-10 h-10 rounded-xl bg-status-warning/10 text-status-warning flex items-center justify-center hover:bg-status-warning hover:text-text-primary transition-all shadow-lg shadow-amber-500/5 group/vision"
                                         >
                                             <Camera size={18} className="group-hover/vision:scale-110 transition-transform" />
                                         </button>
@@ -228,7 +228,7 @@ export function PlanNettoyage() {
                                                 e.stopPropagation();
                                                 setReportingTask({ task, zoneId: selectedZoneId });
                                             }}
-                                            className="w-10 h-10 rounded-full border-2 border-rose-500/30 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                                            className="w-10 h-10 rounded-full border-2 border-rose-500/30 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-text-primary transition-all opacity-0 group-hover:opacity-100"
                                         >
                                             <AlertTriangle size={18} />
                                         </button>
@@ -259,7 +259,7 @@ export function PlanNettoyage() {
                     <Button
                         onClick={submitReport}
                         disabled={!reportNote.trim()}
-                        className="w-full h-14 bg-status-danger hover:bg-status-danger text-white rounded-2xl shadow-xl shadow-rose-500/20 font-black tracking-widest uppercase text-[10px] transition-all"
+                        className="w-full h-14 bg-status-danger hover:bg-status-danger text-text-primary rounded-2xl shadow-xl shadow-rose-500/20 font-black tracking-widest uppercase text-[10px] transition-all"
                     >
                         Enregistrer l'anomalie
                     </Button>

@@ -74,20 +74,20 @@ export default function ROICalculator() {
       {/* Comparison */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl bg-red-50 border border-red-100 p-4 space-y-1">
-          <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest">TheFork / mois</p>
+          <p className="text-[10px] font-bold text-status-danger uppercase tracking-widest">TheFork / mois</p>
           <p className="text-2xl font-serif font-bold text-red-600">
             {calc.theForkCost.toLocaleString('fr-FR')} €
           </p>
-          <p className="text-xs text-red-400">
+          <p className="text-xs text-status-danger">
             {monthlyFee} € fixe + {covers} × {COMMISSION_PER_COVER} € comm.
           </p>
         </div>
         <div className="rounded-2xl bg-green-50 border border-green-100 p-4 space-y-1">
-          <p className="text-[10px] font-bold text-green-500 uppercase tracking-widest">Restaurant OS / mois</p>
+          <p className="text-[10px] font-bold text-status-success uppercase tracking-widest">Restaurant OS / mois</p>
           <p className="text-2xl font-serif font-bold text-green-700">
             {OUR_FLAT_FEE} €
           </p>
-          <p className="text-xs text-green-500">Forfait tout inclus, sans commission</p>
+          <p className="text-xs text-status-success">Forfait tout inclus, sans commission</p>
         </div>
       </div>
 
@@ -95,19 +95,19 @@ export default function ROICalculator() {
       <div className="rounded-2xl bg-bg-primary border border-border divide-y divide-border">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
-            <TrendingDown className="w-4 h-4 text-green-500" />
+            <TrendingDown className="w-4 h-4 text-status-success" />
             Economie mensuelle
           </div>
-          <span className={`font-bold font-mono text-base ${calc.monthlySavings >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+          <span className={`font-bold font-mono text-base ${calc.monthlySavings >= 0 ? 'text-green-600' : 'text-status-danger'}`}>
             {calc.monthlySavings >= 0 ? '+' : ''}{calc.monthlySavings.toLocaleString('fr-FR')} €
           </span>
         </div>
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
-            <TrendingUp className="w-4 h-4 text-green-500" />
+            <TrendingUp className="w-4 h-4 text-status-success" />
             Economie annuelle
           </div>
-          <span className={`font-bold font-mono text-base ${calc.annualSavings >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+          <span className={`font-bold font-mono text-base ${calc.annualSavings >= 0 ? 'text-green-600' : 'text-status-danger'}`}>
             {calc.annualSavings >= 0 ? '+' : ''}{calc.annualSavings.toLocaleString('fr-FR')} €
           </span>
         </div>

@@ -24,4 +24,6 @@ export interface IReservationProvider {
     cancelReservation(id: string, reason?: string): Promise<void>;
     /** Sync full state from provider — returns nb of records synced. */
     syncAll(tenantId: string): Promise<number>;
+    /** Vérifie la signature HMAC du webhook entrant. Retourne false → 401. */
+    verifySignature?(rawBody: string, headers: Headers): boolean;
 }

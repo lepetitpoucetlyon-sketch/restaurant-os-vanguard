@@ -15,7 +15,7 @@ import {
     Sparkles,
 } from "lucide-react";
 
-import { useInventoryPage } from "@/modules/logistics/inventory/hooks/useInventoryPage";
+import { useInventoryPage } from "@/modules/logistics/inventory/hooks";
 import {
     StockReceptionModal,
     StockTransferModal,
@@ -62,7 +62,7 @@ export default function InventoryPage() {
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90">
+                    <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90">
                         <PlusCircle className="w-4 h-4" /> Réception
                     </button>
                     <button onClick={() => setPrepOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover">
@@ -91,7 +91,7 @@ export default function InventoryPage() {
                 {activeTab === "stock" && (
                     <section>
                         {lowStockItems.length > 0 && (
-                            <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-md bg-amber-500/10 text-amber-600 text-sm">
+                            <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-md bg-action-primary/10 text-amber-600 text-sm">
                                 <AlertTriangle className="w-4 h-4" />
                                 {lowStockItems.length} article(s) en stock bas.
                             </div>
@@ -119,7 +119,7 @@ export default function InventoryPage() {
                                             return (
                                                 <tr key={item.id} className="border-t border-border hover:bg-surface-hover">
                                                     <td className="px-4 py-2.5 font-medium">{item.name ?? item.ingredientName}</td>
-                                                    <td className={`px-4 py-2.5 tabular-nums ${isLow ? "text-amber-500 font-semibold" : ""}`}>{item.quantity}</td>
+                                                    <td className={`px-4 py-2.5 tabular-nums ${isLow ? "text-action-primary font-semibold" : ""}`}>{item.quantity}</td>
                                                     <td className="px-4 py-2.5 text-text-muted">{item.unit}</td>
                                                     <td className={`px-4 py-2.5 tabular-nums ${dlcStatus.className}`} title={item.dlc as string | undefined}>{dlcStatus.label}</td>
                                                     <td className="px-4 py-2.5 tabular-nums text-text-muted">{item.minQuantity != null ? `${item.minQuantity} ${item.unit}` : "—"}</td>
@@ -141,7 +141,7 @@ export default function InventoryPage() {
                                                             <button onClick={() => setOracleItem(item)} title="Prévision Oracle" className="p-1.5 rounded hover:bg-surface-hover text-accent-gold hover:text-accent-gold/80">
                                                                 <Sparkles className="w-3.5 h-3.5" />
                                                             </button>
-                                                            <button onClick={() => handleDeleteClick(item)} title={deletePermission.allowed ? "Supprimer" : "Accès insuffisant"} className={`p-1.5 rounded hover:bg-surface-hover ${deletePermission.allowed ? "text-red-500 hover:text-red-600" : "opacity-40 cursor-not-allowed text-text-muted"}`}>
+                                                            <button onClick={() => handleDeleteClick(item)} title={deletePermission.allowed ? "Supprimer" : "Accès insuffisant"} className={`p-1.5 rounded hover:bg-surface-hover ${deletePermission.allowed ? "text-status-danger hover:text-red-600" : "opacity-40 cursor-not-allowed text-text-muted"}`}>
                                                                 <Trash2 className="w-3.5 h-3.5" />
                                                             </button>
                                                         </div>

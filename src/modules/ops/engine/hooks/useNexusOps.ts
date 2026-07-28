@@ -1,6 +1,6 @@
 "use client";
 
-import { useNexusOps as useProviderNexusOps } from '@/modules/ops/providers/NexusOpsProvider';
+import { useNexusOps as useProviderNexusOps } from '@/modules/ops/providers';
 
 /**
  * 🏛️ useNexusOps - Grade X Compatibility Facade

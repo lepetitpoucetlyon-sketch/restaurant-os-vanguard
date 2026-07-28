@@ -130,7 +130,7 @@ export function DeploymentEngine() {
                 <div className={cn(
                     "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all",
                     status && status.modifiedCount > 0 
-                        ? "bg-status-warning/10 text-status-warning border-amber-500/20 animate-pulse" 
+                        ? "bg-status-warning/10 text-status-warning border-action-primary/20 animate-pulse" 
                         : "bg-status-success/10 text-status-success border-emerald-500/20"
                 )}>
                     {isLoading ? 'Scanning...' : (status && status.modifiedCount > 0 ? `${status.modifiedCount} Changes` : 'Synced')}
@@ -268,7 +268,7 @@ export function DeploymentEngine() {
                         </button>
                         <button
                             onClick={fetchRagHealth}
-                            className="p-3 rounded-xl bg-surface-card/5 border border-white/5 text-muted hover:text-white transition-all"
+                            className="p-3 rounded-xl bg-surface-card/5 border border-white/5 text-muted hover:text-text-primary transition-all"
                         >
                             <Zap className="w-3.5 h-3.5" />
                         </button>

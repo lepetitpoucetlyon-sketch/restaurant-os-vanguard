@@ -107,7 +107,7 @@ export default function AgentIntelligencePage() {
                 <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-4 border-bg-secondary flex items-center justify-center ${
                   report?.status === 'critical' ? 'bg-status-danger' : 'bg-status-success'
                 }`}>
-                  {report?.status === 'critical' ? <ShieldAlert className="w-3 h-3 text-white" /> : <Zap className="w-3 h-3 text-white fill-white" />}
+                  {report?.status === 'critical' ? <ShieldAlert className="w-3 h-3 text-text-primary" /> : <Zap className="w-3 h-3 text-text-primary fill-white" />}
                 </div>
               </div>
               <div>
@@ -153,7 +153,7 @@ export default function AgentIntelligencePage() {
                 <ShieldCheck className="w-3 h-3" />
                 Type Safety: {report?.metrics.typeSafety ?? '--'}%
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-status-warning border border-amber-500/10 rounded-full text-[10px] font-bold text-status-warning uppercase tracking-wider">
+              <div className="flex items-center gap-2 px-4 py-2 bg-status-warning border border-action-primary/10 rounded-full text-[10px] font-bold text-status-warning uppercase tracking-wider">
                 <AlertTriangle className="w-3 h-3" />
                 Anomalies: {report?.complexity.godObjects.length ?? 0}
               </div>
@@ -261,7 +261,7 @@ export default function AgentIntelligencePage() {
                        </p>
                     </div>
                     <button
-                       className="mt-8 w-full px-6 py-3 bg-action-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                       className="mt-8 w-full px-6 py-3 bg-action-primary text-text-primary rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        onClick={fetchReport}
                        disabled={loading}
                     >

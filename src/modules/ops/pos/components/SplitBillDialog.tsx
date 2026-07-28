@@ -172,14 +172,14 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                 <div className="w-10 h-0.5 bg-accent-gold rounded-full" />
                                 <span className="text-[11px] font-black uppercase tracking-[0.5em] text-accent-gold">{t('pos.split.subtitle')}</span>
                             </div>
-                            <h1 className="text-4xl font-serif font-black text-white italic tracking-tight leading-none">{t('pos.split.title')}</h1>
-                             <p className="text-[11px] font-black text-white/30 uppercase tracking-[0.4em] mt-4">
-                                <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
-                                Total TTC: <span className="text-white">{formatCurrency(SovereignMath.toCents(BigInt(total)))}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
+                            <h1 className="text-4xl font-serif font-black text-text-primary italic tracking-tight leading-none">{t('pos.split.title')}</h1>
+                             <p className="text-[11px] font-black text-text-primary/30 uppercase tracking-[0.4em] mt-4">
+                                <span className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
+                                Total TTC: <span className="text-text-primary">{formatCurrency(SovereignMath.toCents(BigInt(total)))}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
                             </p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-14 h-14 bg-surface-card/5 hover:bg-surface-card/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-white/40 hover:text-white transition-all duration-500 border border-subtle group">
+                    <button onClick={onClose} className="w-14 h-14 bg-surface-card/5 hover:bg-surface-card/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-text-primary/40 hover:text-text-primary transition-all duration-500 border border-subtle group">
                         <X className="w-6 h-6" />
                     </button>
                 </div>
@@ -190,7 +190,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             <div className="w-24 h-24 rounded-[32px] bg-accent-gold/10 flex items-center justify-center mx-auto mb-8 shadow-premium border border-accent-gold/20">
                                 <User className="w-12 h-12 text-accent-gold" strokeWidth={1} />
                             </div>
-                            <h2 className="text-3xl font-serif font-black text-white italic tracking-tighter">{t('pos.split.convive_signature_title')}<br />{t('pos.split.convive')} {payingConvive + 1}</h2>
+                            <h2 className="text-3xl font-serif font-black text-text-primary italic tracking-tighter">{t('pos.split.convive_signature_title')}<br />{t('pos.split.convive')} {payingConvive + 1}</h2>
                             <div className="relative">
                                 <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(SovereignMath.toCents(BigInt(getConviveTotal(payingConvive || 0))))}</p>
                                 <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-accent-gold/20 rounded-full blur-sm" />
@@ -219,7 +219,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                     )}>
                                         <method.icon className="w-7 h-7" strokeWidth={1.5} />
                                     </div>
-                                    <span className={cn("text-[10px] font-black uppercase tracking-[0.3em] transition-colors", selectedPaymentMethod === method.id ? "text-white" : "text-white/20 group-hover:text-white/40")}>
+                                    <span className={cn("text-[10px] font-black uppercase tracking-[0.3em] transition-colors", selectedPaymentMethod === method.id ? "text-text-primary" : "text-text-primary/20 group-hover:text-text-primary/40")}>
                                         {method.name}
                                     </span>
                                 </button>
@@ -247,7 +247,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                                 Erreur de paiement<br/>
                                                 <span className="text-[9px] opacity-70">{terminalError}</span>
                                             </p>
-                                            <button onClick={() => setTerminalState('idle')} className="px-6 py-2 rounded-full bg-surface-card border border-white/10 text-white/50 text-[10px] font-bold uppercase hover:bg-white/10 transition-colors mt-2">Réessayer</button>
+                                            <button onClick={() => setTerminalState('idle')} className="px-6 py-2 rounded-full bg-surface-card border border-white/10 text-text-primary/50 text-[10px] font-bold uppercase hover:bg-white/10 transition-colors mt-2">Réessayer</button>
                                         </>
                                     ) : null}
                                 </div>
@@ -257,7 +257,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                 <button
                                     onClick={() => { setPayingConvive(null); setTerminalState('idle'); }}
                                     disabled={isProcessing}
-                                    className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-white/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-white transition-all duration-500 border border-subtle disabled:opacity-20"
+                                    className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-text-primary/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-text-primary transition-all duration-500 border border-subtle disabled:opacity-20"
                                 >
                                     {t('pos.split.back')}
                                 </button>
@@ -290,7 +290,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             "flex-1 flex items-center justify-center gap-4 py-5 px-8 rounded-[28px] font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-700 border",
                                             mode === m.id
                                                 ? "bg-accent-gold text-primary border-accent-gold shadow-glow"
-                                                : "bg-surface-card/[0.02] text-white/40 hover:border-accent-gold/30 hover:text-accent-gold border-white/5"
+                                                : "bg-surface-card/[0.02] text-text-primary/40 hover:border-accent-gold/30 hover:text-accent-gold border-white/5"
                                         )}
                                     >
                                         <m.icon className={cn("w-4 h-4", mode === m.id ? "text-primary" : "text-accent-gold")} strokeWidth={2} />
@@ -306,7 +306,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                     <div className="flex items-center justify-between">
                                         <div className="flex flex-col">
                                             <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.5em] mb-3">{t('pos.split.seats_control')}</span>
-                                            <span className="text-2xl font-serif italic font-black text-white">{t('pos.split.convive_count')}</span>
+                                            <span className="text-2xl font-serif italic font-black text-text-primary">{t('pos.split.convive_count')}</span>
                                         </div>
                                         <div className="flex items-center gap-8 bg-surface-card/[0.02] rounded-[32px] p-3 border border-white/5 shadow-inner">
                                             <button
@@ -329,7 +329,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             <div className="w-12 h-12 rounded-2xl bg-accent-gold/10 flex items-center justify-center">
                                                 <Sparkles className="w-6 h-6 text-accent-gold animate-pulse" />
                                             </div>
-                                            <span className="text-[11px] font-black text-white/60 uppercase tracking-[0.4em]">{t('pos.split.investment_per_seat')}</span>
+                                            <span className="text-[11px] font-black text-text-primary/60 uppercase tracking-[0.4em]">{t('pos.split.investment_per_seat')}</span>
                                         </div>
                                         <span className="text-5xl font-serif font-black italic text-accent-gold drop-shadow-glow">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(amountPerPerson))))}</span>
                                     </div>
@@ -338,11 +338,11 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
 
                             {mode === 'by-item' && (
                                 <div className="px-12 py-8 border-b border-white/5 shrink-0 overflow-y-auto max-h-56 elegant-scrollbar">
-                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 mb-4">{t('pos.split.assign_items')}</p>
+                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-4">{t('pos.split.assign_items')}</p>
                                     <div className="space-y-2">
                                         {items.map((item) => (
                                             <div key={item.cartId} className="flex items-center justify-between gap-4 px-5 py-3 rounded-2xl bg-surface-card/[0.04] border border-white/5">
-                                                <span className="text-xs font-semibold text-white/80 truncate max-w-[140px]">{item.name} ×{item.quantity}</span>
+                                                <span className="text-xs font-semibold text-text-primary/80 truncate max-w-[140px]">{item.name} ×{item.quantity}</span>
                                                 <div className="flex gap-2 shrink-0">
                                                     {convivePayments.map((_, idx) => {
                                                         const isAssigned = (selectedItems[idx] || []).includes(item.cartId);
@@ -361,7 +361,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                                                     "w-7 h-7 rounded-xl text-[10px] font-black transition-all duration-300 border",
                                                                     isAssigned
                                                                         ? "bg-accent-gold text-primary border-accent-gold"
-                                                                        : "bg-transparent border-white/10 text-white/40 hover:border-accent-gold/40 hover:text-accent-gold"
+                                                                        : "bg-transparent border-white/10 text-text-primary/40 hover:border-accent-gold/40 hover:text-accent-gold"
                                                                 )}
                                                             >{idx + 1}</button>
                                                         );
@@ -375,11 +375,11 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
 
                             {mode === 'custom' && (
                                 <div className="px-12 py-8 border-b border-white/5 shrink-0">
-                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 mb-4">{t('pos.split.custom_amounts')}</p>
+                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-4">{t('pos.split.custom_amounts')}</p>
                                     <div className="space-y-3">
                                         {convivePayments.map((_, idx) => (
                                             <div key={idx} className="flex items-center justify-between gap-4">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{t('pos.split.master')} {idx + 1}</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/50">{t('pos.split.master')} {idx + 1}</span>
                                                 <div className="flex items-center gap-2">
                                                     <input
                                                         type="number"
@@ -397,7 +397,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                                         }}
                                                         className="w-24 text-right bg-surface-card/[0.04] border border-white/10 rounded-xl px-3 py-2 text-accent-gold font-serif font-black text-base focus:outline-none focus:border-accent-gold/60"
                                                     />
-                                                    <span className="text-white/40 text-sm font-black">€</span>
+                                                    <span className="text-text-primary/40 text-sm font-black">€</span>
                                                 </div>
                                             </div>
                                         ))}
@@ -419,22 +419,22 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                             )}
                                         >
                                             <div className="flex items-center justify-between mb-8">
-                                                <div className="flex items-center gap-2 text-white/60 font-mono text-xs">
+                                                <div className="flex items-center gap-2 text-text-primary/60 font-mono text-xs">
                                                     {(SovereignMath.toCents(BigInt(getConviveTotal(index))) / 100).toFixed(2)}€
                                                 </div>
                                                 <div className={cn(
                                                     "w-12 h-12 rounded-[20px] flex items-center justify-center font-serif font-black italic text-xl shadow-sm transition-all duration-700",
-                                                    convive.paid ? "bg-accent-gold text-primary rotate-12" : "bg-surface-sidebar/40 text-white/40 border border-white/5 group-hover/card:scale-110"
+                                                    convive.paid ? "bg-accent-gold text-primary rotate-12" : "bg-surface-sidebar/40 text-text-primary/40 border border-white/5 group-hover/card:scale-110"
                                                 )}>
                                                     {convive.paid ? <Check className="w-6 h-6" /> : index + 1}
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.3em] mb-1">{t('pos.split.convive_spirit')}</span>
-                                                    <span className="font-serif italic font-black text-white text-lg">{t('pos.split.master')} {index + 1}</span>
+                                                    <span className="font-serif italic font-black text-text-primary text-lg">{t('pos.split.master')} {index + 1}</span>
                                                 </div>
                                             </div>
 
-                                            <div className="text-4xl font-serif font-black italic text-white mb-8 transition-colors group-hover/card:text-accent-gold group-hover/card:translate-x-2 duration-500">
+                                            <div className="text-4xl font-serif font-black italic text-text-primary mb-8 transition-colors group-hover/card:text-accent-gold group-hover/card:translate-x-2 duration-500">
                                                 {formatCurrency(SovereignMath.toCents(BigInt(getConviveTotal(index))))}
                                             </div>
 
@@ -470,8 +470,8 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.6em] mb-2">{t('pos.split.remaining')}</span>
                                 <div className="flex items-end gap-3">
-                                    <span className="text-5xl font-serif font-black italic text-white leading-none tracking-tighter">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(remainingAmount))))}</span>
-                                    <span className="text-xs font-black text-white/20 uppercase tracking-widest mb-1 pb-1">Restant</span>
+                                    <span className="text-5xl font-serif font-black italic text-text-primary leading-none tracking-tighter">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(remainingAmount))))}</span>
+                                    <span className="text-xs font-black text-text-primary/20 uppercase tracking-widest mb-1 pb-1">Restant</span>
                                 </div>
                             </div>
 
@@ -485,7 +485,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                 </button>
                             ) : (
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.5em] mb-4">À encaisser maintenant</span>
+                                    <span className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.5em] mb-4">À encaisser maintenant</span>
                                     <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(remainingAmount))))}</p>
                                 </div>
                             )}

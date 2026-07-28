@@ -16,7 +16,8 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from '@ui/Modal';
 import { PremiumSelect } from '@ui/PremiumSelect';
-import { useInventory, useQuotes, useCRM } from '@/modules/ops/providers/NexusOpsProvider';
+import { useInventory, useQuotes } from '@/modules/ops/providers';
+import { useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
 import { QuoteLine } from '@modules/commerce/marketing/types';
 import { Quote } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
@@ -139,13 +140,9 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                 status: 'draft',
                 totals: {
                     totalHTInMicrounits: totals.totalHTInMicrounits,
-                    totalHTInCents: Math.round(totals.totalHTInMicrounits / 10_000),
                     totalTTCInMicrounits: totals.totalTTCInMicrounits,
-                    totalTTCInCents: Math.round(totals.totalTTCInMicrounits / 10_000),
                     totalTaxInMicrounits: totals.totalVATInMicrounits,
-                    totalTaxInCents: Math.round(totals.totalVATInMicrounits / 10_000),
                     totalDiscountInMicrounits: 0,
-                    totalDiscountInCents: 0,
                 }
             };
 
@@ -412,7 +409,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                             onClick={handleSave}
                             disabled={isSaving}
                             className={cn(
-                                "h-16 px-14 bg-accent text-white rounded-[24px] text-[11px] font-black uppercase tracking-[0.5em] shadow-premium transition-all duration-700 relative overflow-hidden group flex items-center gap-4",
+                                "h-16 px-14 bg-accent text-text-primary rounded-[24px] text-[11px] font-black uppercase tracking-[0.5em] shadow-premium transition-all duration-700 relative overflow-hidden group flex items-center gap-4",
                                 isSaving && "opacity-50 grayscale cursor-not-allowed"
                             )}
                         >
@@ -471,7 +468,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                                             <p className="text-sm font-black text-text-primary group-hover:text-accent-gold transition-colors">{String(product.name || '')}</p>
                                             <p className="text-[10px] text-text-muted font-medium mt-1">{(Number(product.priceInMicrounits || 0) / 1_000_000).toFixed(2)}€ HT</p>
                                         </div>
-                                        <div className="w-10 h-10 rounded-full bg-bg-tertiary border border-border flex items-center justify-center text-text-muted group-hover:bg-accent-gold group-hover:text-white transition-all">
+                                        <div className="w-10 h-10 rounded-full bg-bg-tertiary border border-border flex items-center justify-center text-text-muted group-hover:bg-accent-gold group-hover:text-text-primary transition-all">
                                             <Plus className="w-4 h-4" />
                                         </div>
                                     </button>

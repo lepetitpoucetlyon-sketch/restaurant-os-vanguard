@@ -27,10 +27,10 @@ export default function WelcomePage() {
   const _yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-bg-primary font-sans overflow-x-hidden selection:bg-accent selection:text-white">
+    <div ref={containerRef} className="min-h-screen bg-bg-primary font-sans overflow-x-hidden selection:bg-accent selection:text-text-primary">
       
       {/* NAVIGATION / HEADER */}
-      <nav className="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference text-white">
+      <nav className="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference text-text-primary">
         <div className="font-serif text-2xl tracking-widest uppercase flex items-center gap-2">
            <Box className="w-6 h-6 text-accent" />
            Restaurant <span className="italic opacity-80">OS</span>
@@ -157,10 +157,10 @@ export default function WelcomePage() {
                  {/* Step A */}
                  <div className="bg-surface-card/5 border border-subtle p-10 rounded-3xl backdrop-blur-md">
                      <div className="w-12 h-12 bg-surface-card/10 rounded-xl flex items-center justify-center mb-8">
-                         <FileText className="w-6 h-6 text-white" />
+                         <FileText className="w-6 h-6 text-text-primary" />
                      </div>
                      <h3 className="text-2xl font-serif mb-4">1. Uploadez votre PDF</h3>
-                     <p className="text-white/60 mb-8 leading-relaxed">
+                     <p className="text-text-primary/60 mb-8 leading-relaxed">
                          Prenez une photo ou uploadez un PDF / Word du menu existant. Rien à formater.
                      </p>
                  </div>
@@ -173,7 +173,7 @@ export default function WelcomePage() {
                          <div className="w-5 h-5 border-2 border-bg-primary border-t-transparent rounded-full animate-spin" />
                      </div>
                      <h3 className="text-2xl font-serif mb-4">2. OCR & IA Générative</h3>
-                     <p className="text-white/60 mb-8 leading-relaxed">
+                     <p className="text-text-primary/60 mb-8 leading-relaxed">
                          Le moteur Gemini 3.1 Pro lit, organise et classe intelligemment 100% des plats, descriptions et prix en quelques secondes.
                      </p>
                  </div>
@@ -183,7 +183,7 @@ export default function WelcomePage() {
                          <Database className="w-6 h-6 text-success" />
                      </div>
                      <h3 className="text-2xl font-serif mb-4">3. Validation Visuelle</h3>
-                     <p className="text-white/60 mb-8 leading-relaxed">
+                     <p className="text-text-primary/60 mb-8 leading-relaxed">
                          Vérifiez les tuiles générées. Un clic et l'intégralité de la carte est injectée dans le KDS et la Caisse.
                      </p>
                  </div>
@@ -191,7 +191,7 @@ export default function WelcomePage() {
 
              <div className="mt-16 text-center">
                  <Link href="/settings?tab=migration">
-                    <Button className="bg-accent text-white w-64 h-14 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-accent/80 transition-all shadow-xl shadow-accent/20">
+                    <Button className="bg-accent text-text-primary w-64 h-14 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-accent/80 transition-all shadow-xl shadow-accent/20">
                         Ouvrir le portail d'import
                     </Button>
                  </Link>
@@ -265,7 +265,7 @@ export default function WelcomePage() {
                       Prêt pour le test ?<br/>
                       <span className="italic text-accent">Activez le Bac à Sable.</span>
                   </h2>
-                  <p className="text-white/60 text-xl font-medium max-w-2xl mx-auto">
+                  <p className="text-text-primary/60 text-xl font-medium max-w-2xl mx-auto">
                       Simulez un service complet avec des fausses commandes générées par notre IA pour former vos équipes avant le grand jour.
                   </p>
                   <Link href="/" className="inline-block mt-8">

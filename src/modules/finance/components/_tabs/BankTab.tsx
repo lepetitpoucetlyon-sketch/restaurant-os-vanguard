@@ -53,7 +53,7 @@ export function BankTab({
                         <button
                             onClick={onConnectBank}
                             disabled={connectingBank}
-                            className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Link2 className="w-4 h-4" />
                             {connectingBank ? "Connexion…" : "Connecter ma banque"}
@@ -172,7 +172,7 @@ export function BankTab({
                                                     className={`px-4 py-2.5 text-right tabular-nums font-medium ${
                                                         isCredit
                                                             ? "text-emerald-600"
-                                                            : "text-red-500"
+                                                            : "text-status-danger"
                                                     }`}
                                                 >
                                                     <span className="flex items-center justify-end gap-1">
@@ -188,8 +188,8 @@ export function BankTab({
                                                     <span
                                                         className={`inline-block w-2 h-2 rounded-full ${
                                                             reconciled
-                                                                ? "bg-emerald-500"
-                                                                : "bg-amber-400"
+                                                                ? "bg-status-success"
+                                                                : "bg-action-primary"
                                                         }`}
                                                         title={reconciled ? "Rapprochée" : "Non rapprochée"}
                                                     />

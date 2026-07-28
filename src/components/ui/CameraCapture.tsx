@@ -109,7 +109,7 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
                     <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-center gap-12">
                         <button 
                             onClick={toggleFacingMode}
-                            className="w-14 h-14 rounded-full bg-surface-card/10 hover:bg-surface-card/20 text-white flex items-center justify-center transition-all backdrop-blur-md"
+                            className="w-14 h-14 rounded-full bg-surface-card/10 hover:bg-surface-card/20 text-text-primary flex items-center justify-center transition-all backdrop-blur-md"
                         >
                             <SwitchCamera className="w-6 h-6" />
                         </button>
@@ -128,7 +128,7 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
                             onClick={() => setIsMirror(!isMirror)}
                             className={cn(
                                 "w-14 h-14 rounded-full flex items-center justify-center transition-all backdrop-blur-md",
-                                isMirror ? "bg-accent text-white" : "bg-surface-card/10 text-white hover:bg-surface-card/20"
+                                isMirror ? "bg-accent text-text-primary" : "bg-surface-card/10 text-text-primary hover:bg-surface-card/20"
                             )}
                         >
                             <RefreshCcw className="w-6 h-6" />
@@ -142,7 +142,7 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
                         <div className="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-accent rounded-bl-3xl m-[-4px]" />
                         <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-accent rounded-br-3xl m-[-4px]" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] font-serif italic bg-surface-sidebar/20 px-6 py-3 rounded-full backdrop-blur-sm">Cadrage CV</p>
+                            <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.3em] font-serif italic bg-surface-sidebar/20 px-6 py-3 rounded-full backdrop-blur-sm">Cadrage CV</p>
                         </div>
                     </div>
                 </>
@@ -153,14 +153,14 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
                     <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-center gap-8">
                         <Button 
                             variant="outline" 
-                            className="h-16 px-10 rounded-2xl bg-surface-card/10 hover:bg-surface-card/20 text-white border-default font-black uppercase text-[11px] tracking-widest transition-all"
+                            className="h-16 px-10 rounded-2xl bg-surface-card/10 hover:bg-surface-card/20 text-text-primary border-default font-black uppercase text-[11px] tracking-widest transition-all"
                             onClick={() => setCapturedImage(null)}
                         >
                             <X className="w-5 h-5 mr-3" />
                             Recommencer
                         </Button>
                         <Button 
-                            className="h-16 px-12 rounded-2xl bg-accent hover:bg-surface-card text-white hover:text-primary font-black uppercase text-[11px] tracking-widest shadow-2xl transition-all"
+                            className="h-16 px-12 rounded-2xl bg-accent hover:bg-surface-card text-text-primary hover:text-primary font-black uppercase text-[11px] tracking-widest shadow-2xl transition-all"
                             onClick={confirmPhoto}
                         >
                             <Check className="w-5 h-5 mr-3" />

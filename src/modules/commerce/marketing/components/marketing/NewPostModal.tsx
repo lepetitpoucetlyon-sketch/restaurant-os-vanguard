@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Edit3, Trash2, ImageIcon, Settings, Calendar, Clock, Check } from "lucide-react";
 import { Button } from "@ui/button";
 
-import { useMarketing } from "@/modules/ops/providers/NexusOpsProvider";
+import { useMarketing } from "@/modules/ops/providers";
 
 interface NewPostModalProps {
     isOpen: boolean;
@@ -105,7 +105,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                                         ? 'border-emerald-500 bg-status-success'
                                                         : 'border-border group-hover:border-emerald-500 group-hover:bg-status-success'
                                                 }`}>
-                                                    <Check size={12} className={`text-white ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+                                                    <Check size={12} className={`text-text-primary ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
                                                 </div>
                                             </button>
                                         );
@@ -119,7 +119,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                     <textarea
                                         value={caption}
                                         onChange={(e) => setCaption(e.target.value)}
-                                        className="w-full h-40 p-6 bg-surface-card dark:bg-surface-card/5 rounded-[2rem] border border-border/50 focus:border-text-primary/20 focus:ring-4 focus:ring-text-primary/5 outline-none resize-none text-text-primary dark:text-white placeholder:text-text-muted/50 text-base font-medium shadow-sm transition-all"
+                                        className="w-full h-40 p-6 bg-surface-card dark:bg-surface-card/5 rounded-[2rem] border border-border/50 focus:border-text-primary/20 focus:ring-4 focus:ring-text-primary/5 outline-none resize-none text-text-primary dark:text-text-primary placeholder:text-text-muted/50 text-base font-medium shadow-sm transition-all"
                                         placeholder="Écrivez une légende captivante..."
                                     />
                                     <div className="absolute bottom-4 left-4 flex gap-2">

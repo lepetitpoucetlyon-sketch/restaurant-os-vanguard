@@ -38,7 +38,7 @@ export const GlassInput: React.FC<GlassInputProps> = ({
                     className={cn(
                         "w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3",
                         "text-muted placeholder:text-secondary outline-none transition-all",
-                        "focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 focus:bg-surface-sidebar/80",
+                        "focus:border-action-primary/50 focus:ring-1 focus:ring-action-primary/20 focus:bg-surface-sidebar/80",
                         icon && "pl-11",
                         error && "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20",
                         className

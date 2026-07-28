@@ -57,11 +57,11 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
             >
                 {/* Header Section (Mobile/Top) */}
                 <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50 text-center">
-                    <h2 className="text-3xl font-serif italic text-white tracking-tighter mb-1 uppercase">Audit de Dressage</h2>
+                    <h2 className="text-3xl font-serif italic text-text-primary tracking-tighter mb-1 uppercase">Audit de Dressage</h2>
                     <p className="text-[10px] font-black text-status-warning uppercase tracking-[0.5em]">{recipeName}</p>
                 </div>
 
-                <button onClick={onClose} className="absolute top-8 right-8 z-50 p-3 rounded-full bg-surface-card/5 text-muted hover:text-white transition-all">
+                <button onClick={onClose} className="absolute top-8 right-8 z-50 p-3 rounded-full bg-surface-card/5 text-muted hover:text-text-primary transition-all">
                     <X size={20} />
                 </button>
 
@@ -86,7 +86,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                         {/* Captured Image */}
                         <div className="space-y-4 relative">
                             <p className="text-[9px] font-black text-status-warning uppercase tracking-[0.3em] text-center font-bold">CAPTURE RÉELLE</p>
-                            <div className="aspect-square rounded-[2rem] bg-surface-sidebar border-2 border-dashed border-amber-500/30 overflow-hidden relative">
+                            <div className="aspect-square rounded-[2rem] bg-surface-sidebar border-2 border-dashed border-action-primary/30 overflow-hidden relative">
                                 {capturedImage ? (
                                     <img src={capturedImage} className="w-full h-full object-cover" alt="Capture" />
                                 ) : (
@@ -130,7 +130,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                             <div className="w-20 h-20 bg-surface-card/5 rounded-3xl flex items-center justify-center mx-auto">
                                 <Zap className="text-primary" size={32} />
                             </div>
-                            <h4 className="text-xl font-serif italic text-white">Contrôle de Conformité IA</h4>
+                            <h4 className="text-xl font-serif italic text-text-primary">Contrôle de Conformité IA</h4>
                             <p className="text-[11px] font-bold text-secondary leading-relaxed uppercase tracking-widest">
                                 Prenez une photo pour comparer <br />l'assiette avec le standard technique.
                             </p>
@@ -140,7 +140,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                     {isScanning && (
                         <div className="text-center space-y-6">
                             <Loader2 className="animate-spin text-status-warning mx-auto" size={48} />
-                            <h4 className="text-xl font-serif italic text-white animate-pulse">Analyse Vision en cours...</h4>
+                            <h4 className="text-xl font-serif italic text-text-primary animate-pulse">Analyse Vision en cours...</h4>
                             <p className="text-[10px] font-black text-secondary uppercase tracking-[0.4em]">Gemini 1.5 Pro Multimodal</p>
                         </div>
                     )}
@@ -153,12 +153,12 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                         >
                             {/* Score Gauge */}
                             <div className="relative flex flex-col items-center">
-                                <div className="text-[100px] font-serif font-black italic text-white leading-none tracking-tighter">
+                                <div className="text-[100px] font-serif font-black italic text-text-primary leading-none tracking-tighter">
                                     {auditResult.score}<span className="text-3xl text-secondary">/10</span>
                                 </div>
                                 <div className={cn(
                                     "px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.3em] mt-4 shadow-lg",
-                                    auditResult.isCompliant ? "bg-status-success text-white" : "bg-status-danger text-white"
+                                    auditResult.isCompliant ? "bg-status-success text-text-primary" : "bg-status-danger text-text-primary"
                                 )}>
                                     {auditResult.isCompliant ? "Dressage Validé" : "Réajustement Requis"}
                                 </div>
@@ -192,13 +192,13 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                             <div className="grid grid-cols-2 gap-4 pt-8">
                                 <Button 
                                     onClick={() => setAuditResult(null)}
-                                    className="h-14 bg-surface-card/5 text-muted hover:text-white text-[10px] font-black uppercase tracking-widest rounded-2xl border border-subtle"
+                                    className="h-14 bg-surface-card/5 text-muted hover:text-text-primary text-[10px] font-black uppercase tracking-widest rounded-2xl border border-subtle"
                                 >
                                     Refaire
                                 </Button>
                                 <Button 
                                     onClick={() => onComplete(true)}
-                                    className="h-14 bg-status-success text-white hover:bg-status-success text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-500/20"
+                                    className="h-14 bg-status-success text-text-primary hover:bg-status-success text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-500/20"
                                 >
                                     Valider l'Envoi
                                 </Button>

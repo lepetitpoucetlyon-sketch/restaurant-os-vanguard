@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { ParsedFile, ImportResult } from '../types';
-import { isMaskedEmail } from '@/modules/onboarding/migration/emailFilters';
+import { isMaskedEmail } from '../emailFilters';
 
 function parseDate(raw: string): number | undefined {
   if (!raw) return undefined;

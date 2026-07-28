@@ -58,11 +58,11 @@ export const EndOfDayWizard: React.FC = () => {
         return (
             <div className="p-8 bg-status-success/10 border border-emerald-500/20 rounded-2xl text-center">
                 <CheckCircle2 className="mx-auto text-status-success mb-4" size={48} />
-                <h2 className="text-xl font-bold text-white mb-2">Journée Clôturée</h2>
+                <h2 className="text-xl font-bold text-text-primary mb-2">Journée Clôturée</h2>
                 <p className="text-status-success/70 text-sm mb-6">
                     Tous les registres fiscaux ont été scellés et archivés (NF525).
                 </p>
-                <button className="px-6 py-2 bg-status-success text-white rounded-xl font-bold hover:bg-status-success transition-colors">
+                <button className="px-6 py-2 bg-status-success text-text-primary rounded-xl font-bold hover:bg-status-success transition-colors">
                     Télécharger le Rapport Z
                 </button>
             </div>
@@ -76,7 +76,7 @@ export const EndOfDayWizard: React.FC = () => {
                     <Lock size={24} />
                 </div>
                 <div>
-                    <h2 className="text-xl font-bold text-white">Clôture de Journée</h2>
+                    <h2 className="text-xl font-bold text-text-primary">Clôture de Journée</h2>
                     <p className="text-muted text-sm">Certification NF525 & HACCP</p>
                 </div>
             </div>
@@ -84,7 +84,7 @@ export const EndOfDayWizard: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
                     <p className="text-xs text-secondary uppercase font-bold mb-1">CA à Sceller</p>
-                    <p className="text-lg font-bold text-white">{(revenue / 1_000_000).toFixed(2)} €</p>
+                    <p className="text-lg font-bold text-text-primary">{(revenue / 1_000_000).toFixed(2)} €</p>
                 </div>
                 <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
                     <p className="text-xs text-secondary uppercase font-bold mb-1">État Tables</p>

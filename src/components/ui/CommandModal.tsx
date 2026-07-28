@@ -202,7 +202,7 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                                             >
                                                 <div className={cn(
                                                     "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-700",
-                                                    isActive ? "bg-surface-card/20 text-white" : "bg-surface-card text-accent-gold border border-accent-gold/20 shadow-sm"
+                                                    isActive ? "bg-surface-card/20 text-text-primary" : "bg-surface-card text-accent-gold border border-accent-gold/20 shadow-sm"
                                                 )}>
                                                     <Icon strokeWidth={1.5} className="w-6 h-6" />
                                                 </div>

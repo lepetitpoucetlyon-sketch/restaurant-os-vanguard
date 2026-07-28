@@ -1,5 +1,5 @@
 "use client";
 import React from 'react';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 export const useFleet = () => useNexusFleet();
 export const FleetProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;

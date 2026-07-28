@@ -287,7 +287,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                 <button
                                     onClick={() => handlePortionChange(-1)}
                                     disabled={currentPortions <= 1}
-                                    className="w-9 h-9 rounded-xl border border-black/10 bg-surface-card flex items-center justify-center hover:bg-accent hover:text-white hover:border-accent transition-all disabled:opacity-30 disabled:cursor-not-allowed text-primary"
+                                    className="w-9 h-9 rounded-xl border border-black/10 bg-surface-card flex items-center justify-center hover:bg-accent hover:text-text-primary hover:border-accent transition-all disabled:opacity-30 disabled:cursor-not-allowed text-primary"
                                 >
                                     <Minus className="w-4 h-4" strokeWidth={2.5} />
                                 </button>
@@ -296,7 +296,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                 </span>
                                 <button
                                     onClick={() => handlePortionChange(1)}
-                                    className="w-9 h-9 rounded-xl border border-black/10 bg-surface-card flex items-center justify-center hover:bg-accent hover:text-white hover:border-accent transition-all text-primary"
+                                    className="w-9 h-9 rounded-xl border border-black/10 bg-surface-card flex items-center justify-center hover:bg-accent hover:text-text-primary hover:border-accent transition-all text-primary"
                                 >
                                     <Plus className="w-4 h-4" strokeWidth={2.5} />
                                 </button>
@@ -372,7 +372,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                     <div className="p-10 border-t transition-colors duration-500 border-black/5 bg-surface-bg/50">
                         <Button
                             onClick={() => printRecipeTechnicalSheet(recipe, currentPortions)}
-                            className="w-full h-16 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-lg transition-all transform hover:scale-[1.02] bg-surface-sidebar hover:bg-surface-sidebar text-white"
+                            className="w-full h-16 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-lg transition-all transform hover:scale-[1.02] bg-surface-sidebar hover:bg-surface-sidebar text-text-primary"
                         >
                             <Printer className="w-5 h-5 mr-3" />
                             Imprimer Fiche Technique

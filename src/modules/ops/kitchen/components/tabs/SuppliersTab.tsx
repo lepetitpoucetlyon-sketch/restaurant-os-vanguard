@@ -47,11 +47,11 @@ export function SuppliersTab() {
                             <motion.div
                                 whileHover={{ rotate: 360 }}
                                 transition={{ duration: 0.8 }}
-                                className="w-14 h-14 rounded-lg flex items-center justify-center border border-border bg-bg-tertiary dark:bg-bg-tertiary/50 group-hover:bg-accent group-hover:text-white transition-all duration-300 shadow-inner"
+                                className="w-14 h-14 rounded-lg flex items-center justify-center border border-border bg-bg-tertiary dark:bg-bg-tertiary/50 group-hover:bg-accent group-hover:text-text-primary transition-all duration-300 shadow-inner"
                             >
                                 <Truck strokeWidth={1.5} className="w-7 h-7" style={{ color: supplier.color }} />
                             </motion.div>
-                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent text-white shadow-xl shadow-accent/20">
+                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent text-text-primary shadow-xl shadow-accent/20">
                                 <span className="text-[12px]">★</span>
                                 <span className="text-[11px] font-mono leading-none">{supplier.rating}</span>
                             </div>
@@ -68,7 +68,7 @@ export function SuppliersTab() {
                                 <span className="font-medium tracking-tight break-all">{supplier.email}</span>
                             </div>
                         </div>
-                        <Button className="w-full mt-8 h-12 bg-bg-tertiary dark:bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-white rounded-lg font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border border-border/50 group-hover:border-accent">
+                        <Button className="w-full mt-8 h-12 bg-bg-tertiary dark:bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-text-primary rounded-lg font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border border-border/50 group-hover:border-accent">
                             Catalogue & Tarifs
                         </Button>
                     </motion.div>

@@ -78,7 +78,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                                                     color === 'ruby' ? '#EF4444' : '#8B5CF6'
                                 }}
                             >
-                                {theme.accentColor === color && <Check className="w-4 h-4 text-white" />}
+                                {theme.accentColor === color && <Check className="w-4 h-4 text-text-primary" />}
                             </button>
                         ))}
                     </div>

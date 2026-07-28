@@ -127,7 +127,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                     <div className="flex flex-col space-y-2 w-full text-left">
                         <span className="text-sm font-medium text-muted">{field.label}</span>
                         <textarea
-                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none transition-all focus:border-amber-500/50 min-h-[100px]"
+                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none transition-all focus:border-action-primary/50 min-h-[100px]"
                             value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         />
@@ -153,7 +153,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                     <div className="flex flex-col space-y-2 w-full text-left">
                         <span className="text-sm font-medium text-muted">{field.label}</span>
                         <select
-                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none focus:border-amber-500/50"
+                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none focus:border-action-primary/50"
                             value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         >
@@ -184,7 +184,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                             <span className="text-sm font-bold text-status-warning/80 uppercase tracking-wider">{field.label}</span>
                             <button 
                                 onClick={() => onChange([...listValue, {}] as SovereignValue)}
-                                className="p-2 bg-status-warning/10 hover:bg-status-warning/20 text-status-warning rounded-lg transition-colors border border-amber-500/30"
+                                className="p-2 bg-status-warning/10 hover:bg-status-warning/20 text-status-warning rounded-lg transition-colors border border-action-primary/30"
                             >
                                 <Plus size={16} />
                             </button>
@@ -200,7 +200,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                                 >
                                     <button 
                                         onClick={() => onChange(listValue.filter((_, i) => i !== index) as SovereignValue)}
-                                        className="absolute -top-2 -right-2 p-1 bg-status-danger text-white rounded-full hover:bg-status-danger transition-colors shadow-lg z-10 opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                        className="absolute -top-2 -right-2 p-1 bg-status-danger text-text-primary rounded-full hover:bg-status-danger transition-colors shadow-lg z-10 opacity-0 group-hover/item:opacity-100 transition-opacity"
                                     >
                                         <Trash2 size={12} />
                                     </button>
@@ -234,7 +234,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
             {/* Header Control */}
             <div className="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-[2rem] bg-surface-sidebar/60 backdrop-blur-xl border border-white/5 shadow-2xl gap-4">
                 <div className="text-left">
-                    <h2 className="text-2xl font-bold text-white tracking-tight">{schema.title || schema.id.toUpperCase()}</h2>
+                    <h2 className="text-2xl font-bold text-text-primary tracking-tight">{schema.title || schema.id.toUpperCase()}</h2>
                     <p className="text-sm text-muted">Configuration gérée par le Nexus-Sync Engine.</p>
                 </div>
                 
@@ -246,7 +246,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 10 }}
                                 onClick={handleReset}
-                                className="flex items-center space-x-2 px-4 py-2 text-sm text-muted hover:text-white transition-colors"
+                                className="flex items-center space-x-2 px-4 py-2 text-sm text-muted hover:text-text-primary transition-colors"
                             >
                                 <RotateCcw size={16} />
                                 <span>Annuler</span>
@@ -284,7 +284,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                             key={field.id || field.key}
                             variants={fadeInUp}
                             className={cn(
-                                "p-6 rounded-3xl bg-surface-card/5 border border-white/5 hover:border-amber-500/30 transition-all group",
+                                "p-6 rounded-3xl bg-surface-card/5 border border-white/5 hover:border-action-primary/30 transition-all group",
                                 field.type === 'list' && "md:col-span-2"
                             )}
                         >

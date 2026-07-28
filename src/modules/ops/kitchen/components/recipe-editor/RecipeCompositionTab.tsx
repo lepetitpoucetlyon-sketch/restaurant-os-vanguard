@@ -64,7 +64,7 @@ export function RecipeCompositionTab({
                         </div>
                     </div>
                     <div className="col-span-8">
-                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
                             <Plus className="w-4 h-4 mr-2" /> Valider l'Ingrédient
                         </Button>
                     </div>

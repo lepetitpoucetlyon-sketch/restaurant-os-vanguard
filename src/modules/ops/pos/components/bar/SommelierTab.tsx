@@ -76,7 +76,7 @@ export const SommelierTab: React.FC<SommelierTabProps> = ({ regions }) => {
         </div>
 
         {/* Temperature Guide */}
-        <div className="bg-gradient-to-br from-accent to-bg-tertiary/20 dark:to-accent/50 rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-br from-accent to-bg-tertiary/20 dark:to-accent/50 rounded-2xl p-6 text-text-primary">
             <h3 className="text-lg font-black mb-4 flex items-center gap-2">
                 <ThermometerSun className="w-5 h-5" />
                 Guide des Températures de Service

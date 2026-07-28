@@ -46,12 +46,12 @@ export default function LogoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-surface-sidebar flex items-center justify-center p-6 text-white font-mono">
+        <div className="min-h-screen bg-surface-sidebar flex items-center justify-center p-6 text-text-primary font-mono">
             <div className="max-w-xl w-full">
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="border-2 border-red-900 bg-zinc-950 p-8 rounded-xl shadow-[0_0_50px_rgba(153,0,0,0.2)]"
+                    className="border-2 border-red-900 bg-surface-bg p-8 rounded-xl shadow-[0_0_50px_rgba(153,0,0,0.2)]"
                 >
                     <div className="flex items-center gap-4 mb-8">
                         <div className="p-3 bg-status-danger/20 rounded-lg">
@@ -78,7 +78,7 @@ export default function LogoutPage() {
                                     await handleHeal();
                                     handleReset();
                                 }}
-                                className="w-full h-14 bg-status-danger hover:bg-status-danger text-white font-bold uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3 rounded-lg"
+                                className="w-full h-14 bg-status-danger hover:bg-status-danger text-text-primary font-bold uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3 rounded-lg"
                             >
                                 <RefreshCcw className="w-5 h-5" />
                                 Réinitialiser le Système

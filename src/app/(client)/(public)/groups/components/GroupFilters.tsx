@@ -29,7 +29,7 @@ export function GroupFilters({
                         className={cn(
                             "px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border",
                             selectedType === type
-                                ? "bg-action-primary text-white border-focus shadow-lg shadow-purple-500/20"
+                                ? "bg-action-primary text-text-primary border-focus shadow-lg shadow-purple-500/20"
                                 : "bg-bg-secondary text-text-muted border-border hover:border-focus/30"
                         )}
                         id={`groups-type-filter-${type}`}

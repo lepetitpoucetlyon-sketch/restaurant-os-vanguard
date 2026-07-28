@@ -22,7 +22,7 @@ import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
 import { SLMExpert } from "@nexus/contracts";
 import { AgentDomain } from "@/modules/intelligence/domain/agency/types";
-import { AI_MODELS } from "@/modules/intelligence/ai/types";
+import { AI_MODELS } from "@/modules/intelligence/ai";
 
 const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; description: string }> = {
     inventory: { 
@@ -147,7 +147,7 @@ export default function ExpertGovernanceHub() {
                                     className={cn(
                                         "px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all border",
                                         expert.enabled 
-                                            ? "bg-text-primary text-white border-transparent shadow-xl" 
+                                            ? "bg-text-primary text-text-primary border-transparent shadow-xl" 
                                             : "bg-bg-tertiary text-text-muted border-border hover:bg-bg-primary"
                                     )}
                                 >

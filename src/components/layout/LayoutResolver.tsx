@@ -76,7 +76,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
 
         case 'kiosk':
             return (
-                <div className="h-screen w-screen overflow-hidden bg-surface-sidebar text-white p-12 flex flex-col">
+                <div className="h-screen w-screen overflow-hidden bg-surface-sidebar text-text-primary p-12 flex flex-col">
                      <div className="flex justify-between items-center mb-12">
                         <div className="text-4xl font-serif italic font-black">TERMINAL <span className="text-accent-gold not-italic">OS</span></div>
                         <div className="px-6 py-2 rounded-full border border-default text-[10px] font-black tracking-widest animate-pulse">KIOSK MODE ACTIVE</div>

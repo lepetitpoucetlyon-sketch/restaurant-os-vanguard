@@ -112,7 +112,7 @@ export function AccountSettingsDashboard() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 bg-status-warning dark:bg-status-warning border border-amber-200 dark:border-amber-500/30 rounded-xl px-4 py-3 mt-4">
+                <div className="flex items-center gap-2 bg-status-warning dark:bg-status-warning border border-amber-200 dark:border-action-primary/30 rounded-xl px-4 py-3 mt-4">
                     <AlertTriangle className="w-5 h-5 text-status-warning dark:text-status-warning shrink-0" />
                     <p className="text-sm text-status-warning dark:text-status-warning">
                         <strong>Attention :</strong> Les modifications affectent tous les utilisateurs du rôle sélectionné.
@@ -143,7 +143,7 @@ export function AccountSettingsDashboard() {
                                             >
                                                 <div className="flex items-center gap-4">
                                                     <div className={cn(
-                                                        "w-12 h-12 rounded-2xl flex items-center justify-center text-white dark:text-bg-primary font-black text-lg",
+                                                        "w-12 h-12 rounded-2xl flex items-center justify-center text-text-primary dark:text-bg-primary font-black text-lg",
                                                         isAdmin ? "bg-gradient-to-br from-status-warning to-status-warning" : "bg-text-primary"
                                                     )}>
                                                         {(ROLE_LABELS[role] || '').charAt(0)}
@@ -192,7 +192,7 @@ export function AccountSettingsDashboard() {
                                                                             key={user.id}
                                                                             className="flex items-center gap-2 bg-surface-bg dark:bg-bg-tertiary px-3 py-2 rounded-xl"
                                                                         >
-                                                                            <div className="w-6 h-6 rounded-full bg-text-primary dark:bg-action-primary text-white dark:text-bg-primary text-[10px] font-bold flex items-center justify-center">
+                                                                            <div className="w-6 h-6 rounded-full bg-text-primary dark:bg-action-primary text-text-primary dark:text-bg-primary text-[10px] font-bold flex items-center justify-center">
                                                                                 {(user.name || '').charAt(0)}
                                                                             </div>
                                                                             <span className="text-sm font-medium text-text-muted">{user.name}</span>
@@ -246,7 +246,7 @@ export function AccountSettingsDashboard() {
                                                                                 >
                                                                                     <div className={cn(
                                                                                         "w-6 h-6 rounded-lg flex items-center justify-center shrink-0",
-                                                                                        isEnabled ? "bg-success text-white dark:text-bg-primary" : "bg-surface-bg dark:bg-bg-primary text-text-primary dark:text-text-muted"
+                                                                                        isEnabled ? "bg-success text-text-primary dark:text-bg-primary" : "bg-surface-bg dark:bg-bg-primary text-text-primary dark:text-text-muted"
                                                                                     )}>
                                                                                         {isEnabled ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                                                                                     </div>
@@ -265,7 +265,7 @@ export function AccountSettingsDashboard() {
                                                                                                         className={cn(
                                                                                                             "w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-colors border",
                                                                                                             isFeatureEnabled 
-                                                                                                                ? "bg-action-primary border-action-primary text-white" 
+                                                                                                                ? "bg-action-primary border-action-primary text-text-primary" 
                                                                                                                 : "bg-transparent border-border-default dark:border-text-muted group-hover:border-action-primary"
                                                                                                         )}
                                                                                                     >
@@ -299,7 +299,7 @@ export function AccountSettingsDashboard() {
                                                             {hasChanges(role) && (
                                                                 <button
                                                                     onClick={() => saveRolePermissions(role)}
-                                                                    className="flex items-center gap-2 bg-success text-white px-6 py-3 rounded-xl font-bold hover:bg-success/90 transition-colors shadow-lg shadow-success/20"
+                                                                    className="flex items-center gap-2 bg-success text-text-primary px-6 py-3 rounded-xl font-bold hover:bg-success/90 transition-colors shadow-lg shadow-success/20"
                                                                 >
                                                                     <Save className="w-5 h-5" />
                                                                     Sauvegarder les modifications

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { FileText, ShieldCheck, AlertTriangle, Download, Search, ChevronDown, Lock } from 'lucide-react';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 
 interface JournalEntry {
@@ -83,10 +83,10 @@ export function TaxAuditPanel() {
     };
 
     const chainColor = result?.chainStatus === 'ok'
-        ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'
+        ? 'text-status-success border-emerald-500/20 bg-status-success/5'
         : result?.chainStatus === 'breach'
-        ? 'text-red-400 border-red-500/20 bg-red-500/5'
-        : 'text-slate-400 border-white/10 bg-white/5';
+        ? 'text-status-danger border-red-500/20 bg-status-danger/5'
+        : 'text-text-secondary border-white/10 bg-white/5';
 
     return (
         <div className="bg-[#161618] border border-white/5 rounded-3xl p-6 space-y-6">
@@ -97,8 +97,8 @@ export function TaxAuditPanel() {
                         <FileText className="w-5 h-5 text-violet-400" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Audit Fiscal Contrôle</h3>
-                        <p className="text-[10px] text-slate-500">Journaux NF525 par restaurant — données pour l'administration fiscale</p>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Audit Fiscal Contrôle</h3>
+                        <p className="text-[10px] text-text-muted">Journaux NF525 par restaurant — données pour l'administration fiscale</p>
                     </div>
                 </div>
                 {result && (
@@ -115,11 +115,11 @@ export function TaxAuditPanel() {
             {/* Formulaire de sélection */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div className="md:col-span-2 relative">
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-500 pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-text-muted pointer-events-none" />
                     <select
                         value={selectedTenantId}
                         onChange={e => setSelectedTenantId(e.target.value)}
-                        className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white appearance-none focus:outline-none focus:border-violet-500/50"
+                        className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
                     >
                         <option value="">Sélectionner un restaurant…</option>
                         {instances.map(inst => (
@@ -135,28 +135,28 @@ export function TaxAuditPanel() {
                     value={from}
                     onChange={e => setFrom(e.target.value)}
                     placeholder="De"
-                    className="bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-violet-500/50"
+                    className="bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-violet-500/50"
                 />
                 <input
                     type="date"
                     value={to}
                     onChange={e => setTo(e.target.value)}
                     placeholder="À"
-                    className="bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-violet-500/50"
+                    className="bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-violet-500/50"
                 />
             </div>
 
             <button
                 onClick={fetchAudit}
                 disabled={!selectedTenantId || loading}
-                className="flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
+                className="flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed text-text-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-all"
             >
                 <Search className="w-3.5 h-3.5" />
                 {loading ? 'Chargement…' : 'Lancer l\'audit'}
             </button>
 
             {error && (
-                <div className="flex items-center gap-2 px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">
+                <div className="flex items-center gap-2 px-4 py-3 bg-status-danger/10 border border-red-500/20 rounded-xl text-xs text-status-danger">
                     <AlertTriangle className="w-4 h-4 shrink-0" />
                     {error}
                 </div>
@@ -181,11 +181,11 @@ export function TaxAuditPanel() {
                             {result.chainStatus === 'empty' && <Lock className="w-3.5 h-3.5" />}
                             Chaîne : {result.chainStatus === 'ok' ? 'Intègre' : result.chainStatus === 'breach' ? 'RUPTURE DÉTECTÉE' : 'Vide'}
                         </div>
-                        <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-lg text-[10px] font-bold uppercase tracking-widest ${result.tenant.fiscalKeyConfigured ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : 'text-red-400 border-red-500/20 bg-red-500/5'}`}>
+                        <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-lg text-[10px] font-bold uppercase tracking-widest ${result.tenant.fiscalKeyConfigured ? 'text-status-success border-emerald-500/20 bg-status-success/5' : 'text-status-danger border-red-500/20 bg-status-danger/5'}`}>
                             <Lock className="w-3.5 h-3.5" />
                             Clé fiscale : {result.tenant.fiscalKeyConfigured ? 'Configurée' : 'MANQUANTE'}
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-lg text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
                             Région : {result.tenant.dataRegion}
                         </div>
                     </div>
@@ -193,9 +193,9 @@ export function TaxAuditPanel() {
                     {/* Tableau journalEntries */}
                     {result.journalEntries.length > 0 && (
                         <div className="overflow-x-auto rounded-2xl border border-white/5">
-                            <table className="w-full text-[10px] text-slate-300">
+                            <table className="w-full text-[10px] text-text-secondary">
                                 <thead>
-                                    <tr className="border-b border-white/5 text-slate-500 uppercase tracking-widest">
+                                    <tr className="border-b border-white/5 text-text-muted uppercase tracking-widest">
                                         <th className="px-4 py-3 text-left">Date</th>
                                         <th className="px-4 py-3 text-left">Libellé</th>
                                         <th className="px-4 py-3 text-left">Compte PCG</th>
@@ -209,16 +209,16 @@ export function TaxAuditPanel() {
                                             <td className="px-4 py-2.5 font-mono">{je.date?.slice(0, 10)}</td>
                                             <td className="px-4 py-2.5 max-w-[200px] truncate">{je.label}</td>
                                             <td className="px-4 py-2.5 font-mono text-violet-400">{je.pcgAccount} – {je.pcgLabel}</td>
-                                            <td className={`px-4 py-2.5 text-right font-mono tabular-nums ${je.type === 'credit' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                            <td className={`px-4 py-2.5 text-right font-mono tabular-nums ${je.type === 'credit' ? 'text-status-success' : 'text-status-danger'}`}>
                                                 {je.type === 'debit' ? '–' : '+'}{muToEur(Math.abs(je.amountInMicrounits))}
                                             </td>
-                                            <td className="px-4 py-2.5 text-slate-500">{je.source}</td>
+                                            <td className="px-4 py-2.5 text-text-muted">{je.source}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                             {result.journalEntries.length > 200 && (
-                                <p className="text-center text-[10px] text-slate-500 py-3">
+                                <p className="text-center text-[10px] text-text-muted py-3">
                                     + {result.journalEntries.length - 200} lignes supplémentaires dans l'export JSON
                                 </p>
                             )}
@@ -233,8 +233,8 @@ export function TaxAuditPanel() {
 function StatBadge({ label, value }: { label: string; value: string }) {
     return (
         <div className="bg-[#0a0a0b] border border-white/5 rounded-xl p-3">
-            <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">{label}</p>
-            <p className="text-sm font-bold text-white tabular-nums">{value}</p>
+            <p className="text-[9px] uppercase tracking-widest text-text-muted mb-1">{label}</p>
+            <p className="text-sm font-bold text-text-primary tabular-nums">{value}</p>
         </div>
     );
 }

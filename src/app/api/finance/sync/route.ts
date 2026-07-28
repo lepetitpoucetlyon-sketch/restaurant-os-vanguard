@@ -1,20 +1,30 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
 import { logger } from '@/lib/axiom';
 import { JournalEntry } from '@nexus/contracts';
 import { CryptoService } from '@/domain/services/CryptoService';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**
  * 🛰️ API Backend de Synchro Hors-Ligne (Grade X)
- * 
+ *
  * Reçoit les paquets de JournalEntry générés hors-ligne par la caisse.
  * Valide les montants, génère le vrai sceau NF525 serveur (avec NEXUS_TENANT_SECRET)
  * et enregistre de force dans Firestore (outrepassant les rules clientes).
+ *
+ * Auth : token Firebase JWT du POS (n'importe quel rôle tenant).
+ * Le tenantId vient EXCLUSIVEMENT du token — pas du body (protection cross-tenant).
  */
 export async function POST(req: NextRequest) {
+  const caller = await requireTenantUser(req);
+  if (isDenied(caller)) return caller;
+
   try {
     const body = await req.json();
-    const { tenantId, journalEntries, isTrainingMode = false } = body;
+    // tenantId du body intentionnellement ignoré — seul le claim JWT fait foi.
+    const { journalEntries, isTrainingMode = false } = body;
+    const tenantId = caller.tenantId;
 
     if (!tenantId || !journalEntries || !Array.isArray(journalEntries)) {
       return NextResponse.json({ error: 'Payload invalide' }, { status: 400 });
@@ -43,7 +53,7 @@ export async function POST(req: NextRequest) {
         receiptNumber,
         operatorId: 'OFFLINE_SYNC', // On pourrait récupérer l'opérateur d'origine
         tableId: entry.referenceId,
-        totalTTCInMicrounits: (entry.amountInCents ?? 0) * 10000,
+        totalTTCInMicrounits: entry.totalInMicrounits ?? (entry.amountInCents ?? 0) * 10_000,
         timestamp: entry.date,
       });
 

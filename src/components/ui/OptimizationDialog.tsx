@@ -46,7 +46,7 @@ export function OptimizationDialog({ isOpen, onClose, title, description, type =
                     <div className="space-y-3">
                         <Button
                             onClick={onClose}
-                            className="w-full h-12 bg-accent text-white rounded-xl font-black text-[11px] uppercase tracking-widest shadow-xl shadow-accent/20 hover:opacity-90 transition-all"
+                            className="w-full h-12 bg-accent text-text-primary rounded-xl font-black text-[11px] uppercase tracking-widest shadow-xl shadow-accent/20 hover:opacity-90 transition-all"
                         >
                             Optimisation en cours
                         </Button>

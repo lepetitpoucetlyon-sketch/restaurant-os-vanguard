@@ -38,7 +38,7 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                 <button
                     onClick={handleUpdate}
                     title={`Mise à jour disponible : v${targetVersion}`}
-                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-all animate-pulse"
+                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-action-primary/20 text-action-primary border border-action-primary/30 hover:bg-action-primary/30 transition-all animate-pulse"
                 >
                     <ArrowUpCircle className="w-4 h-4" />
                 </button>
@@ -52,13 +52,13 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 8 }}
-                className="mx-3 mb-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20"
+                className="mx-3 mb-2 p-3 rounded-xl bg-action-primary/10 border border-action-primary/20"
             >
                 <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
-                        <ArrowUpCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <ArrowUpCircle className="w-4 h-4 text-action-primary shrink-0 mt-0.5" />
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-amber-400">Mise à jour</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-action-primary">Mise à jour</p>
                             <p className="text-[9px] text-amber-300/70 font-mono">
                                 v{currentVersion} → v{targetVersion}
                             </p>
@@ -66,7 +66,7 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                     </div>
                     <button
                         onClick={() => setDismissed(true)}
-                        className="text-amber-500/50 hover:text-amber-400 transition-colors mt-0.5"
+                        className="text-action-primary/50 hover:text-action-primary transition-colors mt-0.5"
                     >
                         <X className="w-3 h-3" />
                     </button>
@@ -74,7 +74,7 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                 <button
                     onClick={handleUpdate}
                     disabled={updating}
-                    className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 text-[9px] font-black uppercase tracking-widest hover:bg-amber-500/30 transition-all disabled:opacity-50"
+                    className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-action-primary/20 text-amber-300 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary/30 transition-all disabled:opacity-50"
                 >
                     <Download className="w-3 h-3" />
                     {updating ? 'Mise à jour...' : 'Mettre à jour'}

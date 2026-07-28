@@ -62,4 +62,20 @@ describe('SovereignGuard', () => {
       expect(SovereignGuard.resolveTenantForPath('global_config', 'tenant_b')).toBe('tenant_b');
     });
   });
+
+  describe('requiresSignedWrite', () => {
+    it('requires signature for NF525 and audit collections', () => {
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/fiscalSeals/doc')).toBe(true);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/journalEntries/doc')).toBe(true);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/fiscalLedger/doc')).toBe(true);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/orders/doc')).toBe(true);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/wasteLogs/doc')).toBe(true);
+    });
+
+    it('does not require signature for non-critical collections', () => {
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/products/doc')).toBe(false);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/reservations/doc')).toBe(false);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/categories/doc')).toBe(false);
+    });
+  });
 });

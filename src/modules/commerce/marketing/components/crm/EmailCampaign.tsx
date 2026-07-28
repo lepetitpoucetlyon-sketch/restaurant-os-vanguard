@@ -237,8 +237,8 @@ export function EmailCampaign() {
         title={!sendPermission.allowed ? sendPermission.reason : undefined}
         className={`w-full h-12 rounded-xl text-sm font-bold uppercase tracking-wide transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed ${
           sendStatus === "success"
-            ? "bg-green-500 text-white"
-            : "bg-action-primary text-white hover:opacity-90 disabled:opacity-50"
+            ? "bg-status-success text-text-primary"
+            : "bg-action-primary text-text-primary hover:opacity-90 disabled:opacity-50"
         }`}
       >
         {sendStatus === "sending" && <Loader2 className="w-4 h-4 animate-spin" />}

@@ -86,20 +86,20 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
             />
           )}
           <div className="space-y-3">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary tracking-tight leading-tight">
               {name}
             </h1>
             {landing?.tagline && (
-              <p className="text-lg md:text-xl text-white/70 font-medium">{landing.tagline}</p>
+              <p className="text-lg md:text-xl text-text-primary/70 font-medium">{landing.tagline}</p>
             )}
             {description && !landing?.tagline && (
-              <p className="text-base text-white/60 max-w-sm mx-auto">{description}</p>
+              <p className="text-base text-text-primary/60 max-w-sm mx-auto">{description}</p>
             )}
           </div>
 
           <Link
             href={`/${slug}/reservations`}
-            className="flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white text-sm uppercase tracking-widest shadow-lg transition-transform hover:scale-105 active:scale-95"
+            className="flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-text-primary text-sm uppercase tracking-widest shadow-lg transition-transform hover:scale-105 active:scale-95"
             style={{ backgroundColor: primaryColor }}
           >
             <CalendarCheck className="w-4 h-4" />
@@ -114,8 +114,8 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
           {landing.hours && landing.hours.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Clock className="w-4 h-4 text-gray-400" />
-                <h2 className="text-xs font-black uppercase tracking-widest text-gray-500">Horaires</h2>
+                <Clock className="w-4 h-4 text-text-secondary" />
+                <h2 className="text-xs font-black uppercase tracking-widest text-text-muted">Horaires</h2>
               </div>
               <ul className="space-y-2.5 divide-y divide-gray-100">
                 {landing.hours.map((h, i) => (
@@ -131,19 +131,19 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
           {(landing.address || landing.phone || landing.email) && (
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <h2 className="text-xs font-black uppercase tracking-widest text-gray-500">Contact</h2>
+                <MapPin className="w-4 h-4 text-text-secondary" />
+                <h2 className="text-xs font-black uppercase tracking-widest text-text-muted">Contact</h2>
               </div>
               <dl className="space-y-3 text-sm">
                 {landing.address && (
                   <div className="flex items-start gap-3">
-                    <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                    <MapPin className="w-4 h-4 text-text-secondary mt-0.5 flex-shrink-0" />
                     <dd className="text-gray-700">{landing.address}</dd>
                   </div>
                 )}
                 {landing.phone && (
                   <div className="flex items-center gap-3">
-                    <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <Phone className="w-4 h-4 text-text-secondary flex-shrink-0" />
                     <dd>
                       <a href={`tel:${landing.phone}`} className="font-semibold text-gray-900 hover:underline">
                         {landing.phone}
@@ -153,7 +153,7 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
                 )}
                 {landing.email && (
                   <div className="flex items-center gap-3">
-                    <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <Mail className="w-4 h-4 text-text-secondary flex-shrink-0" />
                     <dd>
                       <a href={`mailto:${landing.email}`} className="text-gray-600 hover:underline">
                         {landing.email}
@@ -167,7 +167,7 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
 
           <Link
             href={`/${slug}/reservations`}
-            className="flex w-full items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white text-sm uppercase tracking-widest shadow-md transition-transform hover:scale-105 active:scale-95"
+            className="flex w-full items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-text-primary text-sm uppercase tracking-widest shadow-md transition-transform hover:scale-105 active:scale-95"
             style={{ backgroundColor: primaryColor }}
           >
             <CalendarCheck className="w-4 h-4" />
@@ -178,7 +178,7 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
         <section className="max-w-sm mx-auto px-6 py-14 text-center">
           <Link
             href={`/${slug}/reservations`}
-            className="flex w-full items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white text-sm uppercase tracking-widest shadow-md transition-transform hover:scale-105 active:scale-95"
+            className="flex w-full items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-text-primary text-sm uppercase tracking-widest shadow-md transition-transform hover:scale-105 active:scale-95"
             style={{ backgroundColor: primaryColor }}
           >
             <CalendarCheck className="w-4 h-4" />
@@ -188,7 +188,7 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
       )}
 
       <footer className="border-t border-gray-100 py-8 text-center">
-        <p className="text-xs text-gray-400">Propulsé par <span className="font-semibold text-gray-600">Restaurant OS</span></p>
+        <p className="text-xs text-text-secondary">Propulsé par <span className="font-semibold text-gray-600">Restaurant OS</span></p>
       </footer>
     </div>
   );

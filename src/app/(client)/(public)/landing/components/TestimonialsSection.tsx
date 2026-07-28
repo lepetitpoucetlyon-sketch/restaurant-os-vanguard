@@ -18,7 +18,7 @@ export function TestimonialsSection() {
                     className="text-center mb-20"
                 >
                     <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Témoignages</span>
-                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-white mb-6">
+                    <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                         Ils nous font confiance
                     </h2>
                 </motion.div>
@@ -42,7 +42,7 @@ export function TestimonialsSection() {
                             </div>
 
                             {/* Quote */}
-                            <p className="text-white/80 text-lg leading-relaxed mb-8 italic">
+                            <p className="text-text-primary/80 text-lg leading-relaxed mb-8 italic">
                                 "{testimonial.quote}"
                             </p>
 
@@ -57,8 +57,8 @@ export function TestimonialsSection() {
                                 />
                                 {testimonial.author && (
                                     <div>
-                                        <div className="text-white font-semibold">{testimonial.author}</div>
-                                        <div className="text-white/50 text-sm">{testimonial.role}</div>
+                                        <div className="text-text-primary font-semibold">{testimonial.author}</div>
+                                        <div className="text-text-primary/50 text-sm">{testimonial.role}</div>
                                     </div>
                                 )}
                             </div>

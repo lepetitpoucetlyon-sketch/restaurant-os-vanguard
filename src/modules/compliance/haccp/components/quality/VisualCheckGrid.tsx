@@ -43,7 +43,7 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
               : 'bg-surface-card border-subtle'
           }`}
         >
-          <div className={`p-3 rounded-xl mb-2 ${item.ok ? 'bg-status-success text-white' : 'bg-surface-bg text-muted'}`}>
+          <div className={`p-3 rounded-xl mb-2 ${item.ok ? 'bg-status-success text-text-primary' : 'bg-surface-bg text-muted'}`}>
             {item.icon}
           </div>
           
@@ -56,7 +56,7 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
               onClick={() => onChange(item.id, true)}
               className={`p-2 rounded-lg transition-all ${
                 item.ok 
-                  ? 'bg-status-success text-white scale-110 shadow-lg' 
+                  ? 'bg-status-success text-text-primary scale-110 shadow-lg' 
                   : 'bg-surface-tertiary text-muted hover:bg-status-success hover:text-status-success'
               }`}
             >
@@ -66,7 +66,7 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
               onClick={() => onChange(item.id, false)}
               className={`p-2 rounded-lg transition-all ${
                 !item.ok 
-                  ? 'bg-status-danger text-white scale-110 shadow-lg' 
+                  ? 'bg-status-danger text-text-primary scale-110 shadow-lg' 
                   : 'bg-surface-tertiary text-muted hover:bg-status-danger hover:text-status-danger'
               }`}
             >
@@ -80,7 +80,7 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
               animate={{ scale: 1 }}
               className="absolute -top-1 -right-1 w-5 h-5 bg-status-success rounded-full flex items-center justify-center border-2 border-white shadow-sm"
             >
-              <Check className="w-3 h-3 text-white" />
+              <Check className="w-3 h-3 text-text-primary" />
             </motion.div>
           )}
         </div>

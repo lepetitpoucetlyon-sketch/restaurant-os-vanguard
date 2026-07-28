@@ -3,6 +3,7 @@ export * from './onboardingSteps';
 export * from './csvTemplates';
 export * from './emailFilters';
 export * from './CustomerCSVImporter';
+export * from './CustomerImportPanel';
 export * from './parsers';
 export * from './importers';
 export * from './hooks';

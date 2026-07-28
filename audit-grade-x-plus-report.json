@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-28T20:53:33.916Z",
+  "timestamp": "2026-07-28T21:16:06.619Z",
   "totalFilesScanned": 1662,
   "tenantIsolation": {
     "passedFiles": 1659,
@@ -25,7 +25,7 @@
     ]
   },
   "semanticTokenCoverage": {
-    "migratedComponents": 416,
-    "staticTailwindResiduals": 1383
+    "migratedComponents": 448,
+    "staticTailwindResiduals": 760
   }
 }

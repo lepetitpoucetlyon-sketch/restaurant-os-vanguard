@@ -29,4 +29,6 @@ export interface IIoTProvider {
     subscribe(tenantId: string, onReading: (r: SensorReading) => void): () => void;
     fetchHistory(sensorId: string, from: Date, to: Date): Promise<SensorReading[]>;
     listSensors(tenantId: string): Promise<Sensor[]>;
+    /** Vérifie la signature HMAC du webhook entrant. Retourne false → 401. */
+    verifySignature?(rawBody: string, headers: Headers): boolean;
 }

@@ -70,7 +70,7 @@ export interface QuoteSection {
     title: string;
     position: number;
     lines: QuoteLine[];
-    subtotalHTInCents: number;
+    subtotalHTInMicrounits: number;
 }
 
 export interface Quote {
@@ -109,24 +109,24 @@ export interface Quote {
     // Contenu
     sections: QuoteSection[];
 
-    // Calculs
+    // Calculs (microunits: 1€ = 1_000_000)
     totals: {
-        totalHTInCents: number;
-        totalDiscountInCents: number;
-        totalVATInCents: number;
-        vatBreakdown: { rate: number; baseInCents: number; amountInCents: number }[];
-        totalTTCInCents: number;
+        totalHTInMicrounits: number;
+        totalDiscountInMicrounits: number;
+        totalVATInMicrounits: number;
+        vatBreakdown: { rate: number; baseInMicrounits: number; amountInMicrounits: number }[];
+        totalTTCInMicrounits: number;
 
         // Optionnels
-        optionalTotalHTInCents: number;
-        optionalTotalTTCInCents: number;
+        optionalTotalHTInMicrounits: number;
+        optionalTotalTTCInMicrounits: number;
     };
 
     // Conditions
     conditions: {
         paymentTerms: string;
         depositPercent?: number;
-        depositAmountInCents?: number;
+        depositAmountInMicrounits?: number;
         deliveryTerms?: string;
         warranty?: string;
         customTerms?: string[];

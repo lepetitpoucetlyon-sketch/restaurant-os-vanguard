@@ -22,7 +22,7 @@ interface CourseManagerProps {
 const COURSE_ORDER: CourseType[] = ["entree", "plat", "dessert"];
 
 const COURSE_META: Record<CourseType, { label: string; icon: React.ElementType; color: string }> = {
-    entree:  { label: "Entrées",  icon: UtensilsCrossed, color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/30" },
+    entree:  { label: "Entrées",  icon: UtensilsCrossed, color: "text-status-success bg-emerald-400/10 border-emerald-400/30" },
     plat:    { label: "Plats",    icon: ChefHat,         color: "text-accent-gold bg-accent-gold/10 border-accent-gold/30" },
     dessert: { label: "Desserts", icon: UtensilsCrossed, color: "text-purple-400 bg-purple-400/10 border-purple-400/30" },
 };
@@ -99,7 +99,7 @@ function CourseSection({
                     <button
                         onClick={onSendCourse}
                         disabled={isSending}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-gold text-white text-[9px] font-black uppercase tracking-widest hover:bg-accent-gold/90 active:scale-95 transition-all disabled:opacity-50"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-gold text-text-primary text-[9px] font-black uppercase tracking-widest hover:bg-accent-gold/90 active:scale-95 transition-all disabled:opacity-50"
                     >
                         <ChefHat className="w-3 h-3" />
                         Envoyer

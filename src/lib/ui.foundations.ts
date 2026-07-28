@@ -54,7 +54,7 @@ export type ThemeTokensType = typeof ThemeTokens;
 
 /**
  * Standard Tailwind CSS class merger
- * @example cn("p-4", isOpen && "bg-blue-500", "text-white")
+ * @example cn("p-4", isOpen && "bg-status-info", "text-text-primary")
  */
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))

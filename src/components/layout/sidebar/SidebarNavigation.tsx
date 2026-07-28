@@ -176,7 +176,7 @@ export function SidebarNavigation({
                                                                 )}>
                                                                     {t(`nav.${item.key}`)}
                                                                     {item.badge && (
-                                                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 leading-none not-italic">
+                                                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-action-primary/15 text-amber-600 dark:text-action-primary border border-action-primary/30 leading-none not-italic">
                                                                             {item.badge}
                                                                         </span>
                                                                     )}

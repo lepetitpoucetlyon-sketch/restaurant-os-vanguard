@@ -14,7 +14,7 @@ export default function CGVPage() {
       <h1 className="text-3xl font-bold text-gray-900 mb-2">
         Conditions Générales de Vente
       </h1>
-      <p className="text-sm text-gray-500 mb-8">Dernière mise à jour : {lastUpdate}</p>
+      <p className="text-sm text-text-muted mb-8">Dernière mise à jour : {lastUpdate}</p>
 
       {/* Article 1 */}
       <section className="mb-8">
@@ -38,7 +38,7 @@ export default function CGVPage() {
         <div className="overflow-x-auto mb-4">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-gray-900 text-white">
+              <tr className="bg-surface-bg text-text-primary">
                 <th className="px-4 py-3 text-left font-semibold">Formule</th>
                 <th className="px-4 py-3 text-right font-semibold">Prix mensuel HT</th>
                 <th className="px-4 py-3 text-right font-semibold">Prix annuel HT</th>

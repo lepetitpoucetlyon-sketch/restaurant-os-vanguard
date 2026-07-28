@@ -159,7 +159,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                             <div className="w-32 h-32 bg-accent-gold/10 rounded-full flex items-center justify-center text-accent-gold shadow-premium border border-accent-gold/20">
                                 <CheckCircle className="w-16 h-16" strokeWidth={1} />
                             </div>
-                            <div className="absolute -top-2 -right-2 w-10 h-10 bg-accent-gold rounded-2xl flex items-center justify-center text-white shadow-premium animate-bounce">
+                            <div className="absolute -top-2 -right-2 w-10 h-10 bg-accent-gold rounded-2xl flex items-center justify-center text-text-primary shadow-premium animate-bounce">
                                 <Sparkles className="w-5 h-5" />
                             </div>
                         </div>
@@ -194,7 +194,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                             {!isTerminalBusy && (
                                 <button
                                     onClick={onClose}
-                                    className="w-12 h-12 md:w-14 md:h-14 bg-bg-tertiary/50 hover:bg-accent-gold hover:text-white rounded-2xl flex items-center justify-center text-text-muted transition-all border border-border/50 group"
+                                    className="w-12 h-12 md:w-14 md:h-14 bg-bg-tertiary/50 hover:bg-accent-gold hover:text-text-primary rounded-2xl flex items-center justify-center text-text-muted transition-all border border-border/50 group"
                                 >
                                     <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
                                 </button>
@@ -204,12 +204,12 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                         {/* Amount */}
                         <div className="bg-bg-tertiary/40 border-y border-border/50 px-10 md:px-14 py-8 md:py-10 flex items-center justify-between shrink-0">
                             <div className="flex flex-col items-center">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">Montant à régler</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
                                 <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
                             </div>
                             {tvaInCents !== undefined && (
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">TVA incluse</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">TVA incluse</span>
                                     <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(tvaInCents)}</span>
                                 </div>
                             )}
@@ -246,7 +246,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                         </button>
                                         <button
                                             onClick={handleManualConfirm}
-                                            className="px-6 h-10 rounded-full bg-accent-gold text-white text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
+                                            className="px-6 h-10 rounded-full bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
                                         >
                                             Paiement reçu
                                         </button>
@@ -291,7 +291,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                             <div className={cn(
                                                 "w-12 h-12 md:w-16 md:h-16 rounded-[24px] flex items-center justify-center transition-all duration-700 shadow-sm",
                                                 method === meth.id
-                                                    ? "bg-accent-gold text-white"
+                                                    ? "bg-accent-gold text-text-primary"
                                                     : "bg-surface-card dark:bg-surface-sidebar text-text-muted group-hover:scale-110"
                                             )}>
                                                 <meth.icon className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1} />
@@ -313,7 +313,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                         className={cn(
                                             "w-full h-16 md:h-20 rounded-[32px] md:rounded-[40px] font-black text-lg md:text-xl transition-all duration-700 flex items-center justify-center gap-6 relative overflow-hidden shadow-premium active:scale-95 group uppercase tracking-[0.3em]",
                                             method
-                                                ? "bg-text-primary text-white hover:bg-surface-sidebar dark:hover:bg-surface-card dark:hover:text-primary"
+                                                ? "bg-text-primary text-text-primary hover:bg-surface-sidebar dark:hover:bg-surface-card dark:hover:text-primary"
                                                 : "bg-bg-tertiary text-text-muted/40 cursor-not-allowed border border-border/50"
                                         )}
                                     >

@@ -61,8 +61,8 @@ export const OverviewTab = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                            <AlertTriangle className="w-5 h-5 text-amber-500" />
+                        <div className="w-10 h-10 rounded-xl bg-action-primary/10 flex items-center justify-center">
+                            <AlertTriangle className="w-5 h-5 text-action-primary" />
                         </div>
                         <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Analyse des Pages</h3>
                     </div>

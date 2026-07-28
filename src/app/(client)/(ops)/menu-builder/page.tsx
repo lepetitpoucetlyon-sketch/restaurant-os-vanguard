@@ -44,7 +44,7 @@ export default function MenuBuilderPage() {
                 <div className="w-80 flex flex-col bg-bg-secondary rounded-[2.5rem] border border-border shadow-premium overflow-hidden">
                     <div className="p-6 border-b border-border/50">
                         <h2 className="text-xl font-brand font-black text-text-primary mb-4">Catégories</h2>
-                        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-primary text-white rounded-2xl font-bold hover:bg-brand-primary/90 transition-all">
+                        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-primary text-text-primary rounded-2xl font-bold hover:bg-brand-primary/90 transition-all">
                             <Plus className="w-5 h-5" />
                             Nouvelle Catégorie
                         </button>
@@ -80,7 +80,7 @@ export default function MenuBuilderPage() {
                                     placeholder="Rechercher un plat..." 
                                 />
                             </div>
-                            <button className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-2xl font-bold hover:bg-brand-primary/90 transition-all">
+                            <button className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-text-primary rounded-2xl font-bold hover:bg-brand-primary/90 transition-all">
                                 <Plus className="w-5 h-5" />
                                 Ajouter
                             </button>
@@ -197,7 +197,7 @@ export default function MenuBuilderPage() {
                                             <option value="rec_2" selected={editingProduct.recipeId === 'rec_2'}>Salade César (Food Cost: 2.10€)</option>
                                             <option value="rec_3" selected={editingProduct.recipeId === 'rec_3'}>Fiche Technique : Mojito (Rhum, Menthe, Sucre) - FC: 1.20€</option>
                                         </select>
-                                        <button className="px-6 py-3 bg-brand-primary text-white rounded-xl font-bold">
+                                        <button className="px-6 py-3 bg-brand-primary text-text-primary rounded-xl font-bold">
                                             Lier
                                         </button>
                                     </div>
@@ -210,7 +210,7 @@ export default function MenuBuilderPage() {
                                     onClick={() => {
                                         setEditingProduct(null);
                                     }}
-                                    className="px-8 py-4 bg-brand-primary text-white rounded-2xl font-black text-lg hover:bg-brand-primary/90 transition-all shadow-lg shadow-brand-primary/20"
+                                    className="px-8 py-4 bg-brand-primary text-text-primary rounded-2xl font-black text-lg hover:bg-brand-primary/90 transition-all shadow-lg shadow-brand-primary/20"
                                 >
                                     Enregistrer les modifications
                                 </button>

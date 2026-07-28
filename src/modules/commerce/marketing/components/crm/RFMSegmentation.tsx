@@ -47,8 +47,8 @@ interface RFMRow {
 }
 
 const SEGMENT_META: Record<Segment, { label: string; color: string; bg: string; icon: React.ElementType; desc: string }> = {
-    champion:  { label: 'Champions',    color: 'text-yellow-500',  bg: 'bg-yellow-500/10 border-yellow-500/30', icon: Crown,        desc: 'Clients récents, fréquents et dépensiers' },
-    loyal:     { label: 'Fidèles',      color: 'text-blue-500',    bg: 'bg-blue-500/10 border-blue-500/30',     icon: Star,         desc: 'Haute fréquence, bonne valeur' },
+    champion:  { label: 'Champions',    color: 'text-action-primary',  bg: 'bg-action-primary/10 border-yellow-500/30', icon: Crown,        desc: 'Clients récents, fréquents et dépensiers' },
+    loyal:     { label: 'Fidèles',      color: 'text-blue-500',    bg: 'bg-status-info/10 border-blue-500/30',     icon: Star,         desc: 'Haute fréquence, bonne valeur' },
     at_risk:   { label: 'À risque',     color: 'text-orange-400',  bg: 'bg-orange-400/10 border-orange-400/30', icon: AlertTriangle, desc: 'Bonne valeur passée, absents récemment' },
     dormant:   { label: 'Dormants',     color: 'text-text-muted',  bg: 'bg-surface-sidebar border-border',      icon: Moon,         desc: 'Inactifs depuis longtemps' },
     new:       { label: 'Nouveaux',     color: 'text-status-success', bg: 'bg-status-success/10 border-status-success/30', icon: Sparkles, desc: 'Récents, peu de visites' },
@@ -194,7 +194,7 @@ export function RFMSegmentation({ customers }: Props) {
                                             <td className="px-3 py-2 text-center">
                                                 <span className={cn(
                                                     "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-black",
-                                                    row.total >= 8 ? "bg-yellow-500/20 text-yellow-500" :
+                                                    row.total >= 8 ? "bg-action-primary/20 text-action-primary" :
                                                     row.total >= 6 ? "bg-action-primary/20 text-action-primary" :
                                                     "bg-surface-sidebar text-text-muted"
                                                 )}>

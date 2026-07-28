@@ -67,7 +67,7 @@ export function BrandPromptGuide() {
                         <MessageSquare className="w-20 h-20 text-brand" />
                     </div>
                     
-                    <div className="space-y-4 relative z-10 text-white/80 leading-relaxed italic">
+                    <div className="space-y-4 relative z-10 text-text-primary/80 leading-relaxed italic">
                         <p className="text-brand font-black mb-4 flex items-center gap-2">
                              Instruction Système (Racine Serveur)
                         </p>

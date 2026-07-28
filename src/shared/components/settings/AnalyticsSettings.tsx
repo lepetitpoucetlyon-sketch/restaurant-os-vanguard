@@ -35,8 +35,8 @@ function CodeBlock({ code, onCopy }: { code: string; onCopy: () => void }) {
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-emerald-500">Copié</span>
+              <Check className="w-3.5 h-3.5 text-status-success" />
+              <span className="text-status-success">Copié</span>
             </>
           ) : (
             <>
@@ -298,11 +298,11 @@ export default function AnalyticsSettings() {
 
       {/* Note d'activation */}
       {config.provider !== 'none' && (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
-          <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+        <div className="rounded-xl border border-action-primary/30 bg-action-primary/5 p-4">
+          <p className="text-xs text-amber-600 dark:text-action-primary font-medium">
             Pour activer, ajoutez le snippet ci-dessus dans{' '}
-            <code className="bg-amber-500/10 px-1 rounded font-mono">src/app/layout.tsx</code>{' '}
-            à l'intérieur de la balise <code className="bg-amber-500/10 px-1 rounded font-mono">&lt;head&gt;</code>.
+            <code className="bg-action-primary/10 px-1 rounded font-mono">src/app/layout.tsx</code>{' '}
+            à l'intérieur de la balise <code className="bg-action-primary/10 px-1 rounded font-mono">&lt;head&gt;</code>.
           </p>
         </div>
       )}

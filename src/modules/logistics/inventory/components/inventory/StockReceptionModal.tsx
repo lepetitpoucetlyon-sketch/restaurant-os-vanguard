@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X, Truck } from "lucide-react";
-import { useInventory } from "@/modules/ops/providers/NexusOpsProvider";
+import { useInventory } from "@/modules/ops/providers";
 // import { receiveStockAction } from "@/app/actions/inventory";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
@@ -182,7 +182,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
                             <div className="w-16 h-16 rounded-[22px] bg-text-primary flex items-center justify-center shadow-premium">
-                                <Package className="w-8 h-8 text-white" strokeWidth={1.5} />
+                                <Package className="w-8 h-8 text-text-primary" strokeWidth={1.5} />
                             </div>
                             <div>
                                 <h2 className="text-4xl font-serif font-black text-text-primary italic tracking-tight">Réception Archive.</h2>
@@ -207,7 +207,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                 animate={{ scale: 1, rotate: 0 }}
                                 className="w-24 h-24 rounded-[2.5rem] bg-text-primary flex items-center justify-center mb-10 shadow-premium"
                             >
-                                <Check className="w-12 h-12 text-white" strokeWidth={3} />
+                                <Check className="w-12 h-12 text-text-primary" strokeWidth={3} />
                             </motion.div>
                             <p className="text-4xl font-serif font-black text-text-primary italic">Stock Scellé avec Succès.</p>
                             <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-4">Les ressources ont été intégrées à l&apos;archive maître</p>
@@ -359,7 +359,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                             className={cn(
                                 "flex items-center gap-6 px-16 py-6 rounded-[30px] text-[11px] font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
                                 selectedIngredient && quantity && storageLocation && dlc
-                                    ? "bg-text-primary text-white hover:bg-accent-gold"
+                                    ? "bg-text-primary text-text-primary hover:bg-accent-gold"
                                     : "bg-text-muted/10 text-text-muted/20 cursor-not-allowed"
                             )}
                         >

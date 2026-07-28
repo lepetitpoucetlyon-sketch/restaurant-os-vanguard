@@ -71,7 +71,7 @@ export default function SimulatorPage() {
 
                 <Button
                     onClick={() => setShowNewSimModal(true)}
-                    className="h-12 bg-accent-gold text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] px-8 shadow-premium hover:bg-accent-gold/90 transition-all"
+                    className="h-12 bg-accent-gold text-text-primary rounded-xl text-[10px] font-black uppercase tracking-[0.2em] px-8 shadow-premium hover:bg-accent-gold/90 transition-all"
                 >
                     <Play className="w-3.5 h-3.5 mr-2" />
                     Nouveau Scénario
@@ -149,13 +149,13 @@ export default function SimulatorPage() {
                             </div>
                         </div>
 
-                        <div className="p-6 rounded-[2rem] bg-gradient-to-br from-surface-sidebar to-surface-sidebar text-white relative overflow-hidden">
-                            <Cpu className="w-32 h-32 absolute -right-6 -bottom-6 text-white/5 rotate-12" />
+                        <div className="p-6 rounded-[2rem] bg-gradient-to-br from-surface-sidebar to-surface-sidebar text-text-primary relative overflow-hidden">
+                            <Cpu className="w-32 h-32 absolute -right-6 -bottom-6 text-text-primary/5 rotate-12" />
                             <h3 className="text-xl font-serif font-bold italic z-10 relative">I.A. Insights</h3>
-                            <p className="text-sm text-white/70 mt-2 z-10 relative leading-relaxed">
+                            <p className="text-sm text-text-primary/70 mt-2 z-10 relative leading-relaxed">
                                 "Augmenter vos prix de 5% sur la gamme 'Vins' pourrait générer +1,2k€ de marge nette sans impacter la demande, selon les tendances actuelles."
                             </p>
-                            <Button variant="outline" className="mt-6 border-default text-white hover:bg-surface-card/10 z-10 relative h-10 rounded-xl text-[9px] font-black uppercase tracking-wider">
+                            <Button variant="outline" className="mt-6 border-default text-text-primary hover:bg-surface-card/10 z-10 relative h-10 rounded-xl text-[9px] font-black uppercase tracking-wider">
                                 Appliquer ce scénario
                             </Button>
                         </div>
@@ -211,7 +211,7 @@ export default function SimulatorPage() {
 
                                             <div className={cn(
                                                 "p-4 rounded-2xl border",
-                                                scenario.projections.netProfitChange > 0 ? "bg-accent-gold text-white border-accent-gold" : "bg-error text-white border-error"
+                                                scenario.projections.netProfitChange > 0 ? "bg-accent-gold text-text-primary border-accent-gold" : "bg-error text-text-primary border-error"
                                             )}>
                                                 <p className="text-[9px] opacity-80 font-black uppercase tracking-wider mb-2">Profit Net Est.</p>
                                                 <div className="text-2xl font-black">
@@ -280,7 +280,7 @@ export default function SimulatorPage() {
                     <Button
                         onClick={handleRunSimulation}
                         disabled={isSimulating || !newSimConfig.name}
-                        className="w-full h-16 bg-accent-gold text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-accent-gold/20 flex items-center justify-center gap-3"
+                        className="w-full h-16 bg-accent-gold text-text-primary rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-accent-gold/20 flex items-center justify-center gap-3"
                     >
                         {isSimulating ? (
                             <>

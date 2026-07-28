@@ -74,8 +74,8 @@ function ColumnMapperUI({
 function WarningBadge({ w }: { w: ImportWarning }) {
   const map = {
     error:   { cls: 'bg-destructive/10 text-destructive border-destructive/30', Icon: XCircle },
-    warning: { cls: 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30', Icon: AlertTriangle },
-    info:    { cls: 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30', Icon: Info },
+    warning: { cls: 'bg-action-primary/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30', Icon: AlertTriangle },
+    info:    { cls: 'bg-status-info/10 text-blue-700 dark:text-blue-400 border-blue-500/30', Icon: Info },
   } as const;
   const { cls, Icon } = map[w.severity];
   return (
@@ -221,7 +221,7 @@ function ImportReport({
           e.message.toLowerCase().includes('masqué') || e.message.toLowerCase().includes('masked')
         ).length;
         return maskedCount > 0 ? (
-          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-700 dark:text-yellow-400">
+          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-action-primary/10 px-4 py-3 text-sm text-yellow-700 dark:text-yellow-400">
             <span className="shrink-0 mt-0.5">⚠️</span>
             <span>
               <strong>{maskedCount} contact{maskedCount > 1 ? 's' : ''} TheFork ignoré{maskedCount > 1 ? 's' : ''} (emails masqués)</strong>
@@ -420,7 +420,7 @@ export function UniversalImportDropzone({ category, onComplete, compact = false 
                 </span>
               )}
               {state.file.encoding === 'iso-8859-1' && (
-                <span className="rounded bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 px-1.5 py-0.5 text-xs">Latin-1→UTF-8</span>
+                <span className="rounded bg-action-primary/10 text-yellow-700 dark:text-yellow-400 px-1.5 py-0.5 text-xs">Latin-1→UTF-8</span>
               )}
             </p>
           )}
@@ -454,7 +454,7 @@ export function UniversalImportDropzone({ category, onComplete, compact = false 
         state.file.format === 'pdf' || state.file.format === 'image'
           ? (
             <div className="space-y-4">
-              <div className="rounded-lg border bg-blue-500/10 border-blue-500/30 px-4 py-3 text-sm text-blue-700 dark:text-blue-400 flex items-start gap-2">
+              <div className="rounded-lg border bg-status-info/10 border-blue-500/30 px-4 py-3 text-sm text-blue-700 dark:text-blue-400 flex items-start gap-2">
                 <Info className="w-4 h-4 mt-0.5 shrink-0" />
                 <span>Format {state.file.format.toUpperCase()} détecté — Gemini Vision va extraire les données. Aucun aperçu possible avant l'analyse IA.</span>
               </div>

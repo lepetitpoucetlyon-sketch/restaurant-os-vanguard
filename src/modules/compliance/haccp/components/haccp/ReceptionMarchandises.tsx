@@ -96,7 +96,7 @@ export function ReceptionMarchandises() {
                         <Truck size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Réception Marchandises</h2>
+                        <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Réception Marchandises</h2>
                         <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Contrôle sanitaire à l'arrivée</p>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export function ReceptionMarchandises() {
                                 </div>
                                 <button
                                     onClick={() => deleteLog(log.id)}
-                                    className="w-8 h-8 rounded-full bg-status-danger/10 text-status-danger flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-status-danger hover:text-white"
+                                    className="w-8 h-8 rounded-full bg-status-danger/10 text-status-danger flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-status-danger hover:text-text-primary"
                                 >
                                     <Trash2 size={14} />
                                 </button>
@@ -219,7 +219,7 @@ export function ReceptionMarchandises() {
                                             <span className="text-[9px] font-black uppercase tracking-widest">Photo du Bon / Étiquette</span>
                                         </>
                                     )}
-                                    {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-white" /></div>}
+                                    {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-text-primary" /></div>}
                                 </button>
                             </div>
 
@@ -299,7 +299,7 @@ export function ReceptionMarchandises() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={isUploading}
-                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-action-primary text-white hover:bg-action-primary border border-focus/20"
+                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-action-primary text-text-primary hover:bg-action-primary border border-focus/20"
                             >
                                 {isUploading ? (
                                     <>

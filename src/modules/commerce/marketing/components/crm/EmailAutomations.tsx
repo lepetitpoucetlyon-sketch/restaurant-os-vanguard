@@ -51,7 +51,7 @@ const DEFAULTS: Record<AutomationKey, AutomationConfig> = {
 const AUTOMATION_META: Record<AutomationKey, { icon: React.ElementType; label: string; desc: string; color: string }> = {
     birthday:  { icon: Cake,      label: 'Email Anniversaire',  desc: 'Envoyé le jour de l\'anniversaire du client',           color: 'text-pink-500' },
     winback:   { icon: RotateCcw, label: 'Win-Back',            desc: 'Envoyé après N jours d\'inactivité',                    color: 'text-orange-400' },
-    postvisit: { icon: Star,      label: 'Post-Visite',         desc: 'Envoyé N jours après la dernière visite (review gate)', color: 'text-yellow-500' },
+    postvisit: { icon: Star,      label: 'Post-Visite',         desc: 'Envoyé N jours après la dernière visite (review gate)', color: 'text-action-primary' },
 };
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -132,7 +132,7 @@ export function EmailAutomations() {
                                     <button
                                         onClick={() => runNow(key)}
                                         disabled={!!running}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-action-primary text-white text-xs font-medium disabled:opacity-50 shrink-0"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-action-primary text-text-primary text-xs font-medium disabled:opacity-50 shrink-0"
                                     >
                                         {running === key ? <Loader2 className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3" />}
                                         Lancer

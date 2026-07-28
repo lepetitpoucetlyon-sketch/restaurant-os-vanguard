@@ -151,7 +151,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser, prefillData }: S
                             </Button>
                         )}
                         <Button
-                            className="flex-[2] h-14 bg-accent hover:bg-surface-sidebar text-white rounded-xl font-bold uppercase text-[11px] tracking-widest transition-all"
+                            className="flex-[2] h-14 bg-accent hover:bg-surface-sidebar text-text-primary rounded-xl font-bold uppercase text-[11px] tracking-widest transition-all"
                             onClick={handleSaveStaff}
                         >
                             {editingUser ? "Mettre à jour" : "Recruter"}

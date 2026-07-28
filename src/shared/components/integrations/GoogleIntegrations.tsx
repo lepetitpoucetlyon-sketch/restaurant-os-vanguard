@@ -116,7 +116,7 @@ export default function GoogleIntegrations() {
         <div className="flex items-center gap-2">
           {isConnected ? (
             <>
-              <CheckCircle className="w-4 h-4 text-emerald-500" />
+              <CheckCircle className="w-4 h-4 text-status-success" />
               <span className="text-sm text-text-primary font-medium">Connecté</span>
               <span className="text-xs text-text-muted ml-auto">
                 Depuis le {formatDate(integration?.connectedAt)}
@@ -124,7 +124,7 @@ export default function GoogleIntegrations() {
             </>
           ) : (
             <>
-              <AlertCircle className="w-4 h-4 text-amber-500" />
+              <AlertCircle className="w-4 h-4 text-action-primary" />
               <span className="text-sm text-text-primary font-medium">Non connecté</span>
             </>
           )}
@@ -151,7 +151,7 @@ export default function GoogleIntegrations() {
           <p className="text-xs text-text-muted">
             Envoie vos horaires d'ouverture configurés dans Restaurant OS vers votre fiche Google.
           </p>
-          <p className="text-xs text-amber-500 mt-1">
+          <p className="text-xs text-action-primary mt-1">
             Note : L'appel vers l'API Google Business Profile nécessite une approbation
             Google Actions Center (en cours de validation).
           </p>
@@ -165,7 +165,7 @@ export default function GoogleIntegrations() {
         <button
           onClick={handleSyncHours}
           disabled={isSyncing}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent text-text-primary text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
           {isSyncing ? 'Synchronisation...' : 'Synchroniser les horaires vers Google'}

@@ -143,7 +143,7 @@ export function OnboardingProgress() {
               {!isDone && step.route && (
                 <button
                   onClick={() => router.push(step.route!)}
-                  className="shrink-0 flex items-center gap-1 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
+                  className="shrink-0 flex items-center gap-1 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-text-primary hover:opacity-90 transition-opacity"
                 >
                   Démarrer
                   <ChevronRight className="w-3.5 h-3.5" />

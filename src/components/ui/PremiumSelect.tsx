@@ -78,7 +78,7 @@ export function PremiumSelect({
                         <div className="flex flex-col items-start overflow-hidden">
                             <span className={cn(
                                 "text-[14px] font-black tracking-wider transition-colors duration-300",
-                                value ? "text-text-primary dark:text-white" : "text-text-muted/40"
+                                value ? "text-text-primary dark:text-text-primary" : "text-text-muted/40"
                             )}>
                                 {selectedOption?.label?.toUpperCase() || placeholder?.toUpperCase() || ''}
                             </span>
@@ -117,7 +117,7 @@ export function PremiumSelect({
                                             className={cn(
                                                 "w-full px-6 py-4 flex items-center justify-between rounded-xl transition-all duration-300 group/opt",
                                                 isActive
-                                                    ? "bg-accent-gold text-white shadow-glow-accent/20"
+                                                    ? "bg-accent-gold text-text-primary shadow-glow-accent/20"
                                                     : "text-text-primary hover:bg-accent-gold/5"
                                             )}
                                         >
@@ -133,14 +133,14 @@ export function PremiumSelect({
                                                 <div className="flex flex-col items-start leading-tight">
                                                     <span className={cn(
                                                         "text-[13px] font-black tracking-widest",
-                                                        isActive ? "text-white" : "text-text-primary dark:text-muted"
+                                                        isActive ? "text-text-primary" : "text-text-primary dark:text-muted"
                                                     )}>
                                                         {option.label?.toUpperCase() || ''}
                                                     </span>
                                                     {option.description && (
                                                         <span className={cn(
                                                             "text-[9px] font-medium opacity-60",
-                                                            isActive ? "text-white" : "text-text-muted"
+                                                            isActive ? "text-text-primary" : "text-text-muted"
                                                         )}>
                                                             {option.description}
                                                         </span>

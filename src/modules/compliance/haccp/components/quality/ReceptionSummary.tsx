@@ -37,7 +37,7 @@ export const ReceptionSummary: React.FC<ReceptionSummaryProps> = ({ control }) =
             )}>
                 <div className={cn(
                     "w-20 h-20 rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-110 duration-500",
-                    stats.overall_status === 'pass' ? "bg-status-success text-white" : "bg-status-danger text-white"
+                    stats.overall_status === 'pass' ? "bg-status-success text-text-primary" : "bg-status-danger text-text-primary"
                 )}>
                     {stats.overall_status === 'pass' ? <ShieldCheck className="w-10 h-10" /> : <XOctagon className="w-10 h-10" />}
                 </div>
@@ -87,8 +87,8 @@ export const ReceptionSummary: React.FC<ReceptionSummaryProps> = ({ control }) =
 
             {/* 📝 CRITICAL OBSERVATIONS */}
             {(stats.items_rejected > 0 || stats.visual_issues > 0) && (
-                <div className="p-8 rounded-[3rem] bg-surface-sidebar text-white space-y-4">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 flex items-center gap-2">
+                <div className="p-8 rounded-[3rem] bg-surface-sidebar text-text-primary space-y-4">
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-text-primary/40 flex items-center gap-2">
                         <AlertTriangle className="w-4 h-4 text-status-warning" />
                         Actions Correctives Requises
                     </h4>

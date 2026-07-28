@@ -6,7 +6,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { Product, OptionGroup, Option } from "@nexus/contracts";
 import { useLanguage } from "@/shared/hooks";
-import { useNexusFleet } from "@/modules/intelligence/fleet/NexusFleetProvider";
+import { useNexusFleet } from "@/modules/intelligence/fleet";
 
 // Standard EU allergens list
 const COMMON_ALLERGENS = [
@@ -211,7 +211,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                             <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
                                 <button
                                     onClick={onClose}
-                                    className="w-12 h-12 bg-surface-card/10 dark:bg-surface-sidebar/20 hover:bg-accent-gold hover:text-white backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-subtle shadow-premium group"
+                                    className="w-12 h-12 bg-surface-card/10 dark:bg-surface-sidebar/20 hover:bg-accent-gold hover:text-text-primary backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-subtle shadow-premium group"
                                 >
                                     <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
                                 </button>
@@ -234,7 +234,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                                 {t(`pos.options.${group.id}`)}
                                             </h3>
                                             {group.required && (
-                                                <span className="text-[9px] font-black bg-accent-gold text-white px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">{t('pos.details.required')}</span>
+                                                <span className="text-[9px] font-black bg-accent-gold text-text-primary px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">{t('pos.details.required')}</span>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-3">
@@ -266,14 +266,14 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                                                 ? "bg-accent-gold border-accent-gold scale-110 shadow-premium"
                                                                 : "border-border/80 bg-surface-card dark:bg-surface-sidebar group-hover:scale-105"
                                                         )}>
-                                                            {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                                                            {isSelected && <Check className="w-3.5 h-3.5 text-text-primary" />}
                                                         </div>
                                                         <span className={cn("text-[14px] font-black transition-colors uppercase tracking-tight", isSelected ? "text-text-primary" : "text-text-secondary")}>
                                                             {t(`pos.options.${option.id}`)}
                                                         </span>
                                                     </div>
                                                     {option.priceModifierInCents > 0 && (
-                                                        <span className={cn("text-[11px] font-serif italic font-bold px-3 py-1 rounded-full transition-all", isSelected ? "bg-accent-gold text-white" : "text-accent-gold bg-accent-gold/10")}>
+                                                        <span className={cn("text-[11px] font-serif italic font-bold px-3 py-1 rounded-full transition-all", isSelected ? "bg-accent-gold text-text-primary" : "text-accent-gold bg-accent-gold/10")}>
                                                             +{option.priceModifierInCents / 100}€
                                                         </span>
                                                     )}
@@ -333,7 +333,7 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                                         <button
                                             onClick={addCustomAllergen}
                                             disabled={!customAllergen.trim()}
-                                            className="p-3.5 bg-accent-gold text-white rounded-2xl transition-all shadow-premium disabled:opacity-30"
+                                            className="p-3.5 bg-accent-gold text-text-primary rounded-2xl transition-all shadow-premium disabled:opacity-30"
                                         >
                                             <Plus className="w-5 h-5" />
                                         </button>
@@ -400,16 +400,16 @@ export function ProductDetailsDialog({ product, isOpen, onClose, onAddToCart }: 
                         className="flex-1 h-20 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-full shadow-premium flex items-center justify-between px-10 transition-all active:scale-[0.98] group relative overflow-hidden"
                     >
                         <div className="flex items-center gap-8">
-                            <ShoppingCart className="w-6 h-6 text-white dark:text-primary" strokeWidth={1.5} />
+                            <ShoppingCart className="w-6 h-6 text-text-primary dark:text-primary" strokeWidth={1.5} />
                             <div className="flex flex-col items-start translate-y-[1px]">
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 dark:text-primary/40 leading-none mb-1">{t('pos.details.add_to')}</span>
-                                <span className="text-[13px] font-black uppercase tracking-[0.3em] text-white dark:text-primary leading-none">{t('pos.details.archive')}</span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40 dark:text-primary/40 leading-none mb-1">{t('pos.details.add_to')}</span>
+                                <span className="text-[13px] font-black uppercase tracking-[0.3em] text-text-primary dark:text-primary leading-none">{t('pos.details.archive')}</span>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-8 h-full">
                             <div className="w-px h-8 bg-surface-card/10 dark:bg-surface-sidebar/10" />
-                            <span className="text-2xl font-sans font-black tracking-tight text-white dark:text-primary">
+                            <span className="text-2xl font-sans font-black tracking-tight text-text-primary dark:text-primary">
                                 {(calculateTotal() / 1_000_000).toFixed(2)}€
                             </span>
                         </div>

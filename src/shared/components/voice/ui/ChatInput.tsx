@@ -45,8 +45,8 @@ export function ChatInput({
                     className={cn(
                         "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 transition-all",
                         isDictating 
-                            ? "bg-accent text-white animate-pulse shadow-lg shadow-accent/20" 
-                            : "bg-bg-tertiary text-text-primary hover:bg-surface-sidebar hover:text-white disabled:opacity-50"
+                            ? "bg-accent text-text-primary animate-pulse shadow-lg shadow-accent/20" 
+                            : "bg-bg-tertiary text-text-primary hover:bg-surface-sidebar hover:text-text-primary disabled:opacity-50"
                     )}
                 >
                     <Mic className="w-5 h-5" />
@@ -60,7 +60,7 @@ export function ChatInput({
                             exit={{ opacity: 0, scale: 0.5, width: 0 }}
                             type="submit"
                             disabled={isProcessing}
-                            className="h-12 w-12 rounded-2xl bg-text-primary text-white flex items-center justify-center shrink-0 hover:bg-accent-gold transition-colors disabled:opacity-50"
+                            className="h-12 w-12 rounded-2xl bg-text-primary text-text-primary flex items-center justify-center shrink-0 hover:bg-accent-gold transition-colors disabled:opacity-50"
                         >
                             <Send className="w-5 h-5 ml-1" />
                         </motion.button>

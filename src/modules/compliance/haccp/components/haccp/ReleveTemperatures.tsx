@@ -91,7 +91,7 @@ export function ReleveTemperatures() {
                     <Thermometer size={24} />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-black text-primary dark:text-white tracking-tight uppercase">Relevé de Température</h2>
+                    <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Relevé de Température</h2>
                     <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Surveillance continue des enceintes thermiques</p>
                 </div>
             </div>
@@ -208,7 +208,7 @@ export function ReleveTemperatures() {
                             className={cn(
                                 "w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-2xl transition-all",
                                 (tempValue < recordingEq.min || tempValue > recordingEq.max)
-                                    ? "bg-status-danger text-white shadow-rose-500/20 hover:bg-status-danger"
+                                    ? "bg-status-danger text-text-primary shadow-rose-500/20 hover:bg-status-danger"
                                     : "bg-text-primary text-bg-primary"
                             )}
                         >

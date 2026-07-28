@@ -55,7 +55,7 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
                     )}
 
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center mb-4">
-                        <Martini className="w-8 h-8 text-white" />
+                        <Martini className="w-8 h-8 text-text-primary" />
                     </div>
 
                     <h3 className="font-black text-xl text-text-primary">{cocktail.name}</h3>

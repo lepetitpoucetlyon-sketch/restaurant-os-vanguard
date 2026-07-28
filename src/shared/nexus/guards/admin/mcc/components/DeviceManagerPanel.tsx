@@ -19,7 +19,7 @@ export function DeviceManagerPanel() {
           placeholder="User UID…"
           value={uid}
           onChange={e => setUid(e.target.value)}
-          className="flex-1 bg-slate-950 border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono focus:outline-none focus:border-focus/50 transition-all text-white"
+          className="flex-1 bg-surface-bg border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono focus:outline-none focus:border-focus/50 transition-all text-text-primary"
         />
         <button
           onClick={() => setSubmitted(uid.trim())}

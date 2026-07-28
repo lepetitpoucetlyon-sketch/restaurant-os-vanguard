@@ -38,7 +38,7 @@ export const ForensicButton: React.FC = () => {
     <button
       onClick={handleForensicCapture}
       disabled={isCapturing}
-      className="bg-status-danger hover:bg-status-danger text-white font-bold py-2 px-4 rounded"
+      className="bg-status-danger hover:bg-status-danger text-text-primary font-bold py-2 px-4 rounded"
     >
       {isCapturing ? 'Capturing Nexus State...' : 'Trigger Forensic Snapshot'}
     </button>

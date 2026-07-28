@@ -8,5 +8,6 @@ export * from './useAuditMapper';
 export * from './useComplianceMapper';
 export * from './useGuard';
 export * from './useHACCP';
+export * from './useHaccpPage';
 export * from './useQuality';
 export * from './useQualityMapper';

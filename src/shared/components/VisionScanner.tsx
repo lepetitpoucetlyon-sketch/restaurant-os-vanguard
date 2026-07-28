@@ -59,7 +59,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                 onClick={() => fileInputRef.current?.click()}
                 className={cn(
                     "relative group cursor-pointer overflow-hidden rounded-[2.5rem] border-2 border-dashed transition-all duration-500",
-                    isProcessing ? "border-amber-500/50 bg-status-warning/5" : "border-subtle hover:border-white/30 bg-surface-card/[0.02]"
+                    isProcessing ? "border-action-primary/50 bg-status-warning/5" : "border-subtle hover:border-white/30 bg-surface-card/[0.02]"
                 )}
             >
                 {/* 🛰️ Laser Scan Animation */}
@@ -78,13 +78,13 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                 <div className="p-12 flex flex-col items-center text-center space-y-6">
                     <div className={cn(
                         "w-20 h-20 rounded-3xl flex items-center justify-center transition-all duration-700",
-                        isProcessing ? "bg-status-warning text-primary shadow-2xl shadow-amber-500/20 rotate-12" : "bg-surface-card/5 text-muted group-hover:text-white group-hover:bg-surface-card/10"
+                        isProcessing ? "bg-status-warning text-primary shadow-2xl shadow-amber-500/20 rotate-12" : "bg-surface-card/5 text-muted group-hover:text-text-primary group-hover:bg-surface-card/10"
                     )}>
                         {isProcessing ? <Zap size={36} className="fill-current animate-pulse" /> : <Scan size={36} />}
                     </div>
 
                     <div>
-                        <h3 className="text-xl font-serif italic text-white uppercase tracking-tighter mb-2">{label}</h3>
+                        <h3 className="text-xl font-serif italic text-text-primary uppercase tracking-tighter mb-2">{label}</h3>
                         <p className="text-[10px] font-black text-secondary uppercase tracking-[0.3em]">
                             {isProcessing ? "IA vision en cours d'analyse brute..." : "Glissez-déposez ou cliquez pour capturer"}
                         </p>

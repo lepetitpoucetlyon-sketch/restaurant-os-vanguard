@@ -20,10 +20,10 @@ export function InterventionLogSection() {
     return (
         <div className="max-w-5xl mx-auto space-y-8 pb-12">
             {/* Legal Warning Header */}
-            <div className="bg-status-warning dark:bg-status-warning/5 border border-amber-200 dark:border-amber-500/20 rounded-[2.5rem] p-10 relative overflow-hidden">
+            <div className="bg-status-warning dark:bg-status-warning/5 border border-amber-200 dark:border-action-primary/20 rounded-[2.5rem] p-10 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-status-warning/5 -mr-32 -mt-32 rounded-full blur-3xl" />
                 <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                    <div className="w-20 h-20 rounded-3xl bg-status-warning/10 flex items-center justify-center border border-amber-500/20 shrink-0">
+                    <div className="w-20 h-20 rounded-3xl bg-status-warning/10 flex items-center justify-center border border-action-primary/20 shrink-0">
                         <AlertTriangle strokeWidth={1.5} className="w-10 h-10 text-status-warning" />
                     </div>
                     <div className="space-y-2 text-center md:text-left">
@@ -32,7 +32,7 @@ export function InterventionLogSection() {
                             Le restaurateur est **légalement tenu** de conserver tous les avis de passage et bons d'intervention des entreprises spécialisées (Hottes, Dératisation, Maintenance, Déchets). Ces documents sont indispensables en cas de contrôle sanitaire ou de sinistre assurance.
                         </p>
                     </div>
-                    <Button className="md:ml-auto h-14 px-8 bg-status-warning hover:bg-status-warning text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-amber-600/20">
+                    <Button className="md:ml-auto h-14 px-8 bg-status-warning hover:bg-status-warning text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-amber-600/20">
                         <Plus className="w-4 h-4 mr-2" /> Numériser un bon
                     </Button>
                 </div>

@@ -92,9 +92,9 @@ function formatElapsed(totalSeconds: number): string {
 
 function timerColorClass(totalSeconds: number): string {
     const minutes = Math.floor(totalSeconds / 60);
-    if (minutes < 5) return "text-emerald-400";
+    if (minutes < 5) return "text-status-success";
     if (minutes < 10) return "text-orange-400";
-    return "text-red-500 animate-pulse";
+    return "text-status-danger animate-pulse";
 }
 
 // ─── Sortable Item Wrapper (kds-4) ────────────────────────────────────────────
@@ -263,7 +263,7 @@ export function KDSTicket({
 
                 {/* kds-3: Allergen banner */}
                 {allergens.length > 0 && (
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-red-500/10 border border-red-500/40 text-red-500 text-[10px] font-black uppercase tracking-wider animate-pulse">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-status-danger/10 border border-red-500/40 text-status-danger text-[10px] font-black uppercase tracking-wider animate-pulse">
                         <AlertTriangle className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
                         <span>ALLERGIE: {allergens.join(', ')}</span>
                     </div>
@@ -304,9 +304,9 @@ export function KDSTicket({
                         <div className={cn(
                             "h-full px-3 rounded-lg font-mono border transition-all duration-500 flex items-center gap-2 shadow-sm shrink-0 whitespace-nowrap",
                             isUrgent || (rushMode && elapsedMinutes > 5)
-                                ? "bg-error text-white border-error shadow-error/20"
+                                ? "bg-error text-text-primary border-error shadow-error/20"
                                 : isWarning
-                                    ? "bg-warning text-white border-warning shadow-warning/20"
+                                    ? "bg-warning text-text-primary border-warning shadow-warning/20"
                                     : "bg-surface-card text-primary border-subtle"
                         )}>
                             <Clock className={cn("w-3.5 h-3.5", (isUrgent || rushMode) && "animate-spin-slow")} strokeWidth={2.5} />
@@ -352,10 +352,10 @@ export function KDSTicket({
                             const hasMods = (item.modifiers && item.modifiers.length > 0) || item.notes;
 
                             const badgeColor = isDrink
-                                ? "bg-action-primary text-white shadow-lg shadow-purple-500/20"
+                                ? "bg-action-primary text-text-primary shadow-lg shadow-purple-500/20"
                                 : isCold
-                                    ? "bg-action-primary text-white shadow-lg shadow-blue-500/20"
-                                    : "bg-status-danger text-white shadow-lg shadow-red-700/20";
+                                    ? "bg-action-primary text-text-primary shadow-lg shadow-blue-500/20"
+                                    : "bg-status-danger text-text-primary shadow-lg shadow-red-700/20";
 
                             const stationLabel = isDrink ? "COCKTAIL" : isCold ? "FROID" : "CHAUD";
 
@@ -367,7 +367,7 @@ export function KDSTicket({
                                     <div className={cn(
                                         "group relative bg-surface-card rounded-[20px] overflow-hidden border shadow-sm hover:shadow-md transition-all duration-500",
                                         hasMods
-                                            ? "border-amber-500 ring-2 ring-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.3)] animate-pulse-slow"
+                                            ? "border-action-primary ring-2 ring-action-primary/50 shadow-[0_0_20px_rgba(245,158,11,0.3)] animate-pulse-slow"
                                             : "border-subtle"
                                     )}>
                                         <div className="relative h-24 w-full overflow-hidden">
@@ -414,20 +414,20 @@ export function KDSTicket({
                                                     }) as Recipe;
                                                     setSelectedRecipe(fullRecipe);
                                                 }}
-                                                className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-surface-sidebar/40 hover:bg-surface-sidebar/60 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all group-hover:scale-110 z-20 shadow-lg"
+                                                className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-surface-sidebar/40 hover:bg-surface-sidebar/60 backdrop-blur-md border border-white/30 flex items-center justify-center text-text-primary transition-all group-hover:scale-110 z-20 shadow-lg"
                                             >
                                                 <Book className="w-4 h-4" />
                                             </button>
 
                                             {item.quantity > 1 && (
-                                                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-status-success text-white flex items-center justify-center text-xs font-black shadow-lg border border-default">
+                                                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-status-success text-text-primary flex items-center justify-center text-xs font-black shadow-lg border border-default">
                                                     X {item.quantity}
                                                 </div>
                                             )}
 
                                             {hasMods && item.quantity === 1 && (
-                                                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-status-warning text-white flex items-center justify-center gap-1 text-[10px] font-black shadow-lg border border-default animate-bounce">
-                                                    <AlertTriangle className="w-3 h-3 fill-current text-white" />
+                                                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-status-warning text-text-primary flex items-center justify-center gap-1 text-[10px] font-black shadow-lg border border-default animate-bounce">
+                                                    <AlertTriangle className="w-3 h-3 fill-current text-text-primary" />
                                                     MODIF
                                                 </div>
                                             )}
@@ -507,7 +507,7 @@ export function KDSTicket({
                                 </button>
                             ) : (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all bg-status-success text-white hover:bg-status-success active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all bg-status-success text-text-primary hover:bg-status-success active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
                                     onClick={() => { void handleMarkReady(); }}
                                 >
                                     <span className="flex items-center gap-3">

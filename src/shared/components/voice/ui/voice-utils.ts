@@ -37,7 +37,7 @@ export function formatAssistantText(text: string): string {
 
             return `<a href="${escapeHtml(safeHref)}"${externalLinkAttributes} class="text-accent-gold underline font-black cursor-pointer hover:text-accent-gold/80 transition-colors">${label}</a>`;
         }
-    ).replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
+    ).replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-text-primary">$1</strong>');
 
     const lines = safeText.split(/\r?\n/);
     const htmlParts: string[] = [];

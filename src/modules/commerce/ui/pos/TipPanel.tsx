@@ -76,19 +76,19 @@ export function TipPanel({ totalInMicrounits, onTipSelect }: TipPanelProps) {
                             className={cn(
                                 "flex flex-col items-center justify-center h-16 rounded-2xl border text-center transition-all duration-200",
                                 isActive
-                                    ? "bg-accent-gold border-accent-gold text-white shadow-lg shadow-accent-gold/20"
+                                    ? "bg-accent-gold border-accent-gold text-text-primary shadow-lg shadow-accent-gold/20"
                                     : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
                             )}
                         >
                             <span className={cn(
                                 "text-lg font-black font-serif italic leading-none",
-                                isActive ? "text-white" : "text-text-primary"
+                                isActive ? "text-text-primary" : "text-text-primary"
                             )}>
                                 {pct}%
                             </span>
                             <span className={cn(
                                 "text-[10px] font-mono mt-0.5",
-                                isActive ? "text-white/80" : "text-text-muted"
+                                isActive ? "text-text-primary/80" : "text-text-muted"
                             )}>
                                 {formatCurrency(SovereignMath.toCents(BigInt(tipAmount)))}
                             </span>

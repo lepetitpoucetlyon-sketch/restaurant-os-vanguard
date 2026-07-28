@@ -54,7 +54,7 @@ export function BillingTab({ paidOrders, ordersLoading, billingOrder, onBillOrde
                                 <button
                                     onClick={() => onBillOrder(order)}
                                     disabled={billingOrder === order.id}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border text-xs font-medium hover:bg-action-primary hover:text-white hover:border-action-primary transition-colors disabled:opacity-50"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border text-xs font-medium hover:bg-action-primary hover:text-text-primary hover:border-action-primary transition-colors disabled:opacity-50"
                                 >
                                     {billingOrder === order.id ? "Émission…" : "Émettre facture"}
                                 </button>

@@ -65,7 +65,7 @@ export const TenantOrchestrator: React.FC = () => {
                         <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">Orchestration Multi-Tenant Active</p>
                     </div>
                     <div className="flex gap-2">
-                         <div className="px-4 py-2 bg-text-primary text-white rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
+                         <div className="px-4 py-2 bg-text-primary text-text-primary rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
                             <Activity className="w-3 h-3 text-success animate-pulse" />
                             {displayFleet.length} INSTANCES
                          </div>
@@ -111,7 +111,7 @@ export const TenantOrchestrator: React.FC = () => {
                             <div className="flex items-start gap-5 relative z-10">
                                 <div className={cn(
                                     "w-12 h-12 rounded-2xl flex items-center justify-center transition-colors shadow-sm",
-                                    isActive ? "bg-white/10 text-white" : "bg-bg-tertiary text-text-muted",
+                                    isActive ? "bg-white/10 text-text-primary" : "bg-bg-tertiary text-text-muted",
                                     isError && !isActive && "bg-error/10 text-error"
                                 )}>
                                     <Building2 className="w-6 h-6" />
@@ -121,7 +121,7 @@ export const TenantOrchestrator: React.FC = () => {
                                     <div className="flex items-center gap-2 mb-1">
                                         <h3 className={cn(
                                             "text-lg font-serif italic font-black transition-colors",
-                                            isActive ? "text-white" : "text-text-primary"
+                                            isActive ? "text-text-primary" : "text-text-primary"
                                         )}>
                                             {instance.name}
                                         </h3>
@@ -137,7 +137,7 @@ export const TenantOrchestrator: React.FC = () => {
                                             )} />
                                             <span className={cn(
                                                 "text-[8px] font-black uppercase tracking-widest",
-                                                isActive ? "text-white/50" : "text-text-muted"
+                                                isActive ? "text-text-primary/50" : "text-text-muted"
                                             )}>
                                                 {instance.status}
                                             </span>
@@ -147,7 +147,7 @@ export const TenantOrchestrator: React.FC = () => {
                                                 <span className="w-1 h-1 rounded-full bg-border" />
                                                 <span className={cn(
                                                     "text-[8px] font-black uppercase tracking-widest",
-                                                    isActive ? "text-white/50" : "text-text-muted"
+                                                    isActive ? "text-text-primary/50" : "text-text-muted"
                                                 )}>
                                                     Health: {instance.metrics.healthScore}%
                                                 </span>

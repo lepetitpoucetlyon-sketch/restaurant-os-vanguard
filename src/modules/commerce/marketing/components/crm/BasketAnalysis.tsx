@@ -332,7 +332,7 @@ export function BasketAnalysis() {
                       style={{ width: `${pct}%` }}
                     >
                       {pct > 20 && (
-                        <span className="text-[10px] font-mono font-bold text-white whitespace-nowrap">
+                        <span className="text-[10px] font-mono font-bold text-text-primary whitespace-nowrap">
                           {bucket.avgSpendEur.toFixed(0)}€
                         </span>
                       )}

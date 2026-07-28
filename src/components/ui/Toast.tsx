@@ -91,7 +91,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                         "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
                                         toast.type === 'success' ? "bg-success/10 text-success" :
                                             toast.type === 'error' ? "bg-error/10 text-error" :
-                                                toast.type === 'premium' ? "bg-accent text-white" :
+                                                toast.type === 'premium' ? "bg-accent text-text-primary" :
                                                     toast.type === 'warning' ? "bg-warning/10 text-warning" :
                                                         "bg-action-primary/10 text-brand"
                                     )}
@@ -107,14 +107,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                     {toast.title && (
                                         <p className={cn(
                                             "text-[13px] font-black tracking-widest uppercase mb-1",
-                                            toast.type === 'premium' ? "text-white" : "text-text-primary"
+                                            toast.type === 'premium' ? "text-text-primary" : "text-text-primary"
                                         )}>
                                             {toast.title}
                                         </p>
                                     )}
                                     <p className={cn(
                                         "text-[12px] font-bold leading-relaxed opacity-80",
-                                        toast.type === 'premium' ? "text-white/80" : "text-text-muted"
+                                        toast.type === 'premium' ? "text-text-primary/80" : "text-text-muted"
                                     )}>
                                         {toast.description || toast.message}
                                     </p>
@@ -128,7 +128,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                     className={cn(
                                         "w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0",
                                         toast.type === 'premium'
-                                            ? "text-white/40 hover:text-white hover:bg-surface-card/10"
+                                            ? "text-text-primary/40 hover:text-text-primary hover:bg-surface-card/10"
                                             : "text-text-muted hover:text-text-primary hover:bg-bg-tertiary"
                                     )}
                                 >

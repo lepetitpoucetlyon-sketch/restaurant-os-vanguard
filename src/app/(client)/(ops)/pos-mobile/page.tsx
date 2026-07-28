@@ -64,7 +64,7 @@ export default function POSMobilePage() {
                     <button
                         onClick={() => handleSendToKitchen()}
                         disabled={cartItems.length === 0}
-                        className="h-10 px-4 rounded-full bg-status-success text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-30 flex items-center gap-2"
+                        className="h-10 px-4 rounded-full bg-status-success text-text-primary text-[10px] font-black uppercase tracking-widest disabled:opacity-30 flex items-center gap-2"
                     >
                         <Send className="w-3.5 h-3.5" />
                         Envoyer
@@ -78,7 +78,7 @@ export default function POSMobilePage() {
                     onClick={() => setSelectedCategory('all')}
                     className={cn(
                         'h-9 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
-                        selectedCategory === 'all' ? 'bg-accent-gold text-white' : 'bg-bg-tertiary text-text-muted'
+                        selectedCategory === 'all' ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                     )}
                 >
                     Tout
@@ -89,7 +89,7 @@ export default function POSMobilePage() {
                         onClick={() => setSelectedCategory(cat.id)}
                         className={cn(
                             'h-9 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
-                            selectedCategory === cat.id ? 'bg-accent-gold text-white' : 'bg-bg-tertiary text-text-muted'
+                            selectedCategory === cat.id ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                         )}
                     >
                         {cat.name}
@@ -122,12 +122,12 @@ export default function POSMobilePage() {
                             className="w-full h-14 rounded-2xl bg-text-primary dark:bg-accent-gold px-6 flex items-center justify-between shadow-2xl"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white text-xs font-black">
+                                <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-text-primary text-xs font-black">
                                     {cartCount}
                                 </div>
-                                <ShoppingCart className="w-4 h-4 text-white" />
+                                <ShoppingCart className="w-4 h-4 text-text-primary" />
                             </div>
-                            <span className="text-lg font-mono font-bold text-white">{formatCurrency(cartTotal)}</span>
+                            <span className="text-lg font-mono font-bold text-text-primary">{formatCurrency(cartTotal)}</span>
                         </button>
                     </motion.div>
                 )}

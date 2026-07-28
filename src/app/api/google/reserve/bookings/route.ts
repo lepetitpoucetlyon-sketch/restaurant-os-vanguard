@@ -39,7 +39,7 @@ interface GoogleBookingBody {
 
 function authGuard(req: NextRequest): NextResponse | null {
   const auth = req.headers.get('authorization');
-  if (RESERVE_SECRET && auth !== `Bearer ${RESERVE_SECRET}`) {
+  if (!RESERVE_SECRET || auth !== `Bearer ${RESERVE_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   return null;

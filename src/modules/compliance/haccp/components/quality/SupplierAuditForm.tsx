@@ -6,7 +6,7 @@ export const SupplierAuditForm: React.FC = () => {
     return (
         <div className="bg-surface-card rounded-[2rem] p-8 border border-subtle shadow-xl overflow-hidden relative">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-surface-sidebar text-white flex items-center justify-center">
+                <div className="w-12 h-12 rounded-2xl bg-surface-sidebar text-text-primary flex items-center justify-center">
                     <ClipboardCheck className="w-6 h-6" />
                 </div>
                 <div>
@@ -34,7 +34,7 @@ export const SupplierAuditForm: React.FC = () => {
                 </div>
             </div>
 
-            <Button className="w-full mt-8 bg-surface-sidebar text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">
+            <Button className="w-full mt-8 bg-surface-sidebar text-text-primary py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">
                 Lancer l'Audit de Certification
             </Button>
         </div>

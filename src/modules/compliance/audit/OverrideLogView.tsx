@@ -34,8 +34,8 @@ export function OverrideLogView() {
         return () => { cancelled = true; };
     }, [activeTenantId]);
 
-    if (loading) return <div className="p-4 text-sm text-gray-500">Chargement du journal des overrides…</div>;
-    if (events.length === 0) return <div className="p-4 text-sm text-gray-500">Aucun override enregistré.</div>;
+    if (loading) return <div className="p-4 text-sm text-text-muted">Chargement du journal des overrides…</div>;
+    if (events.length === 0) return <div className="p-4 text-sm text-text-muted">Aucun override enregistré.</div>;
 
     return (
         <div className="space-y-2 p-4">
@@ -43,7 +43,7 @@ export function OverrideLogView() {
             <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                     <thead>
-                        <tr className="border-b text-left text-gray-500">
+                        <tr className="border-b text-left text-text-muted">
                             <th className="py-2 pr-4">Date</th>
                             <th className="py-2 pr-4">Acteur</th>
                             <th className="py-2 pr-4">Rôle</th>
@@ -54,7 +54,7 @@ export function OverrideLogView() {
                     </thead>
                     <tbody>
                         {events.map(event => (
-                            <tr key={event.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <tr key={event.id} className="border-b hover:bg-gray-50 dark:hover:bg-surface-card">
                                 <td className="py-2 pr-4 font-mono text-xs">
                                     {new Date(event.ts).toLocaleString('fr-FR')}
                                 </td>

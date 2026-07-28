@@ -24,8 +24,8 @@ import { logger } from '@/lib/logger';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { PulseSanitizer } from './PulseSanitizer';
-import { sovereignQuery, sovereignIngest, sovereignHealth } from '@/modules/intelligence/rag/SovereignRAGClient';
-import type { RAGHealthResult } from '@/modules/intelligence/rag/SovereignRAGClient';
+import { sovereignQuery, sovereignIngest, sovereignHealth } from './SovereignRAGClient';
+import type { RAGHealthResult } from './SovereignRAGClient';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
 import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';

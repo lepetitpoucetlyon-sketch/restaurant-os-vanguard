@@ -165,7 +165,7 @@ export default function ProfileSettings() {
                                     </div>
                                     {user.id === currentUser?.id && (
                                         <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-bg-secondary shadow-lg">
-                                            <BadgeCheck className="w-3 h-3 text-white" />
+                                            <BadgeCheck className="w-3 h-3 text-text-primary" />
                                         </div>
                                     )}
                                 </div>
@@ -215,7 +215,7 @@ export default function ProfileSettings() {
                                 <motion.button
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="absolute -bottom-3 -right-3 w-12 h-12 bg-accent rounded-2xl flex items-center justify-center shadow-lg border-4 border-bg-secondary text-white hover:bg-accent/90 transition-colors"
+                                    className="absolute -bottom-3 -right-3 w-12 h-12 bg-accent rounded-2xl flex items-center justify-center shadow-lg border-4 border-bg-secondary text-text-primary hover:bg-accent/90 transition-colors"
                                 >
                                     <Camera className="w-5 h-5" />
                                 </motion.button>
@@ -258,7 +258,7 @@ export default function ProfileSettings() {
                         className={cn(
                             "flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all border",
                             isEditing
-                                ? "bg-error/10 border-error/20 text-error hover:bg-error hover:text-white"
+                                ? "bg-error/10 border-error/20 text-error hover:bg-error hover:text-text-primary"
                                 : "bg-bg-tertiary border-border text-text-primary hover:bg-bg-primary shadow-sm"
                         )}
                     >
@@ -413,7 +413,7 @@ export default function ProfileSettings() {
                             className={cn(
                                 "flex items-center gap-4 px-12 py-6 rounded-[2rem] font-bold uppercase tracking-widest shadow-2xl hover:scale-105 transition-all disabled:opacity-50 group border",
                                 saveSuccess
-                                    ? "bg-success text-white border-success"
+                                    ? "bg-success text-text-primary border-success"
                                     : "bg-text-primary text-bg-primary border-border"
                             )}
                         >

@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai';
 import { OperationalIdentity } from '@/shared/nexus-contract';
 import { toProduct, toCategory, toJournalEntry } from '@nexus/contracts/nexus-internal-mapper';
 import { createSovereignHook } from '../opsCore';
-import { useInventory } from '@/modules/logistics/inventory/hooks/useInventory';
+import { useInventory } from '@/modules/logistics/inventory/hooks';
 
 import { productsNodeAtom, categoriesNodeAtom } from '@/store/pillars/logistics';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';

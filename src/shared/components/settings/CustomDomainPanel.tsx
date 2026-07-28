@@ -81,7 +81,7 @@ export default function CustomDomainPanel() {
         <button
           onClick={save}
           disabled={loading || !input.trim()}
-          className="px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
+          className="px-5 py-2.5 rounded-xl bg-accent text-text-primary text-sm font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
         >
           Enregistrer
         </button>
@@ -97,7 +97,7 @@ export default function CustomDomainPanel() {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 text-sm text-red-500 bg-red-50 dark:bg-red-950/20 rounded-xl px-4 py-3">
+        <div className="flex items-center gap-2 text-sm text-status-danger bg-red-50 dark:bg-red-950/20 rounded-xl px-4 py-3">
           <AlertTriangle className="w-4 h-4 shrink-0" /> {error}
         </div>
       )}
@@ -116,7 +116,7 @@ export default function CustomDomainPanel() {
               CNAME → <span className="text-accent">{status.cnameTarget}</span>
             </code>
             <button onClick={copyTarget} className="shrink-0">
-              {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-text-secondary hover:text-text-primary transition-colors" />}
+              {copied ? <CheckCircle2 className="w-4 h-4 text-status-success" /> : <Copy className="w-4 h-4 text-text-secondary hover:text-text-primary transition-colors" />}
             </button>
           </div>
           <p className="text-xs text-text-secondary">{status.instructions}</p>

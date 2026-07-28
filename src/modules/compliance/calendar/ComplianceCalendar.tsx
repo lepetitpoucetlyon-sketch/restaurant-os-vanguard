@@ -29,7 +29,7 @@ function getStatus(expiresAt: string): 'ok' | 'expiring' | 'expired' {
 function statusColor(status: 'ok' | 'expiring' | 'expired'): string {
     switch (status) {
         case 'expired': return 'text-status-error bg-status-error/10 border-status-error/20';
-        case 'expiring': return 'text-amber-500 bg-amber-500/10 border-amber-500/20';
+        case 'expiring': return 'text-action-primary bg-action-primary/10 border-action-primary/20';
         case 'ok': return 'text-status-success bg-status-success/10 border-status-success/20';
     }
 }

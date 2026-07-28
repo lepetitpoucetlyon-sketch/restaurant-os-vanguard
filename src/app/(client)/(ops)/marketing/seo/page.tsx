@@ -34,7 +34,7 @@ export default function SEOPage() {
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-[#00D9A6]/5 blur-[120px] rounded-full" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-purple-500/5 blur-[100px] rounded-full" />
-                <div className="absolute top-[30%] left-[20%] w-[20%] h-[20%] bg-amber-500/5 blur-[80px] rounded-full" />
+                <div className="absolute top-[30%] left-[20%] w-[20%] h-[20%] bg-action-primary/5 blur-[80px] rounded-full" />
             </div>
 
             {/* Header */}
@@ -55,7 +55,7 @@ export default function SEOPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-[#00D9A6] text-white hover:bg-[#00C090] rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(0,217,166,0.25)] transition-all flex items-center gap-3"
+                        className="h-12 px-8 bg-[#00D9A6] text-text-primary hover:bg-[#00C090] rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(0,217,166,0.25)] transition-all flex items-center gap-3"
                         id="seo-analyze-button"
                     >
                         <RefreshCw className="w-4 h-4" />

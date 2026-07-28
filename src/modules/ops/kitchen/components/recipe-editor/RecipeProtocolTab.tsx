@@ -56,7 +56,7 @@ export function RecipeProtocolTab({
                         onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, tip: e.target.value }))}
                         className="w-full h-20 px-6 py-4 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold italic text-sm outline-none resize-none"
                     />
-                    <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                    <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
                         <Plus className="w-4 h-4 mr-2" /> Intégrer cette étape au protocole
                     </Button>
                 </div>

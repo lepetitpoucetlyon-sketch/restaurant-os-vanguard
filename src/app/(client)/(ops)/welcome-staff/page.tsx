@@ -36,7 +36,7 @@ const ROLE_CONFIG: Record<string, { label: string; icon: typeof UtensilsCrossed;
     kitchen_line: {
         label: "Commis de cuisine",
         icon: ChefHat,
-        color: "text-amber-400",
+        color: "text-action-primary",
         homeRoute: "/kds",
         description: "Préparation des plats sur le KDS.",
     },
@@ -227,7 +227,7 @@ function WelcomeStaffInner() {
                                 <button
                                     onClick={handleSave}
                                     disabled={!isValid || isSaving}
-                                    className="w-full h-12 rounded-2xl bg-accent-gold text-white text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 transition-all disabled:opacity-40"
+                                    className="w-full h-12 rounded-2xl bg-accent-gold text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 transition-all disabled:opacity-40"
                                 >
                                     {isSaving ? (
                                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -254,7 +254,7 @@ function WelcomeStaffInner() {
                             </div>
                             <button
                                 onClick={handleGoHome}
-                                className="w-full h-12 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity dark:bg-accent-gold dark:text-white"
+                                className="w-full h-12 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity dark:bg-accent-gold dark:text-text-primary"
                             >
                                 Accéder à mon espace
                                 <ArrowRight className="w-4 h-4" />

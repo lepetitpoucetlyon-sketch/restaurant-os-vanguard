@@ -82,7 +82,7 @@ export function ResellerPortal() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Users className="w-5 h-5 text-brand" />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Reseller Portal</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Reseller Portal</h3>
         </div>
         <button
           onClick={() => setShowForm(s => !s)}
@@ -96,12 +96,12 @@ export function ResellerPortal() {
       <div className="grid grid-cols-3 gap-4">
         {[
           { label: "Revendeurs actifs", value: String(activeResellers), icon: <Users className="w-4 h-4 text-brand" /> },
-          { label: "Tenants apportés", value: String(totalReferrals), icon: <TrendingUp className="w-4 h-4 text-emerald-400" /> },
-          { label: "Commissions cumulées", value: `€${totalCommissions.toFixed(2)}`, icon: <TrendingUp className="w-4 h-4 text-amber-400" /> },
+          { label: "Tenants apportés", value: String(totalReferrals), icon: <TrendingUp className="w-4 h-4 text-status-success" /> },
+          { label: "Commissions cumulées", value: `€${totalCommissions.toFixed(2)}`, icon: <TrendingUp className="w-4 h-4 text-action-primary" /> },
         ].map(k => (
           <div key={k.label} className="bg-white/5 border border-white/5 rounded-xl p-3 text-center">
             <div className="flex justify-center mb-1">{k.icon}</div>
-            <div className="text-lg font-bold text-white">{k.value}</div>
+            <div className="text-lg font-bold text-text-primary">{k.value}</div>
             <div className="text-[10px] text-secondary uppercase tracking-wider">{k.label}</div>
           </div>
         ))}
@@ -112,7 +112,7 @@ export function ResellerPortal() {
         <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
           <p className="text-xs font-semibold text-secondary uppercase tracking-wider">Nouveau revendeur</p>
           {error && (
-            <div className="flex items-center gap-2 text-red-400 text-xs bg-red-950/20 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-status-danger text-xs bg-red-950/20 rounded-lg px-3 py-2">
               <AlertCircle className="w-3 h-3" /> {error}
             </div>
           )}
@@ -122,8 +122,8 @@ export function ResellerPortal() {
             <input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="Téléphone" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
           </div>
           <div className="flex gap-2 justify-end">
-            <button onClick={() => setShowForm(false)} className="px-3 py-2 text-xs text-secondary hover:text-white transition-colors">Annuler</button>
-            <button onClick={create} disabled={saving} className="px-4 py-2 bg-action-primary text-white text-xs font-bold rounded-lg disabled:opacity-50">
+            <button onClick={() => setShowForm(false)} className="px-3 py-2 text-xs text-secondary hover:text-text-primary transition-colors">Annuler</button>
+            <button onClick={create} disabled={saving} className="px-4 py-2 bg-action-primary text-text-primary text-xs font-bold rounded-lg disabled:opacity-50">
               {saving ? "Création..." : "Créer"}
             </button>
           </div>
@@ -141,8 +141,8 @@ export function ResellerPortal() {
             <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-xl px-4 py-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-white truncate">{r.name}</span>
-                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${r.status === "active" ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-600/30 text-slate-400"}`}>{r.status}</span>
+                  <span className="text-sm font-semibold text-text-primary truncate">{r.name}</span>
+                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${r.status === "active" ? "bg-status-success/20 text-status-success" : "bg-slate-600/30 text-text-secondary"}`}>{r.status}</span>
                 </div>
                 <div className="text-[11px] text-secondary">{r.email} · {r.totalTenantsReferred} tenants · €{r.totalCommissionsEur.toFixed(2)}</div>
               </div>
@@ -152,7 +152,7 @@ export function ResellerPortal() {
                   className="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-lg text-[11px] font-mono hover:bg-white/20 transition-colors"
                   title="Copier le code d'affiliation"
                 >
-                  {copied === r.affiliateCode ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-secondary" />}
+                  {copied === r.affiliateCode ? <CheckCircle2 className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3 text-secondary" />}
                   {r.affiliateCode}
                 </button>
                 <button

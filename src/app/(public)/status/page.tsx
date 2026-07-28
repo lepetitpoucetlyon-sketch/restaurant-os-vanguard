@@ -96,7 +96,7 @@ export default async function StatusPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">Restaurant OS — Statut</h1>
-            <p className="text-sm text-gray-500">État des services en temps réel</p>
+            <p className="text-sm text-text-muted">État des services en temps réel</p>
           </div>
         </div>
 
@@ -105,13 +105,13 @@ export default async function StatusPage() {
           <OverallIcon className={`w-7 h-7 flex-shrink-0 ${overallCfg.color}`} />
           <div>
             <p className={`text-base font-bold ${overallCfg.color}`}>{OVERALL_LABEL[overall]}</p>
-            <p className="text-xs text-gray-500 mt-0.5">Vérifié le {checkedAt}</p>
+            <p className="text-xs text-text-muted mt-0.5">Vérifié le {checkedAt}</p>
           </div>
         </div>
 
         {/* Services list */}
         <div className="space-y-3">
-          <h2 className="text-xs font-black uppercase tracking-widest text-gray-500">Services</h2>
+          <h2 className="text-xs font-black uppercase tracking-widest text-text-muted">Services</h2>
           {services.map(service => {
             const cfg = STATUS_CONFIG[service.status];
             const Icon = cfg.icon;
@@ -121,7 +121,7 @@ export default async function StatusPage() {
                 <span className="flex-1 text-sm font-semibold text-gray-900">{service.name}</span>
                 <div className="flex items-center gap-3">
                   {service.latencyMs !== undefined && (
-                    <span className="text-xs text-gray-400 font-mono tabular-nums">{service.latencyMs}ms</span>
+                    <span className="text-xs text-text-secondary font-mono tabular-nums">{service.latencyMs}ms</span>
                   )}
                   <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${cfg.bg} ${cfg.color} border ${cfg.border}`}>
                     {cfg.label}
@@ -132,7 +132,7 @@ export default async function StatusPage() {
           })}
         </div>
 
-        <p className="text-xs text-center text-gray-400 pt-4 border-t border-gray-200">
+        <p className="text-xs text-center text-text-secondary pt-4 border-t border-gray-200">
           Propulsé par <span className="font-semibold text-gray-600">Restaurant OS</span>
         </p>
       </div>

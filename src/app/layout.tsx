@@ -62,7 +62,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
         <ServiceWorkerRegistration />
         <ErrorBoundary>
-          <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-white font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
+          <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-text-primary font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
             <NexusProviderStack>
                 <ImpersonationBanner />
                 {children}

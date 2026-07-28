@@ -10,12 +10,12 @@ import type { ChangeCategory, ChangelogEntry } from '@/shared/nexus/engines/mcc/
 
 const CATEGORY_META: Record<ChangeCategory, { label: string; color: string }> = {
   UI_OVERRIDE:  { label: 'UI',          color: 'text-violet-400 bg-violet-500/10 border-violet-500/30' },
-  FEATURE_FLAG: { label: 'Feature',     color: 'text-blue-400 bg-blue-500/10 border-blue-500/30'     },
-  BILLING:      { label: 'Billing',     color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
-  UPGRADE:      { label: 'Upgrade',     color: 'text-amber-400 bg-amber-500/10 border-amber-500/30'  },
+  FEATURE_FLAG: { label: 'Feature',     color: 'text-blue-400 bg-status-info/10 border-blue-500/30'     },
+  BILLING:      { label: 'Billing',     color: 'text-status-success bg-status-success/10 border-emerald-500/30' },
+  UPGRADE:      { label: 'Upgrade',     color: 'text-action-primary bg-action-primary/10 border-action-primary/30'  },
   DEBUG:        { label: 'Debug',       color: 'text-orange-400 bg-orange-500/10 border-orange-500/30'},
-  CONFIG:       { label: 'Config',      color: 'text-slate-400 bg-slate-500/10 border-slate-500/30'  },
-  MAINTENANCE:  { label: 'Maintenance', color: 'text-red-400 bg-red-500/10 border-red-500/30'        },
+  CONFIG:       { label: 'Config',      color: 'text-text-secondary bg-slate-500/10 border-slate-500/30'  },
+  MAINTENANCE:  { label: 'Maintenance', color: 'text-status-danger bg-status-danger/10 border-red-500/30'        },
   ROLLOUT:      { label: 'Rollout',     color: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30'     },
   CUSTOM:       { label: 'Custom',      color: 'text-pink-400 bg-pink-500/10 border-pink-500/30'     },
 };
@@ -99,7 +99,7 @@ export function TenantChangelogPanel() {
             <ChevronDown className={cn('w-3.5 h-3.5 text-secondary shrink-0 ml-1 transition-transform', dropdownOpen && 'rotate-180')} />
           </button>
           {dropdownOpen && (
-            <div className="absolute z-20 top-full mt-1 w-full bg-slate-900 border border-white/10 rounded-xl overflow-hidden shadow-xl">
+            <div className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-white/10 rounded-xl overflow-hidden shadow-xl">
               <button
                 onClick={() => { setSelectedId('__FLEET__'); setDropdownOpen(false); }}
                 className={cn('w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors', selectedId === '__FLEET__' ? 'text-cyan-400' : 'text-muted')}
@@ -182,7 +182,7 @@ export function TenantChangelogPanel() {
               {idx < entries.length - 1 && (
                 <div className="absolute left-1.5 top-5 bottom-0 w-px bg-white/5" />
               )}
-              <div className="absolute left-0 top-3 w-3 h-3 rounded-full border-2 border-white/10 bg-slate-900" />
+              <div className="absolute left-0 top-3 w-3 h-3 rounded-full border-2 border-white/10 bg-surface-bg" />
 
               <div
                 className="ml-2 p-3 bg-bg-primary/30 border border-white/5 rounded-xl cursor-pointer hover:border-white/10 transition-all"
@@ -213,31 +213,31 @@ export function TenantChangelogPanel() {
                   <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
                     {entry.key && (
                       <p className="text-[9px] font-mono text-secondary">
-                        <span className="text-white/30">Key: </span>{entry.key}
+                        <span className="text-text-primary/30">Key: </span>{entry.key}
                       </p>
                     )}
                     <p className="text-[9px] text-secondary">
-                      <span className="text-white/30">Scope: </span>{entry.scope}
+                      <span className="text-text-primary/30">Scope: </span>{entry.scope}
                       {' — '}
-                      <span className="text-white/30">Par: </span>{entry.appliedBy}
+                      <span className="text-text-primary/30">Par: </span>{entry.appliedBy}
                     </p>
                     <p className="text-[9px] text-secondary">
-                      <span className="text-white/30">Date: </span>
+                      <span className="text-text-primary/30">Date: </span>
                       {new Date(entry.appliedAt).toLocaleString('fr-FR')}
                     </p>
                     {(entry.before !== undefined || entry.after !== undefined) && (
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         {entry.before !== undefined && (
-                          <div className="p-2 bg-red-500/5 border border-red-500/10 rounded-lg">
-                            <p className="text-[8px] font-black uppercase text-red-400/60 mb-1">Avant</p>
+                          <div className="p-2 bg-status-danger/5 border border-red-500/10 rounded-lg">
+                            <p className="text-[8px] font-black uppercase text-status-danger/60 mb-1">Avant</p>
                             <pre className="text-[9px] text-secondary overflow-auto max-h-20 whitespace-pre-wrap break-all">
                               {JSON.stringify(entry.before, null, 2)}
                             </pre>
                           </div>
                         )}
                         {entry.after !== undefined && (
-                          <div className="p-2 bg-emerald-500/5 border border-emerald-500/10 rounded-lg">
-                            <p className="text-[8px] font-black uppercase text-emerald-400/60 mb-1">Après</p>
+                          <div className="p-2 bg-status-success/5 border border-emerald-500/10 rounded-lg">
+                            <p className="text-[8px] font-black uppercase text-status-success/60 mb-1">Après</p>
                             <pre className="text-[9px] text-secondary overflow-auto max-h-20 whitespace-pre-wrap break-all">
                               {JSON.stringify(entry.after, null, 2)}
                             </pre>

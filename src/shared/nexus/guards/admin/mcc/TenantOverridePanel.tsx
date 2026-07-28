@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sliders, Bug, CheckCircle2, AlertCircle, ChevronDown, RotateCcw, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
+import { useNexusFleet } from '@/modules/intelligence/fleet';
 import type { TenantOverrides } from '@/domain/schemas/tenant';
 
 const BUTTON_RADIUS_PRESETS = [
@@ -131,7 +131,7 @@ export function TenantOverridePanel() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="absolute z-20 top-full mt-1 w-full bg-slate-900 border border-white/10 rounded-xl overflow-hidden shadow-xl"
+              className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-white/10 rounded-xl overflow-hidden shadow-xl"
             >
               {instances.map(inst => (
                 <button
@@ -246,11 +246,11 @@ export function TenantOverridePanel() {
           </section>
 
           {/* Debug mode */}
-          <section className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl space-y-3">
+          <section className="p-4 bg-action-primary/5 border border-action-primary/20 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Bug className="w-4 h-4 text-amber-400" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">Debug Mode</span>
+                <Bug className="w-4 h-4 text-action-primary" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-action-primary">Debug Mode</span>
               </div>
               <button
                 onClick={() => {
@@ -260,7 +260,7 @@ export function TenantOverridePanel() {
                 className={cn(
                   'w-10 h-5 rounded-full border transition-all relative',
                   form.debug?.enabled
-                    ? 'bg-amber-500 border-amber-400'
+                    ? 'bg-action-primary border-amber-400'
                     : 'bg-bg-primary/50 border-white/10'
                 )}
               >
@@ -279,7 +279,7 @@ export function TenantOverridePanel() {
                     className={cn(
                       'flex-1 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
                       form.debug?.level === l
-                        ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                        ? 'bg-action-primary/20 border-action-primary/50 text-amber-300'
                         : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
                     )}
                   >
@@ -291,7 +291,7 @@ export function TenantOverridePanel() {
             {current.debug?.enabled && (
               <button
                 onClick={handleRemoveDebug}
-                className="text-[9px] font-black uppercase tracking-wider text-amber-400/60 hover:text-amber-400 transition-colors"
+                className="text-[9px] font-black uppercase tracking-wider text-action-primary/60 hover:text-action-primary transition-colors"
               >
                 Retirer le mode debug
               </button>
@@ -319,7 +319,7 @@ export function TenantOverridePanel() {
             <button
               onClick={handleApply}
               disabled={isSaving}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-text-primary text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
             >
               {isSaving ? 'Application...' : 'Appliquer l\'override'}
             </button>

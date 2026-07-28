@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, TrendingUp, Zap } from "lucide-react";
 import type { Customer } from "@nexus/contracts";
 
-import { useCRM } from "@/modules/ops/providers/NexusOpsProvider";
+import { useCRM } from "@/modules/commerce";
 import { CRMSidebar, CRMList, CRMDetailView } from "@modules/commerce/marketing/components/crm";
 import {
     CustomerCustomerView,
@@ -15,7 +15,7 @@ import { PromoCodeManager } from "@/modules/commerce/marketing/components/crm/Pr
 import { EmailCampaign } from "@/modules/commerce/marketing/components/crm/EmailCampaign";
 import { BasketAnalysis } from "@/modules/commerce/marketing/components/crm/BasketAnalysis";
 import { VisitHistory } from "@/modules/commerce/marketing/components/crm/VisitHistory";
-import { CustomerImportPanel } from "@/modules/onboarding/migration/CustomerImportPanel";
+import { CustomerImportPanel } from "@/modules/commerce";
 import { RFMSegmentation } from "@/modules/commerce/marketing/components/crm/RFMSegmentation";
 import { EmailAutomations } from "@/modules/commerce/marketing/components/crm/EmailAutomations";
 
@@ -39,7 +39,7 @@ export default function CrmPage() {
                 </div>
                 <button
                     onClick={() => setIsNewOpen(true)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-white text-sm font-medium hover:opacity-90"
+                    className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90"
                 >
                     <PlusCircle className="w-4 h-4" /> Nouveau client
                 </button>

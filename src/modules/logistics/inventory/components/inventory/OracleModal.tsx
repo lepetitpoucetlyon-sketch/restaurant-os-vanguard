@@ -4,7 +4,7 @@ import React from 'react';
 import { X } from 'lucide-react';
 import type { StockItem } from '@modules/logistics/inventory/types';
 import { useStockPrediction } from '@/modules/logistics/hooks/useStockPrediction';
-import { OraclePredictor } from '@/modules/intelligence/analytics/components/OraclePredictor';
+import { OraclePredictor } from '@/modules/intelligence/analytics/components';
 
 interface OracleModalProps {
     item: StockItem;

@@ -97,7 +97,7 @@ export function SanitaryComplianceSection() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-start gap-3 bg-status-warning/5 p-4 rounded-xl border border-amber-500/10">
+                                    <div className="flex items-start gap-3 bg-status-warning/5 p-4 rounded-xl border border-action-primary/10">
                                         <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
                                         <p className="text-[11px] text-warning/80 font-medium italic">{s.warning}</p>
                                     </div>

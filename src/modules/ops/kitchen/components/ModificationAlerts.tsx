@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { X, Check, AlertTriangle, ChefHat, Clock, Minus, Plus, MessageSquare } from "lucide-react";
 ;
-import { useOrders } from "@/modules/ops/providers/NexusOpsProvider";
+import { useOrders } from "@/modules/ops/providers";
 import { useAuth } from "@/shared/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { Order, OrderItem, OrderItemModification } from "@nexus/contracts";
@@ -75,12 +75,12 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                 {/* Header Row */}
                 <div className="flex items-start justify-between mb-8">
                     <div className="flex items-center gap-5">
-                        <div className="w-16 h-16 rounded-2xl bg-status-warning dark:bg-status-warning/20 flex items-center justify-center border border-amber-200 dark:border-amber-500/20 shadow-inner">
+                        <div className="w-16 h-16 rounded-2xl bg-status-warning dark:bg-status-warning/20 flex items-center justify-center border border-amber-200 dark:border-action-primary/20 shadow-inner">
                             <AlertTriangle className="w-8 h-8 text-status-warning dark:text-status-warning" strokeWidth={1.5} />
                         </div>
                         <div>
                             <div className="flex items-center gap-3 mb-1">
-                                <span className="font-serif font-black italic text-2xl md:text-3xl text-primary dark:text-white tracking-tight">Table {tableNumber}</span>
+                                <span className="font-serif font-black italic text-2xl md:text-3xl text-primary dark:text-text-primary tracking-tight">Table {tableNumber}</span>
                                 <span className="px-2 py-0.5 rounded-full bg-status-danger dark:bg-status-danger/30 text-status-danger dark:text-status-danger text-[10px] font-black uppercase tracking-widest border border-red-200 dark:border-red-800 animate-pulse">
                                     Prioritaire
                                 </span>
@@ -101,7 +101,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                         <div className="w-10 h-10 rounded-full bg-surface-bg dark:bg-surface-sidebar flex items-center justify-center shrink-0">
                             <ChefHat className="w-5 h-5 text-secondary dark:text-muted" strokeWidth={1.5} />
                         </div>
-                        <span className="font-serif font-medium text-xl md:text-2xl text-primary dark:text-white leading-none">
+                        <span className="font-serif font-medium text-xl md:text-2xl text-primary dark:text-text-primary leading-none">
                             {itemName}
                         </span>
                     </div>
@@ -163,7 +163,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                         placeholder="Ajouter une note de cuisine (optionnel)..."
                         value={responseNote}
                         onChange={(e) => setResponseNote(e.target.value)}
-                        className="w-full px-6 py-4 bg-surface-bg dark:bg-surface-sidebar/40 border border-subtle dark:border-default rounded-2xl text-base text-primary dark:text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all font-medium"
+                        className="w-full px-6 py-4 bg-surface-bg dark:bg-surface-sidebar/40 border border-subtle dark:border-default rounded-2xl text-base text-primary dark:text-text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-action-primary/50 transition-all font-medium"
                     />
                 </div>
 
@@ -180,7 +180,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                     <button
                         onClick={handleApprove}
                         disabled={isResponding}
-                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-surface-sidebar dark:bg-surface-card text-white dark:text-primary hover:bg-status-success dark:hover:bg-status-success hover:text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-green-500/25 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50 disabled:scale-100"
+                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary hover:bg-status-success dark:hover:bg-status-success hover:text-text-primary hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-green-500/25 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50 disabled:scale-100"
                     >
                         <Check className="w-5 h-5" />
                         <span>Approuver</span>
@@ -236,7 +236,7 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                             {/* Panel Header */}
                             <div className="relative shrink-0 px-8 py-6 border-b border-subtle/50 dark:border-white/5 flex items-center justify-between">
                                 <div>
-                                    <h2 className="font-serif font-bold text-2xl text-primary dark:text-white tracking-tight">
+                                    <h2 className="font-serif font-bold text-2xl text-primary dark:text-text-primary tracking-tight">
                                         Modifications
                                     </h2>
                                     <p className="text-secondary dark:text-muted text-sm font-medium mt-0.5">
@@ -265,9 +265,9 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                                             className="flex flex-col items-center justify-center py-20 text-center"
                                         >
                                             <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-status-success to-status-success flex items-center justify-center shadow-lg shadow-green-500/30 mb-8 animate-in fade-in zoom-in duration-500">
-                                                <Check className="w-10 h-10 text-white" strokeWidth={3} />
+                                                <Check className="w-10 h-10 text-text-primary" strokeWidth={3} />
                                             </div>
-                                            <h3 className="font-serif font-medium text-2xl text-primary dark:text-white mb-2">
+                                            <h3 className="font-serif font-medium text-2xl text-primary dark:text-text-primary mb-2">
                                                 Tout est en ordre
                                             </h3>
                                             <p className="text-secondary max-w-[200px] leading-relaxed">

@@ -1,0 +1,156 @@
+name: '🛡️ Grade X++ Sovereignty Guard'
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: grade-x-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ──────────────────────────────────────────────────────────
+  # Phase 1 : Compilation TypeScript (Zero Error Policy)
+  # ──────────────────────────────────────────────────────────
+  type-safety:
+    name: '🏗️ TypeScript Compilation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit
+        name: '🔒 Type-Check (Zero Errors Required)'
+
+  # ──────────────────────────────────────────────────────────
+  # Phase 2 : Suite de Tests Vitest (100% Green)
+  # ──────────────────────────────────────────────────────────
+  tests:
+    name: '🧪 Vitest Test Suite'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: type-safety
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx vitest run --reporter=json --outputFile=vitest-results.json
+        name: '🧪 Run All Tests'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vitest-results
+          path: vitest-results.json
+
+  # ──────────────────────────────────────────────────────────
+  # Phase 3 : Audit Architecte Grade X++ (Scanner AST)
+  # ──────────────────────────────────────────────────────────
+  audit-grade-x:
+    name: '🛰️ Audit Grade X++ (AST Scanner)'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: type-safety
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsx scripts/audit-grade-x-plus.ts
+        name: '🔍 Deep Architectural Audit'
+
+      - name: '🛡️ Enforce Tenant Isolation (Zero Unscoped Queries)'
+        run: |
+          UNSCOPED=$(jq '.tenantIsolation.unscopedQueries | length' audit-grade-x-plus-report.json)
+          # Allow up to 3 global system routes (status, mcc/reseller, google/reserve)
+          if [ "$UNSCOPED" -gt 3 ]; then
+            echo "❌ SOVEREIGNTY VIOLATION: $UNSCOPED unscoped queries detected (max 3 system routes allowed)"
+            jq '.tenantIsolation.unscopedQueries' audit-grade-x-plus-report.json
+            exit 1
+          fi
+          echo "✅ Tenant Isolation: $UNSCOPED system routes (within tolerance)"
+
+      - name: '📜 Enforce NF525 Ledger Immutability'
+        run: |
+          MUTATIONS=$(jq '.nf525Compliance.directLedgerMutations | length' audit-grade-x-plus-report.json)
+          if [ "$MUTATIONS" -gt 0 ]; then
+            echo "❌ NF525 VIOLATION: $MUTATIONS direct ledger mutations detected!"
+            jq '.nf525Compliance.directLedgerMutations' audit-grade-x-plus-report.json
+            exit 1
+          fi
+          echo "✅ NF525 Compliance: Ledger is 100% immutable"
+
+      - name: '🧮 Enforce Sovereign Math (Zero Double Conversions)'
+        run: |
+          DOUBLES=$(jq '.sovereignMath.doubleConversions | length' audit-grade-x-plus-report.json)
+          if [ "$DOUBLES" -gt 0 ]; then
+            echo "❌ MATH VIOLATION: $DOUBLES double microunit conversions detected!"
+            jq '.sovereignMath.doubleConversions' audit-grade-x-plus-report.json
+            exit 1
+          fi
+          echo "✅ Sovereign Math: Zero double conversions"
+
+      - name: '⚡ Enforce Fan-Out Policy (No God Files in Domain)'
+        run: |
+          VIOLATIONS=$(jq '.fanOutPolicies.godFileViolations | length' audit-grade-x-plus-report.json)
+          # Allow up to 1 infra service (NexusSyncService) which is a known aggregation root
+          if [ "$VIOLATIONS" -gt 1 ]; then
+            echo "❌ GOD FILE VIOLATION: $VIOLATIONS domain files exceed fan-out > 12"
+            jq '.fanOutPolicies.godFileViolations' audit-grade-x-plus-report.json
+            exit 1
+          fi
+          echo "✅ Fan-Out Policy: $VIOLATIONS tolerated infra aggregation root(s)"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audit-grade-x-plus-report
+          path: audit-grade-x-plus-report.json
+
+  # ──────────────────────────────────────────────────────────
+  # Phase 4 : Rapport Final de Souveraineté
+  # ──────────────────────────────────────────────────────────
+  sovereignty-report:
+    name: '🏛️ Sovereignty Report'
+    runs-on: ubuntu-latest
+    needs: [type-safety, tests, audit-grade-x]
+    if: always()
+    steps:
+      - name: '📊 Generate Sovereignty Status'
+        run: |
+          echo "## 🏛️ Grade X++ Sovereignty Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.type-safety.result }}" = "success" ]; then
+            echo "| TypeScript Compilation | ✅ Zero Errors |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| TypeScript Compilation | ❌ FAILED |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.tests.result }}" = "success" ]; then
+            echo "| Vitest Test Suite | ✅ 100% Green |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Vitest Test Suite | ❌ FAILED |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.audit-grade-x.result }}" = "success" ]; then
+            echo "| Grade X++ Audit | ✅ Sovereign |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Grade X++ Audit | ❌ VIOLATION |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "_Generated by the Restaurant OS Sovereignty Guard_" >> $GITHUB_STEP_SUMMARY

@@ -14,7 +14,7 @@ export default function CGUPage() {
       <h1 className="text-3xl font-bold text-gray-900 mb-2">
         Conditions Générales d'Utilisation
       </h1>
-      <p className="text-sm text-gray-500 mb-8">Dernière mise à jour : {lastUpdate}</p>
+      <p className="text-sm text-text-muted mb-8">Dernière mise à jour : {lastUpdate}</p>
 
       {/* Article 1 */}
       <section className="mb-8">

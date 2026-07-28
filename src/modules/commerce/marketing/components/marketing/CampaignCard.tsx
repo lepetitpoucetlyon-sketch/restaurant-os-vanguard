@@ -22,7 +22,7 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
             <div className="flex items-center gap-4 w-full md:w-auto">
                 <div className={cn(
                     "w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg",
-                    campaign.type === 'email' ? "bg-gradient-to-br from-action-primary to-action-primary text-white" : "bg-gradient-to-br from-status-success to-status-success text-white"
+                    campaign.type === 'email' ? "bg-gradient-to-br from-action-primary to-action-primary text-text-primary" : "bg-gradient-to-br from-status-success to-status-success text-text-primary"
                 )}>
                     {campaign.type === 'email' ? <Mail size={24} /> : <MessageCircle size={24} />}
                 </div>

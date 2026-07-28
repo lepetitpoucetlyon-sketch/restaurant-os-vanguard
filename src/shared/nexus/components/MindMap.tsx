@@ -277,7 +277,7 @@ export function MindMap() {
                 <div className="bg-bg-primary/80 dark:bg-bg-secondary/80 text-text-primary p-6 rounded-[2rem] shadow-2xl border border-border/50 backdrop-blur-md">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-8 h-8 rounded-xl bg-accent flex items-center justify-center">
-                            <Share2 className="w-4 h-4 text-white" />
+                            <Share2 className="w-4 h-4 text-text-primary" />
                         </div>
                         <h1 className="text-xl font-black tracking-tighter uppercase">Cartographie Système</h1>
                     </div>
@@ -344,7 +344,7 @@ export function MindMap() {
                             )}
                         </div>
 
-                        <button className="w-full h-16 bg-text-primary rounded-[2rem] text-white font-black flex items-center justify-center gap-3 hover:bg-surface-sidebar transition-all shadow-2xl group">
+                        <button className="w-full h-16 bg-text-primary rounded-[2rem] text-text-primary font-black flex items-center justify-center gap-3 hover:bg-surface-sidebar transition-all shadow-2xl group">
                             Dépendances Profondes
                             <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
                         </button>
@@ -367,7 +367,7 @@ export function MindMap() {
                     />
                 </div>
                 <div className="w-px h-6 bg-border" />
-                <button className="bg-text-primary text-white px-6 py-3 rounded-2xl font-black text-[12px] uppercase tracking-wider flex items-center gap-2">
+                <button className="bg-text-primary text-text-primary px-6 py-3 rounded-2xl font-black text-[12px] uppercase tracking-wider flex items-center gap-2">
                     <Layers className="w-4 h-4 text-accent" />
                     Vue 3D
                 </button>
