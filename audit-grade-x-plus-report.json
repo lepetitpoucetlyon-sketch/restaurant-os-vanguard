@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-07-28T20:53:33.916Z",
+  "totalFilesScanned": 1662,
+  "tenantIsolation": {
+    "passedFiles": 1659,
+    "unscopedQueries": [
+      "src/app/api/admin/mcc/reseller/commissions/route.ts",
+      "src/app/api/google/reserve/merchants/route.ts",
+      "src/app/api/status/route.ts"
+    ]
+  },
+  "nf525Compliance": {
+    "passed": true,
+    "directLedgerMutations": []
+  },
+  "sovereignMath": {
+    "doubleConversions": []
+  },
+  "fanOutPolicies": {
+    "godFileViolations": [
+      {
+        "file": "src/infrastructure/services/NexusSyncService.ts",
+        "fanOutCount": 15
+      }
+    ]
+  },
+  "semanticTokenCoverage": {
+    "migratedComponents": 416,
+    "staticTailwindResiduals": 1383
+  }
+}
