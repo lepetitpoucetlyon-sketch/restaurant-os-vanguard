@@ -16,10 +16,7 @@ import { Button } from '@ui/button';
 import { cn } from "@/lib/ui.foundations";
 
 // Tab Components
-import { OverviewTab } from "@modules/commerce/marketing/components/seo/tabs/OverviewTab";
-import { PagesTab } from "@modules/commerce/marketing/components/seo/tabs/PagesTab";
-import { AnalyticsTab } from "@modules/commerce/marketing/components/seo/tabs/AnalyticsTab";
-import { SettingsTab } from "@modules/commerce/marketing/components/seo/tabs/SettingsTab";
+import { OverviewTab, PagesTab, AnalyticsTab, SettingsTab } from "@modules/commerce/marketing/components/seo/tabs";
 
 export default function SEOPage() {
     const [activeTab, setActiveTab] = useState<'overview' | 'pages' | 'analytics' | 'settings'>('overview');
