@@ -845,6 +845,285 @@ AXIOM_TOKEN=...
   <div class="alert alert-yellow">
     <strong>Wildcard subdomain Vercel :</strong> Le plan Pro Vercel est requis pour les wildcards (<code>*.restaurant-os.app</code>). Plan gratuit = domaine unique uniquement. Budget : ~20€/mois. À prévoir dès le premier client.
   </div>
+
+  <!-- ─── TUTORIELS DÉPLOIEMENT ─── -->
+  <div class="chapter-sub" style="margin:32px 0 16px;font-size:.9rem;font-weight:700;color:var(--text-hi)">Tutoriels étape par étape — Mise en prod</div>
+
+  <!-- TUT 1 — Firebase Service Account -->
+  <details style="margin-bottom:10px">
+    <summary>🔑 Tutoriel 1 — Générer <code>FIREBASE_SERVICE_ACCOUNT_JSON</code> (15 min)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-red" style="margin-top:0">
+        <strong>Obligatoire avant toute autre étape.</strong> Sans cette clé, toutes les routes API serveur (signup, scellement NF525, rapports) écrivent dans le void. Le premier client ne peut pas s'inscrire.
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Ouvrir la console Firebase</div>
+            <div class="flow-desc">Aller sur <strong>console.firebase.google.com</strong> → sélectionner le projet <code>kitchen-os-gastro</code></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Paramètres → Comptes de service</div>
+            <div class="flow-desc">Roue dentée en haut à gauche → <strong>Paramètres du projet</strong> → onglet <strong>Comptes de service</strong></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-title">Générer une nouvelle clé privée</div>
+            <div class="flow-desc">Cliquer <strong>Générer une nouvelle clé privée</strong> → Confirmer → un fichier JSON est téléchargé (ex: <code>kitchen-os-gastro-firebase-adminsdk-xxxx.json</code>)</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-title">Minifier le JSON sur une seule ligne</div>
+            <div class="flow-desc">Dans le terminal, depuis le dossier où le fichier est téléchargé :</div>
+            <div class="code-block">cat kitchen-os-gastro-*.json | python3 -c <span class="c-green">"import sys,json; print(json.dumps(json.load(sys.stdin)))"</span>
+<span class="c-muted"># ↑ produit une seule ligne — copier TOUT le résultat</span></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-content">
+            <div class="flow-title">Coller dans Vercel (ou votre hébergeur)</div>
+            <div class="flow-desc">Vercel dashboard → Settings → Environment Variables → ajouter :</div>
+            <div class="code-block">Name  : <span class="c-accent">FIREBASE_SERVICE_ACCOUNT_JSON</span>
+Value : <span class="c-green">{"type":"service_account","project_id":"kitchen-os-gastro",...}</span>
+Env   : Production uniquement</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-content">
+            <div class="flow-title">Supprimer le fichier JSON local</div>
+            <div class="flow-desc">Ne jamais committer ce fichier. Le <code>.gitignore</code> bloque déjà <code>*-firebase-adminsdk-*.json</code>. Supprimer le fichier téléchargé.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- TUT 2 — Stripe -->
+  <details style="margin-bottom:10px">
+    <summary>💳 Tutoriel 2 — Configurer Stripe (produits + webhooks) (45 min)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-yellow" style="margin-top:0">
+        <strong>3 sections :</strong> Clé API → Produits &amp; Tarifs → Webhooks. Toutes les 3 sont nécessaires avant le premier paiement réel.
+      </div>
+
+      <div class="card-header"><span class="card-title">A — Clé API Stripe</span></div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Ouvrir le Dashboard Stripe</div>
+            <div class="flow-desc"><strong>dashboard.stripe.com</strong> → section <strong>Développeurs</strong> (en haut à droite) → <strong>Clés API</strong></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Copier la clé secrète</div>
+            <div class="flow-desc">Colonne <strong>Clé secrète</strong> → Révéler → copier <code>sk_live_...</code> (ou <code>sk_test_...</code> pour commencer sans risque)</div>
+            <div class="code-block"><span class="c-accent">STRIPE_SECRET_KEY</span>=sk_live_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="card-header"><span class="card-title">B — Créer les 3 produits SaaS</span></div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Stripe Dashboard → Catalogue → Créer un produit</div>
+            <div class="flow-desc">Créer 3 produits : <strong>Standard</strong>, <strong>Premium</strong>, <strong>Enterprise</strong>. Pour chacun, ajouter un tarif mensuel récurrent (ex: 49€, 89€, 149€).</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Récupérer les IDs</div>
+            <div class="flow-desc">Cliquer sur chaque produit → copier l'<strong>ID produit</strong> (<code>prod_xxx</code>) et l'<strong>ID de tarif</strong> (<code>price_xxx</code>)</div>
+            <div class="code-block"><span class="c-accent">STRIPE_PRODUCT_STANDARD</span>=prod_XXXXXXXXXXXXXXXX
+<span class="c-accent">STRIPE_PRODUCT_PREMIUM</span>=prod_XXXXXXXXXXXXXXXX
+<span class="c-accent">STRIPE_PRODUCT_ENTERPRISE</span>=prod_XXXXXXXXXXXXXXXX
+
+<span class="c-accent">STRIPE_PRICE_STANDARD</span>=price_XXXXXXXXXXXXXXXX
+<span class="c-accent">STRIPE_PRICE_PREMIUM</span>=price_XXXXXXXXXXXXXXXX
+<span class="c-accent">STRIPE_PRICE_ENTERPRISE</span>=price_XXXXXXXXXXXXXXXX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="card-header"><span class="card-title">C — Configurer les 2 webhooks Stripe</span></div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Stripe Dashboard → Développeurs → Webhooks → Ajouter un endpoint</div>
+            <div class="flow-desc">Créer le webhook principal :</div>
+            <div class="code-block">URL       : https://ton-domaine.vercel.app/api/webhooks/stripe
+Événements: checkout.session.completed
+            customer.subscription.updated
+            customer.subscription.deleted
+            invoice.payment_failed</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Copier le secret de signature du webhook principal</div>
+            <div class="flow-desc">Après création → <strong>Révéler le secret de signature</strong> → copier</div>
+            <div class="code-block"><span class="c-accent">STRIPE_WEBHOOK_SECRET</span>=whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-title">Créer le webhook de dépôt réservation</div>
+            <div class="flow-desc">Deuxième endpoint pour les acomptes privatisation :</div>
+            <div class="code-block">URL       : https://ton-domaine.vercel.app/api/reservations/deposit
+Événements: checkout.session.completed
+            payment_intent.succeeded</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-title">Copier le secret du webhook dépôt</div>
+            <div class="code-block"><span class="c-accent">STRIPE_DEPOSIT_WEBHOOK_SECRET</span>=whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- TUT 3 — Resend -->
+  <details style="margin-bottom:10px">
+    <summary>📧 Tutoriel 3 — Configurer Resend (emails transactionnels) (20 min)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-blue" style="margin-top:0">
+        <strong>Gratuit jusqu'à 3 000 emails/mois.</strong> Utilisé pour : email de bienvenue signup, confirmations réservation, rapports hebdo, relances impayés.
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Créer un compte</div>
+            <div class="flow-desc">Aller sur <strong>resend.com</strong> → S'inscrire → Vérifier l'email</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Vérifier votre domaine</div>
+            <div class="flow-desc">Dashboard Resend → <strong>Domains</strong> → Add Domain → entrer <code>restaurant-os.app</code> (ou votre domaine). Resend fournit 3 enregistrements DNS à ajouter chez votre registrar (Cloudflare, OVH…) : SPF, DKIM, et optionnel DMARC.</div>
+            <div class="code-block"><span class="c-muted"># Exemple Cloudflare — Type TXT</span>
+Name : resend._domainkey.restaurant-os.app
+Value: p=MIGfMA0GCS... <span class="c-muted">(copier depuis Resend)</span>
+
+<span class="c-muted"># Attendre la propagation DNS (0-10 min avec Cloudflare)</span>
+<span class="c-muted"># Resend affiche "Verified" quand c'est bon</span></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-title">Générer une API Key</div>
+            <div class="flow-desc">Dashboard Resend → <strong>API Keys</strong> → Create API Key → nom: <code>restaurant-os-prod</code> → permission: Sending access → domaine: votre domaine vérifié</div>
+            <div class="code-block"><span class="c-accent">RESEND_API_KEY</span>=re_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+<span class="c-accent">RESEND_FROM_EMAIL</span>=noreply@restaurant-os.app
+<span class="c-accent">RESEND_REPLY_TO</span>=support@restaurant-os.app</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-title">Ajouter les 3 variables dans Vercel</div>
+            <div class="flow-desc">Vercel → Settings → Environment Variables → Production uniquement. Les variables <code>RESEND_*</code> ne doivent jamais être préfixées <code>NEXT_PUBLIC_</code> — elles sont serveur uniquement.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- TUT 4 — Firebase Functions Deploy -->
+  <details style="margin-bottom:10px">
+    <summary>🚀 Tutoriel 4 — Déployer les Firebase Functions (30 min)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-red" style="margin-top:0">
+        <strong>Obligatoire pour le PIN Login.</strong> <code>loginWithPin</code> est une Firebase Function. Sans déploiement, le PinLogin tombe en fallback hardcodé (ROOT_ADMIN) — les utilisateurs restaurant ne peuvent pas se connecter.
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Installer Firebase CLI</div>
+            <div class="code-block">npm install -g firebase-tools
+firebase login           <span class="c-muted"># ouvre le navigateur pour authentifier</span>
+firebase projects:list   <span class="c-muted"># vérifier que kitchen-os-gastro apparaît</span></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Remplir .env.production</div>
+            <div class="flow-desc">Avant de lancer le script, s'assurer que toutes les variables critiques sont remplies dans <code>.env.production</code> (les tutoriels 1-3 ci-dessus couvrent comment les obtenir).</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-title">Lancer le script de déploiement</div>
+            <div class="flow-desc">Depuis la racine du projet :</div>
+            <div class="code-block"><span class="c-muted"># Exporter les variables pour que le script puisse les lire</span>
+source .env.production
+<span class="c-muted"># ou sur une ligne :</span>
+env $(cat .env.production | grep -v '#' | xargs) ./scripts/deploy-prod.sh</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-title">Ce que le script fait (5 étapes)</div>
+            <div class="flow-desc">Le script <code>scripts/deploy-prod.sh</code> vérifie les prérequis → compile les functions TypeScript → déploie les functions → déploie les règles Firestore → affiche la checklist post-déploiement.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-content">
+            <div class="flow-title">Vérifier le déploiement</div>
+            <div class="code-block"><span class="c-muted"># Voir les logs de la function loginWithPin</span>
+firebase functions:log --only loginWithPin
+
+<span class="c-muted"># Lister les functions déployées</span>
+firebase functions:list
+
+<span class="c-muted"># Functions attendues :</span>
+loginWithPin        <span class="c-green">✓ ACTIVE</span>
+listLoginProfiles   <span class="c-green">✓ ACTIVE</span>
+askGeminiAgent      <span class="c-green">✓ ACTIVE</span>
+onJournalEntryCreated <span class="c-green">✓ ACTIVE</span></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-content">
+            <div class="flow-title">Configurer les env vars dans Vercel</div>
+            <div class="flow-desc">Les functions Firebase n'ont pas besoin des vars Vercel — elles lisent automatiquement depuis <code>firebase functions:config</code>. Mais le Next.js côté serveur (routes API) a besoin de toutes les <code>FIREBASE_SERVICE_ACCOUNT_JSON</code>, <code>STRIPE_*</code>, <code>RESEND_*</code> dans Vercel → Settings → Environment Variables → Production.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
 </section>
 
 <!-- ─── 09 E-FACTURE ─── -->
@@ -3227,6 +3506,13 @@ const CHECKLIST = [
       { id:'inf-6', text:'Remplacer id: node_${Math.random()} dans ProvisioningEngine par crypto.randomUUID()', sub:'Non cryptographique — collisions possibles en flotte', p:'P2' },
       { id:'inf-7', text:'Migrer le rate limiter signup (new Map() en RAM) vers Redis/Upstash', sub:'Réinitialisé à chaque restart — contournable trivial', p:'P2' },
       { id:'inf-8', text:'Configurer FIREBASE_SERVICE_ACCOUNT_JSON (actuellement vide)', sub:'.env.example — sans ça l\'API server-side Firebase ne marche pas', p:'P1' },
+      { id:'inf-9', text:'Firebase → Paramètres → Comptes de service → Générer une clé privée', sub:'Télécharger le JSON → minifier sur une ligne (python3 -c "import sys,json; print(json.dumps(json.load(sys.stdin)))") → coller dans FIREBASE_SERVICE_ACCOUNT_JSON. Voir Tutoriel 1 §08.', p:'P0' },
+      { id:'inf-10', text:'Stripe → Catalogue → Créer 3 produits (Standard / Premium / Enterprise)', sub:'Pour chacun : créer un tarif mensuel récurrent → copier prod_xxx et price_xxx dans STRIPE_PRODUCT_*/STRIPE_PRICE_*. Voir Tutoriel 2B §08.', p:'P0' },
+      { id:'inf-11', text:'Stripe → Webhooks → Créer endpoint /api/webhooks/stripe (checkout + subscription)', sub:'Événements : checkout.session.completed, customer.subscription.updated/deleted, invoice.payment_failed → copier whsec_xxx dans STRIPE_WEBHOOK_SECRET. Voir Tutoriel 2C §08.', p:'P0' },
+      { id:'inf-12', text:'Stripe → Webhooks → Créer endpoint /api/reservations/deposit (acomptes)', sub:'Événements : checkout.session.completed, payment_intent.succeeded → copier whsec_xxx dans STRIPE_DEPOSIT_WEBHOOK_SECRET. Voir Tutoriel 2C §08.', p:'P1' },
+      { id:'inf-13', text:'Resend → Créer compte + vérifier domaine (SPF/DKIM) + générer API Key', sub:'resend.com → Domains → Add Domain → ajouter les 3 enregistrements DNS → attendre "Verified" → API Keys → copier dans RESEND_API_KEY. Voir Tutoriel 3 §08.', p:'P0' },
+      { id:'inf-14', text:'Coller toutes les vars en production (Vercel → Settings → Environment Variables)', sub:'FIREBASE_SERVICE_ACCOUNT_JSON, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_DEPOSIT_WEBHOOK_SECRET, STRIPE_PRICE_*, STRIPE_PRODUCT_*, RESEND_API_KEY — toutes en mode Production uniquement, jamais Preview/Development.', p:'P0' },
+      { id:'inf-15', text:'Déployer les Firebase Functions via ./scripts/deploy-prod.sh', sub:'source .env.production && ./scripts/deploy-prod.sh → vérifie loginWithPin + listLoginProfiles actives via firebase functions:list. Voir Tutoriel 4 §08.', p:'P0' },
     ]
   },
   {
