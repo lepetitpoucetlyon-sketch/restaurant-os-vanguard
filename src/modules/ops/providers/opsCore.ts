@@ -10,6 +10,8 @@ import { ImmunityAuditLogger } from '@/infrastructure/services/ImmunityAuditLogg
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
+import { SyncManager } from '@/infrastructure/services/offline/sync-manager';
+import { checkOnlineStatus } from '@/infrastructure/services/offline/connectivity-hooks';
 
 /**
  * 🧩 opsCore — primitives partagées des hooks Ops.
@@ -91,15 +93,50 @@ export const createSovereignHook = <T,>(
       add: async (dataToAdd: Partial<SovereignNode>) => {
         const sanitized = sanitizeToSovereign(dataToAdd as object);
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}`;
-        await Nexus.adapter.create(path, { ...sanitized, updatedAt: new Date().toISOString() });
+        const payload = { ...sanitized, updatedAt: new Date().toISOString() };
+        if (!checkOnlineStatus()) {
+          await SyncManager.enqueue({
+            type: 'MUTATION',
+            action: 'CREATE',
+            collection: path,
+            targetId: payload.id || crypto.randomUUID(),
+            payload: payload as import('@/shared/nexus-contract').SovereignField,
+            priority: 0
+          });
+        } else {
+          await Nexus.adapter.create(path, payload);
+        }
       },
       update: async (id: string, dataToUpdate: Partial<SovereignNode>) => {
-        const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}/${id}`;
-        await Nexus.adapter.update(path, { ...dataToUpdate, updatedAt: new Date().toISOString() });
+        const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}`;
+        const payload = { ...dataToUpdate, updatedAt: new Date().toISOString() };
+        if (!checkOnlineStatus()) {
+          await SyncManager.enqueue({
+            type: 'MUTATION',
+            action: 'UPDATE',
+            collection: path,
+            targetId: id,
+            payload: payload as import('@/shared/nexus-contract').SovereignField,
+            priority: 0
+          });
+        } else {
+          await Nexus.adapter.update(`${path}/${id}`, payload);
+        }
       },
       remove: async (id: string) => {
-        const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}/${id}`;
-        await Nexus.adapter.delete(path);
+        const path = `tenants/${tenantId}/${DomainRegistry.resolve(identity)}`;
+        if (!checkOnlineStatus()) {
+          await SyncManager.enqueue({
+            type: 'MUTATION',
+            action: 'DELETE',
+            collection: path,
+            targetId: id,
+            payload: {},
+            priority: 0
+          });
+        } else {
+          await Nexus.adapter.delete(`${path}/${id}`);
+        }
       }
     };
   };

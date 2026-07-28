@@ -35,6 +35,16 @@ export class SyncManager {
         // Tenter une synchro immédiate si online
         if (checkOnlineStatus()) {
             this.processQueue();
+        } else {
+            // Tenter d'enregistrer le tag Background Sync pour quand le réseau reviendra
+            if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(registration => {
+                    if ('sync' in registration) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        (registration as any).sync.register('restaurant-os-sync').catch(() => {});
+                    }
+                }).catch(() => {});
+            }
         }
     }
 
@@ -140,8 +150,20 @@ export class SyncManager {
                     throw new Error(`Sync API failed: ${response.status} ${response.statusText}`);
                 }
             }
+        } else if (op.type === 'MUTATION') {
+            // Logique générique pour les opérations de mutations
+            const fullPath = op.collection + (op.targetId ? `/${op.targetId}` : '');
+            if (op.action === 'CREATE') {
+                await Nexus.adapter.create(op.collection, op.payload);
+            } else if (op.action === 'DELETE') {
+                await Nexus.adapter.delete(fullPath);
+            } else if (op.action === 'SET') {
+                await Nexus.adapter.set(fullPath, op.payload);
+            } else if (op.action === 'UPDATE') {
+                await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
+            }
         } else {
-            // Logique générique pour les opérations simples
+            // Logique générique fallback
             const fullPath = `${op.collection}/${op.targetId}`;
             if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
             if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
@@ -153,6 +175,21 @@ export class SyncManager {
 export function bootSyncManager() {
     if (typeof window !== 'undefined') {
         window.addEventListener('online', () => SyncManager.processQueue());
+        
+        // Listen to Service Worker Background Sync triggers
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if (event.data && event.data.type === 'PROCESS_SYNC_QUEUE') {
+                    logger.info('SyncManager: Background Sync triggered by Service Worker');
+                    SyncManager.processQueue();
+                }
+            });
+            // Register Background Sync if queuing happens
+            navigator.serviceWorker.ready.then(registration => {
+                // Background Sync registration happens inside SyncManager.enqueue now
+            }).catch(() => {});
+        }
+
         // On lance immédiatement la synchro au chargement
         SyncManager.processQueue();
     }

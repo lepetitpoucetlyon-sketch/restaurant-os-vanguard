@@ -9,8 +9,8 @@ import type { ImmunityLogEntry } from '@shared/genome.types';
  */
 export interface SyncOperation {
     id?: number;
-    type: 'NF525_PAYMENT' | 'STOCK_UPDATE' | 'JOURNAL_ENTRY' | 'FISCAL_SEAL' | 'GENERIC_UPDATE';
-    action: 'SET' | 'UPDATE' | 'DELETE' | 'COMMIT_BATCH';
+    type: 'NF525_PAYMENT' | 'STOCK_UPDATE' | 'JOURNAL_ENTRY' | 'FISCAL_SEAL' | 'GENERIC_UPDATE' | 'MUTATION';
+    action: 'SET' | 'UPDATE' | 'DELETE' | 'COMMIT_BATCH' | 'CREATE';
     collection: string;
     targetId: string;
     payload: SovereignField; // Données complètes de la transaction ou du changement

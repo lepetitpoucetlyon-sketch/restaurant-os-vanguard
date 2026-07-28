@@ -25,3 +25,13 @@ self.addEventListener('fetch', event => {
     caches.match(event.request).then(cached => cached || fetch(event.request))
   );
 });
+
+self.addEventListener('sync', event => {
+  if (event.tag === 'restaurant-os-sync') {
+    event.waitUntil(
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => client.postMessage({ type: 'PROCESS_SYNC_QUEUE' }));
+      })
+    );
+  }
+});
