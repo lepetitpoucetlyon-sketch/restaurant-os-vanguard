@@ -24,11 +24,13 @@ import { AccountingReportService } from "@/modules/finance/services/AccountingRe
 import type { Order } from "@modules/ops/engine/types";
 import type { BankTransaction } from "@modules/finance/types";
 import type { JournalEntry } from "@nexus/contracts";
-// dette-4 — onglets extraits vers ./_tabs + types & helpers vers ./financeUtils
-import { AccountingTab } from "./_tabs/AccountingTab";
-import { BillingTab } from "./_tabs/BillingTab";
-import { AuditTab } from "./_tabs/AuditTab";
-import { BankTab } from "./_tabs/BankTab";
+import dynamic from "next/dynamic";
+
+// dette-4 — onglets chargés dynamiquement (code-splitting & réduction fan-out)
+const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
+const BillingTab    = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));
+const AuditTab      = dynamic(() => import("./_tabs/AuditTab").then(m => m.AuditTab));
+const BankTab       = dynamic(() => import("./_tabs/BankTab").then(m => m.BankTab));
 import {
     type FinanceTab,
     type BankAccount,
