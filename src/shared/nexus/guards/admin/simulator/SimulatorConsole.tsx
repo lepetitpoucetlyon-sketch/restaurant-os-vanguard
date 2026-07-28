@@ -8,7 +8,7 @@ import { simulator } from '@/modules/intelligence/simulator/TemporalSimulator';
 import { simulationMetricsAtom, isSimulationRunningAtom } from '@/modules/intelligence/simulator/store/simulatorAtoms';
 import { GlassCard } from '@ui/GlassCard';
 import { Button } from '@ui/button';
-import { SimulationProfile } from '@domain/services/SimulationService';
+import { SimulationProfile } from '@modules/intelligence/simulator/SimulationService';
 import { ProposalPanel } from '../ProposalPanel';
 import { NexusStaffingOracle as StaffingOracle } from '@modules/human/services/NexusStaffingOracle';
 import { SovereignLedger } from '@/infrastructure/adapters/SovereignLedgerAdapter';

@@ -2,8 +2,8 @@
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
-import { fleetTelemetry } from '@domain/services/FleetTelemetryService';
-import { FleetComplianceService } from '@domain/services/FleetComplianceService';
+import { fleetTelemetry } from './FleetTelemetryService';
+import { FleetComplianceService } from './FleetComplianceService';
 import { HACCPTelemetryBridge } from '@modules/compliance/haccp/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
 import { TenantID } from '@domain/types/brands';

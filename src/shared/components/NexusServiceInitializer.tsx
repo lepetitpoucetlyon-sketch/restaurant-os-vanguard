@@ -39,7 +39,7 @@ export function NexusServiceInitializer(): null {
         if (typeof window !== 'undefined') {
             Promise.all([
                 import('@/lib/firebase'),
-                import('@domain/services/FleetTelemetryService'),
+                import('@modules/intelligence/fleet/FleetTelemetryService'),
             ]).then(([{ auth }, { fleetTelemetry }]) => {
                 if (auth.currentUser) {
                     fleetTelemetry.discoverRealFleet().catch(() => { /* silent */ });

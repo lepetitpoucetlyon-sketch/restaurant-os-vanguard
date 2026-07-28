@@ -1,7 +1,7 @@
 import { StaffingProposal, SharedKernel, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SimulationService } from '@/domain/services/SimulationService';
+import { SimulationService } from '@modules/intelligence/simulator/SimulationService';
 
 /**
  * 🧑‍💼 NexusStaffingOracle - Restaurant OS

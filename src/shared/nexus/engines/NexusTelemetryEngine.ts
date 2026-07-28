@@ -1,5 +1,5 @@
-import { ChaosMonkey } from '@domain/services/ChaosMonkey';
-import { ResilienceSlayer } from '@domain/services/ResilienceSlayer';
+import { ChaosMonkey } from '@modules/intelligence/resilience/ChaosMonkey';
+import { ResilienceSlayer } from '@modules/intelligence/resilience/ResilienceSlayer';
 import { Sentry } from '@/lib/sentry';
 
 /**

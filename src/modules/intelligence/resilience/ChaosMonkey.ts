@@ -1,4 +1,4 @@
-import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
+import { ResilienceSlayer } from './ResilienceSlayer';
 import { CycleGuard } from '@/shared/nexus/guards/CycleGuard';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 import { getDefaultStore } from 'jotai';

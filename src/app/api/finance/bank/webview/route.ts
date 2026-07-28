@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { OpenBankingProviderFactory } from '@/modules/finance/banking/openBanking';
-import { signBankConnectState } from '@/modules/finance/banking/openBanking/tokenCipher';
+import { OpenBankingProviderFactory, signBankConnectState } from '@/modules/finance/banking/openBanking';
 
 /**
  * GET /api/finance/bank/webview

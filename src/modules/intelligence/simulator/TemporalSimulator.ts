@@ -1,6 +1,6 @@
 import { logger } from "@/lib/logger";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { SimulationProfile, SIMULATION_PROFILES } from '@domain/services/SimulationService';
+import { SimulationProfile, SIMULATION_PROFILES } from './SimulationService';
 
 /**
  * 🌀 TemporalSimulator - Grade X Monte-Carlo Engine

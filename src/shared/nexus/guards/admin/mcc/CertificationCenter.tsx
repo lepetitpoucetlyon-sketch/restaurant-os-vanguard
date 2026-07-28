@@ -7,7 +7,7 @@ import { useNexusFleet } from '@/modules/intelligence/fleet/NexusFleetProvider';
 import { logger } from '@/lib/logger';
 import { auth } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SiteIntegrityReport, GlobalComplianceCertificate } from '@domain/services/FleetComplianceService';
+import { SiteIntegrityReport, GlobalComplianceCertificate } from '@modules/intelligence/fleet/FleetComplianceService';
 
 interface AuditReport {
   isValid: boolean;

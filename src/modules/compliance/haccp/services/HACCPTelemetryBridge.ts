@@ -1,4 +1,4 @@
-import { fleetTelemetry } from '@/domain/services/FleetTelemetryService';
+import { fleetTelemetry } from '@modules/intelligence/fleet/FleetTelemetryService';
 import { MaintenanceAgent } from '@/domain/services/MaintenanceAgent';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

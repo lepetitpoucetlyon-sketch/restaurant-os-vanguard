@@ -3,5 +3,6 @@ export * from './types';
 export * from './OpenBankingProviderFactory';
 export * from './BankConnectionStore';
 export * from './pcgHeuristics';
+export { signBankConnectState, verifyBankConnectState } from './tokenCipher';
 // Implémentations : ne pas importer directement depuis les routes ou l'UI.
 // Passer toujours par OpenBankingProviderFactory.get().

@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getFirestore } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence/ai/LLMManager';
-import { AI_MODELS } from '@/modules/intelligence/ai/types';
+import { LLMManager, AI_MODELS } from '@/modules/intelligence/ai';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { sovereignQuery } from '@/modules/intelligence/rag/SovereignRAGClient';
+import { sovereignQuery } from '@/modules/intelligence/rag';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import type { UserStatus } from '@/shared/nexus/contracts/auth.types';
 

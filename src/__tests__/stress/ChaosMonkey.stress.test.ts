@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChaosMonkey } from '@/domain/services/ChaosMonkey';
+import { ChaosMonkey } from '@modules/intelligence/resilience/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
-import { ResilienceSlayer } from '@/domain/services/ResilienceSlayer';
+import { ResilienceSlayer } from '@modules/intelligence/resilience/ResilienceSlayer';
 
 // Mocks
 vi.mock('jotai', () => ({
@@ -26,7 +26,7 @@ vi.mock('@/infrastructure/services/SelfHealingEngine', () => ({
     }
 }));
 
-vi.mock('@/domain/services/ResilienceSlayer', () => ({
+vi.mock('@modules/intelligence/resilience/ResilienceSlayer', () => ({
     ResilienceSlayer: {
         handleTransactionFailure: vi.fn()
     }

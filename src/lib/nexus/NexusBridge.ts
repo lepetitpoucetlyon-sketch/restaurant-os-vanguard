@@ -83,7 +83,7 @@ export class NexusBridge {
     this.stopPulse();
     if (typeof window === 'undefined') return; // pulse côté instance uniquement
 
-    import('@domain/services/FleetTelemetryService')
+    import('@modules/intelligence/fleet/FleetTelemetryService')
       .then(({ fleetTelemetry }) => {
         fleetTelemetry.registerNode(tenantId as import('@domain/types/brands').TenantID);
       })
@@ -96,7 +96,7 @@ export class NexusBridge {
 
   private static async pushPulse(tenantId: string): Promise<void> {
     try {
-      const { fleetTelemetry } = await import('@domain/services/FleetTelemetryService');
+      const { fleetTelemetry } = await import('@modules/intelligence/fleet/FleetTelemetryService');
       const { pendingOrdersAtom } = await import('@/store/pillars/ops');
       let activeOrders = 0;
       try {

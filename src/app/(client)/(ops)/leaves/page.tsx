@@ -20,10 +20,7 @@ import {
 
 
 // Modular Components
-import { LeaveBalanceCard } from '@modules/human/hr/components/leaves/LeaveBalanceCard';
-import { LeaveRequestCard } from '@modules/human/hr/components/leaves/LeaveRequestCard';
-import { NewRequestModal } from '@modules/human/hr/components/leaves/NewRequestModal';
-import { TeamCalendar } from '@modules/human/hr/components/leaves/TeamCalendar';
+import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from '@modules/human/hr/components/leaves';
 
 import { useAuth } from '@/shared/hooks';
 import { useHumanResources } from '@modules/human/hr';
