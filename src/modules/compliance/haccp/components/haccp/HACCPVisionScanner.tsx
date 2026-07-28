@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, ShieldCheck, AlertTriangle, Loader2, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useHACCP } from '@nexus/guards/NexusGuardProvider';
-import { VisionService } from '@domain/services/VisionService';
+import { VisionService } from '@modules/intelligence/services/VisionService';
 import { cn } from '@/lib/ui.foundations';
 
 interface HACCPVisionScannerProps {

@@ -1,4 +1,4 @@
-import { policyEngine } from '@/domain/services/PolicyEngine';
+import { policyEngine } from '@/modules/compliance/services/PolicyEngine';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { PermissionRole } from '@nexus/contracts/permissions.types';
 

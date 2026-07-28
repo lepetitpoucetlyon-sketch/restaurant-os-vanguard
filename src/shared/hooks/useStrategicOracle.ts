@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useNexusFleet as useFleet } from '@/shared/hooks/useNexusFleet';
 import { useGeminiAgent } from './useGeminiAgent';
-import { MacroBrain, FleetInsight } from '@domain/services/MacroBrain';
+import { MacroBrain, FleetInsight } from '@modules/intelligence/services/MacroBrain';
 import { logger } from '@/lib/axiom';
 
 /**

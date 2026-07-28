@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Scan, Zap } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { VisionService, type ExtractedInvoice } from '@domain/services/VisionService';
+import { VisionService, type ExtractedInvoice } from '@modules/intelligence/services/VisionService';
 
 
 interface VisionScannerProps {

@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     // Proxy the request based on action
     if (action === 'ANALYZE_INVOICE') {
-       const { InvoiceExtractionService } = await import('@/domain/services/InvoiceExtractionService');
+       const { InvoiceExtractionService } = await import('@/modules/logistics/services/InvoiceExtractionService');
        const result = await InvoiceExtractionService.extractFromImage(payload.base64Image, {
          tenantId: caller.tenantId
        });

@@ -6,7 +6,7 @@ import {
     qualityAlertsAtom,
     todayReceptionStatsAtom 
 } from '@modules/compliance/haccp/store/qualityAtoms';
-import { QualityEngine } from '@domain/services/QualityEngine';
+import { QualityEngine } from '@modules/compliance/services/QualityEngine';
 import { QualityControl } from '@domain/types/quality';
 import type { ActiveQualityControl } from '@nexus/contracts';
 import { logger } from '@/lib/logger';

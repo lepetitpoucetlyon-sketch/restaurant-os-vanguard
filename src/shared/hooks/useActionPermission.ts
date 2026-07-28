@@ -7,7 +7,7 @@ import {
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
-import { policyEngine } from "@/domain/services/PolicyEngine";
+import { policyEngine } from "@/modules/compliance/services/PolicyEngine";
 
 type ActionConfig = {
     minLevel: number;

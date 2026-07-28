@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-import { ExtractedInvoice } from '@domain/services/VisionService';
-import { InventoryVisionService, VisionMatchResult } from '@domain/services/InventoryVisionService';
+import { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
+import { InventoryVisionService, VisionMatchResult } from '@modules/logistics/services/InventoryVisionService';
 import { useInventory } from '@/modules/ops/providers/NexusOpsProvider';
 
 interface InvoiceReviewModalProps {

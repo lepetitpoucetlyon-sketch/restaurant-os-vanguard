@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
-import { StockEngine } from '@/domain/services/StockEngine';
+import { StockEngine } from '@/modules/logistics/services/StockEngine';
 import { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';

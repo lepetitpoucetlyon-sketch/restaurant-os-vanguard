@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { stockItemsAtom } from '@modules/logistics/inventory/store/inventoryAtoms';
-import { StockEngine } from '@domain/services/StockEngine';
+import { StockEngine } from '@modules/logistics/services/StockEngine';
 import { logger } from '@/lib/logger';
 import { useTenant } from '@/shared/hooks';
 

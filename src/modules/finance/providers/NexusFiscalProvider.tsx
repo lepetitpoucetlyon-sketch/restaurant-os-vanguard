@@ -17,7 +17,7 @@ import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { BlockchainLedgerService } from '@/modules/finance/accounting/domain/BlockchainLedgerService';
-import { computeTreasury } from '@/domain/services/TreasuryCalculator';
+import { computeTreasury } from '@/modules/finance/services/TreasuryCalculator';
 import { 
     JournalEntry,
     Account,

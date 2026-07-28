@@ -11,7 +11,7 @@ import {
     ShoppingBag
 } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
-import { TreasuryEngine } from '@domain/services/TreasuryEngine';
+import { TreasuryEngine } from '@modules/finance/services/TreasuryEngine';
 
 export function MCCTreasury() {
     const { instances } = useFleet();

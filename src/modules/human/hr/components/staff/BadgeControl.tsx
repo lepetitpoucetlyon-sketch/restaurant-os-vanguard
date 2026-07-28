@@ -5,7 +5,7 @@ import { useAuth } from '@/shared/hooks';
 import { useAtomValue } from 'jotai';
 import { activeShiftsAtom } from '../../store/staffAtoms';
 import { hrLoadingAtom } from '../../store/hrAtoms';
-import { NexusPayrollEngine } from '@domain/services/NexusPayrollEngine';
+import { NexusPayrollEngine } from '@modules/human/services/NexusPayrollEngine';
 import { Button } from '@ui/button';
 import { Clock, Shield, Fingerprint, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

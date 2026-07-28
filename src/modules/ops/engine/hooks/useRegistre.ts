@@ -1,6 +1,6 @@
 "use client";
 
-import { QualityEngine } from '@domain/services/QualityEngine';
+import { QualityEngine } from '@modules/compliance/services/QualityEngine';
 import { useCallback, useState } from 'react';
 import { ReceptionData } from '@domain/schemas/haccp';
 

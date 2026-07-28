@@ -7,7 +7,7 @@ import { GlassCard } from '@ui/GlassCard';
 import { Button } from '@ui/button';
 import { StaffingProposal } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusStaffingOracle } from '@domain/services/NexusStaffingOracle';
+import { NexusStaffingOracle } from '@modules/human/services/NexusStaffingOracle';
 
 /**
  * 🏛️ ProposalPanel - Grade X

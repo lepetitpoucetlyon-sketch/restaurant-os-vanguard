@@ -1,7 +1,7 @@
 import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
 import { logger } from '@/lib/logger';
-import { HACCPTelemetryBridge } from './HACCPTelemetryBridge';
-import { MaintenanceAgent } from './MaintenanceAgent';
+import { HACCPTelemetryBridge } from '@modules/compliance/haccp/services/HACCPTelemetryBridge';
+import { MaintenanceAgent } from '@/domain/services/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
 import { SharedKernel } from '@/lib/shared-kernel';
@@ -15,7 +15,7 @@ import {
     ReceptionSchema, 
     CleaningSchema, 
     WasteSchema 
-} from '../schemas/haccp';
+} from '@/domain/schemas/haccp';
 
 /**
  * 🏺 QualityEngine - Restaurant OS Guard

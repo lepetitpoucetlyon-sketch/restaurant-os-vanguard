@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useTenant } from "@/shared/hooks";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToRole } from "@/lib/push/pushClient";
-import { PlanMaitriseSanitaire } from "@/domain/services/PlanMaitriseSanitaire";
+import { PlanMaitriseSanitaire } from "@/modules/compliance/haccp/services/PlanMaitriseSanitaire";
 import type { StockItem } from "@nexus/contracts";
 import {
     ClipboardCheck, FileText, CalendarCheck, ShieldAlert, Package,

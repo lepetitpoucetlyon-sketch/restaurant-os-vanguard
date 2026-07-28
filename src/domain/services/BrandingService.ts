@@ -31,7 +31,7 @@ export const BrandingService = {
         logger.info(`[Nexus Branding] Initiating AI Extraction for: ${url}`);
         
         try {
-            const { VisualIdentityExtractor } = await import('./VisualIdentityExtractor');
+            const { VisualIdentityExtractor } = await import('@modules/intelligence/services/VisualIdentityExtractor');
 
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 

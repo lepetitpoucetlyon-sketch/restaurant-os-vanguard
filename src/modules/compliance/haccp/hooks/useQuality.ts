@@ -12,7 +12,7 @@ import {
 } from '@modules/compliance/haccp/store/qualityAtoms';
 import { deliveriesAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
-import { QualityEngine } from '@domain/services/QualityEngine';
+import { QualityEngine } from '@modules/compliance/services/QualityEngine';
 import { ActiveQualityControl, ActiveQualityControlItem } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { buildReceptionControl, buildReceptionData, buildEmptyControl } from './qualityBuilders';
