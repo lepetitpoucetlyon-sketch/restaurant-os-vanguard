@@ -59,7 +59,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const offline = results.filter(r => r.status === 'offline').length;
     return NextResponse.json({ workspaces: results, online, offline, total: results.length });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[RAG] workspace-stats fleet error', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }
 
@@ -105,7 +106,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, purgedCount, totalScanned: docs.length });
 
   } catch (err) {
-    logger.error(`[RAG] Purge error: ${String(err)}`);
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[RAG] Purge orphelins error', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

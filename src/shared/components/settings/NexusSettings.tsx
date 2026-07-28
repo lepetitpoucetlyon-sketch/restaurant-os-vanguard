@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { GEMINI_VOICES, NexusMacro, NexusConfig, AI_PROVIDER_MODELS, AIProvider } from '@nexus/contracts/settings/nexus';
-import { NexusSphereIndicator } from "@/components/layout/NexusSphereIndicator";
+import { NexusSphereIndicator } from "@components/layout/NexusSphereIndicator";
 import { cn } from '@/lib/ui.foundations';
 
 const PROVIDER_META: Record<AIProvider, { label: string; color: string; hint: string; keyLabel: string }> = {

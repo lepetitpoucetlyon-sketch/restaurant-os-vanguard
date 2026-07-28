@@ -113,6 +113,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       .slice(0, 5);
     return NextResponse.json({ hotspots: sorted, scannedCount: instances.length });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[hotspot] Analyse fleet failed', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

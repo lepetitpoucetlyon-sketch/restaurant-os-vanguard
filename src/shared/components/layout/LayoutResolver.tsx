@@ -3,18 +3,18 @@
 import React from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
-import { MobileHeader } from "@/components/layout/MobileHeader";
-import { MobileNavBar } from "@/components/layout/MobileNavBar";
-import { GlobalFAB } from "@/components/layout/GlobalFAB";
-import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
-import { DesktopTopbar } from "@/components/layout/DesktopTopbar";
-import { Header } from "@/components/layout/Header";
-import { AppLaunchpad } from "@/components/layout/AppLaunchpad";
+import { MobileHeader } from "@components/layout/MobileHeader";
+import { MobileNavBar } from "@components/layout/MobileNavBar";
+import { GlobalFAB } from "@components/layout/GlobalFAB";
+import { DesktopSidebar } from "@components/layout/DesktopSidebar";
+import { DesktopTopbar } from "@components/layout/DesktopTopbar";
+import { Header } from "@components/layout/Header";
+import { AppLaunchpad } from "@components/layout/AppLaunchpad";
 import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
-import { ConnectivityBanner } from "@/components/layout/ConnectivityBanner";
+import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
 
 /**
  * 🌀 LayoutResolver

@@ -43,6 +43,18 @@
 - **ZenchefProvider** : HMAC `ZENCHEF_WEBHOOK_SECRET` sur header `x-zenchef-signature`.
 - **3 routes webhook** (`/delivery`, `/reservations`, `/iot`) : Lecture du `rawBody` brut avant parse ; vérification `provider.verifySignature()` ou fallback `CONNECTORS_WEBHOOK_SECRET` (Bearer) ; retour 401 si non vérifié ; avertissement si aucun mécanisme configuré.
 
+### 🔐 AUDIT 9 — RBAC COMPLETENESS
+- **15 routes sans guard Firebase** auditées — toutes légitimes : `signup`, `status`, `menu.json`, `resolve-domain`, `health/rag`, `auth/google/callback`, `finance/bank/callback`, `google/reserve/*` (4), `widget/availability`, `widget/setup-intent` (rate-limit IP), `haccp/iot-push` (Bearer `HACCP_GATEWAY_TOKEN`).
+- **`fleet/rgpd-purge` et `fleet/restore`** : double-handler vérifié — POST (`fleet_admin`) / GET (`mcc_support`). Pattern correct, pas de trou.
+- **`tenant/api-keys/validate`** ❌→✅ : ajout rate-limit 20 req / 15 min par IP — empêche le brute-force de hashes SHA-256 de clés API.
+- **Hiérarchie MCC confirmée** : toutes les opérations destructives (rgpd-purge POST, restore POST, backup POST, fleet command, dns, contracts POST, billing feature-flags POST, device-activation POST) requièrent `fleet_admin`. Opérations de lecture / support à `mcc_support`. Lecture seule drafts AI à `mcc_junior_dev`. Cohérent.
+
+### 🔁 AUDIT 8 — IDEMPOTENCE WEBHOOKS
+- **`delivery/webhook/[provider]`** : Lecture de l'existence de la commande AVANT `set()` — `NexusEventBus.emit('order.placed')` n'est émis que si la commande n'existait pas encore → les retries provider ne créent plus de doublons KDS.
+- **`iot/webhook/[provider]`** : Clé Firestore `iotHistory/${sensorId}/${Date.now()}` remplacée par `iotHistory/${sensorId}/${reading.timestamp}` (clé stable) ; guard `alreadyProcessed` en early-return → retries ignorés sans créer de doublons, `HACCPLogService.recordNonConformity()` n'est plus appelé deux fois pour le même relevé.
+- **`reservations/webhook/[provider]`** : Idempotent nativement via `set()` sur l'id réservation — aucune modification nécessaire.
+- **`billing/webhook` (Stripe)** : Dédup côté Stripe SDK — idempotent par conception.
+
 ## [1.8.0] - 2026-05-08 - SOVEREIGN RAG & OMNI-REFACTOR 🧠🏛️
 ### 🧠 SOVEREIGN RAG & FAST BRAIN (ATLAS-X)
 - **Fast Brain Architecture** : Déploiement de l'ingestion de données structurées et de la distillation des connaissances via les Sovereign Knowledge Items (KIs).

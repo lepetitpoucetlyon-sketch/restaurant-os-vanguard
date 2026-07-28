@@ -19,7 +19,7 @@ import {
 ;
 import { useRecruitment } from '@modules/human/hr';
 import { Candidate, CandidateStatus } from '@nexus/contracts';
-import { PremiumSelect } from '@/components/ui/PremiumSelect';
+import { PremiumSelect } from '@components/ui/PremiumSelect';
 
 const COLUMNS: { id: CandidateStatus; label: string; color: string }[] = [
     { id: 'new', label: 'Nouveaux', color: '#10B981' },
@@ -278,7 +278,7 @@ function AddCandidateModal({ isOpen, onClose, onAdd }: {
                                     type="email"
                                     className="w-full h-14 bg-bg-secondary border border-border rounded-xl px-5 text-sm font-medium outline-none focus:border-accent-gold"
                                     value={formData.email}
-                                    onChange={e => setFormData({...formData, email: e.target.value})}
+                                    onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">

@@ -66,8 +66,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ success: true, tenantId, module: mod, enabled });
   } catch (err) {
-    logger.error('[FeatureFlags] Erreur:', String(err));
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[FeatureFlags] Erreur', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }
 

@@ -21,6 +21,8 @@ import {
     AlertTriangle,
     ChevronDown,
     ChevronUp,
+    Plus,
+    Trash,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
@@ -28,10 +30,12 @@ import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { ROLE_TEMPLATES, type RoleTemplate } from "@/domain/services/RoleTemplates";
 
 export function AccountSettingsDashboard() {
-    const { currentUser: _currentUser, users, rolePermissions, updateRolePermissions, hasAccess } = useAuth();
+    const { currentUser: _currentUser, users, rolePermissions, customRoles, updateRolePermissions, createCustomRole, deleteCustomRole, hasAccess } = useAuth();
     const { showToast } = useToast();
-    const [expandedRole, setExpandedRole] = useState<UserRole | null>(null);
-    const [pendingChanges, setPendingChanges] = useState<Record<UserRole, CategoryKey[]>>({} as Record<UserRole, CategoryKey[]>);
+    const [expandedRole, setExpandedRole] = useState<UserRole | string | null>(null);
+    const [pendingChanges, setPendingChanges] = useState<Record<UserRole | string, CategoryKey[]>>({});
+    const [isCreatingRole, setIsCreatingRole] = useState(false);
+    const [newRoleName, setNewRoleName] = useState("");
 
     // Only admins can access this page
     if (!hasAccess('account-settings')) {
@@ -48,9 +52,17 @@ export function AccountSettingsDashboard() {
         );
     }
 
-    const roles = Object.keys(ROLE_LABELS) as UserRole[];
+    // Merge hardcoded roles and dynamic custom roles
+    const baseRoles = Object.keys(ROLE_LABELS);
+    const allRoles = [...baseRoles, ...(customRoles || []).map((r: any) => r.id)];
 
-    const toggleCategory = (role: UserRole, category: CategoryKey) => {
+    const getRoleLabel = (roleId: string) => {
+        if (ROLE_LABELS[roleId]) return ROLE_LABELS[roleId];
+        const custom = customRoles?.find((r: any) => r.id === roleId);
+        return custom ? custom.label : roleId;
+    };
+
+    const toggleCategory = (role: UserRole | string, category: CategoryKey) => {
         const currentCategories = pendingChanges[role] || rolePermissions[role] || [];
         let newCategories: CategoryKey[];
 
@@ -94,8 +106,37 @@ export function AccountSettingsDashboard() {
         showToast(`Template « ${template.name} » appliqué — sauvegardez pour confirmer`, "info");
     };
 
-    const getUserCountByRole = (role: UserRole) => {
+    const getUserCountByRole = (role: UserRole | string) => {
         return users.filter(u => u.role === role).length;
+    };
+
+    const handleCreateRole = async () => {
+        if (!newRoleName.trim()) return;
+        try {
+            const roleId = await createCustomRole(newRoleName.trim());
+            showToast(`Rôle personnalisé "${newRoleName}" créé.`, "success");
+            setNewRoleName("");
+            setIsCreatingRole(false);
+            setExpandedRole(roleId);
+        } catch (error) {
+            console.error('Failed to create custom role', error);
+            showToast("Erreur lors de la création du rôle.", "error");
+        }
+    };
+
+    const handleDeleteRole = async (roleId: string) => {
+        if (getUserCountByRole(roleId) > 0) {
+            showToast("Impossible de supprimer un rôle assigné à des utilisateurs.", "error");
+            return;
+        }
+        try {
+            await deleteCustomRole(roleId);
+            showToast(`Rôle supprimé avec succès.`, "success");
+            if (expandedRole === roleId) setExpandedRole(null);
+        } catch (error) {
+            console.error('Failed to delete custom role', error);
+            showToast("Erreur lors de la suppression.", "error");
+        }
     };
 
     return (
@@ -120,9 +161,40 @@ export function AccountSettingsDashboard() {
                 </div>
             </div>
 
+            {/* Create Custom Role Banner */}
+            <div className="mb-8 flex justify-end">
+                {isCreatingRole ? (
+                    <div className="flex items-center gap-3 bg-surface-card dark:bg-bg-secondary p-2 pr-4 rounded-full border border-action-primary shadow-lg animate-in fade-in slide-in-from-right-4">
+                        <input
+                            autoFocus
+                            type="text"
+                            placeholder="Nom du rôle (ex: Stagiaire)"
+                            className="bg-transparent border-none focus:ring-0 text-sm px-4 py-2 w-48 text-text-primary placeholder:text-text-muted"
+                            value={newRoleName}
+                            onChange={e => setNewRoleName(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && handleCreateRole()}
+                        />
+                        <button onClick={() => setIsCreatingRole(false)} className="p-2 text-text-muted hover:text-text-primary transition-colors">
+                            <X className="w-4 h-4" />
+                        </button>
+                        <button onClick={handleCreateRole} className="bg-action-primary text-bg-primary px-4 py-2 rounded-full text-sm font-bold shadow-md hover:bg-action-primary/90 transition-all">
+                            Créer
+                        </button>
+                    </div>
+                ) : (
+                    <button
+                        onClick={() => setIsCreatingRole(true)}
+                        className="flex items-center gap-2 px-6 py-3 bg-surface-card dark:bg-bg-secondary border border-border-default hover:border-action-primary/50 text-action-primary font-bold rounded-2xl shadow-sm hover:shadow-md transition-all group"
+                    >
+                        <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        Créer un Rôle Personnalisé
+                    </button>
+                )}
+            </div>
+
             {/* Roles List */}
             <div className="space-y-4">
-                {roles.map(role => {
+                {allRoles.map(role => {
                                     const isExpanded = expandedRole === role;
                                     const userCount = getUserCountByRole(role);
                                     const categories = getCategories(role);
@@ -149,7 +221,7 @@ export function AccountSettingsDashboard() {
                                                         {(ROLE_LABELS[role] || '').charAt(0)}
                                                     </div>
                                                     <div>
-                                                        <h3 className="font-bold text-lg text-text-primary">{ROLE_LABELS[role]}</h3>
+                                                        <h3 className="font-bold text-lg text-text-primary">{getRoleLabel(role)}</h3>
                                                         <p className="text-sm text-text-muted">
                                                             {userCount} utilisateur{userCount > 1 ? 's' : ''} • {categories.length} catégories accessibles
                                                         </p>
@@ -295,16 +367,27 @@ export function AccountSettingsDashboard() {
                                                                 </div>
                                                             </div>
 
-                                                            {/* Save Button */}
-                                                            {hasChanges(role) && (
-                                                                <button
-                                                                    onClick={() => saveRolePermissions(role)}
-                                                                    className="flex items-center gap-2 bg-success text-text-primary px-6 py-3 rounded-xl font-bold hover:bg-success/90 transition-colors shadow-lg shadow-success/20"
-                                                                >
-                                                                    <Save className="w-5 h-5" />
-                                                                    Sauvegarder les modifications
-                                                                </button>
-                                                            )}
+                                                            {/* Save & Delete Buttons */}
+                                                            <div className="flex items-center gap-4">
+                                                                {hasChanges(role) && (
+                                                                    <button
+                                                                        onClick={() => saveRolePermissions(role as UserRole)}
+                                                                        className="flex items-center gap-2 bg-success text-text-primary px-6 py-3 rounded-xl font-bold hover:bg-success/90 transition-colors shadow-lg shadow-success/20"
+                                                                    >
+                                                                        <Save className="w-5 h-5" />
+                                                                        Sauvegarder les modifications
+                                                                    </button>
+                                                                )}
+                                                                {!baseRoles.includes(role) && (
+                                                                    <button
+                                                                        onClick={() => handleDeleteRole(role)}
+                                                                        className="flex items-center gap-2 bg-status-danger/10 text-status-danger px-6 py-3 rounded-xl font-bold hover:bg-status-danger/20 transition-colors"
+                                                                    >
+                                                                        <Trash className="w-5 h-5" />
+                                                                        Supprimer ce rôle
+                                                                    </button>
+                                                                )}
+                                                            </div>
                                                         </>
                                                     )}
                                                 </div>

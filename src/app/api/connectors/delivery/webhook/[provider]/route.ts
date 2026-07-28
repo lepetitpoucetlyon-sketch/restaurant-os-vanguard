@@ -56,18 +56,28 @@ export async function POST(
             return NextResponse.json({ error: 'tenantId manquant' }, { status: 422 });
         }
 
+        // Existence check AVANT set() — set() est un upsert, donc on ne peut plus
+        // distinguer création vs retry après l'écriture.
+        const existing = await Nexus.adapter.get(
+            `tenants/${order.tenantId}/deliveryOrders/${order.id}`
+        );
+
         await Nexus.adapter.set(
             `tenants/${order.tenantId}/deliveryOrders/${order.id}`,
             order
         );
 
-        NexusEventBus.emit('order.placed', {
-            orderId:    order.id,
-            tableId:    null,
-            tenantId:   order.tenantId,
-            operatorId: `delivery:${providerId}`,
-            items:      [],
-        });
+        // N'émettre order.placed que si la commande n'existait pas — sinon le KDS
+        // reçoit un doublon à chaque retry du provider.
+        if (!existing) {
+            NexusEventBus.emit('order.placed', {
+                orderId:    order.id,
+                tableId:    null,
+                tenantId:   order.tenantId,
+                operatorId: `delivery:${providerId}`,
+                items:      [],
+            });
+        }
 
         logger.info(`[delivery/webhook] provider=${providerId} orderId=${order.id} tenant=${order.tenantId}`);
         return NextResponse.json({ received: true, orderId: order.id });

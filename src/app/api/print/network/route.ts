@@ -64,7 +64,8 @@ export async function POST(request: Request): Promise<NextResponse> {
     await sendTCP(ip, port, bytes);
     return NextResponse.json({ ok: true });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 502 });
+    logger.error('[print/network] TCP error', err);
+    return NextResponse.json({ error: 'Impossible de joindre l\'imprimante' }, { status: 502 });
   }
 }
 

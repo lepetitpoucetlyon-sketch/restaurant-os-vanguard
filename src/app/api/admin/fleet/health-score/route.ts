@@ -110,6 +110,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     logger.info(`[HealthScore] Recalcul fleet — ${results.length} tenants mis à jour`);
     return NextResponse.json({ updated: results.length, scores: results });
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[health-score] Recalcul fleet failed', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

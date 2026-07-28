@@ -5,9 +5,9 @@ import Script from "next/script";
 import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { ErrorBoundary } from "@/shared/components/ErrorBoundary";
-import { NexusProviderStack } from "@/components/layout/NexusProviderStack";
-import { ImpersonationBanner } from "@/components/layout/ImpersonationBanner";
-import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { NexusProviderStack } from "@components/layout/NexusProviderStack";
+import { ImpersonationBanner } from "@components/layout/ImpersonationBanner";
+import { ServiceWorkerRegistration } from "@components/ServiceWorkerRegistration";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });

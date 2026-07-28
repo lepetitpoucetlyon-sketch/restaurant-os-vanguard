@@ -1,1 +1,1 @@
-export { PremiumSelect } from '@/components/ui/PremiumSelect';
+export { PremiumSelect } from '@components/ui/PremiumSelect';

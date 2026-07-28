@@ -23,6 +23,9 @@ export interface NexusAuthState {
     updateRolePermissions: (role: UserRole, categories: CategoryKey[]) => Promise<void>;
     getAccessibleCategories: () => CategoryKey[];
     rolePermissions: RolePermissions;
+    customRoles: any[];
+    createCustomRole: (label: string) => Promise<string>;
+    deleteCustomRole: (roleId: string) => Promise<void>;
     // Grade X Extensions (Suture)
     require2FAChallenge?: boolean;
     verifyTwoFactor?: (code: string) => Promise<boolean>;

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageHeader } from "@components/ui/PageHeader";
 import { Plus, GripVertical, Settings2, ChefHat, Tag, Link2 } from "lucide-react";
-import { SearchInput } from "@/components/ui/SearchInput";
+import { SearchInput } from "@components/ui/SearchInput";
 
 // Mocks for now - will be replaced by actual data fetching
 const mockCategories = [
@@ -76,7 +76,7 @@ export default function MenuBuilderPage() {
                             <div className="w-64">
                                 <SearchInput 
                                     value={searchQuery} 
-                                    onChange={(e) => setSearchQuery(e.target.value)} 
+                                    onChange={(e: any) => setSearchQuery(e.target.value)} 
                                     placeholder="Rechercher un plat..." 
                                 />
                             </div>

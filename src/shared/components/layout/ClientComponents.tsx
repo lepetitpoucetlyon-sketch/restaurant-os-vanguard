@@ -3,9 +3,9 @@
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { LayoutResolver } from "./LayoutResolver";
-import { OTABanner } from "@/components/layout/OTABanner";
-import { NeuralShield } from "@/components/layout/NeuralShield";
-import { SovereignLock } from "@/components/layout/SovereignLock";
+import { OTABanner } from "@components/layout/OTABanner";
+import { NeuralShield } from "@components/layout/NeuralShield";
+import { SovereignLock } from "@components/layout/SovereignLock";
 
 // Lazy load system components
 const VoiceCommandListener = dynamic(

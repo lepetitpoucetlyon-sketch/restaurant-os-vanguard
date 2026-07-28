@@ -5,7 +5,7 @@ import { useSetAtom } from "jotai";
 import { activeCartAtom } from "../store/orderAtoms";
 import { useOrders, useTables, useProducts, useCategories } from "@/modules/ops/providers";
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@components/ui/Toast";
 import { Table, OrderItem } from "@nexus/contracts";
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../engine/types";

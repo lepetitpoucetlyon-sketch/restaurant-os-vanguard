@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         logger.info(`[reservations/sync] tenant=${tenantId} provider=${p.id} synced=${reservations.length}`);
         return NextResponse.json({ synced: reservations.length, provider: p.id });
     } catch (err) {
-        logger.error('[reservations/sync] error', String(err));
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        logger.error('[reservations/sync] error', err);
+        return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
     }
 }

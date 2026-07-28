@@ -14,6 +14,7 @@ import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/infrastructure/services/storage/FirebaseStorageProvider';
 import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
 import { tenantConfigAtom } from '@/store/pillars/sovereign';
+import { DemoSeeder } from '@/infrastructure/services/demo/DemoSeeder';
 import type { TenantConfig } from '@/shared/nexus-contract';
 import type { NexusTenantState } from '@nexus/contracts/nexus.types';
 
@@ -58,6 +59,18 @@ export function useNexusTenantLogic(): NexusTenantState {
         setGlobalTenantConfig(config);
         Nexus.tenantOverride = tenantId;
         NexusTelemetryEngine.initSession(tenantId);
+        
+        // Auto-provision Demo Mode if requested via URL
+        if (typeof window !== 'undefined') {
+            const isSimulacra = new URLSearchParams(window.location.search).get('simulacra') === 'true';
+            if (isSimulacra) {
+                Nexus.activateSimulacraMode(tenantId).then(() => {
+                    DemoSeeder.provision(tenantId).catch(err => {
+                        logger.error('Failed to provision demo data', { error: err.message });
+                    });
+                });
+            }
+        }
     }, [setGlobalTenantConfig]);
 
     useEffect(() => {

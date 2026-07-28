@@ -41,8 +41,8 @@ export async function GET(request: NextRequest) {
             manifests: manifests.sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 50),
         });
     } catch (err) {
-        logger.error('[backup] GET error', String(err));
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        logger.error('[backup] GET error', err);
+        return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
     }
 }
 
@@ -61,7 +61,8 @@ export async function POST(request: NextRequest) {
             empireAudit.log({ action: 'backup_purge', module: 'fleet', userId: caller.uid, timestamp: new Date() });
             return NextResponse.json({ purged: deleted, beforeDate: cutoff.toISOString() });
         } catch (err) {
-            return NextResponse.json({ error: String(err) }, { status: 500 });
+            logger.error('[backup] Purge failed', err);
+            return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
         }
     }
 

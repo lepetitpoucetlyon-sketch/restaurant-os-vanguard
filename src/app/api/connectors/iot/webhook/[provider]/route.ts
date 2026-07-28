@@ -62,8 +62,19 @@ export async function POST(
             zoneName:  body['zoneName'] ? String(body['zoneName']) : undefined,
         };
 
-        const histKey = `iotHistory/${reading.sensorId}/${Date.now()}`;
+        // Clé stable = sensorId + timestamp payload → idempotent sur retry
+        const tsKey   = reading.timestamp.replace(/[:.]/g, '-');
+        const histKey = `iotHistory/${reading.sensorId}/${tsKey}`;
+
+        // Vérifier l'existence AVANT set() — set() est un upsert donc on perd
+        // l'information "déjà traité" après l'écriture.
+        const alreadyProcessed = await Nexus.adapter.get(histKey);
         await Nexus.adapter.set(histKey, reading);
+
+        if (alreadyProcessed) {
+            logger.info(`[iot/webhook] Doublon ignoré — sensor=${reading.sensorId} ts=${tsKey}`);
+            return NextResponse.json({ received: true, sensorId: reading.sensorId, duplicate: true });
+        }
 
         const sensor = await Nexus.adapter.get(
             `tenants/${tenantId}/sensors/${reading.sensorId}`

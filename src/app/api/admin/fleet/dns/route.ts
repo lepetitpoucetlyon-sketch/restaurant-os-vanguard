@@ -125,7 +125,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, domain, provider });
 
   } catch (err) {
-    logger.error('[DNS] Erreur provisioning:', String(err));
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[DNS] Erreur provisioning', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

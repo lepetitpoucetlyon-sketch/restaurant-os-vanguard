@@ -114,7 +114,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, processed, checked: pending.length });
 
   } catch (err) {
-    logger.error('[Dunning] Erreur globale:', String(err));
-    return NextResponse.json({ error: String(err) }, { status: 500 });
+    logger.error('[Dunning] Erreur globale', err);
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

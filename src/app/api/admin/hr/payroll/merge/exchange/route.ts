@@ -38,6 +38,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ success: true });
     } catch (err) {
         logger.error('[HR/Merge] Exchange failed', err);
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
     }
 }

@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { staggerContainer, fadeInUp } from "@/shared/utils/motion";
-import { BlueprintHeader } from "@/components/blueprint/BlueprintHeader";
-import { MindMapDependencies } from "@/components/blueprint/MindMapDependencies";
-import { ActionImpactMap } from "@/components/blueprint/ActionImpactMap";
-import { StructureOverview } from "@/components/blueprint/StructureOverview";
-import { BrandPromptGuide } from "@/components/blueprint/BrandPromptGuide";
+import { BlueprintHeader } from "@components/blueprint/BlueprintHeader";
+import { MindMapDependencies } from "@components/blueprint/MindMapDependencies";
+import { ActionImpactMap } from "@components/blueprint/ActionImpactMap";
+import { StructureOverview } from "@components/blueprint/StructureOverview";
+import { BrandPromptGuide } from "@components/blueprint/BrandPromptGuide";
 import { GlassCard } from "@ui/GlassCard";
 import { Database, Network, Cpu, Info } from "lucide-react";
 

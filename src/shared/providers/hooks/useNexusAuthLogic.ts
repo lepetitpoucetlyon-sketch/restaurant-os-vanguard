@@ -99,6 +99,9 @@ export function useNexusAuthLogic(
         updateRolePermissions: access.updateRolePermissions, 
         getAccessibleCategories: access.getAccessibleCategories,
         rolePermissions: access.rolePermissions,
+        customRoles: access.customRoles,
+        createCustomRole: access.createCustomRole,
+        deleteCustomRole: access.deleteCustomRole,
         require2FAChallenge: false, 
         verifyTwoFactor: async () => true,
         // Confirmation d'action privilégiée (remise, annulation, clôture) : on
@@ -138,5 +141,5 @@ export function useNexusAuthLogic(
                 timestamp: now, createdAt: now, updatedAt: now
             } as import('@nexus/contracts').AuditLog); 
         }
-    }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.hasAccess, access.canDo, access.updateRolePermissions, access.getAccessibleCategories, login, logout, activeTenantId]);
+    }), [currentUser, session.isFirebaseAuthReady, staff.isUsersLoaded, staff.users, access.isPermissionsLoaded, access.rolePermissions, access.customRoles, access.hasAccess, access.canDo, access.updateRolePermissions, access.createCustomRole, access.deleteCustomRole, access.getAccessibleCategories, login, logout, activeTenantId]);
 }

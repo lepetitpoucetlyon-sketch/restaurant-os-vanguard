@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
-import { useToast } from '@/components/ui/Toast';
+import { useToast } from '@components/ui/Toast';
 
 import { FleetCommander } from '@modules/intelligence/fleet/FleetCommander';
 

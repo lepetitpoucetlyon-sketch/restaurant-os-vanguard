@@ -19,9 +19,9 @@ import {
   RoleGate 
 } from "@nexus/guards";
 import { AlertSync } from "@/shared/components/AlertSync";
-import { ClientComponents } from "@/components/layout/ClientComponents";
-import { TrainingOverlay } from "@/components/layout/TrainingOverlay";
-import { SovereignLockout } from "@/components/layout/SovereignLockout";
+import { ClientComponents } from "@components/layout/ClientComponents";
+import { TrainingOverlay } from "@components/layout/TrainingOverlay";
+import { SovereignLockout } from "@components/layout/SovereignLockout";
 import { BrandingProvider } from "@/infrastructure/components/BrandingProvider";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
 import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";

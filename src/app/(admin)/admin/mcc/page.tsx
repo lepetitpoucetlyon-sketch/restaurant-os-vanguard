@@ -10,8 +10,8 @@ import dynamic from 'next/dynamic';
 import { MCCWidgetSkeleton, MFAGate } from '@nexus/guards/admin/mcc';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
-import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
-import { AmbientAudio } from '@/components/layout/AmbientAudio';
+import { VoiceAssistantOverlay } from '@components/layout/VoiceAssistantOverlay';
+import { AmbientAudio } from '@components/layout/AmbientAudio';
 
 const FleetTab        = dynamic(() => import('./_tabs/FleetTab').then(m => m.FleetTab), { loading: () => <MCCWidgetSkeleton /> });
 const FleetSidebar    = dynamic(() => import('./_tabs/FleetSidebar').then(m => m.FleetSidebar));

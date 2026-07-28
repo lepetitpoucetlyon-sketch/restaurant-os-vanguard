@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         logger.info(`[reviews/sync] tenant=${tenantId} provider=${p.id} fetched=${reviews.length} avg=${avgScore.toFixed(2)}`);
         return NextResponse.json({ fetched: reviews.length, averageScore: avgScore, provider: p.id });
     } catch (err) {
-        logger.error('[reviews/sync] error', String(err));
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        logger.error('[reviews/sync] error', err);
+        return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
     }
 }

@@ -13,14 +13,14 @@ import {
 } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
-import { useToast } from "@/components/ui/Toast";
+import { useToast } from "@components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/shared/hooks";
 import { usePlanning } from "@modules/human/hr";
 import type { Shift as ContextShift } from "@modules/human/hr/types";
 import { useIsMobile } from "@/shared/hooks";
-import { BottomSheet } from "@/components/ui/BottomSheet";
-import { TimePicker } from "@/components/ui/TimePicker";
+import { BottomSheet } from "@components/ui/BottomSheet";
+import { TimePicker } from "@components/ui/TimePicker";
 
 type Shift = ContextShift;
 type ShiftType = 'morning' | 'lunch' | 'evening' | 'double' | 'off';

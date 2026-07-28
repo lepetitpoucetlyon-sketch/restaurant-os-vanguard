@@ -40,7 +40,7 @@
         "./src/app/*"
       ],
       "@components/*": [
-        "./src/components/*"
+        "./src/shared/components/*"
       ],
       "@modules/*": [
         "./src/modules/*"
@@ -70,10 +70,10 @@
         "./src/shared/*"
       ],
       "@ui": [
-        "./src/components/ui/index"
+        "./src/shared/components/ui/index"
       ],
       "@ui/*": [
-        "./src/components/ui/*"
+        "./src/shared/components/ui/*"
       ],
       "@/*": [
         "./src/*"

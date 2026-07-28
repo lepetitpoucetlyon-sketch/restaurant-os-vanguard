@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { buildWeeklyReportHTML } from '@/modules/intelligence/reports';
+import { logger } from '@/lib/logger';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'rapports@restaurant-os.app';
@@ -86,7 +87,8 @@ export async function GET(req: NextRequest) {
   });
 
   if (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    logger.error('[WeeklyReport] Resend send failed', error);
+    return NextResponse.json({ error: 'Erreur lors de l\'envoi du rapport' }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true, sentTo: ownerEmail });

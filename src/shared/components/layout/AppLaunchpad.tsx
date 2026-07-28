@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
 import { useUI } from "@/shared/hooks";
 import { useLanguage } from "@/shared/hooks";
 import { useRouter } from "next/navigation";
-import { LaunchpadStatusHub } from "@/components/layout/LaunchpadStatusHub";
+import { LaunchpadStatusHub } from "@components/layout/LaunchpadStatusHub";
 import { useAuth } from "@/shared/hooks";
 import { useHasMounted } from "@/shared/hooks";
 

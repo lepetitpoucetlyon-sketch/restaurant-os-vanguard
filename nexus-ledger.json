@@ -4,6 +4,17 @@
   "project": "RESTAURANT-OS-CORE",
   "version": "1.6.0-gradeX",
   "last_global_sync": "2026-05-01T10:00:00Z",
+  "active_extensions": [
+    "stripe",
+    "paypal",
+    "thefork",
+    "google",
+    "mailchimp",
+    "twilio",
+    "ubereats",
+    "deliveroo",
+    "iot_printer"
+  ],
   "active_sessions": {
     "015adcd7-841b-4d10-ad1a-47c4ccf95e97": {
       "role": "Suzerain Orchestrator (Antigravity)",
