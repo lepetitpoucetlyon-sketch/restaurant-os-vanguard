@@ -9,6 +9,8 @@ import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 
 // Panneaux lazy — extraits en registres pour garder ce fichier sous le seuil de fan-out.
 import { SettingsLoading } from "./_SettingsLoading";
+import { BrandScraper } from "./BrandScraper";
+import { BrandUploader } from "./BrandUploader";
 import {
     ProfileSettings, ExpertGovernanceHub, NexusSettings, HoursSettings,
     ReservationSettingsComponent, StaffSettings, MenuSettings, GoalsSettings,
@@ -181,7 +183,29 @@ export function SettingsDashboard() {
                     <StandardSettingsEngine schema={RESERVATIONS_CONFIG_SCHEMA} />
                 </div>
             );
-            case 'appearance': return <StandardSettingsEngine schema={THEME_SCHEMA} />;
+            case 'appearance': return (
+                <div className="space-y-12">
+                    <div className="p-6 rounded-2xl bg-surface-card border border-border space-y-6">
+                        <div>
+                            <h3 className="text-lg font-semibold text-text-primary mb-1">Charte graphique</h3>
+                            <p className="text-sm text-text-secondary">Importez votre logo, favicon et bannière. Toute la plateforme s'adapte automatiquement.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <BrandUploader slot="logo" label="Logo principal" hint="Recommandé : PNG 512×512 sur fond transparent" />
+                            <BrandUploader slot="favicon" label="Favicon" hint="Recommandé : PNG 64×64 carré" />
+                            <BrandUploader slot="banner" label="Bannière" hint="Recommandé : PNG 1200×400" />
+                        </div>
+                    </div>
+                    <div className="p-6 rounded-2xl bg-surface-card border border-border space-y-4">
+                        <div>
+                            <h3 className="text-lg font-semibold text-text-primary mb-1">Extraction automatique</h3>
+                            <p className="text-sm text-text-secondary">Entrez l'URL de votre site ou de votre page Google — l'IA extrait vos couleurs et polices en un clic.</p>
+                        </div>
+                        <BrandScraper />
+                    </div>
+                    <StandardSettingsEngine schema={THEME_SCHEMA} />
+                </div>
+            );
             case 'notifications': return <StandardSettingsEngine schema={NOTIFICATIONS_SCHEMA} />;
             case 'goals': return <GoalsSettings />; // Goals has complex UI, keeping it for now
             case 'delivery': return <StandardSettingsEngine schema={DELIVERY_SCHEMA} />;

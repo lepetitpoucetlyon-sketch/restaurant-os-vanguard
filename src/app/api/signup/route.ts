@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
         tenantId,
         email,
         tier: 'STANDARD',
-        successUrl: `${origin}/?tenant=${tenantId}&checkout=success`,
+        successUrl: `${origin}/welcome?tenant=${tenantId}&checkout=success`,
         cancelUrl: `${origin}/signup?checkout=cancelled`,
       });
       checkoutUrl = checkout.url;

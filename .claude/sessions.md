@@ -43,3 +43,4 @@
 | intelligence-audit | Audit lecture seule : src/modules/intelligence/, api/ routes IA, domain/services/, app intelligence pages | 2026-07-27 | terminée |
 | full-rewire | Câblage réel de tous les stubs/no-ops/cross-tenant sur les 7 piliers — 263 findings, 6 patterns | 2026-07-27 | terminée |
 | rapatriment-services | Migration domain/services/ orphelins → modules/<pilier>/services/ (29 fichiers, 7 piliers) | 2026-07-28 | terminée |
+| prod-blockers-phase1 | Phase 1 bloquants prod : page /login, branding dans Apparence, welcome successUrl | 2026-07-28 | active |

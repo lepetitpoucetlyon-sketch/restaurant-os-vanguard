@@ -32,7 +32,7 @@ export function AuthGate({ children }: AuthGateProps) {
     
     // Bypass for MCC area to allow admin recovery if needed
     const isMccArea = pathname?.startsWith('/admin');
-    const isPublicArea = pathname === '/' || pathname?.startsWith('/landing') || pathname?.startsWith('/showcase') || pathname?.startsWith('/reserve') || pathname?.startsWith('/auth');
+    const isPublicArea = pathname === '/' || pathname?.startsWith('/landing') || pathname?.startsWith('/showcase') || pathname?.startsWith('/reserve') || pathname?.startsWith('/auth') || pathname?.startsWith('/login');
 
     if (isKillSwitchActive && !isMccArea) {
         return <SovereignLockout />;
