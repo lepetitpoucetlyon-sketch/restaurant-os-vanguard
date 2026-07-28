@@ -2,6 +2,8 @@ import type { IOpenBankingProvider } from './types';
 import { PowensProvider } from './PowensProvider';
 import { TinkProvider } from './TinkProvider';
 import { GoCardlessProvider } from './GoCardlessProvider';
+import { BridgeProvider } from './BridgeProvider';
+import { QontoProvider } from './QontoProvider';
 
 /**
  * Registre des agrégateurs bancaires disponibles.
@@ -17,6 +19,8 @@ const PROVIDER_REGISTRY: Record<string, () => IOpenBankingProvider> = {
     powens:      () => new PowensProvider(),
     tink:        () => new TinkProvider(),
     gocardless:  () => new GoCardlessProvider(),
+    bridge:      () => new BridgeProvider(),
+    qonto:       () => new QontoProvider(),
 };
 
 export const DEFAULT_OPEN_BANKING_PROVIDER = 'powens';
