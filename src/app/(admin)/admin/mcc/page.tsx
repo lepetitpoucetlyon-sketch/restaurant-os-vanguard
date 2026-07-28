@@ -2,38 +2,23 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    ShieldCheck, Rocket, LayoutGrid, Activity, Plus, Lock,
-    TrendingUp, RefreshCw, Zap, Cpu, Wallet, BrainCircuit, GitMerge,
+    ShieldCheck, Rocket, LayoutGrid,
+    Lock, RefreshCw, GitMerge, BrainCircuit, Wallet,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-import { MCCWidgetSkeleton, TenantUsersPanel, MFAGate } from '@nexus/guards/admin/mcc';
+import { MCCWidgetSkeleton, MFAGate } from '@nexus/guards/admin/mcc';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
-import { StatCard, DeviceManagerPanel, TabButton, StatusItem, SwitchboardItem } from '@nexus/guards/admin/mcc';
+import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 import { VoiceAssistantOverlay } from '@/components/layout/VoiceAssistantOverlay';
 import { AmbientAudio } from '@/components/layout/AmbientAudio';
-import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 
-const MCCAuditStream    = dynamic(() => import('@nexus/guards/admin/mcc/MCCAuditStream').then(m => m.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });
-const MCCInsights       = dynamic(() => import('@nexus/guards/admin/mcc/MCCInsights').then(m => m.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });
-const CertificationCenter = dynamic(() => import('@nexus/guards/admin/mcc/CertificationCenter').then(m => m.CertificationCenter), { loading: () => <MCCWidgetSkeleton /> });
-const FiscalChainExplorer = dynamic(() => import('@nexus/guards/admin/mcc/FiscalChainExplorer').then(m => m.FiscalChainExplorer), { loading: () => <MCCWidgetSkeleton /> });
-const DeploymentEngine  = dynamic(() => import('@nexus/guards/admin/mcc/DeploymentEngine').then(m => m.DeploymentEngine), { loading: () => <MCCWidgetSkeleton /> });
-const MCCTreasury       = dynamic(() => import('@nexus/guards/admin/mcc/MCCTreasury').then(m => m.MCCTreasury), { loading: () => <MCCWidgetSkeleton /> });
-const StrategyOracle    = dynamic(() => import('@nexus/guards/admin/mcc/StrategyOracle').then(m => m.StrategyOracle), { loading: () => <MCCWidgetSkeleton /> });
-const FleetCommandTable = dynamic(() => import('@nexus/guards/admin/mcc/FleetCommandTable').then(m => m.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
-const PerformanceMonitor = dynamic(() => import('@nexus/guards/admin/mcc/PerformanceMonitor').then(m => m.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
-const AIWorkshop        = dynamic(() => import('@nexus/guards/admin/mcc/AIWorkshop').then(m => m.AIWorkshop), { loading: () => <MCCWidgetSkeleton /> });
-const TaxAuditPanel     = dynamic(() => import('@nexus/guards/admin/mcc/TaxAuditPanel').then(m => m.TaxAuditPanel), { loading: () => <MCCWidgetSkeleton /> });
-const TrustedDevicePanel = dynamic(() => import('@nexus/guards/admin/mcc/TrustedDevicePanel').then(m => m.TrustedDevicePanel), { loading: () => <MCCWidgetSkeleton /> });
-const TenantOverridePanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantOverridePanel').then(m => m.TenantOverridePanel), { loading: () => <MCCWidgetSkeleton /> });
-const TenantChangelogPanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantChangelogPanel').then(m => m.TenantChangelogPanel), { loading: () => <MCCWidgetSkeleton /> });
-const FleetUpgradePanel = dynamic(() => import('@nexus/guards/admin/mcc/FleetUpgradePanel').then(m => m.FleetUpgradePanel), { loading: () => <MCCWidgetSkeleton /> });
-const SupportAIPanel       = dynamic(() => import('@nexus/guards/admin/mcc/SupportAIPanel').then(m => m.SupportAIPanel), { loading: () => <MCCWidgetSkeleton /> });
-const FleetDeviceInventory = dynamic(() => import('@nexus/guards/admin/mcc/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
-const ResellerPortal       = dynamic(() => import('@nexus/guards/admin/mcc/ResellerPortal').then(m => m.ResellerPortal), { loading: () => <MCCWidgetSkeleton /> });
-const TenantBillingPanel   = dynamic(() => import('@nexus/guards/admin/mcc/TenantBillingPanel').then(m => m.TenantBillingPanel), { loading: () => <MCCWidgetSkeleton /> });
-const SupportDraftsPanel   = dynamic(() => import('@nexus/guards/admin/mcc/SupportDraftsPanel').then(m => m.SupportDraftsPanel), { loading: () => <MCCWidgetSkeleton /> });
+const FleetTab        = dynamic(() => import('./_tabs/FleetTab').then(m => m.FleetTab), { loading: () => <MCCWidgetSkeleton /> });
+const FleetSidebar    = dynamic(() => import('./_tabs/FleetSidebar').then(m => m.FleetSidebar));
+const ComplianceTab   = dynamic(() => import('./_tabs/ComplianceTab').then(m => m.ComplianceTab), { loading: () => <MCCWidgetSkeleton /> });
+const IntelligenceTab = dynamic(() => import('./_tabs/IntelligenceTab').then(m => m.IntelligenceTab), { loading: () => <MCCWidgetSkeleton /> });
+const TreasuryTab     = dynamic(() => import('./_tabs/TreasuryTab').then(m => m.TreasuryTab), { loading: () => <MCCWidgetSkeleton /> });
+const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m => m.PatchCenterTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     const {
@@ -85,11 +70,18 @@ export default function MCCDashboard() {
 
                     <div className="overflow-x-auto scrollbar-none -mx-8 px-8 mb-10">
                         <div className="flex gap-6 border-b border-white/5 min-w-max">
-                            <TabButton active={activeTab === 'fleet'}        onClick={() => setActiveTab('fleet')}        label="Fleet"       icon={<LayoutGrid className="w-4 h-4" />} />
-                            <TabButton active={activeTab === 'compliance'}   onClick={() => setActiveTab('compliance')}   label="Compliance"  icon={<ShieldCheck className="w-4 h-4" />} />
-                            <TabButton active={activeTab === 'intelligence'} onClick={() => setActiveTab('intelligence')} label="Oracle"      icon={<BrainCircuit className="w-4 h-4" />} />
-                            <TabButton active={activeTab === 'treasury'}     onClick={() => setActiveTab('treasury')}     label="Treasury"    icon={<Wallet className="w-4 h-4" />} />
-                            <TabButton active={activeTab === 'patchcenter'}  onClick={() => setActiveTab('patchcenter')}  label="Patches"     icon={<GitMerge className="w-4 h-4" />} />
+                            {([
+                                { id: 'fleet',        label: 'Fleet',      icon: <LayoutGrid className="w-4 h-4" /> },
+                                { id: 'compliance',   label: 'Compliance', icon: <ShieldCheck className="w-4 h-4" /> },
+                                { id: 'intelligence', label: 'Oracle',     icon: <BrainCircuit className="w-4 h-4" /> },
+                                { id: 'treasury',     label: 'Treasury',   icon: <Wallet className="w-4 h-4" /> },
+                                { id: 'patchcenter',  label: 'Patches',    icon: <GitMerge className="w-4 h-4" /> },
+                            ] as const).map(tab => (
+                                <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-action-primary text-brand' : 'border-transparent text-secondary hover:text-white'}`}>
+                                    {tab.icon}{tab.label}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
@@ -97,65 +89,28 @@ export default function MCCDashboard() {
                         <div className="col-span-12 lg:col-span-8 space-y-8">
                             <AnimatePresence mode="wait">
                                 {activeTab === 'fleet' && (
-                                    <motion.div key="fleet" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                                            <StatCard label="Total Instances"    value={instances.length.toString()} icon={<LayoutGrid className="text-brand" />} trend="Fleet capacity at 100%" />
-                                            <StatCard label="Global Revenue"     value={`€${((globalMetrics?.fleetTotalRevenue || 0) / 100).toLocaleString()}`} icon={<TrendingUp className="text-status-success" />} trend="Calculated in real-time" />
-                                            <StatCard label="Fleet Health"       value={`${Math.round(globalMetrics?.averageHealthScore || 100)}%`} icon={<Activity className="text-brand" />} trend="Weighted average" />
-                                            <StatCard label="Global Compliance"  value={`${globalMetrics?.averageComplianceScore?.toFixed(1) || '100'}%`} icon={<ShieldCheck className="text-brand" />} trend="NF525 Integrity Level" />
-                                        </div>
-                                        <div className="flex items-center justify-between gap-4">
-                                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-secondary">Fleet Tactical Overview</h3>
-                                            <button onClick={() => setShowCloneModal(true)} className="bg-action-primary text-white font-bold py-3 px-6 rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95 whitespace-nowrap uppercase tracking-widest text-[10px]">
-                                                <Plus className="w-4 h-4" /> New Clone
-                                            </button>
-                                        </div>
-                                        <FleetCommandTable />
-                                        {instances.length > 0 && <TenantUsersPanel instance={instances[0]} />}
-                                        <FleetDeviceInventory instances={instances.map(i => ({ tenantId: i.id, name: i.name }))} />
+                                    <motion.div key="fleet" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <FleetTab instances={instances} globalMetrics={globalMetrics} onShowCloneModal={() => setShowCloneModal(true)} />
                                     </motion.div>
                                 )}
-
                                 {activeTab === 'compliance' && (
-                                    <motion.div key="compliance" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                                        <div className="grid grid-cols-12 gap-8">
-                                            <div className="col-span-12 xl:col-span-8"><CertificationCenter /></div>
-                                            <div className="col-span-12 xl:col-span-4"><FiscalChainExplorer /></div>
-                                        </div>
-                                        <TaxAuditPanel />
-                                        <TrustedDevicePanel />
+                                    <motion.div key="compliance" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <ComplianceTab />
                                     </motion.div>
                                 )}
-
                                 {activeTab === 'intelligence' && (
-                                    <motion.div key="intelligence" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                                        <StrategyOracle />
-                                        <AIWorkshop />
-                                        <SupportAIPanel />
-                                        <DeviceManagerPanel />
+                                    <motion.div key="intelligence" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <IntelligenceTab />
                                     </motion.div>
                                 )}
-
                                 {activeTab === 'treasury' && (
-                                    <motion.div key="treasury" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                                        <MCCTreasury />
-                                        <TenantBillingPanel />
-                                        <ResellerPortal />
+                                    <motion.div key="treasury" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <TreasuryTab />
                                     </motion.div>
                                 )}
-
                                 {activeTab === 'patchcenter' && (
-                                    <motion.div key="patchcenter" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                                        <div className="grid grid-cols-12 gap-8">
-                                            <div className="col-span-12 xl:col-span-5 space-y-6">
-                                                <TenantOverridePanel />
-                                                <FleetUpgradePanel />
-                                            </div>
-                                            <div className="col-span-12 xl:col-span-7 space-y-6">
-                                                <SupportDraftsPanel />
-                                                <TenantChangelogPanel />
-                                            </div>
-                                        </div>
+                                    <motion.div key="patchcenter" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <PatchCenterTab />
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -163,34 +118,7 @@ export default function MCCDashboard() {
 
                         {activeTab === 'fleet' && (
                             <div className="col-span-12 lg:col-span-4 space-y-8">
-                                <PerformanceMonitor />
-                                <DeploymentEngine />
-                                <MCCInsights />
-                                <MCCAuditStream />
-                                <div className="p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl mb-8">
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <Cpu className="w-5 h-5 text-brand mt-0.5" />
-                                        <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">MCC Core Status</h3>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <StatusItem label="Provisioning Engine" status={health ? (health.provisioningEngine === 'ready' ? 'Ready' : health.provisioningEngine === 'degraded' ? 'Dégradé' : 'Offline') : '…'} color={health ? (health.provisioningEngine === 'ready' ? 'bg-status-success' : health.provisioningEngine === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'} />
-                                        <StatusItem label="Axiom Log Ingest"    status={health ? (health.axiomLogIngest === 'streaming' ? 'Streaming' : health.axiomLogIngest === 'degraded' ? 'Dégradé' : 'Offline') : '…'} color={health ? (health.axiomLogIngest === 'streaming' ? 'bg-status-success' : health.axiomLogIngest === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'} />
-                                        <StatusItem label="NF525 Seal Engine"   status={health ? (health.nf525SealEngine === 'secured' ? 'Secured' : health.nf525SealEngine === 'degraded' ? 'Dégradé' : 'Offline ⚠') : '…'} color={health ? (health.nf525SealEngine === 'secured' ? 'bg-action-primary' : health.nf525SealEngine === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'} />
-                                        <StatusItem label="Fleet Intelligence"  status={health ? (health.fleetIntelligence === 'aggregating' ? 'Aggregating' : health.fleetIntelligence === 'degraded' ? 'Dégradé' : 'Offline') : '…'} color={health ? (health.fleetIntelligence === 'aggregating' ? 'bg-action-primary' : health.fleetIntelligence === 'degraded' ? 'bg-yellow-500' : 'bg-status-error') : 'bg-secondary'} />
-                                    </div>
-                                </div>
-                                <div className="p-6 bg-white/5 backdrop-blur-md border border-focus/20 rounded-2xl">
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <Zap className="w-5 h-5 text-brand mt-0.5" />
-                                        <h3 className="text-sm font-bold uppercase tracking-widest text-brand">Sovereign Switchboard</h3>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <SwitchboardItem label="Telemetry & Sentinel" active={switchboard.telemetryActive}      onToggle={() => toggleModule('telemetryActive', 'Manual MCC override')} />
-                                        <SwitchboardItem label="SAM Automations"      active={switchboard.samActive}            onToggle={() => toggleModule('samActive', 'Manual MCC override')} />
-                                        <SwitchboardItem label="Nexus Sync Engine"    active={switchboard.nexusSyncActive}      onToggle={() => toggleModule('nexusSyncActive', 'Manual MCC override')} />
-                                        <SwitchboardItem label="Client Interface"     active={switchboard.clientInterfaceActive} onToggle={() => toggleModule('clientInterfaceActive', 'Manual MCC override')} />
-                                    </div>
-                                </div>
+                                <FleetSidebar health={health} switchboard={switchboard} onToggleModule={toggleModule} />
                             </div>
                         )}
                     </div>

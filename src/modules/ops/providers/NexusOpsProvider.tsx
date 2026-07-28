@@ -13,7 +13,7 @@ import { TenantIdSchema } from '@/domain/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
 
-import { useFloorOpsValue } from './hooks/floorHooks';
+import { useFloorOpsValue } from './hooks';
 import { isMCCMode } from '@/config/instance';
 
 /**
@@ -99,22 +99,9 @@ export const useNexusOps = (): NexusOpsState => {
 export const useFloorOps = () => useNexusOps().floorOps;
 
 // ── Réexports de compatibilité (les hooks vivent désormais dans ./hooks/*) ──────────
-export { useOperationalNodes, useTables } from './hooks/floorHooks';
-export { useOrders, useRecipes, useKitchen } from './hooks/kitchenHooks';
 export {
-    useAllocations,
-    useReservations,
-    useGroups,
-    useMarketing,
-    useCRM,
-    useManagement,
-    useQuotes,
-} from './hooks/commerceHooks';
-export {
-    useProducts,
-    useCategories,
-    useFiscal,
-    useHR,
-    useIntelligence,
-    useInventory,
-} from './hooks/catalogHooks';
+    useOperationalNodes, useTables,
+    useOrders, useRecipes, useKitchen,
+    useAllocations, useReservations, useGroups, useMarketing, useCRM, useManagement, useQuotes,
+    useProducts, useCategories, useFiscal, useHR, useIntelligence, useInventory,
+} from './hooks';

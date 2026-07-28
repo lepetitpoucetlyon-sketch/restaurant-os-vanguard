@@ -16,11 +16,9 @@ import { useFinance } from "@modules/finance";
 import { ExpenseClaimDialog } from "@modules/finance/components/accounting";
 import { useBilling } from "@modules/finance/billing/hooks/useBilling";
 import { FECExporter } from "@modules/finance/accounting/domain/FECExporter";
-import { useTenant } from "@/shared/hooks";
-import { useActionPermission } from "@/shared/hooks/useActionPermission";
+import { useTenant, useActionPermission } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
 import { useOrders } from "@/modules/ops/providers/NexusOpsProvider";
-import { AccountingReportService } from "@/modules/finance/services/AccountingReportService";
 import type { Order } from "@modules/ops/engine/types";
 import type { BankTransaction } from "@modules/finance/types";
 import type { JournalEntry } from "@nexus/contracts";
@@ -191,6 +189,7 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
     const handleExportPnL = useCallback(async () => {
         setPnlExporting(true);
         try {
+            const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
             const start = new Date(`${payrollMonth}-01T00:00:00Z`).getTime();
             const end = Date.now();
             const data = await AccountingReportService.buildPnL(start, end);
@@ -207,6 +206,7 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
     const handleExportBilan = useCallback(async () => {
         setBilanExporting(true);
         try {
+            const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
             const data = await AccountingReportService.buildBalanceSheet(Date.now());
             await AccountingReportService.exportBalanceSheetPDF(data);
             toast.success("Bilan exporté en PDF.");
@@ -221,6 +221,7 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
     const handleExportPayroll = useCallback(async () => {
         setPayrollExporting(true);
         try {
+            const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
             await AccountingReportService.exportPayrollCSV(payrollMonth);
             toast.success(`Variables de paie ${payrollMonth} exportées.`);
         } catch {

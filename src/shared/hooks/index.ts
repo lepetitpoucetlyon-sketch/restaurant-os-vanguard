@@ -20,6 +20,9 @@ export { useEventCallback, useDeepMemo, useRenderCount, usePerformanceMeasure } 
 export { useVirtualizedList, useInfiniteScroll } from "./useVirtualization";
 
 
+// Permissions
+export { useActionPermission } from "./useActionPermission";
+
 // 🏛️ Sovereign Core Hooks (Grade X)
 export { 
     useNexusCore,
