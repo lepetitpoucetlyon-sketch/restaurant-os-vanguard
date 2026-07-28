@@ -4,7 +4,7 @@
   /* ── ACTIONS ── */
   --color-action-primary: var(--action-primary, #C5A059);
   --color-action-primary-hover: var(--action-primary-hover, #000000);
-  --color-action-primary-fg: var(--action-primary-fg, #FFFFFF);
+  --color-action-primary-fg: var(--text-on-primary, #FFFFFF);
   --color-action-danger: var(--action-danger, #ef4444);
   --color-action-accent: var(--action-accent, #C5A059);
 

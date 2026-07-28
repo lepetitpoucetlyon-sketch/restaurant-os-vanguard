@@ -137,5 +137,11 @@ export function generateCSSVariables(
 
     '--font-brand':               'inherit',  // Overridé par BrandingProvider par tenant
     '--font-ui':                  'inherit',
+
+    '--radius-card':              '1.5rem',   // Overridé par BrandingProvider (sm, md, lg, full)
+    '--radius-btn':               '1rem',
+    '--glass-blur':               '16px',
+    '--glass-opacity':            '0.7',
+    '--text-on-primary':          '#FFFFFF',  // Calculé dynamiquement via WCAG luminance
   };
 }

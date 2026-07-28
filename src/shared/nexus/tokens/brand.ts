@@ -51,6 +51,14 @@ export const BrandTokensSchema = z.object({
   tableBusy:        hexColor.optional(),
   tableReserved:    hexColor.optional(),
 
+  // Formes & Rayons de courbure (Radii)
+  borderRadiusCard: z.enum(['sm', 'md', 'lg', 'full']).optional(),
+  borderRadiusBtn:  z.enum(['sm', 'md', 'lg', 'full']).optional(),
+
+  // Effets Glassmorphism & Flou
+  glassBlur:        z.enum(['none', 'sm', 'md', 'lg']).optional(),
+  glassOpacity:     z.enum(['low', 'medium', 'high']).optional(),
+
   // Timestamps
   createdAt:        z.string().optional(),
   updatedAt:        z.string().optional(),

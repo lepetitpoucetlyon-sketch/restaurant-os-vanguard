@@ -8,6 +8,20 @@ import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/sema
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
 
+function getContrastTextColor(hexColor: string): string {
+  const clean = hexColor.replace('#', '');
+  if (clean.length !== 6) return '#FFFFFF';
+  const r = parseInt(clean.substring(0, 2), 16) / 255;
+  const g = parseInt(clean.substring(2, 4), 16) / 255;
+  const b = parseInt(clean.substring(4, 6), 16) / 255;
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return luminance > 0.5 ? '#000000' : '#FFFFFF';
+}
+
+const RADIUS_MAP: Record<string, string> = { sm: '0.5rem', md: '1rem', lg: '1.5rem', full: '9999px' };
+const BLUR_MAP: Record<string, string>   = { none: '0px', sm: '8px', md: '16px', lg: '24px' };
+const OPACITY_MAP: Record<string, string> = { low: '0.4', medium: '0.7', high: '0.9' };
+
 export function BrandingProvider() {
   const tenantId = useAtomValue(tenantIdAtom);
   const rawBrandTokens = useAtomValue(tenantBrandTokensAtom);
@@ -56,6 +70,27 @@ export function BrandingProvider() {
       }
     });
 
+    // Injection automatique du contraste texte WCAG
+    if (brandTokens.primaryColor) {
+      root.style.setProperty('--text-on-primary', getContrastTextColor(brandTokens.primaryColor));
+    }
+
+    // Injection des Radii (Formes)
+    if (brandTokens.borderRadiusCard && RADIUS_MAP[brandTokens.borderRadiusCard]) {
+      root.style.setProperty('--radius-card', RADIUS_MAP[brandTokens.borderRadiusCard]);
+    }
+    if (brandTokens.borderRadiusBtn && RADIUS_MAP[brandTokens.borderRadiusBtn]) {
+      root.style.setProperty('--radius-btn', RADIUS_MAP[brandTokens.borderRadiusBtn]);
+    }
+
+    // Injection des effets Glassmorphism
+    if (brandTokens.glassBlur && BLUR_MAP[brandTokens.glassBlur]) {
+      root.style.setProperty('--glass-blur', BLUR_MAP[brandTokens.glassBlur]);
+    }
+    if (brandTokens.glassOpacity && OPACITY_MAP[brandTokens.glassOpacity]) {
+      root.style.setProperty('--glass-opacity', OPACITY_MAP[brandTokens.glassOpacity]);
+    }
+
     // Injection de la police brand
     if (brandTokens.fontBrand) {
       root.style.setProperty('--font-brand', `'${brandTokens.fontBrand}', Georgia, serif`);
@@ -77,10 +112,16 @@ export function BrandingProvider() {
       root.style.setProperty('--font-ui', `'${brandTokens.fontUI}', Inter, sans-serif`);
     }
 
-    // Injection favicon
+    // Injection favicon & Titre du document
     if (brandTokens.faviconUrl) {
       const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
       if (favicon) favicon.href = brandTokens.faviconUrl;
+    }
+
+    if (brandTokens.brandName && typeof document !== 'undefined') {
+      document.title = brandTokens.tagline 
+        ? `${brandTokens.brandName} • ${brandTokens.tagline}`
+        : `${brandTokens.brandName} — Restaurant OS`;
     }
 
   }, [rawBrandTokens]);
