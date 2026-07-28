@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { MCCWidgetSkeleton } from '@nexus/guards/admin/mcc';
+import { MCCWidgetSkeleton } from '../MCCWidgetSkeleton';
 
 const DeviceManager = dynamic(
   () => import('@nexus/guards/admin/mcc/DeviceManager').then(mod => mod.DeviceManager),
