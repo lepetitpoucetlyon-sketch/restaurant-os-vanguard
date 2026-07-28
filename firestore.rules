@@ -23,6 +23,12 @@ service cloud.firestore {
              (request.auth.token.role == 'manager' || request.auth.token.role == 'admin');
     }
 
+    function isTenantOwner(tenantId) {
+      return isSignedIn() &&
+             getTenantId() == tenantId &&
+             request.auth.token.role == 'admin';
+    }
+
     function isTenantStaff(tenantId) {
       return isSignedIn() && getTenantId() == tenantId;
     }
@@ -52,6 +58,15 @@ service cloud.firestore {
       return c in ['orders', 'tables', 'kds_tickets', 'pos_sessions', 'nonConformities'];
     }
 
+    // Collections dont l'écriture est réservée à l'owner (admin) ou au MCC.
+    // DOIT rester aligné avec ROLE_PERMISSIONS_PATH dans /api/admin/users/assign-role.
+    // La règle spécifique /systemConfig/{docId} ci-dessous filtre owner/MCC,
+    // mais Firestore évalue les blocs en OR — ce garde évite que le bloc générique
+    // ne ré-ouvre l'accès aux managers.
+    function isOwnerOnlyCollection(c) {
+      return c in ['systemConfig'];
+    }
+
     // --- 🏛️ TENANT ISOLATION CORE ---
     // Toute donnée métier vit sous tenants/{tenantId}/... Le claim tenantId
     // du JWT est la SEULE source de vérité d'appartenance.
@@ -62,6 +77,13 @@ service cloud.firestore {
       match /tenantConfig/{docId} {
         allow read: if isTenantStaff(tenantId) || isFleetAdmin();
         allow write: if isTenantManager(tenantId) || isFleetAdmin();
+      }
+
+      // Configuration Système (Rôles, Permissions, Sécurité)
+      match /systemConfig/{docId} {
+        allow read: if isTenantStaff(tenantId) || isFleetAdmin();
+        // Seul l'owner (admin) ou MCC peut créer/éditer les rôles (Bloque les managers)
+        allow write: if isTenantOwner(tenantId) || isFleetAdmin();
       }
 
       // 🔢 Métadonnées fiscales (compteur séquentiel + tête de chaîne de hash).
@@ -84,21 +106,24 @@ service cloud.firestore {
       match /{collection}/{document=**} {
         allow read: if isTenantStaff(tenantId) || isFleetAdmin();
 
-        // CREATE : autorisé pour le staff/MCC, y compris sur les collections
-        // immuables (write-once). Sans ça, la caisse ne peut pas sceller ses ventes.
-        allow create: if isTenantStaff(tenantId) || isFleetAdmin();
+        // CREATE : autorisé pour le staff/MCC, sauf les collections owner-only
+        // (systemConfig) que seul l'admin/MCC peut créer via le bloc spécifique.
+        allow create: if !isOwnerOnlyCollection(collection) &&
+                         (isTenantStaff(tenantId) || isFleetAdmin());
 
-        // UPDATE : jamais sur une collection immuable (NF525). Sinon staff sur
-        // collections opérationnelles chaudes, manager/MCC sur le reste.
+        // UPDATE : jamais sur une collection immuable (NF525) ni owner-only.
+        // Sinon staff sur collections opérationnelles chaudes, manager/MCC sur le reste.
         allow update: if !isImmutableCollection(collection) &&
+                         !isOwnerOnlyCollection(collection) &&
                          (
                            isTenantManager(tenantId) ||
                            isFleetAdmin() ||
                            (isTenantStaff(tenantId) && isOperationalCollection(collection))
                          );
 
-        // DELETE : jamais sur une collection immuable ; réservé manager/MCC.
+        // DELETE : jamais sur une collection immuable ni owner-only ; réservé manager/MCC.
         allow delete: if !isImmutableCollection(collection) &&
+                         !isOwnerOnlyCollection(collection) &&
                          (isTenantManager(tenantId) || isFleetAdmin());
       }
     }
