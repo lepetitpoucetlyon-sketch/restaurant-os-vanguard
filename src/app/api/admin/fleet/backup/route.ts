@@ -9,6 +9,11 @@ import { getBackupProvider } from '@/infrastructure/services/backup/BackupProvid
 import type { BackupManifest } from '@/infrastructure/services/backup/BackupProvider';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const BackupBodySchema = z.object({
+  tenantIds: z.array(z.string()).optional()
+});
 
 /**
  * GET  /api/admin/fleet/backup          — Liste les sauvegardes disponibles
@@ -67,8 +72,12 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Backup complet ────────────────────────────────────────────────────────
-    let body: { tenantIds?: string[] } = {};
-    try { body = await request.json(); } catch { body = {}; }
+    let body: z.infer<typeof BackupBodySchema> = {};
+    try { 
+        body = BackupBodySchema.parse(await request.json()); 
+    } catch { 
+        body = {}; 
+    }
 
     const provider = getBackupProvider();
     const now = new Date().toISOString();

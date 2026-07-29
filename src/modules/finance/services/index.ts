@@ -1,5 +1,5 @@
 export * from './AccountingReportService';
-export * from './BillingService';
+// BillingService est server-only (Stripe) — import direct depuis le chemin complet en contexte serveur uniquement
 export * from './FinanceCore';
 export * from './FiscalEngine';
 export * from './FiscalHACCPMapper';

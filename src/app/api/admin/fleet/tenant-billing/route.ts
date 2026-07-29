@@ -22,6 +22,7 @@ interface TenantConfig {
     nextBillingDate?: string;
     stripeCustomerId?: string;
   };
+  plugins?: Record<string, { active?: boolean }>;
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -69,6 +70,18 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     }
   }
 
+  const activePlugins = Object.entries(config?.plugins || {})
+    .filter(([_, data]) => data.active)
+    .map(([id]) => id);
+
+  const catalogDoc = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, { basePrice: number }> } | null;
+  const dynamicCatalog = catalogDoc?.items || {};
+
+  const monthlyExtraCost = activePlugins.reduce((acc, id) => {
+    const price = dynamicCatalog[id]?.basePrice || 0;
+    return acc + price;
+  }, 0);
+
   return NextResponse.json({
     tenantId,
     name:             config?.name ?? tenantId,
@@ -76,5 +89,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     status:           realStatus,
     nextBillingDate:  realNextDate,
     stripeCustomerId: config?.billing?.stripeCustomerId ?? null,
+    activePlugins,
+    monthlyExtraCost
   });
 }

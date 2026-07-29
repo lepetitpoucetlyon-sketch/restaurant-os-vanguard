@@ -24,15 +24,18 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/shared/nexus/engines/mcc/ChangelogService';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 
-interface UpgradeBody {
-  version:      string;
-  targetState?: 'stable' | 'beta' | 'bleeding-edge';
-  otaUrl?:      string;
-  targetIds?:   string[];
-  notes?:       string;
-  breaking?:    boolean;
-}
+const UpgradeSchema = z.object({
+  version:      z.string().min(1),
+  targetState:  z.enum(['stable', 'beta', 'bleeding-edge']).optional(),
+  otaUrl:       z.string().optional(),
+  targetIds:    z.array(z.string()).optional(),
+  notes:        z.string().optional(),
+  breaking:     z.boolean().optional(),
+});
+
+type UpgradeBody = z.infer<typeof UpgradeSchema>;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
@@ -40,13 +43,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   let body: UpgradeBody;
   try {
-    body = await req.json() as UpgradeBody;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = UpgradeSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { version, targetState = 'stable', otaUrl, notes = '', breaking = false } = body;
-  if (!version) return NextResponse.json({ error: 'version requis' }, { status: 400 });
 
   let targetIds: string[];
   if (body.targetIds?.length) {

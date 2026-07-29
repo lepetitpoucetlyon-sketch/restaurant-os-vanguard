@@ -20,6 +20,22 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const SupportGatePostSchema = z.object({
+  action: z.string().min(1),
+  targetTenantId: z.string().min(1),
+  payload: z.unknown().optional(),
+  requestedBy: z.string().min(1),
+  reason: z.string().min(1)
+});
+
+const SupportGatePatchSchema = z.object({
+  gateId: z.string().min(1),
+  decision: z.enum(['approved', 'rejected']),
+  reviewedBy: z.string().min(1),
+  comment: z.string().optional()
+});
 
 type GateStatus = 'pending_human_approval' | 'approved' | 'rejected' | 'executed';
 
@@ -27,17 +43,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { action: string; targetTenantId: string; payload: unknown; requestedBy: string; reason: string };
+  let body: z.infer<typeof SupportGatePostSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = SupportGatePostSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { action, targetTenantId, payload, requestedBy, reason } = body;
-  if (!action || !targetTenantId || !requestedBy || !reason) {
-    return NextResponse.json({ error: 'action, targetTenantId, requestedBy, reason requis' }, { status: 400 });
-  }
 
   const gateId = crypto.randomUUID();
   const gate = {
@@ -72,17 +85,14 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { gateId: string; decision: 'approved' | 'rejected'; reviewedBy: string; comment?: string };
+  let body: z.infer<typeof SupportGatePatchSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = SupportGatePatchSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { gateId, decision, reviewedBy, comment } = body;
-  if (!gateId || !decision || !reviewedBy) {
-    return NextResponse.json({ error: 'gateId, decision, reviewedBy requis' }, { status: 400 });
-  }
 
   const gate = await Nexus.adapter.get(`mcc/supportGates/${gateId}`) as { status: GateStatus; action: string; targetTenantId: string } | null;
   if (!gate) return NextResponse.json({ error: 'Gate non trouvé' }, { status: 404 });

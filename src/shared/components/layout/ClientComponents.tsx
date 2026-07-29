@@ -24,7 +24,7 @@ const TutorialBubble = dynamic(
 export function ClientComponents({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    if (pathname === '/welcome') {
+    if (pathname === '/welcome' || pathname.startsWith('/admin')) {
         return <>{children}</>;
     }
 

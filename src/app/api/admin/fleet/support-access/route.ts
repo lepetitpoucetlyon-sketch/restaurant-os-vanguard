@@ -47,13 +47,17 @@ async function notifyTenantAccess(tenantId: string, operatorId: string, action: 
   }
 }
 
+import { z } from 'zod';
+
 const DEFAULT_DURATION_HOURS = 4;
 
-interface SupportAccessRequest {
-    action: 'request' | 'revoke' | 'status';
-    tenantId: string;
-    durationHours?: number;
-}
+const SupportAccessBodySchema = z.object({
+  action: z.enum(['request', 'revoke', 'status']),
+  tenantId: z.string().min(1),
+  durationHours: z.number().int().positive().optional()
+});
+
+type SupportAccessRequest = z.infer<typeof SupportAccessBodySchema>;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     // Support access : niveau support minimum (revoke aussi — il faut mcc_support au minimum)
@@ -62,9 +66,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     let body: SupportAccessRequest;
     try {
-        body = await req.json() as SupportAccessRequest;
-    } catch {
-        return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+        body = SupportAccessBodySchema.parse(await req.json());
+    } catch (err) {
+        return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
     }
 
     const { action, tenantId, durationHours = DEFAULT_DURATION_HOURS } = body;

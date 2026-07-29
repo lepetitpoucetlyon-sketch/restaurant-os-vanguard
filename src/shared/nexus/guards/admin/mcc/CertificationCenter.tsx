@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu } from 'lucide-react';
 import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { logger } from '@/lib/logger';
-import { auth } from '@/lib/firebase';
+import { useAuth } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SiteIntegrityReport, GlobalComplianceCertificate } from '@modules/intelligence/fleet/FleetComplianceService';
 
@@ -28,6 +28,7 @@ interface DigitalCertificate {
 
 export function CertificationCenter() {
   const { instances, complianceService } = useNexusFleet();
+  const { currentUser } = useAuth();
   
   const [activeTab, setActiveTab] = useState<'generate' | 'history'>('generate');
   const [selectedInstanceId, setSelectedInstanceId] = useState<string>('');
@@ -83,7 +84,7 @@ export function CertificationCenter() {
     setIsGenerating(true);
     try {
         // 🔒 GLOBAL SEAL: Signing the fleet manifest
-        const operatorId = auth.currentUser?.email ?? auth.currentUser?.uid ?? 'FLEET_CMDR';
+        const operatorId = currentUser?.email ?? currentUser?.id ?? 'FLEET_CMDR';
         const cert = await complianceService.issueGlobalCertificate(operatorId) as GlobalComplianceCertificate;
         
         const digitalCert: DigitalCertificate = {
@@ -118,8 +119,8 @@ export function CertificationCenter() {
             <Award className="w-6 h-6 text-status-warning" />
           </div>
           <div>
-            <h2 className="text-xl font-bold uppercase tracking-tight text-text-primary">Certification Center</h2>
-            <p className="text-secondary text-xs font-medium">Manufacturer Self-Certification (NF525)</p>
+            <h2 className="text-xl font-bold uppercase tracking-tight text-text-primary">Centre de Certification</h2>
+            <p className="text-secondary text-xs font-medium">Auto-Certification Éditeur (NF525)</p>
           </div>
         </div>
 
@@ -128,13 +129,13 @@ export function CertificationCenter() {
                 onClick={() => setActiveTab('generate')}
                 className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'generate' ? 'bg-surface-card text-text-primary shadow-lg border border-border-subtle' : 'text-secondary hover:text-muted'}`}
             >
-                Generate
+                Générer
             </button>
             <button 
                 onClick={() => setActiveTab('history')}
                 className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-surface-card text-text-primary shadow-lg border border-border-subtle' : 'text-secondary hover:text-muted'}`}
             >
-                Archive {certificates.length > 0 && `(${certificates.length})`}
+                Archives {certificates.length > 0 && `(${certificates.length})`}
             </button>
         </div>
       </div>
@@ -156,7 +157,7 @@ export function CertificationCenter() {
                     >
                         <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }} className="space-y-8">
                             <div>
-                                <label className="block text-[10px] font-black text-secondary uppercase mb-3 ml-1 tracking-[0.3em]">Node Instance Selection</label>
+                                <label className="block text-[10px] font-black text-secondary uppercase mb-3 ml-1 tracking-[0.3em]">Sélection de l'Instance (Nœud)</label>
                                 <div className="relative group">
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-action-primary/20 to-action-primary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
                                     <select 
@@ -195,8 +196,8 @@ export function CertificationCenter() {
                                             auditStatus === 'valid' ? 'text-status-success' : 
                                             auditStatus === 'invalid' ? 'text-status-danger' : 
                                             'text-brand'
-                                        }`}>Cryptographic Ledger Scan</h4>
-                                        <p className="text-[10px] text-secondary font-medium">Authenticating block chain integrity (NF525 Protocol).</p>
+                                        }`}>Analyse Cryptographique du Registre</h4>
+                                        <p className="text-[10px] text-secondary font-medium">Authentification de l'intégrité de la chaîne de blocs (Protocole NF525).</p>
                                     </div>
                                     <AnimatePresence mode="wait">
                                         {auditStatus === 'valid' ? (
@@ -217,7 +218,7 @@ export function CertificationCenter() {
                                         disabled={!selectedInstanceId}
                                         className="relative group overflow-hidden text-[10px] font-bold text-text-primary uppercase tracking-widest bg-surface-card hover:bg-surface-card px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
                                     >
-                                        <span className="relative z-10">Run Global Audit</span>
+                                        <span className="relative z-10">Lancer l'Audit Global</span>
                                         <div className="absolute inset-0 bg-gradient-to-r from-action-primary/0 via-white/5 to-action-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                                     </button>
                                 )}
@@ -242,7 +243,7 @@ export function CertificationCenter() {
                                                 />
                                             </div>
                                             <div className="flex items-center gap-3 text-[10px] text-brand font-black uppercase tracking-[0.3em] animate-pulse">
-                                                Tracing Seals...
+                                                Traçage des Sceaux...
                                             </div>
                                         </div>
                                         <div className="h-0.5 w-full bg-surface-card rounded-full overflow-hidden">
@@ -260,16 +261,16 @@ export function CertificationCenter() {
                                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                                         <div className="flex items-center gap-2 text-[10px] text-status-success font-black uppercase tracking-[0.2em]">
                                             <CheckCircle className="w-4 h-4" />
-                                            Consensus Reached: 100% Integrity
+                                            Consensus Atteint : Intégrité 100%
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             <div className="bg-surface-card p-3 rounded-xl border border-border-subtle">
-                                                <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Seals Verified</p>
+                                                <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Sceaux Vérifiés</p>
                                                 <p className="text-sm font-black text-text-primary">{auditReport?.totalSeals || 0}</p>
                                             </div>
                                             <div className="bg-surface-card p-3 rounded-xl border border-border-subtle">
-                                                <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Chain Continuity</p>
-                                                <p className="text-sm font-black text-text-primary">SECURED</p>
+                                                <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Continuité de la Chaîne</p>
+                                                <p className="text-sm font-black text-text-primary">SÉCURISÉ</p>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -277,8 +278,8 @@ export function CertificationCenter() {
 
                                 {auditStatus === 'invalid' && (
                                     <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="p-4 bg-status-danger/10 border border-red-500/20 rounded-xl">
-                                        <p className="text-[10px] text-status-danger font-black uppercase tracking-tight">Security Protocol Violation</p>
-                                        <p className="text-[8px] text-status-danger/70 mt-1 leading-relaxed">Cryptographic link broken. Verification failed.</p>
+                                        <p className="text-[10px] text-status-danger font-black uppercase tracking-tight">Violation du Protocole de Sécurité</p>
+                                        <p className="text-[8px] text-status-danger/70 mt-1 leading-relaxed">Lien cryptographique rompu. Échec de la vérification.</p>
                                     </motion.div>
                                 )}
                                 
@@ -309,17 +310,17 @@ export function CertificationCenter() {
                                     {isGenerating ? (
                                         <div className="flex items-center gap-3">
                                             <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                                            <span className="animate-pulse">Signing Ledger...</span>
+                                            <span className="animate-pulse">Signature du Registre...</span>
                                         </div>
                                     ) : (
                                         <>
                                             <Award className="w-5 h-5" />
-                                            Issue Digital Certificate
+                                            Émettre le Certificat Numérique
                                         </>
                                     )}
                                 </button>
                                 <p className="text-center text-[8px] text-secondary font-black uppercase tracking-[0.3em] opacity-50">
-                                    Legal Vault: Empire-Compliance-v16.2
+                                    Coffre Légal : Empire-Compliance-v16.2
                                 </p>
                             </motion.div>
                         </motion.div>
@@ -397,9 +398,9 @@ export function CertificationCenter() {
                                         <div className="absolute top-0 right-0 p-3 opacity-10 group-hover/item:opacity-30 transition-opacity">
                                             <ShieldCheck className="w-12 h-12" />
                                         </div>
-                                        <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Destination ID</p>
+                                        <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">ID de Destination</p>
                                         <p className="font-black text-xl text-primary uppercase tracking-tight">
-                                            {selectedInstance ? selectedInstance.name : 'AWAITING NODE'}
+                                            {selectedInstance ? selectedInstance.name : 'EN ATTENTE DE NŒUD'}
                                         </p>
                                         <p className="font-mono text-[11px] text-brand font-bold">
                                             {selectedInstance ? selectedInstance.id.toUpperCase() : 'EMP-XX-XXX-XXXX'}
@@ -412,11 +413,11 @@ export function CertificationCenter() {
                                     
                                     <div className="mt-auto flex justify-between items-end">
                                         <div className="space-y-2">
-                                            <p className="font-black text-[10px] text-muted uppercase tracking-[0.2em]">Validated on</p>
+                                            <p className="font-black text-[10px] text-muted uppercase tracking-[0.2em]">Validé le</p>
                                             <p className="font-black text-lg tracking-tighter">{new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase()}</p>
                                         </div>
                                         <div className="w-40 h-20 border-2 border-dashed border-default rounded-2xl flex items-center justify-center text-[9px] text-muted font-black uppercase text-center px-4 leading-tight rotate-3">
-                                            Fingerprint Signed<br/>NF525-V16-NEXUS
+                                            Empreinte Signée<br/>NF525-V16-NEXUS
                                         </div>
                                     </div>
                                 </div>

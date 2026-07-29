@@ -1,1 +1,1 @@
-export { SovereignLedger } from '@/modules/finance/services';
+export { SovereignLedger } from '@/modules/finance/services/SovereignLedger';

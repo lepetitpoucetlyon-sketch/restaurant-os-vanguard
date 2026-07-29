@@ -17,8 +17,14 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 
-type FleetCommandAction = 'RESTART' | 'MAINTENANCE' | 'SOFT_LOCK' | 'HARD_LOCK' | 'LOCK';
+const CommandSchema = z.object({
+    action: z.enum(['RESTART', 'MAINTENANCE', 'SOFT_LOCK', 'HARD_LOCK', 'LOCK']),
+    instanceId: z.string().min(1)
+});
+
+type FleetCommandAction = z.infer<typeof CommandSchema>['action'];
 
 const ACTION_STATUS_MAP: Record<FleetCommandAction, string> = {
     RESTART:     'ONLINE',
@@ -32,18 +38,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const caller = await requireMccLevel(req, 'fleet_admin');
     if (isDenied(caller)) return caller as NextResponse;
 
-    let body: { action: FleetCommandAction; instanceId: string };
+    let body: z.infer<typeof CommandSchema>;
     try {
-        body = await req.json() as { action: FleetCommandAction; instanceId: string };
-    } catch {
-        return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+        body = CommandSchema.parse(await req.json());
+    } catch (err) {
+        return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
     }
 
     const { action, instanceId } = body;
-
-    if (!action || !instanceId) {
-        return NextResponse.json({ error: 'action et instanceId sont requis' }, { status: 400 });
-    }
 
     const newStatus = ACTION_STATUS_MAP[action];
     if (!newStatus) {

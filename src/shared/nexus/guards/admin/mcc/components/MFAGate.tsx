@@ -15,7 +15,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
+import { useAuth } from '@/shared/hooks';
 import { ShieldAlert, ShieldCheck, Copy, Check, Loader2, AlertCircle } from 'lucide-react';
 import {
     isMFAEnrolled,
@@ -39,20 +39,17 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState<'url' | 'key' | null>(null);
 
-    // Determine the current user's role from Firebase custom claims
+    // Determine the current user's role from the DB-Agnostic Nexus Auth
+    const { currentUser } = useAuth();
     const [userRole, setUserRole] = useState<string | null>(null);
 
     useEffect(() => {
-        const user = getAuth().currentUser;
-        if (!user) {
+        if (!currentUser) {
             setStatus('enrolled'); // Auth guard upstream will block non-authed users
             return;
         }
-        user.getIdTokenResult(false).then(result => {
-            const claimedRole = typeof result.claims.role === 'string' ? result.claims.role : null;
-            setUserRole(claimedRole);
-        }).catch(() => setUserRole(null));
-    }, []);
+        setUserRole(currentUser.role || null);
+    }, [currentUser]);
 
     useEffect(() => {
         if (userRole === null) return;
@@ -68,9 +65,8 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
         setStatus('enrolling');
         setError(null);
         try {
-            const user = getAuth().currentUser;
-            if (!user?.email) throw new Error('Email introuvable sur le compte');
-            const sess = await startTOTPEnrollment(user.email);
+            const accountName = currentUser?.email || currentUser?.name || currentUser?.id || 'Admin';
+            const sess = await startTOTPEnrollment(accountName);
             setSession(sess);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erreur lors de la génération du secret TOTP');
@@ -131,12 +127,20 @@ export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
                 </p>
 
                 {status === 'needs_enrollment' && (
-                    <button
-                        onClick={handleStartEnrollment}
-                        className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 text-text-primary font-medium rounded-xl transition-colors"
-                    >
-                        Configurer l&apos;authentificateur
-                    </button>
+                    <div className="space-y-4">
+                        <button
+                            onClick={handleStartEnrollment}
+                            className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 text-text-primary font-medium rounded-xl transition-colors"
+                        >
+                            Configurer l&apos;authentificateur
+                        </button>
+                        {error && (
+                            <div className="flex items-center gap-2 text-status-danger text-sm bg-status-danger/10 p-3 rounded-lg border border-status-danger/20">
+                                <AlertCircle size={14} />
+                                <span>{error}</span>
+                            </div>
+                        )}
+                    </div>
                 )}
 
                 {status === 'enrolling' && session && (

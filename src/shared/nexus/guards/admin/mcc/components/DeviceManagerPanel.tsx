@@ -11,7 +11,7 @@ export function DeviceManagerPanel() {
   const [uid, setUid] = React.useState('');
   const [submitted, setSubmitted] = React.useState('');
   return (
-    <div className="bg-[#0f0f11] border border-white/5 rounded-3xl p-6 space-y-4">
+    <div className="bg-surface-card border border-border-subtle rounded-3xl p-6 space-y-4">
       <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Device Management</h3>
       <div className="flex gap-3">
         <input

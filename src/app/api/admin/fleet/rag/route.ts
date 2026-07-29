@@ -17,15 +17,16 @@ import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/m
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 
-type RagAction = 'health' | 'reindex' | 'push_version' | 'rollback_version' | 'stats';
+const RagSchema = z.object({
+  action: z.enum(['health', 'reindex', 'push_version', 'rollback_version', 'stats']),
+  instanceId: z.string().optional(),
+  version: z.string().optional(),
+  otaUrl: z.string().optional(),
+});
 
-interface RagRequest {
-  action: RagAction;
-  instanceId?: string;
-  version?: string;
-  otaUrl?: string;
-}
+type RagRequest = z.infer<typeof RagSchema>;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireFleetAdmin(req);
@@ -33,9 +34,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   let body: RagRequest;
   try {
-    body = await req.json() as RagRequest;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = RagSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { action, instanceId, version, otaUrl } = body;

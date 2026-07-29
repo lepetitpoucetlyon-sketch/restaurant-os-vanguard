@@ -19,6 +19,18 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/shared/nexus/engines/mcc/ChangelogService';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const TenantOverridePostSchema = z.object({
+  tenantIds: z.array(z.string()).min(1),
+  overrides: z.record(z.string(), z.unknown()),
+  description: z.string().optional()
+});
+
+const TenantOverrideDeleteSchema = z.object({
+  tenantId: z.string().min(1),
+  key: z.string().min(1)
+});
 
 function setNested(obj: Record<string, unknown>, dotPath: string, value: unknown): void {
   const parts = dotPath.split('.');
@@ -46,17 +58,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { tenantIds: string[]; overrides: Record<string, unknown>; description?: string };
+  let body: z.infer<typeof TenantOverridePostSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = TenantOverridePostSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { tenantIds, overrides, description = '' } = body;
-  if (!tenantIds?.length || !overrides || typeof overrides !== 'object') {
-    return NextResponse.json({ error: 'tenantIds[] et overrides{} requis' }, { status: 400 });
-  }
 
   const results: string[] = [];
 
@@ -110,17 +119,14 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { tenantId: string; key: string };
+  let body: z.infer<typeof TenantOverrideDeleteSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = TenantOverrideDeleteSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { tenantId, key } = body;
-  if (!tenantId || !key) {
-    return NextResponse.json({ error: 'tenantId et key requis' }, { status: 400 });
-  }
 
   const current = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as {
     overrides?: Record<string, unknown>;

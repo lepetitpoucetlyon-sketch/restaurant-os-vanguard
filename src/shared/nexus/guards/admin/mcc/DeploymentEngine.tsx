@@ -130,8 +130,8 @@ export function DeploymentEngine() {
                         <GitBranch className="w-5 h-5 text-brand" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Deployment Engine</h3>
-                        <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Source Control Extension</p>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Moteur de Déploiement</h3>
+                        <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Extension Contrôle Source</p>
                     </div>
                 </div>
                 <div className={cn(
@@ -140,7 +140,7 @@ export function DeploymentEngine() {
                         ? "bg-status-warning/10 text-status-warning border-action-primary/20 animate-pulse" 
                         : "bg-status-success/10 text-status-success border-emerald-500/20"
                 )}>
-                    {isLoading ? 'Scanning...' : (status && status.modifiedCount > 0 ? `${status.modifiedCount} Changes` : 'Synced')}
+                    {isLoading ? 'Analyse...' : (status && status.modifiedCount > 0 ? `${status.modifiedCount} Modifications` : 'Synchronisé')}
                 </div>
             </div>
 

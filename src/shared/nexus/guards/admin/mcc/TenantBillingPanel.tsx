@@ -11,6 +11,8 @@ interface BillingInfo {
   status:     string;
   nextBillingDate: string | null;
   stripeCustomerId: string | null;
+  activePlugins: string[];
+  monthlyExtraCost: number;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
@@ -87,6 +89,11 @@ export function TenantBillingPanel() {
                     <span className="flex items-center gap-1 text-secondary">
                       <Calendar className="w-3 h-3" />
                       {new Date(b.nextBillingDate).toLocaleDateString('fr-FR')}
+                    </span>
+                  )}
+                  {b.monthlyExtraCost > 0 && (
+                    <span className="px-2 py-0.5 bg-brand/10 text-brand rounded font-black text-[10px]">
+                      +{b.monthlyExtraCost.toFixed(2)}€/m (Plugins)
                     </span>
                   )}
                 </div>

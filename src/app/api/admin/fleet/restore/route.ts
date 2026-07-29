@@ -20,22 +20,27 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const RestoreBodySchema = z.object({
+  tenantId: z.string().min(1),
+  targetTimestamp: z.string().datetime(), // Vérifie le format ISO 8601
+  reason: z.string().min(1),
+  operatorId: z.string().min(1)
+});
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { tenantId: string; targetTimestamp: string; reason: string; operatorId: string };
+  let body: z.infer<typeof RestoreBodySchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = RestoreBodySchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { tenantId, targetTimestamp, reason, operatorId } = body;
-  if (!tenantId || !targetTimestamp || !reason || !operatorId) {
-    return NextResponse.json({ error: 'tenantId, targetTimestamp, reason, operatorId requis' }, { status: 400 });
-  }
 
   // Validation : la restauration ne peut pas dépasser J-30 (limite PITR Firestore)
   const targetDate = new Date(targetTimestamp);

@@ -22,26 +22,29 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+import { z } from 'zod';
+
+const OtaBroadcastSchema = z.object({
+  targetIds: z.array(z.string()).optional(),
+  maintenanceMode: z.boolean(),
+  message: z.string().optional(),
+  estimatedDurationMin: z.number().int().min(1).optional()
+});
+
+type OtaBroadcastBody = z.infer<typeof OtaBroadcastSchema>;
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: {
-    targetIds?: string[];
-    maintenanceMode: boolean;
-    message?: string;
-    estimatedDurationMin?: number;
-  };
+  let body: OtaBroadcastBody;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = OtaBroadcastSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { maintenanceMode, message, estimatedDurationMin } = body;
-  if (typeof maintenanceMode !== 'boolean') {
-    return NextResponse.json({ error: 'maintenanceMode (boolean) requis' }, { status: 400 });
-  }
 
   let targetIds: string[];
 

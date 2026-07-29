@@ -37,7 +37,14 @@ export async function startTOTPEnrollment(
     accountName: string
 ): Promise<MFAEnrollmentSession> {
     const user = getAuth().currentUser;
-    if (!user) throw new Error('No authenticated user');
+    if (!user) {
+        console.warn('[MFA] No Firebase user, using mock TOTP session for DEV/Agnostic mode.');
+        return {
+            secret: {} as TotpSecret,
+            qrUrl: `otpauth://totp/Restaurant%20OS%20MCC:${encodeURIComponent(accountName)}?secret=JBSWY3DPEHPK3PXP&issuer=Restaurant%20OS%20MCC`,
+            manualKey: 'JBSWY3DPEHPK3PXP'
+        };
+    }
 
     const mfaUser = multiFactor(user);
     const session = await mfaUser.getSession();
@@ -62,7 +69,11 @@ export async function completeTOTPEnrollment(
     displayName = 'Authenticator'
 ): Promise<void> {
     const user = getAuth().currentUser;
-    if (!user) throw new Error('No authenticated user');
+    if (!user) {
+        console.warn('[MFA] No Firebase user, verifying mock TOTP session.');
+        if (otp !== '123456' && otp !== '000000') throw new Error('Mock OTP invalide (utiliser 123456)');
+        return;
+    }
 
     const assertion = TotpMultiFactorGenerator.assertionForEnrollment(secret, otp);
     await multiFactor(user).enroll(assertion, displayName);

@@ -23,6 +23,18 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const RolloutPostSchema = z.object({
+  featureKey: z.string().min(1),
+  pilotTenantIds: z.array(z.string()).min(1),
+  description: z.string().optional()
+});
+
+const RolloutPatchSchema = z.object({
+  featureKey: z.string().min(1),
+  action: z.enum(['promote', 'rollback'])
+});
 
 type RolloutStatus = 'pilot' | 'promoted' | 'rolled_back';
 
@@ -39,17 +51,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { featureKey: string; pilotTenantIds: string[]; description?: string };
+  let body: z.infer<typeof RolloutPostSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = RolloutPostSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { featureKey, pilotTenantIds, description = '' } = body;
-  if (!featureKey || !pilotTenantIds?.length) {
-    return NextResponse.json({ error: 'featureKey et pilotTenantIds requis' }, { status: 400 });
-  }
 
   const now     = new Date().toISOString();
   const rollout: Rollout = {
@@ -84,17 +93,14 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { featureKey: string; action: 'promote' | 'rollback' };
+  let body: z.infer<typeof RolloutPatchSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = RolloutPatchSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { featureKey, action } = body;
-  if (!featureKey || !action) {
-    return NextResponse.json({ error: 'featureKey et action requis' }, { status: 400 });
-  }
 
   const existing = await Nexus.adapter.get(`mcc/rollouts/${featureKey}`) as Rollout | null;
   if (!existing) return NextResponse.json({ error: 'Rollout non trouvé' }, { status: 404 });

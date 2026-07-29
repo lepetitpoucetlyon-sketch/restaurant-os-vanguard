@@ -19,6 +19,13 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const RgpdPurgeSchema = z.object({
+  tenantId: z.string().min(1),
+  requestedBy: z.string().min(1),
+  reason: z.string().min(1),
+});
 
 const PURGEABLE_COLLECTIONS = [
   'users',
@@ -40,17 +47,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  let body: { tenantId: string; requestedBy: string; reason: string };
+  let body: z.infer<typeof RgpdPurgeSchema>;
   try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    body = RgpdPurgeSchema.parse(await req.json());
+  } catch (err) {
+    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
   }
 
   const { tenantId, requestedBy, reason } = body;
-  if (!tenantId || !requestedBy || !reason) {
-    return NextResponse.json({ error: 'tenantId, requestedBy, reason requis' }, { status: 400 });
-  }
 
   const erasedAt     = new Date().toISOString();
   const certificateId = crypto.randomUUID();
