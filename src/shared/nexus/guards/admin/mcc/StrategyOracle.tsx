@@ -19,9 +19,10 @@ import { FleetInsight } from '@modules/intelligence/services/MacroBrain';
 export function StrategyOracle() {
     const { instances } = useFleet();
     const { insights, getExecutiveBriefing, executeAction, messages, isProcessing } = useStrategicOracle();
+    // Gain projeté = 0 tant qu'aucune vente réelle n'a été encaissée
     const projectedGain = useMemo(() => {
-        const base = instances.reduce((sum, inst) => sum + Number(inst.metrics?.dailyRevenue ?? 0) * 30, 0);
-        return Math.round(base * 0.05);
+        const monthlyRevenue = instances.reduce((sum, inst) => sum + Number(inst.metrics?.dailyRevenue ?? 0) * 30, 0);
+        return monthlyRevenue > 0 ? Math.round(monthlyRevenue * 0.05) : 0;
     }, [instances]);
 
     return (

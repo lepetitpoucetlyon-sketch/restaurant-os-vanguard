@@ -8,6 +8,8 @@ import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/modules/intelligence';
 import type { ChangeCategory, ChangelogEntry } from '@/shared/nexus/engines/mcc/ChangelogService';
 
+const CHANGELOG_PAGE_SIZE = 80;
+
 const CATEGORY_META: Record<ChangeCategory, { label: string; color: string }> = {
   UI_OVERRIDE:  { label: 'UI',          color: 'text-violet-400 bg-violet-500/10 border-violet-500/30' },
   FEATURE_FLAG: { label: 'Feature',     color: 'text-blue-400 bg-status-info/10 border-blue-500/30'     },
@@ -45,7 +47,7 @@ export function TenantChangelogPanel() {
   const load = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams({ limit: '80' });
+      const params = new URLSearchParams({ limit: String(CHANGELOG_PAGE_SIZE) });
       if (selectedId === '__FLEET__') {
         params.set('scope', 'fleet');
       } else {

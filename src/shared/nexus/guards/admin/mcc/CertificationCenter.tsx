@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 import { useAuth } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SiteIntegrityReport, GlobalComplianceCertificate } from '@modules/intelligence/fleet/FleetComplianceService';
+import { whiteLabelInstanceConfig } from '@/config/instance';
 
 interface AuditReport {
   isValid: boolean;
@@ -331,7 +332,7 @@ export function CertificationCenter() {
                                     )}
                                 </button>
                                 <p className="text-center text-[8px] text-secondary font-black uppercase tracking-[0.3em] opacity-50">
-                                    Coffre Légal : Empire-Compliance-v16.2
+                                    NF525 · Art. 286 I-3° bis CGI
                                 </p>
                             </motion.div>
                         </motion.div>
@@ -393,11 +394,11 @@ export function CertificationCenter() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-1">
                                             <p className="text-[8px] font-black text-muted uppercase tracking-widest">Constructeur</p>
-                                            <p className="font-bold text-primary uppercase tracking-tight">Restaurant OS Empire</p>
+                                            <p className="font-bold text-primary uppercase tracking-tight">{process.env.NEXT_PUBLIC_PUBLISHER_NAME ?? whiteLabelInstanceConfig.appName}</p>
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[8px] font-black text-muted uppercase tracking-widest">Logiciel</p>
-                                            <p className="font-bold text-primary uppercase tracking-tight">Nexus CORE v16</p>
+                                            <p className="font-bold text-primary uppercase tracking-tight">{whiteLabelInstanceConfig.appName} v{whiteLabelInstanceConfig.version}</p>
                                         </div>
                                     </div>
                                     
@@ -428,7 +429,7 @@ export function CertificationCenter() {
                                             <p className="font-black text-lg tracking-tighter">{new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase()}</p>
                                         </div>
                                         <div className="w-40 h-20 border-2 border-dashed border-default rounded-2xl flex items-center justify-center text-[9px] text-muted font-black uppercase text-center px-4 leading-tight rotate-3">
-                                            Empreinte Signée<br/>NF525-V16-NEXUS
+                                            Sceau NF525<br/>{selectedInstance?.id ? selectedInstance.id.toUpperCase().slice(0, 16) : 'EN ATTENTE'}
                                         </div>
                                     </div>
                                 </div>

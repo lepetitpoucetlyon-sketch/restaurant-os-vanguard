@@ -4,12 +4,27 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { PRICING } from '@/shared/constants/pricing';
 
+const STRIPE_API_VERSION = '2026-05-27.dahlia' as const;
+
+export interface FleetTreasuryReport {
+  /** MRR réel basé sur les abonnements Stripe actifs (€) */
+  mrr: number;
+  /** CA encaissé depuis le 1er du mois courant (€) */
+  collectedMtd: number;
+  /** Nombre d'abonnements actifs */
+  activeSubscriptions: number;
+  /** Nombre d'abonnements annulés sur les 30 derniers jours */
+  churnLast30Days: number;
+  /** Source : 'stripe' si clé présente, 'theoretical' sinon */
+  source: 'stripe' | 'theoretical';
+}
+
 export type PlanTier = keyof typeof PRICING;
 
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error('[BillingService] STRIPE_SECRET_KEY env var not set');
-  return new Stripe(key, { apiVersion: '2026-05-27.dahlia' });
+  return new Stripe(key, { apiVersion: STRIPE_API_VERSION });
 }
 
 export const BillingService = {
@@ -126,4 +141,93 @@ export const BillingService = {
     });
     return { url: session.url };
   },
+
+  /**
+   * Retourne le rapport financier réel de la flotte depuis Stripe.
+   *
+   * - MRR : somme des montants des abonnements actifs (recurring amount × qty)
+   * - CA encaissé MTD : invoices.paid depuis le 1er du mois courant
+   * - Churn : abonnements annulés sur les 30 derniers jours
+   *
+   * Si STRIPE_SECRET_KEY n'est pas défini, retourne un rapport `source: 'theoretical'`
+   * calculé à partir du pricing config × nb instances dans la DB.
+   */
+  async getFleetTreasuryReport(): Promise<FleetTreasuryReport> {
+    const key = process.env.STRIPE_SECRET_KEY;
+
+    if (!key) {
+      // Fallback théorique : compter les tenants actifs depuis Firestore
+      logger.warn('[BillingService] STRIPE_SECRET_KEY absent — rapport théorique');
+      return buildTheoreticalReport();
+    }
+
+    const stripe = new Stripe(key, { apiVersion: STRIPE_API_VERSION });
+
+    try {
+      // 1. MRR : abonnements actifs
+      let mrr = 0;
+      let activeSubscriptions = 0;
+      for await (const sub of stripe.subscriptions.list({ status: 'active', limit: 100 })) {
+        activeSubscriptions++;
+        for (const item of sub.items.data) {
+          const price = item.price;
+          if (price.recurring && price.unit_amount) {
+            // Normaliser en mensuel (peut être annual)
+            const monthly = price.recurring.interval === 'year'
+              ? price.unit_amount / 12
+              : price.unit_amount;
+            mrr += (monthly * (item.quantity ?? 1)) / 100; // cents → €
+          }
+        }
+      }
+
+      // 2. CA encaissé depuis le 1er du mois courant
+      const now = new Date();
+      const startOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth(), 1).getTime() / 1000);
+      let collectedMtd = 0;
+      for await (const inv of stripe.invoices.list({
+        status: 'paid',
+        created: { gte: startOfMonth },
+        limit: 100,
+      })) {
+        collectedMtd += inv.amount_paid / 100;
+      }
+
+      // 3. Churn sur 30 jours
+      const thirtyDaysAgo = Math.floor((Date.now() - 30 * 86400_000) / 1000);
+      let churnLast30Days = 0;
+      for await (const sub of stripe.subscriptions.list({
+        status: 'canceled',
+        created: { gte: thirtyDaysAgo },
+        limit: 100,
+      })) {
+        void sub; // on compte seulement
+        churnLast30Days++;
+      }
+
+      logger.info(`[BillingService] Treasury report — MRR=€${mrr.toFixed(0)} subs=${activeSubscriptions} MTD=€${collectedMtd.toFixed(0)} churn=${churnLast30Days}`);
+
+      return { mrr, collectedMtd, activeSubscriptions, churnLast30Days, source: 'stripe' };
+
+    } catch (err) {
+      logger.error('[BillingService] getFleetTreasuryReport Stripe error', err);
+      return buildTheoreticalReport();
+    }
+  },
 };
+
+async function buildTheoreticalReport(): Promise<FleetTreasuryReport> {
+  // Compter les tenants avec billing ACTIVE en Firestore comme approximation
+  try {
+    type TenantConfig = { billing?: { status?: string; plan?: string } };
+    const configs = await Nexus.adapter.query<TenantConfig>('tenantConfig');
+    const active = configs.filter(c => c.billing?.status === 'ACTIVE');
+    const mrr = active.reduce((sum, c) => {
+      const tier = (c.billing?.plan ?? 'STANDARD') as keyof typeof PRICING;
+      return sum + (PRICING[tier in PRICING ? tier : 'STANDARD']?.monthlyEur ?? 0);
+    }, 0);
+    return { mrr, collectedMtd: 0, activeSubscriptions: active.length, churnLast30Days: 0, source: 'theoretical' };
+  } catch {
+    return { mrr: 0, collectedMtd: 0, activeSubscriptions: 0, churnLast30Days: 0, source: 'theoretical' };
+  }
+}

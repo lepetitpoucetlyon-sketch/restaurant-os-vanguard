@@ -1,24 +1,49 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-    Wallet, 
-    TrendingUp, 
-    Cpu, 
-    Package, 
-    Sparkles, 
-    ShoppingBag
+import {
+    Wallet,
+    TrendingUp,
+    Cpu,
+    Package,
+    Sparkles,
+    ShoppingBag,
+    RefreshCw,
 } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
 import { TreasuryEngine } from '@modules/finance/services/TreasuryEngine';
+import { authedFetch } from '@/lib/client/authedFetch';
+import type { FleetTreasuryReport } from '@modules/finance/services/BillingService';
 
 export function MCCTreasury() {
     const { instances } = useFleet();
 
-    const report = useMemo(() => {
-        return TreasuryEngine.generateFleetReport(instances);
-    }, [instances]);
+    const theoreticalReport = useMemo(() => TreasuryEngine.generateFleetReport(instances), [instances]);
+
+    const [stripeReport, setStripeReport] = useState<FleetTreasuryReport | null>(null);
+    const [isLoadingStripe, setIsLoadingStripe] = useState(true);
+
+    useEffect(() => {
+        let cancelled = false;
+        setIsLoadingStripe(true);
+        authedFetch('/api/admin/fleet/billing/treasury-report')
+            .then(r => r.ok ? r.json() as Promise<FleetTreasuryReport> : Promise.reject(r.status))
+            .then(data => { if (!cancelled) setStripeReport(data); })
+            .catch(() => { /* fallback théorique */ })
+            .finally(() => { if (!cancelled) setIsLoadingStripe(false); });
+        return () => { cancelled = true; };
+    }, []);
+
+    // Tout ce qui est monétaire vient UNIQUEMENT de Stripe.
+    // Si pas de clé Stripe → on affiche 0, jamais une estimation.
+    const hasStripe = stripeReport?.source === 'stripe';
+    const mrr = hasStripe ? (stripeReport?.mrr ?? 0) : 0;
+    const collectedMtd = hasStripe ? (stripeReport?.collectedMtd ?? 0) : 0;
+    const netMargin = hasStripe ? mrr - (theoreticalReport.totalAICosts) : 0;
+    const churn = hasStripe ? (stripeReport?.churnLast30Days ?? 0) : 0;
+    const activeSubscriptions = hasStripe ? (stripeReport?.activeSubscriptions ?? 0) : 0;
+    const dataSource = stripeReport?.source ?? 'theoretical';
 
     const operationalHealth = useMemo(() => {
         if (!instances.length) return 0;
@@ -27,42 +52,63 @@ export function MCCTreasury() {
     }, [instances]);
 
     const PROCUREMENT_ROWS = useMemo(() => [
-        { category: 'Licences POS NF525', volume: instances.length, unit: 'sites', discount: 15, status: 'ACTIVE' as const },
-        { category: 'Papier thermique 80mm', volume: instances.length * 12, unit: 'rouleaux/mois', discount: 22, status: 'NEGOTIATED' as const },
-        { category: 'Maintenance terminaux', volume: instances.length, unit: 'contrats', discount: 10, status: 'COMPLETED' as const },
+        { category: 'Licences POS NF525', volume: instances.length, unit: 'sites', discount: 0, status: 'ACTIVE' as const },
+        { category: 'Papier thermique 80mm', volume: instances.length * 12, unit: 'rouleaux/mois', discount: 0, status: 'NEGOTIATED' as const },
+        { category: 'Maintenance terminaux', volume: instances.length, unit: 'contrats', discount: 0, status: 'COMPLETED' as const },
     ], [instances.length]);
 
     return (
         <div className="space-y-8 pb-12">
+            {/* Source badge */}
+            <div className="flex items-center gap-2">
+                {isLoadingStripe ? (
+                    <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-text-muted">
+                        <RefreshCw className="w-3 h-3 animate-spin" /> Chargement Stripe…
+                    </span>
+                ) : (
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded border ${dataSource === 'stripe' ? 'text-status-success border-emerald-500/30 bg-status-success/10' : 'text-text-muted border-border-subtle bg-surface-card'}`}>
+                        {dataSource === 'stripe' ? '● Données Stripe réelles' : '○ Estimation théorique — STRIPE_SECRET_KEY absent'}
+                    </span>
+                )}
+            </div>
+
             {/* Main Financial Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                
-                {/* Global MRR Card */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+                {/* MRR Stripe réel */}
                 <FinancialCard
-                    label="Empire Monthly Revenue (MRR)"
-                    value={`€${Math.round(report.totalMRR).toLocaleString()}`}
-                    trend="—"
+                    label="MRR Abonnements"
+                    value={isLoadingStripe ? '…' : `€${Math.round(mrr).toLocaleString()}`}
+                    trend={dataSource === 'stripe' ? `${activeSubscriptions} abonnement${activeSubscriptions > 1 ? 's' : ''} actif${activeSubscriptions > 1 ? 's' : ''}` : 'Estimation par tier'}
                     icon={<Wallet className="text-status-success" />}
                     chartColor="rgba(16, 185, 129, 0.2)"
+                />
+
+                {/* CA encaissé mois en cours */}
+                <FinancialCard
+                    label="CA encaissé (mois)"
+                    value={isLoadingStripe ? '…' : `€${Math.round(collectedMtd).toLocaleString()}`}
+                    trend={dataSource === 'stripe' ? 'Invoices Stripe payées MTD' : 'Non disponible sans Stripe'}
+                    icon={<TrendingUp className="text-status-success" />}
+                    chartColor="rgba(16, 185, 129, 0.15)"
                 />
 
                 {/* AI Consumption Cost */}
                 <FinancialCard
                     label="AI Infrastructure Overhead"
-                    value={`€${Math.round(report.totalAICosts).toLocaleString()}`}
+                    value={`€${Math.round(theoreticalReport.totalAICosts).toLocaleString()}`}
                     trend="0.002€ par token estimé"
                     icon={<Cpu className="text-brand" />}
                     chartColor="rgba(99, 102, 241, 0.2)"
                 />
 
-                {/* Collective Savings */}
+                {/* Churn */}
                 <FinancialCard
-                    label="Collective Bargaining Power"
-                    value={`€${Math.round(report.collectiveSavings).toLocaleString()}`}
-                    trend="—"
+                    label="Churn (30 jours)"
+                    value={isLoadingStripe ? '…' : `${churn}`}
+                    trend={dataSource === 'stripe' ? 'Résiliations Stripe' : 'Non disponible sans Stripe'}
                     icon={<Sparkles className="text-status-warning" />}
                     chartColor="rgba(245, 158, 11, 0.2)"
-                    isSpecial
                 />
             </div>
 
@@ -111,13 +157,13 @@ export function MCCTreasury() {
                     <div className="flex-1 bg-surface-card border border-border-subtle rounded-3xl p-8 relative overflow-hidden">
                         <h3 className="text-xs font-black text-secondary uppercase tracking-[0.3em] mb-6">Net Empire Margin</h3>
                         <div className="text-5xl font-black mb-4 tracking-tighter">
-                            €{Math.round(report.netMargin).toLocaleString()}
+                            {hasStripe ? `€${Math.round(netMargin).toLocaleString()}` : '—'}
                         </div>
                         <p className="text-[11px] text-secondary leading-relaxed font-medium">
-                            Après overhead infrastructure, économies procurement collectif et consommation IA.
-                            {report.totalMRR > 0 && (
-                                <> Marge courante : <span className="text-status-success font-bold">{((report.netMargin / report.totalMRR) * 100).toFixed(1)}%</span>.</>
-                            )}
+                            {hasStripe
+                                ? <>MRR encaissé − coûts IA. {mrr > 0 && <> Marge : <span className="text-status-success font-bold">{((netMargin / mrr) * 100).toFixed(1)}%</span>.</>}</>
+                                : 'Disponible dès le premier encaissement Stripe.'
+                            }
                         </p>
                         
                         <div className="mt-8 pt-8 border-t border-border-subtle space-y-4">
@@ -147,7 +193,7 @@ export function MCCTreasury() {
                             </div>
                         </div>
                         <div className="text-right">
-                            <div className="text-sm font-black text-text-primary">€{Math.round(report.collectiveSavings * 0.15).toLocaleString()}</div>
+                            <div className="text-sm font-black text-text-primary">€{Math.round(theoreticalReport.collectiveSavings * 0.15).toLocaleString()}</div>
                             <div className="text-[9px] text-secondary uppercase tracking-widest">économies logistique</div>
                         </div>
                     </div>

@@ -36,7 +36,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     const [updateInfo, setUpdateInfo] = useState<{ version: string; url: string } | null>(null);
     
     // --- INTELLIGENCE STATE (Grade X) ---
-    const [globalInflationRate, setGlobalInflationRate] = useState(2.4);
+    const [globalInflationRate, setGlobalInflationRate] = useState(0);
     const [scenarios, setScenarios] = useState<import('@nexus/contracts').SimulationScenario[]>([]);
 
     const financialInsight = useMemo(() => ({
@@ -51,15 +51,17 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         const priceChange = config.inputs?.priceChange ?? 1;
         const baseRevenue = globalMetrics?.fleetTotalRevenue ?? 0;
         const instanceCount = liveFleet.length;
+        // Confidence grows with fleet size (more data = more reliable), capped at 80%
+        // Revenue impact uses a conservative 8% elasticity; labor offset at 3%
         const newScenario = {
             id: crypto.randomUUID(),
             name: config.name,
             description: config.description,
-            confidenceScore: Math.min(0.97, 0.70 + instanceCount * 0.05),
+            confidenceScore: Math.min(0.80, 0.50 + instanceCount * 0.05),
             projections: {
-                revenueImpact: Math.round(baseRevenue * priceChange * 0.12),
-                laborCostImpact: Math.round(baseRevenue * -0.04),
-                netProfitChange: Math.round(baseRevenue * priceChange * 0.08)
+                revenueImpact: Math.round(baseRevenue * priceChange * 0.08),
+                laborCostImpact: Math.round(baseRevenue * -0.03),
+                netProfitChange: Math.round(baseRevenue * priceChange * 0.05)
             },
             inputs: config.inputs || {}
         };

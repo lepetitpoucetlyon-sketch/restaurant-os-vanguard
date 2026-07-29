@@ -3,8 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Zap, Cpu, ShieldCheck, Trash2 } from 'lucide-react';
+import { whiteLabelInstanceConfig } from '@/config/instance';
 import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
 import { useStore } from 'jotai';
+
+const MAX_JS_HEAP_MB = 512;
 
 // mcc-tel-6 — classes statiques (JIT purge les interpolations bg-${color}-500/10)
 const GAUGE_COLORS = {
@@ -58,7 +61,7 @@ export const PerformanceMonitor: React.FC = () => {
                     <div>
                         <h4 className="text-xs font-black uppercase tracking-[0.2em] text-muted">Nexus Heartbeat</h4>
                         <div className="flex items-center gap-2">
-                            <span className="text-lg font-bold">Diag. v5.0</span>
+                            <span className="text-lg font-bold">Diag. v{whiteLabelInstanceConfig.version}</span>
                             <span className="px-2 py-0.5 bg-status-success/10 text-status-success text-[10px] font-bold rounded-lg border border-emerald-500/20 uppercase">Zero-Lag Active</span>
                         </div>
                     </div>
@@ -83,7 +86,7 @@ export const PerformanceMonitor: React.FC = () => {
                 <MetricGauge
                     label="RAM Heap"
                     value={`${stats.memoryUsage}MB`}
-                    percentage={(stats.memoryUsage / 256) * 100}
+                    percentage={(stats.memoryUsage / MAX_JS_HEAP_MB) * 100}
                     icon={<Cpu className="w-4 h-4" />}
                     color="violet"
                 />

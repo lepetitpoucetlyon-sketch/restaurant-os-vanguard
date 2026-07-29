@@ -14,7 +14,22 @@ export interface TreasuryReport {
     };
 }
 
-const _AI_TOKEN_COST_MODEL = 0.00002; // € per generated token equivalent
+// ─── Financial model parameters ──────────────────────────────────────────────
+// These are rough estimates used for the theoretical P&L until real cost data
+// (cloud invoices, payroll exports) is connected. Update when real data is available.
+
+/** Estimated AI infrastructure cost per active user per month, in euros */
+const AI_COST_PER_USER_EUR = 3.0;
+
+/** Estimated operational infrastructure cost as a fraction of MRR */
+const INFRA_COST_RATIO = 0.40;
+
+/** Coalition discount: rate per 100 instances */
+const COALITION_DISCOUNT_PER_100 = 0.003;
+
+/** Coalition discount cap */
+const COALITION_DISCOUNT_CAP = 0.20;
+// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * 💰 TREASURY ENGINE (Empire Grade)
@@ -44,15 +59,14 @@ export class TreasuryEngine {
                 tierStats[validTier as keyof typeof tierStats]++;
             }
 
-            // AI Consumption Metering (Simulated from instance metrics)
+            // AI cost estimate from active user count
             const activeUsers = instance?.metrics?.activeUsers ?? 0;
-            totalAICosts += (activeUsers * 2.5); // Simplified usage model: 2.5€ per active user in AI overhead
+            totalAICosts += activeUsers * AI_COST_PER_USER_EUR;
         });
 
-        // Coalition Logic: The larger the fleet, the higher the collective bargaining power
-        // We simulate a 0.5% discount per 100 instances, capped at 25%
-        const discountRate = Math.min(0.25, (instances.length / 100) * 0.005);
-        const baselineProcurementCost = totalMRR * 0.45; // Infrastructure/Operations estimate
+        // Coalition discount grows with fleet size
+        const discountRate = Math.min(COALITION_DISCOUNT_CAP, (instances.length / 100) * COALITION_DISCOUNT_PER_100);
+        const baselineProcurementCost = totalMRR * INFRA_COST_RATIO;
         const collectiveSavings = baselineProcurementCost * discountRate;
 
         return {

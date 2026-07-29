@@ -44,7 +44,9 @@ export const MacroBrain = {
         const highHealth = instances.filter(i => i.metrics.lowStockAlerts === 0 && i.metrics.healthScore > 98);
 
         if (lowStock.length > 0 && highHealth.length > 0) {
-            const savings = 850; // Calculated based on wholesale delta
+            // Estimate: 5% of the revenue delta between the best and worst-stocked site
+            const revenueDelta = Math.max(0, highHealth[0].metrics.dailyRevenue - lowStock[0].metrics.dailyRevenue);
+            const savings = Math.round(revenueDelta * 0.05);
             insights.push({
                 id: 'insight_auto_rebalance',
                 type: 'opportunity',
@@ -53,7 +55,7 @@ export const MacroBrain = {
                 title: 'Strategic Stock Rebalancing',
                 description: `Surplus capacity at ${highHealth[0].name} can neutralize stock-out risk at ${lowStock[0].name}. Impact: Zero waste.`,
                 action: 'Authorize Rebalancing',
-                confidence: 88,
+                confidence: 75,
                 potentialRoI: savings,
                 affectedInstances: [lowStock[0].id, highHealth[0].id],
                 canAutoExecute: true
@@ -108,16 +110,21 @@ export const MacroBrain = {
      */
     getConsolidatedMetrics: (instances: EmpireInstance[]): ConsolidatedMetrics => {
         const count = instances.length || 1;
-        
+        const revenues = instances.map(i => i.metrics.dailyRevenue);
+        const meanRevenue = revenues.reduce((a, b) => a + b, 0) / count;
+        const revenueVariance = revenues.reduce((sum, r) => sum + Math.pow(r - meanRevenue, 2), 0) / count;
+        const volatilityIndex = meanRevenue > 0 ? Math.min(1, Math.sqrt(revenueVariance) / meanRevenue) : 0;
+
         return {
             totalRevenue: instances.reduce((acc, i) => acc + i.metrics.dailyRevenue, 0),
             activeUsers: instances.reduce((acc, i) => acc + i.metrics.activeUsers, 0),
             averageHealth: instances.reduce((acc, i) => acc + i.metrics.healthScore, 0) / count,
             totalAlerts: instances.reduce((acc, i) => acc + i.metrics.lowStockAlerts, 0),
-            totalLaborCost: 31.4,
-            averageFoodCost: 27.2,
-            collectiveArbitrageSavings: 14200,
-            volatilityIndex: Math.random() * 0.15 
+            // No external cost data available — displayed as 0 until Firestore integration
+            totalLaborCost: 0,
+            averageFoodCost: 0,
+            collectiveArbitrageSavings: 0,
+            volatilityIndex,
         };
     },
 
@@ -126,9 +133,17 @@ export const MacroBrain = {
      * Provides high-altitude data for the Global Dashboard.
      */
     getQuantumFleetSnapshot: (instances: EmpireInstance[]): QuantumMetrics => {
+        const count = instances.length || 1;
+        const healthScores = instances.map(i => i.metrics.healthScore);
+        const avgHealth = healthScores.reduce((a, b) => a + b, 0) / count;
+        const healthVariance = healthScores.reduce((sum, h) => sum + Math.pow(h - avgHealth, 2), 0) / count;
+        // Entropy = normalized health score stddev (0 = perfectly uniform fleet)
+        const fleetEntropy = Math.min(1, Math.sqrt(healthVariance) / 100);
+
         return {
-            globalROI: 24.8,
-            fleetEntropy: 0.05,
+            // No real cost/revenue accounting available yet → 0 until Stripe + payroll data
+            globalROI: 0,
+            fleetEntropy,
             arbitrageOpportunities: instances.filter(i => i.metrics.healthScore > 90).length,
             otaStagingCount: instances.filter(i => i.version !== '1.0.0').length
         };

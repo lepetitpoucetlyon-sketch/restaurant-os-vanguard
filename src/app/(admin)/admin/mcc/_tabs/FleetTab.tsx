@@ -7,6 +7,7 @@ import { useMCCLocale } from '../_i18n';
 import { useState } from 'react';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toast } from 'sonner';
+import { useFleet } from '@/shared/contexts/FleetContext';
 
 const FleetCommandTable    = dynamic(() => import('@nexus/guards/admin/mcc/FleetCommandTable').then(m => m.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
 const FleetDeviceInventory = dynamic(() => import('@nexus/guards/admin/mcc/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
@@ -21,6 +22,8 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
     const { t } = useMCCLocale();
     const f = t.fleet;
     const [seeding, setSeeding] = useState(false);
+    const { selectedInstanceId } = useFleet();
+    const activeInstance = instances.find(i => i.id === selectedInstanceId) ?? instances[0] ?? null;
 
     const activateDemo = async () => {
         setSeeding(true);
@@ -40,9 +43,9 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
         <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <StatCard label={f.totalInstances}   value={instances.length.toString()} icon={<LayoutGrid className="text-brand" />} trend={f.trendCapacity} />
-                <StatCard label={f.globalRevenue}    value={`€${((globalMetrics?.fleetTotalRevenue || 0) / 100).toLocaleString()}`} icon={<TrendingUp className="text-status-success" />} trend={f.trendRevenue} />
-                <StatCard label={f.fleetHealth}      value={`${Math.round(globalMetrics?.averageHealthScore || 100)}%`} icon={<Activity className="text-brand" />} trend={f.trendHealth} />
-                <StatCard label={f.globalCompliance} value={`${globalMetrics?.averageComplianceScore?.toFixed(1) || '100'}%`} icon={<ShieldCheck className="text-brand" />} trend={f.trendCompliance} />
+                <StatCard label={f.globalRevenue}    value={`€${(globalMetrics?.fleetTotalRevenue || 0).toLocaleString()}`} icon={<TrendingUp className="text-status-success" />} trend={f.trendRevenue} />
+                <StatCard label={f.fleetHealth}      value={globalMetrics ? `${Math.round(globalMetrics.averageHealthScore)}%` : '—'} icon={<Activity className="text-brand" />} trend={f.trendHealth} />
+                <StatCard label={f.globalCompliance} value={globalMetrics ? `${globalMetrics.averageComplianceScore?.toFixed(1) ?? '0'}%` : '—'} icon={<ShieldCheck className="text-brand" />} trend={f.trendCompliance} />
             </div>
 
             {instances.length === 0 && (
@@ -70,7 +73,7 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
                 </button>
             </div>
             <FleetCommandTable />
-            {instances.length > 0 && <TenantUsersPanel instance={instances[0]} />}
+            {activeInstance && <TenantUsersPanel instance={activeInstance} />}
             <FleetDeviceInventory instances={instances.map(i => ({ tenantId: i.id, name: i.name }))} />
         </div>
     );

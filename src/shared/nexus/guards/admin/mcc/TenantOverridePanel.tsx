@@ -7,6 +7,7 @@ import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/modules/intelligence/fleet';
 import type { TenantOverrides } from '@/domain/schemas/tenant';
+import { whiteLabelInstanceConfig } from '@/config/instance';
 
 const BUTTON_RADIUS_PRESETS = [
   { label: 'Carré',    value: '0px'     },
@@ -217,7 +218,7 @@ export function TenantOverridePanel() {
               <div className="flex items-center gap-3">
                 <input
                   type="color"
-                  value={form.ui?.primaryColor ?? '#6366f1'}
+                  value={form.ui?.primaryColor ?? whiteLabelInstanceConfig.primaryColor}
                   onChange={e => updateUI('primaryColor', e.target.value)}
                   className="w-10 h-8 rounded-lg border border-border-subtle bg-transparent cursor-pointer"
                 />

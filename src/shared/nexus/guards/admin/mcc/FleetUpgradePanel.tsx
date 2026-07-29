@@ -6,6 +6,7 @@ import { Rocket, AlertTriangle, CheckCircle2, AlertCircle, Globe, Target } from 
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/modules/intelligence/fleet';
+import { whiteLabelInstanceConfig } from '@/config/instance';
 
 type TargetState = 'stable' | 'beta' | 'bleeding-edge';
 
@@ -97,7 +98,7 @@ export function FleetUpgradePanel() {
           type="text"
           value={version}
           onChange={e => setVersion(e.target.value)}
-          placeholder="2.5.0"
+          placeholder={whiteLabelInstanceConfig.version}
           className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3 text-sm font-mono text-muted focus:outline-none focus:border-border-default"
         />
       </div>
@@ -140,7 +141,7 @@ export function FleetUpgradePanel() {
           type="text"
           value={otaUrl}
           onChange={e => setOtaUrl(e.target.value)}
-          placeholder="https://cdn.example.com/v2.5.0.zip"
+          placeholder={`https://cdn.${whiteLabelInstanceConfig.defaultDomain}/v${whiteLabelInstanceConfig.version}.zip`}
           className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3 text-xs font-mono text-muted focus:outline-none focus:border-border-default"
         />
       </div>

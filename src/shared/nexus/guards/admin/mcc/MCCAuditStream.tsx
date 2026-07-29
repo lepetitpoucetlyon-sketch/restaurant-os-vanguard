@@ -127,7 +127,7 @@ export function MCCAuditStream() {
                 />
                 <div className="flex items-center gap-2 relative z-10">
                     <div className="w-1.5 h-1.5 rounded-full bg-action-primary" />
-                    <span className="text-[8px] font-bold text-secondary uppercase tracking-widest">GTM-7X2A9</span>
+                    <span className="text-[8px] font-bold text-secondary uppercase tracking-widest">NexusAudit Stream</span>
                 </div>
                 <div className="w-px h-3 bg-surface-card ml-auto relative z-10" />
                 <span className="text-[8px] font-bold text-secondary uppercase tracking-widest relative z-10">Buffer Status: {logs.length}/50</span>

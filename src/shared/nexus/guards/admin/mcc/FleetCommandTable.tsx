@@ -1,4 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { whiteLabelInstanceConfig } from '@/config/instance';
+
+const INSTANCE_BASE_DOMAIN = process.env.NEXT_PUBLIC_INSTANCE_BASE_DOMAIN
+    ?? whiteLabelInstanceConfig.defaultDomain
+    ?? 'restaurant-os.app';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { authedFetch } from '@/lib/client/authedFetch';
@@ -287,7 +292,7 @@ export function FleetCommandTable() {
                                             <RotateCcw className={`w-3.5 h-3.5 ${reindexing[instance.id] ? 'animate-spin' : ''}`} />
                                         </button>
                                         <button
-                                            onClick={() => window.open(`https://${instance.key}.restaurant-os.app`, '_blank', 'noopener,noreferrer')}
+                                            onClick={() => window.open(`https://${instance.key}.${INSTANCE_BASE_DOMAIN}`, '_blank', 'noopener,noreferrer')}
                                             title="Ouvrir l'instance"
                                             className="p-2.5 rounded-xl bg-surface-card border border-subtle text-muted hover:text-text-primary hover:border-default transition-all opacity-0 group-hover:opacity-100"
                                         >

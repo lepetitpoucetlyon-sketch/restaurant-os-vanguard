@@ -5,6 +5,8 @@ import { FileText, ShieldCheck, AlertTriangle, Download, Search, ChevronDown, Lo
 import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 
+const JOURNAL_DISPLAY_LIMIT = 200;
+
 interface JournalEntry {
     id: string;
     date: string;
@@ -204,7 +206,7 @@ export function TaxAuditPanel() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
-                                    {result.journalEntries.slice(0, 200).map(je => (
+                                    {result.journalEntries.slice(0, JOURNAL_DISPLAY_LIMIT).map(je => (
                                         <tr key={je.id} className="hover:bg-surface-card transition-colors">
                                             <td className="px-4 py-2.5 font-mono">{je.date?.slice(0, 10)}</td>
                                             <td className="px-4 py-2.5 max-w-[200px] truncate">{je.label}</td>
@@ -217,9 +219,9 @@ export function TaxAuditPanel() {
                                     ))}
                                 </tbody>
                             </table>
-                            {result.journalEntries.length > 200 && (
+                            {result.journalEntries.length > JOURNAL_DISPLAY_LIMIT && (
                                 <p className="text-center text-[10px] text-text-muted py-3">
-                                    + {result.journalEntries.length - 200} lignes supplémentaires dans l'export JSON
+                                    + {result.journalEntries.length - JOURNAL_DISPLAY_LIMIT} lignes supplémentaires dans l'export JSON
                                 </p>
                             )}
                         </div>

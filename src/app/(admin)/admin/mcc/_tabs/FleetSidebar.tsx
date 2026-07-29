@@ -96,10 +96,10 @@ export function FleetSidebar({ health, switchboard, onToggleModule }: FleetSideb
                     <h3 className="text-sm font-bold uppercase tracking-widest text-brand">{sb.switchboard}</h3>
                 </div>
                 <div className="space-y-4">
-                    <SwitchboardItem label={sb.telemetrySentinel} active={switchboard.telemetryActive}       onToggle={() => onToggleModule('telemetryActive', 'Manual MCC override')} />
-                    <SwitchboardItem label={sb.samAutomations}    active={switchboard.samActive}             onToggle={() => onToggleModule('samActive', 'Manual MCC override')} />
-                    <SwitchboardItem label={sb.nexusSyncEngine}   active={switchboard.nexusSyncActive}       onToggle={() => onToggleModule('nexusSyncActive', 'Manual MCC override')} />
-                    <SwitchboardItem label={sb.clientInterface}   active={switchboard.clientInterfaceActive} onToggle={() => onToggleModule('clientInterfaceActive', 'Manual MCC override')} />
+                    <SwitchboardItem label={sb.telemetrySentinel} active={switchboard.telemetryActive}       onToggle={() => onToggleModule('telemetryActive', 'MCC: bascule télémétrie')} />
+                    <SwitchboardItem label={sb.samAutomations}    active={switchboard.samActive}             onToggle={() => onToggleModule('samActive', 'MCC: bascule SAM automations')} />
+                    <SwitchboardItem label={sb.nexusSyncEngine}   active={switchboard.nexusSyncActive}       onToggle={() => onToggleModule('nexusSyncActive', 'MCC: bascule synchronisation Nexus')} />
+                    <SwitchboardItem label={sb.clientInterface}   active={switchboard.clientInterfaceActive} onToggle={() => onToggleModule('clientInterfaceActive', 'MCC: bascule interface client')} />
                 </div>
             </div>
         </>

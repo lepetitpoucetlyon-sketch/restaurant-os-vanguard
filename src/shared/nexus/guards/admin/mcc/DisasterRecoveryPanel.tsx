@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import { ShieldAlert, DatabaseBackup, ActivitySquare, Loader2, RotateCcw } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
+import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
 
 export function DisasterRecoveryPanel() {
   const { instances } = useFleet();
+  const { currentUser } = useAuth();
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
 
   const toggleShadowMode = async (tenantId: string) => {
@@ -48,9 +50,9 @@ export function DisasterRecoveryPanel() {
 
   const triggerRestore = async (tenantId: string) => {
     // Dans la vraie vie on demanderait l'heure cible et la raison. Pour la démo :
-    const targetTimestamp = new Date(Date.now() - 3600 * 1000).toISOString(); // Il y a 1h
+    const targetTimestamp = new Date(Date.now() - 3600 * 1000).toISOString(); // 1h PITR window
     const reason = 'PRA Automatique (1-Click Restore)';
-    const operatorId = 'mcc_operator_1';
+    const operatorId = currentUser?.id ?? currentUser?.email ?? 'mcc_unknown';
 
     if (!confirm(`Restauration PITR pour ${tenantId} ? (Attention, annule les écritures depuis 1h)`)) {
       return;

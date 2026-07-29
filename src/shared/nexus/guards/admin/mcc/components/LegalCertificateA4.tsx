@@ -1,11 +1,15 @@
 import React from 'react';
+import { whiteLabelInstanceConfig } from '@/config/instance';
 
 interface LegalCertificateA4Props {
   instanceName: string;
   instanceId: string;
-  tenantName?: string; // Gérant du restaurant
+  tenantName?: string;      // Gérant du restaurant (volet 2)
   issuedAt: string;
-  softwareVersion?: string;
+  softwareVersion?: string; // Defaults to whiteLabelInstanceConfig.version
+  publisherName?: string;   // Raison sociale éditeur
+  publisherCity?: string;   // Ville de signature éditeur
+  publisherSiret?: string;  // SIRET éditeur
 }
 
 export function LegalCertificateA4({
@@ -13,7 +17,10 @@ export function LegalCertificateA4({
   instanceId,
   tenantName = "______________________",
   issuedAt,
-  softwareVersion = "Nexus CORE v16"
+  softwareVersion = `${whiteLabelInstanceConfig.appName} v${whiteLabelInstanceConfig.version}`,
+  publisherName = process.env.NEXT_PUBLIC_PUBLISHER_NAME ?? '',
+  publisherCity = process.env.NEXT_PUBLIC_PUBLISHER_CITY ?? '',
+  publisherSiret = process.env.NEXT_PUBLIC_PUBLISHER_SIRET ?? '',
 }: LegalCertificateA4Props) {
   const formattedDate = new Date(issuedAt).toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -34,10 +41,10 @@ export function LegalCertificateA4({
         <section className="border border-gray-400 p-6 relative">
           <div className="absolute -top-3 left-4 bg-white px-2 font-bold uppercase text-xs">Volet 1 - Rempli par l'éditeur du logiciel</div>
           <p className="mb-4 mt-2">
-            Je soussigné(e) <strong>Restaurant OS Empire (Société en cours d'immatriculation)</strong>, agissant en qualité de représentant légal de la société éditrice, certifie que le logiciel ou système de caisse désigné ci-après :
+            Je soussigné(e) <strong>{publisherName || '[NEXT_PUBLIC_PUBLISHER_NAME]'}</strong>, agissant en qualité de représentant légal de la société éditrice, certifie que le logiciel ou système de caisse désigné ci-après :
           </p>
           <ul className="list-disc ml-8 mb-4 font-bold">
-            <li>Nom du logiciel : Restaurant OS</li>
+            <li>Nom du logiciel : {whiteLabelInstanceConfig.appName}</li>
             <li>Version : {softwareVersion}</li>
           </ul>
           <p className="mb-4">
@@ -50,17 +57,18 @@ export function LegalCertificateA4({
           
           <div className="flex justify-between items-end mt-8">
              <div>
-                <p>Fait à : <strong>Lyon</strong></p>
+                <p>Fait à : <strong>{publisherCity || '[NEXT_PUBLIC_PUBLISHER_CITY]'}</strong></p>
                 <p>Le : <strong>{formattedDate}</strong></p>
              </div>
              <div className="text-center">
                 <p className="mb-2">Signature de l'éditeur et cachet :</p>
                 <div className="w-64 h-24 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center rotate-[-2deg] p-2">
                     <span className="font-bold text-gray-500 uppercase text-xs text-center leading-tight">
-                        Restaurant OS Empire<br/>
-                        <span className="text-[10px] lowercase italic">en cours de formation</span>
+                        {publisherName || whiteLabelInstanceConfig.appName}
                     </span>
-                    <span className="text-[9px] text-gray-400 mt-1">SIRET : [À COMPLÉTER]</span>
+                    <span className="text-[9px] text-gray-400 mt-1">
+                        {publisherSiret ? `SIRET : ${publisherSiret}` : 'SIRET : [NEXT_PUBLIC_PUBLISHER_SIRET]'}
+                    </span>
                 </div>
              </div>
           </div>
