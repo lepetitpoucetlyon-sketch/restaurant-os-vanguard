@@ -13,6 +13,8 @@ export interface IQueryOptions {
   orderBy?: { field: string; direction: 'asc' | 'desc' };
   limit?: number;
   where?: QueryFilter[];
+  startAfter?: any;
+  endBefore?: any;
 }
 
 export interface IBatchProcessor {

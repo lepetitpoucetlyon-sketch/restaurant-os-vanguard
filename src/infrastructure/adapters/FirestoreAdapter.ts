@@ -8,6 +8,8 @@ import {
     where,
     orderBy,
     limit,
+    startAfter,
+    endBefore,
     setDoc,
     addDoc,
     updateDoc,
@@ -60,6 +62,12 @@ export class FirestoreAdapter implements INexusAdapter {
             }
             if (options?.limit) {
                 constraints.push(limit(options.limit));
+            }
+            if (options?.startAfter) {
+                constraints.push(startAfter(options.startAfter));
+            }
+            if (options?.endBefore) {
+                constraints.push(endBefore(options.endBefore));
             }
 
             const q = query(collection(this.db, collectionPath), ...constraints);
