@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu } from 'lucide-react';
+import { Award, FileText, Download, CheckCircle, ShieldCheck, AlertTriangle, Search, Cpu, Printer } from 'lucide-react';
+import { LegalCertificateA4 } from './components/LegalCertificateA4';
 import { useNexusFleet } from '@/modules/intelligence/fleet';
 import { logger } from '@/lib/logger';
 import { useAuth } from '@/shared/hooks';
@@ -39,6 +40,16 @@ export function CertificationCenter() {
 
   // mcc-comp-1 — persisté dans Nexus (plus de perte au refresh)
   const [certificates, setCertificates] = useState<DigitalCertificate[]>([]);
+  const [printingCert, setPrintingCert] = useState<DigitalCertificate | null>(null);
+
+  useEffect(() => {
+    if (printingCert) {
+      setTimeout(() => {
+        window.print();
+        setPrintingCert(null);
+      }, 100);
+    }
+  }, [printingCert]);
 
   useEffect(() => {
     Nexus.adapter.query<DigitalCertificate>('mcc/certificates')
@@ -452,7 +463,10 @@ export function CertificationCenter() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <button onClick={() => handleDownloadCert(cert)} className="p-2 bg-surface-card rounded-lg text-muted hover:bg-surface-hover hover:text-brand transition-all" title="Télécharger le certificat">
+                                        <button onClick={() => setPrintingCert(cert)} className="p-2 bg-surface-card rounded-lg text-muted hover:bg-surface-hover hover:text-brand transition-all" title="Imprimer le certificat officiel (PDF)">
+                                            <Printer className="w-4 h-4" />
+                                        </button>
+                                        <button onClick={() => handleDownloadCert(cert)} className="p-2 bg-surface-card rounded-lg text-muted hover:bg-surface-hover hover:text-brand transition-all" title="Télécharger le certificat (JSON)">
                                             <Download className="w-4 h-4" />
                                         </button>
                                         <div className="w-8 h-8 rounded-full border border-emerald-500/20 bg-status-success/10 flex items-center justify-center text-status-success">
@@ -504,6 +518,15 @@ export function CertificationCenter() {
             </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Composant masqué affiché uniquement lors de l'impression */}
+      {printingCert && (
+          <LegalCertificateA4 
+              instanceId={printingCert.instanceId}
+              instanceName={printingCert.instanceName}
+              issuedAt={printingCert.issuedAt}
+          />
+      )}
       
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
