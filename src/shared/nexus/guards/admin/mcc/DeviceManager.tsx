@@ -48,14 +48,14 @@ export function DeviceManager({ uid }: { uid: string }) {
   };
 
   if (loading) {
-    return <div className="p-4 text-secondary text-xs font-bold uppercase tracking-widest">Loading Devices...</div>;
+    return <div className="p-4 text-secondary text-xs font-bold uppercase tracking-widest">Chargement des appareils...</div>;
   }
 
   return (
     <div className="bg-surface-card border border-border-subtle rounded-2xl p-6">
       <div className="flex items-center gap-3 mb-6">
         <Smartphone className="w-5 h-5 text-brand" />
-        <h3 className="text-lg font-bold text-text-primary uppercase tracking-tight">Certified Devices</h3>
+        <h3 className="text-lg font-bold text-text-primary uppercase tracking-tight">Appareils Certifiés</h3>
       </div>
       
       {devices.length === 0 ? (
@@ -82,9 +82,9 @@ export function DeviceManager({ uid }: { uid: string }) {
                   </p>
                   <div className="flex gap-2 mt-2 text-[9px] font-black uppercase tracking-wider">
                     {device.revoked ? (
-                      <span className="text-status-danger">Revoked on {new Date(device.revokedAt!).toLocaleDateString()}</span>
+                      <span className="text-status-danger">Révoqué le {new Date(device.revokedAt!).toLocaleDateString()}</span>
                     ) : (
-                      <span className="text-status-success">Certified on {new Date(device.certifiedAt).toLocaleDateString()}</span>
+                      <span className="text-status-success">Certifié le {new Date(device.certifiedAt).toLocaleDateString()}</span>
                     )}
                     {device.certifiedVia && <span className="text-brand">Via {device.certifiedVia}</span>}
                   </div>

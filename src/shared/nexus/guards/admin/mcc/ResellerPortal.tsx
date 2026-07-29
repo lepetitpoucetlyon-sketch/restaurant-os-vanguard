@@ -5,7 +5,7 @@
  * Gestion des commerciaux indépendants + suivi des commissions 10%.
  */
 import { useState, useEffect, useCallback } from "react";
-import { Users, Plus, Copy, CheckCircle2, TrendingUp, AlertCircle } from "lucide-react";
+import { Users, Plus, Copy, CheckCircle2, TrendingUp, AlertCircle, Edit2, Save, Trash2, X } from "lucide-react";
 import { authedFetch } from "@/lib/client/authedFetch";
 
 interface Reseller {
@@ -27,6 +27,9 @@ export function ResellerPortal() {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Reseller>>({});
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -68,6 +71,36 @@ export function ResellerPortal() {
     setResellers(rs => rs.map(x => x.id === r.id ? { ...x, status: newStatus } : x));
   }
 
+  async function saveEdit(id: string) {
+    if (!editForm.name || !editForm.email) { setError("Nom et email requis"); return; }
+    setSaving(true); setError(null);
+    try {
+      const res = await authedFetch("/api/admin/mcc/reseller", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resellerId: id, ...editForm }),
+      });
+      if (!res.ok) throw new Error();
+      setResellers(rs => rs.map(x => x.id === id ? { ...x, ...editForm } as Reseller : x));
+      setEditingId(null);
+    } catch {
+      setError("Erreur lors de la sauvegarde");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteReseller(id: string) {
+    if (!confirm("Supprimer définitivement ce revendeur ?")) return;
+    try {
+      const res = await authedFetch(`/api/admin/mcc/reseller?resellerId=${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      setResellers(rs => rs.filter(x => x.id !== id));
+    } catch {
+      setError("Erreur de suppression");
+    }
+  }
+
   function copyCode(code: string) {
     void navigator.clipboard.writeText(code);
     setCopied(code);
@@ -83,7 +116,7 @@ export function ResellerPortal() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Users className="w-5 h-5 text-brand" />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Reseller Portal</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Portail Revendeurs</h3>
         </div>
         <button
           onClick={() => setShowForm(s => !s)}
@@ -139,29 +172,46 @@ export function ResellerPortal() {
       ) : (
         <div className="space-y-2">
           {resellers.map(r => (
-            <div key={r.id} className="flex items-center gap-3 bg-surface-card border border-border-subtle rounded-xl px-4 py-3">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-text-primary truncate">{r.name}</span>
-                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${r.status === "active" ? "bg-status-success/20 text-status-success" : "bg-slate-600/30 text-text-secondary"}`}>{r.status}</span>
+            <div key={r.id} className="flex items-center gap-3 bg-surface-card border border-border-subtle rounded-xl px-4 py-3 group hover:border-focus/30 transition-all">
+              {editingId === r.id ? (
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-3 mr-2">
+                  <input value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} placeholder="Nom" className="bg-surface-card border border-border-subtle rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-focus/50" />
+                  <input value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} placeholder="Email" className="bg-surface-card border border-border-subtle rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-focus/50" />
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-secondary">COM:</span>
+                    <input type="number" step="0.01" value={(editForm.commissionRate ?? 0) * 100} onChange={e => setEditForm(f => ({ ...f, commissionRate: parseFloat(e.target.value) / 100 }))} placeholder="10" className="w-16 bg-surface-card border border-border-subtle rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-focus/50" />
+                    <span className="text-[10px] text-secondary">%</span>
+                  </div>
                 </div>
-                <div className="text-[11px] text-secondary">{r.email} · {r.totalTenantsReferred} tenants · €{r.totalCommissionsEur.toFixed(2)}</div>
-              </div>
+              ) : (
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-text-primary truncate">{r.name}</span>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${r.status === "active" ? "bg-status-success/20 text-status-success" : "bg-slate-600/30 text-text-secondary"}`}>{r.status}</span>
+                  </div>
+                  <div className="text-[11px] text-secondary">{r.email} · {r.totalTenantsReferred} tenants · Com. {(r.commissionRate * 100).toFixed(0)}% · €{r.totalCommissionsEur.toFixed(2)}</div>
+                </div>
+              )}
+              
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => copyCode(r.affiliateCode)}
-                  className="flex items-center gap-1.5 bg-surface-card px-2.5 py-1.5 rounded-lg text-[11px] font-mono hover:bg-surface-hover transition-colors"
-                  title="Copier le code d'affiliation"
-                >
-                  {copied === r.affiliateCode ? <CheckCircle2 className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3 text-secondary" />}
-                  {r.affiliateCode}
-                </button>
-                <button
-                  onClick={() => toggleStatus(r)}
-                  className="text-[10px] px-2 py-1 rounded-lg border border-border-subtle hover:bg-surface-card transition-colors text-secondary"
-                >
-                  {r.status === "active" ? "Désactiver" : "Activer"}
-                </button>
+                {editingId === r.id ? (
+                  <>
+                    <button onClick={() => setEditingId(null)} className="p-1.5 text-secondary hover:text-text-primary transition-colors"><X className="w-4 h-4" /></button>
+                    <button onClick={() => saveEdit(r.id)} disabled={saving} className="p-1.5 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 rounded transition-colors disabled:opacity-50"><Save className="w-4 h-4" /></button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => copyCode(r.affiliateCode)} className="flex items-center gap-1.5 bg-surface-card px-2.5 py-1.5 rounded-lg text-[11px] font-mono hover:bg-surface-hover transition-colors" title="Copier le code d'affiliation">
+                      {copied === r.affiliateCode ? <CheckCircle2 className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3 text-secondary" />}
+                      {r.affiliateCode}
+                    </button>
+                    <button onClick={() => { setEditingId(r.id); setEditForm(r); }} className="p-1.5 text-secondary hover:text-text-primary opacity-0 group-hover:opacity-100 transition-opacity"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => deleteReseller(r.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => toggleStatus(r)} className="text-[10px] px-2 py-1 rounded-lg border border-border-subtle hover:bg-surface-card transition-colors text-secondary ml-2">
+                      {r.status === "active" ? "Désactiver" : "Activer"}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}
@@ -169,8 +219,7 @@ export function ResellerPortal() {
       )}
 
       <p className="text-[10px] text-secondary opacity-60">
-        Commission : {(resellers[0]?.commissionRate ?? 0.10) * 100}% du MRR par tenant apporté.
-        Le code d'affiliation s'entre lors du provisioning d'un nouveau tenant (champ "Referred by").
+        Commission personnalisable par revendeur. Le code d'affiliation s'entre lors du provisioning d'un nouveau tenant (champ "Referred by").
       </p>
     </div>
   );

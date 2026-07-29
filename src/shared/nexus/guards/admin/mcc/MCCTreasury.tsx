@@ -73,8 +73,8 @@ export function MCCTreasury() {
                     
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <div>
-                            <h3 className="text-lg font-bold tracking-tight uppercase">Fleet Coalition Procurement</h3>
-                            <p className="text-xs text-secondary font-medium tracking-widest mt-1">Industrial Bulk Negotiation Status</p>
+                            <h3 className="text-lg font-bold tracking-tight uppercase">Achats Groupés Flotte</h3>
+                            <p className="text-xs text-secondary font-medium tracking-widest mt-1">Statut des négociations groupées industrielles</p>
                         </div>
                         <div className="p-3 bg-surface-card rounded-2xl">
                             <ShoppingBag className="w-5 h-5 text-brand" />
@@ -122,7 +122,7 @@ export function MCCTreasury() {
                         
                         <div className="mt-8 pt-8 border-t border-border-subtle space-y-4">
                              <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-secondary">
-                                 <span>Operational Health</span>
+                                 <span>Santé Opérationnelle</span>
                                  <span className="text-text-primary">OPTIMAL</span>
                              </div>
                              <div className="w-full h-1 bg-surface-card rounded-full overflow-hidden">

@@ -85,8 +85,8 @@ export function FleetUpgradePanel() {
           <Rocket className="w-5 h-5 text-action-primary" />
         </div>
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Fleet Upgrade</h3>
-          <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Push version & release notes</p>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Mises à Niveau Flotte</h3>
+          <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Déploiement de version &amp; notes de mise à jour</p>
         </div>
       </div>
 

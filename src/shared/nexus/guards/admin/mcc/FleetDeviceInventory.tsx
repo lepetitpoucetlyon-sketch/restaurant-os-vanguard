@@ -96,7 +96,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
           <Tablet className="w-5 h-5 text-brand" />
-          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Fleet Device Inventory</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Inventaire Matériel Flotte</h3>
         </div>
         <button onClick={load} className="p-1.5 rounded-lg hover:bg-surface-card transition-all">
           <RefreshCw className="w-4 h-4 text-secondary" />

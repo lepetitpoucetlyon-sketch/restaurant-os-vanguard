@@ -54,15 +54,15 @@ export function FleetTelemetryPanel() {
           <Activity className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-widest">Fleet Telemetry</h3>
-          <p className="text-xs text-secondary">Real-time Heartbeat & Crash Reports</p>
+          <h3 className="text-sm font-bold uppercase tracking-widest">Télémétrie de la Flotte</h3>
+          <p className="text-xs text-secondary">Signaux de vie & Rapports de plantage en temps réel</p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="p-4 bg-surface-card border border-border-subtle rounded-2xl flex flex-col">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Network Pulse</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Pouls Réseau</span>
             {offlineDevices.length === 0 ? (
               <Wifi className="w-4 h-4 text-emerald-500" />
             ) : (
@@ -71,44 +71,44 @@ export function FleetTelemetryPanel() {
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold tabular-nums">{onlineDevices}</span>
-            <span className="text-xs text-secondary">/ {devices.length} Online</span>
+            <span className="text-xs text-secondary">/ {devices.length} En Ligne</span>
           </div>
           {offlineDevices.length > 0 && (
             <div className="mt-2 text-[10px] text-rose-500 font-bold uppercase tracking-widest">
-              {offlineDevices.length} Instance(s) Offline
+              {offlineDevices.length} Instance(s) Hors Ligne
             </div>
           )}
         </div>
 
         <div className="p-4 bg-surface-card border border-border-subtle rounded-2xl flex flex-col">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Crash Reports</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Rapports de Plantage</span>
             <AlertTriangle className={`w-4 h-4 ${crashes.length > 0 ? 'text-amber-500' : 'text-emerald-500'}`} />
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold tabular-nums">{crashes.length}</span>
-            <span className="text-xs text-secondary">Recorded</span>
+            <span className="text-xs text-secondary">Enregistrés</span>
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
         <div>
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Critical Offline Nodes</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Nœuds Critiques Hors Ligne</h4>
           {loading ? (
-            <div className="text-xs text-muted animate-pulse">Scanning...</div>
+            <div className="text-xs text-muted animate-pulse">Analyse en cours...</div>
           ) : offlineDevices.length === 0 ? (
-            <div className="text-xs text-emerald-500 font-medium">All nodes reporting nominal heartbeat.</div>
+            <div className="text-xs text-emerald-500 font-medium">Tous les nœuds transmettent un signal nominal.</div>
           ) : (
             <div className="space-y-2">
               {offlineDevices.slice(0, 5).map(d => (
                 <div key={d.deviceId} className="flex items-center justify-between p-3 bg-rose-500/5 border border-rose-500/20 rounded-xl">
                   <div>
                     <div className="text-xs font-bold text-text-primary">{d.tenantId}</div>
-                    <div className="text-[10px] text-secondary">Device: {d.deviceId}</div>
+                    <div className="text-[10px] text-secondary">Appareil : {d.deviceId}</div>
                   </div>
                   <div className="text-[10px] text-rose-500 font-bold uppercase">
-                    Last Seen: {d.lastSeen ? new Date(d.lastSeen).toLocaleTimeString() : 'Unknown'}
+                    Vu le : {d.lastSeen ? new Date(d.lastSeen).toLocaleTimeString() : 'Inconnu'}
                   </div>
                 </div>
               ))}
@@ -118,7 +118,7 @@ export function FleetTelemetryPanel() {
 
         {crashes.length > 0 && (
           <div className="pt-4 border-t border-border-subtle">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Recent Crashes</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Derniers Plantages</h4>
             <div className="space-y-2">
               {crashes.slice(0, 5).map(c => (
                 <div key={c.id} className="flex items-center justify-between p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">

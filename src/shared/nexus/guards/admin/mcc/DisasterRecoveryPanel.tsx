@@ -84,7 +84,7 @@ export function DisasterRecoveryPanel() {
           </div>
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-text-primary">Plan de Reprise d'Activité (PRA)</h3>
-            <p className="text-xs text-secondary">Restauration Firestore PITR & Snapshot Global</p>
+            <p className="text-xs text-secondary">Restauration Firestore PITR & Sauvegarde Globale</p>
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export function DisasterRecoveryPanel() {
           className="flex items-center gap-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors disabled:opacity-50"
         >
           {loadingAction === 'backup' ? <Loader2 className="w-4 h-4 animate-spin" /> : <DatabaseBackup className="w-4 h-4" />}
-          Global Snapshot
+          Sauvegarde Globale
         </button>
       </div>
 
@@ -115,7 +115,7 @@ export function DisasterRecoveryPanel() {
                 className="px-3 py-1.5 flex items-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest rounded-lg border border-amber-500/20 transition-colors disabled:opacity-50"
               >
                 {loadingAction === `shadow-${inst.id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldAlert className="w-3.5 h-3.5" />}
-                Shadow Mode
+                Mode Survie
               </button>
               <button
                 onClick={() => triggerRestore(inst.id)}
@@ -123,7 +123,7 @@ export function DisasterRecoveryPanel() {
                 className="px-3 py-1.5 flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-[10px] font-black uppercase tracking-widest rounded-lg border border-rose-500/20 transition-colors disabled:opacity-50"
               >
                 {loadingAction === `restore-${inst.id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
-                1-Click Restore
+                Restauration 1-Clic
               </button>
             </div>
           </div>

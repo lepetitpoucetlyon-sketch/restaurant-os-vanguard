@@ -79,7 +79,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  const body = await req.json() as { resellerId?: string; status?: string; commissionRate?: number; notes?: string };
+  const body = await req.json() as { resellerId?: string; status?: string; commissionRate?: number; notes?: string; name?: string; email?: string; phone?: string; };
   const { resellerId } = body;
   if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
 
@@ -90,8 +90,24 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
   if (body.status !== undefined) updates.status = body.status;
   if (body.commissionRate !== undefined) updates.commissionRate = body.commissionRate;
   if (body.notes !== undefined) updates.notes = body.notes;
+  if (body.name !== undefined) updates.name = body.name;
+  if (body.email !== undefined) updates.email = body.email;
+  if (body.phone !== undefined) updates.phone = body.phone;
 
   await Nexus.adapter.set('mcc/resellers/' + resellerId, { ...existing, ...updates });
 
   return NextResponse.json({ ok: true, resellerId });
+}
+
+export async function DELETE(req: NextRequest): Promise<NextResponse> {
+  const caller = await requireMccLevel(req, 'fleet_admin');
+  if (isDenied(caller)) return caller as NextResponse;
+
+  const resellerId = req.nextUrl.searchParams.get('resellerId');
+  if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
+
+  await Nexus.adapter.delete('mcc/resellers/' + resellerId);
+  logger.info(`[Reseller] Revendeur supprimé : ${resellerId}`);
+
+  return NextResponse.json({ ok: true });
 }

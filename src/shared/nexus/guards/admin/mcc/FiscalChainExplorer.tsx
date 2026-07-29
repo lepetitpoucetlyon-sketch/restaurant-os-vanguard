@@ -90,7 +90,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
                 <div className="space-y-3 mt-4">
                   <div className="flex flex-col space-y-1">
                     <div className="flex items-center justify-between text-[9px] font-black text-secondary uppercase tracking-tighter">
-                      <span>Current Hash</span>
+                      <span>Hash Actuel</span>
                       <span className="text-primary italic">SHA-256</span>
                     </div>
                     <div className="p-2 bg-surface-card rounded-lg border border-border-subtle font-mono text-[10px] text-brand break-all leading-tight relative overflow-hidden group-hover:text-brand transition-colors">

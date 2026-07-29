@@ -207,9 +207,9 @@ export function TrustedDevicePanel() {
                             onChange={e => setRegisterRole(e.target.value as MccRole)}
                             className="flex-1 bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-emerald-500/50"
                         >
-                            <option value="fleet_admin">Fleet Admin (accès complet)</option>
-                            <option value="mcc_support">MCC Support (+reset, RAG)</option>
-                            <option value="mcc_junior_dev">Junior Dev (lecture seule)</option>
+                            <option value="fleet_admin">Admin Flotte (accès complet)</option>
+                            <option value="mcc_support">Support MCC (+reset, RAG)</option>
+                            <option value="mcc_junior_dev">Dev Junior (lecture seule)</option>
                         </select>
                         <button
                             onClick={handleRegister}
@@ -339,9 +339,9 @@ export function TrustedDevicePanel() {
                             onChange={e => setEditRole(e.target.value as MccRole)}
                             className="w-full bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
                         >
-                            <option value="fleet_admin">Fleet Admin (accès complet)</option>
-                            <option value="mcc_support">MCC Support (+reset, RAG)</option>
-                            <option value="mcc_junior_dev">Junior Dev (lecture seule)</option>
+                            <option value="fleet_admin">Admin Flotte (accès complet)</option>
+                            <option value="mcc_support">Support MCC (+reset, RAG)</option>
+                            <option value="mcc_junior_dev">Dev Junior (lecture seule)</option>
                         </select>
                         <div className="flex gap-3">
                             <button onClick={handleUpdateRole} className="flex-1 px-4 py-2.5 bg-violet-600 text-text-primary text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-violet-700 transition-all">

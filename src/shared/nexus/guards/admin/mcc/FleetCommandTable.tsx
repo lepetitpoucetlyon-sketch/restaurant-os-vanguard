@@ -107,7 +107,7 @@ export function FleetCommandTable() {
         <div className="bg-surface-card border border-border-subtle rounded-[2rem] overflow-hidden shadow-2xl">
             <div className="p-8 border-b border-border-subtle flex items-center justify-between bg-gradient-to-r from-action-primary/5 to-transparent">
                 <div>
-                    <h2 className="text-xl font-serif font-black text-text-primary tracking-tighter">Fleet Command Center</h2>
+                    <h2 className="text-xl font-serif font-black text-text-primary tracking-tighter">Centre de Commandement</h2>
                     <p className="text-[10px] text-secondary uppercase font-bold tracking-widest mt-1">Orchestration en temps réel des actifs de l'empire</p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -165,11 +165,11 @@ export function FleetCommandTable() {
                     <thead>
                         <tr className="bg-surface-card">
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Instance ID</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Status / Health</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Revenue (24h)</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">HACCP Risk</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Users</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Global Compliance</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Statut / Santé</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">CA (24h)</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Risque HACCP</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Utilisateurs</th>
+                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Conformité Globale</th>
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">
                                 <div className="flex items-center gap-1.5"><Brain className="w-3 h-3" />RAG</div>
                             </th>
@@ -342,7 +342,7 @@ export function FleetCommandTable() {
                 <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">{filteredInstances.length} site{filteredInstances.length !== 1 ? 's' : ''} affiché{filteredInstances.length !== 1 ? 's' : ''} / {instances.length} total</p>
                 <div className="flex items-center gap-2">
                     <Activity className="w-3 h-3 text-brand" />
-                    <span className="text-[9px] font-black text-muted uppercase">Fleet live</span>
+                    <span className="text-[9px] font-black text-muted uppercase">Flotte en direct</span>
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ export function SwitchboardItem({ label, active, onToggle }: { label: string, ac
       <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
       <div className="flex items-center gap-3">
         <span className={`text-[10px] font-black uppercase tracking-tighter ${active ? 'text-status-success' : 'text-status-danger'}`}>
-          {active ? 'ONLINE' : 'OFFLINE'}
+          {active ? 'EN LIGNE' : 'HORS LIGNE'}
         </span>
         <button
           onClick={onToggle}

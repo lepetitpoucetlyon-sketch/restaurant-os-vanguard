@@ -31,8 +31,8 @@ export function StrategyOracle() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08)_0%,transparent_70%)]" />
                 
                 <div className="absolute top-6 left-8 z-10">
-                    <h3 className="text-xs font-black text-text-primary/40 uppercase tracking-[0.3em] mb-1">Fleet Constellation</h3>
-                    <p className="text-[10px] text-secondary font-medium tracking-tight">Real-time Node Distribution ({instances.length} units)</p>
+                    <h3 className="text-xs font-black text-text-primary/40 uppercase tracking-[0.3em] mb-1">Constellation de la Flotte</h3>
+                    <p className="text-[10px] text-secondary font-medium tracking-tight">Distribution des nœuds en temps réel ({instances.length} unités)</p>
                 </div>
 
                 {/* Simulated Constellation Grid */}
