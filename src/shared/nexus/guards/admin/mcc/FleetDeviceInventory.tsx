@@ -9,7 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Tablet, Plus, Trash2, RefreshCw, AlertTriangle, Truck, ShieldAlert, CheckCircle, Apple, QrCode, PowerOff } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 type EnrollmentType = 'NATIVE_ABM' | 'SOFTWARE_MDM';
 type DeviceStatus = 'PREPARATION' | 'SHIPPED' | 'DELIVERED' | 'LOCKED';
