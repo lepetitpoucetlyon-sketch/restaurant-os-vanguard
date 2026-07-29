@@ -32,7 +32,7 @@ const ROLE_LABELS: Record<MccRole, { label: string; color: string }> = {
     fleet_admin:    { label: 'Fleet Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
     SUPER_ADMIN:    { label: 'Super Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
     mcc_support:    { label: 'MCC Support',    color: 'text-blue-400 bg-status-info/10 border-blue-500/20' },
-    mcc_junior_dev: { label: 'Junior Dev',     color: 'text-text-secondary bg-white/5 border-white/10' },
+    mcc_junior_dev: { label: 'Junior Dev',     color: 'text-text-secondary bg-surface-card border-border-subtle' },
 };
 
 export function TrustedDevicePanel() {
@@ -148,7 +148,7 @@ export function TrustedDevicePanel() {
     const revokedDevices = devices.filter(d => d.status === 'revoked');
 
     return (
-        <div className="bg-[#161618] border border-white/5 rounded-3xl p-6 space-y-6">
+        <div className="bg-surface-card border border-border-subtle rounded-3xl p-6 space-y-6">
             {/* En-tête */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -160,7 +160,7 @@ export function TrustedDevicePanel() {
                         <p className="text-[10px] text-text-muted">Appareils autorisés à accéder au MCC • ZTNA Layer 2</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
+                <div className="flex items-center gap-2 px-3 py-1.5 border border-border-subtle bg-surface-card rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
                     <Wifi className="w-3 h-3" />
                     {activeDevices.length} actif{activeDevices.length !== 1 ? 's' : ''}
                 </div>
@@ -192,20 +192,20 @@ export function TrustedDevicePanel() {
 
             {/* Formulaire d'enregistrement */}
             {showRegisterForm && (
-                <div className="p-4 bg-[#0a0a0b] border border-emerald-500/20 rounded-2xl space-y-3">
+                <div className="p-4 bg-surface-card border border-emerald-500/20 rounded-2xl space-y-3">
                     <p className="text-xs font-bold text-status-success uppercase tracking-widest">Enregistrer cet appareil</p>
                     <input
                         type="text"
                         value={registerName}
                         onChange={e => setRegisterName(e.target.value)}
                         placeholder="Nom de l'appareil (ex: MacBook Pro Mohammed)"
-                        className="w-full bg-[#161618] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-emerald-500/50"
+                        className="w-full bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-emerald-500/50"
                     />
                     <div className="flex gap-3">
                         <select
                             value={registerRole}
                             onChange={e => setRegisterRole(e.target.value as MccRole)}
-                            className="flex-1 bg-[#161618] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-emerald-500/50"
+                            className="flex-1 bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-emerald-500/50"
                         >
                             <option value="fleet_admin">Fleet Admin (accès complet)</option>
                             <option value="mcc_support">MCC Support (+reset, RAG)</option>
@@ -220,7 +220,7 @@ export function TrustedDevicePanel() {
                         </button>
                         <button
                             onClick={() => setShowRegisterForm(false)}
-                            className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-text-secondary text-xs font-bold rounded-xl uppercase tracking-widest transition-all"
+                            className="px-4 py-2.5 bg-surface-card hover:bg-surface-hover text-text-secondary text-xs font-bold rounded-xl uppercase tracking-widest transition-all"
                         >
                             Annuler
                         </button>
@@ -251,7 +251,7 @@ export function TrustedDevicePanel() {
                             const roleInfo = ROLE_LABELS[device.role] ?? ROLE_LABELS.mcc_junior_dev;
                             const isMine = isMyDevice(device);
                             return (
-                                <div key={device.deviceId} className={`p-4 bg-[#0a0a0b] border rounded-2xl space-y-2 ${isMine ? 'border-emerald-500/20' : 'border-white/5'}`}>
+                                <div key={device.deviceId} className={`p-4 bg-surface-card border rounded-2xl space-y-2 ${isMine ? 'border-emerald-500/20' : 'border-border-subtle'}`}>
                                     <div className="flex items-center justify-between gap-3">
                                         <div className="flex items-center gap-2 min-w-0">
                                             <ShieldCheck className={`w-4 h-4 shrink-0 ${isMine ? 'text-status-success' : 'text-text-secondary'}`} />
@@ -269,7 +269,7 @@ export function TrustedDevicePanel() {
                                             </span>
                                             <button
                                                 onClick={() => { setEditingDevice(device); setEditRole(device.role); }}
-                                                className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-text-muted hover:text-text-primary"
+                                                className="p-1.5 hover:bg-surface-hover rounded-lg transition-all text-text-muted hover:text-text-primary"
                                                 title="Modifier le rôle"
                                             >
                                                 <Edit3 className="w-3 h-3" />
@@ -296,7 +296,7 @@ export function TrustedDevicePanel() {
                                     {device.allowedRoutes.length > 0 && (
                                         <div className="flex flex-wrap gap-1 pt-1">
                                             {device.allowedRoutes.map(route => (
-                                                <span key={route} className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] font-mono text-text-muted">
+                                                <span key={route} className="px-2 py-0.5 bg-surface-card border border-border-subtle rounded text-[9px] font-mono text-text-muted">
                                                     {route}
                                                 </span>
                                             ))}
@@ -316,7 +316,7 @@ export function TrustedDevicePanel() {
                             </summary>
                             <div className="mt-2 space-y-2">
                                 {revokedDevices.map(device => (
-                                    <div key={device.deviceId} className="flex items-center gap-3 px-4 py-2.5 bg-[#0a0a0b] border border-white/5 rounded-xl opacity-50">
+                                    <div key={device.deviceId} className="flex items-center gap-3 px-4 py-2.5 bg-surface-card border border-border-subtle rounded-xl opacity-50">
                                         <ShieldX className="w-3.5 h-3.5 text-status-danger shrink-0" />
                                         <span className="text-xs text-text-muted line-through">{device.name}</span>
                                         <span className="text-[9px] text-slate-600 ml-auto">{device.ownerEmail}</span>
@@ -331,13 +331,13 @@ export function TrustedDevicePanel() {
             {/* Modal d'édition de rôle */}
             {editingDevice && (
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setEditingDevice(null)}>
-                    <div className="bg-[#161618] border border-white/10 rounded-2xl p-6 w-80 space-y-4" onClick={e => e.stopPropagation()}>
+                    <div className="bg-surface-card border border-border-subtle rounded-2xl p-6 w-80 space-y-4" onClick={e => e.stopPropagation()}>
                         <p className="text-sm font-bold text-text-primary">Modifier le rôle</p>
                         <p className="text-xs text-text-secondary">{editingDevice.name}</p>
                         <select
                             value={editRole}
                             onChange={e => setEditRole(e.target.value as MccRole)}
-                            className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
+                            className="w-full bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
                         >
                             <option value="fleet_admin">Fleet Admin (accès complet)</option>
                             <option value="mcc_support">MCC Support (+reset, RAG)</option>
@@ -347,7 +347,7 @@ export function TrustedDevicePanel() {
                             <button onClick={handleUpdateRole} className="flex-1 px-4 py-2.5 bg-violet-600 text-text-primary text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-violet-700 transition-all">
                                 Sauvegarder
                             </button>
-                            <button onClick={() => setEditingDevice(null)} className="flex-1 px-4 py-2.5 bg-white/5 text-text-secondary text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-white/10 transition-all">
+                            <button onClick={() => setEditingDevice(null)} className="flex-1 px-4 py-2.5 bg-surface-card text-text-secondary text-xs font-bold rounded-xl uppercase tracking-widest hover:bg-surface-hover transition-all">
                                 Annuler
                             </button>
                         </div>

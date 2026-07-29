@@ -30,12 +30,13 @@ import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { ROLE_TEMPLATES, type RoleTemplate } from "@/domain/services/RoleTemplates";
 
 export function AccountSettingsDashboard() {
-    const { currentUser: _currentUser, users, rolePermissions, customRoles, updateRolePermissions, createCustomRole, deleteCustomRole, hasAccess } = useAuth();
+    const { currentUser: _currentUser, users, rolePermissions, customRoles, updateRolePermissions, createCustomRole, deleteCustomRole, assignRoleToUser, hasAccess } = useAuth();
     const { showToast } = useToast();
     const [expandedRole, setExpandedRole] = useState<UserRole | string | null>(null);
     const [pendingChanges, setPendingChanges] = useState<Record<UserRole | string, CategoryKey[]>>({});
     const [isCreatingRole, setIsCreatingRole] = useState(false);
     const [newRoleName, setNewRoleName] = useState("");
+    const [reassigningUserId, setReassigningUserId] = useState<string | null>(null);
 
     // Only admins can access this page
     if (!hasAccess('account-settings')) {
@@ -121,6 +122,19 @@ export function AccountSettingsDashboard() {
         } catch (error) {
             console.error('Failed to create custom role', error);
             showToast("Erreur lors de la création du rôle.", "error");
+        }
+    };
+
+    const handleAssignRole = async (userId: string, newRole: string) => {
+        setReassigningUserId(userId);
+        try {
+            await assignRoleToUser(userId, newRole);
+            showToast(`Rôle mis à jour.`, "success");
+        } catch (error) {
+            const msg = error instanceof Error ? error.message : "Erreur inconnue";
+            showToast(`Impossible d'assigner le rôle : ${msg}`, "error");
+        } finally {
+            setReassigningUserId(null);
         }
     };
 
@@ -268,6 +282,18 @@ export function AccountSettingsDashboard() {
                                                                                 {(user.name || '').charAt(0)}
                                                                             </div>
                                                                             <span className="text-sm font-medium text-text-muted">{user.name}</span>
+                                                                            {/* Sélecteur de rôle inline — câble /api/admin/users/assign-role */}
+                                                                            <select
+                                                                                disabled={reassigningUserId === user.id}
+                                                                                defaultValue={user.role}
+                                                                                onChange={e => handleAssignRole(user.id, e.target.value)}
+                                                                                className="ml-1 text-[11px] bg-transparent border border-action-primary/20 rounded-lg px-2 py-1 text-text-muted cursor-pointer hover:border-action-primary/60 disabled:opacity-50 transition-colors"
+                                                                                title="Changer le rôle"
+                                                                            >
+                                                                                {allRoles.map(r => (
+                                                                                    <option key={r} value={r}>{getRoleLabel(r)}</option>
+                                                                                ))}
+                                                                            </select>
                                                                         </div>
                                                                     ))}
                                                                     {userCount === 0 && (

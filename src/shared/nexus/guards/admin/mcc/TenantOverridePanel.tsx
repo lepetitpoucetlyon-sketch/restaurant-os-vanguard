@@ -102,7 +102,7 @@ export function TenantOverridePanel() {
   };
 
   return (
-    <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl space-y-6">
+    <div className="p-6 bg-surface-card border border-border-subtle rounded-3xl space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-2xl bg-violet-500/10 flex items-center justify-center border border-violet-500/20">
@@ -118,7 +118,7 @@ export function TenantOverridePanel() {
       <div className="relative">
         <button
           onClick={() => setDropdownOpen(o => !o)}
-          className="w-full flex items-center justify-between p-3 bg-bg-primary/50 border border-white/10 rounded-xl text-sm font-medium text-muted hover:border-white/20 transition-all"
+          className="w-full flex items-center justify-between p-3 bg-bg-primary/50 border border-border-subtle rounded-xl text-sm font-medium text-muted hover:border-border-default transition-all"
         >
           <span className="truncate">
             {selectedInstance ? `${selectedInstance.name ?? selectedInstance.id}` : 'Sélectionner un tenant...'}
@@ -131,14 +131,14 @@ export function TenantOverridePanel() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-white/10 rounded-xl overflow-hidden shadow-xl"
+              className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-border-subtle rounded-xl overflow-hidden shadow-xl"
             >
               {instances.map(inst => (
                 <button
                   key={inst.id}
                   onClick={() => { setSelectedId(inst.id); setDropdownOpen(false); }}
                   className={cn(
-                    'w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-white/5 transition-colors',
+                    'w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-surface-card transition-colors',
                     inst.id === selectedId ? 'text-violet-400 bg-violet-500/10' : 'text-muted'
                   )}
                 >
@@ -176,7 +176,7 @@ export function TenantOverridePanel() {
                       'py-2 text-[9px] font-black uppercase tracking-wider border transition-all',
                       form.ui?.buttonRadius === p.value
                         ? 'bg-violet-500/20 border-violet-500/50 text-violet-300'
-                        : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+                        : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
                     )}
                     style={{ borderRadius: p.value === '9999px' ? '999px' : '8px' }}
                   >
@@ -200,7 +200,7 @@ export function TenantOverridePanel() {
                       'px-3 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
                       form.ui?.layoutType === o.value
                         ? 'bg-violet-500/20 border-violet-500/50 text-violet-300'
-                        : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+                        : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
                     )}
                   >
                     {o.label}
@@ -219,14 +219,14 @@ export function TenantOverridePanel() {
                   type="color"
                   value={form.ui?.primaryColor ?? '#6366f1'}
                   onChange={e => updateUI('primaryColor', e.target.value)}
-                  className="w-10 h-8 rounded-lg border border-white/10 bg-transparent cursor-pointer"
+                  className="w-10 h-8 rounded-lg border border-border-subtle bg-transparent cursor-pointer"
                 />
                 <input
                   type="text"
                   value={form.ui?.primaryColor ?? ''}
                   placeholder="#6366f1"
                   onChange={e => updateUI('primaryColor', e.target.value)}
-                  className="flex-1 bg-bg-primary/50 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-mono text-muted focus:outline-none focus:border-white/30"
+                  className="flex-1 bg-bg-primary/50 border border-border-subtle rounded-lg px-3 py-1.5 text-xs font-mono text-muted focus:outline-none focus:border-border-default"
                 />
               </div>
             </div>
@@ -261,7 +261,7 @@ export function TenantOverridePanel() {
                   'w-10 h-5 rounded-full border transition-all relative',
                   form.debug?.enabled
                     ? 'bg-action-primary border-amber-400'
-                    : 'bg-bg-primary/50 border-white/10'
+                    : 'bg-bg-primary/50 border-border-subtle'
                 )}
               >
                 <span className={cn(
@@ -280,7 +280,7 @@ export function TenantOverridePanel() {
                       'flex-1 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
                       form.debug?.level === l
                         ? 'bg-action-primary/20 border-action-primary/50 text-amber-300'
-                        : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+                        : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
                     )}
                   >
                     {l}
@@ -304,14 +304,14 @@ export function TenantOverridePanel() {
             value={description}
             onChange={e => setDescription(e.target.value)}
             placeholder="Description du changement (optionnel)"
-            className="w-full bg-bg-primary/50 border border-white/10 rounded-xl px-4 py-3 text-xs text-muted focus:outline-none focus:border-white/30"
+            className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3 text-xs text-muted focus:outline-none focus:border-border-default"
           />
 
           {/* Actions */}
           <div className="flex gap-3">
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-bg-primary/30 border border-white/5 text-[10px] font-black uppercase tracking-widest text-secondary hover:text-muted transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-bg-primary/30 border border-border-subtle text-[10px] font-black uppercase tracking-widest text-secondary hover:text-muted transition-all"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Reset

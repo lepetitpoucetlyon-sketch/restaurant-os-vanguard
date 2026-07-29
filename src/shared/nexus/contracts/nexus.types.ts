@@ -26,6 +26,7 @@ export interface NexusAuthState {
     customRoles: any[];
     createCustomRole: (label: string) => Promise<string>;
     deleteCustomRole: (roleId: string) => Promise<void>;
+    assignRoleToUser: (userId: string, role: string) => Promise<void>;
     // Grade X Extensions (Suture)
     require2FAChallenge?: boolean;
     verifyTwoFactor?: (code: string) => Promise<boolean>;

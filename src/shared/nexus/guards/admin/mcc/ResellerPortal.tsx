@@ -6,6 +6,7 @@
  */
 import { useState, useEffect, useCallback } from "react";
 import { Users, Plus, Copy, CheckCircle2, TrendingUp, AlertCircle } from "lucide-react";
+import { authedFetch } from "@/lib/client/authedFetch";
 
 interface Reseller {
   id: string;
@@ -30,7 +31,7 @@ export function ResellerPortal() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/mcc/reseller", { headers: { Authorization: "Bearer " + (typeof window !== "undefined" ? localStorage.getItem("mcc_token") ?? "" : "") } });
+      const res = await authedFetch("/api/admin/mcc/reseller");
       if (res.ok) {
         const d = await res.json() as { resellers: Reseller[] };
         setResellers(d.resellers ?? []);
@@ -44,9 +45,9 @@ export function ResellerPortal() {
     if (!form.name || !form.email) { setError("Nom et email requis"); return; }
     setSaving(true); setError(null);
     try {
-      const res = await fetch("/api/admin/mcc/reseller", {
+      const res = await authedFetch("/api/admin/mcc/reseller", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: "Bearer " + (localStorage.getItem("mcc_token") ?? "") },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       const d = await res.json() as { reseller?: Reseller; error?: string };
@@ -59,9 +60,9 @@ export function ResellerPortal() {
 
   async function toggleStatus(r: Reseller) {
     const newStatus = r.status === "active" ? "inactive" : "active";
-    await fetch("/api/admin/mcc/reseller", {
+    await authedFetch("/api/admin/mcc/reseller", {
       method: "PATCH",
-      headers: { "Content-Type": "application/json", Authorization: "Bearer " + (localStorage.getItem("mcc_token") ?? "") },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ resellerId: r.id, status: newStatus }),
     });
     setResellers(rs => rs.map(x => x.id === r.id ? { ...x, status: newStatus } : x));
@@ -78,7 +79,7 @@ export function ResellerPortal() {
   const totalReferrals = resellers.reduce((s, r) => s + r.totalTenantsReferred, 0);
 
   return (
-    <div className="p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl space-y-6">
+    <div className="p-6 bg-surface-card backdrop-blur-md border border-border-subtle rounded-2xl space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Users className="w-5 h-5 text-brand" />
@@ -99,7 +100,7 @@ export function ResellerPortal() {
           { label: "Tenants apportés", value: String(totalReferrals), icon: <TrendingUp className="w-4 h-4 text-status-success" /> },
           { label: "Commissions cumulées", value: `€${totalCommissions.toFixed(2)}`, icon: <TrendingUp className="w-4 h-4 text-action-primary" /> },
         ].map(k => (
-          <div key={k.label} className="bg-white/5 border border-white/5 rounded-xl p-3 text-center">
+          <div key={k.label} className="bg-surface-card border border-border-subtle rounded-xl p-3 text-center">
             <div className="flex justify-center mb-1">{k.icon}</div>
             <div className="text-lg font-bold text-text-primary">{k.value}</div>
             <div className="text-[10px] text-secondary uppercase tracking-wider">{k.label}</div>
@@ -109,7 +110,7 @@ export function ResellerPortal() {
 
       {/* Formulaire */}
       {showForm && (
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+        <div className="bg-surface-card border border-border-subtle rounded-xl p-4 space-y-3">
           <p className="text-xs font-semibold text-secondary uppercase tracking-wider">Nouveau revendeur</p>
           {error && (
             <div className="flex items-center gap-2 text-status-danger text-xs bg-red-950/20 rounded-lg px-3 py-2">
@@ -117,9 +118,9 @@ export function ResellerPortal() {
             </div>
           )}
           <div className="grid grid-cols-2 gap-3">
-            <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Nom complet" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
-            <input value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="Email" type="email" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
-            <input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="Téléphone" className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
+            <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Nom complet" className="bg-surface-card border border-border-subtle rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
+            <input value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="Email" type="email" className="bg-surface-card border border-border-subtle rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
+            <input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="Téléphone" className="bg-surface-card border border-border-subtle rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-focus/50 col-span-2 sm:col-span-1" />
           </div>
           <div className="flex gap-2 justify-end">
             <button onClick={() => setShowForm(false)} className="px-3 py-2 text-xs text-secondary hover:text-text-primary transition-colors">Annuler</button>
@@ -138,7 +139,7 @@ export function ResellerPortal() {
       ) : (
         <div className="space-y-2">
           {resellers.map(r => (
-            <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-xl px-4 py-3">
+            <div key={r.id} className="flex items-center gap-3 bg-surface-card border border-border-subtle rounded-xl px-4 py-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-semibold text-text-primary truncate">{r.name}</span>
@@ -149,7 +150,7 @@ export function ResellerPortal() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => copyCode(r.affiliateCode)}
-                  className="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-lg text-[11px] font-mono hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-1.5 bg-surface-card px-2.5 py-1.5 rounded-lg text-[11px] font-mono hover:bg-surface-hover transition-colors"
                   title="Copier le code d'affiliation"
                 >
                   {copied === r.affiliateCode ? <CheckCircle2 className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3 text-secondary" />}
@@ -157,7 +158,7 @@ export function ResellerPortal() {
                 </button>
                 <button
                   onClick={() => toggleStatus(r)}
-                  className="text-[10px] px-2 py-1 rounded-lg border border-white/10 hover:bg-white/10 transition-colors text-secondary"
+                  className="text-[10px] px-2 py-1 rounded-lg border border-border-subtle hover:bg-surface-card transition-colors text-secondary"
                 >
                   {r.status === "active" ? "Désactiver" : "Activer"}
                 </button>

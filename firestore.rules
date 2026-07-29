@@ -79,10 +79,10 @@ service cloud.firestore {
         allow write: if isTenantManager(tenantId) || isFleetAdmin();
       }
 
-      // Configuration Système (Rôles, Permissions, Sécurité)
+      // Configuration Système (Rôles, Permissions, etc.)
       match /systemConfig/{docId} {
         allow read: if isTenantStaff(tenantId) || isFleetAdmin();
-        // Seul l'owner (admin) ou MCC peut créer/éditer les rôles (Bloque les managers)
+        // Seul l'owner (admin) ou MCC peut créer ou éditer les rôles/permissions
         allow write: if isTenantOwner(tenantId) || isFleetAdmin();
       }
 

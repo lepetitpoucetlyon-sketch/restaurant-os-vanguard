@@ -126,9 +126,10 @@ async function checkDeviceFingerprintInternal(fingerprint: string, callerRole: M
         const callerLevel = MCC_ROLE_HIERARCHY[callerRole] ?? 0;
         return deviceLevel < callerLevel; // refus si appareil a moins de droits que demandé
     } catch {
-        // En cas d'erreur Firestore, on laisse passer (fail-open en dev, alerter en prod)
-        logger.warn('[adminAuth] checkDeviceFingerprint: impossible de lire mcc/trustedDevices');
-        return false;
+        // Fail-closed : impossible de vérifier le device → refus. Un incident Firestore
+        // ne doit pas ouvrir l'accès MCC. fleet_admin est exempté de cette vérification.
+        logger.error('[adminAuth] checkDeviceFingerprint: impossible de lire mcc/trustedDevices — FAIL-CLOSED');
+        return true;
     }
 }
 

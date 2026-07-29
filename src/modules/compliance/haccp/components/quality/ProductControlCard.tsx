@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { QualityControlItem } from '@domain/types/quality';
+import { QualityControlItem } from '@/modules/compliance/types/quality';
 import { Calendar, Thermometer, CheckCircle2, AlertOctagon, Timer } from 'lucide-react';
 
 interface ProductControlCardProps {

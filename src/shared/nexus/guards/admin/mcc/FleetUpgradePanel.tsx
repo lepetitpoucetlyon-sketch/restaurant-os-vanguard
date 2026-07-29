@@ -78,7 +78,7 @@ export function FleetUpgradePanel() {
   };
 
   return (
-    <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl space-y-6">
+    <div className="p-6 bg-surface-card border border-border-subtle rounded-3xl space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-2xl bg-action-primary/10 flex items-center justify-center border border-action-primary/20">
@@ -98,7 +98,7 @@ export function FleetUpgradePanel() {
           value={version}
           onChange={e => setVersion(e.target.value)}
           placeholder="2.5.0"
-          className="w-full bg-bg-primary/50 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono text-muted focus:outline-none focus:border-white/30"
+          className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3 text-sm font-mono text-muted focus:outline-none focus:border-border-default"
         />
       </div>
 
@@ -112,7 +112,7 @@ export function FleetUpgradePanel() {
               onClick={() => setTargetState(s)}
               className={cn(
                 'py-2 text-[9px] font-black uppercase tracking-wider rounded-xl border transition-all',
-                targetState === s ? STATE_META[s].color : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+                targetState === s ? STATE_META[s].color : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
               )}
             >
               {STATE_META[s].label}
@@ -129,7 +129,7 @@ export function FleetUpgradePanel() {
           onChange={e => setNotes(e.target.value)}
           rows={3}
           placeholder="Ce qui change dans cette version..."
-          className="w-full bg-bg-primary/50 border border-white/10 rounded-xl px-4 py-3 text-xs text-muted resize-none focus:outline-none focus:border-white/30"
+          className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3 text-xs text-muted resize-none focus:outline-none focus:border-border-default"
         />
       </div>
 
@@ -141,7 +141,7 @@ export function FleetUpgradePanel() {
           value={otaUrl}
           onChange={e => setOtaUrl(e.target.value)}
           placeholder="https://cdn.example.com/v2.5.0.zip"
-          className="w-full bg-bg-primary/50 border border-white/10 rounded-xl px-4 py-3 text-xs font-mono text-muted focus:outline-none focus:border-white/30"
+          className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3 text-xs font-mono text-muted focus:outline-none focus:border-border-default"
         />
       </div>
 
@@ -152,7 +152,7 @@ export function FleetUpgradePanel() {
           'flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all',
           breaking
             ? 'bg-status-danger/10 border-red-500/30'
-            : 'bg-bg-primary/30 border-white/5 hover:border-white/10'
+            : 'bg-bg-primary/30 border-border-subtle hover:border-border-subtle'
         )}
       >
         <AlertTriangle className={cn('w-4 h-4 shrink-0', breaking ? 'text-status-danger' : 'text-secondary')} />
@@ -164,7 +164,7 @@ export function FleetUpgradePanel() {
         </div>
         <div className={cn(
           'w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
-          breaking ? 'bg-status-danger border-red-400' : 'border-white/20'
+          breaking ? 'bg-status-danger border-red-400' : 'border-border-default'
         )}>
           {breaking && <span className="text-text-primary text-[8px]">✓</span>}
         </div>
@@ -178,7 +178,7 @@ export function FleetUpgradePanel() {
             onClick={() => setScope('fleet')}
             className={cn(
               'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all',
-              scope === 'fleet' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+              scope === 'fleet' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
             )}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export function FleetUpgradePanel() {
             onClick={() => setScope('select')}
             className={cn(
               'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all',
-              scope === 'select' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-white/5 text-secondary hover:border-white/20'
+              scope === 'select' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
             )}
           >
             <Target className="w-3.5 h-3.5" />
@@ -207,12 +207,12 @@ export function FleetUpgradePanel() {
                   'w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-xs transition-all',
                   selectedIds.has(inst.id)
                     ? 'bg-action-primary/10 border-action-primary/30 text-amber-300'
-                    : 'bg-bg-primary/20 border-white/5 text-secondary hover:border-white/10'
+                    : 'bg-bg-primary/20 border-border-subtle text-secondary hover:border-border-subtle'
                 )}
               >
                 <div className={cn(
                   'w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0',
-                  selectedIds.has(inst.id) ? 'bg-action-primary border-amber-400' : 'border-white/20'
+                  selectedIds.has(inst.id) ? 'bg-action-primary border-amber-400' : 'border-border-default'
                 )}>
                   {selectedIds.has(inst.id) && <span className="text-[7px] text-text-primary">✓</span>}
                 </div>

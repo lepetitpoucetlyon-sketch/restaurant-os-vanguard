@@ -86,10 +86,10 @@ export function TaxAuditPanel() {
         ? 'text-status-success border-emerald-500/20 bg-status-success/5'
         : result?.chainStatus === 'breach'
         ? 'text-status-danger border-red-500/20 bg-status-danger/5'
-        : 'text-text-secondary border-white/10 bg-white/5';
+        : 'text-text-secondary border-border-subtle bg-surface-card';
 
     return (
-        <div className="bg-[#161618] border border-white/5 rounded-3xl p-6 space-y-6">
+        <div className="bg-surface-card border border-border-subtle rounded-3xl p-6 space-y-6">
             {/* En-tête */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -119,7 +119,7 @@ export function TaxAuditPanel() {
                     <select
                         value={selectedTenantId}
                         onChange={e => setSelectedTenantId(e.target.value)}
-                        className="w-full bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
+                        className="w-full bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
                     >
                         <option value="">Sélectionner un restaurant…</option>
                         {instances.map(inst => (
@@ -135,14 +135,14 @@ export function TaxAuditPanel() {
                     value={from}
                     onChange={e => setFrom(e.target.value)}
                     placeholder="De"
-                    className="bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-violet-500/50"
+                    className="bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-violet-500/50"
                 />
                 <input
                     type="date"
                     value={to}
                     onChange={e => setTo(e.target.value)}
                     placeholder="À"
-                    className="bg-[#0a0a0b] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-violet-500/50"
+                    className="bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary focus:outline-none focus:border-violet-500/50"
                 />
             </div>
 
@@ -185,17 +185,17 @@ export function TaxAuditPanel() {
                             <Lock className="w-3.5 h-3.5" />
                             Clé fiscale : {result.tenant.fiscalKeyConfigured ? 'Configurée' : 'MANQUANTE'}
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 bg-white/5 rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
+                        <div className="flex items-center gap-2 px-3 py-1.5 border border-border-subtle bg-surface-card rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
                             Région : {result.tenant.dataRegion}
                         </div>
                     </div>
 
                     {/* Tableau journalEntries */}
                     {result.journalEntries.length > 0 && (
-                        <div className="overflow-x-auto rounded-2xl border border-white/5">
+                        <div className="overflow-x-auto rounded-2xl border border-border-subtle">
                             <table className="w-full text-[10px] text-text-secondary">
                                 <thead>
-                                    <tr className="border-b border-white/5 text-text-muted uppercase tracking-widest">
+                                    <tr className="border-b border-border-subtle text-text-muted uppercase tracking-widest">
                                         <th className="px-4 py-3 text-left">Date</th>
                                         <th className="px-4 py-3 text-left">Libellé</th>
                                         <th className="px-4 py-3 text-left">Compte PCG</th>
@@ -205,7 +205,7 @@ export function TaxAuditPanel() {
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {result.journalEntries.slice(0, 200).map(je => (
-                                        <tr key={je.id} className="hover:bg-white/3 transition-colors">
+                                        <tr key={je.id} className="hover:bg-surface-card transition-colors">
                                             <td className="px-4 py-2.5 font-mono">{je.date?.slice(0, 10)}</td>
                                             <td className="px-4 py-2.5 max-w-[200px] truncate">{je.label}</td>
                                             <td className="px-4 py-2.5 font-mono text-violet-400">{je.pcgAccount} – {je.pcgLabel}</td>
@@ -232,7 +232,7 @@ export function TaxAuditPanel() {
 
 function StatBadge({ label, value }: { label: string; value: string }) {
     return (
-        <div className="bg-[#0a0a0b] border border-white/5 rounded-xl p-3">
+        <div className="bg-surface-card border border-border-subtle rounded-xl p-3">
             <p className="text-[9px] uppercase tracking-widest text-text-muted mb-1">{label}</p>
             <p className="text-sm font-bold text-text-primary tabular-nums">{value}</p>
         </div>

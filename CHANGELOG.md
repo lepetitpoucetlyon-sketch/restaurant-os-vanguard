@@ -1,5 +1,46 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [1.9.2] - 2026-07-29 - SÉCURITÉ FIRESTORE + STUBS RÉELS 🔐
+
+### 🔐 AUDIT FIRESTORE — Règles privilege escalation systemConfig
+- **Problème** : Firestore évalue les blocs `match` en **OR logique** — le bloc spécifique `systemConfig` (owner-only) ne neutralise pas le bloc générique `/{collection}/{document=**}`. Un manager pouvait écrire sur `role_permissions` via la règle générique malgré le bloc restrictif.
+- **Fonction `isOwnerOnlyCollection`** ajoutée dans `firestore.rules` — liste les collections réservées à l'owner/MCC.
+- **Gardes injectés** dans les 3 opérations du bloc générique (`create`, `update`, `delete`) : `!isOwnerOnlyCollection(collection)`. La route d'escalade via wildcard est fermée.
+
+### 🩹 STUBS → CODE RÉEL
+- **`LiquidStaffingEngine.auditGroupStaffing`** : Suppression du mock `i % 2 === 0 ? 2 : 6` — remplacé par une vraie requête `Nexus.adapter.get(tenants/${id}/timeclock/${today})`. Calcule `currentStaff` en comptant les employés qui ont un `clock_in` sans `clock_out` ultérieur. `requiredStaff` lu depuis `settings.planningConfig.minStaff` avec fallback à 3. Fail-safe par tenant sur erreur (log + `currentStaff: 0`).
+- **`auth/google/callback` — `encryptToken`** : Suppression du fallback "stocker en clair si pas de secret". `NEXUS_TENANT_SECRET` manquant → `throw` immédiat (fail-closed). Le callback renvoie une redirection `/settings?error=internal` — aucun token OAuth n'est jamais écrit en clair dans Nexus.
+
+### 📝 ENV VARS — `.env.example` complété
+8 secrets utilisés dans les routes API mais absents du fichier d'exemple :
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` / `GOOGLE_REDIRECT_URI` — OAuth Google Business
+- `CONNECTORS_WEBHOOK_SECRET` — Bearer fallback webhooks delivery/réservations/IoT
+- `CRON_SECRET` — protection des routes cron (reviews, reservations sync)
+- `INTERNAL_API_SECRET` — appels M2M internes (chain-audit, widget/book)
+- `PUSH_SECRET` — autorisation envoi notifications push
+- `AXIOM_DATASET` / `AXIOM_TOKEN` — observabilité logs production (Axiom)
+
+---
+
+## [1.9.1] - 2026-07-29 - FINITIONS 4-5-6 🏛️
+
+### 🏛️ FIX 4 — Rapatriement progressif (domain/ → modules/)
+- **`domain/types/bar.ts`** → `src/modules/ops/types/bar.ts` (canonical). Stub de compat backward en place.
+- **`domain/types/quality.ts`** → `src/modules/compliance/types/quality.ts` (canonical). Stub backward.
+- **`domain/constants/bar-data.ts`** → `src/modules/ops/constants/bar-data.ts` (canonical). Stub backward.
+- **`domain/repositories/IFinanceRepository.ts`** → `src/modules/finance/repositories/IFinanceRepository.ts` (canonical). Stub backward.
+- **11 importeurs mis à jour** : `ops/pos/components/bar/*` (5), `compliance/haccp/**` (4), `infrastructure/repositories/` (2) → tous pointent désormais sur le canonical dans le pilier.
+- Les stubs `@domain/*` restent pour les imports existants dans `app/` — migration progressive conforme à la règle barrel.
+
+### 🩹 FIX 5 — Demo page : correction du mensonge "24h auto-destroy"
+- `src/app/(public)/demo/page.tsx` : "Cet environnement s'auto-détruira dans 24h" remplacé par "Environnement local à votre navigateur — les données disparaissent à la fermeture de l'onglet." — `SimulacraAdapter` est in-memory only ; aucun cron ni TTL n'a jamais existé côté serveur.
+
+### 🔌 FIX 6 — useExtensions câblé dans IntegrationSettings
+- `IntegrationSettings.tsx` importe désormais `useExtensions()` — `isExtensionActive(id)` compare l'état local (toggle non sauvegardé) avec l'état Nexus persisté.
+- Badge "Non sauvegardé" (orange) apparaît automatiquement si l'état local diverge du Nexus. Disparaît dès que `handleSave()` est appelé et que le hook relit les settings. Source unique de vérité : `settings.integrations[].isActive` (Nexus via SettingsContext).
+
+---
+
 ## [1.9.0] - 2026-07-28 - AUDIT MULTI-DIMENSIONNEL & SÉCURISATION WEBHOOKS 🔒🧪
 
 ### 🔬 AUDIT 1 — LOGIQUE MÉTIER (BUSINESS LOGIC)
@@ -42,6 +83,20 @@
 - **UberEatsProvider** : HMAC `UBEREATS_WEBHOOK_SECRET` sur header `x-uber-signature` (strip préfixe `sha256=`).
 - **ZenchefProvider** : HMAC `ZENCHEF_WEBHOOK_SECRET` sur header `x-zenchef-signature`.
 - **3 routes webhook** (`/delivery`, `/reservations`, `/iot`) : Lecture du `rawBody` brut avant parse ; vérification `provider.verifySignature()` ou fallback `CONNECTORS_WEBHOOK_SECRET` (Bearer) ; retour 401 si non vérifié ; avertissement si aucun mécanisme configuré.
+
+### ✅ FINITION WALKTHROUGH MÉTA-PLAN (Phases 3 & 4)
+
+**Phase 3 — RBAC : custom roles effectifs côté serveur**
+- **`/api/admin/users/assign-role`** (nouveau) : route `requireTenantAdmin` — valide le rôle contre `ROLE_LABELS` ET les `customRoles` du tenant stockés dans Nexus (DB-agnostique) ; écrit via `Nexus.adapter.set()` ; met à jour les Firebase Auth custom claims en best-effort non-bloquant (`try/catch` avec `logger.warn`). Cross-tenant impossible : le `tenantId` vient du token.
+- **`AuthAccess.tsx`** : `assignRoleToUser(userId, role)` exposé via `authedFetch` → appelle la route ci-dessus.
+- **`useNexusAuthLogic.ts`** : `assignRoleToUser` propagé dans `NexusAuthState`.
+- **`nexus.types.ts`** : `NexusAuthState.assignRoleToUser` déclaré.
+- **`AccountSettingsDashboard.tsx`** : sélecteur de rôle inline sur chaque chip utilisateur — change de rôle en 1 clic, désactivé pendant l'appel (`disabled={reassigningUserId === user.id}`).
+- Les rôles custom sont désormais reconnus côté serveur (ils apparaissent dans les claims Firebase et dans Nexus).
+
+**Phase 4 — Extensions : source unique de vérité Nexus**
+- **`src/shared/providers/hooks/useExtensions.ts`** (nouveau) : hook `useExtensions()` → `{ isExtensionActive(id), activeExtensions[] }`. Lit `settings.integrations[].isActive` depuis `SettingsContext` (déjà persisté dans Nexus via `updateList()`). Aucune dépendance Firebase, aucun fichier statique.
+- `nexus-ledger.json` conservé en snapshot de référence projet, mais n'est plus la source de vérité runtime des toggles.
 
 ### 🔐 AUDIT 9 — RBAC COMPLETENESS
 - **15 routes sans guard Firebase** auditées — toutes légitimes : `signup`, `status`, `menu.json`, `resolve-domain`, `health/rag`, `auth/google/callback`, `finance/bank/callback`, `google/reserve/*` (4), `widget/availability`, `widget/setup-intent` (rate-limit IP), `haccp/iot-push` (Bearer `HACCP_GATEWAY_TOKEN`).

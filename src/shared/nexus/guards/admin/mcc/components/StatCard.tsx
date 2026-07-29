@@ -2,10 +2,10 @@ import React from 'react';
 
 export function StatCard({ label, value, icon, trend, isWarning = false }: { label: string, value: string, icon: React.ReactNode, trend: string, isWarning?: boolean }) {
   return (
-    <div className={`p-6 bg-white/5 backdrop-blur-md border ${isWarning ? 'border-action-primary/20' : 'border-white/10'} rounded-2xl relative overflow-hidden group hover:border-white/20 transition-all`}>
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-all" />
+    <div className={`p-6 bg-surface-card backdrop-blur-md border ${isWarning ? 'border-action-primary/20' : 'border-border-subtle'} rounded-2xl relative overflow-hidden group hover:border-border-subtle transition-all`}>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-surface-card rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-surface-hover transition-all" />
       <div className="flex justify-between items-start mb-4 relative z-10">
-        <div className="p-3 bg-white/5 rounded-xl group-hover:bg-white/10 transition-all">
+        <div className="p-3 bg-surface-card rounded-xl group-hover:bg-surface-hover transition-all">
           {icon}
         </div>
         {isWarning && <div className="w-2.5 h-2.5 rounded-full bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]" />}

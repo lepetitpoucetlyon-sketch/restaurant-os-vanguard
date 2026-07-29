@@ -61,16 +61,29 @@ export function SupportAIPanel() {
     }
   };
 
-  const handleEscalate = () => {
+  const handleEscalate = async () => {
     if (!result) return;
-    toast.info(`Ticket ${result.ticketId.slice(0, 8)}… transmis en L1`);
+    try {
+      const res = await fetch('/api/admin/fleet/support-ai/drafts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticketId: result.ticketId, diagnostic: result.diagnostic, tenantId, description }),
+      });
+      if (res.ok) {
+        toast.success(`Ticket ${result.ticketId.slice(0, 8)}… transmis en L1`);
+      } else {
+        toast.error('Échec de l\'escalade');
+      }
+    } catch {
+      toast.error('Erreur réseau lors de l\'escalade');
+    }
   };
 
   const d = result?.diagnostic;
   const sevStyle = d ? (SEVERITY_STYLES[d.severity] ?? SEVERITY_STYLES.low) : null;
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-5">
+    <div className="bg-surface-card backdrop-blur-md border border-border-subtle rounded-3xl p-6 space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-2xl bg-action-primary/10 border border-action-primary/20 flex items-center justify-center">
@@ -132,7 +145,7 @@ export function SupportAIPanel() {
 
       {/* Result */}
       {result && d && sevStyle && (
-        <div className="space-y-4 border-t border-white/5 pt-5">
+        <div className="space-y-4 border-t border-border-subtle pt-5">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <span className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-widest ${sevStyle.cls}`}>
               {d.severity === 'critical' || d.severity === 'high'

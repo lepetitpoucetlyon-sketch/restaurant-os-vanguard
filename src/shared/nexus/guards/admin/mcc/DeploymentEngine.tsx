@@ -92,10 +92,16 @@ export function DeploymentEngine() {
         setPushProgress(10);
         setLastResult(null);
 
+        const steps = [30, 60, 90];
+        const stepTimers = steps.map((pct, i) =>
+            setTimeout(() => setPushProgress(pct), (i + 1) * 800),
+        );
+
         try {
             const res = await authedFetch('/api/admin/git/push', { method: 'POST' });
             const data = await res.json();
 
+            stepTimers.forEach(clearTimeout);
             setPushProgress(100);
 
             if (data.success) {
@@ -105,6 +111,7 @@ export function DeploymentEngine() {
                 setLastResult({ success: false, msg: 'Échec de Synchronisation' });
             }
         } catch (_error) {
+            stepTimers.forEach(clearTimeout);
             setLastResult({ success: false, msg: 'Erreur Réseau' });
         } finally {
             setIsPushing(false);
@@ -113,7 +120,7 @@ export function DeploymentEngine() {
     };
 
     return (
-        <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl relative overflow-hidden group">
+        <div className="p-6 bg-surface-card border border-border-subtle rounded-3xl relative overflow-hidden group">
             {/* Background Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-action-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-action-primary/10 transition-all pointer-events-none" />
 
@@ -139,14 +146,14 @@ export function DeploymentEngine() {
 
             <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-bg-primary/50 border border-white/5 rounded-2xl">
+                    <div className="p-4 bg-bg-primary/50 border border-border-subtle rounded-2xl">
                         <p className="text-[9px] font-black text-secondary uppercase mb-1 tracking-widest">Active Branch</p>
                         <div className="flex items-center gap-2">
                             <GitBranch className="w-3 h-3 text-brand" />
                             <span className="text-xs font-mono font-bold text-muted">{status?.branch || '...'}</span>
                         </div>
                     </div>
-                    <div className="p-4 bg-bg-primary/50 border border-white/5 rounded-2xl">
+                    <div className="p-4 bg-bg-primary/50 border border-border-subtle rounded-2xl">
                         <p className="text-[9px] font-black text-secondary uppercase mb-1 tracking-widest">Master Status</p>
                         <div className="flex items-center gap-2">
                             <ShieldCheck className="w-3 h-3 text-status-success" />
@@ -155,7 +162,7 @@ export function DeploymentEngine() {
                     </div>
                 </div>
 
-                <div className="p-4 bg-bg-primary/30 border border-white/5 rounded-2xl space-y-2">
+                <div className="p-4 bg-bg-primary/30 border border-border-subtle rounded-2xl space-y-2">
                     <p className="text-[9px] font-black text-secondary uppercase tracking-widest flex items-center gap-2">
                         <GitCommit className="w-3 h-3" /> Latest Snapshot
                     </p>
@@ -166,7 +173,7 @@ export function DeploymentEngine() {
 
                 {isPushing ? (
                     <div className="space-y-4 py-2">
-                        <div className="w-full h-1.5 bg-surface-card/5 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-surface-card rounded-full overflow-hidden">
                             <motion.div 
                                 className="h-full bg-action-primary shadow-[0_0_15px_rgba(99,102,241,0.5)]"
                                 initial={{ width: 0 }}
@@ -186,13 +193,13 @@ export function DeploymentEngine() {
                             "w-full group/btn relative flex items-center justify-between p-4 rounded-2xl transition-all duration-300 transform active:scale-[0.98]",
                             status && status.modifiedCount > 0
                                 ? "bg-surface-card text-primary shadow-xl shadow-white/5 hover:bg-surface-bg"
-                                : "bg-surface-card/5 text-secondary border border-white/5 cursor-not-allowed"
+                                : "bg-surface-card text-secondary border border-border-subtle cursor-not-allowed"
                         )}
                     >
                         <div className="flex items-center gap-3">
                             <div className={cn(
                                 "w-8 h-8 rounded-xl flex items-center justify-center transition-colors",
-                                status && status.modifiedCount > 0 ? "bg-surface-sidebar/5" : "bg-surface-card/5"
+                                status && status.modifiedCount > 0 ? "bg-surface-card" : "bg-surface-card"
                             )}>
                                 <RefreshCw className={cn("w-4 h-4", isPushing ? "animate-spin" : "")} />
                             </div>
@@ -222,7 +229,7 @@ export function DeploymentEngine() {
                 </AnimatePresence>
 
                 {/* ── Sovereign RAG Panel ─────────────────────────────────── */}
-                <div className="pt-4 border-t border-white/5 space-y-3">
+                <div className="pt-4 border-t border-border-subtle space-y-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Brain className="w-3.5 h-3.5 text-brand" />
@@ -234,7 +241,7 @@ export function DeploymentEngine() {
                                 ? "bg-status-success/10 text-status-success border-emerald-500/20"
                                 : ragHealth?.status === 'offline'
                                 ? "bg-status-danger/10 text-status-danger border-red-500/20"
-                                : "bg-surface-card/5 text-secondary border-white/5"
+                                : "bg-surface-card text-secondary border-border-subtle"
                         )}>
                             {ragHealth?.status ?? 'Checking...'}
                         </div>
@@ -242,15 +249,15 @@ export function DeploymentEngine() {
 
                     {ragHealth && (
                         <div className="grid grid-cols-3 gap-2">
-                            <div className="p-2.5 bg-bg-primary/30 border border-white/5 rounded-xl text-center">
+                            <div className="p-2.5 bg-bg-primary/30 border border-border-subtle rounded-xl text-center">
                                 <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Docs</p>
                                 <p className="text-xs font-bold text-muted">{ragHealth.documentCount ?? '—'}</p>
                             </div>
-                            <div className="p-2.5 bg-bg-primary/30 border border-white/5 rounded-xl text-center">
+                            <div className="p-2.5 bg-bg-primary/30 border border-border-subtle rounded-xl text-center">
                                 <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Latence</p>
                                 <p className="text-xs font-bold text-muted">{ragHealth.latencyMs}ms</p>
                             </div>
-                            <div className="p-2.5 bg-bg-primary/30 border border-white/5 rounded-xl text-center">
+                            <div className="p-2.5 bg-bg-primary/30 border border-border-subtle rounded-xl text-center">
                                 <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Version</p>
                                 <p className="text-xs font-bold text-muted">{ragHealth.version ?? '—'}</p>
                             </div>
@@ -261,14 +268,14 @@ export function DeploymentEngine() {
                         <button
                             onClick={handleRagReindexFleet}
                             disabled={isRagIndexing}
-                            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface-card/5 border border-white/5 text-[9px] font-black uppercase tracking-widest text-muted hover:border-brand hover:text-brand transition-all disabled:opacity-50"
+                            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface-card border border-border-subtle text-[9px] font-black uppercase tracking-widest text-muted hover:border-brand hover:text-brand transition-all disabled:opacity-50"
                         >
                             <RotateCcw className={cn("w-3.5 h-3.5", isRagIndexing && "animate-spin")} />
                             Réindexer flotte
                         </button>
                         <button
                             onClick={fetchRagHealth}
-                            className="p-3 rounded-xl bg-surface-card/5 border border-white/5 text-muted hover:text-text-primary transition-all"
+                            className="p-3 rounded-xl bg-surface-card border border-border-subtle text-muted hover:text-text-primary transition-all"
                         >
                             <Zap className="w-3.5 h-3.5" />
                         </button>

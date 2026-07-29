@@ -1,5 +1,7 @@
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import type { ClockEntry } from '@/modules/human/connectors/timeclock/types';
 
 /**
  * 🧑‍🤝‍🧑 Local Liquid Staffing Engine (Human Pillar)
@@ -26,11 +28,38 @@ export class LiquidStaffingEngine {
     public static async auditGroupStaffing(ownerId: string, groupTenantIds: string[]): Promise<StaffingAnomaly[]> {
         logger.info(`🔍 [Liquid Staffing] Audit RH intra-groupe pour le Owner ${ownerId}...`);
         
-        // TODO: remplacer par Nexus.adapter.query<ShiftMetrics>(`tenants/${id}/shifts`, {})
-        const activeShiftsByTenant: Record<string, { currentStaff: number; requiredStaff: number }> =
-            Object.fromEntries(
-                groupTenantIds.map((id, i) => [id, { currentStaff: i % 2 === 0 ? 2 : 6, requiredStaff: i % 2 === 0 ? 5 : 4 }])
-            );
+        const today = new Date().toISOString().slice(0, 10);
+        const activeShiftsByTenant: Record<string, { currentStaff: number; requiredStaff: number }> = {};
+
+        await Promise.all(groupTenantIds.map(async (tenantId) => {
+            try {
+                // Lire les pointages du jour (chemin canonique timeclock)
+                const raw = await Nexus.adapter.get<Record<string, ClockEntry>>(
+                    `tenants/${tenantId}/timeclock/${today}`
+                );
+                const entries = raw ? Object.values(raw) : [];
+
+                // Employés actuellement en service : ont un clock_in sans clock_out ultérieur
+                const clockedInIds = new Set<string>();
+                const clockedOutIds = new Set<string>();
+                for (const e of entries) {
+                    if (e.type === 'clock_in')  clockedInIds.add(e.employeeId);
+                    if (e.type === 'clock_out') clockedOutIds.add(e.employeeId);
+                }
+                const currentStaff = [...clockedInIds].filter(id => !clockedOutIds.has(id)).length;
+
+                // Effectif requis : lu depuis les settings tenant, fallback à 3
+                const settings = await Nexus.adapter.get<{ planningConfig?: { minStaff?: number } }>(
+                    `tenants/${tenantId}/settings/global`
+                );
+                const requiredStaff = settings?.planningConfig?.minStaff ?? 3;
+
+                activeShiftsByTenant[tenantId] = { currentStaff, requiredStaff };
+            } catch (err) {
+                logger.error(`[Liquid Staffing] Impossible de lire les pointages pour tenant=${tenantId}`, String(err));
+                activeShiftsByTenant[tenantId] = { currentStaff: 0, requiredStaff: 3 };
+            }
+        }));
 
         const anomalies: StaffingAnomaly[] = [];
 

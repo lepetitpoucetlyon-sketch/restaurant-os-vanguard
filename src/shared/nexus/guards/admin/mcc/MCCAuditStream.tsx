@@ -43,9 +43,9 @@ export function MCCAuditStream() {
     }, [logs]);
 
     return (
-        <div className="bg-[#0a0a0b] border border-white/5 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[400px]">
+        <div className="bg-surface-card border border-border-subtle rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[400px]">
             {/* Header */}
-            <div className="px-6 py-4 bg-[#161618] border-b border-white/5 flex items-center justify-between">
+            <div className="px-6 py-4 bg-surface-card border-b border-border-subtle flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-action-primary/10 flex items-center justify-center">
                         <Terminal className="w-4 h-4 text-brand" />
@@ -87,7 +87,7 @@ export function MCCAuditStream() {
                                     borderLeftColor: { repeat: Infinity, duration: 2 }
                                 }}
                                 className={cn(
-                                    "flex items-start gap-4 p-2.5 rounded-xl hover:bg-surface-card/[0.02] transition-all group border-l-2 border-transparent hover:border-white/5",
+                                    "flex items-start gap-4 p-2.5 rounded-xl hover:bg-surface-card transition-all group border-l-2 border-transparent hover:border-border-subtle",
                                     (log.severity === 'critical' || log.severity === 'high') && "bg-status-danger/[0.02]"
                                 )}
                             >
@@ -119,7 +119,7 @@ export function MCCAuditStream() {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-3 bg-[#111113] border-t border-white/5 flex items-center gap-4 relative overflow-hidden">
+            <div className="px-6 py-3 bg-surface-card border-t border-border-subtle flex items-center gap-4 relative overflow-hidden">
                 <motion.div 
                     animate={{ x: ['-100%', '200%'] }}
                     transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
@@ -129,7 +129,7 @@ export function MCCAuditStream() {
                     <div className="w-1.5 h-1.5 rounded-full bg-action-primary" />
                     <span className="text-[8px] font-bold text-secondary uppercase tracking-widest">GTM-7X2A9</span>
                 </div>
-                <div className="w-px h-3 bg-surface-card/5 ml-auto relative z-10" />
+                <div className="w-px h-3 bg-surface-card ml-auto relative z-10" />
                 <span className="text-[8px] font-bold text-secondary uppercase tracking-widest relative z-10">Buffer Status: {logs.length}/50</span>
             </div>
         </div>

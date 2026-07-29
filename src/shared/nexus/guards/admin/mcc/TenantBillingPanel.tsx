@@ -48,10 +48,11 @@ export function TenantBillingPanel() {
     }
   };
 
-  useEffect(() => { void load(); }, [instances.length]);
+  const instanceIds = instances.map(i => i.id).join(',');
+  useEffect(() => { void load(); }, [instanceIds]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl">
+    <div className="p-6 bg-surface-card backdrop-blur-md border border-border-subtle rounded-2xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <CreditCard className="w-5 h-5 text-brand" />
@@ -64,7 +65,7 @@ export function TenantBillingPanel() {
       </div>
 
       {loading ? (
-        <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-12 bg-white/5 rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-12 bg-surface-card rounded-xl animate-pulse" />)}</div>
       ) : billingData.length === 0 ? (
         <p className="text-xs text-secondary text-center py-6">Aucun tenant trouvé.</p>
       ) : (
@@ -72,7 +73,7 @@ export function TenantBillingPanel() {
           {billingData.map(b => {
             const st = STATUS_CONFIG[b.status] ?? { label: b.status, color: 'text-secondary', icon: null };
             return (
-              <div key={b.tenantId} className="flex items-center justify-between p-3 bg-white/[0.03] border border-white/5 rounded-xl">
+              <div key={b.tenantId} className="flex items-center justify-between p-3 bg-surface-card border border-border-subtle rounded-xl">
                 <div>
                   <p className="text-sm font-semibold text-text-primary">{b.name}</p>
                   <p className="text-[10px] text-secondary font-mono">{b.tenantId}</p>

@@ -32,7 +32,7 @@ export default function DemoLandingPage() {
         </Link>
         
         <p className="text-[10px] text-text-muted">
-          Cet environnement s'auto-détruira dans 24h. Aucune donnée n'est envoyée à nos serveurs de production.
+          Environnement local à votre navigateur — les données disparaissent à la fermeture de l'onglet. Rien n'est envoyé à nos serveurs.
         </p>
       </div>
     </div>

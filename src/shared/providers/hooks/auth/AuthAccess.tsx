@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { authedFetch } from '@/lib/client/authedFetch';
 import { AccessPolicyManager, DEFAULT_ROLE_PERMISSIONS, type CategoryKey, type RolePermissions } from '@domain/services/AccessPolicyManager';
 import { ROOT_ADMIN } from '@domain/services/IdentityManager';
 import { User, UserRole } from '@nexus/contracts';
@@ -119,6 +120,23 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
         }, { merge: true });
     }, [currentUser?.id, currentUser?.tenantId, customRoles, rolePermissions]);
 
+    /**
+     * Assigne un rôle (standard ou custom) à un utilisateur du tenant.
+     * Appelle /api/admin/users/assign-role qui met à jour Nexus + Firebase claims.
+     * DB-agnostique : la route côté serveur gère la couche de persistance.
+     */
+    const assignRoleToUser = useCallback(async (userId: string, role: string): Promise<void> => {
+        const response = await authedFetch('/api/admin/users/assign-role', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, role }),
+        });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
+            throw new Error((err as { error?: string }).error ?? `HTTP ${response.status}`);
+        }
+    }, []);
+
     const hasAccess = useCallback((category: CategoryKey) => {
         return AccessPolicyManager.hasAccess(currentUser, rolePermissions, category);
     }, [currentUser, rolePermissions]);
@@ -138,6 +156,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
         updateRolePermissions,
         createCustomRole,
         deleteCustomRole,
+        assignRoleToUser,
         hasAccess,
         canDo,
         getAccessibleCategories

@@ -6,7 +6,7 @@ import {
     Thermometer,
     ShieldCheck
 } from 'lucide-react';
-import { QualityControl } from '@domain/types/quality';
+import { QualityControl } from '@/modules/compliance/types/quality';
 import { cn } from '@/lib/ui.foundations';
 
 interface ReceptionSummaryProps {

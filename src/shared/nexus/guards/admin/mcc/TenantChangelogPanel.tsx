@@ -70,7 +70,7 @@ export function TenantChangelogPanel() {
     : (instances.find(i => i.id === selectedId)?.name ?? selectedId);
 
   return (
-    <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl space-y-5">
+    <div className="p-6 bg-surface-card border border-border-subtle rounded-3xl space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export function TenantChangelogPanel() {
             <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Changelog auto-catégorisé</p>
           </div>
         </div>
-        <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-white/5 text-secondary hover:text-muted transition-all">
+        <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
           <RefreshCw className={cn('w-3.5 h-3.5', isLoading && 'animate-spin')} />
         </button>
       </div>
@@ -93,16 +93,16 @@ export function TenantChangelogPanel() {
         <div className="relative flex-1 min-w-[160px]">
           <button
             onClick={() => setDropdownOpen(o => !o)}
-            className="w-full flex items-center justify-between px-3 py-2 bg-bg-primary/50 border border-white/10 rounded-xl text-xs font-medium text-muted hover:border-white/20 transition-all"
+            className="w-full flex items-center justify-between px-3 py-2 bg-bg-primary/50 border border-border-subtle rounded-xl text-xs font-medium text-muted hover:border-border-default transition-all"
           >
             <span className="truncate">{displayName}</span>
             <ChevronDown className={cn('w-3.5 h-3.5 text-secondary shrink-0 ml-1 transition-transform', dropdownOpen && 'rotate-180')} />
           </button>
           {dropdownOpen && (
-            <div className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-white/10 rounded-xl overflow-hidden shadow-xl">
+            <div className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-border-subtle rounded-xl overflow-hidden shadow-xl">
               <button
                 onClick={() => { setSelectedId('__FLEET__'); setDropdownOpen(false); }}
-                className={cn('w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors', selectedId === '__FLEET__' ? 'text-cyan-400' : 'text-muted')}
+                className={cn('w-full text-left px-3 py-2 text-xs hover:bg-surface-card transition-colors', selectedId === '__FLEET__' ? 'text-cyan-400' : 'text-muted')}
               >
                 Flotte entière
               </button>
@@ -110,7 +110,7 @@ export function TenantChangelogPanel() {
                 <button
                   key={inst.id}
                   onClick={() => { setSelectedId(inst.id); setDropdownOpen(false); }}
-                  className={cn('w-full text-left px-3 py-2 text-xs hover:bg-white/5 transition-colors', inst.id === selectedId ? 'text-cyan-400' : 'text-muted')}
+                  className={cn('w-full text-left px-3 py-2 text-xs hover:bg-surface-card transition-colors', inst.id === selectedId ? 'text-cyan-400' : 'text-muted')}
                 >
                   {inst.name ?? inst.id}
                 </button>
@@ -124,7 +124,7 @@ export function TenantChangelogPanel() {
           <select
             value={filterCat}
             onChange={e => setFilterCat(e.target.value as ChangeCategory | 'ALL')}
-            className="appearance-none px-3 py-2 bg-bg-primary/50 border border-white/10 rounded-xl text-xs font-medium text-muted pr-8 focus:outline-none hover:border-white/20 transition-all cursor-pointer"
+            className="appearance-none px-3 py-2 bg-bg-primary/50 border border-border-subtle rounded-xl text-xs font-medium text-muted pr-8 focus:outline-none hover:border-border-default transition-all cursor-pointer"
           >
             <option value="ALL">Toutes</option>
             {ALL_CATEGORIES.map(c => (
@@ -180,12 +180,12 @@ export function TenantChangelogPanel() {
             >
               {/* Timeline line */}
               {idx < entries.length - 1 && (
-                <div className="absolute left-1.5 top-5 bottom-0 w-px bg-white/5" />
+                <div className="absolute left-1.5 top-5 bottom-0 w-px bg-surface-card" />
               )}
-              <div className="absolute left-0 top-3 w-3 h-3 rounded-full border-2 border-white/10 bg-surface-bg" />
+              <div className="absolute left-0 top-3 w-3 h-3 rounded-full border-2 border-border-subtle bg-surface-bg" />
 
               <div
-                className="ml-2 p-3 bg-bg-primary/30 border border-white/5 rounded-xl cursor-pointer hover:border-white/10 transition-all"
+                className="ml-2 p-3 bg-bg-primary/30 border border-border-subtle rounded-xl cursor-pointer hover:border-border-subtle transition-all"
                 onClick={() => setExpanded(isOpen ? null : entry.id)}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -210,7 +210,7 @@ export function TenantChangelogPanel() {
                 </div>
 
                 {isOpen && (
-                  <div className="mt-3 pt-3 border-t border-white/5 space-y-2">
+                  <div className="mt-3 pt-3 border-t border-border-subtle space-y-2">
                     {entry.key && (
                       <p className="text-[9px] font-mono text-secondary">
                         <span className="text-text-primary/30">Key: </span>{entry.key}

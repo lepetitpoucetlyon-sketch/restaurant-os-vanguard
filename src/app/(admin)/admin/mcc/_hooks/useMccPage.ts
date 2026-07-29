@@ -64,15 +64,18 @@ export function useMccPage() {
             });
 
             timers.forEach(clearTimeout);
+            setProvisionStep(PROV_STEPS.length);
+            setProvisioningStatus('Clone Actif · Déploiement terminé ✓');
             refreshFleet();
-            setProvisioningStatus('Success! Clone Active.');
-            setShowCloneModal(false);
-            setProvisioningStatus(null);
-            setProvisionStep(0);
-            setNewCloneName('');
-            setNewCloneKey('');
-            setNewCloneEmail('');
-            setNewCloneTier('STANDARD');
+            setTimeout(() => {
+                setShowCloneModal(false);
+                setProvisioningStatus(null);
+                setProvisionStep(0);
+                setNewCloneName('');
+                setNewCloneKey('');
+                setNewCloneEmail('');
+                setNewCloneTier('STANDARD');
+            }, 2500);
         } catch {
             timers.forEach(clearTimeout);
             setProvisioningStatus('Critical Error in Provisioning.');

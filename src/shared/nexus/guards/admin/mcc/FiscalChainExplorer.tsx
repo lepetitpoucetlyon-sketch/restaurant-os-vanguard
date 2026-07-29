@@ -40,7 +40,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
   const lastUpdate = nodes.length > 0 ? nodes[0].timestamp : 'No data';
 
   return (
-    <div className="bg-[#161618] border border-white/5 rounded-3xl p-6 h-full flex flex-col">
+    <div className="bg-surface-card border border-border-subtle rounded-3xl p-6 h-full flex flex-col">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-action-primary/10 rounded-xl">
@@ -74,7 +74,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="p-4 bg-[#0a0a0b] border border-white/5 rounded-2xl relative group hover:border-focus/30 transition-all cursor-crosshair"
+                className="p-4 bg-surface-card border border-border-subtle rounded-2xl relative group hover:border-focus/30 transition-all cursor-crosshair"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex flex-col">
@@ -93,7 +93,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
                       <span>Current Hash</span>
                       <span className="text-primary italic">SHA-256</span>
                     </div>
-                    <div className="p-2 bg-surface-card/[0.02] rounded-lg border border-white/5 font-mono text-[10px] text-brand break-all leading-tight relative overflow-hidden group-hover:text-brand transition-colors">
+                    <div className="p-2 bg-surface-card rounded-lg border border-border-subtle font-mono text-[10px] text-brand break-all leading-tight relative overflow-hidden group-hover:text-brand transition-colors">
                       {node.hash}
                       <motion.div 
                         initial={{ x: '-100%' }}
@@ -112,7 +112,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/5 flex justify-between items-center">
+                <div className="mt-4 pt-3 border-t border-border-subtle flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Search className="w-3 h-3 text-secondary" />
                     <span className="text-[9px] text-secondary font-medium">{node.timestamp}</span>
@@ -122,7 +122,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
 
                 {/* Visual Continuity Link with Electron Flow */}
                 {i < nodes.length - 1 && (
-                  <div className="absolute -bottom-4 left-6 w-0.5 h-4 bg-surface-card/5 z-0">
+                  <div className="absolute -bottom-4 left-6 w-0.5 h-4 bg-surface-card z-0">
                     <motion.div 
                       animate={{ top: ['0%', '100%'], opacity: [0, 1, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}

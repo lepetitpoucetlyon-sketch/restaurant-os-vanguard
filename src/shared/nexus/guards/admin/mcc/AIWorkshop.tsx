@@ -57,7 +57,7 @@ export const AIWorkshop: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#111113] border border-white/5 rounded-3xl p-6">
+    <div className="bg-surface-card border border-border-subtle rounded-3xl p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-action-primary/10 rounded-xl flex items-center justify-center border border-focus/20">
@@ -70,7 +70,7 @@ export const AIWorkshop: React.FC = () => {
         </div>
         <button
           onClick={loadPatches}
-          className="p-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all"
+          className="p-2 bg-surface-card hover:bg-surface-hover rounded-xl border border-border-subtle transition-all"
           title="Rafraîchir"
         >
           <RefreshCw className={`w-4 h-4 text-secondary ${loading ? 'animate-spin' : ''}`} />
@@ -80,13 +80,13 @@ export const AIWorkshop: React.FC = () => {
       {loading ? (
         <div className="text-center py-8 text-secondary text-xs font-bold uppercase tracking-widest">Chargement…</div>
       ) : patches.length === 0 ? (
-        <div className="text-center py-8 border border-dashed border-white/5 rounded-2xl">
+        <div className="text-center py-8 border border-dashed border-border-subtle rounded-2xl">
           <p className="text-secondary text-xs italic">Aucun patch NAM en attente.</p>
         </div>
       ) : (
         <div className="space-y-4">
           {patches.map(patch => (
-            <div key={patch.id} className="border border-white/5 rounded-2xl p-4 bg-white/[0.02] space-y-3">
+            <div key={patch.id} className="border border-border-subtle rounded-2xl p-4 bg-surface-card space-y-3">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono text-brand">{patch.ticketId}</span>
@@ -101,7 +101,7 @@ export const AIWorkshop: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="overflow-x-auto rounded-xl bg-[#0D0D18] p-3 border border-white/5">
+              <div className="overflow-x-auto rounded-xl bg-surface-card p-3 border border-border-subtle">
                 <pre className="text-[10px] font-mono text-status-success whitespace-pre-wrap">{patch.codeDiff}</pre>
               </div>
               {patch.status === 'PENDING' && (

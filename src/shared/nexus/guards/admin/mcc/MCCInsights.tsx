@@ -11,12 +11,12 @@ import { logger } from '@/lib/logger';
 
 export function MCCInsights() {
     const { macroInsights, refreshFleet } = useFleet();
+    useAtomValue(fleetSnapshotAtom);
     const triggerRebalancing = async (insight: FleetInsight) => {
         logger.info('[Fleet] Triggering rebalancing', { insightId: insight.id, type: insight.type });
         await MacroBrain.executeStrategicAction(insight);
         refreshFleet?.(true);
     };
-    const _fleetState = useAtomValue(fleetSnapshotAtom);
 
     if (!macroInsights || macroInsights.length === 0) return null;
 
@@ -33,7 +33,7 @@ export function MCCInsights() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="p-5 bg-[#161618] border border-focus/20 rounded-3xl relative overflow-hidden group hover:border-focus/40 transition-all"
+                    className="p-5 bg-surface-card border border-focus/20 rounded-3xl relative overflow-hidden group hover:border-focus/40 transition-all"
                 >
                     {/* Glow effect */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-action-primary/5 blur-3xl -mr-16 -mt-16 group-hover:bg-action-primary/10 transition-all" />
@@ -59,7 +59,7 @@ export function MCCInsights() {
 
                     <button 
                         onClick={() => triggerRebalancing(insight)}
-                        className="w-full py-3 bg-surface-card/[0.03] hover:bg-surface-card/[0.08] border border-white/5 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all group-hover:border-focus/30 active:scale-[0.98]"
+                        className="w-full py-3 bg-surface-card hover:bg-surface-card border border-border-subtle rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all group-hover:border-focus/30 active:scale-[0.98]"
                     >
                         {insight.action}
                         <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

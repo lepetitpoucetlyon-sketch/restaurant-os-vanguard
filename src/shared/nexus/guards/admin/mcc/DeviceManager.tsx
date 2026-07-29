@@ -52,7 +52,7 @@ export function DeviceManager({ uid }: { uid: string }) {
   }
 
   return (
-    <div className="bg-[#0f0f11] border border-white/5 rounded-2xl p-6">
+    <div className="bg-surface-card border border-border-subtle rounded-2xl p-6">
       <div className="flex items-center gap-3 mb-6">
         <Smartphone className="w-5 h-5 text-brand" />
         <h3 className="text-lg font-bold text-text-primary uppercase tracking-tight">Certified Devices</h3>
@@ -67,7 +67,7 @@ export function DeviceManager({ uid }: { uid: string }) {
               key={device.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`p-4 rounded-xl border flex items-center justify-between ${device.revoked ? 'bg-status-danger/5 border-red-500/20' : 'bg-surface-card/5 border-subtle'}`}
+              className={`p-4 rounded-xl border flex items-center justify-between ${device.revoked ? 'bg-status-danger/5 border-red-500/20' : 'bg-surface-card border-subtle'}`}
             >
               <div className="flex items-center gap-4">
                 {device.revoked ? (

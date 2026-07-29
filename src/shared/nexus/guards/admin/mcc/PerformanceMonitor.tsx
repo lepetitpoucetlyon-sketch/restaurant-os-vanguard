@@ -47,7 +47,7 @@ export const PerformanceMonitor: React.FC = () => {
     }, []);
 
     return (
-        <div className="bg-[#111113] border border-white/5 rounded-3xl p-6 overflow-hidden relative">
+        <div className="bg-surface-card border border-border-subtle rounded-3xl p-6 overflow-hidden relative">
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-action-primary/10 blur-[100px] rounded-full pointer-events-none" />
 
             <div className="flex items-center justify-between mb-8">
@@ -89,7 +89,7 @@ export const PerformanceMonitor: React.FC = () => {
                 />
             </div>
 
-            <div className="mt-8 pt-6 border-t border-white/5">
+            <div className="mt-8 pt-6 border-t border-border-subtle">
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex flex-col">
                         <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Atomic Domains Health</span>
@@ -124,12 +124,12 @@ const MetricGauge: React.FC<{
 }> = ({ label, value, percentage, icon, color }) => {
     const c = GAUGE_COLORS[color];
     return (
-        <div className="bg-surface-card/[0.02] border border-white/5 rounded-2xl p-4">
+        <div className="bg-surface-card border border-border-subtle rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-3">
                 <div className={`p-1.5 rounded-lg ${c.wrap}`}>{icon}</div>
                 <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
             </div>
-            <div className="relative h-1 bg-surface-card/5 rounded-full overflow-hidden mb-2">
+            <div className="relative h-1 bg-surface-card rounded-full overflow-hidden mb-2">
                 <motion.div
                     className={`absolute left-0 top-0 h-full ${c.gradient}`}
                     initial={{ width: 0 }}

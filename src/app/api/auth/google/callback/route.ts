@@ -34,10 +34,9 @@ interface GoogleIntegrationRecord {
 async function encryptToken(plaintext: string): Promise<string> {
   const secret = process.env.NEXUS_TENANT_SECRET;
   if (!secret) {
-    // TODO: En production, ce cas doit bloquer (secret obligatoire).
-    // Pour l'instant, on stocke en clair avec un avertissement.
-    logger.warn('[Google OAuth Callback] NEXUS_TENANT_SECRET non configuré — token stocké en clair');
-    return plaintext;
+    // Fail-closed : stocker un token OAuth en clair est inacceptable.
+    // Configurer NEXUS_TENANT_SECRET dans les variables d'environnement.
+    throw new Error('NEXUS_TENANT_SECRET manquant — chiffrement OAuth impossible');
   }
 
   const encoder = new TextEncoder();

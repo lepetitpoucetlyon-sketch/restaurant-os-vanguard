@@ -85,27 +85,27 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
 
   if (rows.length === 0) {
     return (
-      <div className="p-6 bg-white/5 border border-white/10 rounded-2xl text-center text-secondary text-sm">
+      <div className="p-6 bg-surface-card border border-border-subtle rounded-2xl text-center text-secondary text-sm">
         Aucun tenant chargé.
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl space-y-4">
+    <div className="p-6 bg-surface-card backdrop-blur-md border border-border-subtle rounded-2xl space-y-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
           <Tablet className="w-5 h-5 text-brand" />
           <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Fleet Device Inventory</h3>
         </div>
-        <button onClick={load} className="p-1.5 rounded-lg hover:bg-white/10 transition-all">
+        <button onClick={load} className="p-1.5 rounded-lg hover:bg-surface-card transition-all">
           <RefreshCw className="w-4 h-4 text-secondary" />
         </button>
       </div>
 
       <div className="space-y-3">
         {rows.map(row => (
-          <div key={row.tenantId} className="bg-white/5 border border-white/5 rounded-xl p-4 space-y-3">
+          <div key={row.tenantId} className="bg-surface-card border border-border-subtle rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-text-primary truncate max-w-[60%]">{row.name}</span>
               <span className="text-[10px] text-secondary font-mono">{row.tenantId.slice(0, 12)}</span>
@@ -120,7 +120,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
             {row.serials.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {row.serials.map(sn => (
-                  <span key={sn} className="flex items-center gap-1.5 bg-white/10 text-[11px] font-mono px-2.5 py-1 rounded-lg">
+                  <span key={sn} className="flex items-center gap-1.5 bg-surface-card text-[11px] font-mono px-2.5 py-1 rounded-lg">
                     {sn}
                     <button
                       onClick={() => removeSerial(row.tenantId, sn)}
@@ -144,7 +144,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                 onChange={e => setInputMap(m => ({ ...m, [row.tenantId]: e.target.value }))}
                 onKeyDown={e => { if (e.key === 'Enter') void addSerial(row.tenantId); }}
                 placeholder="N° de série (ex: C07X1234ABCD)"
-                className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-mono placeholder:text-secondary/40 focus:outline-none focus:border-focus/50"
+                className="flex-1 bg-surface-card border border-border-subtle rounded-lg px-3 py-1.5 text-xs font-mono placeholder:text-secondary/40 focus:outline-none focus:border-focus/50"
               />
               <button
                 onClick={() => addSerial(row.tenantId)}

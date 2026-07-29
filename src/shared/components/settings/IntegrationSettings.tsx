@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useExtensions } from '@/shared/providers/hooks/useExtensions';
 import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 
 const INTEGRATIONS_METADATA = [
@@ -46,6 +47,7 @@ export default function IntegrationSettings() {
     const [isSaving, setIsSaving] = useState(false);
     const [showSecrets, setShowSecrets] = useState(false);
     const { addNotification } = useNotifications();
+    const { isExtensionActive } = useExtensions();
 
     const handleSave = async () => {
         setIsSaving(true);
@@ -194,18 +196,34 @@ export default function IntegrationSettings() {
                                                     <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{meta.description}</p>
                                                 </div>
                                             </div>
-                                            <AnimatePresence>
-                                                {integration.isActive && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, scale: 0.8 }}
-                                                        animate={{ opacity: 1, scale: 1 }}
-                                                        className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20"
-                                                    >
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                                                        <span className="text-[9px] font-bold text-accent uppercase tracking-widest">Linked</span>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
+                                            <div className="flex flex-col items-end gap-1.5">
+                                                <AnimatePresence>
+                                                    {integration.isActive && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, scale: 0.8 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20"
+                                                        >
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                                                            <span className="text-[9px] font-bold text-accent uppercase tracking-widest">Linked</span>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                                <AnimatePresence>
+                                                    {integration.isActive !== isExtensionActive(meta.id) && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, scale: 0.8 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            exit={{ opacity: 0, scale: 0.8 }}
+                                                            className="flex items-center gap-1.5 px-3 py-1 bg-status-warning/10 rounded-full border border-status-warning/30"
+                                                            title="Changement en attente de sauvegarde"
+                                                        >
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-status-warning" />
+                                                            <span className="text-[8px] font-bold text-status-warning uppercase tracking-widest">Non sauvegardé</span>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
                                         </div>
 
                                         <div className="flex gap-4 relative z-10">

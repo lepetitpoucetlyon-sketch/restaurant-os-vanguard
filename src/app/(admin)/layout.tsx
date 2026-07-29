@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     // authenticated before we render), show the spinner rather than flashing "denied".
     if (isAuthLoading || !currentUser) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#0B0B10]">
+            <div className="min-h-screen flex items-center justify-center bg-surface-bg">
                 <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
             </div>
         );
@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     const role = currentUser.role ?? "";
     if (!ADMIN_ROLES.includes(role)) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[#0B0B10] text-text-primary">
+            <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-surface-bg text-text-primary">
                 <Shield className="w-10 h-10 text-status-danger" />
                 <p className="text-sm font-bold uppercase tracking-widest text-status-danger">Accès refusé</p>
                 <p className="text-xs text-text-primary/40">Ce panneau requiert un rôle administrateur.</p>
@@ -37,5 +37,5 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         );
     }
 
-    return <>{children}</>;
+    return <div data-theme="light">{children}</div>;
 }

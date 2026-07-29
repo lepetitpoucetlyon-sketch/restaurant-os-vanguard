@@ -137,7 +137,7 @@ export function SupportDraftsPanel() {
   const draftReadyCount = tickets.filter(t => t.status === 'draft_ready').length;
 
   return (
-    <div className="p-6 bg-[#161618] border border-white/5 rounded-3xl space-y-5">
+    <div className="p-6 bg-surface-card border border-border-subtle rounded-3xl space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -151,7 +151,7 @@ export function SupportDraftsPanel() {
             </p>
           </div>
         </div>
-        <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-white/5 text-secondary hover:text-muted transition-all">
+        <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
           <RefreshCw className={cn('w-3.5 h-3.5', isLoading && 'animate-spin')} />
         </button>
       </div>
@@ -176,7 +176,7 @@ export function SupportDraftsPanel() {
               key={ticket.id}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-3 bg-bg-primary/30 border border-white/5 rounded-xl"
+              className="p-3 bg-bg-primary/30 border border-border-subtle rounded-xl"
             >
               <div className="flex items-start justify-between gap-2 cursor-pointer" onClick={() => toggleExpand(ticket)}>
                 <div className="flex-1 min-w-0">
@@ -202,7 +202,7 @@ export function SupportDraftsPanel() {
               </div>
 
               {isOpen && draft && edit && (
-                <div className="mt-3 pt-3 border-t border-white/5 space-y-3" onClick={e => e.stopPropagation()}>
+                <div className="mt-3 pt-3 border-t border-border-subtle space-y-3" onClick={e => e.stopPropagation()}>
                   <p className="text-[9px] text-secondary">
                     <span className="text-text-primary/30">Requête originale : </span>{ticket.description}
                   </p>

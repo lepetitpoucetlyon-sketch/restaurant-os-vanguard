@@ -47,6 +47,16 @@ export function CertificationCenter() {
 
   const selectedInstance = instances.find(i => i.id === selectedInstanceId);
 
+  const handleDownloadCert = (cert: DigitalCertificate) => {
+    const blob = new Blob([JSON.stringify(cert, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cert_${cert.instanceId}_${cert.year}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleCheckAudit = async () => {
     if (!selectedInstanceId) return;
     setAuditStatus('checking');
@@ -101,7 +111,7 @@ export function CertificationCenter() {
 
 
   return (
-    <div className="bg-[#161618] border border-white/5 rounded-3xl p-8 flex flex-col h-full overflow-hidden">
+    <div className="bg-surface-card border border-border-subtle rounded-3xl p-8 flex flex-col h-full overflow-hidden">
       <div className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-status-warning/10 rounded-2xl flex items-center justify-center border border-action-primary/20 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
@@ -113,16 +123,16 @@ export function CertificationCenter() {
           </div>
         </div>
 
-        <div className="flex bg-[#0a0a0b] p-1 rounded-xl border border-white/5">
+        <div className="flex bg-surface-card p-1 rounded-xl border border-border-subtle">
             <button 
                 onClick={() => setActiveTab('generate')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'generate' ? 'bg-[#161618] text-text-primary shadow-lg border border-white/5' : 'text-secondary hover:text-muted'}`}
+                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'generate' ? 'bg-surface-card text-text-primary shadow-lg border border-border-subtle' : 'text-secondary hover:text-muted'}`}
             >
                 Generate
             </button>
             <button 
                 onClick={() => setActiveTab('history')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-[#161618] text-text-primary shadow-lg border border-white/5' : 'text-secondary hover:text-muted'}`}
+                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-surface-card text-text-primary shadow-lg border border-border-subtle' : 'text-secondary hover:text-muted'}`}
             >
                 Archive {certificates.length > 0 && `(${certificates.length})`}
             </button>
@@ -150,7 +160,7 @@ export function CertificationCenter() {
                                 <div className="relative group">
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-action-primary/20 to-action-primary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
                                     <select 
-                                        className="relative w-full bg-[#0a0a0b] border border-subtle rounded-2xl p-4 text-sm text-muted focus:outline-none focus:border-focus/50 appearance-none cursor-pointer transition-all hover:border-default"
+                                        className="relative w-full bg-surface-card border border-subtle rounded-2xl p-4 text-sm text-muted focus:outline-none focus:border-focus/50 appearance-none cursor-pointer transition-all hover:border-default"
                                         value={selectedInstanceId}
                                         onChange={(e) => {
                                             setSelectedInstanceId(e.target.value);
@@ -174,10 +184,10 @@ export function CertificationCenter() {
                             {/* Audit Verification Step */}
                             <motion.div 
                                 variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
-                                className={`p-6 bg-[#0a0a0b] border rounded-2xl transition-all duration-700 relative overflow-hidden ${
+                                className={`p-6 bg-surface-card border rounded-2xl transition-all duration-700 relative overflow-hidden ${
                                 auditStatus === 'valid' ? 'border-emerald-500/30 bg-status-success/5 text-status-success' : 
                                 auditStatus === 'invalid' ? 'border-red-500/30 bg-status-danger/5 text-status-danger' : 
-                                'border-white/5'
+                                'border-border-subtle'
                             }`}>
                                 <div className="flex justify-between items-start mb-6 relative z-10">
                                     <div>
@@ -205,7 +215,7 @@ export function CertificationCenter() {
                                     <button 
                                         onClick={handleCheckAudit}
                                         disabled={!selectedInstanceId}
-                                        className="relative group overflow-hidden text-[10px] font-bold text-text-primary uppercase tracking-widest bg-surface-card/5 hover:bg-surface-card/10 px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
+                                        className="relative group overflow-hidden text-[10px] font-bold text-text-primary uppercase tracking-widest bg-surface-card hover:bg-surface-card px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
                                     >
                                         <span className="relative z-10">Run Global Audit</span>
                                         <div className="absolute inset-0 bg-gradient-to-r from-action-primary/0 via-white/5 to-action-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
@@ -235,7 +245,7 @@ export function CertificationCenter() {
                                                 Tracing Seals...
                                             </div>
                                         </div>
-                                        <div className="h-0.5 w-full bg-surface-card/5 rounded-full overflow-hidden">
+                                        <div className="h-0.5 w-full bg-surface-card rounded-full overflow-hidden">
                                             <motion.div 
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "100%" }}
@@ -253,11 +263,11 @@ export function CertificationCenter() {
                                             Consensus Reached: 100% Integrity
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
-                                            <div className="bg-surface-sidebar/40 p-3 rounded-xl border border-white/5">
+                                            <div className="bg-surface-card p-3 rounded-xl border border-border-subtle">
                                                 <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Seals Verified</p>
                                                 <p className="text-sm font-black text-text-primary">{auditReport?.totalSeals || 0}</p>
                                             </div>
-                                            <div className="bg-surface-sidebar/40 p-3 rounded-xl border border-white/5">
+                                            <div className="bg-surface-card p-3 rounded-xl border border-border-subtle">
                                                 <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Chain Continuity</p>
                                                 <p className="text-sm font-black text-text-primary">SECURED</p>
                                             </div>
@@ -292,7 +302,7 @@ export function CertificationCenter() {
                                     disabled={!selectedInstanceId || isGenerating || auditStatus !== 'valid'}
                                     className={`w-full py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-[10px] flex items-center justify-center gap-4 transition-all duration-500 ${
                                         !selectedInstanceId || isGenerating || auditStatus !== 'valid'
-                                        ? 'bg-surface-sidebar/50 text-secondary cursor-not-allowed border border-white/5' 
+                                        ? 'bg-surface-card0 text-secondary cursor-not-allowed border border-border-subtle' 
                                         : 'bg-surface-card text-primary hover:bg-surface-card hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-[0.98]'
                                     }`}
                                 >
@@ -430,7 +440,7 @@ export function CertificationCenter() {
                     {certificates.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {certificates.map((cert) => (
-                                <div key={cert.id} className="p-6 bg-[#0a0a0b] border border-white/5 rounded-2xl flex items-center justify-between group hover:border-focus/30 transition-all">
+                                <div key={cert.id} className="p-6 bg-surface-card border border-border-subtle rounded-2xl flex items-center justify-between group hover:border-focus/30 transition-all">
                                     <div className="flex gap-4 items-center">
                                         <div className="w-10 h-10 bg-action-primary/10 rounded-xl flex items-center justify-center text-brand group-hover:scale-110 transition-transform">
                                             <Award className="w-5 h-5" />
@@ -441,7 +451,7 @@ export function CertificationCenter() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <button className="p-2 bg-surface-card/5 rounded-lg text-muted hover:bg-surface-card/10 transition-all">
+                                        <button onClick={() => handleDownloadCert(cert)} className="p-2 bg-surface-card rounded-lg text-muted hover:bg-surface-hover hover:text-brand transition-all" title="Télécharger le certificat">
                                             <Download className="w-4 h-4" />
                                         </button>
                                         <div className="w-8 h-8 rounded-full border border-emerald-500/20 bg-status-success/10 flex items-center justify-center text-status-success">
@@ -453,7 +463,7 @@ export function CertificationCenter() {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-32 space-y-6">
-                            <div className="w-20 h-20 bg-surface-card/5 rounded-full flex items-center justify-center border border-subtle text-primary">
+                            <div className="w-20 h-20 bg-surface-card rounded-full flex items-center justify-center border border-subtle text-primary">
                                 <FileText className="w-10 h-10" />
                             </div>
                             <div className="text-center">
@@ -462,7 +472,7 @@ export function CertificationCenter() {
                             </div>
                         </div>
                     )}
-                    <div className="pt-8 border-t border-white/5">
+                    <div className="pt-8 border-t border-border-subtle">
                         <button className="w-full text-[10px] font-black text-secondary hover:text-brand uppercase tracking-widest transition-all">
                             Synchroniser les Archives Globales
                         </button>
@@ -480,7 +490,7 @@ export function CertificationCenter() {
                 exit={{ opacity: 0, y: 20, scale: 0.9 }}
                 className="fixed bottom-10 right-10 bg-status-success text-text-primary px-8 py-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center gap-6 z-50 border border-default backdrop-blur-xl"
             >
-                <div className="w-12 h-12 bg-surface-card/20 rounded-2xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-surface-card rounded-2xl flex items-center justify-center">
                     <CheckCircle className="w-8 h-8" />
                 </div>
                 <div>

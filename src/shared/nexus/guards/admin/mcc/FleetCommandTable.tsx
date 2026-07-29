@@ -104,14 +104,14 @@ export function FleetCommandTable() {
     }
 
     return (
-        <div className="bg-[#0f0f11] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
-            <div className="p-8 border-b border-white/5 flex items-center justify-between bg-gradient-to-r from-action-primary/5 to-transparent">
+        <div className="bg-surface-card border border-border-subtle rounded-[2rem] overflow-hidden shadow-2xl">
+            <div className="p-8 border-b border-border-subtle flex items-center justify-between bg-gradient-to-r from-action-primary/5 to-transparent">
                 <div>
                     <h2 className="text-xl font-serif font-black text-text-primary tracking-tighter">Fleet Command Center</h2>
                     <p className="text-[10px] text-secondary uppercase font-bold tracking-widest mt-1">Orchestration en temps réel des actifs de l'empire</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="px-4 py-2 bg-surface-card/5 rounded-xl border border-white/5 flex items-center gap-2">
+                    <div className="px-4 py-2 bg-surface-card rounded-xl border border-border-subtle flex items-center gap-2">
                         <Search className="w-3.5 h-3.5 text-secondary" />
                         <input
                             type="text"
@@ -141,13 +141,13 @@ export function FleetCommandTable() {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: -6, scale: 0.97 }}
                                     transition={{ duration: 0.12 }}
-                                    className="absolute right-0 top-full mt-2 w-44 bg-[#111113] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden"
+                                    className="absolute right-0 top-full mt-2 w-44 bg-surface-card border border-border-subtle rounded-xl shadow-2xl z-50 overflow-hidden"
                                 >
                                     {STATUS_FILTERS.map(f => (
                                         <button
                                             key={f.value}
                                             onClick={() => { setStatusFilter(f.value); setFilterOpen(false); }}
-                                            className="flex items-center justify-between w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors text-left"
+                                            className="flex items-center justify-between w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors text-left"
                                         >
                                             <span className={statusFilter === f.value ? 'text-brand' : 'text-muted'}>{f.label}</span>
                                             {statusFilter === f.value && <Check className="w-3 h-3 text-brand" />}
@@ -163,7 +163,7 @@ export function FleetCommandTable() {
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-surface-card/[0.02]">
+                        <tr className="bg-surface-card">
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Instance ID</th>
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Status / Health</th>
                             <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Revenue (24h)</th>
@@ -183,7 +183,7 @@ export function FleetCommandTable() {
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: idx * 0.05 }}
-                                className="hover:bg-surface-card/[0.03] transition-colors group"
+                                className="hover:bg-surface-card transition-colors group"
                             >
                                 <td className="px-6 py-5">
                                     <div className="flex flex-col">
@@ -200,7 +200,7 @@ export function FleetCommandTable() {
                                         }`} />
                                         <div className="flex flex-col">
                                             <span className="text-[10px] font-black uppercase text-muted">{instance.status}</span>
-                                            <div className="w-16 h-1 bg-surface-card/10 rounded-full mt-1 overflow-hidden">
+                                            <div className="w-16 h-1 bg-surface-card rounded-full mt-1 overflow-hidden">
                                                 <div 
                                                     className={`h-full rounded-full ${instance.metrics.healthScore < 70 ? 'bg-error' : 'bg-status-success'}`}
                                                     style={{ width: `${instance.metrics.healthScore}%` }}
@@ -216,7 +216,7 @@ export function FleetCommandTable() {
                                                 <span className="text-sm font-black text-text-primary">{(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                                             </>
                                         ) : (
-                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-card/5 rounded-md border border-white/5 opacity-40">
+                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-card rounded-md border border-border-subtle opacity-40">
                                                 <span className="text-[9px] font-black text-muted uppercase tracking-widest">PROTÉGÉ</span>
                                             </div>
                                         )}
@@ -247,7 +247,7 @@ export function FleetCommandTable() {
                                 </td>
                                 <td className="px-6 py-5">
                                     <div className="flex flex-col gap-1.5">
-                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-card/[0.03] border border-white/5 rounded-lg w-fit">
+                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-card border border-border-subtle rounded-lg w-fit">
                                             <ShieldCheck className={`w-3.5 h-3.5 ${instance.security.nf525Certified ? 'text-status-success' : 'text-secondary'}`} />
                                             <span className="text-[9px] font-black uppercase tracking-wider text-muted">NF525 SEALED</span>
                                         </div>
@@ -262,7 +262,7 @@ export function FleetCommandTable() {
                                                 instance.rag.status === 'online'   ? 'bg-status-success/10 text-status-success border-emerald-500/20' :
                                                 instance.rag.status === 'indexing' ? 'bg-action-primary/10 text-action-primary border-action-primary/20 animate-pulse' :
                                                 instance.rag.status === 'offline'  ? 'bg-status-danger/10 text-status-danger border-red-500/20' :
-                                                'bg-surface-card/5 text-secondary border-white/5'
+                                                'bg-surface-card text-secondary border-border-subtle'
                                             }`}>
                                                 <Brain className="w-2.5 h-2.5" />
                                                 {instance.rag.status}
@@ -282,11 +282,15 @@ export function FleetCommandTable() {
                                             onClick={() => handleReindex(instance.id)}
                                             disabled={reindexing[instance.id]}
                                             title="Réindexer RAG"
-                                            className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-brand hover:border-brand transition-all opacity-0 group-hover:opacity-100 disabled:opacity-30"
+                                            className="p-2.5 rounded-xl bg-surface-card border border-subtle text-muted hover:text-brand hover:border-brand transition-all opacity-0 group-hover:opacity-100 disabled:opacity-30"
                                         >
                                             <RotateCcw className={`w-3.5 h-3.5 ${reindexing[instance.id] ? 'animate-spin' : ''}`} />
                                         </button>
-                                        <button className="p-2.5 rounded-xl bg-surface-card/5 border border-subtle text-muted hover:text-text-primary hover:border-default transition-all opacity-0 group-hover:opacity-100">
+                                        <button
+                                            onClick={() => window.open(`https://${instance.key}.restaurant-os.app`, '_blank', 'noopener,noreferrer')}
+                                            title="Ouvrir l'instance"
+                                            className="p-2.5 rounded-xl bg-surface-card border border-subtle text-muted hover:text-text-primary hover:border-default transition-all opacity-0 group-hover:opacity-100"
+                                        >
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </button>
                                         <div className="relative">
@@ -307,16 +311,16 @@ export function FleetCommandTable() {
                                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                                         exit={{ opacity: 0, y: -6, scale: 0.97 }}
                                                         transition={{ duration: 0.12 }}
-                                                        className="absolute right-0 bottom-full mb-2 w-44 bg-[#111113] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden"
+                                                        className="absolute right-0 bottom-full mb-2 w-44 bg-surface-card border border-border-subtle rounded-xl shadow-2xl z-50 overflow-hidden"
                                                     >
-                                                        <div className="px-3 py-2 border-b border-white/5">
+                                                        <div className="px-3 py-2 border-b border-border-subtle">
                                                             <p className="text-[8px] font-black uppercase tracking-widest text-secondary">Action sur {instance.name}</p>
                                                         </div>
                                                         {COMMANDER_ACTIONS.map(({ key, label, icon: Icon, danger }) => (
                                                             <button
                                                                 key={key}
                                                                 onClick={() => handleCommand(instance.id, key)}
-                                                                className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors ${danger ? 'text-error hover:bg-status-danger/10' : 'text-muted hover:text-text-primary'}`}
+                                                                className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors ${danger ? 'text-error hover:bg-status-danger/10' : 'text-muted hover:text-text-primary'}`}
                                                             >
                                                                 <Icon className="w-3 h-3" />
                                                                 {label}
@@ -334,7 +338,7 @@ export function FleetCommandTable() {
                 </table>
             </div>
             
-            <div className="p-6 bg-surface-card/[0.01] border-t border-white/5 flex items-center justify-between">
+            <div className="p-6 bg-surface-card border-t border-border-subtle flex items-center justify-between">
                 <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">{filteredInstances.length} site{filteredInstances.length !== 1 ? 's' : ''} affiché{filteredInstances.length !== 1 ? 's' : ''} / {instances.length} total</p>
                 <div className="flex items-center gap-2">
                     <Activity className="w-3 h-3 text-brand" />

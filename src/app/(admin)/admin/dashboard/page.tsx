@@ -158,7 +158,7 @@ export default function VibecodingDashboard() {
               variants={itemVariants}
               onMouseEnter={() => setHoveredStat(index)}
               onMouseLeave={() => setHoveredStat(null)}
-              className="relative overflow-hidden rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-xl transition-colors hover:bg-white/[0.04]"
+              className="relative overflow-hidden rounded-2xl bg-surface-card border border-border-subtle p-6 backdrop-blur-xl transition-colors hover:bg-surface-card"
             >
               {/* Subtle glassmorphism gradient glow */}
               <div 
@@ -167,7 +167,7 @@ export default function VibecodingDashboard() {
               
               <div className="relative z-10">
                 <div className="flex justify-between items-start">
-                  <div className="p-3 bg-white/[0.05] rounded-xl border border-white/[0.05]">
+                  <div className="p-3 bg-surface-card rounded-xl border border-border-subtle">
                     <stat.icon className={`w-6 h-6 ${stat.title === "Alertes HACCP" && parseInt(stat.value) > 0 ? "text-rose-400" : "text-brand"}`} />
                   </div>
                   <div className={`flex items-center gap-1 text-sm font-medium ${stat.trend === 'up' ? 'text-status-success' : stat.trend === 'down' ? 'text-rose-400' : 'text-text-muted'}`}>
@@ -194,7 +194,7 @@ export default function VibecodingDashboard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="lg:col-span-2 rounded-3xl bg-white/[0.02] border border-white/[0.05] p-8 backdrop-blur-xl"
+            className="lg:col-span-2 rounded-3xl bg-surface-card border border-border-subtle p-8 backdrop-blur-xl"
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-text-primary/90">Commandes Récentes</h2>
@@ -208,7 +208,7 @@ export default function VibecodingDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + (i * 0.1) }}
                   key={order.id} 
-                  className="flex items-center justify-between p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.02] transition-colors cursor-pointer group"
+                  className="flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card border border-border-subtle transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-action-primary/10 flex items-center justify-center text-brand font-medium group-hover:bg-action-primary/20 transition-colors">
@@ -266,7 +266,7 @@ export default function VibecodingDashboard() {
                 {['Nouvelle Commande', 'Fermer la Caisse', 'Rapport Z'].map((action, _idx) => (
                   <button 
                     key={action}
-                    className="w-full text-left p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] transition-all flex items-center justify-between group"
+                    className="w-full text-left p-4 rounded-xl bg-surface-card hover:bg-surface-card border border-border-subtle transition-all flex items-center justify-between group"
                   >
                     <span className="text-text-primary/80 group-hover:text-text-primary transition-colors">{action}</span>
                     <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-text-primary transition-colors" />
