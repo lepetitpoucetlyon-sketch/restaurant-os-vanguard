@@ -178,7 +178,8 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             if (cancelled) return;
             const unsub = auth.onAuthStateChanged(user => {
                 if (cancelled) return;
-                if (user) {
+                const devBypass = process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true';
+                if (user || devBypass) {
                     startPolling();
                 } else if (intervalId) {
                     clearInterval(intervalId);

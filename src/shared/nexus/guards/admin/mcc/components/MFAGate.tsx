@@ -32,7 +32,15 @@ interface MFAGateProps {
     children: React.ReactNode;
 }
 
+/** Point d'entrée public — délègue à l'implémentation complète ou au bypass dev */
 export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
+    if (process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true') {
+        return <>{children}</>;
+    }
+    return <MFAGateImpl role={role}>{children}</MFAGateImpl>;
+}
+
+function MFAGateImpl({ role = 'fleet_admin', children }: MFAGateProps) {
     const [status, setStatus] = useState<GateStatus>('checking');
     const [session, setSession] = useState<MFAEnrollmentSession | null>(null);
     const [otp, setOtp] = useState('');

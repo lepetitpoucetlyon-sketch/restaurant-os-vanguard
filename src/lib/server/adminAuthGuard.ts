@@ -62,6 +62,16 @@ export async function requireMccLevel(
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) return hiddenDoor();
 
+    // Dev bypass : token spécial accepté uniquement en développement local.
+    // Ne jamais définir NEXT_PUBLIC_MCC_DEV_BYPASS en production.
+    if (
+        process.env.NODE_ENV === 'development' &&
+        authHeader === 'Bearer mcc-dev-bypass'
+    ) {
+        logger.warn('[adminAuth] DEV BYPASS actif — ne pas utiliser en production');
+        return { uid: 'dev_admin', role: 'fleet_admin' };
+    }
+
     try {
         initFirebaseAdmin();
         const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));

@@ -57,9 +57,109 @@ export async function executeCloudSync(tenantId: TenantID, data: Partial<SiteTel
 
 export async function discoverRealFleet(): Promise<SiteTelemetry[]> {
     try {
-      return await Nexus.adapter.query<SiteTelemetry>("fleet-telemetry");
+      const results = await Nexus.adapter.query<SiteTelemetry>("fleet-telemetry");
+      // Dev bypass : si la flotte est vide et que le mode dev est actif, injecter une instance démo
+      logger.info(`[Fleet] discoverRealFleet: ${results.length} results, NODE_ENV=${process.env.NODE_ENV}`);
+      if (results.length === 0 && process.env.NODE_ENV === 'development') {
+        const now = new Date().toISOString();
+        return [{
+          id:            'lepetitpoucet',
+          key:           'lepetitpoucet',
+          name:          'Le Restaurant OS — Démo',
+          tenantId:      'lepetitpoucet',
+          status:        'ONLINE',
+          tier:          'PREMIUM',
+          version:       '4.0.0-NEXUS',
+          engineVersion: 'Grade-X-Vanguard',
+          createdAt:     now,
+          updatedAt:     now,
+          lastHeartbeat: now,
+          lastSeen:      now,
+          activeUsers:   4,
+          dailyRevenue:  1840,
+          activeOrders:  7,
+          healthScore:   94,
+          complianceScore: 98,
+          lowStockAlerts:  2,
+          branding: {
+            primaryColor:   '#C5A059',
+            secondaryColor: '#1C1C1C',
+            logoUrl:        '',
+            tagline:        'Excellence Opérationnelle',
+          },
+          security: {
+            twoFactorEnabled:         true,
+            nf525Certified:           true,
+            maintenanceAccessGranted: false,
+            supportAccessGranted:     false,
+          },
+          ragStatus: {
+            status:        'online',
+            version:       '1.0.0',
+            documentCount: 142,
+            lastIndexed:   now,
+            latencyMs:     82,
+          },
+          featureFlags: {
+            mod_pos:       true,
+            mod_kds:       true,
+            mod_haccp:     true,
+            mod_analytics: true,
+          },
+        }];
+      }
+      return results;
     } catch (e) {
-      console.error("[Fleet] Discovery failed", e);
+      logger.error("[Fleet] Discovery failed", e);
+      // Dev bypass : si Nexus n'est pas configuré, retourner l'instance démo
+      if (process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true') {
+        const now = new Date().toISOString();
+        return [{
+          id:            'lepetitpoucet',
+          key:           'lepetitpoucet',
+          name:          'Le Restaurant OS — Démo',
+          tenantId:      'lepetitpoucet',
+          status:        'ONLINE',
+          tier:          'PREMIUM',
+          version:       '4.0.0-NEXUS',
+          engineVersion: 'Grade-X-Vanguard',
+          createdAt:     now,
+          updatedAt:     now,
+          lastHeartbeat: now,
+          lastSeen:      now,
+          activeUsers:   4,
+          dailyRevenue:  1840,
+          activeOrders:  7,
+          healthScore:   94,
+          complianceScore: 98,
+          lowStockAlerts:  2,
+          branding: {
+            primaryColor:   '#C5A059',
+            secondaryColor: '#1C1C1C',
+            logoUrl:        '',
+            tagline:        'Excellence Opérationnelle',
+          },
+          security: {
+            twoFactorEnabled:         true,
+            nf525Certified:           true,
+            maintenanceAccessGranted: false,
+            supportAccessGranted:     false,
+          },
+          ragStatus: {
+            status:        'online',
+            version:       '1.0.0',
+            documentCount: 142,
+            lastIndexed:   now,
+            latencyMs:     82,
+          },
+          featureFlags: {
+            mod_pos:       true,
+            mod_kds:       true,
+            mod_haccp:     true,
+            mod_analytics: true,
+          },
+        }];
+      }
       return [];
     }
 }
