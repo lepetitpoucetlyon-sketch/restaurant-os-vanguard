@@ -34,7 +34,7 @@ export function LegalCertificateA4({
         <section className="border border-gray-400 p-6 relative">
           <div className="absolute -top-3 left-4 bg-white px-2 font-bold uppercase text-xs">Volet 1 - Rempli par l'éditeur du logiciel</div>
           <p className="mb-4 mt-2">
-            Je soussigné(e) <strong>Restaurant OS Empire</strong>, agissant en qualité de représentant légal de la société éditrice, certifie que le logiciel ou système de caisse désigné ci-après :
+            Je soussigné(e) <strong>Restaurant OS Empire (Société en cours d'immatriculation)</strong>, agissant en qualité de représentant légal de la société éditrice, certifie que le logiciel ou système de caisse désigné ci-après :
           </p>
           <ul className="list-disc ml-8 mb-4 font-bold">
             <li>Nom du logiciel : Restaurant OS</li>
@@ -55,11 +55,12 @@ export function LegalCertificateA4({
              </div>
              <div className="text-center">
                 <p className="mb-2">Signature de l'éditeur et cachet :</p>
-                <div className="w-48 h-24 border-2 border-dashed border-gray-300 flex items-center justify-center rotate-[-2deg]">
+                <div className="w-64 h-24 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center rotate-[-2deg] p-2">
                     <span className="font-bold text-gray-500 uppercase text-xs text-center leading-tight">
                         Restaurant OS Empire<br/>
-                        Signé Électroniquement
+                        <span className="text-[10px] lowercase italic">en cours de formation</span>
                     </span>
+                    <span className="text-[9px] text-gray-400 mt-1">SIRET : [À COMPLÉTER]</span>
                 </div>
              </div>
           </div>
