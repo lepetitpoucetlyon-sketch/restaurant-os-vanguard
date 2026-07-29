@@ -43,7 +43,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     empireAudit.log({
       module: 'fleet',
       action: 'CRON_NF525_AUDIT',
-      severity: anomalies > 0 ? 'critical' : 'info',
+      severity: anomalies > 0 ? 'critical' : 'low',
       details: { tenantsAudited: tenantIds.length, anomaliesCount: anomalies } as unknown as import('@/shared/nexus-contract').SovereignData,
       timestamp: new Date(),
     });
