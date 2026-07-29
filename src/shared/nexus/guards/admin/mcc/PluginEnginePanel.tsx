@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { PackageOpen, ToggleLeft, ToggleRight, Loader2, ServerCog, Store } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface CatalogItem {
   name: string;
@@ -29,7 +30,7 @@ export function PluginEnginePanel() {
       let latestCatalog = {};
       const results = await Promise.allSettled(
         instances.map(async inst => {
-          const res = await fetch(`/api/admin/fleet/plugins?tenantId=${encodeURIComponent(inst.id)}`);
+          const res = await authedFetch(`/api/admin/fleet/plugins?tenantId=${encodeURIComponent(inst.id)}`);
           return res.ok ? (await res.json()) : null;
         })
       );
@@ -56,7 +57,7 @@ export function PluginEnginePanel() {
     setActionLoading(`${tenantId}-${pluginId}`);
     try {
       const method = currentlyActive ? 'DELETE' : 'POST';
-      const res = await fetch('/api/admin/fleet/plugins', {
+      const res = await authedFetch('/api/admin/fleet/plugins', {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tenantId, pluginId })

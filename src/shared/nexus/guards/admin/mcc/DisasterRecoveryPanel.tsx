@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ShieldAlert, DatabaseBackup, ActivitySquare, Loader2, RotateCcw } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 export function DisasterRecoveryPanel() {
   const { instances } = useFleet();
@@ -13,7 +14,7 @@ export function DisasterRecoveryPanel() {
     setLoadingAction(`shadow-${tenantId}`);
     try {
       // Pour la démo, on bascule en 'local_survival' (Offline Cloud)
-      const res = await fetch('/api/admin/fleet/shadow-mode', {
+      const res = await authedFetch('/api/admin/fleet/shadow-mode', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tenantId, mode: 'local_survival' })
@@ -30,10 +31,10 @@ export function DisasterRecoveryPanel() {
   const triggerGlobalBackup = async () => {
     setLoadingAction('backup');
     try {
-      const res = await fetch('/api/admin/fleet/backup', {
+      const res = await authedFetch('/api/admin/fleet/backup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}) // Vide = toute la flotte
+        body: JSON.stringify({})
       });
       if (!res.ok) throw new Error('Backup error');
       const data = await res.json();
@@ -57,7 +58,7 @@ export function DisasterRecoveryPanel() {
 
     setLoadingAction(`restore-${tenantId}`);
     try {
-      const res = await fetch('/api/admin/fleet/restore', {
+      const res = await authedFetch('/api/admin/fleet/restore', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tenantId, targetTimestamp, reason, operatorId })

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Package, Plus, Trash2, Edit2, Loader2, Save, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface CatalogItem {
   id: string;
@@ -22,7 +23,7 @@ export function PluginCatalogManager() {
   const loadCatalog = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/fleet/catalog');
+      const res = await authedFetch('/api/admin/fleet/catalog');
       if (!res.ok) throw new Error('Erreur de chargement');
       const data = await res.json();
       const itemsArray = Object.entries(data.catalog || {}).map(([id, val]: any) => ({
@@ -44,7 +45,7 @@ export function PluginCatalogManager() {
   const handleSave = async (id: string, form: Partial<CatalogItem>) => {
     try {
       const payload = { id, ...form };
-      const res = await fetch('/api/admin/fleet/catalog', {
+      const res = await authedFetch('/api/admin/fleet/catalog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -62,7 +63,7 @@ export function PluginCatalogManager() {
   const handleDelete = async (id: string) => {
     if (!confirm('Voulez-vous vraiment supprimer cette offre du catalogue ?')) return;
     try {
-      const res = await fetch(`/api/admin/fleet/catalog?id=${encodeURIComponent(id)}`, {
+      const res = await authedFetch(`/api/admin/fleet/catalog?id=${encodeURIComponent(id)}`, {
         method: 'DELETE'
       });
       if (!res.ok) throw new Error('Delete error');

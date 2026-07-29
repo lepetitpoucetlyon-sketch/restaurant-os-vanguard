@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
-    Lock, RefreshCw, GitMerge, BrainCircuit, Wallet,
+    Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -19,6 +19,7 @@ const ComplianceTab   = dynamic(() => import('./_tabs/ComplianceTab').then(m => 
 const IntelligenceTab = dynamic(() => import('./_tabs/IntelligenceTab').then(m => m.IntelligenceTab), { loading: () => <MCCWidgetSkeleton /> });
 const TreasuryTab     = dynamic(() => import('./_tabs/TreasuryTab').then(m => m.TreasuryTab), { loading: () => <MCCWidgetSkeleton /> });
 const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m => m.PatchCenterTab), { loading: () => <MCCWidgetSkeleton /> });
+const PluginsTab      = dynamic(() => import('./_tabs/PluginsTab').then(m => m.PluginsTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     return (
@@ -52,6 +53,7 @@ function MCCDashboardInner() {
         { id: 'intelligence', label: t.tabs.intelligence, icon: <BrainCircuit className="w-4 h-4" /> },
         { id: 'treasury',     label: t.tabs.treasury,     icon: <Wallet className="w-4 h-4" /> },
         { id: 'patchcenter',  label: t.tabs.patchcenter,  icon: <GitMerge className="w-4 h-4" /> },
+        { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
     ] as const;
 
     return (
@@ -123,6 +125,11 @@ function MCCDashboardInner() {
                                 {activeTab === 'patchcenter' && (
                                     <motion.div key="patchcenter" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                                         <PatchCenterTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'plugins' && (
+                                    <motion.div key="plugins" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <PluginsTab />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

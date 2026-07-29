@@ -6,17 +6,21 @@ const TenantOverridePanel  = dynamic(() => import('@nexus/guards/admin/mcc/Tenan
 const FleetUpgradePanel    = dynamic(() => import('@nexus/guards/admin/mcc/FleetUpgradePanel').then(m => m.FleetUpgradePanel), { loading: () => <MCCWidgetSkeleton /> });
 const SupportDraftsPanel   = dynamic(() => import('@nexus/guards/admin/mcc/SupportDraftsPanel').then(m => m.SupportDraftsPanel), { loading: () => <MCCWidgetSkeleton /> });
 const TenantChangelogPanel = dynamic(() => import('@nexus/guards/admin/mcc/TenantChangelogPanel').then(m => m.TenantChangelogPanel), { loading: () => <MCCWidgetSkeleton /> });
+const DisasterRecoveryPanel = dynamic(() => import('@nexus/guards/admin/mcc/DisasterRecoveryPanel').then(m => m.DisasterRecoveryPanel), { loading: () => <MCCWidgetSkeleton /> });
 
 export function PatchCenterTab() {
     return (
-        <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 xl:col-span-5 space-y-6">
-                <TenantOverridePanel />
-                <FleetUpgradePanel />
-            </div>
-            <div className="col-span-12 xl:col-span-7 space-y-6">
-                <SupportDraftsPanel />
-                <TenantChangelogPanel />
+        <div className="space-y-8">
+            <DisasterRecoveryPanel />
+            <div className="grid grid-cols-12 gap-8">
+                <div className="col-span-12 xl:col-span-5 space-y-6">
+                    <TenantOverridePanel />
+                    <FleetUpgradePanel />
+                </div>
+                <div className="col-span-12 xl:col-span-7 space-y-6">
+                    <SupportDraftsPanel />
+                    <TenantChangelogPanel />
+                </div>
             </div>
         </div>
     );

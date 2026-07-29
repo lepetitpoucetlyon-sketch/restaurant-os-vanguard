@@ -19,7 +19,7 @@ export function useMccPage() {
 
     const [health, setHealth] = useState<MCCHealthStatus | null>(null);
     const [showCloneModal, setShowCloneModal] = useState(false);
-    const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury' | 'patchcenter'>('fleet');
+    const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury' | 'patchcenter' | 'plugins'>('fleet');
     const [newCloneName, setNewCloneName] = useState('');
     const [newCloneKey, setNewCloneKey] = useState('');
     const [newCloneEmail, setNewCloneEmail] = useState('');

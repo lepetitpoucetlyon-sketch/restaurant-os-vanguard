@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Activity, AlertTriangle, Wifi, WifiOff, Search } from 'lucide-react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { motion, AnimatePresence } from 'framer-motion';
+import { logger } from '@/lib/logger';
 
 export function FleetTelemetryPanel() {
   const [devices, setDevices] = useState<any[]>([]);
@@ -22,7 +23,7 @@ export function FleetTelemetryPanel() {
         setDevices(devs as any[]);
         setCrashes(crs as any[]);
       } catch (e) {
-        console.error('Failed to fetch telemetry', e);
+        logger.error('Failed to fetch telemetry', { error: e });
       } finally {
         if (active) setLoading(false);
       }
