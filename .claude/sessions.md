@@ -61,3 +61,4 @@
 | event-cartography | Audit lecture seule — EventBus, EventEmitter, PubSub, NexusEvents, .emit(, .on(, dispatch( — cartographie exhaustive Saga Pattern | 2026-07-30 | terminée |
 | saga-plan-md | Rédaction docs/SAGA_PLAN.md — plan opérationnel complet bus événementiel (P0→P3) | 2026-07-30 | terminée |
 | rbac-hardening | Correction 4 lacunes RBAC : PIN hashing PBKDF2, rate limit serveur, role gate cash drawer, requireTenantRole sur finance/sync + print/network | 2026-07-30 | terminée |
+| structural-hardening | Failles structurelles : barrels violations, ArchitecturalHealthService, domain/types rapatriation | 2026-07-30 | terminée |

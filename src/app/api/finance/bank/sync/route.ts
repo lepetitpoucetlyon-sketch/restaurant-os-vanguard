@@ -7,7 +7,7 @@ import {
     OpenBankingProviderFactory,
     BankConnectionStore,
     inferPCGAccount,
-} from '@/modules/finance/banking/openBanking';
+} from '@/modules/finance';
 import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import type { FiscalSeal } from '@nexus/contracts';

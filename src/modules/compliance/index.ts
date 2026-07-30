@@ -12,3 +12,5 @@ export type { PiiRecord } from '@/domain/schemas/pii';
 export { RecallService } from './recall/RecallService';
 export { FoodDonationService } from './donation/FoodDonationService';
 export { ComplianceCalendar } from './calendar/ComplianceCalendar';
+export { IoTProviderFactory } from './connectors/iot';
+export { IoTSensorService } from './haccp/iot';

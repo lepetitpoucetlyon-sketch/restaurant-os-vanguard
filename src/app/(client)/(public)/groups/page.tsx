@@ -25,7 +25,7 @@ const GroupFilters = (_props: {
 }): null => null;
 
 // Constants
-import { useGroups } from '@/modules/ops/providers';
+import { useGroups } from '@/modules/ops';
 import { Calendar, BarChart3, Star } from 'lucide-react';
 
 export default function GroupsPage() {

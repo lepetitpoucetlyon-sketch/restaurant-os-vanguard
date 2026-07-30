@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { IoTProviderFactory } from '@/modules/compliance/connectors/iot';
+import { IoTProviderFactory } from '@/modules/compliance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';

@@ -17,7 +17,7 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { IoTSensorService } from '@/modules/compliance/haccp/iot';
+import { IoTSensorService } from '@/modules/compliance';
 import { logger } from '@/lib/logger';
 
 const GATEWAY_TOKEN = process.env.HACCP_GATEWAY_TOKEN;

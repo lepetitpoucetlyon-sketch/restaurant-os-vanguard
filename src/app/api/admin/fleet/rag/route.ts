@@ -13,7 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/modules/intelligence/rag';
+import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';

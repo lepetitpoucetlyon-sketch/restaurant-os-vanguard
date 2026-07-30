@@ -13,3 +13,6 @@ export type { FloorPlanEditorRef } from './engine/components/floor-plan/FloorPla
 export { OperationsDashboard } from './engine/components/OperationsDashboard';
 export { KDSDashboard } from './kds/components/KDSDashboard';
 export { KitchenDashboard } from './kitchen/components/KitchenDashboard';
+export { useGroups } from './providers/hooks/commerceHooks';
+export { DeliveryProviderFactory } from './connectors/delivery';
+export { ReservationProviderFactory } from './connectors/reservations';

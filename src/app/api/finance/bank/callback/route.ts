@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenBankingProviderFactory, BankConnectionStore, verifyBankConnectState } from '@/modules/finance/banking/openBanking';
+import { OpenBankingProviderFactory, BankConnectionStore, verifyBankConnectState } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 
 /**

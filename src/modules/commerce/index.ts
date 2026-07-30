@@ -14,3 +14,6 @@ export { CustomerImportPanel } from '@/modules/onboarding/migration';
 
 export { LandingDashboard } from './landing/components/LandingDashboard';
 export { ProspectingDashboard } from './crm/components/ProspectingDashboard';
+export { MenuJsonLd } from './seo';
+export { ReservationWidget } from './widgets';
+export { ReviewProviderFactory } from './connectors/reviews';

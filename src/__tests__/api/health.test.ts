@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { GET } from '@/app/api/admin/system/health/route';
 
-vi.mock('@/domain/system/ArchitecturalHealthService', () => ({
+vi.mock('@/infrastructure/services/ArchitecturalHealthService', () => ({
   ArchitecturalHealthService: {
     generateReport: vi.fn().mockResolvedValue({
       grade: 'X',

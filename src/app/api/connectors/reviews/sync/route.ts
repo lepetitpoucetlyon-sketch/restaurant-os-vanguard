@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ReviewProviderFactory } from '@/modules/commerce/connectors/reviews';
+import { ReviewProviderFactory } from '@/modules/commerce';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

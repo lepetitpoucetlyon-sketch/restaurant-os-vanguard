@@ -1,5 +1,7 @@
 export * from './analytics';
 export * from './rag';
+export * from './ai';
+export { buildWeeklyReportHTML } from './reports/weeklyReport';
 export * from './agency';
 export * from './fleet/NexusFleetProvider';
 export { AnomalyDetector } from './anomaly/AnomalyDetector';

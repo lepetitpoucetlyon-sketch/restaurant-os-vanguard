@@ -1,7 +1,7 @@
 // Vercel Cron: schedule: "0 8 * * 1" (chaque lundi à 8h)
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { buildWeeklyReportHTML } from '@/modules/intelligence/reports';
+import { buildWeeklyReportHTML } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;

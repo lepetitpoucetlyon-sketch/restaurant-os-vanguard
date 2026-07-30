@@ -15,3 +15,5 @@ export { TransactionService } from './services/TransactionService';
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
 export * from './types';
 export { FinanceDashboard } from './components/FinanceDashboard';
+export * from './fec';
+export * from './banking/openBanking';

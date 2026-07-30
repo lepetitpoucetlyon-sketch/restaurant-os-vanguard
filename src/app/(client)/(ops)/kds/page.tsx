@@ -1,4 +1,4 @@
-import { KDSDashboard } from '@/modules/ops/kds/components/KDSDashboard';
+import { KDSDashboard } from '@/modules/ops';
 
 export default function KDSPage() {
   return <KDSDashboard />;

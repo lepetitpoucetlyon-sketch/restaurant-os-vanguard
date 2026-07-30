@@ -5,3 +5,4 @@ export { useProducts } from './inventory/hooks/useProducts';
 export { useCategories } from './inventory/hooks/useCategories';
 
 export { InventoryReceptionDashboard } from './reception/components/InventoryReceptionDashboard';
+export * from './domain/procurement';

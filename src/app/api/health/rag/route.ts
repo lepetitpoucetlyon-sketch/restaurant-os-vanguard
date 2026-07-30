@@ -6,7 +6,7 @@
  * Ne révèle aucune donnée métier : juste l'état du sidecar local.
  */
 import { NextResponse } from 'next/server';
-import { sovereignHealth } from '@/modules/intelligence/rag';
+import { sovereignHealth } from '@/modules/intelligence';
 
 export async function GET(): Promise<NextResponse> {
     try {

@@ -1,4 +1,4 @@
-import { KitchenDashboard } from '@/modules/ops/kitchen/components/KitchenDashboard';
+import { KitchenDashboard } from '@/modules/ops';
 
 export default function KitchenPage() {
   return <KitchenDashboard />;

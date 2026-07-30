@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ProcurementBridge } from '@/modules/logistics/domain/procurement';
-import { DeliveryNote } from '@/modules/logistics/domain/procurement';
+import { ProcurementBridge } from '@/modules/logistics';
+import { DeliveryNote } from '@/modules/logistics';
 import { LogisticsErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
