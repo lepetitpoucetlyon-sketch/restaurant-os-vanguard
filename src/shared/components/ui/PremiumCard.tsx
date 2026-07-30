@@ -48,6 +48,8 @@ export const PremiumCard = forwardRef<HTMLDivElement, PremiumCardProps>(
             glowColor = "accent",
             padding = "lg",
             rounded = "2xl",
+            role,
+            "aria-label": ariaLabel,
             ...props
         },
         ref
@@ -83,6 +85,8 @@ export const PremiumCard = forwardRef<HTMLDivElement, PremiumCardProps>(
             <motion.div
                 ref={ref}
                 className={cn(baseClasses, variantClasses[variant], className)}
+                role={role || (ariaLabel ? "region" : undefined)}
+                aria-label={ariaLabel}
                 {...props}
             >
                 {children}

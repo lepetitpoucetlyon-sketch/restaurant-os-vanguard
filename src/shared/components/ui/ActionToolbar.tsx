@@ -10,6 +10,7 @@ interface ActionToolbarProps {
     align?: "left" | "center" | "right" | "between";
     sticky?: boolean;
     className?: string;
+    "aria-label"?: string;
 }
 
 export function ActionToolbar({
@@ -18,6 +19,7 @@ export function ActionToolbar({
     align = "between",
     sticky = false,
     className,
+    ...props
 }: ActionToolbarProps) {
     const alignClasses = {
         left: "justify-start",
@@ -45,6 +47,9 @@ export function ActionToolbar({
                 sticky && position === "bottom" && "bottom-0",
                 className
             )}
+            role="toolbar"
+            aria-orientation="horizontal"
+            aria-label={props["aria-label"] || "Barre d'actions"}
         >
             {children}
         </motion.div>
@@ -91,6 +96,8 @@ export function ToolbarDivider({
                 orientation === "vertical" ? "w-px h-8" : "w-full h-px",
                 className
             )}
+            role="separator"
+            aria-orientation={orientation}
         />
     );
 }

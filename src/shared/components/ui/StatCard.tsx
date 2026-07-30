@@ -106,6 +106,8 @@ export function StatCard({
                 styles.container,
                 className
             )}
+            role="region"
+            aria-label={`${label}: ${value}`}
         >
             <div className="flex items-start justify-between mb-4">
                 <div
