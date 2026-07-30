@@ -45,6 +45,18 @@ const MODULE_TO_FOLDER: Record<string, string> = {
     'Gestion des Accès': 'auth'
 };
 
+function _scanModulePhysicalFolder(folderName: string, modulesPath: string, pillarFolders: string[], pillarIndexes: Record<string, string>): { physicalFolder: string; isWelded: boolean } {
+    for (const folder of pillarFolders) {
+        const modPath = path.join(modulesPath, folder, folderName);
+        if (fs.existsSync(modPath)) {
+            const index = pillarIndexes[folder] || '';
+            const strictSuturePattern = new RegExp(`export\\s+\\*\\s+from\\s+['"]\\.\\/${folderName}['"]`, 'i');
+            return { physicalFolder: folder, isWelded: strictSuturePattern.test(index) };
+        }
+    }
+    return { physicalFolder: '', isWelded: false };
+}
+
 function sync() {
     console.log('🏛️ Starting Deep Forensic Sync...');
 
@@ -80,22 +92,7 @@ function sync() {
             const mId = `${pId}_${j}`;
             const folderName = MODULE_TO_FOLDER[mLabel] || mLabel.toLowerCase();
             
-            // --- SEARCH IN ALL PHYSICAL FOLDERS ---
-            let physicalFolder = '';
-            let isWelded = false;
-
-            for (const folder of PILLAR_FOLDERS) {
-                const modPath = path.join(MODULES_PATH, folder, folderName);
-                if (fs.existsSync(modPath)) {
-                    physicalFolder = folder;
-                    // Check if welded in THIS pillar index
-                    const index = pillarIndexes[folder] || '';
-                    const strictSuturePattern = new RegExp(`export\\s+\\*\\s+from\\s+['"]\\.\\/${folderName}['"]`, 'i');
-                    if (strictSuturePattern.test(index)) isWelded = true;
-                    break;
-                }
-            }
-
+            const { physicalFolder, isWelded } = _scanModulePhysicalFolder(folderName, MODULES_PATH, PILLAR_FOLDERS, pillarIndexes);
             const exists = physicalFolder !== '';
             const isActive = atlasContent.toLowerCase().includes(folderName.toLowerCase());
 

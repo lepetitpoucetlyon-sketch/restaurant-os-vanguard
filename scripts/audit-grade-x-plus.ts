@@ -51,6 +51,35 @@ function countImports(content: string): number {
   return importLines.length;
 }
 
+function _analyzeFile(content: string, relativePath: string) {
+  const rawCollectionQuery = /adapter\.(query|get|set|update|delete)\(['"](?!(tenants\/|system\/|config\/))[a-zA-Z0-9_-]+['"]/g;
+  if (rawCollectionQuery.test(content) && !relativePath.includes('NexusAdapter') && !relativePath.includes('DomainRegistry')) {
+    report.tenantIsolation.unscopedQueries.push(relativePath);
+  } else {
+    report.tenantIsolation.passedFiles++;
+  }
+  const directLedgerMutation = /adapter\.(update|delete)\([\s\S]*?journalEntries/gi;
+  if (directLedgerMutation.test(content)) {
+    report.nf525Compliance.passed = false;
+    report.nf525Compliance.directLedgerMutations.push(relativePath);
+  }
+  if (content.includes('toMicrounits(toMicrounits')) {
+    report.sovereignMath.doubleConversions.push(relativePath);
+  }
+  const isDomainService = relativePath.includes('src/domain/') || relativePath.includes('/services/');
+  const fanOut = countImports(content);
+  if (isDomainService && fanOut > 12) {
+    report.fanOutPolicies.godFileViolations.push({ file: relativePath, fanOutCount: fanOut });
+  }
+  if (/var\(--|bg-action-|bg-status-|bg-surface-|text-text-/.test(content)) {
+    report.semanticTokenCoverage.migratedComponents++;
+  }
+  const twMatches = content.match(/\b(bg|text|border)-(?:slate|gray|zinc|neutral|red|amber|blue|indigo|emerald)-(?:50|[1-9]00)\b/g);
+  if (twMatches) {
+    report.semanticTokenCoverage.staticTailwindResiduals += twMatches.length;
+  }
+}
+
 function scanDirectory(dir: string) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
@@ -68,42 +97,7 @@ function scanDirectory(dir: string) {
     if (isTypeScriptFile(entry.name)) {
       report.totalFilesScanned++;
       const content = fs.readFileSync(fullPath, 'utf-8');
-
-      // 1. Isolation Multi-Tenant (vérification des requêtes de collections brutes hors tenants/)
-      const rawCollectionQuery = /adapter\.(query|get|set|update|delete)\(['"](?!(tenants\/|system\/|config\/))[a-zA-Z0-9_-]+['"]/g;
-      if (rawCollectionQuery.test(content) && !relativePath.includes('NexusAdapter') && !relativePath.includes('DomainRegistry')) {
-        report.tenantIsolation.unscopedQueries.push(relativePath);
-      } else {
-        report.tenantIsolation.passedFiles++;
-      }
-
-      // 2. Immuabilité NF525 (vérification des mutations sur JournalEntry)
-      const directLedgerMutation = /adapter\.(update|delete)\([\s\S]*?journalEntries/gi;
-      if (directLedgerMutation.test(content)) {
-        report.nf525Compliance.passed = false;
-        report.nf525Compliance.directLedgerMutations.push(relativePath);
-      }
-
-      // 3. Souveraineté Mathématique (vérification des sur-multiplications toMicrounits)
-      if (content.includes('toMicrounits(toMicrounits')) {
-        report.sovereignMath.doubleConversions.push(relativePath);
-      }
-
-      // 4. Politique de Fan-Out (Max 12 pour domain/services, max 30 pour UI entry points)
-      const isDomainService = relativePath.includes('src/domain/') || relativePath.includes('/services/');
-      const fanOut = countImports(content);
-      if (isDomainService && fanOut > 12) {
-        report.fanOutPolicies.godFileViolations.push({ file: relativePath, fanOutCount: fanOut });
-      }
-
-      // 5. Semantic Tokens Coverage
-      if (/var\(--|bg-action-|bg-status-|bg-surface-|text-text-/.test(content)) {
-        report.semanticTokenCoverage.migratedComponents++;
-      }
-      const twMatches = content.match(/\b(bg|text|border)-(?:slate|gray|zinc|neutral|red|amber|blue|indigo|emerald)-(?:50|[1-9]00)\b/g);
-      if (twMatches) {
-        report.semanticTokenCoverage.staticTailwindResiduals += twMatches.length;
-      }
+      _analyzeFile(content, relativePath);
     }
   }
 }

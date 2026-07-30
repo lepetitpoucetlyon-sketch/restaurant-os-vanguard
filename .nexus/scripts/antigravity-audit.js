@@ -16,13 +16,31 @@ function loadGraph() {
     return JSON.parse(fs.readFileSync(GRAPH_PATH, 'utf8'));
 }
 
+function _computeEdgeFlows(graph, nodeIds) {
+    const outgoing = [];
+    const incoming = [];
+    if (!graph.edges) return { outgoing, incoming };
+    graph.edges.forEach(edge => {
+        if (nodeIds.has(edge.source) && !nodeIds.has(edge.target)) outgoing.push(edge.target);
+        if (nodeIds.has(edge.target) && !nodeIds.has(edge.source)) incoming.push(edge.source);
+    });
+    return { outgoing, incoming };
+}
+
+function _checkViolation(outgoing, relativePath) {
+    const violations = outgoing.filter(dep => dep.includes('view') || dep.includes('component') || dep.includes('UI'));
+    if (relativePath.includes('core') || relativePath.includes('domain')) {
+        if (violations.length > 0) return violations;
+    }
+    return null;
+}
+
 function auditFile(graph, relativePath) {
     const absolutePath = path.resolve(REPO_ROOT, relativePath);
     console.log(`\n🔍 Auditing: ${relativePath}`);
 
     const nodes = graph.nodes.filter(n => {
         if (!n.source_file) return false;
-        // Normalize: compare relative paths from project root
         const nRel = n.source_file.split('RESTAURANT-OS-CORE/').pop();
         const tRel = absolutePath.split('RESTAURANT-OS-CORE/').pop();
         return nRel === tRel;
@@ -36,29 +54,17 @@ function auditFile(graph, relativePath) {
     const communities = [...new Set(nodes.map(n => n.community))];
     console.log(`📍 Logical Communities: ${communities.join(', ')}`);
 
-    // Dependency check
     const nodeIds = new Set(nodes.map(n => n.id));
-    const outgoing = [];
-    const incoming = [];
-
-    if (graph.edges) {
-        graph.edges.forEach(edge => {
-            if (nodeIds.has(edge.source) && !nodeIds.has(edge.target)) outgoing.push(edge.target);
-            if (nodeIds.has(edge.target) && !nodeIds.has(edge.source)) incoming.push(edge.source);
-        });
-    }
+    const { outgoing, incoming } = _computeEdgeFlows(graph, nodeIds);
 
     console.log(`🔗 Outgoing Flows: ${outgoing.slice(0, 3).join(', ')}${outgoing.length > 3 ? '...' : ''}`);
     console.log(`📥 Incoming Flows: ${incoming.slice(0, 3).join(', ')}${incoming.length > 3 ? '...' : ''}`);
 
-    // Violation Check (Simple Rule: Core should not depend on UI)
-    const violations = outgoing.filter(dep => dep.includes('view') || dep.includes('component') || dep.includes('UI'));
-    if (relativePath.includes('core') || relativePath.includes('domain')) {
-        if (violations.length > 0) {
-            console.error('❌ ARCHITECTURAL VIOLATION: Core logic depending on UI-layer nodes.');
-            violations.forEach(v => console.error(`   -> ${v}`));
-            return false;
-        }
+    const violations = _checkViolation(outgoing, relativePath);
+    if (violations) {
+        console.error('❌ ARCHITECTURAL VIOLATION: Core logic depending on UI-layer nodes.');
+        violations.forEach(v => console.error(`   -> ${v}`));
+        return false;
     }
 
     console.log('✅ Integrity Confirmed.');

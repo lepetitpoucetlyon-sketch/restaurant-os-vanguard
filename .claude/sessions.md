@@ -50,4 +50,9 @@
 | suite-fixes-firestore | Fixes 4-5-6 (rapatriement, demo, useExtensions), audit Firestore rules privilege escalation systemConfig | 2026-07-29 | terminée |
 | preflight-green | Preflight complet : cycles Madge 0, SSR purity (ops pages), playwright/mqtt externals, fan-out KitchenDashboard+FinanceDashboard, baseline v2.0, hook pre-push, CC -3 (resolveTaskContext/middleware/AnomalyDetector) | 2026-07-30 | terminée |
 | cc-reduction | Réduction CC 10 fonctions TS : usePos, useReservationsPage, InventoryReceptionDashboard, NexusFleetProvider, fileDetector, BrandingProvider, ReservationHistoryImporter, useFloorPlanControls, NewQuoteDialog, useInventory | 2026-07-30 | terminée |
-| cc-reduction-15 | Chantier 8 — abaissement seuil cc≤15 : ~28 fonctions TS (plateforme + bridge + MCC) | 2026-07-30 | active |
+| cc-reduction-15 | Chantier 8 — abaissement seuil cc≤15 : ~28 fonctions TS (plateforme + bridge + MCC) | 2026-07-30 | terminée |
+| cc-wave2 | Chantier 9 wave 2 — abaissement cc≤12 : 17 fonctions cc=14, puis 12 fonctions cc=15 | 2026-07-30 | terminée |
+| cc-wave2-finish | Finalisation cc-wave2 : réduction CC ≤12 + correction arborescence (MCC manquant) | 2026-07-30 | terminée |
+| full-audit | Audit complet structure/code/arborescence (lecture seule) | 2026-07-30 | terminée |
+| god-files-microunits | God files (6 fichiers >400L) + migration InCents→Microunits (478 occ.) | 2026-07-30 | active |
+| cc-python | Chantier 9 Python — réduction CC ≤12 : 10 fonctions sovereign-rag + scripts | 2026-07-30 | active |

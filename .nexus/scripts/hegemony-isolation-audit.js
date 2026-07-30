@@ -42,9 +42,54 @@ function verifyInCode(source, target) {
     }
 }
 
+function findPath(adj, nodeTable, start, targetH, visited = new Set()) {
+    if (visited.has(start)) return null;
+    visited.add(start);
+    const neighbors = adj[start] || [];
+    for (const neighborId of neighbors) {
+        const neighborNode = nodeTable[neighborId];
+        if (!neighborNode) continue;
+        const nH = getHegemony(neighborNode.source_file);
+        if (nH === targetH) return [start, neighborId];
+        const subPath = findPath(adj, nodeTable, neighborId, targetH, visited);
+        if (subPath) return [start, ...subPath];
+    }
+    return null;
+}
+
+function _certifyKernel(nodeTable, adj) {
+    console.log('🛡️  CERTIFICATION KERNEL (Feuille Morte) :');
+    const kernelNodeId = Object.keys(nodeTable).find(id => nodeTable[id].source_file && nodeTable[id].source_file.includes(SHARED_KERNEL_PATH));
+    if (kernelNodeId) {
+        const kernelDeps = adj[kernelNodeId] || [];
+        const hegemonyDeps = kernelDeps.filter(depId => getHegemony(nodeTable[depId]?.source_file));
+        if (hegemonyDeps.length === 0) {
+            console.log('   ✅ SHARED KERNEL : État de "Feuille Morte" confirmé. 0 dépendance vers les hégémonies.\n');
+        } else {
+            console.error(`   ❌ VIOLATION : Le Kernel dépend de : ${hegemonyDeps.join(', ')}\n`);
+        }
+    } else {
+        console.warn('   ⚠️  Kernel node not found in graph.\n');
+    }
+}
+
+function _reportBridges(bridges, nodeTable) {
+    console.log('🔍 RECHERCHE DE PONTS (Backoffice -> Public) :');
+    if (bridges.length === 0) {
+        console.log('   ✅ Aucun pont transitif détecté entre Backoffice et Public.\n');
+    } else {
+        const realBridges = bridges.filter(b => b.isReal);
+        console.error(`   ⚠️  ${bridges.length} ponts théoriques trouvés, dont ${realBridges.length} confirmés RÉELS.\n`);
+        realBridges.slice(0,3).forEach(b => {
+            console.error(`   🚩 PONT RÉEL : ${b.path.map(id => nodeTable[id].source_file || id).join(' -> ')}`);
+        });
+    }
+    console.log('--- RAPPORT DE PROPRETÉ RÉELLE ---');
+}
+
 function runAudit() {
     console.log('🏛️  SINGULARITY TRANSITIVE AUDIT [GRADE X]\n');
-    
+
     if (!fs.existsSync(GRAPH_PATH)) {
         console.error('❌ Nexus Graph missing.');
         process.exit(1);
@@ -65,65 +110,20 @@ function runAudit() {
         });
     }
 
-    // 1. Kernel Leaf Certification
-    console.log('🛡️  CERTIFICATION KERNEL (Feuille Morte) :');
-    const kernelNodeId = Object.keys(nodeTable).find(id => nodeTable[id].source_file && nodeTable[id].source_file.includes(SHARED_KERNEL_PATH));
-    
-    if (kernelNodeId) {
-        const kernelDeps = adj[kernelNodeId] || [];
-        const hegemonyDeps = kernelDeps.filter(depId => getHegemony(nodeTable[depId]?.source_file));
-        
-        if (hegemonyDeps.length === 0) {
-            console.log('   ✅ SHARED KERNEL : État de "Feuille Morte" confirmé. 0 dépendance vers les hégémonies.\n');
-        } else {
-            console.error(`   ❌ VIOLATION : Le Kernel dépend de : ${hegemonyDeps.join(', ')}\n`);
-        }
-    } else {
-        console.warn('   ⚠️  Kernel node not found in graph.\n');
-    }
-
-    // 2. Traque des Ponts Transitifs (DFS)
-    function findPath(start, targetH, visited = new Set()) {
-        if (visited.has(start)) return null;
-        visited.add(start);
-
-        const neighbors = adj[start] || [];
-        for (const neighborId of neighbors) {
-            const neighborNode = nodeTable[neighborId];
-            if (!neighborNode) continue;
-
-            const nH = getHegemony(neighborNode.source_file);
-            if (nH === targetH) return [start, neighborId];
-            
-            const subPath = findPath(neighborId, targetH, visited);
-            if (subPath) return [start, ...subPath];
-        }
-        return null;
-    }
+    _certifyKernel(nodeTable, adj);
 
     const backofficeNodes = graph.nodes.filter(n => getHegemony(n.source_file) === 'backoffice').map(n => n.id);
     const bridges = [];
 
-    console.log('🔍 RECHERCHE DE PONTS (Backoffice -> Public) :');
     backofficeNodes.forEach(nodeId => {
-        const pathFound = findPath(nodeId, 'public');
+        const pathFound = findPath(adj, nodeTable, nodeId, 'public');
         if (pathFound) {
             const isReal = verifyInCode(nodeTable[nodeId].source_file, nodeTable[pathFound[1]].source_file);
             bridges.push({ path: pathFound, isReal });
         }
     });
 
-    if (bridges.length === 0) {
-        console.log('   ✅ Aucun pont transitif détecté entre Backoffice et Public.\n');
-    } else {
-        const realBridges = bridges.filter(b => b.isReal);
-        console.error(`   ⚠️  ${bridges.length} ponts théoriques trouvés, dont ${realBridges.length} confirmés RÉELS.\n`);
-        realBridges.slice(0,3).forEach(b => {
-            console.error(`   🚩 PONT RÉEL : ${b.path.map(id => nodeTable[id].source_file || id).join(' -> ')}`);
-        });
-    }
-
-    console.log('--- RAPPORT DE PROPRETÉ RÉELLE ---');
+    _reportBridges(bridges, nodeTable);
     const sealScore = bridges.length === 0 ? 100 : Math.round(((bridges.length - bridges.filter(b => b.isReal).length) / bridges.length) * 100);
     console.log(`💎 Score d'étanchéité : ${sealScore}%`);
 }

@@ -5,6 +5,15 @@ const { config } = require('./antigravity-config');
 const REPO_ROOT = config.repoRoot;
 const GRAPH_PATH = path.join(REPO_ROOT, 'graphify-out/graph.json');
 
+function _suggestComponentName(symbols) {
+  const has = (kw1, kw2) => symbols.some(s => s.toLowerCase().includes(kw1) || s.toLowerCase().includes(kw2));
+  if (has('modal', 'form')) return 'StaffMemberForm';
+  if (has('list', 'card')) return 'StaffList';
+  if (has('audit', 'log')) return 'StaffAuditLog';
+  if (has('pay', 'salary')) return 'StaffPayroll';
+  return 'Component';
+}
+
 function weave(targetFile) {
   if (!fs.existsSync(GRAPH_PATH)) {
     console.error('❌ Graph Nexus uninitialized. Run `npm run atlas` first.');
@@ -44,14 +53,7 @@ function weave(targetFile) {
     console.log(`\n📦 Cluster #${c.id} [Lines ${minLine}-${maxLine}+]`);
     console.log(`   Symbols: ${c.symbols.join(', ')}`);
     
-    // Suggest component name based on symbols
-    let suggestedName = 'Component';
-    if (c.symbols.some(s => s.toLowerCase().includes('modal') || s.toLowerCase().includes('form'))) suggestedName = 'StaffMemberForm';
-    else if (c.symbols.some(s => s.toLowerCase().includes('list') || s.toLowerCase().includes('card'))) suggestedName = 'StaffList';
-    else if (c.symbols.some(s => s.toLowerCase().includes('audit') || s.toLowerCase().includes('log'))) suggestedName = 'StaffAuditLog';
-    else if (c.symbols.some(s => s.toLowerCase().includes('pay') || s.toLowerCase().includes('salary'))) suggestedName = 'StaffPayroll';
-    
-    console.log(`   💡 Potential Extraction: ${suggestedName}.tsx`);
+    console.log(`   💡 Potential Extraction: ${_suggestComponentName(c.symbols)}.tsx`);
   });
 }
 

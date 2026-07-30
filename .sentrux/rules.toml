@@ -35,7 +35,7 @@ max_coupling = "B"
 
 # Complexité cyclomatique max par unité.
 # Chantier 7 : 20→15. Les fonctions >15 branches ont besoin d'être découpées.
-max_cc = 15
+max_cc = 12
 
 # Pas de fichier "dieu" (>300 lignes de logique + >10 dépendances).
 # Les agents IA ont tendance à tout mettre dans un seul fichier.

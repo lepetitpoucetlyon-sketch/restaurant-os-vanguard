@@ -46,64 +46,48 @@ function parseLintFile(filePath) {
 }
 
 // Fix 1: Remove unused imports (no-unused-vars on import lines)
+function _fixImportLine(line, unusedName) {
+  const namedImportMatch = line.match(/^(\s*import\s*\{)([^}]+)(\}\s*from\s*.+)$/);
+  if (namedImportMatch) {
+    const imports = namedImportMatch[2].split(',').map(s => s.trim());
+    const filtered = imports.filter(i => {
+      const parts = i.split(/\s+as\s+/);
+      return parts[parts.length - 1].trim() !== unusedName;
+    });
+    if (filtered.length === 0) return '';
+    if (filtered.length !== imports.length) return `${namedImportMatch[1]} ${filtered.join(', ')} ${namedImportMatch[3]}`;
+    return line;
+  }
+  const defaultImportMatch = line.match(/^(\s*import\s+)([A-Za-z_$][A-Za-z0-9_$]*)(\s*from\s*.+)$/);
+  if (defaultImportMatch && defaultImportMatch[2] === unusedName) return '';
+  const nsImportMatch = line.match(/^(\s*import\s+\*\s+as\s+)([A-Za-z_$][A-Za-z0-9_$]*)(\s*from\s*.+)$/);
+  if (nsImportMatch && nsImportMatch[2] === unusedName) return '';
+  return line;
+}
+
 function fixUnusedImports(content, errors) {
-  const unusedImportErrors = errors.filter(e => 
-    e.rule === '@typescript-eslint/no-unused-vars' && 
+  const unusedImportErrors = errors.filter(e =>
+    e.rule === '@typescript-eslint/no-unused-vars' &&
     e.message.match(/'(.+)' is defined but never used|'(.+)' is assigned a value but never used/)
   );
 
   if (unusedImportErrors.length === 0) return content;
 
   const lines = content.split('\n');
-  
+
   for (const error of unusedImportErrors) {
     const lineIdx = error.line - 1;
     if (lineIdx < 0 || lineIdx >= lines.length) continue;
     const line = lines[lineIdx];
-    
-    // Extract the unused identifier
+
     const nameMatch = error.message.match(/'([^']+)' is (defined|assigned)/);
     if (!nameMatch) continue;
-    const unusedName = nameMatch[1];
 
-    // Only process import statements
     if (!line.trim().startsWith('import ')) continue;
 
-    // Case: import { A, B, C } from '...' where one of them is unused
-    const namedImportMatch = line.match(/^(\s*import\s*\{)([^}]+)(\}\s*from\s*.+)$/);
-    if (namedImportMatch) {
-      const imports = namedImportMatch[2].split(',').map(s => s.trim());
-      const filtered = imports.filter(i => {
-        // Handle "X as Y" - check both original and alias
-        const parts = i.split(/\s+as\s+/);
-        return parts[parts.length - 1].trim() !== unusedName;
-      });
-      
-      if (filtered.length === 0) {
-        // Remove the entire import line
-        lines[lineIdx] = '';
-      } else if (filtered.length !== imports.length) {
-        lines[lineIdx] = `${namedImportMatch[1]} ${filtered.join(', ')} ${namedImportMatch[3]}`;
-      }
-      continue;
-    }
-
-    // Case: import DefaultExport from '...' - remove entire line
-    const defaultImportMatch = line.match(/^(\s*import\s+)([A-Za-z_$][A-Za-z0-9_$]*)(\s*from\s*.+)$/);
-    if (defaultImportMatch && defaultImportMatch[2] === unusedName) {
-      lines[lineIdx] = '';
-      continue;
-    }
-
-    // Case: import * as X from '...' - remove entire line
-    const nsImportMatch = line.match(/^(\s*import\s+\*\s+as\s+)([A-Za-z_$][A-Za-z0-9_$]*)(\s*from\s*.+)$/);
-    if (nsImportMatch && nsImportMatch[2] === unusedName) {
-      lines[lineIdx] = '';
-      continue;
-    }
+    lines[lineIdx] = _fixImportLine(line, nameMatch[1]);
   }
 
-  // Remove consecutive empty lines left by import removal
   return lines.join('\n').replace(/\n{3,}/g, '\n\n');
 }
 
@@ -139,35 +123,36 @@ function fixUnescapedEntities(content, errors) {
   return lines.join('\n');
 }
 
+function _updateJSXExprState(c, state) {
+  if (!state.inString && !state.inTag && c === '{') { state.inJSExpr++; return true; }
+  if (!state.inString && !state.inTag && c === '}' && state.inJSExpr > 0) { state.inJSExpr--; return true; }
+  if (!state.inString && !state.inJSExpr && c === '<') { state.inTag = true; return true; }
+  return false;
+}
+
+function _updateJSXTagState(c, state) {
+  if (c === '>') { state.inTag = false; return true; }
+  if (c === '"' || c === "'") {
+    if (!state.inString) { state.inString = true; state.stringChar = c; }
+    else if (c === state.stringChar) { state.inString = false; }
+    return true;
+  }
+  return false;
+}
+
 // Naive JSX text replacer - replaces only in text context (not inside {}, <>, "")
 function replaceInJSXText(line, char, replacement) {
+  const state = { inString: false, stringChar: '', inJSExpr: 0, inTag: false };
   let result = '';
-  let inString = false;
-  let stringChar = '';
-  let inJSExpr = 0;
-  let inTag = false;
   let i = 0;
 
   while (i < line.length) {
     const c = line[i];
-
-    if (!inString && !inTag && c === '{') {
-      inJSExpr++;
+    if (_updateJSXExprState(c, state)) {
       result += c;
-    } else if (!inString && !inTag && c === '}' && inJSExpr > 0) {
-      inJSExpr--;
+    } else if (state.inTag && _updateJSXTagState(c, state)) {
       result += c;
-    } else if (!inString && !inJSExpr && c === '<') {
-      inTag = true;
-      result += c;
-    } else if (inTag && c === '>') {
-      inTag = false;
-      result += c;
-    } else if (inTag && (c === '"' || c === "'")) {
-      if (!inString) { inString = true; stringChar = c; }
-      else if (c === stringChar) { inString = false; }
-      result += c;
-    } else if (!inTag && !inJSExpr && !inString && c === char) {
+    } else if (!state.inTag && !state.inJSExpr && !state.inString && c === char) {
       result += replacement;
     } else {
       result += c;

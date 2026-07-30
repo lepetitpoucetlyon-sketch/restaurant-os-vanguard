@@ -41,18 +41,22 @@ const ALL_COLORS = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|g
 const SHADES = '50|[1-9]00';
 const PREFIXES = 'bg|text|border|ring|from|to|via';
 
+function _getGrayBgReplacement(prefix: string, shade: string): string {
+    if (['50', '100', '200'].includes(shade)) return `${prefix}-surface-bg`;
+    if (['300', '400', '500'].includes(shade)) return `${prefix}-surface-tertiary`;
+    return `${prefix}-surface-sidebar`;
+}
+
+function _getGrayTextReplacement(shade: string): string {
+    if (['50', '100', '200', '300', '400'].includes(shade)) return 'text-muted';
+    if (['500', '600'].includes(shade)) return 'text-secondary';
+    return 'text-primary';
+}
+
 function getGrayReplacement(prefix: string, color: string, shade: string): string | null {
     if (!['slate', 'gray', 'zinc', 'neutral', 'stone'].includes(color)) return null;
-    if (['bg', 'from', 'to', 'via'].includes(prefix)) {
-        if (['50', '100', '200'].includes(shade)) return `${prefix}-surface-bg`;
-        if (['300', '400', '500'].includes(shade)) return `${prefix}-surface-tertiary`;
-        if (['600', '700', '800', '900'].includes(shade)) return `${prefix}-surface-sidebar`;
-    }
-    if (prefix === 'text') {
-        if (['50', '100', '200', '300', '400'].includes(shade)) return 'text-muted';
-        if (['500', '600'].includes(shade)) return 'text-secondary';
-        if (['700', '800', '900'].includes(shade)) return 'text-primary';
-    }
+    if (['bg', 'from', 'to', 'via'].includes(prefix)) return _getGrayBgReplacement(prefix, shade);
+    if (prefix === 'text') return _getGrayTextReplacement(shade);
     if (prefix === 'border' || prefix === 'ring') {
         if (['50', '100', '200'].includes(shade)) return `${prefix}-subtle`;
         return `${prefix}-default`;

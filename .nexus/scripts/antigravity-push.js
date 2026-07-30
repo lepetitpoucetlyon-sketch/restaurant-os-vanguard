@@ -11,6 +11,19 @@ const { config, EXEC_OPTS } = require('./antigravity-config');
 const DRY_RUN = process.argv.includes('--dry-run');
 const LOCK_FILE = path.join(config.repoRoot, '.git/antigravity-sync.lock');
 
+function _loadManifestStability(repoRoot) {
+    try {
+        const manifestPath = path.join(repoRoot, '../extensions/ghost-commander-os/CDC_MANIFEST.json');
+        if (fs.existsSync(manifestPath)) {
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+            if (manifest.globalStatus && manifest.globalStatus.empireStability !== undefined) {
+                return ` | Empire Stability: ${manifest.globalStatus.empireStability}%`;
+            }
+        }
+    } catch (e) { /* Fallback to default message */ }
+    return '';
+}
+
 async function pushWork() {
     // 0. Lock Prevention
     if (fs.existsSync(LOCK_FILE)) {
@@ -44,17 +57,7 @@ async function pushWork() {
 
         // 3. Generate Commit Message
         const date = new Date().toISOString();
-        let stabilitySuffix = "";
-        
-        try {
-            const manifestPath = path.join(config.repoRoot, '../extensions/ghost-commander-os/CDC_MANIFEST.json');
-            if (fs.existsSync(manifestPath)) {
-                const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-                if (manifest.globalStatus && manifest.globalStatus.empireStability !== undefined) {
-                    stabilitySuffix = ` | Empire Stability: ${manifest.globalStatus.empireStability}%`;
-                }
-            }
-        } catch (e) { /* Fallback to default message */ }
+        const stabilitySuffix = _loadManifestStability(config.repoRoot);
 
         const commitMsg = `[EMPIRE-AUTO] Pulse Stabilization Sync - ${date}${stabilitySuffix}`;
 
