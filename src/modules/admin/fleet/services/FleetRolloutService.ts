@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { CoreAuditLogger } from '@/shared/nexus/guards/audit/CoreAuditLogger';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 /**
  * 🚀 C5.4: Fleet Rollout Service
@@ -31,13 +31,13 @@ export class FleetRolloutService {
                 });
 
                 // 2. Trace inaltérable pour le tenant
-                await CoreAuditLogger.log(
-                    tenantId,
-                    'FLEET_ROLLOUT_RECEIVED',
-                    superAdminId,
-                    { type: 'menu', timestamp: Date.now() },
-                    'high'
-                );
+                empireAudit.log({
+                    module: 'fleet',
+                    action: 'FLEET_ROLLOUT_RECEIVED',
+                    details: { tenantId, type: 'menu', rolledOutBy: superAdminId, timestamp: Date.now() },
+                    severity: 'high',
+                    timestamp: new Date(),
+                });
 
                 successful.push(tenantId);
             } catch (e) {

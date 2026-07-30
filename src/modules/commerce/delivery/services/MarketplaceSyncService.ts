@@ -1,6 +1,6 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
-import { SharedKernel } from '@/shared/nexus/contracts/SharedKernel';
+import type { CartItem } from '@/modules/ops/engine/types';
 
 export interface MarketplaceOrderPayload {
     platform: 'ubereats' | 'deliveroo' | 'wolt';
@@ -22,31 +22,40 @@ export class MarketplaceSyncService {
     static async handleIncomingOrder(tenantId: string, payload: MarketplaceOrderPayload): Promise<void> {
         logger.info(`[Marketplace] Nouvelle commande ${payload.platform} (Ext ID: ${payload.externalOrderId})`);
 
-        const orderId = SharedKernel.generateId('ORD');
+        const orderId = crypto.randomUUID();
+        const tableId = `delivery-${payload.platform}`;
+        const mappedItems = payload.items.map(item => ({
+            cartId: item.id,
+            productId: item.id,
+            categoryId: 'marketplace',
+            name: item.id,
+            quantity: item.quantity,
+            unitPriceInMicrounits: item.priceInCents * 10_000,
+            discountInMicrounits: 0,
+            taxRate: '0.10' as const,
+            modifiers: [],
+        })) as unknown as CartItem[];
 
-        // 1. Émettre l'événement de commande passée (qui va aller au KDS, déduire les stocks, etc.)
+        // 1. Émettre l'événement de commande passée (KDS, déduction stock, etc.)
         await NexusEventBus.emitDurable('order.placed', {
             v: 1,
             orderId,
             tenantId,
-            tableId: `delivery-${payload.platform}`, // "table" virtuelle
+            tableId,
             operatorId: 'system-marketplace',
-            items: payload.items.map(item => ({
-                id: item.id,
-                quantity: item.quantity,
-                unitPriceInMicrounits: item.priceInCents * 10000,
-                discountInMicrounits: 0
-            }))
+            items: mappedItems,
         });
 
-        // 2. Déclencher le flux de paiement externe (qui sera géré par AccountsReceivable pour le lettrage de la commission)
+        // 2. Déclencher le flux de paiement
         await NexusEventBus.emitDurable('order.paid', {
             v: 1,
             orderId,
             tenantId,
-            amountInMicrounits: payload.totalInCents * 10000,
-            method: 'external_marketplace',
-            timestamp: Date.now()
+            tableId,
+            operatorId: 'system-marketplace',
+            items: mappedItems,
+            totalInMicrounits: payload.totalInCents * 10_000,
+            paymentMode: `marketplace_${payload.platform}`,
         });
 
         logger.info(`[Marketplace] Commande ${orderId} ingérée et payée via ${payload.platform} (Commission: ${payload.commissionInCents} cts).`);

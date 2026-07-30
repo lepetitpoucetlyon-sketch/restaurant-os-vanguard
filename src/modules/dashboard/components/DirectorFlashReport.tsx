@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DailyFlashReport, DailyConsolidationService } from '../services/DailyConsolidationService';
 import { useTenant } from '@/shared/providers/NexusCoreProvider';
 import { formatCurrency } from '@/lib/formatters';
-import { PremiumCard, StatCard } from '@/components/ui';
-import { PageHeader } from '@/components/layout';
+import { PremiumCard, StatCard, PageHeader } from '@/shared/components/ui';
 import { logger } from '@/lib/logger';
 
 /**
@@ -52,25 +51,23 @@ export const DirectorFlashReport: React.FC = () => {
             />
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <StatCard 
-                    title="Chiffre d'Affaires" 
-                    value={formatCurrency(report.totalRevenueInCents / 100)} 
-                    trend="+12%" 
-                    trendUp={true}
+                <StatCard
+                    label="Chiffre d'Affaires"
+                    value={formatCurrency(report.totalRevenueInCents / 100)}
+                    trend={{ value: 12, direction: 'up' }}
                 />
-                <StatCard 
-                    title="Couverts" 
-                    value={report.totalCovers.toString()} 
+                <StatCard
+                    label="Couverts"
+                    value={report.totalCovers.toString()}
                 />
-                <StatCard 
-                    title="Ticket Moyen" 
-                    value={formatCurrency(report.averageTicketInCents / 100)} 
+                <StatCard
+                    label="Ticket Moyen"
+                    value={formatCurrency(report.averageTicketInCents / 100)}
                 />
-                <StatCard 
-                    title="Incidents Sécurité" 
-                    value={report.incidentsCount.toString()} 
-                    trend={report.incidentsCount > 0 ? "Alerte" : "RAS"}
-                    trendUp={report.incidentsCount === 0}
+                <StatCard
+                    label="Incidents Sécurité"
+                    value={report.incidentsCount.toString()}
+                    trend={{ value: report.incidentsCount, direction: report.incidentsCount === 0 ? 'up' : 'down' }}
                 />
             </div>
 
@@ -87,7 +84,7 @@ export const DirectorFlashReport: React.FC = () => {
                             <div className="w-full bg-bg-secondary rounded-full h-2">
                                 <div 
                                     className={`h-2 rounded-full ${report.laborCostPercentage > 35 ? 'bg-red-500' : 'bg-green-500'}`} 
-                                    style={{ width: \`\${Math.min(report.laborCostPercentage, 100)}%\` }}
+                                    style={{ width: `${Math.min(report.laborCostPercentage, 100)}%` }}
                                 />
                             </div>
                         </div>
@@ -102,7 +99,7 @@ export const DirectorFlashReport: React.FC = () => {
                             <div className="w-full bg-bg-secondary rounded-full h-2">
                                 <div 
                                     className={`h-2 rounded-full ${report.foodCostPercentage > 30 ? 'bg-red-500' : 'bg-green-500'}`} 
-                                    style={{ width: \`\${Math.min(report.foodCostPercentage, 100)}%\` }}
+                                    style={{ width: `${Math.min(report.foodCostPercentage, 100)}%` }}
                                 />
                             </div>
                         </div>

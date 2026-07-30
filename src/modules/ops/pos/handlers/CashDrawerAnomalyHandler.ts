@@ -32,7 +32,7 @@ export function registerCashDrawerAnomalyHandler(): () => void {
         
         if (drawer && drawer.tenantId !== tenantId) {
           // BRÈCHE DE SOUVERAINETÉ DÉTECTÉE (Tiroir croisé entre tenants)
-          logger.fatal(`[SovereignGuard] BRÈCHE DÉTECTÉE : Le tiroir ${drawerId} appartient à ${drawer.tenantId} mais a été ouvert par ${tenantId}`);
+          logger.error(`[SovereignGuard] BRÈCHE DÉTECTÉE : Le tiroir ${drawerId} appartient à ${drawer.tenantId} mais a été ouvert par ${tenantId}`);
           
           await NexusEventBus.emitDurable('sovereign.breach', {
             v: 1,

@@ -81,7 +81,7 @@ export const FinancialNexusBridge = {
       const lineMode = (item as { consumptionMode?: ConsumptionMode }).consumptionMode ?? consumptionMode;
       const category = inferCategory(item.categoryId ?? '', item.name);
       const taxRate = resolveVatRate({ category, consumptionMode: lineMode });
-      const analyticalAxis = category === 'drink' ? 'Beverage' : 'Food';
+      const analyticalAxis = (category === 'beverage_soft' || category === 'alcohol') ? 'Beverage' : 'Food';
       return { ...item, taxRate, analyticalAxis };
     });
 

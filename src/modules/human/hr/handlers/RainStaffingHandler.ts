@@ -17,7 +17,7 @@ export function registerRainStaffingHandler(): () => void {
         logger.info(`[RainStaffingHandler] Appel RH d'urgence reçu : Besoin de ${headcount} personnes à ${toTenantId} (Prime: ${bonusInMicrounits/1000000}€)`);
 
         empireAudit.log({
-          module: 'hr',
+          module: 'human',
           action: 'EMERGENCY_STAFFING_CALL',
           details: { fromTenantId, toTenantId, headcount, bonusInMicrounits },
           severity: 'high',

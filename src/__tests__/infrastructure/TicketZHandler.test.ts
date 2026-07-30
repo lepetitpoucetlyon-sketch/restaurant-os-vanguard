@@ -76,6 +76,7 @@ import { NexusEventBus, type NexusEvents } from '@/shared/eventBus/NexusEventBus
 
 function paidPayload(overrides: Partial<NexusEvents['order.paid']> & Pick<NexusEvents['order.paid'], 'tenantId' | 'totalInMicrounits'>): NexusEvents['order.paid'] {
   return {
+    v: 1 as const,
     orderId: 'order_test',
     tableId: null,
     operatorId: 'op_test',

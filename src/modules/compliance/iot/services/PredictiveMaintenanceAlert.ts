@@ -51,11 +51,8 @@ export class PredictiveMaintenanceAlert {
                     v: 1,
                     tenantId,
                     ticketId: `maint-${Date.now()}`,
-                    category: 'MAINTENANCE_PREDICTIVE',
-                    description: `Dérive thermique anormale détectée sur l'équipement ${reading.equipmentId}. Risque de panne compresseur.`,
-                    priority: 'high',
+                    description: `[MAINTENANCE] Dérive thermique anormale détectée sur l'équipement ${reading.equipmentId}. Risque de panne compresseur.`,
                     submittedBy: 'iot-sentinel',
-                    submittedAt: Date.now()
                 });
 
                 // Vider le cache pour éviter le spam

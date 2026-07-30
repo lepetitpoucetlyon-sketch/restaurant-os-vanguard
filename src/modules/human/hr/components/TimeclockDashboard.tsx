@@ -158,9 +158,10 @@ export function TimeclockDashboard() {
                 });
             } else {
                 // Break logic fallback (hors spec P1, juste pour ne pas casser)
-                const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${id}` : `shiftEntries/${id}`;
+                const entryId = idArr[0].toString(16);
+                const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${entryId}` : `shiftEntries/${entryId}`;
                 await Nexus.adapter.set(shiftPath, {
-                    id,
+                    id: entryId,
                     userId: foundUser.id,
                     userName: foundUser.name,
                     type,

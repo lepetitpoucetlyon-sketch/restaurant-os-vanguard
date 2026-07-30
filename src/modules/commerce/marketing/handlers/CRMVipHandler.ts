@@ -27,23 +27,22 @@ export function registerCRMVipHandler(): () => void {
         if (!customer) return;
 
         // Si déjà VIP, rien à faire (sauf si on gère des tiers, mais restons simple)
-        if (customer.tags?.includes('VIP')) return;
+        if ((customer as any).tags?.includes?.('VIP')) return;
 
         // 3. Logique d'évaluation VIP
-        // Exemple simple : on incrémente le total des visites/montant 
-        // Dans une vraie app, on lirait le total depuis une agrégation (ou on incrémente ici)
-        const visits = (customer.stats?.totalVisits || 0) + 1;
-        const totalSpent = (customer.stats?.totalSpentInMicrounits || 0) + (order.totalTTCInMicrounits || 0);
+        const stats = (customer as any).stats as { totalVisits?: number; totalSpentInMicrounits?: number; lastVisitAt?: string } | undefined;
+        const visits = (stats?.totalVisits ?? 0) + 1;
+        const totalSpent = (stats?.totalSpentInMicrounits ?? 0) + ((order as any).totalTTCInMicrounits ?? 0);
 
         const VIP_VISITS_THRESHOLD = 5;
-        const VIP_SPENT_THRESHOLD = 500_000_000; // 500€ en microunits (500 * 100 * 10000 = 500,000,000)
+        const VIP_SPENT_THRESHOLD = 500_000_000; // 500€ en microunits
 
         const becomesVip = visits >= VIP_VISITS_THRESHOLD || totalSpent >= VIP_SPENT_THRESHOLD;
 
         // Met à jour les stats client en passant
         await Nexus.adapter.update(`tenants/${tenantId}/customers/${customerId}`, {
           stats: {
-            ...customer.stats,
+            ...(stats ?? {}),
             totalVisits: visits,
             totalSpentInMicrounits: totalSpent,
             lastVisitAt: new Date().toISOString()

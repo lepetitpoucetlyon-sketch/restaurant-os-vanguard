@@ -3,6 +3,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toMicrounits } from '@/domain/schemas/primitives';
 
 const makePayload = () => ({
+  v: 1 as const,
   orderId: 'order-1',
   tableId: 'table-3',
   tenantId: 'tenant-test',

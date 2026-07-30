@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { CoreAuditLogger } from '@/shared/nexus/guards/audit/CoreAuditLogger';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 /**
  * 🤝 C5.3: Table Handoff Service
@@ -39,18 +39,13 @@ export class TableHandoffService {
         await Nexus.adapter.set(`tenants/${tenantId}/orders/${orderId}`, order);
 
         // 3. Log Audit Inaltérable (Souveraineté)
-        await CoreAuditLogger.log(
-            tenantId,
-            'TABLE_HANDOFF',
-            approvingManagerId || fromOperatorId,
-            {
-                orderId,
-                from: previousOwner,
-                to: toOperatorId,
-                timestamp: Date.now()
-            },
-            'low'
-        );
+        empireAudit.log({
+            module: 'ops',
+            action: 'TABLE_HANDOFF',
+            details: { tenantId, orderId, from: previousOwner, to: toOperatorId, approver: approvingManagerId },
+            severity: 'low',
+            timestamp: new Date(),
+        });
 
         logger.info(`[Handoff] Table transférée avec succès à ${toOperatorId}.`);
     }

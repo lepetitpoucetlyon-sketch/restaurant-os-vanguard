@@ -44,7 +44,7 @@ export function registerPayrollTimeclockHandler(): () => void {
     logger.info(`[PayrollTimeclock] Pointage enregistré: ${userName} (${clockType}) à ${timestamp}`);
 
     empireAudit.log({
-      module: 'human/hr',
+      module: 'human',
       action: 'TIMECLOCK_ENTRY',
       details: { userId, userName, type: clockType, timestamp, terminalId },
       severity: 'low',

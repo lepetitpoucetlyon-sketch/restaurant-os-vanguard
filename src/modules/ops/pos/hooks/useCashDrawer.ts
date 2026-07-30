@@ -64,7 +64,7 @@ export function useCashDrawer(drawerId: string, tenantId: string, currentOperato
           module: 'finance',
           action: 'CASH_DRAWER_COUNTED',
           details: { drawerId, expectedAmountInCents, countedAmountInCents, discrepancyInCents },
-          severity: Math.abs(discrepancyInCents) > 500 ? 'high' : 'info',
+          severity: Math.abs(discrepancyInCents) > 500 ? 'high' : 'low',
           timestamp: new Date(),
         });
         showToast(`Caisse comptée. Écart: ${discrepancyInCents / 100}€`, 'success');
