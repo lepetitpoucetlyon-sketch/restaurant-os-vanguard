@@ -72,6 +72,15 @@ function verifyStripeSignature(
   }
 }
 
+function extractTenantId(subscription: StripeSubscription): string | undefined {
+  return (
+    subscription.metadata?.tenantId ??
+    (typeof subscription.customer === 'object' && subscription.customer !== null
+      ? subscription.customer.metadata?.tenantId
+      : undefined)
+  );
+}
+
 /**
  * POST /api/webhooks/stripe
  * Reçoit les events Stripe, vérifie la signature et met à jour le statut
@@ -123,12 +132,7 @@ export async function POST(req: NextRequest) {
           break;
         }
 
-        // Extraire le tenantId depuis les métadonnées de la subscription ou du customer
-        const tenantId =
-          subscription.metadata?.tenantId ??
-          (typeof subscription.customer === 'object' && subscription.customer !== null
-            ? subscription.customer.metadata?.tenantId
-            : undefined);
+        const tenantId = extractTenantId(subscription);
 
         if (!tenantId) {
           logger.warn(

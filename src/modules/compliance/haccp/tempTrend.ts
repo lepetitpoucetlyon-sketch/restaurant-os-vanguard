@@ -78,9 +78,7 @@ export const TempTrendService = {
             const currentTemp = last.temperature;
             const avgTemp = eqReadings.reduce((s, r) => s + r.temperature, 0) / eqReadings.length;
 
-            const isApproachingBreach =
-                (eq.type !== 'hot_hold' && trend === 'rising' && currentTemp < threshold) ||
-                (eq.type === 'freezer' && trend === 'rising' && currentTemp < threshold);
+            const isApproachingBreach = eq.type !== 'hot_hold' && trend === 'rising' && currentTemp < threshold;
 
             if (isApproachingBreach) {
                 const degreesLeft = threshold - currentTemp;

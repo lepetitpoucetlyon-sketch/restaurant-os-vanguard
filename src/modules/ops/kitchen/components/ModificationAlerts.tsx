@@ -14,6 +14,15 @@ interface ModificationAlertProps {
     tableNumber: string;
 }
 
+function parseModDetails(modification: OrderItemModification): { removedIngredients: string[]; addedIngredients: string[]; newNotes: string } {
+    try {
+        const newValue = JSON.parse(String(modification.newValue || '{}'));
+        return { removedIngredients: newValue.removed || [], addedIngredients: newValue.added || [], newNotes: newValue.notes || '' };
+    } catch {
+        return { removedIngredients: [], addedIngredients: [], newNotes: '' };
+    }
+}
+
 export function ModificationAlert({ modification, itemName, tableNumber }: ModificationAlertProps) {
     const { respondToModification } = useOrders();
     const { currentUser } = useAuth();
@@ -44,19 +53,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
         setIsResponding(false);
     };
 
-    // Parse the modification details
-    let removedIngredients: string[] = [];
-    let addedIngredients: string[] = [];
-    let newNotes = '';
-
-    try {
-        const newValue = JSON.parse(String(modification.newValue || '{}'));
-        removedIngredients = newValue.removed || [];
-        addedIngredients = newValue.added || [];
-        newNotes = newValue.notes || '';
-    } catch {
-        // Use description as fallback
-    }
+    const { removedIngredients, addedIngredients, newNotes } = parseModDetails(modification);
 
     const timeSinceRequest = Math.floor((new Date().getTime() - new Date(modification.requestedAt).getTime()) / 1000 / 60);
 

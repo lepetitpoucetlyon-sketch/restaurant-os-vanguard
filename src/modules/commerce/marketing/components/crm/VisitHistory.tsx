@@ -61,6 +61,30 @@ const STATUS_COLORS: Record<string, string> = {
     no_show: "bg-text-muted/15 text-text-muted",
 };
 
+type ReservationWithContact = Reservation & { customerEmail?: string; customerPhone?: string };
+
+async function fetchContactFallback(email: string, phone: string | undefined): Promise<Reservation[]> {
+    if (!email && !phone) return [];
+    const all = await Nexus.adapter
+        .query<ReservationWithContact>("reservations", {
+            orderBy: { field: "date", direction: "desc" },
+            limit: 200,
+        })
+        .catch(() => [] as ReservationWithContact[]);
+    return all.filter((r) => {
+        const rEmail = r.customerEmail ?? "";
+        const rPhone = r.customerPhone ?? "";
+        return (email && rEmail.toLowerCase() === email.toLowerCase()) || (phone && rPhone === phone);
+    });
+}
+
+function sumOrderMicrounits(orders: Order[]): number {
+    return orders.reduce((sum, o) => {
+        const mu = o.totalInMicrounits ?? (o.totalInCents ? o.totalInCents * 10_000 : 0);
+        return sum + (typeof mu === 'number' ? mu : 0);
+    }, 0);
+}
+
 // ── Component ──────────────────────────────────────────────────────────────────
 
 export function VisitHistory({ customerId, email, phone }: VisitHistoryProps) {
@@ -97,29 +121,9 @@ export function VisitHistory({ customerId, email, phone }: VisitHistoryProps) {
                     .catch(() => [] as Reservation[]);
 
                 // ── Fallback: client-side match on email / phone ───────────────
-                // Reservations booked online may carry these extra fields.
-                type ReservationWithContact = Reservation & {
-                    customerEmail?: string;
-                    customerPhone?: string;
-                };
-                let fallbackReservations: Reservation[] = [];
-                if (reservationsByCustomerId.length === 0 && (email || phone)) {
-                    const all = await Nexus.adapter
-                        .query<ReservationWithContact>("reservations", {
-                            orderBy: { field: "date", direction: "desc" },
-                            limit: 200,
-                        })
-                        .catch(() => [] as ReservationWithContact[]);
-
-                    fallbackReservations = all.filter((r) => {
-                        const rEmail = r.customerEmail ?? "";
-                        const rPhone = r.customerPhone ?? "";
-                        return (
-                            (email && rEmail.toLowerCase() === email.toLowerCase()) ||
-                            (phone && rPhone === phone)
-                        );
-                    });
-                }
+                const fallbackReservations = reservationsByCustomerId.length === 0
+                    ? await fetchContactFallback(email, phone)
+                    : [];
 
                 const reservations = (
                     reservationsByCustomerId.length > 0
@@ -150,12 +154,7 @@ export function VisitHistory({ customerId, email, phone }: VisitHistoryProps) {
                 const paidOrders = orders.filter(
                     (o) => o.status === "paid" || o.status === "served"
                 );
-                const totalMicrounits = paidOrders.reduce((sum, o) => {
-                    const mu =
-                        o.totalInMicrounits ??
-                        (o.totalInCents ? o.totalInCents * 10_000 : 0);
-                    return sum + (typeof mu === "number" ? mu : 0);
-                }, 0);
+                const totalMicrounits = sumOrderMicrounits(paidOrders);
                 const avgSpendEuros =
                     paidOrders.length > 0
                         ? totalMicrounits / paidOrders.length / 1_000_000

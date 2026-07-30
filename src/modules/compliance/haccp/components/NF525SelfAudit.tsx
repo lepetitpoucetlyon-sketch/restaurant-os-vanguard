@@ -19,6 +19,7 @@ import {
 import { toast } from 'sonner';
 import { useTenant } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -165,7 +166,7 @@ export default function NF525SelfAudit() {
     // Check: FEC export route reachable
     let fecOk: CheckStatus = 'error';
     try {
-      const res = await fetch('/api/admin/finance/fec/export', {
+      const res = await authedFetch('/api/admin/finance/fec/export', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ siren: '__probe__', yearMonth: '2000-01' }),

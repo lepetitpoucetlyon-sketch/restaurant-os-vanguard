@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Key, Plus, Trash2, Copy, Eye, EyeOff, Loader2, Shield } from 'lucide-react';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface ApiKey {
   id: string;
@@ -34,7 +35,7 @@ export default function ApiKeysPanel() {
   const loadKeys = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/tenant/api-keys');
+      const res = await authedFetch('/api/tenant/api-keys');
       if (!res.ok) throw new Error(String(res.status));
       const data = await res.json() as { keys: ApiKey[] };
       setKeys(data.keys);
@@ -51,7 +52,7 @@ export default function ApiKeysPanel() {
     if (!newKeyName.trim()) return;
     setIsCreating(true);
     try {
-      const res = await fetch('/api/tenant/api-keys', {
+      const res = await authedFetch('/api/tenant/api-keys', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newKeyName.trim() }),

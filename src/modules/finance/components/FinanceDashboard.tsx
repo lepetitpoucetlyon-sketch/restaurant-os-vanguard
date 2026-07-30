@@ -58,6 +58,26 @@ async function applyBankSyncResult(
     }
 }
 
+async function performConnectBank(
+    setBankWebviewUrl: (url: string) => void,
+    setBankModalOpen: (open: boolean) => void,
+    setConnectingBank: (b: boolean) => void,
+): Promise<void> {
+    setConnectingBank(true);
+    try {
+        const origin = typeof window !== "undefined" ? window.location.origin : "";
+        const res = await fetch(`/api/finance/bank/webview?origin=${encodeURIComponent(origin)}`);
+        if (!res.ok) throw new Error("Erreur serveur");
+        const { url } = (await res.json()) as { url: string; isDemoMode?: boolean };
+        setBankWebviewUrl(url);
+        setBankModalOpen(true);
+    } catch {
+        toast.error("Impossible d'ouvrir la connexion bancaire.");
+    } finally {
+        setConnectingBank(false);
+    }
+}
+
 function BankModal({ open, url, onClose }: { open: boolean; url: string | null; onClose: () => void }) {
     if (!open || !url) return null;
     return (
@@ -174,22 +194,7 @@ export function FinanceDashboard() {
 
     // fin-8: open Powens webview in modal iframe
     const handleConnectBank = useCallback(async () => {
-        setConnectingBank(true);
-        try {
-            const origin =
-                typeof window !== "undefined" ? window.location.origin : "";
-            const res = await fetch(
-                `/api/finance/bank/webview?origin=${encodeURIComponent(origin)}`
-            );
-            if (!res.ok) throw new Error("Erreur serveur");
-            const { url } = (await res.json()) as { url: string; isDemoMode?: boolean };
-            setBankWebviewUrl(url);
-            setBankModalOpen(true);
-        } catch {
-            toast.error("Impossible d'ouvrir la connexion bancaire.");
-        } finally {
-            setConnectingBank(false);
-        }
+        await performConnectBank(setBankWebviewUrl, setBankModalOpen, setConnectingBank);
     }, []);
 
     // fin-8: trigger sync

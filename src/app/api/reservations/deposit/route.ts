@@ -54,7 +54,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'STRIPE_SECRET_KEY non configuré' }, { status: 503 });
   }
 
-  const stripe     = new Stripe(stripeKey, { apiVersion: '2026-05-27.dahlia' });
+  const stripe     = new Stripe(stripeKey, { apiVersion: '2026-06-24.dahlia' });
   const amountCents = Math.round(amountInMicrounits / MICROUNITS_PER_CENT);
   const appUrl     = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.restaurantos.app';
 
@@ -96,7 +96,7 @@ async function handleStripeWebhook(req: NextRequest): Promise<NextResponse> {
 
   let event: Stripe.Event;
   try {
-    const stripe = new Stripe(stripeKey, { apiVersion: '2026-05-27.dahlia' });
+    const stripe = new Stripe(stripeKey, { apiVersion: '2026-06-24.dahlia' });
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (err) {
     logger.warn(`[Deposit/webhook] Signature invalide: ${String(err)}`);

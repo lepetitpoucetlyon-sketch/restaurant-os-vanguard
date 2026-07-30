@@ -51,6 +51,27 @@ const DEFAULT_GDPR_CONSENT: GDPRConsent = {
     method: 'digital'
 };
 
+function buildCandidateData(
+    formData: Partial<Candidate>,
+    cvFile: string | null,
+    existing?: Candidate | null,
+): Candidate {
+    return {
+        id: existing?.id || crypto.randomUUID(),
+        firstName: formData.firstName!,
+        lastName: formData.lastName!,
+        email: formData.email!,
+        phone: formData.phone || "",
+        appliedRole: formData.appliedRole || "server",
+        status: formData.status as CandidateStatus || "new",
+        notes: formData.notes || "",
+        cvUrl: cvFile || undefined,
+        gdpr: formData.gdpr!,
+        createdAt: existing?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    };
+}
+
 function getInitialCandidateForm(candidate?: Candidate | null): Partial<Candidate> {
     if (!candidate) {
         return {
@@ -108,32 +129,14 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
             showToast("Veuillez remplir les informations obligatoires", "error");
             return;
         }
-
         if (!formData.gdpr?.consented) {
             showToast("Le consentement RGPD est obligatoire pour sauvegarder ces données", "error");
             return;
         }
-
-        const candidateData: Candidate = {
-            id: candidate?.id || crypto.randomUUID(),
-            firstName: formData.firstName!,
-            lastName: formData.lastName!,
-            email: formData.email!,
-            phone: formData.phone || "",
-            appliedRole: formData.appliedRole || "server",
-            status: formData.status as CandidateStatus || "new",
-            notes: formData.notes || "",
-            cvUrl: cvFile || undefined,
-            gdpr: formData.gdpr!,
-            createdAt: candidate?.createdAt || new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
-
+        const candidateData = buildCandidateData(formData, cvFile, candidate);
         try {
             if (candidate) {
                 await updateCandidateStatus(candidate.id, candidateData.status);
-                // Note: If other fields changed, we might need a more generic updateCandidate in the hook
-                // For now, focusing on status as per the current hook implementation
                 showToast("Candidature mise à jour (Statut)", "success");
             } else {
                 await addCandidate(candidateData);

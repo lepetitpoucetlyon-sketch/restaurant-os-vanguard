@@ -27,6 +27,10 @@ function findCol(row: Record<string, string>, candidates: string[]): string {
 type CrmRecord = { id: string; email?: string; phone?: string; metrics?: { totalVisits: number; lastVisitDate?: number } };
 type AggEntry  = { totalVisits: number; lastVisitDate: number | undefined; visitEntries: { date: number; covers: number; source: string }[] };
 
+function isNewerVisit(lastDate: number | undefined, date: number): boolean {
+  return !lastDate || date > lastDate;
+}
+
 function findCrmId(email: string, phone: string, emailIndex: Map<string, string>, phoneIndex: Map<string, string>): string | null {
   if (email) return emailIndex.get(email) ?? null;
   if (phone) return phoneIndex.get(phone) ?? null;
@@ -85,7 +89,7 @@ export async function importReservationHistory(file: ParsedFile, onProgress: (n:
 
     const agg = crmUpdates.get(crmId)!;
     agg.totalVisits += 1;
-    if (!agg.lastVisitDate || date > agg.lastVisitDate) agg.lastVisitDate = date;
+    if (isNewerVisit(agg.lastVisitDate, date)) agg.lastVisitDate = date;
     agg.visitEntries.push({ date, covers: parseInt(coversRaw) || 2, source });
     updated++;
   }

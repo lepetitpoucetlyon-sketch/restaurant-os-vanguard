@@ -27,7 +27,7 @@ import { logger } from '@/lib/logger';
 const QUEUE_STATUSES: SupportTicketStatus[] = ['new', 'analyzing', 'draft_ready', 'analysis_failed'];
 
 function canAutoApplyPatch(draft: NonNullable<SupportTicket['draft']>, applyPatch?: boolean): boolean {
-  return draft.kind === 'config_patch' && draft.autoApplicable === true && applyPatch === true;
+  return draft.kind === 'config_patch' && draft.autoApplicable === true && applyPatch === true && !!draft.proposedPatch;
 }
 
 async function applyPatchToConfig(
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       key: `supportTickets.${ticketId}`,
       before: ticket.draft,
       after: null,
-      description: body.note || 'Brouillon refusé',
+      description: body.note ?? 'Brouillon refusé',
       appliedBy: caller.uid,
       scope: 'tenant',
       category: 'CUSTOM',
@@ -144,7 +144,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       key: `supportTickets.${ticketId}`,
       before: ticket.draft,
       after: correctedDraft,
-      description: body.note || `Brouillon corrigé par ${caller.uid}`,
+      description: body.note ?? `Brouillon corrigé par ${caller.uid}`,
       appliedBy: caller.uid,
       scope: 'tenant',
       category: 'CUSTOM',
@@ -175,7 +175,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     category: 'CUSTOM',
   });
 
-  if (canAutoApplyPatch(draft, body.applyPatch) && draft.proposedPatch) {
+  if (canAutoApplyPatch(draft, body.applyPatch)) {
     await applyPatchToConfig(ticket.tenantId, draft, ticketPath, caller.uid);
     logger.info(`[SupportDrafts] Ticket ${ticketId} approuvé et appliqué par ${caller.uid}`);
     return NextResponse.json({ success: true, ticketId, status: 'applied' });

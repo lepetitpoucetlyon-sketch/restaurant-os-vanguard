@@ -103,12 +103,7 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     if (isRestricted) return <RestrictedScreen />;
 
     const isAdmin = permissions?.role === 'admin' || permissions?.permissions?.isSovereignAdmin === true;
-    let isAllowed = !requiredCategory || isAdmin || (permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
-
-    // Social Shield: Un utilisateur RESTRICTED a ses autres accès coupés au niveau du Gate
-    if (permissions && (permissions as User & { status?: string }).status === 'RESTRICTED' && requiredCategory) {
-        isAllowed = false; // Coupé au niveau du Gate
-    }
+    const isAllowed = !requiredCategory || isAdmin || !!(permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
 
     if (!isAuthenticated) return null; // AuthGate handles this
 

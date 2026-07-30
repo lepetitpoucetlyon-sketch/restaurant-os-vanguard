@@ -99,10 +99,11 @@ export async function importInventory(file: ParsedFile, onProgress: (n: number) 
 
     // Upsert ingredient
     let ingredientId: string;
+    const storageLocation = zoneRaw || undefined;
     if (ingredientIndex.has(nameKey)) {
       ingredientId = ingredientIndex.get(nameKey)!;
       batch.update(`ingredients/${ingredientId}`, {
-        defaultStorageLocation: zoneRaw || undefined,
+        defaultStorageLocation: storageLocation,
         cost: priceInMicrounits ? (parseFloat(costRaw.replace(',', '.')) || 0) : undefined,
         updatedAt: Date.now(),
       });
@@ -116,7 +117,7 @@ export async function importInventory(file: ParsedFile, onProgress: (n: number) 
         minQuantity: threshold ?? 1,
         cost: parseFloat(costRaw.replace(',', '.')) || 0,
         supplier: supplierRaw || undefined,
-        defaultStorageLocation: zoneRaw || undefined,
+        defaultStorageLocation: storageLocation,
         createdAt: Date.now(),
       });
       ingredientIndex.set(nameKey, ingredientId);

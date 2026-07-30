@@ -86,6 +86,16 @@ async function recordNoShow(
     await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
 }
 
+async function cancelReservationById(
+    id: string,
+    updateReservation: (id: string, data: Partial<Reservation> & Record<string, unknown>) => Promise<void>
+): Promise<void> {
+    try {
+        await updateReservation(id, { status: "cancelled", cancelledAt: new Date().toISOString() } as Partial<Reservation> & { cancelledAt: string });
+        toast.success("Réservation annulée");
+    } catch { toast.error("Erreur lors de l'annulation"); }
+}
+
 async function syncFloorPlan(reservations: Reservation[], tenantId: string) {
     const now = Date.now();
     const in15Min = now + 15 * 60 * 1000;
@@ -128,7 +138,7 @@ export function useReservationsPage() {
     const { data: customers = [], isLoading: customersLoading } = useCRM();
     const { tables = [], isLoading: tablesLoading } = useTables();
     const { data: groups = [] } = useGroups();
-    const isLoading = reservationsLoading || customersLoading || tablesLoading;
+    const isLoading = [reservationsLoading, customersLoading, tablesLoading].some(Boolean);
 
     const weekAnchor = useMemo(() => computeWeekAnchor(new Date(selectedDate), weekOffset), [selectedDate, weekOffset]);
 
@@ -180,17 +190,11 @@ export function useReservationsPage() {
 
     const handleCancelReservation = useCallback(async (id: string) => {
         if (!cancelResPerm.allowed) { toast.error("Permission insuffisante pour annuler une réservation"); return; }
-        const doCancel = async () => {
-            try {
-                await updateReservation(id, { status: "cancelled", cancelledAt: new Date().toISOString() } as Partial<Reservation> & { cancelledAt: string });
-                toast.success("Réservation annulée");
-            } catch { toast.error("Erreur lors de l'annulation"); }
-        };
         if (cancelResPerm.requiresPin) {
             setPinError(undefined);
-            setPinModal({ open: true, action: "cancel_reservation", reservationId: id, onConfirm: doCancel });
+            setPinModal({ open: true, action: "cancel_reservation", reservationId: id, onConfirm: () => cancelReservationById(id, updateReservation) });
         } else {
-            await doCancel();
+            await cancelReservationById(id, updateReservation);
         }
     }, [cancelResPerm, updateReservation]);
 

@@ -87,6 +87,80 @@ class SelfCrystallizer:
         self._min_score: float = _cfg.crystallizer_min_score
         self._min_answer_len: int = _cfg.crystallizer_min_answer_len
 
+    @staticmethod
+    def _strip_json_fences(raw: str) -> str:
+        if "```json" in raw:
+            return raw.split("```json")[1].split("```")[0].strip()
+        if "```" in raw:
+            return raw.split("```")[1].split("```")[0].strip()
+        return raw
+
+    async def _dedup_crystal(self, workspace_id: str, vec: list, extracted_a: str) -> Optional[Dict[str, Any]]:
+        """Retourne un dict 'deduplicated' si doublon détecté, sinon None."""
+        existing = await self.client.query(workspace_id, vec)
+        if not existing.get("results"):
+            return None
+        top = existing["results"][0]
+        top_score = top.get("score", 0.0)
+        if top_score < TAU_FUSION:
+            return None
+        neg_patterns = [
+            r"\bne\s+\w+\s+pas\b", r"\bn'est\s+pas\b", r"\baucun\b",
+            r"\binterdit\b", r"\bexempté\b", r"\bnon\s+soumis\b",
+        ]
+        def has_neg(t: str) -> bool:
+            return any(re.search(p, t.lower()) for p in neg_patterns)
+        if has_neg(extracted_a) != has_neg(top.get("answer", "")):
+            logger.info(
+                f"🛡️ SelfCrystal Veto Λ: Contradiction avec KI '{top.get('ki_id')}' "
+                f"(score={top_score:.3f}) → Fusion refusée"
+            )
+            return None
+        logger.info(
+            f"🔄 SelfCrystal: Doublon (score={top_score:.3f} ≥ τ={TAU_FUSION}) → KI déjà présent"
+        )
+        return {"status": "deduplicated", "existing_ki_id": top.get("ki_id"), "similarity": top_score}
+
+    async def _inject_crystal_ki(
+        self,
+        workspace_id: str,
+        vec: list,
+        extracted_q: str,
+        extracted_a: str,
+        confidence: float,
+        domain: str,
+        origin_question: str,
+        root_id: Optional[str],
+    ) -> Dict[str, Any]:
+        crystal_root_id = root_id or f"ROOT_crystal_{hashlib.sha256(workspace_id.encode()).hexdigest()[:12]}"
+        ki_id = f"KI_crystal_{hashlib.sha256((extracted_q + extracted_a).encode()).hexdigest()[:12]}"
+        point_id = f"{ki_id}_{uuid.uuid4().hex[:4]}"
+        ki_entry = {
+            "point_id": point_id, "ki_id": ki_id, "source": SELF_CRYSTAL_SOURCE,
+            "root_id": crystal_root_id, "question": extracted_q, "answer": extracted_a,
+            "alias": extracted_q, "raw_snippet": f"[AutoCrystal] Q: {extracted_q} → A: {extracted_a}",
+            "payload": {
+                "ht_amount": "0.0", "tva_amount": "0.0", "ttc_amount": "0.0",
+                "currency": "UNKNOWN", "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                "raw_snippet": f"[AutoCrystal | domain={domain} | conf={confidence:.2f}] {extracted_a}",
+                "domain": domain, "confidence": str(confidence), "origin_question": origin_question,
+            },
+            "vector": vec,
+            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "version": 1,
+        }
+        res = await self.client.ingest(workspace_id, [{"id": point_id, "values": vec}], [ki_entry])
+        if res and res.get("status") != "error":
+            self.ingestion_manager.bm25_manager.add_documents(workspace_id, [ki_entry])
+            logger.info(f"💎 SelfCrystal SUCCESS: KI {ki_id} créé dans {workspace_id} (domain={domain}, conf={confidence:.2f})")
+            return {
+                "status": "crystallized", "ki_id": ki_id, "question": extracted_q,
+                "answer": extracted_a, "domain": domain, "confidence": confidence,
+                "source": SELF_CRYSTAL_SOURCE,
+            }
+        logger.warning(f"⚠️ SelfCrystal: Ingestion failed pour {ki_id}")
+        return {"status": "error", "reason": "ingestion_failed"}
+
     async def crystallize_after_query(
         self,
         workspace_id: str,
@@ -105,45 +179,21 @@ class SelfCrystallizer:
           3. Vérification déduplication (τ_fusion = 0.75)
           4. Injection dans le KI Tree permanent
           5. Mise à jour du BM25 index
-
-        Args:
-            workspace_id : identifiant du workspace courant
-            question     : question posée par l'utilisateur
-            answer       : réponse approuvée par le gate sémantique
-            score        : score de confiance de la réponse
-            source       : source originelle (optionnel)
-            root_id      : ROOT du document source (optionnel)
-
-        Returns:
-            dict avec statut, ki_id créé, et métriques
         """
         if not self._enabled:
             return {"status": "disabled"}
 
-        # ── Seuil de confiance (zenith.yaml : rag.crystallizer.min_score) ─────────
         if score < self._min_score:
-            logger.info(
-                f"🧊 SelfCrystal: Score {score:.2f} < {self._min_score} → pas de cristallisation"
-            )
+            logger.info(f"🧊 SelfCrystal: Score {score:.2f} < {self._min_score} → pas de cristallisation")
             return {"status": "skipped", "reason": "low_confidence"}
 
         if len(answer.strip()) < self._min_answer_len:
             return {"status": "skipped", "reason": "answer_too_short"}
 
-        # ── Extraction LLM du KI atomique ─────────────────────────────────────
         try:
             prompt = _build_extraction_prompt(question, answer)
-            raw = await brain.generate(prompt, system_prompt=SYSTEM_PROMPT, timeout=15.0)
-
-            # Nettoyage JSON
-            raw = raw.strip()
-            if "```json" in raw:
-                raw = raw.split("```json")[1].split("```")[0].strip()
-            elif "```" in raw:
-                raw = raw.split("```")[1].split("```")[0].strip()
-
+            raw = self._strip_json_fences((await brain.generate(prompt, system_prompt=SYSTEM_PROMPT, timeout=15.0)).strip())
             ki_data = json.loads(raw)
-
         except json.JSONDecodeError as e:
             logger.warning(f"⚠️ SelfCrystal: JSON invalide : {e}")
             return {"status": "error", "reason": "json_parse_error"}
@@ -151,7 +201,6 @@ class SelfCrystallizer:
             logger.error(f"❌ SelfCrystal: Extraction LLM failed : {e}")
             return {"status": "error", "reason": str(e)}
 
-        # ── Skip si le LLM n'a rien trouvé de mémorisable ─────────────────────
         if ki_data.get("skip", False):
             logger.info("🧊 SelfCrystal: LLM a décidé que rien ne vaut d'être mémorisé")
             return {"status": "skipped", "reason": "llm_decided_skip"}
@@ -161,103 +210,18 @@ class SelfCrystallizer:
         confidence  = float(ki_data.get("confidence", 0.8))
         domain      = ki_data.get("domain", "Général")
 
-        if not extracted_q or not extracted_a:
+        if not all([extracted_q, extracted_a]):
             return {"status": "skipped", "reason": "empty_extraction"}
 
-        # ── Vérification déduplication avant injection (τ_fusion = 0.75) ───────
         vec = self.embed_model.encode(extracted_q, normalize_embeddings=True).tolist()
-        existing = await self.client.query(workspace_id, vec)
-
-        if existing.get("results"):
-            top = existing["results"][0]
-            top_score = top.get("score", 0.0)
-
-            if top_score >= TAU_FUSION:
-                # Vérifie que ce n'est pas une contradiction (Veto Λ)
-                import re
-                neg_patterns = [
-                    r"\bne\s+\w+\s+pas\b", r"\bn'est\s+pas\b", r"\baucun\b",
-                    r"\binterdit\b", r"\bexempté\b", r"\bnon\s+soumis\b"
-                ]
-                def has_neg(t: str) -> bool:
-                    return any(re.search(p, t.lower()) for p in neg_patterns)
-
-                if has_neg(extracted_a) != has_neg(top.get("answer", "")):
-                    logger.info(
-                        f"🛡️ SelfCrystal Veto Λ: Contradiction détectée avec KI existant "
-                        f"'{top.get('ki_id')}' (score={top_score:.3f}) → Fusion refusée"
-                    )
-                    # On garde les deux comme KIs distincts → pas de skip
-                else:
-                    logger.info(
-                        f"🔄 SelfCrystal: Doublon détecté (score={top_score:.3f} ≥ τ={TAU_FUSION}) "
-                        f"→ KI déjà présent, cristallisation inutile"
-                    )
-                    return {
-                        "status": "deduplicated",
-                        "existing_ki_id": top.get("ki_id"),
-                        "similarity": top_score,
-                    }
-
-        # ── Injection dans le KI Tree ──────────────────────────────────────────
-        # ROOT synthétique pour les KIs auto-générés
-        crystal_root_id = root_id or f"ROOT_crystal_{hashlib.sha256(workspace_id.encode()).hexdigest()[:12]}"
-        ki_id = f"KI_crystal_{hashlib.sha256((extracted_q + extracted_a).encode()).hexdigest()[:12]}"
-        point_id = f"{ki_id}_{uuid.uuid4().hex[:4]}"
-
-        ki_entry = {
-            "point_id":  point_id,
-            "ki_id":     ki_id,
-            "source":    SELF_CRYSTAL_SOURCE,
-            "root_id":   crystal_root_id,
-            "question":  extracted_q,
-            "answer":    extracted_a,
-            "alias":     extracted_q,
-            "raw_snippet": f"[AutoCrystal] Q: {extracted_q} → A: {extracted_a}",
-            "payload": {
-                "ht_amount":  "0.0",
-                "tva_amount": "0.0",
-                "ttc_amount": "0.0",
-                "currency":   "UNKNOWN",
-                "date":       datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-                "raw_snippet": f"[AutoCrystal | domain={domain} | conf={confidence:.2f}] {extracted_a}",
-                "domain":     domain,
-                "confidence": str(confidence),
-                "origin_question": question[:200],
-            },
-            "vector":    vec,
-            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-            "version":   1,
-        }
+        dup = await self._dedup_crystal(workspace_id, vec, extracted_a)
+        if dup is not None:
+            return dup
 
         try:
-            res = await self.client.ingest(
-                workspace_id,
-                [{"id": point_id, "values": vec}],
-                [ki_entry],
+            return await self._inject_crystal_ki(
+                workspace_id, vec, extracted_q, extracted_a, confidence, domain, question[:200], root_id
             )
-
-            if res and res.get("status") != "error":
-                # Mise à jour du BM25 index
-                self.ingestion_manager.bm25_manager.add_documents(workspace_id, [ki_entry])
-
-                logger.info(
-                    f"💎 SelfCrystal SUCCESS: KI {ki_id} créé dans {workspace_id} "
-                    f"(domain={domain}, conf={confidence:.2f})"
-                )
-                return {
-                    "status":     "crystallized",
-                    "ki_id":      ki_id,
-                    "question":   extracted_q,
-                    "answer":     extracted_a,
-                    "domain":     domain,
-                    "confidence": confidence,
-                    "source":     SELF_CRYSTAL_SOURCE,
-                }
-            else:
-                logger.warning(f"⚠️ SelfCrystal: Ingestion failed pour {ki_id}")
-                return {"status": "error", "reason": "ingestion_failed"}
-
         except Exception as e:
             logger.error(f"❌ SelfCrystal: Injection exception : {e}")
             return {"status": "error", "reason": str(e)}

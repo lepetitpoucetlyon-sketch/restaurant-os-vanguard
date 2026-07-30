@@ -23,6 +23,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 type DeviceStatus = 'online' | 'offline';
 
@@ -185,7 +186,7 @@ export default function MDMPanel() {
   const [eraseTarget, setEraseTarget] = useState<Device | null>(null);
 
   useEffect(() => {
-    fetch('/api/admin/mdm/devices')
+    authedFetch('/api/admin/mdm/devices')
       .then(r => r.json())
       .then((data: { devices: Device[]; demo: boolean }) => {
         setDevices(data.devices ?? []);
@@ -198,7 +199,7 @@ export default function MDMPanel() {
   const handleLock = async (device: Device) => {
     setLockingId(device.serialNumber);
     try {
-      const res = await fetch('/api/admin/mdm/lock', {
+      const res = await authedFetch('/api/admin/mdm/lock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ serialNumber: device.serialNumber }),
@@ -216,7 +217,7 @@ export default function MDMPanel() {
     if (!eraseTarget) return;
 
     try {
-      const res = await fetch('/api/admin/mdm/erase', {
+      const res = await authedFetch('/api/admin/mdm/erase', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

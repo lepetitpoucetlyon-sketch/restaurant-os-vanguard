@@ -99,6 +99,51 @@ function findIngredientByBarcode(items: IngredientDoc[], code: string): Ingredie
     return items.find(i => i.sku?.toUpperCase() === code || i.barcode?.toUpperCase() === code || i.supplierRef?.toUpperCase() === code);
 }
 
+async function performScan(
+    tenantId: string,
+    setIsScanning: (b: boolean) => void,
+    setScanResult: (items: ScannedItem[]) => void,
+    setActiveStep: (step: 'scan' | 'verify' | 'advice') => void,
+): Promise<void> {
+    setIsScanning(true);
+    try {
+        const results = await runOcrScan(tenantId);
+        if (results.length === 0) {
+            toast.warning("Aucun ingrédient correspondant dans le référentiel. Utilisation du mode Ingestion Directe.");
+            setScanResult([{ id: 'new-1', name: 'Saumon (Non Référencé)', qty: 5, unit: 'kg', price: 125.00, dlc: '2026-04-20', forceScan: true }]);
+        } else {
+            setScanResult(results);
+        }
+        setActiveStep('verify');
+    } catch (error) {
+        console.error('Scan error:', error);
+        toast.error('Erreur lors du scan intelligent.');
+    } finally {
+        setIsScanning(false);
+    }
+}
+
+async function performSaveToStock(
+    tenantId: string,
+    scanResult: ScannedItem[],
+    setIsSaving: (b: boolean) => void,
+    setActiveStep: (step: 'scan' | 'verify' | 'advice') => void,
+    setScanResult: (items: ScannedItem[] | null) => void,
+): Promise<void> {
+    setIsSaving(true);
+    try {
+        await persistReception(tenantId, scanResult);
+        toast.success('Stock mis à jour avec succès !');
+        setActiveStep('scan');
+        setScanResult(null);
+    } catch (error) {
+        console.error('Failed to save stock:', error);
+        toast.error('Erreur lors de la sauvegarde du stock.');
+    } finally {
+        setIsSaving(false);
+    }
+}
+
 async function performBarcodeSearch(
     code: string,
     setBarcodeSearching: (b: boolean) => void,
@@ -216,38 +261,12 @@ export function InventoryReceptionDashboard() {
 
   const handleScan = async () => {
     if (!tenantId) return;
-    setIsScanning(true);
-    try {
-        const results = await runOcrScan(tenantId);
-        if (results.length === 0) {
-            toast.warning("Aucun ingrédient correspondant dans le référentiel. Utilisation du mode Ingestion Directe.");
-            setScanResult([{ id: 'new-1', name: 'Saumon (Non Référencé)', qty: 5, unit: 'kg', price: 125.00, dlc: '2026-04-20', forceScan: true }]);
-        } else {
-            setScanResult(results);
-        }
-        setActiveStep('verify');
-    } catch (error) {
-        console.error('Scan error:', error);
-        toast.error('Erreur lors du scan intelligent.');
-    } finally {
-        setIsScanning(false);
-    }
+    await performScan(tenantId, setIsScanning, setScanResult, setActiveStep);
   };
 
   const handleSaveToStock = async () => {
     if (!tenantId || !scanResult) return;
-    setIsSaving(true);
-    try {
-      await persistReception(tenantId, scanResult);
-      toast.success('Stock mis à jour avec succès !');
-      setActiveStep('scan');
-      setScanResult(null);
-    } catch (error) {
-      console.error('Failed to save stock:', error);
-      toast.error('Erreur lors de la sauvegarde du stock.');
-    } finally {
-      setIsSaving(false);
-    }
+    await performSaveToStock(tenantId, scanResult, setIsSaving, setActiveStep, setScanResult);
   };
 
 

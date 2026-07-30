@@ -43,8 +43,10 @@ export function PluginCatalogManager() {
   }, []);
 
   const handleSave = async (id: string, form: Partial<CatalogItem>) => {
+    if (!id.trim()) { toast.error('L\'identifiant du plugin est obligatoire'); return; }
+    if (!form.name?.trim()) { toast.error('Le nom du plugin est obligatoire'); return; }
     try {
-      const payload = { id, ...form };
+      const payload = { id: id.trim(), ...form };
       const res = await authedFetch('/api/admin/fleet/catalog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

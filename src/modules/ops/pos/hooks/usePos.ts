@@ -141,6 +141,29 @@ interface SendOrderParams {
     items: OrderItem[];
 }
 
+async function handleSendCourseImpl(
+    course: CourseType,
+    cartItems: CartItem[],
+    currentTable: Table | undefined,
+    currentUser: { name?: string } | null | undefined,
+    addOrder: (data: Record<string, unknown>) => Promise<void>,
+    updateTable: (id: string, data: Record<string, unknown>) => Promise<void>,
+    selectedTableId: string | null,
+    setCartItems: (updater: (prev: CartItem[]) => CartItem[]) => void,
+    showToast: (msg: string, type: string) => void
+): Promise<void> {
+    const courseItems = getUnsentCourseItems(cartItems, course);
+    if (courseItems.length === 0 || !currentTable) return;
+    try {
+        await submitKitchenOrder(
+            { tableId: currentTable.id, tableNumber: currentTable.number, serverName: resolveServerName(currentUser), items: buildCourseOrderItems(courseItems, course) },
+            addOrder, updateTable, selectedTableId
+        );
+        setCartItems((prev) => markCourseAsSent(prev, course, Date.now()));
+        showToast(`${COURSE_LABELS[course]} envoyés en cuisine`, "success");
+    } catch { showToast("Erreur lors de l'envoi du cours", "error"); }
+}
+
 async function submitKitchenOrder(
     params: SendOrderParams,
     addOrder: (data: Record<string, unknown>) => Promise<void>,
@@ -332,18 +355,9 @@ export function usePOSController() {
      * Only sends items matching the given course; marks them with sentAt.
      * Items already sent (sentAt set) are skipped to prevent double-firing.
      */
-    const handleSendCourse = useCallback(async (course: CourseType) => {
-        const courseItems = getUnsentCourseItems(cartItems, course);
-        if (courseItems.length === 0 || !currentTable) return;
-        try {
-            await submitKitchenOrder(
-                { tableId: currentTable.id, tableNumber: currentTable.number, serverName: resolveServerName(currentUser), items: buildCourseOrderItems(courseItems, course) },
-                addOrder, updateTable, selectedTableId
-            );
-            setCartItems((prev) => markCourseAsSent(prev, course, Date.now()));
-            showToast(`${COURSE_LABELS[course]} envoyés en cuisine`, "success");
-        } catch { showToast("Erreur lors de l'envoi du cours", "error"); }
-    }, [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast]);
+    const handleSendCourse = useCallback((course: CourseType) =>
+        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast),
+        [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast]);
 
     return {
         // State

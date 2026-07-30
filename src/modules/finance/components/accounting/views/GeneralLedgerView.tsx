@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FileText } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-import { useAccounting } from "@modules/finance";
+import { useAccounting } from "../../../hooks/useAccounting";
 
 export function GeneralLedgerView() {
     const { ledger } = useAccounting();

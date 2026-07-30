@@ -19,6 +19,14 @@ interface IndexRequest {
     data: Record<string, unknown>;
 }
 
+function collectDietFlags(doc: Record<string, unknown>): string[] {
+    const flags: string[] = [];
+    if (doc.isVegetarian) flags.push('végétarien');
+    if (doc.isVegan) flags.push('vegan');
+    if (doc.isGlutenFree) flags.push('sans gluten');
+    return flags;
+}
+
 function documentToText(type: string, doc: Record<string, unknown>): string {
     const id = String(doc.id ?? doc.name ?? 'unknown');
     const name = String(doc.name ?? doc.label ?? doc.description ?? id);
@@ -50,10 +58,7 @@ function documentToText(type: string, doc: Record<string, unknown>): string {
     }
 
     // Drapeaux diététiques
-    const flags: string[] = [];
-    if (doc.isVegetarian) flags.push('végétarien');
-    if (doc.isVegan) flags.push('vegan');
-    if (doc.isGlutenFree) flags.push('sans gluten');
+    const flags = collectDietFlags(doc);
     if (flags.length) parts.push(`Régime : ${flags.join(', ')}`);
 
     return parts.join('\n');

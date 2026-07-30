@@ -10,6 +10,25 @@ interface CriticalityEntry {
     criticalThreshold: number;
 }
 
+async function updateProductAvailability(
+    tenantId: string,
+    product: { id: string; recipeId?: string; isAvailable?: boolean },
+    blockedRecipeIds: Set<string>,
+    eightySixed: string[],
+    restored: string[],
+): Promise<void> {
+    if (!product.recipeId) return;
+    const shouldBeUnavailable = blockedRecipeIds.has(product.recipeId);
+    const currentlyAvailable = product.isAvailable !== false;
+    if (shouldBeUnavailable && currentlyAvailable) {
+        await Nexus.adapter.update(`tenants/${tenantId}/products/${product.id}`, { isAvailable: false });
+        eightySixed.push(product.id);
+    } else if (!shouldBeUnavailable && !currentlyAvailable) {
+        await Nexus.adapter.update(`tenants/${tenantId}/products/${product.id}`, { isAvailable: true });
+        restored.push(product.id);
+    }
+}
+
 export const Auto86Service = {
     async evaluate(tenantId: string): Promise<{ eightySixed: string[]; restored: string[] }> {
         const [stockItems, recipes, products] = await Promise.all([
@@ -52,24 +71,7 @@ export const Auto86Service = {
         const restored: string[] = [];
 
         for (const product of products) {
-            if (!product.recipeId) continue;
-
-            const shouldBeUnavailable = blockedRecipeIds.has(product.recipeId);
-            const currentlyAvailable = product.isAvailable !== false;
-
-            if (shouldBeUnavailable && currentlyAvailable) {
-                await Nexus.adapter.update(
-                    `tenants/${tenantId}/products/${product.id}`,
-                    { isAvailable: false }
-                );
-                eightySixed.push(product.id);
-            } else if (!shouldBeUnavailable && !currentlyAvailable) {
-                await Nexus.adapter.update(
-                    `tenants/${tenantId}/products/${product.id}`,
-                    { isAvailable: true }
-                );
-                restored.push(product.id);
-            }
+            await updateProductAvailability(tenantId, product, blockedRecipeIds, eightySixed, restored);
         }
 
         if (eightySixed.length > 0 || restored.length > 0) {

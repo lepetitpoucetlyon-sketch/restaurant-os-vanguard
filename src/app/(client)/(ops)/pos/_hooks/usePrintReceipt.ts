@@ -8,27 +8,28 @@ import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedK
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { CartItem } from "@modules/ops/engine/types";
 
+function parsePrinterConfig(): { ip: string; port: number } {
+    const defaults = { ip: "192.168.1.100", port: 8008 };
+    try {
+        const raw = typeof window !== "undefined" ? localStorage.getItem(tenantScopedKey("printer_config")) : null;
+        if (!raw) return defaults;
+        const obj = JSON.parse(raw) as Record<string, unknown>;
+        return {
+            ip: typeof obj.ip === "string" ? obj.ip : defaults.ip,
+            port: typeof obj.port === "number" ? obj.port : defaults.port,
+        };
+    } catch {
+        return defaults;
+    }
+}
+
 export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
     const { activeTenantConfig } = useTenant();
 
     return useCallback(async () => {
         if (cartItems.length === 0) return;
 
-        const STORAGE_KEY = tenantScopedKey("printer_config");
-        let _ip = "192.168.1.100";
-        let _port = 8008;
-        try {
-            const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
-            if (raw) {
-                const parsed = JSON.parse(raw) as unknown;
-                if (typeof parsed === "object" && parsed !== null && "ip" in parsed && typeof (parsed as { ip: unknown }).ip === "string") {
-                    _ip = (parsed as { ip: string }).ip;
-                }
-                if (typeof parsed === "object" && parsed !== null && "port" in parsed && typeof (parsed as { port: unknown }).port === "number") {
-                    _port = (parsed as { port: number }).port;
-                }
-            }
-        } catch { /* fallback to defaults */ }
+        const { ip: _ip, port: _port } = parsePrinterConfig();
 
         // Taux TVA effectif : moyenne pondérée multi-taux (10/5.5/20%)
         let tvaMu = 0, ttcTotal = 0;

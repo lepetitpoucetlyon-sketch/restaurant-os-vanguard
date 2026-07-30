@@ -5,7 +5,7 @@ import { CheckCircle2, Clock, Eye } from "lucide-react";
 import { Button } from "@ui/button";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-import { useAccounting } from "@modules/finance";
+import { useAccounting } from "../../../hooks/useAccounting";
 
 export function JournalEntriesView() {
     const { journalEntries, validateJournalEntry } = useAccounting();

@@ -25,6 +25,10 @@ type PaymentMethod = "card" | "cash" | "mobile";
 
 type TerminalState = "idle" | "pending" | "manual_wait" | "error";
 
+function applyHashIfPresent(hash: string | void, setCertifiedHash: (h: string) => void): void {
+    if (hash) setCertifiedHash(hash);
+}
+
 export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onPaymentComplete }: PaymentDialogProps) {
     const [method, setMethod] = useState<PaymentMethod | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -86,7 +90,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
             setIsProcessing(true);
             try {
                 const hash = await onPaymentComplete();
-                if (hash) setCertifiedHash(hash);
+                applyHashIfPresent(hash, setCertifiedHash);
                 setIsSuccess(true);
             } finally {
                 setIsProcessing(false);
@@ -107,7 +111,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                 printerService.openCashDrawer();
             }
             const hash = await onPaymentComplete();
-            if (hash) setCertifiedHash(hash);
+            applyHashIfPresent(hash, setCertifiedHash);
             setIsSuccess(true);
         } catch {
             /* toast handled upstream */

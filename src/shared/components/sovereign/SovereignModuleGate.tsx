@@ -9,6 +9,21 @@ interface SovereignModuleGateProps {
     moduleFactory: () => Promise<{ default: React.ComponentType<unknown> }>;
 }
 
+function extractClaim(c: unknown): string {
+    return typeof c === 'string' ? c : '';
+}
+
+function checkAuthorization(
+    role: string,
+    plan: string,
+    requiredRole?: string,
+    requiredPlan?: string[],
+): boolean {
+    if (requiredRole && role !== requiredRole && role !== 'SUPER_ADMIN') return false;
+    if (requiredPlan && requiredPlan.length > 0 && !requiredPlan.includes(plan)) return false;
+    return true;
+}
+
 export function SovereignModuleGate({ requiredRole, requiredPlan, moduleFactory }: SovereignModuleGateProps) {
     const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
     const [ModuleComponent, setModuleComponent] = useState<React.LazyExoticComponent<React.ComponentType<unknown>> | null>(null);
@@ -24,9 +39,9 @@ export function SovereignModuleGate({ requiredRole, requiredPlan, moduleFactory 
                 const tokenResult = await user.getIdTokenResult(true);
                 const claims = tokenResult.claims;
 
-                const role = typeof claims.role === "string" ? claims.role : "";
-                const plan = typeof claims.plan === "string" ? claims.plan : "";
-                const clientId = typeof claims.clientId === "string" ? claims.clientId : "";
+                const role     = extractClaim(claims.role);
+                const plan     = extractClaim(claims.plan);
+                const clientId = extractClaim(claims.clientId);
 
                 if (!clientId) {
                     console.error("[SovereignModuleGate] FATAL: Missing clientId claim.");
@@ -34,18 +49,9 @@ export function SovereignModuleGate({ requiredRole, requiredPlan, moduleFactory 
                     return;
                 }
 
-                if (requiredRole && role !== requiredRole && role !== 'SUPER_ADMIN') {
-                    setIsAuthorized(false);
-                    return;
-                }
-
-                if (requiredPlan && requiredPlan.length > 0 && !requiredPlan.includes(plan)) {
-                    setIsAuthorized(false);
-                    return;
-                }
-
-                setIsAuthorized(true);
-                setModuleComponent(() => React.lazy(moduleFactory));
+                const authorized = checkAuthorization(role, plan, requiredRole, requiredPlan);
+                setIsAuthorized(authorized);
+                if (authorized) setModuleComponent(() => React.lazy(moduleFactory));
 
             } catch (error) {
                 console.error("[SovereignModuleGate] Verification failed", error);

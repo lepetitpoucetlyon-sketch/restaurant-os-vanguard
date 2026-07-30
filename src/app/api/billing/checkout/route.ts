@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     const cancelUrl  = body.cancelUrl  ?? `${appUrl}/settings?tab=billing&status=cancelled`;
 
     try {
-        const stripe = new Stripe(secret, { apiVersion: '2026-05-27.dahlia' });
+        const stripe = new Stripe(secret, { apiVersion: '2026-06-24.dahlia' });
 
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',

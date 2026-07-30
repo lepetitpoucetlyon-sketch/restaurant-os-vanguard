@@ -22,6 +22,31 @@ interface FloorPlanControlsOptions {
     onTableSelect?: (id: string) => void;
 }
 
+function getWheelDelta(deltaY: number): 1 | -1 {
+    return deltaY < 0 ? 1 : -1;
+}
+
+async function addTableAtPointer(
+    stage: Konva.Stage,
+    floorTables: Table[],
+    floorZones: { id: string }[],
+    currentFloorId: string,
+    addTable: (t: object) => Promise<void>
+): Promise<void> {
+    const pointer = stage.getPointerPosition();
+    if (!pointer) return;
+    const { x, y } = FloorPlanGeometry.toWorldPoint(
+        pointer,
+        { x: stage.x(), y: stage.y() },
+        { x: stage.scaleX(), y: stage.scaleY() }
+    );
+    await addTable({
+        number: FloorPlanGeometry.nextTableNumber(floorTables),
+        x, y, seats: 4, status: 'free', shape: 'rect',
+        width: 80, height: 80, zoneId: floorZones[0]?.id || 'main', floorId: currentFloorId
+    });
+}
+
 function observeContainerResize(onResize: (dims: { width: number; height: number }) => void): () => void {
     const container = document.getElementById("canvas-container");
     const measure = () => {
@@ -36,6 +61,10 @@ function observeContainerResize(onResize: (dims: { width: number; height: number
     }
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
+}
+
+function shouldAutoCenterPlan(width: number, tableCount: number, isManualPan: boolean): boolean {
+    return width > 0 && tableCount > 0 && !isManualPan;
 }
 
 function resolveCheckoutTotal(explicit: number | undefined, table: unknown): number {
@@ -97,10 +126,9 @@ export function useFloorPlanControls({
     useEffect(() => observeContainerResize(setDimensions), []);
 
     useEffect(() => {
-        if (dimensions.width > 0 && floorTables.length > 0 && !isManualPan) {
-            const frameId = requestAnimationFrame(() => centerPlan());
-            return () => cancelAnimationFrame(frameId);
-        }
+        if (!shouldAutoCenterPlan(dimensions.width, floorTables.length, isManualPan)) return;
+        const frameId = requestAnimationFrame(() => centerPlan());
+        return () => cancelAnimationFrame(frameId);
     }, [centerPlan, dimensions.width, floorTables.length, isManualPan]);
 
     const handleDragStart = useCallback((e: { target: { setAttrs: (attrs: KonvaShadowAttrs) => void } }) => {
@@ -118,12 +146,12 @@ export function useFloorPlanControls({
         if (!stage) return;
         const pointer = stage.getPointerPosition();
         if (!pointer) return;
-        
+
         const result = FloorPlanGeometry.calculateZoom(
-            pointer, 
-            stage.scaleX(), 
-            {x: stage.x(), y: stage.y()}, 
-            e.evt.deltaY < 0 ? 1 : -1,
+            pointer,
+            stage.scaleX(),
+            {x: stage.x(), y: stage.y()},
+            getWheelDelta(e.evt.deltaY),
             1.1
         );
         onScaleChange(result.scale);
@@ -139,20 +167,7 @@ export function useFloorPlanControls({
             return;
         }
 
-        const pointer = stage?.getPointerPosition();
-        if (!pointer) return;
-
-        const { x, y } = FloorPlanGeometry.toWorldPoint(
-            pointer,
-            { x: stage.x(), y: stage.y() },
-            { x: stage.scaleX(), y: stage.scaleY() }
-        );
-
-        await addTable({
-            number: FloorPlanGeometry.nextTableNumber(floorTables),
-            x, y, seats: 4, status: 'free', shape: 'rect',
-            width: 80, height: 80, zoneId: floorZones[0]?.id || 'main', floorId: currentFloorId
-        });
+        await addTableAtPointer(stage!, floorTables, floorZones, currentFloorId, addTable);
     }, [mode, floorTables, floorZones, currentFloorId, addTable]);
 
     const handleCheckout = useCallback((total?: number) => {

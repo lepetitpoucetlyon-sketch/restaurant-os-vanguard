@@ -69,10 +69,10 @@ export function useInventory() {
     const storageNode = useAtomValue(storageLocationsNodeAtom);
     const wasteNode = useAtomValue(wasteLogsNodeAtom);
 
-    const stockItems = (stockNode.data || []) as StockItem[];
-    const preparations = (preparationsNode.data || []) as Preparation[];
-    const storageLocations = (storageNode.data || []) as StorageLocation[];
-    const wasteLogs = (wasteNode.data || []) as unknown[]; // WasteLog mapping later
+    const stockItems = (stockNode.data ?? []) as StockItem[];
+    const preparations = (preparationsNode.data ?? []) as Preparation[];
+    const storageLocations = (storageNode.data ?? []) as StorageLocation[];
+    const wasteLogs = (wasteNode.data ?? []) as unknown[]; // WasteLog mapping later
 
     const lowStockItems = useMemo(() =>
         stockItems.filter((i: StockItem) => i.quantity <= (i.minQuantity || 0)),
@@ -82,7 +82,7 @@ export function useInventory() {
     // Mémoïsé sur ingredientsNode.data : re-calcule seulement quand les données changent,
     // pas à chaque render. Le timestamp est capturé au moment du changement de données.
     const ingredients = useMemo(() =>
-        (ingredientsNode.data || []).map(i => mapNodeToIngredient(i as unknown as SovereignNode, new Date().toISOString())),
+        (ingredientsNode.data ?? []).map(i => mapNodeToIngredient(i as unknown as SovereignNode, new Date().toISOString())),
         [ingredientsNode.data]
     );
 

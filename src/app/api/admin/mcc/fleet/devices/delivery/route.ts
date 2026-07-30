@@ -1,17 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // NOTE: In production, STRIPE_SECRET_KEY must be in environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock_key', {
-  apiVersion: '2025-01-27.acacia',
+  apiVersion: '2026-06-24.dahlia',
 });
 
 // Price ID for the hardware rental MRR (Monthly Recurring Revenue)
 const HARDWARE_RENTAL_PRICE_ID = process.env.STRIPE_HARDWARE_PRICE_ID || 'price_hardware_ipad_monthly';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const caller = await requireMccLevel(req, 'fleet_admin');
+  if (isDenied(caller)) return caller as NextResponse;
+
   try {
     const { tenantId, serialNumber } = await req.json();
 

@@ -70,6 +70,10 @@ function buildQuotePayload(
     };
 }
 
+function needsRecalculation(updates: Partial<QuoteLine>): boolean {
+    return updates.quantity !== undefined || updates.unitPriceHTInMicrounits !== undefined || updates.vatRate !== undefined;
+}
+
 function createQuoteLine(product?: QuoteProduct): Partial<QuoteLine> {
     const price = product?.priceInMicrounits ?? ((product?.priceInCents ?? product?.unitCostInCents ?? 0) * 10_000);
     return recalculateLineTotals({
@@ -119,7 +123,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     };
 
     const updateLine = (id: string, updates: Partial<QuoteLine>) => {
-        const needsRecalc = updates.quantity !== undefined || updates.unitPriceHTInMicrounits !== undefined || updates.vatRate !== undefined;
+        const needsRecalc = needsRecalculation(updates);
         setLines(lines.map(l => {
             if (l.id !== id) return l;
             const merged = { ...l, ...updates };

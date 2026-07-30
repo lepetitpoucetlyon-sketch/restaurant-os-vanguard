@@ -4,6 +4,29 @@ import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
 import { useAuth, useTenant } from '@/shared/hooks';
+function buildGdprNote(gdpr: GDPRConsent | undefined): string {
+    return gdpr?.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant";
+}
+
+async function purgeOldCandidates(tenantId: string): Promise<void> {
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    const candidatesPath = `tenants/${tenantId}/candidates`;
+    const oldCandidates = await Nexus.adapter.query(candidatesPath, {
+        where: [{ field: 'updatedAt', operator: '<', value: sixMonthsAgo.toISOString() }]
+    }) as Candidate[];
+    const batch = Nexus.adapter.batch();
+    for (const candidate of oldCandidates) {
+        batch.delete(`${candidatesPath}/${candidate.id}`);
+        const logsPath = `tenants/${tenantId}/recruitment_logs`;
+        const relatedLogs = await Nexus.adapter.query(logsPath, {
+            where: [{ field: 'candidateId', operator: '==', value: candidate.id }]
+        }) as RecruitmentLog[];
+        relatedLogs.forEach((l: RecruitmentLog) => batch.delete(`${logsPath}/${l.id}`));
+    }
+    await batch.commit();
+}
+
 async function hiredCandidateAction(tenantId: string, candidate: Candidate): Promise<{ success: boolean; id: string }> {
     const now = new Date().toISOString();
     const staffPath = `tenants/${tenantId}/staff`;
@@ -79,7 +102,7 @@ export function useRecruitment() {
             action,
             performedBy: currentUser.name,
             timestamp: now,
-            notes: notes || "",
+            notes: notes ?? "",
             createdAt: now,
             updatedAt: now
         } as RecruitmentLog);
@@ -100,7 +123,7 @@ export function useRecruitment() {
         } as Candidate);
 
         const gdpr = candidate.gdpr as unknown as GDPRConsent;
-        await logAction(candidateId, "Candidat ajouté au système", gdpr?.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant");
+        await logAction(candidateId, "Candidat ajouté au système", buildGdprNote(gdpr));
         return candidateId;
     }, [activeTenantId, logAction]);
 
@@ -128,30 +151,7 @@ export function useRecruitment() {
 
     const deleteOldCandidates = useCallback(async () => {
         if (!activeTenantId) return;
-
-        // GDPR: Purge logic for 6+ months old
-        const sixMonthsAgo = new Date();
-        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-        
-        const candidatesPath = `tenants/${activeTenantId}/candidates`;
-        const oldCandidates = await Nexus.adapter.query(candidatesPath, {
-            where: [{ field: 'updatedAt', operator: '<', value: sixMonthsAgo.toISOString() }]
-        }) as Candidate[];
-
-        const batch = Nexus.adapter.batch();
-        
-        for (const candidate of oldCandidates) {
-            batch.delete(`${candidatesPath}/${candidate.id}`);
-            
-            // Also need to find and delete related logs
-            const logsPath = `tenants/${activeTenantId}/recruitment_logs`;
-            const relatedLogs = await Nexus.adapter.query(logsPath, {
-                where: [{ field: 'candidateId', operator: '==', value: candidate.id }]
-            }) as RecruitmentLog[];
-            relatedLogs.forEach((l: RecruitmentLog) => batch.delete(`${logsPath}/${l.id}`));
-        }
-
-        await batch.commit();
+        await purgeOldCandidates(activeTenantId);
     }, [activeTenantId]);
 
     return {

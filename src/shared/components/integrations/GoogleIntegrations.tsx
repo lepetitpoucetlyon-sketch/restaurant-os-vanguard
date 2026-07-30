@@ -5,6 +5,7 @@ import { RefreshCw, CheckCircle, AlertCircle, ExternalLink, Clock } from 'lucide
 import { toast } from 'sonner';
 import { useTenant } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface GoogleIntegrationData {
   accessToken?: string;
@@ -57,7 +58,7 @@ export default function GoogleIntegrations() {
 
     setIsSyncing(true);
     try {
-      const res = await fetch('/api/google/sync-hours', { method: 'GET' });
+      const res = await authedFetch('/api/google/sync-hours', { method: 'GET' });
       const data = await res.json() as { success?: boolean; message?: string; syncedAt?: number; error?: string };
 
       if (!res.ok || data.error) {

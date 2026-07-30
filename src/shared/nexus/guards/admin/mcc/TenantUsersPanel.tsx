@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { User, Shield, Clock, RefreshCw, ChevronDown } from 'lucide-react';
 import type { EmpireInstance } from '@/shared/nexus/contracts/fleet.types';
 import type { User as TenantUser } from '@/domain/schemas/users';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface Props {
   instance: EmpireInstance;
@@ -29,7 +30,7 @@ export function TenantUsersPanel({ instance }: Props) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(
+      const res = await authedFetch(
         `/api/admin/fleet/tenant-users?tenantId=${encodeURIComponent(instance.id)}`,
       );
       if (!res.ok) throw new Error(await res.text());
@@ -45,7 +46,7 @@ export function TenantUsersPanel({ instance }: Props) {
   useEffect(() => { load(); }, [instance.id]);
 
   const handleResetPin = async (userId: string) => {
-    const res = await fetch('/api/admin/fleet/users/reset-pin', {
+    const res = await authedFetch('/api/admin/fleet/users/reset-pin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tenantId: instance.id, userId }),
@@ -59,7 +60,7 @@ export function TenantUsersPanel({ instance }: Props) {
 
   const handleRoleChange = async (userId: string, newRole: string) => {
     setRoleEditing(null);
-    await fetch('/api/admin/fleet/users/role', {
+    await authedFetch('/api/admin/fleet/users/role', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tenantId: instance.id, userId, newRole }),
@@ -68,7 +69,7 @@ export function TenantUsersPanel({ instance }: Props) {
   };
 
   const handleImpersonate = async (userId: string) => {
-    const res = await fetch('/api/admin/fleet/users/impersonate', {
+    const res = await authedFetch('/api/admin/fleet/users/impersonate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tenantId: instance.id, userId }),

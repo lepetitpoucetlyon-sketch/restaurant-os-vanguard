@@ -51,7 +51,7 @@ export class TenantProvisioningService {
             const stripeKey = process.env.STRIPE_SECRET_KEY;
             let stripeCustomerId: string;
             if (stripeKey) {
-                const stripe = new Stripe(stripeKey, { apiVersion: '2026-05-27.dahlia' });
+                const stripe = new Stripe(stripeKey, { apiVersion: '2026-06-24.dahlia' });
                 const customer = await stripe.customers.create({
                     email: request.ownerEmail,
                     name:  request.companyName,

@@ -7,6 +7,25 @@ import { logger } from '@/lib/axiom';
  * 🔄 SyncManager - Restaurant OS
  * Gère la file d'attente de synchronisation entre la base locale et Firestore.
  */
+async function executeMutationOp(op: SyncOperation): Promise<void> {
+    const fullPath = op.collection + (op.targetId ? `/${op.targetId}` : '');
+    if (op.action === 'CREATE') {
+        await Nexus.adapter.create(op.collection, op.payload);
+    } else if (op.action === 'DELETE') {
+        await Nexus.adapter.delete(fullPath);
+    } else if (op.action === 'SET') {
+        await Nexus.adapter.set(fullPath, op.payload);
+    } else if (op.action === 'UPDATE') {
+        await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
+    }
+}
+
+async function executeFallbackOp(op: SyncOperation): Promise<void> {
+    const fullPath = `${op.collection}/${op.targetId}`;
+    if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
+    if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
+}
+
 export class SyncManager {
     private static isSyncing = false;
 
@@ -151,22 +170,9 @@ export class SyncManager {
                 }
             }
         } else if (op.type === 'MUTATION') {
-            // Logique générique pour les opérations de mutations
-            const fullPath = op.collection + (op.targetId ? `/${op.targetId}` : '');
-            if (op.action === 'CREATE') {
-                await Nexus.adapter.create(op.collection, op.payload);
-            } else if (op.action === 'DELETE') {
-                await Nexus.adapter.delete(fullPath);
-            } else if (op.action === 'SET') {
-                await Nexus.adapter.set(fullPath, op.payload);
-            } else if (op.action === 'UPDATE') {
-                await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
-            }
+            await executeMutationOp(op);
         } else {
-            // Logique générique fallback
-            const fullPath = `${op.collection}/${op.targetId}`;
-            if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
-            if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
+            await executeFallbackOp(op);
         }
     }
 }

@@ -1,31 +1,29 @@
-import * as otplib from 'otplib';
-const { authenticator } = otplib;
+import { OTP } from 'otplib';
 import { logger } from '@/lib/logger';
+import { whiteLabelInstanceConfig } from '@/config/instance';
+
+const otp = new OTP();
 
 export class MFAService {
-  /**
-   * Génère un nouveau secret TOTP pour un administrateur du MCC.
-   * Retourne le secret et l'URI pour générer un QR Code (Google Authenticator / Authy).
-   */
   static generateSecret(adminEmail: string) {
-    const secret = authenticator.generateSecret();
-    const otpauth = authenticator.keyuri(adminEmail, 'Restaurant OS Empire', secret);
+    const secret  = otp.generateSecret();
+    const otpauth = otp.generateURI({
+      issuer: whiteLabelInstanceConfig.appName,
+      label:  adminEmail,
+      secret,
+    });
     return { secret, otpauth };
   }
 
-  /**
-   * Vérifie un code TOTP (ex: 123456) soumis par l'administrateur.
-   */
-  static async verifyToken(adminEmail: string, token: string, expectedSecret: string): Promise<boolean> {
+  static verifyToken(adminEmail: string, token: string, expectedSecret: string): boolean {
     try {
-      const isValid = authenticator.verify({ token, secret: expectedSecret });
-      
+      const result  = otp.verifySync({ token, secret: expectedSecret });
+      const isValid = result.valid;
       if (!isValid) {
-        logger.warn(`[MFA] Tentative d'accès refusée (Token Invalide) pour l'admin ${adminEmail}`);
+        logger.warn(`[MFA] Tentative d'accès refusée (Token Invalide) pour ${adminEmail}`);
       } else {
         logger.info(`[MFA] Authentification 2FA réussie pour ${adminEmail}`);
       }
-      
       return isValid;
     } catch (err) {
       logger.error(`[MFA] Erreur lors de la vérification TOTP`, err);

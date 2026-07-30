@@ -10,6 +10,44 @@ from core_rag.finance_rules import correct_answer_from_payload
 logger = logging.getLogger("SovereignRAG.Veto")
 QUESTION_VETO_THRESHOLD = 0.65
 
+_WHO_MARKERS = ["qui", "quel client", "quel prestataire", "quel fournisseur", "quel signataire", "quelle partie"]
+
+
+def _resolve_intent_conflicts(
+    q_lower: str, is_who: bool, is_how_much: bool, is_when: bool
+) -> Tuple[bool, bool, bool]:
+    """Résout les conflits entre intentions multiples (qui vs montant vs quand)."""
+    if is_who and is_how_much:
+        if any(w in q_lower for w in _WHO_MARKERS):
+            is_how_much = False
+        else:
+            is_who = False
+    if is_who and is_when:
+        if any(w in q_lower for w in _WHO_MARKERS):
+            is_when = False
+        else:
+            is_who = False
+    return is_who, is_how_much, is_when
+
+
+def _validate_who_answer(q_lower: str, ans_lower: str, candidate_answer: str) -> Tuple[bool, str]:
+    """Valide qu'une réponse WHO contient bien une entité (pas un montant ou terme temporel)."""
+    import re
+    exclus_qui = ["indéterminée", "indeterminee", "illimitée", "illimitee", "temporaire", "3 mois", "1 an", "non définie"]
+    if any(ex in ans_lower for ex in exclus_qui):
+        return False, f"La question attend une entité (QUI), mais la réponse contient un terme temporel exclu: '{candidate_answer}'"
+    if "qui" in q_lower and "signataire" in q_lower:
+        exclus_signataires = ["clients industriels", "clients", "entreprises", "produits"]
+        cleaned = re.sub(r"^(les|le|la|l\'|un|une|des)\s+", "", ans_lower.replace(".", "").strip())
+        if any(ex == cleaned for ex in exclus_signataires):
+            return False, f"La question attend des signataires (QUI), pas un groupe générique: '{candidate_answer}'"
+    cleaned = re.sub(r"\b(eur|euros|usd|gbp|tva|ht|ttc)\b", "", ans_lower.replace("€", "").replace("$", "").replace("£", ""))
+    cleaned = cleaned.replace(" ", "").replace(",", "").replace(".", "").strip()
+    if cleaned.isdigit() and len(cleaned) > 0:
+        return False, f"La question attend une entité (QUI), mais la réponse ressemble à un montant: '{candidate_answer}'"
+    return True, ""
+
+
 class VetoManager:
     def __init__(self, embed_model):
         self.embed_model = embed_model
@@ -17,75 +55,38 @@ class VetoManager:
 
     def symbolic_guard(self, question: str, candidate_answer: str) -> Tuple[bool, str]:
         """Valide programmatiquement si la réponse candidate correspond au type attendu par la question."""
-        import re
         q_lower = question.lower()
         ans_lower = candidate_answer.lower()
-        
+
         is_who = any(w in q_lower for w in ["qui", "signataire", "signataires", "partie", "parties", "client", "prestataire", "fournisseur", "représentant"])
         is_how_much = any(w in q_lower for w in ["combien", "montant", "tva", "tarif", "prix", "taux", "total", "ttc", "ht"])
         is_when = any(w in q_lower for w in ["quand", "date", "durée", "duree", "échéance", "echeance", "période", "periode", "validité"])
-        
-        # Refinement: If it contains "quel(s)/quelle(s)" followed by an entity noun
-        # and doesn't ask "quel est le montant/taux/tarif/prix/total/tva", it's NOT a how much question!
+
         if any(w in q_lower for w in ["quel", "quels", "quelle", "quelles"]):
             has_metric_phrase = any(p in q_lower for p in ["quel est le montant", "quel est le taux", "quel est le prix", "quel est le tarif", "quel est le total", "quelle est la tva", "quel est le coût", "quel est le cout", "quelle est la valeur", "quelle amende"])
             if not has_metric_phrase and any(ent in q_lower for ent in ["résident", "parti", "ministre", "société", "autorité", "commission", "syndicat", "inspecteur", "établissement", "militaire", "direction"]):
                 is_how_much = False
-        
-        # Résoudre les conflits d'intentions multiples
-        if is_who and is_how_much:
-            # Si la question contient "qui" ou demande explicitement un nom d'entité, c'est WHO
-            if any(w in q_lower for w in ["qui", "quel client", "quel prestataire", "quel fournisseur", "quel signataire", "quelle partie"]):
-                is_how_much = False
-            else:
-                # Sinon, si elle demande un montant (ex: "Quel est le montant..."), c'est HOW_MUCH
-                is_who = False
-                
-        if is_who and is_when:
-            if any(w in q_lower for w in ["qui", "quel client", "quel prestataire", "quel fournisseur", "quel signataire", "quelle partie"]):
-                is_when = False
-            else:
-                is_who = False
-        
+
+        is_who, is_how_much, is_when = _resolve_intent_conflicts(q_lower, is_who, is_how_much, is_when)
+
         if is_who:
-            exclus_qui = ["indéterminée", "indeterminee", "illimitée", "illimitee", "temporaire", "3 mois", "1 an", "non définie"]
-            if any(ex in ans_lower for ex in exclus_qui):
-                return False, f"La question attend une entité (QUI), mais la réponse contient un terme temporel exclu: '{candidate_answer}'"
-            
-            if "qui" in q_lower and "signataire" in q_lower:
-                exclus_signataires = ["clients industriels", "clients", "entreprises", "produits"]
-                cleaned_ans = re.sub(r"^(les|le|la|l\'|un|une|des)\s+", "", ans_lower.replace(".", "").strip())
-                if any(ex == cleaned_ans for ex in exclus_signataires):
-                    return False, f"La question attend des personnes physiques/morales signataires (QUI), pas un groupe générique exclu: '{candidate_answer}'"
-            
-            # Rejeter les réponses ressemblant à des montants financiers (ex: "1200 EUR")
-            cleaned_ans = ans_lower.replace("€", "").replace("$", "").replace("£", "")
-            cleaned_ans = re.sub(r"\b(eur|euros|usd|gbp|tva|ht|ttc)\b", "", cleaned_ans)
-            cleaned_ans = cleaned_ans.replace(" ", "").replace(",", "").replace(".", "").strip()
-            if cleaned_ans.isdigit() and len(cleaned_ans) > 0:
-                return False, f"La question attend une entité (QUI), mais la réponse ressemble à un montant numérique: '{candidate_answer}'"
-            
+            return _validate_who_answer(q_lower, ans_lower, candidate_answer)
         elif is_how_much:
-            has_digit = any(c.isdigit() for c in candidate_answer)
-            if not has_digit:
-                return False, f"La question attend un montant ou une quantité (COMBIEN), mais la réponse ne contient aucun chiffre: '{candidate_answer}'"
-                
+            if not any(c.isdigit() for c in candidate_answer):
+                return False, f"La question attend un montant (COMBIEN), mais la réponse ne contient aucun chiffre: '{candidate_answer}'"
         elif is_when:
             has_digit = any(c.isdigit() for c in candidate_answer)
             durations = ["indéterminée", "indeterminee", "illimitée", "illimitee", "temporaire", "mois", "an", "jour", "heure", "semaine", "durée", "indéterminé", "indetermine"]
             has_duration_word = any(d in ans_lower for d in durations)
-            
             if not (has_digit or has_duration_word):
-                return False, f"La question attend une date ou une durée (QUAND), mais la réponse ne contient ni chiffre ni motif temporel: '{candidate_answer}'"
+                return False, f"La question attend une date (QUAND), mais la réponse ne contient ni chiffre ni motif temporel: '{candidate_answer}'"
 
         return True, ""
 
-    async def question_veto(self, question: str, workspace_id: str, bm25_metadata: list) -> Tuple[bool, float]:
-        """Couche 0 - Filtre les questions AVANT toute recherche HNSW/BM25/LLM."""
-        q_vector = self.embed_model.encode(question, normalize_embeddings=True).tolist()
-
-        # Get threshold dynamically from DB for Grade X customization
+    def _load_veto_threshold(self, workspace_id: str) -> float:
+        """Charge le seuil veto depuis la DB, avec fallback sur la constante globale."""
         threshold = QUESTION_VETO_THRESHOLD
+        conn = None
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -96,42 +97,46 @@ class VetoManager:
         except Exception as e:
             logger.warning(f"⚠️ Failed to load veto_threshold from DB: {e}")
         finally:
-            if 'conn' in locals() and conn:
+            if conn:
                 conn.close()
+        return threshold
+
+    def _veto_bm25_fallback(self, q_vector: list, bm25_metadata: list, threshold: float) -> Tuple[bool, float]:
+        """Fallback veto via centroïde BM25 quand aucun cluster n'existe."""
+        if not bm25_metadata:
+            return False, 0.0
+        try:
+            sample = bm25_metadata[:20]
+            ki_questions = [ki.get("question", "") for ki in sample if ki.get("question")]
+            if not ki_questions:
+                return True, 1.0
+            ki_embeddings = self.embed_model.encode(ki_questions, normalize_embeddings=True)
+            corpus_centroid = np.mean(ki_embeddings, axis=0)
+            q_vec = np.array(q_vector)
+            norm_q = np.linalg.norm(q_vec)
+            norm_c = np.linalg.norm(corpus_centroid)
+            if norm_q > 0 and norm_c > 0:
+                score = float(np.dot(q_vec, corpus_centroid) / (norm_q * norm_c))
+                logger.info(f"🛡️ Question Veto Gate (BM25 fallback): centroid_score={score:.4f} threshold={threshold}")
+                return score >= threshold, score
+            return True, 1.0
+        except Exception as e:
+            logger.warning(f"⚠️ Question Veto Gate fallback error: {e}")
+            return True, 1.0
+
+    async def question_veto(self, question: str, workspace_id: str, bm25_metadata: list) -> Tuple[bool, float]:
+        """Couche 0 - Filtre les questions AVANT toute recherche HNSW/BM25/LLM."""
+        q_vector = self.embed_model.encode(question, normalize_embeddings=True).tolist()
+        threshold = self._load_veto_threshold(workspace_id)
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "SELECT centroid FROM clusters WHERE workspace_id = ?",
-            (workspace_id,)
-        )
+        cursor.execute("SELECT centroid FROM clusters WHERE workspace_id = ?", (workspace_id,))
         rows = cursor.fetchall()
         conn.close()
 
         if not rows:
-            if not bm25_metadata:
-                return False, 0.0
-
-            try:
-                sample = bm25_metadata[:20]
-                ki_questions = [ki.get("question", "") for ki in sample if ki.get("question")]
-                if not ki_questions:
-                    return True, 1.0
-
-                ki_embeddings = self.embed_model.encode(ki_questions, normalize_embeddings=True)
-                corpus_centroid = np.mean(ki_embeddings, axis=0)
-
-                q_vec = np.array(q_vector)
-                norm_q = np.linalg.norm(q_vec)
-                norm_c = np.linalg.norm(corpus_centroid)
-                if norm_q > 0 and norm_c > 0:
-                    score = float(np.dot(q_vec, corpus_centroid) / (norm_q * norm_c))
-                    logger.info(f"🛡️ Question Veto Gate (BM25 fallback): centroid_score={score:.4f} threshold={threshold}")
-                    return score >= threshold, score
-                return True, 1.0
-            except Exception as e:
-                logger.warning(f"⚠️ Question Veto Gate fallback error: {e}")
-                return True, 1.0 
+            return self._veto_bm25_fallback(q_vector, bm25_metadata, threshold)
 
         q_vec = np.array(q_vector)
         max_score = 0.0

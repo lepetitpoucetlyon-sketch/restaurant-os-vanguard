@@ -6,9 +6,10 @@ import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { Users } from "lucide-react";
 import { cinematicItem, TABLES_DATA } from "@modules/commerce/reservations/constants";
+import type { Table } from "@/modules/ops/engine/tables.types";
 
 interface FloorPlanViewProps {
-    setSelectedTable: (table: import('@modules/ops').Table) => void;
+    setSelectedTable: (table: Table) => void;
 }
 
 export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
@@ -30,7 +31,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                             <div className="h-px flex-1 bg-border/40" />
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                            {tableList.map((table: import('@modules/ops').Table) => {
+                            {tableList.map((table: Table) => {
                                 // Status Mapping for Style Consistency
                                 const effectiveStatus =
                                     table.status === 'free' ? 'free' :

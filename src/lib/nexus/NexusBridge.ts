@@ -28,6 +28,19 @@ type RemoteConfigData = Partial<TenantConfig> & LegacyTenantConfig;
  * Nexus.adapter (Firestore / SQL / Mock interchangeables), donc par le
  * NexusInterceptor + SovereignGuard.
  */
+function metadataDefaults(): { name: string; version: string; description: string; ownerId: string; createdAt: number; subscriptionTier: string } {
+  const dna = RESTAURANT_FULL_DNA.metadata;
+  const def = DEFAULT_TENANT_CONFIG.metadata;
+  return {
+    name: dna?.name || def.name,
+    version: dna?.version || def.version,
+    description: dna?.description || '',
+    ownerId: dna?.ownerId || '',
+    createdAt: dna?.createdAt || Date.now(),
+    subscriptionTier: dna?.subscriptionTier || 'FREE',
+  };
+}
+
 export class NexusBridge {
   private static unsubscribe: (() => void) | null = null;
   private static pulseInterval: ReturnType<typeof setInterval> | null = null;
@@ -142,13 +155,14 @@ export class NexusBridge {
   }
 
   private static mapMetadata(remoteData: RemoteConfigData): TenantConfig['metadata'] {
-      return { 
-        name: remoteData.metadata?.name || RESTAURANT_FULL_DNA.metadata?.name || DEFAULT_TENANT_CONFIG.metadata.name,
-        version: remoteData.metadata?.version || RESTAURANT_FULL_DNA.metadata?.version || DEFAULT_TENANT_CONFIG.metadata.version,
-        description: remoteData.metadata?.description || RESTAURANT_FULL_DNA.metadata?.description || '',
-        ownerId: remoteData.metadata?.ownerId || RESTAURANT_FULL_DNA.metadata?.ownerId || '',
-        createdAt: remoteData.metadata?.createdAt || RESTAURANT_FULL_DNA.metadata?.createdAt || Date.now(),
-        subscriptionTier: (remoteData.metadata?.subscriptionTier || RESTAURANT_FULL_DNA.metadata?.subscriptionTier || 'FREE') as string
+      const defaults = metadataDefaults();
+      return {
+        name: remoteData.metadata?.name || defaults.name,
+        version: remoteData.metadata?.version || defaults.version,
+        description: remoteData.metadata?.description || defaults.description,
+        ownerId: remoteData.metadata?.ownerId || defaults.ownerId,
+        createdAt: remoteData.metadata?.createdAt || defaults.createdAt,
+        subscriptionTier: (remoteData.metadata?.subscriptionTier || defaults.subscriptionTier) as string,
       };
   }
 

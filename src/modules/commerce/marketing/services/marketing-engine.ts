@@ -18,6 +18,10 @@ function resolveIdentityForSEO(defaults: typeof whiteLabelInstanceConfig.identit
     };
 }
 
+function fieldScore(value: string | undefined, minLen: number, weight: number): number {
+    return value && value.length > minLen ? weight : 0;
+}
+
 /**
  * 📈 MarketingEngine - Restaurant OS
  * Handles real-time SEO scoring and marketing metrics based on system configuration.
@@ -29,7 +33,7 @@ export const MarketingEngine = {
      */
     calculateSEOScore(): number {
         const { identityDefaults } = whiteLabelInstanceConfig;
-        
+
         const weights = {
             name: 15,
             slogan: 10,
@@ -43,11 +47,10 @@ export const MarketingEngine = {
         };
 
         let score = 0;
-
-        if (identityDefaults.name && identityDefaults.name.length > 2) score += weights.name;
-        if (identityDefaults.slogan && identityDefaults.slogan.length > 5) score += weights.slogan;
-        if (identityDefaults.shortDescription && identityDefaults.shortDescription.length > 20) score += weights.shortDescription;
-        if (identityDefaults.longDescription && identityDefaults.longDescription.length > 50) score += weights.longDescription;
+        score += fieldScore(identityDefaults.name, 2, weights.name);
+        score += fieldScore(identityDefaults.slogan, 5, weights.slogan);
+        score += fieldScore(identityDefaults.shortDescription, 20, weights.shortDescription);
+        score += fieldScore(identityDefaults.longDescription, 50, weights.longDescription);
         if (identityDefaults.cuisineType) score += weights.cuisineType;
         if (identityDefaults.headChef) score += weights.headChef;
         if (identityDefaults.owner) score += weights.owner;

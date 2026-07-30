@@ -53,16 +53,37 @@ def format_float_precision(val: Any) -> str:
         s = s.rstrip('0').rstrip('.')
     return s if s else "0"
 
+def _normalize_separators(s: str) -> str:
+    """Résout l'ambiguïté entre séparateurs de milliers et décimaux."""
+    if '.' in s and ',' in s:
+        dot_idx = s.find('.')
+        comma_idx = s.find(',')
+        if dot_idx < comma_idx:
+            return s.replace('.', '').replace(',', '.')
+        return s.replace(',', '')
+    if ',' in s:
+        parts = s.split(',')
+        if len(parts) == 2 and len(parts[1]) == 3:
+            try:
+                if float(parts[0].replace('.', '')) >= 10:
+                    return s.replace(',', '')
+                return s.replace(',', '.')
+            except ValueError:
+                return s.replace(',', '.')
+        return s.replace(',', '.')
+    return s
+
+
 def clean_amount(val: Any) -> str:
     if val is None:
         return "0"
     if isinstance(val, (int, float, Decimal)):
         return format_float_precision(val)
-    
+
     s = str(val).replace("€", "").replace("EUR", "").strip()
     if not s:
         return "0"
-        
+
     if 'e' in s.lower():
         try:
             return format_float_precision(Decimal(s))
@@ -70,33 +91,13 @@ def clean_amount(val: Any) -> str:
             pass
 
     is_negative = s.startswith('-')
-    s = re.sub(r'\s+', '', s)
-    
-    if '.' in s and ',' in s:
-        dot_idx = s.find('.')
-        comma_idx = s.find(',')
-        if dot_idx < comma_idx:
-            s = s.replace('.', '').replace(',', '.')
-        else:
-            s = s.replace(',', '')
-    elif ',' in s:
-        parts = s.split(',')
-        if len(parts) == 2 and len(parts[1]) == 3:
-            try:
-                if float(parts[0].replace('.', '')) >= 10:
-                    s = s.replace(',', '')
-                else:
-                    s = s.replace(',', '.')
-            except ValueError:
-                s = s.replace(',', '.')
-        else:
-            s = s.replace(',', '.')
-            
+    s = _normalize_separators(re.sub(r'\s+', '', s))
+
     res = "".join(c for c in s if c.isdigit() or c == '.')
     if res.count('.') > 1:
         parts = res.split('.')
         res = "".join(parts[:-1]) + "." + parts[-1]
-        
+
     if is_negative and res != "0":
         res = '-' + res
     return res if res else "0"

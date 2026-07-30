@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { BotMessageSquare, AlertTriangle, CheckCircle2, Loader2, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 type Severity = 'critical' | 'high' | 'medium' | 'low';
 
@@ -40,7 +41,7 @@ export function SupportAIPanel() {
     setIsLoading(true);
     setResult(null);
     try {
-      const res = await fetch('/api/admin/fleet/support-ai/diagnose', {
+      const res = await authedFetch('/api/admin/fleet/support-ai/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -64,7 +65,7 @@ export function SupportAIPanel() {
   const handleEscalate = async () => {
     if (!result) return;
     try {
-      const res = await fetch('/api/admin/fleet/support-ai/drafts', {
+      const res = await authedFetch('/api/admin/fleet/support-ai/drafts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ticketId: result.ticketId, diagnostic: result.diagnostic, tenantId, description }),

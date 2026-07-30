@@ -10,6 +10,7 @@ import { Tablet, Plus, Trash2, RefreshCw, AlertTriangle, Truck, ShieldAlert, Che
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
+import { authedFetch } from "@/lib/client/authedFetch";
 
 type EnrollmentType = 'NATIVE_ABM' | 'SOFTWARE_MDM';
 type DeviceStatus = 'PREPARATION' | 'SHIPPED' | 'DELIVERED' | 'LOCKED';
@@ -41,6 +42,8 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
   const [rows, setRows] = useState<FleetRow[]>([]);
   const [inputMap, setInputMap] = useState<Record<string, { sn: string, type: EnrollmentType, tracking: string }>>({});
   const [saving, setSaving] = useState<Record<string, boolean>>({});
+  const [pendingDelivery, setPendingDelivery] = useState<{ tenantId: string; device: HardwareDevice } | null>(null);
+  const [confirming, setConfirming] = useState(false);
 
   const load = useCallback(async () => {
     const loaded = await Promise.all(
@@ -118,7 +121,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
 
     try {
       // Simulation call to start billing
-      await fetch('/api/admin/mcc/fleet/devices/delivery', {
+      await authedFetch('/api/admin/mcc/fleet/devices/delivery', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tenantId, serialNumber: device.serialNumber })
@@ -142,7 +145,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
     const newStatus = isLocked ? 'DELIVERED' : 'LOCKED';
 
     try {
-      await fetch('/api/admin/mcc/fleet/devices/lock', {
+      await authedFetch('/api/admin/mcc/fleet/devices/lock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tenantId, serialNumber: device.serialNumber, lock: !isLocked })
@@ -167,6 +170,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
   }
 
   return (
+    <>
     <div className="p-6 bg-surface-card backdrop-blur-md border border-border-subtle rounded-2xl space-y-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
@@ -226,7 +230,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                       
                       <div className="flex items-center gap-2">
                         {device.status === 'SHIPPED' && (
-                          <button onClick={() => simulateDelivery(row.tenantId, device)} className="p-2 bg-emerald-500/10 text-status-success rounded-lg hover:bg-emerald-500/20 transition-all border border-emerald-500/20" title="Simuler Livraison (Déclenche Stripe)">
+                          <button onClick={() => setPendingDelivery({ tenantId: row.tenantId, device })} className="p-2 bg-emerald-500/10 text-status-success rounded-lg hover:bg-emerald-500/20 transition-all border border-emerald-500/20" title="Confirmer Livraison (Déclenche Stripe)">
                             <CheckCircle className="w-4 h-4" />
                           </button>
                         )}
@@ -285,5 +289,48 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
         })}
       </div>
     </div>
+
+    {pendingDelivery && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-sm" onClick={() => !confirming && setPendingDelivery(null)} />
+        <div className="relative w-full max-w-sm bg-surface-bg border border-border-subtle rounded-2xl p-6 shadow-2xl">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-status-success/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+              <Truck className="w-5 h-5 text-status-success" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-widest mb-1">Confirmer la livraison</h3>
+              <p className="text-xs text-secondary leading-relaxed">
+                Cette action démarre la <span className="text-text-primary font-semibold">facturation Stripe</span> pour l&apos;appareil{' '}
+                <span className="font-mono text-brand">{pendingDelivery.device.serialNumber}</span>.
+                Elle ne peut pas être annulée.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-3 mt-6">
+            <button
+              onClick={() => setPendingDelivery(null)}
+              disabled={confirming}
+              className="flex-1 py-2.5 text-xs font-bold uppercase tracking-widest text-secondary hover:text-text-primary transition-colors disabled:opacity-40"
+            >
+              Annuler
+            </button>
+            <button
+              onClick={async () => {
+                setConfirming(true);
+                await simulateDelivery(pendingDelivery.tenantId, pendingDelivery.device);
+                setConfirming(false);
+                setPendingDelivery(null);
+              }}
+              disabled={confirming}
+              className="flex-1 py-2.5 bg-status-success text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:opacity-90 transition-all active:scale-95 disabled:opacity-50"
+            >
+              {confirming ? 'Facturation…' : 'Confirmer & Facturer'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

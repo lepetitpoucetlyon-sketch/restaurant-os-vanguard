@@ -5,7 +5,7 @@ import { X, Users, DivideCircle, Check, ArrowRight, User, Minus, Plus, CheckCirc
 import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import { motion } from "framer-motion";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/shared/hooks/useLanguage";
 import { formatCurrency } from "@/lib/formatters";
 
 import { CartItem } from "@modules/ops/engine/types";

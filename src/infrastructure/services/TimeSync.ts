@@ -1,6 +1,24 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
+function parseHeartbeatDate(h: unknown): Date | null {
+    if (h instanceof Date) return h;
+    if (h && typeof h === 'object' && 'toDate' in h && typeof (h as { toDate: unknown }).toDate === 'function') {
+        return (h as unknown as { toDate: () => Date }).toDate();
+    }
+    if (typeof h === 'string' || typeof h === 'number') return new Date(h);
+    return null;
+}
+
+function applyTimeSyncData(ts: { offset: number; isSynced: boolean }, data: import('@/shared/nexus-contract').SovereignData): void {
+    if (!data?.heartbeat) return;
+    const serverDate = parseHeartbeatDate(data.heartbeat as unknown);
+    if (!serverDate) return;
+    ts.offset = serverDate.getTime() - Date.now();
+    ts.isSynced = true;
+    logger.debug(`[TimeSync] Offset recalibrated: ${ts.offset}ms`);
+}
+
 /**
  * ⏰ TimeSync - Restaurant OS
  * Synchronizes local clock with Firestore Server Time to solve Clock Drift.
@@ -38,25 +56,7 @@ export const TimeSync = {
     };
 
     this.private_unsub = Nexus.adapter.onSnapshot<import('@/shared/nexus-contract').SovereignData>(syncPath, (data) => {
-        if (data && data.heartbeat) {
-            const h = data.heartbeat;
-            let serverDate: Date | null = null;
-
-            if (h instanceof Date) {
-                serverDate = h;
-            } else if (h && typeof h === 'object' && 'toDate' in h && typeof (h as { toDate: unknown }).toDate === 'function') {
-                serverDate = (h as unknown as { toDate: () => Date }).toDate();
-            } else if (typeof h === 'string' || typeof h === 'number') {
-                serverDate = new Date(h);
-            }
-
-            if (serverDate) {
-                const now = Date.now();
-                this.offset = serverDate.getTime() - now;
-                this.isSynced = true;
-                logger.debug(`[TimeSync] Offset recalibrated: ${this.offset}ms`);
-            }
-        }
+        applyTimeSyncData(this, data);
     });
 
     // Sync every 5 minutes (300,000ms) to maintain precision

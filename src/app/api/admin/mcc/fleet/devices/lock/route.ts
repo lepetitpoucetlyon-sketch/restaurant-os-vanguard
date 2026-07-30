@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import crypto from 'crypto';
 
@@ -11,7 +12,10 @@ function generateMDMAuthToken() {
   return `mdm_jwt_${crypto.randomBytes(16).toString('hex')}`;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const caller = await requireMccLevel(req, 'fleet_admin');
+  if (isDenied(caller)) return caller as NextResponse;
+
   try {
     const { tenantId, serialNumber, lock } = await req.json();
 

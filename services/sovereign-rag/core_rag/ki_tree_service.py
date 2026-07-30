@@ -41,6 +41,67 @@ class KITreeService:
     def __init__(self):
         self.client = ZenithClient()
 
+    @staticmethod
+    def _tune_dbscan_eps(X: np.ndarray) -> float:
+        """Sélectionne dynamiquement eps pour viser ~25 clusters."""
+        best_eps, best_diff = 0.23, 999
+        for test_eps in [0.18, 0.20, 0.22, 0.23, 0.24, 0.25, 0.27, 0.30]:
+            labels = DBSCAN(eps=test_eps, min_samples=2, metric='cosine').fit(X).labels_
+            n = len(set(labels)) - (1 if -1 in labels else 0)
+            diff = abs(n - 25)
+            if diff < best_diff:
+                best_diff, best_eps = diff, test_eps
+        return best_eps
+
+    @staticmethod
+    def _pair_vectors_to_kis(rust_kis: list, rust_vectors: list) -> tuple:
+        """Retourne (embeddings, kis) en associant vecteurs et KIs par id."""
+        embeddings, kis = [], []
+        for i, ki in enumerate(rust_kis):
+            if i < len(rust_vectors):
+                vec = rust_vectors[i]
+                if vec["id"].startswith(ki["ki_id"]):
+                    embeddings.append(vec["values"])
+                    ki["embedding"] = vec["values"]
+                    kis.append(ki)
+        return embeddings, kis
+
+    @staticmethod
+    async def _process_cluster(cluster_id: str, cluster_kis: list) -> Optional[Dict[str, Any]]:
+        """Génère la synthèse LLM d'un cluster et retourne son dict, ou None."""
+        if len(cluster_kis) < 2:
+            return None
+        sample_kis = cluster_kis[:5]
+        context = "\n".join([f"- Q: {ki.get('question')} | R: {ki.get('answer')}" for ki in sample_kis])
+        prompt = (
+            "Tu es un analyste expert Grade X. Génère une synthèse globale pour ce groupe de connaissances.\n"
+            "Réponds UNIQUEMENT en JSON valide.\n"
+            'Format attendu:\n{"name": "Nom court du concept", "summary": "Résumé consolidé (max 3 phrases)", "keywords": "mot1, mot2, mot3"}\n'
+            f"CONNAISSANCES:\n{context}"
+        )
+        try:
+            res = await brain.generate(prompt, system_prompt="Analyste expert RAG Grade X. JSON strict.")
+            res_str = res.strip()
+            if "```json" in res_str:
+                res_str = res_str.split("```json")[1].split("```")[0].strip()
+            elif "```" in res_str:
+                res_str = res_str.split("```")[1].split("```")[0].strip()
+            synth = json.loads(res_str)
+            centroid = np.mean([ki['embedding'] for ki in cluster_kis], axis=0).tolist()
+            root_ids = list(set(ki.get("root_id") for ki in cluster_kis if ki.get("root_id")))
+            return {
+                "id": f"CLUSTER_{uuid.uuid4().hex[:8]}",
+                "name": synth.get("name"),
+                "summary": synth.get("summary"),
+                "keywords": synth.get("keywords"),
+                "size": len(cluster_kis),
+                "centroid": centroid,
+                "root_ids": root_ids,
+            }
+        except Exception as e:
+            logger.error(f"⚠️ Synthèse cluster {cluster_id}: {e}")
+            return None
+
     async def build_tree_for_workspace(self, workspace_id: str) -> Dict[str, Any]:
         """Reconstruit le KI Tree complet pour un workspace (DBSCAN + LLM synthèse)."""
         logger.info(f"🌲 Construction du Code KI Tree pour workspace: {workspace_id}")
@@ -56,36 +117,16 @@ class KITreeService:
             if not rust_vectors:
                 return {"status": "error", "message": "Aucun vecteur trouvé pour le clustering"}
 
-            embeddings, kis = [], []
-            for i, ki in enumerate(rust_kis):
-                if i < len(rust_vectors):
-                    vec = rust_vectors[i]
-                    if vec["id"].startswith(ki["ki_id"]):
-                        embeddings.append(vec["values"])
-                        ki["embedding"] = vec["values"]
-                        kis.append(ki)
+            embeddings, kis = self._pair_vectors_to_kis(rust_kis, rust_vectors)
 
             if not embeddings:
                 return {"status": "error", "message": "Aucun KI valide avec vecteur trouvé"}
 
             logger.info(f"🧠 DBSCAN sur {len(embeddings)} vecteurs")
             X = np.array(embeddings)
-            
-            # Dynamically tune eps to target 25 clusters
-            best_eps = 0.23
-            best_diff = 999
-            for test_eps in [0.18, 0.20, 0.22, 0.23, 0.24, 0.25, 0.27, 0.30]:
-                test_clustering = DBSCAN(eps=test_eps, min_samples=2, metric='cosine').fit(X)
-                test_labels = test_clustering.labels_
-                test_n = len(set(test_labels)) - (1 if -1 in test_labels else 0)
-                diff = abs(test_n - 25)
-                if diff < best_diff:
-                    best_diff = diff
-                    best_eps = test_eps
-            
+            best_eps = self._tune_dbscan_eps(X)
             logger.info(f"🎯 Dynamic tuning selected eps={best_eps} (target: 25 clusters)")
-            clustering = DBSCAN(eps=best_eps, min_samples=2, metric='cosine').fit(X)
-            labels = clustering.labels_
+            labels = DBSCAN(eps=best_eps, min_samples=2, metric='cosine').fit(X).labels_
 
             clusters_map: Dict[str, list] = {}
             outliers = []
@@ -97,41 +138,7 @@ class KITreeService:
 
             logger.info(f"📊 {len(clusters_map)} clusters | Outliers: {len(outliers)}")
 
-            async def process_cluster(cluster_id: str, cluster_kis: list):
-                if len(cluster_kis) < 2:
-                    return None
-                sample_kis = cluster_kis[:5]
-                context = "\n".join([f"- Q: {ki.get('question')} | R: {ki.get('answer')}" for ki in sample_kis])
-                prompt = f"""Tu es un analyste expert Grade X. Génère une synthèse globale pour ce groupe de connaissances.
-Réponds UNIQUEMENT en JSON valide.
-Format attendu:
-{{"name": "Nom court du concept", "summary": "Résumé consolidé (max 3 phrases)", "keywords": "mot1, mot2, mot3"}}
-CONNAISSANCES:
-{context}"""
-                try:
-                    res = await brain.generate(prompt, system_prompt="Analyste expert RAG Grade X. JSON strict.")
-                    res_str = res.strip()
-                    if "```json" in res_str:
-                        res_str = res_str.split("```json")[1].split("```")[0].strip()
-                    elif "```" in res_str:
-                        res_str = res_str.split("```")[1].split("```")[0].strip()
-                    synth = json.loads(res_str)
-                    centroid = np.mean([ki['embedding'] for ki in cluster_kis], axis=0).tolist()
-                    root_ids = list(set(ki.get("root_id") for ki in cluster_kis if ki.get("root_id")))
-                    return {
-                        "id": f"CLUSTER_{uuid.uuid4().hex[:8]}",
-                        "name": synth.get("name"),
-                        "summary": synth.get("summary"),
-                        "keywords": synth.get("keywords"),
-                        "size": len(cluster_kis),
-                        "centroid": centroid,
-                        "root_ids": root_ids
-                    }
-                except Exception as e:
-                    logger.error(f"⚠️ Synthèse cluster {cluster_id}: {e}")
-                    return None
-
-            tasks = [process_cluster(c_id, c_kis) for c_id, c_kis in clusters_map.items()]
+            tasks = [self._process_cluster(c_id, c_kis) for c_id, c_kis in clusters_map.items()]
             cluster_results = list(await asyncio.gather(*tasks))
 
             if outliers:
@@ -161,7 +168,6 @@ CONNAISSANCES:
             conn.commit()
             conn.close()
 
-            # Automatically build semantic bridges between the new clusters
             bridges_created = 0
             try:
                 from core_rag_service import get_engine

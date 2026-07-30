@@ -230,7 +230,7 @@ export class SovereignLedger {
         let totalCredit = 0;
         const discrepancies: InquisiteurDiscrepancy[] = [];
 
-        if (!entries || entries.length === 0) {
+        if (!entries?.length) {
             return { secure: true, expected: 0, actual: 0, discrepancies: [] };
         }
 

@@ -70,7 +70,7 @@ export class HumanResourcesService {
 
         // --- Punctuality: 100 − round(lateArrivals / totalShifts × 100) ---
         let punctualityScore = 100;
-        if (scheduledShifts && scheduledShifts.length > 0) {
+        if (scheduledShifts?.length) {
             let lateArrivals = 0;
             let totalScheduled = 0;
 

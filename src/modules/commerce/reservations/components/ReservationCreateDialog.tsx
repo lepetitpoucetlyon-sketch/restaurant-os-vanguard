@@ -23,6 +23,15 @@ type Step = 1 | 2;
 
 const TERRACE_ZONE_IDS = ["zone-terrasse", "TERRACE", "terrace"];
 
+function filterAvailableTables(tables: Table[], terraceClosed: boolean, minCovers = 0): Table[] {
+    return tables.filter((t) => {
+        const isAvailable = t.status === "free" || t.status === "available";
+        if (!isAvailable || (t.seats ?? 0) < minCovers) return false;
+        if (terraceClosed && TERRACE_ZONE_IDS.some((z) => t.zoneId?.toLowerCase().includes(z.toLowerCase()))) return false;
+        return true;
+    });
+}
+
 export function ReservationCreateDialog({
     isOpen,
     onClose,
@@ -45,17 +54,7 @@ export function ReservationCreateDialog({
 
     // ── Auto table suggestion ────────────────────────────────────────────────
     const suggestedTable = useMemo(() => {
-        const available = tables.filter((t) => {
-            const capacity = t.seats ?? 0;
-            const status = t.status;
-            const isAvailable = status === "free" || status === "available";
-            if (!isAvailable || capacity < formData.covers) return false;
-            if (terraceClosed && TERRACE_ZONE_IDS.some((z) => t.zoneId?.toLowerCase().includes(z.toLowerCase()))) {
-                return false;
-            }
-            return true;
-        });
-        // Sort ascending by capacity to minimise wasted seats
+        const available = filterAvailableTables(tables, terraceClosed, formData.covers);
         available.sort((a, b) => (a.seats ?? 0) - (b.seats ?? 0));
         return available[0] ?? null;
     }, [tables, formData.covers, terraceClosed]);
@@ -119,16 +118,10 @@ export function ReservationCreateDialog({
         setTimeout(resetForm, 300);
     };
 
-    const availableTables = useMemo(() => {
-        return tables.filter((t) => {
-            const isAvail = t.status === "free" || t.status === "available";
-            if (!isAvail) return false;
-            if (terraceClosed && TERRACE_ZONE_IDS.some((z) => t.zoneId?.toLowerCase().includes(z.toLowerCase()))) {
-                return false;
-            }
-            return true;
-        });
-    }, [tables, terraceClosed]);
+    const availableTables = useMemo(
+        () => filterAvailableTables(tables, terraceClosed),
+        [tables, terraceClosed]
+    );
 
     const itemV = {
         hidden: { opacity: 0, y: 12 },

@@ -65,12 +65,16 @@ function buildInstanceSecurity(f: SiteTelemetry): EmpireInstance['security'] {
   };
 }
 
+function resolveNodeName(f: SiteTelemetry): string {
+  return f.name || `Nexus Node ${(f.id || '').slice(0, 4) || '??'}`;
+}
+
 /** Convertit une télémétrie de site brute en `EmpireInstance` normalisée (Grade X). */
 export function mapSiteTelemetryToInstance(f: SiteTelemetry): EmpireInstance {
   return {
     id: f.id || f.key || `node-${Math.random().toString(36).substring(7)}`,
     key: f.key || f.id || `key-${Math.random().toString(36).substring(7)}`,
-    name: f.name || `Nexus Node ${(f.id || '').slice(0, 4) || '??'}`,
+    name: resolveNodeName(f),
     status: f.status || 'ONLINE',
     tier: f.tier || 'STANDARD',
     version: f.engineVersion || '1.0.0',

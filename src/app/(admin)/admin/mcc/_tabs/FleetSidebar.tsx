@@ -54,8 +54,8 @@ export function FleetSidebar({ health, switchboard, onToggleModule }: FleetSideb
         : s.loading;
 
     const nf525Color = health
-        ? health.nf525SealEngine === 'secured' ? 'bg-action-primary'
-        : health.nf525SealEngine === 'degraded' ? 'bg-action-primary'
+        ? health.nf525SealEngine === 'secured'  ? 'bg-status-success'
+        : health.nf525SealEngine === 'degraded' ? 'bg-status-warning'
         : 'bg-status-error'
         : 'bg-secondary';
 
@@ -66,8 +66,8 @@ export function FleetSidebar({ health, switchboard, onToggleModule }: FleetSideb
         : s.loading;
 
     const intelColor = health
-        ? health.fleetIntelligence === 'aggregating' ? 'bg-action-primary'
-        : health.fleetIntelligence === 'degraded' ? 'bg-action-primary'
+        ? health.fleetIntelligence === 'aggregating' ? 'bg-status-success'
+        : health.fleetIntelligence === 'degraded'    ? 'bg-status-warning'
         : 'bg-status-error'
         : 'bg-secondary';
 

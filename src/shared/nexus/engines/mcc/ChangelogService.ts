@@ -99,27 +99,33 @@ class ChangelogServiceClass {
     return entry;
   }
 
-  async getForTenant(tenantId: string, limit = 50): Promise<ChangelogEntry[]> {
-    const all = await Nexus.adapter.query('mcc/changelog') as ChangelogEntry[];
-    return all
-      .filter(e => e.tenantId === tenantId)
-      .sort((a, b) => b.appliedAt.localeCompare(a.appliedAt))
-      .slice(0, limit);
+  async getForTenant(tenantId: string, limit = 50, startAfter?: string): Promise<ChangelogEntry[]> {
+    return Nexus.adapter.query<ChangelogEntry>('mcc/changelog', {
+      where:    [{ field: 'tenantId', operator: '==', value: tenantId }],
+      orderBy:  { field: 'appliedAt', direction: 'desc' },
+      limit,
+      startAfter: startAfter ?? undefined,
+    });
   }
 
-  async getFleet(limit = 100): Promise<ChangelogEntry[]> {
-    const all = await Nexus.adapter.query('mcc/changelog') as ChangelogEntry[];
-    return all
-      .sort((a, b) => b.appliedAt.localeCompare(a.appliedAt))
-      .slice(0, limit);
+  async getFleet(limit = 100, startAfter?: string): Promise<ChangelogEntry[]> {
+    return Nexus.adapter.query<ChangelogEntry>('mcc/changelog', {
+      orderBy:  { field: 'appliedAt', direction: 'desc' },
+      limit,
+      startAfter: startAfter ?? undefined,
+    });
   }
 
-  async getByCategory(category: ChangeCategory, tenantId?: string, limit = 50): Promise<ChangelogEntry[]> {
-    const all = await Nexus.adapter.query('mcc/changelog') as ChangelogEntry[];
-    return all
-      .filter(e => e.category === category && (!tenantId || e.tenantId === tenantId))
-      .sort((a, b) => b.appliedAt.localeCompare(a.appliedAt))
-      .slice(0, limit);
+  async getByCategory(category: ChangeCategory, tenantId?: string, limit = 50, startAfter?: string): Promise<ChangelogEntry[]> {
+    const where = tenantId
+      ? [{ field: 'category', operator: '==' as const, value: category }, { field: 'tenantId', operator: '==' as const, value: tenantId }]
+      : [{ field: 'category', operator: '==' as const, value: category }];
+    return Nexus.adapter.query<ChangelogEntry>('mcc/changelog', {
+      where,
+      orderBy:    { field: 'appliedAt', direction: 'desc' },
+      limit,
+      startAfter: startAfter ?? undefined,
+    });
   }
 }
 

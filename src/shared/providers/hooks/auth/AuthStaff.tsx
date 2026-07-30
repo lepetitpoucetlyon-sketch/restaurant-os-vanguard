@@ -11,6 +11,17 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { hashPin } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 
+async function buildUserPatch(data: Partial<User>, userId: string): Promise<import('@/shared/nexus-contract').SovereignData> {
+    const patch: import('@/shared/nexus-contract').SovereignData = {};
+    for (const [key, value] of Object.entries(data)) {
+        if (value !== undefined) patch[key] = value as import('@/shared/nexus-contract').SovereignField;
+    }
+    if (typeof data.pin === 'string' && data.pin.trim()) {
+        patch.pinHash = await hashPin(data.pin.trim(), userId);
+    }
+    return patch;
+}
+
 function isNetworkError(err: unknown): boolean {
     return err instanceof Error && (
         err.message.includes('CORS') || err.message.includes('internal') || err.message.includes('network')
@@ -141,16 +152,7 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
     }, []);
 
     const updateUserStatus = useCallback(async (userId: string, data: Partial<User>) => {
-        const patch: import('@/shared/nexus-contract').SovereignData = {};
-
-        for (const [key, value] of Object.entries(data)) {
-            if (value !== undefined) patch[key] = value as import('@/shared/nexus-contract').SovereignField;
-        }
-
-        if (typeof data.pin === 'string' && data.pin.trim()) {
-            patch.pinHash = await hashPin(data.pin.trim(), userId);
-        }
-
+        const patch = await buildUserPatch(data, userId);
         await Nexus.adapter.update(`${Nexus.getTenantPath('users')}/${userId}`, patch);
 
         empireAudit.log({

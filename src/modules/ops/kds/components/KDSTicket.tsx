@@ -16,6 +16,10 @@ import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
 import { resolveStation } from "@modules/ops/kds";
+
+function isTicketWarning(status: string, elapsedMinutes: number): boolean {
+    return status !== 'ready' && elapsedMinutes >= 8 && elapsedMinutes < 15;
+}
 import {
     DndContext,
     closestCenter,
@@ -201,7 +205,7 @@ export function KDSTicket({
     // ── Derived urgency flags (unchanged logic) ───────────────────────────────
     const isReady   = ticket.status === 'ready';
     const isUrgent  = !isReady && elapsedMinutes >= 15;
-    const isWarning = !isReady && elapsedMinutes >= 8 && elapsedMinutes < 15;
+    const isWarning = isTicketWarning(ticket.status, elapsedMinutes);
 
     // ── kds-2 + not-2: Mark ticket ready + push notification to server ────────
     const handleMarkReady = useCallback(async () => {

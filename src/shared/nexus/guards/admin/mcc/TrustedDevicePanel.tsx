@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Shield, ShieldCheck, ShieldX, Smartphone, Plus, Trash2, Edit3, Wifi, WifiOff, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
+import { authedFetch } from '@/lib/client/authedFetch';
 import type { MccRole } from '@/lib/server/adminAuthGuard';
 import type { TrustedDevice } from '@/app/api/admin/fleet/trusted-devices/route';
 
@@ -47,18 +48,11 @@ export function TrustedDevicePanel() {
     const [editingDevice, setEditingDevice] = useState<TrustedDevice | null>(null);
     const [editRole, setEditRole] = useState<MccRole>('mcc_junior_dev');
 
-    const getToken = useCallback(async () =>
-        (currentUser as { getIdToken?: () => Promise<string> })?.getIdToken?.() ?? '',
-    [currentUser]);
-
     const loadDevices = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
-            const token = await getToken();
-            const res = await fetch('/api/admin/fleet/trusted-devices', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const res = await authedFetch('/api/admin/fleet/trusted-devices');
             if (!res.ok) throw new Error((await res.json()).error ?? 'Erreur serveur');
             const data = await res.json();
             setDevices(data.devices ?? []);
@@ -67,7 +61,7 @@ export function TrustedDevicePanel() {
         } finally {
             setLoading(false);
         }
-    }, [getToken]);
+    }, []);
 
     useEffect(() => {
         loadDevices();
@@ -88,10 +82,9 @@ export function TrustedDevicePanel() {
     const handleRegister = async () => {
         if (!myFingerprint || !registerName.trim()) return;
         try {
-            const token = await getToken();
-            const res = await fetch('/api/admin/fleet/trusted-devices', {
+            const res = await authedFetch('/api/admin/fleet/trusted-devices', {
                 method: 'POST',
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     fingerprint: myFingerprint,
                     name: registerName.trim(),
@@ -111,10 +104,8 @@ export function TrustedDevicePanel() {
 
     const handleRevoke = async (deviceId: string) => {
         try {
-            const token = await getToken();
-            const res = await fetch(`/api/admin/fleet/trusted-devices?deviceId=${deviceId}`, {
+            const res = await authedFetch(`/api/admin/fleet/trusted-devices?deviceId=${deviceId}`, {
                 method: 'DELETE',
-                headers: { Authorization: `Bearer ${token}` },
             });
             if (!res.ok) throw new Error((await res.json()).error ?? 'Erreur');
             await loadDevices();
@@ -126,10 +117,9 @@ export function TrustedDevicePanel() {
     const handleUpdateRole = async () => {
         if (!editingDevice) return;
         try {
-            const token = await getToken();
-            const res = await fetch('/api/admin/fleet/trusted-devices', {
+            const res = await authedFetch('/api/admin/fleet/trusted-devices', {
                 method: 'PATCH',
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ deviceId: editingDevice.deviceId, role: editRole }),
             });
             if (!res.ok) throw new Error((await res.json()).error ?? 'Erreur');

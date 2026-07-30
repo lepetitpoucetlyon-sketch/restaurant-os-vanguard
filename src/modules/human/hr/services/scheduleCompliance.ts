@@ -42,6 +42,32 @@ function hoursOf(shift: Shift): number {
     return Math.max(0, (end - start) / (1000 * 60 * 60));
 }
 
+function compareShifts(a: Shift, b: Shift): number {
+    return a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime);
+}
+
+function checkShiftCompliance(
+    shift: Shift,
+    prev: Shift | undefined,
+    hours: number,
+    config: HcrConfig,
+    violations: ComplianceViolation[],
+    userId: string,
+): void {
+    if (hours > config.maxDailyHours) {
+        violations.push({ ruleId: 'max_daily_hours', severity: 'blocking', shiftId: shift.id, userId, message: `Amplitude ${hours.toFixed(1)}h dépasse le max ${config.maxDailyHours}h` });
+    }
+    if (hours >= config.minBreakAfterHours) {
+        violations.push({ ruleId: 'break_required', severity: 'warning', shiftId: shift.id, userId, message: `Shift de ${hours.toFixed(1)}h : pause ${config.breakDurationMinutes}min obligatoire` });
+    }
+    if (prev) {
+        const restHours = (parseTime(shift.date, shift.startTime) - parseTime(prev.date, prev.endTime)) / (1000 * 60 * 60);
+        if (restHours < config.minRestBetweenShifts) {
+            violations.push({ ruleId: 'min_rest', severity: 'blocking', shiftId: shift.id, userId, message: `Repos ${restHours.toFixed(1)}h < minimum ${config.minRestBetweenShifts}h` });
+        }
+    }
+}
+
 function daysBetween(a: string, b: string): number {
     return Math.round(
         (new Date(b).getTime() - new Date(a).getTime()) / (1000 * 60 * 60 * 24)
@@ -62,48 +88,10 @@ export function checkCompliance(
     }
 
     for (const [userId, userShifts] of byUser) {
-        const sorted = [...userShifts].sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime));
+        const sorted = [...userShifts].sort(compareShifts);
 
         for (let i = 0; i < sorted.length; i++) {
-            const shift = sorted[i];
-            const hours = hoursOf(shift);
-
-            if (hours > config.maxDailyHours) {
-                violations.push({
-                    ruleId: 'max_daily_hours',
-                    severity: 'blocking',
-                    shiftId: shift.id,
-                    userId,
-                    message: `Amplitude ${hours.toFixed(1)}h dépasse le max ${config.maxDailyHours}h`,
-                });
-            }
-
-            if (hours >= config.minBreakAfterHours) {
-                violations.push({
-                    ruleId: 'break_required',
-                    severity: 'warning',
-                    shiftId: shift.id,
-                    userId,
-                    message: `Shift de ${hours.toFixed(1)}h : pause ${config.breakDurationMinutes}min obligatoire`,
-                });
-            }
-
-            if (i > 0) {
-                const prev = sorted[i - 1];
-                const prevEnd = parseTime(prev.date, prev.endTime);
-                const currStart = parseTime(shift.date, shift.startTime);
-                const restHours = (currStart - prevEnd) / (1000 * 60 * 60);
-
-                if (restHours < config.minRestBetweenShifts) {
-                    violations.push({
-                        ruleId: 'min_rest',
-                        severity: 'blocking',
-                        shiftId: shift.id,
-                        userId,
-                        message: `Repos ${restHours.toFixed(1)}h < minimum ${config.minRestBetweenShifts}h`,
-                    });
-                }
-            }
+            checkShiftCompliance(sorted[i], sorted[i - 1], hoursOf(sorted[i]), config, violations, userId);
         }
 
         // Consecutive days check

@@ -31,8 +31,8 @@ export function computePayroll(
 ): PayrollRow[] {
     return members.map(user => {
         const monthLogs = allLogs.filter(
-            l => ((l.userId && l.userId === user.id) || (l.performedBy && l.performedBy === user.id)) &&
-                 l.timestamp && l.timestamp.startsWith(month)
+            l => (l.userId === user.id || l.performedBy === user.id) &&
+                 l.timestamp.startsWith(month)
         );
         const sorted = [...monthLogs].sort(
             (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()

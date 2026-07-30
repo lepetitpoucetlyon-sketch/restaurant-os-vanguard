@@ -15,7 +15,7 @@ vi.mock('@/store/pillars', () => ({
     updateNexusNode: vi.fn((prev, update) => ({ ...prev, ...update }))
 }));
 
-vi.mock('@modules/compliance', () => ({
+vi.mock('@/modules/compliance/haccp/store/qualityAtoms', () => ({
     qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
 }));
 

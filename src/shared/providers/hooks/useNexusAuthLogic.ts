@@ -47,6 +47,26 @@ async function attemptDevLogin(
     return false;
 }
 
+async function attemptCloudLogin(
+    loginCallable: ((args: { userId: string; pin: string }) => Promise<{ data: unknown }>) | null | undefined,
+    loginWithFirebase: (token: string) => Promise<void>,
+    userId: string,
+    pin: string,
+    commitSession: () => void,
+): Promise<boolean | null> {
+    if (!loginCallable) return null;
+    try {
+        const result = await loginCallable({ userId, pin });
+        const data = result.data as { token: string };
+        if (data.token) {
+            await loginWithFirebase(data.token);
+            commitSession();
+            return true;
+        }
+    } catch {}
+    return null;
+}
+
 export function useNexusAuthLogic(
     activeTenantId: string | null
 ) {
@@ -67,17 +87,8 @@ export function useNexusAuthLogic(
             session.setIsTwoFactorVerified(true);
         };
         try {
-            if (session.loginWithPinCallable) {
-                try {
-                    const result = await session.loginWithPinCallable({ userId, pin });
-                    const data = result.data as { token: string };
-                    if (data.token) {
-                        await session.loginWithFirebase(data.token);
-                        commitSession();
-                        return true;
-                    }
-                } catch {}
-            }
+            const cloudResult = await attemptCloudLogin(session.loginWithPinCallable, session.loginWithFirebase, userId, pin, commitSession);
+            if (cloudResult !== null) return cloudResult;
             return await attemptDevLogin(staff.users, userId, pin, commitSession);
         } catch { return false; }
     }, [session, staff.users]);
@@ -138,7 +149,7 @@ export function useNexusAuthLogic(
             const id = Nexus.adapter.generateId(path);
             const now = new Date().toISOString();
             await Nexus.adapter.set(`${path}/${id}`, {
-                id, action, userId: currentUser.id, metadata: metadata || {},
+                id, action, userId: currentUser.id, metadata: metadata ?? {},
                 timestamp: now, createdAt: now, updatedAt: now
             } as import('@nexus/contracts').AuditLog); 
         }

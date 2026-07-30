@@ -63,10 +63,16 @@ export class NexusFleetEngine {
      * 🛡️ AUDIT COMPLIANCE BRIDGE
      * Triggers a cross-fleet check of NF525 ledger integrity.
      */
-    public async verifyFleetCompliance(tenantIds: string[]): Promise<boolean> {
+    public async verifyFleetCompliance(tenantIds: string[]): Promise<{
+        verified: boolean;
+        results: Array<{ tenantId: string; chainValid: boolean; lastSealAt: string | null }>;
+    }> {
         logger.info(`[NexusFleetEngine] Running cross-ledger verification for ${tenantIds.length} tenants...`);
-        // Logic for cross-tenant ledger hash validation
-        return true;
+
+        // TODO: implémenter la vérification réelle via FiscalEngine.verifyChain() par tenant
+        throw new Error(
+            `[NexusFleetEngine] verifyFleetCompliance non implémenté — ${tenantIds.length} tenants en attente`,
+        );
     }
 }
 

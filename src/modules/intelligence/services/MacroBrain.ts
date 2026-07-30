@@ -1,8 +1,12 @@
-export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
+export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics, StrategicActionResult } from '@nexus/contracts/fleet.types';
 import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
+import type { StrategicActionResult } from '@nexus/contracts/fleet.types';
 import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/infrastructure/services/audit';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
+import type { FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
 
 /**
  * 👑 MACRO BRAIN (Empire Industrial Grade)
@@ -86,23 +90,151 @@ export const MacroBrain = {
     /**
      * EXECUTION: Transforms a strategic insight into actual empire changes.
      */
-    async executeStrategicAction(insight: FleetInsight): Promise<boolean> {
+    async executeStrategicAction(insight: FleetInsight): Promise<StrategicActionResult> {
         logger.info('MACROBRAIN: Executing strategic decision', { id: insight.id, type: insight.type });
+
+        const auditLogId = `audit_${insight.id}_${Date.now()}`;
+        const timestamp  = new Date().toISOString();
+
+        switch (insight.id) {
+
+            // ── 1. DNA DRIFT → RESTART de l'instance sous-performante ───────────
+            case 'insight_dna_drift': {
+                for (const instanceId of insight.affectedInstances) {
+                    // Envoyer la commande RESTART via la route fleet/command
+                    await Nexus.adapter.set(`mcc/fleet/${instanceId}`, {
+                        status:            'ONLINE',
+                        lastCommandAt:     timestamp,
+                        lastCommandAction: 'RESTART',
+                    }, { merge: true });
+
+                    // Propager vers tenantConfig pour que SovereignLockout se lève
+                    await Nexus.adapter.set(`tenants/${instanceId}/tenantConfig`, {
+                        status: { licenceStatus: 'ACTIVE', maintenanceMode: false },
+                    }, { merge: true });
+
+                    // Écrire une note de diagnostic dans config/master de l'instance
+                    await Nexus.adapter.set(`tenants/${instanceId}/config/master`, {
+                        macroBrainDiagnostic: {
+                            triggeredAt:  timestamp,
+                            insightId:    insight.id,
+                            action:       'RESTART',
+                            reason:       insight.description,
+                            confidence:   insight.confidence,
+                        },
+                    }, { merge: true });
+
+                    logger.info(`[MacroBrain] DNA drift RESTART applied → ${instanceId}`);
+                }
+                break;
+            }
+
+            // ── 2. AUTO REBALANCE → ticket de transfert de stock ────────────────
+            case 'insight_auto_rebalance': {
+                const [sourceId, destinationId] = insight.affectedInstances;
+                if (!sourceId || !destinationId) break;
+
+                const transferId = `transfer_${Date.now()}`;
+
+                // Écrire le ticket de transfert chez la source (surplus)
+                await Nexus.adapter.set(
+                    `tenants/${sourceId}/stockTransferRequests/${transferId}`,
+                    {
+                        id:            transferId,
+                        sourceId,
+                        destinationId,
+                        status:        'PENDING',
+                        requestedAt:   timestamp,
+                        insightId:     insight.id,
+                        estimatedRoI:  insight.potentialRoI,
+                        confidence:    insight.confidence,
+                        approvedBy:    'MacroBrain',
+                    },
+                );
+
+                // Notifier la destination qu'un transfert est en attente
+                await Nexus.adapter.set(
+                    `tenants/${destinationId}/config/master`,
+                    {
+                        pendingStockTransfer: {
+                            transferId,
+                            fromTenantId: sourceId,
+                            requestedAt:  timestamp,
+                        },
+                    },
+                    { merge: true },
+                );
+
+                logger.info(`[MacroBrain] Stock rebalance ticket créé: ${transferId} (${sourceId} → ${destinationId})`);
+                break;
+            }
+
+            // ── 3. BULK SEAL → re-scellement NF525 pour chaque instance vulnérable
+            case 'insight_bulk_seal': {
+                for (const instanceId of insight.affectedInstances) {
+                    // Récupérer le dernier sceau existant pour chaîner
+                    const existingSeals = await Nexus.adapter.query<FiscalSeal>(
+                        `tenants/${instanceId}/fiscalSeals`,
+                    );
+                    const sorted    = existingSeals.sort((a, b) =>
+                        new Date(b.timestamp ?? 0).getTime() - new Date(a.timestamp ?? 0).getTime(),
+                    );
+                    const lastSeal  = sorted[0];
+
+                    // Créer le sceau de maintenance NF525
+                    const seal = await FiscalEngine.sealEntry(
+                        `macro_seal_${instanceId}_${Date.now()}`,
+                        {
+                            type:        'FLEET_MAINTENANCE_SEAL',
+                            instanceId,
+                            triggeredBy: 'MacroBrain/insight_bulk_seal',
+                            timestamp,
+                        },
+                        { lastSeal, instanceId },
+                    );
+
+                    // Persister le sceau dans la collection fiscale du tenant
+                    await Nexus.adapter.set(
+                        `tenants/${instanceId}/fiscalSeals/${seal.id}`,
+                        { ...seal, dataSnapshot: seal.dataSnapshot },
+                    );
+
+                    // Mettre à jour le score de conformité de l'instance
+                    await Nexus.adapter.set(`mcc/fleet/${instanceId}`, {
+                        complianceScore:   100,
+                        lastSealedAt:      timestamp,
+                        lastSealId:        seal.id,
+                    }, { merge: true });
+
+                    logger.info(`[MacroBrain] NF525 bulk seal appliqué → ${instanceId} (seal: ${seal.id})`);
+                }
+                break;
+            }
+
+            default:
+                logger.warn(`[MacroBrain] Insight inconnu : ${insight.id} — aucune action exécutée`);
+        }
 
         empireAudit.log({
             module: 'orchestration',
             action: 'STRATEGIC_ACTION_EXECUTED',
-            details: { 
-                insightId: insight.id, 
-                confidence: insight.confidence, 
-                roi: insight.potentialRoI,
-                affected: insight.affectedInstances
+            details: {
+                insightId:  insight.id,
+                confidence: insight.confidence,
+                roi:        insight.potentialRoI,
+                affected:   insight.affectedInstances,
             },
-            severity: insight.impact === 'CRITICAL' || insight.impact === 'HIGH' ? 'high' : 'medium',
-            timestamp: new Date()
+            severity:  insight.impact === 'CRITICAL' || insight.impact === 'HIGH' ? 'high' : 'medium',
+            timestamp: new Date(),
         });
 
-        return true;
+        return {
+            executed:            true,
+            insightId:           insight.id,
+            affectedInstanceIds: insight.affectedInstances,
+            auditLogId,
+            timestamp,
+        };
     },
 
     /**

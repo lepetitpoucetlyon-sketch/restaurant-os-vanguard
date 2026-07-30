@@ -79,6 +79,17 @@ function startAuthAwarePolling(
   };
 }
 
+function buildFleetStats(metrics: EmpireGlobalMetrics | null) {
+    return {
+        totalRevenue: metrics?.fleetTotalRevenue || 0,
+        averageHealth: metrics?.averageHealthScore || 0,
+        consolidated: {
+            totalLaborCost: metrics?.totalLaborCost || 0,
+            averageFoodCost: metrics?.averageFoodCost || 0
+        }
+    };
+}
+
 /**
  * 🏥 NexusFleetProvider - The Heart of the Fleet
  * Implements "Hybrid-Shadow" state and "Smart-Focus" polling.
@@ -205,14 +216,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         return () => { stopPolling(); authCleanup?.(); };
     }, [refreshFleet]);
 
-    const stats = useMemo(() => ({
-        totalRevenue: globalMetrics?.fleetTotalRevenue || 0,
-        averageHealth: globalMetrics?.averageHealthScore || 0,
-        consolidated: {
-            totalLaborCost: globalMetrics?.totalLaborCost || 0,
-            averageFoodCost: globalMetrics?.averageFoodCost || 0
-        }
-    }), [globalMetrics]);
+    const stats = useMemo(() => buildFleetStats(globalMetrics), [globalMetrics]);
 
     const contextValue: NexusFleetStateInternal = useMemo(() => ({
         instanceIds: liveFleet.map(f => f.id),

@@ -144,9 +144,17 @@ export class FinanceCore {
      * 🛡️ AUDIT LEDGER
      * Grade X: Vérification de l'intégrité de la chaîne fiscale.
      */
-    static async auditLedger(tenantId: string): Promise<boolean> {
+    static async auditLedger(tenantId: string): Promise<{
+        valid: boolean;
+        entriesChecked: number;
+        brokenLinks: Array<{ entryId: string; expected: string; actual: string }>;
+    }> {
         logger.info(`[FinanceCore] Auditing Ledger for ${tenantId}`);
-        return true;
+
+        // TODO: implémenter via FiscalEngine.verifyChain() sur les sceaux du tenant
+        throw new Error(
+            `[FinanceCore] auditLedger non implémenté pour tenant ${tenantId}`,
+        );
     }
 }
 

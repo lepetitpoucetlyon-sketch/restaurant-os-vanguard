@@ -15,9 +15,9 @@ import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
  */
 export async function POST(
     req: NextRequest,
-    { params }: { params: { provider: string } }
+    { params }: { params: Promise<{ provider: string }> }
 ) {
-    const providerId = params.provider;
+    const { provider: providerId } = await params;
 
     // Lire le body brut avant de parser — nécessaire pour la vérification HMAC
     const rawBody = await req.text();

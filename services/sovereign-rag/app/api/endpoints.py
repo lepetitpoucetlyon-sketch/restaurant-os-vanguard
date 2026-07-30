@@ -155,6 +155,17 @@ async def run_background_ingest_task(job_id: str, workspace_id: str, file_path: 
     async with lock:
         await engine.ingestion_manager.background_ingest(job_id, workspace_id, file_path)
 
+def _validate_upload_file(filename: str) -> str:
+    """Valide et retourne le nom sécurisé du fichier, ou lève HTTPException."""
+    safe_name = secure_filename(filename)
+    if not safe_name or safe_name in (".", ".."):
+        raise HTTPException(status_code=400, detail="Nom de fichier invalide.")
+    ext = os.path.splitext(safe_name)[1].lower()
+    if ext not in ALLOWED_UPLOAD_EXTENSIONS:
+        raise HTTPException(status_code=415, detail=f"Type de fichier non supporté: {ext or 'sans extension'}.")
+    return safe_name
+
+
 @router.post("/ingest")
 async def ingest_file(
     background_tasks: BackgroundTasks,
@@ -184,12 +195,7 @@ async def ingest_file(
     ws_upload_dir = f"uploads/{current.workspace_id}"
     os.makedirs(ws_upload_dir, exist_ok=True)
 
-    safe_name = secure_filename(file.filename)
-    if not safe_name or safe_name in (".", ".."):
-        raise HTTPException(status_code=400, detail="Nom de fichier invalide.")
-    ext = os.path.splitext(safe_name)[1].lower()
-    if ext not in ALLOWED_UPLOAD_EXTENSIONS:
-        raise HTTPException(status_code=415, detail=f"Type de fichier non supporté: {ext or 'sans extension'}.")
+    safe_name = _validate_upload_file(file.filename)
 
     file_path = os.path.join(ws_upload_dir, safe_name)
     total_size = 0

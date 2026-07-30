@@ -4,6 +4,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
 
+function isOutOfRange(sensor: { minThreshold?: number; maxThreshold?: number }, value: number): boolean {
+    return (sensor.minThreshold !== undefined && value < sensor.minThreshold) ||
+           (sensor.maxThreshold !== undefined && value > sensor.maxThreshold);
+}
+
 /**
  * POST /api/connectors/iot/webhook/{provider}
  * Reçoit les relevés capteurs HACCP depuis les providers IoT (Lacroix, Monnit, webhook générique).
@@ -13,9 +18,9 @@ import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
  */
 export async function POST(
     req: NextRequest,
-    { params }: { params: { provider: string } }
+    { params }: { params: Promise<{ provider: string }> }
 ) {
-    const providerId = params.provider;
+    const { provider: providerId } = await params;
 
     const rawBody = await req.text();
     let payload: unknown;
@@ -81,11 +86,7 @@ export async function POST(
         ) as { minThreshold?: number; maxThreshold?: number; zoneName?: string } | null;
 
         if (sensor) {
-            const outOfRange =
-                (sensor.minThreshold !== undefined && reading.value < sensor.minThreshold) ||
-                (sensor.maxThreshold !== undefined && reading.value > sensor.maxThreshold);
-
-            if (outOfRange) {
+            if (isOutOfRange(sensor, reading.value)) {
                 const { HACCPLogService } = await import('@/modules/compliance/haccp/HACCPLogService');
                 await HACCPLogService.recordNonConformity({
                     tenantId,

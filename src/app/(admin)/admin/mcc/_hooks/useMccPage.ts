@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProvisioningEngine } from '@domain/services/ProvisioningEngine';
 import { useNexusFleet } from '@/modules/intelligence';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
+import { authedFetch } from '@/lib/client/authedFetch';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 
 export const PROV_STEPS = [
@@ -17,9 +19,25 @@ export function useMccPage() {
     const { instances, globalMetrics, isLoading, refreshFleet } = useNexusFleet();
     const { currentUser } = useAuth();
 
+    const searchParams = useSearchParams();
+    const router       = useRouter();
+    const pathname     = usePathname();
+
+    const VALID_TABS = ['fleet', 'compliance', 'intelligence', 'treasury', 'patchcenter', 'plugins'] as const;
+    type TabId = typeof VALID_TABS[number];
+    const rawTab    = searchParams.get('tab') ?? '';
+    const initialTab: TabId = (VALID_TABS as readonly string[]).includes(rawTab) ? rawTab as TabId : 'fleet';
+
     const [health, setHealth] = useState<MCCHealthStatus | null>(null);
     const [showCloneModal, setShowCloneModal] = useState(false);
-    const [activeTab, setActiveTab] = useState<'fleet' | 'compliance' | 'intelligence' | 'treasury' | 'patchcenter' | 'plugins'>('fleet');
+    const [activeTab, setActiveTabState] = useState<TabId>(initialTab);
+
+    const setActiveTab = useCallback((tab: TabId) => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('tab', tab);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }, [router, pathname, searchParams]);
     const [newCloneName, setNewCloneName] = useState('');
     const [newCloneKey, setNewCloneKey] = useState('');
     const [newCloneEmail, setNewCloneEmail] = useState('');
@@ -28,7 +46,7 @@ export function useMccPage() {
     const [provisionStep, setProvisionStep] = useState(0);
 
     useEffect(() => {
-        fetch('/api/admin/mcc/health')
+        authedFetch('/api/admin/mcc/health')
             .then(r => r.ok ? r.json() as Promise<MCCHealthStatus> : null)
             .then(data => { if (data) setHealth(data); })
             .catch(() => {});

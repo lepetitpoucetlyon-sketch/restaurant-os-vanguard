@@ -12,6 +12,31 @@ import { canDoAtom } from '@shared/nexus/state/SovereignGenome';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { useAtomValue } from 'jotai';
 
+function applyNodeMutation<T extends { id: string }>(
+    prev: import('@/store/base').NexusNode<T>,
+    action: 'SET' | 'UPDATE' | 'DELETE',
+    id: string,
+    payload: Partial<T> | undefined,
+    meta: { mutationId: string; timestamp: string; moduleId: string }
+): import('@/store/base').NexusNode<T> {
+    let newData = [...prev.data];
+    if (action === 'SET') {
+        const existingIndex = newData.findIndex((item: T) => item.id === id);
+        const newItem = { ...(payload as T), id, _mutationMetadata: meta };
+        if (existingIndex !== -1) {
+            logger.warn(`[FORGE v3] IDEMPOTENCE: Resource ${id} already exists in ${meta.moduleId}. Merging instead of adding.`);
+            newData[existingIndex] = { ...newData[existingIndex], ...newItem };
+        } else {
+            newData = [newItem, ...newData];
+        }
+    } else if (action === 'UPDATE') {
+        newData = newData.map((item: T) => item.id === id ? { ...item, ...(payload as Partial<T>) } : item);
+    } else if (action === 'DELETE') {
+        newData = newData.filter((item: T) => item.id !== id);
+    }
+    return updateNexusNode(prev, { data: newData });
+}
+
 /**
  * 🔨 useNexusMutation - The Sovereign Forge v3 (Génétique)
  * Orchestre les mutations atomiques avec validation génomique (Zod)
@@ -59,33 +84,7 @@ export function useNexusMutation<T extends { id: string } & import("@shared/nexu
 
         try {
             // 2. ATOMIC LOCAL UPDATE
-            setNode((prev: NexusNode<T>) => {
-                let newData = [...prev.data];
-
-                if (action === 'SET') {
-                    const existingIndex = newData.findIndex((item: T) => item.id === id);
-                    const newItem = { 
-                        ...(payload as T), 
-                        id, 
-                        _mutationMetadata: { mutationId, timestamp, moduleId } 
-                    };
-                    
-                    if (existingIndex !== -1) {
-                        logger.warn(`[FORGE v3] IDEMPOTENCE: Resource ${id} already exists in ${moduleId}:${key}. Merging instead of adding.`);
-                        newData[existingIndex] = { ...newData[existingIndex], ...newItem };
-                    } else {
-                        newData = [newItem, ...newData];
-                    }
-                } else if (action === 'UPDATE') {
-                    newData = newData.map((item: T) => 
-                        item.id === id ? { ...item, ...(payload as Partial<T>) } : item
-                    );
-                } else if (action === 'DELETE') {
-                    newData = newData.filter((item: T) => item.id !== id);
-                }
-
-                return updateNexusNode(prev, { data: newData });
-            });
+            setNode((prev: NexusNode<T>) => applyNodeMutation(prev, action, id, payload, { mutationId, timestamp, moduleId }));
 
             // 3. BROADCAST PULSE
             if (!options.silent) {

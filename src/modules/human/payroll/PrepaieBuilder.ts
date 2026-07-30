@@ -16,6 +16,27 @@ import type { User } from '@nexus/contracts';
 import { TipDistributionService } from '@/modules/human/hr/services/tipDistribution';
 
 const MU_TO_EUR = 1_000_000;
+
+function mergeBreaks(
+    breaks: Array<{ start: number; end: number }>,
+): Array<{ start: number; end: number }> {
+    const sorted = [...breaks].sort((a, b) => a.start - b.start);
+    const merged: Array<{ start: number; end: number }> = [];
+    for (const b of sorted) {
+        const last = merged[merged.length - 1];
+        if (last && b.start <= last.end) {
+            last.end = Math.max(last.end, b.end);
+        } else {
+            merged.push({ ...b });
+        }
+    }
+    return merged;
+}
+
+function splitName(fullName: string | undefined): { nom: string; prenom: string } {
+    const parts = (fullName ?? '').split(' ');
+    return { nom: parts[0] ?? '', prenom: parts.slice(1).join(' ') };
+}
 const NORMAL_WEEKLY_HOURS = 35;
 const OT_25_BAND_HOURS = 8;    // 8 premières heures sup (36e–43e) à +25%
 const NIGHT_START_HOUR = 21;   // majoration nuit à partir de 21h00
@@ -86,17 +107,7 @@ function analyseSession(
     holidayMinutes: number;
     mealCount: number;
 } {
-    // Fusionner les pauses chevauchantes
-    const sortedBreaks = [...breaks].sort((a, b) => a.start - b.start);
-    const merged: Array<{ start: number; end: number }> = [];
-    for (const b of sortedBreaks) {
-        const last = merged[merged.length - 1];
-        if (last && b.start <= last.end) {
-            last.end = Math.max(last.end, b.end);
-        } else {
-            merged.push({ ...b });
-        }
-    }
+    const merged = mergeBreaks(breaks);
 
     // Découper la session en segments hors pause, par minute
     let netMinutes = 0;
@@ -130,7 +141,7 @@ function analyseSession(
     }
 
     // 1 repas pour toute session ≥ 5h de travail effectif (convention HCR)
-    mealCount = netMinutes >= 300 ? 1 : 0;
+    mealCount = Number(netMinutes >= 300);
 
     return { netMinutes, nightMinutes, sundayMinutes, holidayMinutes, mealCount };
 }
@@ -297,13 +308,13 @@ export const PrepaieBuilder = {
             const absDays = extractLeaveDays(leavesRaw, user.id, ['sick', 'unpaid'], startTs, endTs);
 
             const grossEur = computeGross(normal, ot25, ot50, hourlyRateEur);
-            const nameParts = (user.name ?? '').split(' ');
+            const { nom, prenom } = splitName(user.name as string | undefined);
 
             rows.push({
                 userId: user.id,
                 matricule: user.id.slice(-8).toUpperCase(),
-                nom: nameParts[0] ?? '',
-                prenom: nameParts.slice(1).join(' ') || '',
+                nom,
+                prenom,
                 email: (user as unknown as Record<string, string>).email,
                 contrat: (user as unknown as Record<string, string>).contractType ?? 'cdi',
                 dateEntree: (user as unknown as Record<string, string>).hireDate,

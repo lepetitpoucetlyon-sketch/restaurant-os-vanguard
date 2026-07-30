@@ -103,7 +103,7 @@ export class EscPosBuilder {
       this.text(padR(`Règlement: ${ticket.paymentMethod}`, lw));
       if (ticket.cashGiven !== undefined) {
         this.text(`${padR('Remis', lw - PRICE_W)}${padL(fmtEur(ticket.cashGiven), PRICE_W)}`);
-        const change = (ticket.cashGiven ?? 0) - ticket.totalInMicrounits;
+        const change = ticket.cashGiven - ticket.totalInMicrounits;
         this.text(`${padR('Monnaie', lw - PRICE_W)}${padL(fmtEur(change), PRICE_W)}`);
       }
     }
@@ -113,24 +113,27 @@ export class EscPosBuilder {
     this.text('Merci de votre visite !');
     if (ticket.footerNote) this.text(ticket.footerNote);
 
-    if (ticket.nf525Hash || ticket.siret) {
-      this.text(sep('-', lw));
-      if (ticket.siret) this.text(`SIRET: ${ticket.siret}`);
-      this.text('--- CERTIFICATION NF525 ---');
-      this.text('Restaurant OS Core v1.0.0');
-      if (ticket.certifiedAt) this.text(`Date: ${ticket.certifiedAt}`);
-      if (ticket.nf525Hash) {
-        this.text(`Signature:`);
-        for (let i = 0; i < ticket.nf525Hash.length; i += lw) {
-          this.text(ticket.nf525Hash.substring(i, i + lw));
-        }
-      }
-    }
+    this.appendNf525Footer(ticket, lw);
 
     this.push(CMD.FEED_5);
     if (this.hasCutter) this.push(CMD.CUT_PARTIAL);
 
     return new Uint8Array(this.bytes);
+  }
+
+  private appendNf525Footer(ticket: ReceiptTicket, lw: number): void {
+    if (!ticket.nf525Hash && !ticket.siret) return;
+    this.text(sep('-', lw));
+    if (ticket.siret) this.text(`SIRET: ${ticket.siret}`);
+    this.text('--- CERTIFICATION NF525 ---');
+    this.text('Restaurant OS Core v1.0.0');
+    if (ticket.certifiedAt) this.text(`Date: ${ticket.certifiedAt}`);
+    if (ticket.nf525Hash) {
+      this.text(`Signature:`);
+      for (let i = 0; i < ticket.nf525Hash.length; i += lw) {
+        this.text(ticket.nf525Hash.substring(i, i + lw));
+      }
+    }
   }
 
   buildKitchen(ticket: KitchenTicket): Uint8Array {

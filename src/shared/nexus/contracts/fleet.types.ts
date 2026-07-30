@@ -89,6 +89,14 @@ export interface FleetInsight {
     canAutoExecute: boolean;
 }
 
+export interface StrategicActionResult {
+    executed: boolean;
+    insightId: string;
+    affectedInstanceIds: string[];
+    auditLogId: string;
+    timestamp: string;
+}
+
 export interface ConsolidatedMetrics {
     totalRevenue: number;
     activeUsers: number;

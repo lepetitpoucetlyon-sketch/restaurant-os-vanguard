@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { useRecipes } from "@/modules/ops/providers";
 import { useKDSController } from "@modules/ops/kds";
-import { useNexusOps } from "@modules/ops";
+import { useNexusOps } from "../../providers/NexusOpsProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
@@ -22,9 +22,9 @@ import { KDSTicket, hasAllergens } from "./KDSTicket";
 import { KDSEmptyState } from "./KDSEmptyState";
 
 // UI Components (Modals)
-import { ModificationAlertsPanel } from "@modules/ops";
-import { RecipeDetailDialog } from "@modules/ops";
-import { PlateAuditWizard } from "@modules/ops";
+import { ModificationAlertsPanel } from "../../kitchen/components/ModificationAlerts";
+import { RecipeDetailDialog } from "../../kitchen/components/RecipeDetailDialog";
+import { PlateAuditWizard } from "../../kitchen/components/PlateAuditWizard";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

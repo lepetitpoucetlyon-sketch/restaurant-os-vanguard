@@ -76,6 +76,16 @@ export interface NexusFiscalState {
     };
 }
 
+function computeRevExpTotals(entries: JournalEntry[]): { totalRevenueMu: number; totalExpensesMu: number } {
+    let rev = 0, exp = 0;
+    for (const entry of entries) {
+        const amount = Number(entry.amountInMicrounits || 0);
+        if (entry.type === 'revenue') rev = SovereignMath.add(rev, amount);
+        else if (entry.type === 'expense') exp = SovereignMath.add(exp, amount);
+    }
+    return { totalRevenueMu: rev, totalExpensesMu: exp };
+}
+
 const NexusFiscalContext = createContext<NexusFiscalState | undefined>(undefined);
 
 export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -98,15 +108,10 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     }, [journalEntries.data]);
 
     // Produits & charges séparés (pour le résumé P&L de la trésorerie).
-    const { totalRevenueMu, totalExpensesMu } = useMemo(() => {
-        let rev = 0, exp = 0;
-        for (const entry of journalEntries.data) {
-            const amount = Number(entry.amountInMicrounits || 0);
-            if (entry.type === 'revenue') rev = SovereignMath.add(rev, amount);
-            else if (entry.type === 'expense') exp = SovereignMath.add(exp, amount);
-        }
-        return { totalRevenueMu: rev, totalExpensesMu: exp };
-    }, [journalEntries.data]);
+    const { totalRevenueMu, totalExpensesMu } = useMemo(
+        () => computeRevExpTotals(journalEntries.data),
+        [journalEntries.data]
+    );
 
     const generateBusinessSignature = (data: SovereignSignable): string => {
         const payload = `${data.amountInMicrounits}|${data.category}|${data.merchantName || 'NONE'}|${data.date}`;

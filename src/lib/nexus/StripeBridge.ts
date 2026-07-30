@@ -17,6 +17,7 @@ export const SOVEREIGN_PRICING = {
 } as const;
 
 import { logger } from '@/lib/logger';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 export type CapabilityId = keyof typeof SOVEREIGN_PRICING.capabilities;
 
@@ -42,16 +43,9 @@ export const calculateEngineMRR = (
 export const redirectToStripePortal = async (tenantId: string, returnUrl: string) => {
   logger.info(`[Empire Economy] Fetching Stripe portal session for ${tenantId}…`);
 
-  const authHeader = typeof window !== 'undefined'
-    ? (window as Window & { __nexusAuthToken?: string }).__nexusAuthToken
-    : undefined;
-
-  const res = await fetch('/api/admin/fleet/billing/portal-session', {
+  const res = await authedFetch('/api/admin/fleet/billing/portal-session', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(authHeader ? { Authorization: `Bearer ${authHeader}` } : {}),
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ tenantId, returnUrl }),
   });
 

@@ -96,14 +96,17 @@ export function SupportDraftsPanel() {
     }
   };
 
+  const clearEdit = (ticketId: string) =>
+    setEdits(prev => { const next = { ...prev }; delete next[ticketId]; return next; });
+
   const handleApprove = async (ticket: SupportTicket) => {
     const ok = await postAction(ticket, { action: 'approve', applyPatch: !!applyPatch[ticket.id] });
-    if (ok) { toast.success(`Ticket ${ticket.id.slice(0, 8)}… approuvé`); load(); }
+    if (ok) { clearEdit(ticket.id); toast.success(`Ticket ${ticket.id.slice(0, 8)}… approuvé`); load(); }
   };
 
   const handleReject = async (ticket: SupportTicket) => {
     const ok = await postAction(ticket, { action: 'reject' });
-    if (ok) { toast.info(`Ticket ${ticket.id.slice(0, 8)}… refusé`); load(); }
+    if (ok) { clearEdit(ticket.id); toast.info(`Ticket ${ticket.id.slice(0, 8)}… refusé`); load(); }
   };
 
   const handleCorrect = async (ticket: SupportTicket) => {
@@ -131,7 +134,7 @@ export function SupportDraftsPanel() {
     };
 
     const ok = await postAction(ticket, { action: 'correct', correctedDraft });
-    if (ok) { toast.success('Brouillon corrigé'); load(); }
+    if (ok) { clearEdit(ticket.id); toast.success('Brouillon corrigé'); load(); }
   };
 
   const draftReadyCount = tickets.filter(t => t.status === 'draft_ready').length;

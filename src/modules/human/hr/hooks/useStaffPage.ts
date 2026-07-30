@@ -15,13 +15,21 @@ import { computePayroll, type StaffTab, type StaffDocument } from "@/app/(client
 
 const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "leaves", "recruitment"];
 
+function computeInitialTab(tabParam: StaffTab | null): StaffTab {
+    return tabParam && VALID_STAFF_TABS.includes(tabParam) ? tabParam : "team";
+}
+
+function buildStaffDoc(userId: string | null, form: { name: string; url: string } | null): { doc: StaffDocument } | { error: string } | null {
+    if (!userId || !form) return null;
+    if (!form.name.trim() || !form.url.trim()) return { error: "Nom et URL requis." };
+    return { doc: { id: `${userId}_${Date.now()}`, userId, name: form.name.trim(), url: form.url.trim(), uploadedAt: new Date().toISOString() } };
+}
+
 export function useStaffPage() {
     const { tenantId } = useTenant();
     const searchParams = useSearchParams();
     const tabParam = searchParams.get("tab") as StaffTab | null;
-    const [activeTab, setActiveTab] = useState<StaffTab>(
-        tabParam && VALID_STAFF_TABS.includes(tabParam) ? tabParam : "team"
-    );
+    const [activeTab, setActiveTab] = useState<StaffTab>(computeInitialTab(tabParam));
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
@@ -74,9 +82,10 @@ export function useStaffPage() {
     };
 
     const handleAddDoc = async () => {
-        if (!selectedSkillUser || !docForm) return;
-        if (!docForm.name.trim() || !docForm.url.trim()) { toast.error("Nom et URL requis."); return; }
-        const doc: StaffDocument = { id: `${selectedSkillUser.id}_${Date.now()}`, userId: selectedSkillUser.id, name: docForm.name.trim(), url: docForm.url.trim(), uploadedAt: new Date().toISOString() };
+        const result = buildStaffDoc(selectedSkillUser?.id ?? null, docForm);
+        if (!result) return;
+        if ('error' in result) { toast.error(result.error); return; }
+        const { doc } = result;
         try {
             await Nexus.adapter.set(`staffDocuments/${doc.id}`, doc);
             setStaffDocs(prev => [doc, ...prev]);
