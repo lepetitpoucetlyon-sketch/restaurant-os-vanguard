@@ -89,15 +89,26 @@ export function useAccounting() {
             let running = 0;
             const movementsWithBalance = movements.map(m => {
                 running += (m.debitInCents || 0) - (m.creditInCents || 0);
-                return { ...m, runningBalanceInCents: running };
+                return {
+                    ...m,
+                    runningBalanceInCents: running,
+                    runningBalanceInMicrounits: running * 10_000,
+                    debitInMicrounits: (m.debitInCents || 0) * 10_000,
+                    creditInMicrounits: (m.creditInCents || 0) * 10_000,
+                    amountInMicrounits: (m.amountInCents || 0) * 10_000,
+                };
             });
             const debitTotal = movements.reduce((s, m) => s + (m.debitInCents || 0), 0);
             const creditTotal = movements.reduce((s, m) => s + (m.creditInCents || 0), 0);
+            const balance = account.balanceInCents ?? (debitTotal - creditTotal);
             return {
                 ...account,
-                balanceInCents: account.balanceInCents ?? (debitTotal - creditTotal),
+                balanceInCents: balance,
+                balanceInMicrounits: balance * 10_000,
                 debitTotalInCents: debitTotal,
+                debitTotalInMicrounits: debitTotal * 10_000,
                 creditTotalInCents: creditTotal,
+                creditTotalInMicrounits: creditTotal * 10_000,
                 movements: movementsWithBalance,
             };
         });
@@ -109,20 +120,30 @@ export function useAccounting() {
         const toCents = (µ: number) => Math.round(µ / 10_000);
         const revenues = journalEntries
             .filter(e => e.type === 'revenue')
-            .map(e => ({ category: e.type ?? 'revenue', accountCode: e.pieceNumber, accountName: e.description, amountInCents: buildEntryAmountInCents(e, 'credit', toCents) }));
+            .map(e => {
+                const c = buildEntryAmountInCents(e, 'credit', toCents);
+                return { category: e.type ?? 'revenue', accountCode: e.pieceNumber, accountName: e.description, amountInCents: c, amountInMicrounits: c * 10_000 };
+            });
         const expenses = journalEntries
             .filter(e => e.type === 'expense')
-            .map(e => ({ category: e.type ?? 'expense', accountCode: e.pieceNumber, accountName: e.description, amountInCents: buildEntryAmountInCents(e, 'debit', toCents) }));
+            .map(e => {
+                const c = buildEntryAmountInCents(e, 'debit', toCents);
+                return { category: e.type ?? 'expense', accountCode: e.pieceNumber, accountName: e.description, amountInCents: c, amountInMicrounits: c * 10_000 };
+            });
         const totalRevenueInCents = revenues.reduce((s, r) => s + r.amountInCents, 0);
         const totalExpensesInCents = expenses.reduce((s, e) => s + e.amountInCents, 0);
+        const netResultInCents = totalRevenueInCents - totalExpensesInCents;
         return {
             periodId,
             periodName: 'Période courante',
             revenues,
             expenses,
             totalRevenueInCents,
+            totalRevenueInMicrounits: totalRevenueInCents * 10_000,
             totalExpensesInCents,
-            netResultInCents: totalRevenueInCents - totalExpensesInCents,
+            totalExpensesInMicrounits: totalExpensesInCents * 10_000,
+            netResultInCents,
+            netResultInMicrounits: netResultInCents * 10_000,
             generatedAt: new Date().toISOString(),
         };
     }, [journalEntries]);
@@ -131,7 +152,10 @@ export function useAccounting() {
         const toLine = (type: string, label: string) =>
             (accounts as Account[])
                 .filter(a => a.type === type)
-                .map(a => ({ category: label, accountCode: a.code, accountName: a.name, amountInCents: a.balanceInCents ?? 0 }));
+                .map(a => {
+                    const c = a.balanceInCents ?? 0;
+                    return { category: label, accountCode: a.code, accountName: a.name, amountInCents: c, amountInMicrounits: c * 10_000 };
+                });
         const assets = toLine('asset', 'Actif');
         const liabilities = toLine('liability', 'Passif');
         const equity = toLine('equity', 'Capitaux propres');
@@ -144,20 +168,30 @@ export function useAccounting() {
             liabilities,
             equity,
             totalAssetsInCents,
+            totalAssetsInMicrounits: totalAssetsInCents * 10_000,
             totalLiabilitiesInCents,
+            totalLiabilitiesInMicrounits: totalLiabilitiesInCents * 10_000,
             totalEquityInCents,
+            totalEquityInMicrounits: totalEquityInCents * 10_000,
             isBalanced: Math.abs(totalAssetsInCents - (totalLiabilitiesInCents + totalEquityInCents)) < 1,
             generatedAt: new Date().toISOString(),
         };
     }, [accounts]);
 
-    // Alias InCents pour compatibilité des vues transplantées
-    const metricsWithCents = useMemo(() => ({
-        ...metrics,
-        netProfitInCents: Math.round(metrics.netProfit / 10_000),
-        totalRevenueInCents: Math.round(metrics.totalRevenue / 10_000),
-        totalExpensesInCents: Math.round(metrics.totalExpenses / 10_000),
-    }), [metrics]);
+    const metricsWithCents = useMemo(() => {
+        const netProfitMu    = Math.round(metrics.netProfit);
+        const totalRevMu     = Math.round(metrics.totalRevenue);
+        const totalExpMu     = Math.round(metrics.totalExpenses);
+        return {
+            ...metrics,
+            netProfitInCents:       Math.round(netProfitMu  / 10_000),
+            totalRevenueInCents:    Math.round(totalRevMu   / 10_000),
+            totalExpensesInCents:   Math.round(totalExpMu   / 10_000),
+            netProfitInMicrounits:  netProfitMu,
+            totalRevenueInMicrounits: totalRevMu,
+            totalExpensesInMicrounits: totalExpMu,
+        };
+    }, [metrics]);
 
     return {
         // State

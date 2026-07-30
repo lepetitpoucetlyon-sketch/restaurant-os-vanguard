@@ -89,7 +89,9 @@ export class SovereignLedger {
 
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
             id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
-            date, accountName: acc, type, amountInCents: params.amountInCents,
+            date, accountName: acc, type,
+            amountInCents: params.amountInCents,
+            amountInMicrounits: params.amountInCents * 10_000,
             referenceId: params.referenceId, description: params.description, scelledAt: date
         });
 

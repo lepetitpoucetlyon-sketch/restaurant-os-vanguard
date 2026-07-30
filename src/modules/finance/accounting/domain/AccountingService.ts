@@ -70,11 +70,15 @@ export class AccountingService {
                     description: expenseData.description,
                     side: 'debit',
                     amountInCents: expenseData.amountInCents,
+                    amountInMicrounits: expenseData.amountInCents * 10_000,
                     date: timestamp.toISOString(),
                     pieceNumber: `EXP-${timestamp.getTime()}`,
                     debitInCents: expenseData.amountInCents,
+                    debitInMicrounits: expenseData.amountInCents * 10_000,
                     creditInCents: 0,
-                    runningBalanceInCents: 0
+                    creditInMicrounits: 0,
+                    runningBalanceInCents: 0,
+                    runningBalanceInMicrounits: 0,
                 },
                 {
                     accountId: 'acc_421',
@@ -83,11 +87,15 @@ export class AccountingService {
                     description: 'Remboursement à effectuer',
                     side: 'credit',
                     amountInCents: expenseData.amountInCents,
+                    amountInMicrounits: expenseData.amountInCents * 10_000,
                     date: timestamp.toISOString(),
                     pieceNumber: `EXP-${timestamp.getTime()}`,
                     debitInCents: 0,
+                    debitInMicrounits: 0,
                     creditInCents: expenseData.amountInCents,
-                    runningBalanceInCents: 0
+                    creditInMicrounits: expenseData.amountInCents * 10_000,
+                    runningBalanceInCents: 0,
+                    runningBalanceInMicrounits: 0,
                 }
             ]
         };

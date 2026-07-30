@@ -3,9 +3,12 @@
 import { useState, useMemo } from "react";
 import { CheckCircle2, Clock, Eye } from "lucide-react";
 import { Button } from "@ui/button";
-import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 import { useAccounting } from "../../../hooks/useAccounting";
+import { formatMu } from "../../financeUtils";
+
+const fmu = (mu?: number | null, fallbackCents = 0) =>
+    formatMu(mu ?? fallbackCents * 10_000);
 
 export function JournalEntriesView() {
     const { journalEntries, validateJournalEntry } = useAccounting();
@@ -38,13 +41,13 @@ export function JournalEntriesView() {
                     <div className="text-right">
                         <p className="text-[9px] text-text-muted uppercase">Total Débits</p>
                         <p className="text-lg font-black text-success font-mono">
-                            {formatCurrency(filtered.reduce((acc, e) => acc + e.lines.filter(l => l.side === 'debit').reduce((a, l) => a + l.amountInCents, 0), 0))}
+                            {fmu(null, filtered.reduce((acc, e) => acc + e.lines.filter(l => l.side === 'debit').reduce((a, l) => a + (l.amountInCents ?? 0), 0), 0))}
                         </p>
                     </div>
                     <div className="text-right">
                         <p className="text-[9px] text-text-muted uppercase">Total Crédits</p>
                         <p className="text-lg font-black text-error font-mono">
-                            {formatCurrency(filtered.reduce((acc, e) => acc + e.lines.filter(l => l.side === 'credit').reduce((a, l) => a + l.amountInCents, 0), 0))}
+                            {fmu(null, filtered.reduce((acc, e) => acc + e.lines.filter(l => l.side === 'credit').reduce((a, l) => a + (l.amountInCents ?? 0), 0), 0))}
                         </p>
                     </div>
                 </div>
@@ -73,7 +76,7 @@ export function JournalEntriesView() {
                                     <td className="py-4 px-6"><span className="font-mono text-xs font-bold text-accent bg-accent/5 px-2 py-1 rounded">{entry.pieceNumber}</span></td>
                                     <td className="py-4 px-6 text-sm font-medium text-text-primary max-w-xs truncate">{entry.description}</td>
                                     <td className="py-4 px-6 text-center text-sm text-text-muted">{entry.lines.length}</td>
-                                    <td className="py-4 px-6 text-right font-mono text-sm font-black">{formatCurrency(entry.lines.filter(l => l.side === 'debit').reduce((a, l) => a + l.amountInCents, 0))}</td>
+                                    <td className="py-4 px-6 text-right font-mono text-sm font-black">{fmu(null, entry.lines.filter(l => l.side === 'debit').reduce((a, l) => a + (l.amountInCents ?? 0), 0))}</td>
                                     <td className="py-4 px-6 text-center">
                                         {entry.isValidated ? (
                                             <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase text-success bg-success/5 px-2 py-1 rounded-full">

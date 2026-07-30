@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { FileText } from "lucide-react";
-import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 import { useAccounting } from "../../../hooks/useAccounting";
+import { formatMu } from "../../financeUtils";
+
+const fmu = (mu?: number | null, fallbackCents = 0) =>
+    formatMu(mu ?? fallbackCents * 10_000);
 
 export function GeneralLedgerView() {
     const { ledger } = useAccounting();
@@ -35,8 +38,8 @@ export function GeneralLedgerView() {
                                 <span className="font-mono text-xs font-bold text-accent">{account.code}</span>
                                 <p className="text-sm font-medium text-text-primary truncate max-w-[180px]">{account.name}</p>
                             </div>
-                             <span className={cn("text-sm font-black font-mono", account.balanceInCents >= 0 ? "text-success" : "text-error")}>
-                                {formatCurrency(account.balanceInCents)}
+                             <span className={cn("text-sm font-black font-mono", (account.balanceInMicrounits ?? account.balanceInCents) >= 0 ? "text-success" : "text-error")}>
+                                {fmu(account.balanceInMicrounits, account.balanceInCents)}
                             </span>
                         </button>
                     ))}
@@ -55,8 +58,8 @@ export function GeneralLedgerView() {
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[10px] text-text-muted uppercase tracking-widest">Solde</p>
-                                     <p className={cn("text-2xl font-black font-mono", selectedAccount.balanceInCents >= 0 ? "text-success" : "text-error")}>
-                                        {formatCurrency(selectedAccount.balanceInCents)}
+                                     <p className={cn("text-2xl font-black font-mono", (selectedAccount.balanceInMicrounits ?? selectedAccount.balanceInCents) >= 0 ? "text-success" : "text-error")}>
+                                        {fmu(selectedAccount.balanceInMicrounits, selectedAccount.balanceInCents)}
                                     </p>
                                 </div>
                             </div>
@@ -79,9 +82,9 @@ export function GeneralLedgerView() {
                                             <td className="py-3 text-sm text-text-muted">{new Date(mv.date).toLocaleDateString('fr-FR')}</td>
                                             <td className="py-3"><span className="font-mono text-xs text-accent bg-accent/5 px-2 py-0.5 rounded">{mv.pieceNumber}</span></td>
                                             <td className="py-3 text-sm text-text-primary">{mv.description}</td>
-                                             <td className="py-3 text-right font-mono text-sm text-success">{mv.debitInCents > 0 ? formatCurrency(mv.debitInCents) : '-'}</td>
-                                            <td className="py-3 text-right font-mono text-sm text-error">{mv.creditInCents > 0 ? formatCurrency(mv.creditInCents) : '-'}</td>
-                                            <td className="py-3 text-right font-mono text-sm font-bold">{formatCurrency(mv.runningBalanceInCents)}</td>
+                                             <td className="py-3 text-right font-mono text-sm text-success">{mv.debitInCents > 0 ? fmu(mv.debitInMicrounits, mv.debitInCents) : '-'}</td>
+                                            <td className="py-3 text-right font-mono text-sm text-error">{mv.creditInCents > 0 ? fmu(mv.creditInMicrounits, mv.creditInCents) : '-'}</td>
+                                            <td className="py-3 text-right font-mono text-sm font-bold">{fmu(mv.runningBalanceInMicrounits, mv.runningBalanceInCents)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

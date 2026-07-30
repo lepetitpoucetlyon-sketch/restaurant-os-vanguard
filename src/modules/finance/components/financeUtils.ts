@@ -79,3 +79,17 @@ export function centsToEur(cents: number): number {
 export function muToEur(mu: number): number {
     return mu / 1_000_000;
 }
+
+export function centsToMu(cents: number): number {
+    return cents * 10_000;
+}
+
+/** Display amount from either µ or cents, preferring µ when present. */
+export function resolveEur(obj: { amountInMicrounits?: number | null; amountInCents?: number | null }): number {
+    if (obj.amountInMicrounits != null) return muToEur(obj.amountInMicrounits);
+    return centsToEur(obj.amountInCents ?? 0);
+}
+
+export function formatMu(mu: number): string {
+    return formatEur(muToEur(mu));
+}

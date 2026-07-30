@@ -6,49 +6,49 @@ import { StockItem } from "@nexus/contracts";
 export const InventoryService = {
     /**
      * Calculates the total value of the current stock (HT).
-     * @param items - List of available stock items
-     * @returns Total valuation in cents
+     * Returns both cents (legacy) and microunits (preferred).
      */
     calculateStockValuation: (items: StockItem[]): number => {
-        // 🏛️ MICROUNITS PROTOCOL: We calculate in Microunits (10^-6) to avoid float drift.
-        // Final return is converted back to cents (10^-2) only for UI/Fiscal sealing.
-        const totalMicrounits = items.reduce((acc, item) => {
-            if (item.unitCostInCents && item.quantity > 0) {
-                const microQuantity = Math.floor(item.quantity * 1_000_000);
-                return acc + (item.unitCostInCents * microQuantity);
+        const mu = InventoryService.calculateStockValuationInMicrounits(items);
+        return Math.floor(mu / 10_000); // µ → cents
+    },
+
+    calculateStockValuationInMicrounits: (items: StockItem[]): number => {
+        return items.reduce((acc, item) => {
+            const costMu = item.unitCostInMicrounits ?? (item.unitCostInCents ?? 0) * 10_000;
+            if (costMu > 0 && item.quantity > 0) {
+                return acc + Math.floor(costMu * item.quantity);
             }
             return acc;
         }, 0);
-        
-        return Math.floor(totalMicrounits / 1_000_000);
     },
 
-    /**
-     * Estimates the impact of inflation on the next replenishment.
-     * @param currentValuationInCents - Total value of stock in cents
-     * @param inflationRate - Global inflation rate (0-20)
-     * @returns Added cost for restocking in cents
-     */
     getReplacementCostImpact: (currentValuationInCents: number, inflationRate: number): number => {
         if (currentValuationInCents === 0 || inflationRate === 0) return 0;
-        
-        // Multiplier to reflect real-world volatility (suppliers often raise more than CPI)
         const volatilityFactor = 1.25;
         return Math.round(currentValuationInCents * (inflationRate / 100) * volatilityFactor);
     },
 
-    /**
-     * Analyzes stock categories for high-risk items (perishables with high value).
-     */
+    getReplacementCostImpactInMicrounits: (currentValuationInMicrounits: number, inflationRate: number): number => {
+        if (currentValuationInMicrounits === 0 || inflationRate === 0) return 0;
+        const volatilityFactor = 1.25;
+        return Math.round(currentValuationInMicrounits * (inflationRate / 100) * volatilityFactor);
+    },
+
     getRiskAnalysis: (items: StockItem[]) => {
         const highValueRisk = items.filter(item => {
-            const valInCents = (item.unitCostInCents || 0) * item.quantity;
-            return valInCents > 50000; // 500.00€ threshold
+            const costMu = item.unitCostInMicrounits ?? (item.unitCostInCents ?? 0) * 10_000;
+            const valMu = costMu * item.quantity;
+            return valMu > 500_000_000_000; // 500 000 µ × qty threshold (≈500€ per unit, for qty=1)
         });
-
+        const totalRiskMicrounits = highValueRisk.reduce((acc, item) => {
+            const costMu = item.unitCostInMicrounits ?? (item.unitCostInCents ?? 0) * 10_000;
+            return acc + costMu * item.quantity;
+        }, 0);
         return {
             highValueCount: highValueRisk.length,
-            totalRiskValueInCents: highValueRisk.reduce((acc, item) => acc + (item.unitCostInCents || 0) * item.quantity, 0)
+            totalRiskValueInCents: Math.floor(totalRiskMicrounits / 10_000),
+            totalRiskValueInMicrounits: totalRiskMicrounits,
         };
     }
 };

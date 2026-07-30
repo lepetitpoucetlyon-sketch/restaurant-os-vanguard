@@ -10,7 +10,7 @@ import { usePageSetting } from "@/shared/components/settings/ContextualSettings"
 import { useIntelligence } from "@/modules/ops/providers";
 import { useNexusFleet } from "@/modules/intelligence/fleet";
 import { useLanguage } from "@/shared/hooks";
-import { formatCurrency } from "@/lib/formatters";
+import { formatMu } from "@/modules/finance/components/financeUtils";
 import { useIsMobile } from "@/shared/hooks";
 import { POSService } from "@/infrastructure/adapters/POSAdapter";
 import { CartItem } from "@modules/ops/engine/types";
@@ -79,11 +79,11 @@ const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemCont
                     <div className="flex flex-col items-end gap-0.5">
                         {item.originalPriceInMicrounits && (
                             <span className="text-[10px] line-through opacity-40 font-mono text-status-error">
-                                {formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}
+                                {formatMu(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier) * item.quantity)}
                             </span>
                         )}
-                        <span className="text-sm font-serif font-black italic">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier)) * BigInt(item.quantity)))}</span>
-                        <span className="text-[10px] opacity-40 font-mono">{formatCurrency(SovereignMath.toCents(BigInt(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))))} unit</span>
+                        <span className="text-sm font-serif font-black italic">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier) * item.quantity)}</span>
+                        <span className="text-[10px] opacity-40 font-mono">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))} unit</span>
                         
                         {item.isOffer && (
                             <span className="text-[8px] font-black uppercase tracking-widest bg-status-success/10 text-status-success border border-emerald-500/20 px-2 py-0.5 rounded-full">
@@ -131,7 +131,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
     const globalInflationRate = config?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
 
-    const { totalInCents, htInCents } = useMemo(() => {
+    const { totalInMicrounits, htInMicrounits, totalInCents, htInCents } = useMemo(() => {
         let totalMicro = BigInt(0);
         let htMicro = BigInt(0);
 
@@ -149,10 +149,11 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
         });
 
         return {
-            // Source of truth (Microunits Protocol); totalInCents kept as a deprecated parity mirror for legacy formatters.
             totalInMicrounits: Number(totalMicro),
+            htInMicrounits: Number(htMicro),
+            // Parity mirrors kept for legacy callers (POSService.getProjectedMargin)
             totalInCents: SovereignMath.toCents(totalMicro),
-            htInCents: SovereignMath.toCents(htMicro)
+            htInCents: SovereignMath.toCents(htMicro),
         };
     }, [items, priceMultiplier]);
 
@@ -218,7 +219,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     <div className="flex justify-between items-center text-[10px] font-black text-text-muted uppercase tracking-widest">
                         <span>{t('pos.cart.subtotal')}</span>
                         <div className="flex items-center gap-4">
-                            {totalInCents > 0 && (
+                            {totalInMicrounits > 0 && (
                                 <div className="flex items-center gap-1.5 px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/20">
                                     <Sparkles className="w-3 h-3 text-accent-gold" />
                                     <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInCents / 100, globalInflationRate).toFixed(1)}%</span>
@@ -228,12 +229,12 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     </div>
                     <div className="flex justify-between text-text-muted mt-1 px-1">
                         <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
-                        <span className="font-mono text-sm">{formatCurrency(htInCents)}</span>
+                        <span className="font-mono text-sm">{formatMu(htInMicrounits)}</span>
                     </div>
                     <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
                         <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
                         <span className="text-4xl font-serif font-black italic text-text-primary tracking-tighter drop-shadow-glow">
-                            {formatCurrency(totalInCents)}
+                            {formatMu(totalInMicrounits)}
                         </span>
                     </div>
                 </div>

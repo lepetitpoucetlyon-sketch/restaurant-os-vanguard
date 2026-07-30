@@ -71,5 +71,19 @@ export const SplitBillDomainService = {
         const exactMicro = SovereignMath.divide(totalMicro, countMicro);
         const amount = SovereignMath.fromMicrounits(exactMicro);
         return Array(count).fill(amount);
-    }
+    },
+
+    // ── Microunits-native entry points ────────────────────────────────────────
+
+    createEqualPaymentsFromMicrounits(count: number, totalInMicrounits: number): ConvivePayment[] {
+        return SplitBillDomainService.createEqualPayments(count, Math.round(totalInMicrounits / 10_000));
+    },
+
+    calculateRemainingFromMicrounits(totalInMicrounits: number, payments: ConvivePayment[]): number {
+        return SplitBillDomainService.calculateRemaining(Math.round(totalInMicrounits / 10_000), payments);
+    },
+
+    calculateAmountPerPersonFromMicrounits(totalInMicrounits: number, count: number): number {
+        return SplitBillDomainService.calculateAmountPerPerson(Math.round(totalInMicrounits / 10_000), count);
+    },
 };

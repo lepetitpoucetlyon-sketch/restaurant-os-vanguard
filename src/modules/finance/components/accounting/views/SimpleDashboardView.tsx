@@ -15,16 +15,21 @@ import {
     Activity
 } from 'lucide-react';
 import { useAccounting } from '../../../hooks/useAccounting';
-import { formatCurrency } from '@/lib/formatters';
 import { cn } from '@/lib/ui.foundations';
+import { formatMu } from '../../financeUtils';
+
+const fmu = (mu?: number | null, fallbackCents = 0) =>
+    formatMu(mu ?? fallbackCents * 10_000);
 import { motion } from 'framer-motion';
 
 export function SimpleDashboardView() {
     const { metrics, generatePandL, bankTransactions } = useAccounting();
     const pnl = useMemo(() => generatePandL('current'), [generatePandL]);
 
-    const healthStatus = metrics.netProfitInCents >= 0 ? 'sunny' : 'rainy';
-    const profitMargin = (metrics.netProfitInCents / pnl.totalRevenueInCents) * 100 || 0;
+    const netProfitMu = metrics.netProfitInMicrounits ?? metrics.netProfitInCents * 10_000;
+    const totalRevenueMu = pnl.totalRevenueInMicrounits ?? pnl.totalRevenueInCents * 10_000;
+    const healthStatus = netProfitMu >= 0 ? 'sunny' : 'rainy';
+    const profitMargin = totalRevenueMu > 0 ? (netProfitMu / totalRevenueMu) * 100 : 0;
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -58,7 +63,7 @@ export function SimpleDashboardView() {
                             {healthStatus === 'sunny' ? "Grand Soleil" : "Averse passagère"}
                         </h2>
                         <p className="text-text-muted mt-2 text-sm max-w-xs">
-                            Votre résultat net est de <span className={cn("font-bold", healthStatus === 'sunny' ? "text-accent" : "text-error")}>{formatCurrency(metrics.netProfitInCents)}</span>. 
+                            Votre résultat net est de <span className={cn("font-bold", healthStatus === 'sunny' ? "text-accent" : "text-error")}>{fmu(metrics.netProfitInMicrounits, metrics.netProfitInCents)}</span>.
                             C'est un mois {healthStatus === 'sunny' ? "positif" : "difficile"}.
                         </p>
                     </div>
@@ -66,12 +71,12 @@ export function SimpleDashboardView() {
                     <div className="flex items-center gap-6 mt-6">
                         <div className="flex items-center gap-2">
                             <TrendingUp className="w-4 h-4 text-status-success" />
-                            <span className="text-xl font-bold">{formatCurrency(pnl.totalRevenueInCents)}</span>
+                            <span className="text-xl font-bold">{fmu(pnl.totalRevenueInMicrounits, pnl.totalRevenueInCents)}</span>
                         </div>
                         <div className="w-px h-6 bg-border" />
                         <div className="flex items-center gap-2">
                             <TrendingDown className="w-4 h-4 text-error" />
-                            <span className="text-xl font-bold">{formatCurrency(pnl.totalExpensesInCents)}</span>
+                            <span className="text-xl font-bold">{fmu(pnl.totalExpensesInMicrounits, pnl.totalExpensesInCents)}</span>
                         </div>
                     </div>
                 </motion.div>
@@ -121,7 +126,7 @@ export function SimpleDashboardView() {
                         <h4 className="text-xs font-black tracking-widest uppercase">Trésorerie Banq</h4>
                     </div>
                     <p className="text-3xl font-black font-mono">
-                        {formatCurrency(bankTransactions.reduce((s, t) => s + (t.amountInCents || 0), 0))}
+                        {fmu(null, bankTransactions.reduce((s, t) => s + (t.amountInCents || 0), 0))}
                     </p>
                     <div className="flex items-center gap-2 mt-2 text-[10px] text-status-success font-bold uppercase">
                         <Activity className="w-3 h-3" /> Connecté en direct
@@ -180,7 +185,7 @@ export function SimpleDashboardView() {
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-lg font-mono font-black text-error">-{formatCurrency(exp.amountInCents)}</p>
+                                <p className="text-lg font-mono font-black text-error">-{fmu(exp.amountInMicrounits, exp.amountInCents)}</p>
                                 <p className="text-[10px] text-text-muted font-bold">Aujourd'hui, 14:32</p>
                             </div>
                         </div>

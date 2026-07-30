@@ -30,12 +30,17 @@ export class InvoiceEngine {
       orderId: order?.id ?? 'UNKNOWN',
       invoiceNumber: `FACT-${new Date().getFullYear()}-${(order?.id ?? '').slice(-6).toUpperCase()}`,
       subTotalInCents,
+      subTotalInMicrounits: subTotalInCents * 10_000,
       taxTotalInCents,
+      taxTotalInMicrounits: taxTotalInCents * 10_000,
       totalInCents,
+      totalInMicrounits: totalInCents * 10_000,
       taxDetails: [{
         rate: taxRateValue * 100,
         amountInCents: taxTotalInCents,
-        baseInCents: subTotalInCents
+        amountInMicrounits: taxTotalInCents * 10_000,
+        baseInCents: subTotalInCents,
+        baseInMicrounits: subTotalInCents * 10_000,
       }],
       status: 'issued',
       issuedAt: new Date().toISOString()

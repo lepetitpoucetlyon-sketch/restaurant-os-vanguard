@@ -54,5 +54,5 @@
 | cc-wave2 | Chantier 9 wave 2 — abaissement cc≤12 : 17 fonctions cc=14, puis 12 fonctions cc=15 | 2026-07-30 | terminée |
 | cc-wave2-finish | Finalisation cc-wave2 : réduction CC ≤12 + correction arborescence (MCC manquant) | 2026-07-30 | terminée |
 | full-audit | Audit complet structure/code/arborescence (lecture seule) | 2026-07-30 | terminée |
-| god-files-microunits | God files (6 fichiers >400L) + migration InCents→Microunits (478 occ.) | 2026-07-30 | active |
+| god-files-microunits | God files (6 fichiers >400L) + migration InCents→Microunits (478 occ.) | 2026-07-30 | terminée |
 | cc-python | Chantier 9 Python — réduction CC ≤12 : 10 fonctions sovereign-rag + scripts | 2026-07-30 | terminée |
