@@ -48,11 +48,11 @@ const ONE_HOUR_MS = 60 * 60 * 1000;
 const POLL_INTERVAL_MS = 15 * 60 * 1000;
 const VALID_HACCP_TABS: HaccpTab[] = ["haccp", "quality", "planning", "compliance", "lots"];
 
-function resolveInitialTab(tabParam: HaccpTab | null): HaccpTab {
+export function resolveInitialTab(tabParam: HaccpTab | null): HaccpTab {
     return tabParam && VALID_HACCP_TABS.includes(tabParam) ? tabParam : "haccp";
 }
 
-function buildTempAlertFromLog(log: TemperatureLogDoc, nowMs: number): TempAlert | null {
+export function buildTempAlertFromLog(log: TemperatureLogDoc, nowMs: number): TempAlert | null {
     const timestamp = log.measuredAt ?? log.recordedAt ?? "";
     if (!timestamp || nowMs - new Date(timestamp).getTime() >= ONE_HOUR_MS) return null;
     const zone = log.zone ?? log.storageLocationId ?? "Zone inconnue";

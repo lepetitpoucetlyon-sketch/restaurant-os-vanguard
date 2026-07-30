@@ -20,7 +20,7 @@ export interface StockImpactResult {
 type Modifier = { action?: string; quantityImpact?: number; ingredientId?: string; name: string };
 type RequiredIngredient = { id: string; name: string; quantity: number };
 
-function aggregateRecipeIngredients(
+export function aggregateRecipeIngredients(
     recipe: Recipe,
     modifiers: Modifier[],
 ): Map<string, RequiredIngredient> {

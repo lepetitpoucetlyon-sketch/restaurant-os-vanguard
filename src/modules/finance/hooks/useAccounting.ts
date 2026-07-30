@@ -21,14 +21,14 @@ import { useCallback, useMemo } from 'react';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@nexus/contracts/finance.types';
 
-function getAmountInMu(tx: { amountInMicrounits?: unknown; amountInCents?: unknown; credit?: unknown; debit?: unknown }): number {
+export function getAmountInMu(tx: { amountInMicrounits?: unknown; amountInCents?: unknown; credit?: unknown; debit?: unknown }): number {
     if (tx.amountInMicrounits !== undefined && tx.amountInMicrounits !== null) return Number(tx.amountInMicrounits);
     if (tx.amountInCents !== undefined && tx.amountInCents !== null) return Number(tx.amountInCents) * 10_000;
     if (tx.credit || tx.debit) return (Number(tx.credit || 0) + Number(tx.debit || 0)) * 10_000;
     return 0;
 }
 
-function buildEntryAmountInCents(
+export function buildEntryAmountInCents(
     e: { amountInMicrounits?: number | null; lines: { side: string; amountInMicrounits?: number }[] },
     side: 'credit' | 'debit',
     toCents: (µ: number) => number,

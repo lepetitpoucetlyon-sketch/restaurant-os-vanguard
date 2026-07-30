@@ -19,7 +19,7 @@ interface UseSortingReturn<T> {
     getSortIndicator: (key: keyof T) => "asc" | "desc" | null;
 }
 
-function compareValues<T>(aVal: T[keyof T], bVal: T[keyof T], direction: SortDirection): number {
+export function compareValues<T>(aVal: T[keyof T], bVal: T[keyof T], direction: SortDirection): number {
     if (aVal === bVal) return 0;
     if (aVal === null || aVal === undefined) return 1;
     if (bVal === null || bVal === undefined) return -1;

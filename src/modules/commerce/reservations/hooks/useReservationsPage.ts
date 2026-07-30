@@ -29,13 +29,13 @@ export interface ZoneTable {
     number: string;
 }
 
-function computeWeekAnchor(base: Date, weekOffset: number): Date {
+export function computeWeekAnchor(base: Date, weekOffset: number): Date {
     if (weekOffset > 0) return addWeeks(base, weekOffset);
     if (weekOffset < 0) return subWeeks(base, Math.abs(weekOffset));
     return base;
 }
 
-function groupTablesByZone(tables: Table[]): Record<string, ZoneTable[]> {
+export function groupTablesByZone(tables: Table[]): Record<string, ZoneTable[]> {
     return tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
         const zone = table.zoneId ?? "STANDARD";
         if (!acc[zone]) acc[zone] = [];
@@ -53,7 +53,7 @@ function getWeekDays(anchor: Date): Date[] {
     return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
 }
 
-function mapTableToZoneTable(table: Table): ZoneTable {
+export function mapTableToZoneTable(table: Table): ZoneTable {
     const isTerrace = TERRACE_ZONE_IDS.some((z) => table.zoneId?.toLowerCase().includes(z));
     return {
         id: table.number,
