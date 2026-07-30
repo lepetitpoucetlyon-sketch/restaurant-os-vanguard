@@ -260,6 +260,7 @@ details>summary+*{margin-top:8px}
     <a href="#sprint7" style="color:var(--success)">23 — Sprint 7 (RAG + Bugs)</a>
     <a href="#audit-2026-07" style="color:var(--warn)">24 — Audit Complet 2026-07-20</a>
     <a href="#audit-360-remediation" style="color:var(--success)">25 — Audit 360 & Remédiations 2026-07-26</a>
+    <a href="#nexus-event-bus" style="color:var(--info)">26 — Bus Événementiel Neuro-Réactif</a>
     <a href="#checklist">19 — Checklist Complète</a>
   </div>
 </nav>
@@ -3478,6 +3479,126 @@ reader.readAsText(file, <span class="c-warn">'iso-8859-1'</span>); <span class="
   </div>
 
   <div class="cl-cats" id="cl-root"></div>
+</section>
+
+<!-- ─── 26 BUS ÉVÉNEMENTIEL ─── -->
+<section class="chapter" id="nexus-event-bus">
+  <div class="chapter-header">
+    <span class="chapter-num">26</span>
+    <div>
+      <div class="chapter-title">Bus Événementiel Neuro-Réactif</div>
+      <div class="chapter-sub">NexusEventBus — Architecture Saga Grade X, Cascades Métier, Résilience Absolue</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--info)">🧠 Philosophie</span></div>
+    <p style="padding:0 16px 12px;line-height:1.7;color:var(--text-mid)">
+      Le NexusEventBus transforme l'OS en système <strong>neuro-réactif</strong> : les composants ne s'appellent plus directement,
+      ils émettent des événements versionnés (<code>v: 1</code>) et s'abonnent à des réactions. Trois niveaux de priorité :
+      <strong>CRITICAL</strong> (séquentiel, bloquant — fiscal, souveraineté),
+      <strong>HIGH</strong> (parallel allSettled — stock, RH, compliance) et
+      <strong>BACKGROUND</strong> (microtask — IA, CRM, météo).
+      Règle d'or : <strong>tout événement lié à une transaction fiscale ou à un stock utilise <code>emitDurable()</code></strong>,
+      jamais un <code>emit()</code> nu. Un crash entre le <code>Nexus.adapter.set()</code> et le <code>emit()</code> ne peut plus
+      faire disparaître de données.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title">📡 Catalogue des 19 Événements</span></div>
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead>
+        <tr style="background:var(--bg-card);color:var(--text-hi)">
+          <th style="padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)">Événement</th>
+          <th style="padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)">Priorité</th>
+          <th style="padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)">Émetteur</th>
+          <th style="padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)">Handler(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>order.placed</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">usePos · delivery webhook · MarketplaceSyncService</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">KDS (onSnapshot)</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>order.paid</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--danger)">CRITICAL</span> / HIGH / BG</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">FinancialNexusBridge · PaymentDialog</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">StockDeduction · TicketZ · Intelligence · CRMVip</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>order.cancelled</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">usePos · delivery webhook</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">StockRestitutionHandler</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>stock.low</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">StockDeductionHandler</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">StockAlertHandler</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>stock.received</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">ProcurementBridge · InventoryReceptionDashboard</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">StockReceptionHandler</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>sovereign.breach</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--danger)">CRITICAL</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">SovereignGuard · CashDrawerAnomalyHandler</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">SovereignBreachHandler (killswitch)</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>haccp.alert</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--danger)">CRITICAL</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">MqttProvider (sonde IoT &gt; seuil)</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">QuarantineHandler → quarantinedProductsAtom</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>waste.logged</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">HACCPLogService.logWaste()</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">WasteStockReconciliationHandler · WasteToFoodCostHandler</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>staff.clock_in / clock_out</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">TimeclockDashboard (QR kiosk)</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">PayrollTimeclockHandler</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>hr.transfer_offer</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">LiquidStaffingEngine · WeatherService</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">RainStaffingHandler (WebPush urgence)</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>cash_drawer.opened_unauthorized</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--danger)">CRITICAL</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">useCashDrawer (ouverture hors transaction)</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">CashDrawerAnomalyHandler → sovereign.breach ou lockdown POS</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>supplier.invoice_processed</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">API factures fournisseur</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">FoodCostRecomputer → commerce.margin_warning</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>commerce.margin_warning</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">FoodCostRecomputer · WasteToFoodCostHandler</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">MarginWarningHandler (WebPush direction)</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>commerce.yield_updated</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:gray)">BACKGROUND</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">YieldEngine</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">—</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>reservation.confirmed</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">ReservationService</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">—</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>payroll.submitted</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">PayrollService</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">—</td></tr>
+        <tr><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>inventory.quarantine_activated</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--danger)">CRITICAL</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">QuarantineHandler</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">ProductGrid (filtre Jotai)</td></tr>
+        <tr style="background:var(--bg-card-alt,rgba(255,255,255,.02))"><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><code>support.ticket_submitted</code></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)"><span style="color:var(--warn)">HIGH</span></td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">API route (SSR) · PredictiveMaintenanceAlert</td><td style="padding:6px 12px;border-bottom:1px solid var(--border)">SupportTicketAnalysisHandler (Gemini)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--success)">🌊 Cascades Métier — Schéma</span></div>
+    <pre class="mermaid" style="padding:16px;background:var(--bg-card);border-radius:8px;overflow-x:auto;font-size:.78rem">flowchart TD
+  POS([POS / PaymentDialog]) -->|emitDurable| OP[order.paid]
+  OP -->|CRITICAL| TicketZ[TicketZHandler<br/>NF525 sceau + JournalEntry]
+  OP -->|HIGH| StockDed[StockDeductionHandler<br/>BOM → déduction]
+  OP -->|BACKGROUND| Intel[IntelligenceHandler<br/>RAG + Gemini ⟨debounce 30s⟩]
+  OP -->|BACKGROUND| CRM[CRMVipHandler<br/>≥5 visites → badge VIP]
+  StockDed -->|emitDurable| SL[stock.low]
+  SL -->|HIGH| StockAlert[StockAlertHandler<br/>persiste alerte Nexus]
+
+  MQTT([Sonde IoT]) -->|temp &gt; seuil| HA[haccp.alert]
+  HA -->|CRITICAL| Quara[QuarantineHandler<br/>quarantinedProductsAtom]
+  Quara --> PG[ProductGrid POS<br/>🔴 QUARANTAINE HACCP]
+
+  FAC([Facture fournisseur]) -->|emitDurable| SIP[supplier.invoice_processed]
+  SIP -->|HIGH| FCR[FoodCostRecomputer<br/>recalcule food-cost BOM]
+  FCR -->|marge &lt; 25%| MW[commerce.margin_warning]
+  MW -->|HIGH| MWH[MarginWarningHandler<br/>WebPush direction]
+
+  WASTE([HACCPLogService]) -->|emitDurable| WL[waste.logged]
+  WL -->|HIGH| WSRH[WasteStockReconciliationHandler<br/>re-crédite stock]
+  WL -->|BACKGROUND| WTFC[WasteToFoodCostHandler<br/>sliding window 7j → margin_warning]
+
+  DRAWER([Tiroir ouvert hors tx]) -->|emitDurable| CDA[cash_drawer.opened_unauthorized]
+  CDA -->|CRITICAL| CDAH[CashDrawerAnomalyHandler]
+  CDAH -->|autre tenant| SB[sovereign.breach → killswitch]
+  CDAH -->|même tenant| LOCK[POS lockdown + WebPush]</pre>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--warn)">🔒 P0 — Fondations Résilience</span></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">EventOutbox — <code>emitDurable()</code></div><div class="desc">Chaque événement critique est d'abord persisté dans la table IndexedDB <code>busOutbox</code> (statut <code>pending</code>), puis émis. Au redémarrage, <code>NexusSyncService.replayPendingEvents()</code> rejoue les entrées <code>pending</code>. Aucune vente ni mouvement de stock ne peut disparaître en cas de crash navigateur entre le <code>Nexus.adapter.set()</code> et le <code>emit()</code>.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Dead Letter Queue (DLQ) — backoff exponentiel</div><div class="desc">Si un handler throw, l'événement est capturé dans la table <code>deadLetterEvents</code> (status <code>retry</code>). Backoff : <code>2^attempts × 1 000 ms</code>. Après 5 tentatives → statut <code>quarantine</code>. Le panneau MCC <code>/admin/mcc/event-bus</code> (EventBusHealthPanel) permet de relancer ou d'archiver manuellement.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Payload Versioning (<code>v: 1</code>)</div><div class="desc">Tous les événements portent un champ <code>v: 1</code> (literal type). Le <code>PayloadMigrator</code> permet des migrations transparentes <code>v0 → v1</code> sans breaking change. La DLQ affiche la version du payload bloqué pour faciliter le debug.</div></div></div>
+    <div class="item"><div class="item-icon icon-green">✓</div><div class="item-body"><div class="title">Bouclier IA — Backpressure IntelligenceHandler</div><div class="desc">Debounce 30s sur les appels Gemini (coalescence des <code>order.paid</code> en fenêtre glissante). Circuit breaker 3 erreurs → pause 60s sur <code>GeminiProvider</code>. Évite un DDOS interne lors des coups de feu (100 commandes/h).</div></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title">📋 Checklist — Ajouter un nouvel événement (8 étapes)</span></div>
+    <ol style="padding:12px 24px 12px 36px;line-height:2;color:var(--text-mid);font-size:.88rem">
+      <li>Déclarer l'interface dans <code>NexusEvents</code> (<code>src/shared/eventBus/NexusEventBus.ts</code>) avec <code>v: 1</code> littéral et tous les champs <code>tenantId</code> obligatoires.</li>
+      <li>Choisir la priorité : <strong>CRITICAL</strong> si fiscal/souveraineté, <strong>HIGH</strong> si stock/RH/compliance, <strong>BACKGROUND</strong> si IA/CRM/météo.</li>
+      <li>Créer le handler dans <code>src/shared/eventBus/handlers/</code> ou <code>src/modules/&lt;pilier&gt;/handlers/</code>.</li>
+      <li>Enregistrer le handler dans <code>registerHandlers.ts</code>.</li>
+      <li>Utiliser <code>emitDurable()</code> (pas <code>emit()</code>) si l'événement est lié à une transaction fiscale, un mouvement de stock ou une opération RH critique.</li>
+      <li>Écrire au moins 1 test Vitest : happy path + handler qui throw (vérifie entrée DLQ).</li>
+      <li>Vérifier <code>npx tsc --noEmit</code> → 0 erreur.</li>
+      <li>Ajouter une ligne dans la table des événements du chapitre 26 de la Bible.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title" style="color:var(--danger)">🚫 Règles Invariantes du Bus</span></div>
+    <div class="item"><div class="item-icon" style="color:var(--danger)">1</div><div class="item-body"><div class="title"><code>emitDurable()</code> obligatoire sur les chemins fiscaux</div><div class="desc"><code>order.paid</code>, <code>waste.logged</code>, <code>cash_drawer.opened_unauthorized</code>, <code>supplier.invoice_processed</code> : toujours <code>emitDurable</code>. Un <code>emit()</code> nu sur ces événements = bug de résilience potentiel.</div></div></div>
+    <div class="item"><div class="item-icon" style="color:var(--danger)">2</div><div class="item-body"><div class="title">SovereignGuard non-contournable, même dans les handlers CRITICAL</div><div class="desc">Un handler CRITICAL peut écrire dans Nexus, mais doit toujours passer par le path <code>tenants/{tenantId}/...</code> avec le <code>tenantId</code> du payload, jamais hardcodé.</div></div></div>
+    <div class="item"><div class="item-icon" style="color:var(--danger)">3</div><div class="item-body"><div class="title">Jamais de <code>delete</code> / <code>update</code> sur les collections fiscales depuis un handler</div><div class="desc"><code>journalEntries</code>, <code>fiscalSeals</code>, <code>fiscalLedger</code> sont immuables. Un handler peut en <em>créer</em> de nouvelles entrées via <code>FinancialNexusBridge.processOrder()</code>, jamais en modifier.</div></div></div>
+    <div class="item"><div class="item-icon" style="color:var(--danger)">4</div><div class="item-body"><div class="title">Un handler BACKGROUND ne doit jamais bloquer</div><div class="desc">Si un handler BACKGROUND throw, l'erreur est loguée mais ne doit <em>pas</em> être re-throw vers la DLQ (sauf configuration explicite). Les erreurs BACKGROUND sont des dégradations gracieuses, pas des incidents critiques.</div></div></div>
+    <div class="item"><div class="item-icon" style="color:var(--danger)">5</div><div class="item-body"><div class="title">Tout nouveau handler est couvert par un test avant merge</div><div class="desc">Happy path + cas handler-qui-throw. Le test vérifie que la DLQ a reçu l'entrée en cas d'échec répété. Sans test = code mort.</div></div></div>
+  </div>
 </section>
 
 </main>
