@@ -33,9 +33,9 @@ max_cycles = 0
 # Cible à terme : A. On exige B maintenant (cohérent avec le score 7011/10000).
 max_coupling = "B"
 
-# Complexité cyclomatique max par unité. 25 était trop lâche (FiscalEngine ~22).
-# On serre à 20 — les fonctions >20 branches ont besoin d'être découpées.
-max_cc = 20
+# Complexité cyclomatique max par unité.
+# Chantier 7 : 20→15. Les fonctions >15 branches ont besoin d'être découpées.
+max_cc = 15
 
 # Pas de fichier "dieu" (>300 lignes de logique + >10 dépendances).
 # Les agents IA ont tendance à tout mettre dans un seul fichier.
