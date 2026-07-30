@@ -57,4 +57,4 @@
 | god-files-microunits | God files (6 fichiers >400L) + migration InCents→Microunits (478 occ.) | 2026-07-30 | terminée |
 | cc-python | Chantier 9 Python — réduction CC ≤12 : 10 fonctions sovereign-rag + scripts | 2026-07-30 | terminée |
 | microunits-lot2 | Migration µ Lot 2 : ProductFormModal/Financials, menu-builder, TreasuryCalculator, FiscalHACCPMapper, SovereignPayout, FiscalTransmitter, taxCalc, BankingNexusBridge, airlock-report, SinfoniaGradeXProof, financeUtils, usePos, marketing CRM | 2026-07-30 | terminée |
-| microunits-fix | Correction MicrounitAdapter.ts : facteur 100→10 000 (toPSP / toDomain) | 2026-07-30 | active |
+| microunits-fix | Correction MicrounitAdapter.ts : facteur 100→10 000 (toPSP / toDomain) | 2026-07-30 | terminée |

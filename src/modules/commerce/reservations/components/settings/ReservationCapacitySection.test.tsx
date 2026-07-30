@@ -13,8 +13,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 }));
 
 test('ReservationCapacitySection renders successfully', () => {
-  render(<ReservationCapacitySection />);
-  // Verifying the component mounts and shows title/content
-  const sectionElement = screen.getByTestId('reservation-capacity-section');
+  render(<ReservationCapacitySection config={{} as any} setConfig={() => {}} slots={{ slotDuration: 15, intervalBetweenSlots: 15, maxCoversPerSlot: 10 } as any} setSlots={() => {}} />);
+  const sectionElement = screen.getByText(/Capacity Matrix/i);
   expect(sectionElement).toBeDefined();
 });

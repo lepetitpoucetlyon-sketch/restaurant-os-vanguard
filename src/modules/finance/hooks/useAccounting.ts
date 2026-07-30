@@ -21,6 +21,39 @@ import { useCallback, useMemo } from 'react';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@nexus/contracts/finance.types';
 
+function computeLedger(accounts: Account[], journalEntries: JournalEntry[]): LedgerAccount[] {
+    return accounts.map(account => {
+        const movements = journalEntries
+            .flatMap(e => e.lines)
+            .filter(l => l.accountId === account.id || l.accountCode === account.code);
+        let running = 0;
+        const movementsWithBalance = movements.map(m => {
+            running += (m.debitInCents || 0) - (m.creditInCents || 0);
+            return {
+                ...m,
+                runningBalanceInCents: running,
+                runningBalanceInMicrounits: running * 10_000,
+                debitInMicrounits: (m.debitInCents || 0) * 10_000,
+                creditInMicrounits: (m.creditInCents || 0) * 10_000,
+                amountInMicrounits: (m.amountInCents || 0) * 10_000,
+            };
+        });
+        const debitTotal = movements.reduce((s, m) => s + (m.debitInCents || 0), 0);
+        const creditTotal = movements.reduce((s, m) => s + (m.creditInCents || 0), 0);
+        const balance = account.balanceInCents ?? (debitTotal - creditTotal);
+        return {
+            ...account,
+            balanceInCents: balance,
+            balanceInMicrounits: balance * 10_000,
+            debitTotalInCents: debitTotal,
+            debitTotalInMicrounits: debitTotal * 10_000,
+            creditTotalInCents: creditTotal,
+            creditTotalInMicrounits: creditTotal * 10_000,
+            movements: movementsWithBalance,
+        };
+    });
+}
+
 export function getAmountInMu(tx: { amountInMicrounits?: unknown; amountInCents?: unknown; credit?: unknown; debit?: unknown }): number {
     if (tx.amountInMicrounits !== undefined && tx.amountInMicrounits !== null) return Number(tx.amountInMicrounits);
     if (tx.amountInCents !== undefined && tx.amountInCents !== null) return Number(tx.amountInCents) * 10_000;
@@ -82,36 +115,7 @@ export function useAccounting() {
 
     // Ledger: account + mouvements calculés depuis les écritures
     const ledger = useMemo<LedgerAccount[]>(() => {
-        return (accounts as Account[]).map(account => {
-            const movements = journalEntries
-                .flatMap(e => e.lines)
-                .filter(l => l.accountId === account.id || l.accountCode === account.code);
-            let running = 0;
-            const movementsWithBalance = movements.map(m => {
-                running += (m.debitInCents || 0) - (m.creditInCents || 0);
-                return {
-                    ...m,
-                    runningBalanceInCents: running,
-                    runningBalanceInMicrounits: running * 10_000,
-                    debitInMicrounits: (m.debitInCents || 0) * 10_000,
-                    creditInMicrounits: (m.creditInCents || 0) * 10_000,
-                    amountInMicrounits: (m.amountInCents || 0) * 10_000,
-                };
-            });
-            const debitTotal = movements.reduce((s, m) => s + (m.debitInCents || 0), 0);
-            const creditTotal = movements.reduce((s, m) => s + (m.creditInCents || 0), 0);
-            const balance = account.balanceInCents ?? (debitTotal - creditTotal);
-            return {
-                ...account,
-                balanceInCents: balance,
-                balanceInMicrounits: balance * 10_000,
-                debitTotalInCents: debitTotal,
-                debitTotalInMicrounits: debitTotal * 10_000,
-                creditTotalInCents: creditTotal,
-                creditTotalInMicrounits: creditTotal * 10_000,
-                movements: movementsWithBalance,
-            };
-        });
+        return computeLedger(accounts as Account[], journalEntries);
     }, [accounts, journalEntries]);
 
     const generatePandL = useCallback((periodId: string = 'current'): ProfitAndLossReport => {

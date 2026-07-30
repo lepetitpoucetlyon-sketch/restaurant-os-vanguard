@@ -13,8 +13,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 }));
 
 test('CardImprintStep renders successfully', () => {
-  render(<CardImprintStep />);
-  // Verifying the component mounts
-  const stepElement = screen.getByTestId('card-imprint-step');
+  render(<CardImprintStep penalty={10} cardImprintConfig={{} as any} stripeLoading={false} stripeError={null} stripeReady={true} cardMountRef={{ current: null }} submitting={false} btnPrimary="test" btnSecondary="test" onBack={() => {}} onConfirmCard={async () => {}} />);
+  const stepElement = screen.getByText(/Garantie de réservation/i);
   expect(stepElement).toBeDefined();
 });

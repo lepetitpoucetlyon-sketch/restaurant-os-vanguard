@@ -356,7 +356,7 @@ export function usePOSController() {
      * Items already sent (sentAt set) are skipped to prevent double-firing.
      */
     const handleSendCourse = useCallback((course: CourseType) =>
-        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast),
+        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast as any),
         [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast]);
 
     return {

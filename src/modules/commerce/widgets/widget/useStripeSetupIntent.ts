@@ -27,6 +27,22 @@ interface Params {
   onBook(pmId: string | undefined): Promise<void>;
 }
 
+async function loadStripeScript(): Promise<void> {
+  if (window.Stripe) return;
+  return new Promise<void>((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://js.stripe.com/v3/';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Stripe.js failed to load'));
+    document.head.appendChild(script);
+  });
+}
+
+async function fetchSetupIntent(tenantId: string, covers: number) {
+  const res = await fetch(`/api/widget/setup-intent?tenantId=${encodeURIComponent(tenantId)}&covers=${covers}`);
+  return res.json() as Promise<{ required: boolean; clientSecret?: string; penaltyAmount?: number }>;
+}
+
 export function useStripeSetupIntent({
   imprintActive,
   tenantId,
@@ -53,30 +69,26 @@ export function useStripeSetupIntent({
       setStripeLoading(true);
       setStripeError(null);
       try {
-        if (!window.Stripe) {
-          await new Promise<void>((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://js.stripe.com/v3/';
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error('Stripe.js failed to load'));
-            document.head.appendChild(script);
-          });
-        }
-        const res  = await fetch(`/api/widget/setup-intent?tenantId=${encodeURIComponent(tenantId)}&covers=${covers}`);
-        const data: { required: boolean; clientSecret?: string; penaltyAmount?: number } = await res.json();
+        await loadStripeScript();
+        const data = await fetchSetupIntent(tenantId, covers);
+        
         if (!data.required) {
           if (mounted) { onSkipImprint(); void onBook(undefined); }
           return;
         }
         if (!mounted) return;
+        
         if (data.penaltyAmount) setPenalty(data.penaltyAmount);
         setClientSecret(data.clientSecret ?? null);
-        const pk     = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '';
+        
+        const pk = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '';
         const stripe = window.Stripe!(pk);
         stripeRef.current = stripe;
+        
         const card = stripe.elements().create('card', {
           style: { base: { fontFamily: 'system-ui, sans-serif', fontSize: '16px', color: '#1a1a1a', '::placeholder': { color: '#9ca3af' } } },
         });
+        
         await new Promise((r) => setTimeout(r, 100));
         if (mounted && cardMountRef.current) {
           card.mount(cardMountRef.current);
