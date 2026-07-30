@@ -182,6 +182,22 @@ function computeGross(
     );
 }
 
+function extractLeaveDays(
+    leaves: LeaveRequest[],
+    userId: string,
+    types: string[],
+    startTs: number,
+    endTs: number,
+): number {
+    return leaves
+        .filter(lr => lr.userId === userId && types.includes(lr.type))
+        .reduce((sum, lr) => {
+            const lrStart = new Date(lr.startDate).getTime();
+            const lrEnd   = new Date(lr.endDate).getTime();
+            return sum + (lrStart <= endTs && lrEnd >= startTs ? (lr.workingDays ?? 0) : 0);
+        }, 0);
+}
+
 // ── Export principal ───────────────────────────────────────────────────────────
 
 export const PrepaieBuilder = {
@@ -277,25 +293,8 @@ export const PrepaieBuilder = {
             const { normal, ot25, ot50 } = weeklyOvertimeBreakdown(weekMinutes);
             const hourlyRateEur = (user.hourlyRateInMicrounits ?? 0) / MU_TO_EUR;
 
-            // Congés payés pris dans le mois
-            const cpDays = leavesRaw
-                .filter(lr => lr.userId === user.id && lr.type === 'paid_leave')
-                .reduce((sum, lr) => {
-                    const lrStart = new Date(lr.startDate).getTime();
-                    const lrEnd = new Date(lr.endDate).getTime();
-                    const overlap = lrStart <= endTs && lrEnd >= startTs;
-                    return sum + (overlap ? (lr.workingDays ?? 0) : 0);
-                }, 0);
-
-            // Absences non justifiées (sick, unpaid dans le mois)
-            const absDays = leavesRaw
-                .filter(lr => lr.userId === user.id && ['sick', 'unpaid'].includes(lr.type))
-                .reduce((sum, lr) => {
-                    const lrStart = new Date(lr.startDate).getTime();
-                    const lrEnd = new Date(lr.endDate).getTime();
-                    const overlap = lrStart <= endTs && lrEnd >= startTs;
-                    return sum + (overlap ? (lr.workingDays ?? 0) : 0);
-                }, 0);
+            const cpDays  = extractLeaveDays(leavesRaw, user.id, ['paid_leave'],     startTs, endTs);
+            const absDays = extractLeaveDays(leavesRaw, user.id, ['sick', 'unpaid'], startTs, endTs);
 
             const grossEur = computeGross(normal, ot25, ot50, hourlyRateEur);
             const nameParts = (user.name ?? '').split(' ');

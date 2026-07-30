@@ -140,7 +140,7 @@ export function useFloorPlanControls({
         }
 
         const pointer = stage?.getPointerPosition();
-        if (!stage || !pointer) return;
+        if (!pointer) return;
 
         const { x, y } = FloorPlanGeometry.toWorldPoint(
             pointer,
@@ -183,9 +183,7 @@ export function useFloorPlanControls({
 
     const setSelectedIdWithCallback = useCallback((id: string | null) => {
         setSelectedId(id);
-        if (id && onTableSelect) {
-            onTableSelect(id);
-        }
+        if (id) onTableSelect?.(id);
     }, [onTableSelect]);
 
     return {

@@ -30,6 +30,15 @@ import type {
     LegacyArchiveEntry,
 } from './types';
 
+const ENTITY_KEYWORDS: Array<{ keywords: string[]; type: NormalizedLegacyRecord['entityType'] }> = [
+    { keywords: ['facture', 'invoice', 'vente'],         type: 'transaction' },
+    { keywords: ['fournisseur', 'supplier'],              type: 'supplier' },
+    { keywords: ['produit', 'product', 'article'],        type: 'product' },
+    { keywords: ['ingredient', 'matière'],                type: 'ingredient' },
+    { keywords: ['employé', 'employee', 'staff'],         type: 'employee' },
+    { keywords: ['client', 'customer'],                   type: 'customer' },
+];
+
 // ============================================
 // AIRLOCK PIPELINE
 // ============================================
@@ -515,30 +524,12 @@ export class AirlockPipeline {
     private inferEntityType(
         fields: Record<string, string | number | null>
     ): NormalizedLegacyRecord['entityType'] | null {
-        const keys = Object.keys(fields).map(k => k.toLowerCase());
-        const values = Object.values(fields).map(v => String(v ?? '').toLowerCase());
-        const allText = [...keys, ...values].join(' ');
+        const allText = [
+            ...Object.keys(fields),
+            ...Object.values(fields).map(v => String(v ?? '')),
+        ].join(' ').toLowerCase();
 
-        if (allText.includes('facture') || allText.includes('invoice') || allText.includes('vente')) {
-            return 'transaction';
-        }
-        if (allText.includes('fournisseur') || allText.includes('supplier')) {
-            return 'supplier';
-        }
-        if (allText.includes('produit') || allText.includes('product') || allText.includes('article')) {
-            return 'product';
-        }
-        if (allText.includes('ingredient') || allText.includes('matière')) {
-            return 'ingredient';
-        }
-        if (allText.includes('employé') || allText.includes('employee') || allText.includes('staff')) {
-            return 'employee';
-        }
-        if (allText.includes('client') || allText.includes('customer')) {
-            return 'customer';
-        }
-
-        return null;
+        return ENTITY_KEYWORDS.find(({ keywords }) => keywords.some(k => allText.includes(k)))?.type ?? null;
     }
 
     private extractDate(doc: RawLegacyDocument): string | null {

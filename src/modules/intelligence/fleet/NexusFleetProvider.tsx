@@ -35,6 +35,16 @@ function checkOtaUpdate(
   return { isUpdateAvailable: false, updateInfo: null };
 }
 
+function applyIntelligenceUpdate(
+  intelligence: { metrics?: unknown; insights?: FleetInsight[] },
+  mappedInstances: EmpireInstance[],
+  setGlobalMetrics: (m: EmpireGlobalMetrics) => void,
+  setMacroInsights: (i: FleetInsight[]) => void,
+): void {
+  if (intelligence.metrics) setGlobalMetrics(buildGlobalMetrics(mappedInstances, intelligence.metrics));
+  if (intelligence.insights) setMacroInsights(intelligence.insights);
+}
+
 function startAuthAwarePolling(
   refreshFleet: (bg?: boolean) => Promise<void>,
   onCleanup: (cleanup: () => void) => void
@@ -148,13 +158,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             // Atomic upgrade to Grade X Intelligence
             const intelligence = await fleetEngine.updateFleetIntelligence(mappedInstances);
 
-            if (intelligence.metrics) {
-                setGlobalMetrics(buildGlobalMetrics(mappedInstances, intelligence.metrics));
-            }
-
-            if (intelligence.insights) {
-                setMacroInsights(intelligence.insights);
-            }
+            applyIntelligenceUpdate(intelligence, mappedInstances, setGlobalMetrics, setMacroInsights);
 
         } catch (error) {
             console.error('[Fleet] Sync failed:', error);

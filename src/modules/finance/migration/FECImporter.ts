@@ -86,6 +86,33 @@ export function parseFECDate(raw: string): number {
 
 // ── Parsing FEC ────────────────────────────────────────────────────────────────
 
+function buildFECEntry(cells: string[], fieldMap: string[]): FECEntry {
+  const get = (field: string): string => {
+    const idx = fieldMap.indexOf(field);
+    return idx >= 0 ? (cells[idx] ?? '').trim() : '';
+  };
+  return {
+    JournalCode:   get('JournalCode'),
+    JournalLib:    get('JournalLib'),
+    EcritureNum:   get('EcritureNum'),
+    EcritureDate:  get('EcritureDate'),
+    CompteNum:     get('CompteNum'),
+    CompteLib:     get('CompteLib'),
+    CompAuxNum:    get('CompAuxNum') || undefined,
+    CompAuxLib:    get('CompAuxLib') || undefined,
+    PieceRef:      get('PieceRef') || undefined,
+    PieceDate:     get('PieceDate') || undefined,
+    EcritureLib:   get('EcritureLib'),
+    Debit:         get('Debit'),
+    Credit:        get('Credit'),
+    EcritureLet:   get('EcritureLet') || undefined,
+    DateLet:       get('DateLet') || undefined,
+    ValidDate:     get('ValidDate') || undefined,
+    Montantdevise: get('Montantdevise') || undefined,
+    Idevise:       get('Idevise') || undefined,
+  };
+}
+
 /**
  * Parse le contenu brut d'un fichier FEC pipe-séparé.
  *
@@ -98,7 +125,6 @@ export function parseFECDate(raw: string): number {
 export function parseFECContent(content: string): { entries: FECEntry[]; warnings: string[] } {
   const warnings: string[] = [];
 
-  // Suppression du BOM UTF-8 éventuel
   const clean = content.replace(/^﻿/, '');
   const lines = clean.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
 
@@ -106,7 +132,6 @@ export function parseFECContent(content: string): { entries: FECEntry[]; warning
     return { entries: [], warnings: ['Fichier vide'] };
   }
 
-  // Détection de l'en-tête
   let dataStart = 0;
   let fieldMap: string[] = FEC_FIELD_ORDER as string[];
 
@@ -128,33 +153,7 @@ export function parseFECContent(content: string): { entries: FECEntry[]; warning
       continue;
     }
 
-    const get = (field: string): string => {
-      const idx = fieldMap.indexOf(field);
-      return idx >= 0 ? (cells[idx] ?? '').trim() : '';
-    };
-
-    const entry: FECEntry = {
-      JournalCode: get('JournalCode'),
-      JournalLib:  get('JournalLib'),
-      EcritureNum: get('EcritureNum'),
-      EcritureDate: get('EcritureDate'),
-      CompteNum:   get('CompteNum'),
-      CompteLib:   get('CompteLib'),
-      CompAuxNum:  get('CompAuxNum') || undefined,
-      CompAuxLib:  get('CompAuxLib') || undefined,
-      PieceRef:    get('PieceRef') || undefined,
-      PieceDate:   get('PieceDate') || undefined,
-      EcritureLib: get('EcritureLib'),
-      Debit:       get('Debit'),
-      Credit:      get('Credit'),
-      EcritureLet: get('EcritureLet') || undefined,
-      DateLet:     get('DateLet') || undefined,
-      ValidDate:   get('ValidDate') || undefined,
-      Montantdevise: get('Montantdevise') || undefined,
-      Idevise:     get('Idevise') || undefined,
-    };
-
-    entries.push(entry);
+    entries.push(buildFECEntry(cells, fieldMap));
   }
 
   return { entries, warnings };

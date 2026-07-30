@@ -76,6 +76,55 @@ function emailToId(email: string): string {
   return 'cust_' + createHash('sha256').update(email.toLowerCase()).digest('hex').slice(0, 16);
 }
 
+interface CustomerRowFields {
+  firstName: string; lastName: string; email: string; phone: string;
+  visits: number; lastVisitDate?: number; birthdayTs?: number; notes: string;
+}
+
+function buildCustomerPayload(f: CustomerRowFields) {
+  return {
+    firstName:       f.firstName || undefined,
+    lastName:        f.lastName  || undefined,
+    email:           f.email     || undefined,
+    phone:           f.phone     ? normalizePhone(f.phone) : undefined,
+    notes:           f.notes     || undefined,
+    visitCount:      f.visits,
+    lastVisitDate:   f.lastVisitDate ? new Date(f.lastVisitDate).toISOString() : undefined,
+    birthDate:       f.birthdayTs   ? new Date(f.birthdayTs).toISOString()   : undefined,
+    preferences:     [] as string[],
+    tags:            [] as string[],
+    totalSpentInCents: 0,
+    updatedAt:       new Date().toISOString(),
+  };
+}
+
+async function persistCustomer(
+  email: string,
+  payload: ReturnType<typeof buildCustomerPayload>,
+  now: string,
+): Promise<'imported' | 'updated'> {
+  if (!email) {
+    const id = 'cust_' + createHash('sha256')
+      .update(`${payload.firstName}|${payload.lastName}|${payload.phone}|${Date.now()}`)
+      .digest('hex').slice(0, 16);
+    await Nexus.adapter.set('customers/' + id, { id, type: 'customer', createdAt: now, ...payload });
+    return 'imported';
+  }
+  const id   = emailToId(email);
+  const path = 'customers/' + id;
+  const existing = await Nexus.adapter.get<Record<string, unknown>>(path);
+  if (existing) {
+    await Nexus.adapter.set(path, {
+      ...existing, ...payload,
+      visitCount: Math.max(payload.visitCount, (existing.visitCount as number) ?? 0),
+      updatedAt: now,
+    }, { merge: true });
+    return 'updated';
+  }
+  await Nexus.adapter.set(path, { id, type: 'customer', createdAt: now, ...payload });
+  return 'imported';
+}
+
 // ── Classe principale ─────────────────────────────────────────────────────────
 
 export class CustomerCSVImporter {
@@ -124,65 +173,18 @@ export class CustomerCSVImporter {
         continue;
       }
 
-      const now = new Date().toISOString();
-      const visits = parseInt(visitsRaw) || 0;
-      const lastVisitDate = parseDate(lastVisitRaw);
-      const birthdayTs = parseDate(birthdayRaw);
-
-      const payload = {
-        firstName: firstName || undefined,
-        lastName: lastName || undefined,
-        email: email || undefined,
-        phone: phone ? normalizePhone(phone) : undefined,
-        notes: notes || undefined,
-        visitCount: visits,
-        lastVisitDate: lastVisitDate ? new Date(lastVisitDate).toISOString() : undefined,
-        birthDate: birthdayTs ? new Date(birthdayTs).toISOString() : undefined,
-        preferences: [] as string[],
-        tags: [] as string[],
-        totalSpentInCents: 0,
-        updatedAt: now,
-      };
+      const now        = new Date().toISOString();
+      const visits     = parseInt(visitsRaw) || 0;
+      const payload    = buildCustomerPayload({
+        firstName, lastName, email, phone, visits,
+        lastVisitDate: parseDate(lastVisitRaw),
+        birthdayTs:    parseDate(birthdayRaw),
+        notes,
+      });
 
       try {
-        if (email) {
-          const id = emailToId(email);
-          const path = 'customers/' + id;
-          const existing = await Nexus.adapter.get<Record<string, unknown>>(path);
-
-          if (existing) {
-            // Merge : ne pas écraser le compteur de visites par 0
-            await Nexus.adapter.set(path, {
-              ...existing,
-              ...payload,
-              visitCount: Math.max(visits, (existing.visitCount as number) ?? 0),
-              updatedAt: now,
-            }, { merge: true });
-            updated++;
-          } else {
-            await Nexus.adapter.set(path, {
-              id,
-              type: 'customer',
-              createdAt: now,
-              ...payload,
-            });
-            imported++;
-          }
-        } else {
-          // Pas d'email → on génère un ID aléatoire (pas de dédoublonnage possible)
-          const id = 'cust_' + createHash('sha256')
-            .update(`${firstName}|${lastName}|${phone}|${Date.now()}`)
-            .digest('hex')
-            .slice(0, 16);
-
-          await Nexus.adapter.set('customers/' + id, {
-            id,
-            type: 'customer',
-            createdAt: now,
-            ...payload,
-          });
-          imported++;
-        }
+        const outcome = await persistCustomer(email, payload, now);
+        if (outcome === 'updated') updated++; else imported++;
       } catch (err) {
         errors.push(`Ligne ${i + 2} — ${err instanceof Error ? err.message : String(err)}`);
       }

@@ -24,59 +24,64 @@ function findCol(row: Record<string, string>, candidates: string[]): string {
   return '';
 }
 
+type CrmRecord = { id: string; email?: string; phone?: string; metrics?: { totalVisits: number; lastVisitDate?: number } };
+type AggEntry  = { totalVisits: number; lastVisitDate: number | undefined; visitEntries: { date: number; covers: number; source: string }[] };
+
+function findCrmId(email: string, phone: string, emailIndex: Map<string, string>, phoneIndex: Map<string, string>): string | null {
+  if (email) return emailIndex.get(email) ?? null;
+  if (phone) return phoneIndex.get(phone) ?? null;
+  return null;
+}
+
+function initAggEntry(crmId: string, crmRecords: CrmRecord[], crmUpdates: Map<string, AggEntry>): void {
+  if (crmUpdates.has(crmId)) return;
+  const existing = crmRecords.find(r => r.id === crmId);
+  crmUpdates.set(crmId, {
+    totalVisits:  existing?.metrics?.totalVisits ?? 0,
+    lastVisitDate: existing?.metrics?.lastVisitDate,
+    visitEntries: [],
+  });
+}
+
 export async function importReservationHistory(file: ParsedFile, onProgress: (n: number) => void): Promise<ImportResult> {
   onProgress(5);
 
-  // Build CRM email and phone indexes for matching
-  const crmRecords = await Nexus.adapter.query<{ id: string; email?: string; phone?: string; metrics?: { totalVisits: number; lastVisitDate?: number } }>('crms');
+  const crmRecords = await Nexus.adapter.query<CrmRecord>('crms');
   const emailIndex = new Map<string, string>(crmRecords.filter(r => r.email).map(r => [r.email!.toLowerCase(), r.id]));
-  const phoneIndex = new Map<string, string>(
-    crmRecords.filter(r => r.phone).map(r => [r.phone!.replace(/\s/g, ''), r.id])
-  );
+  const phoneIndex = new Map<string, string>(crmRecords.filter(r => r.phone).map(r => [r.phone!.replace(/\s/g, ''), r.id]));
   onProgress(20);
 
   let updated = 0, skipped = 0;
   const errors: { row: number; message: string }[] = [];
-  // Aggregate per CRM: { crmId → { totalVisits, lastVisitDate } }
-  const crmUpdates = new Map<string, { totalVisits: number; lastVisitDate: number | undefined; visitEntries: { date: number; covers: number; source: string }[] }>();
+  const crmUpdates = new Map<string, AggEntry>();
 
   for (let i = 0; i < file.rows.length; i++) {
     const row = file.rows[i];
     onProgress(20 + Math.round((i / file.rows.length) * 60));
 
-    const dateRaw = findCol(row, ['date', 'date réservation', 'date_reservation', 'booking_date', 'jour']);
-    const email = findCol(row, ['email', 'mail', 'customer_email']).toLowerCase().trim();
-    const phone = findCol(row, ['phone', 'telephone', 'téléphone', 'mobile']).replace(/\s/g, '');
+    const dateRaw  = findCol(row, ['date', 'date réservation', 'date_reservation', 'booking_date', 'jour']);
+    const email    = findCol(row, ['email', 'mail', 'customer_email']).toLowerCase().trim();
+    const phone    = findCol(row, ['phone', 'telephone', 'téléphone', 'mobile']).replace(/\s/g, '');
     const coversRaw = findCol(row, ['couverts', 'covers', 'party_size', 'pax', 'nb_convives', 'nb couverts']);
-    const source = findCol(row, ['source', 'origin', 'provenance', 'canal']) || file.source;
+    const source   = findCol(row, ['source', 'origin', 'provenance', 'canal']) || file.source;
 
     const date = parseDate(dateRaw);
     if (!date) { skipped++; continue; }
 
-    // Emails masqués TheFork → non liables au CRM
     if (email && isMaskedEmail(email)) {
       errors.push({ row: i + 2, message: `Email masqué TheFork ignoré (${email})` });
       skipped++;
       continue;
     }
 
-    // Find matching CRM record
-    const crmId = (email && emailIndex.get(email)) ?? (phone && phoneIndex.get(phone)) ?? null;
+    const crmId = findCrmId(email, phone, emailIndex, phoneIndex);
     if (!crmId) {
-      // No matching CRM — skip (don't create ghost CRM records from reservation data)
       errors.push({ row: i + 2, message: `Pas de client CRM trouvé pour ${email || phone || 'inconnu'} — ligne ignorée` });
       skipped++;
       continue;
     }
 
-    if (!crmUpdates.has(crmId)) {
-      const existing = crmRecords.find(r => r.id === crmId);
-      crmUpdates.set(crmId, {
-        totalVisits: existing?.metrics?.totalVisits ?? 0,
-        lastVisitDate: existing?.metrics?.lastVisitDate,
-        visitEntries: [],
-      });
-    }
+    initAggEntry(crmId, crmRecords, crmUpdates);
 
     const agg = crmUpdates.get(crmId)!;
     agg.totalVisits += 1;

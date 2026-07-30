@@ -5,35 +5,39 @@ import { Recipe } from '@nexus/contracts/common.types';
  * Centralized Domain Logic for Culinary Operations and HACCP.
  * Grade VI: Industrialized Recipe & Prep Management.
  */
+const RECIPE_DEFAULTS = {
+    name:                'Sans titre',
+    category:            'Non classé',
+    prepTime:            0,
+    cookTime:            0,
+    portions:            1,
+    difficulty:          'easy' as Recipe['difficulty'],
+    ingredients:         [] as Recipe['ingredients'],
+    steps:               [] as Recipe['steps'],
+    allergens:           [] as Recipe['allergens'],
+    dietaryInfo:         [] as Recipe['dietaryInfo'],
+    costPriceInCents:    0,
+    sellingPriceInCents: 0,
+    color:               '#000000',
+    isActive:            true,
+};
+
+function buildRecipeDefaults(recipe: Partial<Recipe>, id: string, now: string): Recipe {
+    const merged = { ...RECIPE_DEFAULTS, ...recipe };
+    return {
+        ...merged,
+        id,
+        marginInCents: (recipe.marginInCents as number) || merged.sellingPriceInCents - merged.costPriceInCents,
+        updatedAt:     now,
+        createdAt:     typeof recipe.createdAt === 'string' ? recipe.createdAt : now,
+    } as Recipe;
+}
+
 export class KitchenService {
 
-    /**
-     * Prepares a recipe for persistence.
-     * Could include unit conversions or nutritional calculation in the future.
-     */
     static prepareRecipe(recipe: Partial<Recipe>, generatedId: string): Recipe {
         const now = new Date().toISOString();
-        return {
-            ...recipe,
-            id: generatedId,
-            name: recipe.name || 'Sans titre',
-            category: recipe.category || 'Non classé',
-            prepTime: recipe.prepTime || 0,
-            cookTime: recipe.cookTime || 0,
-            portions: recipe.portions || 1,
-            difficulty: recipe.difficulty || 'easy',
-            ingredients: recipe.ingredients || [],
-            steps: recipe.steps || [],
-            allergens: recipe.allergens || [],
-            dietaryInfo: recipe.dietaryInfo || [],
-            costPriceInCents: recipe.costPriceInCents || 0,
-            sellingPriceInCents: recipe.sellingPriceInCents || 0,
-            marginInCents: (recipe.marginInCents as number) || ((recipe.sellingPriceInCents as number) || 0) - ((recipe.costPriceInCents as number) || 0),
-            updatedAt: new Date().toISOString(),
-            createdAt: typeof recipe.createdAt === 'string' ? recipe.createdAt : now,
-            color: recipe.color || '#000000',
-            isActive: recipe.isActive ?? true
-        } as Recipe;
+        return buildRecipeDefaults(recipe, generatedId, now);
     }
 
     /**

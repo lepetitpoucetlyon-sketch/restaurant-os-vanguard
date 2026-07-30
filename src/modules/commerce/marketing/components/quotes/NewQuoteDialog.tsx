@@ -40,6 +40,36 @@ function recalculateLineTotals(line: Partial<QuoteLine>): Partial<QuoteLine> {
     return { ...line, totalHTInMicrounits: totalHT, vatAmountInMicrounits: vatAmount, totalTTCInMicrounits: totalHT + vatAmount };
 }
 
+function buildQuotePayload(
+    lines: Partial<QuoteLine>[],
+    crmName: string,
+    subject: string,
+    selectedCRMId: string | undefined,
+    totals: { totalHTInMicrounits: number; totalVATInMicrounits: number; totalTTCInMicrounits: number },
+): Partial<Quote> {
+    return {
+        customerId: selectedCRMId || 'ORPHAN',
+        customerName: crmName,
+        title: subject,
+        items: lines.map(l => ({
+            id: l.id!,
+            name: l.designation!,
+            quantity: l.quantity || 1,
+            priceInMicrounits: l.unitPriceHTInMicrounits || 0,
+            priceInCents: Math.round((l.unitPriceHTInMicrounits || 0) / 10_000),
+        })),
+        amountInMicrounits: totals.totalTTCInMicrounits,
+        validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'draft' as const,
+        totals: {
+            totalHTInMicrounits:       totals.totalHTInMicrounits,
+            totalTTCInMicrounits:      totals.totalTTCInMicrounits,
+            totalTaxInMicrounits:      totals.totalVATInMicrounits,
+            totalDiscountInMicrounits: 0,
+        },
+    };
+}
+
 function createQuoteLine(product?: QuoteProduct): Partial<QuoteLine> {
     const price = product?.priceInMicrounits ?? ((product?.priceInCents ?? product?.unitCostInCents ?? 0) * 10_000);
     return recalculateLineTotals({
@@ -118,29 +148,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
         setIsSaving(true);
         try {
-            const quoteData: Partial<Quote> = {
-                customerId: selectedCRM?.id || 'ORPHAN',
-                customerName: crmName,
-                title: subject,
-                items: lines.map(l => ({
-                    id: l.id!,
-                    name: l.designation!,
-                    quantity: l.quantity || 1,
-                    priceInMicrounits: l.unitPriceHTInMicrounits || 0,
-                    priceInCents: Math.round((l.unitPriceHTInMicrounits || 0) / 10_000),
-                })),
-                amountInMicrounits: totals.totalTTCInMicrounits,
-                validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                status: 'draft',
-                totals: {
-                    totalHTInMicrounits: totals.totalHTInMicrounits,
-                    totalTTCInMicrounits: totals.totalTTCInMicrounits,
-                    totalTaxInMicrounits: totals.totalVATInMicrounits,
-                    totalDiscountInMicrounits: 0,
-                }
-            };
-
-            await createQuote(quoteData);
+            await createQuote(buildQuotePayload(lines, crmName, subject, selectedCRM?.id, totals));
             
             toast.success("Le devis a été généré et persisté avec succès.");
             handleClose();

@@ -19,6 +19,44 @@ export interface AgentRequest {
 }
 
 
+function buildFetchUrl(endpoint: string, apiKey: string): string {
+    return endpoint.includes('key=') ? endpoint : `${endpoint}?key=${apiKey}`;
+}
+
+async function executeGeminiRequest(url: string, body: string, apiKey: string): Promise<string> {
+    const maxAttempts = 3;
+    let rawText = '';
+
+    for (let attempts = 1; attempts <= maxAttempts; attempts++) {
+        try {
+            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+            if (apiKey && !url.includes('key=')) headers['Authorization'] = `Bearer ${apiKey}`;
+
+            const res = await fetch(url, { method: 'POST', headers, body });
+
+            if (res.status === 429 && attempts < maxAttempts) {
+                await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
+                continue;
+            }
+            if (res.ok) {
+                const data = await res.json();
+                rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                break;
+            }
+            if (attempts >= maxAttempts) {
+                rawText = `[Erreur API ${res.status}] ${await res.text()}`;
+            }
+        } catch (fetchErr) {
+            if (attempts >= maxAttempts) {
+                rawText = `[Erreur Réseau] ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`;
+            } else {
+                await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
+            }
+        }
+    }
+    return rawText;
+}
+
 /**
  * AgentEngine - The "Brain" of the Software Factory
  * Orchestrates calls to Gemini 1.5 with dedicated system prompts and RBAC.
@@ -29,93 +67,47 @@ export const AgentEngine = {
             throw new Error('AgentEngine: Missing API Configuration (Check Settings)');
         }
 
-        const _systemPrompt = generateSystemPrompt(request.domain, request.userRole);
-        const _dataContext = request.contextData ? `\nCONTEXTE DATA ACTUEL :\n${JSON.stringify(request.contextData, null, 2)}` : '';
+        const systemPrompt  = generateSystemPrompt(request.domain, request.userRole);
+        const dataContext   = request.contextData ? `\nCONTEXTE DATA ACTUEL :\n${JSON.stringify(request.contextData, null, 2)}` : '';
+        const tenantLabel   = request.dna?.tenantId || 'GLOBAL';
 
-        // Prepare the actual payload for Gemini 1.5 (assuming Flash/Pro REST API format)
-        // Here we simulate the reasoning steps for the "Wow Effect" requested by user
-        
+        const reasoning: AgentReasoningStep[] = [
+            {
+                id: 'r1',
+                timestamp: new Date().toISOString(),
+                action: 'Initialisation',
+                observation: `Audit: ${request.domain}, Modèle: ${request.modelId}`,
+                thought: 'Application du blindage système et vérification des autorisations métier par profil.',
+            },
+            {
+                id: `r2_${Date.now()}`,
+                timestamp: new Date().toISOString(),
+                action: 'Analyse Profonde',
+                observation: request.userPrompt,
+                thought: `Utilisation du modèle ${request.modelId} pour croisement avec le contexte ${request.domain} fourni (${tenantLabel}).`,
+            },
+        ];
+
         try {
-            // we simulate a smart streaming/reasoning delay
-            const reasoning: AgentReasoningStep[] = [
-                {
-                    id: 'r1',
-                    timestamp: new Date().toISOString(),
-                    action: 'Initialisation',
-                    observation: `Audit: ${request.domain}, Modèle: ${request.modelId}`,
-                    thought: 'Application du blindage système et vérification des autorisations métier par profil.'
-                },
-                {
-                    id: `r2_${Date.now()}`,
-                    timestamp: new Date().toISOString(),
-                    action: 'Analyse Profonde',
-                    observation: request.userPrompt,
-                    thought: `Utilisation du modèle ${request.modelId} pour croisement avec le contexte ${request.domain} fourni (${request.dna?.tenantId || 'GLOBAL'}).`
-                }
-            ];
-
-            let rawText = '';
-            let attempts = 0;
-            const maxAttempts = 3;
-            let responseData: any = null;
-
-            while (attempts < maxAttempts) {
-                attempts++;
-                try {
-                    const fetchUrl = request.endpoint.includes('key=')
-                        ? request.endpoint
-                        : `${request.endpoint}?key=${request.apiKey}`;
-
-                    const res = await fetch(fetchUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            ...(request.apiKey && !fetchUrl.includes('key=') ? { 'Authorization': `Bearer ${request.apiKey}` } : {})
-                        },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: `${_systemPrompt}\n\n${_dataContext}\n\nREQUÊTE UTILISATEUR :\n${request.userPrompt}` }] }]
-                        })
-                    });
-
-                    if (res.status === 429 && attempts < maxAttempts) {
-                        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
-                        continue;
-                    }
-
-                    if (res.ok) {
-                        responseData = await res.json();
-                        rawText = responseData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                        break;
-                    } else if (attempts >= maxAttempts) {
-                        const errBody = await res.text();
-                        rawText = `[Erreur API ${res.status}] ${errBody}`;
-                    }
-                } catch (fetchErr) {
-                    if (attempts >= maxAttempts) {
-                        rawText = `[Erreur Réseau] ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`;
-                    } else {
-                        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
-                    }
-                }
-            }
-
-            const dynamicInsight: AgentInsight = {
-                id: `ins_${Date.now()}`,
-                domain: request.domain,
-                type: 'info',
-                title: `Diagnostic Expert : ${request.domain}`,
-                description: rawText || `Analyse exécutée via le moteur ${request.modelId}.`,
-                reasoning: reasoning
-            };
+            const fetchUrl = buildFetchUrl(request.endpoint, request.apiKey);
+            const body = JSON.stringify({
+                contents: [{ parts: [{ text: `${systemPrompt}\n\n${dataContext}\n\nREQUÊTE UTILISATEUR :\n${request.userPrompt}` }] }],
+            });
+            const rawText = await executeGeminiRequest(fetchUrl, body, request.apiKey);
 
             return {
-                insight: dynamicInsight,
-                rawText: rawText || "Analyse terminée."
+                insight: {
+                    id: `ins_${Date.now()}`,
+                    domain: request.domain,
+                    type: 'info',
+                    title: `Diagnostic Expert : ${request.domain}`,
+                    description: rawText || `Analyse exécutée via le moteur ${request.modelId}.`,
+                    reasoning,
+                },
+                rawText: rawText || 'Analyse terminée.',
             };
-
         } catch (err) {
             throw new Error(`Échec du moteur de raisonnement expert: ${err instanceof Error ? err.message : String(err)}`);
         }
-
-    }
+    },
 };

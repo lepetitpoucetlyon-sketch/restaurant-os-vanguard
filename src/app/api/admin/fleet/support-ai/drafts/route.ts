@@ -26,6 +26,33 @@ import { logger } from '@/lib/logger';
 
 const QUEUE_STATUSES: SupportTicketStatus[] = ['new', 'analyzing', 'draft_ready', 'analysis_failed'];
 
+function canAutoApplyPatch(draft: NonNullable<SupportTicket['draft']>, applyPatch?: boolean): boolean {
+  return draft.kind === 'config_patch' && draft.autoApplicable === true && applyPatch === true;
+}
+
+async function applyPatchToConfig(
+  tenantId: string,
+  draft: NonNullable<SupportTicket['draft']>,
+  ticketPath: string,
+  callerId: string,
+): Promise<void> {
+  const current = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { overrides?: unknown } | null;
+  const before  = current?.overrides ?? {};
+  await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, { overrides: draft.proposedPatch }, { merge: true });
+  const patchKey = Object.keys(draft.proposedPatch ?? {})[0];
+  await ChangelogService.record({
+    tenantId,
+    action: 'OVERRIDE_APPLIED',
+    key: patchKey ? `overrides.${patchKey}` : 'overrides',
+    before,
+    after: draft.proposedPatch,
+    description: `Appliqué via brouillon SAV IA — ${draft.title}`,
+    appliedBy: callerId,
+    scope: 'tenant',
+  });
+  await Nexus.adapter.set(ticketPath, { status: 'applied' }, { merge: true });
+}
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_junior_dev');
   if (isDenied(caller)) return caller as NextResponse;
@@ -148,29 +175,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     category: 'CUSTOM',
   });
 
-  const canAutoApply = draft.kind === 'config_patch' && draft.autoApplicable === true && body.applyPatch === true;
-  if (canAutoApply && draft.proposedPatch) {
-    const current = await Nexus.adapter.get(`tenants/${ticket.tenantId}/tenantConfig`) as { overrides?: unknown } | null;
-    const before = current?.overrides ?? {};
-
-    await Nexus.adapter.set(
-      `tenants/${ticket.tenantId}/tenantConfig`,
-      { overrides: draft.proposedPatch },
-      { merge: true }
-    );
-
-    await ChangelogService.record({
-      tenantId: ticket.tenantId,
-      action: 'OVERRIDE_APPLIED',
-      key: Object.keys(draft.proposedPatch)[0] ? `overrides.${Object.keys(draft.proposedPatch)[0]}` : 'overrides',
-      before,
-      after: draft.proposedPatch,
-      description: `Appliqué via brouillon SAV IA — ${draft.title}`,
-      appliedBy: caller.uid,
-      scope: 'tenant',
-    });
-
-    await Nexus.adapter.set(ticketPath, { status: 'applied' }, { merge: true });
+  if (canAutoApplyPatch(draft, body.applyPatch) && draft.proposedPatch) {
+    await applyPatchToConfig(ticket.tenantId, draft, ticketPath, caller.uid);
     logger.info(`[SupportDrafts] Ticket ${ticketId} approuvé et appliqué par ${caller.uid}`);
     return NextResponse.json({ success: true, ticketId, status: 'applied' });
   }

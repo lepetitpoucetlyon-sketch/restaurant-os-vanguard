@@ -12,6 +12,24 @@ import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import type { FiscalSeal } from '@nexus/contracts';
 
+async function resolveTenantId(request: NextRequest): Promise<{ tenantId: string } | NextResponse> {
+    const internalSecret   = request.headers.get('x-internal-secret');
+    const internalTenantId = request.headers.get('x-tenant-id');
+    if (internalSecret && internalTenantId) {
+        const expectedSecret = process.env.INTERNAL_API_SECRET;
+        if (!expectedSecret) return NextResponse.json({ error: 'INTERNAL_API_SECRET manquant.' }, { status: 503 });
+        const secretBuf   = Buffer.from(internalSecret);
+        const expectedBuf = Buffer.from(expectedSecret);
+        if (secretBuf.length !== expectedBuf.length || !timingSafeEqual(secretBuf, expectedBuf)) {
+            return NextResponse.json({ error: 'Secret interne invalide.' }, { status: 401 });
+        }
+        return { tenantId: internalTenantId };
+    }
+    const caller = await requireTenantAdmin(request);
+    if (isDenied(caller)) return caller;
+    return { tenantId: caller.tenantId };
+}
+
 /**
  * POST /api/finance/bank/sync
  * Déclenche une synchronisation bancaire pour le tenant authentifié.
@@ -21,27 +39,9 @@ import type { FiscalSeal } from '@nexus/contracts';
  */
 export async function POST(request: NextRequest) {
     try {
-        let tenantId: string;
-
-        // Chemin interne : webhook Powens → sync (pas de Bearer token disponible)
-        const internalSecret   = request.headers.get('x-internal-secret');
-        const internalTenantId = request.headers.get('x-tenant-id');
-        if (internalSecret && internalTenantId) {
-            const expectedSecret = process.env.INTERNAL_API_SECRET;
-            if (!expectedSecret) {
-                return NextResponse.json({ error: 'INTERNAL_API_SECRET manquant.' }, { status: 503 });
-            }
-            const secretBuf   = Buffer.from(internalSecret);
-            const expectedBuf = Buffer.from(expectedSecret);
-            if (secretBuf.length !== expectedBuf.length || !timingSafeEqual(secretBuf, expectedBuf)) {
-                return NextResponse.json({ error: 'Secret interne invalide.' }, { status: 401 });
-            }
-            tenantId = internalTenantId;
-        } else {
-            const caller = await requireTenantAdmin(request);
-            if (isDenied(caller)) return caller;
-            tenantId = caller.tenantId;
-        }
+        const resolved = await resolveTenantId(request);
+        if (resolved instanceof NextResponse) return resolved;
+        const { tenantId } = resolved;
 
         // Rate limiting : max 10 syncs/heure par tenant (manuel ou webhook)
         const rl = await getRateLimiter().check(`bank:sync:${tenantId}`, 10, 60 * 60 * 1000);
