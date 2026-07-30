@@ -48,6 +48,30 @@ const ONE_HOUR_MS = 60 * 60 * 1000;
 const POLL_INTERVAL_MS = 15 * 60 * 1000;
 const VALID_HACCP_TABS: HaccpTab[] = ["haccp", "quality", "planning", "compliance", "lots"];
 
+function resolveInitialTab(tabParam: HaccpTab | null): HaccpTab {
+    return tabParam && VALID_HACCP_TABS.includes(tabParam) ? tabParam : "haccp";
+}
+
+function buildTempAlertFromLog(log: TemperatureLogDoc, nowMs: number): TempAlert | null {
+    const timestamp = log.measuredAt ?? log.recordedAt ?? "";
+    if (!timestamp || nowMs - new Date(timestamp).getTime() >= ONE_HOUR_MS) return null;
+    const zone = log.zone ?? log.storageLocationId ?? "Zone inconnue";
+    const temp = log.temperature;
+    if (log.type !== "hot" && temp > COLD_THRESHOLD) return { id: log.id, zone, temperature: temp, type: "cold", measuredAt: timestamp };
+    if (log.type === "hot" && temp < HOT_THRESHOLD) return { id: log.id, zone, temperature: temp, type: "hot", measuredAt: timestamp };
+    return null;
+}
+
+function emitTempAlert(alert: TempAlert, tenantId: string | undefined): void {
+    const isCold = alert.type === "cold";
+    const threshold = isCold ? COLD_THRESHOLD : HOT_THRESHOLD;
+    const minMax = isCold ? "max" : "min";
+    const dir = isCold ? "froide" : "chaude";
+    const overDir = isCold ? "froid" : "chaud";
+    toast.error(`Alerte température ${dir} — ${alert.zone} : ${alert.temperature}°C (${minMax} ${threshold}°C)`, { id: `temp-${alert.type}-${alert.id}` });
+    if (tenantId) pushToRole(tenantId, 'chef_cuisinier', { title: 'Alerte température !', body: `${alert.zone} : ${alert.temperature}°C (dépassement ${overDir})`, url: '/haccp' });
+}
+
 export const HACCP_TOOLS: { id: HaccpTool; label: string }[] = [
     { id: "temperatures", label: "Températures" },
     { id: "huiles",       label: "Huiles de friture" },
@@ -59,9 +83,7 @@ export function useHaccpPage() {
     const { tenantId, activeTenantConfig } = useTenant();
     const searchParams = useSearchParams();
     const tabParam = searchParams.get("tab") as HaccpTab | null;
-    const [activeTab, setActiveTab] = useState<HaccpTab>(
-        tabParam && VALID_HACCP_TABS.includes(tabParam) ? tabParam : "haccp"
-    );
+    const [activeTab, setActiveTab] = useState<HaccpTab>(resolveInitialTab(tabParam));
     const [activeTool, setActiveTool] = useState<HaccpTool>("temperatures");
     const [openNcCount, setOpenNcCount] = useState(0);
     const [pmsLoading, setPmsLoading] = useState(false);
@@ -79,21 +101,8 @@ export function useHaccpPage() {
             const nowMs = Date.now();
             const activeAlerts: TempAlert[] = [];
             for (const log of logs) {
-                const timestamp = log.measuredAt ?? log.recordedAt ?? "";
-                const logMs = timestamp ? new Date(timestamp).getTime() : 0;
-                if (nowMs - logMs >= ONE_HOUR_MS) continue;
-                const zone = log.zone ?? log.storageLocationId ?? "Zone inconnue";
-                const temp = log.temperature;
-                const isHot = log.type === "hot";
-                if (!isHot && temp > COLD_THRESHOLD) {
-                    activeAlerts.push({ id: log.id, zone, temperature: temp, type: "cold", measuredAt: timestamp });
-                    toast.error(`Alerte température froide — ${zone} : ${temp}°C (max ${COLD_THRESHOLD}°C)`, { id: `temp-cold-${log.id}` });
-                    if (tenantId) pushToRole(tenantId, 'chef_cuisinier', { title: 'Alerte température !', body: `${zone} : ${temp}°C (dépassement froid)`, url: '/haccp' });
-                } else if (isHot && temp < HOT_THRESHOLD) {
-                    activeAlerts.push({ id: log.id, zone, temperature: temp, type: "hot", measuredAt: timestamp });
-                    toast.error(`Alerte température chaude — ${zone} : ${temp}°C (min ${HOT_THRESHOLD}°C)`, { id: `temp-hot-${log.id}` });
-                    if (tenantId) pushToRole(tenantId, 'chef_cuisinier', { title: 'Alerte température !', body: `${zone} : ${temp}°C (dépassement chaud)`, url: '/haccp' });
-                }
+                const alert = buildTempAlertFromLog(log, nowMs);
+                if (alert) { activeAlerts.push(alert); emitTempAlert(alert, tenantId); }
             }
             setTempAlerts(activeAlerts);
         } catch { /* silently retry */ }

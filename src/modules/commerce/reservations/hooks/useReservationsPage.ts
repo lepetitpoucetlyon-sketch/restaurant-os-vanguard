@@ -29,6 +29,25 @@ export interface ZoneTable {
     number: string;
 }
 
+function computeWeekAnchor(base: Date, weekOffset: number): Date {
+    if (weekOffset > 0) return addWeeks(base, weekOffset);
+    if (weekOffset < 0) return subWeeks(base, Math.abs(weekOffset));
+    return base;
+}
+
+function groupTablesByZone(tables: Table[]): Record<string, ZoneTable[]> {
+    return tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
+        const zone = table.zoneId ?? "STANDARD";
+        if (!acc[zone]) acc[zone] = [];
+        acc[zone].push(mapTableToZoneTable(table));
+        return acc;
+    }, {});
+}
+
+function applyTerraceState(stored: { open?: boolean } | null, setTerraceClosed: (v: boolean) => void): void {
+    if (stored != null && typeof stored.open === "boolean") setTerraceClosed(!stored.open);
+}
+
 function getWeekDays(anchor: Date): Date[] {
     const monday = startOfWeek(anchor, { weekStartsOn: 1 });
     return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
@@ -111,12 +130,7 @@ export function useReservationsPage() {
     const { data: groups = [] } = useGroups();
     const isLoading = reservationsLoading || customersLoading || tablesLoading;
 
-    const weekAnchor = useMemo(() => {
-        const base = new Date(selectedDate);
-        if (weekOffset > 0) return addWeeks(base, weekOffset);
-        if (weekOffset < 0) return subWeeks(base, Math.abs(weekOffset));
-        return base;
-    }, [selectedDate, weekOffset]);
+    const weekAnchor = useMemo(() => computeWeekAnchor(new Date(selectedDate), weekOffset), [selectedDate, weekOffset]);
 
     const weekDays = useMemo(() => getWeekDays(weekAnchor), [weekAnchor]);
     const dayStr = format(selectedDate, "yyyy-MM-dd");
@@ -129,20 +143,12 @@ export function useReservationsPage() {
     const displayDate = format(selectedDate, "EEEE d MMMM", { locale: fr });
     const opsTables = tables as unknown as OpsTable[];
 
-    const tablesByZone = useMemo(
-        () => tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
-            const zone = table.zoneId ?? "STANDARD";
-            if (!acc[zone]) acc[zone] = [];
-            acc[zone].push(mapTableToZoneTable(table));
-            return acc;
-        }, {}),
-        [tables]
-    );
+    const tablesByZone = useMemo(() => groupTablesByZone(tables), [tables]);
 
     useEffect(() => {
         if (!tenantId) return;
         Nexus.adapter.get<{ open: boolean }>(`tenants/${tenantId}/${TERRASSE_SETTINGS_PATH}`)
-            .then((stored) => { if (stored != null && typeof stored.open === "boolean") setTerraceClosed(!stored.open); })
+            .then((stored) => applyTerraceState(stored, setTerraceClosed))
             .catch(() => { /* no stored preference yet */ });
     }, [tenantId]);
 

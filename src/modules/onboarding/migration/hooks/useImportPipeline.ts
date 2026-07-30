@@ -28,6 +28,46 @@ const INITIAL_STATE: PipelineState = {
   extraWarnings: [],
 };
 
+type CategoryConfig = typeof CATEGORY_CONFIGS[ImportCategory];
+
+function buildAutoMappings(file: ParsedFile, config: CategoryConfig): ColumnMapping[] {
+  return file.headers.map(sourceColumn => {
+    const lower = sourceColumn.toLowerCase().replace(/[_\s]/g, '');
+    const match = config.targetFields.find(tf => {
+      const tfKey = tf.key.toLowerCase();
+      const tfLabel = tf.label.toLowerCase().replace(/[_\s\(\)]/g, '');
+      return lower.includes(tfKey) || lower.includes(tfLabel) || tfKey.includes(lower);
+    });
+    return { sourceColumn, targetField: match?.key ?? null };
+  });
+}
+
+function buildExtraWarnings(file: ParsedFile, category: ImportCategory, config: CategoryConfig): ImportWarning[] {
+  const warnings: ImportWarning[] = [...file.warnings];
+  if (file.source === 'thefork') {
+    warnings.push({ row: 0, field: 'email', message: 'TheFork : emails masqués (@thefork.com) détectés — ils seront importés mais marqués comme non-contactables', severity: 'warning' });
+  }
+  if (file.source === 'thefork' && file.encoding === 'iso-8859-1') {
+    warnings.push({ row: 0, field: 'encoding', message: 'Encodage Latin-1 détecté (TheFork) → converti en UTF-8 automatiquement', severity: 'info' });
+  }
+  if (file.source === 'laddition' || file.source === 'zelty') {
+    warnings.push({ row: 0, field: 'price', message: `${file.source === 'laddition' ? "L'Addition" : 'Zelty'} : prix en centimes détectés → conversion automatique en euros`, severity: 'info' });
+  }
+  if (category === 'staff') {
+    warnings.push({ row: 0, field: 'pin', message: 'Les PINs absents seront générés aléatoirement — les employés devront les changer à la première connexion', severity: 'info' });
+  }
+  if (category === 'reservations') {
+    warnings.push({ row: 0, field: '', message: "Les réservations historiques iront dans l'historique CRM uniquement — elles n'apparaîtront pas dans le planning actif", severity: 'info' });
+  }
+  if (category === 'fec') {
+    warnings.push({ row: 0, field: '', message: 'Les écritures FEC importées sont immuables (NF525) — elles seront scellées SHA-256 et ne pourront plus être modifiées ou supprimées', severity: 'warning' });
+  }
+  if (config.requiresOrder && config.requiresOrder.length > 0) {
+    warnings.push({ row: 0, field: '', message: `Conseil : importer d'abord ${config.requiresOrder.map(c => CATEGORY_CONFIGS[c].label).join(', ')} pour les liaisons optimales`, severity: 'info' });
+  }
+  return warnings;
+}
+
 export function useImportPipeline(category: ImportCategory) {
   const [state, setState] = useState<PipelineState>(INITIAL_STATE);
   const config = CATEGORY_CONFIGS[category];
@@ -35,48 +75,6 @@ export function useImportPipeline(category: ImportCategory) {
   const rawFileRef = useRef<File | null>(null);
 
   const updateProgress = (progress: number) => setState(s => ({ ...s, progress }));
-
-  // Build auto-mappings from parsed headers → target fields
-  function buildAutoMappings(file: ParsedFile): ColumnMapping[] {
-    return file.headers.map(sourceColumn => {
-      const lower = sourceColumn.toLowerCase().replace(/[_\s]/g, '');
-      const match = config.targetFields.find(tf => {
-        const tfKey = tf.key.toLowerCase();
-        const tfLabel = tf.label.toLowerCase().replace(/[_\s\(\)]/g, '');
-        return lower.includes(tfKey) || lower.includes(tfLabel) || tfKey.includes(lower);
-      });
-      return { sourceColumn, targetField: match?.key ?? null };
-    });
-  }
-
-  // Warn about source-specific quirks
-  function buildExtraWarnings(file: ParsedFile): ImportWarning[] {
-    const warnings: ImportWarning[] = [...file.warnings];
-
-    if (file.source === 'thefork') {
-      warnings.push({ row: 0, field: 'email', message: 'TheFork : emails masqués (@thefork.com) détectés — ils seront importés mais marqués comme non-contactables', severity: 'warning' });
-    }
-    if (file.source === 'thefork' && file.encoding === 'iso-8859-1') {
-      warnings.push({ row: 0, field: 'encoding', message: 'Encodage Latin-1 détecté (TheFork) → converti en UTF-8 automatiquement', severity: 'info' });
-    }
-    if (file.source === 'laddition' || file.source === 'zelty') {
-      warnings.push({ row: 0, field: 'price', message: `${file.source === 'laddition' ? "L'Addition" : 'Zelty'} : prix en centimes détectés → conversion automatique en euros`, severity: 'info' });
-    }
-    if (category === 'staff') {
-      warnings.push({ row: 0, field: 'pin', message: 'Les PINs absents seront générés aléatoirement — les employés devront les changer à la première connexion', severity: 'info' });
-    }
-    if (category === 'reservations') {
-      warnings.push({ row: 0, field: '', message: 'Les réservations historiques iront dans l\'historique CRM uniquement — elles n\'apparaîtront pas dans le planning actif', severity: 'info' });
-    }
-    if (category === 'fec') {
-      warnings.push({ row: 0, field: '', message: 'Les écritures FEC importées sont immuables (NF525) — elles seront scellées SHA-256 et ne pourront plus être modifiées ou supprimées', severity: 'warning' });
-    }
-    if (config.requiresOrder && config.requiresOrder.length > 0) {
-      warnings.push({ row: 0, field: '', message: `Conseil : importer d'abord ${config.requiresOrder.map(c => CATEGORY_CONFIGS[c].label).join(', ')} pour les liaisons optimales`, severity: 'info' });
-    }
-
-    return warnings;
-  }
 
   const handleFile = useCallback(async (incomingFile: File) => {
     setState(s => ({ ...s, stage: 'reading', rawFile: incomingFile, error: null, result: null, progress: 0 }));
@@ -88,7 +86,7 @@ export function useImportPipeline(category: ImportCategory) {
 
       // PDF / image → skip column mapping, go straight to import via AI
       if (parsed.format === 'pdf' || parsed.format === 'image') {
-        const extraWarnings = buildExtraWarnings(parsed);
+        const extraWarnings = buildExtraWarnings(parsed, category, config);
         setState(s => ({
           ...s,
           stage: 'previewing',
@@ -100,9 +98,9 @@ export function useImportPipeline(category: ImportCategory) {
         return;
       }
 
-      const mappings = buildAutoMappings(parsed);
+      const mappings = buildAutoMappings(parsed, config);
       const hasUnmapped = mappings.some(m => m.targetField === null);
-      const extraWarnings = buildExtraWarnings(parsed);
+      const extraWarnings = buildExtraWarnings(parsed, category, config);
 
       setState(s => ({
         ...s,

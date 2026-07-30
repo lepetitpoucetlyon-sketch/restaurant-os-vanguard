@@ -35,15 +35,55 @@ import {
     computeTVABreakdown,
 } from "./financeUtils";
 
+const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "audit"];
+
+function computeInitialTab(tabParam: string | null): FinanceTab {
+    return tabParam && VALID_FINANCE_TABS.includes(tabParam as FinanceTab) ? (tabParam as FinanceTab) : "accounting";
+}
+
+function filterPaidOrders(orders: Order[]): Order[] {
+    return orders.filter(o => o.status === "paid" || (o as { status?: string }).status === "served");
+}
+
+async function applyBankSyncResult(
+    data: { success?: boolean; isDemoMode?: boolean; error?: string },
+    setBankAccounts: (accounts: BankAccount[]) => void,
+): Promise<void> {
+    if (data.success) {
+        toast.success(data.isDemoMode ? "Synchronisation simulée (mode démo)." : "Synchronisation bancaire lancée.");
+        const { Nexus } = await import("@/lib/nexus/NexusAdapter");
+        setBankAccounts(await Nexus.adapter.query<BankAccount>("bankAccounts"));
+    } else {
+        toast.error(data.error ?? "Erreur lors de la synchronisation.");
+    }
+}
+
+function BankModal({ open, url, onClose }: { open: boolean; url: string | null; onClose: () => void }) {
+    if (!open || !url) return null;
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+            <div className="relative w-full max-w-2xl h-[600px] bg-surface-base rounded-xl shadow-2xl overflow-hidden flex flex-col">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface-sidebar shrink-0">
+                    <div className="flex items-center gap-2">
+                        <Landmark className="w-4 h-4 text-action-primary" />
+                        <span className="text-sm font-medium">Connexion bancaire sécurisée (PSD2)</span>
+                    </div>
+                    <button onClick={onClose} className="p-1.5 rounded-md hover:bg-surface-base transition-colors" aria-label="Fermer">
+                        <X className="w-4 h-4" />
+                    </button>
+                </div>
+                <iframe src={url} className="flex-1 w-full border-0" title="Connexion bancaire sécurisée Powens" sandbox="allow-same-origin allow-scripts allow-forms allow-popups" />
+            </div>
+        </div>
+    );
+}
+
 // ── Page component ────────────────────────────────────────────────────────────
 
 export function FinanceDashboard() {
     const searchParams = useSearchParams();
-const _tabParam = searchParams.get("tab") as FinanceTab | null;
-const _VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "audit"];
-const [activeTab, setActiveTab] = useState<FinanceTab>(
-    _tabParam && _VALID_FINANCE_TABS.includes(_tabParam) ? _tabParam : "accounting"
-);
+    const tabParam = searchParams.get("tab");
+    const [activeTab, setActiveTab] = useState<FinanceTab>(computeInitialTab(tabParam));
     const [claimOpen, setClaimOpen] = useState(false);
     const [closingZ, setClosingZ] = useState(false);
     const [billingOrder, setBillingOrder] = useState<string | null>(null);
@@ -76,9 +116,7 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
     const { billOrder } = useBilling();
     const { data: orders, isLoading: ordersLoading } = useOrders();
 
-    const paidOrders = (orders as Order[]).filter(
-        (o) => o.status === "paid" || (o as { status?: string }).status === "served"
-    );
+    const paidOrders = filterPaidOrders(orders as Order[]);
 
     // Load bank accounts from Nexus on mount
     useEffect(() => {
@@ -159,25 +197,8 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
         setSyncingBank(true);
         try {
             const res = await fetch("/api/finance/bank/sync", { method: "POST" });
-            const data = (await res.json()) as {
-                success?: boolean;
-                isDemoMode?: boolean;
-                message?: string;
-                error?: string;
-            };
-            if (data.success) {
-                toast.success(
-                    data.isDemoMode
-                        ? "Synchronisation simulée (mode démo)."
-                        : "Synchronisation bancaire lancée."
-                );
-                // Refresh bank accounts
-                const { Nexus } = await import("@/lib/nexus/NexusAdapter");
-                const accounts = await Nexus.adapter.query<BankAccount>("bankAccounts");
-                setBankAccounts(accounts);
-            } else {
-                toast.error(data.error ?? "Erreur lors de la synchronisation.");
-            }
+            const data = (await res.json()) as { success?: boolean; isDemoMode?: boolean; error?: string };
+            await applyBankSyncResult(data, setBankAccounts);
         } catch {
             toast.error("Erreur réseau lors de la synchronisation.");
         } finally {
@@ -237,33 +258,7 @@ const [activeTab, setActiveTab] = useState<FinanceTab>(
         <div className="min-h-screen bg-surface-base text-text-primary p-6">
 
             {/* fin-8: Bank connection modal iframe */}
-            {bankModalOpen && bankWebviewUrl && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div className="relative w-full max-w-2xl h-[600px] bg-surface-base rounded-xl shadow-2xl overflow-hidden flex flex-col">
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface-sidebar shrink-0">
-                            <div className="flex items-center gap-2">
-                                <Landmark className="w-4 h-4 text-action-primary" />
-                                <span className="text-sm font-medium">
-                                    Connexion bancaire sécurisée (PSD2)
-                                </span>
-                            </div>
-                            <button
-                                onClick={() => setBankModalOpen(false)}
-                                className="p-1.5 rounded-md hover:bg-surface-base transition-colors"
-                                aria-label="Fermer"
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
-                        </div>
-                        <iframe
-                            src={bankWebviewUrl}
-                            className="flex-1 w-full border-0"
-                            title="Connexion bancaire sécurisée Powens"
-                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
-                        />
-                    </div>
-                </div>
-            )}
+            <BankModal open={bankModalOpen} url={bankWebviewUrl} onClose={() => setBankModalOpen(false)} />
 
             <header className="mb-6 flex items-start justify-between">
                 <div>

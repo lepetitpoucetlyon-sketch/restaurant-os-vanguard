@@ -21,6 +21,22 @@ import { useCallback, useMemo } from 'react';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@nexus/contracts/finance.types';
 
+function getAmountInMu(tx: { amountInMicrounits?: unknown; amountInCents?: unknown; credit?: unknown; debit?: unknown }): number {
+    if (tx.amountInMicrounits !== undefined && tx.amountInMicrounits !== null) return Number(tx.amountInMicrounits);
+    if (tx.amountInCents !== undefined && tx.amountInCents !== null) return Number(tx.amountInCents) * 10_000;
+    if (tx.credit || tx.debit) return (Number(tx.credit || 0) + Number(tx.debit || 0)) * 10_000;
+    return 0;
+}
+
+function buildEntryAmountInCents(
+    e: { amountInMicrounits?: number | null; lines: { side: string; amountInMicrounits?: number }[] },
+    side: 'credit' | 'debit',
+    toCents: (µ: number) => number,
+): number {
+    if (e.amountInMicrounits != null) return toCents(e.amountInMicrounits);
+    return e.lines.reduce((s, l) => s + (l.side === side ? toCents(l.amountInMicrounits ?? 0) : 0), 0);
+}
+
 /**
  * 📊 useAccounting - Grade X Atomic Mapper
  * Orchestre la finance souveraine et la conformité NF525.
@@ -44,19 +60,6 @@ export function useAccounting() {
 
     // Computed Metrics (Grade X logic)
     const metrics = useMemo<FinancialMetrics>(() => {
-        const getAmountInMu = (tx: any) => {
-            if (tx.amountInMicrounits !== undefined && tx.amountInMicrounits !== null) {
-                return Number(tx.amountInMicrounits);
-            }
-            if (tx.amountInCents !== undefined && tx.amountInCents !== null) {
-                return Number(tx.amountInCents) * 10_000;
-            }
-            if (tx.credit || tx.debit) {
-                return (Number(tx.credit || 0) + Number(tx.debit || 0)) * 10_000;
-            }
-            return 0;
-        };
-
         const revenue = journalEntries.reduce((sum, tx) => sum + (tx.type === 'revenue' || (tx.type as string) === 'DEBIT' ? getAmountInMu(tx) : 0), 0);
         const expenses = journalEntries.reduce((sum, tx) => sum + (tx.type === 'expense' || (tx.type as string) === 'CREDIT' ? getAmountInMu(tx) : 0), 0);
         const netProfit = revenue - expenses;
@@ -106,24 +109,10 @@ export function useAccounting() {
         const toCents = (µ: number) => Math.round(µ / 10_000);
         const revenues = journalEntries
             .filter(e => e.type === 'revenue')
-            .map(e => ({
-                category: e.type ?? 'revenue',
-                accountCode: e.pieceNumber,
-                accountName: e.description,
-                amountInCents: e.amountInMicrounits != null
-                    ? toCents(e.amountInMicrounits)
-                    : e.lines.reduce((s, l) => s + (l.side === 'credit' ? toCents(l.amountInMicrounits ?? 0) : 0), 0),
-            }));
+            .map(e => ({ category: e.type ?? 'revenue', accountCode: e.pieceNumber, accountName: e.description, amountInCents: buildEntryAmountInCents(e, 'credit', toCents) }));
         const expenses = journalEntries
             .filter(e => e.type === 'expense')
-            .map(e => ({
-                category: e.type ?? 'expense',
-                accountCode: e.pieceNumber,
-                accountName: e.description,
-                amountInCents: e.amountInMicrounits != null
-                    ? toCents(e.amountInMicrounits)
-                    : e.lines.reduce((s, l) => s + (l.side === 'debit' ? toCents(l.amountInMicrounits ?? 0) : 0), 0),
-            }));
+            .map(e => ({ category: e.type ?? 'expense', accountCode: e.pieceNumber, accountName: e.description, amountInCents: buildEntryAmountInCents(e, 'debit', toCents) }));
         const totalRevenueInCents = revenues.reduce((s, r) => s + r.amountInCents, 0);
         const totalExpensesInCents = expenses.reduce((s, e) => s + e.amountInCents, 0);
         return {

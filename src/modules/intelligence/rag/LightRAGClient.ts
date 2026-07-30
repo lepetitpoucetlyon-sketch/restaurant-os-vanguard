@@ -323,6 +323,20 @@ export class LightRAGClient {
     // PRIVATE — HTTP Transport
     // ============================================
 
+    private buildHeaders(body: unknown): Record<string, string> {
+        const headers: Record<string, string> = { 'Accept': 'application/json' };
+        if (!(body instanceof FormData)) headers['Content-Type'] = 'application/json';
+        if (this.config.apiKey) headers['Authorization'] = `Bearer ${this.config.apiKey}`;
+        if (this.config.workspace) headers['X-Workspace'] = this.config.workspace;
+        return headers;
+    }
+
+    private classifyFetchError(error: unknown, label: string, timeoutMs: number): Error {
+        if (error instanceof DOMException && error.name === 'AbortError') return new LightRAGTimeoutError(label, timeoutMs);
+        if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('network'))) return new LightRAGUnavailableError(label);
+        return error instanceof Error ? error : new Error(String(error));
+    }
+
     private async request<T>(
         method: 'GET' | 'POST' | 'PUT' | 'DELETE',
         path: string,
@@ -331,7 +345,7 @@ export class LightRAGClient {
     ): Promise<T> {
         const url = `${this.config.baseUrl}${path}`;
         const timeoutMs = customTimeoutMs ?? this.config.timeoutMs;
-
+        const label = `${method} ${path}`;
         let lastError: Error | null = null;
 
         for (let attempt = 0; attempt <= this.config.maxRetries; attempt++) {
@@ -339,27 +353,9 @@ export class LightRAGClient {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-                const headers: Record<string, string> = {
-                    'Accept': 'application/json',
-                };
-
-                // Only set Content-Type to JSON if body is NOT FormData
-                if (!(body instanceof FormData)) {
-                    headers['Content-Type'] = 'application/json';
-                }
-
-                if (this.config.apiKey) {
-                    headers['Authorization'] = `Bearer ${this.config.apiKey}`;
-                }
-
-                // Add workspace header for tenant isolation
-                if (this.config.workspace) {
-                    headers['X-Workspace'] = this.config.workspace;
-                }
-
                 const fetchOptions: RequestInit = {
                     method,
-                    headers,
+                    headers: this.buildHeaders(body),
                     signal: controller.signal,
                 };
 
@@ -376,52 +372,30 @@ export class LightRAGClient {
 
                     if (retryable && attempt < this.config.maxRetries) {
                         const delay = this.config.retryDelayMs * Math.pow(2, attempt);
-                        logger.warn(
-                            `[LightRAGClient] ${method} ${path} failed (${response.status}), ` +
-                            `retrying in ${delay}ms (${attempt + 1}/${this.config.maxRetries})`
-                        );
+                        logger.warn(`[LightRAGClient] ${label} failed (${response.status}), retrying in ${delay}ms (${attempt + 1}/${this.config.maxRetries})`);
                         await this.sleep(delay);
                         continue;
                     }
 
-                    throw new LightRAGError(
-                        errorBody,
-                        response.status,
-                        `${method} ${path}`,
-                        retryable
-                    );
+                    throw new LightRAGError(errorBody, response.status, label, retryable);
                 }
 
                 return await response.json() as T;
 
             } catch (error) {
-                if (error instanceof LightRAGError) {
-                    throw error;
-                }
+                if (error instanceof LightRAGError) throw error;
 
-                if (error instanceof DOMException && error.name === 'AbortError') {
-                    lastError = new LightRAGTimeoutError(`${method} ${path}`, timeoutMs);
-                } else if (
-                    error instanceof TypeError &&
-                    (error.message.includes('fetch') || error.message.includes('network'))
-                ) {
-                    lastError = new LightRAGUnavailableError(`${method} ${path}`);
-                } else {
-                    lastError = error instanceof Error ? error : new Error(String(error));
-                }
+                lastError = this.classifyFetchError(error, label, timeoutMs);
 
                 if (attempt < this.config.maxRetries) {
                     const delay = this.config.retryDelayMs * Math.pow(2, attempt);
-                    logger.warn(
-                        `[LightRAGClient] ${method} ${path} error: ${lastError.message}, ` +
-                        `retrying in ${delay}ms (${attempt + 1}/${this.config.maxRetries})`
-                    );
+                    logger.warn(`[LightRAGClient] ${label} error: ${lastError.message}, retrying in ${delay}ms (${attempt + 1}/${this.config.maxRetries})`);
                     await this.sleep(delay);
                 }
             }
         }
 
-        throw lastError ?? new LightRAGUnavailableError(`${method} ${path}`);
+        throw lastError ?? new LightRAGUnavailableError(label);
     }
 
     private sleep(ms: number): Promise<void> {

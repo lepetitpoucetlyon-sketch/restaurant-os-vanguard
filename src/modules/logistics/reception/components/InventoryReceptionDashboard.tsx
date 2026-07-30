@@ -99,6 +99,22 @@ function findIngredientByBarcode(items: IngredientDoc[], code: string): Ingredie
     return items.find(i => i.sku?.toUpperCase() === code || i.barcode?.toUpperCase() === code || i.supplierRef?.toUpperCase() === code);
 }
 
+async function performBarcodeSearch(
+    code: string,
+    setBarcodeSearching: (b: boolean) => void,
+    setBarcodeResult: (r: BarcodeSearchResult | null) => void,
+): Promise<void> {
+    if (!code.trim()) return;
+    setBarcodeSearching(true);
+    setBarcodeResult(null);
+    try {
+        const found = await searchBarcode(code);
+        if (found) { setBarcodeResult(found); toast.success(`Produit trouvé : ${found.name}`); }
+        else { toast.warning(`Aucun produit trouvé pour le code : ${code}`); }
+    } catch { toast.error('Erreur lors de la recherche par code-barres.'); }
+    finally { setBarcodeSearching(false); }
+}
+
 async function searchBarcode(code: string): Promise<BarcodeSearchResult | null> {
     const [products, ingredients] = await Promise.all([
         Nexus.adapter.query<ProductDoc>('products'),
@@ -108,6 +124,22 @@ async function searchBarcode(code: string): Promise<BarcodeSearchResult | null> 
     const found = findByBarcode(products ?? [], normalised) ?? findIngredientByBarcode(ingredients ?? [], normalised) ?? null;
     if (!found) return null;
     return { id: String(found.id), name: String(found.name), unit: found.unit ? String(found.unit) : undefined, sku: found.sku, supplier: found.supplier, supplierId: found.supplierId };
+}
+
+function onBarcodeKeyDown(
+    e: React.KeyboardEvent<HTMLInputElement>,
+    barcodeValue: string,
+    bufferRef: React.MutableRefObject<string>,
+    timerRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>,
+    search: (code: string) => void,
+): void {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const code = bufferRef.current || barcodeValue;
+        if (code) { void search(code); bufferRef.current = ''; }
+    } else {
+        handleBarcodeBuffer(e.key, bufferRef, timerRef, (c) => void search(c));
+    }
 }
 
 function handleBarcodeBuffer(
@@ -120,6 +152,40 @@ function handleBarcodeBuffer(
     timerRef.current = setTimeout(() => {
         if (bufferRef.current.length > 3) { onSearch(bufferRef.current); bufferRef.current = ''; }
     }, 100);
+}
+
+function ScanContent({ isScanning, onScan }: { isScanning: boolean; onScan: () => void }) {
+    return isScanning ? (
+        <>
+            <motion.div
+                animate={{ top: ['0%', '100%', '0%'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-status-success to-transparent z-10 shadow-[0_0_20px_rgba(52,211,153,0.5)]"
+            />
+            <ScanLine className="w-20 h-20 text-status-success animate-pulse mb-4" />
+            <span className="text-status-success font-black tracking-[0.3em] uppercase animate-pulse">Analyse Empire Vision...</span>
+        </>
+    ) : (
+        <>
+            <Camera className="w-16 h-16 text-text-secondary group-hover:text-status-success transition-colors mb-6" />
+            <p className="text-text-secondary font-bold mb-8 text-center max-w-xs uppercase tracking-tighter">Posez le bon de livraison sous l'objectif ou importez un PDF</p>
+            <button onClick={onScan} className="bg-surface-card text-primary font-black py-5 px-12 rounded-2xl hover:bg-status-success transition-all active:scale-95 text-lg uppercase shadow-xl shadow-emerald-500/10">
+                Scanner le Bon
+            </button>
+        </>
+    );
+}
+
+function AdviceSaveButton({ isSaving, onSave }: { isSaving: boolean; onSave: () => void }) {
+    return (
+        <button onClick={onSave} disabled={isSaving} className="w-full bg-surface-bg text-text-primary py-5 rounded-2xl font-black uppercase text-sm flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50">
+            {isSaving ? (
+                <span className="animate-pulse">Synchronisation...</span>
+            ) : (
+                <><Save className="w-5 h-5" />Sceller &amp; Stocker</>
+            )}
+        </button>
+    );
 }
 
 export function InventoryReceptionDashboard() {
@@ -138,26 +204,12 @@ export function InventoryReceptionDashboard() {
   const barcodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleBarcodeSearch = useCallback(async (code: string) => {
-    if (!code.trim()) return;
-    setBarcodeSearching(true);
-    setBarcodeResult(null);
-    try {
-      const found = await searchBarcode(code);
-      if (found) { setBarcodeResult(found); toast.success(`Produit trouvé : ${found.name}`); }
-      else { toast.warning(`Aucun produit trouvé pour le code : ${code}`); }
-    } catch { toast.error('Erreur lors de la recherche par code-barres.'); }
-    finally { setBarcodeSearching(false); }
+    await performBarcodeSearch(code, setBarcodeSearching, setBarcodeResult);
   }, []);
 
   const handleBarcodeKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const code = barcodeBufferRef.current || barcodeValue;
-        if (code) { void handleBarcodeSearch(code); barcodeBufferRef.current = ''; }
-      } else {
-        handleBarcodeBuffer(e.key, barcodeBufferRef, barcodeTimerRef, (c) => void handleBarcodeSearch(c));
-      }
+        onBarcodeKeyDown(e, barcodeValue, barcodeBufferRef, barcodeTimerRef, handleBarcodeSearch);
     },
     [barcodeValue, handleBarcodeSearch]
   );
@@ -284,28 +336,7 @@ export function InventoryReceptionDashboard() {
               className="flex flex-col items-center"
             >
               <div className="w-full aspect-video md:aspect-[21/9] bg-[#161618] rounded-[2.5rem] border-2 border-dashed border-border-default flex flex-col items-center justify-center relative overflow-hidden group">
-                {isScanning ? (
-                  <>
-                    <motion.div 
-                      animate={{ top: ['0%', '100%', '0%'] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                      className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-status-success to-transparent z-10 shadow-[0_0_20px_rgba(52,211,153,0.5)]"
-                    />
-                    <ScanLine className="w-20 h-20 text-status-success animate-pulse mb-4" />
-                    <span className="text-status-success font-black tracking-[0.3em] uppercase animate-pulse">Analyse Empire Vision...</span>
-                  </>
-                ) : (
-                  <>
-                    <Camera className="w-16 h-16 text-text-secondary group-hover:text-status-success transition-colors mb-6" />
-                    <p className="text-text-secondary font-bold mb-8 text-center max-w-xs uppercase tracking-tighter">Posez le bon de livraison sous l'objectif ou importez un PDF</p>
-                    <button 
-                      onClick={handleScan}
-                      className="bg-surface-card text-primary font-black py-5 px-12 rounded-2xl hover:bg-status-success transition-all active:scale-95 text-lg uppercase shadow-xl shadow-emerald-500/10"
-                    >
-                      Scanner le Bon
-                    </button>
-                  </>
-                )}
+                <ScanContent isScanning={isScanning} onScan={handleScan} />
               </div>
             </motion.div>
           )}
@@ -411,20 +442,7 @@ export function InventoryReceptionDashboard() {
                         <p className="text-primary/70 font-bold text-xs uppercase mb-10 tracking-tighter leading-snug">
                             En validant, les stocks seront déduits via FIFO, les alertes DLC activées et les calculs de marge mis à jour.
                         </p>
-                        <button 
-                            onClick={handleSaveToStock}
-                            disabled={isSaving}
-                            className="w-full bg-surface-bg text-text-primary py-5 rounded-2xl font-black uppercase text-sm flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50"
-                        >
-                            {isSaving ? (
-                                <span className="animate-pulse">Synchronisation...</span>
-                            ) : (
-                                <>
-                                    <Save className="w-5 h-5" />
-                                    Sceller & Stocker
-                                </>
-                            )}
-                        </button>
+                        <AdviceSaveButton isSaving={isSaving} onSave={handleSaveToStock} />
                     </div>
 
                     <div className="bg-[#161618] border border-border-subtle p-6 rounded-3xl">

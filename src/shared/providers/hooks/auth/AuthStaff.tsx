@@ -11,6 +11,22 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { hashPin } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 
+function isNetworkError(err: unknown): boolean {
+    return err instanceof Error && (
+        err.message.includes('CORS') || err.message.includes('internal') || err.message.includes('network')
+    );
+}
+
+function extractRemoteUsers(data: { users?: User[] } | null | undefined): User[] {
+    return Array.isArray(data?.users) ? data!.users.map(IdentityManager.stripSensitiveFields) : [];
+}
+
+async function resolveDefaultUser(): Promise<User> {
+    return isMCCMode()
+        ? IdentityManager.createFleetAdminUser()
+        : IdentityManager.createRootAdminUser();
+}
+
 export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: string | null) {
     const firebaseFunctions = getFunctions(firebaseApp);
     const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
@@ -26,7 +42,7 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
 
         const loadLoginProfiles = async () => {
             if (isMock || isMCCMode()) {
-                logger.info(`[AuthStaff] Seed immédiat: ${seedUser.role} (${isMCCMode() ? 'MCC' : 'MOCK'})`);
+                logger.info(`[AuthStaff] Seed immédiat: ${seedUser.role}`);
                 setUsers([IdentityManager.buildSessionUser(seedUser)]);
                 setIsUsersLoaded(true);
                 return;
@@ -35,10 +51,7 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
             try {
                 // Pre-auth fallback
                 const response = await listLoginProfilesCallable({});
-                const remoteUsers = Array.isArray(response.data?.users)
-                    ? response.data.users.map(IdentityManager.stripSensitiveFields)
-                    : [];
-
+                const remoteUsers = extractRemoteUsers(response.data);
                 const rootAdmin = IdentityManager.buildSessionUser(ROOT_ADMIN);
                 const combinedUsers = [rootAdmin, ...remoteUsers.filter(u => u.id !== rootAdmin.id)];
 
@@ -48,10 +61,7 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
                 }
             } catch (error) {
                 // Network or CORS errors are common in dev/mock environments
-                const isNetworkError = error instanceof Error &&
-                    (error.message.includes('CORS') || error.message.includes('internal') || error.message.includes('network'));
-
-                if (!isNetworkError) {
+                if (!isNetworkError(error)) {
                     console.error('Unable to load login profiles', error);
                 }
 
@@ -71,12 +81,10 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
         const unsubscribeUsers = Nexus.adapter.onSnapshot(
             usersPath,
             async (fetchedUsers: User[]) => {
-                let currentUsers = fetchedUsers || [];
+                let currentUsers = fetchedUsers;
 
                 if (currentUsers.length === 0) {
-                    const defaultUser = isMCCMode()
-                        ? await IdentityManager.createFleetAdminUser()
-                        : await IdentityManager.createRootAdminUser();
+                    const defaultUser = await resolveDefaultUser();
                     await Nexus.adapter.set(`${usersPath}/${seedUser.id}`, defaultUser);
                     currentUsers = [defaultUser];
                 }

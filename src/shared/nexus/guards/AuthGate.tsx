@@ -16,6 +16,12 @@ interface AuthGateProps {
     children: React.ReactNode;
 }
 
+const PUBLIC_PATH_PREFIXES = ['/landing', '/showcase', '/reserve', '/auth', '/login'] as const;
+
+function isPublicPath(pathname: string | null): boolean {
+    return pathname === '/' || PUBLIC_PATH_PREFIXES.some(p => pathname?.startsWith(p));
+}
+
 /**
  * AuthGate - Specialized security layer for Identity & Session.
  * Only handles PIN Authentication and 2FA Challenges.
@@ -23,36 +29,28 @@ interface AuthGateProps {
 export function AuthGate({ children }: AuthGateProps) {
     const { isAuthenticated, require2FAChallenge } = useAuth();
     const { isMobileMenuOpen, closeMobileMenu } = useUI();
-    const { activeTenantId, isTenantLoading } = useTenant();
+    const { activeTenantId: _activeTenantId } = useTenant();
     const tenantConfig = useAtomValue(tenantConfigAtom);
     const pathname = usePathname();
 
     // 0. SOVEREIGN KILL SWITCH (Highest Priority)
     const isKillSwitchActive = (tenantConfig as { status?: { killSwitch?: boolean } })?.status?.killSwitch === true;
-    
+
     // Bypass for MCC area to allow admin recovery if needed
     const isMccArea = pathname?.startsWith('/admin');
-    const isPublicArea = pathname === '/' || pathname?.startsWith('/landing') || pathname?.startsWith('/showcase') || pathname?.startsWith('/reserve') || pathname?.startsWith('/auth') || pathname?.startsWith('/login');
 
     if (isKillSwitchActive && !isMccArea) {
         return <SovereignLockout />;
     }
 
     // 1. PUBLIC ROUTES BYPASS
-    if (isPublicArea) {
+    if (isPublicPath(pathname)) {
         return <>{children}</>;
     }
 
     // 2. PIN ENFORCEMENT
     if (!isAuthenticated) {
         return <PinLogin />;
-    }
-
-    // 3. TENANT CONTEXT RESOLUTION
-    // Initialization is now handled atomically by TenantContext (URL params aware).
-    // We just wait for resolution if not in MCC.
-    if (!isMccArea && !activeTenantId && !isTenantLoading) {
-        // Optionnel: On pourrait afficher un Loader ici si le tenant n'est pas encore résolu.
     }
 
     // 4. 2FA CHALLENGE

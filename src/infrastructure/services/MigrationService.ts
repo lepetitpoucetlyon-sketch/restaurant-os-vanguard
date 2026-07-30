@@ -35,6 +35,30 @@ export const MenuMigrationSchema = z.object({
 
 export type MenuMigration = z.infer<typeof MenuMigrationSchema>;
 
+function buildStaffRecord(emp: Record<string, string>): Record<string, unknown> {
+    return {
+        name: emp.name || emp.Nom,
+        role: emp.role || 'server',
+        pin: (emp.pin && validatePin(emp.pin).valid) ? emp.pin : generateSecurePin(),
+        createdAt: new Date().toISOString(),
+        accessLevel: 3,
+        performanceScore: 5.0,
+    };
+}
+
+function buildCrmRecord(crm: Record<string, string>): Record<string, unknown> {
+    return {
+        firstName: crm.prenom || crm.firstName || "Inconnu",
+        lastName: crm.nom || crm.lastName || "",
+        email: crm.email || "",
+        phone: crm.phone || "",
+        status: 'active',
+        metrics: { totalVisits: 0, totalSpent: 0, noShows: 0 },
+        tags: [],
+        createdAt: new Date().toISOString(),
+    };
+}
+
 export class MigrationService {
     static preprocessData(data: unknown): MenuMigration {
         const raw = data as Record<string, unknown>;
@@ -141,35 +165,15 @@ Associe chaque produit à sa categoryName. Ne renvoie AUCUN autre texte que le J
             onProgress(100);
         } 
         else if (entity === 'staff') {
-            const staffData = data as Record<string, string>[];
-            for (const emp of staffData) {
-                const id = Nexus.adapter.generateId('users');
-                batch.set(`users/${id}`, {
-                    name: emp.name || emp.Nom,
-                    role: emp.role || 'server',
-                    pin: (emp.pin && validatePin(emp.pin).valid) ? emp.pin : generateSecurePin(),
-                    createdAt: new Date().toISOString(),
-                    accessLevel: 3,
-                    performanceScore: 5.0
-                });
+            for (const emp of data as Record<string, string>[]) {
+                batch.set(`users/${Nexus.adapter.generateId('users')}`, buildStaffRecord(emp));
             }
             await batch.commit();
             onProgress(100);
         }
         else if (entity === 'crm') {
-            const crmData = data as Record<string, string>[];
-            for (const crm of crmData) {
-                const id = Nexus.adapter.generateId('crms');
-                batch.set(`crms/${id}`, {
-                    firstName: crm.prenom || crm.firstName || "Inconnu",
-                    lastName: crm.nom || crm.lastName || "",
-                    email: crm.email || "",
-                    phone: crm.phone || "",
-                    status: 'active',
-                    metrics: { totalVisits: 0, totalSpent: 0, noShows: 0 },
-                    tags: [],
-                    createdAt: new Date().toISOString()
-                });
+            for (const crm of data as Record<string, string>[]) {
+                batch.set(`crms/${Nexus.adapter.generateId('crms')}`, buildCrmRecord(crm));
             }
             await batch.commit();
             onProgress(100);

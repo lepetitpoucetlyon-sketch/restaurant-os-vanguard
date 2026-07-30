@@ -19,9 +19,26 @@ interface UseSortingReturn<T> {
     getSortIndicator: (key: keyof T) => "asc" | "desc" | null;
 }
 
+function compareValues<T>(aVal: T[keyof T], bVal: T[keyof T], direction: SortDirection): number {
+    if (aVal === bVal) return 0;
+    if (aVal === null || aVal === undefined) return 1;
+    if (bVal === null || bVal === undefined) return -1;
+    let cmp = 0;
+    if (typeof aVal === "string" && typeof bVal === "string") {
+        cmp = aVal.localeCompare(bVal, "fr");
+    } else if (typeof aVal === "number" && typeof bVal === "number") {
+        cmp = aVal - bVal;
+    } else if (aVal instanceof Date && bVal instanceof Date) {
+        cmp = aVal.getTime() - bVal.getTime();
+    } else {
+        cmp = String(aVal).localeCompare(String(bVal));
+    }
+    return direction === "asc" ? cmp : -cmp;
+}
+
 /**
  * Hook pour gérer le tri des listes.
- * 
+ *
  * @example
  * const { sortedItems, sortBy, getSortIndicator } = useSorting(items, {
  *   initialSortKey: 'date',
@@ -67,31 +84,7 @@ export function useSorting<T extends SovereignData>(
 
     const sortedItems = useMemo(() => {
         if (!sortKey) return items;
-
-        return [...items].sort((a, b) => {
-            const aValue = a[sortKey];
-            const bValue = b[sortKey];
-
-            if (aValue === bValue) return 0;
-            if (aValue === null || aValue === undefined) return 1;
-            if (bValue === null || bValue === undefined) return -1;
-
-            let comparison = 0;
-            if (typeof aValue === "string" && typeof bValue === "string") {
-                comparison = aValue.localeCompare(bValue, "fr");
-            } else if (typeof aValue === "number" && typeof bValue === "number") {
-                comparison = aValue - bValue;
-            } else if (
-                aValue && typeof aValue === "object" && (aValue instanceof Date) &&
-                bValue && typeof bValue === "object" && (bValue instanceof Date)
-            ) {
-                comparison = (aValue as Date).getTime() - (bValue as Date).getTime();
-            } else {
-                comparison = String(aValue).localeCompare(String(bValue));
-            }
-
-            return sortDirection === "asc" ? comparison : -comparison;
-        });
+        return [...items].sort((a, b) => compareValues(a[sortKey], b[sortKey], sortDirection));
     }, [items, sortKey, sortDirection]);
 
     return {

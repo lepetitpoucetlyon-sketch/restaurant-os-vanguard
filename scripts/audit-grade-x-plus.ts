@@ -42,6 +42,10 @@ const report: DeepAuditReport = {
   semanticTokenCoverage: { migratedComponents: 0, staticTailwindResiduals: 0 },
 };
 
+function isTypeScriptFile(name: string): boolean {
+  return name.endsWith('.ts') || name.endsWith('.tsx');
+}
+
 function countImports(content: string): number {
   const importLines = content.match(/^import\s+[\s\S]*?from\s+['"][^'"]+['"]/gm) || [];
   return importLines.length;
@@ -61,7 +65,7 @@ function scanDirectory(dir: string) {
       continue;
     }
 
-    if (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx')) {
+    if (isTypeScriptFile(entry.name)) {
       report.totalFilesScanned++;
       const content = fs.readFileSync(fullPath, 'utf-8');
 

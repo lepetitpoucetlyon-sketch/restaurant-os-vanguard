@@ -17,6 +17,30 @@ export interface StockImpactResult {
     movements: InventoryMovement[];
 }
 
+type Modifier = { action?: string; quantityImpact?: number; ingredientId?: string; name: string };
+type RequiredIngredient = { id: string; name: string; quantity: number };
+
+function aggregateRecipeIngredients(
+    recipe: Recipe,
+    modifiers: Modifier[],
+): Map<string, RequiredIngredient> {
+    const required = new Map<string, RequiredIngredient>();
+    for (const ing of (recipe.ingredients || [])) {
+        required.set(ing.id, { id: ing.id, name: ing.name as string, quantity: ing.quantity || 0 });
+    }
+    for (const mod of modifiers) {
+        if (!mod.ingredientId) continue;
+        const current = required.get(mod.ingredientId) || { id: mod.ingredientId, name: mod.name, quantity: 0 };
+        if (mod.action === 'add' && mod.quantityImpact) {
+            current.quantity += mod.quantityImpact;
+            required.set(mod.ingredientId, current);
+        } else if (mod.action === 'remove') {
+            required.delete(mod.ingredientId);
+        }
+    }
+    return required;
+}
+
 /**
  * 📦 StockEngine - Restaurant OS
  * Centralized Domain Logic for Inventory Management.
@@ -43,38 +67,9 @@ export class StockEngine {
                 continue;
             }
 
-            // Aggregate required ingredients (Base Recipe + Modifiers)
-            const requiredIngredients = new Map<string, { id: string, name: string, quantity: number }>();
-            
-            // 1. Add base recipe ingredients
-            for (const ing of (recipe.ingredients || [])) {
-                requiredIngredients.set(ing.id, { 
-                    id: ing.id, 
-                    name: ing.name as string, 
-                    quantity: ing.quantity || 0 
-                });
-            }
+            const rawModifiers = (item as unknown as { modifiers?: Modifier[] }).modifiers || [];
+            const requiredIngredients = aggregateRecipeIngredients(recipe, rawModifiers);
 
-            // 2. Apply modifiers (additions / removals)
-            const modifiers = (item as unknown as { modifiers?: { action?: string, quantityImpact?: number, ingredientId?: string, name: string }[] }).modifiers || [];
-            for (const mod of modifiers) {
-                if (mod.ingredientId) {
-                    const current = requiredIngredients.get(mod.ingredientId) || { 
-                        id: mod.ingredientId, 
-                        name: mod.name, 
-                        quantity: 0 
-                    };
-                    
-                    if (mod.action === 'add' && mod.quantityImpact) {
-                        current.quantity += mod.quantityImpact;
-                        requiredIngredients.set(mod.ingredientId, current);
-                    } else if (mod.action === 'remove') {
-                        requiredIngredients.delete(mod.ingredientId);
-                    }
-                }
-            }
-
-            // 3. Process deductions
             for (const ing of requiredIngredients.values()) {
                 if (ing.quantity <= 0) continue;
 

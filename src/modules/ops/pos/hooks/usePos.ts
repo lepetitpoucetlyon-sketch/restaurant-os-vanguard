@@ -118,6 +118,22 @@ function hasPermission(hasAccess: ((perm: string) => boolean) | undefined, perm:
     return !hasAccess || hasAccess(perm);
 }
 
+function resolveServerName(user: { name?: string } | null | undefined): string {
+    return user?.name || "Serveur";
+}
+
+interface SplitInfo {
+    label: string;
+    partials: { amount: number; guest: number; method?: string }[] | undefined;
+}
+
+function getSplitInfo(opts: { split?: boolean } | undefined, payments: { amount: number; guest: number; method?: string }[]): SplitInfo {
+    return {
+        label: opts?.split ? "Paiement fractionné validé" : "Paiement validé",
+        partials: opts?.split ? payments : undefined,
+    };
+}
+
 interface SendOrderParams {
     tableId: string;
     tableNumber: string;
@@ -172,11 +188,14 @@ export function usePOSController() {
     const [consumptionMode, setConsumptionMode] = useState<ConsumptionMode>('dine_in');
 
     const isLoading = productsLoading || categoriesLoading;
+    const resolvedTables = tables ?? [];
+    const resolvedCategories = categories ?? [];
+    const resolvedProducts = products ?? [];
 
     // --- DERIVED STATE ---
     const currentTable = useMemo(() =>
-        (tables || []).find((t: Table) => t.id === selectedTableId),
-        [tables, selectedTableId]);
+        resolvedTables.find((t: Table) => t.id === selectedTableId),
+        [resolvedTables, selectedTableId]);
 
     /** Cart subtotal (does not include tip). Already reflects per-item discounts. */
     const cartTotal = useMemo(() =>
@@ -262,7 +281,7 @@ export function usePOSController() {
         if (cartItems.length === 0 || !currentTable) return;
         try {
             await submitKitchenOrder(
-                { tableId: currentTable.id, tableNumber: currentTable.number, serverName: currentUser?.name || "Serveur", items: POSService.formatForKitchen(cartItems) as OrderItem[] },
+                { tableId: currentTable.id, tableNumber: currentTable.number, serverName: resolveServerName(currentUser), items: POSService.formatForKitchen(cartItems) as OrderItem[] },
                 addOrder, updateTable, selectedTableId
             );
             showToast(`Table ${currentTable.number} : Commande envoyée`, "success");
@@ -275,8 +294,8 @@ export function usePOSController() {
     const finalizePayment = useCallback(async (opts?: { split?: boolean }) => {
         if (!currentTable) return;
         try {
-            await processPayment({ cartItems, operatorId: currentUser?.id ?? "unknown", tableId: selectedTableId, tenantId: activeTenantId ?? "restaurant-os", consumptionMode, partialPayments: opts?.split ? partialPayments : undefined });
-            const label = opts?.split ? "Paiement fractionné validé" : "Paiement validé";
+            const { label, partials } = getSplitInfo(opts, partialPayments);
+            await processPayment({ cartItems, operatorId: currentUser?.id ?? "unknown", tableId: selectedTableId, tenantId: activeTenantId ?? "restaurant-os", consumptionMode, partialPayments: partials });
             showToast(`Table ${currentTable.number} — ${label} & scellé NF525`, "success");
             handleClearCart();
             setSelectedTableId(null);
@@ -318,7 +337,7 @@ export function usePOSController() {
         if (courseItems.length === 0 || !currentTable) return;
         try {
             await submitKitchenOrder(
-                { tableId: currentTable.id, tableNumber: currentTable.number, serverName: currentUser?.name || "Serveur", items: buildCourseOrderItems(courseItems, course) },
+                { tableId: currentTable.id, tableNumber: currentTable.number, serverName: resolveServerName(currentUser), items: buildCourseOrderItems(courseItems, course) },
                 addOrder, updateTable, selectedTableId
             );
             setCartItems((prev) => markCourseAsSent(prev, course, Date.now()));
@@ -332,8 +351,8 @@ export function usePOSController() {
         setSelectedTableId,
         selectedCategory,
         setSelectedCategory,
-        categories: categories || [],
-        products: products || [],
+        categories: resolvedCategories,
+        products: resolvedProducts,
         isLoading,
         isMobileCartOpen,
         setIsMobileCartOpen,
