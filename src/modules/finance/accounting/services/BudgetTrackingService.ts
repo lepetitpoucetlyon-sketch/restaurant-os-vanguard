@@ -28,12 +28,10 @@ export class BudgetTrackingService {
         logger.info(`[BudgetTracking] Génération du rapport budget vs réalisé pour ${yearMonth} (${tenantId})`);
         
         try {
-            // 1. Charger le budget configuré pour ce mois
-            // Dans un vrai système, on lit depuis une collection 'budgets'
-            const budgetData = {
-                'Food': 5000000, // 50 000 €
-                'Beverage': 2000000, // 20 000 €
-            };
+            // 1. Charger le budget configuré pour ce mois depuis le Nexus
+            const budgetData = await Nexus.adapter.get<Record<string, number>>(
+                `tenants/${tenantId}/budgets/${yearMonth}`
+            ) || { 'Food': 0, 'Beverage': 0 };
 
             // 2. Charger les écritures du mois (JournalEntries)
             const entries = await Nexus.adapter.get<Record<string, any>>(

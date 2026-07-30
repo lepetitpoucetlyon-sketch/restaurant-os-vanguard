@@ -4,6 +4,9 @@ import { useState, useCallback } from "react";
 import { useToast } from "@components/ui/Toast";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { empireAudit } from "@/infrastructure/services/audit";
+import { PERMISSION_ROLE_LEVELS, type PermissionRole } from "@/shared/nexus/contracts/permissions.types";
+
+const MIN_ALERT_ROLE_LEVEL = PERMISSION_ROLE_LEVELS['hotesse']; // 30 — tout le personnel de salle
 
 interface CashTransaction {
   id: string;
@@ -13,7 +16,12 @@ interface CashTransaction {
   operatorId: string;
 }
 
-export function useCashDrawer(drawerId: string, tenantId: string, currentOperatorId: string) {
+export function useCashDrawer(
+  drawerId: string,
+  tenantId: string,
+  currentOperatorId: string,
+  currentOperatorRole: string = 'plongeur',
+) {
   const { showToast } = useToast();
   
   const [expectedAmountInCents, setExpectedAmountInCents] = useState(15000); // Ex: fond de caisse 150€
@@ -75,7 +83,11 @@ export function useCashDrawer(drawerId: string, tenantId: string, currentOperato
   }, [counterType, addTransaction, showToast, drawerId, expectedAmountInCents]);
 
   const triggerUnauthorizedOpen = useCallback(async () => {
-    // Simulation d'une ouverture par clé matérielle sans transaction
+    const roleLevel = PERMISSION_ROLE_LEVELS[currentOperatorRole as PermissionRole] ?? 0;
+    if (roleLevel < MIN_ALERT_ROLE_LEVEL) {
+      showToast('Accès refusé — rôle insuffisant pour émettre une alerte caisse', 'error');
+      return;
+    }
     await NexusEventBus.emitDurable('cash_drawer.opened_unauthorized' as any, {
       v: 1,
       drawerId,
@@ -84,7 +96,7 @@ export function useCashDrawer(drawerId: string, tenantId: string, currentOperato
       detectedAt: Date.now()
     });
     showToast('Alerte de sécurité envoyée', 'error');
-  }, [drawerId, currentOperatorId, tenantId, showToast]);
+  }, [drawerId, currentOperatorId, currentOperatorRole, tenantId, showToast]);
 
   return {
     expectedAmountInCents,

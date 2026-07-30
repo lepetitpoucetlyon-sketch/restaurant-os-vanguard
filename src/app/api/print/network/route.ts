@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import * as net from 'net';
-import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 
 interface Body { ip: string; port: number; data: number[] }
@@ -33,7 +33,7 @@ function isPrivateIPv4(ip: string): boolean {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const caller = await requireTenantUser(request);
+  const caller = await requireTenantRole(request, 'hotesse');
   if (isDenied(caller)) return caller;
 
   let body: Body;

@@ -18,6 +18,8 @@ export const UserSchema = z.object({
   role:              z.string(),
   status:            StatusSchema.default('active'),
   pin:               z.string().regex(/^[0-9]{4}$/, 'Le PIN doit être composé de 4 chiffres').optional(),
+  pinHash:           z.string().optional(),
+  pinSalt:           z.string().optional(),
   avatar:            z.string().url().optional().nullable(),
   lastActive:        TimestampSchema.optional(),
   performanceScore:  z.number().min(0).max(100).optional(),

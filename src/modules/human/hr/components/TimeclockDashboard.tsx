@@ -16,7 +16,8 @@ import {
 } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
-import type { User } from "@nexus/contracts";
+
+type FoundUser = { id: string; name: string; role: string; avatar: string | null };
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -66,11 +67,9 @@ export function TimeclockDashboard() {
     const [tenantId] = useAtom(activeTenantIdAtom);
     const [now, setNow] = useState(new Date());
     const [pin, setPin] = useState("");
-    const [foundUser, setFoundUser] = useState<User | null>(null);
+    const [foundUser, setFoundUser] = useState<FoundUser | null>(null);
     const [isLooking, setIsLooking] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [failedAttempts, setFailedAttempts] = useState(0);
-    const [lockedUntil, setLockedUntil] = useState<number | null>(null);
 
     // Update clock every second
     useEffect(() => {
@@ -78,35 +77,25 @@ export function TimeclockDashboard() {
         return () => clearInterval(id);
     }, []);
 
-    // Look up user when 4 digits are entered
+    // Look up user via API server-side (PIN hashed + rate limit persistant)
     const lookupUser = useCallback(async (enteredPin: string) => {
-        if (lockedUntil && Date.now() < lockedUntil) {
-            const waitSec = Math.ceil((lockedUntil - Date.now()) / 1000);
-            toast.error(`Verrouillage sécurité — réessayez dans ${waitSec}s`);
-            setPin("");
-            return;
-        }
-
         setIsLooking(true);
         try {
-            const path = tenantId ? `tenants/${tenantId}/staff` : "staff";
-            const results = (await Nexus.adapter.query(path, {
-                where: [{ field: "pin", operator: "==", value: enteredPin }],
-            })) as User[];
+            const res = await fetch('/api/timeclock/verify-pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: enteredPin, terminalId: 'kiosk-1' }),
+            });
 
-            if (results && results.length > 0) {
-                setFoundUser(results[0]);
-                setFailedAttempts(0);
+            if (res.ok) {
+                const user = await res.json() as FoundUser;
+                setFoundUser(user);
+            } else if (res.status === 429) {
+                const data = await res.json() as { error: string };
+                toast.error(data.error ?? 'Kiosque temporairement verrouillé');
+                setPin("");
             } else {
-                const nextAttempts = failedAttempts + 1;
-                setFailedAttempts(nextAttempts);
-                if (nextAttempts >= 5) {
-                    const lockTime = Date.now() + 30000;
-                    setLockedUntil(lockTime);
-                    toast.error("Trop de tentatives incorrectes — Bloqué 30s");
-                } else {
-                    toast.error(`PIN incorrect (${nextAttempts}/5) — réessayez`);
-                }
+                toast.error('PIN incorrect — réessayez');
                 setPin("");
             }
         } catch {
@@ -115,7 +104,7 @@ export function TimeclockDashboard() {
         } finally {
             setIsLooking(false);
         }
-    }, [tenantId, failedAttempts, lockedUntil]);
+    }, []);
 
     useEffect(() => {
         if (pin.length === 4) {

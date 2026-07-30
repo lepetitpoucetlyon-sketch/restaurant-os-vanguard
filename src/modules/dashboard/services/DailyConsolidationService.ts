@@ -40,19 +40,31 @@ export class DailyConsolidationService {
             }
 
             // 2. Récupération des commandes (pour les couverts et les produits phares)
-            const orders = await Nexus.adapter.get<Record<string, { items: any[] }>>(
+            const orders = await Nexus.adapter.get<Record<string, { items: Array<{id: string; quantity: number}> }>>(
                 `tenants/${tenantId}/orders`
             ) || {};
             
-            let totalCovers = Object.keys(orders).length * 2.5; // Heuristique basique : 2.5 couverts/commande
+            let totalCovers = Object.keys(orders).length * 2.5; // Heuristique basique
             totalCovers = Math.round(totalCovers);
             
             const averageTicketInCents = totalCovers > 0 ? Math.round(totalRevenueInCents / totalCovers) : 0;
 
+            // Agrégation des produits vendus
+            const itemCounts: Record<string, number> = {};
+            for (const order of Object.values(orders)) {
+                for (const item of (order.items || [])) {
+                    itemCounts[item.id] = (itemCounts[item.id] || 0) + item.quantity;
+                }
+            }
+            const topSellingItems = Object.entries(itemCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([name, quantity]) => ({ name, quantity }));
+
             // 3. Labor Cost
             const laborMetrics = await LaborCostAnalyzer.analyzeDailyLaborCost(tenantId, totalRevenueInCents);
 
-            // 4. Incidents de la journée (depuis l'audit)
+            // 4. Incidents de la journée
             const auditLogs = await Nexus.adapter.get<Record<string, { severity: string, timestamp: number }>>(
                 `tenants/${tenantId}/empireAudit`
             ) || {};
@@ -63,6 +75,12 @@ export class DailyConsolidationService {
                     incidentsCount++;
                 }
             }
+            
+            // 5. Food Cost
+            const yieldData = await Nexus.adapter.get<{ currentFoodCostPct: number }>(
+                `tenants/${tenantId}/inventory/yield`
+            );
+            const foodCostPercentage = yieldData?.currentFoodCostPct || 0;
 
             const report: DailyFlashReport = {
                 date: dateStr,
@@ -70,12 +88,9 @@ export class DailyConsolidationService {
                 totalCovers,
                 averageTicketInCents,
                 laborCostPercentage: Number(laborMetrics.laborCostPercentage.toFixed(1)),
-                foodCostPercentage: 28.5, // Simulé, viendrait de C3.4 YieldEngine
+                foodCostPercentage,
                 incidentsCount,
-                topSellingItems: [
-                    { name: 'Burger Maison', quantity: 42 },
-                    { name: 'Pinte Blonde', quantity: 85 }
-                ]
+                topSellingItems
             };
 
             // Sauvegarde du rapport pour historique

@@ -4,7 +4,7 @@ import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
 import { logger } from '@/lib/axiom';
 import { JournalEntry } from '@nexus/contracts';
 import { CryptoService } from '@/domain/services/CryptoService';
-import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**
  * 🛰️ API Backend de Synchro Hors-Ligne (Grade X)
@@ -17,7 +17,7 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
  * Le tenantId vient EXCLUSIVEMENT du token — pas du body (protection cross-tenant).
  */
 export async function POST(req: NextRequest) {
-  const caller = await requireTenantUser(req);
+  const caller = await requireTenantRole(req, 'serveur');
   if (isDenied(caller)) return caller;
 
   try {

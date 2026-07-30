@@ -43,16 +43,59 @@ export class LaborCostAnalyzer {
                 }
             }
 
-            // Ajouter le temps partiel pour les shifts ouverts (jusqu'à "now")
+            // 3. Calcul du coût en croisant avec les contrats RH
+            let currentLaborCostInCents = 0;
             const now = Date.now();
-            for (const startTime of Object.values(openShifts)) {
-                totalHoursWorked += (now - startTime) / (1000 * 60 * 60);
+            
+            for (const employeeId of Object.keys(openShifts)) {
+                const hours = (now - openShifts[employeeId]) / (1000 * 60 * 60);
+                
+                // Récupération du contrat
+                const contract = await Nexus.adapter.get<{ hourlyRateCents: number }>(
+                    `tenants/${tenantId}/hr/contracts/${employeeId}`
+                );
+                const rate = contract?.hourlyRateCents || 1500; // 15€/h fallback
+                currentLaborCostInCents += Math.round(hours * rate);
+            }
+            
+            // Ajouter les coûts des shifts terminés
+            const closedShiftsHours: Record<string, number> = {};
+            for (const entry of entries) {
+                 if (entry.type === 'clock_out') {
+                     // Logique simplifiée : la durée a déjà été ajoutée dans totalHoursWorked mais il faut l'attribuer.
+                     // On re-boucle proprement sur les paires in/out.
+                 }
+            }
+            
+            // Recalcul précis complet:
+            currentLaborCostInCents = 0;
+            const openMap: Record<string, number> = {};
+            const employeeHours: Record<string, number> = {};
+
+            for (const entry of entries) {
+                if (entry.type === 'clock_in') {
+                    openMap[entry.employeeId] = new Date(entry.timestamp).getTime();
+                } else if (entry.type === 'clock_out' && openMap[entry.employeeId]) {
+                    const durationMs = new Date(entry.timestamp).getTime() - openMap[entry.employeeId];
+                    employeeHours[entry.employeeId] = (employeeHours[entry.employeeId] || 0) + (durationMs / 3600000);
+                    delete openMap[entry.employeeId];
+                }
+            }
+            
+            // Shifts en cours
+            for (const employeeId of Object.keys(openMap)) {
+                const durationMs = now - openMap[employeeId];
+                employeeHours[employeeId] = (employeeHours[employeeId] || 0) + (durationMs / 3600000);
             }
 
-            // 3. Application du taux horaire (simulé à 15€/h moyen pour cet exemple)
-            // Dans la vraie vie, on irait chercher le contrat de chaque employé
-            const AVG_HOURLY_RATE_CENTS = 1500;
-            const currentLaborCostInCents = Math.round(totalHoursWorked * AVG_HOURLY_RATE_CENTS);
+            // Calcul du coût individuel
+            for (const employeeId of Object.keys(employeeHours)) {
+                const contract = await Nexus.adapter.get<{ hourlyRateCents: number }>(
+                    `tenants/${tenantId}/hr/contracts/${employeeId}`
+                );
+                const rate = contract?.hourlyRateCents || 1500;
+                currentLaborCostInCents += Math.round(employeeHours[employeeId] * rate);
+            }
 
             // 4. Calcul du pourcentage
             const laborCostPercentage = currentRevenueInCents > 0 

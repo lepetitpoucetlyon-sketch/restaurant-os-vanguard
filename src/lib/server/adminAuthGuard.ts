@@ -4,6 +4,7 @@ import { getAuth, type DecodedIdToken } from 'firebase-admin/auth';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
 interface StoredDevice {
     fingerprint: string;
@@ -281,6 +282,37 @@ export async function requireTenantUser(
 
   if (!tenantId) return hiddenDoor();
   return { ...caller, tenantId };
+}
+
+/**
+ * Exige un utilisateur tenant avec un niveau de rôle minimum.
+ * Fleet admins passent toujours (ils ont accès à tout).
+ * Retourne 403 si le rôle est insuffisant (contrairement à requireTenantAdmin qui renvoie 404).
+ */
+export async function requireTenantRole(
+  request: Request,
+  minRole: PermissionRole,
+): Promise<(AdminCaller & { tenantId: string }) | NextResponse> {
+  const candidate = await requireTenantUser(request);
+  if (isDenied(candidate)) return candidate;
+  const caller = candidate as AdminCaller & { tenantId: string };
+
+  // Fleet admins ont accès à toutes les routes tenant
+  if ((FLEET_ROLES as readonly string[]).includes(caller.role)) return caller;
+
+  const callerLevel = PERMISSION_ROLE_LEVELS[caller.role as PermissionRole] ?? 0;
+  const requiredLevel = PERMISSION_ROLE_LEVELS[minRole];
+
+  if (callerLevel < requiredLevel) {
+    logger.warn(
+      `[adminAuth] Tenant RBAC denied: uid=${caller.uid} role=${caller.role} needed>=${minRole}(${requiredLevel}) got=${callerLevel}`,
+    );
+    return new NextResponse(
+      JSON.stringify({ error: 'Rôle insuffisant pour cette action' }),
+      { status: 403, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+  return caller;
 }
 
 /** Type guard pratique côté route. */

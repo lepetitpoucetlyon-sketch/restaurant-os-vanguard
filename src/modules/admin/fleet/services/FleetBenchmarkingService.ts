@@ -29,12 +29,18 @@ export class FleetBenchmarkingService {
      * qu'un tenant lise les données des autres.
      */
     static async getFleetMedianMetrics(): Promise<FleetBenchmarkMetrics> {
-        // Simulation d'un appel à l'agrégateur de flotte (qui a le droit de lire tous les tenants)
-        return {
+        const fallback: FleetBenchmarkMetrics = {
             medianFoodCostPct: 28.5,
             medianLaborCostPct: 32.0,
             medianTicketAOV: 2450 // 24.50€
         };
+        
+        try {
+            const data = await Nexus.adapter.get<FleetBenchmarkMetrics>('global/fleet/benchmark_median');
+            return data || fallback;
+        } catch {
+            return fallback;
+        }
     }
 
     /**
@@ -45,11 +51,18 @@ export class FleetBenchmarkingService {
         
         const fleetMetrics = await this.getFleetMedianMetrics();
         
-        // Simulation des métriques du tenant (normalement calculées via DailyConsolidationService)
+        // Récupération des métriques réelles du tenant (via le DailyConsolidationService)
+        const today = new Date().toISOString().slice(0, 10);
+        const report = await Nexus.adapter.get<{ 
+            foodCostPercentage: number; 
+            laborCostPercentage: number;
+            averageTicketInCents: number; 
+        }>(`tenants/${tenantId}/flashReports/${today}`);
+        
         const tenantMetrics = {
-            foodCostPct: 30.2,
-            laborCostPct: 31.5,
-            ticketAOV: 2200
+            foodCostPct: report?.foodCostPercentage || 0,
+            laborCostPct: report?.laborCostPercentage || 0,
+            ticketAOV: report?.averageTicketInCents || 0
         };
 
         return {
