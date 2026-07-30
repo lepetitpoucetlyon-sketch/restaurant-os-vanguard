@@ -48,3 +48,4 @@
 | bible-deploy-tutos | Ajout Bible §08 : 4 tutoriels déploiement (Firebase SA, Stripe, Resend, Functions) + checklist §19 items inf-9→inf-15 | 2026-07-28 | terminée |
 | connectors-arch | Implémentation plan connecteurs : types + factories + providers (P1) pour toutes les catégories + routes API | 2026-07-28 | terminée |
 | suite-fixes-firestore | Fixes 4-5-6 (rapatriement, demo, useExtensions), audit Firestore rules privilege escalation systemConfig | 2026-07-29 | terminée |
+| preflight-green | Preflight complet : cycles Madge 0, SSR purity (ops pages), playwright/mqtt externals, fan-out KitchenDashboard+FinanceDashboard, MCC WebPush/URL-tab | 2026-07-30 | active |

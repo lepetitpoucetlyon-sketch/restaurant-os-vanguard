@@ -23,7 +23,6 @@ export class MqttProvider implements IIoTProvider {
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let client: any = null;
-        // @ts-expect-error — mqtt optionnel, installer avec: npm i mqtt
         import('mqtt').then((mod) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const mqtt = mod as any;

@@ -3,7 +3,8 @@
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { inventoryMovementsAtom } from '../inventory/store/inventoryAtoms';
-import { OracleEngine, OraclePrediction } from '@/modules/intelligence/services';
+import { OracleEngine } from '@/modules/intelligence/services/OracleEngine';
+import type { OraclePrediction } from '@/modules/intelligence/services/OracleEngine';
 import type { Quantity } from '@/infrastructure/branding/brands';
 
 interface UseOraclePredictionResult {

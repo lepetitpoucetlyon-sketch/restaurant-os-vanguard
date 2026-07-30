@@ -46,7 +46,8 @@ const nextConfig: NextConfig = {
   },
   typescript: {
     ignoreBuildErrors: false,
-  }
+  },
+  serverExternalPackages: ['playwright', 'playwright-core', 'mqtt'],
 };
 
 export default nextConfig;

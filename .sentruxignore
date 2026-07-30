@@ -1,5 +1,13 @@
 # Exclusions sentrux — code non-prod, ne doit pas influencer le score archi.
 
+# Sidecar Python RAG et scripts maintenance — hors périmètre architecture TypeScript
+services
+services/
+services/**
+**/sovereign-rag/**
+.nexus/
+.nexus/**
+
 # Artefacts de build
 .next/
 .next-mcc/

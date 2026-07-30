@@ -13,66 +13,57 @@ const TENANT_ONLY_ROUTES = [
 
 const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN ?? 'restaurantos.app';
 
+function checkAppModeGate(url: string): NextResponse | null {
+  if (APP_MODE === 'tenant' && MCC_ROUTES.some(r => url.startsWith(r)))        return new NextResponse(null, { status: 404 });
+  if (APP_MODE === 'mcc'    && TENANT_ONLY_ROUTES.some(r => url.startsWith(r))) return new NextResponse(null, { status: 404 });
+  return null;
+}
+
+function checkAdminApiGate(request: NextRequest, url: string): NextResponse | null {
+  if (!url.startsWith('/api/admin/')) return null;
+  if (url.startsWith('/api/admin/git/') && process.env.NODE_ENV === 'production') return new NextResponse(null, { status: 404 });
+  const auth = request.headers.get('authorization');
+  if (!auth || !auth.startsWith('Bearer ')) return new NextResponse(null, { status: 404 });
+  return null;
+}
+
+async function resolveCustomDomain(request: NextRequest, host: string, url: string): Promise<NextResponse | null> {
+  if (url.startsWith('/api/resolve-domain')) return null;
+  try {
+    const resolveUrl = new URL(`/api/resolve-domain?domain=${encodeURIComponent(host)}`, request.url);
+    const res = await fetch(resolveUrl.toString());
+    if (!res.ok) return null;
+    const data = await res.json() as { slug?: string | null };
+    if (!data.slug) return null;
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = `/${data.slug}${url === '/' ? '' : url}`;
+    const rewrite = NextResponse.rewrite(rewriteUrl);
+    rewrite.headers.set('x-resolved-tenant-id', data.slug);
+    rewrite.headers.set('x-custom-domain', host);
+    return rewrite;
+  } catch {
+    return null;
+  }
+}
+
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.pathname;
 
-  // --- APP_MODE route gating ---
-  // The MCC console is a SEPARATE deployment (APP_MODE=mcc), never part of the
-  // tenant application. In tenant mode the MCC routes do not exist — this must hold
-  // in dev and prod alike. To work on the MCC locally, run the dedicated `dev:mcc`
-  // server (NEXT_PUBLIC_APP_MODE=mcc), which serves only MCC routes and 404s the
-  // tenant app.
-  if (APP_MODE === 'tenant') {
-    if (MCC_ROUTES.some(r => url.startsWith(r))) {
-      return new NextResponse(null, { status: 404 });
-    }
-  }
-  if (APP_MODE === 'mcc') {
-    if (TENANT_ONLY_ROUTES.some(r => url.startsWith(r))) {
-      return new NextResponse(null, { status: 404 });
-    }
-  }
+  const modeBlock = checkAppModeGate(url);
+  if (modeBlock) return modeBlock;
 
-  // --- Admin API auth gate ---
-  if (url.startsWith('/api/admin/')) {
-    if (url.startsWith('/api/admin/git/') && process.env.NODE_ENV === 'production') {
-      return new NextResponse(null, { status: 404 });
-    }
+  const adminBlock = checkAdminApiGate(request, url);
+  if (adminBlock) return adminBlock;
 
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new NextResponse(null, { status: 404 });
-    }
-  }
-
-  // --- Custom domain → slug rewrite (res-arch-3) ---
-  // bistro.com/reservations → /bistroduport/reservations
-  // Only runs when the hostname is NOT a subdomain of the app domain.
+  // Custom domain → slug rewrite (res-arch-3): bistro.com → /bistroduport/...
   const host = (request.headers.get('host') ?? '').split(':')[0].toLowerCase();
   const isAppSubdomain = host === APP_DOMAIN || host.endsWith(`.${APP_DOMAIN}`) || host === 'localhost';
-  if (!isAppSubdomain && !url.startsWith('/api/resolve-domain')) {
-    try {
-      const resolveUrl = new URL(`/api/resolve-domain?domain=${encodeURIComponent(host)}`, request.url);
-      const res = await fetch(resolveUrl.toString());
-      if (res.ok) {
-        const data = await res.json() as { slug?: string | null };
-        if (data.slug) {
-          const rewriteUrl = request.nextUrl.clone();
-          rewriteUrl.pathname = `/${data.slug}${url === '/' ? '' : url}`;
-          const rewrite = NextResponse.rewrite(rewriteUrl);
-          rewrite.headers.set('x-resolved-tenant-id', data.slug);
-          rewrite.headers.set('x-custom-domain', host);
-          return rewrite;
-        }
-      }
-    } catch {
-      // DNS lookup failed — continue normal routing
-    }
+  if (!isAppSubdomain) {
+    const customRewrite = await resolveCustomDomain(request, host, url);
+    if (customRewrite) return customRewrite;
   }
 
-  // --- Subdomain → slug rewrite (platform-agnostic, no Vercel Pro required) ---
-  // bistroduport.restaurant-os.app/reservations → /bistroduport/reservations
-  // Works on Railway, Fly.io, Docker, Vercel free, any Node host.
+  // Subdomain → slug rewrite (platform-agnostic): bistroduport.app → /bistroduport/...
   const resolvedTenant = resolveTenantFromHost(request);
   if (resolvedTenant && !url.startsWith(`/${resolvedTenant}/`)) {
     const PUBLIC_WIDGET_PATHS = ['/reservations', '/menu', '/booking'];

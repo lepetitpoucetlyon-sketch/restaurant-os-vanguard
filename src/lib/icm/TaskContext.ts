@@ -245,33 +245,39 @@ export const TASK_MAPS: Record<string, TaskContext> = {
   },
 };
 
+// Ordre important : les routes plus spécifiques (pos-mobile) avant les générales (pos).
+const ROUTE_SEGMENTS: [string, keyof typeof TASK_MAPS][] = [
+  ['/pos-mobile',  'pos-mobile'],
+  ['/pos',         'pos'],
+  ['/kds',         'kds'],
+  ['/bar',         'bar'],
+  ['/kitchen',     'kitchen'],
+  ['/floor-plan',  'floor-plan'],
+  ['/registre',    'registre'],
+  ['/groups',      'groups'],
+  ['/audit',       'finance'],
+  ['/finance',     'finance'],
+  ['/operations',  'operations'],
+  ['/compliance',  'compliance'],
+  ['/reservations','reservations'],
+  ['/commerce',    'commerce'],
+  ['/planning',    'planning'],
+  ['/timeclock',   'timeclock'],
+  ['/recruitment', 'recruitment'],
+  ['/staff',       'staff'],
+  ['/inventory',   'inventory'],
+  ['/haccp',       'haccp'],
+  ['/crm',         'crm'],
+  ['/mon-espace',  'mon-espace'],
+  ['/marketing',   'marketing'],
+  ['/analytics',   'analytics'],
+  ['/admin',       'admin'],
+];
+
 /** Résout le TaskContext depuis un pathname Next.js */
 export function resolveTaskContext(pathname: string): TaskContext {
-  if (pathname.includes('/pos-mobile'))                                        return TASK_MAPS['pos-mobile'];
-  if (pathname.includes('/pos'))                                              return TASK_MAPS.pos;
-  if (pathname.includes('/kds'))                                              return TASK_MAPS.kds;
-  if (pathname.includes('/bar'))                                              return TASK_MAPS.bar;
-  if (pathname.includes('/kitchen'))                                          return TASK_MAPS.kitchen;
-  if (pathname.includes('/floor-plan'))                                       return TASK_MAPS['floor-plan'];
-  if (pathname.includes('/registre'))                                         return TASK_MAPS.registre;
-  if (pathname.includes('/groups'))                                           return TASK_MAPS.groups;
-  if (pathname.includes('/finance') || pathname.includes('/audit'))           return TASK_MAPS.finance;
-  if (pathname.includes('/operations'))                                       return TASK_MAPS.operations;
-  if (pathname.includes('/compliance'))                                       return TASK_MAPS.compliance;
-  if (pathname.includes('/reservations'))                                       return TASK_MAPS.reservations;
-  if (pathname.includes('/commerce'))                                           return TASK_MAPS.commerce;
-  if (pathname.includes('/planning'))                                         return TASK_MAPS.planning;
-  if (pathname.includes('/timeclock'))                                        return TASK_MAPS.timeclock;
-  if (pathname.includes('/recruitment'))                                      return TASK_MAPS.recruitment;
-  if (pathname.includes('/staff'))                                            return TASK_MAPS.staff;
-  if (pathname.includes('/inventory'))                                        return TASK_MAPS.inventory;
-  if (pathname.includes('/haccp'))                                            return TASK_MAPS.haccp;
-  if (pathname.includes('/crm'))                                              return TASK_MAPS.crm;
-  if (pathname.includes('/mon-espace'))                                       return TASK_MAPS['mon-espace'];
-  if (pathname.includes('/marketing'))                                        return TASK_MAPS.marketing;
-  if (pathname.includes('/analytics'))                                        return TASK_MAPS.analytics;
-  if (pathname.includes('/admin'))                                            return TASK_MAPS.admin;
-  return TASK_MAPS.default;
+  const match = ROUTE_SEGMENTS.find(([segment]) => pathname.includes(segment));
+  return match ? TASK_MAPS[match[1]] : TASK_MAPS.default;
 }
 
 /** Retourne true si le module doit être initialisé (pas OFF) */

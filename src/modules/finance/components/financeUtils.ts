@@ -1,4 +1,5 @@
 import type { JournalEntry, JournalLine } from "@nexus/contracts";
+export type { BankTransaction } from "@/domain/schemas/finance";
 
 /**
  * 💶 Finance — types & helpers purs

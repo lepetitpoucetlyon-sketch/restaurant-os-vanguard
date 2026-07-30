@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useFinance } from "@modules/finance";
+import { useFinance } from "../hooks/useFinance";
 import { ExpenseClaimDialog } from "@modules/finance/components/accounting";
 import { useBilling } from "@modules/finance/billing/hooks/useBilling";
 import { FECExporter } from "@modules/finance/accounting/domain/FECExporter";
@@ -20,7 +20,6 @@ import { useTenant, useActionPermission } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
 import { useOrders } from "@/modules/ops/providers";
 import type { Order } from "@modules/ops/engine/types";
-import type { BankTransaction } from "@modules/finance/types";
 import type { JournalEntry } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 
@@ -32,6 +31,7 @@ const BankTab       = dynamic(() => import("./_tabs/BankTab").then(m => m.BankTa
 import {
     type FinanceTab,
     type BankAccount,
+    type BankTransaction,
     computeTVABreakdown,
 } from "./financeUtils";
 

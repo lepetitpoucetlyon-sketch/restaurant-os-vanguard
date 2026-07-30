@@ -25,20 +25,13 @@ const ProductFormModal = dynamic(
   () => import("@/modules/ops/pos/components/ProductFormModal").then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
-import { PrepTaskDetailDialog } from "@modules/ops";
-import { RecipeDetailDialog } from "@modules/ops";
+import { PrepTaskDetailDialog } from "./PrepTaskDetailDialog";
+import { RecipeDetailDialog } from "./RecipeDetailDialog";
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 import { ExpertHub } from "@modules/commerce";
 
-import { MiseEnPlaceTab } from "@modules/ops";
-import { RecipesTab } from "@modules/ops";
-import { WasteTab } from "@modules/ops";
-import { MarginsTab } from "@modules/ops";
-import { SuppliersTab } from "@modules/ops";
-import { AllergensTab } from "@modules/ops";
-import { CookingTimesTab } from "@modules/ops";
-import { IngredientsTab } from "@modules/ops";
-import { DailyPrepList } from "@/modules/ops/recipes";
+import { MiseEnPlaceTab, RecipesTab, WasteTab, MarginsTab, SuppliersTab, AllergensTab, CookingTimesTab, IngredientsTab } from "./tabs";
+import { DailyPrepList } from "@/modules/ops/recipes/DailyPrepList";
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 
