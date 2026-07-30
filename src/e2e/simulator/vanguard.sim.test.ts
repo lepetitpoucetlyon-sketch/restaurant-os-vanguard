@@ -41,7 +41,10 @@ vi.mock('@/modules/intelligence/simulator/SimulatorDB', () => {
 
 // ── NexusEventBus: fire-and-forget — silence side-effects ─────────────────
 vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: { emit: vi.fn().mockResolvedValue(undefined) },
+  NexusEventBus: { 
+    emit: vi.fn().mockResolvedValue(undefined),
+    emitDurable: vi.fn().mockResolvedValue(undefined)
+  },
 }));
 
 // ── empireAudit: silence in tests ─────────────────────────────────────────

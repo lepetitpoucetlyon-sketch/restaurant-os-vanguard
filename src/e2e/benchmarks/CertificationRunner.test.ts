@@ -95,8 +95,8 @@ describe('🚨 BLACK FRIDAY SUPREME CERTIFICATION', () => {
         // (avgLatency, < 15ms/tx) est bonne ; c'est le wall-time des 1000
         // itérations sous jsdom (crypto.subtle polyfillé lent) qui dépassait les
         // 5s par défaut. Les fast paths node:crypto (CryptoService) réduisent ce coût.
-    }, 60000);
-    // Timeout 60s (aligné sur BlackFriday.test.ts) : benchmark de 1000
+    }, 120000);
+    // Timeout 120s (aligné sur BlackFriday.test.ts) : benchmark de 1000
     // scellements chaînés. La LATENCE métier (avgLatency < 15 ms/tx) est bonne ;
     // c'est le wall-time de la boucle awaited sous la suite complète (workers
     // parallèles, event-loop saturée) qui pouvait dépasser 30s. Pure marge

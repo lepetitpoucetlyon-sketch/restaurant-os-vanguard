@@ -44,7 +44,7 @@ describe('Restaurant OS: Black Friday Certification', () => {
     // stdout (2 logs/tx) est neutralisé pendant la boucle chronométrée dans
     // runLedgerStressTest.
     expect(result.avgLatency).toBeLessThan(15); // Performance target: < 15ms/tx
-  }, 60000); // Timeout 60s. Ce n'est PAS un seuil de perf métier mais une pure
+  }, 120000); // Timeout 120s. Ce n'est PAS un seuil de perf métier mais une pure
     // marge wall-clock. Le travail réel de scellement est ~12 ms (avgLatency
     // ~0,02 ms/tx). Mais sous la suite complète (38 fichiers en workers
     // parallèles), la boucle de 500 promesses chaînées peut mettre plusieurs

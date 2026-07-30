@@ -36,6 +36,11 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 describe('IntelligenceHandler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('registers on order.paid event', () => {
@@ -60,6 +65,8 @@ describe('IntelligenceHandler', () => {
       ],
       totalInMicrounits: 63_000_000,
     });
+
+    await vi.runAllTimersAsync();
 
     // Handler ran without crashing — Hermes mock may or may not fire
     // depending on jsdom/browser detection in readZcpoState.
@@ -92,6 +99,8 @@ describe('IntelligenceHandler', () => {
       totalInMicrounits: 10_000_000,
     });
 
+    await vi.runAllTimersAsync();
+
     // Should have queried 7 days of TicketZ
     expect(mockGet).toHaveBeenCalledTimes(7);
   });
@@ -116,6 +125,8 @@ describe('IntelligenceHandler', () => {
       items: [{ name: 'Burger', quantity: 5, unitPriceInMicrounits: 12_000_000 }],
       totalInMicrounits: 60_000_000,
     });
+
+    await vi.runAllTimersAsync();
 
     // Hermes should NOT be called due to critical pressure
     // (In browser env, readZcpoState returns null, so it proceeds — this test is browser-side)

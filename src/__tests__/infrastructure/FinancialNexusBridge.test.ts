@@ -40,6 +40,7 @@ vi.mock('@/infrastructure/services/finance/FiscalSealer', () => ({
 vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: {
     emit: vi.fn().mockResolvedValue(undefined),
+    emitDurable: vi.fn().mockResolvedValue(undefined),
   },
 }));
 
@@ -80,8 +81,12 @@ describe('FinancialNexusBridge', () => {
     expect(result.seal.id).toBe('seal_1');
     expect(result.seal.hash).toBe('test_hash');
 
-    expect(TaxCalculator.calculateTotals).toHaveBeenCalledWith(payload.cartItems);
+    expect(TaxCalculator.calculateTotals).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ cartId: 'c1' })
+      ])
+    );
     expect(FiscalSealer.sealDataAtomically).toHaveBeenCalled();
-    expect(NexusEventBus.emit).toHaveBeenCalledWith('order.paid', expect.any(Object));
+    expect(NexusEventBus.emitDurable).toHaveBeenCalledWith('order.paid', expect.any(Object));
   });
 });

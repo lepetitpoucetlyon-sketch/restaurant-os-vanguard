@@ -15,7 +15,81 @@ import { JournalEntry, FiscalSeal } from '@/modules/finance/types';
 // Initialisation immédiate du Mock pour les tests
 Nexus.adapter = new MockAdapter();
 
-const mockTableData = new Set<string>();
+const { mockTableData, mockTable, mockDb } = vi.hoisted(() => {
+    const mockTableData = new Set<string>();
+
+    const mockTable = {
+        clear: vi.fn().mockImplementation(async () => {
+            mockTableData.clear();
+        }),
+        add: vi.fn().mockImplementation(async (item: any) => {
+            mockTableData.add(item.id);
+            return item.id;
+        }),
+        put: vi.fn().mockImplementation(async (item: any) => {
+            mockTableData.add(item.id);
+            return item.id;
+        }),
+        count: vi.fn().mockImplementation(async () => {
+            return mockTableData.size;
+        }),
+        update: vi.fn().mockResolvedValue(undefined),
+        get: vi.fn().mockResolvedValue(undefined),
+        toArray: vi.fn().mockResolvedValue([]),
+        where: vi.fn().mockReturnThis(),
+        equals: vi.fn().mockReturnThis(),
+        anyOf: vi.fn().mockReturnThis(),
+        sortBy: vi.fn().mockResolvedValue([]),
+        orderBy: vi.fn().mockReturnThis(),
+        reverse: vi.fn().mockReturnThis(),
+        first: vi.fn().mockResolvedValue(undefined),
+        last: vi.fn().mockResolvedValue(undefined),
+        delete: vi.fn().mockResolvedValue(undefined),
+        bulkPut: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const mockDb = {
+        clearAll: vi.fn().mockImplementation(async () => {
+            mockTableData.clear();
+            return true;
+        }),
+        transaction: vi.fn().mockImplementation((_type: any, _tables: any, cb: any) => cb()),
+        orders: mockTable,
+        stockItems: mockTable,
+        inventoryMovements: mockTable,
+        journalEntries: mockTable,
+        fiscalSeals: mockTable,
+        syncQueue: mockTable,
+        busOutbox: mockTable,
+        deadLetterEvents: mockTable,
+    };
+    
+    return { mockTableData, mockTable, mockDb };
+});
+
+// 3. Mock de Dexie
+vi.mock('dexie', () => {
+    class MockDexie {
+        version() { return this; }
+        stores() { return this; }
+        on() { return this; }
+        open() { return Promise.resolve(this); }
+        transaction = mockDb.transaction;
+        orders = mockTable;
+        stockItems = mockTable;
+        inventoryMovements = mockTable;
+        journalEntries = mockTable;
+        fiscalSeals = mockTable;
+        syncQueue = mockTable;
+        busOutbox = mockTable;
+        deadLetterEvents = mockTable;
+    }
+    return { default: MockDexie, Dexie: MockDexie };
+});
+
+vi.mock('@/infrastructure/services/offline/offline-store', () => ({
+    db: mockDb
+}));
 
 // 1. Mock de Firebase (Tous les services)
 vi.mock('firebase/app', () => ({ initializeApp: vi.fn(), getApps: vi.fn(() => []), getApp: vi.fn() }));
@@ -32,87 +106,10 @@ vi.mock('firebase/firestore', () => ({
     getDocs: vi.fn(),
     updateDoc: vi.fn(),
     where: vi.fn(),
-    onSnapshot: vi.fn(() => vi.fn()) // Returns an unsubscribe function
+    onSnapshot: vi.fn(() => vi.fn())
 }));
-
 vi.mock('firebase/storage', () => ({ getStorage: vi.fn() }));
-
-// 2. Mock de @/lib/firebase (Pour court-circuiter l'initialisation réelle)
-vi.mock('@/lib/firebase', () => ({
-    firestore: {},
-    auth: {},
-    storage: {},
-    firebaseApp: {}
-}));
-
-type MockDatabaseItem = Order | StockItem | InventoryMovement | JournalEntry | FiscalSeal;
-
-const mockTable = {
-    clear: vi.fn().mockImplementation(async () => {
-        mockTableData.clear();
-    }),
-    add: vi.fn().mockImplementation(async (item: MockDatabaseItem) => {
-        mockTableData.add(item.id);
-        return item.id;
-    }),
-    put: vi.fn().mockImplementation(async (item: MockDatabaseItem) => {
-        mockTableData.add(item.id);
-        return item.id;
-    }),
-    count: vi.fn().mockImplementation(async () => {
-        return mockTableData.size;
-    }),
-    update: vi.fn().mockResolvedValue(undefined),
-    get: vi.fn().mockResolvedValue(undefined),
-    toArray: vi.fn().mockResolvedValue([]),
-    where: vi.fn().mockReturnThis(),
-    equals: vi.fn().mockReturnThis(),
-    anyOf: vi.fn().mockReturnThis(),   // SyncManager.processQueue : where('status').anyOf('pending','failed')
-    sortBy: vi.fn().mockResolvedValue([]),
-    orderBy: vi.fn().mockReturnThis(),
-    reverse: vi.fn().mockReturnThis(),
-    first: vi.fn().mockResolvedValue(undefined),
-    last: vi.fn().mockResolvedValue(undefined),
-    delete: vi.fn().mockResolvedValue(undefined),
-    bulkPut: vi.fn().mockResolvedValue(undefined),
-};
-
-const mockDb = {
-    clearAll: vi.fn().mockImplementation(async () => {
-        mockTableData.clear();
-        return true;
-    }),
-    transaction: vi.fn().mockImplementation((_type, _tables, cb) => cb()),
-    orders: mockTable,
-    stockItems: mockTable,
-    inventoryMovements: mockTable,
-    journalEntries: mockTable,
-    fiscalSeals: mockTable,
-    syncQueue: mockTable,
-};
-
-
-// 3. Mock de Dexie
-vi.mock('dexie', () => {
-    class MockDexie {
-        version() { return this; }
-        stores() { return this; }
-        on() { return this; }
-        open() { return Promise.resolve(this); }
-        transaction = mockDb.transaction;
-        orders = mockTable;
-        stockItems = mockTable;
-        inventoryMovements = mockTable;
-        journalEntries = mockTable;
-        fiscalSeals = mockTable;
-        syncQueue = mockTable;
-    }
-    return { default: MockDexie, Dexie: MockDexie };
-});
-
-vi.mock('@/infrastructure/services/offline/offline-store', () => ({
-    db: mockDb
-}));
+vi.mock('@/lib/firebase', () => ({ firestore: {}, auth: {}, storage: {}, firebaseApp: {} }));
 
 // 4. Utils
 Object.defineProperty(global, 'performance', {
