@@ -76,22 +76,30 @@ export const FinancialNexusBridge = {
       throw new Error('FinancialNexusBridge: panier vide');
     }
 
-    // ── 1. Résolution TVA par ligne (mode consommation) ──────────────────────
+    // ── 1. Résolution TVA et Analytique par ligne ──────────────────────
     const resolvedItems = cartItems.map(item => {
       const lineMode = (item as { consumptionMode?: ConsumptionMode }).consumptionMode ?? consumptionMode;
       const category = inferCategory(item.categoryId ?? '', item.name);
       const taxRate = resolveVatRate({ category, consumptionMode: lineMode });
-      return { ...item, taxRate };
+      const analyticalAxis = category === 'drink' ? 'Beverage' : 'Food';
+      return { ...item, taxRate, analyticalAxis };
     });
 
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
 
-    // TTC ventilé par taux (pour dériver le HT par taux : HT = TTC − TVA).
-    const ttcByRate: Record<string, number> = {};
+    // TTC ventilé par taux et axe analytique.
+    const ttcByRateAndAxis: Record<string, { ttcMu: number; tvaMu: number }> = {};
     for (const item of resolvedItems) {
-      const rate = String(item.taxRate ?? '0.10');
+      const key = `${item.taxRate}_${item.analyticalAxis}`;
       const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-      ttcByRate[rate] = (ttcByRate[rate] ?? 0) + lineTTC;
+      const rateNum = parseFloat(String(item.taxRate ?? '0.10'));
+      const lineTVA = lineTTC - Math.round(lineTTC / (1 + rateNum));
+
+      if (!ttcByRateAndAxis[key]) {
+        ttcByRateAndAxis[key] = { ttcMu: 0, tvaMu: 0 };
+      }
+      ttcByRateAndAxis[key].ttcMu += lineTTC;
+      ttcByRateAndAxis[key].tvaMu += lineTVA;
     }
 
     const entryId = SharedKernel.generateId('JE');
@@ -105,6 +113,7 @@ export const FinancialNexusBridge = {
       cents: number,
       description: string,
       pieceNumber: string,
+      analyticalAxis?: string,
     ): JournalLine => ({
       accountId: accountCode,
       accountCode,
@@ -121,19 +130,22 @@ export const FinancialNexusBridge = {
       creditInMicrounits: side === 'credit' ? cents * 10_000 : 0,
       runningBalanceInCents: 0,
       runningBalanceInMicrounits: 0,
+      ...(analyticalAxis ? { analyticalAxis } : {}),
     });
 
-    // Partie double : 1 débit d'encaissement = Σ (crédits 701 HT + 445710 TVA) par taux.
+    // Partie double analytique
     const buildLines = (pieceNumber: string): JournalLine[] => {
       const credits: JournalLine[] = [];
       let totalCreditCents = 0;
-      for (const [rate, ttcMu] of Object.entries(ttcByRate)) {
-        const tvaMu = tvaBreakdown[rate] ?? 0;
-        const htCents = microToCents(ttcMu - tvaMu);
-        const tvaCents = microToCents(tvaMu);
+
+      for (const [key, totals] of Object.entries(ttcByRateAndAxis)) {
+        const [rate, axis] = key.split('_');
+        const htCents = microToCents(totals.ttcMu - totals.tvaMu);
+        const tvaCents = microToCents(totals.tvaMu);
         const ratePct = (parseFloat(rate) * 100).toFixed(1);
+        
         if (htCents > 0) {
-          credits.push(makeLine('701000', 'Ventes de marchandises', 'credit', htCents, `Ventes HT (TVA ${ratePct}%)`, pieceNumber));
+          credits.push(makeLine('701000', 'Ventes de marchandises', 'credit', htCents, `Ventes HT (TVA ${ratePct}%)`, pieceNumber, axis));
           totalCreditCents += htCents;
         }
         if (tvaCents > 0) {
@@ -141,7 +153,8 @@ export const FinancialNexusBridge = {
           totalCreditCents += tvaCents;
         }
       }
-      // Le débit d'encaissement = somme des crédits → équilibre garanti au centime.
+      
+      // Le débit d'encaissement = somme des crédits
       const debit = makeLine(payAcct.code, payAcct.name, 'debit', totalCreditCents, `Encaissement ${payAcct.name}`, pieceNumber);
       return [debit, ...credits];
     };
