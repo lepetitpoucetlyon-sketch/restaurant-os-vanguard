@@ -22,6 +22,43 @@ import { logger } from "@/lib/logger";
  * 🥫 useInventory - Grade X Atomic Bridge (Source of Truth)
  * Centralisation de la gestion des stocks et de la chaîne d'approvisionnement.
  */
+async function deductByRecipe(tenantId: string, recipeId: string, stockBase: string, quantity: number) {
+    const recipe = await Nexus.adapter.get<{ ingredients?: Array<{ ingredientId: string; quantity: number }> }>(
+        `tenants/${tenantId}/recipes/${recipeId}`
+    );
+    await Promise.allSettled(
+        (recipe?.ingredients ?? []).map(async (ing) => {
+            if (!ing.ingredientId) return;
+            const itemPath = `${stockBase}/${ing.ingredientId}`;
+            const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
+            if (!stockItem) return;
+            const newQty = Math.max(0, (stockItem.quantity ?? 0) - ing.quantity * quantity);
+            await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: new Date().toISOString() });
+        })
+    );
+}
+
+async function deductDirectItem(stockBase: string, itemId: string, quantity: number) {
+    const itemPath = `${stockBase}/${itemId}`;
+    const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
+    if (!stockItem) return;
+    const newQty = Math.max(0, (stockItem.quantity ?? 0) - quantity);
+    await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: new Date().toISOString() });
+}
+
+async function deductStock(tenantId: string, productId: string, quantity: number) {
+    const product = await Nexus.adapter.get<{ linkedStockItemId?: string; recipeId?: string }>(
+        `tenants/${tenantId}/products/${productId}`
+    );
+    if (!product) return;
+    const stockBase = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
+    if (product.recipeId) {
+        await deductByRecipe(tenantId, product.recipeId, stockBase, quantity);
+    } else if (product.linkedStockItemId) {
+        await deductDirectItem(stockBase, product.linkedStockItemId, quantity);
+    }
+}
+
 export function useInventory() {
     useVisibilityPurge('stockItems');
     const tenantId = useAtomValue(tenantIdAtom);
@@ -96,35 +133,7 @@ export function useInventory() {
 
     const deductStockForProduct = async (productId: string, quantity: number) => {
         if (!tenantId) return;
-        const product = await Nexus.adapter.get<{ linkedStockItemId?: string; recipeId?: string }>(
-            `tenants/${tenantId}/products/${productId}`
-        );
-        if (!product) return;
-
-        const stockBase = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
-
-        if (product.recipeId) {
-            const recipe = await Nexus.adapter.get<{ ingredients?: Array<{ ingredientId: string; quantity: number }> }>(
-                `tenants/${tenantId}/recipes/${product.recipeId}`
-            );
-            await Promise.allSettled(
-                (recipe?.ingredients ?? []).map(async (ing) => {
-                    if (!ing.ingredientId) return;
-                    const itemPath = `${stockBase}/${ing.ingredientId}`;
-                    const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
-                    if (!stockItem) return;
-                    const newQty = Math.max(0, (stockItem.quantity ?? 0) - ing.quantity * quantity);
-                    await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: new Date().toISOString() });
-                })
-            );
-        } else if (product.linkedStockItemId) {
-            const itemPath = `${stockBase}/${product.linkedStockItemId}`;
-            const stockItem = await Nexus.adapter.get<{ quantity?: number }>(itemPath);
-            if (stockItem) {
-                const newQty = Math.max(0, (stockItem.quantity ?? 0) - quantity);
-                await Nexus.adapter.update(itemPath, { quantity: newQty, updatedAt: new Date().toISOString() });
-            }
-        }
+        await deductStock(tenantId, productId, quantity);
     };
 
     return {

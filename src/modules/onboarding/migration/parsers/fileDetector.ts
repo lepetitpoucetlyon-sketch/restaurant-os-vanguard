@@ -41,27 +41,27 @@ export function detectSourceSystem(headers: string[]): SourceSystem {
   return 'generic';
 }
 
+const MAGIC_SIGNATURES: Array<{ bytes: number[]; format: FileFormat }> = [
+  { bytes: [0x50, 0x4B, 0x03, 0x04], format: 'xlsx' },  // ZIP/XLSX
+  { bytes: [0x25, 0x50, 0x44, 0x46], format: 'pdf' },   // %PDF
+  { bytes: [0xFF, 0xD8, 0xFF],       format: 'image' },  // JPEG
+  { bytes: [0x89, 0x50, 0x4E, 0x47], format: 'image' },  // PNG
+  { bytes: [0x52, 0x49, 0x46, 0x46], format: 'image' },  // RIFF/WebP
+];
+
+const FEC_EXTENSIONS = ['.txt', '.fec'];
+
 async function detectFormatFromMagicBytes(file: File): Promise<FileFormat> {
   const buf = await file.slice(0, 8).arrayBuffer();
   const bytes = new Uint8Array(buf);
 
-  // XLSX / ZIP: PK\x03\x04
-  if (bytes[0] === 0x50 && bytes[1] === 0x4B && bytes[2] === 0x03 && bytes[3] === 0x04) return 'xlsx';
-  // PDF: %PDF
-  if (bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46) return 'pdf';
-  // JPEG: FFD8FF
-  if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF) return 'image';
-  // PNG: 89PNG
-  if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) return 'image';
-  // WebP: RIFF....WEBP
-  if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) return 'image';
+  const magicMatch = MAGIC_SIGNATURES.find(sig => sig.bytes.every((b, i) => bytes[i] === b));
+  if (magicMatch) return magicMatch.format;
 
-  // FEC: try extension
-  if (file.name.toLowerCase().endsWith('.txt') || file.name.toLowerCase().endsWith('.fec')) return 'fec';
+  const ext = file.name.toLowerCase();
+  if (FEC_EXTENSIONS.some(e => ext.endsWith(e))) return 'fec';
 
-  // JSON: first visible char is { or [
-  const text = new TextDecoder().decode(buf);
-  const firstChar = text.trim()[0];
+  const firstChar = new TextDecoder().decode(buf).trim()[0];
   if (firstChar === '{' || firstChar === '[') return 'json';
 
   return 'csv';

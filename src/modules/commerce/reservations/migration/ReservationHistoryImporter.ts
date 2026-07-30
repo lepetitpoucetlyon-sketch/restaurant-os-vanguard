@@ -148,6 +148,80 @@ export function parseReservationCSV(csvContent: string): ReservationCSVRow[] {
   return rows;
 }
 
+// ── Row processing ────────────────────────────────────────────────────────────
+
+type CRMRecord = {
+  id: string;
+  email?: string;
+  phone?: string;
+  visitHistory?: VisitEntry[];
+  metrics?: { totalVisits?: number; lastVisitDate?: number };
+};
+
+type AggEntry = {
+  existingVisitHistory: VisitEntry[];
+  newEntries: VisitEntry[];
+  existingMetrics: { totalVisits: number; lastVisitDate?: number };
+};
+
+async function resolveCrmId(
+  rawEmail: string, rawPhone: string, row: ReservationCSVRow,
+  source: string, tenantId: string,
+  emailIndex: Map<string, string>, crmRecords: CRMRecord[]
+): Promise<string | null> {
+  if (!rawEmail || !rawEmail.includes('@')) return null;
+  const newId = await hashEmail(rawEmail);
+  const existing = await Nexus.adapter.get<CRMRecord>(`crms/${newId}`).catch(() => null);
+  if (!existing) {
+    const nameParts = (row.client_name ?? '').trim().split(/\s+/);
+    await Nexus.adapter.set(`crms/${newId}`, {
+      id: newId, type: 'crm', email: rawEmail, phone: rawPhone || undefined,
+      firstName: nameParts[0] ?? '', lastName: nameParts.slice(1).join(' ') || '',
+      visitHistory: [], metrics: { totalVisits: 0 }, createdAt: Date.now(),
+      source: `import_${source}`, tenantId,
+    });
+    emailIndex.set(rawEmail, newId);
+    crmRecords.push({ id: newId, email: rawEmail, phone: rawPhone || undefined, visitHistory: [], metrics: {} });
+  }
+  return newId;
+}
+
+function ensureAggEntry(crmId: string, updates: Map<string, AggEntry>, crmRecords: CRMRecord[]) {
+  if (!updates.has(crmId)) {
+    const existing = crmRecords.find(r => r.id === crmId);
+    updates.set(crmId, {
+      existingVisitHistory: existing?.visitHistory ?? [],
+      newEntries: [],
+      existingMetrics: { totalVisits: existing?.metrics?.totalVisits ?? 0, lastVisitDate: existing?.metrics?.lastVisitDate },
+    });
+  }
+}
+
+async function processImportRow(
+  row: ReservationCSVRow, lineNum: number, source: string, tenantId: string,
+  emailIndex: Map<string, string>, phoneIndex: Map<string, string>,
+  crmRecords: CRMRecord[], updates: Map<string, AggEntry>
+): Promise<{ error?: string }> {
+  const date = parseReservationDate(row.date);
+  if (!date) return { error: `Ligne ${lineNum} : date invalide "${row.date}"` };
+
+  const rawEmail = (row.client_email ?? '').toLowerCase().trim();
+  const rawPhone = normalizePhone(row.client_phone ?? '');
+
+  if (rawEmail && isMaskedEmail(rawEmail)) return { error: `Ligne ${lineNum} : email masqué TheFork ignoré (${rawEmail})` };
+
+  let crmId = (rawEmail && emailIndex.get(rawEmail)) ?? (rawPhone && phoneIndex.get(rawPhone)) ?? null;
+  if (!crmId) crmId = await resolveCrmId(rawEmail, rawPhone, row, source, tenantId, emailIndex, crmRecords);
+  if (!crmId) return { error: `Ligne ${lineNum} : aucun client CRM trouvé pour "${rawEmail || rawPhone || 'inconnu'}"` };
+
+  ensureAggEntry(crmId, updates, crmRecords);
+  const agg = updates.get(crmId)!;
+  agg.newEntries.push({ date, covers: row.covers, source, status: row.status ?? 'confirmed', ...(row.notes ? { notes: row.notes } : {}) });
+  agg.existingMetrics.totalVisits += 1;
+  if (!agg.existingMetrics.lastVisitDate || date > agg.existingMetrics.lastVisitDate) agg.existingMetrics.lastVisitDate = date;
+  return {};
+}
+
 // ── Importer ───────────────────────────────────────────────────────────────────
 
 export class ReservationHistoryImporter {
@@ -171,14 +245,6 @@ export class ReservationHistoryImporter {
 
     const errors: string[] = [];
 
-    // Index CRM : email → docId, phone → docId
-    type CRMRecord = {
-      id: string;
-      email?: string;
-      phone?: string;
-      visitHistory?: VisitEntry[];
-      metrics?: { totalVisits?: number; lastVisitDate?: number };
-    };
     const crmRecords = await Nexus.adapter.query<CRMRecord>('crms');
     const emailIndex = new Map<string, string>(
       crmRecords.filter(r => r.email).map(r => [r.email!.toLowerCase().trim(), r.id])
@@ -187,94 +253,13 @@ export class ReservationHistoryImporter {
       crmRecords.filter(r => r.phone).map(r => [normalizePhone(r.phone!), r.id])
     );
 
-    // Agrégation par crmId
-    const updates = new Map<string, {
-      existingVisitHistory: VisitEntry[];
-      newEntries: VisitEntry[];
-      existingMetrics: { totalVisits: number; lastVisitDate?: number };
-    }>();
+    const updates = new Map<string, AggEntry>();
 
     let imported = 0;
 
     for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const lineNum = i + 2;
-
-      const date = parseReservationDate(row.date);
-      if (!date) {
-        errors.push(`Ligne ${lineNum} : date invalide "${row.date}"`);
-        continue;
-      }
-
-      const rawEmail = (row.client_email ?? '').toLowerCase().trim();
-      const rawPhone = normalizePhone(row.client_phone ?? '');
-
-      // Emails masqués TheFork → non liables
-      if (rawEmail && isMaskedEmail(rawEmail)) {
-        errors.push(`Ligne ${lineNum} : email masqué TheFork ignoré (${rawEmail})`);
-        continue;
-      }
-
-      // Recherche du client CRM
-      let crmId =
-        (rawEmail && emailIndex.get(rawEmail)) ??
-        (rawPhone && phoneIndex.get(rawPhone)) ??
-        null;
-
-      // Pas de client CRM → tenter un upsert minimal si email valide et non masqué
-      if (!crmId && rawEmail && rawEmail.includes('@')) {
-        const newId = await hashEmail(rawEmail);
-        const existing = await Nexus.adapter.get<CRMRecord>(`crms/${newId}`).catch(() => null);
-        if (!existing) {
-          const nameParts = (row.client_name ?? '').trim().split(/\s+/);
-          await Nexus.adapter.set(`crms/${newId}`, {
-            id: newId,
-            type: 'crm',
-            email: rawEmail,
-            phone: rawPhone || undefined,
-            firstName: nameParts[0] ?? '',
-            lastName: nameParts.slice(1).join(' ') || '',
-            visitHistory: [],
-            metrics: { totalVisits: 0 },
-            createdAt: Date.now(),
-            source: `import_${source}`,
-            tenantId,
-          });
-          emailIndex.set(rawEmail, newId);
-          crmRecords.push({ id: newId, email: rawEmail, phone: rawPhone || undefined, visitHistory: [], metrics: {} });
-        }
-        crmId = newId;
-      }
-
-      if (!crmId) {
-        errors.push(`Ligne ${lineNum} : aucun client CRM trouvé pour "${rawEmail || rawPhone || 'inconnu'}"`);
-        continue;
-      }
-
-      if (!updates.has(crmId)) {
-        const existing = crmRecords.find(r => r.id === crmId);
-        updates.set(crmId, {
-          existingVisitHistory: existing?.visitHistory ?? [],
-          newEntries: [],
-          existingMetrics: {
-            totalVisits: existing?.metrics?.totalVisits ?? 0,
-            lastVisitDate: existing?.metrics?.lastVisitDate,
-          },
-        });
-      }
-
-      const agg = updates.get(crmId)!;
-      agg.newEntries.push({
-        date,
-        covers: row.covers,
-        source,
-        status: row.status ?? 'confirmed',
-        ...(row.notes ? { notes: row.notes } : {}),
-      });
-      agg.existingMetrics.totalVisits += 1;
-      if (!agg.existingMetrics.lastVisitDate || date > agg.existingMetrics.lastVisitDate) {
-        agg.existingMetrics.lastVisitDate = date;
-      }
+      const result = await processImportRow(rows[i], i + 2, source, tenantId, emailIndex, phoneIndex, crmRecords, updates);
+      if (result.error) { errors.push(result.error); continue; }
       imported++;
     }
 

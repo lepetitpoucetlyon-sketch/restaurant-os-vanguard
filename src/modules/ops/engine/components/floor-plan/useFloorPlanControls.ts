@@ -22,6 +22,27 @@ interface FloorPlanControlsOptions {
     onTableSelect?: (id: string) => void;
 }
 
+function observeContainerResize(onResize: (dims: { width: number; height: number }) => void): () => void {
+    const container = document.getElementById("canvas-container");
+    const measure = () => {
+        const el = document.getElementById("canvas-container");
+        if (el) onResize({ width: el.offsetWidth, height: el.offsetHeight });
+    };
+    measure();
+    if (container) {
+        const observer = new ResizeObserver(measure);
+        observer.observe(container);
+        return () => observer.disconnect();
+    }
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+}
+
+function resolveCheckoutTotal(explicit: number | undefined, table: unknown): number {
+    if (typeof explicit === 'number' && explicit > 0) return explicit;
+    return (table as Record<string, number>)?.currentOrderTotal ?? (table as Record<string, number>)?.currentTotal ?? 0;
+}
+
 export function useFloorPlanControls({
     scale,
     onScaleChange,
@@ -73,23 +94,7 @@ export function useFloorPlanControls({
         onPositionChange(result.position);
     }, [scale, position, onScaleChange, onPositionChange]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            const container = document.getElementById("canvas-container");
-            if (container) {
-                setDimensions({ width: container.offsetWidth, height: container.offsetHeight });
-            }
-        };
-        handleResize();
-        const container = document.getElementById("canvas-container");
-        if (container) {
-            const observer = new ResizeObserver(handleResize);
-            observer.observe(container);
-            return () => observer.disconnect();
-        }
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    useEffect(() => observeContainerResize(setDimensions), []);
 
     useEffect(() => {
         if (dimensions.width > 0 && floorTables.length > 0 && !isManualPan) {
@@ -151,10 +156,7 @@ export function useFloorPlanControls({
     }, [mode, floorTables, floorZones, currentFloorId, addTable]);
 
     const handleCheckout = useCallback((total?: number) => {
-        const calculated = (typeof total === 'number' && total > 0)
-            ? total
-            : (selectedTable as any)?.currentOrderTotal || (selectedTable as any)?.currentTotal || 0;
-        setCheckoutTotal(calculated);
+        setCheckoutTotal(resolveCheckoutTotal(total, selectedTable));
         setIsPaymentOpen(true);
     }, [selectedTable]);
 

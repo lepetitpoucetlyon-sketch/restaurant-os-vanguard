@@ -34,6 +34,54 @@ function getWeekDays(anchor: Date): Date[] {
     return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
 }
 
+function mapTableToZoneTable(table: Table): ZoneTable {
+    const isTerrace = TERRACE_ZONE_IDS.some((z) => table.zoneId?.toLowerCase().includes(z));
+    return {
+        id: table.number,
+        seats: table.seats ?? 4,
+        type: table.zoneId === "VIP" ? "vip" : isTerrace ? "terrace" : "standard",
+        status: table.status === "free" ? "available" : table.status === "seated" ? "occupied" : "reserved",
+        number: table.number,
+    };
+}
+
+function computeTableStatus(res: Reservation, now: number, in15Min: number): string | null {
+    const resDateTime = (() => { try { return new Date(`${res.date}T${res.time}:00`).getTime(); } catch { return NaN; } })();
+    if (isNaN(resDateTime)) return null;
+    if (res.status === "seated") return "occupied";
+    if ((res.status as string) === "completed") return "free";
+    if (resDateTime <= in15Min && resDateTime >= now) return "reserved";
+    return null;
+}
+
+async function recordNoShow(
+    reservationId: string, reservations: Reservation[], customers: Customer[],
+    tenantId: string, updateReservation: (id: string, data: Partial<Reservation> & Record<string, unknown>) => Promise<void>
+) {
+    await updateReservation(reservationId, { status: "no_show", noShowAt: Date.now() } as Partial<Reservation> & { noShowAt: number });
+    const res = reservations.find((r: Reservation) => r.id === reservationId);
+    if (!res?.customerId) return;
+    const crmRecord = customers.find((c: Customer) => c.id === res.customerId);
+    if (!crmRecord) return;
+    const currentNoShows = (crmRecord as Record<string, unknown>)["noShows"] as number ?? 0;
+    await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
+}
+
+async function syncFloorPlan(reservations: Reservation[], tenantId: string) {
+    const now = Date.now();
+    const in15Min = now + 15 * 60 * 1000;
+    const ts = new Date().toISOString();
+    const updates: Array<Promise<void>> = [];
+    for (const res of reservations) {
+        if (!res.tableId || res.status === "cancelled" || res.status === "no_show") continue;
+        const newStatus = computeTableStatus(res, now, in15Min);
+        if (newStatus) {
+            updates.push(Nexus.adapter.update(`tenants/${tenantId}/ops_nodes/${res.tableId}`, { status: newStatus, updatedAt: ts }));
+        }
+    }
+    await Promise.all(updates);
+}
+
 export function useReservationsPage() {
     const [activeSection, setActiveSection] = useState<"reservations" | "customers" | "groups">("reservations");
     const [view, setView] = useState<"day" | "week">("day");
@@ -85,15 +133,7 @@ export function useReservationsPage() {
         () => tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
             const zone = table.zoneId ?? "STANDARD";
             if (!acc[zone]) acc[zone] = [];
-            acc[zone].push({
-                id: table.number,
-                seats: table.seats ?? 4,
-                type: table.zoneId === "VIP" ? "vip"
-                    : TERRACE_ZONE_IDS.some((z) => table.zoneId?.toLowerCase().includes(z)) ? "terrace"
-                    : "standard",
-                status: table.status === "free" ? "available" : table.status === "seated" ? "occupied" : "reserved",
-                number: table.number,
-            });
+            acc[zone].push(mapTableToZoneTable(table));
             return acc;
         }, {}),
         [tables]
@@ -108,29 +148,9 @@ export function useReservationsPage() {
 
     useEffect(() => {
         if (!tenantId || reservations.length === 0) return;
-        const syncFloorPlan = async () => {
-            const now = Date.now();
-            const in15Min = now + 15 * 60 * 1000;
-            const updates: Array<Promise<void>> = [];
-            const ts = new Date().toISOString();
-            for (const res of reservations) {
-                if (!res.tableId) continue;
-                if (res.status === "cancelled" || res.status === "no_show") continue;
-                const resDateTime = (() => { try { return new Date(`${res.date}T${res.time}:00`).getTime(); } catch { return NaN; } })();
-                if (isNaN(resDateTime)) continue;
-                const tablePath = `tenants/${tenantId}/ops_nodes/${res.tableId}`;
-                if (res.status === "seated") {
-                    updates.push(Nexus.adapter.update(tablePath, { status: "occupied", updatedAt: ts }));
-                } else if ((res.status as string) === "completed") {
-                    updates.push(Nexus.adapter.update(tablePath, { status: "free", updatedAt: ts }));
-                } else if (resDateTime <= in15Min && resDateTime >= now) {
-                    updates.push(Nexus.adapter.update(tablePath, { status: "reserved", updatedAt: ts }));
-                }
-            }
-            await Promise.all(updates);
-        };
-        syncFloorPlan();
-        const interval = setInterval(syncFloorPlan, 60_000);
+        const run = () => syncFloorPlan(reservations, tenantId);
+        run();
+        const interval = setInterval(run, 60_000);
         return () => clearInterval(interval);
     }, [reservations, tenantId]);
 
@@ -147,19 +167,9 @@ export function useReservationsPage() {
 
     const handleMarkNoShow = useCallback(async (id: string) => {
         try {
-            await updateReservation(id, { status: "no_show", noShowAt: Date.now() } as Partial<Reservation> & { noShowAt: number });
-            const res = reservations.find((r: Reservation) => r.id === id);
-            if (res?.customerId) {
-                const crmRecord = customers.find((c: Customer) => c.id === res.customerId);
-                if (crmRecord) {
-                    const currentNoShows = (crmRecord as Record<string, unknown>)["noShows"] as number ?? 0;
-                    await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
-                }
-            }
+            await recordNoShow(id, reservations, customers, tenantId, updateReservation);
             toast.success("No-show enregistré");
-        } catch {
-            toast.error("Erreur lors de l'enregistrement du no-show");
-        }
+        } catch { toast.error("Erreur lors de l'enregistrement du no-show"); }
     }, [reservations, customers, tenantId, updateReservation]);
 
     const handleCancelReservation = useCallback(async (id: string) => {

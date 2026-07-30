@@ -22,108 +22,77 @@ const RADIUS_MAP: Record<string, string> = { sm: '0.5rem', md: '1rem', lg: '1.5r
 const BLUR_MAP: Record<string, string>   = { none: '0px', sm: '8px', md: '16px', lg: '24px' };
 const OPACITY_MAP: Record<string, string> = { low: '0.4', medium: '0.7', high: '0.9' };
 
+type BrandTokens = ReturnType<typeof BrandTokensSchema.parse>;
+
+function buildSemanticOverrides(brandTokens: BrandTokens): Record<string, unknown> {
+    const overrides: Record<string, unknown> = {};
+    if (brandTokens.primaryColor) {
+        overrides.action = { ...semanticTokens.action, primary: brandTokens.primaryColor, primaryHover: brandTokens.primaryHover ?? brandTokens.primaryColor };
+        overrides.text   = { ...semanticTokens.text, brand: brandTokens.primaryColor };
+        overrides.border = { ...semanticTokens.border, focus: brandTokens.primaryColor };
+    }
+    if (brandTokens.surfaceModal) {
+        overrides.surface = { ...semanticTokens.surface, modal: brandTokens.surfaceModal };
+    }
+    return overrides;
+}
+
+function applyTokenToCSS(root: HTMLElement, token: string | undefined, varName: string, map: Record<string, string>) {
+    if (token && map[token]) root.style.setProperty(varName, map[token]);
+}
+
+function applyFonts(root: HTMLElement, brandTokens: BrandTokens) {
+    if (brandTokens.fontBrand) {
+        root.style.setProperty('--font-brand', `'${brandTokens.fontBrand}', Georgia, serif`);
+        if (brandTokens.fontBrandUrl && !document.querySelector('link[data-brand-font]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = brandTokens.fontBrandUrl;
+            link.setAttribute('data-brand-font', 'true');
+            document.head.appendChild(link);
+        }
+    }
+    if (brandTokens.fontUI) {
+        root.style.setProperty('--font-ui', `'${brandTokens.fontUI}', Inter, sans-serif`);
+    }
+}
+
+function applyDocumentMeta(brandTokens: BrandTokens) {
+    if (brandTokens.faviconUrl) {
+        const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+        if (favicon) favicon.href = brandTokens.faviconUrl;
+    }
+    if (brandTokens.brandName) {
+        document.title = brandTokens.tagline
+            ? `${brandTokens.brandName} • ${brandTokens.tagline}`
+            : `${brandTokens.brandName} — Restaurant OS`;
+    }
+}
+
 export function BrandingProvider() {
   const tenantId = useAtomValue(tenantIdAtom);
   const rawBrandTokens = useAtomValue(tenantBrandTokensAtom);
 
-  // Synchronisation temps réel Google Stitch
   useFirestoreBrand(tenantId || "");
 
   useEffect(() => {
-    // Valider les tokens tenant via Zod avant injection
     const result = BrandTokensSchema.safeParse(rawBrandTokens || defaultBrandTokens);
     const brandTokens = result.success ? result.data : defaultBrandTokens;
 
-    // Construire le override de tokens sémantiques
-    const overrides: Record<string, unknown> = {};
-    
-    if (brandTokens.primaryColor) {
-        overrides.action = {
-            ...semanticTokens.action,
-            primary:      brandTokens.primaryColor,
-            primaryHover: brandTokens.primaryHover ?? brandTokens.primaryColor,
-        };
-        overrides.text = {
-            ...semanticTokens.text,
-            brand: brandTokens.primaryColor,
-        };
-        overrides.border = {
-            ...semanticTokens.border,
-            focus: brandTokens.primaryColor,
-        };
-    }
-
-    if (brandTokens.surfaceModal) {
-        overrides.surface = {
-            ...semanticTokens.surface,
-            modal: brandTokens.surfaceModal,
-        };
-    }
-
-    // Générer et injecter les variables CSS
+    const overrides = buildSemanticOverrides(brandTokens);
     const cssVars = generateCSSVariables({ ...semanticTokens, ...overrides });
-
     const root = document.documentElement;
-    Object.entries(cssVars).forEach(([key, value]) => {
-      if (value) {
-        root.style.setProperty(key, value as string);
-      }
-    });
+    Object.entries(cssVars).forEach(([key, value]) => { if (value) root.style.setProperty(key, value as string); });
 
-    // Injection automatique du contraste texte WCAG
-    if (brandTokens.primaryColor) {
-      root.style.setProperty('--text-on-primary', getContrastTextColor(brandTokens.primaryColor));
-    }
+    if (brandTokens.primaryColor) root.style.setProperty('--text-on-primary', getContrastTextColor(brandTokens.primaryColor));
 
-    // Injection des Radii (Formes)
-    if (brandTokens.borderRadiusCard && RADIUS_MAP[brandTokens.borderRadiusCard]) {
-      root.style.setProperty('--radius-card', RADIUS_MAP[brandTokens.borderRadiusCard]);
-    }
-    if (brandTokens.borderRadiusBtn && RADIUS_MAP[brandTokens.borderRadiusBtn]) {
-      root.style.setProperty('--radius-btn', RADIUS_MAP[brandTokens.borderRadiusBtn]);
-    }
+    applyTokenToCSS(root, brandTokens.borderRadiusCard, '--radius-card', RADIUS_MAP);
+    applyTokenToCSS(root, brandTokens.borderRadiusBtn,  '--radius-btn',  RADIUS_MAP);
+    applyTokenToCSS(root, brandTokens.glassBlur,    '--glass-blur',    BLUR_MAP);
+    applyTokenToCSS(root, brandTokens.glassOpacity, '--glass-opacity', OPACITY_MAP);
 
-    // Injection des effets Glassmorphism
-    if (brandTokens.glassBlur && BLUR_MAP[brandTokens.glassBlur]) {
-      root.style.setProperty('--glass-blur', BLUR_MAP[brandTokens.glassBlur]);
-    }
-    if (brandTokens.glassOpacity && OPACITY_MAP[brandTokens.glassOpacity]) {
-      root.style.setProperty('--glass-opacity', OPACITY_MAP[brandTokens.glassOpacity]);
-    }
-
-    // Injection de la police brand
-    if (brandTokens.fontBrand) {
-      root.style.setProperty('--font-brand', `'${brandTokens.fontBrand}', Georgia, serif`);
-
-      // Charger la police depuis URL si fournie
-      if (brandTokens.fontBrandUrl) {
-        const existing = document.querySelector(`link[data-brand-font]`);
-        if (!existing) {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = brandTokens.fontBrandUrl;
-          link.setAttribute('data-brand-font', 'true');
-          document.head.appendChild(link);
-        }
-      }
-    }
-
-    if (brandTokens.fontUI) {
-      root.style.setProperty('--font-ui', `'${brandTokens.fontUI}', Inter, sans-serif`);
-    }
-
-    // Injection favicon & Titre du document
-    if (brandTokens.faviconUrl) {
-      const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
-      if (favicon) favicon.href = brandTokens.faviconUrl;
-    }
-
-    if (brandTokens.brandName && typeof document !== 'undefined') {
-      document.title = brandTokens.tagline 
-        ? `${brandTokens.brandName} • ${brandTokens.tagline}`
-        : `${brandTokens.brandName} — Restaurant OS`;
-    }
-
+    applyFonts(root, brandTokens);
+    applyDocumentMeta(brandTokens);
   }, [rawBrandTokens]);
 
   return null;

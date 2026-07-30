@@ -23,6 +23,52 @@ interface NexusFleetStateInternal extends Omit<NexusFleetState, 'tutorial'> {
 
 const NexusFleetContext = createContext<NexusFleetStateInternal | undefined>(undefined);
 
+function checkOtaUpdate(
+  tenantConfig: { status?: { targetVersion?: string; otaUrl?: string } },
+  currentVersion: string
+): { isUpdateAvailable: boolean; updateInfo: { version: string; url: string } | null } {
+  const target = tenantConfig.status?.targetVersion;
+  if (target && target !== currentVersion) {
+    console.warn(`[NexusOTA] NEW VERSION DETECTED: ${target}. Current: ${currentVersion}`);
+    return { isUpdateAvailable: true, updateInfo: { version: target, url: tenantConfig.status?.otaUrl || '' } };
+  }
+  return { isUpdateAvailable: false, updateInfo: null };
+}
+
+function startAuthAwarePolling(
+  refreshFleet: (bg?: boolean) => Promise<void>,
+  onCleanup: (cleanup: () => void) => void
+) {
+  let cancelled = false;
+  let intervalId: ReturnType<typeof setInterval> | null = null;
+
+  const startPolling = () => {
+    if (cancelled || intervalId) return;
+    refreshFleet();
+    intervalId = setInterval(() => refreshFleet(true), 120000);
+  };
+
+  import('@/lib/firebase').then(({ auth }) => {
+    if (cancelled) return;
+    const unsub = auth.onAuthStateChanged(user => {
+      if (cancelled) return;
+      const devBypass = process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true';
+      if (user || devBypass) {
+        startPolling();
+      } else if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    });
+    onCleanup(() => unsub());
+  }).catch(() => { /* firebase absent — skip polling */ });
+
+  return () => {
+    cancelled = true;
+    if (intervalId) clearInterval(intervalId);
+  };
+}
+
 /**
  * 🏥 NexusFleetProvider - The Heart of the Fleet
  * Implements "Hybrid-Shadow" state and "Smart-Focus" polling.
@@ -73,26 +119,13 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const priceMultiplier = tenantConfig.status?.priceMultiplier || 1.0;
 
-    // --- PHASE 3: HEARTBEAT & PHASE 5: OTA ---
     useEffect(() => {
-        if (tenantConfig.id) {
-            NexusTelemetryService.start(tenantConfig.id);
-
-            // OTA Update Signal Check
-            if (tenantConfig.status?.targetVersion && tenantConfig.status?.targetVersion !== whiteLabelInstanceConfig.version) {
-                console.warn(`[NexusOTA] NEW VERSION DETECTED: ${tenantConfig.status?.targetVersion}. Current: ${whiteLabelInstanceConfig.version}`);
-                setIsUpdateAvailable(true);
-                setUpdateInfo({
-                    version: tenantConfig.status?.targetVersion,
-                    url: tenantConfig.status?.otaUrl || ''
-                });
-            } else {
-                setIsUpdateAvailable(false);
-                setUpdateInfo(null);
-            }
-
-            return () => NexusTelemetryService.stop();
-        }
+        if (!tenantConfig.id) return;
+        NexusTelemetryService.start(tenantConfig.id);
+        const ota = checkOtaUpdate(tenantConfig, whiteLabelInstanceConfig.version);
+        setIsUpdateAvailable(ota.isUpdateAvailable);
+        setUpdateInfo(ota.updateInfo);
+        return () => NexusTelemetryService.stop();
     }, [tenantConfig.id, tenantConfig.status?.targetVersion, tenantConfig.status?.otaUrl]);
 
     const isEmpireMode = selectedInstanceId === null;
@@ -163,38 +196,9 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     useEffect(() => {
-        // Guard: only start fleet polling once Firebase auth resolves to a real user.
-        // Without a session, discoverRealFleet() 403s in a loop every 2 min against
-        // Firestore `fleet-telemetry` rules — noisy in console and wastes cycles.
-        // We also self-heal: if a refresh comes back permission-denied, stop polling.
-        let cancelled = false;
-        let intervalId: ReturnType<typeof setInterval> | null = null;
-
-        const startPolling = () => {
-            if (cancelled || intervalId) return;
-            refreshFleet();
-            intervalId = setInterval(() => refreshFleet(true), 120000);
-        };
-
-        import('@/lib/firebase').then(({ auth }) => {
-            if (cancelled) return;
-            const unsub = auth.onAuthStateChanged(user => {
-                if (cancelled) return;
-                const devBypass = process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true';
-                if (user || devBypass) {
-                    startPolling();
-                } else if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = null;
-                }
-            });
-            return () => unsub();
-        }).catch(() => { /* firebase absent — skip polling */ });
-
-        return () => {
-            cancelled = true;
-            if (intervalId) clearInterval(intervalId);
-        };
+        let authCleanup: (() => void) | undefined;
+        const stopPolling = startAuthAwarePolling(refreshFleet, (fn) => { authCleanup = fn; });
+        return () => { stopPolling(); authCleanup?.(); };
     }, [refreshFleet]);
 
     const stats = useMemo(() => ({

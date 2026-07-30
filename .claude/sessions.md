@@ -49,3 +49,4 @@
 | connectors-arch | Implémentation plan connecteurs : types + factories + providers (P1) pour toutes les catégories + routes API | 2026-07-28 | terminée |
 | suite-fixes-firestore | Fixes 4-5-6 (rapatriement, demo, useExtensions), audit Firestore rules privilege escalation systemConfig | 2026-07-29 | terminée |
 | preflight-green | Preflight complet : cycles Madge 0, SSR purity (ops pages), playwright/mqtt externals, fan-out KitchenDashboard+FinanceDashboard, baseline v2.0, hook pre-push, CC -3 (resolveTaskContext/middleware/AnomalyDetector) | 2026-07-30 | terminée |
+| cc-reduction | Réduction CC 10 fonctions TS : usePos, useReservationsPage, InventoryReceptionDashboard, NexusFleetProvider, fileDetector, BrandingProvider, ReservationHistoryImporter, useFloorPlanControls, NewQuoteDialog, useInventory | 2026-07-30 | terminée |

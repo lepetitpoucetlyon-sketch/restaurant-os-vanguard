@@ -30,9 +30,19 @@ interface NewQuoteDialogProps {
 }
 
 type QuoteProduct = { name?: string; priceInMicrounits?: number; priceInCents?: number; unitCostInCents?: number };
+
+function recalculateLineTotals(line: Partial<QuoteLine>): Partial<QuoteLine> {
+    const q = line.quantity || 0;
+    const p = line.unitPriceHTInMicrounits || 0;
+    const v = line.vatRate || 20;
+    const totalHT = Math.round(q * p);
+    const vatAmount = Math.round(totalHT * (v / 100));
+    return { ...line, totalHTInMicrounits: totalHT, vatAmountInMicrounits: vatAmount, totalTTCInMicrounits: totalHT + vatAmount };
+}
+
 function createQuoteLine(product?: QuoteProduct): Partial<QuoteLine> {
     const price = product?.priceInMicrounits ?? ((product?.priceInCents ?? product?.unitCostInCents ?? 0) * 10_000);
-    return {
+    return recalculateLineTotals({
         id: crypto.randomUUID(),
         type: product ? 'product' : 'service',
         designation: product?.name ?? '',
@@ -40,10 +50,7 @@ function createQuoteLine(product?: QuoteProduct): Partial<QuoteLine> {
         unitPriceHTInMicrounits: price,
         vatRate: 20,
         unit: 'unité',
-        totalHTInMicrounits: price,
-        totalTTCInMicrounits: Math.round(price * 1.2),
-        vatAmountInMicrounits: Math.round(price * 0.2)
-    };
+    });
 }
 
 export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
@@ -82,24 +89,11 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
     };
 
     const updateLine = (id: string, updates: Partial<QuoteLine>) => {
+        const needsRecalc = updates.quantity !== undefined || updates.unitPriceHTInMicrounits !== undefined || updates.vatRate !== undefined;
         setLines(lines.map(l => {
-            if (l.id === id) {
-                const updatedLine = { ...l, ...updates };
-
-                // Recalculate totals
-                if (updates.quantity !== undefined || updates.unitPriceHTInMicrounits !== undefined || updates.vatRate !== undefined) {
-                    const q = updatedLine.quantity || 0;
-                    const p = updatedLine.unitPriceHTInMicrounits || 0;
-                    const v = updatedLine.vatRate || 20;
-
-                    updatedLine.totalHTInMicrounits = Math.round(q * p);
-                    updatedLine.vatAmountInMicrounits = Math.round(updatedLine.totalHTInMicrounits * (v / 100));
-                    updatedLine.totalTTCInMicrounits = updatedLine.totalHTInMicrounits + updatedLine.vatAmountInMicrounits;
-                }
-
-                return updatedLine;
-            }
-            return l;
+            if (l.id !== id) return l;
+            const merged = { ...l, ...updates };
+            return needsRecalc ? recalculateLineTotals(merged) : merged;
         }));
     };
 

@@ -47,6 +47,81 @@ interface BarcodeSearchResult {
   supplierId?: string;
 }
 
+async function runOcrScan(tenantId: string): Promise<ScannedItem[]> {
+  const keywords = ['Saumon', 'Aneth', 'Sel'];
+  const SCAN_DEFAULTS: Record<string, { qty: number; price: number }> = {
+    Saumon: { qty: 5, price: 125.00 },
+    Aneth:  { qty: 10, price: 15.00 },
+    Sel:    { qty: 25, price: 45.00 },
+  };
+  const results: ScannedItem[] = [];
+  for (const word of keywords) {
+    const matches = await searchIngredientsAction(tenantId, word);
+    if (matches.length === 0) continue;
+    const match = matches[0] as import('@nexus/contracts').Ingredient;
+    const defaults = SCAN_DEFAULTS[word] ?? { qty: 1, price: 0 };
+    results.push({
+      id: String(match.id), name: String(match.name),
+      qty: defaults.qty, unit: String(match.unit), price: defaults.price,
+      dlc: new Date(Date.now() + (Number(match.shelfLifeDays) || 3) * 86400000).toISOString().split('T')[0],
+      forceScan: word === 'Saumon', ingredient: match,
+    });
+  }
+  return results;
+}
+
+async function persistReception(tenantId: string, items: ScannedItem[]) {
+  for (const item of items) {
+    const stockPath = `tenants/${tenantId}/stockItems/${item.id}`;
+    const existing = await Nexus.adapter.get<{ quantity?: number }>(stockPath);
+    await Nexus.adapter.set(stockPath, {
+      id: item.id, name: item.name, quantity: (existing?.quantity ?? 0) + item.qty,
+      unit: item.unit, dlc: item.dlc, updatedAt: new Date().toISOString(),
+    });
+    const movPath = `tenants/${tenantId}/inventoryMovements`;
+    const movId = Nexus.adapter.generateId(movPath);
+    await Nexus.adapter.set(`${movPath}/${movId}`, {
+      id: movId, type: 'reception', ingredientId: item.id, ingredientName: item.name,
+      quantity: item.qty, unit: item.unit, costInCents: Math.round(item.price * 100),
+      dlc: item.dlc, recordedAt: new Date().toISOString(),
+    });
+  }
+}
+
+type ProductDoc = BarcodeSearchResult & { barcode?: string; sku?: string; supplier?: string; supplierId?: string };
+type IngredientDoc = ProductDoc & { supplierRef?: string };
+
+function findByBarcode(items: ProductDoc[], code: string): ProductDoc | undefined {
+    return items.find(p => p.sku?.toUpperCase() === code || p.barcode?.toUpperCase() === code);
+}
+
+function findIngredientByBarcode(items: IngredientDoc[], code: string): IngredientDoc | undefined {
+    return items.find(i => i.sku?.toUpperCase() === code || i.barcode?.toUpperCase() === code || i.supplierRef?.toUpperCase() === code);
+}
+
+async function searchBarcode(code: string): Promise<BarcodeSearchResult | null> {
+    const [products, ingredients] = await Promise.all([
+        Nexus.adapter.query<ProductDoc>('products'),
+        Nexus.adapter.query<IngredientDoc>('ingredients'),
+    ]);
+    const normalised = code.trim().toUpperCase();
+    const found = findByBarcode(products ?? [], normalised) ?? findIngredientByBarcode(ingredients ?? [], normalised) ?? null;
+    if (!found) return null;
+    return { id: String(found.id), name: String(found.name), unit: found.unit ? String(found.unit) : undefined, sku: found.sku, supplier: found.supplier, supplierId: found.supplierId };
+}
+
+function handleBarcodeBuffer(
+    key: string, bufferRef: React.MutableRefObject<string>,
+    timerRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>,
+    onSearch: (code: string) => void
+) {
+    bufferRef.current += key;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+        if (bufferRef.current.length > 3) { onSearch(bufferRef.current); bufferRef.current = ''; }
+    }, 100);
+}
+
 export function InventoryReceptionDashboard() {
   const { tenantId } = useNexusOps();
   const [isScanning, setIsScanning] = useState(false);
@@ -62,85 +137,26 @@ export function InventoryReceptionDashboard() {
   const barcodeBufferRef = useRef('');
   const barcodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /** Triggered when the barcode field receives a full scan (Enter key or buffer flush) */
   const handleBarcodeSearch = useCallback(async (code: string) => {
     if (!code.trim()) return;
     setBarcodeSearching(true);
     setBarcodeResult(null);
-
-    type ProductDoc = BarcodeSearchResult & {
-      barcode?: string;
-      sku?: string;
-      supplier?: string;
-      supplierId?: string;
-    };
-
-    type IngredientDoc = ProductDoc & { supplierRef?: string };
-
     try {
-      // Search both products and ingredients for a matching barcode/sku field
-      const [products, ingredients] = await Promise.all([
-        Nexus.adapter.query<ProductDoc>('products'),
-        Nexus.adapter.query<IngredientDoc>('ingredients'),
-      ]);
-
-      const normalised = code.trim().toUpperCase();
-
-      const matchingProduct = (products ?? []).find(
-        (p) =>
-          p.sku?.toUpperCase() === normalised ||
-          p.barcode?.toUpperCase() === normalised
-      );
-
-      const matchingIngredient = (ingredients ?? []).find(
-        (i) =>
-          i.sku?.toUpperCase() === normalised ||
-          i.barcode?.toUpperCase() === normalised ||
-          i.supplierRef?.toUpperCase() === normalised
-      );
-
-      const found = matchingProduct ?? matchingIngredient ?? null;
-
-      if (found) {
-        setBarcodeResult({
-          id: String(found.id),
-          name: String(found.name),
-          unit: found.unit ? String(found.unit) : undefined,
-          sku: found.sku,
-          supplier: found.supplier,
-          supplierId: found.supplierId,
-        });
-        toast.success(`Produit trouvé : ${found.name}`);
-      } else {
-        toast.warning(`Aucun produit trouvé pour le code : ${code}`);
-      }
-    } catch {
-      toast.error('Erreur lors de la recherche par code-barres.');
-    } finally {
-      setBarcodeSearching(false);
-    }
+      const found = await searchBarcode(code);
+      if (found) { setBarcodeResult(found); toast.success(`Produit trouvé : ${found.name}`); }
+      else { toast.warning(`Aucun produit trouvé pour le code : ${code}`); }
+    } catch { toast.error('Erreur lors de la recherche par code-barres.'); }
+    finally { setBarcodeSearching(false); }
   }, []);
 
-  /** Handles rapid barcode-scanner input: accumulate chars, flush on Enter */
   const handleBarcodeKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         const code = barcodeBufferRef.current || barcodeValue;
-        if (code) {
-          void handleBarcodeSearch(code);
-          barcodeBufferRef.current = '';
-        }
+        if (code) { void handleBarcodeSearch(code); barcodeBufferRef.current = ''; }
       } else {
-        // For HID scanners that fire blur immediately, buffer chars with a timer
-        barcodeBufferRef.current += e.key;
-        if (barcodeTimerRef.current) clearTimeout(barcodeTimerRef.current);
-        barcodeTimerRef.current = setTimeout(() => {
-          if (barcodeBufferRef.current.length > 3) {
-            void handleBarcodeSearch(barcodeBufferRef.current);
-            barcodeBufferRef.current = '';
-          }
-        }, 100);
+        handleBarcodeBuffer(e.key, barcodeBufferRef, barcodeTimerRef, (c) => void handleBarcodeSearch(c));
       }
     },
     [barcodeValue, handleBarcodeSearch]
@@ -149,38 +165,14 @@ export function InventoryReceptionDashboard() {
   const handleScan = async () => {
     if (!tenantId) return;
     setIsScanning(true);
-    
     try {
-        const keywords = ['Saumon', 'Aneth', 'Sel'];
-        const results: ScannedItem[] = [];
-        
-        for (const word of keywords) {
-            const matches = await searchIngredientsAction(tenantId, word);
-            if (matches.length > 0) {
-                const match = matches[0] as import('@nexus/contracts').Ingredient;
-                results.push({
-                    id: String(match.id),
-                    name: String(match.name),
-                    qty: word === 'Saumon' ? 5 : word === 'Aneth' ? 10 : 25,
-                    unit: String(match.unit),
-                    price: word === 'Saumon' ? 125.00 : word === 'Aneth' ? 15.00 : 45.00,
-                    dlc: new Date(Date.now() + (Number(match.shelfLifeDays) || 3) * 86400000).toISOString().split('T')[0],
-                    forceScan: word === 'Saumon',
-                    ingredient: match
-                });
-            }
-        }
-
-        // If no ingredients found in DB, we still show the "Ghost" items but mark them as new or warning
+        const results = await runOcrScan(tenantId);
         if (results.length === 0) {
             toast.warning("Aucun ingrédient correspondant dans le référentiel. Utilisation du mode Ingestion Directe.");
-            setScanResult([
-                { id: 'new-1', name: 'Saumon (Non Référencé)', qty: 5, unit: 'kg', price: 125.00, dlc: '2026-04-20', forceScan: true },
-            ]);
+            setScanResult([{ id: 'new-1', name: 'Saumon (Non Référencé)', qty: 5, unit: 'kg', price: 125.00, dlc: '2026-04-20', forceScan: true }]);
         } else {
             setScanResult(results);
         }
-        
         setActiveStep('verify');
     } catch (error) {
         console.error('Scan error:', error);
@@ -193,36 +185,8 @@ export function InventoryReceptionDashboard() {
   const handleSaveToStock = async () => {
     if (!tenantId || !scanResult) return;
     setIsSaving(true);
-
     try {
-      for (const item of scanResult) {
-        const stockPath = `tenants/${tenantId}/stockItems/${item.id}`;
-        const existing = await Nexus.adapter.get<{ quantity?: number }>(stockPath);
-        const currentQty = existing?.quantity ?? 0;
-        await Nexus.adapter.set(stockPath, {
-          id: item.id,
-          name: item.name,
-          quantity: currentQty + item.qty,
-          unit: item.unit,
-          dlc: item.dlc,
-          updatedAt: new Date().toISOString(),
-        });
-
-        const movPath = `tenants/${tenantId}/inventoryMovements`;
-        const movId = Nexus.adapter.generateId(movPath);
-        await Nexus.adapter.set(`${movPath}/${movId}`, {
-          id: movId,
-          type: 'reception',
-          ingredientId: item.id,
-          ingredientName: item.name,
-          quantity: item.qty,
-          unit: item.unit,
-          costInCents: Math.round(item.price * 100),
-          dlc: item.dlc,
-          recordedAt: new Date().toISOString(),
-        });
-      }
-
+      await persistReception(tenantId, scanResult);
       toast.success('Stock mis à jour avec succès !');
       setActiveStep('scan');
       setScanResult(null);
