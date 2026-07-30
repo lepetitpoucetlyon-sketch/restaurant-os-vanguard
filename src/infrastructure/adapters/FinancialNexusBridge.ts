@@ -112,11 +112,15 @@ export const FinancialNexusBridge = {
       description,
       side,
       amountInCents: cents,
+      amountInMicrounits: cents * 10_000,
       date: now,
       pieceNumber,
       debitInCents: side === 'debit' ? cents : 0,
+      debitInMicrounits: side === 'debit' ? cents * 10_000 : 0,
       creditInCents: side === 'credit' ? cents : 0,
+      creditInMicrounits: side === 'credit' ? cents * 10_000 : 0,
       runningBalanceInCents: 0,
+      runningBalanceInMicrounits: 0,
     });
 
     // Partie double : 1 débit d'encaissement = Σ (crédits 701 HT + 445710 TVA) par taux.
@@ -164,6 +168,7 @@ export const FinancialNexusBridge = {
       isValidated: status === 'validated',
       type: 'revenue' as const,
       amountInCents: microToCents(totalTTCInMicrounits),
+      amountInMicrounits: totalTTCInMicrounits,
       status,
       lines: buildLines(pieceNumber),
     });

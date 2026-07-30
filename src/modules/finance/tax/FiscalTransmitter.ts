@@ -76,11 +76,15 @@ export class FiscalTransmitter {
         // pour calculer la base HT et la TVA collectée/déductible.
         return {
             totalRevenueInCents: 5000000,
+            totalRevenueInMicrounits: 5000000 * 10_000,
             taxBaseByRate: { "20.0": 4000000, "10.0": 1000000 },
             taxCollectedByRate: { "20.0": 800000, "10.0": 100000 },
             totalTaxCollectedInCents: 900000,
+            totalTaxCollectedInMicrounits: 900000 * 10_000,
             deductibleTaxInCents: 200000,
-            netTaxToPayInCents: 700000
+            deductibleTaxInMicrounits: 200000 * 10_000,
+            netTaxToPayInCents: 700000,
+            netTaxToPayInMicrounits: 700000 * 10_000,
         };
     }
 

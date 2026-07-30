@@ -3,7 +3,7 @@
 import React from "react";
 import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Lock, Download, FileText } from "lucide-react";
 import { TreasuryDashboard } from "@modules/finance/components/accounting";
-import { type TvaGroup, formatEur, centsToEur } from "../financeUtils";
+import { type TvaGroup, formatEur, centsToEur, muToEur } from "../financeUtils";
 
 /**
  * Onglet « Comptabilité » de la page Finance — extrait de page.tsx (dette-4).
@@ -145,7 +145,7 @@ export function AccountingTab({
                                     </td>
                                     <td className="py-2.5 text-text-muted">{row.label}</td>
                                     <td className="py-2.5 text-right tabular-nums font-medium">
-                                        {formatEur(centsToEur(row.htInCents))}
+                                        {formatEur(row.htInMicrounits != null ? muToEur(row.htInMicrounits) : centsToEur(row.htInCents))}
                                     </td>
                                 </tr>
                             ))}
@@ -158,8 +158,8 @@ export function AccountingTab({
                                 </td>
                                 <td className="py-2.5 text-right tabular-nums font-bold">
                                     {formatEur(
-                                        centsToEur(
-                                            tvaBreakdown.reduce((s, r) => s + r.htInCents, 0)
+                                        muToEur(
+                                            tvaBreakdown.reduce((s, r) => s + (r.htInMicrounits ?? r.htInCents * 10_000), 0)
                                         )
                                     )}
                                 </td>

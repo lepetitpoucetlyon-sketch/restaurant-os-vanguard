@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatMu } from "@/modules/finance/components/financeUtils";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@components/ui/PageHeader";
 import { Plus, GripVertical, Settings2, ChefHat, Tag, Link2 } from "lucide-react";
@@ -14,16 +15,16 @@ const mockCategories = [
 ];
 
 const mockProducts = [
-    { id: 'p_1', categoryId: 'cat_1', name: 'Burger Maison', priceInCents: 1500, recipeId: 'rec_1', active: true },
-    { id: 'p_2', categoryId: 'cat_1', name: 'Salade César', priceInCents: 1200, recipeId: null, active: true },
-    { id: 'p_3', categoryId: 'cat_2', name: 'Mojito Royal', priceInCents: 900, recipeId: 'rec_3', active: true },
-    { id: 'p_4', categoryId: 'cat_2', name: 'Coca Cola', priceInCents: 400, recipeId: null, active: true },
+    { id: 'p_1', categoryId: 'cat_1', name: 'Burger Maison', priceInCents: 1500, priceInMicrounits: 1500 * 10_000, recipeId: 'rec_1', active: true },
+    { id: 'p_2', categoryId: 'cat_1', name: 'Salade César', priceInCents: 1200, priceInMicrounits: 1200 * 10_000, recipeId: null, active: true },
+    { id: 'p_3', categoryId: 'cat_2', name: 'Mojito Royal', priceInCents: 900, priceInMicrounits: 900 * 10_000, recipeId: 'rec_3', active: true },
+    { id: 'p_4', categoryId: 'cat_2', name: 'Coca Cola', priceInCents: 400, priceInMicrounits: 400 * 10_000, recipeId: null, active: true },
 ];
 
 export default function MenuBuilderPage() {
     const [selectedCategory, setSelectedCategory] = useState<string>('cat_1');
     const [searchQuery, setSearchQuery] = useState("");
-    const [editingProduct, setEditingProduct] = useState<{ id: string; categoryId: string; name: string; priceInCents: number; recipeId: string | null; active: boolean } | null>(null);
+    const [editingProduct, setEditingProduct] = useState<{ id: string; categoryId: string; name: string; priceInCents: number; priceInMicrounits?: number; recipeId: string | null; active: boolean } | null>(null);
 
     const filteredProducts = mockProducts.filter(p => 
         p.categoryId === selectedCategory &&
@@ -102,7 +103,7 @@ export default function MenuBuilderPage() {
                                         </div>
                                         <div>
                                             <h3 className="font-black text-text-primary">{product.name}</h3>
-                                            <p className="text-sm font-bold text-text-muted mt-1">{(product.priceInCents / 100).toFixed(2)} €</p>
+                                            <p className="text-sm font-bold text-text-muted mt-1">{formatMu(product.priceInMicrounits ?? product.priceInCents * 10_000)}</p>
                                         </div>
                                     </div>
 

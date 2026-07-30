@@ -46,7 +46,8 @@ export class StaffService {
                         accountName: 'Rémunérations du personnel',
                         description: `Estimation coût horaire (${hours.toFixed(2)}h @ 18€/h)`,
                         side: 'debit',
-                        amountInCents: totalCostCents
+                        amountInCents: totalCostCents,
+                        amountInMicrounits: totalCostCents * 10_000,
                     },
                     {
                         accountId: 'acc_421',
@@ -54,7 +55,8 @@ export class StaffService {
                         accountName: 'Personnel - Rémunérations dues',
                         description: `Provision pour paie à venir`,
                         side: 'credit',
-                        amountInCents: totalCostCents
+                        amountInCents: totalCostCents,
+                        amountInMicrounits: totalCostCents * 10_000,
                     }
                 ],
                 metadata: {

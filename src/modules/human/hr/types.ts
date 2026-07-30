@@ -42,9 +42,11 @@ export interface StaffPerformance {
     userId: string;
     userName: string;
     totalSalesInCents: number;
+    totalSalesInMicrounits?: number; // µ = cents × 10 000
     totalSales: number; // UI compatibility
     orderCount: number;
     averageCheckInCents: number;
+    averageCheckInMicrounits?: number;
     averageCheck: number; // UI compatibility
     upsellRate: number; // % of orders with modifiers/drinks
     kudos: number;

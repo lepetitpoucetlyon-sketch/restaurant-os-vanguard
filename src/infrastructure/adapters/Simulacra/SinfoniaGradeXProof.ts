@@ -36,7 +36,9 @@ export async function runGradeXProof() {
             receptionDate: new Date().toISOString(),
             dlc: new Date(Date.now() + 5*24*60*60*1000).toISOString(),
             unitCostInCents: 300,
+            unitCostInMicrounits: 300 * 10_000,
             costInCents: 4500,
+            costInMicrounits: 4500 * 10_000,
             status: 'available'
         },
         {
@@ -50,7 +52,9 @@ export async function runGradeXProof() {
             receptionDate: new Date().toISOString(),
             dlc: new Date(Date.now() + 2*24*60*60*1000).toISOString(),
             unitCostInCents: 437,
+            unitCostInMicrounits: 437 * 10_000,
             costInCents: 3500,
+            costInMicrounits: 3500 * 10_000,
             status: 'available'
         }
     ];

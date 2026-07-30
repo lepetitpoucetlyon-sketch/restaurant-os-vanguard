@@ -96,7 +96,7 @@ export function CRMList() {
                         <div>
                             <p className="text-[7px] md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest">TOTAL</p>
                             <p className="text-lg md:text-3xl font-serif italic text-accent-gold">
-                                {((crm.totalSpentInCents || 0) / 100).toFixed(0)}€
+                                {((crm.totalSpentInMicrounits ?? (crm.totalSpentInCents || 0) * 10_000) / 1_000_000).toFixed(0)}€
                             </p>
                         </div>
                     </div>

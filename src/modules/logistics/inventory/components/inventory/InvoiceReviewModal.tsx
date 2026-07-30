@@ -38,6 +38,7 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                     supplierName: data.supplierName,
                     invoiceReference: data.invoiceNumber,
                     unitCostInCents: Math.round(match.extracted.unitPriceHT * 100),
+                    unitCostInMicrounits: Math.round(match.extracted.unitPriceHT * 1_000_000),
                     status: 'available'
                 });
             }

@@ -77,7 +77,7 @@ export function RFMSegmentation({ customers }: Props) {
 
         const recencies = customers.map(c => daysSince(c.lastVisitDate));
         const frequencies = customers.map(c => c.visitCount ?? 0);
-        const amounts = customers.map(c => c.totalSpentInCents ?? 0);
+        const amounts = customers.map(c => c.totalSpentInMicrounits ?? (c.totalSpentInCents ?? 0) * 10_000);
 
         const rP33 = percentile(recencies, 33);
         const rP66 = percentile(recencies, 66);
@@ -89,7 +89,7 @@ export function RFMSegmentation({ customers }: Props) {
         return customers.map(customer => {
             const r = daysSince(customer.lastVisitDate);
             const f = customer.visitCount ?? 0;
-            const m = customer.totalSpentInCents ?? 0;
+            const m = customer.totalSpentInMicrounits ?? (customer.totalSpentInCents ?? 0) * 10_000;
             const rScore = score3(r, true, rP33, rP66);
             const fScore = score3(f, false, fP33, fP66);
             const mScore = score3(m, false, mP33, mP66);

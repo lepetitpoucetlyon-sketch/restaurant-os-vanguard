@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Plus, Edit2, Trash2, Package, Tag, Truck } from "lucide-react";
-import { formatCurrency } from "@/lib/formatters";
+import { formatMu } from "@/modules/finance/components/financeUtils";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 import { useInventory } from "@/modules/ops/providers";
@@ -68,8 +68,10 @@ export function IngredientsTab() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredIngredients.map((ing) => (
-                    <motion.div
+                {filteredIngredients.map((ing) => {
+                    const _i = ing as unknown as { unitCostInMicrounits?: number; costInMicrounits?: number; unitCostInCents?: number; costInCents?: number };
+                    const _costMu = _i.unitCostInMicrounits ?? _i.costInMicrounits ?? Number(_i.unitCostInCents ?? _i.costInCents ?? 0) * 10_000;
+                    return (<motion.div
                         key={ing.id}
                         variants={cinematicItem}
                         whileHover={{ y: -5 }}
@@ -101,7 +103,7 @@ export function IngredientsTab() {
                              <div className="grid grid-cols-2 gap-4 py-4 border-y border-border/50">
                                  <div>
                                      <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Coût Unitaire</p>
-                                     <p className="text-xl font-mono font-black text-text-primary">{formatCurrency((Number(ing.unitCostInCents || ing.costInCents || 0)) / 100)}<span className="text-[10px] text-text-muted ml-1">/{String(ing.unit || '')}</span></p>
+                                     <p className="text-xl font-mono font-black text-text-primary">{formatMu(_costMu)}<span className="text-[10px] text-text-muted ml-1">/{String(ing.unit || '')}</span></p>
                                  </div>
                                  <div className="text-right">
                                      <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Stock Min</p>
@@ -114,8 +116,8 @@ export function IngredientsTab() {
                                 <span className="text-[11px] font-bold truncate">{String(ing.supplierName || 'Nexus')}</span>
                             </div>
                         </div>
-                    </motion.div>
-                ))}
+                    </motion.div>);
+                })}
 
                 <motion.button
                     variants={cinematicItem}

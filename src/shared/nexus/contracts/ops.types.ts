@@ -45,6 +45,7 @@ export interface GroupEvent {
     customerName: string;
     partySize: number;
     depositInCents?: number;
+    depositInMicrounits?: number; // µ = cents × 10 000
     isDepositPaid: boolean;
     notes?: string;
 }

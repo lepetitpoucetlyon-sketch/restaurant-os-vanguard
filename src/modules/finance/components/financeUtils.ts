@@ -30,6 +30,7 @@ export interface TvaGroup {
     rate: string;
     label: string;
     htInCents: number;
+    htInMicrounits?: number; // µ = cents × 10 000
 }
 
 /**
@@ -60,9 +61,9 @@ export function computeTVABreakdown(entries: JournalEntry[]): TvaGroup[] {
     }
 
     return [
-        { rate: "5,5 %", label: "CA alimentaire (snacking, épicerie)", htInCents: map["5.5%"] },
-        { rate: "10 %", label: "Restauration sur place / à emporter", htInCents: map["10%"] },
-        { rate: "20 %", label: "Alcools & boissons premium", htInCents: map["20%"] },
+        { rate: "5,5 %", label: "CA alimentaire (snacking, épicerie)", htInCents: map["5.5%"], htInMicrounits: map["5.5%"] * 10_000 },
+        { rate: "10 %", label: "Restauration sur place / à emporter", htInCents: map["10%"], htInMicrounits: map["10%"] * 10_000 },
+        { rate: "20 %", label: "Alcools & boissons premium", htInCents: map["20%"], htInMicrounits: map["20%"] * 10_000 },
     ];
 }
 

@@ -43,6 +43,7 @@ export interface Table {
     floorId?: string; // Which floor this table is on
     lastService?: string;
     revenueTodayInCents?: number;
+    revenueTodayInMicrounits?: number; // µ = cents × 10 000
 }
 
 /**

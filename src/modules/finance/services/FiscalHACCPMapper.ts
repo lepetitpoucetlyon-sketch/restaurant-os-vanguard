@@ -46,6 +46,7 @@ export class FiscalHACCPMapper {
             status: 'validated',
             description: `[HACCP_AUTO] Perte Critique - Capteur ${reading.sensorId || reading.id} - Temp: ${reading.value}${reading.unit}`,
             amountInCents: totalLossInCents,
+            amountInMicrounits: totalLossInCents * 10_000,
             isSystemGenerated: true,
             isValidated: false,
             lines: [],

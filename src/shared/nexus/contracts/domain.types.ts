@@ -29,6 +29,7 @@ export interface JournalLineProvision {
     description: string;
     side: AccountSide | 'debit' | 'credit';
     amountInCents: number;
+    amountInMicrounits?: number; // µ = cents × 10 000
 }
 
 export interface ShiftProvision {

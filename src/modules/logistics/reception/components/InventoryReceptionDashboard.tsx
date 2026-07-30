@@ -82,7 +82,7 @@ async function persistReception(tenantId: string, items: ScannedItem[]) {
     const movId = Nexus.adapter.generateId(movPath);
     await Nexus.adapter.set(`${movPath}/${movId}`, {
       id: movId, type: 'reception', ingredientId: item.id, ingredientName: item.name,
-      quantity: item.qty, unit: item.unit, costInCents: Math.round(item.price * 100),
+      quantity: item.qty, unit: item.unit, costInCents: Math.round(item.price * 100), costInMicrounits: Math.round(item.price * 1_000_000),
       dlc: item.dlc, recordedAt: new Date().toISOString(),
     });
   }

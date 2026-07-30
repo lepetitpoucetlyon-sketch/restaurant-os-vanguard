@@ -41,6 +41,9 @@ max_cc = 12
 # Les agents IA ont tendance à tout mettre dans un seul fichier.
 no_god_files = true
 
+# Interdit d'importer un module sans passer par son index.ts (Barrel Contract)
+no_barrel_violations = true
+
 # ────────────────────────────────────────────────────────────────────────────
 # [2] COUCHES (layers)
 # Direction des dépendances : une couche ne dépend que de couches d'order >= au sien.

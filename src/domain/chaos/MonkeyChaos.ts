@@ -19,7 +19,7 @@ export const MonkeyChaos = {
             await SovereignLedger.getInstance(tenantId).recordTransfer({
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',
-                amountInCents: 10000, 
+                amountInCents: 10000,
                 referenceId: 'MONKEY-PATCH-2026',
                 description: 'MONKEY_ATTACK: Asymmetric Corruption Attempt'
             });

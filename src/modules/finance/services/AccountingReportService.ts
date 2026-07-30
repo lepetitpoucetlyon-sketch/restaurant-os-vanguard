@@ -149,7 +149,7 @@ export class AccountingReportService {
             .map(l => ({
                 description: l.description || l.accountName || l.accountCode,
                 quantity: 1,
-                unitPrice: (l.creditInCents ?? 0) / 100,
+                unitPrice: (l.creditInMicrounits ?? (l.creditInCents ?? 0) * 10_000) / 1_000_000,
                 vatRate: 0.10,
             }));
 
@@ -157,7 +157,7 @@ export class AccountingReportService {
             facturXLines.push({
                 description: entry.description || 'Prestation',
                 quantity: 1,
-                unitPrice: (entry.amountInCents ?? 0) / 100,
+                unitPrice: (entry.amountInMicrounits ?? (entry.amountInCents ?? 0) * 10_000) / 1_000_000,
                 vatRate: 0.10,
             });
         }

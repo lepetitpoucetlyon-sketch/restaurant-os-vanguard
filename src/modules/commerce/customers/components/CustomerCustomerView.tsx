@@ -33,7 +33,10 @@ const getFirstName = (c: Customer): string => (c?.firstName as string) || (c?.na
 const getLastName = (c: Customer): string => (c?.lastName as string) || (c?.name ? String(c.name).split(' ').slice(1).join(' ') : '') || '';
 const getInitial = (s: string): string => (s && s.length > 0 ? s.charAt(0) : '?');
 const getVisitCount = (c: Customer): number => c?.visitCount ?? 0;
-const getTotalSpent = (c: Customer): number => Number(c?.totalSpentInCents ?? 0) / 100;
+const getTotalSpent = (c: Customer): number =>
+    (c as unknown as { totalSpentInMicrounits?: number }).totalSpentInMicrounits != null
+        ? (c as unknown as { totalSpentInMicrounits: number }).totalSpentInMicrounits / 1_000_000
+        : Number(c?.totalSpentInCents ?? 0) / 100;
 
 interface CustomerCustomerViewProps {
     customers: Customer[];

@@ -33,8 +33,9 @@ export class FECExporter {
         const rows = entries.flatMap(entry => 
             entry.lines.map(line => {
                 const isDebit = line.side === 'debit';
-                const debit = isDebit ? (line.amountInCents / 100).toFixed(2).replace('.', ',') : '0,00';
-                const credit = !isDebit ? (line.amountInCents / 100).toFixed(2).replace('.', ',') : '0,00';
+                const amtEur = (line.amountInMicrounits ?? line.amountInCents * 10_000) / 1_000_000;
+                const debit = isDebit ? amtEur.toFixed(2).replace('.', ',') : '0,00';
+                const credit = !isDebit ? amtEur.toFixed(2).replace('.', ',') : '0,00';
                 
                 return [
                     'GEN', // Default General Journal

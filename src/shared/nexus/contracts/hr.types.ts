@@ -125,4 +125,5 @@ export interface HRMetrics {
     openPositions: number;
     turnoverRate: number;
     laborCostInCents: number;
+    laborCostInMicrounits?: number; // µ = cents × 10 000
 }

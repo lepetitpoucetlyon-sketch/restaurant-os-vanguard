@@ -30,6 +30,7 @@ export class SovereignPayout {
             id: `REQ-${invoice.id}-${Date.now()}`,
             invoiceId: invoice.id,
             amountInCents: invoice.amountInCents,
+            amountInMicrounits: (invoice.amountInMicrounits ?? invoice.amountInCents * 10_000),
             status: isHighValue ? 'pending_approval' : 'approved',
             approvals: []
         };
