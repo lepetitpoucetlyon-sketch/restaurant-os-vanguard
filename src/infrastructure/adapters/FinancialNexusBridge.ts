@@ -243,7 +243,8 @@ export const FinancialNexusBridge = {
     };
 
     // Émission de l'événement — déclenche stock, Ticket Z, IA en parallèle
-    NexusEventBus.emit('order.paid', {
+    NexusEventBus.emitDurable('order.paid', {
+      v: 1,
       orderId: entryId,
       tableId,
       tenantId,

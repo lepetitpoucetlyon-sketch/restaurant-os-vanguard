@@ -20,4 +20,5 @@ export {
     wasteLogsNodeAtom,        // COMPLIANCE
     wasteLogsAtom,            // COMPLIANCE
     guardLoadingAtom,         // COMPLIANCE
+    quarantinedProductsAtom,  // COMPLIANCE
 } from '@modules/compliance/haccp/store/complianceAtoms';

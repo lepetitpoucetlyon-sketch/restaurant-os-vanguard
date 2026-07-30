@@ -69,13 +69,25 @@ export async function POST(
 
         // N'émettre order.placed que si la commande n'existait pas — sinon le KDS
         // reçoit un doublon à chaque retry du provider.
-        if (!existing) {
-            NexusEventBus.emit('order.placed', {
+        if (!existing && order.status !== 'cancelled') {
+            await NexusEventBus.emitDurable('order.placed', {
+                v: 1,
                 orderId:    order.id,
                 tableId:    null,
                 tenantId:   order.tenantId,
                 operatorId: `delivery:${providerId}`,
                 items:      [],
+            });
+        }
+
+        // Si la commande entrante (nouvelle ou màj) est annulée, on émet l'événement
+        if (order.status === 'cancelled' && existing?.status !== 'cancelled') {
+            await NexusEventBus.emitDurable('order.cancelled', {
+                v: 1,
+                orderId: order.id,
+                tenantId: order.tenantId,
+                operatorId: `delivery:${providerId}`,
+                reason: 'Annulé par le partenaire de livraison',
             });
         }
 

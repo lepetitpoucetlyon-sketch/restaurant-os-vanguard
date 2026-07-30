@@ -15,6 +15,7 @@ import {
     Clock,
 } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import type { User } from "@nexus/contracts";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -143,17 +144,30 @@ export function TimeclockDashboard() {
 
         try {
             const idArr = crypto.getRandomValues(new Uint32Array(1));
-            const id = `shiftentry_${Date.now()}_${idArr[0].toString(36)}`;
+            const timestamp = new Date().toISOString();
 
-            const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${id}` : `shiftEntries/${id}`;
-            await Nexus.adapter.set(shiftPath, {
-                id,
-                userId: foundUser.id,
-                userName: foundUser.name,
-                type,
-                timestamp: new Date().toISOString(),
-                location: { terminalId: "kiosk-1" },
-            });
+            if (type === 'CLOCK_IN' || type === 'CLOCK_OUT') {
+                const eventName = type === 'CLOCK_IN' ? 'staff.clock_in' : 'staff.clock_out';
+                await NexusEventBus.emitDurable(eventName, {
+                    v: 1,
+                    tenantId: tenantId || 'default',
+                    userId: foundUser.id,
+                    userName: foundUser.name,
+                    terminalId: "kiosk-1",
+                    timestamp,
+                });
+            } else {
+                // Break logic fallback (hors spec P1, juste pour ne pas casser)
+                const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${id}` : `shiftEntries/${id}`;
+                await Nexus.adapter.set(shiftPath, {
+                    id,
+                    userId: foundUser.id,
+                    userName: foundUser.name,
+                    type,
+                    timestamp,
+                    location: { terminalId: "kiosk-1" },
+                });
+            }
 
             toast.success(`${ACTION_CONFIG[type].label} — ${foundUser.name}`);
 

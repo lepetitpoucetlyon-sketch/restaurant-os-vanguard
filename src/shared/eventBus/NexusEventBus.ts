@@ -1,10 +1,12 @@
 import { logger } from '@/lib/logger';
 import type { CartItem } from '@/modules/ops/engine/types';
+import { db } from '@/infrastructure/services/offline/offline-store';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
 export interface NexusEvents {
   'order.placed': {
+    v: 1;
     orderId: string;
     tableId: string | null;
     tenantId: string;
@@ -12,6 +14,7 @@ export interface NexusEvents {
     items: CartItem[];
   };
   'order.paid': {
+    v: 1;
     orderId: string;
     tableId: string | null;
     tenantId: string;
@@ -21,12 +24,14 @@ export interface NexusEvents {
     paymentMode: string;
   };
   'order.cancelled': {
+    v: 1;
     orderId: string;
     tenantId: string;
     operatorId: string;
     reason?: string;
   };
   'stock.low': {
+    v: 1;
     tenantId: string;
     itemId: string;
     itemName: string;
@@ -34,6 +39,7 @@ export interface NexusEvents {
     threshold: number;
   };
   'stock.received': {
+    v: 1;
     tenantId: string;
     deliveryId: string;
     items: Array<{ itemId: string; quantity: number }>;
@@ -45,16 +51,19 @@ export interface NexusEvents {
    * (cassure du cycle SovereignGuard → MasterBridge → TimeSync → NexusAdapter → SovereignGuard).
    */
   'sovereign.breach': {
+    v: 1;
     targetTenantId: string;
     anchoredTenantId: string;
     path?: string;
     message: string;
   };
   'commerce.yield_updated': {
+    v: 1;
     tenantId: string;
     config: Record<string, unknown>;
   };
   'hr.transfer_offer': {
+    v: 1;
     fromTenantId: string;
     toTenantId: string;
     ownerId: string;
@@ -62,6 +71,7 @@ export interface NexusEvents {
     bonusInMicrounits: number;
   };
   'reservation.confirmed': {
+    v: 1;
     tenantId: string;
     reservationId: string;
     customerName: string;
@@ -70,6 +80,7 @@ export interface NexusEvents {
     time: string;
   };
   'haccp.alert': {
+    v: 1;
     tenantId: string;
     sensorId: string;
     readingId: string;
@@ -78,10 +89,37 @@ export interface NexusEvents {
     message: string;
   };
   'payroll.submitted': {
+    v: 1;
     tenantId: string;
     period: string;
     submissionId: string;
     employeeCount: number;
+  };
+  'waste.logged': {
+    v: 1;
+    tenantId: string;
+    wasteId: string;
+    ingredientId: string;
+    ingredientName: string;
+    quantity: number;
+    unit: string;
+    reason: string;
+  };
+  'staff.clock_in': {
+    v: 1;
+    tenantId: string;
+    userId: string;
+    userName: string;
+    terminalId: string;
+    timestamp: string;
+  };
+  'staff.clock_out': {
+    v: 1;
+    tenantId: string;
+    userId: string;
+    userName: string;
+    terminalId: string;
+    timestamp: string;
   };
   /**
    * Émis par une route API serveur (pas par le client) : première émission
@@ -89,11 +127,41 @@ export interface NexusEvents {
    * la route elle-même, pas via registerHandlers.ts (100% client).
    */
   'support.ticket_submitted': {
+    v: 1;
     ticketId: string;
     tenantId: string;
     description: string;
     screenshotUrl?: string;
     submittedBy: string;
+  };
+  'cash_drawer.opened_unauthorized': {
+    v: 1;
+    drawerId: string;
+    operatorId: string;
+    detectedAt: number;
+    tenantId: string;
+  };
+  'supplier.invoice_processed': {
+    v: 1;
+    tenantId: string;
+    supplierId: string;
+    invoiceId: string;
+    lines: Array<{ stockItemId: string; unitCostInMicrounits: number }>;
+    processedAt: number;
+  };
+  'inventory.quarantine_activated': {
+    v: 1;
+    tenantId: string;
+    productIds: string[];
+    reason: string;
+  };
+  'commerce.margin_warning': {
+    v: 1;
+    tenantId: string;
+    productId: string;
+    currentMarginBps: number;
+    thresholdBps: number;
+    triggerEventId: string;
   };
 }
 
@@ -146,6 +214,45 @@ class NexusEventBusClass {
   }
 
   /**
+   * Émet un événement métier de manière durable via l'EventOutbox.
+   * Protège contre les crashs entre le persist state (Nexus) et l'exécution des handlers.
+   */
+  async emitDurable<E extends NexusEventName>(
+    event: E,
+    payload: NexusEventPayload<E>
+  ): Promise<void> {
+    const id = crypto.randomUUID();
+    
+    // 1. Outbox : Persister l'intention d'émettre
+    if (typeof window !== 'undefined') {
+      try {
+        await db.busOutbox.put({
+          id,
+          eventName: event,
+          payload,
+          createdAt: Date.now(),
+          attempts: 0,
+          status: 'pending'
+        });
+      } catch (err) {
+        logger.error(`[EventBus] Failed to write to Outbox for ${event}`, err);
+      }
+    }
+
+    // 2. Émettre en RAM
+    await this.emit(event, payload);
+
+    // 3. Outbox : Marquer comme terminé
+    if (typeof window !== 'undefined') {
+      try {
+        await db.busOutbox.update(id, { status: 'done' });
+      } catch (err) {
+        logger.error(`[EventBus] Failed to mark Outbox as done for ${event}`, err);
+      }
+    }
+  }
+
+  /**
    * Émet un événement.
    *
    * Ordre d'exécution :
@@ -175,6 +282,19 @@ class NexusEventBusClass {
         await h.handler(payload);
       } catch (err) {
         logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
+        if (typeof window !== 'undefined') {
+          await db.deadLetterEvents.put({
+            id: crypto.randomUUID(),
+            eventName: event,
+            payload,
+            handlerId: h.id,
+            error: String(err),
+            failedAt: Date.now(),
+            attempts: 1,
+            nextRetryAt: Date.now() + 2000,
+            status: 'retry'
+          }).catch(e => logger.error('[EventBus] DLQ write failed', e));
+        }
         throw err; // remonte — critique = non négociable
       }
     }
@@ -184,11 +304,25 @@ class NexusEventBusClass {
       const results = await Promise.allSettled(
         high.map(h => h.handler(payload))
       );
-      results.forEach((r, i) => {
+      await Promise.all(results.map(async (r, i) => {
         if (r.status === 'rejected') {
-          logger.error(`[EventBus][HIGH] ${event}#${high[i].id} failed`, r.reason);
+          const h = high[i];
+          logger.error(`[EventBus][HIGH] ${event}#${h.id} failed`, r.reason);
+          if (typeof window !== 'undefined') {
+            await db.deadLetterEvents.put({
+              id: crypto.randomUUID(),
+              eventName: event,
+              payload,
+              handlerId: h.id,
+              error: String(r.reason),
+              failedAt: Date.now(),
+              attempts: 1,
+              nextRetryAt: Date.now() + 2000,
+              status: 'retry'
+            }).catch(e => logger.error('[EventBus] DLQ write failed', e));
+          }
         }
-      });
+      }));
     }
 
     // 3 — BACKGROUND : fire-and-forget

@@ -76,7 +76,7 @@ export class YieldEngine {
 
         // Mise à jour de la config via le système standard local du tenant
         // await LocalConfigService.update(tenantId, yieldConfigPatch);
-        NexusEventBus.emit('commerce.yield_updated', { tenantId, config: yieldConfigPatch });
+        NexusEventBus.emit('commerce.yield_updated', { v: 1, tenantId, config: yieldConfigPatch });
         
         logger.info(`✅ [Yield Local] Promo activée légitimement sur ${tenantId}.`);
     }

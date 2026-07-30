@@ -11,6 +11,7 @@ import React, { useState, useCallback } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { useTenant } from "@/shared/hooks";
+import { HACCPLogService } from "@/modules/compliance/haccp/HACCPLogService";
 
 import { Ingredient, RegulatoryWasteLog } from "@nexus/contracts";
 
@@ -42,16 +43,13 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
         if (!tenantId) return;
         try {
             const ingredient = ingredients.find(i => (i.id || i.name) === selectedIngredient);
-            const path = `tenants/${tenantId}/wasteEntries`;
-            const id = Nexus.adapter.generateId(path);
-            await Nexus.adapter.set(`${path}/${id}`, {
-                id,
+            await HACCPLogService.logWaste({
+                tenantId,
                 ingredientId: selectedIngredient,
                 ingredientName: ingredient?.name ?? selectedIngredient,
                 quantity: parseFloat(quantity),
                 unit: ingredient?.unit ?? 'kg',
                 reason: selectedReason || 'Autre',
-                recordedAt: new Date().toISOString(),
             });
             showToast("Perte enregistrée avec succès", "success");
             setSelectedIngredient("");

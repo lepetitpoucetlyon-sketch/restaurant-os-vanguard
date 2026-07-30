@@ -1,20 +1,19 @@
 "use client";
 
 import { useMemo, useCallback, memo } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, AlertTriangle, Clock } from "lucide-react";
 import { Product, Option } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from "@modules/ops/pos/store/posAtoms";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
+import { quarantinedProductsAtom } from "@/store/pillars/compliance";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useLanguage } from "@/shared/hooks";
 import { useInventory } from "@/modules/ops/providers";
-import { AlertTriangle, Clock } from "lucide-react";
 import { useNexusFleet } from "@/modules/intelligence/fleet";
-import { useAtomValue } from "jotai";
 
 // ==========================================
 // PERFORMANCE-OPTIMIZED SUB-COMPONENTS
@@ -26,7 +25,7 @@ interface ProductCardProps {
     showImages: boolean;
     buttonSize: 'small' | 'medium' | 'large';
     isDisabled?: boolean;
-    disabledReason?: 'expired' | 'stockout';
+    disabledReason?: 'expired' | 'stockout' | 'quarantine';
     t: (key: string) => string;
     onClick: (product: Product) => void;
     multiplier: number;
@@ -70,18 +69,20 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
                     className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-surface-sidebar/40 backdrop-blur-sm p-6 text-center"
                 >
                     <div className="w-16 h-16 rounded-full bg-status-danger/20 flex items-center justify-center mb-4">
-                        {disabledReason === 'expired' ? (
+                        {disabledReason === 'expired' || disabledReason === 'quarantine' ? (
                             <Clock className="w-8 h-8 text-status-danger animate-pulse" />
                         ) : (
                             <AlertTriangle className="w-8 h-8 text-status-danger" />
                         )}
                     </div>
-                    <span className="text-text-primary font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg">
-                        {disabledReason === 'expired' ? 'DLC CRITIQUE' : 'RUPTURE STOCK'}
+                    <span className="text-text-primary font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg text-center">
+                        {disabledReason === 'expired' ? 'DLC CRITIQUE' : disabledReason === 'quarantine' ? 'QUARANTAINE HACCP' : 'RUPTURE STOCK'}
                     </span>
-                    <p className="text-text-primary/70 text-sm mt-2 font-medium">
+                    <p className="text-text-primary/70 text-sm mt-2 font-medium text-center px-4">
                         {disabledReason === 'expired' 
                             ? "Produit retiré par mesure d'hygiène" 
+                            : disabledReason === 'quarantine'
+                            ? "Produit isolé (Alerte Capteur)"
                             : "Ingrédients manquants pour ce plat"}
                     </p>
                 </motion.div>
@@ -176,6 +177,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
     const inventory = useInventory();
     const { priceMultiplier } = useNexusFleet();
     const performanceMode = useAtomValue(performanceModeAtom);
+    const quarantinedProducts = useAtomValue(quarantinedProductsAtom);
     const stockItems = inventory.data || [];
 
     // Read show_images setting from context (defaults to true)
@@ -194,9 +196,15 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
             // COMPLIANCE GUARD LOGIC
             // Check if unknown required ingredient is completely unavailable or expired
             let isDisabled = false;
-            let disabledReason: 'expired' | 'stockout' | undefined;
+            let disabledReason: 'expired' | 'stockout' | 'quarantine' | undefined;
 
-            if (product.ingredients && product.ingredients.length > 0) {
+            // P2: Check Quarantine HACCP first
+            if (quarantinedProducts[product.id]) {
+                isDisabled = true;
+                disabledReason = 'quarantine';
+            }
+
+            if (!isDisabled && product.ingredients && product.ingredients.length > 0) {
                 for (const req of product.ingredients) {
                     const relatedStock = stockItems.filter(s => s.ingredientId === req.ingredientId);
                     

@@ -4,6 +4,9 @@ import { logger } from '@/lib/logger';
 const API_KEY = process.env.GEMINI_API_KEY || '';
 const BASE_URL = process.env.LLM_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
 
+let errorCount = 0;
+let circuitBreakerUntil = 0;
+
 interface GeminiPart {
     text?: string;
     inlineData?: { mimeType: string; data: string };
@@ -28,13 +31,22 @@ interface GeminiResponse {
 export class GeminiProvider implements ILLMProvider {
 
     async generateText(request: LLMTextRequest): Promise<LLMTextResponse> {
+        this.checkCircuitBreaker();
         const contents = this.buildContents(request.history, request.userPrompt);
         const body = this.buildRequestBody(contents, request);
 
-        return this.call(request.model, body);
+        try {
+            const res = await this.call(request.model, body);
+            this.resetCircuitBreaker();
+            return res;
+        } catch (err) {
+            this.tripCircuitBreaker();
+            throw err;
+        }
     }
 
     async generateFromImage(request: LLMVisionRequest): Promise<LLMTextResponse> {
+        this.checkCircuitBreaker();
         const userParts: GeminiPart[] = [
             { text: request.userPrompt },
             { inlineData: { mimeType: request.image.mimeType, data: request.image.base64 } },
@@ -42,10 +54,38 @@ export class GeminiProvider implements ILLMProvider {
         const contents: GeminiContent[] = [{ role: 'user', parts: userParts }];
         const body = this.buildRequestBody(contents, request);
 
-        return this.call(request.model, body);
+        try {
+            const res = await this.call(request.model, body);
+            this.resetCircuitBreaker();
+            return res;
+        } catch (err) {
+            this.tripCircuitBreaker();
+            throw err;
+        }
     }
 
     // ── internals ────────────────────────────────────────────
+
+    private checkCircuitBreaker() {
+        if (Date.now() < circuitBreakerUntil) {
+            throw new Error('Gemini API circuit breaker open (paused for 60s)');
+        }
+    }
+
+    private tripCircuitBreaker() {
+        errorCount++;
+        if (errorCount >= 3) {
+            circuitBreakerUntil = Date.now() + 60000;
+            logger.warn(`[GeminiProvider] Circuit breaker tripped! Pausing for 60s`);
+        }
+    }
+
+    private resetCircuitBreaker() {
+        if (errorCount > 0) {
+            errorCount = 0;
+            logger.info(`[GeminiProvider] Circuit breaker reset.`);
+        }
+    }
 
     private buildContents(
         history: Array<{ role: string; content: string }> | undefined,

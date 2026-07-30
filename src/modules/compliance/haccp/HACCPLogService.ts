@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import type { SensorReading } from '@/domain/schemas/haccp';
 
 /**
@@ -122,4 +123,44 @@ export const HACCPLogService = {
     logger.warn(`[HACCP] Non-conformité (${input.severity}) enregistrée : ${input.description}`);
     return ncId;
   },
+
+  /**
+   * P1-1: Enregistre une perte/casse (waste) et déclenche la saga de déduction de stock.
+   */
+  async logWaste(input: {
+    tenantId: string;
+    ingredientId: string;
+    ingredientName: string;
+    quantity: number;
+    unit: string;
+    reason: string;
+  }): Promise<string> {
+    const path = `tenants/${input.tenantId}/wasteEntries`;
+    const id = Nexus.adapter.generateId(path);
+    
+    await Nexus.adapter.set(`${path}/${id}`, {
+      id,
+      ingredientId: input.ingredientId,
+      ingredientName: input.ingredientName,
+      quantity: input.quantity,
+      unit: input.unit,
+      reason: input.reason,
+      recordedAt: new Date().toISOString(),
+    });
+
+    // Déclenche la saga de déduction au gramme (P1-1)
+    await NexusEventBus.emitDurable('waste.logged', {
+      v: 1,
+      tenantId: input.tenantId,
+      wasteId: id,
+      ingredientId: input.ingredientId,
+      ingredientName: input.ingredientName,
+      quantity: input.quantity,
+      unit: input.unit,
+      reason: input.reason,
+    });
+
+    logger.info(`[HACCP] Gaspillage enregistré : ${input.ingredientName} (${input.quantity}${input.unit})`);
+    return id;
+  }
 };

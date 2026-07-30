@@ -1,5 +1,6 @@
 import type { IIoTProvider, SensorReading, Sensor } from '../types';
 import { logger } from '@/lib/logger';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**
  * MQTT générique — couvre Dragino LoRaWAN et tous les capteurs MQTT.
@@ -35,9 +36,9 @@ export class MqttProvider implements IIoTProvider {
             });
             client.on('message', (_topic: string, message: { toString(): string }) => {
                 try {
-                    const payload = JSON.parse(message.toString()) as Partial<SensorReading>;
+                    const payload = JSON.parse(message.toString()) as Partial<SensorReading> & { threshold?: number };
                     if (payload.sensorId && payload.value !== undefined) {
-                        onReading({
+                        const reading: SensorReading = {
                             sensorId:  payload.sensorId,
                             tenantId,
                             value:     payload.value,
@@ -45,7 +46,21 @@ export class MqttProvider implements IIoTProvider {
                             timestamp: payload.timestamp ?? new Date().toISOString(),
                             zoneId:    payload.zoneId,
                             zoneName:  payload.zoneName,
-                        });
+                        };
+                        onReading(reading);
+
+                        // P2: Cascade Quarantaine POS — Si seuil dépassé, on déclenche haccp.alert
+                        if (payload.threshold !== undefined && payload.value > payload.threshold) {
+                            NexusEventBus.emitDurable('haccp.alert', {
+                                v: 1,
+                                tenantId,
+                                sensorId: payload.sensorId,
+                                readingId: `read_${Date.now()}`,
+                                alertType: 'TEMPERATURE_HIGH',
+                                severity: 'CRITICAL',
+                                message: `Température critique détectée : ${payload.value}°C (seuil: ${payload.threshold}°C)`
+                            }).catch(err => logger.error('[MqttProvider] failed to emit haccp.alert', err));
+                        }
                     }
                 } catch (e) {
                     logger.warn('[MqttProvider] message parse error', String(e));

@@ -3,19 +3,63 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { HermesKnowledgeManager } from '@/modules/intelligence/rag/HermesKnowledgeManager';
 
+import { CartItem } from '@/modules/ops/engine/types';
+
 /**
  * Analyse intelligente BACKGROUND après chaque paiement.
  * Lance en parallèle : analyse stock prédictive + signaux d'alerte.
  * BACKGROUND : fire-and-forget, jamais bloquant.
+ * P2: Coalescence (debounce) sur 30s pour limiter la charge LLM.
  */
+
+interface PendingIntelligenceEvent {
+  tenantId: string;
+  items: CartItem[];
+  totalInMicrounits: number;
+}
+
+let eventBuffer: PendingIntelligenceEvent[] = [];
+let debounceTimeout: NodeJS.Timeout | null = null;
+
 export function registerIntelligenceHandler(): () => void {
   return NexusEventBus.on(
     'order.paid',
-    async ({ tenantId, items, totalInMicrounits }) => {
-      await Promise.allSettled([
-        analyzeStockTrend(tenantId, items),
-        analyzeRevenueSignal(tenantId, totalInMicrounits),
-      ]);
+    (payload) => {
+      eventBuffer.push({
+        tenantId: payload.tenantId,
+        items: payload.items,
+        totalInMicrounits: payload.totalInMicrounits,
+      });
+
+      if (!debounceTimeout) {
+        debounceTimeout = setTimeout(async () => {
+          const batch = [...eventBuffer];
+          eventBuffer = [];
+          debounceTimeout = null;
+
+          try {
+            const byTenant = new Map<string, { items: CartItem[]; totals: number[] }>();
+            for (const ev of batch) {
+              const existing = byTenant.get(ev.tenantId) ?? { items: [], totals: [] };
+              existing.items.push(...ev.items);
+              existing.totals.push(ev.totalInMicrounits);
+              byTenant.set(ev.tenantId, existing);
+            }
+
+            for (const [tenantId, agg] of byTenant.entries()) {
+              const promises: Promise<void>[] = [
+                analyzeStockTrend(tenantId, agg.items),
+              ];
+              for (const t of agg.totals) {
+                promises.push(analyzeRevenueSignal(tenantId, t));
+              }
+              await Promise.allSettled(promises);
+            }
+          } catch (e) {
+            logger.error('[Intelligence] Batch processing failed', e);
+          }
+        }, 30_000);
+      }
     },
     { id: 'intelligence-analysis', priority: 'BACKGROUND' }
   );

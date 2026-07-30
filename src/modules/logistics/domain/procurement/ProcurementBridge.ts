@@ -3,7 +3,7 @@ import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
 import { PurchaseOrder, DeliveryNote } from './types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { DocumentVault } from '@/domain/shared/DocumentVault';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**
  * 🏛️ ProcurementBridge - Grade X+++
@@ -62,18 +62,16 @@ export class ProcurementBridge {
         // 3. Réaction Automatique : Contre-passation de l'engagement et création de la dette réelle
         await SovereignLedger.getInstance(tenantId).convertEngagementToDebt(deliveryNote.id, deliveryNote.totalAmountInCents);
 
-        // 4. Mise à jour du stock physique pour chaque article livré
-        for (const item of deliveryNote.deliveredItems) {
-            const stockPath = `tenants/${tenantId}/stockItems/${item.productId}`;
-            const existing = await Nexus.adapter.get<{ quantity?: number }>(stockPath);
-            const currentQty = existing?.quantity ?? 0;
-            await Nexus.adapter.set(stockPath, {
-                id: item.productId,
-                quantity: currentQty + item.quantityDelivered,
-                updatedAt: new Date().toISOString(),
-                lastDeliveryNoteId: deliveryNote.id,
-            });
-        }
+        // 4. Mise à jour du stock physique déléguée à l'événement stock.received (P1)
+        await NexusEventBus.emitDurable('stock.received', {
+            v: 1,
+            tenantId,
+            deliveryId: deliveryNote.id,
+            items: deliveryNote.deliveredItems.map(item => ({
+                itemId: item.productId,
+                quantity: item.quantityDelivered,
+            })),
+        });
 
         NexusTelemetryService.emitAuditPulse('LOGISTICS', 'DELIVERY_NOTE_SIGNED', {
             deliveryNoteId: deliveryNote.id,

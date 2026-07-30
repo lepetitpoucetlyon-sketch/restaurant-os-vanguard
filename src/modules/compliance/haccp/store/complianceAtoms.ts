@@ -63,6 +63,10 @@ export const guardLoadingAtom = atom((get) => {
     ];
     return nodes.some(node => (get(node as import("jotai").Atom<{ loading: boolean }>)).loading);
 });
+
+// P2: QUARANTINED PRODUCTS (HACCP Alert -> QuarantineHandler -> POS ProductGrid)
+export const quarantinedProductsAtom = atom<Record<string, { reason: string; timestamp: number }>>({});
+
 // ⚡ HARDWARE SIMULATION (Electrification)
 // SensorReading moved to central types.ts
 

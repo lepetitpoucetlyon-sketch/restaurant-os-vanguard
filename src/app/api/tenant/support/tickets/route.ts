@@ -60,6 +60,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   logger.info(`[SupportTickets] Ticket ${ticketId} soumis par tenant ${tenantId}`);
 
   await NexusEventBus.emit('support.ticket_submitted', {
+    v: 1,
     ticketId,
     tenantId,
     description: parsedDescription.data,

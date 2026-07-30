@@ -11,6 +11,8 @@ import { toMicrounits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../engine/types";
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { ConsumptionMode } from "@/domain/schemas/orders";
 
 import { POSService } from "../domain";
@@ -150,14 +152,15 @@ async function handleSendCourseImpl(
     updateTable: (id: string, data: Record<string, unknown>) => Promise<void>,
     selectedTableId: string | null,
     setCartItems: (updater: (prev: CartItem[]) => CartItem[]) => void,
-    showToast: (msg: string, type: string) => void
+    showToast: (msg: string, type: string) => void,
+    tenantId: string
 ): Promise<void> {
     const courseItems = getUnsentCourseItems(cartItems, course);
     if (courseItems.length === 0 || !currentTable) return;
     try {
         await submitKitchenOrder(
             { tableId: currentTable.id, tableNumber: currentTable.number, serverName: resolveServerName(currentUser), items: buildCourseOrderItems(courseItems, course) },
-            addOrder, updateTable, selectedTableId
+            addOrder, updateTable, selectedTableId, tenantId
         );
         setCartItems((prev) => markCourseAsSent(prev, course, Date.now()));
         showToast(`${COURSE_LABELS[course]} envoyés en cuisine`, "success");
@@ -168,9 +171,12 @@ async function submitKitchenOrder(
     params: SendOrderParams,
     addOrder: (data: Record<string, unknown>) => Promise<void>,
     updateTable: (id: string, data: Record<string, unknown>) => Promise<void>,
-    selectedTableId: string | null
+    selectedTableId: string | null,
+    tenantId: string
 ) {
+    const orderId = Nexus.adapter.generateId(`tenants/${tenantId}/flows`);
     await addOrder({
+        id: orderId,
         tableId: params.tableId,
         tableNumber: Number(params.tableNumber) || 0,
         serverName: params.serverName,
@@ -178,6 +184,16 @@ async function submitKitchenOrder(
         status: "new",
     });
     if (selectedTableId) await updateTable(selectedTableId, { status: "ordered" });
+    
+    // Déclenchement de l'événement de commande (P1)
+    await NexusEventBus.emitDurable('order.placed', {
+        v: 1,
+        orderId,
+        tableId: params.tableId,
+        tenantId,
+        operatorId: params.serverName,
+        items: params.items as any,
+    });
 }
 
 /**
@@ -305,7 +321,7 @@ export function usePOSController() {
         try {
             await submitKitchenOrder(
                 { tableId: currentTable.id, tableNumber: currentTable.number, serverName: resolveServerName(currentUser), items: POSService.formatForKitchen(cartItems) as OrderItem[] },
-                addOrder, updateTable, selectedTableId
+                addOrder, updateTable, selectedTableId, activeTenantId ?? 'default'
             );
             showToast(`Table ${currentTable.number} : Commande envoyée`, "success");
             setCartItems([]);
@@ -356,8 +372,8 @@ export function usePOSController() {
      * Items already sent (sentAt set) are skipped to prevent double-firing.
      */
     const handleSendCourse = useCallback((course: CourseType) =>
-        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast as any),
-        [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast]);
+        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast as any, activeTenantId ?? 'default'),
+        [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast, activeTenantId]);
 
     return {
         // State

@@ -5,6 +5,7 @@ import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-interna
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../opsCore';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 import { ordersNodeAtom } from '@/store/pillars/ops';
 import { recipesNodeAtom, prepTasksNodeAtom, miseEnPlaceTargetSelector } from '@/store/pillars/logistics';
@@ -133,6 +134,16 @@ export const useKitchen = () => {
           attributes: { status },
           updatedAt: new Date().toISOString()
         });
+        
+        if (status === 'cancelled') {
+          await NexusEventBus.emitDurable('order.cancelled', {
+            v: 1,
+            orderId: id,
+            tenantId,
+            operatorId: 'KDS',
+            reason: 'Annulation depuis écran KDS/Manager',
+          });
+        }
       });
     },
 

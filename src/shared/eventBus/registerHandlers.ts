@@ -4,6 +4,13 @@ import { registerStockAlertHandler } from './handlers/StockAlertHandler';
 import { registerTicketZHandler } from './handlers/TicketZHandler';
 import { registerIntelligenceHandler } from './handlers/IntelligenceHandler';
 import { registerSovereignBreachHandler } from './handlers/SovereignBreachHandler';
+import { registerWasteStockReconciliationHandler } from './handlers/WasteStockReconciliationHandler';
+import { registerPayrollTimeclockHandler } from './handlers/PayrollTimeclockHandler';
+import { registerStockRestitutionHandler } from './handlers/StockRestitutionHandler';
+import { registerStockReceptionHandler } from './handlers/StockReceptionHandler';
+import { registerQuarantineHandler } from './handlers/QuarantineHandler';
+import { registerFoodCostRecomputer } from './handlers/FoodCostRecomputer';
+import { registerMarginWarningHandler } from './handlers/MarginWarningHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -30,6 +37,13 @@ export function registerNexusHandlers(): void {
     registerTicketZHandler(),          // BACKGROUND — Ticket Z temps réel
     registerIntelligenceHandler(),     // BACKGROUND — analyse IA
     registerSovereignBreachHandler(),  // CRITICAL — kill-switch sur brèche d'isolation
+    registerWasteStockReconciliationHandler(), // HIGH — déduction stock suite à perte HACCP
+    registerPayrollTimeclockHandler(), // HIGH — registre des pointages
+    registerStockRestitutionHandler(), // HIGH — restitution des stocks
+    registerStockReceptionHandler(),   // HIGH — réception des stocks (BL)
+    registerQuarantineHandler(),       // CRITICAL — quarantaine HACCP
+    registerFoodCostRecomputer(),      // HIGH — calcul de food cost dynamique (Inflation Shield)
+    registerMarginWarningHandler(),    // HIGH — alertes de marge (Inflation Shield)
   );
 }
 

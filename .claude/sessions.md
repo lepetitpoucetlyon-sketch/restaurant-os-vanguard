@@ -58,3 +58,5 @@
 | cc-python | Chantier 9 Python — réduction CC ≤12 : 10 fonctions sovereign-rag + scripts | 2026-07-30 | terminée |
 | microunits-lot2 | Migration µ Lot 2 : ProductFormModal/Financials, menu-builder, TreasuryCalculator, FiscalHACCPMapper, SovereignPayout, FiscalTransmitter, taxCalc, BankingNexusBridge, airlock-report, SinfoniaGradeXProof, financeUtils, usePos, marketing CRM | 2026-07-30 | terminée |
 | microunits-fix | Correction MicrounitAdapter.ts : facteur 100→10 000 (toPSP / toDomain) | 2026-07-30 | terminée |
+| event-cartography | Audit lecture seule — EventBus, EventEmitter, PubSub, NexusEvents, .emit(, .on(, dispatch( — cartographie exhaustive Saga Pattern | 2026-07-30 | terminée |
+| saga-plan-md | Rédaction docs/SAGA_PLAN.md — plan opérationnel complet bus événementiel (P0→P3) | 2026-07-30 | terminée |

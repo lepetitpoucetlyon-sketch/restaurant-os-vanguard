@@ -4,6 +4,35 @@ import { TenantConfig, SovereignField } from '@/shared/nexus-contract';
 import type { ImmunityLogEntry } from '@shared/genome.types';
 
 /**
+ * 📥 BusOutboxEntry - Restaurant OS Offline
+ * Définit un événement métier en attente d'émission sur le NexusEventBus.
+ */
+export interface BusOutboxEntry {
+    id: string;           // crypto.randomUUID()
+    eventName: string;
+    payload: unknown;
+    createdAt: number;
+    attempts: number;
+    status: 'pending' | 'done' | 'failed';
+}
+
+/**
+ * 📥 DeadLetterEntry - Restaurant OS Offline
+ * Événement métier dont le handler a échoué. En quarantaine pour retry manuel ou différé.
+ */
+export interface DeadLetterEntry {
+    id: string;
+    eventName: string;
+    payload: unknown;
+    handlerId: string;
+    error: string;
+    failedAt: number;
+    attempts: number;        // max 5 → quarantine
+    nextRetryAt: number;     // backoff exponentiel
+    status: 'retry' | 'quarantine';
+}
+
+/**
  * 📥 SyncOperation - Restaurant OS Offline
  * Définit une opération de synchronisation en attente.
  */
@@ -42,6 +71,10 @@ export class RestaurantOfflineDB extends Dexie {
     jetEntries!: Table<import('@shared/genome.types').JetEntry>;
     /** Grade X: Suture des Recettes pour le calcul offline */
     recipes!: Table<Recipe>;
+    /** P0-1: EventOutbox pour le NexusEventBus */
+    busOutbox!: Table<BusOutboxEntry>;
+    /** P0-2: Dead Letter Queue (DLQ) pour les handlers du NexusEventBus */
+    deadLetterEvents!: Table<DeadLetterEntry>;
 
     constructor() {
         super('RestaurantOS_Offline');
@@ -79,6 +112,12 @@ export class RestaurantOfflineDB extends Dexie {
         // Version 5 — NF525 JET (Journal des Événements Techniques)
         this.version(5).stores({
             jetEntries: '++id, timestamp, eventType, deviceId'
+        });
+
+        // Version 6 — P0 (EventOutbox et DLQ pour le NexusEventBus)
+        this.version(6).stores({
+            busOutbox: 'id, status, eventName',
+            deadLetterEvents: 'id, status, eventName, handlerId, nextRetryAt'
         });
     }
 

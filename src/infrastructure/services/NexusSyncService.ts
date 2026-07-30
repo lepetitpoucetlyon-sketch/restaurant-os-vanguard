@@ -8,6 +8,8 @@ import { TelemetryService } from '@/lib/nexus/TelemetryService';
 import { Mutex } from '@/lib/utils/Mutex';
 import { TaskContext, TASK_MAPS } from '@/lib/icm/TaskContext';
 import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
+import { NexusEventBus, type NexusEvents, type NexusEventName } from '@/shared/eventBus/NexusEventBus';
+import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
 import { readZcpoState, degradeImportanceMap } from '@/lib/icm/zcpoBridge';
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
@@ -55,6 +57,7 @@ export const NexusSyncService = {
         // (bootSyncManager n'était appelé nulle part : les tickets NF525 mis en
         //  file hors-ligne n'étaient JAMAIS resynchronisés.)
         bootSyncManager();
+        await this.replayPendingEvents();
 
         // --- EVENT BUS HANDLERS ---
         registerNexusHandlers();
@@ -143,5 +146,26 @@ export const NexusSyncService = {
 
   async clearCache() {
     return this.stopAll();
+  },
+
+  /**
+   * P0-1: Rejoue les événements bloqués dans l'Outbox au démarrage.
+   * Protège contre les arrêts brutaux entre persist state et émission RAM.
+   */
+  async replayPendingEvents(): Promise<void> {
+    if (typeof window === 'undefined') return;
+    try {
+      const pending = await db.busOutbox.where('status').equals('pending').toArray();
+      if (pending.length > 0) {
+        logger.info(`[NexusSyncService] Replaying ${pending.length} pending events from Outbox...`);
+        for (const entry of pending) {
+          const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload);
+          await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);
+          await db.busOutbox.update(entry.id, { status: 'done' });
+        }
+      }
+    } catch (err) {
+      logger.error('[NexusSyncService] Failed to replay pending events from Outbox', err);
+    }
   }
 };

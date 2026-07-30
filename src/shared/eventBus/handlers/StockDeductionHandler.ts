@@ -90,7 +90,8 @@ async function _deductStock(
   logger.info(`[StockDeduction] ${label} −${qty} → stock ${newQty}`);
 
   if (stockItem.reorderThreshold !== undefined && newQty <= stockItem.reorderThreshold) {
-    await NexusEventBus.emit('stock.low', {
+    await NexusEventBus.emitDurable('stock.low', {
+      v: 1,
       tenantId,
       itemId: stockItemId,
       itemName: label,

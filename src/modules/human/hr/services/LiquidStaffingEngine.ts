@@ -104,6 +104,7 @@ export class LiquidStaffingEngine {
                 
                 // Notification au personnel du groupe via l'App RH
                 NexusEventBus.emit('hr.transfer_offer', {
+                    v: 1,
                     fromTenantId: provider.tenantId,
                     toTenantId: shortage.tenantId,
                     ownerId: shortage.ownerId, // Traçabilité stricte

@@ -272,6 +272,7 @@ export const SovereignGuard = {
     // SovereignBreachHandler (CRITICAL) consomme l'événement et appelle MasterBridge.
     try {
       await NexusEventBus.emit('sovereign.breach', {
+        v: 1,
         targetTenantId: targetId,
         anchoredTenantId: anchoredId,
         path: fullPath,
