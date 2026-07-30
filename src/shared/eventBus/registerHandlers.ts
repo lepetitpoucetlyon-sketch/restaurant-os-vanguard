@@ -11,6 +11,10 @@ import { registerStockReceptionHandler } from './handlers/StockReceptionHandler'
 import { registerQuarantineHandler } from './handlers/QuarantineHandler';
 import { registerFoodCostRecomputer } from './handlers/FoodCostRecomputer';
 import { registerMarginWarningHandler } from './handlers/MarginWarningHandler';
+import { registerCRMVipHandler } from '@/modules/commerce/marketing/handlers/CRMVipHandler';
+import { registerRainStaffingHandler } from '@/modules/human/hr/handlers/RainStaffingHandler';
+import { registerCashDrawerAnomalyHandler } from '@/modules/ops/pos/handlers/CashDrawerAnomalyHandler';
+import { registerWasteToFoodCostHandler } from '@/modules/compliance/haccp/handlers/WasteToFoodCostHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -44,6 +48,10 @@ export function registerNexusHandlers(): void {
     registerQuarantineHandler(),       // CRITICAL — quarantaine HACCP
     registerFoodCostRecomputer(),      // HIGH — calcul de food cost dynamique (Inflation Shield)
     registerMarginWarningHandler(),    // HIGH — alertes de marge (Inflation Shield)
+    registerCRMVipHandler(),           // BACKGROUND — fidélisation CRM (VIP)
+    registerRainStaffingHandler(),     // HIGH — alerte urgence staffing (Météo/RH)
+    registerCashDrawerAnomalyHandler(),// CRITICAL — sécurité anti-fraude tiroir
+    registerWasteToFoodCostHandler(),  // BACKGROUND — conversion perte en alerte marge
   );
 }
 
