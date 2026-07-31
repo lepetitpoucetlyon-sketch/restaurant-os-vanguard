@@ -67,16 +67,16 @@ export async function POST(
             order
         );
 
-        // N'émettre order.placed que si la commande n'existait pas — sinon le KDS
-        // reçoit un doublon à chaque retry du provider.
+        // Au lieu de polluer le KDS directement avec "order.placed",
+        // on délègue au Anti-Corruption Layer (ACL). C'est lui qui décidera
+        // (selon l'autoAccept) s'il doit émettre order.placed ou mettre en attente.
         if (!existing && order.status !== 'cancelled') {
-            await NexusEventBus.emitDurable('order.placed', {
+            await NexusEventBus.emitDurable('integration.delivery_order_received', {
                 v: 1,
-                orderId:    order.id,
-                tableId:    null,
-                tenantId:   order.tenantId,
-                operatorId: `delivery:${providerId}`,
-                items:      [],
+                tenantId: order.tenantId,
+                integrationId: providerId,
+                platform: providerId as any,
+                rawPayload: payload // payload brut de l'API externe
             });
         }
 

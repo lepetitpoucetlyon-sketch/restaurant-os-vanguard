@@ -8,6 +8,7 @@ import { TelemetryService } from '@/lib/nexus/TelemetryService';
 import { Mutex } from '@/lib/utils/Mutex';
 import { TaskContext, TASK_MAPS } from '@/lib/icm/TaskContext';
 import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
+import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
 import { NexusEventBus, type NexusEvents, type NexusEventName } from '@/shared/eventBus/NexusEventBus';
 import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
 import { readZcpoState, degradeImportanceMap } from '@/lib/icm/zcpoBridge';
@@ -61,6 +62,7 @@ export const NexusSyncService = {
 
         // --- EVENT BUS HANDLERS ---
         registerNexusHandlers();
+        startDLQRetryService();
 
         // --- ZCPO × ICM degradation — ajuste l'importance map selon pression mémoire ---
         const zcpoState = await readZcpoState();
@@ -135,6 +137,7 @@ export const NexusSyncService = {
     NexusBridge.stop();
     TelemetryService.stop();
     unregisterNexusHandlers();
+    stopDLQRetryService();
 
     try {
         await db.clearAll();

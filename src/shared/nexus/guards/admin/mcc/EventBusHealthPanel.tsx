@@ -33,20 +33,28 @@ export const EventBusHealthPanel: React.FC = () => {
   }, []);
 
   const handleRetry = async (entry: DeadLetterEntry) => {
+    const MAX_ATTEMPTS = 3;
+    const newAttempts = entry.attempts + 1;
     try {
-      // Retirer de la DLQ temporairement pour le retry
-      await db.deadLetterEvents.delete(entry.id);
-      
-      logger.info(`[EventBusHealthPanel] Retrying event ${entry.eventName}#${entry.id}`);
-      
+      logger.info(`[EventBusHealthPanel] Retrying event ${entry.eventName}#${entry.id} (attempt ${newAttempts})`);
+
       const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload);
-      // On rejoue via le bus (s'il échoue, le bus le remettra dans la DLQ avec attempts+1)
-      await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);
-      
-      // Rafraîchir l'UI
-      await fetchDlq();
+      // skipDLQWrite: on gère l'état DLQ ici, pas dans le bus, pour éviter attempts=1
+      await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload, { skipDLQWrite: true });
+
+      // Succès : supprimer de la DLQ
+      await db.deadLetterEvents.delete(entry.id);
     } catch (err) {
       logger.error(`[EventBusHealthPanel] Retry failed for ${entry.id}`, err);
+      // Échec : incrémenter attempts in-place, quarantaine si seuil atteint
+      await db.deadLetterEvents.update(entry.id, {
+        attempts: newAttempts,
+        status: newAttempts >= MAX_ATTEMPTS ? 'quarantine' : 'retry',
+        nextRetryAt: Date.now() + Math.min(2_000 * Math.pow(2, newAttempts - 1), 60_000),
+        error: `[manual retry ${newAttempts}/${MAX_ATTEMPTS}] ${String(err)}`,
+        failedAt: Date.now(),
+      });
+    } finally {
       await fetchDlq();
     }
   };
@@ -120,7 +128,7 @@ export const EventBusHealthPanel: React.FC = () => {
                   </td>
                   <td className="py-3 px-4">
                     <span className="bg-gray-800 px-2 py-1 rounded text-gray-300">
-                      {entry.attempts} / 5
+                      {entry.attempts} / 3
                     </span>
                   </td>
                   <td className="py-3 px-4">

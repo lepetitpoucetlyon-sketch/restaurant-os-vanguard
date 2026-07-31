@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { createHash, randomBytes } from 'node:crypto';
+import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
 
 interface StoredApiKey {
@@ -17,8 +18,10 @@ interface StoredApiKey {
   lastUsedAt: string | null;
 }
 
-function generateApiKey(): string {
-  return `ros_${randomBytes(24).toString('hex')}`;
+function generateApiKey(tenantId: string): string {
+  const secret = process.env.INTERNAL_API_SECRET ?? 'fallback-secret-for-dev';
+  const token = jwt.sign({ tenantId }, secret);
+  return `ros_${token}`;
 }
 
 function hashKey(key: string): string {
@@ -55,7 +58,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'name requis' }, { status: 400 });
   }
 
-  const key = generateApiKey();
+  const key = generateApiKey(tenantId);
   const keyHash = hashKey(key);
   const keyPrefix = key.slice(0, 12);
   const id = crypto.randomUUID();

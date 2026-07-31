@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant OS — Arborescence des Actions Métier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 42, 0.6);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .btn-open-guide {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--accent-blue);
+            color: #60a5fa;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-open-guide:hover {
+            background: rgba(59, 130, 246, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Arborescence (Tree Layout) */
+        .tree-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .tree-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid var(--accent-blue);
+            padding-left: 0.75rem;
+        }
+
+        /* Nodes style */
+        .node {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .node:last-child {
+            margin-bottom: 0;
+        }
+
+        .node::before {
+            content: "";
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: -1.25rem;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .node:last-child::before {
+            display: none;
+        }
+
+        .node-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .node-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .node-icon {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .node-label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .node-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .badge-trigger {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .badge-event {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c084fc;
+        }
+
+        /* Sub-levels */
+        .sub-tree {
+            margin-top: 0.75rem;
+            padding-left: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .leaf {
+            position: relative;
+            padding-left: 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .leaf::before {
+            content: "➔";
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .leaf strong {
+            color: #f3f4f6;
+        }
+
+        .tech-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.05);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+        }
+
+        /* Color Themes by Section */
+        .theme-caisse .tree-title { border-color: var(--accent-blue); }
+        .theme-stock .tree-title { border-color: var(--accent-green); }
+        .theme-haccp .tree-title { border-color: var(--accent-yellow); }
+        .theme-securite .tree-title { border-color: var(--accent-red); }
+        .theme-rh .tree-title { border-color: var(--accent-purple); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Restaurant OS — Arborescence des Actions</h1>
+                <div class="subtitle">Toutes les branches de décision et cascades d'impacts du système</div>
+            </div>
+            <a href="presentation_evenements.md" class="btn-open-guide">Ouvrir le Rapport Visuel</a>
+        </header>
+
+        <!-- BRANCHE CAISSE & VENTE -->
+        <div class="tree-section theme-caisse">
+            <div class="tree-title">🛒 Branche 1 : Prise de Commande & Encaissement</div>
+            
+            <!-- Commande prise -->
+            <div class="node">
+                <div class="node-header">
+                    <span class="node-icon">📝</span>
+                    <span class="node-label">Le serveur prend une commande sur la caisse</span>
+                    <span class="node-badge badge-trigger">Action Serveur</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">order.placed</span><span class="tech-box">Durable</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Impact KDS :</strong> Envoi sur l'écran de cuisine pour les cuisiniers et commis de cuisine.
+                    </div>
+                    <div class="leaf">
+                        <strong>Action Cuisine :</strong> Préparation des plats.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paiement -->
+            <div class="node" style="margin-top: 2rem;">
+                <div class="node-header">
+                    <span class="node-icon">💳</span>
+                    <span class="node-label">Le serveur encaisse la commande (CB, Espèces, etc.)</span>
+                    <span class="node-badge badge-trigger">Action Caisse</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">order.paid</span><span class="tech-box">Durable / Scellé</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Impression :</strong> Sortie du ticket de caisse physique client.
+                    </div>
+                    <div class="leaf">
+                        <strong>Certification NF525 (CRITICAL) :</strong> Le module calcule la signature unique (SHA-256) du ticket pour prouver qu'il ne pourra jamais être effacé.
+                    </div>
+                    <div class="leaf">
+                        <strong>Comptabilité (BACKGROUND) :</strong> Création automatique de la ligne d'écriture dans le journal des ventes (débit banque, crédit recette).
+                    </div>
+                    <div class="leaf">
+                        <strong>Mise à jour des stocks (HIGH) :</strong> Le système prend la recette de chaque plat, déduit les ingrédients utilisés en stock réel, et si un ingrédient passe sous le seuil critique :
+                        <div class="sub-tree" style="margin-top: 0.5rem; border-left: 2px dashed rgba(255,255,255,0.1); padding-left: 1rem;">
+                            <div class="leaf">Déclenche le signal <span class="node-badge badge-event">stock.low</span></div>
+                            <div class="leaf"><strong>Alerte Gérant :</strong> Affiche un voyant orange d'alerte réapprovisionnement sur l'écran de contrôle du gérant (MCC).</div>
+                        </div>
+                    </div>
+                    <div class="leaf">
+                        <strong>Intelligence Artificielle (BACKGROUND) :</strong> Lance le calcul des tendances de vente et des prévisions d'achat pour le lendemain (Gemini).
+                    </div>
+                    <div class="leaf">
+                        <strong>Fidélité CRM (BACKGROUND) :</strong> Vérifie le compte client. Si c'est sa 5ème visite, il reçoit le badge VIP et déclenche une alerte de bienvenue.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Annulation -->
+            <div class="node" style="margin-top: 2rem;">
+                <div class="node-header">
+                    <span class="node-icon">❌</span>
+                    <span class="node-label">Le manager annule une commande déjà envoyée ou payée</span>
+                    <span class="node-badge badge-trigger">Action Manager</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">order.cancelled</span><span class="tech-box">Durable</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Restitution des stocks (HIGH) :</strong> Les ingrédients réservés pour la préparation en cuisine sont automatiquement remis en stock disponible.
+                    </div>
+                    <div class="leaf">
+                        <strong>Rapport d'annulation (BACKGROUND) :</strong> Enregistrement du motif d'annulation dans l'historique d'audit (lutte contre le coulage).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE STOCKS & INFLATION -->
+        <div class="tree-section theme-stock">
+            <div class="tree-title">📦 Branche 2 : Gestion des Stocks & Inflation</div>
+            
+            <!-- Réception marchandises -->
+            <div class="node">
+                <div class="node-header">
+                    <span class="node-icon">🚚</span>
+                    <span class="node-label">Le réceptionniste valide un bon de livraison fournisseur</span>
+                    <span class="node-badge badge-trigger">Action Réception</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">stock.received</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Augmentation de stock (HIGH) :</strong> Les stocks d'ingrédients physiques sont recrédités en base de données.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scan Facture / OCR -->
+            <div class="node" style="margin-top: 2rem;">
+                <div class="node-header">
+                    <span class="node-icon">📄</span>
+                    <span class="node-label">Une facture fournisseur est scannée et lue par l'intelligence artificielle</span>
+                    <span class="node-badge badge-trigger">Action Système / OCR</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">supplier.invoice_processed</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Mise à jour des prix (HIGH) :</strong> Le coût unitaire moyen pondéré (PUMP) des ingrédients est recalculé.
+                    </div>
+                    <div class="leaf">
+                        <strong>Calcul de rentabilité (HIGH) :</strong> Le système calcule la nouvelle marge théorique de chaque plat à la carte. Si la hausse de prix fait descendre la marge en dessous du seuil configuré (ex: 70%) :
+                        <div class="sub-tree" style="margin-top: 0.5rem; border-left: 2px dashed rgba(255,255,255,0.1); padding-left: 1rem;">
+                            <div class="leaf">Déclenche le signal <span class="node-badge badge-event">commerce.margin_warning</span></div>
+                            <div class="leaf"><strong>Alerte Financière :</strong> Le plat s'affiche en rouge sur le tableau de bord du gérant pour lui signaler qu'il faut augmenter son prix de vente ou changer de fournisseur.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE HYGIÈNE & HACCP -->
+        <div class="tree-section theme-haccp">
+            <div class="tree-title">🌡️ Branche 3 : Alertes Sanitaires & Gaspillage</div>
+            
+            <!-- Alerte température -->
+            <div class="node">
+                <div class="node-header">
+                    <span class="node-icon">🚨</span>
+                    <span class="node-label">Un capteur connecté détecte une température anormale (+11°C dans un frigo)</span>
+                    <span class="node-badge badge-trigger">Action Capteur IoT</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">haccp.alert</span><span class="tech-box">Priorité Critique</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Quarantaine Sanitaire (CRITICAL) :</strong> Les produits liés à ce frigo sont immédiatement marqués en quarantaine dans la base.
+                    </div>
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">inventory.quarantine_activated</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Sécurisation POS (CRITICAL) :</strong> Les boutons de commande de ces produits sont automatiquement masqués ou bloqués en rouge sur l'écran tactile du serveur pour éviter tout risque d'intoxication alimentaire.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Déclaration de perte -->
+            <div class="node" style="margin-top: 2rem;">
+                <div class="node-header">
+                    <span class="node-icon">🗑️</span>
+                    <span class="node-label">Le cuisinier déclare avoir jeté 2.5 kg de tomates périmées</span>
+                    <span class="node-badge badge-trigger">Action Cuisinier</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">waste.logged</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Retrait du stock (HIGH) :</strong> Retrait de 2.5 kg de tomates de la base de données.
+                    </div>
+                    <div class="leaf">
+                        <strong>Analyse de pertes (BACKGROUND) :</strong> Le volume jeté est cumulé sur 7 jours. Si le gaspillage dépasse 15% des achats, déclenche à nouveau une alerte de marge brute sur le menu concerné.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE SECURITÉ & FRAUDE -->
+        <div class="tree-section theme-securite">
+            <div class="tree-title">🛡️ Branche 4 : Anti-Fraude & Sécurité Réseau</div>
+            
+            <!-- Tiroir forcé -->
+            <div class="node">
+                <div class="node-header">
+                    <span class="node-icon">🔒</span>
+                    <span class="node-label">Ouverture physique du tiroir-caisse sans transaction en cours</span>
+                    <span class="node-badge badge-trigger">Action Matériel</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">cash_drawer.opened_unauthorized</span><span class="tech-box">Priorité Critique</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Lockdown Caisse (CRITICAL) :</strong> La caisse locale se bloque immédiatement. Seul le manager peut la déverrouiller avec son badge.
+                    </div>
+                    <div class="leaf">
+                        <strong>Alerte Manager (BACKGROUND) :</strong> Envoi d'une notification push ou d'un SMS urgent sur le téléphone du gérant.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intrusion réseau -->
+            <div class="node" style="margin-top: 2rem;">
+                <div class="node-header">
+                    <span class="node-icon">👾</span>
+                    <span class="node-label">Une tentative de piratage ou d'accès aux données d'un autre restaurant est détectée</span>
+                    <span class="node-badge badge-trigger">Action Système / SovereignGuard</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">sovereign.breach</span><span class="tech-box">Priorité Critique</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Arrêt d'Urgence (CRITICAL) :</strong> Activation du bouton d'arrêt d'urgence global (Killswitch). Le système bloque instantanément toutes les transactions de la base de données pour protéger les restaurants.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE RH & POINTAGES -->
+        <div class="tree-section theme-rh">
+            <div class="tree-title">⏰ Branche 5 : Gestion des Pointages & Salariés</div>
+            
+            <!-- Prise de poste -->
+            <div class="node">
+                <div class="node-header">
+                    <span class="node-icon">👥</span>
+                    <span class="node-label">Un serveur badge son QR Code d'arrivée à l'entrée</span>
+                    <span class="node-badge badge-trigger">Action Salarié</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">staff.clock_in</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Validation :</strong> Enregistre l'heure précise de début de shift en base de données.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fin de poste -->
+            <div class="node" style="margin-top: 2rem;">
+                <div class="node-header">
+                    <span class="node-icon">👋</span>
+                    <span class="node-label">Le serveur badge son QR Code de départ à la fin de son service</span>
+                    <span class="node-badge badge-trigger">Action Salarié</span>
+                </div>
+                <div class="sub-tree">
+                    <div class="leaf">
+                        Déclenche le signal <span class="node-badge badge-event">staff.clock_out</span>
+                    </div>
+                    <div class="leaf">
+                        <strong>Comptabilité RH (HIGH) :</strong> Calcul de la durée exacte travaillée et calcul de la provision de salaire pour la fin du mois.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

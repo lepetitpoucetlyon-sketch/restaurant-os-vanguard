@@ -99,4 +99,13 @@ async function _deductStock(
       threshold: stockItem.reorderThreshold,
     });
   }
+
+  if (newQty <= 0) {
+    await NexusEventBus.emitDurable('stock.zero', {
+      v: 1,
+      tenantId,
+      itemId: stockItemId,
+      itemName: label,
+    });
+  }
 }

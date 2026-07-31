@@ -15,6 +15,42 @@ import { registerCRMVipHandler } from '@/modules/commerce/marketing/handlers/CRM
 import { registerRainStaffingHandler } from '@/modules/human/hr/handlers/RainStaffingHandler';
 import { registerCashDrawerAnomalyHandler } from '@/modules/ops/pos/handlers/CashDrawerAnomalyHandler';
 import { registerWasteToFoodCostHandler } from '@/modules/compliance/haccp/handlers/WasteToFoodCostHandler';
+import { registerPaymentLedgerHandler } from './handlers/PaymentLedgerHandler';
+import { registerSplitPaymentHandler } from './handlers/SplitPaymentHandler';
+import { registerCompEntryHandler } from './handlers/CompEntryHandler';
+import { registerRefundExtourneHandler } from './handlers/RefundExtourneHandler';
+import { registerStockZeroBlockerHandler } from './handlers/StockZeroBlockerHandler';
+import { registerPhysicalInventoryHandler } from './handlers/PhysicalInventoryHandler';
+import { registerStockTransferHandler } from './handlers/StockTransferHandler';
+import { registerQuarantineActivatedHandler } from './handlers/QuarantineActivatedHandler';
+import { registerRecallPOSBlockerHandler } from './handlers/RecallPOSBlockerHandler';
+import { registerDLCExpiryHandler } from './handlers/DLCExpiryHandler';
+import { registerIotOfflineAlertHandler } from './handlers/IotOfflineAlertHandler';
+import { registerKdsRoutingHandler } from './handlers/KdsRoutingHandler';
+import { registerKdsCourseManagerHandler } from './handlers/KdsCourseManagerHandler';
+import { registerKdsPrepTimeAnalyzerHandler } from './handlers/KdsPrepTimeAnalyzerHandler';
+import { registerKdsPassNotifierHandler } from './handlers/KdsPassNotifierHandler';
+import { registerKdsPrintFallbackHandler } from './handlers/KdsPrintFallbackHandler';
+import { registerReservationNotifierHandler } from './handlers/ReservationNotifierHandler';
+import { registerFloorPlanCapacityHandler } from './handlers/FloorPlanCapacityHandler';
+import { registerNoShowPenaltyHandler } from './handlers/NoShowPenaltyHandler';
+import { registerTableTurnoverAnalyzerHandler } from './handlers/TableTurnoverAnalyzerHandler';
+import { registerLaborCostAnalyzerHandler } from './handlers/LaborCostAnalyzerHandler';
+import { registerScheduleNotifierHandler } from './handlers/ScheduleNotifierHandler';
+import { registerOvertimeAlertHandler } from './handlers/OvertimeAlertHandler';
+import { registerPayrollComplianceHandler } from './handlers/PayrollComplianceHandler';
+import { registerSupplierInvoiceLedgerHandler } from './handlers/SupplierInvoiceLedgerHandler';
+import { registerSepaExportHandler } from './handlers/SepaExportHandler';
+import { registerBankSyncAuditHandler } from './handlers/BankSyncAuditHandler';
+import { registerReconciliationEngineHandler } from './handlers/ReconciliationEngineHandler';
+import { registerCustomerRFMAnalyzerHandler } from './handlers/CustomerRFMAnalyzerHandler';
+import { registerLoyaltyEngineHandler } from './handlers/LoyaltyEngineHandler';
+import { registerMarketingCampaignRouterHandler } from './handlers/MarketingCampaignRouterHandler';
+import { registerPrivacyConsentHandler } from './handlers/PrivacyConsentHandler';
+import { registerAntiCorruptionLayerHandler } from './handlers/AntiCorruptionLayerHandler';
+import { registerOrderAcceptanceWindowHandler } from './handlers/OrderAcceptanceWindowHandler';
+import { registerAggregatorMenuSyncHandler } from './handlers/AggregatorMenuSyncHandler';
+import { registerAggregatorStockSyncHandler } from './handlers/AggregatorStockSyncHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -52,6 +88,58 @@ export function registerNexusHandlers(): void {
     registerRainStaffingHandler(),     // HIGH — alerte urgence staffing (Météo/RH)
     registerCashDrawerAnomalyHandler(),// CRITICAL — sécurité anti-fraude tiroir
     registerWasteToFoodCostHandler(),  // BACKGROUND — conversion perte en alerte marge
+    registerPaymentLedgerHandler(),    // BACKGROUND — CQRS PaymentLedger (Standard)
+    registerSplitPaymentHandler(),     // BACKGROUND — CQRS PaymentLedger (Split)
+    registerCompEntryHandler(),        // BACKGROUND — CQRS PaymentLedger (Comp)
+    registerRefundExtourneHandler(),   // BACKGROUND — CQRS PaymentLedger (Refund)
+    
+    // --- V3 Stocks ---
+    registerStockZeroBlockerHandler(), // BACKGROUND — bloque produits si stock=0
+    registerPhysicalInventoryHandler(),// HIGH — validation d'inventaire
+    registerStockTransferHandler(),    // HIGH — transfert inter-sites
+    
+    // --- V4 HACCP & IoT ---
+    registerQuarantineActivatedHandler(), // CRITICAL — bloque produits en quarantaine
+    registerRecallPOSBlockerHandler(),    // CRITICAL — bloque produits suite rappel
+    registerDLCExpiryHandler(),           // HIGH — perte auto sur DLC
+    registerIotOfflineAlertHandler(),     // CRITICAL — alerte IoT offline
+    
+    // --- V5 KDS Cuisine ---
+    registerKdsRoutingHandler(),          // HIGH — Route les tickets vers les stations
+    registerKdsCourseManagerHandler(),    // HIGH — Gère les réclames (courses)
+    registerKdsPrepTimeAnalyzerHandler(), // BACKGROUND — Analyse les retards
+    registerKdsPassNotifierHandler(),     // HIGH — Notifie les serveurs
+    registerKdsPrintFallbackHandler(),    // CRITICAL — Imprimante de secours
+    
+    // --- V6 Réservations & Plan Salle ---
+    registerReservationNotifierHandler(), // BACKGROUND — Notifie le client (SMS/Email)
+    registerFloorPlanCapacityHandler(),   // HIGH — Jauge anti-surbooking
+    registerNoShowPenaltyHandler(),       // HIGH — Pénalité et CRM
+    registerTableTurnoverAnalyzerHandler(),// BACKGROUND — Analyse de rotation des tables
+
+    // --- V7 RH & Paie ---
+    registerLaborCostAnalyzerHandler(),   // BACKGROUND — Calcule le Labor Cost temps réel
+    registerScheduleNotifierHandler(),    // BACKGROUND — Notifie la brigade
+    registerOvertimeAlertHandler(),       // HIGH — Alerte sur les dépassements légaux
+    registerPayrollComplianceHandler(),   // HIGH — Verrouille les pointages
+
+    // --- V8 Finance & Banking ---
+    registerSupplierInvoiceLedgerHandler(), // HIGH — Dette fournisseur au Grand Livre
+    registerSepaExportHandler(),            // BACKGROUND — Changement de statut sur décaissement
+    registerBankSyncAuditHandler(),         // HIGH — Corrige le Blind Spot d'API
+    registerReconciliationEngineHandler(),  // HIGH — Scelle le lettrage comptable NF525
+
+    // --- V9 CRM & Marketing ---
+    registerCustomerRFMAnalyzerHandler(),   // BACKGROUND — RFM dynamique
+    registerLoyaltyEngineHandler(),         // HIGH — Portefeuille points
+    registerMarketingCampaignRouterHandler(),// BACKGROUND — Envoi de campagnes
+    registerPrivacyConsentHandler(),        // HIGH — Droit à l'oubli RGPD
+
+    // --- V10 Connecteurs & ACL ---
+    registerAntiCorruptionLayerHandler(),   // HIGH — Traducteur UberEats -> Interne
+    registerOrderAcceptanceWindowHandler(), // HIGH — File d'attente POS pour validation manuelle
+    registerAggregatorMenuSyncHandler(),    // BACKGROUND — Pousse le menu sur les plateformes
+    registerAggregatorStockSyncHandler()    // HIGH — Met à jour les ruptures (86) sur Uber/Deliveroo
   );
 }
 

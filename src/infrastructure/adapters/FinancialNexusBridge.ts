@@ -9,7 +9,7 @@ import { FiscalSealer } from '../services/finance/FiscalSealer';
 import { resolveVatRate, inferCategory } from '@/modules/finance/tax/vatResolver';
 import type { ConsumptionMode } from '@/domain/schemas/orders';
 
-export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer';
+export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
 
 export interface BridgePayload {
   cartItems: CartItem[];
@@ -41,6 +41,7 @@ const PCG_PAYMENT_ACCOUNTS: Record<PaymentMode, { code: string; name: string }> 
   check:        { code: '511200', name: 'Chèques à encaisser' },
   ticket_resto: { code: '511500', name: 'Titres-restaurant à encaisser' },
   transfer:     { code: '512000', name: 'Banque (virement)' },
+  comp:         { code: '658000', name: 'Charges diverses (Offerts)' },
 };
 
 const microToCents = (mu: number): number => Math.round(mu / 10_000);
@@ -154,9 +155,19 @@ export const FinancialNexusBridge = {
         }
       }
       
-      // Le débit d'encaissement = somme des crédits
-      const debit = makeLine(payAcct.code, payAcct.name, 'debit', totalCreditCents, `Encaissement ${payAcct.name}`, pieceNumber);
-      return [debit, ...credits];
+      // Le débit d'encaissement = somme des crédits, ou splits
+      const debits: JournalLine[] = [];
+      if (payload.partialPayments && payload.partialPayments.length > 0) {
+        for (const p of payload.partialPayments) {
+          const pm = (p.method as PaymentMode) || 'card';
+          const acct = PCG_PAYMENT_ACCOUNTS[pm] ?? PCG_PAYMENT_ACCOUNTS.card;
+          const amtCents = microToCents(p.amount);
+          debits.push(makeLine(acct.code, acct.name, 'debit', amtCents, `Encaissement split ${acct.name} (Guest ${p.guest})`, pieceNumber));
+        }
+      } else {
+        debits.push(makeLine(payAcct.code, payAcct.name, 'debit', totalCreditCents, paymentMode === 'comp' ? 'Repas offert (Comp)' : `Encaissement ${payAcct.name}`, pieceNumber));
+      }
+      return [...debits, ...credits];
     };
 
     const buildSnapshot = (pieceNumber: string): string =>
@@ -255,7 +266,7 @@ export const FinancialNexusBridge = {
       updatedAt: now,
     };
 
-    // Émission de l'événement — déclenche stock, Ticket Z, IA en parallèle
+    // Émission de l'événement principal
     NexusEventBus.emitDurable('order.paid', {
       v: 1,
       orderId: entryId,
@@ -264,8 +275,40 @@ export const FinancialNexusBridge = {
       operatorId,
       items: cartItems,
       totalInMicrounits: totalTTCInMicrounits,
-      paymentMode,
-    }).catch(() => {}); // fire-and-forget — ne bloque pas le retour bridge
+      paymentMode: (payload.partialPayments && payload.partialPayments.length > 0) ? 'split' : paymentMode,
+    }).catch(() => {});
+
+    // Émissions spécifiques V2 (Split, Comp, Refund)
+    if (payload.partialPayments && payload.partialPayments.length > 0) {
+      NexusEventBus.emitDurable('order.split', {
+        v: 1,
+        orderId: entryId,
+        tableId,
+        tenantId,
+        operatorId,
+        totalInMicrounits: totalTTCInMicrounits,
+        payments: payload.partialPayments.map(p => ({ amount: p.amount, guest: p.guest, method: p.method ?? 'card' })),
+      }).catch(() => {});
+    } else if (paymentMode === 'comp' || totalTTCInMicrounits === 0) {
+      NexusEventBus.emitDurable('order.comp', {
+        v: 1,
+        orderId: entryId,
+        tenantId,
+        operatorId,
+        items: cartItems,
+        totalValueInMicrounits: totalTTCInMicrounits,
+        reason: 'Offert par la direction',
+      }).catch(() => {});
+    } else if (totalTTCInMicrounits < 0) {
+      NexusEventBus.emitDurable('order.refunded', {
+        v: 1,
+        orderId: entryId,
+        tenantId,
+        operatorId,
+        amountInMicrounits: Math.abs(totalTTCInMicrounits),
+        originalPaymentMode: paymentMode,
+      }).catch(() => {});
+    }
 
     empireAudit.log({
       module: 'accounting',

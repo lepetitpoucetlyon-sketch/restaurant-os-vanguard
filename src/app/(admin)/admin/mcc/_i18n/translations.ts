@@ -14,6 +14,8 @@ export const mccTranslations = {
       intelligence: 'Oracle',
       treasury: 'Trésorerie',
       patchcenter: 'Correctifs',
+      plugins: 'Plugins',
+      eventbus: 'Event Bus',
     },
     fleet: {
       totalInstances: 'Total Instances',
@@ -142,6 +144,8 @@ export const mccTranslations = {
       intelligence: 'Oracle',
       treasury: 'Treasury',
       patchcenter: 'Patches',
+      plugins: 'Plugins',
+      eventbus: 'Event Bus',
     },
     fleet: {
       totalInstances: 'Total Instances',

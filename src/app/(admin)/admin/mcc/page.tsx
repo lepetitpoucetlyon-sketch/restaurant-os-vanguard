@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
-    Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle,
+    Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -20,6 +20,7 @@ const IntelligenceTab = dynamic(() => import('./_tabs/IntelligenceTab').then(m =
 const TreasuryTab     = dynamic(() => import('./_tabs/TreasuryTab').then(m => m.TreasuryTab), { loading: () => <MCCWidgetSkeleton /> });
 const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m => m.PatchCenterTab), { loading: () => <MCCWidgetSkeleton /> });
 const PluginsTab      = dynamic(() => import('./_tabs/PluginsTab').then(m => m.PluginsTab), { loading: () => <MCCWidgetSkeleton /> });
+const EventBusTab     = dynamic(() => import('./_tabs/EventBusTab').then(m => m.EventBusTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     return (
@@ -54,6 +55,7 @@ function MCCDashboardInner() {
         { id: 'treasury',     label: t.tabs.treasury,     icon: <Wallet className="w-4 h-4" /> },
         { id: 'patchcenter',  label: t.tabs.patchcenter,  icon: <GitMerge className="w-4 h-4" /> },
         { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
+        { id: 'eventbus',     label: t.tabs.eventbus,     icon: <Activity className="w-4 h-4" /> },
     ] as const;
 
     return (
@@ -130,6 +132,11 @@ function MCCDashboardInner() {
                                 {activeTab === 'plugins' && (
                                     <motion.div key="plugins" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                                         <PluginsTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'eventbus' && (
+                                    <motion.div key="eventbus" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <EventBusTab />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

@@ -30,6 +30,32 @@ export interface NexusEvents {
     operatorId: string;
     reason?: string;
   };
+  'order.split': {
+    v: 1;
+    orderId: string;
+    tableId: string | null;
+    tenantId: string;
+    operatorId: string;
+    totalInMicrounits: number;
+    payments: Array<{ amount: number; guest: number; method: string }>;
+  };
+  'order.comp': {
+    v: 1;
+    orderId: string;
+    tenantId: string;
+    operatorId: string;
+    items: CartItem[];
+    totalValueInMicrounits: number;
+    reason: string;
+  };
+  'order.refunded': {
+    v: 1;
+    orderId: string;
+    tenantId: string;
+    operatorId: string;
+    amountInMicrounits: number;
+    originalPaymentMode: string;
+  };
   'stock.low': {
     v: 1;
     tenantId: string;
@@ -163,6 +189,254 @@ export interface NexusEvents {
     thresholdBps: number;
     triggerEventId: string;
   };
+  'stock.zero': {
+    v: 1;
+    tenantId: string;
+    itemId: string;
+    itemName: string;
+  };
+  'stock.transfer': {
+    v: 1;
+    tenantId: string;
+    fromLocationId: string;
+    toLocationId: string;
+    itemId: string;
+    quantity: number;
+    operatorId: string;
+  };
+  'inventory.physical': {
+    v: 1;
+    tenantId: string;
+    inventoryId: string;
+    items: Array<{ itemId: string; theoreticalQty: number; physicalQty: number }>;
+    operatorId: string;
+  };
+  'recall.declared': {
+    v: 1;
+    tenantId: string;
+    recallId: string;
+    productIds: string[];
+    reason: string;
+  };
+  'dlc.expired': {
+    v: 1;
+    tenantId: string;
+    itemId: string;
+    batchNumber: string;
+    quantity: number;
+  };
+  'iot.offline': {
+    v: 1;
+    tenantId: string;
+    sensorId: string;
+    lastSeenAt: number;
+  };
+  'kds.ticket_received': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    stationId?: string;
+    items: Array<{ id: string; productId: string; name: string; quantity: number; course: number }>;
+  };
+  'kds.course_fired': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    course: number;
+  };
+  'kds.item_started': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    itemId: string;
+    operatorId?: string;
+  };
+  'kds.item_done': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    itemId: string;
+    operatorId?: string;
+  };
+  'kds.ticket_done': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+  };
+  'kds.bumped': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    stationId?: string;
+  };
+  'kds.rush_alert': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    itemId?: string;
+    exceededByMinutes: number;
+  };
+  'kds.printer_failed': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    printerId: string;
+    errorReason: string;
+  };
+  'reservation.created': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+    guestName: string;
+    partySize: number;
+    scheduledAt: number;
+    hasDeposit: boolean;
+  };
+  'reservation.updated': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+    updates: any;
+  };
+  'reservation.cancelled': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+    reason: string;
+  };
+  'reservation.no_show': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+  };
+  'table.assigned': {
+    v: 1;
+    tenantId: string;
+    tableId: string;
+    reservationId?: string;
+    partySize: number;
+  };
+  'table.released': {
+    v: 1;
+    tenantId: string;
+    tableId: string;
+    orderId?: string;
+  };
+  'hr.shift_started': {
+    v: 1;
+    tenantId: string;
+    shiftId: string;
+    employeeId: string;
+    startedAt: number;
+    role: string;
+  };
+  'hr.shift_ended': {
+    v: 1;
+    tenantId: string;
+    shiftId: string;
+    employeeId: string;
+    endedAt: number;
+  };
+  'hr.schedule_published': {
+    v: 1;
+    tenantId: string;
+    weekStart: number;
+    publishedBy: string;
+  };
+  'hr.payroll_exported': {
+    v: 1;
+    tenantId: string;
+    periodStart: number;
+    periodEnd: number;
+    exportedBy: string;
+  };
+  'finance.invoice_approved': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    supplierId: string;
+    amountInMicrounits: number;
+    approvedBy: string;
+  };
+  'finance.payment_dispatched': {
+    v: 1;
+    tenantId: string;
+    paymentBatchId: string;
+    totalAmountInMicrounits: number;
+    dispatchedBy: string;
+  };
+  'finance.bank_transaction_synced': {
+    v: 1;
+    tenantId: string;
+    transactionId: string;
+    bankAccountId: string;
+    amountInMicrounits: number;
+    syncedAt: number;
+  };
+  'finance.reconciliation_completed': {
+    v: 1;
+    tenantId: string;
+    reconciliationId: string;
+    bankTransactionId: string;
+    matchedEntityId: string;
+    matchedEntityType: 'invoice' | 'ticket_z' | 'other';
+    reconciledBy: string;
+  };
+  'crm.customer_created': {
+    v: 1;
+    tenantId: string;
+    customerId: string;
+    email?: string;
+    phone?: string;
+    source: string;
+  };
+  'crm.customer_updated': {
+    v: 1;
+    tenantId: string;
+    customerId: string;
+    updates: any;
+  };
+  'crm.points_earned': {
+    v: 1;
+    tenantId: string;
+    customerId: string;
+    points: number;
+    sourceOrderId: string;
+  };
+  'crm.reward_redeemed': {
+    v: 1;
+    tenantId: string;
+    customerId: string;
+    rewardId: string;
+    pointsCost: number;
+  };
+  'marketing.campaign_launched': {
+    v: 1;
+    tenantId: string;
+    campaignId: string;
+    targetSegment: string;
+    launchedBy: string;
+  };
+  'integration.delivery_order_received': {
+    v: 1;
+    tenantId: string;
+    integrationId: string;
+    platform: 'ubereats' | 'deliveroo' | 'other';
+    rawPayload: any;
+  };
+  'integration.menu_sync_requested': {
+    v: 1;
+    tenantId: string;
+    integrationId: string;
+    requestedBy: string;
+  };
+  'integration.catalog_mapping_updated': {
+    v: 1;
+    tenantId: string;
+    internalProductId: string;
+    externalId: string;
+    platform: string;
+  };
 }
 
 export type NexusEventName = keyof NexusEvents;
@@ -262,10 +536,15 @@ class NexusEventBusClass {
    *
    * Retourne quand CRITICAL + HIGH sont résolus.
    * Les erreurs BACKGROUND sont loggées sans propager.
+   *
+   * @param options.skipDLQWrite — true quand appelé par DLQRetryService ou
+   *   handleRetry : le service de retry gère lui-même l'état de l'entrée DLQ
+   *   pour éviter une double-écriture avec attempts=1.
    */
   async emit<E extends NexusEventName>(
     event: E,
-    payload: NexusEventPayload<E>
+    payload: NexusEventPayload<E>,
+    options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
     const all = this.handlers.get(event) ?? [];
     if (all.length === 0) return;
@@ -282,7 +561,7 @@ class NexusEventBusClass {
         await h.handler(payload);
       } catch (err) {
         logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
           await db.deadLetterEvents.put({
             id: crypto.randomUUID(),
             eventName: event,
@@ -308,7 +587,7 @@ class NexusEventBusClass {
         if (r.status === 'rejected') {
           const h = high[i];
           logger.error(`[EventBus][HIGH] ${event}#${h.id} failed`, r.reason);
-          if (typeof window !== 'undefined') {
+          if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
             await db.deadLetterEvents.put({
               id: crypto.randomUUID(),
               eventName: event,
