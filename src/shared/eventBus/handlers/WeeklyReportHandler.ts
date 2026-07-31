@@ -45,13 +45,15 @@ export class WeeklyReportHandler {
             timestamp: new Date(),
         });
         
+        const pointsOptim = tickets.length > 50 ? 2 : 1; // Simulation très simple pour le mock
+        
         NexusEventBus.emitDurable('notification.created', {
             v: 1,
             tenantId,
             id: `alert-report-${periodEnd}`,
             type: 'info',
             title: 'Rapport Hebdomadaire Prêt',
-            message: `Le rapport analytique est disponible (${tickets.length} tickets traités pour ${(totalRevenue / 100).toFixed(2)}€). L'Oracle a identifié 3 points d'optimisation.`,
+            message: `Le rapport analytique est disponible (${tickets.length} tickets traités pour ${(totalRevenue / 100).toFixed(2)}€). L'Oracle a identifié ${pointsOptim} point(s) d'optimisation.`,
             priority: 'medium',
             read: false,
             timestamp: new Date().toISOString()

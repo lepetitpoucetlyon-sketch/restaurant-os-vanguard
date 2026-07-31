@@ -13,10 +13,25 @@ export class PromotionExpiryHandler {
       logger.info(`[PromotionExpiry] Promotion ${promotionId} expirée. Rétablissement des prix initiaux.`);
 
       try {
+        const promoDoc = await Nexus.adapter.get<{ productIds?: string[] }>(`tenants/${tenantId}/pos/activePromotions/${promotionId}`);
+        const productIds = promoDoc?.productIds || [];
+
         await Nexus.adapter.update(`tenants/${tenantId}/pos/activePromotions/${promotionId}`, {
             status: 'expired',
             expiredAt: Date.now()
         });
+
+        // Rollback des produits impactés dans le POS/Menu
+        for (const productId of productIds) {
+            try {
+                await Nexus.adapter.update(`tenants/${tenantId}/menu/items/${productId}`, {
+                    activePromotionId: null, // Rétablissement des prix normaux
+                    updatedAt: Date.now()
+                });
+            } catch (e) {
+                logger.warn(`[PromotionExpiry] Impossible de rollback la promo sur le produit ${productId}`, String(e));
+            }
+        }
 
         empireAudit.log({
             module: 'crm',

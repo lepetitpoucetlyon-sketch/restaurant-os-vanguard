@@ -187,7 +187,7 @@ async function checkFleetAdminMFA(
     }
 }
 
-async function verifyCaller(request: Request): Promise<AdminCaller | null> {
+async function verifyCaller(request: Request): Promise<AdminCaller | NextResponse | null> {
   const authHeader = request.headers.get('authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
 
@@ -218,7 +218,11 @@ async function verifyCaller(request: Request): Promise<AdminCaller | null> {
 
     // Blocage Runtime (P09-K) : si la route est une mutation (POST/PUT/DELETE) et que le tenant est readOnly
     if (isReadOnly && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
-        throw new Error('Tenant is in read-only mode due to expired subscription');
+        logger.warn('[adminAuth] Blocked mutation for read-only tenant');
+        return new NextResponse(
+            JSON.stringify({ error: 'Tenant is in read-only mode due to expired subscription' }),
+            { status: 403, headers: { 'Content-Type': 'application/json' } }
+        );
     }
 
     return {
@@ -227,11 +231,7 @@ async function verifyCaller(request: Request): Promise<AdminCaller | null> {
       tenantId,
     };
   } catch (err) {
-    if (err instanceof Error && err.message.includes('read-only')) {
-        logger.warn('[adminAuth] Blocked mutation for read-only tenant');
-    } else {
-        logger.warn('[adminAuth] Token verification failed', String(err));
-    }
+    logger.warn('[adminAuth] Token verification failed', String(err));
     return null;
   }
 }
@@ -273,6 +273,7 @@ export async function requireFleetAdmin(request: Request): Promise<AdminCaller |
  */
 export async function requireTenantAdmin(request: Request): Promise<(AdminCaller & { tenantId: string }) | NextResponse> {
   const caller = await verifyCaller(request);
+  if (caller instanceof NextResponse) return caller;
   if (!caller || !(TENANT_ADMIN_ROLES as readonly string[]).includes(caller.role)) return hiddenDoor();
 
   const isFleet = (FLEET_ROLES as readonly string[]).includes(caller.role);
@@ -300,6 +301,7 @@ export async function requireTenantUser(
   request: Request,
 ): Promise<(AdminCaller & { tenantId: string }) | NextResponse> {
   const caller = await verifyCaller(request);
+  if (caller instanceof NextResponse) return caller;
   if (!caller || !caller.role) return hiddenDoor();
 
   const isFleet = (FLEET_ROLES as readonly string[]).includes(caller.role);
