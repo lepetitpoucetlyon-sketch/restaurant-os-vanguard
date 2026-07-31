@@ -52,20 +52,43 @@ export function registerSovereignBreachHandler(): () => void {
         
         logger.error(`[SovereignBreach] Alerte envoyée sur la plateforme MCC et WebPush critique préparé.`);
         
-        // [TEMPORARY MOCK] Simulation d'un WebPush VAPID d'alerte critique.
-        // A remplacer par un vrai push via web-push API ou un service cloud messaging.
+        // Notification WebPush VAPID d'alerte critique.
         if (!payload.isSimulation) {
-            await fetch('https://jsonplaceholder.typicode.com/posts', {
-                method: 'POST',
-                body: JSON.stringify({
-                    topic: 'mcc.security.critical',
-                    title: '🚨 SOVEREIGN BREACH DETECTED',
-                    body: message,
-                    targetTenantId,
-                    anchoredTenantId
-                }),
-                headers: { 'Content-Type': 'application/json' }
-            }).catch(e => logger.warn('Failed to send WebPush', e));
+            try {
+                const webpush = (await import('web-push')).default;
+                const vapidPublicKey = process.env.VAPID_PUBLIC_KEY || process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+                const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+                const vapidSubject = process.env.VAPID_SUBJECT || 'mailto:admin@restaurant-os.com';
+
+                if (!vapidPublicKey || !vapidPrivateKey) {
+                    logger.warn('[SovereignBreach] VAPID keys non configurées, WebPush ignoré.');
+                } else {
+                    webpush.setVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
+                    
+                    const subs = await Nexus.adapter.query<{ endpoint: string; keys: { p256dh: string; auth: string } }>('mcc/pushSubscriptions', {
+                        where: [{ field: 'status', operator: '==', value: 'active' }]
+                    });
+
+                    const pushPayload = JSON.stringify({
+                        topic: 'mcc.security.critical',
+                        title: '🚨 SOVEREIGN BREACH DETECTED',
+                        body: message,
+                        targetTenantId,
+                        anchoredTenantId
+                    });
+
+                    await Promise.allSettled(
+                        subs.map(sub => 
+                            webpush.sendNotification(
+                                { endpoint: sub.endpoint, keys: sub.keys },
+                                pushPayload
+                            )
+                        )
+                    );
+                }
+            } catch (e) {
+                logger.warn('[SovereignBreach] Failed to send WebPush', String(e));
+            }
         }
 
       } catch (e) {

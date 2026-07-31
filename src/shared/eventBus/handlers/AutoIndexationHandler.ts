@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { LightRAGClient } from '@/modules/intelligence/rag/LightRAGClient';
 
 export class AutoIndexationHandler {
   static register() {
@@ -13,31 +14,22 @@ export class AutoIndexationHandler {
       logger.info(`[AutoIndexation] Début de l'indexation LightRAG pour le document ${fileName}`);
 
       try {
-        // Simulation de l'appel LightRAG via fetch 
-        // [TEMPORARY MOCK] Simulation d'appel à l'API LightRAG pour l'indexation.
-        // A remplacer par l'URL réelle du service RAG en production.
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-            method: 'POST',
-            body: JSON.stringify({
-                tenantId,
-                documentId,
-                fileName,
-                action: 'index'
-            }),
-            headers: { 'Content-Type': 'application/json' }
-        });
+        const ragUrl = process.env.LIGHTRAG_URL || 'http://localhost:9621';
+        const client = new LightRAGClient({ baseUrl: ragUrl, workspace: tenantId });
+        
+        // On simule l'envoi du document pour indexation, car on n'a que le documentId
+        // Dans la réalité le RAG ira le lire dans GCS/S3, ou bien on lui passe un Blob.
+        const response = await client.insert(`Metadata: ${fileName}`, documentId);
 
-        if (!response.ok) {
-            throw new Error(`LightRAG API responded with status ${response.status}`);
+        if (response.status === 'error') {
+            throw new Error(`LightRAG API responded with error: ${response.message}`);
         }
 
-        const data = await response.json();
-        
         // Enregistrement en base
         await Nexus.adapter.update(`tenants/${tenantId}/ai/documents/${documentId}`, {
             indexStatus: 'completed',
             indexedAt: Date.now(),
-            lightragId: data.id || `rag_${Date.now()}`
+            lightragId: documentId
         });
 
         empireAudit.log({
@@ -45,7 +37,7 @@ export class AutoIndexationHandler {
             action: 'AI_DOCUMENT_INDEXED',
             userId: uploadedBy,
             instanceId: tenantId,
-            details: { documentId, fileName, ragResponseId: data.id },
+            details: { documentId, fileName, ragResponseId: documentId },
             severity: 'low',
             timestamp: new Date(),
         });

@@ -11,18 +11,31 @@ export class SilaeExportHandler {
       logger.info(`[SilaeExportHandler] Exporting payroll for period ${periodId} (Tenant: ${tenantId})`);
 
       try {
-        // Vrai mock de l'appel HTTP (Déstubbing)
-        // Dans un environnement de test, on pourrait fetch('https://sandbox.api.silae.fr/v1/payroll/export')
-        // [TEMPORARY MOCK] Simulation d'appel à l'API Silae pour l'export paie.
-        // A remplacer par l'URL réelle de l'API Silae (ex: https://api.silae.fr/v1/export) en production.
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        const silaeUrl = process.env.SILAE_API_URL || 'https://api.silae.fr/v1';
+        const silaeKey = process.env.SILAE_API_KEY;
+
+        if (!silaeKey) {
+            logger.warn(`[SilaeExportHandler] Clé SILAE manquante. Mode dégradé: mise en file d'attente (pendingExports)`);
+            await Nexus.adapter.update(`tenants/${tenantId}/hr/pendingExports/${periodId}`, {
+                periodId,
+                status: 'queued',
+                totalEmployees,
+                queuedAt: Date.now()
+            });
+            return;
+        }
+
+        const response = await fetch(`${silaeUrl}/export`, {
             method: 'POST',
             body: JSON.stringify({
                 tenantId,
                 periodId,
                 totalEmployees
             }),
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${silaeKey}`
+            }
         });
 
         if (!response.ok) {
@@ -58,6 +71,15 @@ export class SilaeExportHandler {
       } catch (error) {
         logger.error(`[SilaeExportHandler] Erreur lors de l'export:`, String(error));
         
+        // Mode dégradé en cas d'erreur API
+        await Nexus.adapter.update(`tenants/${tenantId}/hr/pendingExports/${periodId}`, {
+            periodId,
+            status: 'error_queued',
+            error: String(error),
+            totalEmployees,
+            queuedAt: Date.now()
+        });
+
         empireAudit.log({
           action: 'hr.silae_export_failed',
           module: 'human',
