@@ -85,6 +85,16 @@ export function registerStockRestitutionHandler(): () => void {
           paymentMode: (order as any).paymentMode ?? 'card', // Remboursement sur le mode original
         });
         
+        // Avoir document for traceability
+        await Nexus.adapter.update(`tenants/${tenantId}/avoirs/avoir_${orderId}`, {
+          type: 'CREDIT_NOTE',
+          orderId,
+          operatorId,
+          reason,
+          totalInMicrounits: cartItemsForRefund.reduce((acc, i) => acc + (i.unitPriceInMicrounits * i.quantity), 0),
+          createdAt: Date.now(),
+        });
+
         logger.info(`[StockRestitution] Avoir comptable généré avec succès pour l'annulation ${orderId}`);
       } catch (err) {
         logger.error(`[StockRestitution] Erreur lors de la génération de l'avoir pour ${orderId}`, err);

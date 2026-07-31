@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
 
 export class StripePaymentRetryHandler {
   static register() {
@@ -33,7 +34,34 @@ export class StripePaymentRetryHandler {
             timestamp: new Date(),
         });
         
-        // Simulation: Ajout dans une file de retry Stripe et notification DAF
+        // Email de relance (dunning) au propriétaire du tenant
+        const nextRetryDate = new Date(Date.now() + 86400000).toLocaleDateString('fr-FR');
+        try {
+          const tenantSettings = await Nexus.adapter.get<{ contact?: { emailGeneral?: string } }>(
+            `tenants/${tenantId}/settings/general`
+          );
+          const ownerEmail = tenantSettings?.contact?.emailGeneral;
+          if (ownerEmail) {
+            await NotificationGateway.send({
+              tenantId,
+              to: ownerEmail,
+              subject: `Échec de paiement — Facture ${invoiceId}`,
+              text: [
+                `Le paiement de ${(amountInMicrounits / 1_000_000).toFixed(2)} € pour la facture ${invoiceId} a échoué.`,
+                `Motif : ${reason}`,
+                `Une relance automatique est programmée le ${nextRetryDate}.`,
+                `Veuillez vérifier votre moyen de paiement pour éviter toute interruption de service.`
+              ].join('\n'),
+              channel: 'email'
+            });
+          } else {
+            logger.warn(`[StripePaymentRetryHandler] Pas d'email propriétaire configuré pour tenant ${tenantId}, dunning email non envoyé.`);
+          }
+        } catch (emailErr) {
+          logger.error('[StripePaymentRetryHandler] Erreur envoi email dunning', String(emailErr));
+        }
+
+        // Notification in-app DAF
         NexusEventBus.emitDurable('notification.created', {
             v: 1,
             tenantId,

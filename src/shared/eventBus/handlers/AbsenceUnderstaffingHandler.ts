@@ -43,7 +43,14 @@ export class AbsenceUnderstaffingHandler {
                     timestamp: new Date(),
                 });
 
-                // Émission d'une alerte au manager
+                await NexusEventBus.emitDurable('anomaly.detected', {
+                    v: 1,
+                    tenantId,
+                    type: 'understaffing',
+                    message: `Sous-effectif détecté le ${startDate}: ${newHeadcount}/${schedule.requiredHeadcount} personnes`,
+                    metadata: { absentUserId: userId, absenceType, headcount: newHeadcount, required: schedule.requiredHeadcount },
+                });
+
                 NexusEventBus.emitDurable('notification.created', {
                     v: 1,
                     tenantId: tenantId,

@@ -62,3 +62,5 @@
 | saga-plan-md | Rédaction docs/SAGA_PLAN.md — plan opérationnel complet bus événementiel (P0→P3) | 2026-07-30 | terminée |
 | rbac-hardening | Correction 4 lacunes RBAC : PIN hashing PBKDF2, rate limit serveur, role gate cash drawer, requireTenantRole sur finance/sync + print/network | 2026-07-30 | terminée |
 | structural-hardening | Failles structurelles : barrels violations, ArchitecturalHealthService, domain/types rapatriation | 2026-07-30 | terminée |
+| sprint1-audit-plan | Sprints 1-5 plan audit : allergènes INCO, menu-builder Nexus, registres/HACCP/bar Nexus, bus events (cert.expired, compliance.calendar, anomaly.detected), treasury+SEPA UI, Oracle chat, capacité plan de salle | 2026-07-31 | terminée |
+| partial-39-sweep | Éradication 39 promesses partielles restantes (CAT-01/04/05/06/07/08/09/10/12) — tous piliers | 2026-07-31 | active |

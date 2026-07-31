@@ -25,7 +25,8 @@ export class PromotionExpiryHandler {
         for (const productId of productIds) {
             try {
                 await Nexus.adapter.update(`tenants/${tenantId}/menu/items/${productId}`, {
-                    activePromotionId: null, // Rétablissement des prix normaux
+                    activePromotionId: null,
+                    promotionDiscountBps: null,
                     updatedAt: Date.now()
                 });
             } catch (e) {

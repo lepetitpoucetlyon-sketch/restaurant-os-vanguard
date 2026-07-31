@@ -50,15 +50,25 @@ export function registerCashDrawerAnomalyHandler(): () => void {
           lockdownReason: `Ouverture suspecte du tiroir ${drawerId}`
         });
 
-        // 4. Notification WebPush au manager
-        if (typeof window !== 'undefined' && 'Notification' in window) {
-          if (Notification.permission === 'granted') {
-            new Notification('🛑 ALERTE SÉCURITÉ CAISSE', {
-              body: `Tiroir ${drawerId} ouvert sans transaction. Le POS est verrouillé.`,
-              requireInteraction: true,
-            });
-          }
+        // 4. Notification WebPush serveur au manager
+        try {
+          const { WebPushService } = await import('@/lib/push/webPushService');
+          await WebPushService.sendToRole(tenantId, 'manager', {
+            title: 'ALERTE SÉCURITÉ CAISSE',
+            body: `Tiroir ${drawerId} ouvert sans transaction par ${operatorId}. Le POS est verrouillé.`,
+          });
+        } catch (pushErr) {
+          logger.warn('[CashDrawerAnomaly] WebPush envoi échoué (VAPID non configuré ?)', String(pushErr));
         }
+
+        // 5. Émission anomaly.detected pour Intelligence
+        await NexusEventBus.emitDurable('anomaly.detected', {
+          v: 1,
+          tenantId,
+          type: 'unauthorized_drawer_open',
+          message: `Tiroir-caisse ${drawerId} ouvert sans transaction par ${operatorId}`,
+          metadata: { drawerId, operatorId, detectedAt },
+        });
       } catch (e) {
         logger.error('[CashDrawerAnomaly] Erreur critique lors de la gestion de l\'anomalie', e);
         throw e; // Laisse remonter, c'est CRITICAL. Ça ira dans la DLQ.

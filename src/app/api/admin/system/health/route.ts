@@ -21,6 +21,22 @@ export async function GET(request: Request) {
             timestamp: report.timestamp
         });
 
+        // P09-K: Notification proactive si des routes admin non protégées sont détectées
+        if (report.blockers.length > 0) {
+            const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+            NexusEventBus.emitDurable('notification.created', {
+                v: 1,
+                tenantId: 'fleet',
+                id: `health-blockers-${Date.now()}`,
+                type: 'error',
+                title: `Santé Architecturale : ${report.blockers.length} bloqueur(s) détecté(s)`,
+                message: report.blockers.map(b => `[${b.code}] ${b.file}`).join(' | '),
+                priority: 'high',
+                read: false,
+                timestamp: new Date().toISOString(),
+            });
+        }
+
         return NextResponse.json({
             success: true,
             data: report,

@@ -8,6 +8,7 @@ import {
     ShieldCheck,
     PlusCircle,
     Landmark,
+    Wallet,
     X,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ import dynamic from "next/dynamic";
 const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
 const BillingTab    = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));
 const AuditTab      = dynamic(() => import("./_tabs/AuditTab").then(m => m.AuditTab));
+const TreasuryTab   = dynamic(() => import("./_tabs/TreasuryTab").then(m => m.TreasuryTab));
 const BankTab       = dynamic(() => import("./_tabs/BankTab").then(m => m.BankTab));
 import {
     type FinanceTab,
@@ -35,7 +37,7 @@ import {
     computeTVABreakdown,
 } from "./financeUtils";
 
-const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "audit"];
+const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "treasury", "audit"];
 
 function computeInitialTab(tabParam: string | null): FinanceTab {
     return tabParam && VALID_FINANCE_TABS.includes(tabParam as FinanceTab) ? (tabParam as FinanceTab) : "accounting";
@@ -285,6 +287,7 @@ export function FinanceDashboard() {
                     { id: "accounting", label: "Comptabilité", icon: BookOpen },
                     { id: "billing", label: "Facturation", icon: Receipt },
                     { id: "bank", label: "Connexion Bancaire", icon: Landmark },
+                    { id: "treasury", label: "Trésorerie", icon: Wallet },
                     { id: "audit", label: "Audit fiscal", icon: ShieldCheck },
                 ] as const).map((tab) => {
                     const Icon = tab.icon;
@@ -351,6 +354,9 @@ export function FinanceDashboard() {
                         onSync={handleBankSync}
                     />
                 )}
+
+                {/* ── Trésorerie & SEPA ──────────────────────────────────────── */}
+                {activeTab === "treasury" && <TreasuryTab />}
 
                 {/* ── Audit fiscal ───────────────────────────────────────────── */}
                 {activeTab === "audit" && (

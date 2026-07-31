@@ -73,7 +73,7 @@ export class FiscalSealer {
       signature = await CryptoService.signFiscalData(hash, FiscalKeyService.requireKey(tenantId));
     }
 
-    return { hash, signature };
+    return { hash, signature, isTrainingMode, ...(isTrainingMode ? { taxExempt: true } : {}) };
   }
 
   /**

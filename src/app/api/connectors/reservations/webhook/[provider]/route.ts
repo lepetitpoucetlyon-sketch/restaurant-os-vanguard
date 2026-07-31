@@ -52,6 +52,29 @@ export async function POST(
             return NextResponse.json({ error: 'tenantId requis dans le payload' }, { status: 422 });
         }
 
+        // Idempotency check: si une réservation avec le même externalId existe déjà
+        if (reservation.externalId) {
+            const existing = await Nexus.adapter.query<{ id: string; status?: string }>(
+                `tenants/${reservation.tenantId}/reservations`,
+                { where: [{ field: 'externalId', operator: '==', value: reservation.externalId }] }
+            );
+            if (existing && existing.length > 0) {
+                const existingRes = existing[0];
+                // Si le statut n'a pas changé, c'est un doublon pur
+                if (existingRes.status === reservation.status) {
+                    logger.info(`[reservations/webhook] Doublon détecté provider=${providerId} externalId=${reservation.externalId}`);
+                    return NextResponse.json({ received: true, duplicate: true, id: existingRes.id });
+                }
+                // Statut différent : mise à jour de la réservation existante
+                await Nexus.adapter.update(
+                    `tenants/${reservation.tenantId}/reservations/${existingRes.id}`,
+                    { ...reservation, updatedAt: Date.now() }
+                );
+                logger.info(`[reservations/webhook] Mise à jour via webhook provider=${providerId} id=${existingRes.id}`);
+                return NextResponse.json({ received: true, updated: true, id: existingRes.id });
+            }
+        }
+
         await Nexus.adapter.set(
             `tenants/${reservation.tenantId}/reservations/${reservation.id}`,
             reservation

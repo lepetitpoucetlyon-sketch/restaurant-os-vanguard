@@ -67,17 +67,17 @@ export const guardLoadingAtom = atom((get) => {
 // P2: QUARANTINED PRODUCTS (HACCP Alert -> QuarantineHandler -> POS ProductGrid)
 export const quarantinedProductsAtom = atom<Record<string, { reason: string; timestamp: number }>>({});
 
-// ⚡ HARDWARE SIMULATION (Electrification)
-// SensorReading moved to central types.ts
+// IoT Sensor Readings from Nexus (replaces hardcoded simulation)
+const _sensorReadings = createProxyDomain<SensorReading>('sensorReadings');
+export const sensorReadingsNodeAtom = _sensorReadings.node;
+export const sensorReadingsAtom = _sensorReadings.data;
 
-export const sensorsAtom = atom<Record<string, SensorReading>>({
-    'ROTISSERIE_CORE_TEMP': {
-        id: 'ROTISSERIE_CORE_TEMP',
-        name: 'Sonde Cœur Poulet',
-        type: 'temperature',
-        value: 75,
-        unit: '°C',
-        status: 'ok',
-        lastUpdated: new Date()
+// Backward-compat: keyed by sensor ID
+export const sensorsAtom = atom<Record<string, SensorReading>>((get) => {
+    const readings = get(sensorReadingsAtom);
+    const map: Record<string, SensorReading> = {};
+    for (const r of readings) {
+        map[r.id] = r;
     }
+    return map;
 });

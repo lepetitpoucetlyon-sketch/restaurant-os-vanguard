@@ -1,4 +1,5 @@
 import { NexusEventBus } from '../NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
@@ -7,17 +8,34 @@ export function registerSepaExportHandler() {
     'finance.payment_dispatched',
     async (payload) => {
       const { tenantId, paymentBatchId, totalAmountInMicrounits, dispatchedBy } = payload;
-      
+
       logger.info(`[SepaExport] Fichier SEPA ${paymentBatchId} émis par ${dispatchedBy} pour un total de ${totalAmountInMicrounits / 1000000} EUR.`);
 
-      // En réalité, on mettrait à jour toutes les factures contenues dans ce batch
-      // pour passer leur statut à 'paid' et générer l'écriture de décaissement (Cash Out).
+      try {
+        const pendingInvoices = await Nexus.adapter.query<{ id: string; status: string; sepaBatchId?: string }>(
+          `tenants/${tenantId}/supplierInvoices`,
+          { where: [{ field: 'sepaBatchId', operator: '==', value: paymentBatchId }] }
+        );
+
+        for (const inv of pendingInvoices) {
+          if (inv.status !== 'paid') {
+            await Nexus.adapter.update(
+              `tenants/${tenantId}/supplierInvoices/${inv.id}`,
+              { status: 'paid', paidAt: Date.now() }
+            );
+          }
+        }
+
+        logger.info(`[SepaExport] ${pendingInvoices.length} facture(s) marquées payées pour le batch ${paymentBatchId}`);
+      } catch (err) {
+        logger.error(`[SepaExport] Erreur lors de la mise à jour des factures du batch ${paymentBatchId}`, String(err));
+      }
 
       empireAudit.log({
         module: 'finance',
         action: 'SEPA_PAYMENT_DISPATCHED',
-        details: { paymentBatchId, totalAmountInMicrounits },
-        severity: 'high', // Impact financier direct
+        details: { paymentBatchId, totalAmountInMicrounits, dispatchedBy },
+        severity: 'high',
         timestamp: new Date(),
       });
     },

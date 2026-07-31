@@ -46,29 +46,6 @@ export async function GET(req: NextRequest) {
   lastSunday.setDate(lastMonday.getDate() + 6);
   lastSunday.setHours(23, 59, 59, 999);
 
-  // ── Build report ──────────────────────────────────────────────────────────
-  const html = await buildWeeklyReportHTML(
-    lastMonday.getTime(),
-    lastSunday.getTime()
-  );
-
-  // ── Resolve owner email from Nexus settings ───────────────────────────────
-  const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-
-  const settings = await Nexus.adapter
-    .get<TenantSettings>('settings/general')
-    .catch(() => null);
-
-  const ownerEmail =
-    settings?.contact?.emailGeneral ?? process.env.REPORT_EMAIL;
-
-  if (!ownerEmail) {
-    return NextResponse.json(
-      { error: 'No owner email configured (settings/general → contact.emailGeneral or REPORT_EMAIL env)' },
-      { status: 400 }
-    );
-  }
-
   // ── Send via Resend ───────────────────────────────────────────────────────
   if (!resend) {
     return NextResponse.json(
@@ -77,19 +54,69 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const subject = `Rapport Hebdomadaire — ${lastMonday.toLocaleDateString('fr-FR')} au ${lastSunday.toLocaleDateString('fr-FR')}`;
+  // ── Multi-tenant iteration ────────────────────────────────────────────────
+  const { Nexus } = await import('@/lib/nexus/NexusAdapter');
 
-  const { error } = await resend.emails.send({
-    from: FROM_EMAIL,
-    to: ownerEmail,
-    subject,
-    html,
-  });
+  // Récupérer la liste de tous les tenants actifs
+  const allTenants = await Nexus.adapter.query<{ id?: string; status?: string }>(
+    'tenants',
+    { where: [{ field: 'status', operator: '==', value: 'active' }] }
+  ).catch(() => [] as Array<{ id?: string; status?: string }>);
 
-  if (error) {
-    logger.error('[WeeklyReport] Resend send failed', error);
-    return NextResponse.json({ error: 'Erreur lors de l\'envoi du rapport' }, { status: 500 });
+  // Fallback : si aucun tenant trouvé, utiliser le tenant par défaut (REPORT_EMAIL)
+  if (allTenants.length === 0) {
+    const fallbackEmail = process.env.REPORT_EMAIL;
+    if (!fallbackEmail) {
+      return NextResponse.json(
+        { error: 'No tenants found and no REPORT_EMAIL configured' },
+        { status: 400 }
+      );
+    }
+    const html = await buildWeeklyReportHTML(lastMonday.getTime(), lastSunday.getTime());
+    const subject = `Rapport Hebdomadaire — ${lastMonday.toLocaleDateString('fr-FR')} au ${lastSunday.toLocaleDateString('fr-FR')}`;
+    const { error } = await resend.emails.send({ from: FROM_EMAIL, to: fallbackEmail, subject, html });
+    if (error) {
+      logger.error('[WeeklyReport] Resend send failed', error);
+      return NextResponse.json({ error: 'Erreur lors de l\'envoi du rapport' }, { status: 500 });
+    }
+    return NextResponse.json({ ok: true, sentTo: fallbackEmail });
   }
 
-  return NextResponse.json({ ok: true, sentTo: ownerEmail });
+  const results: Array<{ tenantId: string; sentTo?: string; error?: string }> = [];
+
+  for (const tenant of allTenants) {
+    const tenantId = tenant.id;
+    if (!tenantId) continue;
+
+    try {
+      const settings = await Nexus.adapter
+        .get<TenantSettings>(`tenants/${tenantId}/settings/general`)
+        .catch(() => null);
+
+      const ownerEmail = settings?.contact?.emailGeneral ?? process.env.REPORT_EMAIL;
+      if (!ownerEmail) {
+        logger.warn(`[WeeklyReport] Tenant ${tenantId} : pas d'email configuré, rapport ignoré.`);
+        results.push({ tenantId, error: 'no_email' });
+        continue;
+      }
+
+      const html = await buildWeeklyReportHTML(lastMonday.getTime(), lastSunday.getTime());
+      const subject = `Rapport Hebdomadaire — ${lastMonday.toLocaleDateString('fr-FR')} au ${lastSunday.toLocaleDateString('fr-FR')}`;
+
+      const { error } = await resend.emails.send({ from: FROM_EMAIL, to: ownerEmail, subject, html });
+      if (error) {
+        logger.error(`[WeeklyReport] Resend failed for tenant ${tenantId}`, error);
+        results.push({ tenantId, error: 'send_failed' });
+      } else {
+        results.push({ tenantId, sentTo: ownerEmail });
+      }
+    } catch (err) {
+      logger.error(`[WeeklyReport] Error processing tenant ${tenantId}`, String(err));
+      results.push({ tenantId, error: String(err) });
+    }
+  }
+
+  const sent = results.filter(r => r.sentTo);
+  const failed = results.filter(r => r.error);
+  return NextResponse.json({ ok: true, sent: sent.length, failed: failed.length, details: results });
 }

@@ -4,6 +4,35 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MosyleClient } from '@/infrastructure/services/MosyleClient';
 
+// ── Plan-to-features mapping (P12-D / P12-J) ────────────────────────────────
+const PLAN_FEATURES: Record<string, string[]> = {
+  starter:    ['pos', 'kds'],
+  pro:        ['pos', 'kds', 'marketing', 'crm', 'analytics'],
+  enterprise: ['pos', 'kds', 'marketing', 'crm', 'analytics', 'rh', 'ia', 'haccp'],
+};
+
+/**
+ * Resolve a Stripe price/product to one of our plan tiers.
+ * Looks at price lookup_key, price metadata.plan, and product metadata.plan.
+ */
+function resolvePlanFromSubscription(subscription: StripeSubscription): string | null {
+  const items = subscription.items?.data ?? [];
+  for (const item of items) {
+    const price = item.price;
+    if (!price) continue;
+    // 1. lookup_key (e.g. "pro_monthly")
+    if (price.lookup_key) {
+      const key = price.lookup_key.split('_')[0].toLowerCase();
+      if (key in PLAN_FEATURES) return key;
+    }
+    // 2. price metadata
+    if (price.metadata?.plan && price.metadata.plan in PLAN_FEATURES) {
+      return price.metadata.plan;
+    }
+  }
+  return null;
+}
+
 // Vérification HMAC manuelle — remplacer par stripe.webhooks.constructEvent
 // quand le package stripe sera installé (npm install stripe).
 
@@ -23,6 +52,16 @@ interface StripeSubscription {
   status: string;
   metadata?: StripeEventMetadata;
   customer?: string | StripeCustomer;
+  items?: {
+    data: Array<{
+      price?: {
+        id?: string;
+        lookup_key?: string;
+        product?: string;
+        metadata?: Record<string, string>;
+      };
+    }>;
+  };
 }
 
 interface StripeEvent {
@@ -123,15 +162,6 @@ export async function POST(req: NextRequest) {
       case 'customer.subscription.deleted':
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
-
-        // Ne traiter que les subscriptions non-actives pour 'updated'
-        if (
-          event.type === 'customer.subscription.updated' &&
-          subscription.status === 'active'
-        ) {
-          break;
-        }
-
         const tenantId = extractTenantId(subscription);
 
         if (!tenantId) {
@@ -141,7 +171,53 @@ export async function POST(req: NextRequest) {
           break;
         }
 
-        // Restreindre le tenant
+        // ── P12-D / P12-J: subscription active → auto-enable features ──
+        if (
+          event.type === 'customer.subscription.updated' &&
+          subscription.status === 'active'
+        ) {
+          const plan = resolvePlanFromSubscription(subscription);
+          if (plan) {
+            const features = PLAN_FEATURES[plan] ?? [];
+            const previousFeatures = await Nexus.adapter.get(
+              `tenants/${tenantId}/billing/features`
+            ) as { enabled?: string[] } | null;
+            const previousEnabled = previousFeatures?.enabled ?? [];
+
+            await Nexus.adapter.set(`tenants/${tenantId}/billing/features`, {
+              plan,
+              enabled: features,
+              updatedAt: Date.now(),
+              subscriptionId: subscription.id,
+            });
+
+            // Determine newly unlocked features
+            const newFeatures = features.filter(f => !previousEnabled.includes(f));
+            if (newFeatures.length > 0) {
+              await Nexus.adapter.set(
+                `tenants/${tenantId}/notifications/${crypto.randomUUID()}`,
+                {
+                  type: 'features_unlocked',
+                  title: 'Nouvelles fonctionnalites disponibles',
+                  message: `Plan ${plan} active. Nouveaux modules : ${newFeatures.join(', ')}`,
+                  read: false,
+                  createdAt: Date.now(),
+                }
+              );
+            }
+
+            logger.info(
+              `[Stripe Webhook] Tenant ${tenantId} plan=${plan} features=[${features.join(',')}] (sub: ${subscription.id})`
+            );
+          } else {
+            logger.warn(
+              `[Stripe Webhook] Active subscription ${subscription.id} — unable to resolve plan tier`
+            );
+          }
+          break;
+        }
+
+        // ── Subscription non-active or deleted → restrict tenant ──
         await Nexus.adapter.update(
           `tenants/${tenantId}`,
           { status: 'RESTRICTED', restrictedSince: Date.now() },
@@ -151,6 +227,39 @@ export async function POST(req: NextRequest) {
         logger.info(
           `[Stripe Webhook] Tenant ${tenantId} restreint (event: ${event.type}, sub: ${subscription.id})`
         );
+
+        // ── P12-E: emit tenant.subscription_expired for GracePeriodHandler ──
+        if (event.type === 'customer.subscription.deleted') {
+          // NexusEventBus is client-side; in SSR context we persist the event
+          // directly so the GracePeriodHandler can pick it up on next client load.
+          await Nexus.adapter.set(
+            `tenants/${tenantId}/events/subscription_expired_${Date.now()}`,
+            {
+              type: 'tenant.subscription_expired',
+              v: 1,
+              tenantId,
+              expiredAt: new Date().toISOString(),
+              processed: false,
+              createdAt: Date.now(),
+            }
+          );
+
+          // Also create a notification for the tenant
+          await Nexus.adapter.set(
+            `tenants/${tenantId}/notifications/${crypto.randomUUID()}`,
+            {
+              type: 'subscription_expired',
+              title: 'Abonnement expire',
+              message: 'Votre abonnement a expire. Une periode de grace de 7 jours est active.',
+              read: false,
+              createdAt: Date.now(),
+            }
+          );
+
+          logger.info(
+            `[Stripe Webhook] tenant.subscription_expired persisted for tenant ${tenantId} (grace period)`
+          );
+        }
 
         // Kill switch MDM : verrouiller les iPads du tenant (fire-and-forget)
         if (process.env.MOSYLE_API_KEY) {

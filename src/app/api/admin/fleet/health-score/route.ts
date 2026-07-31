@@ -75,6 +75,38 @@ async function computeHealthScore(tenantId: string): Promise<{
   };
 }
 
+const CRITICAL_HEALTH_THRESHOLD = 50;
+
+async function alertIfCritical(tenantId: string, healthScore: number, computedAt: string): Promise<void> {
+  if (healthScore >= CRITICAL_HEALTH_THRESHOLD) return;
+
+  const notifId = `health_critical_${tenantId}_${Date.now()}`;
+
+  // Create tenant notification
+  await Nexus.adapter.set(`tenants/${tenantId}/notifications/${notifId}`, {
+    type: 'health_critical',
+    title: 'Sante tenant critique',
+    message: `Score de sante a ${healthScore}/100 — intervention recommandee.`,
+    severity: 'high',
+    read: false,
+    createdAt: Date.now(),
+  });
+
+  // Create auto support ticket suggestion for MCC
+  await Nexus.adapter.set(`mcc/support/auto-tickets/${notifId}`, {
+    tenantId,
+    type: 'health_score_critical',
+    healthScore,
+    computedAt,
+    title: `Sante critique (${healthScore}/100) pour tenant ${tenantId}`,
+    suggestedAction: 'Contacter le tenant pour diagnostiquer les problemes de sante.',
+    status: 'pending',
+    createdAt: Date.now(),
+  });
+
+  logger.warn(`[HealthScore] Tenant ${tenantId} — score critique ${healthScore}/100, ticket auto cree`);
+}
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller as NextResponse;
@@ -87,6 +119,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
     healthScore: health.total, healthComputedAt: health.computedAt,
   }, { merge: true });
+
+  // P12-F: Alert if health score is below critical threshold
+  await alertIfCritical(tenantId, health.total, health.computedAt);
 
   return NextResponse.json(health);
 }
@@ -104,6 +139,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         await Nexus.adapter.set(`tenants/${tid}/tenantConfig`, {
           healthScore: health.total, healthComputedAt: health.computedAt,
         }, { merge: true });
+        await alertIfCritical(tid, health.total, health.computedAt);
         return { tenantId: tid, score: health.total };
       })
     );

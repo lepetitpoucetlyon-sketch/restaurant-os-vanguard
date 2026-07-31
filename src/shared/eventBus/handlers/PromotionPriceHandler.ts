@@ -28,6 +28,7 @@ export class PromotionPriceHandler {
                 try {
                     await Nexus.adapter.update(`tenants/${tenantId}/menu/items/${productId}`, {
                         activePromotionId: promotionId,
+                        promotionDiscountBps: discountBps,
                         updatedAt: Date.now()
                     });
                 } catch (e) {

@@ -90,6 +90,10 @@ export default function FloorPlanPage() {
 
     const FloorIcon = currentFloor?.icon ? FLOOR_ICONS[String(currentFloor.icon)] || Layers : Layers;
     const totalSeatsOnFloor = (tablesOnCurrentFloor as Table[]).reduce((acc, t) => acc + Number(t.seats || 0), 0);
+    const occupiedSeats = (tablesOnCurrentFloor as Table[])
+        .filter(t => t.status === 'occupied')
+        .reduce((acc, t) => acc + Number(t.seats || 0), 0);
+    const occupancyPercent = totalSeatsOnFloor > 0 ? Math.round((occupiedSeats / totalSeatsOnFloor) * 100) : 0;
 
     return (
         <div className="flex h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 flex-col overflow-hidden bg-bg-primary pb-24 lg:pb-0">
@@ -114,7 +118,7 @@ export default function FloorPlanPage() {
                                     <span className="text-[8px] lg:text-[10px] font-black uppercase tracking-widest truncate">{String(currentFloor?.name || '')}</span>
                                     <ChevronDown className={cn("w-3 h-3 text-accent transition-transform", showFloorSelector && "rotate-180")} />
                                 </div>
-                                <p className="text-[7px] lg:text-[8px] text-accent/60 font-bold tracking-tighter hidden lg:block">{tablesOnCurrentFloor.length} UNITÉS • {totalSeatsOnFloor} PAX</p>
+                                <p className="text-[7px] lg:text-[8px] text-accent/60 font-bold tracking-tighter hidden lg:block">{tablesOnCurrentFloor.length} UNITÉS • {occupiedSeats}/{totalSeatsOnFloor} PAX ({occupancyPercent}%)</p>
                             </div>
                         </button>
 

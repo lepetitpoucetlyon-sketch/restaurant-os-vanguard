@@ -181,7 +181,7 @@ export default function RegistrePage() {
                                         {prestataires.map(p => (
                                             <div key={p.id} className={cn(
                                                 "w-3 h-3 rounded-full",
-                                                p.status === 'valide' ? 'bg-success' : p.status === 'a_renouveler' ? 'bg-warning' : 'bg-error'
+                                                p.status === 'valide' ? 'bg-success' : p.status === 'expire' ? 'bg-error' : 'bg-warning'
                                             )} />
                                         ))}
                                     </div>

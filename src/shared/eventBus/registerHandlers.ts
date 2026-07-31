@@ -57,6 +57,7 @@ import { registerNonConformActionHandler } from './handlers/NonConformActionHand
 import { registerTrainingComplianceAlertHandler } from './handlers/TrainingComplianceAlertHandler';
 import { registerComplianceDeadlineHandler } from './handlers/ComplianceDeadlineHandler';
 import { AbsenceUnderstaffingHandler } from './handlers/AbsenceUnderstaffingHandler';
+import { PayrollAutoCalcHandler } from './handlers/PayrollAutoCalcHandler';
 import { SilaeExportHandler } from './handlers/SilaeExportHandler';
 import { ContractRenewalAlertHandler } from './handlers/ContractRenewalAlertHandler';
 import { MedicalVisitAlertHandler } from './handlers/MedicalVisitAlertHandler';
@@ -73,7 +74,11 @@ import { PromotionExpiryHandler } from './handlers/PromotionExpiryHandler';
 import { OnboardingProgressHandler } from './handlers/OnboardingProgressHandler';
 import { GracePeriodHandler } from './handlers/GracePeriodHandler';
 import { BankConnectionExpiredHandler } from './handlers/BankConnectionExpiredHandler';
+import { PinLockoutNotifierHandler } from './handlers/PinLockoutNotifierHandler';
 import { FleetOutboxHandler } from './handlers/FleetOutboxHandler';
+import { CashflowForecastHandler } from './handlers/CashflowForecastHandler';
+import { registerCertExpiryHandler } from './handlers/CertExpiryHandler';
+import { registerComplianceCalendarHandler } from './handlers/ComplianceCalendarHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -163,8 +168,11 @@ export function registerNexusHandlers(): void {
     registerNonConformActionHandler(),
     registerTrainingComplianceAlertHandler(),
     registerComplianceDeadlineHandler(),
+    registerCertExpiryHandler(),
+    registerComplianceCalendarHandler(),
 
     // HR G3
+    PayrollAutoCalcHandler.register(),
     AbsenceUnderstaffingHandler.register(),
     SilaeExportHandler.register(),
     ContractRenewalAlertHandler.register(),
@@ -174,6 +182,7 @@ export function registerNexusHandlers(): void {
     // Finance G4
     PeriodLockGuardHandler.register(),
     StripePaymentRetryHandler.register(),
+    CashflowForecastHandler.register(),   // BACKGROUND — Prévision de trésorerie J+1
 
     // AI G5
     OracleQueryAuditHandler.register(),
@@ -189,6 +198,9 @@ export function registerNexusHandlers(): void {
     // MCC SaaS G7
     OnboardingProgressHandler.register(),
     GracePeriodHandler.register(),
+
+    // Security G9
+    PinLockoutNotifierHandler.register(),
 
     // Connectors G8
     BankConnectionExpiredHandler.register(),

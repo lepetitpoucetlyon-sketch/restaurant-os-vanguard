@@ -1,8 +1,8 @@
 import { useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { SovereignData } from '@/shared/nexus-contract';
-import { 
-    hygieneLabelsAtom, 
+import {
+    hygieneLabelsAtom,
     hygieneLogsAtom,
     receptionLogsAtom,
     oilLogsAtom,
@@ -12,7 +12,8 @@ import {
     hygieneLabelsNodeAtom,
     hygieneLogsNodeAtom,
     receptionLogsNodeAtom,
-    maintenanceLogsNodeAtom
+    maintenanceLogsNodeAtom,
+    sensorReadingsAtom
 } from '../store/complianceAtoms';
 import { useNexusMutation } from '@shared/hooks/useNexusMutation';
 import { 
@@ -41,22 +42,7 @@ export function useHACCP() {
     const receptionForge = useNexusMutation<ReceptionLog>(receptionLogsNodeAtom, 'receptionLogs', 'HACCP');
     const maintenanceForge = useNexusMutation<MaintenanceLog>(maintenanceLogsNodeAtom, 'maintenanceLogs', 'HACCP');
 
-    /**
-     * 🛰️ SIMULACRA : Capteurs Fantômes
-     */
-    const getSimulatedSensors = useCallback((): SensorReading[] => {
-        const now = new Date();
-        const sensors: SensorReading[] = [
-        { id: 'S1', name: 'Chambre Froide Positive', type: 'temperature', value: 3.2, unit: '°C', status: 'ok', lastUpdated: new Date() },
-        { id: 'S2', name: 'Congélateur Négatif', type: 'temperature', value: -18.5, unit: '°C', status: 'ok', lastUpdated: new Date() },
-        { id: 'S3', name: 'Stock Sec', type: 'humidity', value: 45, unit: '%', status: 'ok', lastUpdated: new Date() }
-        ];
-
-        return sensors.map(s => {
-            const drift = Math.sin(now.getTime() / 10000) * 0.5;
-            return { ...s, value: parseFloat((s.value + drift).toFixed(1)) };
-        });
-    }, []);
+    const sensorReadings = useAtomValue(sensorReadingsAtom);
 
     const temperatureHistory = useMemo(() => {
         return Array.from({ length: 24 }).map((_, i) => ({
@@ -101,10 +87,9 @@ export function useHACCP() {
         isLoading,
         criticalAlerts,
         
-        // 🛰️ Densified Stubs
         getComplianceScore,
         checklists: ['Nettoyage Sol', 'Vidange Friteuse', 'Contrôle Températures'],
-        sensors: getSimulatedSensors(),
+        sensors: sensorReadings,
         temperatureHistory,
 
         // --- 🔨 Forge Actions ---

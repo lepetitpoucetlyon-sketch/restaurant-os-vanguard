@@ -133,42 +133,45 @@ export const SimulationService = {
 
         for (let iter = 0; iter < iterations; iter++) {
             const timelineId = `timeline_${Date.now()}_${iter}`;
-            
+
             // On entre dans une réalité parallèle pour cette itération
             await Nexus.activateSimulacraMode(timelineId);
 
-            const timelineMetrics = {
-                totalRevenue: 0,
-                totalFoodCost: 0,
-                totalLaborCost: 0,
-                netProfit: 0,
-                burnoutIndex: 0,
-                anomalyCount: 0
-            };
+            try {
+                const timelineMetrics = {
+                    totalRevenue: 0,
+                    totalFoodCost: 0,
+                    totalLaborCost: 0,
+                    netProfit: 0,
+                    burnoutIndex: 0,
+                    anomalyCount: 0
+                };
 
-            for (let d = 0; d < days; d++) {
-                const day = await this.simulateDay(new Date().toISOString(), mode, profileId, { 
-                    ingredients: [], // Placeholder
-                    stockItems: []   // Placeholder
+                for (let d = 0; d < days; d++) {
+                    const day = await this.simulateDay(new Date().toISOString(), mode, profileId, {
+                        ingredients: [], // Placeholder
+                        stockItems: []   // Placeholder
+                    });
+
+                    timelineMetrics.totalRevenue += day.totalRevenue;
+                    timelineMetrics.totalFoodCost += day.totalFoodCost;
+                    timelineMetrics.totalLaborCost += day.totalLaborCost;
+                    timelineMetrics.anomalyCount += day.anomalyCount;
+                    timelineMetrics.burnoutIndex = Math.max(timelineMetrics.burnoutIndex, day.burnoutIndex);
+                }
+
+                timelineMetrics.netProfit = timelineMetrics.totalRevenue - timelineMetrics.totalFoodCost - timelineMetrics.totalLaborCost;
+
+                results.push({
+                    timelineId,
+                    metrics: timelineMetrics,
+                    days
                 });
-                
-                timelineMetrics.totalRevenue += day.totalRevenue;
-                timelineMetrics.totalFoodCost += day.totalFoodCost;
-                timelineMetrics.totalLaborCost += day.totalLaborCost;
-                timelineMetrics.anomalyCount += day.anomalyCount;
-                timelineMetrics.burnoutIndex = Math.max(timelineMetrics.burnoutIndex, day.burnoutIndex);
+            } finally {
+                // Toujours sortir de la réalité parallèle, même en cas d'erreur,
+                // pour éviter que les écritures suivantes polluent le Simulacra
+                Nexus.deactivateSimulacraMode();
             }
-
-            timelineMetrics.netProfit = timelineMetrics.totalRevenue - timelineMetrics.totalFoodCost - timelineMetrics.totalLaborCost;
-
-            results.push({
-                timelineId,
-                metrics: timelineMetrics,
-                days
-            });
-
-            // On sort de la réalité parallèle pour préparer la suivante
-            Nexus.deactivateSimulacraMode();
         }
 
         return results;

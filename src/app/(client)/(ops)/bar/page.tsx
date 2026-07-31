@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { useAtomValue } from "jotai";
 import { useToast } from "@ui/Toast";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
@@ -9,17 +10,11 @@ const ProductFormModal = dynamic(
 );
 import { RecipeDetailDialog } from "@modules/ops";
 
-// Domain & Constants
-import { BarTab, Wine, Cocktail } from "@domain/types/bar";
-import {
-  WINE_REGIONS,
-  WINE_CELLAR,
-  COCKTAILS,
-} from "@domain/constants/bar-data";
+import { BarTab, Wine, Cocktail } from "@/modules/ops/types/bar";
+import { winesAtom, cocktailsAtom, wineRegionsAtom } from "@/modules/ops/bar/store/barAtoms";
 import { Recipe } from "@nexus/contracts";
 import { useKitchen } from "@/modules/ops/providers";
 
-// Components
 import { BarSidebar } from "@modules/ops";
 import { KdsTab } from "@modules/ops";
 import { WineCellarTab } from "@modules/ops";
@@ -32,14 +27,16 @@ export default function BarPage() {
     const { showToast } = useToast();
     const { orders: kitchenOrders, updateOrderStatus: nexusUpdateOrderStatus } = useKitchen();
 
-    // UI State
+    const wines = useAtomValue(winesAtom);
+    const cocktails = useAtomValue(cocktailsAtom);
+    const regions = useAtomValue(wineRegionsAtom);
+
     const [activeTab, setActiveTab] = useState<BarTab>('kds');
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryKDS, setSearchQueryKDS] = useState('');
     const [rushMode, setRushMode] = useState(false);
 
-    // Bar orders: real-time Firestore orders filtered to bar station
-    const orders = React.useMemo(() => {
+    const orders = useMemo(() => {
       return kitchenOrders
         .filter(o => o.status !== 'delivered' && o.status !== 'paid' && o.items.some(item => {
           const extra = item as unknown as { station?: string; category?: string };
@@ -71,8 +68,7 @@ export default function BarPage() {
         }))
         .filter(o => o.items.length > 0);
     }, [kitchenOrders]);
-    
-    // Selection State
+
     const [selectedWine, setSelectedWine] = useState<Wine | null>(null);
     const [filterRegion, setFilterRegion] = useState<string | null>(null);
     const [showCocktailModal, setShowCocktailModal] = useState(false);
@@ -84,29 +80,33 @@ export default function BarPage() {
         showToast(`Commande ${nextStatus === 'delivered' ? 'terminée' : nextStatus === 'preparing' ? 'lancée' : 'prête'}`, "success");
     };
 
-    const filteredWines = WINE_CELLAR.filter(w => {
+    const filteredWines = useMemo(() => wines.filter(w => {
         if (filterRegion && w.region !== filterRegion) return false;
         if (searchQuery && !w.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
         return true;
-    });
+    }), [wines, filterRegion, searchQuery]);
 
-    const totalCellarValue = WINE_CELLAR.reduce((sum, w) => sum + (w.priceInMicrounits / 1_000_000 * w.stock), 0);
-    const lowStockWines = WINE_CELLAR.filter(w => w.stock <= w.minStock).length;
+    const totalCellarValue = useMemo(() =>
+        wines.reduce((sum, w) => sum + (w.priceInMicrounits / 1_000_000 * w.stock), 0),
+        [wines]
+    );
+    const lowStockWines = useMemo(() =>
+        wines.filter(w => w.stock <= w.minStock).length,
+        [wines]
+    );
 
     return (
         <div className="flex h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary overflow-hidden pb-20 md:pb-0">
-            {/* Modular Sidebar */}
-            <BarSidebar 
-                activeTab={activeTab} 
+            <BarSidebar
+                activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 cellarValue={totalCellarValue}
-                referenceCount={WINE_CELLAR.length}
+                referenceCount={wines.length}
             />
 
-            {/* Main Content Area */}
             <div className="flex-1 overflow-auto p-8 custom-scrollbar">
                 {activeTab === 'kds' && (
-                    <KdsTab 
+                    <KdsTab
                         orders={orders}
                         rushMode={rushMode}
                         searchQueryKDS={searchQueryKDS}
@@ -119,9 +119,9 @@ export default function BarPage() {
                 )}
 
                 {activeTab === 'wines' && (
-                    <WineCellarTab 
+                    <WineCellarTab
                         wines={filteredWines}
-                        regions={WINE_REGIONS}
+                        regions={regions}
                         filterRegion={filterRegion}
                         searchQuery={searchQuery}
                         setFilterRegion={setFilterRegion}
@@ -131,12 +131,12 @@ export default function BarPage() {
                 )}
 
                 {activeTab === 'sommelier' && (
-                    <SommelierTab regions={WINE_REGIONS} />
+                    <SommelierTab regions={regions} />
                 )}
 
                 {activeTab === 'cocktails' && (
-                    <CocktailTab 
-                        cocktails={COCKTAILS}
+                    <CocktailTab
+                        cocktails={cocktails}
                         setShowCocktailModal={setShowCocktailModal}
                         setEditingCocktail={setEditingCocktail}
                     />
@@ -146,19 +146,17 @@ export default function BarPage() {
                     <StocksTab
                         lowStockWines={lowStockWines}
                         totalCellarValue={totalCellarValue}
-                        wineCount={WINE_CELLAR.length}
+                        wineCount={wines.length}
                     />
                 )}
             </div>
 
-            {/* Contextual Panels */}
-            <WineDetailPanel 
+            <WineDetailPanel
                 selectedWine={selectedWine}
-                regions={WINE_REGIONS}
+                regions={regions}
                 onClose={() => setSelectedWine(null)}
             />
 
-            {/* Modals & Dialogs */}
             {selectedRecipe && (
                 <RecipeDetailDialog
                     recipe={selectedRecipe}

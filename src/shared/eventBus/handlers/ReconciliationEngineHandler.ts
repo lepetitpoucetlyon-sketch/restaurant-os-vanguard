@@ -48,22 +48,63 @@ export function registerReconciliationEngineHandler() {
       const { tenantId, transactionId, amountInMicrounits, syncedAt } = payload;
       logger.info(`[ReconciliationEngine] Bank transaction synced: ${transactionId} for ${amountInMicrounits}µ. Running heuristics...`);
 
-      // 1. Chercher un ticket Z ou une facture correspondant au même montant non lettré
-      // (Mock Grade X : On simule qu'une fois sur deux, on trouve un match exact de montant)
-      const isMatchFound = amountInMicrounits % 2 === 0;
+      // 1. Chercher un journal entry non lettré avec montant exact
+      let matchedEntityId: string | null = null;
+      let matchedEntityType: 'ticket_z' | 'invoice' = 'ticket_z';
 
-      if (isMatchFound) {
-        const mockEntityId = `inv_${Date.now()}`;
-        logger.info(`[ReconciliationEngine] Heuristic match found for transaction ${transactionId} -> Invoice ${mockEntityId}`);
-        
+      // Pour les montants positifs (recettes), chercher dans les journalEntries
+      if (amountInMicrounits > 0) {
+        const unreconciledEntries = await Nexus.adapter.query<{
+          id?: string;
+          totalInMicrounits: number;
+          status: string;
+        }>(`tenants/${tenantId}/journalEntries`, {
+          where: [
+            { field: 'status', operator: '!=', value: 'reconciled' }
+          ]
+        });
+
+        const exactMatch = unreconciledEntries.find(
+          (entry) => entry.totalInMicrounits === amountInMicrounits
+        );
+        if (exactMatch) {
+          matchedEntityId = exactMatch.id ?? null;
+          matchedEntityType = 'ticket_z';
+        }
+      }
+
+      // Pour les montants négatifs (décaissements), chercher dans les factures fournisseurs
+      if (!matchedEntityId && amountInMicrounits < 0) {
+        const supplierInvoices = await Nexus.adapter.query<{
+          id?: string;
+          totalInMicrounits: number;
+          status: string;
+        }>(`tenants/${tenantId}/supplierInvoices`, {
+          where: [
+            { field: 'status', operator: '!=', value: 'reconciled' }
+          ]
+        });
+
+        const invoiceMatch = supplierInvoices.find(
+          (inv) => inv.totalInMicrounits === Math.abs(amountInMicrounits)
+        );
+        if (invoiceMatch) {
+          matchedEntityId = invoiceMatch.id ?? null;
+          matchedEntityType = 'invoice';
+        }
+      }
+
+      if (matchedEntityId) {
+        logger.info(`[ReconciliationEngine] Exact match found for transaction ${transactionId} -> ${matchedEntityType} ${matchedEntityId}`);
+
         // Auto-emit le rapprochement
         NexusEventBus.emitDurable('finance.reconciliation_completed', {
           v: 1,
           tenantId,
           reconciliationId: `recon_${Date.now()}`,
           bankTransactionId: transactionId,
-          matchedEntityId: mockEntityId,
-          matchedEntityType: 'invoice',
+          matchedEntityId,
+          matchedEntityType,
           reconciledBy: 'system_heuristic'
         });
       } else {

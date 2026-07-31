@@ -10,7 +10,7 @@ export type { BankTransaction } from "@/domain/schemas/finance";
 
 // ── Tab types ─────────────────────────────────────────────────────────────────
 
-export type FinanceTab = "accounting" | "billing" | "bank" | "audit";
+export type FinanceTab = "accounting" | "billing" | "bank" | "audit" | "treasury";
 
 // ── Local bank account shape (from bankAccounts/ Nexus collection) ─────────
 

@@ -14,6 +14,8 @@ export const ProductSchema = z.object({
   sku:               z.string().optional(),
   isAvailable:       z.boolean().default(true),
   stockQuantity:     z.number().optional(),
+  allergens:         z.array(z.string()).default([]),
+  recipeId:          z.string().optional(),
   updatedAt:         z.number().default(Date.now()),
 }).catchall(z.any());
 

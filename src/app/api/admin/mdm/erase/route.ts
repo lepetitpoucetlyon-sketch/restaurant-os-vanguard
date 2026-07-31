@@ -9,6 +9,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { MosyleClient } from '@/infrastructure/services/MosyleClient';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
 const REQUIRED_CONFIRMATION = 'ERASE CONFIRMED';
@@ -41,6 +43,30 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   await MosyleClient.eraseDevice(serialNumber);
 
   const uid = (caller as import('@/lib/server/adminAuthGuard').AdminCaller).uid;
+
+  // P12-I: Audit trail for device erase
+  empireAudit.log({
+    module: 'system',
+    action: 'MDM_DEVICE_ERASED',
+    userId: uid,
+    instanceId: serialNumber,
+    details: { serialNumber, erasedBy: uid, erasedAt: new Date().toISOString() },
+    severity: 'critical',
+    timestamp: new Date(),
+  });
+
+  // Notification for fleet_admin about the wipe
+  const notifId = `mdm_erase_${serialNumber}_${Date.now()}`;
+  await Nexus.adapter.set(`mcc/notifications/${notifId}`, {
+    type: 'device_erased',
+    title: 'Appareil efface (MDM)',
+    message: `L'appareil ${serialNumber} a ete efface par ${uid}. Action irreversible.`,
+    targetRole: 'fleet_admin',
+    serialNumber,
+    read: false,
+    createdAt: Date.now(),
+  });
+
   logger.info(`[MDM] erase ${serialNumber} — DONE (caller: ${uid})`);
 
   return NextResponse.json({ ok: true });

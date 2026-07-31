@@ -4,10 +4,30 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export class PeriodLockGuardHandler {
+  /**
+   * Vérifie si une période fiscale est verrouillée pour un tenant donné.
+   * Utilisable par tout service avant d'autoriser une écriture comptable.
+   * @param tenantId - ID du tenant
+   * @param date - Date ISO (YYYY-MM-DD) dont on veut vérifier le mois
+   * @returns true si la période (mois) est verrouillée (NF525)
+   */
+  static async isPeriodLocked(tenantId: string, date: string): Promise<boolean> {
+    const periodId = date.substring(0, 7); // YYYY-MM
+    try {
+      const lock = await Nexus.adapter.get<{ isLocked?: boolean }>(
+        `tenants/${tenantId}/fiscalLedger/locks/${periodId}`
+      );
+      return lock?.isLocked === true;
+    } catch {
+      // Si le document n'existe pas, la période n'est pas verrouillée
+      return false;
+    }
+  }
+
   static register() {
     return NexusEventBus.on('finance.period_locked', async (payload) => {
       const { tenantId, periodId, lockedBy, lockedAt } = payload;
-      
+
       logger.info(`[PeriodLockGuard] Période fiscale ${periodId} verrouillée par ${lockedBy}.`);
 
       // On inscrit le lock en base (Souveraineté NF525)
@@ -27,7 +47,7 @@ export class PeriodLockGuardHandler {
         severity: 'critical',
        timestamp: new Date(),
 });
-      
+
       NexusEventBus.emitDurable('notification.created', {
         v: 1,
         tenantId,

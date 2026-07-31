@@ -1,15 +1,83 @@
 "use client";
 
 import { QualityEngine } from '@modules/compliance/services/QualityEngine';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { ReceptionData } from '@domain/schemas/haccp';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { useTenant } from '@/shared/hooks';
+import type { RegisterDocStatus, RegistreEntry, InterventionLog } from '@nexus/contracts/registre.types';
 
-/**
- * 📝 useRegistre - Grade VI Atomic Mapper
- * Sovereign interface for legal registers (Internal Suture).
- */
+interface RegisterDoc {
+    id: string;
+    title: string;
+    status: RegisterDocStatus;
+    description: string;
+    lastUpdated: string;
+    nextReview: string;
+    updatedAt: string;
+}
+
+interface Prestataire {
+    id: string;
+    name: string;
+    type: string;
+    status: 'valide' | 'expire' | 'suspendu';
+    phone: string;
+    certification: string;
+    certificationExpiry: string;
+    frequency: string;
+}
+
+const DEFAULT_DOC: RegisterDoc = {
+    id: '',
+    title: '',
+    status: 'attention',
+    description: '',
+    lastUpdated: '',
+    nextReview: '',
+    updatedAt: '',
+};
+
 export function useRegistre() {
     const [isProcessing, setIsProcessing] = useState(false);
+    const { activeTenantId } = useTenant();
+    const [documents, setDocuments] = useState<Record<string, RegisterDoc>>({});
+    const [prestataires, setPrestataires] = useState<Prestataire[]>([]);
+    const [interventions, setInterventions] = useState<InterventionLog[]>([]);
+    const [registreEntries, setRegistreEntries] = useState<RegistreEntry[]>([]);
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        if (!activeTenantId) return;
+        let cancelled = false;
+
+        async function load() {
+            try {
+                const [docs, prests, ints, entries] = await Promise.all([
+                    Nexus.adapter.query<RegisterDoc>(`tenants/${activeTenantId}/documents`, {}),
+                    Nexus.adapter.query<Prestataire>(`tenants/${activeTenantId}/prestataires`, {}),
+                    Nexus.adapter.query<InterventionLog>(`tenants/${activeTenantId}/interventions`, {}),
+                    Nexus.adapter.query<RegistreEntry>(`tenants/${activeTenantId}/registreEntries`, {}),
+                ]);
+                if (cancelled) return;
+
+                const docMap: Record<string, RegisterDoc> = {};
+                for (const doc of docs) {
+                    docMap[doc.id] = doc;
+                }
+                setDocuments(docMap);
+                setPrestataires(prests);
+                setInterventions(ints);
+                setRegistreEntries(entries);
+            } catch (err) {
+                console.error('[useRegistre] Failed to load data', err);
+            } finally {
+                if (!cancelled) setLoaded(true);
+            }
+        }
+        load();
+        return () => { cancelled = true; };
+    }, [activeTenantId]);
 
     const validateHACCP = useCallback(async (data: ReceptionData, tenantId: string) => {
         setIsProcessing(true);
@@ -20,77 +88,33 @@ export function useRegistre() {
         }
     }, []);
 
-    // 🛡️ UI COMPATIBILITY LAYER (Grade VI)
-    // In a real scenario, these would be fetched from atoms. 
-    // For now, we provide the structure needed by RegistrePage.
-    const mockDoc = (title: string, status: import('@nexus/contracts/registre.types').RegisterDocStatus = 'certified') => ({
-        id: title.toLowerCase().replace(/ /g, '_'),
-        title,
-        status,
-        description: `Registre de conformité pour ${title}.`,
-        lastUpdated: new Date().toLocaleDateString('fr-FR'),
-        nextReview: '15/06/2026',
-        updatedAt: new Date().toISOString()
-    });
+    const getDoc = (key: string, fallbackTitle: string): RegisterDoc =>
+        documents[key] || { ...DEFAULT_DOC, id: key, title: fallbackTitle, status: 'attention' as RegisterDocStatus, description: `Registre de conformité pour ${fallbackTitle}.` };
+
+    const getOverallStatus = () => {
+        const allDocs = Object.values(documents);
+        return {
+            conforme: allDocs.filter(d => d.status === 'certified').length,
+            attention: allDocs.filter(d => d.status === 'attention').length,
+            non_conforme: allDocs.filter(d => d.status === 'expired').length,
+        };
+    };
 
     return {
-        // Actions
         validateHACCP,
         isProcessing,
+        loaded,
 
-        // Data (Bridges to keep UI alive)
-        duerp: mockDoc('Document Unique'),
-        cerfa: mockDoc('Cerfa 13984', 'attention'),
-        pmrDoc: mockDoc('Accessibilité PMR'),
-        incendieDoc: mockDoc('Sécurité Incendie'),
-        hottesDoc: mockDoc('Nettoyage Hottes'),
-        certHalal: mockDoc('Certification Halal'),
-        agrementBoucher: mockDoc('Agrément Boucher'),
-        prestataires: [
-            { 
-                id: '1', 
-                name: 'SafeClean', 
-                type: 'nettoyage', 
-                status: 'valide' as const, 
-                phone: '01 23 45 67 89',
-                certification: 'HACCP Silver',
-                certificationExpiry: '2026-12-31',
-                frequency: 'Mensuel'
-            },
-            { 
-                id: '2', 
-                name: 'FireGuard', 
-                type: 'securite', 
-                status: 'valide' as const,
-                phone: '01 98 76 54 32',
-                certification: 'NF S 61-919',
-                certificationExpiry: '2027-05-15',
-                frequency: 'Annuel'
-            }
-        ],
-        getOverallStatus: () => ({ conforme: 5, attention: 1, non_conforme: 0 }),
-        registreEntries: [] as import('@nexus/contracts/registre.types').RegistreEntry[],
-        interventions: [
-            {
-                id: 'INT-001',
-                prestataire: 'SafeClean',
-                type: 'Nettoyage Hottes',
-                description: 'Dégraissage annuel complet du système d\'extraction.',
-                date: '15/04/2026',
-                status: 'realise' as const,
-                documentUrl: '#',
-                updatedAt: new Date().toISOString()
-            },
-            {
-                id: 'INT-002',
-                prestataire: 'FireGuard',
-                type: 'Contrôle Extincteurs',
-                description: 'Vérification périodique des 5 extincteurs CO2.',
-                date: '10/04/2026',
-                status: 'realise' as const,
-                documentUrl: '#',
-                updatedAt: new Date().toISOString()
-            }
-        ] as import('@nexus/contracts/registre.types').InterventionLog[],
+        duerp: getDoc('duerp', 'Document Unique'),
+        cerfa: getDoc('cerfa', 'Cerfa 13984'),
+        pmrDoc: getDoc('pmr', 'Accessibilité PMR'),
+        incendieDoc: getDoc('incendie', 'Sécurité Incendie'),
+        hottesDoc: getDoc('hottes', 'Nettoyage Hottes'),
+        certHalal: getDoc('halal', 'Certification Halal'),
+        agrementBoucher: getDoc('boucher', 'Agrément Boucher'),
+        prestataires,
+        getOverallStatus,
+        registreEntries,
+        interventions,
     };
 }

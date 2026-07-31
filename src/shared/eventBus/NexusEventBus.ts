@@ -475,6 +475,24 @@ export interface NexusEvents {
     productIds: string[];
     reason: string;
   };
+  'cert.expired': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    certId: string;
+    certType: string;
+    entityName: string;
+    expiredAt: string;
+  };
+  'compliance.calendar': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    eventType: 'audit' | 'renewal' | 'inspection' | 'training';
+    title: string;
+    dueDate: string;
+    daysUntilDue: number;
+  };
   'dlc.expired': {
     v: 1;
     isSimulation?: boolean;

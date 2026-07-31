@@ -11,6 +11,7 @@ import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBu
 import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
 import { NexusEventBus, type NexusEvents, type NexusEventName } from '@/shared/eventBus/NexusEventBus';
 import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
+import { empireAudit } from '@/infrastructure/services/audit';
 import { readZcpoState, degradeImportanceMap } from '@/lib/icm/zcpoBridge';
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
@@ -176,6 +177,14 @@ export const NexusSyncService = {
           await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);
           await db.busOutbox.update(entry.id, { status: 'done' });
         }
+
+        empireAudit.log({
+          module: 'fiscal',
+          action: 'OFFLINE_SYNC_VERIFIED',
+          details: { replayedCount: pending.length, tenantId: Nexus.tenantOverride ?? 'unknown' },
+          severity: 'high',
+          timestamp: new Date(),
+        });
       }
     } catch (err) {
       logger.error('[NexusSyncService] Failed to replay pending events from Outbox', err);

@@ -7,6 +7,7 @@
 export * from './ComplianceView';
 export * from './MenuEngineeringMatrix';
 export * from './MindMap';
+export * from './OracleChatDrawer';
 export * from './OraclePredictor';
 export * from './ProfitabilityView';
 export * from './ReputationView';

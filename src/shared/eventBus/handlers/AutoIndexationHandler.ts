@@ -10,16 +10,43 @@ export class AutoIndexationHandler {
       if (payload.isSimulation) return;
 
       const { tenantId, documentId, fileName, uploadedBy } = payload;
-      
+
       logger.info(`[AutoIndexation] Début de l'indexation LightRAG pour le document ${fileName}`);
 
       try {
         const ragUrl = process.env.LIGHTRAG_URL || 'http://localhost:9621';
         const client = new LightRAGClient({ baseUrl: ragUrl, workspace: tenantId });
-        
-        // On simule l'envoi du document pour indexation, car on n'a que le documentId
-        // Dans la réalité le RAG ira le lire dans GCS/S3, ou bien on lui passe un Blob.
-        const response = await client.insert(`Metadata: ${fileName}`, documentId);
+
+        // Récupérer le contenu réel du document depuis la base
+        let indexationText = `Document: ${fileName}`;
+        try {
+          const doc = await Nexus.adapter.get<{
+            content?: string;
+            textContent?: string;
+            docType?: string;
+            tags?: string[];
+            description?: string;
+          }>(`tenants/${tenantId}/ai/documents/${documentId}`);
+
+          const docContent = doc?.content || doc?.textContent || '';
+          const docType = doc?.docType || 'unknown';
+          const tags = doc?.tags?.join(', ') || '';
+          const description = doc?.description || '';
+
+          const parts = [`Document: ${fileName}`, `Type: ${docType}`];
+          if (description) parts.push(`Description: ${description}`);
+          if (tags) parts.push(`Tags: ${tags}`);
+          if (docContent) {
+            parts.push(`Content: ${docContent}`);
+          } else {
+            logger.info(`[AutoIndexation] Pas de contenu textuel pour ${documentId}, indexation sur métadonnées uniquement.`);
+          }
+          indexationText = parts.join('\n');
+        } catch (fetchErr) {
+          logger.warn(`[AutoIndexation] Impossible de lire le contenu de ${documentId}, fallback métadonnées`, String(fetchErr));
+        }
+
+        const response = await client.insert(indexationText, documentId);
 
         if (response.status === 'error') {
             throw new Error(`LightRAG API responded with error: ${response.message}`);

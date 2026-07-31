@@ -11,7 +11,7 @@ export class MedicalVisitAlertHandler {
       logger.info(`[MedicalVisitAlertHandler] Visite médicale expirée pour ${userId} (Retard: ${daysOverdue} jours)`);
 
       try {
-        const docRef = await Nexus.adapter.query<{ id: string; status: string; employeeName: string }>(`hr/employees`, {
+        const docRef = await Nexus.adapter.query<{ id: string; status: string; employeeName: string }>(`tenants/${tenantId}/hr/employees`, {
             where: [{ field: 'id', operator: '==', value: userId }]
         });
         

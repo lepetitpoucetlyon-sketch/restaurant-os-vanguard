@@ -11,7 +11,7 @@ export class ContractRenewalAlertHandler {
       logger.info(`[ContractRenewalAlertHandler] Contrat ${contractId} expire dans ${daysRemaining} jours.`);
 
       try {
-        const contractRef = await Nexus.adapter.query<{ id: string; type: string; status: string }>(`hr/contracts`, {
+        const contractRef = await Nexus.adapter.query<{ id: string; type: string; status: string }>(`tenants/${tenantId}/hr/contracts`, {
             where: [{ field: 'id', operator: '==', value: contractId }]
         });
         
