@@ -161,6 +161,16 @@ export const NexusSyncService = {
       const pending = await db.busOutbox.where('status').equals('pending').toArray();
       if (pending.length > 0) {
         logger.info(`[NexusSyncService] Replaying ${pending.length} pending events from Outbox...`);
+        
+        // P01-J: Re-scellement NF525 côté serveur avant d'émettre les événements
+        // pour s'assurer que les tickets provisoires (OFFLINE) sont bien scellés (SyncManager.processQueue()).
+        try {
+          const { SyncManager } = await import('@/infrastructure/services/offline/sync-manager');
+          await SyncManager.processQueue();
+        } catch (e) {
+          logger.error('[NexusSyncService] Échec du re-scellement NF525 lors du replay', e);
+        }
+
         for (const entry of pending) {
           const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload);
           await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);

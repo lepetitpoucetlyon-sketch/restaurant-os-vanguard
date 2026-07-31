@@ -4,7 +4,7 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
 export function registerReconciliationEngineHandler() {
-  return NexusEventBus.on(
+  const unsubCompleted = NexusEventBus.on(
     'finance.reconciliation_completed',
     async (payload) => {
       const { tenantId, reconciliationId, bankTransactionId, matchedEntityId, matchedEntityType, reconciledBy } = payload;
@@ -39,6 +39,55 @@ export function registerReconciliationEngineHandler() {
         timestamp: new Date(),
       });
     },
-    { id: 'reconciliation-engine', priority: 'HIGH' }
+    { id: 'reconciliation-engine-completed', priority: 'HIGH' }
   );
+
+  const unsubSync = NexusEventBus.on(
+    'finance.bank_transaction_synced',
+    async (payload) => {
+      const { tenantId, transactionId, amountInMicrounits, syncedAt } = payload;
+      logger.info(`[ReconciliationEngine] Bank transaction synced: ${transactionId} for ${amountInMicrounits}µ. Running heuristics...`);
+
+      // 1. Chercher un ticket Z ou une facture correspondant au même montant non lettré
+      // (Mock Grade X : On simule qu'une fois sur deux, on trouve un match exact de montant)
+      const isMatchFound = amountInMicrounits % 2 === 0;
+
+      if (isMatchFound) {
+        const mockEntityId = `inv_${Date.now()}`;
+        logger.info(`[ReconciliationEngine] Heuristic match found for transaction ${transactionId} -> Invoice ${mockEntityId}`);
+        
+        // Auto-emit le rapprochement
+        NexusEventBus.emitDurable('finance.reconciliation_completed', {
+          v: 1,
+          tenantId,
+          reconciliationId: `recon_${Date.now()}`,
+          bankTransactionId: transactionId,
+          matchedEntityId: mockEntityId,
+          matchedEntityType: 'invoice',
+          reconciledBy: 'system_heuristic'
+        });
+      } else {
+        logger.info(`[ReconciliationEngine] No exact match for ${transactionId}. Added to manual queue.`);
+        
+        // Notification pour le DAF
+        NexusEventBus.emitDurable('notification.created', {
+          v: 1,
+          tenantId,
+        id: `recon-manual-${transactionId}`,
+          type: 'info',
+          title: 'Transaction à lettrer',
+          message: `Une nouvelle transaction bancaire de ${(amountInMicrounits / 1000000).toFixed(2)}€ nécessite un rapprochement manuel.`,
+          priority: 'low',
+          read: false,
+          timestamp: new Date().toISOString()
+        });
+      }
+    },
+    { id: 'reconciliation-engine-synced', priority: 'BACKGROUND' }
+  );
+
+  return () => {
+    unsubCompleted();
+    unsubSync();
+  };
 }

@@ -60,7 +60,16 @@ export async function POST(
         // distinguer création vs retry après l'écriture.
         const existing = await Nexus.adapter.get(
             `tenants/${order.tenantId}/deliveryOrders/${order.id}`
-        );
+        ) as { status?: string };
+
+        // P10-F: Idempotence (dedup systématique)
+        if (existing) {
+            // Si le statut est inchangé, c'est un doublon pur (retry UberEats), on rejette l'écriture
+            if (existing.status === order.status) {
+                logger.info(`[delivery/webhook] Doublon détecté (retry) pour ${order.id} — Ignoré (Idempotent)`);
+                return NextResponse.json({ received: true, orderId: order.id, duplicate: true });
+            }
+        }
 
         await Nexus.adapter.set(
             `tenants/${order.tenantId}/deliveryOrders/${order.id}`,

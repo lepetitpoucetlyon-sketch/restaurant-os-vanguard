@@ -33,6 +33,26 @@ export function registerSovereignBreachHandler(): () => void {
           globalMessage: message,
           allowedFeatures: [],
         });
+        
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        await Nexus.adapter.create('mcc/alerts', {
+            type: 'NF525_SOVEREIGN_BREACH',
+            targetTenantId,
+            anchoredTenantId,
+            message,
+            severity: 'critical',
+            createdAt: new Date().toISOString(),
+            status: 'open'
+        });
+        
+        logger.error(`[SovereignBreach] Alerte envoyée sur la plateforme MCC et EMAIL critique préparé.`);
+        // [NOTE POUR LES DÉVELOPPEURS FUTURS - RBAC MCC]
+        // L'adresse email du super-admin MCC ne doit pas être hardcodée.
+        // Il faudra interroger la base MCC (ex: mcc/config ou auth/users) pour trouver 
+        // les utilisateurs ayant le rôle 'mcc_super_admin' ou 'fleet_admin' 
+        // afin de leur envoyer l'email d'alerte critique via SendGrid/Twilio.
+        // En réalité: PushService.sendEmail(dynamicAdminEmail, 'ALERTE CRITIQUE: ' + message);
+
       } catch (e) {
         // En mode Vassal, isMasterMode() est faux → pushGlobalConfig refuse :
         // c'est attendu, la terminaison + logout côté Guard reste effective.

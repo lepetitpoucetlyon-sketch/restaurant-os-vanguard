@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { AggregatorMappingService } from '@/modules/commerce/delivery/services/AggregatorMappingService';
 
 export function registerAggregatorStockSyncHandler() {
   return NexusEventBus.on(
@@ -11,14 +12,25 @@ export function registerAggregatorStockSyncHandler() {
       logger.info(`[AggregatorStockSync] Produit "${itemName}" (${itemId}) en rupture de stock.`);
       logger.info(`[AggregatorStockSync] Transmission du statut "Indisponible" (86) aux agrégateurs...`);
 
-      // En réalité:
-      // 1. Lire le mapping pour trouver l'ID externe correspondant à `itemId` sur Uber/Deliveroo
-      // 2. Faire un appel API POST vers UberEats (suspend item) et Deliveroo (out of stock)
+      // 1. Lire les intégrations actives et leurs mappings
+      const activeIntegrations = await AggregatorMappingService.getActiveAdapters(tenantId);
+      let syncCount = 0;
+
+      // 2. Transmettre le statut 86 à chaque plateforme
+      for (const { adapter, mappings } of activeIntegrations) {
+          const externalId = AggregatorMappingService.resolveExternalId(itemId, mappings);
+          if (externalId) {
+              const success = await adapter.suspendItem(tenantId, externalId);
+              if (success) syncCount++;
+          } else {
+              logger.warn(`[AggregatorStockSync] Impossible de trouver le mapping de "${itemName}" (${itemId}) pour la plateforme ${adapter.platformId}`);
+          }
+      }
       
       empireAudit.log({
         module: 'ops',
         action: 'AGGREGATOR_STOCK_ZERO_SYNCED',
-        details: { itemId, itemName },
+        details: { itemId, itemName, syncCount },
         severity: 'high', // Impact CA immédiat
         timestamp: new Date(),
       });

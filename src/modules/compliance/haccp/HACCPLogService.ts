@@ -70,6 +70,14 @@ export const HACCPLogService = {
         recordedAt: new Date(reading.timestamp).toISOString(),
       },
     );
+
+    await NexusEventBus.emitDurable('haccp.check.saved', {
+      v: 1,
+      tenantId: reading.tenantId,
+      checkId: `${reading.sensorId}_${reading.timestamp}`,
+      operatorId: reading.source || 'system',
+      timestamp: reading.timestamp,
+    });
   },
 
   /**
@@ -121,6 +129,14 @@ export const HACCPLogService = {
     });
 
     logger.warn(`[HACCP] Non-conformité (${input.severity}) enregistrée : ${input.description}`);
+
+    await NexusEventBus.emitDurable('haccp.nonconform', {
+      v: 1,
+      tenantId: input.tenantId,
+      checkId: logId,
+      correctionDeadline: Date.now() + 24 * 60 * 60 * 1000, // +24h par défaut
+    });
+
     return ncId;
   },
 

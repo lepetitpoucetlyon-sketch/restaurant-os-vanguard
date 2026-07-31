@@ -16,8 +16,7 @@ import { toast } from "sonner";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
 import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 
-// Components
-import { KDSHeader, ServiceStation } from "./KDSHeader";
+import { KDSHeader } from "./KDSHeader";
 import { KDSTicket, hasAllergens } from "./KDSTicket";
 import { KDSEmptyState } from "./KDSEmptyState";
 
@@ -25,18 +24,6 @@ import { KDSEmptyState } from "./KDSEmptyState";
 import { ModificationAlertsPanel } from "../../kitchen/components/ModificationAlerts";
 import { RecipeDetailDialog } from "../../kitchen/components/RecipeDetailDialog";
 import { PlateAuditWizard } from "../../kitchen/components/PlateAuditWizard";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const LS_KEY_BASE = 'kds-station-filter';
-
-function readSavedServiceStation(): ServiceStation {
-    try {
-        const saved = localStorage.getItem(tenantScopedKey(LS_KEY_BASE));
-        if (saved === 'cuisine' || saved === 'bar') return saved;
-    } catch { /* ignore */ }
-    return 'all';
-}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -56,6 +43,7 @@ export function KDSDashboard() {
         getPendingModifications: _getPendingModifications,
         isLoading,
         activeStation,
+        lockedStation,
         setActiveStation,
         rushMode,
         setRushMode,
@@ -80,9 +68,6 @@ export function KDSDashboard() {
     // Settings
     const columnsFromSettings = usePageSetting('kds', 'columns', 3);
     const [gridColumns, setGridColumns] = useState(columnsFromSettings);
-
-    // kds-5: service station filter (Tout / Cuisine / Bar)
-    const [serviceStation, setServiceStation] = useState<ServiceStation>(readSavedServiceStation);
 
     // kds-6: recall mode
     const [isRecallMode, setIsRecallMode] = useState(false);
@@ -146,45 +131,14 @@ export function KDSDashboard() {
         });
     }, [isRecallMode, tenantId]);
 
-    // kds-5: filter by service station
-    const serviceFilteredOrders = useMemo(() => {
-        if (serviceStation === 'all') return filteredOrders;
-
-        if (serviceStation === 'bar') {
-            return filteredOrders.filter(o =>
-                o.items.some(item => {
-                    const extra = item as unknown as { station?: string; category?: string };
-                    return extra.station === 'bar' || extra.category === 'boissons';
-                })
-            ).map(o => ({
-                ...o,
-                items: o.items.filter(item => {
-                    const extra = item as unknown as { station?: string; category?: string };
-                    return extra.station === 'bar' || extra.category === 'boissons';
-                }),
-            }));
-        }
-
-        // cuisine: exclude bar items
-        return filteredOrders
-            .map(o => ({
-                ...o,
-                items: o.items.filter(item => {
-                    const extra = item as unknown as { station?: string; category?: string };
-                    return extra.station !== 'bar' && extra.category !== 'boissons';
-                }),
-            }))
-            .filter(o => o.items.length > 0);
-    }, [filteredOrders, serviceStation]);
-
     // kds-3: sort allergic tickets first
     const displayOrders = useMemo(() =>
-        [...serviceFilteredOrders].sort((a, b) => {
+        [...filteredOrders].sort((a, b) => {
             const aAllergic = hasAllergens(a.items).length > 0 ? 0 : 1;
             const bAllergic = hasAllergens(b.items).length > 0 ? 0 : 1;
             return aAllergic - bAllergic;
         }),
-    [serviceFilteredOrders]);
+    [filteredOrders]);
 
     // kds-6: renvoyer (resend) a recalled ticket
     const handleRenvoyer = async (ticket: Order) => {
@@ -217,6 +171,7 @@ export function KDSDashboard() {
 
             <KDSHeader
                 activeStation={activeStation}
+                lockedStation={lockedStation}
                 setActiveStation={setActiveStation}
                 ordersCount={orders.length}
                 preparingOrdersCount={preparingOrdersCount}
@@ -229,8 +184,6 @@ export function KDSDashboard() {
                 setRushMode={setRushMode}
                 pendingModificationsCount={pendingModificationsCount}
                 setShowModificationAlerts={setShowModificationAlerts}
-                serviceStation={serviceStation}
-                setServiceStation={setServiceStation}
                 isRecallMode={isRecallMode}
                 setIsRecallMode={setIsRecallMode}
             />
@@ -372,6 +325,7 @@ export function KDSDashboard() {
                                 <KDSTicket
                                     key={ticket.id}
                                     ticket={ticket}
+                                    fullOrder={orders.find((o: any) => o.id === ticket.id) || ticket}
                                     tenantId={tenantId ?? ''}
                                     gridColumns={gridColumns}
                                     rushMode={rushMode}

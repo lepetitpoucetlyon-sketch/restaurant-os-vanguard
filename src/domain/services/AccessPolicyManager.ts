@@ -9,7 +9,7 @@ export const CORE_CATEGORIES = ['dashboard', 'account-settings', 'settings'] as 
 
 export const ALL_CATEGORIES = [
     'dashboard', 'account-settings', 'settings', 'operations', 
-    'hr', 'marketing', 'finance', 'inventory', 'quality'
+    'hr', 'marketing', 'finance', 'inventory', 'quality', 'delivery'
 ] as const;
 
 export type CategoryKey = string; // Generic string for dynamic injection
@@ -128,7 +128,8 @@ export const CATEGORY_LABELS: Record<string, string> = {
     marketing: "Intelligence Client",
     finance: "Flux Bancaires",
     inventory: "Stocks & Recettes",
-    quality: "HACCP & Qualité"
+    quality: "HACCP & Qualité",
+    delivery: "Agrégateurs & Livraison"
 };
 
 export const CATEGORY_FEATURES: Record<string, { id: string; label: string; description?: string }[]> = {
@@ -192,5 +193,10 @@ export const CATEGORY_FEATURES: Record<string, { id: string; label: string; desc
     ],
     "account-settings": [
         { id: 'account-settings.reset_passwords', label: 'Réinitialiser les codes PIN', description: 'Autorise la réinitialisation des mots de passe des employés.' }
+    ],
+    delivery: [
+        { id: 'delivery.manage_platforms', label: 'Gérer les Plateformes', description: 'Autorise l\'activation et désactivation d\'UberEats/Deliveroo.' },
+        { id: 'delivery.push_menu', label: 'Forcer synchro Menu', description: 'Autorise le renvoi manuel de la carte complète aux agrégateurs.' },
+        { id: 'delivery.toggle_rush_mode', label: 'Mode Rush (Pause Plateformes)', description: 'Autorise la suspension des commandes externes en cas de forte affluence.' }
     ]
 };

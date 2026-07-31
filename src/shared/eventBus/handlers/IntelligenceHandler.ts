@@ -132,6 +132,14 @@ async function analyzeRevenueSignal(tenantId: string, totalInMicrounits: number)
       logger.warn(
         `[Intelligence] Alerte revenue — ticket ${ticketEur}€ ${direction} (moyenne 7j: ${meanEur}€, z=${zScore.toFixed(2)})`
       );
+      NexusEventBus.emitDurable('anomaly.detected', {
+        v: 1,
+        tenantId,
+        type: 'revenue_zscore',
+        message: `Ticket ${ticketEur}€ ${direction}`,
+        zScore,
+        metadata: { meanEur, ticketEur }
+      }).catch(() => {});
     } else {
       logger.info(
         `[Intelligence] Revenue signal — ticket ${ticketEur}€ (moyenne 7j: ${meanEur}€, z=${zScore.toFixed(2)})`

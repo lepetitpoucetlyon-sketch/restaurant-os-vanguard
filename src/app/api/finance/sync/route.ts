@@ -36,10 +36,25 @@ export async function POST(req: NextRequest) {
 
     // On traite chaque ticket hors-ligne un par un pour garantir l'atomicité de la chaîne
     for (const entry of journalEntries as JournalEntry[]) {
-      // Le brouillon hors-ligne portait un numéro provisoire ("OFFLINE-…") : on
-      // attribue ici le VRAI numéro séquentiel NF525 côté serveur, de façon
-      // transactionnelle (le compteur est incrémenté atomiquement).
       const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
+
+      // 🛡️ DURCISSEMENT ANTI-FRAUDE : Recalcul serveur obligatoire
+      const declaredTotal = entry.totalInMicrounits ?? (entry.amountInCents ?? 0) * 10_000;
+      
+      let computedCredits = 0;
+      let computedDebits = 0;
+      if (Array.isArray(entry.lines)) {
+         for (const line of entry.lines) {
+             if (line.side === 'credit') computedCredits += (line.creditInMicrounits ?? line.amountInCents * 10_000);
+             if (line.side === 'debit') computedDebits += (line.debitInMicrounits ?? line.amountInCents * 10_000);
+         }
+      }
+
+      if (computedCredits !== declaredTotal || computedDebits !== declaredTotal) {
+         logger.error(`[Sync API] TENTATIVE DE FRAUDE NF525 DÉTECTÉE (Tenant: ${tenantId}). Totaux incohérents. Déclaré: ${declaredTotal}, Crédits: ${computedCredits}, Débits: ${computedDebits}`);
+         // Rejeter le ticket et déclencher potentiellement un Sovereign Lockout
+         return NextResponse.json({ error: 'NF525 Integrity Breach: Amounts mismatch' }, { status: 403 });
+      }
 
       const sealedEntry = {
         ...entry,

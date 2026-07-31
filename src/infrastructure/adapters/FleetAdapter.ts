@@ -69,10 +69,48 @@ export class NexusFleetEngine {
     }> {
         logger.info(`[NexusFleetEngine] Running cross-ledger verification for ${tenantIds.length} tenants...`);
 
-        // TODO: implémenter la vérification réelle via FiscalEngine.verifyChain() par tenant
-        throw new Error(
-            `[NexusFleetEngine] verifyFleetCompliance non implémenté — ${tenantIds.length} tenants en attente`,
-        );
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const { FiscalEngine } = await import('@/infrastructure/adapters/FiscalAdapter');
+
+
+        const results = [];
+        let allVerified = true;
+
+        for (const tenantId of tenantIds) {
+            try {
+                // Fetch the seals for the tenant
+                const seals = await Nexus.adapter.query(
+                    `tenants/${tenantId}/fiscalSeals`,
+                    { orderBy: { field: 'timestamp', direction: 'asc' } }
+                ) as any[];
+
+                if (seals.length === 0) {
+                    results.push({ tenantId, chainValid: true, lastSealAt: null });
+                    continue;
+                }
+
+                const isValid = await FiscalEngine.verifyChain(seals);
+                if (!isValid) {
+                    allVerified = false;
+                }
+
+                results.push({
+                    tenantId,
+                    chainValid: isValid,
+                    lastSealAt: seals[seals.length - 1].timestamp
+                });
+
+            } catch (error) {
+                logger.error(`[NexusFleetEngine] Erreur de vérification pour tenant ${tenantId}`, error);
+                allVerified = false;
+                results.push({ tenantId, chainValid: false, lastSealAt: null });
+            }
+        }
+
+        return {
+            verified: allVerified,
+            results
+        };
     }
 }
 

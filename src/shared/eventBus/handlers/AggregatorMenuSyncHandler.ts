@@ -1,6 +1,8 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import { AggregatorMappingService } from '@/modules/commerce/delivery/services/AggregatorMappingService';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export function registerAggregatorMenuSyncHandler() {
   return NexusEventBus.on(
@@ -10,15 +12,26 @@ export function registerAggregatorMenuSyncHandler() {
       
       logger.info(`[AggregatorMenuSync] Export du catalogue menu vers l'intégration ${integrationId} (demandé par ${requestedBy}).`);
 
-      // En réalité:
-      // 1. Lire tout le catalogue de produits (src/domain/schemas/recipe.ts / products)
-      // 2. Formater le JSON de sortie (Format UberEats vs Deliveroo)
-      // 3. POST sur l'API partenaire
+      // 1. Lire les intégrations actives pour filtrer sur l'integrationId cible
+      const activeIntegrations = await AggregatorMappingService.getActiveAdapters(tenantId);
+      const targetIntegration = activeIntegrations.find(i => i.adapter.platformId === integrationId);
+
+      if (!targetIntegration) {
+          logger.warn(`[AggregatorMenuSync] Intégration ${integrationId} non trouvée ou inactive pour le tenant ${tenantId}.`);
+          return;
+      }
+
+      // 2. Fetch du catalogue (mock)
+      const recipes = await Nexus.adapter.query(`tenants/${tenantId}/recipes`);
+      const payloadData = { recipes, mappings: targetIntegration.mappings };
+
+      // 3. Pousser le catalogue vers l'API de l'agrégateur
+      const success = await targetIntegration.adapter.pushMenu(tenantId, payloadData);
 
       empireAudit.log({
         module: 'ops',
         action: 'MENU_SYNC_PUSHED',
-        details: { integrationId, requestedBy },
+        details: { integrationId, requestedBy, success },
         severity: 'low',
         timestamp: new Date(),
       });

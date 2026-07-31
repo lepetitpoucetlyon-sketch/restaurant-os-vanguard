@@ -44,7 +44,7 @@ export class SyncManager {
             // ⚠️ 'NF525_PAYMENT' ne contient pas « FISCAL » : l'ancien calcul
             // (op.type.includes('FISCAL')) classait les paiements en priorité 0.
             priority: op.priority ?? (
-                op.type === 'NF525_PAYMENT' || op.type === 'FISCAL_SEAL' || op.type === 'JOURNAL_ENTRY' ? 1 : 0
+                op.type === 'NF525_PAYMENT' || op.type === 'NF525_JET' || op.type === 'FISCAL_SEAL' || op.type === 'JOURNAL_ENTRY' ? 1 : 0
             )
         };
 
@@ -168,6 +168,22 @@ export class SyncManager {
                 if (!response.ok) {
                     throw new Error(`Sync API failed: ${response.status} ${response.statusText}`);
                 }
+            }
+        } else if (op.type === 'NF525_JET') {
+            const payload = op.payload as import('@/shared/nexus-contract').SovereignData;
+            const tenantId = op.collection.split('/')[1] || 'default';
+            
+            const response = await fetch('/api/finance/jet/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tenantId,
+                    entries: [payload],
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`JET Sync API failed: ${response.status} ${response.statusText}`);
             }
         } else if (op.type === 'MUTATION') {
             await executeMutationOp(op);

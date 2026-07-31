@@ -38,7 +38,7 @@ export interface DeadLetterEntry {
  */
 export interface SyncOperation {
     id?: number;
-    type: 'NF525_PAYMENT' | 'STOCK_UPDATE' | 'JOURNAL_ENTRY' | 'FISCAL_SEAL' | 'GENERIC_UPDATE' | 'MUTATION';
+    type: 'NF525_PAYMENT' | 'STOCK_UPDATE' | 'JOURNAL_ENTRY' | 'FISCAL_SEAL' | 'GENERIC_UPDATE' | 'MUTATION' | 'NF525_JET';
     action: 'SET' | 'UPDATE' | 'DELETE' | 'COMMIT_BATCH' | 'CREATE';
     collection: string;
     targetId: string;

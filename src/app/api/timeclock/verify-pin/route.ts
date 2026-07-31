@@ -89,7 +89,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!match) {
     const nextAttempts = (rate.attempts ?? 0) + 1;
     const update: RateEntry = { attempts: nextAttempts };
-    if (nextAttempts >= MAX_ATTEMPTS) update.lockedUntil = Date.now() + LOCKOUT_MS;
+    if (nextAttempts >= MAX_ATTEMPTS) {
+      update.lockedUntil = Date.now() + LOCKOUT_MS;
+      
+      const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+      await NexusEventBus.emitDurable('security.pin_locked', {
+        v: 1,
+        tenantId,
+        terminalId,
+        lockedUntil: update.lockedUntil,
+      });
+    }
+    
     await Nexus.adapter.set(ratePath, update);
     logger.warn(
       `[timeclock/verify-pin] PIN incorrect (${nextAttempts}/${MAX_ATTEMPTS}) tenant=${tenantId} terminal=${terminalId}`,

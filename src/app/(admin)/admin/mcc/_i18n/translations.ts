@@ -16,6 +16,7 @@ export const mccTranslations = {
       patchcenter: 'Correctifs',
       plugins: 'Plugins',
       eventbus: 'Event Bus',
+      lifecycle: 'Cycle de vie',
     },
     fleet: {
       totalInstances: 'Total Instances',
@@ -146,6 +147,7 @@ export const mccTranslations = {
       patchcenter: 'Patches',
       plugins: 'Plugins',
       eventbus: 'Event Bus',
+      lifecycle: 'Lifecycle',
     },
     fleet: {
       totalInstances: 'Total Instances',

@@ -81,7 +81,10 @@ export const FinancialNexusBridge = {
     const resolvedItems = cartItems.map(item => {
       const lineMode = (item as { consumptionMode?: ConsumptionMode }).consumptionMode ?? consumptionMode;
       const category = inferCategory(item.categoryId ?? '', item.name);
-      const taxRate = resolveVatRate({ category, consumptionMode: lineMode });
+      
+      // P01-L: En mode formation / exo TVA, le taux doit être forcé à 0%
+      const taxRate = isTrainingMode ? ('0.00' as any) : resolveVatRate({ category, consumptionMode: lineMode });
+      
       const analyticalAxis = (category === 'beverage_soft' || category === 'alcohol') ? 'Beverage' : 'Food';
       return { ...item, taxRate, analyticalAxis };
     });

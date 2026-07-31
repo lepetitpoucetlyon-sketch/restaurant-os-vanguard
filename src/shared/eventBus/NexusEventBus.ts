@@ -5,8 +5,107 @@ import { db } from '@/infrastructure/services/offline/offline-store';
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
 export interface NexusEvents {
+  "integration.reservation_received": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    integrationId: string;
+    platform: string;
+    rawPayload: any;
+  };
+
+  "tenant.onboarding_step_completed": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    stepId: string;
+  };
+  "tenant.subscription_expired": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    expiredAt: string;
+  };
+  "fleet.device_provisioned": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    deviceId: string;
+  };
+  "fleet.device_wipe_requested": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    deviceId: string;
+  };
+  "fleet.weekly_report_due": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+  };
+  "finance.bank_connection_expired": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    connectionId: string;
+  };
+
+  "crm.birthday_approaching": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    customerId: string;
+    birthdayAt: string;
+    daysUntil: number;
+  };
+  "commerce.promotion_activated": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    promotionId: string;
+    discountBps: number;
+    productIds: string[];
+  };
+  "commerce.promotion_expired": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    promotionId: string;
+  };
+
+  "ai.query_received": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    userId: string;
+    query: string;
+    contextScope: string;
+  };
+  "ai.document_uploaded": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    documentId: string;
+    fileName: string;
+    uploadedBy: string;
+  };
+  "ai.weekly_report_due": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    periodEnd: string;
+  };
+  "ai.fleet_brief_requested": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    requestedBy: string;
+    fleetScope: string;
+  };
+
   'order.placed': {
     v: 1;
+    isSimulation?: boolean;
     orderId: string;
     tableId: string | null;
     tenantId: string;
@@ -15,6 +114,7 @@ export interface NexusEvents {
   };
   'order.paid': {
     v: 1;
+    isSimulation?: boolean;
     orderId: string;
     tableId: string | null;
     tenantId: string;
@@ -25,6 +125,7 @@ export interface NexusEvents {
   };
   'order.cancelled': {
     v: 1;
+    isSimulation?: boolean;
     orderId: string;
     tenantId: string;
     operatorId: string;
@@ -32,6 +133,7 @@ export interface NexusEvents {
   };
   'order.split': {
     v: 1;
+    isSimulation?: boolean;
     orderId: string;
     tableId: string | null;
     tenantId: string;
@@ -41,6 +143,7 @@ export interface NexusEvents {
   };
   'order.comp': {
     v: 1;
+    isSimulation?: boolean;
     orderId: string;
     tenantId: string;
     operatorId: string;
@@ -50,6 +153,7 @@ export interface NexusEvents {
   };
   'order.refunded': {
     v: 1;
+    isSimulation?: boolean;
     orderId: string;
     tenantId: string;
     operatorId: string;
@@ -58,6 +162,7 @@ export interface NexusEvents {
   };
   'stock.low': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     itemId: string;
     itemName: string;
@@ -66,6 +171,7 @@ export interface NexusEvents {
   };
   'stock.received': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     deliveryId: string;
     items: Array<{ itemId: string; quantity: number }>;
@@ -78,6 +184,7 @@ export interface NexusEvents {
    */
   'sovereign.breach': {
     v: 1;
+    isSimulation?: boolean;
     targetTenantId: string;
     anchoredTenantId: string;
     path?: string;
@@ -85,11 +192,13 @@ export interface NexusEvents {
   };
   'commerce.yield_updated': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     config: Record<string, unknown>;
   };
   'hr.transfer_offer': {
     v: 1;
+    isSimulation?: boolean;
     fromTenantId: string;
     toTenantId: string;
     ownerId: string;
@@ -98,6 +207,7 @@ export interface NexusEvents {
   };
   'reservation.confirmed': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
     customerName: string;
@@ -105,8 +215,45 @@ export interface NexusEvents {
     date: string;
     time: string;
   };
+  'haccp.check.saved': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    checkId: string;
+    operatorId: string;
+    timestamp: number;
+  };
+  'haccp.nonconform': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    checkId: string;
+    correctionDeadline: number;
+  };
+  'hr.training_expired': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    employeeId: string;
+    trainingType: string;
+  };
+  'compliance.deadline_approaching': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    type: string;
+    daysLeft: number;
+  };
+  'security.pin_locked': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    terminalId: string;
+    lockedUntil: number;
+  };
   'haccp.alert': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     sensorId: string;
     readingId: string;
@@ -116,6 +263,7 @@ export interface NexusEvents {
   };
   'payroll.submitted': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     period: string;
     submissionId: string;
@@ -123,6 +271,7 @@ export interface NexusEvents {
   };
   'waste.logged': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     wasteId: string;
     ingredientId: string;
@@ -133,6 +282,7 @@ export interface NexusEvents {
   };
   'staff.clock_in': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     userId: string;
     userName: string;
@@ -141,11 +291,66 @@ export interface NexusEvents {
   };
   'staff.clock_out': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     userId: string;
     userName: string;
     terminalId: string;
     timestamp: string;
+  };
+  'notification.created': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    id: string;
+    type: 'alert' | 'info' | 'warning' | 'error';
+    title: string;
+    message: string;
+    priority: 'low' | 'medium' | 'high' | 'critical';
+    read: boolean;
+    timestamp: string;
+  };
+  'hr.absence_declared': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    userId: string;
+    absenceType: 'sick' | 'vacation' | 'unjustified';
+    startDate: string;
+    endDate?: string;
+  };
+  'hr.preroll_validated': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    periodId: string;
+    validatedBy: string;
+    totalEmployees: number;
+  };
+  'hr.contract_expiring': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    userId: string;
+    contractId: string;
+    expiryDate: string;
+    daysRemaining: number;
+  };
+  'hr.medical_visit_expired': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    userId: string;
+    expiryDate: string;
+    daysOverdue: number;
+  };
+  'hr.application_received': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    applicationId: string;
+    role: string;
+    applicantName: string;
   };
   /**
    * Émis par une route API serveur (pas par le client) : première émission
@@ -154,6 +359,7 @@ export interface NexusEvents {
    */
   'support.ticket_submitted': {
     v: 1;
+    isSimulation?: boolean;
     ticketId: string;
     tenantId: string;
     description: string;
@@ -162,6 +368,7 @@ export interface NexusEvents {
   };
   'cash_drawer.opened_unauthorized': {
     v: 1;
+    isSimulation?: boolean;
     drawerId: string;
     operatorId: string;
     detectedAt: number;
@@ -169,6 +376,7 @@ export interface NexusEvents {
   };
   'supplier.invoice_processed': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     supplierId: string;
     invoiceId: string;
@@ -177,12 +385,14 @@ export interface NexusEvents {
   };
   'inventory.quarantine_activated': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     productIds: string[];
     reason: string;
   };
   'commerce.margin_warning': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     productId: string;
     currentMarginBps: number;
@@ -191,12 +401,14 @@ export interface NexusEvents {
   };
   'stock.zero': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     itemId: string;
     itemName: string;
   };
   'stock.transfer': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     fromLocationId: string;
     toLocationId: string;
@@ -206,6 +418,7 @@ export interface NexusEvents {
   };
   'inventory.physical': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     inventoryId: string;
     items: Array<{ itemId: string; theoreticalQty: number; physicalQty: number }>;
@@ -213,6 +426,7 @@ export interface NexusEvents {
   };
   'recall.declared': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     recallId: string;
     productIds: string[];
@@ -220,6 +434,7 @@ export interface NexusEvents {
   };
   'dlc.expired': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     itemId: string;
     batchNumber: string;
@@ -227,12 +442,14 @@ export interface NexusEvents {
   };
   'iot.offline': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     sensorId: string;
     lastSeenAt: number;
   };
   'kds.ticket_received': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     stationId?: string;
@@ -240,12 +457,14 @@ export interface NexusEvents {
   };
   'kds.course_fired': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     course: number;
   };
   'kds.item_started': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     itemId: string;
@@ -253,6 +472,7 @@ export interface NexusEvents {
   };
   'kds.item_done': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     itemId: string;
@@ -260,17 +480,20 @@ export interface NexusEvents {
   };
   'kds.ticket_done': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
   };
   'kds.bumped': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     stationId?: string;
   };
   'kds.rush_alert': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     itemId?: string;
@@ -278,6 +501,7 @@ export interface NexusEvents {
   };
   'kds.printer_failed': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     orderId: string;
     printerId: string;
@@ -285,6 +509,7 @@ export interface NexusEvents {
   };
   'reservation.created': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
     guestName: string;
@@ -294,23 +519,27 @@ export interface NexusEvents {
   };
   'reservation.updated': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
     updates: any;
   };
   'reservation.cancelled': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
     reason: string;
   };
   'reservation.no_show': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
   };
   'table.assigned': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     tableId: string;
     reservationId?: string;
@@ -318,12 +547,14 @@ export interface NexusEvents {
   };
   'table.released': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     tableId: string;
     orderId?: string;
   };
   'hr.shift_started': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     shiftId: string;
     employeeId: string;
@@ -332,6 +563,7 @@ export interface NexusEvents {
   };
   'hr.shift_ended': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     shiftId: string;
     employeeId: string;
@@ -339,12 +571,14 @@ export interface NexusEvents {
   };
   'hr.schedule_published': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     weekStart: number;
     publishedBy: string;
   };
   'hr.payroll_exported': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     periodStart: number;
     periodEnd: number;
@@ -352,6 +586,7 @@ export interface NexusEvents {
   };
   'finance.invoice_approved': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     invoiceId: string;
     supplierId: string;
@@ -360,13 +595,32 @@ export interface NexusEvents {
   };
   'finance.payment_dispatched': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     paymentBatchId: string;
     totalAmountInMicrounits: number;
     dispatchedBy: string;
   };
+  'finance.period_locked': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    periodId: string;
+    lockedBy: string;
+    lockedAt: string;
+  };
+  'finance.payment_failed': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    invoiceId: string;
+    customerId: string;
+    amountInMicrounits: number;
+    reason: string;
+  };
   'finance.bank_transaction_synced': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     transactionId: string;
     bankAccountId: string;
@@ -375,6 +629,7 @@ export interface NexusEvents {
   };
   'finance.reconciliation_completed': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     reconciliationId: string;
     bankTransactionId: string;
@@ -384,6 +639,7 @@ export interface NexusEvents {
   };
   'crm.customer_created': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     customerId: string;
     email?: string;
@@ -392,12 +648,14 @@ export interface NexusEvents {
   };
   'crm.customer_updated': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     customerId: string;
     updates: any;
   };
   'crm.points_earned': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     customerId: string;
     points: number;
@@ -405,6 +663,7 @@ export interface NexusEvents {
   };
   'crm.reward_redeemed': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     customerId: string;
     rewardId: string;
@@ -412,6 +671,7 @@ export interface NexusEvents {
   };
   'marketing.campaign_launched': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     campaignId: string;
     targetSegment: string;
@@ -419,6 +679,7 @@ export interface NexusEvents {
   };
   'integration.delivery_order_received': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     integrationId: string;
     platform: 'ubereats' | 'deliveroo' | 'other';
@@ -426,16 +687,42 @@ export interface NexusEvents {
   };
   'integration.menu_sync_requested': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     integrationId: string;
     requestedBy: string;
   };
   'integration.catalog_mapping_updated': {
     v: 1;
+    isSimulation?: boolean;
     tenantId: string;
     internalProductId: string;
     externalId: string;
     platform: string;
+  };
+  'anomaly.detected': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    type: string;
+    message: string;
+    zScore?: number;
+    metadata?: any;
+  };
+  'finance.ticket_z_closed': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    date: string;
+    totalInMicrounits: number;
+    ordersCount: number;
+  };
+  'store.rush_mode_toggled': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    isPaused: boolean;
+    requestedBy: string;
   };
 }
 

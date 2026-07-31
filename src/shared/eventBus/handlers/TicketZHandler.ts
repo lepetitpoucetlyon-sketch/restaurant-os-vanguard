@@ -157,4 +157,13 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
   });
 
   logger.info(`[TicketZ] Clôture Z ${date} — JournalEntry ${entryId} scellé NF525 (hash: ${sealResult.hash.substring(0, 8)})`);
+
+  // P08-H: Déclencher la prévision CA J+1 via l'Oracle
+  NexusEventBus.emitDurable('finance.ticket_z_closed', {
+    v: 1,
+    tenantId,
+    date,
+    totalInMicrounits: ticketZ.totalInMicrounits,
+    ordersCount: ticketZ.ordersCount
+  }).catch(() => {});
 }

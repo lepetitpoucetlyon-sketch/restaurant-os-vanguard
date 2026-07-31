@@ -151,10 +151,20 @@ export class FinanceCore {
     }> {
         logger.info(`[FinanceCore] Auditing Ledger for ${tenantId}`);
 
-        // TODO: implémenter via FiscalEngine.verifyChain() sur les sceaux du tenant
-        throw new Error(
-            `[FinanceCore] auditLedger non implémenté pour tenant ${tenantId}`,
-        );
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const { FiscalEngine } = await import('@/infrastructure/adapters/FiscalAdapter');
+
+        const seals = await Nexus.adapter.query<FiscalSeal>(`tenants/${tenantId}/fiscalSeals`, {
+            orderBy: { field: 'timestamp', direction: 'asc' }
+        });
+
+        const isValid = await FiscalEngine.verifyChain(seals);
+
+        return {
+            valid: isValid,
+            entriesChecked: seals.length,
+            brokenLinks: [] // Could be enhanced by verifyChain returning details
+        };
     }
 }
 

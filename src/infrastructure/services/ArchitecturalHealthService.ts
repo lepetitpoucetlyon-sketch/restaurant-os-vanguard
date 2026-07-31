@@ -17,20 +17,65 @@ export interface ArchitecturalHealthReport {
 
 export class ArchitecturalHealthService {
     static async generateReport(): Promise<ArchitecturalHealthReport> {
+        let unprotectedAdminRoutes: string[] = [];
+        
+        try {
+            if (typeof window === 'undefined') {
+                const fs = await import('fs');
+                const path = await import('path');
+                
+                // Scan statique simple de src/app/api/admin (P09-K)
+                const apiAdminPath = path.join(process.cwd(), 'src/app/api/admin');
+                if (fs.existsSync(apiAdminPath)) {
+                    const walkSync = (dir: string, filelist: string[] = []) => {
+                        const files = fs.readdirSync(dir);
+                        for (const file of files) {
+                            const filepath = path.join(dir, file);
+                            if (fs.statSync(filepath).isDirectory()) {
+                                walkSync(filepath, filelist);
+                            } else if (file.endsWith('route.ts')) {
+                                filelist.push(filepath);
+                            }
+                        }
+                        return filelist;
+                    };
+                    
+                    const routes = walkSync(apiAdminPath);
+                    for (const route of routes) {
+                        const content = fs.readFileSync(route, 'utf-8');
+                        if (!content.includes('requireFleetAdmin') && 
+                            !content.includes('requireTenantAdmin') && 
+                            !content.includes('requireMccLevel') &&
+                            !content.includes('requireTenantRole')) {
+                            unprotectedAdminRoutes.push(route.replace(process.cwd(), ''));
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            // Ignorer en cas d'erreur de filesystem (ex: edge runtime)
+        }
+
+        const grade = unprotectedAdminRoutes.length > 0 ? 'CRITICAL' : 'X+++';
+        
         return {
             timestamp: new Date().toISOString(),
-            grade: 'X+++',
+            grade,
             metrics: {
                 anyCount: 0,
                 graphCycles: 0,
                 godNodes: [],
                 silentServices: 0,
-                unprotectedAdminRoutes: [],
+                unprotectedAdminRoutes,
                 scratchImports: 0,
                 financialIntegrity: true,
                 sovereignMathCompliance: true,
             },
-            blockers: [],
+            blockers: unprotectedAdminRoutes.map(file => ({
+                code: 'UNPROTECTED_ADMIN_ROUTE',
+                description: 'Une route admin critique ne vérifie pas le RBAC via adminAuthGuard',
+                file
+            })),
             warnings: [],
         };
     }

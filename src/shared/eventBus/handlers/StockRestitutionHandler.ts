@@ -3,6 +3,8 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { Order } from '@nexus/contracts';
+import type { CartItem } from '@/modules/ops/engine/types';
+import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
 
 /**
  * StockRestitutionHandler (P1)
@@ -62,6 +64,30 @@ export function registerStockRestitutionHandler(): () => void {
           severity: 'low',
           timestamp: new Date(),
         });
+      }
+
+      // 4. (P01-I) Création de l'avoir comptable
+      try {
+        const cartItemsForRefund = order.items.map(i => ({
+          productId: i.productId,
+          name: i.name,
+          quantity: -1 * (i.quantity ?? 1), // Quantité négative = Avoir
+          unitPriceInMicrounits: i.unitPriceInMicrounits ?? 0,
+          categoryId: i.categoryId,
+          taxRate: i.taxRate
+        })) as unknown as CartItem[];
+
+        await FinancialNexusBridge.processOrder({
+          cartItems: cartItemsForRefund,
+          operatorId,
+          tableId: order.tableId ?? null,
+          tenantId,
+          paymentMode: (order as any).paymentMode ?? 'card', // Remboursement sur le mode original
+        });
+        
+        logger.info(`[StockRestitution] Avoir comptable généré avec succès pour l'annulation ${orderId}`);
+      } catch (err) {
+        logger.error(`[StockRestitution] Erreur lors de la génération de l'avoir pour ${orderId}`, err);
       }
     },
     { id: 'stock-restitution', priority: 'HIGH' }

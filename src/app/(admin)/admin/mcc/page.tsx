@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
     Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
+    Network
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -21,6 +22,7 @@ const TreasuryTab     = dynamic(() => import('./_tabs/TreasuryTab').then(m => m.
 const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m => m.PatchCenterTab), { loading: () => <MCCWidgetSkeleton /> });
 const PluginsTab      = dynamic(() => import('./_tabs/PluginsTab').then(m => m.PluginsTab), { loading: () => <MCCWidgetSkeleton /> });
 const EventBusTab     = dynamic(() => import('./_tabs/EventBusTab').then(m => m.EventBusTab), { loading: () => <MCCWidgetSkeleton /> });
+const LifecycleTab    = dynamic(() => import('./_tabs/LifecycleTab').then(m => m.LifecycleTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     return (
@@ -56,6 +58,7 @@ function MCCDashboardInner() {
         { id: 'patchcenter',  label: t.tabs.patchcenter,  icon: <GitMerge className="w-4 h-4" /> },
         { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
         { id: 'eventbus',     label: t.tabs.eventbus,     icon: <Activity className="w-4 h-4" /> },
+        { id: 'lifecycle',    label: t.tabs.lifecycle,    icon: <Network className="w-4 h-4" /> },
     ] as const;
 
     return (
@@ -137,6 +140,11 @@ function MCCDashboardInner() {
                                 {activeTab === 'eventbus' && (
                                     <motion.div key="eventbus" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                                         <EventBusTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'lifecycle' && (
+                                    <motion.div key="lifecycle" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <LifecycleTab />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

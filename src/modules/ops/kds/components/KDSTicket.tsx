@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Clock,
@@ -11,6 +11,8 @@ import {
     CheckCircle2,
     Flame,
     GripVertical,
+    ChevronDown,
+    ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
@@ -46,6 +48,7 @@ interface AuditTicket {
 
 interface KDSTicketProps {
     ticket: Order;
+    fullOrder?: Order; // kds-7: Context items
     tenantId: string;
     gridColumns: number;
     rushMode: boolean;
@@ -140,6 +143,7 @@ function SeatBadge({ seat }: { seat: number | string }) {
 
 export function KDSTicket({
     ticket,
+    fullOrder,
     tenantId,
     gridColumns,
     rushMode,
@@ -159,6 +163,7 @@ export function KDSTicket({
     }, [ticket.createdAt]);
 
     const [elapsedSeconds, setElapsedSeconds] = useState<number>(getElapsed);
+    const [isContextOpen, setIsContextOpen] = useState(false);
 
     useEffect(() => {
         const id = setInterval(() => setElapsedSeconds(getElapsed()), 1000);
@@ -206,6 +211,18 @@ export function KDSTicket({
     const isReady   = ticket.status === 'ready';
     const isUrgent  = !isReady && elapsedMinutes >= 15;
     const isWarning = isTicketWarning(ticket.status, elapsedMinutes);
+
+    // ── kds-7: Compute full order grouped by seat ─────────────────────────
+    const fullOrderGroupedBySeat = useMemo(() => {
+        if (!fullOrder) return {};
+        const grouped: Record<string, any[]> = {};
+        for (const item of fullOrder.items) {
+            const seat = (item as any).seatNumber || 'Partagé';
+            if (!grouped[seat]) grouped[seat] = [];
+            grouped[seat].push(item);
+        }
+        return grouped;
+    }, [fullOrder]);
 
     // ── kds-2 + not-2: Mark ticket ready + push notification to server ────────
     const handleMarkReady = useCallback(async () => {
@@ -483,6 +500,68 @@ export function KDSTicket({
                     </SortableContext>
                 </DndContext>
             </div>
+
+            {/* ── kds-7: Table Context Drawer ─────────────────────────────── */}
+            {Object.keys(fullOrderGroupedBySeat).length > 0 && (
+                <div className="border-t border-subtle bg-surface-bg/30">
+                    <button
+                        onClick={() => setIsContextOpen(!isContextOpen)}
+                        className="w-full flex items-center justify-between p-4 text-secondary hover:text-primary hover:bg-surface-bg transition-colors"
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.15em]">Commande Complète (Accords)</span>
+                            <span className="px-2 py-0.5 rounded-full bg-surface-card border border-subtle text-[9px] font-black">
+                                {fullOrder?.items.length}
+                            </span>
+                        </div>
+                        {isContextOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                    <AnimatePresence>
+                        {isContextOpen && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="p-4 pt-0 flex flex-col gap-4">
+                                    {Object.entries(fullOrderGroupedBySeat).map(([seat, items]) => (
+                                        <div key={seat} className="flex flex-col gap-2">
+                                            <div className="text-[10px] font-bold text-muted uppercase tracking-wider pl-1 border-b border-subtle pb-1">
+                                                {seat === 'Partagé' ? 'À Partager' : `Convive ${seat}`}
+                                            </div>
+                                            {items.map((cItem: any, i: number) => {
+                                                const station = resolveStation(cItem.name);
+                                                // Highlight the item if it belongs to the current ticket
+                                                const isActiveStation = ticket.items.some(ti => (ti.id || ti.name) === (cItem.id || cItem.name));
+                                                return (
+                                                    <div key={`${cItem.id || cItem.name}-${i}`} 
+                                                         className={cn(
+                                                             "flex items-center justify-between p-2 rounded-lg border",
+                                                             isActiveStation 
+                                                                 ? "bg-surface-card border-accent-gold/30 shadow-sm" 
+                                                                 : "bg-surface-bg/50 border-subtle opacity-75 grayscale-[0.5]"
+                                                         )}>
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={cn("w-1.5 h-1.5 rounded-full", isActiveStation ? "bg-accent-gold" : "bg-secondary")} />
+                                                            <div className="flex flex-col">
+                                                                <span className={cn("text-xs font-bold", isActiveStation ? "text-primary" : "text-secondary")}>
+                                                                    {cItem.quantity && cItem.quantity > 1 ? `${cItem.quantity}x ` : ''}{cItem.name}
+                                                                </span>
+                                                                <span className="text-[9px] text-muted uppercase tracking-wider">{station}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            )}
 
             {/* ── Action Footer ───────────────────────────────────────────── */}
             <div className="p-6 pt-0 mt-auto">

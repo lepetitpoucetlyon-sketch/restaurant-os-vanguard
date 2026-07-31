@@ -16,27 +16,42 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const instances = await Nexus.adapter.query<{ id: string }>('mcc/empire/instances');
     const tenantIds = instances.map(i => i.id).filter(Boolean);
 
-    const results = [];
+    const { fleetEngine } = await import('@/infrastructure/adapters/FleetAdapter');
+    const verification = await fleetEngine.verifyFleetCompliance(tenantIds);
+
     let anomalies = 0;
+    const results = [];
 
-    for (const tenantId of tenantIds) {
-      // Simulation de la vérification de la chaîne cryptographique
-      // Dans le monde réel, on vérifierait que le hash de la dernière transaction
-      // correspond au sceau enregistré.
-      
-      const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as any;
-      const isCompliant = config?.nf525Status !== 'violation';
+    for (const result of verification.results) {
+      const { tenantId, chainValid, lastSealAt } = result;
 
-      if (!isCompliant) {
+      if (!chainValid) {
         anomalies++;
-        logger.warn(`[NF525-Cron] ⚠️ Violation détectée pour le tenant ${tenantId}`);
-        // TODO: Déclencher une alerte critique à la DGFIP ou verrouiller le tenant (SovereignLockout)
+        logger.error(`[NF525-Cron] ⚠️ VIOLATION DE LA CHAÎNE NF525 DÉTECTÉE pour le tenant ${tenantId}`);
+        
+        // Sovereign Lockout : Verrouiller le tenant
+        await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
+            nf525Status: 'violation',
+            status: 'locked_nf525_breach',
+            lockoutReason: 'NF525 Cryptographic Chain Breach',
+            lockoutAt: new Date().toISOString()
+        }, { merge: true });
+
+        // Déclencher le kill-switch via EventBus
+        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        await NexusEventBus.emitDurable('sovereign.breach', {
+            v: 1,
+            targetTenantId: tenantId,
+            anchoredTenantId: 'mcc',
+            message: 'Violations des sceaux cryptographiques NF525. Caisse verrouillée.'
+        });
       }
 
       results.push({
         tenantId,
-        status: isCompliant ? 'COMPLIANT' : 'VIOLATION',
-        auditedAt: new Date().toISOString()
+        status: chainValid ? 'COMPLIANT' : 'VIOLATION',
+        auditedAt: new Date().toISOString(),
+        lastSealAt
       });
     }
 

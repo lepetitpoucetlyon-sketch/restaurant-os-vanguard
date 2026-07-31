@@ -129,6 +129,15 @@ export const RecallService = {
             } as unknown as import('@/shared/nexus-contract').SovereignData,
         });
 
+        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        await NexusEventBus.emitDurable('recall.declared', {
+            v: 1,
+            tenantId,
+            recallId: recallRecord.id,
+            productIds: Array.from(new Set(impact.preparations.map(p => p.recipeId))),
+            reason
+        });
+
         return impact;
     },
 };

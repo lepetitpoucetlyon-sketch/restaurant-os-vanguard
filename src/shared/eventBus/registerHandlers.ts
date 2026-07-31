@@ -51,6 +51,28 @@ import { registerAntiCorruptionLayerHandler } from './handlers/AntiCorruptionLay
 import { registerOrderAcceptanceWindowHandler } from './handlers/OrderAcceptanceWindowHandler';
 import { registerAggregatorMenuSyncHandler } from './handlers/AggregatorMenuSyncHandler';
 import { registerAggregatorStockSyncHandler } from './handlers/AggregatorStockSyncHandler';
+import { registerDeliveryRushModeHandler } from './handlers/DeliveryRushModeHandler';
+import { registerHaccpCheckArchiverHandler } from './handlers/HaccpCheckArchiverHandler';
+import { registerNonConformActionHandler } from './handlers/NonConformActionHandler';
+import { registerTrainingComplianceAlertHandler } from './handlers/TrainingComplianceAlertHandler';
+import { registerComplianceDeadlineHandler } from './handlers/ComplianceDeadlineHandler';
+import { AbsenceUnderstaffingHandler } from './handlers/AbsenceUnderstaffingHandler';
+import { SilaeExportHandler } from './handlers/SilaeExportHandler';
+import { ContractRenewalAlertHandler } from './handlers/ContractRenewalAlertHandler';
+import { MedicalVisitAlertHandler } from './handlers/MedicalVisitAlertHandler';
+import { RecruitmentRouterHandler } from './handlers/RecruitmentRouterHandler';
+import { PeriodLockGuardHandler } from './handlers/PeriodLockGuardHandler';
+import { StripePaymentRetryHandler } from './handlers/StripePaymentRetryHandler';
+import { OracleQueryAuditHandler } from './handlers/OracleQueryAuditHandler';
+import { AutoIndexationHandler } from './handlers/AutoIndexationHandler';
+import { WeeklyReportHandler } from './handlers/WeeklyReportHandler';
+import { FleetStratBriefingHandler } from './handlers/FleetStratBriefingHandler';
+import { BirthdayOfferHandler } from './handlers/BirthdayOfferHandler';
+import { PromotionPriceHandler } from './handlers/PromotionPriceHandler';
+import { PromotionExpiryHandler } from './handlers/PromotionExpiryHandler';
+import { OnboardingProgressHandler } from './handlers/OnboardingProgressHandler';
+import { GracePeriodHandler } from './handlers/GracePeriodHandler';
+import { BankConnectionExpiredHandler } from './handlers/BankConnectionExpiredHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -136,10 +158,44 @@ export function registerNexusHandlers(): void {
     registerPrivacyConsentHandler(),        // HIGH — Droit à l'oubli RGPD
 
     // --- V10 Connecteurs & ACL ---
+    registerHaccpCheckArchiverHandler(),
+    registerNonConformActionHandler(),
+    registerTrainingComplianceAlertHandler(),
+    registerComplianceDeadlineHandler(),
+
+    // HR G3
+    AbsenceUnderstaffingHandler.register(),
+    SilaeExportHandler.register(),
+    ContractRenewalAlertHandler.register(),
+    MedicalVisitAlertHandler.register(),
+    RecruitmentRouterHandler.register(),
+
+    // Finance G4
+    PeriodLockGuardHandler.register(),
+    StripePaymentRetryHandler.register(),
+
+    // AI G5
+    OracleQueryAuditHandler.register(),
+    AutoIndexationHandler.register(),
+    WeeklyReportHandler.register(),
+    FleetStratBriefingHandler.register(),
+
+    // CRM G6
+    BirthdayOfferHandler.register(),
+    PromotionPriceHandler.register(),
+    PromotionExpiryHandler.register(),
+
+    // MCC SaaS G7
+    OnboardingProgressHandler.register(),
+    GracePeriodHandler.register(),
+
+    // Connectors G8
+    BankConnectionExpiredHandler.register(),
     registerAntiCorruptionLayerHandler(),   // HIGH — Traducteur UberEats -> Interne
     registerOrderAcceptanceWindowHandler(), // HIGH — File d'attente POS pour validation manuelle
     registerAggregatorMenuSyncHandler(),    // BACKGROUND — Pousse le menu sur les plateformes
-    registerAggregatorStockSyncHandler()    // HIGH — Met à jour les ruptures (86) sur Uber/Deliveroo
+    registerAggregatorStockSyncHandler(),   // HIGH — Met à jour les ruptures (86) sur Uber/Deliveroo
+    registerDeliveryRushModeHandler()       // HIGH — Active le mode rush pour les agrégateurs
   );
 }
 

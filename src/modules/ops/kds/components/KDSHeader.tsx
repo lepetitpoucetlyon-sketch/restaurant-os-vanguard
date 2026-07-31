@@ -9,18 +9,11 @@ import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedK
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type ServiceStation = 'all' | 'cuisine' | 'bar';
-
-const SERVICE_STATION_LABELS: Record<ServiceStation, string> = {
-    all: 'Tout',
-    cuisine: 'Cuisine',
-    bar: 'Bar',
-};
-
 const LS_KEY_BASE = 'kds-station-filter';
 
 interface KDSHeaderProps {
     activeStation: KitchenStation;
+    lockedStation?: KitchenStation | null;
     setActiveStation: (station: KitchenStation) => void;
     ordersCount: number;
     preparingOrdersCount: number;
@@ -33,9 +26,6 @@ interface KDSHeaderProps {
     setRushMode: (mode: boolean) => void;
     pendingModificationsCount: number;
     setShowModificationAlerts: (show: boolean) => void;
-    /** kds-5: selected service-station filter */
-    serviceStation: ServiceStation;
-    setServiceStation: (s: ServiceStation) => void;
     /** kds-6: toggle recall mode */
     isRecallMode: boolean;
     setIsRecallMode: (v: boolean) => void;
@@ -43,6 +33,7 @@ interface KDSHeaderProps {
 
 export function KDSHeader({
     activeStation,
+    lockedStation,
     setActiveStation,
     ordersCount,
     preparingOrdersCount,
@@ -55,8 +46,6 @@ export function KDSHeader({
     setRushMode,
     pendingModificationsCount,
     setShowModificationAlerts,
-    serviceStation,
-    setServiceStation,
     isRecallMode,
     setIsRecallMode,
 }: KDSHeaderProps) {
@@ -78,12 +67,6 @@ export function KDSHeader({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // kds-5: persist service station preference
-    const handleSetServiceStation = (s: ServiceStation) => {
-        setServiceStation(s);
-        try { localStorage.setItem(tenantScopedKey(LS_KEY_BASE), s); } catch { /* silently ignore in SSR / private browsing */ }
-    };
-
     return (
         <div className="relative z-20 w-full border-b border-border/50 bg-bg-primary/60 backdrop-blur-xl shrink-0">
             <div className="w-full overflow-x-auto md:overflow-visible no-scrollbar py-6 px-4 md:px-8">
@@ -99,14 +82,22 @@ export function KDSHeader({
                                 const config = STATION_CONFIG[station];
                                 const Icon = config.icon;
                                 const isActive = activeStation === station;
+                                const isDisabled = lockedStation ? lockedStation !== station : false;
+
+                                if (lockedStation && lockedStation !== station && lockedStation !== 'all') {
+                                    // Optionally we could just hide them entirely if locked:
+                                    // return null; 
+                                }
 
                                 return (
                                     <button
                                         key={station}
                                         onClick={() => setActiveStation(station)}
+                                        disabled={isDisabled}
                                         className={cn(
                                             "relative flex items-center gap-2.5 px-6 h-11 rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-colors duration-300 z-10",
-                                            isActive ? config.activeText : "text-secondary hover:text-primary"
+                                            isActive ? config.activeText : "text-secondary hover:text-primary",
+                                            isDisabled && "opacity-30 cursor-not-allowed hidden md:flex" // Cache sur mobile si bloqué, opaque sur desktop
                                         )}
                                     >
                                         {isActive && (
@@ -119,6 +110,7 @@ export function KDSHeader({
                                         )}
                                         <Icon className={cn("w-3.5 h-3.5 z-10", isActive ? "text-inherit" : config.iconColor)} strokeWidth={2.5} />
                                         <span className="relative z-10">{config.label}</span>
+                                        {isDisabled && lockedStation && <div className="absolute inset-0 z-20 cursor-not-allowed" title="Restreint par RBAC" />}
                                     </button>
                                 );
                             })}
@@ -135,35 +127,6 @@ export function KDSHeader({
                                 </span>
                                 <TableIcon className="w-4 h-4 text-muted" strokeWidth={2} />
                             </div>
-                        </div>
-
-                        <div className="w-px h-8 bg-surface-bg mx-2" />
-
-                        {/* 3. kds-5: Service station toggle (Tout / Cuisine / Bar) */}
-                        <div className="flex items-center p-1 bg-surface-bg/50 rounded-full border border-black/5 shadow-inner">
-                            {(Object.keys(SERVICE_STATION_LABELS) as ServiceStation[]).map(s => {
-                                const isActive = serviceStation === s;
-                                return (
-                                    <button
-                                        key={s}
-                                        onClick={() => handleSetServiceStation(s)}
-                                        className={cn(
-                                            "relative px-4 h-9 rounded-full font-bold text-[10px] uppercase tracking-[0.15em] transition-all duration-200 z-10",
-                                            isActive ? "text-text-primary" : "text-secondary hover:text-primary"
-                                        )}
-                                    >
-                                        {isActive && (
-                                            <motion.div
-                                                layoutId="serviceStationPill"
-                                                className="absolute inset-0 rounded-full bg-surface-sidebar z-[-1] shadow-md"
-                                                initial={false}
-                                                transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                                            />
-                                        )}
-                                        <span className="relative z-10">{SERVICE_STATION_LABELS[s]}</span>
-                                    </button>
-                                );
-                            })}
                         </div>
 
                         <div className="w-px h-8 bg-surface-bg mx-2" />
