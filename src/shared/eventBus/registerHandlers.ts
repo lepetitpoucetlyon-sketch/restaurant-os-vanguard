@@ -73,6 +73,7 @@ import { PromotionExpiryHandler } from './handlers/PromotionExpiryHandler';
 import { OnboardingProgressHandler } from './handlers/OnboardingProgressHandler';
 import { GracePeriodHandler } from './handlers/GracePeriodHandler';
 import { BankConnectionExpiredHandler } from './handlers/BankConnectionExpiredHandler';
+import { FleetOutboxHandler } from './handlers/FleetOutboxHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -195,7 +196,8 @@ export function registerNexusHandlers(): void {
     registerOrderAcceptanceWindowHandler(), // HIGH — File d'attente POS pour validation manuelle
     registerAggregatorMenuSyncHandler(),    // BACKGROUND — Pousse le menu sur les plateformes
     registerAggregatorStockSyncHandler(),   // HIGH — Met à jour les ruptures (86) sur Uber/Deliveroo
-    registerDeliveryRushModeHandler()       // HIGH — Active le mode rush pour les agrégateurs
+    registerDeliveryRushModeHandler(),      // HIGH — Active le mode rush pour les agrégateurs
+    FleetOutboxHandler.register()
   );
 }
 

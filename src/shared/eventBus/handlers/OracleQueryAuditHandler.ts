@@ -1,5 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export class OracleQueryAuditHandler {
@@ -11,15 +12,27 @@ export class OracleQueryAuditHandler {
       
       logger.info(`[OracleQueryAudit] AI Query par ${userId} (Scope: ${contextScope})`);
 
-      empireAudit.log({
-        module: 'system',
-        action: 'AI_QUERY_EXECUTED',
-        userId,
-        instanceId: tenantId,
-        details: { query, contextScope },
-        severity: 'low',
-        timestamp: new Date(),
-      });
-    });
+      try {
+        const queryId = `query_${Date.now()}`;
+        await Nexus.adapter.update(`tenants/${tenantId}/ai/queries/${queryId}`, {
+            userId,
+            query,
+            contextScope,
+            timestamp: Date.now()
+        });
+
+        empireAudit.log({
+            module: 'system',
+            action: 'AI_QUERY_EXECUTED',
+            userId,
+            instanceId: tenantId,
+            details: { queryId, query, contextScope },
+            severity: 'low',
+            timestamp: new Date(),
+        });
+      } catch (err) {
+        logger.error('[OracleQueryAuditHandler] Error auditing AI query', String(err));
+      }
+    }, { id: 'oracle-query-audit', priority: 'BACKGROUND' });
   }
 }

@@ -1,5 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export class BankConnectionExpiredHandler {
@@ -9,27 +10,36 @@ export class BankConnectionExpiredHandler {
       const { tenantId, connectionId } = payload;
       logger.error(`[BankConnection] Connection ${connectionId} expired for tenant ${tenantId}`);
 
-      empireAudit.log({
-        module: 'finance',
-        action: 'BANK_CONNECTION_EXPIRED',
-        userId: 'system',
-        instanceId: tenantId,
-        details: { connectionId },
-        severity: 'high',
-        timestamp: new Date(),
-      });
+      try {
+        await Nexus.adapter.update(`tenants/${tenantId}/finance/bank_connections/${connectionId}`, {
+            status: 'expired',
+            updatedAt: Date.now()
+        });
 
-      NexusEventBus.emitDurable('notification.created', {
-        v: 1,
-        tenantId,
-        id: `alert-bank-${connectionId}`,
-        type: 'error',
-        title: 'Connexion Bancaire Expirée',
-        message: `La connexion à votre banque (ID: ${connectionId}) a expiré (SCA). Veuillez la renouveler.`,
-        priority: 'high',
-        read: false,
-        timestamp: new Date().toISOString()
-      });
-    });
+        empireAudit.log({
+            module: 'finance',
+            action: 'BANK_CONNECTION_EXPIRED',
+            userId: 'system',
+            instanceId: tenantId,
+            details: { connectionId },
+            severity: 'high',
+            timestamp: new Date(),
+        });
+
+        NexusEventBus.emitDurable('notification.created', {
+            v: 1,
+            tenantId,
+            id: `alert-bank-${connectionId}`,
+            type: 'error',
+            title: 'Connexion Bancaire Expirée',
+            message: `La connexion à votre banque (ID: ${connectionId}) a expiré (SCA). Veuillez la renouveler.`,
+            priority: 'high',
+            read: false,
+            timestamp: new Date().toISOString()
+        });
+      } catch (err) {
+        logger.error('[BankConnectionExpiredHandler] Error updating bank connection status', String(err));
+      }
+    }, { id: 'bank-connection-expired', priority: 'HIGH' });
   }
 }

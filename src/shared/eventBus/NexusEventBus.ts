@@ -280,6 +280,49 @@ export interface NexusEvents {
     unit: string;
     reason: string;
   };
+  'hr.clock_in': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    userId: string;
+    timestamp: number;
+  };
+  'finance.cash_counted': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    drawerId: string;
+    expectedAmountInMicrounits: number;
+    actualAmountInMicrounits: number;
+    countedBy: string;
+  };
+  'inventory.stock_adjusted': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    itemId: string;
+    oldQuantity: number;
+    newQuantity: number;
+    reason: string;
+    adjustedBy: string;
+  };
+  'haccp.temperature_logged': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    sensorId: string;
+    temperature: number;
+    unit: string;
+    timestamp: number;
+  };
+  'fleet.vehicle_assigned': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    vehicleId: string;
+    driverId: string;
+    assignedAt: number;
+  };
   'staff.clock_in': {
     v: 1;
     isSimulation?: boolean;

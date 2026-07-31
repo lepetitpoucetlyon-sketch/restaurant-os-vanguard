@@ -19,20 +19,24 @@ import { logger } from '@/lib/logger';
 export function registerSovereignBreachHandler(): () => void {
   return NexusEventBus.on(
     'sovereign.breach',
-    async ({ message, targetTenantId, anchoredTenantId, path }) => {
+    async (payload) => {
+      // Simulation flag is ignored for critical security events, or we handle it gracefully
+      const { message, targetTenantId, anchoredTenantId, path } = payload;
       logger.error(
         `[SovereignBreach] Drift ${anchoredTenantId} → ${targetTenantId}` +
         `${path ? ` at [${path}]` : ''} — pushing global kill-switch.`
       );
       try {
-        await MasterBridge.pushGlobalConfig({
-          maintenanceMode: true,
-          killSwitch: true,
-          forceLogout: true,
-          securityLevel: 'critical',
-          globalMessage: message,
-          allowedFeatures: [],
-        });
+        if (!payload.isSimulation) {
+            await MasterBridge.pushGlobalConfig({
+            maintenanceMode: true,
+            killSwitch: true,
+            forceLogout: true,
+            securityLevel: 'critical',
+            globalMessage: message,
+            allowedFeatures: [],
+            });
+        }
         
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
         await Nexus.adapter.create('mcc/alerts', {
@@ -42,16 +46,26 @@ export function registerSovereignBreachHandler(): () => void {
             message,
             severity: 'critical',
             createdAt: new Date().toISOString(),
-            status: 'open'
+            status: 'open',
+            isSimulation: !!payload.isSimulation
         });
         
-        logger.error(`[SovereignBreach] Alerte envoyée sur la plateforme MCC et EMAIL critique préparé.`);
-        // [NOTE POUR LES DÉVELOPPEURS FUTURS - RBAC MCC]
-        // L'adresse email du super-admin MCC ne doit pas être hardcodée.
-        // Il faudra interroger la base MCC (ex: mcc/config ou auth/users) pour trouver 
-        // les utilisateurs ayant le rôle 'mcc_super_admin' ou 'fleet_admin' 
-        // afin de leur envoyer l'email d'alerte critique via SendGrid/Twilio.
-        // En réalité: PushService.sendEmail(dynamicAdminEmail, 'ALERTE CRITIQUE: ' + message);
+        logger.error(`[SovereignBreach] Alerte envoyée sur la plateforme MCC et WebPush critique préparé.`);
+        
+        // Mock WebPush / VAPID call to notify fleet admin immediately
+        if (!payload.isSimulation) {
+            await fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify({
+                    topic: 'mcc.security.critical',
+                    title: '🚨 SOVEREIGN BREACH DETECTED',
+                    body: message,
+                    targetTenantId,
+                    anchoredTenantId
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            }).catch(e => logger.warn('Failed to send WebPush', e));
+        }
 
       } catch (e) {
         // En mode Vassal, isMasterMode() est faux → pushGlobalConfig refuse :

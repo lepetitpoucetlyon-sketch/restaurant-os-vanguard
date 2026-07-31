@@ -12,30 +12,54 @@ export class PromotionPriceHandler {
       
       logger.info(`[PromotionPrice] Promotion ${promotionId} activée (-${discountBps/100}%). Sync POS...`);
 
-      // Mock broadcast to POS logic
-      await new Promise(r => setTimeout(r, 500));
+      try {
+        // Enregistrement de la promotion active dans le registre POS
+        await Nexus.adapter.update(`tenants/${tenantId}/pos/activePromotions/${promotionId}`, {
+            discountBps,
+            productIds,
+            status: 'active',
+            activatedAt: Date.now()
+        });
 
-      empireAudit.log({
-        module: 'crm',
-        action: 'COMMERCE_PROMOTION_ACTIVATED',
-        userId: 'system',
-        instanceId: tenantId,
-        details: { promotionId, discountBps, productIds },
-        severity: 'medium',
-        timestamp: new Date(),
-      });
-      
-      NexusEventBus.emitDurable('notification.created', {
-        v: 1,
-        tenantId,
-        id: `alert-promo-on-${promotionId}`,
-        type: 'info',
-        title: 'Promotion Activée',
-        message: `La promotion ${promotionId} (-${discountBps/100}%) a été propagée sur les caisses (POS).`,
-        priority: 'low',
-        read: false,
-        timestamp: new Date().toISOString()
-      });
-    });
+        // Appliquer optionnellement un flag sur les produits du menu
+        if (productIds && productIds.length > 0) {
+            for (const productId of productIds) {
+                // Utilisation de try/catch individuels pour continuer même si un produit manque
+                try {
+                    await Nexus.adapter.update(`tenants/${tenantId}/menu/items/${productId}`, {
+                        activePromotionId: promotionId,
+                        updatedAt: Date.now()
+                    });
+                } catch (e) {
+                    logger.warn(`[PromotionPrice] Impossible d'appliquer la promotion au produit ${productId}`, String(e));
+                }
+            }
+        }
+
+        empireAudit.log({
+            module: 'crm',
+            action: 'COMMERCE_PROMOTION_ACTIVATED',
+            userId: 'system',
+            instanceId: tenantId,
+            details: { promotionId, discountBps, productIds },
+            severity: 'medium',
+            timestamp: new Date(),
+        });
+        
+        NexusEventBus.emitDurable('notification.created', {
+            v: 1,
+            tenantId,
+            id: `alert-promo-on-${promotionId}`,
+            type: 'info',
+            title: 'Promotion Activée',
+            message: `La promotion ${promotionId} (-${discountBps/100}%) a été propagée sur les caisses (POS).`,
+            priority: 'low',
+            read: false,
+            timestamp: new Date().toISOString()
+        });
+      } catch (err) {
+        logger.error('[PromotionPriceHandler] Error activating promotion', String(err));
+      }
+    }, { id: 'promotion-price', priority: 'HIGH' });
   }
 }

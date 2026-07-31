@@ -197,13 +197,41 @@ async function verifyCaller(request: Request): Promise<AdminCaller | null> {
     // `clientId` : alias historique de tenantId (SovereignModuleGate) — compat.
     const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
       : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
+
+    let isReadOnly = false;
+    if (tenantId) {
+      try {
+        const billingRef = await Nexus.adapter.query<{ isReadOnly: boolean; readOnlyEffectiveAt: string }>('billing/status', {
+           where: [{ field: 'tenantId', operator: '==', value: tenantId }]
+        });
+        const billingStatus = billingRef[0];
+        if (billingStatus && billingStatus.isReadOnly) {
+            // verifier que la date effective est passée
+            if (new Date(billingStatus.readOnlyEffectiveAt).getTime() <= Date.now()) {
+                isReadOnly = true;
+            }
+        }
+      } catch (err) {
+        logger.warn(`[adminAuth] Failed to fetch billing status for tenant ${tenantId}`, String(err));
+      }
+    }
+
+    // Blocage Runtime (P09-K) : si la route est une mutation (POST/PUT/DELETE) et que le tenant est readOnly
+    if (isReadOnly && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
+        throw new Error('Tenant is in read-only mode due to expired subscription');
+    }
+
     return {
       uid: decoded.uid,
       role: typeof decoded.role === 'string' ? decoded.role : '',
       tenantId,
     };
   } catch (err) {
-    logger.warn('[adminAuth] Token verification failed', String(err));
+    if (err instanceof Error && err.message.includes('read-only')) {
+        logger.warn('[adminAuth] Blocked mutation for read-only tenant');
+    } else {
+        logger.warn('[adminAuth] Token verification failed', String(err));
+    }
     return null;
   }
 }

@@ -7,6 +7,7 @@ export function registerSupplierInvoiceLedgerHandler() {
   return NexusEventBus.on(
     'finance.invoice_approved',
     async (payload) => {
+      if (payload.isSimulation) return;
       const { tenantId, invoiceId, supplierId, amountInMicrounits, approvedBy } = payload;
       
       logger.info(`[SupplierInvoiceLedger] Facture fournisseur ${invoiceId} approuvée par ${approvedBy}. Inscription au Grand Livre (AP).`);
