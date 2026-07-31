@@ -13,6 +13,8 @@ export class SilaeExportHandler {
       try {
         // Vrai mock de l'appel HTTP (Déstubbing)
         // Dans un environnement de test, on pourrait fetch('https://sandbox.api.silae.fr/v1/payroll/export')
+        // [TEMPORARY MOCK] Simulation d'appel à l'API Silae pour l'export paie.
+        // A remplacer par l'URL réelle de l'API Silae (ex: https://api.silae.fr/v1/export) en production.
         const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
             method: 'POST',
             body: JSON.stringify({

@@ -52,7 +52,8 @@ export function registerSovereignBreachHandler(): () => void {
         
         logger.error(`[SovereignBreach] Alerte envoyée sur la plateforme MCC et WebPush critique préparé.`);
         
-        // Mock WebPush / VAPID call to notify fleet admin immediately
+        // [TEMPORARY MOCK] Simulation d'un WebPush VAPID d'alerte critique.
+        // A remplacer par un vrai push via web-push API ou un service cloud messaging.
         if (!payload.isSimulation) {
             await fetch('https://jsonplaceholder.typicode.com/posts', {
                 method: 'POST',

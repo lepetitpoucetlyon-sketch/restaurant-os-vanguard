@@ -14,6 +14,8 @@ export class AutoIndexationHandler {
 
       try {
         // Simulation de l'appel LightRAG via fetch 
+        // [TEMPORARY MOCK] Simulation d'appel à l'API LightRAG pour l'indexation.
+        // A remplacer par l'URL réelle du service RAG en production.
         const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
             method: 'POST',
             body: JSON.stringify({

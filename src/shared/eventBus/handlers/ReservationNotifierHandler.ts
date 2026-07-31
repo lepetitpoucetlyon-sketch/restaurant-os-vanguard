@@ -8,9 +8,15 @@ export function registerReservationNotifierHandler() {
     if (payload.isSimulation) return;
     try {
       // Mock d'un appel à un prestataire SMS/Email (Twilio/SendGrid)
+      // [TEMPORARY MOCK] Simulation d'un appel à l'API SendGrid/Twilio pour notifier le client.
+      // A remplacer par l'URL réelle de notre service de notification en production.
       const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
           method: 'POST',
-          body: JSON.stringify({ tenantId, reservationId, eventType }),
+          body: JSON.stringify({
+              to: payload.customerId,
+              subject: 'Confirmation de Réservation',
+              text: `Votre réservation ${reservationId} est bien confirmée.`
+          }),
           headers: { 'Content-Type': 'application/json' }
       });
       if (!response.ok) throw new Error('API SMS/Email en erreur');
