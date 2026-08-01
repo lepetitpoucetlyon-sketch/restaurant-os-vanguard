@@ -118,12 +118,14 @@ export class SilaeExportHandler {
       } catch (error) {
         logger.error(`[SilaeExportHandler] Erreur lors de l'export:`, String(error));
 
-        // Mode dégradé en cas d'erreur API
-        await Nexus.adapter.update(`tenants/${tenantId}/hr/pendingExports/${periodId}`, {
-            periodId,
+        // Mode dégradé en cas d'erreur API: file d'attente Outbox pour retry automatique
+        const outboxId = `silae_retry_${periodId}_${Date.now()}`;
+        await Nexus.adapter.update(`tenants/${tenantId}/outbox/${outboxId}`, {
+            type: 'hr.preroll_validated',
+            payload,
             status: 'error_queued',
             error: String(error),
-            totalEmployees,
+            retryCount: 0,
             queuedAt: Date.now()
         });
 

@@ -119,9 +119,22 @@ export interface NexusEvents {
     tableId: string | null;
     tenantId: string;
     operatorId: string;
+    customerId?: string;
     items: CartItem[];
     totalInMicrounits: number;
     paymentMode: string;
+    splits?: { amount: number; mode: string }[];
+  };
+  'order.comp': {
+    v: 1;
+    isSimulation?: boolean;
+    orderId: string;
+    tableId?: string | null;
+    tenantId: string;
+    operatorId: string;
+    items: CartItem[];
+    totalValueInMicrounits: number;
+    reason: string;
   };
   'order.cancelled': {
     v: 1;
@@ -140,16 +153,6 @@ export interface NexusEvents {
     operatorId: string;
     totalInMicrounits: number;
     payments: Array<{ amount: number; guest: number; method: string }>;
-  };
-  'order.comp': {
-    v: 1;
-    isSimulation?: boolean;
-    orderId: string;
-    tenantId: string;
-    operatorId: string;
-    items: CartItem[];
-    totalValueInMicrounits: number;
-    reason: string;
   };
   'order.refunded': {
     v: 1;
@@ -174,6 +177,7 @@ export interface NexusEvents {
     isSimulation?: boolean;
     tenantId: string;
     deliveryId: string;
+    purchaseOrderId?: string;
     items: Array<{ itemId: string; quantity: number }>;
   };
   /**
@@ -353,6 +357,13 @@ export interface NexusEvents {
     read: boolean;
     timestamp: string;
   };
+  'notification.urgent': {
+    v: 1;
+    tenantId: string;
+    message: string;
+    roles: string[];
+    priority?: 'CRITICAL' | 'HIGH';
+  };
   'hr.absence_declared': {
     v: 1;
     isSimulation?: boolean;
@@ -432,6 +443,12 @@ export interface NexusEvents {
     tenantId: string;
     productIds: string[];
     reason: string;
+  };
+  'recipe.updated': {
+    v: 1;
+    tenantId: string;
+    recipeId: string;
+    productId: string;
   };
   'commerce.margin_warning': {
     v: 1;
@@ -597,6 +614,14 @@ export interface NexusEvents {
     isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
+    customerId?: string;
+  };
+  'reservation.large_group': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+    covers: number;
+    datetime: string;
   };
   'table.assigned': {
     v: 1;
@@ -730,6 +755,20 @@ export interface NexusEvents {
     rewardId: string;
     pointsCost: number;
   };
+  'crm.reward_unlocked': {
+    v: 1;
+    tenantId: string;
+    customerId: string;
+    rewardId: string;
+    rewardName: string;
+  };
+  'crm.segment_matched': {
+    v: 1;
+    tenantId: string;
+    customerId: string;
+    segmentId: string;
+    segmentName: string;
+  };
   'marketing.campaign_launched': {
     v: 1;
     isSimulation?: boolean;
@@ -778,6 +817,39 @@ export interface NexusEvents {
     totalInMicrounits: number;
     ordersCount: number;
   };
+  'system.audit_log': {
+    v: 1;
+    tenantId: string;
+    action: string;
+    userId: string;
+    details: any;
+    severity: 'low' | 'medium' | 'high' | 'critical';
+  };
+  'finance.daily_audit': {
+    v: 1;
+    tenantId: string;
+    date: string;
+  };
+  'finance.month_closed': {
+    v: 1;
+    tenantId: string;
+    month: string; // YYYY-MM
+  };
+  'payment.rejected': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    reason: string;
+    amountInMicrounits: number;
+  };
+  'finance.tax_mismatch': {
+    v: 1;
+    tenantId: string;
+    orderId?: string;
+    expectedTax: number;
+    actualTax: number;
+    date: string;
+  };
   'store.rush_mode_toggled': {
     v: 1;
     isSimulation?: boolean;
@@ -810,6 +882,16 @@ export interface NexusEvents {
 
   // P06-F — Avis négatif
   'review.negative': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reviewId: string;
+    customerId: string;
+    rating: number;
+    platform: string;
+    content: string;
+  };
+  'review.positive': {
     v: 1;
     isSimulation?: boolean;
     tenantId: string;
@@ -907,6 +989,49 @@ export interface NexusEvents {
     covers: number;
     date: string;
     customerId?: string;
+  };
+
+  'kds.ticket_delayed': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    delayInMinutes: number;
+  };
+  'store.shift_ended': {
+    v: 1;
+    tenantId: string;
+    shiftId: string;
+    endTime: string;
+  };
+  'delivery.delivered': {
+    v: 1;
+    tenantId: string;
+    deliveryId: string;
+    orderId: string;
+    driverId?: string;
+  };
+  'sensor.temperature_anomaly': {
+    v: 1;
+    tenantId: string;
+    sensorId: string;
+    temperature: number;
+    durationInMinutes: number;
+  };
+  'supplier.delivery_received': {
+    v: 1;
+    tenantId: string;
+    supplierId: string;
+    orderId: string;
+  };
+  'inventory.waste_logged': {
+    v: 1;
+    tenantId: string;
+    wasteId: string;
+    items: Array<{ productId: string; quantity: number }>;
+  };
+  'service.end': {
+    v: 1;
+    tenantId: string;
   };
 }
 

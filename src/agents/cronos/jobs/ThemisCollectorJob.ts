@@ -1,6 +1,7 @@
 import { CollectionService } from '@/modules/finance/tresorerie/collection/CollectionService';
 import { InvoiceTarget } from '@/modules/finance';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
 
 /**
  * 🏛️ ThemisCollectorJob - Grade X+++
@@ -34,6 +35,19 @@ export const ThemisCollectorJob = {
             NexusTelemetryService.emitAuditPulse('FINANCE', 'THEMIS_JOB_FAILED', {
                 error: error instanceof Error ? error.message : 'Unknown error'
             });
+
+            // FALLBACK RESILIENCE: Si l'envoi primaire a échoué (Resend), on sécurise via NotificationGateway local
+            const invoices = await getOverdueInvoices().catch(() => []);
+            for (const inv of invoices) {
+                await NotificationGateway.send({
+                    tenantId: (inv as any).tenantId || 'global',
+                    to: inv.customerEmail,
+                    subject: `Urgent - Retard de paiement pour la facture ${inv.id}`,
+                    text: `La facture ${inv.id} est en retard de paiement. (Fallback System)`,
+                    channel: 'email'
+                }).catch(() => {});
+            }
+
             throw error;
         }
     }

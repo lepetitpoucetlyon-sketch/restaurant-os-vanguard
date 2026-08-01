@@ -103,4 +103,11 @@ describe('FiscalSealer', () => {
       expect(result.signature).toBe('test_signature_xyz');
     });
   });
+  describe('sealDataAtomically', () => {
+    it('chaque seal contient le hash du précédent', async () => {
+      const seal1 = await FiscalSealer.sealDataAtomically('data1', 'tenant_1', false);
+      const seal2 = await FiscalSealer.sealDataAtomically('data2', 'tenant_1', false);
+      expect(seal2.previousHash).toBe(seal1.hash);
+    });
+  });
 });

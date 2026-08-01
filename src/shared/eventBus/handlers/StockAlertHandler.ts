@@ -27,6 +27,14 @@ export function registerStockAlertHandler(): () => void {
                 itemId,
             });
 
+            if (currentQuantity <= 0) {
+                // P11-G: Produit rupture -> retiré KDS/POS
+                await Nexus.adapter.update(`tenants/${tenantId}/products/${itemId}`, {
+                    available: false,
+                    stockZeroAt: new Date().toISOString()
+                });
+            }
+
             empireAudit.log({
                 module: 'inventory',
                 action: 'STOCK_ALERT_TRIGGERED',

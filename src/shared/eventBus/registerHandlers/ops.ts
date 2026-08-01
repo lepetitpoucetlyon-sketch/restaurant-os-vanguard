@@ -8,6 +8,9 @@ import { registerResaKitchenTaskHandler } from '../handlers/ResaKitchenTaskHandl
 import { registerNoShowTableReleaseHandler } from '../handlers/NoShowTableReleaseHandler';
 import { registerTableAutoReleaseHandler } from '../handlers/TableAutoReleaseHandler';
 import { registerBigGroupAlertHandler } from '../handlers/BigGroupAlertHandler';
+import { registerRushModeIntegrationHandler } from '../handlers/RushModeIntegrationHandler';
+import { registerEndOfServiceActionHandler } from '../handlers/EndOfServiceActionHandler';
+import { registerDeliveryDriverUnlockHandler } from '../handlers/DeliveryDriverUnlockHandler';
 import { registerOpsKdsHandlers } from './ops-kds';
 import { registerOpsDeliveryHandlers } from './ops-delivery';
 
@@ -23,6 +26,9 @@ export function registerOpsHandlers(): Array<() => void> {
     registerNoShowTableReleaseHandler(),
     registerTableAutoReleaseHandler(),
     registerBigGroupAlertHandler(),
+    registerRushModeIntegrationHandler(),
+    registerEndOfServiceActionHandler(),
+    registerDeliveryDriverUnlockHandler(),
     ...registerOpsKdsHandlers(),
     ...registerOpsDeliveryHandlers(),
   ];

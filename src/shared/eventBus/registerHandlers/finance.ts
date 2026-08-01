@@ -9,10 +9,14 @@ import { StripePaymentRetryHandler } from '../handlers/StripePaymentRetryHandler
 import { CashflowForecastHandler } from '../handlers/CashflowForecastHandler';
 import { BankConnectionExpiredHandler } from '../handlers/BankConnectionExpiredHandler';
 import { registerFinanceNf525Handlers } from './finance-nf525';
+import { registerPaymentLedgerHandler } from '../handlers/PaymentLedgerHandler';
+import { registerCompMealHandler } from '../handlers/CompMealHandler';
 
 export function registerFinanceHandlers(): Array<() => void> {
   return [
     ...registerFinanceNf525Handlers(),
+    registerPaymentLedgerHandler(),
+    registerCompMealHandler(),
     registerSupplierInvoiceLedgerHandler(),
     registerSepaExportHandler(),
     registerBankSyncAuditHandler(),

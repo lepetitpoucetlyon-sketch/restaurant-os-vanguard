@@ -20,7 +20,36 @@ export class ReviewProviderFactory {
                 `Provider avis inconnu : "${id}". Disponibles : ${Object.keys(PROVIDER_REGISTRY).join(', ')}`
             );
         }
-        return factory();
+        const provider = factory();
+
+        return new Proxy(provider, {
+            get(target, prop) {
+                if (prop === 'fetchRecent') {
+                    return async (tenantId: string, since: Date) => {
+                        const reviews = await target.fetchRecent(tenantId, since);
+                        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+                        
+                        for (const review of reviews) {
+                            const eventName = review.rating <= 3 ? 'review.negative' : 'review.positive';
+                            // Fire & forget event emission
+                            NexusEventBus.emit(eventName, {
+                                v: 1,
+                                tenantId,
+                                reviewId: review.id,
+                                customerId: review.authorName,
+                                rating: review.rating,
+                                platform: review.source,
+                                content: review.text || ''
+                            }).catch(() => {});
+                        }
+                        return reviews;
+                    };
+                }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const value = (target as any)[prop];
+                return typeof value === 'function' ? value.bind(target) : value;
+            }
+        });
     }
 
     static list(): string[] {

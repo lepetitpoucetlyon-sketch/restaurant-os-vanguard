@@ -23,6 +23,18 @@ describe('TaxCalculator', () => {
       expect(breakdown['0.10']).toBe(10909091);
     });
 
+    it('calcul TVA 10% sur 10€ TTC', () => {
+      const items = [{
+        productId: 'p1', name: 'Plat', quantity: 1,
+        unitPriceInMicrounits: 10_000_000, // 10 €
+        taxRate: '0.10',
+        discountInMicrounits: 0,
+      } as unknown as CartItem];
+      const result = TaxCalculator.computeTvaBreakdown(items);
+      // TVA = 10€ × 0.10/1.10 = 0,909090...€ (909091 microunits)
+      expect(result['0.10']).toBe(909091);
+    });
+
     it('handles multiple tax rates', () => {
       const items = [
         cartItem({ taxRate: '0.055', unitPriceInMicrounits: 100000000 as any }),
@@ -46,6 +58,20 @@ describe('TaxCalculator', () => {
       const tvaWith = TaxCalculator.computeTvaBreakdown(withDiscount)['0.10']!;
       const tvaWithout = TaxCalculator.computeTvaBreakdown(withoutDiscount)['0.10']!;
       expect(tvaWith).toBeLessThan(tvaWithout);
+    });
+
+    it('ventile précisément TVA 5.5%, 10%, 20% sur même commande', () => {
+      const items = [
+        { productId: 'p1', name: 'Pain', quantity: 1, unitPriceInMicrounits: 2_000_000, taxRate: '0.055', discountInMicrounits: 0 } as unknown as CartItem,
+        { productId: 'p2', name: 'Plat', quantity: 1, unitPriceInMicrounits: 15_000_000, taxRate: '0.10', discountInMicrounits: 0 } as unknown as CartItem,
+        { productId: 'p3', name: 'Alcool', quantity: 1, unitPriceInMicrounits: 8_000_000, taxRate: '0.20', discountInMicrounits: 0 } as unknown as CartItem,
+      ];
+      const breakdown = TaxCalculator.computeTvaBreakdown(items);
+      // TVA = Math.round(TTC × r/(1+r))
+      expect(breakdown['0.055']).toBe(Math.round(2_000_000 * 0.055 / 1.055));   // = 104265
+      expect(breakdown['0.10']).toBe(Math.round(15_000_000 * 0.10 / 1.10));     // = 1363636
+      expect(breakdown['0.20']).toBe(Math.round(8_000_000 * 0.20 / 1.20));      // = 1333333
+      expect(Object.keys(breakdown)).toHaveLength(3);
     });
 
     it('returns empty breakdown for empty cart', () => {

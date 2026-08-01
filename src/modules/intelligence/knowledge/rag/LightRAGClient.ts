@@ -16,6 +16,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { empireAudit } from '@/infrastructure/services/audit';
 
 import {
     DEFAULT_LIGHTRAG_CONFIG,
@@ -395,6 +396,15 @@ export class LightRAGClient {
             }
         }
 
+        if (lastError) {
+            empireAudit.log({
+                module: 'system',
+                action: 'LIGHTRAG_RETRY_EXHAUSTED',
+                details: { label, error: lastError.message },
+                severity: 'critical',
+                timestamp: new Date()
+            });
+        }
         throw lastError ?? new LightRAGUnavailableError(label);
     }
 

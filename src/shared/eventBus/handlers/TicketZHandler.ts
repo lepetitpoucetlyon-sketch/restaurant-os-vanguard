@@ -26,7 +26,25 @@ type TicketZDoc = {
 export function registerTicketZHandler(): () => void {
   return NexusEventBus.on(
     'order.paid',
-    async ({ tenantId, totalInMicrounits, items }) => {
+    async (payload) => {
+      const { tenantId, totalInMicrounits, items, tableId } = payload;
+      
+      // P11-D, P11-E, P11-I : Libérer la table et la marquer à nettoyer (avec optimistic locking via tx)
+      if (tableId) {
+        const tablePath = `tenants/${tenantId}/tables/${tableId}`;
+        await Nexus.adapter.runTransaction(async (tx) => {
+          const table = await tx.get<{ status: string; cleaningRequired: boolean; version?: number }>(tablePath);
+          if (table && table.status !== 'available') {
+            tx.set(tablePath, {
+              ...table,
+              status: 'available',
+              freedAt: new Date().toISOString(),
+              cleaningRequired: true,
+            });
+          }
+        }).catch(err => logger.error(`[TicketZHandler] Erreur libération table ${tableId}`, err));
+      }
+
       const today = new Date().toISOString().split('T')[0];
       const path = `tenants/${tenantId}/ticketZ/${today}`;
 

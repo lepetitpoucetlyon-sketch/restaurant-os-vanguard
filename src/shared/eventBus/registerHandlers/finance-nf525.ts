@@ -5,6 +5,12 @@ import { registerCompEntryHandler } from '../handlers/CompEntryHandler';
 import { registerRefundExtourneHandler } from '../handlers/RefundExtourneHandler';
 import { registerRefundJournalHandler } from '../handlers/RefundJournalHandler';
 import { registerCompJournalHandler } from '../handlers/CompJournalHandler';
+import { registerTechAuditLedgerHandler } from '../handlers/TechAuditLedgerHandler';
+import { registerCryptoIntegrityCheckHandler } from '../handlers/CryptoIntegrityCheckHandler';
+import { registerMonthlyFECExportHandler } from '../handlers/MonthlyFECExportHandler';
+import { registerPaymentRejectAuditHandler } from '../handlers/PaymentRejectAuditHandler';
+import { registerTaxMismatchAlertHandler } from '../handlers/TaxMismatchAlertHandler';
+import { registerTicketZArchiveHandler } from '../handlers/TicketZArchiveHandler';
 
 export function registerFinanceNf525Handlers(): Array<() => void> {
   return [
@@ -15,5 +21,11 @@ export function registerFinanceNf525Handlers(): Array<() => void> {
     registerRefundExtourneHandler(),
     registerRefundJournalHandler(),
     registerCompJournalHandler(),
+    registerTechAuditLedgerHandler(),
+    registerCryptoIntegrityCheckHandler(),
+    registerMonthlyFECExportHandler(),
+    registerPaymentRejectAuditHandler(),
+    registerTaxMismatchAlertHandler(),
+    registerTicketZArchiveHandler(),
   ];
 }

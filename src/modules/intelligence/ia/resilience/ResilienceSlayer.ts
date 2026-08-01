@@ -96,4 +96,32 @@ export class ResilienceSlayer {
             SelfHealingEngine.auditAndHeal(targetAtom as import("jotai").PrimitiveAtom<import("@/store/base").NexusNode<unknown>>, "FORCE_SYNC", persistencePath);
         }
     }
+
+    /**
+     * 🛡️ CIRCUIT BREAKER: Grade X Resilience
+     * Wraps execution and returns graceful fallback when circuit is OPEN.
+     */
+    private static circuitFailures = 0;
+    private static circuitOpenUntil = 0;
+
+    static async withCircuitBreaker<T>(operation: () => Promise<T>, fallback: T): Promise<T> {
+        if (Date.now() < this.circuitOpenUntil) {
+            logger.warn('[Slayer] Circuit Breaker is OPEN. Returning graceful fallback.');
+            return fallback;
+        }
+
+        try {
+            const result = await operation();
+            this.circuitFailures = 0; // reset on success
+            return result;
+        } catch (error) {
+            this.circuitFailures++;
+            logger.error(`[Slayer] Circuit Breaker caught error. Failures: ${this.circuitFailures}`);
+            if (this.circuitFailures >= 3) {
+                logger.error('[Slayer] Circuit Breaker OPENING for 60s.');
+                this.circuitOpenUntil = Date.now() + 60000;
+            }
+            return fallback;
+        }
+    }
 }

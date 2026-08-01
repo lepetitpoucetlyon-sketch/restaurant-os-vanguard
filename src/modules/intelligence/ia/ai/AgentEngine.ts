@@ -23,16 +23,21 @@ function buildFetchUrl(endpoint: string, apiKey: string): string {
     return endpoint.includes('key=') ? endpoint : `${endpoint}?key=${apiKey}`;
 }
 
-async function executeGeminiRequest(url: string, body: string, apiKey: string): Promise<string> {
+async function executeGeminiRequest(url: string, body: string, apiKey: string, timeoutMs: number = 30000): Promise<{text: string, fallbackUsed: boolean}> {
     const maxAttempts = 3;
     let rawText = '';
+    let fallbackUsed = false;
 
     for (let attempts = 1; attempts <= maxAttempts; attempts++) {
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+            
             const headers: Record<string, string> = { 'Content-Type': 'application/json' };
             if (apiKey && !url.includes('key=')) headers['Authorization'] = `Bearer ${apiKey}`;
 
-            const res = await fetch(url, { method: 'POST', headers, body });
+            const res = await fetch(url, { method: 'POST', headers, body, signal: controller.signal });
+            clearTimeout(timeoutId);
 
             if (res.status === 429 && attempts < maxAttempts) {
                 await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
@@ -46,7 +51,13 @@ async function executeGeminiRequest(url: string, body: string, apiKey: string): 
             if (attempts >= maxAttempts) {
                 rawText = `[Erreur API ${res.status}] ${await res.text()}`;
             }
-        } catch (fetchErr) {
+        } catch (fetchErr: any) {
+            if (fetchErr.name === 'AbortError' && url.includes('gemini-pro')) {
+                // Timeout on pro -> fallback flash
+                url = url.replace('gemini-pro', 'gemini-flash');
+                fallbackUsed = true;
+                continue; // Retry next attempt with flash
+            }
             if (attempts >= maxAttempts) {
                 rawText = `[Erreur Réseau] ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`;
             } else {
@@ -54,7 +65,7 @@ async function executeGeminiRequest(url: string, body: string, apiKey: string): 
             }
         }
     }
-    return rawText;
+    return { text: rawText, fallbackUsed };
 }
 
 /**
@@ -93,7 +104,17 @@ export const AgentEngine = {
             const body = JSON.stringify({
                 contents: [{ parts: [{ text: `${systemPrompt}\n\n${dataContext}\n\nREQUÊTE UTILISATEUR :\n${request.userPrompt}` }] }],
             });
-            const rawText = await executeGeminiRequest(fetchUrl, body, request.apiKey);
+            const { text: rawText, fallbackUsed } = await executeGeminiRequest(fetchUrl, body, request.apiKey);
+
+            if (fallbackUsed) {
+                reasoning.push({
+                    id: `r3_${Date.now()}`,
+                    timestamp: new Date().toISOString(),
+                    action: 'Fallback Modèle',
+                    observation: 'Timeout sur gemini-pro',
+                    thought: 'Bascule automatique sur gemini-flash pour garantir une réponse.',
+                });
+            }
 
             return {
                 insight: {
