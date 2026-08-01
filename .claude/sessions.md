@@ -67,4 +67,6 @@
 | p08-handlers | src/shared/eventBus/handlers/ReportRetryHandler.ts, LLMFallbackHandler.ts, NexusEventBus.ts, registerHandlers.ts | 2026-08-01 | terminée |
 | v6-handlers | src/shared/eventBus/handlers/ (CompJournalHandler, ResaReminderHandler, ResaKitchenTaskHandler, NoShowCRMHandler, NoShowTableReleaseHandler, TableAutoReleaseHandler, BigGroupAlertHandler), NexusEventBus.ts, registerHandlers.ts | 2026-08-01 | terminée |
 | payroll-plugplay | Architecture paie plug-and-play : IPayrollConnectorProvider+ping(), PROVIDER_CATALOG, PayrollIntegrationPanel dynamique, browserPush/api/push/internal, PayrollConnectorFactory registry, PayrollExportHandler agnostique, routes API admin/hr/payroll/* | 2026-08-01 | terminée |
-| promise-audit | Audit promesses Restaurant OS + MCC : scans lecture seule + rapport docs/AUDIT_PROMESSES_RESTAURANT_OS_MCC.md | 2026-08-01 | active |
+| promise-audit | Audit promesses Restaurant OS + MCC : scans lecture seule + rapport docs/AUDIT_PROMESSES_RESTAURANT_OS_MCC.md | 2026-08-01 | terminée |
+| ui-audit-prompt | Rédaction mega-prompt Codex audit UI client (26 catégories, RBAC, calculs, flux cross-cat) — lecture seule | 2026-08-01 | terminée |
+| ui-client-audit | Audit UI client 26 catégories : connexions, calculs, flux cross-cat, RBAC + rapport docs/AUDIT_UI_CLIENT_26_CATEGORIES.md | 2026-08-01 | active |

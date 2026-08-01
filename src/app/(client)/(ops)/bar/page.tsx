@@ -14,6 +14,7 @@ import { BarTab, Wine, Cocktail } from "@/modules/ops/types/bar";
 import { winesAtom, cocktailsAtom, wineRegionsAtom } from "@/modules/ops/bar/store/barAtoms";
 import { Recipe } from "@nexus/contracts";
 import { useKitchen } from "@/modules/ops/providers";
+import { SovereignMath } from "@/shared/services/SovereignMath";
 
 import { BarSidebar } from "@modules/ops";
 import { KdsTab } from "@modules/ops";
@@ -86,10 +87,11 @@ export default function BarPage() {
         return true;
     }), [wines, filterRegion, searchQuery]);
 
-    const totalCellarValue = useMemo(() =>
-        wines.reduce((sum, w) => sum + (w.priceInMicrounits / 1_000_000 * w.stock), 0),
-        [wines]
-    );
+    const totalCellarValue = useMemo(() => {
+        const totalMicrounits = wines.reduce((sum, w) => 
+            SovereignMath.addMicrounits(sum, SovereignMath.mulMicrounits(w.priceInMicrounits, w.stock)), 0);
+        return totalMicrounits / 1_000_000;
+    }, [wines]);
     const lowStockWines = useMemo(() =>
         wines.filter(w => w.stock <= w.minStock).length,
         [wines]
