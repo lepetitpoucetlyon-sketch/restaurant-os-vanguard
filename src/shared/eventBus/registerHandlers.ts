@@ -58,7 +58,7 @@ import { registerTrainingComplianceAlertHandler } from './handlers/TrainingCompl
 import { registerComplianceDeadlineHandler } from './handlers/ComplianceDeadlineHandler';
 import { AbsenceUnderstaffingHandler } from './handlers/AbsenceUnderstaffingHandler';
 import { PayrollAutoCalcHandler } from './handlers/PayrollAutoCalcHandler';
-import { SilaeExportHandler } from './handlers/SilaeExportHandler';
+import { PayrollExportHandler } from './handlers/PayrollExportHandler';
 import { ContractRenewalAlertHandler } from './handlers/ContractRenewalAlertHandler';
 import { MedicalVisitAlertHandler } from './handlers/MedicalVisitAlertHandler';
 import { RecruitmentRouterHandler } from './handlers/RecruitmentRouterHandler';
@@ -202,7 +202,7 @@ export function registerNexusHandlers(): void {
     // HR G3
     PayrollAutoCalcHandler.register(),
     AbsenceUnderstaffingHandler.register(),
-    SilaeExportHandler.register(),
+    PayrollExportHandler.register(),   // provider-agnostique via PayrollConnectorFactory
     ContractRenewalAlertHandler.register(),
     MedicalVisitAlertHandler.register(),
     RecruitmentRouterHandler.register(),

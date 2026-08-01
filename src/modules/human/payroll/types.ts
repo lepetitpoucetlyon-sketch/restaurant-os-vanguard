@@ -46,14 +46,15 @@ export interface PayrollPeriodSummary {
     rows: PrepaieRow[];
     totalBrut: number;
     totalHeures: number;
-    provider?: 'csv' | 'silae' | 'merge';
+    provider?: string;
     syncStatus?: 'pending' | 'synced' | 'error';
     syncedAt?: string;
     externalRef?: string;         // ID côté Silae / Merge après sync
 }
 
 export interface PayrollProviderConfig {
-    provider: 'none' | 'silae' | 'merge';
+    /** Identifiant du provider — doit correspondre à une clé dans PayrollConnectorFactory */
+    provider: string;
     // Silae
     silaeApiKey?: string;
     silaeDossierId?: string;
@@ -61,4 +62,6 @@ export interface PayrollProviderConfig {
     // Merge.dev
     mergeAccountToken?: string;
     mergeLinkedAccountId?: string;
+    // Extensible : chaque provider peut ajouter ses propres clés ici
+    [key: string]: unknown;
 }
