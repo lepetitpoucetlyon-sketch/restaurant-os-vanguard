@@ -2,26 +2,30 @@ import { NexusEventBus } from '../NexusEventBus';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
-/**
- * ComplianceDeadlineHandler (P03-K)
- * Réagit aux alertes d'échéance de conformité (par ex: nettoyage, inspection)
- * et notifie le dashboard/manager.
- */
 export function registerComplianceDeadlineHandler(): () => void {
   return NexusEventBus.on(
     'compliance.deadline_approaching',
     async (payload) => {
-      logger.warn(`[ComplianceDeadline] Alerte pour le tenant ${payload.tenantId}: ${payload.type} (J-${payload.daysLeft})`);
+      const { tenantId, type, daysLeft } = payload;
+      logger.warn(`[ComplianceDeadline] Échéance ${type} dans ${daysLeft} jour(s)`);
 
-      // TODO: Logique pour notifier le dashboard ou envoyer un email au manager
+      const isCritical = daysLeft <= 1;
+
+      await NexusEventBus.emit('notification.urgent', {
+        v: 1,
+        tenantId,
+        message: isCritical
+          ? `URGENT : Échéance de conformité "${type}" DEMAIN. Action immédiate requise.`
+          : `Rappel : Échéance de conformité "${type}" dans ${daysLeft} jour(s).`,
+        roles: ['admin', 'manager'],
+        priority: isCritical ? 'CRITICAL' : 'HIGH',
+      });
+
       empireAudit.log({
         module: 'compliance',
-        action: 'compliance_deadline_alert',
-        details: {
-          type: payload.type,
-          daysLeft: payload.daysLeft,
-        },
-        severity: payload.daysLeft <= 1 ? 'critical' : 'high',
+        action: 'COMPLIANCE_DEADLINE_NOTIFIED',
+        details: { type, daysLeft },
+        severity: isCritical ? 'critical' : 'high',
         timestamp: new Date(),
       });
     },

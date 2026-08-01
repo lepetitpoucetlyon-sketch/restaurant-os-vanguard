@@ -1,26 +1,33 @@
 import { NexusEventBus } from '../NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
-/**
- * TrainingComplianceAlertHandler (P03-G)
- * Réagit à 'hr.training_expired' (par exemple formation hygiène HACCP)
- * et déclenche une alerte RH ou bloque la pointeuse de l'employé.
- */
 export function registerTrainingComplianceAlertHandler(): () => void {
   return NexusEventBus.on(
     'hr.training_expired',
     async (payload) => {
-      logger.warn(`[TrainingCompliance] Formation expirée pour ${payload.employeeId} (Type: ${payload.trainingType})`);
+      const { tenantId, employeeId, trainingType } = payload;
+      logger.warn(`[TrainingCompliance] Formation expirée pour ${employeeId} (Type: ${trainingType})`);
 
-      // TODO: Logique pour bloquer la pointeuse ou envoyer une alerte RH (Push)
+      await Nexus.adapter.update(`tenants/${tenantId}/employees/${employeeId}`, {
+        trainingBlockActive: true,
+        blockedTraining: trainingType,
+        trainingBlockedAt: new Date().toISOString(),
+      });
+
+      await NexusEventBus.emit('notification.urgent', {
+        v: 1,
+        tenantId,
+        message: `Formation "${trainingType}" expirée pour l'employé ${employeeId}. Accès pointeuse suspendu jusqu'au renouvellement.`,
+        roles: ['admin', 'manager'],
+        priority: 'HIGH',
+      });
+
       empireAudit.log({
         module: 'human',
-        action: 'training_expired_alert',
-        details: {
-          employeeId: payload.employeeId,
-          trainingType: payload.trainingType,
-        },
+        action: 'TRAINING_EXPIRED_BLOCK',
+        details: { employeeId, trainingType },
         severity: 'high',
         timestamp: new Date(),
       });

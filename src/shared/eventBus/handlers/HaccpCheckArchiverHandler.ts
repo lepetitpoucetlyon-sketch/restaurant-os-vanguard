@@ -1,25 +1,32 @@
 import { NexusEventBus } from '../NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
-/**
- * HaccpCheckArchiverHandler (P03-E)
- * Réagit à 'haccp.check.saved'
- * et déclenche un archivage froid ou une analyse.
- */
 export function registerHaccpCheckArchiverHandler(): () => void {
   return NexusEventBus.on(
     'haccp.check.saved',
     async (payload) => {
-      logger.info(`[HaccpCheckArchiver] Nouveau relevé sauvegardé (Check: ${payload.checkId})`);
+      const { checkId, tenantId } = payload;
+      logger.info(`[HaccpCheckArchiver] Archivage du relevé HACCP ${checkId}`);
 
-      // TODO: Logique pour envoyer vers Data Warehouse ou archive froide
+      const checkData = await Nexus.adapter.get(`tenants/${tenantId}/haccpChecks/${checkId}`) as Record<string, unknown> | null;
+
+      if (!checkData) {
+        logger.warn(`[HaccpCheckArchiver] Relevé ${checkId} introuvable — archivage ignoré.`);
+        return;
+      }
+
+      await Nexus.adapter.set(`tenants/${tenantId}/haccpArchives/${checkId}`, {
+        ...checkData,
+        archivedAt: new Date().toISOString(),
+        source: 'auto-archiver',
+      });
+
       empireAudit.log({
         module: 'compliance',
-        action: 'haccp_check_archived',
-        details: {
-          checkId: payload.checkId,
-        },
+        action: 'HACCP_CHECK_ARCHIVED',
+        details: { checkId },
         severity: 'low',
         timestamp: new Date(),
       });

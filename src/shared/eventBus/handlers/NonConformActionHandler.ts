@@ -1,26 +1,37 @@
 import { NexusEventBus } from '../NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { SharedKernel } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
-/**
- * NonConformActionHandler (P03-F)
- * Réagit à 'haccp.nonconform' (Non-conformité détectée)
- * et alerte le manager pour une action corrective.
- */
 export function registerNonConformActionHandler(): () => void {
   return NexusEventBus.on(
     'haccp.nonconform',
     async (payload) => {
-      logger.warn(`[NonConformAction] Action corrective requise pour le tenant ${payload.tenantId} (Check: ${payload.checkId})`);
+      const { tenantId, checkId, correctionDeadline } = payload;
+      logger.warn(`[NonConformAction] Non-conformité HACCP (Check: ${checkId})`);
 
-      // TODO: Logique pour notifier (Push/Email)
+      const actionId = SharedKernel.generateId('CORRECTIVE_ACTION');
+      await Nexus.adapter.set(`tenants/${tenantId}/correctiveActions/${actionId}`, {
+        id: actionId,
+        checkId,
+        status: 'pending',
+        deadline: correctionDeadline,
+        createdAt: new Date().toISOString(),
+      });
+
+      await NexusEventBus.emit('notification.urgent', {
+        v: 1,
+        tenantId,
+        message: `Non-conformité HACCP détectée (relevé ${checkId}). Action corrective requise avant le ${correctionDeadline}.`,
+        roles: ['admin', 'manager'],
+        priority: 'CRITICAL',
+      });
+
       empireAudit.log({
         module: 'compliance',
-        action: 'nonconformity_alert',
-        details: {
-          checkId: payload.checkId,
-          correctionDeadline: payload.correctionDeadline,
-        },
+        action: 'NONCONFORMITY_ACTION_CREATED',
+        details: { checkId, actionId, correctionDeadline },
         severity: 'high',
         timestamp: new Date(),
       });
