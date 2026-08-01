@@ -1,10 +1,3 @@
-import { registerTicketZHandler } from '../handlers/TicketZHandler';
-import { registerPaymentLedgerHandler } from '../handlers/PaymentLedgerHandler';
-import { registerSplitPaymentHandler } from '../handlers/SplitPaymentHandler';
-import { registerCompEntryHandler } from '../handlers/CompEntryHandler';
-import { registerRefundExtourneHandler } from '../handlers/RefundExtourneHandler';
-import { registerRefundJournalHandler } from '../handlers/RefundJournalHandler';
-import { registerCompJournalHandler } from '../handlers/CompJournalHandler';
 import { registerSupplierInvoiceLedgerHandler } from '../handlers/SupplierInvoiceLedgerHandler';
 import { registerSepaExportHandler } from '../handlers/SepaExportHandler';
 import { registerBankSyncAuditHandler } from '../handlers/BankSyncAuditHandler';
@@ -15,16 +8,11 @@ import { PeriodLockGuardHandler } from '../handlers/PeriodLockGuardHandler';
 import { StripePaymentRetryHandler } from '../handlers/StripePaymentRetryHandler';
 import { CashflowForecastHandler } from '../handlers/CashflowForecastHandler';
 import { BankConnectionExpiredHandler } from '../handlers/BankConnectionExpiredHandler';
+import { registerFinanceNf525Handlers } from './finance-nf525';
 
 export function registerFinanceHandlers(): Array<() => void> {
   return [
-    registerTicketZHandler(),
-    registerPaymentLedgerHandler(),
-    registerSplitPaymentHandler(),
-    registerCompEntryHandler(),
-    registerRefundExtourneHandler(),
-    registerRefundJournalHandler(),
-    registerCompJournalHandler(),
+    ...registerFinanceNf525Handlers(),
     registerSupplierInvoiceLedgerHandler(),
     registerSepaExportHandler(),
     registerBankSyncAuditHandler(),

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DeliveryProviderFactory } from '@/modules/ops';
+import { DeliveryProviderFactory } from '@/modules/ops/connectors/delivery/DeliveryProviderFactory';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';

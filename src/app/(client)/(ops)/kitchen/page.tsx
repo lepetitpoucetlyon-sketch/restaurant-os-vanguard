@@ -1,3 +1,5 @@
+"use client";
+
 import { KitchenDashboard } from '@/modules/ops';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 

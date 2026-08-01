@@ -1,6 +1,14 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.0.1] - 2026-08-01 - SUB-HANDLERS SPLIT & PAGE BARRELS ALIGNMENT 🧩
+
+### 🧩 EVENT BUS SUB-HANDLERS & CONNECTORS
+- **Sous-handlers spécialisés** : Extraction des sous-handlers `finance-nf525.ts`, `ops-delivery.ts`, et `ops-kds.ts` dans `src/shared/eventBus/registerHandlers/`.
+- **Alignement des routes pages (11 routes)** : Alignement des imports de composants de page sur les barrels de piliers (`@/modules/ops`, `@/modules/finance`, etc.).
+- **Synchronisation Connecteurs** : Mise à jour des routes webhooks livraison & réservations.
+
 ## [2.0.0] - 2026-08-01 - RESTRUCTURATION ARCHITECTURALE & CONFORMITÉ SENTRUX 🏛️
+
 
 ### 🏛️ ARCHITECTURE & DESTRUCTION GOD FILES
 - **`registerHandlers.ts` Fan-out Split (96 → 7)** : Décomposition du god file en 7 sous-modules par domaine métier (`ops`, `finance`, `compliance`, `commerce`, `logistics`, `intelligence`, `human`) sous `src/shared/eventBus/registerHandlers/`.

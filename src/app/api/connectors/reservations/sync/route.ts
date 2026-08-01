@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ReservationProviderFactory } from '@/modules/ops';
+import { ReservationProviderFactory } from '@/modules/ops/connectors/reservations/ReservationProviderFactory';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

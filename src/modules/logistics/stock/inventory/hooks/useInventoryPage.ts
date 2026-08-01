@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { useInventory } from "@modules/logistics/stock/inventory";
+import { useInventory } from './useInventory';
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 
-import type { StockItem } from "@modules/logistics/stock/inventory/types";
+import type { StockItem } from '../types';
 
 type InvTab = "stock" | "storage" | "rotating_count";
 

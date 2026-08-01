@@ -15,7 +15,7 @@ import {
     Sparkles,
 } from "lucide-react";
 
-import { useInventoryPage } from "@/modules/logistics/stock/inventory/hooks";
+import { useInventoryPage } from "@/modules/logistics/stock/inventory/hooks/useInventoryPage";
 import {
     StockReceptionModal,
     StockTransferModal,

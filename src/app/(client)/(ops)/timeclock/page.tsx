@@ -1,3 +1,5 @@
+"use client";
+
 import { TimeclockDashboard } from '@/modules/human';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 

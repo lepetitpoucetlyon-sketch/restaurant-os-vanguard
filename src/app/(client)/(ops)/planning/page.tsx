@@ -1,3 +1,5 @@
+"use client";
+
 import { PlanningDashboard } from '@/modules/human';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 

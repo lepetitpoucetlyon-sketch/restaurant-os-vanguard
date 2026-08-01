@@ -16,8 +16,7 @@ export { KitchenDashboard } from './production/kitchen/components/KitchenDashboa
 // Infrastructure pilier (providers, connectors)
 export { NexusOpsProvider, useOrders, useTables, useKitchen } from './providers';
 export { useGroups } from './providers/hooks/commerceHooks';
-export { DeliveryProviderFactory } from './connectors/delivery';
-export { ReservationProviderFactory } from './connectors/reservations';
+// Factories server-only : importées directement par les routes API, pas ici
 
 // Cross-pilier (facility)
 // eslint-disable-next-line no-restricted-imports

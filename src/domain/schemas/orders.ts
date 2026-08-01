@@ -49,7 +49,7 @@ export const OrderLineSchema = z.object({
   modification: OrderItemModificationSchema.optional(),
 });
 
-export const OrderSchema = z.object({
+const OrderBaseSchema = z.object({
   id:            UUIDSchema,
   type:          z.literal('order').default('order'),
   correlationId: UUIDSchema.optional(),
@@ -72,7 +72,9 @@ export const OrderSchema = z.object({
   covers:        z.number().int().min(1).max(50).optional(),
   notes:         z.string().max(500).pipe(SanitizedStringSchema).optional(),
   schemaVersion: z.literal(2).default(2),
-}).catchall(z.any()).refine(
+}).catchall(z.any());
+
+export const OrderSchema = OrderBaseSchema.refine(
   data => data.paidAt === null || data.paidAt === undefined || data.paidAt >= data.createdAt,
   { message: 'La date de paiement ne peut pas précéder la création', path: ['paidAt'] }
 );
@@ -80,5 +82,5 @@ export const OrderSchema = z.object({
 export type Order = z.infer<typeof OrderSchema>;
 export type OrderLine = z.infer<typeof OrderLineSchema>;
 
-export const OrderPatchSchema = OrderSchema.partial().omit({ id: true, correlationId: true, createdAt: true });
+export const OrderPatchSchema = OrderBaseSchema.partial().omit({ id: true, correlationId: true, createdAt: true });
 export type OrderPatch = z.infer<typeof OrderPatchSchema>;
