@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops';
 import { toMicrounits } from '@/domain/schemas/primitives';
 
 // --- Mocks ---

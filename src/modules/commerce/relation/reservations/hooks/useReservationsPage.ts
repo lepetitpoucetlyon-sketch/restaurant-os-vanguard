@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useReservations, useTables, useGroups } from "@/modules/ops/providers";
+import { useReservations, useTables, useGroups } from "@/modules/ops";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
 import { useCRM } from "@/modules/commerce";
@@ -20,7 +20,7 @@ import { authedFetch } from "@/lib/client/authedFetch";
 import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/domain/schemas/ops";
 import type { Customer } from "@nexus/contracts";
-import type { GroupFormData } from "@/modules/commerce/relation/reservations/components/GroupFormModal";
+import type { GroupFormData } from "@/modules/commerce";
 
 const TERRACE_ZONE_IDS = ["zone-terrasse", "terrace"];
 const TERRASSE_SETTINGS_PATH = "settings/terrasse";

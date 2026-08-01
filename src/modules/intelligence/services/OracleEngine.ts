@@ -127,7 +127,7 @@ export async function suggestChickenProcurement(qty: number, tenantId: string): 
   // Inject into SovereignLedger PROPOSALS account
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-  const { SovereignLedger } = await import('@/modules/finance/services');
+  const { SovereignLedger } = await import('@/modules/finance/services/SovereignLedger');
   await SovereignLedger.getInstance(tenantId).recordTransfer({
     debitAccount: 'PURCHASES',
     creditAccount: 'PROPOSALS', // Awaiting human signing

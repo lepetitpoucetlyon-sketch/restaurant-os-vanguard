@@ -10,11 +10,11 @@ import { usePageSetting } from "@/shared/components/settings/ContextualSettings"
 import { useIntelligence } from "@/modules/ops/providers";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useNexusFleet } from "@/modules/intelligence/ia/fleet";
+import { useNexusFleet } from "@/modules/intelligence";
 import { useLanguage } from "@/shared/hooks";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { formatMu } from "@/modules/finance/components/financeUtils";
+import { formatMu } from "@/modules/finance";
 import { useIsMobile } from "@/shared/hooks";
 import { POSService } from "@/infrastructure/adapters/POSAdapter";
 import { CartItem } from "@modules/ops/workflow/engine/types";

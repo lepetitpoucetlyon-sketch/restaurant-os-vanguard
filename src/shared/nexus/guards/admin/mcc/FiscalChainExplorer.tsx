@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Link, Database, Search, CheckCircle2, Lock } from 'lucide-react';
-import { useCompliance } from '@/modules/finance/providers/NexusFiscalProvider';
+import { useCompliance } from '@/modules/finance';
 import { format } from 'date-fns';
 
 import { FiscalSeal } from '@modules/finance/types';

@@ -73,3 +73,4 @@
 | rbac-verify | Vérification déploiement RBAC 3 niveaux : schemas, hooks, guards, pages, API, commit | 2026-08-01 | terminée |
 | mcc-skeleton | Restructuration AUDIT_PROMESSES → squelette multi-plateforme MCC + bootstrap pilier 8 (facility) + rapatriement floor-plan/registre/settings | 2026-08-01 | terminée |
 | genesis-variant | Multi-variant provisioning + restructuration 7 piliers en domaines universels (ops/commerce/finance/compliance/human/logistics/intelligence) | 2026-08-01 | terminée |
+| arch-diagram | Lecture seule — création schéma architectural réel (SVG artifact) | 2026-08-01 | terminée |

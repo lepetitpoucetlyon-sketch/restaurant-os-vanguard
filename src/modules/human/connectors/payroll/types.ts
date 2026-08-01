@@ -1,3 +1,5 @@
+import type { PayrollPeriodSummary } from '../../remuneration/payroll/types';
+
 export interface TimesheetEntry {
     date: string;   // YYYY-MM-DD
     hours: number;
@@ -37,5 +39,5 @@ export interface IPayrollConnectorProvider {
     fetchPayslips(tenantId: string, month: string): Promise<Payslip[]>;
     fetchPayrollCost(tenantId: string, month: string): Promise<PayrollCost>;
     /** Exporte le résumé pré-paie complet vers le prestataire. */
-    syncPeriod(summary: import('@/modules/human/remuneration/payroll/types').PayrollPeriodSummary): Promise<PayrollSyncResult>;
+    syncPeriod(summary: PayrollPeriodSummary): Promise<PayrollSyncResult>;
 }

@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
 
-import { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 /**
  * Analyse intelligente BACKGROUND après chaque paiement.
@@ -65,7 +65,7 @@ export function registerIntelligenceHandler(): () => void {
   );
 }
 
-async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops/workflow/engine/types").CartItem[]): Promise<void> {
+async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops").CartItem[]): Promise<void> {
   try {
     const zcpoState = await readZcpoState();
     if (zcpoState?.memoryPressure === 'critical') return;

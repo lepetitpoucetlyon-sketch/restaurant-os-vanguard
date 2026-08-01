@@ -15,11 +15,8 @@ import { toast } from "sonner";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
-import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { ExpenseClaimDialog } from "@modules/finance/components/accounting";
-import { useBilling } from "@modules/finance/comptabilite/billing/hooks/useBilling";
-import { FECExporter } from "@modules/finance/comptabilite/accounting/domain/FECExporter";
-import { useTenant, useActionPermission } from "@/shared/hooks";
+import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
@@ -112,7 +109,6 @@ export function FinanceDashboard() {
     const [activeTab, setActiveTab] = useState<FinanceTab>(computeInitialTab(tabParam));
     const [claimOpen, setClaimOpen] = useState(false);
     const [closingZ, setClosingZ] = useState(false);
-    const [billingOrder, setBillingOrder] = useState<string | null>(null);
 
     // fin-8: bank connection
     const [bankModalOpen, setBankModalOpen] = useState(false);
@@ -142,7 +138,6 @@ export function FinanceDashboard() {
 
     const { activeTenantId } = useTenant();
     const closePeriodPermission = useActionPermission("finance", "close_period");
-    const { billOrder } = useBilling();
     const { data: orders, isLoading: ordersLoading } = useOrders();
 
     const paidOrders = filterPaidOrders(orders as Order[]);
@@ -187,19 +182,6 @@ export function FinanceDashboard() {
             setClosingZ(false);
         }
     }, [activeTenantId]);
-
-    const handleBillOrder = useCallback(async (order: Order) => {
-        setBillingOrder(order.id);
-        try {
-            await billOrder(order);
-        } finally {
-            setBillingOrder(null);
-        }
-    }, [billOrder]);
-
-    const handleFECExport = useCallback(() => {
-        FECExporter.downloadFEC(journalEntries as unknown as JournalEntry[]);
-    }, [journalEntries]);
 
     // fin-8: open Powens webview in modal iframe
     const handleConnectBank = useCallback(async () => {
@@ -348,8 +330,6 @@ export function FinanceDashboard() {
                     <BillingTab
                         paidOrders={paidOrders}
                         ordersLoading={ordersLoading}
-                        billingOrder={billingOrder}
-                        onBillOrder={handleBillOrder}
                     />
                 )}
 
@@ -376,7 +356,7 @@ export function FinanceDashboard() {
                 {/* ── Audit fiscal ───────────────────────────────────────────── */}
                 {activeTab === "audit" && (
                     <TabGuard pageKey="finance" tabKey="audit">
-                        <AuditTab entriesCount={journalEntries.length} onExportFEC={handleFECExport} />
+                        <AuditTab entriesCount={journalEntries.length} journalEntries={journalEntries} />
                     </TabGuard>
                 )}
             </main>

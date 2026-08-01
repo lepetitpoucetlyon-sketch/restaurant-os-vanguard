@@ -3,6 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/infrastructure/services/offline/offline-store';
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
+import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
@@ -210,7 +211,7 @@ export class NexusBridge {
    * 🖋️ Suture GRADE X+++: Emission CommunicationPulse (Email/SMS)
    * @deprecated Use CommunicationService.sendCommunicationPulse directly
    */
-  static async sendCommunicationPulse(pulse: import('@/modules/finance/tresorerie/collection/types').CommunicationPulse) {
+  static async sendCommunicationPulse(pulse: CommunicationPulse) {
       const { CommunicationService } = await import('@/infrastructure/services/CommunicationService');
       return CommunicationService.sendCommunicationPulse(pulse);
   }

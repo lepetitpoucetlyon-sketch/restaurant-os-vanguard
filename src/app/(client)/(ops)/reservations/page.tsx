@@ -18,7 +18,7 @@ import { useReservationsPage } from "@/modules/commerce/relation/reservations/ho
 import { PinModal } from "@modules/commerce/ui/pos/PinModal";
 import { DailyListView } from "@/modules/commerce/relation/reservations/components/DailyListView";
 import { WeeklyView } from "@/modules/commerce/relation/reservations/components/WeeklyView";
-import { GroupFormModal } from "@/modules/commerce/relation/reservations/components/GroupFormModal";
+import { GroupFormModal } from "@/modules/commerce";
 import dynamic from "next/dynamic";
 const EventQuoteModal = dynamic(
   () => import("@/modules/commerce/relation/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),

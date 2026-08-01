@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useQuality } from '@modules/compliance';
-import { QualityControl } from '@/modules/compliance/types/quality';
+import { QualityControl } from '@/modules/compliance';
 
 export const VisualInspection: React.FC = () => {
     const { activeControl, setActiveControl: updateControl } = useQuality();

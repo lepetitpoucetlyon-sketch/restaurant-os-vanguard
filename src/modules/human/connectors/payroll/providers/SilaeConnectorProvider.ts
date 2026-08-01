@@ -1,5 +1,6 @@
 import type { IPayrollConnectorProvider, TimesheetEntry, Payslip, PayrollCost, PayrollSyncResult } from '../types';
-import { SilaeClient } from '@/modules/human/remuneration/payroll/SilaeClient';
+import type { PayrollPeriodSummary } from '../../remuneration/payroll/types';
+import { SilaeClient } from '@/modules/human/remuneration/payroll';
 import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
 import { logger } from '@/lib/logger';
 
@@ -53,7 +54,7 @@ export class SilaeConnectorProvider implements IPayrollConnectorProvider {
         return { month, totalGross: 0, totalNet: 0, totalEmployerCost: 0, headcount: 0 };
     }
 
-    async syncPeriod(summary: import('@/modules/human/remuneration/payroll/types').PayrollPeriodSummary): Promise<PayrollSyncResult> {
+    async syncPeriod(summary: PayrollPeriodSummary): Promise<PayrollSyncResult> {
         const client = this.client();
         return client.syncPeriod(summary);
     }

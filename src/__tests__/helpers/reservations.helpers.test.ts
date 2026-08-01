@@ -9,7 +9,10 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({ Nexus: { adapter: {}, getTenantPath
 vi.mock('@/store/pillars/sovereign', () => ({ tenantIdAtom: {} }));
 vi.mock('@/lib/client/authedFetch', () => ({ authedFetch: vi.fn() }));
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
-vi.mock('jotai', () => ({ useAtomValue: vi.fn() }));
+vi.mock('jotai', async () => {
+    const actual = await vi.importActual<typeof import('jotai')>('jotai');
+    return { ...actual, useAtomValue: vi.fn() };
+});
 
 import { addDays, addWeeks, subWeeks } from 'date-fns';
 import {

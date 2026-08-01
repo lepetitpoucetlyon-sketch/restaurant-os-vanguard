@@ -8,7 +8,7 @@ import { Product, OptionGroup, Option } from "@nexus/contracts";
 import { useLanguage } from "@/shared/hooks";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useNexusFleet } from "@/modules/intelligence/ia/fleet";
+import { useNexusFleet } from "@/modules/intelligence";
 
 // Standard EU allergens list
 const COMMON_ALLERGENS = [

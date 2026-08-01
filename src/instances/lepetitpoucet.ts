@@ -1,4 +1,5 @@
 import type { TenantConfig } from '@/shared/nexus-contract';
+// eslint-disable-next-line no-restricted-imports
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 
 /**

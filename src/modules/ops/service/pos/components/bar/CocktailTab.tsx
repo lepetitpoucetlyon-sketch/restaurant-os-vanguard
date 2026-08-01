@@ -8,7 +8,7 @@ import {
   TrendingUp 
 } from "lucide-react";
 import { Button } from "@ui/button";
-import { Cocktail } from "@/modules/ops/types/bar";
+import type { Cocktail } from "@/modules/ops/types/bar";
 import { formatCurrency } from "@/lib/formatters";
 
 interface CocktailTabProps {

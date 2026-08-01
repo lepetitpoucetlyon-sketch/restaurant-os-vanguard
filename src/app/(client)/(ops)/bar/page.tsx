@@ -10,10 +10,10 @@ const ProductFormModal = dynamic(
 );
 import { RecipeDetailDialog } from "@modules/ops";
 
-import { BarTab, Wine, Cocktail } from "@/modules/ops/types/bar";
+import { BarTab, Wine, Cocktail } from "@/modules/ops";
 import { winesAtom, cocktailsAtom, wineRegionsAtom } from "@/modules/ops/service/bar/store/barAtoms";
 import { Recipe } from "@nexus/contracts";
-import { useKitchen } from "@/modules/ops/providers";
+import { useKitchen } from "@/modules/ops";
 
 import { BarSidebar } from "@modules/ops";
 import { KdsTab } from "@modules/ops";

@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { X, Camera, ReceiptEuro, Save, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@ui/button";
 import { motion } from "framer-motion";
-import { useAccounting } from "@/modules/finance/providers/NexusFiscalProvider";
+import { useAccounting, useNexusFiscal } from "@/modules/finance/providers/NexusFiscalProvider";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useUI } from "@/shared/hooks";
@@ -32,7 +32,9 @@ const CATEGORIES: { id: string; label: string }[] = [
 export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps) {
     const { theme } = useUI();
     const isDark = theme === 'dark';
-    const { submitExpense } = useAccounting();
+    useAccounting();
+    const { accounting } = useNexusFiscal();
+    const { submitExpense } = accounting;
     const { showToast } = useToast();
 
     const fileInputRef = useRef<HTMLInputElement>(null);

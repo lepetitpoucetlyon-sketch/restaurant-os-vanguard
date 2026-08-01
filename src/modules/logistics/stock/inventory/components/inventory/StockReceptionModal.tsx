@@ -5,7 +5,7 @@ import { PremiumSelect } from "@ui/PremiumSelect";
 import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X, Truck } from "lucide-react";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from "@/modules/ops/providers";
+import { useInventory } from "@/modules/ops";
 // import { receiveStockAction } from "@/app/actions/inventory";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";

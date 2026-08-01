@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { formatMu } from "@/modules/finance/components/financeUtils";
+import { formatMu } from "@/modules/finance";
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@components/ui/PageHeader";

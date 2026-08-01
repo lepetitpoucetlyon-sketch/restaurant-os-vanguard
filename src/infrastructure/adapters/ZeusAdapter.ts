@@ -1,5 +1,5 @@
-import { AgentEngine } from '@/modules/intelligence/ia/ai/AgentEngine';
-import { AgentDomain } from '@/modules/intelligence/domain/agency/types';
+import { AgentEngine } from '@/modules/intelligence';
+import { AgentDomain } from '@/modules/intelligence';
 import {
     ZeusPulseResult,
     ZeusAnomaly,
@@ -152,7 +152,7 @@ export class ZeusEngine {
         domain: AgentDomain,
         prompt: string,
         context?: import('@/shared/nexus-contract').SovereignValue,
-    ): Promise<import('@/modules/intelligence/domain/agency/types').AgentResponse> {
+    ): Promise<import('@/modules/intelligence').AgentResponse> {
         const agent =
             this.manifest.activeAgents.find((a) => a.domain === domain) ||
             this.manifest.activeAgents[0];

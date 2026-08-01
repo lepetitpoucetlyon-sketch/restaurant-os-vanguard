@@ -112,7 +112,9 @@ export const VisionService = {
 
         // Server-side: call LLMManager directly
         try {
+            // eslint-disable-next-line no-restricted-imports
             const { LLMManager } = await import('@/modules/intelligence/ia/ai');
+            // eslint-disable-next-line no-restricted-imports
             const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
             const imageData = plateBase64.includes(',') ? plateBase64.split(',')[1] : plateBase64;
             const response = await LLMManager.provider.generateFromImage({

@@ -4,9 +4,10 @@ import { getDefaultStore } from 'jotai';
 import { ResilienceSlayer } from '@modules/intelligence/ia/resilience/ResilienceSlayer';
 
 // Mocks
-vi.mock('jotai', () => ({
-    getDefaultStore: vi.fn()
-}));
+vi.mock('jotai', async () => {
+    const actual = await vi.importActual<typeof import('jotai')>('jotai');
+    return { ...actual, getDefaultStore: vi.fn() };
+});
 
 vi.mock('@/store/pillars', () => ({
     ordersNodeAtom: { toString: () => 'ordersNodeAtom' },

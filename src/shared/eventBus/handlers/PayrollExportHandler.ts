@@ -2,9 +2,9 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { PayrollConnectorFactory } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
-import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
-import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
+import { PayrollConnectorFactory } from '@/modules/human';
+import { PrepaieBuilder } from '@/modules/human';
+import type { PayrollProviderConfig } from '@/modules/human';
 
 export class PayrollExportHandler {
   static register() {

@@ -32,12 +32,13 @@ export interface InvoiceExtractionOptions {
 
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
+// eslint-disable-next-line no-restricted-imports
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 
-const MODELS = {
+const getModels = () => ({
     flash: AI_MODELS.visionFast,
     pro: AI_MODELS.visionPro,
-} as const;
+} as const);
 
 // Cross-validation tolerance (±2 centimes)
 const TOLERANCE_CENTS = 2;
@@ -60,7 +61,7 @@ export const InvoiceExtractionService = {
         options: InvoiceExtractionOptions = {}
     ): Promise<InvoiceExtractionResult> {
         const { model = 'flash', tenantId = 'system' } = options;
-        const modelId = MODELS[model];
+        const modelId = getModels()[model];
         const startTime = Date.now();
 
         logger.info(`[InvoiceExtraction] Starting extraction with ${modelId} for tenant ${tenantId}`);

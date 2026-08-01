@@ -1,5 +1,5 @@
 "use client";
-import { useNexusFleet } from '@/modules/intelligence/ia/fleet';
+import { useNexusFleet } from '../../../ia/fleet';
 
 export const useIntelligence = () => {
     const fleet = useNexusFleet();

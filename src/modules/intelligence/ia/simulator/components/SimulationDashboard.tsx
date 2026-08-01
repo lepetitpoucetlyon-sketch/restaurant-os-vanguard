@@ -22,7 +22,8 @@ import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from "@modules/intelligence/ia/simulator/SimulationService";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from "@/modules/ops/providers";
+        // eslint-disable-next-line vanguard/no-inter-module-imports
+import { useInventory } from "@/modules/logistics/stock/inventory/hooks/useInventory";
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {

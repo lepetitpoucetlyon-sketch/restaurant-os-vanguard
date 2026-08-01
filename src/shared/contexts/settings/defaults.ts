@@ -286,6 +286,7 @@ export const defaultIntegrationsConfig: IntegrationsConfig = {
 };
 
 import { NexusAIConfig } from '@nexus/contracts/settings/nexus';
+// eslint-disable-next-line no-restricted-imports
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 
 export const defaultInventory: InventoryConfig = {

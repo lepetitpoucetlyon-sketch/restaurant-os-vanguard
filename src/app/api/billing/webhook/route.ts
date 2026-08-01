@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { BillingService } from '@/modules/finance/services/BillingService';
+import { BillingService } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 
 /**

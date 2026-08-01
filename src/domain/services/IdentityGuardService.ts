@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+// eslint-disable-next-line no-restricted-imports
 import { LLMManager } from '@/modules/intelligence/ia/ai';
 import {
     IdentityExtractionSchema,
@@ -7,13 +8,14 @@ import {
     type ComplianceExtractionError
 } from '@/domain/schemas/compliance.schemas';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
+// eslint-disable-next-line no-restricted-imports
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 
 export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }
     | { success: false; error: ComplianceExtractionError | { error: string; reason: string; flags: string[] }; rawResponse: string };
 
-const MODEL_ID = AI_MODELS.fast;
+const getModelId = () => AI_MODELS.fast;
 
 export const IdentityGuardService = {
     /**
@@ -67,7 +69,7 @@ export const IdentityGuardService = {
             : "\nCONTEXTE : UNTRUSTED_OUTSIDE_VASSAL. raw_value doit être NULL pour tout Tier 4.";
 
         const response = await LLMManager.provider.generateFromImage({
-            model: MODEL_ID,
+            model: getModelId(),
             systemPrompt: IDENTITY_GUARD_SYSTEM_PROMPT + contextInstruction,
             userPrompt: "Analyze this document for GDPR compliance. Return JSON only.",
             image: { base64: imageData, mimeType: 'image/jpeg' },

@@ -6,10 +6,9 @@ import { bootSyncManager } from '@/infrastructure/services/offline/sync-manager'
 import { NexusBridge } from '@/lib/nexus/NexusBridge';
 import { TelemetryService } from '@/lib/nexus/TelemetryService';
 import { Mutex } from '@/lib/utils/Mutex';
-import { TaskContext, TASK_MAPS } from '@/lib/icm/TaskContext';
+import { TaskContext, TASK_MAPS, readZcpoState, degradeImportanceMap } from '@/lib/icm';
 import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
 import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
-import { readZcpoState, degradeImportanceMap } from '@/lib/icm/zcpoBridge';
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
 import { initMasterBridgeListener } from './sync/masterBridgeInit';

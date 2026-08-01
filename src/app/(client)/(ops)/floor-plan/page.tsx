@@ -6,13 +6,13 @@ import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardLi
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
-import { useTables } from "@/modules/ops";
+import { useTables } from "@/modules/ops/providers";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/shared/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
 import { Table, TableStatus } from "@nexus/contracts";
-import { FloorPlanEditorRef } from "@modules/ops";
+import type { FloorPlanEditorRef } from "@/modules/facility/spaces/floor-plan/FloorPlanEditor";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 

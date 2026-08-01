@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react';
 import { useAuth } from '@/shared/hooks';
 import { useSettings } from '@/shared/contexts/SettingsContext';
-import { AgentDomain, AgentRole, AgentResponse } from '@/modules/intelligence/domain/agency/types';
-import { AgentEngine } from '@/modules/intelligence/ia/ai/AgentEngine';
-import { AI_MODELS } from '@/modules/intelligence/ia/ai';
+import { AgentDomain, AgentRole, AgentResponse } from './types';
+import { AgentEngine } from '../../ia/ai/AgentEngine';
+import { AI_MODELS } from '../../ia/ai/types';
 
 /**
  * useExpert - Le hook standard pour consommer l'expertise système.

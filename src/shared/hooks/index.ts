@@ -22,6 +22,7 @@ export { useVirtualizedList, useInfiniteScroll } from "./useVirtualization";
 
 // Permissions
 export { useActionPermission } from "./useActionPermission";
+export { useTabAccess } from "./useTabAccess";
 
 // 🏛️ Sovereign Core Hooks (Grade X)
 export { 

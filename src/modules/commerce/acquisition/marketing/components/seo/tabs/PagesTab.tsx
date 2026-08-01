@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
 import { PageCard } from "../PageCard";
-import { MarketingEngine } from '@/modules/commerce/acquisition/marketing/marketing-engine';
+import { MarketingEngine } from '@/modules/commerce';
 
 export const PagesTab = () => {
     const pages = MarketingEngine.getLivePageAnalysis();

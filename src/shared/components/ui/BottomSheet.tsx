@@ -6,7 +6,7 @@ import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion
 import { cn } from "@/lib/ui.foundations";;
 import { drawerVariants, mobileBackdrop } from "@/shared/utils/motion";
 import { X } from "lucide-react";
-import { useHasMounted } from "@/shared/hooks";
+import { useHasMounted } from "@/shared/hooks/useHasMounted";
 
 interface BottomSheetProps {
     isOpen: boolean;

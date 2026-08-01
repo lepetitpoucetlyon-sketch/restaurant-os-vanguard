@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { CustomerFeedback } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { PromoCodeRecord } from '@/modules/commerce/acquisition/marketing/components/crm/PromoCodeManager';
+import type { PromoCodeRecord } from '../components/crm/types';
 
 // Re-export the PromoCode shape callers expect (legacy alias for existing consumers)
 export type PromoCode = PromoCodeRecord;

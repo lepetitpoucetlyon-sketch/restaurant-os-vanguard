@@ -13,7 +13,7 @@ import {
     quotesNodeAtom
 } from './store/marketingAtoms';
 import { logger } from '@/lib/logger';
-import { MarketingEngine } from "@/modules/commerce/acquisition/marketing/marketing-engine";
+import { MarketingEngine } from './marketing-engine';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { getDefaultStore } from 'jotai';
 

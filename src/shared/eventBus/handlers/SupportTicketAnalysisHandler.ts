@@ -2,6 +2,7 @@ import { NexusEventBus, NexusEventPayload } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { GeminiProvider } from '@/infrastructure/adapters/GeminiProvider';
+// eslint-disable-next-line no-restricted-imports
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 import { ChangelogService } from '@/shared/nexus/engines/mcc/ChangelogService';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';

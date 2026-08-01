@@ -9,7 +9,7 @@ import {
   Package 
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { BarTab } from "@/modules/ops/types/bar";
+import type { BarTab } from "@/modules/ops/types/bar";
 import { formatCurrency } from "@/lib/formatters";
 
 interface BarSidebarProps {

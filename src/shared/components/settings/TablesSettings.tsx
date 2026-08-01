@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useTables } from "@/modules/ops/providers";
+import { useTables } from "@/modules/ops";
 import {
     LayoutGrid,
     Users,

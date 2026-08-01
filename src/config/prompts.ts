@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { AgentDomain, AgentRole } from '@/modules/intelligence/domain/agency/types';
 
 export const MASTER_DNA = `

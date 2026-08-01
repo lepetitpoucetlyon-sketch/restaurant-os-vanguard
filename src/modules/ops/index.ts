@@ -14,10 +14,18 @@ export { KDSDashboard } from './production/kds/components/KDSDashboard';
 export { KitchenDashboard } from './production/kitchen/components/KitchenDashboard';
 
 // Infrastructure pilier (providers, connectors)
-export { NexusOpsProvider, useOrders, useTables, useKitchen } from './providers';
-export { useGroups } from './providers/hooks/commerceHooks';
+export * from './providers';
 // Factories server-only : importées directement par les routes API, pas ici
 
-// Cross-pilier (facility)
-// eslint-disable-next-line no-restricted-imports
-export type { FloorPlanEditorRef } from '@/modules/facility/spaces/floor-plan/FloorPlanEditor';
+// Resolve TS2308 conflicts: providers and workflow/engine both export these
+export { useGroups } from './providers/hooks/commerceHooks';
+export { useNexusOps, NexusOpsProvider } from './providers/NexusOpsProvider';
+export type { Table } from './workflow/engine/tables.types';
+
+// Kitchen components (production/recipes)
+export { RecipeCostBadge } from './production/recipes';
+export { BarRecipeCard } from './production/recipes';
+
+// Bar types (BarTab, Wine, Cocktail, WineRegion)
+export type { BarTab, Wine, Cocktail, WineRegion } from './types/bar';
+

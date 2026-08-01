@@ -1,5 +1,6 @@
 // Domaine : qualite (HACCP, IoT, recall, donation, calendar)
 export * from './qualite/haccp/types';
+export * from './types/quality';
 export * from './qualite/haccp/store/complianceAtoms';
 export * from './qualite/haccp/store/qualityAtoms';
 export { useGuard, useHygieneLabels, useHygieneLogs, useReceptionLogs, useOilLogs, useMaintenance } from './qualite/haccp/hooks/useGuard';
@@ -12,7 +13,7 @@ export { ComplianceCalendar } from './qualite/calendar/ComplianceCalendar';
 export { IoTSensorService } from './qualite/haccp/iot';
 
 // Domaine : securite (audit)
-export { AuditService } from './securite/audit/AuditService';
+export { AuditService, auditService } from './securite/audit/AuditService';
 
 // Domaine : reglementaire (RGPD)
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
@@ -20,3 +21,4 @@ export { ErasureService } from './reglementaire/rgpd/ErasureService';
 // Infrastructure pilier (connectors, services, types)
 export type { PiiRecord } from '@/domain/schemas/pii';
 export { IoTProviderFactory } from './connectors/iot';
+export * from './services';

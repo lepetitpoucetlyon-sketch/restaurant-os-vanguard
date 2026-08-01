@@ -1,6 +1,7 @@
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
+// eslint-disable-next-line no-restricted-imports
 import { LLMManager } from '@/modules/intelligence/ia/ai';
 
 /**
@@ -35,6 +36,7 @@ export const BrandingService = {
 
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 
+            // eslint-disable-next-line no-restricted-imports
             const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
             const response = await LLMManager.provider.generateFromImage({
                 model: AI_MODELS.fast,

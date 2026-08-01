@@ -11,7 +11,7 @@ import {
     CustomerDetailPanel,
     NewCustomerDialog,
 } from "@modules/commerce/relation/customers/components";
-import { PromoCodeManager } from "@/modules/commerce/acquisition/marketing/components/crm/PromoCodeManager";
+import { PromoCodeManager } from "@/modules/commerce";
 import { EmailCampaign } from "@/modules/commerce/acquisition/marketing/components/crm/EmailCampaign";
 import { BasketAnalysis } from "@/modules/commerce/acquisition/marketing/components/crm/BasketAnalysis";
 import { VisitHistory } from "@/modules/commerce/acquisition/marketing/components/crm/VisitHistory";

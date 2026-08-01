@@ -1,2 +1,2 @@
 // Rapatrié vers @/modules/finance/comptabilite/repositories/IFinanceRepository — stub de compatibilité backward
-export * from '@/modules/finance/comptabilite/repositories/IFinanceRepository';
+export * from '@/modules/finance';

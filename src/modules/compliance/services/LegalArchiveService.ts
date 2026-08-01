@@ -1,22 +1,21 @@
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { FiscalEngine } from '@/modules/finance/services';
-import { FiscalSeal } from '@nexus/contracts';
+import type { FiscalSeal } from '@nexus/contracts';
 
 /**
  * 🏛️ LegalArchiveService - Grade IX Sovereign Bridge
- * This service is an alias for the consolidated FiscalEngine.
- * Resolves legacy dependencies across the "Neural Shield" Fleet.
+ * Lazy wrappers around FiscalEngine — all methods call FiscalEngine at call-time
+ * (not at module init time) to avoid circular-dependency issues.
  */
 export const LegalArchiveService = {
-    ...FiscalEngine,
-
-    // Grade IX Compatibility Wrappers
+    // Grade IX Compatibility Wrappers — lazy: FiscalEngine is read at call time
     runAudit: (seals: FiscalSeal[]) => FiscalEngine.runAudit(seals, 'master-instance'),
-    sealEntry: FiscalEngine.sealEntry,
-    sealPeriod: (start: Date, end: Date) => FiscalEngine.sealEntry('period-seal', { start, end }),
+    sealEntry: (...args: Parameters<typeof FiscalEngine.sealEntry>) => FiscalEngine.sealEntry(...args),
+    sealPeriod: (start: Date, end: Date) => FiscalEngine.sealEntry('period-seal', { start: start.toISOString(), end: end.toISOString() }),
+    verifyChain: (seals: FiscalSeal[]) => FiscalEngine.verifyChain(seals),
     verifyIntegrity: (seals: FiscalSeal[]) => FiscalEngine.verifyChain(seals),
-    verifyVaultIntegrity: (seals: FiscalSeal[]) => FiscalEngine.verifyChain(seals)
+    verifyVaultIntegrity: (seals: FiscalSeal[]) => FiscalEngine.verifyChain(seals),
 };
 
 export default LegalArchiveService;

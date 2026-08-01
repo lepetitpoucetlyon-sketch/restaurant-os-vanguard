@@ -1,22 +1,31 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { FileText } from "lucide-react";
 import { FacturXDownloadButton } from "@/modules/finance/components/FacturXDownloadButton";
 import type { Order } from "@/domain/schemas/orders";
+import { useBilling } from "@/modules/finance/comptabilite/billing/hooks";
 
 /**
  * Onglet « Facturation » de la page Finance — extrait de page.tsx (dette-4).
- * Composant présentationnel pur : reçoit données + handlers en props.
  */
 export interface BillingTabProps {
     paidOrders: Order[];
     ordersLoading: boolean;
-    /** id de la commande en cours d'émission (désactive son bouton) */
-    billingOrder: string | null;
-    onBillOrder: (order: Order) => void;
 }
 
-export function BillingTab({ paidOrders, ordersLoading, billingOrder, onBillOrder }: BillingTabProps) {
+export function BillingTab({ paidOrders, ordersLoading }: BillingTabProps) {
+    const [billingOrder, setBillingOrder] = useState<string | null>(null);
+    const { billOrder } = useBilling();
+
+    const onBillOrder = useCallback(async (order: Order) => {
+        setBillingOrder(order.id);
+        try {
+            await billOrder(order);
+        } finally {
+            setBillingOrder(null);
+        }
+    }, [billOrder]);
     return (
         <section className="space-y-4">
             <div className="flex items-center justify-between">

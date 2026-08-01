@@ -9,7 +9,7 @@ import { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
 import { InventoryVisionService, VisionMatchResult } from '@modules/logistics/services/InventoryVisionService';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from '@/modules/ops/providers';
+import { useInventory } from '@/modules/ops';
 
 interface InvoiceReviewModalProps {
     data: ExtractedInvoice;

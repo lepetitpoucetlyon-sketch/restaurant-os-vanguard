@@ -15,7 +15,7 @@ import {
 
 // Nexus Data Hooks
 import { useAccounting, useCompliance } from "@/modules/finance/providers";
-import { useOrders, useTables, useReservations } from "@/modules/ops/providers";
+import { useOrders, useTables, useReservations } from "@/modules/ops";
 
 // Define an interface for the orders since useOrders() might return generic objects
 interface Order {
