@@ -28,6 +28,8 @@ import { SanitaryComplianceSection } from "@modules/ops";
 import { Modal } from "@ui/Modal";
 import { InterventionLogSection } from "@modules/ops";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { useTabAccess } from "@/shared/hooks/useTabAccess";
 
 type TabType = 'overview' | 'duerp' | 'incendie' | 'prestataires' | 'pmr' | 'conformite' | 'interventions';
 
@@ -63,6 +65,7 @@ function StatusBadge({ status }: { status: 'conforme' | 'attention' | 'non_confo
 }
 
 function RegistrePage() {
+    const canSeeDuerp = useTabAccess("registre", "duerp");
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [isCerfaOpen, setIsCerfaOpen] = useState(false);
     const { duerp, cerfa, pmrDoc, incendieDoc, hottesDoc, certHalal, agrementBoucher: _agrementBoucher, prestataires, getOverallStatus } = useRegistre();
@@ -81,7 +84,10 @@ function RegistrePage() {
         <div className="flex flex-1 h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 flex-col bg-bg-primary overflow-hidden pb-20 md:pb-0">
             {/* Tab Navigation */}
             <div className="bg-bg-secondary border-b border-border px-4 md:px-10 py-3 flex items-center gap-2 overflow-x-auto scrollbar-hide">
-                {TABS.map((tab) => (
+                {TABS.filter(tab => {
+                    if (tab.id === 'duerp') return canSeeDuerp;
+                    return true;
+                }).map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
@@ -192,9 +198,11 @@ function RegistrePage() {
                     )}
 
                     {activeTab === 'duerp' && (
-                        <motion.div key="duerp" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <DUERPSection />
-                        </motion.div>
+                        <TabGuard pageKey="registre" tabKey="duerp">
+                            <motion.div key="duerp" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                                <DUERPSection />
+                            </motion.div>
+                        </TabGuard>
                     )}
                     {activeTab === 'incendie' && (
                         <motion.div key="incendie" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>

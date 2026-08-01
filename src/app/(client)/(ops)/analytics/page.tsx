@@ -9,6 +9,8 @@ import { format } from "date-fns";
 import { useAnalyticsPage, percentChange } from "@/modules/finance/analytics/hooks";
 import type { MacroBrainAlert } from "@/modules/finance/analytics/hooks";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
 } from "@modules/intelligence/analytics/components";
@@ -60,6 +62,8 @@ const EXAMPLE_ALERTS: MacroBrainAlert[] = [
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 function AnalyticsPage() {
+    const canSeeOracle = useTabAccess("analytics", "oracle");
+
     const {
         activeTab, setActiveTab,
         macroAlerts, attendance, complianceAlerts,
@@ -89,7 +93,10 @@ function AnalyticsPage() {
                     { id: "reputation", label: "Réputation", icon: Star },
                     { id: "compliance", label: "Conformité", icon: ShieldCheck },
                     { id: "oracle", label: "Oracle", icon: Brain },
-                ] as const).map(({ id, label, icon: Icon }) => (
+                ] as const).filter(tab => {
+                    if (tab.id === "oracle") return canSeeOracle;
+                    return true;
+                }).map(({ id, label, icon: Icon }) => (
                     <button key={id} onClick={() => setActiveTab(id)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
                         <Icon className="w-4 h-4" /> {label}
                     </button>
@@ -102,6 +109,7 @@ function AnalyticsPage() {
                 {activeTab === "compliance" && <ComplianceView alerts={complianceAlerts} />}
 
                 {activeTab === "oracle" && (
+                    <TabGuard pageKey="analytics" tabKey="oracle">
                     <div className="space-y-10">
                         {/* 30-day chart */}
                         <section>
@@ -194,6 +202,7 @@ function AnalyticsPage() {
                             )}
                         </section>
                     </div>
+                    </TabGuard>
                 )}
             </main>
         </div>

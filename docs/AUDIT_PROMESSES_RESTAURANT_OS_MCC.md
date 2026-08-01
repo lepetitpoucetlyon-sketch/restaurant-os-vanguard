@@ -1,19 +1,19 @@
 # Audit des promesses — Restaurant OS + MCC
 
 Date d'audit : 2026-08-01  
-Commit local audité : `8362ff337`  
+Commit local audité : `00f303b4e` *(mis à jour depuis `8362ff337` — architecture RBAC 3 niveaux déployée)*  
 Mode : scans déterministes + lectures ciblées des chemins critiques. `graphify-out/GRAPH_REPORT.md` existe, mais il est construit sur `87542410`; il a donc servi de repère de corpus, pas de preuve courante.
 
 ## Résumé exécutif
 
-- Total éléments audités : 377
-- OK : 146 (38,7%)
-- PARTIAL : 112 (29,7%)
-- STUB : 26 (6,9%)
+- Total éléments audités : **390** *(+13 éléments RBAC)*
+- OK : **157** (40,3%) *(+11 : RBAC system complet + pos_mobile + settings PageGuard + /api/admin/rbac auth)*
+- PARTIAL : **113** (29,0%) *(+1 : RolesPermissionsPanel)*
+- STUB : 26 (6,7%)
 - MISSING : 8 (2,1%)
 - BROKEN : 5 (1,3%)
 - DEAD : 1 (0,3%)
-- VIOLATION : 79 (21,0%)
+- VIOLATION : **78** (20,0%) *(−1 : /api/admin/rbac désormais auth-protégée)*
 
 Verdict : le socle critique compile (`npx tsc --noEmit` : 0 erreur) et les flux NF525 principaux sont bien plus matures que le reste : `FinancialNexusBridge`, `FiscalSealer`, `FiscalAdapter` et `SovereignGuard` contiennent une logique réelle de double-écriture, scellement, hash chain, numérotation séquentielle et isolation tenant. En revanche, la promesse "tête détachable + connecteurs plug-and-play + MCC production-grade" reste partielle : plusieurs factories n'ont pas de `ping()`, pas de catalogue client-safe, ni de registration dynamique; le core/shared importe encore des modules restaurant; le MCC contient encore des chemins simulés ou dépendants d'env vars absentes.
 
@@ -154,6 +154,24 @@ Schémas peu ou pas référencés par scan approximatif : `quality.ts`, plusieur
 | Champs `*InCents` | Modèle | VIOLATION/PARTIAL | Encore présents dans contracts, accounting, procurement, dashboard. | Plan de migration microunits par frontières PSP/legacy. | P1 |
 | Billing Stripe MCC | API/UI | PARTIAL | Portal réel si Stripe configuré; fallback 503. | Harmoniser chemin config tenant et tests e2e Stripe mock. | P1 |
 
+#### Sécurité & RBAC *(ajouté commit `00f303b4e`)*
+
+| Élément | Type | Statut | Détail | Correctif proposé | Priorité |
+|---|---|---|---|---|---|
+| `usePageAccess` | Hook | OK | Whitelist roles + delta Nexus; 25 pages couvertes via `DEFAULT_PAGE_ACCESS`. | Garder tests de non-régression par rôle. | P1 |
+| `useTabAccess` | Hook | OK | Résolution `PERMISSION_ROLE_LEVELS[role]` vs `DEFAULT_TAB_ACCESS`; overrides delta Nexus. | — | P1 |
+| `useActionPermission` (ACTION_MAP) | Hook | OK | 140+ actions sur 26 pages; flags `requiresPin` pour actions sensibles (ex. remise, annulation). | Ajouter tests exhaustifs par rôle/action. | P1 |
+| `PageGuard` / `withPageGuard` | HOC/Component | OK | Spinner `isAuthLoading`, fallback `<AccessDenied>`; wrapping HOC appliqué sur tous les `page.tsx` sauf exceptions. | — | P1 |
+| `TabGuard` | Component | OK | Déployé : payroll/recruitment (staff), treasury/audit (finance), oracle (analytics), duerp (registre). | Envisager `kitchen.margins` si onglet sensible. | P2 |
+| `AccessDenied` | Component | OK | `ShieldAlert` icon; prop `pageKey` pour message contextuel. | — | P2 |
+| `rbacConfigAtom` / `fetchRbacConfigAtom` | Store (Jotai) | OK | Path `tenants/${tenantId}/config/rbac`; delta-based overrides; fallback hardcoded. | — | P1 |
+| `TenantRBACConfigSchema` | Zod schema | OK | 25 pages, 11 rôles, `DEFAULT_PAGE_ACCESS`, `DEFAULT_TAB_ACCESS` dans `src/domain/schemas/rbac.ts`. | — | P1 |
+| `/api/admin/rbac` route | API | OK | Auth `requireTenantRole` : GET(manager)/POST(directeur); body validé `TenantRBACConfigSchema.parse()`; path scopé `caller.tenantId`. | — | P1 |
+| `pos_mobile/page.tsx` PageGuard | UI | OK | `withPageGuard(POSMobilePage, "pos_mobile")` ajouté — était absent. | — | P1 |
+| `settings/page.tsx` PageGuard | UI | OK | `<PageGuard pageKey="settings">` enveloppant `SettingsDashboard` — était absent (server component). | — | P1 |
+| `RolesPermissionsPanel.tsx` | UI | PARTIAL | Config affichée en JSON brut; save button fonctionnel. Matrice visuelle rôle × page non construite. | Construire matrice role×page avec toggles inline. | P2 |
+| Architecture 3 niveaux (Page→Tab→Action) | Architecture | OK | Séparation propre; hooks indépendants; Nexus delta transparent; aucun bypass SovereignGuard. | — | P1 |
+
 #### human
 
 | Élément | Type | Statut | Détail | Correctif proposé | Priorité |
@@ -218,7 +236,7 @@ Schémas peu ou pas référencés par scan approximatif : `quality.ts`, plusieur
 | FIX-04 | P1 | `src/shared`, `src/lib`, `src/infrastructure` | 58 imports core -> modules violent la tête détachable. | Déplacer types/interfaces vers `src/shared/nexus/contracts` ou `src/domain/schemas`; remplacer imports directs. | XL | Tests TypeScript |
 | FIX-05 | P1 | `src/shared/nexus/contracts/finance.types.ts`, `src/modules/finance/**`, `src/modules/logistics/**` | Champs `*InCents` encore présents hors frontières. | Introduire champs `*InMicrounits`, adapters legacy, tests de conversion; renommer seulement après migration. | XL | MIGRATION-microunits.md |
 | FIX-06 | P1 | `src/shared/eventBus/handlers/PeriodLockGuardHandler.ts` | Update sous `fiscalLedger/locks`. | Déplacer dans `periodLocks` ou modéliser append-only `periodLockEvents`. | M | FiscalGuard |
-| FIX-07 | P1 | `src/app/api/push/send/route.ts`, `cron/weekly-report`, `connectors/*/sync`, telemetry routes | Routes sans auth signal. | Ajouter `requireTenantRole`, secret cron, signature webhook ou documenter public + rate-limit. | M | SecuritySentinel |
+| FIX-07 | P1 | `src/app/api/push/send/route.ts`, `cron/weekly-report`, `connectors/*/sync`, telemetry routes | Routes sans auth signal. **`/api/admin/rbac` résolue** : `requireTenantRole` GET(manager)/POST(directeur) + Zod parse. 13 routes restantes à sécuriser. | Ajouter `requireTenantRole`, secret cron, signature webhook ou documenter public + rate-limit pour les routes restantes. | M | SecuritySentinel |
 | FIX-08 | P1 | `src/modules/*/connectors/**` | Factories non uniformes. | Standard provider contract : `ping()`, `PROVIDER_CATALOG`, `register()`, route `/connectors/<cat>/test`. | L | Payroll as template |
 | FIX-09 | P2 | `src/shared/eventBus/handlers/SilaeExportHandler.ts` | Handler mort, provider-specific. | Supprimer et vérifier absence d'import; conserver migration note vers `PayrollExportHandler`. | S | FIX-08 paie déjà OK |
 | FIX-10 | P2 | `src/shared/nexus/guards/admin/mcc/PluginCatalogManager.tsx`, `src/app/api/admin/fleet/plugins/route.ts` | Plugin enable/disable réel partiel, billing proration TODO. | Émettre événement billing + recalcul Stripe subscription item. | M | Billing tests |
