@@ -8,7 +8,7 @@ function createMockNexus() {
     return {
         store,
         set: vi.fn(async (path: string, data: unknown) => { store[path] = data; }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         query: vi.fn(async (): Promise<any[]> => []),
         generateId: vi.fn(() => `audit-${++idCounter}`),
     };
@@ -21,7 +21,7 @@ describe('AuditService', () => {
     beforeEach(() => {
         service = new AuditService();
         nexus = createMockNexus();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         service.setNexus(nexus as any);
         (operationalFlags as unknown as Record<string, string>).auditIntercept = 'enforce';
     });

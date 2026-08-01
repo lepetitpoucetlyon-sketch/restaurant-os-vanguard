@@ -37,7 +37,7 @@ export async function POST(
 
     // Vérification de signature — provider-specific ou fallback partagé
     const verified = p.verifySignature
-        ? p.verifySignature(rawBody, req.headers)
+        ? await p.verifySignature(rawBody, req.headers)
         : checkFallbackWebhookSecret(req.headers, providerId);
 
     if (!verified) {

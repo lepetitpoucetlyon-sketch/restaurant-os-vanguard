@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Activity, AlertTriangle, Wifi, WifiOff, Search } from 'lucide-react';
+import { Activity, AlertTriangle, Wifi, WifiOff } from 'lucide-react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { motion, AnimatePresence } from 'framer-motion';
 import { logger } from '@/lib/logger';
 
 export function FleetTelemetryPanel() {

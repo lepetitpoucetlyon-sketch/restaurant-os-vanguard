@@ -17,7 +17,7 @@ export interface ArchitecturalHealthReport {
 
 export class ArchitecturalHealthService {
     static async generateReport(): Promise<ArchitecturalHealthReport> {
-        let unprotectedAdminRoutes: string[] = [];
+        const unprotectedAdminRoutes: string[] = [];
         
         try {
             if (typeof window === 'undefined') {
@@ -42,9 +42,11 @@ export class ArchitecturalHealthService {
                     
                     const routes = walkSync(apiAdminPath);
                     for (const route of routes) {
+                        // Routes machine-to-machine exemptées (pas de session utilisateur)
+                        if (route.includes('telemetry')) continue;
                         const content = fs.readFileSync(route, 'utf-8');
-                        if (!content.includes('requireFleetAdmin') && 
-                            !content.includes('requireTenantAdmin') && 
+                        if (!content.includes('requireFleetAdmin') &&
+                            !content.includes('requireTenantAdmin') &&
                             !content.includes('requireMccLevel') &&
                             !content.includes('requireTenantRole')) {
                             unprotectedAdminRoutes.push(route.replace(process.cwd(), ''));

@@ -7,11 +7,10 @@ import { LegalCertificateA4 } from './components/LegalCertificateA4';
 import { CertAuditPanel } from './components/CertAuditPanel';
 import { CertPreviewPanel } from './components/CertPreviewPanel';
 import { CertHistoryTab } from './components/CertHistoryTab';
-import { useNexusFleet } from '@/modules/intelligence/ia/fleet';
+import { useNexusFleet, type SiteIntegrityReport, type GlobalComplianceCertificate } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { useAuth } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { SiteIntegrityReport, GlobalComplianceCertificate } from '@modules/intelligence/ia/fleet/FleetComplianceService';
 
 interface AuditReport {
   isValid: boolean;

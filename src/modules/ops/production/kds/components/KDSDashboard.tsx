@@ -14,7 +14,6 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
-import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
 
 import { KDSHeader } from "./KDSHeader";
 import { KDSTicket, hasAllergens } from "./KDSTicket";

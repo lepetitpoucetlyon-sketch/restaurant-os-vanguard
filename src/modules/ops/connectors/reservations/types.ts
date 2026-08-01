@@ -25,5 +25,5 @@ export interface IReservationProvider {
     /** Sync full state from provider — returns nb of records synced. */
     syncAll(tenantId: string): Promise<number>;
     /** Vérifie la signature HMAC du webhook entrant. Retourne false → 401. */
-    verifySignature?(rawBody: string, headers: Headers): boolean;
+    verifySignature?(rawBody: string, headers: Headers): boolean | Promise<boolean>;
 }

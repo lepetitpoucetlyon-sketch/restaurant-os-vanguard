@@ -108,7 +108,7 @@ export function useStripeSetupIntent({
       cardElementRef.current?.destroy();
       cardElementRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [imprintActive]);
 
   const handleConfirmCard = useCallback(async () => {

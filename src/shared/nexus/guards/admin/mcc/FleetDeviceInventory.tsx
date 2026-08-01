@@ -6,7 +6,7 @@
  * Gestion Hybride (ABM / MDM) et logistique.
  */
 import { useState, useEffect, useCallback } from "react";
-import { Tablet, Plus, Trash2, RefreshCw, AlertTriangle, Truck, ShieldAlert, CheckCircle, Apple, QrCode, PowerOff } from "lucide-react";
+import { Tablet, Plus, Trash2, RefreshCw, AlertTriangle, Truck, CheckCircle, Apple, QrCode, PowerOff } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";

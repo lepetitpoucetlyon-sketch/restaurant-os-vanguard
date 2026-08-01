@@ -25,6 +25,36 @@ const LOCKOUT_MS = 30_000;
 interface RateEntry { attempts: number; lockedUntil?: number }
 type StaffDoc = User & { pinHash?: string; pinSalt?: string; pin?: string };
 
+function validatePinRequest(pin?: string, terminalId?: string): NextResponse | null {
+  if (!pin || !/^\d{4}$/.test(pin)) {
+    return NextResponse.json({ error: 'PIN invalide' }, { status: 400 });
+  }
+  if (!terminalId || typeof terminalId !== 'string' || terminalId.length > 64) {
+    return NextResponse.json({ error: 'terminalId requis' }, { status: 400 });
+  }
+  return null;
+}
+
+function verifyStaffPin(staffList: StaffDoc[], pin: string, tenantId: string): StaffDoc | undefined {
+  for (const staff of staffList) {
+    if (staff.pinHash && staff.pinSalt) {
+      if (PinHashService.verify(pin, staff.pinHash, staff.pinSalt)) {
+        return staff;
+      }
+    } else if (staff.pin === pin) {
+      const hashed = PinHashService.hash(pin);
+      Nexus.adapter.update(`tenants/${tenantId}/staff/${staff.id}`, {
+        pinHash: hashed.pinHash,
+        pinSalt: hashed.pinSalt,
+      }).catch((err) => {
+        logger.warn('[timeclock/verify-pin] Migration PIN hash échouée', String(err));
+      });
+      return staff;
+    }
+  }
+  return undefined;
+}
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireTenantUser(req);
   if (isDenied(caller)) return caller as NextResponse;
@@ -38,12 +68,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const { pin, terminalId } = body;
-  if (!pin || !/^\d{4}$/.test(pin)) {
-    return NextResponse.json({ error: 'PIN invalide' }, { status: 400 });
-  }
-  if (!terminalId || typeof terminalId !== 'string' || terminalId.length > 64) {
-    return NextResponse.json({ error: 'terminalId requis' }, { status: 400 });
-  }
+  const validationError = validatePinRequest(pin, terminalId);
+  if (validationError) return validationError;
 
   // Rate limit côté serveur — survit aux rechargements de page
   const safeTerminal = encodeURIComponent(terminalId);
@@ -64,27 +90,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     {},
   )) as StaffDoc[];
 
-  let match: StaffDoc | undefined;
-
-  for (const staff of staffList) {
-    if (staff.pinHash && staff.pinSalt) {
-      if (PinHashService.verify(pin, staff.pinHash, staff.pinSalt)) {
-        match = staff;
-        break;
-      }
-    } else if (staff.pin === pin) {
-      // Migration : premier succès → on hash et on met à jour (non-bloquant)
-      match = staff;
-      const hashed = PinHashService.hash(pin);
-      Nexus.adapter.update(`tenants/${tenantId}/staff/${staff.id}`, {
-        pinHash: hashed.pinHash,
-        pinSalt: hashed.pinSalt,
-      }).catch((err) => {
-        logger.warn('[timeclock/verify-pin] Migration PIN hash échouée', String(err));
-      });
-      break;
-    }
-  }
+  const match = verifyStaffPin(staffList, pin, tenantId);
 
   if (!match) {
     const nextAttempts = (rate.attempts ?? 0) + 1;
@@ -118,3 +124,4 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     avatar: match.avatar ?? null,
   });
 }
+

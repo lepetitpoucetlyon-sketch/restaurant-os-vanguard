@@ -5,7 +5,7 @@ import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
-import { LightRAGClient } from '@/modules/intelligence/knowledge/rag';
+import { LightRAGClient } from '@/modules/intelligence';
 import { Resend } from 'resend';
 
 export interface ProvisioningRequest {

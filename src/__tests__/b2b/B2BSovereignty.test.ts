@@ -97,7 +97,7 @@ describe('B2B Sovereignty — YieldEngine isolation', () => {
         // Import dynamique pour éviter des effets de bord au module level
         const { YieldEngine } = await import('@/modules/commerce/acquisition/marketing/services/YieldEngine');
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const spy = vi.spyOn(YieldEngine as any, 'applyStrategyToLocalTenant');
 
         await YieldEngine.launchCampaign({

@@ -38,5 +38,5 @@ export interface IDeliveryProvider {
     getMenu(tenantId: string): Promise<DeliveryMenuItem[]>;
     pushMenu(tenantId: string, menu: DeliveryMenuItem[]): Promise<void>;
     /** Vérifie la signature HMAC du webhook entrant. Retourne false → 401. */
-    verifySignature?(rawBody: string, headers: Headers): boolean;
+    verifySignature?(rawBody: string, headers: Headers): boolean | Promise<boolean>;
 }

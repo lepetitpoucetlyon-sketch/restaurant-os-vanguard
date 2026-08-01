@@ -20,14 +20,17 @@ export const BlackFridaySimulation = {
     let frameDrops = 0;
     let lastFrame = performance.now();
 
-    // Frame monitor
+    const reqAnim = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : (cb: FrameRequestCallback) => setTimeout(cb, 16) as unknown as number;
+    const cancelAnim = typeof cancelAnimationFrame !== 'undefined' ? cancelAnimationFrame : (id: number) => clearTimeout(id as unknown as NodeJS.Timeout);
+
+    let animId: number;
     const monitor = () => {
         const now = performance.now();
         if (now - lastFrame > 18) frameDrops++; // Frame took > 18ms
         lastFrame = now;
-        requestAnimationFrame(monitor);
+        animId = reqAnim(monitor);
     };
-    const animId = requestAnimationFrame(monitor);
+    animId = reqAnim(monitor);
 
     const startTime = performance.now();
     const tasks = [];
@@ -51,7 +54,8 @@ export const BlackFridaySimulation = {
 
     await Promise.all(tasks);
     const duration = performance.now() - startTime;
-    cancelAnimationFrame(animId);
+    cancelAnim(animId);
+
 
     logger.info(`[BF_RESULT] Saturation over. Duration: ${Math.round(duration)}ms. Frame Drops: ${frameDrops}.`);
     return { duration, frameDrops };

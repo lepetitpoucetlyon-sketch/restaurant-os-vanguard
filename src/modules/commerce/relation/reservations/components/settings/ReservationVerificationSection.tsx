@@ -1,7 +1,7 @@
 "use client";
 
 import type { Dispatch, SetStateAction } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { ShieldCheck, Zap, CreditCard, History } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { cn } from '@/lib/ui.foundations';

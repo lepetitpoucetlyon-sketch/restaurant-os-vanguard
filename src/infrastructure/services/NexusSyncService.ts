@@ -9,14 +9,12 @@ import { Mutex } from '@/lib/utils/Mutex';
 import { TaskContext, TASK_MAPS } from '@/lib/icm/TaskContext';
 import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
 import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
-import { NexusEventBus, type NexusEvents, type NexusEventName } from '@/shared/eventBus/NexusEventBus';
-import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
-import { empireAudit } from '@/infrastructure/services/audit';
 import { readZcpoState, degradeImportanceMap } from '@/lib/icm/zcpoBridge';
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
 import { initMasterBridgeListener } from './sync/masterBridgeInit';
 import { startSelfHealingInterval } from './sync/selfHealingInit';
+import { replayPendingEvents } from './sync/outboxReplayer';
 
 const syncMutex = new Mutex();
 
@@ -56,8 +54,6 @@ export const NexusSyncService = {
         TelemetryService.start(tenantId);
 
         // --- OFFLINE RESILIENCE : vide la file Dexie au boot + au retour réseau ---
-        // (bootSyncManager n'était appelé nulle part : les tickets NF525 mis en
-        //  file hors-ligne n'étaient JAMAIS resynchronisés.)
         bootSyncManager();
         await this.replayPendingEvents();
 
@@ -154,40 +150,8 @@ export const NexusSyncService = {
 
   /**
    * P0-1: Rejoue les événements bloqués dans l'Outbox au démarrage.
-   * Protège contre les arrêts brutaux entre persist state et émission RAM.
    */
   async replayPendingEvents(): Promise<void> {
-    if (typeof window === 'undefined') return;
-    try {
-      const pending = await db.busOutbox.where('status').equals('pending').toArray();
-      if (pending.length > 0) {
-        logger.info(`[NexusSyncService] Replaying ${pending.length} pending events from Outbox...`);
-        
-        // P01-J: Re-scellement NF525 côté serveur avant d'émettre les événements
-        // pour s'assurer que les tickets provisoires (OFFLINE) sont bien scellés (SyncManager.processQueue()).
-        try {
-          const { SyncManager } = await import('@/infrastructure/services/offline/sync-manager');
-          await SyncManager.processQueue();
-        } catch (e) {
-          logger.error('[NexusSyncService] Échec du re-scellement NF525 lors du replay', e);
-        }
-
-        for (const entry of pending) {
-          const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload);
-          await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);
-          await db.busOutbox.update(entry.id, { status: 'done' });
-        }
-
-        empireAudit.log({
-          module: 'fiscal',
-          action: 'OFFLINE_SYNC_VERIFIED',
-          details: { replayedCount: pending.length, tenantId: Nexus.tenantOverride ?? 'unknown' },
-          severity: 'high',
-          timestamp: new Date(),
-        });
-      }
-    } catch (err) {
-      logger.error('[NexusSyncService] Failed to replay pending events from Outbox', err);
-    }
+    return replayPendingEvents();
   }
 };

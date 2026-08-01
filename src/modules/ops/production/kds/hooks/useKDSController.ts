@@ -1,8 +1,49 @@
+'use client';
+
 import { useMemo, useState, useEffect } from 'react';
 import { useKitchen } from '@/modules/ops/providers';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import { Order } from '@nexus/contracts';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
+
+function resolveLockedStation(role?: string): KitchenStation | null {
+    if (!role) return null;
+    const roleMap: Record<string, KitchenStation> = {
+        bartender: 'bar',
+        chef_grill: 'hot',
+        chef_pastry: 'pastry',
+        chef_cold: 'cold',
+    };
+    return roleMap[role] ?? null;
+}
+
+function filterOrdersByStationAndSearch(orders: Order[], station: KitchenStation, searchQuery: string): Order[] {
+    let result = (orders ?? []).filter(o => o?.status !== 'delivered');
+
+    if (station !== 'all') {
+        result = result
+            .filter(order => order.items.some(item => resolveStation(item.name) === station))
+            .map(order => ({
+                ...order,
+                items: order.items.filter(item => resolveStation(item.name) === station),
+            }));
+    }
+
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        result = result.filter(o =>
+            (o.tableNumber || "").toLowerCase().includes(query) ||
+            (o.serverName || "").toLowerCase().includes(query)
+        );
+    }
+
+    return result.sort((a, b) => {
+        const isAReady = a?.status === 'ready';
+        const isBReady = b?.status === 'ready';
+        if (isAReady !== isBReady) return isAReady ? 1 : -1;
+        return new Date(a.timestamp ?? 0).getTime() - new Date(b.timestamp ?? 0).getTime();
+    });
+}
 
 /**
  * 👨‍🍳 useKDSController - Grade X Domain Logic
@@ -10,16 +51,13 @@ import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 export const useKDSController = () => {
     const { nodes: orders, updateOrderStatus, getPendingModifications, isLoading, error } = useKitchen();
     const { currentUser } = useAuth();
+
     
     // RBAC Station Locking
-    const lockedStation = useMemo((): KitchenStation | null => {
-        if (!currentUser?.role) return null;
-        if (currentUser.role === 'bartender') return 'bar';
-        if (currentUser.role === 'chef_grill') return 'hot';
-        if (currentUser.role === 'chef_pastry') return 'pastry';
-        if (currentUser.role === 'chef_cold') return 'cold';
-        return null;
-    }, [currentUser?.role]);
+    const lockedStation = useMemo(
+        () => resolveLockedStation(currentUser?.role),
+        [currentUser?.role]
+    );
 
     // UI State managed at domain level
     const [activeStation, _setActiveStation] = useState<KitchenStation>(() => {
@@ -44,34 +82,10 @@ export const useKDSController = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     // --- Filtering & Sorting Logic (Grade X) ---
-    const filteredOrders = useMemo(() => {
-        const activeOrders = (orders as Order[]).filter(o => o?.status !== 'delivered');
-        let result = activeOrders;
-
-        if (activeStation !== 'all') {
-            result = result.filter(order =>
-                order.items.some(item => (resolveStation(item.name)) === activeStation)
-            ).map(order => ({
-                ...order,
-                items: order.items.filter(item => (resolveStation(item.name)) === activeStation)
-            }));
-        }
-
-        if (searchQuery) {
-            result = result.filter(o =>
-                (o.tableNumber || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (o.serverName || "").toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        }
-
-        return result.sort((a, b) => {
-            const isAReady = a?.status === 'ready';
-            const isBReady = b?.status === 'ready';
-            if (isAReady && !isBReady) return 1;
-            if (!isAReady && isBReady) return -1;
-            return new Date(a.timestamp ?? 0).getTime() - new Date(b.timestamp ?? 0).getTime();
-        });
-    }, [orders, activeStation, searchQuery]);
+    const filteredOrders = useMemo(
+        () => filterOrdersByStationAndSearch(orders as Order[], activeStation, searchQuery),
+        [orders, activeStation, searchQuery]
+    );
 
     const preparingOrdersCount = useMemo(() => 
         orders.filter((o) => (o as { status?: string })?.status === 'preparing' || o?.status === 'new').length,
@@ -106,3 +120,4 @@ export const useKDSController = () => {
         getPendingModifications
     };
 };
+

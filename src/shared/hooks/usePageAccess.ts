@@ -15,7 +15,7 @@ export function usePageAccess(pageKey: PageKey | string): boolean {
 
   // Defaults
   const defaultAllowed = DEFAULT_PAGE_ACCESS[pageKey] || [];
-  let isAllowed = defaultAllowed.includes(role);
+  const isAllowed = defaultAllowed.includes(role);
 
   // Overrides
   if (config && config.pageOverrides && config.pageOverrides[pageKey]) {

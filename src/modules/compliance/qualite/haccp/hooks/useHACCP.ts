@@ -19,8 +19,7 @@ import { useNexusMutation } from '@shared/hooks/useNexusMutation';
 import { 
     HygieneLog, 
     ReceptionLog, 
-    MaintenanceLog, 
-    SensorReading 
+    MaintenanceLog 
 } from '../types';
 
 /**

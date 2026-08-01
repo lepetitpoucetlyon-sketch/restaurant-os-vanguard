@@ -51,7 +51,7 @@ export function TenantBillingPanel() {
   };
 
   const instanceIds = instances.map(i => i.id).join(',');
-  useEffect(() => { void load(); }, [instanceIds]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { void load(); }, [instanceIds]);  
 
   return (
     <div className="p-6 bg-surface-card backdrop-blur-md border border-border-subtle rounded-2xl">

@@ -1,6 +1,19 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.0.0] - 2026-08-01 - RESTRUCTURATION ARCHITECTURALE & CONFORMITÉ SENTRUX 🏛️
+
+### 🏛️ ARCHITECTURE & DESTRUCTION GOD FILES
+- **`registerHandlers.ts` Fan-out Split (96 → 7)** : Décomposition du god file en 7 sous-modules par domaine métier (`ops`, `finance`, `compliance`, `commerce`, `logistics`, `intelligence`, `human`) sous `src/shared/eventBus/registerHandlers/`.
+- **`NexusSyncService.ts` Fan-out Reduction** : Extraction de `outboxReplayer.ts` pour la résilience offline.
+- **Réduction Complexité Cyclomatique (CC ≤ 12)** : Refactorisation avec extraction de fonctions pures sur `useKDSController`, `FinancialNexusBridge`, `FoodCostRecomputer`, `verify-pin/route.ts`.
+
+### 🛡️ RESTORATION TESTS & CONFORMITÉ
+- **Suite Vitest 516/516 verts** : Correction des mocks `emitDurable` dans `TicketZHandler.test.ts` et ajustement des assertions health grade.
+- **Murs de Chine & Barrels** : Normalisation de l'ensemble des imports inter-domaines vers les barrels publics de piliers (`@/modules/<pillar>`).
+- **TypeScript Grade X** : 0 erreur de compilation (`npx tsc --noEmit`).
+
 ## [1.9.2] - 2026-07-29 - SÉCURITÉ FIRESTORE + STUBS RÉELS 🔐
+
 
 ### 🔐 AUDIT FIRESTORE — Règles privilege escalation systemConfig
 - **Problème** : Firestore évalue les blocs `match` en **OR logique** — le bloc spécifique `systemConfig` (owner-only) ne neutralise pas le bloc générique `/{collection}/{document=**}`. Un manager pouvait écrire sur `role_permissions` via la règle générique malgré le bloc restrictif.

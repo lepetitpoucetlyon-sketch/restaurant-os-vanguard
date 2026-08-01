@@ -8,7 +8,7 @@ import { DEFAULT_TENANT_ID } from '@/config/instance';
 import { logger } from '@/lib/axiom';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
-import { LLMManager } from '@/modules/intelligence/ia/ai';
+import { LLMManager } from '@/modules/intelligence';
 import { GeminiProvider } from '@/infrastructure/adapters/GeminiProvider';
 import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/infrastructure/services/storage/FirebaseStorageProvider';

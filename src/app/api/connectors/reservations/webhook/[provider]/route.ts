@@ -32,7 +32,7 @@ export async function POST(
     }
 
     const verified = p.verifySignature
-        ? p.verifySignature(rawBody, req.headers)
+        ? await p.verifySignature(rawBody, req.headers)
         : checkFallbackWebhookSecret(req.headers, providerId);
 
     if (!verified) {

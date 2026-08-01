@@ -2,7 +2,7 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash } from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
 

@@ -9,3 +9,5 @@ export { PlanningDashboard } from './effectifs/hr/components/PlanningDashboard';
 
 // Domaine : remuneration (payroll, DSN, paie)
 export * from './remuneration/payroll';
+export { NexusStaffingOracle } from './services/NexusStaffingOracle';
+

@@ -4,8 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
     BellRing, CreditCard, CalendarClock, PackageOpen, 
-    ChefHat, Building2, ArrowRight, Server, Store, CheckCircle2,
-    ShieldAlert, Wallet, BarChart4, Activity
+    ChefHat, Building2, Server, CheckCircle2, Activity
 } from 'lucide-react';
 
 const STAGES = [

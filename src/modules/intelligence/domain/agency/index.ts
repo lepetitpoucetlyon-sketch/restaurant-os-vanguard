@@ -7,3 +7,6 @@
 export * from './Zeus';
 export * from './types';
 export * from './useExpert';
+export type { HermesPulseResult, HermesAnomaly } from './hermes.types';
+
+

@@ -9,6 +9,61 @@ type StockItem = {
   lastCostInMicrounits?: number;
 };
 
+function computeProductCostAndImpact(
+  product: Product,
+  recipesRaw: Record<string, Recipe> | null,
+  costMap: Map<string, number>,
+  updatedStockItemIds: Set<string>
+): { totalCost: number; impacted: boolean } {
+  let totalCost = 0;
+  let impacted = false;
+
+  if ((product as any).recipeId && recipesRaw) {
+    const recipe = recipesRaw[(product as any).recipeId];
+    if (recipe && recipe.ingredients) {
+      for (const ing of recipe.ingredients) {
+        const ingId = ing.ingredientId;
+        if (!ingId) continue;
+        if (updatedStockItemIds.has(ingId)) impacted = true;
+        totalCost += (costMap.get(ingId) ?? 0) * ing.quantity;
+      }
+    }
+  } else if ((product as any).linkedStockItemId) {
+    const ingId = (product as any).linkedStockItemId;
+    if (updatedStockItemIds.has(ingId)) impacted = true;
+    totalCost = costMap.get(ingId) ?? 0;
+  }
+
+  return { totalCost, impacted };
+}
+
+async function evaluateProductMargin(
+  product: Product,
+  totalCost: number,
+  tenantId: string,
+  invoiceId: string
+): Promise<void> {
+  if (product.priceInMicrounits <= 0) return;
+
+  const margin = product.priceInMicrounits - totalCost;
+  const marginBps = Math.floor((margin / product.priceInMicrounits) * 10000);
+  const thresholdBps = 2500;
+
+  if (marginBps < thresholdBps) {
+    logger.warn(`[FoodCostRecomputer] Marge critique sur ${product.name} : ${marginBps} bps (Seuil: ${thresholdBps})`);
+    await NexusEventBus.emitDurable('commerce.margin_warning', {
+      v: 1,
+      tenantId,
+      productId: product.id,
+      currentMarginBps: marginBps,
+      thresholdBps,
+      triggerEventId: invoiceId
+    });
+  } else {
+    logger.info(`[FoodCostRecomputer] ${product.name} marge OK : ${marginBps} bps`);
+  }
+}
+
 /**
  * P2-3: Inflation Shield - FoodCostRecomputer
  * Recalcule le food cost des produits finis suite à la variation 
@@ -21,7 +76,6 @@ export function registerFoodCostRecomputer(): () => void {
       const { tenantId, invoiceId, lines } = payload;
       
       try {
-        // 1. Mettre à jour les coûts unitaires des items de stock
         for (const line of lines) {
           await Nexus.adapter.update(
             `tenants/${tenantId}/stockItems/${line.stockItemId}`,
@@ -29,74 +83,32 @@ export function registerFoodCostRecomputer(): () => void {
           );
         }
 
-        // 2. Récupérer tous les stockItems pour avoir les prix à jour
         const stockItemsRaw = await Nexus.adapter.get<Record<string, StockItem>>(`tenants/${tenantId}/stockItems`);
         const stockItems = stockItemsRaw ? Object.values(stockItemsRaw) : [];
         const costMap = new Map<string, number>();
         for (const s of stockItems) {
-            costMap.set(s.id, s.lastCostInMicrounits ?? 0);
+          costMap.set(s.id, s.lastCostInMicrounits ?? 0);
         }
 
-        // 3. Récupérer tous les produits et toutes les recettes
         const productsRaw = await Nexus.adapter.get<Record<string, Product>>(`tenants/${tenantId}/products`);
         const recipesRaw = await Nexus.adapter.get<Record<string, Recipe>>(`tenants/${tenantId}/recipes`);
         
         if (!productsRaw) return;
         const products = Object.values(productsRaw);
+        const updatedStockItemIds = new Set(lines.map(l => l.stockItemId));
 
         for (const product of products) {
-            let totalCost = 0;
-            let impacted = false;
-
-            if ((product as any).recipeId && recipesRaw) {
-                const recipe = recipesRaw[(product as any).recipeId];
-                if (recipe && recipe.ingredients) {
-                    for (const ing of recipe.ingredients) {
-                        const ingId = ing.ingredientId;
-                        if (!ingId) continue;
-                        if (lines.some(l => l.stockItemId === ingId)) {
-                            impacted = true;
-                        }
-                        const cost = costMap.get(ingId) ?? 0;
-                        // On suppose que ing.quantity est dans la même unité de mesure que le stockItem
-                        totalCost += cost * ing.quantity;
-                    }
-                }
-            } else if ((product as any).linkedStockItemId) {
-                const ingId = (product as any).linkedStockItemId;
-                if (lines.some(l => l.stockItemId === ingId)) {
-                    impacted = true;
-                }
-                totalCost = costMap.get(ingId) ?? 0;
-            }
-
-            if (impacted && product.priceInMicrounits > 0) {
-                // Marge en basis points (BPS) : 10000 = 100%
-                const margin = product.priceInMicrounits - totalCost;
-                const marginBps = Math.floor((margin / product.priceInMicrounits) * 10000);
-
-                const thresholdBps = 2500; // Seuil hardcodé à 25% pour l'exemple P2
-
-                if (marginBps < thresholdBps) {
-                    logger.warn(`[FoodCostRecomputer] Marge critique sur ${product.name} : ${marginBps} bps (Seuil: ${thresholdBps})`);
-                    await NexusEventBus.emitDurable('commerce.margin_warning', {
-                        v: 1,
-                        tenantId,
-                        productId: product.id,
-                        currentMarginBps: marginBps,
-                        thresholdBps,
-                        triggerEventId: invoiceId
-                    });
-                } else {
-                    logger.info(`[FoodCostRecomputer] ${product.name} marge OK : ${marginBps} bps`);
-                }
-            }
+          const { totalCost, impacted } = computeProductCostAndImpact(product, recipesRaw, costMap, updatedStockItemIds);
+          if (impacted) {
+            await evaluateProductMargin(product, totalCost, tenantId, invoiceId);
+          }
         }
       } catch (e) {
-          logger.error('[FoodCostRecomputer] Erreur de recalcul', e);
-          throw e; // Laisse la DLQ s'en occuper
+        logger.error('[FoodCostRecomputer] Erreur de recalcul', e);
+        throw e;
       }
     },
     { id: 'food-cost-recomputer', priority: 'HIGH' }
   );
 }
+

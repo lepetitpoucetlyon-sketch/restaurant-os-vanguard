@@ -13,9 +13,8 @@ import {
     Clock,
     Crosshair
 } from 'lucide-react';
-import { cn } from "@/lib/ui.foundations";
-import { HermesEngine } from '@/modules/intelligence/ia/ai';
-import { HermesPulseResult } from '@/modules/intelligence/domain/agency/hermes.types';
+import { HermesEngine, type HermesPulseResult } from '@/modules/intelligence';
+import { cn } from '@/lib/ui.foundations';
 
 /**
  * 🏺 Hermes Dashboard - Grade X Command Center

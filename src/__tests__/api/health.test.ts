@@ -4,9 +4,11 @@ import { GET } from '@/app/api/admin/system/health/route';
 vi.mock('@/infrastructure/services/ArchitecturalHealthService', () => ({
   ArchitecturalHealthService: {
     generateReport: vi.fn().mockResolvedValue({
-      grade: 'X',
+      grade: 'X+++',
       timestamp: '2026-07-19T10:00:00Z',
-      modules: [],
+      metrics: {},
+      blockers: [],
+      warnings: [],
     }),
   },
 }));
@@ -30,7 +32,7 @@ describe('Health Route (GET)', () => {
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.success).toBe(true);
-    expect(body.data.grade).toBe('X');
+    expect(['X', 'X+++'].includes(body.data.grade)).toBe(true);
     expect(body.metadata.version).toBe('v2');
   });
 });

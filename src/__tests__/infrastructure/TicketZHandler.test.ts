@@ -64,6 +64,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
     emit: vi.fn(async (event: string, payload: unknown) => {
       for (const h of handlers[event] ?? []) await h(payload);
     }),
+    emitDurable: vi.fn().mockResolvedValue(undefined),
   },
 }));
 

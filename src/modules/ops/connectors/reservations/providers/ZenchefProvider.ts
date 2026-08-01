@@ -1,6 +1,5 @@
 import type { IReservationProvider, Reservation } from '../types';
 import { logger } from '@/lib/logger';
-import { computeHmacHex, timingSafeCompareHex } from '@/lib/server/webhookVerify';
 
 const ZENCHEF_BASE = 'https://api.zenchef.com/v1';
 
@@ -92,10 +91,12 @@ export class ZenchefProvider implements IReservationProvider {
         return reservations.length;
     }
 
-    verifySignature(rawBody: string, headers: Headers): boolean {
+    async verifySignature(rawBody: string, headers: Headers): Promise<boolean> {
         const secret = process.env.ZENCHEF_WEBHOOK_SECRET;
         if (!secret) return false;
         const incoming = headers.get('x-zenchef-signature') ?? '';
+        // Dynamic import keeps server-only crypto out of the client bundle
+        const { computeHmacHex, timingSafeCompareHex } = await import('@/lib/server/webhookVerify');
         const expected = computeHmacHex(secret, rawBody);
         return timingSafeCompareHex(incoming, expected);
     }

@@ -9,7 +9,6 @@ import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 import { useToast } from "@ui/Toast";
 import React, { useState, useCallback } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { useTenant } from "@/shared/hooks";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

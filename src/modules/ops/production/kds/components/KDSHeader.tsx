@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { STATION_CONFIG, KitchenStation } from "@modules/ops/production/kds";
-import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
