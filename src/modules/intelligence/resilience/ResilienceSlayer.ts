@@ -5,6 +5,8 @@ import {
     stockItemsNodeAtom, 
     journalEntriesNodeAtom 
 } from '@/store/pillars';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { qualityActiveControlAtom } from '@/modules/compliance/haccp/store/qualityAtoms';
 import { SelfHealingEngine } from '@/infrastructure/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

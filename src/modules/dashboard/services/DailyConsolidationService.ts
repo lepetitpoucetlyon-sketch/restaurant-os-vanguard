@@ -1,5 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { LaborCostAnalyzer } from '@/modules/human/hr/services/LaborCostAnalyzer';
 
 export interface DailyFlashReport {

@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Edit3, Trash2, ImageIcon, Settings, Calendar, Clock, Check } from "lucide-react";
 import { Button } from "@ui/button";
 
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useMarketing } from "@/modules/ops/providers";
 
 interface NewPostModalProps {

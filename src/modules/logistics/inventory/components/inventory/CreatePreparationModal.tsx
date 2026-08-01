@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ChefHat, X, Check, MapPin, Package, RefreshCw, Plus, Minus, Calendar } from "lucide-react";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useInventory } from "@/modules/ops/providers";
 import { useAuth } from "@/shared/hooks";
 import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";

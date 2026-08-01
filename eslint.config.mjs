@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     },
     rules: {
       "vanguard/no-cross-imports": "error",
+      "vanguard/no-inter-module-imports": "error",
       // Legacy warning debt is intentionally disabled now that the blocking
       // correctness rules pass; CI focuses on hard failures rather than noise.
       "no-restricted-imports": ["error", {

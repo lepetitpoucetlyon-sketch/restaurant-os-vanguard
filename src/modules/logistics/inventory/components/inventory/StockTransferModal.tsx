@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useInventory } from "@/modules/ops/providers";
 import { StockItem, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { motion, AnimatePresence } from "framer-motion";

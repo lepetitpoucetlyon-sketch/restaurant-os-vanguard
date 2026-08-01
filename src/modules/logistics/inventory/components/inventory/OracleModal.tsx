@@ -4,6 +4,8 @@ import React from 'react';
 import { X } from 'lucide-react';
 import type { StockItem } from '@modules/logistics/inventory/types';
 import { useStockPrediction } from '@/modules/logistics/hooks/useStockPrediction';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { OraclePredictor } from '@/modules/intelligence/analytics/components';
 
 interface OracleModalProps {

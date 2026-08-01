@@ -16,6 +16,8 @@ import { PayrollTab } from "./_tabs/PayrollTab";
 import { LeavesTab } from "./_tabs/LeavesTab";
 import type { StaffTab } from "./staffUtils";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { useTabAccess } from "@/shared/hooks/useTabAccess";
 
 const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
     { id: "team",        label: "Équipe",              icon: Users },
@@ -28,6 +30,14 @@ const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
 ];
 
 function StaffPage() {
+    const canSeePayroll = useTabAccess("staff", "payroll");
+    const canSeeRecruitment = useTabAccess("staff", "recruitment");
+    const visibleTabs = TABS.filter(t => {
+        if (t.id === "payroll") return canSeePayroll;
+        if (t.id === "recruitment") return canSeeRecruitment;
+        return true;
+    });
+
     const {
         activeTab, setActiveTab,
         editingUser, isFormOpen, setIsFormOpen,
@@ -54,7 +64,7 @@ function StaffPage() {
             </header>
 
             <nav className="flex gap-1 border-b border-border mb-6">
-                {TABS.map((tab) => {
+                {visibleTabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
@@ -94,7 +104,9 @@ function StaffPage() {
                 )}
 
                 {activeTab === "payroll" && (
-                    <PayrollTab isManager={isManager} payrollMonth={payrollMonth} setPayrollMonth={setPayrollMonth} payrollRows={payrollRows} />
+                    <TabGuard pageKey="staff" tabKey="payroll">
+                        <PayrollTab isManager={isManager} payrollMonth={payrollMonth} setPayrollMonth={setPayrollMonth} payrollRows={payrollRows} />
+                    </TabGuard>
                 )}
 
                 {activeTab === "skills" && (
@@ -106,7 +118,9 @@ function StaffPage() {
                 )}
 
                 {activeTab === "recruitment" && (
-                    <section><RecruitmentBoard onHireCandidate={handleHireCandidate} /></section>
+                    <TabGuard pageKey="staff" tabKey="recruitment">
+                        <section><RecruitmentBoard onHireCandidate={handleHireCandidate} /></section>
+                    </TabGuard>
                 )}
             </main>
 

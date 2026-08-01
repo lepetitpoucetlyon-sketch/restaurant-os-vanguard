@@ -6,7 +6,11 @@ import { startOfWeek, addDays, addWeeks, subWeeks, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
 
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useReservations, useTables, useGroups } from "@/modules/ops/providers";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useCRM } from "@/modules/commerce";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";

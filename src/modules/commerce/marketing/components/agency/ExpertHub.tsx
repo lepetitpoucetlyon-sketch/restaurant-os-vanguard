@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useExpert } from '@/modules/intelligence/domain/agency/useExpert';
 import { Target, Search, X, Zap, Activity } from 'lucide-react';
 import { InsightsConsole } from './InsightsConsole';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { AgentReasoningStep, AgentDomain } from '@/modules/intelligence/domain/agency/types';
 
 interface ExpertHubProps {

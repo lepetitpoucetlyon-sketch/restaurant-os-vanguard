@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { piiVault } from './PiiVault';
+import { piiVault } from '@/shared/nexus/vault/PiiVault';
 import { auditService } from '@/modules/compliance/audit/AuditService';
 
 const COLLECTIONS_WITH_SUBJECT_REF = [

@@ -8,6 +8,8 @@ import {
     preparationsNodeAtom, 
     storageLocationsNodeAtom 
 } from "../store/inventoryAtoms";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { wasteLogsNodeAtom } from "@/modules/compliance/haccp/store";
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";

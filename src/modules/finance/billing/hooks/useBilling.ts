@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useCallback } from 'react';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useOrders } from '@/modules/ops/providers';
 import type { Order } from '@modules/ops/engine/types';
 import type { JournalEntry } from '@modules/finance/types';

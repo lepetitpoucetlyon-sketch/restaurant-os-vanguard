@@ -6,6 +6,8 @@ import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { Users } from "lucide-react";
 import { cinematicItem, TABLES_DATA } from "@modules/commerce/reservations/constants";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import type { Table } from "@/modules/ops/engine/tables.types";
 
 interface FloorPlanViewProps {

@@ -1,4 +1,6 @@
 import { logger } from '@/lib/logger';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { LLMManager } from '@/modules/intelligence/ai';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
@@ -28,6 +30,8 @@ export interface InvoiceExtractionOptions {
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { AI_MODELS } from '@/modules/intelligence/ai';
 
 const MODELS = {

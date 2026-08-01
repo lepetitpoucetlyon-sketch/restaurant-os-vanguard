@@ -16,7 +16,11 @@ import {
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from '@ui/Modal';
 import { PremiumSelect } from '@ui/PremiumSelect';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useInventory, useQuotes } from '@/modules/ops/providers';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
 import { QuoteLine } from '@modules/commerce/marketing/types';
 import { Quote } from '@nexus/contracts';

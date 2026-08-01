@@ -17,6 +17,8 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import type { PrivatisationFormule, PrivatisationData } from "@/modules/finance/documents";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -156,6 +158,8 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
             }
 
             // Lazy-load jsPDF-dependent generator (client-only)
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
             const { generatePrivatisationContract } = await import("@/modules/finance/documents");
 
             const restaurantNom = whiteLabelInstanceConfig.identityDefaults.name || whiteLabelInstanceConfig.appName;

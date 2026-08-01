@@ -14,11 +14,15 @@ import {
 import { toast } from "sonner";
 
 import { useFinance } from "../hooks/useFinance";
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { ExpenseClaimDialog } from "@modules/finance/components/accounting";
 import { useBilling } from "@modules/finance/billing/hooks/useBilling";
 import { FECExporter } from "@modules/finance/accounting/domain/FECExporter";
 import { useTenant, useActionPermission } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useOrders } from "@/modules/ops/providers";
 import type { Order } from "@modules/ops/engine/types";
 import type { JournalEntry } from "@nexus/contracts";
@@ -125,6 +129,9 @@ export function FinanceDashboard() {
     const [payrollMonth, setPayrollMonth] = useState<string>(
         new Date().toISOString().slice(0, 7)
     );
+
+    const canSeeTreasury = useTabAccess("finance", "treasury");
+    const canSeeAudit = useTabAccess("finance", "audit");
 
     const {
         metrics,
@@ -289,7 +296,11 @@ export function FinanceDashboard() {
                     { id: "bank", label: "Connexion Bancaire", icon: Landmark },
                     { id: "treasury", label: "Trésorerie", icon: Wallet },
                     { id: "audit", label: "Audit fiscal", icon: ShieldCheck },
-                ] as const).map((tab) => {
+                ] as const).filter(tab => {
+                    if (tab.id === "treasury") return canSeeTreasury;
+                    if (tab.id === "audit") return canSeeAudit;
+                    return true;
+                }).map((tab) => {
                     const Icon = tab.icon;
                     const active = activeTab === tab.id;
                     return (
@@ -356,11 +367,17 @@ export function FinanceDashboard() {
                 )}
 
                 {/* ── Trésorerie & SEPA ──────────────────────────────────────── */}
-                {activeTab === "treasury" && <TreasuryTab />}
+                {activeTab === "treasury" && (
+                    <TabGuard pageKey="finance" tabKey="treasury">
+                        <TreasuryTab />
+                    </TabGuard>
+                )}
 
                 {/* ── Audit fiscal ───────────────────────────────────────────── */}
                 {activeTab === "audit" && (
-                    <AuditTab entriesCount={journalEntries.length} onExportFEC={handleFECExport} />
+                    <TabGuard pageKey="finance" tabKey="audit">
+                        <AuditTab entriesCount={journalEntries.length} onExportFEC={handleFECExport} />
+                    </TabGuard>
                 )}
             </main>
 

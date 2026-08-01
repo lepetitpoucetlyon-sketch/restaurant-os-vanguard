@@ -1,4 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { LaborCostService } from '@/modules/human/hr/services';
 
 interface FlashMetrics {

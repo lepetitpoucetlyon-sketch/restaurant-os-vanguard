@@ -20,6 +20,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from "@modules/intelligence/simulator/SimulationService";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useInventory } from "@/modules/ops/providers";
 import { useToast } from "@ui/Toast";
 

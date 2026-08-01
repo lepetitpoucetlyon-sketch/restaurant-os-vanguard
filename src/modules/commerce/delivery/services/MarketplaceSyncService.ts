@@ -1,5 +1,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import type { CartItem } from '@/modules/ops/engine/types';
 
 export interface MarketplaceOrderPayload {

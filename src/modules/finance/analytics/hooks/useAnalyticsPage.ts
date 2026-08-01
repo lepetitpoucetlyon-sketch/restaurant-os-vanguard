@@ -11,9 +11,13 @@ import { fr } from "date-fns/locale";
 
 import { useQuality } from "@modules/compliance";
 import type { ComplianceAlert } from "@modules/intelligence/analytics/types";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useOrders, useTables } from "@/modules/ops";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
 import { predictAttendance } from "@/modules/intelligence/attendance";
 
 export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";

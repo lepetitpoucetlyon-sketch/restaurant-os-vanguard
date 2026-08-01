@@ -125,6 +125,8 @@ export async function suggestChickenProcurement(qty: number, tenantId: string): 
   logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} chickens (Cost: ${cost/100}€)`);
 
   // Inject into SovereignLedger PROPOSALS account
+        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+        // eslint-disable-next-line vanguard/no-inter-module-imports
   const { SovereignLedger } = await import('@/modules/finance/services');
   await SovereignLedger.getInstance(tenantId).recordTransfer({
     debitAccount: 'PURCHASES',
