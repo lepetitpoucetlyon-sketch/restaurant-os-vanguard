@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { AgentDomain, AgentRole, AgentResponse } from './types';
 import { AgentEngine } from '../../ia/ai/AgentEngine';

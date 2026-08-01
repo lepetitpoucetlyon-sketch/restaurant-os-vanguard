@@ -28,7 +28,7 @@ const ProductFormModal = dynamic(
 import { PrepTaskDetailDialog } from "./PrepTaskDetailDialog";
 import { RecipeDetailDialog } from "./RecipeDetailDialog";
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
-import { ExpertHub } from "@modules/commerce";
+import { ExpertHub } from "@/modules/commerce/acquisition/marketing/components/agency/ExpertHub";
 
 import { MiseEnPlaceTab, RecipesTab, WasteTab, MarginsTab, SuppliersTab, AllergensTab, CookingTimesTab, IngredientsTab } from "./tabs";
 import { DailyPrepList } from "@/modules/ops/production/recipes/DailyPrepList";

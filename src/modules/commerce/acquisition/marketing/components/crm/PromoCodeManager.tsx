@@ -7,7 +7,8 @@ import { toast } from "sonner";
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { useTenant } from "@/shared/hooks/useTenant";
 
-export type { PromoCodeRecord } from './types';
+import type { PromoCodeRecord } from './types';
+export type { PromoCodeRecord };
 
 const SEED_CODES: Omit<PromoCodeRecord, "id" | "createdAt" | "updatedAt">[] = [
   {

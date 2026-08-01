@@ -25,7 +25,7 @@ export { TransactionService } from './services/TransactionService';
 export { FiscalEngine, FISCAL_CONSTANTS } from './services/FiscalEngine';
 export { SovereignLedger } from './services/SovereignLedger';
 export { FiscalKeyService } from './services/FiscalKeyService';
-export { BillingService } from './services/BillingService';
+
 export type { TreasuryEntryInput } from './services/TreasuryCalculator';
 export { computeTreasury } from './services/TreasuryCalculator';
 export type { IFinanceRepository } from './comptabilite/repositories/IFinanceRepository';

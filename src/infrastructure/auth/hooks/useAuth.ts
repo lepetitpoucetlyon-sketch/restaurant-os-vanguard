@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth as useNexusAuth } from '@/shared/hooks';
+import { useAuth as useNexusAuth } from '@/shared/providers/NexusCoreProvider';
 
 /**
  * 🔒 useAuth - Grade VI

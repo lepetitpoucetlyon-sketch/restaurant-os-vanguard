@@ -65,7 +65,7 @@ export function registerIntelligenceHandler(): () => void {
   );
 }
 
-async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops").CartItem[]): Promise<void> {
+async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops/workflow/engine/types").CartItem[]): Promise<void> {
   try {
     const zcpoState = await readZcpoState();
     if (zcpoState?.memoryPressure === 'critical') return;
