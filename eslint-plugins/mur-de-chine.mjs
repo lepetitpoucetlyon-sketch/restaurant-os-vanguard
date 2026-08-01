@@ -56,28 +56,33 @@ export const murDeChinePlugin = {
         },
       },
       create(context) {
+        function checkCrossModuleImport(node, importPath) {
+          const currentFile = context.filename || context.getFilename();
+          const normalizedFile = currentFile.replace(/\\/g, '/');
+          const match = normalizedFile.match(/\/src\/modules\/([^\/]+)/);
+          if (!match) return;
+          const currentModule = match[1];
+
+          const absoluteMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
+          if (!absoluteMatch) return;
+          const targetModule = absoluteMatch[1];
+
+          if (targetModule !== currentModule) {
+            context.report({
+              node,
+              messageId: "interModuleImport",
+              data: { source: currentModule, target: targetModule },
+            });
+          }
+        }
+
         return {
           ImportDeclaration(node) {
-            const currentFile = context.filename || context.getFilename();
-            const importPath = node.source.value;
-
-            const normalizedFile = currentFile.replace(/\\/g, '/');
-            const match = normalizedFile.match(/\/src\/modules\/([^\/]+)/);
-            if (!match) return;
-            const currentModule = match[1];
-
-            let targetModule = null;
-            const absoluteMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
-            if (absoluteMatch) {
-              targetModule = absoluteMatch[1];
-            }
-
-            if (targetModule && targetModule !== currentModule) {
-              context.report({
-                node,
-                messageId: "interModuleImport",
-                data: { source: currentModule, target: targetModule },
-              });
+            checkCrossModuleImport(node, node.source.value);
+          },
+          ImportExpression(node) {
+            if (node.source && node.source.type === "Literal") {
+              checkCrossModuleImport(node, node.source.value);
             }
           },
         };
