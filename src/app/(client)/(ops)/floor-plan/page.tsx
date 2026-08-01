@@ -13,6 +13,7 @@ import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
 import { Table, TableStatus } from "@nexus/contracts";
 import { FloorPlanEditorRef } from "@modules/ops";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 
 const FloorPlanEditor = dynamic(
@@ -32,7 +33,7 @@ const FLOOR_ICONS: Record<string, React.ElementType> = {
     'building': Building2,
 };
 
-export default function FloorPlanPage() {
+function FloorPlanPage() {
     const router = useRouter();
     const isMobile = useIsMobile();
     const { showToast } = useToast();
@@ -260,3 +261,5 @@ export default function FloorPlanPage() {
         </div>
     );
 }
+
+export default withPageGuard(FloorPlanPage, "floor_plan");

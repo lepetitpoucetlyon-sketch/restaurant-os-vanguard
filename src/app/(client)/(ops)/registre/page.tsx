@@ -27,6 +27,7 @@ import { PMRSection } from "@modules/ops";
 import { SanitaryComplianceSection } from "@modules/ops";
 import { Modal } from "@ui/Modal";
 import { InterventionLogSection } from "@modules/ops";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type TabType = 'overview' | 'duerp' | 'incendie' | 'prestataires' | 'pmr' | 'conformite' | 'interventions';
 
@@ -61,7 +62,7 @@ function StatusBadge({ status }: { status: 'conforme' | 'attention' | 'non_confo
     );
 }
 
-export default function RegistrePage() {
+function RegistrePage() {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [isCerfaOpen, setIsCerfaOpen] = useState(false);
     const { duerp, cerfa, pmrDoc, incendieDoc, hottesDoc, certHalal, agrementBoucher: _agrementBoucher, prestataires, getOverallStatus } = useRegistre();
@@ -231,3 +232,5 @@ export default function RegistrePage() {
         </div>
     );
 }
+
+export default withPageGuard(RegistrePage, "registre");

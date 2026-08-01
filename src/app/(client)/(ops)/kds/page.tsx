@@ -1,5 +1,8 @@
 import { KDSDashboard } from '@/modules/ops';
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function KDSPage() {
+function KDSPage() {
   return <KDSDashboard />;
 }
+
+export default withPageGuard(KDSPage, "kds");

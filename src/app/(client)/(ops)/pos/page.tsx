@@ -19,6 +19,7 @@ import { CourseType } from "@modules/ops/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 const ICON_MAP: Record<string, LucideIcon> = {
     all:      Star,
@@ -30,7 +31,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
     desserts: Coffee,
 };
 
-export default function POSPage() {
+function POSPage() {
     const { t: _t } = useLanguage();
     const {
         isMobile, activeTenantId, posUser, allTables,
@@ -268,3 +269,5 @@ export default function POSPage() {
         </div>
     );
 }
+
+export default withPageGuard(POSPage, "pos");

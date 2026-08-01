@@ -11,7 +11,7 @@ import { useProducts } from "@/modules/logistics/inventory/hooks/useProducts";
 import { useCategories } from "@/modules/logistics/inventory/hooks/useCategories";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Product } from "@nexus/contracts";
-import { useTenant } from "@/shared/hooks";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 const COMMON_ALLERGENS = [
     { id: 'gluten', name: 'Gluten', icon: '🌾' },
@@ -38,10 +38,9 @@ interface EditForm {
     recipeId: string;
 }
 
-export default function MenuBuilderPage() {
+function MenuBuilderPage() {
     const { data: products, isLoading: productsLoading } = useProducts();
     const { data: categories, isLoading: categoriesLoading } = useCategories();
-    const { activeTenantId } = useTenant();
 
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState("");
@@ -81,11 +80,11 @@ export default function MenuBuilderPage() {
     }, []);
 
     const saveProduct = useCallback(async () => {
-        if (!editingProduct || !activeTenantId) return;
+        if (!editingProduct) return;
         setSaving(true);
         try {
             const priceInMicrounits = toMicrounits(parseFloat(editForm.priceEuros) || 0);
-            const path = `tenants/${activeTenantId}/products/${editingProduct.id}`;
+            const path = Nexus.getTenantPath(`products/${editingProduct.id}`);
             await Nexus.adapter.update(path, {
                 name: editForm.name,
                 priceInMicrounits,
@@ -100,7 +99,7 @@ export default function MenuBuilderPage() {
         } finally {
             setSaving(false);
         }
-    }, [editingProduct, editForm, activeTenantId]);
+    }, [editingProduct, editForm]);
 
     const isLoading = productsLoading || categoriesLoading;
 
@@ -358,3 +357,5 @@ export default function MenuBuilderPage() {
         </div>
     );
 }
+
+export default withPageGuard(MenuBuilderPage, "menu_builder");

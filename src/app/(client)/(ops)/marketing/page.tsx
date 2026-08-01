@@ -13,6 +13,7 @@ const NewQuoteDialog = dynamic(
 );
 import { ExpertHub } from "@modules/commerce/marketing/components/agency";
 import { SEOManager } from "@modules/commerce/marketing/services/SEOManager";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type MktTab = "campaigns" | "social" | "quotes" | "ai" | "seo";
 
@@ -22,7 +23,7 @@ type CampaignRow = { id: string; name?: string; type?: string };
 type SocialRow = { id: string; platform?: string; handle?: string; followers?: number };
 type QuoteRow = { id: string; title?: string; clientName?: string; status?: string };
 
-export default function MarketingPage() {
+function MarketingPage() {
     const searchParams = useSearchParams();
     const tabParam = searchParams.get("tab") as MktTab | null;
     const [activeTab, setActiveTab] = useState<MktTab>(
@@ -195,3 +196,5 @@ export default function MarketingPage() {
         </div>
     );
 }
+
+export default withPageGuard(MarketingPage, "marketing");

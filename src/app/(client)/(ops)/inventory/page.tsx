@@ -30,8 +30,9 @@ import {
 } from "@/modules/logistics/inventory/components/InventoryInlineModals";
 import { SecurityPinModal } from "@components/ui";
 import { RotatingCount } from "@/modules/logistics/inventory/components/RotatingCount";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function InventoryPage() {
+function InventoryPage() {
     const {
         activeTab, setActiveTab,
         receptionOpen, setReceptionOpen,
@@ -200,3 +201,5 @@ export default function InventoryPage() {
         </div>
     );
 }
+
+export default withPageGuard(InventoryPage, "inventory");

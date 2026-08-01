@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Sparkles, Map, BarChart3, MessageSquare, TrendingUp, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 /**
  * Hub /intelligence — passerelle vers les surfaces d'analyse et d'IA du produit.
@@ -53,7 +54,7 @@ const CARDS: HubCard[] = [
     },
 ];
 
-export default function IntelligenceHubPage() {
+function IntelligenceHubPage() {
     return (
         <div className="min-h-screen bg-surface-base text-text-primary p-8">
             <motion.header
@@ -113,3 +114,5 @@ export default function IntelligenceHubPage() {
         </div>
     );
 }
+
+export default withPageGuard(IntelligenceHubPage, "intelligence");

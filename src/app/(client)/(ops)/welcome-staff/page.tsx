@@ -8,6 +8,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useAuth } from "@/shared/hooks";
 import { toast } from "sonner";
 import type { UserRole } from "@nexus/contracts";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 // ── Role configuration ────────────────────────────────────────────────────────
 
@@ -269,7 +270,7 @@ function WelcomeStaffInner() {
 
 // ── Page wrapper (Suspense required for useSearchParams) ─────────────────────
 
-export default function WelcomeStaffPage() {
+function WelcomeStaffPage() {
     return (
         <Suspense fallback={
             <div className="min-h-screen bg-bg-primary flex items-center justify-center">
@@ -280,3 +281,5 @@ export default function WelcomeStaffPage() {
         </Suspense>
     );
 }
+
+export default withPageGuard(WelcomeStaffPage, "welcome_staff");

@@ -33,8 +33,9 @@ import { TableGrid } from "@modules/commerce";
 import { CustomerCustomerView } from "@modules/commerce";
 import { CustomerDetailPanel } from "@modules/commerce";
 import { cn } from "@/lib/ui.foundations";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function ReservationsPage() {
+function ReservationsPage() {
     const {
         activeSection, setActiveSection,
         view, setView,
@@ -238,3 +239,5 @@ export default function ReservationsPage() {
         </div>
     );
 }
+
+export default withPageGuard(ReservationsPage, "reservations");

@@ -18,10 +18,11 @@ import { VisitHistory } from "@/modules/commerce/marketing/components/crm/VisitH
 import { CustomerImportPanel } from "@/modules/commerce";
 import { RFMSegmentation } from "@/modules/commerce/marketing/components/crm/RFMSegmentation";
 import { EmailAutomations } from "@/modules/commerce/marketing/components/crm/EmailAutomations";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
 
-export default function CrmPage() {
+function CrmPage() {
     const [activeTab, setActiveTab] = useState<CrmTab>("pipeline");
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [isNewOpen, setIsNewOpen] = useState(false);
@@ -196,3 +197,5 @@ export default function CrmPage() {
         </div>
     );
 }
+
+export default withPageGuard(CrmPage, "crm");

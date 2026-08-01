@@ -65,18 +65,18 @@ export function useStaffPage() {
     const payrollRows = useMemo(() => computePayroll(staffMembers, shiftLogs, payrollMonth), [staffMembers, shiftLogs, payrollMonth]);
 
     useEffect(() => {
-        if (!selectedSkillUser || !tenantId) { setStaffDocs([]); return; }
-        Nexus.adapter.query<StaffDocument>(`tenants/${tenantId}/staffDocuments`, {
+        if (!selectedSkillUser) { setStaffDocs([]); return; }
+        Nexus.adapter.query<StaffDocument>('staffDocuments', {
             where: [{ field: 'userId', operator: '==', value: selectedSkillUser.id }],
             orderBy: { field: 'uploadedAt', direction: 'desc' },
         }).then(setStaffDocs).catch(() => setStaffDocs([]));
-    }, [selectedSkillUser, tenantId]);
+    }, [selectedSkillUser]);
 
     const handleToggleSkill = async (user: User, skill: string) => {
         const current = ((user as Record<string, unknown>).skills as string[] | undefined) ?? [];
         const next = current.includes(skill) ? current.filter(s => s !== skill) : [...current, skill];
         try {
-            await Nexus.adapter.update(`tenants/${tenantId}/users/${user.id}`, { skills: next });
+            await Nexus.adapter.update(`users/${user.id}`, { skills: next });
             toast.success(`Compétence ${current.includes(skill) ? "retirée" : "ajoutée"}.`);
         } catch { toast.error("Erreur lors de la mise à jour des compétences."); }
     };
@@ -87,7 +87,7 @@ export function useStaffPage() {
         if ('error' in result) { toast.error(result.error); return; }
         const { doc } = result;
         try {
-            await Nexus.adapter.set(`tenants/${tenantId}/staffDocuments/${doc.id}`, doc);
+            await Nexus.adapter.set(`staffDocuments/${doc.id}`, doc);
             setStaffDocs(prev => [doc, ...prev]);
             setDocForm(null);
             toast.success("Document enregistré.");
@@ -96,7 +96,7 @@ export function useStaffPage() {
 
     const handleDeleteDoc = async (doc: StaffDocument) => {
         try {
-            await Nexus.adapter.delete(`tenants/${tenantId}/staffDocuments/${doc.id}`);
+            await Nexus.adapter.delete(`staffDocuments/${doc.id}`);
             setStaffDocs(prev => prev.filter(d => d.id !== doc.id));
             toast.success("Document supprimé.");
         } catch { toast.error("Erreur lors de la suppression."); }

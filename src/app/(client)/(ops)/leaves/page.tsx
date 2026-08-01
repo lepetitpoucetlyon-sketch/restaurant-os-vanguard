@@ -24,8 +24,9 @@ import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } fro
 
 import { useAuth } from '@/shared/hooks';
 import { useHumanResources } from '@modules/human/hr';
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function LeavesPage() {
+function LeavesPage() {
     const { currentUser } = useAuth() || {};
     const {
         leaveRequests: requests,
@@ -285,3 +286,5 @@ export default function LeavesPage() {
         </div>
     );
 }
+
+export default withPageGuard(LeavesPage, "leaves");

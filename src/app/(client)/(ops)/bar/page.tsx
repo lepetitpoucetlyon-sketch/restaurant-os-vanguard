@@ -14,7 +14,6 @@ import { BarTab, Wine, Cocktail } from "@/modules/ops/types/bar";
 import { winesAtom, cocktailsAtom, wineRegionsAtom } from "@/modules/ops/bar/store/barAtoms";
 import { Recipe } from "@nexus/contracts";
 import { useKitchen } from "@/modules/ops/providers";
-import { SovereignMath } from "@/shared/services/SovereignMath";
 
 import { BarSidebar } from "@modules/ops";
 import { KdsTab } from "@modules/ops";
@@ -23,8 +22,9 @@ import { SommelierTab } from "@modules/ops";
 import { CocktailTab } from "@modules/ops";
 import { StocksTab } from "@modules/ops";
 import { WineDetailPanel } from "@modules/ops";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function BarPage() {
+function BarPage() {
     const { showToast } = useToast();
     const { orders: kitchenOrders, updateOrderStatus: nexusUpdateOrderStatus } = useKitchen();
 
@@ -87,11 +87,10 @@ export default function BarPage() {
         return true;
     }), [wines, filterRegion, searchQuery]);
 
-    const totalCellarValue = useMemo(() => {
-        const totalMicrounits = wines.reduce((sum, w) => 
-            SovereignMath.addMicrounits(sum, SovereignMath.mulMicrounits(w.priceInMicrounits, w.stock)), 0);
-        return totalMicrounits / 1_000_000;
-    }, [wines]);
+    const totalCellarValue = useMemo(() =>
+        wines.reduce((sum, w) => sum + (w.priceInMicrounits / 1_000_000 * w.stock), 0),
+        [wines]
+    );
     const lowStockWines = useMemo(() =>
         wines.filter(w => w.stock <= w.minStock).length,
         [wines]
@@ -179,3 +178,5 @@ export default function BarPage() {
         </div>
     );
 }
+
+export default withPageGuard(BarPage, "bar");

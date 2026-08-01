@@ -15,6 +15,7 @@ import { TimesheetTab } from "./_tabs/TimesheetTab";
 import { PayrollTab } from "./_tabs/PayrollTab";
 import { LeavesTab } from "./_tabs/LeavesTab";
 import type { StaffTab } from "./staffUtils";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
     { id: "team",        label: "Équipe",              icon: Users },
@@ -26,7 +27,7 @@ const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
     { id: "recruitment", label: "Recrutement",          icon: UserPlus },
 ];
 
-export default function StaffPage() {
+function StaffPage() {
     const {
         activeTab, setActiveTab,
         editingUser, isFormOpen, setIsFormOpen,
@@ -124,3 +125,5 @@ export default function StaffPage() {
         </div>
     );
 }
+
+export default withPageGuard(StaffPage, "staff");

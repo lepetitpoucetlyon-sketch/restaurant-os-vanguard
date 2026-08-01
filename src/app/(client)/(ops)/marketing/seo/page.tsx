@@ -17,8 +17,9 @@ import { cn } from "@/lib/ui.foundations";
 
 // Tab Components
 import { OverviewTab, PagesTab, AnalyticsTab, SettingsTab } from "@modules/commerce/marketing/components/seo/tabs";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function SEOPage() {
+function SEOPage() {
     const [activeTab, setActiveTab] = useState<'overview' | 'pages' | 'analytics' | 'settings'>('overview');
 
     const tabs = [
@@ -103,3 +104,5 @@ export default function SEOPage() {
         </div>
     );
 }
+
+export default withPageGuard(SEOPage, "marketing");

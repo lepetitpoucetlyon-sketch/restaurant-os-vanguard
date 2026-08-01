@@ -13,6 +13,7 @@ import {
 import { CleaningPlan } from "@/modules/compliance/haccp/components/CleaningPlan";
 import { DLCTracker } from "@/modules/compliance/haccp/components/DLCTracker";
 import { NonConformityForm } from "@/modules/compliance/haccp/components/NonConformityForm";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
     temperatures: Thermometer,
@@ -21,7 +22,7 @@ const TOOL_ICONS: Record<string, typeof Thermometer> = {
     anomalies: AlertOctagon,
 };
 
-export default function HaccpPage() {
+function HaccpPage() {
     const {
         activeTab, setActiveTab,
         activeTool, setActiveTool,
@@ -180,3 +181,5 @@ export default function HaccpPage() {
         </div>
     );
 }
+
+export default withPageGuard(HaccpPage, "haccp");

@@ -1,5 +1,8 @@
 import { PlanningDashboard } from '@/modules/human';
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function PlanningPage() {
+function PlanningPage() {
   return <PlanningDashboard />;
 }
+
+export default withPageGuard(PlanningPage, "planning");

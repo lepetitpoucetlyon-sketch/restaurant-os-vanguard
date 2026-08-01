@@ -1,5 +1,8 @@
 import { OperationsDashboard } from '@/modules/ops';
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function OperationsPage() {
+function OperationsPage() {
   return <OperationsDashboard />;
 }
+
+export default withPageGuard(OperationsPage, "operations");

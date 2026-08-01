@@ -1,5 +1,8 @@
 import { FinanceDashboard } from '@/modules/finance';
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function FinancePage() {
+function FinancePage() {
   return <FinanceDashboard />;
 }
+
+export default withPageGuard(FinancePage, "finance");

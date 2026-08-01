@@ -50,12 +50,11 @@ function filterPaidOrders(orders: Order[]): Order[] {
 async function applyBankSyncResult(
     data: { success?: boolean; isDemoMode?: boolean; error?: string },
     setBankAccounts: (accounts: BankAccount[]) => void,
-    tenantId: string
 ): Promise<void> {
     if (data.success) {
         toast.success(data.isDemoMode ? "Synchronisation simulée (mode démo)." : "Synchronisation bancaire lancée.");
         const { Nexus } = await import("@/lib/nexus/NexusAdapter");
-        setBankAccounts(await Nexus.adapter.query<BankAccount>(`tenants/${tenantId}/bankAccounts`));
+        setBankAccounts(await Nexus.adapter.query<BankAccount>("bankAccounts"));
     } else {
         toast.error(data.error ?? "Erreur lors de la synchronisation.");
     }
@@ -145,11 +144,10 @@ export function FinanceDashboard() {
     useEffect(() => {
         let cancelled = false;
         async function loadAccounts() {
-            if (!activeTenantId) return;
             setLoadingBankAccounts(true);
             try {
                 const { Nexus } = await import("@/lib/nexus/NexusAdapter");
-                const accounts = await Nexus.adapter.query<BankAccount>(`tenants/${activeTenantId}/bankAccounts`);
+                const accounts = await Nexus.adapter.query<BankAccount>("bankAccounts");
                 if (!cancelled) setBankAccounts(accounts);
             } catch {
                 // Collection may be empty — no-op
@@ -159,7 +157,7 @@ export function FinanceDashboard() {
         }
         loadAccounts();
         return () => { cancelled = true; };
-    }, [activeTenantId]);
+    }, []);
 
     // fin-10: TVA breakdown derived from live journal entries
     const tvaBreakdown = useMemo(
@@ -203,18 +201,17 @@ export function FinanceDashboard() {
 
     // fin-8: trigger sync
     const handleBankSync = useCallback(async () => {
-        if (!activeTenantId) return;
         setSyncingBank(true);
         try {
             const res = await fetch("/api/finance/bank/sync", { method: "POST" });
             const data = (await res.json()) as { success?: boolean; isDemoMode?: boolean; error?: string };
-            await applyBankSyncResult(data, setBankAccounts, activeTenantId);
+            await applyBankSyncResult(data, setBankAccounts);
         } catch {
             toast.error("Erreur réseau lors de la synchronisation.");
         } finally {
             setSyncingBank(false);
         }
-    }, [activeTenantId]);
+    }, []);
 
     // fin-12: P&L PDF export
     const handleExportPnL = useCallback(async () => {

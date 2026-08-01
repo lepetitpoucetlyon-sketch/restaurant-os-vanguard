@@ -12,7 +12,6 @@ import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";
-import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 
 import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/domain/schemas/ops";
@@ -85,7 +84,6 @@ async function recordNoShow(
     if (!crmRecord) return;
     const currentNoShows = (crmRecord as Record<string, unknown>)["noShows"] as number ?? 0;
     await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
-    await NexusEventBus.emit('reservation.no_show', { reservationId, customerId: res.customerId, tenantId });
 }
 
 async function cancelReservationById(

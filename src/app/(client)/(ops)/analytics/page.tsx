@@ -8,6 +8,7 @@ import { format } from "date-fns";
 
 import { useAnalyticsPage, percentChange } from "@/modules/finance/analytics/hooks";
 import type { MacroBrainAlert } from "@/modules/finance/analytics/hooks";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
 } from "@modules/intelligence/analytics/components";
@@ -58,7 +59,7 @@ const EXAMPLE_ALERTS: MacroBrainAlert[] = [
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-export default function AnalyticsPage() {
+function AnalyticsPage() {
     const {
         activeTab, setActiveTab,
         macroAlerts, attendance, complianceAlerts,
@@ -198,3 +199,5 @@ export default function AnalyticsPage() {
         </div>
     );
 }
+
+export default withPageGuard(AnalyticsPage, "analytics");

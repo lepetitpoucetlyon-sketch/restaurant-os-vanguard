@@ -9,6 +9,7 @@ import {
     CreditCard, User,
 } from "lucide-react";
 import { TipDistributionService } from "@/modules/human/hr/services";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type Tab = 'planning' | 'pointage' | 'conges' | 'pourboires' | 'bulletin' | 'formations';
 
@@ -21,7 +22,7 @@ const TABS: { id: Tab; label: string; icon: typeof Calendar }[] = [
     { id: 'formations', label: 'Formations', icon: GraduationCap },
 ];
 
-export default function MonEspacePage() {
+function MonEspacePage() {
     const { currentUser } = useAuth();
     const { activeTenantId } = useTenant();
     const [activeTab, setActiveTab] = useState<Tab>('planning');
@@ -167,3 +168,5 @@ export default function MonEspacePage() {
         </div>
     );
 }
+
+export default withPageGuard(MonEspacePage, "mon_espace");
