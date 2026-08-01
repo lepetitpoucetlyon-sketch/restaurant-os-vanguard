@@ -2,7 +2,7 @@
 
 import { FileText } from "lucide-react";
 import { FacturXDownloadButton } from "@/modules/finance/components/FacturXDownloadButton";
-import type { Order } from "@modules/ops/engine/types";
+import type { Order } from "@/domain/schemas/orders";
 
 /**
  * Onglet « Facturation » de la page Finance — extrait de page.tsx (dette-4).

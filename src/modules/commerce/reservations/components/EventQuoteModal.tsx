@@ -17,9 +17,7 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import type { PrivatisationFormule, PrivatisationData } from "@/modules/finance/documents";
+import type { PrivatisationFormule, PrivatisationData } from "@/domain/schemas/commerce";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 

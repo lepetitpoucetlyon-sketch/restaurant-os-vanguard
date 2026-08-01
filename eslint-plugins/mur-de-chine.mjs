@@ -56,23 +56,49 @@ export const murDeChinePlugin = {
         },
       },
       create(context) {
+        // Composition roots légitimes : assembleurs qui ont le droit d'importer n'importe quel module.
+        const COMPOSITION_ROOT_PATTERNS = [
+          /\/src\/shared\/components\/layout\//,
+          /\/src\/shared\/contexts\//,
+          /\/src\/shared\/providers\//,
+          /\/src\/shared\/nexus\/guards\//,
+          /\/src\/shared\/components\/settings\//,
+        ];
+
         function checkCrossModuleImport(node, importPath) {
           const currentFile = context.filename || context.getFilename();
           const normalizedFile = currentFile.replace(/\\/g, '/');
-          const match = normalizedFile.match(/\/src\/modules\/([^\/]+)/);
-          if (!match) return;
-          const currentModule = match[1];
 
-          const absoluteMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
-          if (!absoluteMatch) return;
-          const targetModule = absoluteMatch[1];
+          // Vecteur 1 : inter-module (src/modules/A → @/modules/B)
+          const moduleMatch = normalizedFile.match(/\/src\/modules\/([^\/]+)/);
+          if (moduleMatch) {
+            if (node.importKind === "type") return;
+            const currentModule = moduleMatch[1];
+            const absoluteMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
+            if (absoluteMatch && absoluteMatch[1] !== currentModule) {
+              context.report({
+                node,
+                messageId: "interModuleImport",
+                data: { source: currentModule, target: absoluteMatch[1] },
+              });
+            }
+            return;
+          }
 
-          if (targetModule !== currentModule) {
-            context.report({
-              node,
-              messageId: "interModuleImport",
-              data: { source: currentModule, target: targetModule },
-            });
+          // Vecteur 2 : FIX-04 — src/shared/hooks/ ou src/lib/ → @/modules/
+          // Exclut les composition roots qui ont le droit d'assembler des modules.
+          const isFix04Zone = /\/src\/shared\/hooks\/|\/src\/lib\//.test(normalizedFile);
+          if (isFix04Zone) {
+            const isRoot = COMPOSITION_ROOT_PATTERNS.some(p => p.test(normalizedFile));
+            if (isRoot) return;
+            const modMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
+            if (modMatch) {
+              context.report({
+                node,
+                messageId: "interModuleImport",
+                data: { source: "shared/hooks|lib", target: modMatch[1] },
+              });
+            }
           }
         }
 

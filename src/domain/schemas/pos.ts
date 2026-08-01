@@ -73,3 +73,27 @@ export const PosTicketSchema = z.object({
 export type PosTicket = z.infer<typeof PosTicketSchema>;
 export type CartLine  = z.infer<typeof CartLineSchema>;
 export type PaymentSplit = z.infer<typeof PaymentSplitSchema>;
+
+// ─── CartItem (ops/engine canonical type, promoted to domain) ────────────────
+import type { Microunits } from './primitives';
+
+export type CourseType = 'entree' | 'plat' | 'dessert';
+
+export interface CartItem extends Omit<CartLine, 'id'> {
+    cartId: string;
+    discountPercent?: number;
+    originalPriceInMicrounits?: Microunits;
+    isOffer?: boolean;
+    course?: CourseType;
+    firedAt?: number;
+}
+
+// ─── Split bill (promoted from SplitBillDialog component) ────────────────────
+export type SplitMode = 'equal' | 'by-item' | 'custom';
+export type PaymentMethod = 'card' | 'cash' | 'mobile';
+
+export interface ConvivePayment {
+    paid: boolean;
+    amount: number;
+    method?: PaymentMethod;
+}

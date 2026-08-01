@@ -1,7 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import type { PurchaseOrder, DeliveryNote } from '@/modules/logistics/domain/procurement';
+import type { PurchaseOrder, DeliveryNote } from '@/domain/schemas/inventory';
 import type { ExtractedSupplierInvoice } from '@/domain/schemas/supplier-invoice.schemas';
 import { empireAudit } from '@/infrastructure/services/audit';
 

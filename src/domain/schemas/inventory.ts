@@ -43,3 +43,45 @@ export type InventoryTransaction = z.infer<typeof InventoryTransactionSchema>;
 
 export const StockItemPatchSchema = StockItemSchema.partial().omit({ id: true });
 export type StockItemPatch = z.infer<typeof StockItemPatchSchema>;
+
+// ─── Procurement (promoted from logistics/domain/procurement/types) ───────────
+export interface PurchaseOrder {
+    id: string;
+    supplierId: string;
+    items: Array<{ productId: string; quantity: number; unitPriceInCents: number }>;
+    totalAmountInCents: number;
+    status: 'draft' | 'submitted' | 'engaged' | 'delivered' | 'cancelled';
+    createdAt: string;
+}
+
+export interface DeliveryNote {
+    id: string;
+    purchaseOrderId: string;
+    deliveredItems: Array<{ productId: string; quantityDelivered: number }>;
+    deliveryDate: string;
+    signatureHash?: string;
+    status: 'pending' | 'signed' | 'disputed';
+    totalAmountInCents: number;
+}
+
+// ─── Intelligence prediction (promoted from intelligence/services/OracleEngine) ─
+export interface OraclePrediction {
+    estimatedDaysRemaining: number;
+    confidence: number;
+    trend: 'STABLE' | 'ACCELERATING' | 'DECELERATING';
+    scenarios: { optimistic: number; pessimistic: number; p50: number };
+    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
+}
+
+// ─── ExtractedInvoice (promoted from intelligence/services/VisionService) ─────
+import type { ExtractedInvoiceItem } from './supplier-invoice.schemas';
+
+export interface ExtractedInvoice {
+    supplierName: string;
+    invoiceNumber: string;
+    date: string;
+    currency: string;
+    totalHT: number;
+    totalTTC: number;
+    items: ExtractedInvoiceItem[];
+}

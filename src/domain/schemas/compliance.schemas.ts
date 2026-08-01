@@ -2,6 +2,13 @@ import { z } from 'zod';
 
 // ─── Enums ──────────────────────────────────────────────────────────────────────
 
+// ─── ComplianceAlert (promoted from intelligence/analytics/types) ────────────
+export interface ComplianceAlert {
+    id: string;
+    userName: string;
+    message: string;
+}
+
 export const ComplianceDocumentTypeEnum = z.enum([
     'EMPLOYMENT_CONTRACT',
     'PAYSLIP',

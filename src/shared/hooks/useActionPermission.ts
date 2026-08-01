@@ -7,6 +7,8 @@ import {
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
+// FIXME (FIX-04): shared/hooks ne doit pas importer de module métier. Extraire policyEngine vers shared/nexus/contracts ou NexusEventBus.
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { policyEngine } from "@/modules/compliance/services";
 
 type ActionConfig = {

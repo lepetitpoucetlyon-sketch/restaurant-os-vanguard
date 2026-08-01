@@ -69,3 +69,25 @@ export type Table = z.infer<typeof TableSchema>;
 export type Reservation = z.infer<typeof ReservationSchema>;
 export type Floor = z.infer<typeof FloorSchema>;
 export type Zone = z.infer<typeof ZoneSchema>;
+
+// ─── FloorTable : runtime shape (sans schemaVersion/updatedAt Nexus) ─────────
+export type TableStatus = 'free' | 'seated' | 'ordered' | 'eating' | 'paying' | 'dirty' | 'reserved' | 'cleaning' | 'locked';
+export type TableShape = 'rect' | 'circle';
+
+export interface FloorTable {
+    id: string;
+    number: string;
+    seats: number;
+    status: TableStatus;
+    shape: TableShape;
+    x: number;
+    y: number;
+    width?: number;
+    height?: number;
+    radius?: number;
+    zoneId: string;
+    floorId?: string;
+    lastService?: string;
+    revenueTodayInCents?: number;
+    revenueTodayInMicrounits?: number;
+}
