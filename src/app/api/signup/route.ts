@@ -9,11 +9,13 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { sendEmail } from '@/infrastructure/services/email-service';
+import { PlatformVariantSchema } from '@/domain/schemas/tenant';
 
 const SignupSchema = z.object({
   email: z.string().email().max(254),
   password: z.string().min(8).max(128),
   restaurantName: z.string().min(2).max(80),
+  variant: PlatformVariantSchema.default('restaurant'),
   siret: z.string().max(20).optional(),
   websiteUrl: z.string().url().max(2048).optional().or(z.literal('')),
 });
@@ -81,7 +83,7 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  const { email, password, restaurantName, siret: _siret, websiteUrl } = parsed.data;
+  const { email, password, restaurantName, variant, siret: _siret, websiteUrl } = parsed.data;
 
   initFirebaseAdmin();
 
@@ -132,6 +134,7 @@ export async function POST(req: NextRequest) {
       key: tenantId,
       name: restaurantName,
       ownerEmail: email,
+      variant,
       initialPrimaryColor: primaryColor,
       tier: 'STANDARD',
       copyBaseTemplates: true,

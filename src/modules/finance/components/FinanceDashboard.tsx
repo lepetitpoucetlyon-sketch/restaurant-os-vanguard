@@ -17,8 +17,8 @@ import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { ExpenseClaimDialog } from "@modules/finance/components/accounting";
-import { useBilling } from "@modules/finance/billing/hooks/useBilling";
-import { FECExporter } from "@modules/finance/accounting/domain/FECExporter";
+import { useBilling } from "@modules/finance/comptabilite/billing/hooks/useBilling";
+import { FECExporter } from "@modules/finance/comptabilite/accounting/domain/FECExporter";
 import { useTenant, useActionPermission } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.

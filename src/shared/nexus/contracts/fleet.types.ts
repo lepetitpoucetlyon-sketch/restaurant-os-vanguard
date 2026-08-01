@@ -166,6 +166,7 @@ export interface ProvisioningDNA {
     name: string;
     key: string;
     ownerEmail: string;
+    variant?: import('@/domain/schemas/tenant').PlatformVariant;
     initialPrimaryColor?: string;
     tier?: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     copyBaseTemplates?: boolean;

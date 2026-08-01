@@ -12,16 +12,16 @@ export {
     groupsLoadingAtom,        // COMMERCE
     reservationStatsAtom,     // COMMERCE
     isReservationSyncingAtom, // COMMERCE
-} from '@modules/commerce/reservations/store/reservationAtoms';
+} from '@modules/commerce/relation/reservations/store/reservationAtoms';
 
 export {
     menuAnalysisSelector,     // COMMERCE
     staffPerformanceSelector, // COMMERCE
     laborCostRatioSelector,   // COMMERCE
-} from '@modules/commerce/marketing/store/analyticsAtoms';
+} from '@modules/commerce/acquisition/marketing/store/analyticsAtoms';
 
 export {
     quotesNodeAtom,           // COMMERCE
     quotesAtom,               // COMMERCE
     quotesLoadingAtom,        // COMMERCE
-} from '@modules/commerce/marketing/store/marketingAtoms';
+} from '@modules/commerce/acquisition/marketing/store/marketingAtoms';

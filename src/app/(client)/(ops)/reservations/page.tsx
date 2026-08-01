@@ -14,18 +14,18 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useReservationsPage } from "@/modules/commerce/reservations/hooks";
+import { useReservationsPage } from "@/modules/commerce/relation/reservations/hooks";
 import { PinModal } from "@modules/commerce/ui/pos/PinModal";
-import { DailyListView } from "@/modules/commerce/reservations/components/DailyListView";
-import { WeeklyView } from "@/modules/commerce/reservations/components/WeeklyView";
-import { GroupFormModal } from "@/modules/commerce/reservations/components/GroupFormModal";
+import { DailyListView } from "@/modules/commerce/relation/reservations/components/DailyListView";
+import { WeeklyView } from "@/modules/commerce/relation/reservations/components/WeeklyView";
+import { GroupFormModal } from "@/modules/commerce/relation/reservations/components/GroupFormModal";
 import dynamic from "next/dynamic";
 const EventQuoteModal = dynamic(
-  () => import("@/modules/commerce/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
+  () => import("@/modules/commerce/relation/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
   { ssr: false, loading: () => null }
 );
 const ReservationCreateDialog = dynamic(
-  () => import("@/modules/commerce/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
+  () => import("@/modules/commerce/relation/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
   { ssr: false, loading: () => null }
 );
 import { ReservationSidebar } from "@modules/commerce";

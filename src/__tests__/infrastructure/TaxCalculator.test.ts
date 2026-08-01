@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { TaxCalculator } from '@/infrastructure/services/finance/TaxCalculator';
-import type { CartItem } from '@/modules/ops/engine/types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 function cartItem(overrides: Partial<CartItem> = {}): CartItem {
   return {

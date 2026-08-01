@@ -3,16 +3,17 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { validatePin } from '@/lib/auth/validatePin';
 import { hashPin } from '@/lib/shared-kernel';
-import { RESTAURANT_FULL_DNA } from '@/shared/seeds/restaurant-full-dna';
+import { resolveDNA } from '@/shared/seeds';
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
-import type { Floor, Zone, Table } from '@/modules/ops/engine/tables.types';
+import type { Floor, Zone, Table } from '@/modules/ops/workflow/engine/tables.types';
 
 export interface SeedInput {
   tenantId: string;
   name: string;
   adminEmail: string;
+  variant?: import('@/domain/schemas/tenant').PlatformVariant;
   /** 4-digit PIN for the admin user — omit to let TenantSeeder generate a secure one */
   adminPin?: string;
   siren?: string;
@@ -60,11 +61,12 @@ interface SeedResult {
  */
 export const TenantSeeder = {
   async seed(input: SeedInput): Promise<SeedResult> {
-    const { tenantId, name, adminEmail, siren, primaryColor } = input;
+    const { tenantId, name, adminEmail, siren, primaryColor, variant = 'restaurant' } = input;
     const adminPin = resolveAdminPin(input.adminPin, input.adminEmail);
     const seededPaths: string[] = [];
+    const baseDNA = resolveDNA(variant);
 
-    logger.info(`[TenantSeeder] Seeding tenant ${tenantId}...`);
+    logger.info(`[TenantSeeder] Seeding tenant ${tenantId} (variant=${variant})...`);
 
     try {
       // Idempotency guard — if tenantConfig exists, skip
@@ -80,23 +82,24 @@ export const TenantSeeder = {
       // en mémoire via FiscalKeyService.provision() au sync de la config.
       const fiscalSigningKey = FiscalKeyService.generateKey();
       const config = {
-        ...RESTAURANT_FULL_DNA,
+        ...baseDNA,
         id: tenantId,
+        variant,
         name,
         fiscalSigningKey,
         metadata: {
-          ...RESTAURANT_FULL_DNA.metadata,
+          ...baseDNA.metadata,
           name,
           ownerId: adminEmail,
           createdAt: Date.now(),
           siren: siren ?? '',
         },
         theme: {
-          ...RESTAURANT_FULL_DNA.theme,
-          primaryColor: primaryColor ?? RESTAURANT_FULL_DNA.theme?.primaryColor ?? '#C5A059',
+          ...baseDNA.theme,
+          primaryColor: primaryColor ?? baseDNA.theme?.primaryColor ?? '#C5A059',
         },
         status: {
-          ...RESTAURANT_FULL_DNA.status,
+          ...baseDNA.status,
           updatedAt: Date.now(),
         },
       };

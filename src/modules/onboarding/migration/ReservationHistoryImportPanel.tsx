@@ -12,7 +12,7 @@ import { Upload, CheckCircle2, AlertTriangle, FileText, X } from "lucide-react";
 import {
   ReservationHistoryImporter,
   type ImportReservationResult,
-} from "@/modules/commerce/reservations/migration";
+} from "@/modules/commerce/relation/reservations/migration";
 import { useTenant } from "@/shared/hooks";
 
 // ── Types locaux ────────────────────────────────────────────────────────────────

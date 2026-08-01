@@ -1,19 +1,22 @@
-export * from './marketing';
-export * from './reservations';
-// Composants "customer" canoniques (fiche client, dialog, vue CRM) — source unique
-// partagée par les sous-modules customers et reservations du pilier commerce.
-export * from './customers/components';
-export { useMarketing } from './marketing/hooks/useMarketing';
-export { useQuotes } from './marketing/hooks/useQuotes';
+// Domaine : acquisition (marketing, SEO, landing)
+export * from './acquisition/marketing';
+export { useMarketing } from './acquisition/marketing/hooks/useMarketing';
+export { useQuotes } from './acquisition/marketing/hooks/useQuotes';
+export { LandingDashboard } from './acquisition/landing/components/LandingDashboard';
+export { MenuJsonLd } from './acquisition/seo';
+
+// Domaine : relation (reservations, CRM, customers, delivery)
+export * from './relation/reservations';
+export * from './relation/customers/components';
+export { ProspectingDashboard } from './relation/crm/components/ProspectingDashboard';
 // Ré-export depuis la source (commerceHooks) et non le barrel NexusOpsProvider :
 // passer par le Provider crée un cycle SSR commerce → Provider → NexusSyncService → commerce
-// (TDZ « Cannot access 'p' before initialization » au prerender).
+// eslint-disable-next-line no-restricted-imports
 export { useReservations, useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
-export { CustomerImportPanel } from '@/modules/onboarding/migration';
 
+// Domaine : fidélité (loyalty, quotes, widgets)
+export { ReservationWidget } from './fidelite/widgets';
 
-export { LandingDashboard } from './landing/components/LandingDashboard';
-export { ProspectingDashboard } from './crm/components/ProspectingDashboard';
-export { MenuJsonLd } from './seo';
-export { ReservationWidget } from './widgets';
+// Infrastructure pilier (connectors, ui)
 export { ReviewProviderFactory } from './connectors/reviews';
+export { CustomerImportPanel } from '@/modules/onboarding/migration';

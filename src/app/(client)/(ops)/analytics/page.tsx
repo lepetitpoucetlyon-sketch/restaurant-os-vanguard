@@ -6,14 +6,14 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-import { useAnalyticsPage, percentChange } from "@/modules/finance/analytics/hooks";
-import type { MacroBrainAlert } from "@/modules/finance/analytics/hooks";
+import { useAnalyticsPage, percentChange } from "@/modules/finance/comptabilite/analytics/hooks";
+import type { MacroBrainAlert } from "@/modules/finance/comptabilite/analytics/hooks";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
-} from "@modules/intelligence/analytics/components";
+} from "@modules/intelligence/analytique/analytics/components";
 
 // ── Local sub-components (presentation only) ──────────────────────────────────
 

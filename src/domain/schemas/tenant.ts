@@ -1,6 +1,20 @@
 import { z } from 'zod';
 import { TimestampSchema } from './primitives';
 
+export const PLATFORM_VARIANTS = [
+  'restaurant',
+  'hotel',
+  'bakery',
+  'garage',
+  'salon',
+  'clinic',
+  'retail',
+  'custom',
+] as const;
+
+export const PlatformVariantSchema = z.enum(PLATFORM_VARIANTS);
+export type PlatformVariant = z.infer<typeof PlatformVariantSchema>;
+
 export const TenantThemeSchema = z.object({
   primaryColor: z.string(),
   secondaryColor: z.string(),
@@ -61,6 +75,7 @@ export type TenantOverrides = z.infer<typeof TenantOverridesSchema>;
 
 export const TenantConfigSchema = z.object({
   id: z.string(),
+  variant: PlatformVariantSchema.optional(),
   name: z.string().optional(),
   tier: z.string().optional(),
   billing: z.object({

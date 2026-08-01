@@ -8,7 +8,7 @@ import {
     Calendar, Clock, Gift, FileText, GraduationCap,
     CreditCard, User,
 } from "lucide-react";
-import { TipDistributionService } from "@/modules/human/hr/services";
+import { TipDistributionService } from "@/modules/human/effectifs/hr/services";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type Tab = 'planning' | 'pointage' | 'conges' | 'pourboires' | 'bulletin' | 'formations';

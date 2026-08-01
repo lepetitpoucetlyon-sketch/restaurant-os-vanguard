@@ -17,4 +17,4 @@ export {
     selectedCRMAtom,          // MARKETING
     seoLoadingAtom,           // MARKETING
     isMarketingSyncingAtom,   // MARKETING
-} from '@modules/commerce/marketing/store/marketingAtoms';
+} from '@modules/commerce/acquisition/marketing/store/marketingAtoms';

@@ -105,7 +105,7 @@ export function TreasuryTab() {
 
     try {
       const { SepaFileGenerator } = await import(
-        "@/modules/finance/ap/SepaFileGenerator"
+        "@/modules/finance/tresorerie/ap/SepaFileGenerator"
       );
 
       const settings = await Nexus.adapter.get<{

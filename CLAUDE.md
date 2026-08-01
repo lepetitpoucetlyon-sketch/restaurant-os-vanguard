@@ -15,10 +15,23 @@ Si tu ne t'inscris pas, tu risques d'écraser le travail d'une autre session san
 
 ## Architecture
 
-Système multi-tenant en **piliers** (Core, Ops, Finance, Human, Commerce, Logistics, Compliance, Sovereign).
-Chaque pilier a : `modules/`, `engines/`, `store/pillars/`, `domain/schemas/`.
-Piliers réels dans `src/modules/` : `ops, commerce, compliance, finance, human, intelligence, logistics`.
-Sous-modules notables : `ops/{pos, kds, kitchen, prep}`, `compliance/{haccp, audit, rgpd, recall}`, `commerce/{marketing}`, `human/{payroll}`.
+Système multi-tenant en **8 piliers** avec une couche intermédiaire de **domaines universels** (2-3 par pilier).
+Structure canonique : `src/modules/<pilier>/<domaine>/<module>/` — l'infrastructure (providers, connectors, hooks, services, store, domain, migration) reste à la racine du pilier.
+
+### Arborescence des piliers et domaines
+
+| Pilier | Domaines | Modules principaux |
+|--------|----------|-------------------|
+| **ops** | `service/` · `production/` · `workflow/` | service: pos, bar, printers, frontdesk · production: kds, kitchen, recipes · workflow: engine |
+| **commerce** | `acquisition/` · `relation/` · `fidelite/` | acquisition: marketing, seo, landing · relation: reservations, crm, customers, delivery · fidelite: loyalty, quotes, widgets |
+| **finance** | `comptabilite/` · `tresorerie/` · `fiscalite/` | comptabilite: accounting, billing, fec, documents, analytics · tresorerie: banking, payout, collection, ap · fiscalite: tax |
+| **compliance** | `qualite/` · `securite/` · `reglementaire/` | qualite: haccp, iot, recall, donation, calendar · securite: audit · reglementaire: rgpd |
+| **human** | `effectifs/` · `remuneration/` | effectifs: hr · remuneration: payroll |
+| **logistics** | `stock/` · `approvisionnement/` | stock: inventory · approvisionnement: reception, procurement |
+| **intelligence** | `analytique/` · `ia/` · `knowledge/` | analytique: analytics, reports, attendance, anomaly · ia: ai, agency, fleet, simulator, resilience, tools · knowledge: rag |
+| **facility** | `spaces/` · `maintenance/` · `assets/` | spaces: floor-plan, settings · maintenance: registre |
+
+**Règle du Barrel renforcée** : importer uniquement depuis `@/modules/<pilier>` (barrel racine). Tout import vers `@/modules/<pilier>/<domaine>/...` est une violation — sauf pour les tests qui mockent des chemins spécifiques.
 
 **Nexus** = couche d'accès données (adapters : Firestore / Simulacra / Mock).
 Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiquement** tout adapter avec `NexusInterceptor` + `SovereignGuard`.
@@ -28,7 +41,7 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 **i18n** : `src/i18n/` existe (domains/ 464 lignes) mais **0 composant UI ne l'utilise** — l'app est monolingue français en dur. Infrastructure conservée en squelette pour une future internationalisation, mais inactive. Ne pas câbler i18n dans de nouveaux composants sans décision explicite.
 
-**Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture.
+**Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture. Le barrel de chaque pilier (ex: `src/modules/ops/index.ts`) est la seule surface d'export publique — les domaines et modules internes ne sont pas importables directement.
 
 ### Les 3 canaux légitimes de communication cross-module
 1. `import { X } from '@/modules/<pilier>'` (Types, hooks, composants publics)
@@ -58,8 +71,14 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 ### Types
 - Schémas Zod dans `src/domain/schemas/` → typage auto via `z.infer<>`
 - Contrats dans `src/shared/nexus/contracts/` (interfaces runtime)
-- `CartItem` ops = `src/modules/ops/engine/types.ts` (microunits)
-- `CartItem` legacy = `src/modules/pos/hooks/usePos.ts` (cents → bridge via `toMicrounits`)
+- `CartItem` ops = `src/modules/ops/workflow/engine/types.ts` (microunits)
+- `CartItem` legacy = `src/modules/ops/service/pos/hooks/usePos.ts` (cents → bridge via `toMicrounits`)
+
+### PlatformVariant — multi-industrie
+- Variants supportés : `restaurant | hotel | bakery | garage | salon | clinic | retail | custom`
+- DNA templates dans `src/shared/seeds/` — `resolveDNA(variant)` route vers le bon template
+- Nav gating : `filterByCapabilities(sections, tenant.capabilities)` dans `src/config/navConfig.ts`
+- `variant` dans `TenantConfigSchema` (optionnel, défaut `'restaurant'` à runtime dans `TenantSeeder`)
 
 ## ICM-lite — Chargement sélectif par route
 
@@ -87,8 +106,8 @@ Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.t
 | `src/domain/schemas/finance.ts` | `JournalEntry` (Zod) |
 | `src/lib/nexus/NexusAdapter.ts` | Singleton Nexus |
 | `src/engines/fiscal/NexusFiscalProvider.tsx` | Context fiscal React |
-| `src/modules/intelligence/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
-| `src/modules/intelligence/rag/LightRAGClient.ts` | Client REST LightRAG (retry intégré) |
+| `src/modules/intelligence/knowledge/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
+| `src/modules/intelligence/knowledge/rag/LightRAGClient.ts` | Client REST LightRAG (retry intégré) |
 
 ## Commandes
 

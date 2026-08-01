@@ -10,7 +10,7 @@ import { DesktopSidebar } from "@components/layout/DesktopSidebar";
 import { DesktopTopbar } from "@components/layout/DesktopTopbar";
 import { Header } from "@components/layout/Header";
 import { AppLaunchpad } from "@components/layout/AppLaunchpad";
-import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
@@ -24,13 +24,14 @@ import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
 export function LayoutResolver({ children }: { children: React.ReactNode }) {
     const config = useAtomValue(tenantConfigAtom);
     const layout = (config as { status?: { layoutType?: string } })?.status?.layoutType || 'default';
+    const capabilities = (config as { capabilities?: Record<string, boolean> })?.capabilities;
     const { isLaunchpadOpen, setIsLaunchpadOpen } = useUI();
 
     const launchpad = (
         <AppLaunchpad
             isOpen={isLaunchpadOpen}
             onClose={() => setIsLaunchpadOpen(false)}
-            sections={filterNavSections(NAV_SECTIONS, APP_MODE)}
+            sections={filterByCapabilities(filterNavSections(NAV_SECTIONS, APP_MODE), capabilities)}
         />
     );
 

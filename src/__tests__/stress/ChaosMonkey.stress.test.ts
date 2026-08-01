@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChaosMonkey } from '@modules/intelligence/resilience/ChaosMonkey';
+import { ChaosMonkey } from '@modules/intelligence/ia/resilience/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
-import { ResilienceSlayer } from '@modules/intelligence/resilience/ResilienceSlayer';
+import { ResilienceSlayer } from '@modules/intelligence/ia/resilience/ResilienceSlayer';
 
 // Mocks
 vi.mock('jotai', () => ({
@@ -15,7 +15,7 @@ vi.mock('@/store/pillars', () => ({
     updateNexusNode: vi.fn((prev, update) => ({ ...prev, ...update }))
 }));
 
-vi.mock('@/modules/compliance/haccp/store/qualityAtoms', () => ({
+vi.mock('@/modules/compliance/qualite/haccp/store/qualityAtoms', () => ({
     qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
 }));
 
@@ -26,7 +26,7 @@ vi.mock('@/infrastructure/services/SelfHealingEngine', () => ({
     }
 }));
 
-vi.mock('@modules/intelligence/resilience/ResilienceSlayer', () => ({
+vi.mock('@modules/intelligence/ia/resilience/ResilienceSlayer', () => ({
     ResilienceSlayer: {
         handleTransactionFailure: vi.fn()
     }

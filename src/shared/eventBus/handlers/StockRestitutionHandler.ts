@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { Order } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/engine/types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
 
 /**

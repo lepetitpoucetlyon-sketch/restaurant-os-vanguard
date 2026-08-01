@@ -15,7 +15,7 @@ import { SovereignMath } from '@shared/services/SovereignMath';
 import { OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { BlockchainLedgerService } from '@/modules/finance/accounting/domain/BlockchainLedgerService';
+import { BlockchainLedgerService } from '@/modules/finance/comptabilite/accounting/domain/BlockchainLedgerService';
 import { computeTreasury } from '@/modules/finance/services/TreasuryCalculator';
 import { 
     JournalEntry,
@@ -26,7 +26,7 @@ import {
     FiscalSeal
 } from '@modules/finance/types';
 import type { TreasuryMetrics } from '@/domain/schemas/finance';
-import { useBilling } from '@modules/finance/billing/hooks/useBilling';
+import { useBilling } from '@modules/finance/comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { Sentry } from '@/lib/sentry';

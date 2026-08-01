@@ -6,7 +6,7 @@ import { NexusCoreProvider } from "@/shared/providers/NexusCoreProvider";
 import { NexusOpsProvider } from "@/modules/ops/providers";
 import { NexusFiscalProvider } from "@/modules/finance/providers/NexusFiscalProvider";
 import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
-import { NexusFleetProvider } from "@/modules/intelligence/fleet";
+import { NexusFleetProvider } from "@/modules/intelligence/ia/fleet";
 import { ToastProvider } from "@ui/Toast";
 import { ContextualSettingsProvider } from "@/shared/components/settings/ContextualSettings";
 

@@ -5,7 +5,7 @@ const INSTANCE_BASE_DOMAIN = process.env.NEXT_PUBLIC_INSTANCE_BASE_DOMAIN
     ?? whiteLabelInstanceConfig.defaultDomain
     ?? 'restaurant-os.app';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNexusFleet } from '@/modules/intelligence/fleet';
+import { useNexusFleet } from '@/modules/intelligence/ia/fleet';
 import { authedFetch } from '@/lib/client/authedFetch';
 import {
   Activity,

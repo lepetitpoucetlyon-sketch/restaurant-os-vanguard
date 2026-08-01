@@ -2,7 +2,7 @@
 
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
-import { inventoryMovementsAtom } from '../inventory/store/inventoryAtoms';
+import { inventoryMovementsAtom } from '../stock/inventory/store/inventoryAtoms';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { OracleEngine } from '@/modules/intelligence/services/OracleEngine';

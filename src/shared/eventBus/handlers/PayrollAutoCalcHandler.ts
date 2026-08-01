@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { PrepaieBuilder } from '@/modules/human/payroll/PrepaieBuilder';
+import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
 import { browserPush } from '@/lib/push/browserPush';
 
 export class PayrollAutoCalcHandler {

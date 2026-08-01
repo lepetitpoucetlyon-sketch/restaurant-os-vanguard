@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusYieldEngine } from '@modules/finance/services/NexusYieldEngine';
-import { MarketingService } from '@modules/commerce/marketing/services/MarketingService';
+import { MarketingService } from '@modules/commerce/acquisition/marketing/services/MarketingService';
 import { ProcurementService } from '@modules/logistics/services/ProcurementService';
 import { logger } from '@/lib/logger';
 
 // --- GRADE X : MOCKING PROTOCOL ---
-vi.mock('@modules/commerce/marketing/services/MarketingService', () => ({
+vi.mock('@modules/commerce/acquisition/marketing/services/MarketingService', () => ({
     MarketingService: {
         updateDynamicPricing: vi.fn(),
     }

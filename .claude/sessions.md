@@ -70,4 +70,6 @@
 | promise-audit | Audit promesses Restaurant OS + MCC : scans lecture seule + rapport docs/AUDIT_PROMESSES_RESTAURANT_OS_MCC.md | 2026-08-01 | terminée |
 | ui-audit-prompt | Rédaction mega-prompt Codex audit UI client (26 catégories, RBAC, calculs, flux cross-cat) — lecture seule | 2026-08-01 | terminée |
 | ui-client-audit | Audit UI client 26 catégories : connexions, calculs, flux cross-cat, RBAC + rapport docs/AUDIT_UI_CLIENT_26_CATEGORIES.md | 2026-08-01 | terminée |
-| rbac-verify | Vérification déploiement RBAC 3 niveaux : schemas, hooks, guards, pages, API, commit | 2026-08-01 | active |
+| rbac-verify | Vérification déploiement RBAC 3 niveaux : schemas, hooks, guards, pages, API, commit | 2026-08-01 | terminée |
+| mcc-skeleton | Restructuration AUDIT_PROMESSES → squelette multi-plateforme MCC + bootstrap pilier 8 (facility) + rapatriement floor-plan/registre/settings | 2026-08-01 | terminée |
+| genesis-variant | Multi-variant provisioning + restructuration 7 piliers en domaines universels (ops/commerce/finance/compliance/human/logistics/intelligence) | 2026-08-01 | terminée |

@@ -4,8 +4,8 @@ import '@/e2e/vanguard/mocks';
 
 // Chemins corrigés après réorganisation de l'archi (le barrel @/store/operationalAtoms n'existe plus).
 import { tenantIdAtom, activeFleetTenantAtom } from '@/shared/nexus/state/SovereignGenome';
-import { ordersAtom } from '@/modules/ops/pos/store/orderAtoms';
-import { stockItemsAtom } from '@/modules/logistics/inventory/store/inventoryAtoms';
+import { ordersAtom } from '@/modules/ops/service/pos/store/orderAtoms';
+import { stockItemsAtom } from '@/modules/logistics/stock/inventory/store/inventoryAtoms';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
 // NB: fleetBloomFilterAtom a été retiré du code — l'ancien test 4 (filtre de Bloom) a donc été supprimé.
 

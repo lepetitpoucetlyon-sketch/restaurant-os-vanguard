@@ -11,10 +11,10 @@ import { registerStockReceptionHandler } from './handlers/StockReceptionHandler'
 import { registerQuarantineHandler } from './handlers/QuarantineHandler';
 import { registerFoodCostRecomputer } from './handlers/FoodCostRecomputer';
 import { registerMarginWarningHandler } from './handlers/MarginWarningHandler';
-import { registerCRMVipHandler } from '@/modules/commerce/marketing/handlers/CRMVipHandler';
-import { registerRainStaffingHandler } from '@/modules/human/hr/handlers/RainStaffingHandler';
-import { registerCashDrawerAnomalyHandler } from '@/modules/ops/pos/handlers/CashDrawerAnomalyHandler';
-import { registerWasteToFoodCostHandler } from '@/modules/compliance/haccp/handlers/WasteToFoodCostHandler';
+import { registerCRMVipHandler } from '@/modules/commerce/acquisition/marketing/handlers/CRMVipHandler';
+import { registerRainStaffingHandler } from '@/modules/human/effectifs/hr/handlers/RainStaffingHandler';
+import { registerCashDrawerAnomalyHandler } from '@/modules/ops/service/pos/handlers/CashDrawerAnomalyHandler';
+import { registerWasteToFoodCostHandler } from '@/modules/compliance/qualite/haccp/handlers/WasteToFoodCostHandler';
 import { registerPaymentLedgerHandler } from './handlers/PaymentLedgerHandler';
 import { registerSplitPaymentHandler } from './handlers/SplitPaymentHandler';
 import { registerCompEntryHandler } from './handlers/CompEntryHandler';

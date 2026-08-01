@@ -1,9 +1,9 @@
 import { AccessPolicyManager, CategoryKey, RolePermissions } from "@domain/services/AccessPolicyManager";
 import { User } from '@nexus/contracts';
-import { AGENT_TOOLS } from '@/modules/intelligence/tools';
+import { AGENT_TOOLS } from '@/modules/intelligence/ia/tools';
 import { ToolDefinition } from '@/modules/intelligence/domain/agent/tools/types';
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
-import { ShieldedContext } from '@/modules/intelligence/ai/ShieldedContext';
+import { ShieldedContext } from '@/modules/intelligence/ia/ai/ShieldedContext';
 import { logger } from '@/lib/logger';
 
 export type GeminiLiveEvent = 

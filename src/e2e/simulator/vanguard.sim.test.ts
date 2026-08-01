@@ -7,7 +7,7 @@ import '../vanguard/mocks';
 // We replace it with a synchronous in-memory Map exposing the same API.
 const virtualMap = new Map<string, { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }>();
 
-vi.mock('@/modules/intelligence/simulator/SimulatorDB', () => {
+vi.mock('@/modules/intelligence/ia/simulator/SimulatorDB', () => {
   const makeTable = () => ({
     get: async (path: string) => virtualMap.get(path) ?? undefined,
     put: async (doc: { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }) => {

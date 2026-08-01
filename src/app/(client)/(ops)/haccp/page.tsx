@@ -5,14 +5,14 @@ import {
     Download, PackageSearch, BellRing, Search, Package,
 } from "lucide-react";
 
-import { useHaccpPage, HACCP_TOOLS } from "@/modules/compliance/haccp/hooks";
+import { useHaccpPage, HACCP_TOOLS } from "@/modules/compliance/qualite/haccp/hooks";
 import {
     ReleveTemperatures, GestionHuiles, PlanNettoyage, GestionAnomalies,
     ProductControlList, SanitaryReport,
-} from "@modules/compliance/haccp/components";
-import { CleaningPlan } from "@/modules/compliance/haccp/components/CleaningPlan";
-import { DLCTracker } from "@/modules/compliance/haccp/components/DLCTracker";
-import { NonConformityForm } from "@/modules/compliance/haccp/components/NonConformityForm";
+} from "@modules/compliance/qualite/haccp/components";
+import { CleaningPlan } from "@/modules/compliance/qualite/haccp/components/CleaningPlan";
+import { DLCTracker } from "@/modules/compliance/qualite/haccp/components/DLCTracker";
+import { NonConformityForm } from "@/modules/compliance/qualite/haccp/components/NonConformityForm";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {

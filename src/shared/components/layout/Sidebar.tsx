@@ -6,7 +6,7 @@ import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
 import { useAuth, useUI } from "@/shared/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 
 // Modular Sub-components
@@ -43,7 +43,7 @@ const sidebarReveal: Variants = {
 
 export function Sidebar() {
     const pathname = usePathname();
-    const { currentUser, logout, hasAccess, canSwitchProfiles } = useAuth();
+    const { currentUser, logout, canSwitchProfiles } = useAuth();
     const { 
         isSidebarCollapsed, toggleSidebar, setSidebarCollapsed, 
         isMobileMenuOpen, closeMobileMenu, settings, 
@@ -58,56 +58,22 @@ export function Sidebar() {
     const longPressTimer = useRef<NodeJS.Timeout | null>(null);
     const isLongPress = useRef(false);
 
-    // Filtered navigation based on permissions, settings, and Suzerain Feature Flags
+    // Filtered navigation based on APP_MODE, tenant capabilities, and RBAC
     const accessibleSections = useMemo(() => {
-        const features = (tenantConfig as { features?: Record<string, boolean> })?.features || {};
-        
+        const capabilities = (tenantConfig as { capabilities?: Record<string, boolean> })?.capabilities;
         const pmsEnabled = !!(settings as { pmsEnabled?: boolean })?.pmsEnabled;
-        
-        return filterNavSections(NAV_SECTIONS || [], APP_MODE).map(section => ({
+
+        const modeFiltered = filterNavSections(NAV_SECTIONS || [], APP_MODE);
+        const capFiltered = filterByCapabilities(modeFiltered, capabilities);
+
+        return capFiltered.map(section => ({
             ...section,
             items: (section.items || []).filter(item => {
-                // 1. Core / Hardened modules (Always visible if role permits)
-                if (['dashboard', 'settings', 'account-settings'].includes(item.category)) {
-                    return hasAccess?.(item.category);
-                }
-
-                // 2. Hardware/Instance settings filter
                 if (item.href === '/pms' && !pmsEnabled) return false;
-
-                // 3. Suzerain Feature Flag Mapping
-                const cat = item.category as string;
-                let isFeatureEnabled = true;
-
-                const featureMapping: Record<string, boolean> = {
-                    'pos': !!features.pos,
-                    'floor-plan': !!features.pos,
-                    'kds': !!features.kds,
-                    'kitchen': !!features.kds,
-                    'inventory': !!features.inventory,
-                    'haccp': !!features.inventory, // HACCP often coupled with Inventory/Stock
-                    'staff': !!features.hr,
-                    'planning': !!features.hr,
-                    'recruitment': !!features.hr,
-                    'onboarding': !!features.hr,
-                    'reservations': !!features.reservations,
-                    'customer': !!features.reservations,
-                    'accounting': !!features.finance,
-                    'finance': !!features.finance,
-                    'analytics': !!features.marketing,
-                    'marketing': !!features.marketing,
-                    'registre': true, // Standard requirement
-                };
-
-                if (cat in featureMapping) {
-                    isFeatureEnabled = featureMapping[cat];
-                }
-
-                // 4. Combined accessibility check
                 return true;
             })
         })).filter(section => (section.items?.length || 0) > 0);
-    }, [hasAccess, settings, tenantConfig]);
+    }, [settings, tenantConfig]);
 
     // Cleanup and effects
     useEffect(() => {

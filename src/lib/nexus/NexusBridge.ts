@@ -96,7 +96,7 @@ export class NexusBridge {
     this.stopPulse();
     if (typeof window === 'undefined') return; // pulse côté instance uniquement
 
-    import('@modules/intelligence/fleet/FleetTelemetryService')
+    import('@modules/intelligence/ia/fleet/FleetTelemetryService')
       .then(({ fleetTelemetry }) => {
         fleetTelemetry.registerNode(tenantId as import('@domain/types/brands').TenantID);
       })
@@ -109,7 +109,7 @@ export class NexusBridge {
 
   private static async pushPulse(tenantId: string): Promise<void> {
     try {
-      const { fleetTelemetry } = await import('@modules/intelligence/fleet/FleetTelemetryService');
+      const { fleetTelemetry } = await import('@modules/intelligence/ia/fleet/FleetTelemetryService');
       const { pendingOrdersAtom } = await import('@/store/pillars/ops');
       let activeOrders = 0;
       try {
@@ -210,7 +210,7 @@ export class NexusBridge {
    * 🖋️ Suture GRADE X+++: Emission CommunicationPulse (Email/SMS)
    * @deprecated Use CommunicationService.sendCommunicationPulse directly
    */
-  static async sendCommunicationPulse(pulse: import('@/modules/finance/collection/types').CommunicationPulse) {
+  static async sendCommunicationPulse(pulse: import('@/modules/finance/tresorerie/collection/types').CommunicationPulse) {
       const { CommunicationService } = await import('@/infrastructure/services/CommunicationService');
       return CommunicationService.sendCommunicationPulse(pulse);
   }

@@ -9,8 +9,8 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { PayrollConnectorFactory } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
-import { PrepaieBuilder } from '@/modules/human/payroll/PrepaieBuilder';
-import type { PayrollProviderConfig } from '@/modules/human/payroll/types';
+import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
+import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

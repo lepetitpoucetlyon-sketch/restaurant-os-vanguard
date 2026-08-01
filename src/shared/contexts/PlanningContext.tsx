@@ -1,1 +1,1 @@
-export * from "@/modules/human/hr/contexts/PlanningContext";
+export * from "@/modules/human/effectifs/hr/contexts/PlanningContext";

@@ -141,6 +141,7 @@ export enum OperationalIdentity {
 
 
 export const DEFAULT_TENANT_CONFIG: Omit<TenantConfig, 'id'> = {
+  variant: 'restaurant',
   capabilities: {},
   features: {
     pos: true,

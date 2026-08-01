@@ -1,5 +1,5 @@
 import { YieldState } from '@/lib/shared-kernel';
-import { MarketingService } from '@modules/commerce/marketing/services/MarketingService';
+import { MarketingService } from '@modules/commerce/acquisition/marketing/services/MarketingService';
 import { ProcurementService } from '@modules/logistics/services/ProcurementService';
 import { logger } from '@/lib/logger';
 

@@ -5,19 +5,19 @@ import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, Tren
 import type { Customer } from "@nexus/contracts";
 
 import { useCRM } from "@/modules/commerce";
-import { CRMSidebar, CRMList, CRMDetailView } from "@modules/commerce/marketing/components/crm";
+import { CRMSidebar, CRMList, CRMDetailView } from "@modules/commerce/acquisition/marketing/components/crm";
 import {
     CustomerCustomerView,
     CustomerDetailPanel,
     NewCustomerDialog,
-} from "@modules/commerce/customers/components";
-import { PromoCodeManager } from "@/modules/commerce/marketing/components/crm/PromoCodeManager";
-import { EmailCampaign } from "@/modules/commerce/marketing/components/crm/EmailCampaign";
-import { BasketAnalysis } from "@/modules/commerce/marketing/components/crm/BasketAnalysis";
-import { VisitHistory } from "@/modules/commerce/marketing/components/crm/VisitHistory";
+} from "@modules/commerce/relation/customers/components";
+import { PromoCodeManager } from "@/modules/commerce/acquisition/marketing/components/crm/PromoCodeManager";
+import { EmailCampaign } from "@/modules/commerce/acquisition/marketing/components/crm/EmailCampaign";
+import { BasketAnalysis } from "@/modules/commerce/acquisition/marketing/components/crm/BasketAnalysis";
+import { VisitHistory } from "@/modules/commerce/acquisition/marketing/components/crm/VisitHistory";
 import { CustomerImportPanel } from "@/modules/commerce";
-import { RFMSegmentation } from "@/modules/commerce/marketing/components/crm/RFMSegmentation";
-import { EmailAutomations } from "@/modules/commerce/marketing/components/crm/EmailAutomations";
+import { RFMSegmentation } from "@/modules/commerce/acquisition/marketing/components/crm/RFMSegmentation";
+import { EmailAutomations } from "@/modules/commerce/acquisition/marketing/components/crm/EmailAutomations";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";

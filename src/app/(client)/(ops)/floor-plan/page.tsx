@@ -6,7 +6,7 @@ import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardLi
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
-import { useTables } from "@/modules/ops/providers";
+import { useTables } from "@/modules/ops";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/shared/hooks";
 import { BottomSheet } from "@ui/BottomSheet";
@@ -17,7 +17,7 @@ import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@modules/ops/engine/components/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
+    () => import("@/modules/facility/spaces/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
     { 
         ssr: false,
         loading: () => <div className="absolute inset-0 bg-bg-primary flex items-center justify-center animate-pulse"><div className="w-20 h-20 bg-accent/10 rounded-full border border-accent/20" /></div>

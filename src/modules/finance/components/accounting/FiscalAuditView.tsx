@@ -4,7 +4,7 @@ import React, { useState } from 'react';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useFiscal } from '@/modules/ops/providers';
-import { BlockchainLedgerService } from '@modules/finance/accounting/domain/BlockchainLedgerService';
+import { BlockchainLedgerService } from '@modules/finance/comptabilite/accounting/domain/BlockchainLedgerService';
 import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

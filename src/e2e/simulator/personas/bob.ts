@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
 import { toMicrounits } from '@/domain/schemas/primitives';
-import type { CartItem } from '@/modules/ops/engine/types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { runAct, type PersonaFn, type PersonaResult } from '../engine/PersonaTypes';
 
 // Entrecôte 26€ + Bordeaux 18€ = 44€ TTC

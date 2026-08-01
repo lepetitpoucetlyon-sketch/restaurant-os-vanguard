@@ -2,10 +2,10 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SilaeClient } from '@/modules/human/payroll/SilaeClient';
-import { MergePayrollClient } from '@/modules/human/payroll/MergePayrollClient';
-import { PrepaieBuilder } from '@/modules/human/payroll/PrepaieBuilder';
-import type { PayrollProviderConfig } from '@/modules/human/payroll/types';
+import { SilaeClient } from '@/modules/human/remuneration/payroll/SilaeClient';
+import { MergePayrollClient } from '@/modules/human/remuneration/payroll/MergePayrollClient';
+import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
+import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
 
 export class SilaeExportHandler {
   static register() {

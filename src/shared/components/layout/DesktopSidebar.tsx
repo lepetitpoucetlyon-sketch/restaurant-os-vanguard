@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
 import { useNexusCore } from "@/shared/hooks";
-import { NAV_SECTIONS, filterNavSections } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
@@ -15,9 +15,9 @@ import { isSidebarCollapsedAtom } from '@/store/pillars/sovereign';
 
 export function DesktopSidebar() {
     const pathname = usePathname();
-    const { auth } = useNexusCore();
+    const { auth, tenant } = useNexusCore();
     const { currentUser, logout } = auth;
-    
+
     const [isSidebarCollapsed, setSidebarCollapsed] = useAtom(isSidebarCollapsedAtom);
     const [_isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
     const [_isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
@@ -27,7 +27,8 @@ export function DesktopSidebar() {
 
     const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
 
-    const accessibleSections = filterNavSections(NAV_SECTIONS, APP_MODE);
+    const capabilities = (tenant.activeTenantConfig as { capabilities?: Record<string, boolean> })?.capabilities;
+    const accessibleSections = filterByCapabilities(filterNavSections(NAV_SECTIONS, APP_MODE), capabilities);
 
     return (
         <aside 

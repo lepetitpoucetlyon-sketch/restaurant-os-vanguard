@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { LightRAGClient } from '@/modules/intelligence/rag/LightRAGClient';
+import { LightRAGClient } from '@/modules/intelligence/knowledge/rag/LightRAGClient';
 
 export class AutoIndexationHandler {
   static register() {

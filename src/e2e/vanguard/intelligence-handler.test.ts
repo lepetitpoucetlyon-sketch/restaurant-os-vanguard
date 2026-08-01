@@ -11,7 +11,7 @@ vi.mock('@/lib/logger', () => ({
 }));
 
 const mockQuery = vi.fn().mockResolvedValue({ answer: 'Risque de rupture moyen', entities: [], confidence: 0.8 });
-vi.mock('@/modules/intelligence/rag/HermesKnowledgeManager', () => ({
+vi.mock('@/modules/intelligence/knowledge/rag/HermesKnowledgeManager', () => ({
   HermesKnowledgeManager: vi.fn().mockImplementation(() => ({
     query: mockQuery,
   })),
@@ -72,7 +72,7 @@ describe('IntelligenceHandler', () => {
     // depending on jsdom/browser detection in readZcpoState.
     // The key contract: high-velocity items (qty >= 3) are identified
     // and the handler completes without throwing.
-    const { HermesKnowledgeManager } = await import('@/modules/intelligence/rag/HermesKnowledgeManager');
+    const { HermesKnowledgeManager } = await import('@/modules/intelligence/knowledge/rag/HermesKnowledgeManager');
     expect(HermesKnowledgeManager).toHaveBeenCalledWith(
       'test-resto',
       expect.any(Object)

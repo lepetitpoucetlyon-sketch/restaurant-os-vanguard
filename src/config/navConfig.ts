@@ -47,6 +47,7 @@ export interface NavItem {
     icon: LucideIcon;
     category: string;
     badge?: string;
+    requiredCapability?: string;
 }
 
 export interface NavSection {
@@ -123,10 +124,10 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#3B82F6',
         mode: 'tenant',
         items: [
-            { label: "Point de vente", key: "pos", href: "/pos", icon: Store, category: "pos" },
-            { label: "Éditeur de Carte", key: "menu_builder", href: "/menu-builder", icon: ChefHat, category: "pos" },
-            { label: "Plan de salle", key: "floor_plan", href: "/floor-plan", icon: Map, category: "floor-plan" },
-            { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds" },
+            { label: "Point de vente", key: "pos", href: "/pos", icon: Store, category: "pos", requiredCapability: "mod_pos" },
+            { label: "Éditeur de Carte", key: "menu_builder", href: "/menu-builder", icon: ChefHat, category: "pos", requiredCapability: "mod_pos" },
+            { label: "Plan de salle", key: "floor_plan", href: "/floor-plan", icon: Map, category: "floor-plan", requiredCapability: "mod_floor_plan" },
+            { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds", requiredCapability: "mod_kds" },
             { label: "Opérations", key: "operations", href: "/operations", icon: ClipboardCheck, category: "operations" },
         ]
     },
@@ -138,10 +139,10 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#EC4899',
         mode: 'tenant',
         items: [
-            { label: "Réservations", key: "reservations", href: "/reservations", icon: CalendarDays, category: "reservations" },
-            { label: "CRM Clients", key: "crm", href: "/crm", icon: Heart, category: "reservations" },
-            { label: "Devis & Privatisation", key: "quotes", href: "/marketing?tab=quotes", icon: FileSpreadsheet, category: "reservations" },
-            { label: "Groupes & Privatisation", key: "groups", href: "/groups", icon: PartyPopper, category: "reservations" },
+            { label: "Réservations", key: "reservations", href: "/reservations", icon: CalendarDays, category: "reservations", requiredCapability: "mod_reservations" },
+            { label: "CRM Clients", key: "crm", href: "/crm", icon: Heart, category: "reservations", requiredCapability: "mod_customer" },
+            { label: "Devis & Privatisation", key: "quotes", href: "/marketing?tab=quotes", icon: FileSpreadsheet, category: "reservations", requiredCapability: "mod_quotes" },
+            { label: "Groupes & Privatisation", key: "groups", href: "/groups", icon: PartyPopper, category: "reservations", requiredCapability: "mod_groups" },
         ]
     },
     {
@@ -152,12 +153,12 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#F97316',
         mode: 'tenant',
         items: [
-            { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: ChefHat, category: "kitchen" },
-            { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen" },
-            { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=storage", icon: Refrigerator, category: "inventory" },
-            { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory" },
-            { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp" },
-            { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: ShieldCheck, category: "haccp" },
+            { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: ChefHat, category: "kitchen", requiredCapability: "mod_kitchen_management" },
+            { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen", requiredCapability: "mod_bar" },
+            { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=storage", icon: Refrigerator, category: "inventory", requiredCapability: "mod_storage_map" },
+            { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory", requiredCapability: "mod_inventory" },
+            { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp", requiredCapability: "mod_haccp" },
+            { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: ShieldCheck, category: "haccp", requiredCapability: "mod_quality_control" },
         ]
     },
     {
@@ -168,11 +169,11 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#06B6D4',
         mode: 'tenant',
         items: [
-            { label: "Prise de Poste", key: "onboarding", href: "/welcome-staff", icon: Briefcase, category: "onboarding" },
-            { label: "Ressources Humaines", key: "hr", href: "/staff?tab=team", icon: Users, category: "staff" },
-            { label: "Planning", key: "planning", href: "/staff?tab=planning", icon: CalendarRange, category: "planning" },
-            { label: "Congés & Absences", key: "leaves", href: "/staff?tab=leaves", icon: Palmtree, category: "planning" },
-            { label: "Recrutement", key: "recruitment", href: "/staff?tab=recruitment", icon: UserPlus, category: "recruitment" },
+            { label: "Prise de Poste", key: "onboarding", href: "/welcome-staff", icon: Briefcase, category: "onboarding", requiredCapability: "mod_onboarding" },
+            { label: "Ressources Humaines", key: "hr", href: "/staff?tab=team", icon: Users, category: "staff", requiredCapability: "mod_hr" },
+            { label: "Planning", key: "planning", href: "/staff?tab=planning", icon: CalendarRange, category: "planning", requiredCapability: "mod_planning" },
+            { label: "Congés & Absences", key: "leaves", href: "/staff?tab=leaves", icon: Palmtree, category: "planning", requiredCapability: "mod_leaves" },
+            { label: "Recrutement", key: "recruitment", href: "/staff?tab=recruitment", icon: UserPlus, category: "recruitment", requiredCapability: "mod_recruitment" },
         ]
     },
     {
@@ -183,11 +184,11 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#8B5CF6',
         mode: 'tenant',
         items: [
-            { label: "Analytique BI", key: "analytics", href: "/analytics", icon: BarChart3, category: "analytics" },
-            { label: "Analyse Rentabilité", key: "google_analytics", href: "/analytics?tab=profitability", icon: BarChart3, category: "analytics" },
-            { label: "Marketing & Social", key: "social_marketing", href: "/marketing", icon: Instagram, category: "analytics" },
-            { label: "Référencement IA", key: "ai_referencing", href: "/marketing?tab=ai", icon: Bot, category: "analytics" },
-            { label: "SEO & Référencement", key: "seo", href: "/marketing?tab=seo", icon: Globe, category: "analytics" },
+            { label: "Analytique BI", key: "analytics", href: "/analytics", icon: BarChart3, category: "analytics", requiredCapability: "mod_analytics" },
+            { label: "Analyse Rentabilité", key: "google_analytics", href: "/analytics?tab=profitability", icon: BarChart3, category: "analytics", requiredCapability: "mod_google_analytics" },
+            { label: "Marketing & Social", key: "social_marketing", href: "/marketing", icon: Instagram, category: "analytics", requiredCapability: "mod_social_marketing" },
+            { label: "Référencement IA", key: "ai_referencing", href: "/marketing?tab=ai", icon: Bot, category: "analytics", requiredCapability: "mod_ai_referencing" },
+            { label: "SEO & Référencement", key: "seo", href: "/marketing?tab=seo", icon: Globe, category: "analytics", requiredCapability: "mod_seo" },
         ]
     },
     {
@@ -198,7 +199,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#EF4444',
         mode: 'tenant',
         items: [
-            { label: "Trésorerie & Prévisions", key: "treasury", href: "/finance", icon: Wallet, category: "accounting" },
+            { label: "Trésorerie & Prévisions", key: "treasury", href: "/finance", icon: Wallet, category: "accounting", requiredCapability: "mod_treasury" },
         ]
     },
     {
@@ -209,7 +210,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#F59E0B',
         mode: 'tenant',
         items: [
-            { label: "Gestion Comptable", key: "accounting_management", href: "/finance?tab=accounting", icon: BookOpen, category: "accounting" },
+            { label: "Gestion Comptable", key: "accounting_management", href: "/finance?tab=accounting", icon: BookOpen, category: "accounting", requiredCapability: "mod_accounting_management" },
         ]
     },
     {
@@ -220,7 +221,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#0EA5E9',
         mode: 'tenant',
         items: [
-            { label: "Registres & Conformité", key: "registre", href: "/registre", icon: ScrollText, category: "registre", badge: "OBLIGATOIRE" },
+            { label: "Registres & Conformité", key: "registre", href: "/registre", icon: ScrollText, category: "registre", badge: "OBLIGATOIRE", requiredCapability: "mod_registre" },
         ]
     },
 
@@ -245,4 +246,21 @@ export function filterNavSections(sections: NavSection[], mode: 'tenant' | 'mcc'
         const sectionMode = s.mode ?? 'tenant';
         return sectionMode === 'both' || sectionMode === mode;
     });
+}
+
+/** Filters nav items by tenant capabilities — hides items whose requiredCapability is false. */
+export function filterByCapabilities(
+    sections: NavSection[],
+    capabilities: Record<string, boolean> | undefined,
+): NavSection[] {
+    if (!capabilities || Object.keys(capabilities).length === 0) return sections;
+    return sections
+        .map(section => ({
+            ...section,
+            items: section.items.filter(item => {
+                if (!item.requiredCapability) return true;
+                return capabilities[item.requiredCapability] !== false;
+            }),
+        }))
+        .filter(section => section.items.length > 0);
 }

@@ -20,10 +20,10 @@ import {
 
 
 // Modular Components
-import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from '@modules/human/hr/components/leaves';
+import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from '@modules/human/effectifs/hr/components/leaves';
 
 import { useAuth } from '@/shared/hooks';
-import { useHumanResources } from '@modules/human/hr';
+import { useHumanResources } from '@modules/human/effectifs/hr';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function LeavesPage() {

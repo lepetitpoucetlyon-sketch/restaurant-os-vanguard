@@ -1,6 +1,6 @@
 import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
 import { logger } from '@/lib/logger';
-import { HACCPTelemetryBridge } from '@modules/compliance/haccp/services/HACCPTelemetryBridge';
+import { HACCPTelemetryBridge } from '@modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
 import { MaintenanceAgent } from '@/domain/services/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.

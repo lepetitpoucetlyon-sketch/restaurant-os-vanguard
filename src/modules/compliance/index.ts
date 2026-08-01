@@ -1,16 +1,22 @@
-export * from './haccp/types';
-export * from './haccp/store/complianceAtoms';
-export * from './haccp/store/qualityAtoms';
-export { useGuard, useHygieneLabels, useHygieneLogs, useReceptionLogs, useOilLogs, useMaintenance } from './haccp/hooks/useGuard';
-export { useQuality } from './haccp/hooks/useQuality';
-export { useHACCP } from './haccp/hooks/useHACCP';
-export { useComplianceMapper } from './haccp/hooks/useComplianceMapper';
+// Domaine : qualite (HACCP, IoT, recall, donation, calendar)
+export * from './qualite/haccp/types';
+export * from './qualite/haccp/store/complianceAtoms';
+export * from './qualite/haccp/store/qualityAtoms';
+export { useGuard, useHygieneLabels, useHygieneLogs, useReceptionLogs, useOilLogs, useMaintenance } from './qualite/haccp/hooks/useGuard';
+export { useQuality } from './qualite/haccp/hooks/useQuality';
+export { useHACCP } from './qualite/haccp/hooks/useHACCP';
+export { useComplianceMapper } from './qualite/haccp/hooks/useComplianceMapper';
+export { RecallService } from './qualite/recall/RecallService';
+export { FoodDonationService } from './qualite/donation/FoodDonationService';
+export { ComplianceCalendar } from './qualite/calendar/ComplianceCalendar';
+export { IoTSensorService } from './qualite/haccp/iot';
 
-export { AuditService } from './audit/AuditService';
-export { ErasureService } from './rgpd/ErasureService';
+// Domaine : securite (audit)
+export { AuditService } from './securite/audit/AuditService';
+
+// Domaine : reglementaire (RGPD)
+export { ErasureService } from './reglementaire/rgpd/ErasureService';
+
+// Infrastructure pilier (connectors, services, types)
 export type { PiiRecord } from '@/domain/schemas/pii';
-export { RecallService } from './recall/RecallService';
-export { FoodDonationService } from './donation/FoodDonationService';
-export { ComplianceCalendar } from './calendar/ComplianceCalendar';
 export { IoTProviderFactory } from './connectors/iot';
-export { IoTSensorService } from './haccp/iot';

@@ -23,7 +23,7 @@ const TutorialBubble = dynamic(
     { ssr: false }
 );
 const OracleChatDrawer = dynamic(
-    () => import("@/modules/intelligence/analytics/components/OracleChatDrawer").then(mod => ({ default: mod.OracleChatDrawer })),
+    () => import("@/modules/intelligence/analytique/analytics/components/OracleChatDrawer").then(mod => ({ default: mod.OracleChatDrawer })),
     { ssr: false }
 );
 

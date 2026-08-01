@@ -1,9 +1,9 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
-import { fleetTelemetry } from '@modules/intelligence/fleet/FleetTelemetryService';
+import { fleetTelemetry } from '@modules/intelligence/ia/fleet/FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
-import { sovereignCreateWorkspace } from '@/modules/intelligence/rag';
+import { sovereignCreateWorkspace } from '@/modules/intelligence/knowledge/rag';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/infrastructure/branding/WhiteLabelBrandingInjector';
 
@@ -103,6 +103,7 @@ export const ProvisioningEngine = {
                     tenantId: dna.key,
                     name: dna.name,
                     adminEmail: dna.ownerEmail,
+                    variant: dna.variant ?? 'restaurant',
                     primaryColor: dna.initialPrimaryColor,
                 });
                 if (!seedResult.success) {

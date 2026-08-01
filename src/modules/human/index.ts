@@ -1,9 +1,11 @@
-export * from './hr';
-export * from './payroll';
-export { useHumanResources } from './hr/hooks/useHumanResources';
-export { useRecruitment } from './hr/hooks/useRecruitment';
-export { useStaffAudit } from './hr/hooks/useStaffAudit';
+// Domaine : effectifs (HR, recruitment, planning, staff)
+export * from './effectifs/hr';
+export { useHumanResources } from './effectifs/hr/hooks/useHumanResources';
+export { useRecruitment } from './effectifs/hr/hooks/useRecruitment';
+export { useStaffAudit } from './effectifs/hr/hooks/useStaffAudit';
+export { RecruitmentDashboard } from './effectifs/hr/components/RecruitmentDashboard';
+export { TimeclockDashboard } from './effectifs/hr/components/TimeclockDashboard';
+export { PlanningDashboard } from './effectifs/hr/components/PlanningDashboard';
 
-export { RecruitmentDashboard } from './hr/components/RecruitmentDashboard';
-export { TimeclockDashboard } from './hr/components/TimeclockDashboard';
-export { PlanningDashboard } from './hr/components/PlanningDashboard';
+// Domaine : remuneration (payroll, DSN, paie)
+export * from './remuneration/payroll';

@@ -17,7 +17,7 @@ import {
     groupTablesByZone,
     mapTableToZoneTable,
     type ZoneTable,
-} from '@/modules/commerce/reservations/hooks/useReservationsPage';
+} from '@/modules/commerce/relation/reservations/hooks/useReservationsPage';
 import type { Table } from '@nexus/contracts';
 
 const makeTable = (overrides: Partial<Table> = {}): Table => ({

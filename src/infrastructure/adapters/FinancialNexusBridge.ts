@@ -2,11 +2,11 @@ import { CryptoService } from '@domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/engine/types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../services/finance/TaxCalculator';
 import { FiscalSealer } from '../services/finance/FiscalSealer';
-import { resolveVatRate, inferCategory } from '@/modules/finance/tax/vatResolver';
+import { resolveVatRate, inferCategory } from '@/modules/finance/fiscalite/tax/vatResolver';
 import type { ConsumptionMode } from '@/domain/schemas/orders';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';

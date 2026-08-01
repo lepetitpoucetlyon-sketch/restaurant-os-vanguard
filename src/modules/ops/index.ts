@@ -1,18 +1,24 @@
-export * from './engine';
-export * from './pos';
-export * from './kitchen';
-export * from './kds';
+// Domaine : workflow (engine, operations dashboard)
+export * from './workflow/engine';
+export type { Order, OrderItem } from './workflow/engine';
+export { OperationsDashboard } from './workflow/engine/components/OperationsDashboard';
+
+// Domaine : service (POS, bar, frontdesk, printers)
+export * from './service/pos';
+export { usePOSController } from './service/pos/hooks/usePos';
+
+// Domaine : production (KDS, kitchen, recipes)
+export * from './production/kitchen';
+export * from './production/kds';
+export { KDSDashboard } from './production/kds/components/KDSDashboard';
+export { KitchenDashboard } from './production/kitchen/components/KitchenDashboard';
+
+// Infrastructure pilier (providers, connectors)
 export { NexusOpsProvider, useOrders, useTables, useKitchen } from './providers';
-export { usePOSController } from './pos/hooks/usePos';
-// 🛒 usePOSController is now imported from @modules/ops/pos
-export type { Order, OrderItem } from './engine';
-// FloorPlanEditor (konva + react-reconciler ~1.2MB) must be lazy-loaded via next/dynamic.
-// Import the RUNTIME component directly from '@modules/ops/engine/components/floor-plan/FloorPlanEditor'.
-// Only the TYPES are re-exported here — types are erased at compile time so they don't drag konva into the bundle.
-export type { FloorPlanEditorRef } from './engine/components/floor-plan/FloorPlanEditor';
-export { OperationsDashboard } from './engine/components/OperationsDashboard';
-export { KDSDashboard } from './kds/components/KDSDashboard';
-export { KitchenDashboard } from './kitchen/components/KitchenDashboard';
 export { useGroups } from './providers/hooks/commerceHooks';
 export { DeliveryProviderFactory } from './connectors/delivery';
 export { ReservationProviderFactory } from './connectors/reservations';
+
+// Cross-pilier (facility)
+// eslint-disable-next-line no-restricted-imports
+export type { FloorPlanEditorRef } from '@/modules/facility/spaces/floor-plan/FloorPlanEditor';
