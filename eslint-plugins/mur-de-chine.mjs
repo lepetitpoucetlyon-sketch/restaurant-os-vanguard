@@ -67,7 +67,7 @@ export const murDeChinePlugin = {
             const currentModule = match[1];
 
             let targetModule = null;
-            const absoluteMatch = importPath.match(/^@\/modules\/([^\/]+)/);
+            const absoluteMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
             if (absoluteMatch) {
               targetModule = absoluteMatch[1];
             }

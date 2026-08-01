@@ -9,7 +9,11 @@ import {
 } from "date-fns";
 import { fr } from "date-fns/locale";
 
+// FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { useQuality } from "@modules/compliance";
+// FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import type { ComplianceAlert } from "@modules/intelligence/analytics/types";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
