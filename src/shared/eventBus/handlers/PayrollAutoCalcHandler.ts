@@ -3,7 +3,7 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { PrepaieBuilder } from '@/modules/human/payroll/PrepaieBuilder';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 
 export class PayrollAutoCalcHandler {
   static register() {
@@ -35,7 +35,7 @@ export class PayrollAutoCalcHandler {
         );
 
         // Notifier le directeur que la pré-paie est prête
-        await WebPushService.sendToRole(tenantId, 'directeur', {
+        await browserPush.sendToRole(tenantId, 'directeur', {
           title: 'Pré-paie calculée',
           body: `La pré-paie ${period} est prête : ${summary.rows.length} salariés, brut total ${summary.totalBrut.toFixed(2)}€.`,
         });

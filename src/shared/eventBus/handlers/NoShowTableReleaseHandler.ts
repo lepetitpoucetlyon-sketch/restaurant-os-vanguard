@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 
 /**
  * NoShowTableReleaseHandler (P05-F)
@@ -32,7 +32,7 @@ export function registerNoShowTableReleaseHandler(): () => void {
         logger.info(`[NoShowTableRelease] Pas de tableId pour la réservation ${reservationId} — aucune table à libérer`);
       }
 
-      await WebPushService.sendToRole(tenantId, 'hotesse', {
+      await browserPush.sendToRole(tenantId, 'hotesse', {
         title: 'Table libérée',
         body: `No-show confirmé — table disponible`,
       });

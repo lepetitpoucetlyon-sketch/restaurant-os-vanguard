@@ -50,15 +50,15 @@ export function registerCashDrawerAnomalyHandler(): () => void {
           lockdownReason: `Ouverture suspecte du tiroir ${drawerId}`
         });
 
-        // 4. Notification WebPush serveur au manager
+        // 4. Notification push au manager via route interne (client-safe)
         try {
-          const { WebPushService } = await import('@/lib/push/webPushService');
-          await WebPushService.sendToRole(tenantId, 'manager', {
+          const { browserPush } = await import('@/lib/push/browserPush');
+          await browserPush.sendToRole(tenantId, 'manager', {
             title: 'ALERTE SÉCURITÉ CAISSE',
             body: `Tiroir ${drawerId} ouvert sans transaction par ${operatorId}. Le POS est verrouillé.`,
           });
         } catch (pushErr) {
-          logger.warn('[CashDrawerAnomaly] WebPush envoi échoué (VAPID non configuré ?)', String(pushErr));
+          logger.warn('[CashDrawerAnomaly] Push envoi échoué', String(pushErr));
         }
 
         // 5. Émission anomaly.detected pour Intelligence

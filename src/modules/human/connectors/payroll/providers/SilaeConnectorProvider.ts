@@ -20,6 +20,11 @@ export class SilaeConnectorProvider implements IPayrollConnectorProvider {
         return new SilaeClient(config);
     }
 
+    async ping(): Promise<{ ok: boolean; info?: string }> {
+        const result = await this.client().ping();
+        return { ok: result.ok, info: result.dossierNom };
+    }
+
     async pushTimesheet(_employeeId: string, hours: TimesheetEntry[]): Promise<void> {
         logger.info('[SilaeConnectorProvider] pushTimesheet', hours.length, 'lignes');
         // SilaeClient.pushVariables(periode, variables) — appelable depuis NexusPayrollEngine

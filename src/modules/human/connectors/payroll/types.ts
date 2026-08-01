@@ -31,6 +31,8 @@ export interface PayrollSyncResult {
 
 export interface IPayrollConnectorProvider {
     readonly id: string;
+    /** Vérifie la connexion sans rien persister. */
+    ping(): Promise<{ ok: boolean; info?: string }>;
     pushTimesheet(employeeId: string, hours: TimesheetEntry[]): Promise<void>;
     fetchPayslips(tenantId: string, month: string): Promise<Payslip[]>;
     fetchPayrollCost(tenantId: string, month: string): Promise<PayrollCost>;

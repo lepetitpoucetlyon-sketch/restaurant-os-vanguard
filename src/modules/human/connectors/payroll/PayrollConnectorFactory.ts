@@ -1,6 +1,8 @@
 import type { IPayrollConnectorProvider } from './types';
 import { SilaeConnectorProvider } from './providers/SilaeConnectorProvider';
 import { MergeConnectorProvider } from './providers/MergeConnectorProvider';
+export { PROVIDER_CATALOG } from './catalog';
+export type { ProviderCatalogEntry, ProviderFieldDef } from './catalog';
 
 /**
  * Registre plug-and-play des providers paie.

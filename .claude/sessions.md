@@ -64,3 +64,6 @@
 | structural-hardening | Failles structurelles : barrels violations, ArchitecturalHealthService, domain/types rapatriation | 2026-07-30 | terminée |
 | sprint1-audit-plan | Sprints 1-5 plan audit : allergènes INCO, menu-builder Nexus, registres/HACCP/bar Nexus, bus events (cert.expired, compliance.calendar, anomaly.detected), treasury+SEPA UI, Oracle chat, capacité plan de salle | 2026-07-31 | terminée |
 | partial-39-sweep | Éradication 39 promesses partielles restantes (CAT-01/04/05/06/07/08/09/10/12) — tous piliers | 2026-07-31 | terminée |
+| p08-handlers | src/shared/eventBus/handlers/ReportRetryHandler.ts, LLMFallbackHandler.ts, NexusEventBus.ts, registerHandlers.ts | 2026-08-01 | terminée |
+| v6-handlers | src/shared/eventBus/handlers/ (CompJournalHandler, ResaReminderHandler, ResaKitchenTaskHandler, NoShowCRMHandler, NoShowTableReleaseHandler, TableAutoReleaseHandler, BigGroupAlertHandler), NexusEventBus.ts, registerHandlers.ts | 2026-08-01 | terminée |
+| payroll-plugplay | Architecture paie plug-and-play : IPayrollConnectorProvider+ping(), PROVIDER_CATALOG, PayrollIntegrationPanel dynamique, browserPush/api/push/internal, PayrollConnectorFactory registry, PayrollExportHandler agnostique, routes API admin/hr/payroll/* | 2026-08-01 | active |

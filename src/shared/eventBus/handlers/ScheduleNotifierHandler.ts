@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 
 interface ShiftRecord {
   id?: string;
@@ -66,12 +66,12 @@ export function registerScheduleNotifierHandler() {
         );
 
         // Notification push groupée pour le personnel de salle et cuisine
-        await WebPushService.sendToRole(tenantId, 'serveur', {
+        await browserPush.sendToRole(tenantId, 'serveur', {
           title: 'Nouveau planning disponible',
           body: `Le planning de la semaine du ${weekDate} a été publié. Consultez vos horaires.`,
         });
 
-        await WebPushService.sendToRole(tenantId, 'cuisinier', {
+        await browserPush.sendToRole(tenantId, 'cuisinier', {
           title: 'Nouveau planning disponible',
           body: `Le planning de la semaine du ${weekDate} a été publié. Consultez vos horaires.`,
         });

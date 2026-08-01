@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 import { logger } from '@/lib/logger';
 
 /**
@@ -20,7 +20,7 @@ export function registerNegativeReviewHandler(): () => void {
       const now = new Date().toISOString();
 
       // 1. WebPush manager
-      await WebPushService.sendToRole(tenantId, 'manager', {
+      await browserPush.sendToRole(tenantId, 'manager', {
         title: `Avis négatif ${rating}★ — ${platform}`,
         body: content.substring(0, 100),
       });

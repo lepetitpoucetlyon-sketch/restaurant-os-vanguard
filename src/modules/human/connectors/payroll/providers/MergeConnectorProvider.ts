@@ -17,6 +17,17 @@ export class MergeConnectorProvider implements IPayrollConnectorProvider {
         });
     }
 
+    async ping(): Promise<{ ok: boolean; info?: string }> {
+        try {
+            const client = this.client();
+            const employees = await client.listRemoteEmployees();
+            return { ok: true, info: `${employees.length} employé(s) distant(s)` };
+        } catch (err) {
+            logger.warn('[MergeConnectorProvider] ping failed', String(err));
+            return { ok: false };
+        }
+    }
+
     async pushTimesheet(_employeeId: string, hours: TimesheetEntry[]): Promise<void> {
         logger.info('[MergeConnectorProvider] pushTimesheet', hours.length, 'lignes');
     }

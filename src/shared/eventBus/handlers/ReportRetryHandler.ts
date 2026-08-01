@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 
 const MAX_ATTEMPTS = 3;
 
@@ -65,7 +65,7 @@ export function registerReportRetryHandler(): () => void {
           },
         );
 
-        await WebPushService.sendToRole(tenantId, 'manager', {
+        await browserPush.sendToRole(tenantId, 'manager', {
           title: 'Rapport non livré après 3 tentatives',
           body: `${reportType} — ${recipientEmail}`,
         });

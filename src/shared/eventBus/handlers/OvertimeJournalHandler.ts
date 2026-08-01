@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 import { logger } from '@/lib/logger';
 
 /**
@@ -47,7 +47,7 @@ export function registerOvertimeJournalHandler(): () => void {
       logger.info(`[OvertimeJournal] Alerte ${alertId} créée — ${overtimeHours}h sup pour ${employeeName}`);
 
       // 2. WebPush manager
-      await WebPushService.sendToRole(tenantId, 'manager', {
+      await browserPush.sendToRole(tenantId, 'manager', {
         title: `Heures sup — ${employeeName}`,
         body: `${overtimeHours}h dépassées sur la période`,
       });

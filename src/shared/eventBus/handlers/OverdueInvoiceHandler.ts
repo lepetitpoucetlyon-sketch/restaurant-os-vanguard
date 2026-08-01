@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 import { logger } from '@/lib/logger';
 
 type ReminderLevel = 'J+30' | 'J+60' | 'contentieux';
@@ -111,7 +111,7 @@ export function registerOverdueInvoiceHandler(): () => void {
         );
 
         // WebPush manager
-        await WebPushService.sendToRole(tenantId, 'manager', {
+        await browserPush.sendToRole(tenantId, 'manager', {
           title: `Contentieux — Facture ${invoiceNumber}`,
           body: `${dueDaysOverdue}j de retard — ${customerName}`,
         });

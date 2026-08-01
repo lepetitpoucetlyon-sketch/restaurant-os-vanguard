@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
-import { WebPushService } from '@/lib/push/webPushService';
+import { browserPush } from '@/lib/push/browserPush';
 import type { AuditSeverity } from '@/infrastructure/services/audit';
 
 /**
@@ -32,7 +32,7 @@ export function registerBigGroupAlertHandler(): () => void {
       const severity: AuditSeverity = covers >= 20 ? 'high' : 'medium';
       const tags: string[] = covers >= 20 ? ['vip_event'] : [];
 
-      await WebPushService.sendToRole(tenantId, 'manager', {
+      await browserPush.sendToRole(tenantId, 'manager', {
         title: `Grand groupe : ${covers} couverts`,
         body: `Réservation ${reservationId} le ${date}`,
       });

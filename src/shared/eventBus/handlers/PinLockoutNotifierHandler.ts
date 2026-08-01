@@ -21,13 +21,13 @@ export class PinLockoutNotifierHandler {
       });
 
       try {
-        const { WebPushService } = await import('@/lib/push/webPushService');
-        await WebPushService.sendToRole(tenantId, 'manager', {
+        const { browserPush } = await import('@/lib/push/browserPush');
+        await browserPush.sendToRole(tenantId, 'manager', {
           title: 'ALERTE PIN — Terminal verrouillé',
           body: `Terminal ${terminalId} bloqué (5 échecs PIN). Déverr. auto dans 30s.`,
         });
       } catch (err) {
-        logger.warn('[PinLockoutNotifier] WebPush indisponible', String(err));
+        logger.warn('[PinLockoutNotifier] Push indisponible', String(err));
       }
 
       empireAudit.log({
