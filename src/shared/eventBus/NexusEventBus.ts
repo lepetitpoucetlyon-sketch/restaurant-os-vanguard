@@ -785,6 +785,129 @@ export interface NexusEvents {
     isPaused: boolean;
     requestedBy: string;
   };
+
+  // P04-D — Heures supplémentaires
+  'overtime.threshold': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    employeeId: string;
+    hoursWorked: number;
+    hoursLimit: number;
+    periodStart: string;
+    periodEnd: string;
+  };
+
+  // P06-E — Client inactif 90 jours
+  'inactive.90d': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    customerId: string;
+    lastVisitDate: string;
+    totalSpentInMicrounits: number;
+  };
+
+  // P06-F — Avis négatif
+  'review.negative': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reviewId: string;
+    customerId: string;
+    rating: number;
+    platform: string;
+    content: string;
+  };
+
+  // P07-H — Devis envoyé
+  'quote.sent': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    quoteId: string;
+    customerId: string;
+    totalInMicrounits: number;
+    sentAt: string;
+  };
+
+  // P07-I — Facture en retard
+  'invoice.overdue': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    invoiceId: string;
+    customerId: string;
+    amountInMicrounits: number;
+    dueDaysOverdue: number;
+  };
+
+  // P08-E — Échec envoi rapport (retry exponentiel)
+  'report.send.failed': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reportId: string;
+    recipientEmail: string;
+    reportType: string;
+    attemptCount: number;
+    error: string;
+  };
+
+  // P08-J — Timeout LLM (fallback model chain)
+  'llm.timeout': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    requestId: string;
+    model: string;
+    prompt: string;
+    attemptCount: number;
+  };
+
+  // Oracle query (IA — requête vers un modèle LLM)
+  'oracle.query': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    requestId: string;
+    model: string;
+    prompt: string;
+    isFallback?: boolean;
+  };
+
+  // P05-B/C — Rappel J-1 réservation (émis par job planifié la veille)
+  'resa.j1': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reservationId: string;
+    customerId: string;
+    date: string;
+    time: string;
+    covers: number;
+  };
+
+  // P05-I — Table vidée, fin de service (sessionEnd=true = groupe parti)
+  'table.cleared': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    orderId?: string;
+    sessionEnd?: boolean;
+  };
+
+  // P05-K — Grand groupe confirmé (covers ≥ bigGroupThreshold)
+  'biggroup.confirmed': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reservationId: string;
+    covers: number;
+    date: string;
+    customerId?: string;
+  };
 }
 
 export type NexusEventName = keyof NexusEvents;

@@ -79,6 +79,21 @@ import { FleetOutboxHandler } from './handlers/FleetOutboxHandler';
 import { CashflowForecastHandler } from './handlers/CashflowForecastHandler';
 import { registerCertExpiryHandler } from './handlers/CertExpiryHandler';
 import { registerComplianceCalendarHandler } from './handlers/ComplianceCalendarHandler';
+import { registerRefundJournalHandler } from './handlers/RefundJournalHandler';
+import { registerCompJournalHandler } from './handlers/CompJournalHandler';
+import { registerResaReminderHandler } from './handlers/ResaReminderHandler';
+import { registerResaKitchenTaskHandler } from './handlers/ResaKitchenTaskHandler';
+import { registerNoShowCRMHandler } from './handlers/NoShowCRMHandler';
+import { registerNoShowTableReleaseHandler } from './handlers/NoShowTableReleaseHandler';
+import { registerTableAutoReleaseHandler } from './handlers/TableAutoReleaseHandler';
+import { registerBigGroupAlertHandler } from './handlers/BigGroupAlertHandler';
+import { registerReportRetryHandler } from './handlers/ReportRetryHandler';
+import { registerLLMFallbackHandler } from './handlers/LLMFallbackHandler';
+import { registerOvertimeJournalHandler } from './handlers/OvertimeJournalHandler';
+import { registerInactiveCustomerHandler } from './handlers/InactiveCustomerHandler';
+import { registerNegativeReviewHandler } from './handlers/NegativeReviewHandler';
+import { registerQuoteFollowUpHandler } from './handlers/QuoteFollowUpHandler';
+import { registerOverdueInvoiceHandler } from './handlers/OverdueInvoiceHandler';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -120,6 +135,7 @@ export function registerNexusHandlers(): void {
     registerSplitPaymentHandler(),     // BACKGROUND — CQRS PaymentLedger (Split)
     registerCompEntryHandler(),        // BACKGROUND — CQRS PaymentLedger (Comp)
     registerRefundExtourneHandler(),   // BACKGROUND — CQRS PaymentLedger (Refund)
+    registerRefundJournalHandler(),    // HIGH — Extourne NF525 journal (P01-H)
     
     // --- V3 Stocks ---
     registerStockZeroBlockerHandler(), // BACKGROUND — bloque produits si stock=0
@@ -142,13 +158,21 @@ export function registerNexusHandlers(): void {
     // --- V6 Réservations & Plan Salle ---
     registerReservationNotifierHandler(), // BACKGROUND — Notifie le client (SMS/Email)
     registerFloorPlanCapacityHandler(),   // HIGH — Jauge anti-surbooking
-    registerNoShowPenaltyHandler(),       // HIGH — Pénalité et CRM
+    registerNoShowPenaltyHandler(),       // HIGH — Pénalité et CRM (dépôt)
     registerTableTurnoverAnalyzerHandler(),// BACKGROUND — Analyse de rotation des tables
+    registerCompJournalHandler(),          // HIGH — Écriture NF525 offerts (P01-G)
+    registerResaReminderHandler(),         // BACKGROUND — Rappel J-1 client (P05-B)
+    registerResaKitchenTaskHandler(),      // BACKGROUND — Tâches cuisine J-1 (P05-C)
+    registerNoShowCRMHandler(),            // BACKGROUND — Dégradation score CRM (P05-E)
+    registerNoShowTableReleaseHandler(),   // HIGH — Libération table no-show (P05-F)
+    registerTableAutoReleaseHandler(),     // HIGH — Auto-libération fin de service (P05-I)
+    registerBigGroupAlertHandler(),        // HIGH — Alerte grand groupe manager (P05-K)
 
     // --- V7 RH & Paie ---
     registerLaborCostAnalyzerHandler(),   // BACKGROUND — Calcule le Labor Cost temps réel
     registerScheduleNotifierHandler(),    // BACKGROUND — Notifie la brigade
     registerOvertimeAlertHandler(),       // HIGH — Alerte sur les dépassements légaux
+    registerOvertimeJournalHandler(),     // HIGH — Journal heures sup + flag bulletin (P04-D)
     registerPayrollComplianceHandler(),   // HIGH — Verrouille les pointages
 
     // --- V8 Finance & Banking ---
@@ -156,12 +180,16 @@ export function registerNexusHandlers(): void {
     registerSepaExportHandler(),            // BACKGROUND — Changement de statut sur décaissement
     registerBankSyncAuditHandler(),         // HIGH — Corrige le Blind Spot d'API
     registerReconciliationEngineHandler(),  // HIGH — Scelle le lettrage comptable NF525
+    registerQuoteFollowUpHandler(),         // BACKGROUND — Relance devis J+7 (P07-H)
+    registerOverdueInvoiceHandler(),        // HIGH — Escalade factures impayées (P07-I)
 
     // --- V9 CRM & Marketing ---
     registerCustomerRFMAnalyzerHandler(),   // BACKGROUND — RFM dynamique
     registerLoyaltyEngineHandler(),         // HIGH — Portefeuille points
     registerMarketingCampaignRouterHandler(),// BACKGROUND — Envoi de campagnes
     registerPrivacyConsentHandler(),        // HIGH — Droit à l'oubli RGPD
+    registerInactiveCustomerHandler(),      // BACKGROUND — Réactivation client 90j (P06-E)
+    registerNegativeReviewHandler(),        // BACKGROUND — Alerte avis négatif (P06-F)
 
     // --- V10 Connecteurs & ACL ---
     registerHaccpCheckArchiverHandler(),
@@ -209,7 +237,11 @@ export function registerNexusHandlers(): void {
     registerAggregatorMenuSyncHandler(),    // BACKGROUND — Pousse le menu sur les plateformes
     registerAggregatorStockSyncHandler(),   // HIGH — Met à jour les ruptures (86) sur Uber/Deliveroo
     registerDeliveryRushModeHandler(),      // HIGH — Active le mode rush pour les agrégateurs
-    FleetOutboxHandler.register()
+    FleetOutboxHandler.register(),
+
+    // --- V11 Intelligence & Résilience ---
+    registerReportRetryHandler(),   // BACKGROUND — Retry exponentiel envoi rapport (P08-E)
+    registerLLMFallbackHandler(),   // BACKGROUND — Fallback modèle LLM sur timeout (P08-J)
   );
 }
 
