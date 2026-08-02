@@ -1,0 +1,2 @@
+// Variant: shift-bidding
+export {};

@@ -1,0 +1,2 @@
+// Variant: rooms
+export {};

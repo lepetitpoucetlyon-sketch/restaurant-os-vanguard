@@ -1,0 +1,2 @@
+// Variant: spare-parts
+export {};

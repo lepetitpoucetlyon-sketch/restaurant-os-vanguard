@@ -1,0 +1,2 @@
+// Variant: courtesy-cars
+export {};

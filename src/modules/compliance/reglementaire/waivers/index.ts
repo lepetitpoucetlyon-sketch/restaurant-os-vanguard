@@ -1,0 +1,2 @@
+// Variant: waivers
+export {};

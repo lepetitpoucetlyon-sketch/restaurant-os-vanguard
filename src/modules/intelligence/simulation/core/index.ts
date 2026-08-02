@@ -1,0 +1,2 @@
+// Variant: core
+export {};

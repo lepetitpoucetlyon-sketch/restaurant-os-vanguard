@@ -1,0 +1,2 @@
+// Variant: yield-management
+export {};

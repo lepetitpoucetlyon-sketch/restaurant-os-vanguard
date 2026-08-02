@@ -1,0 +1,2 @@
+// Variant: safety-protocols
+export {};

@@ -1,0 +1,2 @@
+// Variant: lab
+export {};

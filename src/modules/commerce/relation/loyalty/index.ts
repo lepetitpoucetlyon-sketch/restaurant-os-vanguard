@@ -1,0 +1,2 @@
+// Variant: loyalty
+export {};
