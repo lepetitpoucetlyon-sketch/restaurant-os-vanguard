@@ -24,9 +24,9 @@ import {
   Info,
 } from "lucide-react";
 
-import { CustomerCSVImporter } from "@/modules/onboarding/migration/CustomerCSVImporter";
-import type { CustomerImportResult, CustomerCSVRow } from "@/modules/onboarding/migration/CustomerCSVImporter";
-import { downloadCSVTemplate } from "@/modules/onboarding/migration/csvTemplates";
+import { CustomerCSVImporter } from '@/modules/onboarding';
+import type { CustomerImportResult, CustomerCSVRow } from '@/modules/onboarding';
+import { downloadCSVTemplate } from '@/modules/onboarding';
 import { useTenant } from "@/shared/hooks";
 
 // ── Types locaux ──────────────────────────────────────────────────────────────

@@ -2,6 +2,20 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
+import type { Order } from '@nexus/contracts';
+
+interface RecipeIngredient {
+  stockItemId: string;
+  quantity: number;
+}
+interface RecipeRecord {
+  id: string;
+  ingredients?: RecipeIngredient[];
+}
+interface StockRecord {
+  id: string;
+  quantity: number;
+}
 
 export function registerOrderCancelRestockHandler() {
   return NexusEventBus.on(
@@ -9,26 +23,26 @@ export function registerOrderCancelRestockHandler() {
     async (payload) => {
       const { tenantId, orderId } = payload;
       
-      const order = await Nexus.adapter.get(`tenants/${tenantId}/orders/${orderId}`) as any;
-      if (!order) return;
+      const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/orders/${orderId}`);
+      if (!order || !order.items) return;
       
       // Si la commande n'était pas encore lancée en cuisine, on peut restituer le stock
-      if (order.status !== 'in_preparation' && order.status !== 'ready' && order.status !== 'delivered') {
+      if (order.status !== 'preparing' && order.status !== 'ready' && order.status !== 'delivered') {
         logger.info(`[Restock] Restitution des stocks pour la commande annulée ${orderId}`);
         
         // Pour chaque article, on pourrait exploser la recette et incrémenter les ingrédients
         // C'est l'opération inverse de StockDeductionHandler
         for (const item of order.items) {
-          const recipe = await Nexus.adapter.get(`tenants/${tenantId}/recipes/${item.productId}`) as any;
+          const recipe = await Nexus.adapter.get<RecipeRecord>(`tenants/${tenantId}/recipes/${item.productId}`);
           if (recipe && recipe.ingredients) {
             for (const ing of recipe.ingredients) {
               const qtyToRestore = ing.quantity * item.quantity;
               
               await Nexus.adapter.runTransaction(async (transaction) => {
-                const stockItem = await transaction.get(`tenants/${tenantId}/stockItems/${ing.stockItemId}`) as any;
+                const stockItem = await transaction.get<StockRecord>(`tenants/${tenantId}/stockItems/${ing.stockItemId}`);
                 if (stockItem) {
                   transaction.update(`tenants/${tenantId}/stockItems/${ing.stockItemId}`, {
-                    quantity: (stockItem.quantity as number) + qtyToRestore,
+                    quantity: stockItem.quantity + qtyToRestore,
                   });
                 }
               });

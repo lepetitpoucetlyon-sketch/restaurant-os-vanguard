@@ -3,8 +3,30 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { Order } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops';
 import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
+
+/** Produit avec recette (forme runtime Firestore) */
+interface ProductWithRecipe {
+  id: string;
+  name: string;
+  recipe?: {
+    ingredients: Array<{
+      id: string;
+      name: string;
+      quantity: number;  // par portion
+    }>;
+  };
+}
+/** Article de stock (état Firestore) */
+interface StockRecord {
+  id: string;
+  quantity: number;
+  prmp?: number;         // Prix de Revient Moyen Pondéré en microunits
+  name?: string;
+}
+/** Commande enrichie avec le mode de paiement */
+type OrderWithPayment = Order & { paymentMode?: string };
 
 /**
  * StockRestitutionHandler (P1)
@@ -30,7 +52,7 @@ export function registerStockRestitutionHandler(): () => void {
       const restitutions = new Map<string, { qty: number; name: string }>();
 
       for (const item of order.items) {
-        const product = await Nexus.adapter.get<any>(`tenants/${tenantId}/products/${item.productId}`);
+        const product = await Nexus.adapter.get<ProductWithRecipe>(`tenants/${tenantId}/products/${item.productId}`);
         if (!product || !product.recipe || !product.recipe.ingredients) continue;
         
         for (const ing of product.recipe.ingredients) {
@@ -45,7 +67,7 @@ export function registerStockRestitutionHandler(): () => void {
       // 3. Appliquer la restitution sur chaque stock item
       for (const [stockItemId, data] of restitutions.entries()) {
         const path = `tenants/${tenantId}/stockItems/${stockItemId}`;
-        const stockItem = await Nexus.adapter.get<any>(path);
+        const stockItem = await Nexus.adapter.get<StockRecord>(path);
         if (!stockItem) continue;
 
         const newQty = (stockItem.quantity ?? 0) + data.qty;
@@ -82,7 +104,7 @@ export function registerStockRestitutionHandler(): () => void {
           operatorId,
           tableId: order.tableId ?? null,
           tenantId,
-          paymentMode: (order as any).paymentMode ?? 'card', // Remboursement sur le mode original
+          paymentMode: ((order as OrderWithPayment).paymentMode ?? 'card') as import('@/infrastructure/adapters/FinancialNexusBridge').PaymentMode, // Mode de paiement original
         });
         
         // Avoir document for traceability

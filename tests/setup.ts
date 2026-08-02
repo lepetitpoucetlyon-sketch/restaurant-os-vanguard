@@ -8,9 +8,6 @@ process.env.FISCAL_SIGNING_SECRET = 'test-fiscal-signing-secret';
 // Protection globale contre les initialisations Firebase/Dexie/IDB
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
-import { Order } from '@/modules/ops/types';
-import { StockItem, InventoryMovement } from '@/modules/inventory/types';
-import { JournalEntry, FiscalSeal } from '@/modules/finance/types';
 
 // Initialisation immédiate du Mock pour les tests
 Nexus.adapter = new MockAdapter();

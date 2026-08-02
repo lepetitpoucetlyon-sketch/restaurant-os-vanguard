@@ -3,6 +3,12 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface ShiftRecord {
+  id: string;
+  endedAt?: number;
+  locked?: boolean;
+}
+
 export function registerPayrollComplianceHandler() {
   return NexusEventBus.on(
     'hr.payroll_exported',
@@ -17,9 +23,9 @@ export function registerPayrollComplianceHandler() {
       const shiftsPath = `tenants/${tenantId}/shifts`;
       // Dans une implémentation Firestore réelle, on ferait une query: where('endedAt', '>=', periodStart) ...
       // Pour ce boilerplate, on simule l'obtention de la collection.
-      const allShifts = await Nexus.adapter.query(shiftsPath) || [];
+      const allShifts = await Nexus.adapter.query<ShiftRecord>(shiftsPath) || [];
       
-      const shiftsToLock = allShifts.filter((s: any) => 
+      const shiftsToLock = allShifts.filter((s: ShiftRecord) => 
         s.endedAt && s.endedAt >= periodStart && s.endedAt <= periodEnd && !s.locked
       );
 

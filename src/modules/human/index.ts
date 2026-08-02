@@ -16,3 +16,15 @@ export { TipDistributionService } from './effectifs/hr/services/tipDistribution'
 export { LaborCostAnalyzer } from './effectifs/hr/services/LaborCostAnalyzer';
 export { LaborCostService } from './effectifs/hr/services/laborCost';
 
+
+export { useStaffPage } from './effectifs/hr/hooks';
+export { RecruitmentBoard } from './effectifs/hr/components/RecruitmentBoard';
+export { QuickAddStaffModal } from './effectifs/hr/components/QuickAddStaffModal';
+export { HRSyncService } from './effectifs/hr/hr.sync';
+export type { PayrollPeriodSummary } from './remuneration/payroll/types';
+export { MergePayrollClient } from './remuneration/payroll';
+export { SilaeClient } from './remuneration/payroll';
+export type { PayrollProviderConfig } from './remuneration/payroll/types';
+export { PROVIDER_CATALOG } from './connectors/payroll/catalog';
+export type { ProviderCatalogEntry } from './connectors/payroll/catalog';
+export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffingHandler';

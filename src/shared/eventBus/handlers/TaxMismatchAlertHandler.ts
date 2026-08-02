@@ -1,7 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
-import { SharedKernel } from '@/lib/shared-kernel';
 
 export function registerTaxMismatchAlertHandler() {
   return NexusEventBus.on(

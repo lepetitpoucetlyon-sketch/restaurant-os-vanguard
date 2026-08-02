@@ -5,9 +5,22 @@ import { Activity, AlertTriangle, Wifi, WifiOff } from 'lucide-react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
+interface TelemetryDevice {
+  deviceId: string;
+  tenantId: string;
+  lastSeen?: number | string;
+}
+
+interface TelemetryCrash {
+  id: string;
+  errorName: string;
+  errorMessage: string;
+  tenantId: string;
+}
+
 export function FleetTelemetryPanel() {
-  const [devices, setDevices] = useState<any[]>([]);
-  const [crashes, setCrashes] = useState<any[]>([]);
+  const [devices, setDevices] = useState<TelemetryDevice[]>([]);
+  const [crashes, setCrashes] = useState<TelemetryCrash[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,8 +32,8 @@ export function FleetTelemetryPanel() {
           Nexus.adapter.query('mcc/telemetry/crashes')
         ]);
         if (!active) return;
-        setDevices(devs as any[]);
-        setCrashes(crs as any[]);
+        setDevices(devs as unknown as TelemetryDevice[]);
+        setCrashes(crs as unknown as TelemetryCrash[]);
       } catch (e) {
         logger.error('Failed to fetch telemetry', { error: e });
       } finally {

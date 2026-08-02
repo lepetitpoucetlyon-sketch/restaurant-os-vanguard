@@ -36,3 +36,25 @@ export { StatementIngestionService } from './comptabilite/accounting/domain/Stat
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
 export * from './types';
 export { FinanceDashboard } from './components/FinanceDashboard';
+
+export { getAmountInMu } from './hooks/useAccounting';
+export { buildEntryAmountInCents } from './hooks/useAccounting';
+export { CollectionService } from './tresorerie/collection/CollectionService';
+export { useAnalyticsPage } from './comptabilite/analytics/hooks';
+export { percentChange } from './comptabilite/analytics/hooks';
+export type { MacroBrainAlert } from './comptabilite/analytics/hooks';
+export { UsageTracker } from './comptabilite/billing/UsageTracker';
+export { resolveVatRate } from './fiscalite/tax/vatResolver';
+export { inferCategory } from './fiscalite/tax/vatResolver';
+export { FinanceSyncService } from './finance.sync';
+export { AccountingReportService } from './services/AccountingReportService';
+export { TreasuryDashboard } from './components/accounting';
+export { FiscalAuditView } from './components/accounting';
+export { FacturXDownloadButton } from './components/FacturXDownloadButton';
+export { useBilling } from './comptabilite/billing/hooks';
+
+export { PlaceholderView } from './components/accounting/PlaceholderView';
+export { BankingNexusBridge } from './tresorerie/banking/BankingNexusBridge';
+export { inferPCGAccount } from './tresorerie/banking/openBanking';
+export type { JournalEntry } from './types';
+export type { FiscalSeal } from './types';

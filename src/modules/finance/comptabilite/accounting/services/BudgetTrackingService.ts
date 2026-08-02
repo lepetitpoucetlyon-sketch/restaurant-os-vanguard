@@ -34,7 +34,7 @@ export class BudgetTrackingService {
             ) || { 'Food': 0, 'Beverage': 0 };
 
             // 2. Charger les écritures du mois (JournalEntries)
-            const entries = await Nexus.adapter.get<Record<string, any>>(
+            const entries = await Nexus.adapter.get<Record<string, unknown>>(
                 `tenants/${tenantId}/journalEntries`
             ) || {};
 

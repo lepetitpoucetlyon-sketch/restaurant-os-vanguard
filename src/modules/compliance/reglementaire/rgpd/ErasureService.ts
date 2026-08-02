@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { piiVault } from '@/shared/nexus/vault/PiiVault';
-import { auditService } from '@/modules/compliance/securite/audit/AuditService';
+import { auditService } from '@/modules/compliance';
 
 const COLLECTIONS_WITH_SUBJECT_REF = [
     'orders',

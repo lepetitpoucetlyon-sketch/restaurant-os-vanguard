@@ -30,8 +30,8 @@ export class ImapInvoiceProvider implements IEmailInvoiceProvider {
 
         try {
             // @ts-expect-error — imap-simple optionnel, installer avec: npm i imap-simple @types/imap-simple
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const imapSimple = await import('imap-simple') as any;
+             
+            const imapSimple = await import('imap-simple') as { connect: (opts: Record<string, unknown>) => Promise<Record<string, unknown> & { openBox: (boxName: string) => Promise<void>; search: (criteria: unknown[], fetchOptions: Record<string, unknown>) => Promise<unknown[]> }>; getParts: (struct: unknown[]) => Record<string, unknown>[] };
             const connection = await imapSimple.connect({
                 imap: { host, port, user, password, tls: true, authTimeout: 5000 },
             });
@@ -67,7 +67,7 @@ export class ImapInvoiceProvider implements IEmailInvoiceProvider {
                     });
                 }
             }
-            await connection.end();
+            await (connection as unknown as { end: () => Promise<void> }).end();
             return result;
         } catch (err) {
             logger.error('[ImapInvoiceProvider] fetchUnprocessed error', String(err));

@@ -1,6 +1,6 @@
 import type { IPayrollConnectorProvider, TimesheetEntry, Payslip, PayrollCost, PayrollSyncResult } from '../types';
-import type { PayrollPeriodSummary } from '@/modules/human/remuneration/payroll/types';
-import { MergePayrollClient } from '@/modules/human/remuneration/payroll';
+import type { PayrollPeriodSummary } from '@/modules/human';
+import { MergePayrollClient } from '@/modules/human';
 import { logger } from '@/lib/logger';
 
 /**

@@ -9,7 +9,7 @@ function createMockNexus() {
         store,
         set: vi.fn(async (path: string, data: unknown) => { store[path] = data; }),
          
-        query: vi.fn(async (): Promise<any[]> => []),
+        query: vi.fn(async (): Promise<unknown[]> => []),
         generateId: vi.fn(() => `audit-${++idCounter}`),
     };
 }
@@ -22,7 +22,7 @@ describe('AuditService', () => {
         service = new AuditService();
         nexus = createMockNexus();
          
-        service.setNexus(nexus as any);
+        service.setNexus(nexus as unknown as Parameters<typeof service.setNexus>[0]);
         (operationalFlags as unknown as Record<string, string>).auditIntercept = 'enforce';
     });
 

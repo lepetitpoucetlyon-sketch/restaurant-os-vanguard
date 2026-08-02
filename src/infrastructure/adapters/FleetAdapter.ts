@@ -1,6 +1,7 @@
 import { EmpireInstance } from '@domain/types/empire';
 import { MacroBrain, FleetInsight } from '@modules/intelligence/services/MacroBrain';
 import { logger } from '@/lib/logger';
+import type { FiscalSeal } from '@nexus/contracts';
 
 /**
  * 🛰️ NexusFleetEngine (Grade VII)
@@ -82,7 +83,7 @@ export class NexusFleetEngine {
                 const seals = await Nexus.adapter.query(
                     `tenants/${tenantId}/fiscalSeals`,
                     { orderBy: { field: 'timestamp', direction: 'asc' } }
-                ) as any[];
+                ) as FiscalSeal[];
 
                 if (seals.length === 0) {
                     results.push({ tenantId, chainValid: true, lastSealAt: null });
@@ -97,7 +98,7 @@ export class NexusFleetEngine {
                 results.push({
                     tenantId,
                     chainValid: isValid,
-                    lastSealAt: seals[seals.length - 1].timestamp
+                    lastSealAt: seals[seals.length - 1]?.timestamp ?? null
                 });
 
             } catch (error) {

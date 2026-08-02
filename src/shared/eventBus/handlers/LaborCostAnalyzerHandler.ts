@@ -3,6 +3,22 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+/** Fiche de shift employé (Firestore) */
+interface ShiftRecord {
+  id: string;
+  employeeId: string;
+  startedAt: number;       // timestamp ms
+  endedAt?: number;
+  hourlyRate?: number;     // microunits / heure (ex: 15_000_000 = 15€)
+  role?: string;
+}
+/** Cumul journalier du coût salarial */
+interface LaborBudget {
+  totalCostInMicrounits: number;
+  totalHours: number;
+  updatedAt?: number;
+}
+
 export function registerLaborCostAnalyzerHandler() {
   const unsubStarted = NexusEventBus.on(
     'hr.shift_started',
@@ -28,13 +44,13 @@ export function registerLaborCostAnalyzerHandler() {
     async (payload) => {
       const { tenantId, shiftId, employeeId, endedAt } = payload;
       
-      const shift = await Nexus.adapter.get<any>(`tenants/${tenantId}/shifts/${shiftId}`);
+      const shift = await Nexus.adapter.get<ShiftRecord>(`tenants/${tenantId}/shifts/${shiftId}`);
       
       if (shift && shift.startedAt) {
         const durationHours = (endedAt - shift.startedAt) / 3600000;
         
         // En vrai: récupérer le taux horaire de l'employé depuis son profil
-        const hourlyRate = shift.hourlyRate || 15000000; // 15 euros par défaut (en microunits)
+        const hourlyRate = shift.hourlyRate ?? 15000000; // 15 euros par défaut (en microunits)
         
         const costInMicrounits = durationHours * hourlyRate;
         
@@ -43,7 +59,7 @@ export function registerLaborCostAnalyzerHandler() {
         const budgetPath = `tenants/${tenantId}/analytics/laborCost_${dateStr}`;
         
         await Nexus.adapter.runTransaction(async (tx) => {
-          const budget = await Nexus.adapter.get<any>(budgetPath) || { totalCostInMicrounits: 0, totalHours: 0 };
+          const budget = await Nexus.adapter.get<LaborBudget>(budgetPath) ?? { totalCostInMicrounits: 0, totalHours: 0 };
           
           await Nexus.adapter.set(budgetPath, {
             totalCostInMicrounits: budget.totalCostInMicrounits + costInMicrounits,

@@ -88,7 +88,7 @@ export function useCashDrawer(
       showToast('Accès refusé — rôle insuffisant pour émettre une alerte caisse', 'error');
       return;
     }
-    await NexusEventBus.emitDurable('cash_drawer.opened_unauthorized' as any, {
+    await NexusEventBus.emitDurable('cash_drawer.opened_unauthorized', {
       v: 1,
       drawerId,
       operatorId: currentOperatorId,

@@ -1,1 +1,1 @@
-export * from "@/modules/intelligence/analytique/analytics/contexts/IntelligenceContext";
+export * from "@/modules/intelligence";

@@ -7,7 +7,7 @@ vi.mock('@/modules/finance/store/accountingAtoms', () => ({
 }));
 vi.mock('@shared/hooks/useNexusMutation', () => ({ useNexusMutation: vi.fn() }));
 
-import { getAmountInMu, buildEntryAmountInCents } from '@/modules/finance/hooks/useAccounting';
+import { getAmountInMu, buildEntryAmountInCents } from '@/modules/finance';
 
 const toCents = (µ: number) => Math.round(µ / 10_000);
 

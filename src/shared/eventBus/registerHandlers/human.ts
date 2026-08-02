@@ -1,5 +1,5 @@
 import { registerPayrollTimeclockHandler } from '../handlers/PayrollTimeclockHandler';
-import { registerRainStaffingHandler } from '@/modules/human/effectifs/hr/handlers/RainStaffingHandler';
+import { registerRainStaffingHandler } from '@/modules/human';
 import { registerLaborCostAnalyzerHandler } from '../handlers/LaborCostAnalyzerHandler';
 import { registerScheduleNotifierHandler } from '../handlers/ScheduleNotifierHandler';
 import { registerOvertimeAlertHandler } from '../handlers/OvertimeAlertHandler';

@@ -14,8 +14,8 @@ import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { BlockchainLedgerService } from '@/modules/finance/comptabilite/accounting/domain/BlockchainLedgerService';
-import { computeTreasury } from '@/modules/finance/services/TreasuryCalculator';
+import { BlockchainLedgerService } from '@/modules/finance';
+import { computeTreasury } from '@/modules/finance';
 import { 
     JournalEntry,
     Account,

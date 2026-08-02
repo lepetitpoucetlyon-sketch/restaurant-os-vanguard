@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops';
 import { db } from '@/infrastructure/services/offline/offline-store';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
@@ -11,7 +11,7 @@ export interface NexusEvents {
     tenantId: string;
     integrationId: string;
     platform: string;
-    rawPayload: any;
+    rawPayload: Record<string, unknown>;
   };
 
   "tenant.onboarding_step_completed": {
@@ -361,6 +361,7 @@ export interface NexusEvents {
     v: 1;
     tenantId: string;
     message: string;
+    metadata?: Record<string, unknown>;
     roles: string[];
     priority?: 'CRITICAL' | 'HIGH';
   };
@@ -600,7 +601,7 @@ export interface NexusEvents {
     isSimulation?: boolean;
     tenantId: string;
     reservationId: string;
-    updates: any;
+    updates: Record<string, unknown>;
   };
   'reservation.cancelled': {
     v: 1;
@@ -737,7 +738,7 @@ export interface NexusEvents {
     isSimulation?: boolean;
     tenantId: string;
     customerId: string;
-    updates: any;
+    updates: Record<string, unknown>;
   };
   'crm.points_earned': {
     v: 1;
@@ -783,7 +784,7 @@ export interface NexusEvents {
     tenantId: string;
     integrationId: string;
     platform: 'ubereats' | 'deliveroo' | 'other';
-    rawPayload: any;
+    rawPayload: Record<string, unknown>;
   };
   'integration.menu_sync_requested': {
     v: 1;
@@ -807,7 +808,7 @@ export interface NexusEvents {
     type: string;
     message: string;
     zScore?: number;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
   };
   'finance.ticket_z_closed': {
     v: 1;
@@ -822,7 +823,7 @@ export interface NexusEvents {
     tenantId: string;
     action: string;
     userId: string;
-    details: any;
+    details: Record<string, unknown>;
     severity: 'low' | 'medium' | 'high' | 'critical';
   };
   'finance.daily_audit': {
@@ -1032,6 +1033,13 @@ export interface NexusEvents {
   'service.end': {
     v: 1;
     tenantId: string;
+  };
+  'procurement.mismatch_detected': {
+    v: 1;
+    tenantId: string;
+    purchaseOrderId: string;
+    invoiceId: string;
+    discrepancies: string[];
   };
 }
 

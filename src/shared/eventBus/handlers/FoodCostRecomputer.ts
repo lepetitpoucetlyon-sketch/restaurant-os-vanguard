@@ -9,8 +9,14 @@ type StockItem = {
   lastCostInMicrounits?: number;
 };
 
+/** Product with optional recipe/stock link (runtime Firestore shape) */
+type ProductWithLinks = Product & {
+  recipeId?: string;
+  linkedStockItemId?: string;
+};
+
 function computeProductCostAndImpact(
-  product: Product,
+  product: ProductWithLinks,
   recipesRaw: Record<string, Recipe> | null,
   costMap: Map<string, number>,
   updatedStockItemIds: Set<string>
@@ -18,8 +24,8 @@ function computeProductCostAndImpact(
   let totalCost = 0;
   let impacted = false;
 
-  if ((product as any).recipeId && recipesRaw) {
-    const recipe = recipesRaw[(product as any).recipeId];
+  if (product.recipeId && recipesRaw) {
+    const recipe = recipesRaw[product.recipeId];
     if (recipe && recipe.ingredients) {
       for (const ing of recipe.ingredients) {
         const ingId = ing.ingredientId;
@@ -28,8 +34,8 @@ function computeProductCostAndImpact(
         totalCost += (costMap.get(ingId) ?? 0) * ing.quantity;
       }
     }
-  } else if ((product as any).linkedStockItemId) {
-    const ingId = (product as any).linkedStockItemId;
+  } else if (product.linkedStockItemId) {
+    const ingId = product.linkedStockItemId;
     if (updatedStockItemIds.has(ingId)) impacted = true;
     totalCost = costMap.get(ingId) ?? 0;
   }

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 // Nexus Data Hooks
-import { useAccounting, useCompliance } from "@/modules/finance/providers";
+import { useAccounting, useCompliance } from '@/modules/finance';
 import { useOrders, useTables, useReservations } from "@/modules/ops";
 
 // Define an interface for the orders since useOrders() might return generic objects
@@ -39,7 +39,7 @@ export default function VibecodingDashboard() {
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
 
   // 1. Fetch Real Data from Nexus Providers
-  const { metrics, entries: _entries } = useAccounting();
+  const { metrics, journalEntries: _entries } = useAccounting();
   const { documents } = useCompliance();
   const { data: ordersData } = useOrders();
   const orders = ordersData as unknown as Order[];

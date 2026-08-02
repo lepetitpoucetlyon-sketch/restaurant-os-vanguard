@@ -3,6 +3,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface TableSession {
+  seatedAt?: number;
+  partySize?: number;
+}
+
 export function registerTableTurnoverAnalyzerHandler() {
   // Gère l'assignation (début du chrono)
   const unsubAssigned = NexusEventBus.on(
@@ -33,7 +38,7 @@ export function registerTableTurnoverAnalyzerHandler() {
       const { tenantId, tableId } = payload;
       
       const sessionPath = `tenants/${tenantId}/tables/${tableId}/currentSession`;
-      const session = await Nexus.adapter.get<any>(sessionPath);
+      const session = await Nexus.adapter.get<TableSession>(sessionPath);
       
       if (session && session.seatedAt) {
         const releasedAt = Date.now();

@@ -38,7 +38,7 @@ export const EventBusHealthPanel: React.FC = () => {
     try {
       logger.info(`[EventBusHealthPanel] Retrying event ${entry.eventName}#${entry.id} (attempt ${newAttempts})`);
 
-      const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload);
+      const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload as Record<string, unknown>);
       // skipDLQWrite: on gère l'état DLQ ici, pas dans le bus, pour éviter attempts=1
       await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload, { skipDLQWrite: true });
 

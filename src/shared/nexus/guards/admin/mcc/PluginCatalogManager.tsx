@@ -26,11 +26,11 @@ export function PluginCatalogManager() {
       const res = await authedFetch('/api/admin/fleet/catalog');
       if (!res.ok) throw new Error('Erreur de chargement');
       const data = await res.json();
-      const itemsArray = Object.entries(data.catalog || {}).map(([id, val]: any) => ({
+      const itemsArray = Object.entries(data.catalog || {}).map(([id, val]: [string, Record<string, unknown>]) => ({
         id,
         ...val
       }));
-      setCatalog(itemsArray);
+      setCatalog(itemsArray as unknown as CatalogItem[]);
     } catch (e) {
       toast.error('Impossible de charger le catalogue');
     } finally {

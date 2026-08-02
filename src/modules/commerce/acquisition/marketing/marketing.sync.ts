@@ -108,7 +108,7 @@ export const MarketingSyncService = {
     this.private_listeners.marketing = Nexus.adapter.onSnapshot(
         path('marketingCampaigns'),
         (data: Campaign[]) => {
-          if (store) store.set(marketingCampaignsNodeAtom, (prev) => updateNexusNode(prev, { data: (data as any) || [], loading: false }));
+          if (store) store.set(marketingCampaignsNodeAtom, (prev) => updateNexusNode(prev, { data: (data as unknown as import('@/modules/commerce/acquisition/marketing/types').MarketingCampaign[]) || [], loading: false }));
         },
         {
           onError: (error: Error) => logger.error('[MarketingSync] Marketing Sync Failed', error)
@@ -119,7 +119,7 @@ export const MarketingSyncService = {
     this.private_listeners.social = Nexus.adapter.onSnapshot(
         path('socialAccounts'),
         (data: SocialAccount[]) => {
-          if (store) store.set(socialAccountsNodeAtom, (prev) => updateNexusNode(prev, { data: (data as any) || [], loading: false }));
+          if (store) store.set(socialAccountsNodeAtom, (prev) => updateNexusNode(prev, { data: (data as unknown as import('@/modules/commerce/acquisition/marketing/types').SocialAccount[]) || [], loading: false }));
         },
         {
           onError: (error: Error) => logger.error('[MarketingSync] Social Sync Failed', error)
@@ -130,7 +130,7 @@ export const MarketingSyncService = {
     this.private_listeners.quotes = Nexus.adapter.onSnapshot(
       path('quotes'),
       (data: Quote[]) => {
-        if (store) store.set(quotesNodeAtom, (prev) => updateNexusNode(prev, { data: (data as any) || [], loading: false }));
+        if (store) store.set(quotesNodeAtom, (prev) => updateNexusNode(prev, { data: (data as unknown as import('@/modules/commerce/acquisition/marketing/quotes.types').Quote[]) || [], loading: false }));
       },
       {
         orderBy: { field: 'updatedAt', direction: 'desc' },

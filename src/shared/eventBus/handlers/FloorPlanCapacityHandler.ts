@@ -3,8 +3,21 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface ReservationPayload {
+  tenantId: string;
+  scheduledAt?: string | number;
+  partySize?: number;
+  updates?: {
+    partySizeDiff?: number;
+  };
+}
+interface CapacityRecord {
+  bookedCovers: number;
+  maxCovers: number;
+}
+
 export function registerFloorPlanCapacityHandler() {
-  const handleCapacityEvent = async (payload: any, eventType: string) => {
+  const handleCapacityEvent = async (payload: ReservationPayload, eventType: string) => {
     const { tenantId, scheduledAt, partySize } = payload;
 
     if (!scheduledAt) return;
@@ -23,14 +36,14 @@ export function registerFloorPlanCapacityHandler() {
     const configuredMaxCovers = tenantSettings?.maxCovers ?? tenantSettings?.capacity ?? 100;
 
     await Nexus.adapter.runTransaction(async (tx) => {
-      const capacityDoc = await Nexus.adapter.get<any>(capacityPath) || { bookedCovers: 0, maxCovers: configuredMaxCovers };
+      const capacityDoc = await Nexus.adapter.get<CapacityRecord>(capacityPath) || { bookedCovers: 0, maxCovers: configuredMaxCovers };
 
       // Toujours synchroniser maxCovers depuis la config tenant
       capacityDoc.maxCovers = configuredMaxCovers;
 
       let diff = 0;
-      if (eventType === 'reservation.created') diff = partySize;
-      if (eventType === 'reservation.cancelled') diff = -partySize;
+      if (eventType === 'reservation.created') diff = partySize || 0;
+      if (eventType === 'reservation.cancelled') diff = -(partySize || 0);
       if (eventType === 'reservation.updated') {
         diff = payload.updates?.partySizeDiff || 0;
       }

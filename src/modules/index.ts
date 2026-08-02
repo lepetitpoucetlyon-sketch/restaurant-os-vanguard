@@ -13,5 +13,5 @@ export * from './logistics';
 export * from './ops';
 
 // Resolve cross-pilier TS2308 ambiguities (ops sovereign versions take precedence)
-export { useMarketing, useQuotes } from './ops';
+export { useMarketing, useQuotes, useRegistre } from './ops';
 export { useProducts, useCategories } from './ops';

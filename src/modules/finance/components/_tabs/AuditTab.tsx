@@ -2,8 +2,8 @@
 
 import { useCallback } from "react";
 import { Download } from "lucide-react";
-import { FiscalAuditView } from "@/modules/finance/components/accounting";
-import { FECExporter } from "@/modules/finance/comptabilite/accounting/domain";
+import { FiscalAuditView } from '@/modules/finance';
+import { FECExporter } from '@/modules/finance';
 import type { JournalEntry } from "@nexus/contracts";
 
 /**

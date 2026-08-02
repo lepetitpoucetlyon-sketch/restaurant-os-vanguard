@@ -23,7 +23,7 @@ export async function replayPendingEvents(): Promise<void> {
       }
 
       for (const entry of pending) {
-        const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload);
+        const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload as Record<string, unknown>);
         await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);
         await db.busOutbox.update(entry.id, { status: 'done' });
       }

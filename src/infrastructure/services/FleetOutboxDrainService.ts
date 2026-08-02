@@ -10,7 +10,7 @@ export class FleetOutboxDrainService {
         let count = 0;
         try {
             // Note: with NexusAdapter, we query the tenant's collection directly
-            const pendingEvents = await Nexus.adapter.query<{ id: string; type: string; payload: any; timestamp: string }>(`tenants/${tenantId}/mcc_outbox`, {
+            const pendingEvents = await Nexus.adapter.query<{ id: string; type: string; payload: Record<string, unknown>; timestamp: string }>(`tenants/${tenantId}/mcc_outbox`, {
                 where: [
                     { field: 'status', operator: '==', value: 'pending' }
                 ],

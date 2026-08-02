@@ -11,7 +11,7 @@ const ProductFormModal = dynamic(
 import { RecipeDetailDialog } from "@modules/ops";
 
 import { BarTab, Wine, Cocktail } from "@/modules/ops";
-import { winesAtom, cocktailsAtom, wineRegionsAtom } from "@/modules/ops/service/bar/store/barAtoms";
+import { winesAtom, cocktailsAtom, wineRegionsAtom } from '@/modules/ops';
 import { Recipe } from "@nexus/contracts";
 import { useKitchen } from "@/modules/ops";
 

@@ -1,15 +1,15 @@
 import { AgentEngine } from './AgentEngine';
-import { AgentDomain } from '@/modules/intelligence/domain/agency/types';
+import { AgentDomain } from '@/modules/intelligence';
 import { 
     HermesPulseResult, 
     HermesAnomaly, 
     HermesManifest 
-} from '@/modules/intelligence/domain/agency/hermes.types';
+} from '../../domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalHACCPMapper } from '@/modules/finance/services/FiscalHACCPMapper';
+import { FiscalHACCPMapper } from '@/modules/finance';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator

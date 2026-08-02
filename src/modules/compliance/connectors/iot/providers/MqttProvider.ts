@@ -22,11 +22,9 @@ export class MqttProvider implements IIoTProvider {
             return () => { /* noop */ };
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let client: any = null;
+        let client: { subscribe: (...args: unknown[]) => void; on: (...args: unknown[]) => void; end: (...args: unknown[]) => void } | null = null;
         import('mqtt').then((mod) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const mqtt = mod as any;
+            const mqtt = mod as unknown as { connect: (url: string, opts: Record<string, unknown>) => { subscribe: (...args: unknown[]) => void; on: (...args: unknown[]) => void; end: (...args: unknown[]) => void } };
             client = mqtt.connect(brokerUrl, {
                 username: process.env.MQTT_USERNAME,
                 password: process.env.MQTT_PASSWORD,

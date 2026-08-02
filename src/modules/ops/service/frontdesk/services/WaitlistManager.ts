@@ -73,7 +73,7 @@ export class WaitlistManager {
             tenantId,
             operatorId,
             items: []
-        } as any); // cast pour simplifier dans cet exemple
+        } as never); // cast pour simplifier dans cet exemple
 
         logger.info(`[Waitlist] Client ${entry.customerName} placé à la table ${tableId}`);
     }

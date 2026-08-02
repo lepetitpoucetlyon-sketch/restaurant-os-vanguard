@@ -4,6 +4,22 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+interface StockItemRecord {
+  supplierId?: string;
+  idealStock?: number;
+}
+interface DraftOrderItem {
+  itemId: string;
+  quantity: number;
+}
+interface SupplierDraftOrder {
+  id: string;
+  supplierId: string;
+  status: string;
+  items: DraftOrderItem[];
+  createdAt?: string;
+}
+
 export function registerAutoSupplierDraftHandler() {
   return NexusEventBus.on(
     'stock.low',
@@ -12,7 +28,7 @@ export function registerAutoSupplierDraftHandler() {
       
       logger.info(`[Logistics] Seuil bas atteint pour ${itemId} (${currentQuantity} <= ${threshold}).`);
       
-      const stockItem = await Nexus.adapter.get(`tenants/${tenantId}/stockItems/${itemId}`) as any;
+      const stockItem = await Nexus.adapter.get<StockItemRecord>(`tenants/${tenantId}/stockItems/${itemId}`);
       if (!stockItem || !stockItem.supplierId) return;
 
       const supplierId = stockItem.supplierId;
@@ -25,7 +41,7 @@ export function registerAutoSupplierDraftHandler() {
         ],
       });
 
-      let draftOrder: any = existingDrafts.length > 0 ? existingDrafts[0] : null;
+      let draftOrder: SupplierDraftOrder | null = existingDrafts.length > 0 ? existingDrafts[0] as unknown as SupplierDraftOrder : null;
       
       const qtyToOrder = Math.max(stockItem.idealStock || 0, threshold * 2) - currentQuantity;
       if (qtyToOrder <= 0) return;
@@ -42,7 +58,7 @@ export function registerAutoSupplierDraftHandler() {
         await Nexus.adapter.set(`tenants/${tenantId}/supplierOrders/${orderId}`, draftOrder);
         logger.info(`[Logistics] Nouveau brouillon fournisseur créé pour ${supplierId}`);
       } else {
-        const itemIndex = draftOrder.items.findIndex((i: any) => i.itemId === itemId);
+        const itemIndex = draftOrder.items.findIndex((i: DraftOrderItem) => i.itemId === itemId);
         if (itemIndex > -1) {
           draftOrder.items[itemIndex].quantity += qtyToOrder;
         } else {

@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger';
  * vers le schéma en vigueur dans NexusEvents, notamment l'ajout du `v: 1`.
  */
 export const PayloadMigrator = {
-  migrate<E extends NexusEventName>(eventName: E, rawPayload: any): NexusEventPayload<E> {
+  migrate<E extends NexusEventName>(eventName: E, rawPayload: Record<string, unknown>): NexusEventPayload<E> {
     if (!rawPayload) return rawPayload;
 
     // Clone pour éviter les mutations

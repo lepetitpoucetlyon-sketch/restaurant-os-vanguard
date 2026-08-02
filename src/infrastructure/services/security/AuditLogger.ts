@@ -17,7 +17,7 @@ export interface AuditLog {
   targetId: string;
   ipAddress: string;
   timestamp: number;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -30,7 +30,7 @@ export class AuditLogger {
     adminId: string, 
     action: AuditAction, 
     targetId: string, 
-    metadata?: any, 
+    metadata?: Record<string, unknown>, 
     ipAddress: string = '0.0.0.0'
   ) {
     const log: AuditLog = {

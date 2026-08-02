@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { activeCartAtom } from "../store/orderAtoms";
-import { useOrders, useTables, useProducts, useCategories } from "@/modules/ops/providers";
+import { useOrders, useTables, useProducts, useCategories } from '@/modules/ops';
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useToast } from "@components/ui/Toast";
 import { Table, OrderItem } from "@nexus/contracts";
@@ -192,7 +192,7 @@ async function submitKitchenOrder(
         tableId: params.tableId,
         tenantId,
         operatorId: params.serverName,
-        items: params.items as any,
+        items: params.items as never,
     });
 }
 
@@ -372,7 +372,7 @@ export function usePOSController() {
      * Items already sent (sentAt set) are skipped to prevent double-firing.
      */
     const handleSendCourse = useCallback((course: CourseType) =>
-        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast as any, activeTenantId ?? 'default'),
+        handleSendCourseImpl(course, cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, setCartItems, showToast as never, activeTenantId ?? 'default'),
         [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast, activeTenantId]);
 
     return {

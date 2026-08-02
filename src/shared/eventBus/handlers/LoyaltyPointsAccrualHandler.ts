@@ -3,6 +3,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+interface CustomerProfile {
+  loyaltyPoints?: number;
+  totalSpentInMicrounits?: number;
+}
+
 export function registerLoyaltyPointsAccrualHandler() {
   return NexusEventBus.on(
     'order.paid',
@@ -11,13 +16,13 @@ export function registerLoyaltyPointsAccrualHandler() {
       if (!customerId || totalInMicrounits <= 0) return;
 
       const profilePath = `tenants/${tenantId}/crms/${customerId}`;
-      const profile = await Nexus.adapter.get(profilePath) as any;
+      const profile = await Nexus.adapter.get<CustomerProfile>(profilePath);
       if (!profile) return;
 
       // Règle: 1 point pour chaque 1€ dépensé
       const pointsEarned = Math.floor(totalInMicrounits / 100000);
-      const newPoints = ((profile.loyaltyPoints as number) || 0) + pointsEarned;
-      const newTotalSpent = ((profile.totalSpentInMicrounits as number) || 0) + totalInMicrounits;
+      const newPoints = (profile.loyaltyPoints ?? 0) + pointsEarned;
+      const newTotalSpent = (profile.totalSpentInMicrounits ?? 0) + totalInMicrounits;
       
       await Nexus.adapter.update(profilePath, {
         loyaltyPoints: newPoints,
@@ -46,7 +51,7 @@ export function registerLoyaltyPointsAccrualHandler() {
         });
         
         // Simuler le déblocage d'une récompense si on atteint 100 points par exemple
-        if (newPoints >= 100 && ((profile.loyaltyPoints as number) || 0) < 100) {
+        if (newPoints >= 100 && (profile.loyaltyPoints ?? 0) < 100) {
           NexusEventBus.emitDurable('crm.reward_unlocked', {
             v: 1,
             tenantId,

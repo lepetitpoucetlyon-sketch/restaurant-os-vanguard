@@ -5,8 +5,8 @@ import { Download, Link2, CheckCircle, AlertCircle, Loader2, ChevronDown, FileTe
 import { cn } from '@/lib/utils';
 import { useToast } from '@ui/Toast';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { PROVIDER_CATALOG } from '@/modules/human/connectors/payroll/catalog';
-import type { ProviderCatalogEntry } from '@/modules/human/connectors/payroll/catalog';
+import { PROVIDER_CATALOG } from '@/modules/human';
+import type { ProviderCatalogEntry } from '@/modules/human';
 
 type ActiveTab = 'csv' | string;
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';

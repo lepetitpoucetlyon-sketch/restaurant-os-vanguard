@@ -1,5 +1,5 @@
 import { PayoutInvoice, PayoutRequest } from './types';
-import { BankingNexusBridge } from '@/modules/finance/tresorerie/banking/BankingNexusBridge';
+import { BankingNexusBridge } from '@/modules/finance';
 import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { SovereignLedger } from '@/modules/finance';

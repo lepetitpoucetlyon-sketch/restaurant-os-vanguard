@@ -1,5 +1,5 @@
 import { logger } from '@/lib/axiom';
-import { StatementIngestionService } from '@/modules/finance/comptabilite/accounting/domain';
+import { StatementIngestionService } from '@/modules/finance';
 import type { BankTransaction } from '@nexus/contracts';
 import type {
     IOpenBankingProvider,

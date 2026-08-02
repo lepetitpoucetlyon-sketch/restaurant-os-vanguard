@@ -74,13 +74,13 @@ export function useHumanResources() {
         if (request) {
             const userBalance = leaveBalances.find(b => b.userId === request.userId);
             if (userBalance) {
-                const days = (request as any).daysCount || (request as any).days || 1;
+                const days = (request as Record<string, unknown>).daysCount || (request as Record<string, unknown>).days || 1;
                 const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-                const tenantId = (request as any).tenantId;
-                const balanceId = (userBalance as any).id || userBalance.userId;
+                const tenantId = (request as Record<string, unknown>).tenantId;
+                const balanceId = (userBalance as unknown as Record<string, unknown>).id || userBalance.userId;
                 const balancePath = tenantId ? `tenants/${tenantId}/leaveBalances/${balanceId}` : `leaveBalances/${balanceId}`;
                 await Nexus.adapter.update(balancePath, {
-                    remaining: Math.max(0, (userBalance.remaining || 0) - days),
+                    remaining: Math.max(0, (userBalance.remaining || 0) - (days as number)),
                     updatedAt: now
                 });
             }

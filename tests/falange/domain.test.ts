@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
-import { StockEngine } from '@/modules/logistics/services/StockEngine';
+import { StockEngine } from '@/modules/logistics';
 import { IdentityManager } from '@/domain/services/IdentityManager';
 
 describe('🏛️ FALANGE - COHORTE DOMAIN (10 TESTS)', () => {

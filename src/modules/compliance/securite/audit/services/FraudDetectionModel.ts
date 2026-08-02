@@ -20,7 +20,7 @@ export class FraudDetectionModel {
         try {
             // 1. Récupération des logs d'audit
             // Dans un vrai système, on interrogerait le LightRAG ou une DB vectorielle
-            const auditLogs = await Nexus.adapter.get<Record<string, { action: string, timestamp: string, details: any }>>(
+            const auditLogs = await Nexus.adapter.get<Record<string, { action: string, timestamp: string, details: Record<string, unknown> }>>(
                 `tenants/${tenantId}/empireAudit`
             ) || {};
             
@@ -62,7 +62,7 @@ export class FraudDetectionModel {
                 // Émission d'un event système pour réveiller le dashboard du directeur
                 // Note : On ne fait pas de sovereign.breach ici car ce n'est pas une fuite de données inter-tenant, 
                 // c'est un problème RH/Vol interne.
-                await NexusEventBus.emitDurable('support.ticket_submitted' as any, {
+                await NexusEventBus.emitDurable('support.ticket_submitted', {
                     v: 1,
                     ticketId: `fraud-${Date.now()}`,
                     tenantId,

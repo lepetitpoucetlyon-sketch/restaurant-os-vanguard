@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@components/ui/PageHeader";
 import { Plus, GripVertical, Settings2, ChefHat, Tag, Link2, AlertTriangle, Loader2, Save } from "lucide-react";
 import { SearchInput } from "@components/ui/SearchInput";
-import { useProducts } from "@/modules/logistics/stock/inventory/hooks/useProducts";
-import { useCategories } from "@/modules/logistics/stock/inventory/hooks/useCategories";
+import { useProducts } from '@/modules/logistics';
+import { useCategories } from '@/modules/logistics';
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Product } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
@@ -64,9 +64,9 @@ function MenuBuilderPage() {
         setEditForm({
             name: product.name,
             priceEuros: (priceMu / 1_000_000).toFixed(2),
-            taxRate: (product as any).taxRate || '0.10',
-            allergens: (product as any).allergens || [],
-            recipeId: (product as any).recipeId || '',
+            taxRate: (product as Record<string, unknown>).taxRate as string || '0.10',
+            allergens: (product as Record<string, unknown>).allergens as string[] || [],
+            recipeId: (product as Record<string, unknown>).recipeId as string || '',
         });
     }, []);
 
@@ -161,7 +161,7 @@ function MenuBuilderPage() {
                             <div className="w-64">
                                 <SearchInput
                                     value={searchQuery}
-                                    onChange={(e: any) => setSearchQuery(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                                     placeholder="Rechercher un plat..."
                                 />
                             </div>
@@ -178,7 +178,7 @@ function MenuBuilderPage() {
                         )}
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                             {filteredProducts.map(product => {
-                                const allergens: string[] = (product as any).allergens || [];
+                                const allergens: string[] = (product as Record<string, unknown>).allergens as string[] || [];
                                 return (
                                     <motion.div
                                         key={product.id}
@@ -205,7 +205,7 @@ function MenuBuilderPage() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            {(product as any).recipeId ? (
+                                            {(product as Record<string, unknown>).recipeId ? (
                                                 <span className="px-3 py-1 bg-status-success/10 text-status-success text-xs font-bold rounded-lg flex items-center gap-1">
                                                     <Link2 className="w-3 h-3" />
                                                     Lié

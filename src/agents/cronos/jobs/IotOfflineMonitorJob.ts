@@ -6,6 +6,13 @@ import { logger } from '@/lib/logger';
  * 📡 IotOfflineMonitorJob - Grade X
  * Surveille les capteurs IoT pour détecter s'ils sont hors ligne.
  */
+interface IotSensorRecord {
+  id: string;
+  timeoutMinutes?: number;
+}
+interface IotReadingRecord {
+  timestamp: number;
+}
 export const IotOfflineMonitorJob = {
     name: 'IotOfflineMonitor',
     schedule: '*/15 * * * *', // Toutes les 15 minutes
@@ -16,12 +23,11 @@ export const IotOfflineMonitorJob = {
             const now = Date.now();
 
             for (const tenantId of tenantIds) {
-                const sensors = await Nexus.adapter.query<any>(`tenants/${tenantId}/iotSensors`, { limit: 1000 });
+                const sensors = await Nexus.adapter.query<IotSensorRecord>(`tenants/${tenantId}/iotSensors`, { limit: 1000 }) || [];
                 
                 for (const sensor of sensors) {
-                    const lastReading = await Nexus.adapter.get<any>(`tenants/${tenantId}/iotReadings/${sensor.id}`);
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const timeoutMinutes = Number((sensor as any).timeoutMinutes) || 30;
+                    const lastReading = await Nexus.adapter.get<IotReadingRecord>(`tenants/${tenantId}/iotReadings/${sensor.id}`);
+                    const timeoutMinutes = Number(sensor.timeoutMinutes) || 30;
                     const timeoutMs = timeoutMinutes * 60 * 1000;
 
                     if (lastReading) {

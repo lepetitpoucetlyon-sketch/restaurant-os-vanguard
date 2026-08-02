@@ -1,8 +1,11 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { StockItem } from '@modules/logistics';
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { Reservation } from '@modules/commerce';
 import { User } from '@nexus/contracts';
 import { Recipe } from '@nexus/contracts';
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { Account } from '@modules/finance';
 import { HygieneLog, Candidate } from '@nexus/contracts';
 

@@ -3,19 +3,47 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface IntegrationConfig {
+  autoAccept?: boolean;
+}
+
+interface RawDeliveryItem {
+  id?: string;
+  plu?: string;
+  name?: string;
+  title?: string;
+  quantity: number;
+  price_cents?: number;
+  special_instructions?: string;
+  external_data?: { plu?: string };
+}
+
+interface ReservationPayload {
+  tenantId: string;
+  integrationId: string;
+  platform: string;
+  rawPayload: {
+    customer_name?: string;
+    pax?: number;
+    date?: string;
+    time?: string;
+  };
+}
+
 export function registerAntiCorruptionLayerHandler() {
   const unsubOrder = NexusEventBus.on(
     'integration.delivery_order_received',
     async (payload) => {
       const { tenantId, integrationId, platform, rawPayload } = payload;
       
-      const config = await Nexus.adapter.get<any>(`tenants/${tenantId}/integrations/${integrationId}`);
+      const config = await Nexus.adapter.get<IntegrationConfig>(`tenants/${tenantId}/integrations/${integrationId}`);
       
       if (config && config.autoAccept) {
         logger.info(`[ACL] Auto-Accept activé pour ${platform}. Traduction du payload brut vers les événements natifs de l'Empire.`);
         
         const canonicalOrderId = `order_${crypto.randomUUID()}`;
-        const amount = rawPayload.total_price_cents * 100 || 0; 
+        const rp = rawPayload as Record<string, unknown>;
+        const amount = (rp.total_price_cents as number) * 100 || 0; 
         
         await NexusEventBus.emitDurable('order.placed', {
           v: 1,
@@ -23,13 +51,13 @@ export function registerAntiCorruptionLayerHandler() {
           orderId: canonicalOrderId,
           tableId: null,
           operatorId: `integration_${platform}`,
-          items: rawPayload.items?.map((i: any) => ({
+          items: (rp.items as unknown as RawDeliveryItem[])?.map((i: RawDeliveryItem) => ({
             productId: i.external_data?.plu ?? i.id,
             name: i.title ?? i.name,
             quantity: i.quantity,
             unitPriceInMicrounits: (i.price_cents ?? 0) * 10_000,
             notes: i.special_instructions ?? '',
-          })) ?? []
+          })) as unknown as import('@/domain/schemas/pos').CartItem[] ?? []
         });
         
         await NexusEventBus.emitDurable('order.paid', {
@@ -38,13 +66,13 @@ export function registerAntiCorruptionLayerHandler() {
           orderId: canonicalOrderId,
           tableId: null,
           operatorId: `integration_${platform}`,
-          items: rawPayload.items?.map((i: any) => ({
+          items: (rp.items as unknown as RawDeliveryItem[])?.map((i: RawDeliveryItem) => ({
             productId: i.external_data?.plu ?? i.id,
             name: i.title ?? i.name,
             quantity: i.quantity,
             unitPriceInMicrounits: (i.price_cents ?? 0) * 10_000,
             notes: i.special_instructions ?? '',
-          })) ?? [],
+          })) as unknown as import('@/domain/schemas/pos').CartItem[] ?? [],
           totalInMicrounits: amount,
           paymentMode: platform
         });
@@ -64,7 +92,7 @@ export function registerAntiCorruptionLayerHandler() {
   const unsubResa = NexusEventBus.on(
     'integration.reservation_received',
     async (payload) => {
-      const { tenantId, integrationId, platform, rawPayload } = payload as any;
+      const { tenantId, integrationId, platform, rawPayload } = payload as ReservationPayload;
       
       if (platform === 'lafourchette') {
         logger.info(`[ACL] Traduction de réservation LaFourchette vers l'Empire.`);
@@ -78,7 +106,7 @@ export function registerAntiCorruptionLayerHandler() {
           date: rawPayload.date,
           time: rawPayload.time,
           channel: 'lafourchette',
-        } as any);
+        } as Parameters<typeof NexusEventBus.emitDurable>[1]);
 
         empireAudit.log({
           module: 'crm',

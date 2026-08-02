@@ -21,7 +21,7 @@ export class TableHandoffService {
         logger.info(`[Handoff] Demande de transfert order ${orderId} de ${fromOperatorId} à ${toOperatorId}`);
 
         // 1. Récupérer la commande
-        const order = await Nexus.adapter.get<any>(`tenants/${tenantId}/orders/${orderId}`);
+        const order = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}/orders/${orderId}`);
         
         if (!order) {
             throw new Error(`Commande ${orderId} introuvable.`);

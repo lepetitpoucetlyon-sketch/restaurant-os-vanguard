@@ -3,12 +3,17 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface LoyaltyWallet {
+  pointsBalance: number;
+  updatedAt?: number;
+}
+
 export function registerLoyaltyEngineHandler() {
   const handleWalletEvent = async (tenantId: string, customerId: string, diff: number, eventType: string) => {
     const walletPath = `tenants/${tenantId}/wallets/${customerId}`;
     
     await Nexus.adapter.runTransaction(async (tx) => {
-      const wallet = await Nexus.adapter.get<any>(walletPath) || { pointsBalance: 0 };
+      const wallet = await Nexus.adapter.get<LoyaltyWallet>(walletPath) || { pointsBalance: 0 };
       const newBalance = Math.max(0, wallet.pointsBalance + diff);
       
       await Nexus.adapter.set(walletPath, {

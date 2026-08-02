@@ -22,7 +22,7 @@ export function registerCashDrawerAnomalyHandler(): () => void {
         empireAudit.log({
           module: 'finance',
           action: 'UNAUTHORIZED_DRAWER_OPEN',
-          details: { drawerId, operatorId, detectedAt },
+          details: { drawerId: drawerId as string, operatorId: operatorId as string, detectedAt: detectedAt as unknown as string },
           severity: 'critical',
           timestamp: new Date(detectedAt),
         });

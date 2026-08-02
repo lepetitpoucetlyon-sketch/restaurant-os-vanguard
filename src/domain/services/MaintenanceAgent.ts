@@ -1,6 +1,6 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager } from "@/modules/intelligence/ia/ai";
-import { AI_MODELS } from "@/modules/intelligence/ia/ai";
+import { LLMManager } from '@/modules/intelligence';
+import { AI_MODELS } from '@/modules/intelligence';
 import { logger } from "../../lib/axiom";
 // eslint-disable-next-line no-restricted-imports
 import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";

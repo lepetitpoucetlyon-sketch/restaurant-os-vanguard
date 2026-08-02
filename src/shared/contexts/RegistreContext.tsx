@@ -1,1 +1,1 @@
-export * from "@/modules/compliance/qualite/haccp/contexts/RegistreContext";
+export * from "@/modules/compliance";

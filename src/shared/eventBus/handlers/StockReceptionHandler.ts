@@ -3,6 +3,19 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+/** Ligne d'un bon de commande fournisseur */
+interface PurchaseOrderItem {
+  itemId: string;
+  quantity: number;
+  unitPrice?: number;
+}
+/** Bon de commande fournisseur (état Firestore) */
+interface PurchaseOrder {
+  id: string;
+  status: string;
+  items: PurchaseOrderItem[];
+}
+
 /**
  * StockReceptionHandler (P1)
  * Consomme l'événement 'stock.received' (émis par ProcurementBridge lors de la signature du BL)
@@ -14,9 +27,9 @@ export function registerStockReceptionHandler(): () => void {
     async (payload) => {
       const { tenantId, deliveryId, purchaseOrderId, items } = payload;
       
-      let purchaseOrder: any = null;
+      let purchaseOrder: PurchaseOrder | null = null;
       if (purchaseOrderId) {
-        purchaseOrder = await Nexus.adapter.get(`tenants/${tenantId}/purchaseOrders/${purchaseOrderId}`);
+        purchaseOrder = await Nexus.adapter.get<PurchaseOrder>(`tenants/${tenantId}/purchaseOrders/${purchaseOrderId}`);
       }
 
       const driftReport: { itemId: string; expected: number; received: number; diff: number }[] = [];
@@ -38,7 +51,7 @@ export function registerStockReceptionHandler(): () => void {
 
         // Calcul écart si BC existe
         if (purchaseOrder && purchaseOrder.items) {
-          const expectedItem = purchaseOrder.items.find((i: any) => i.itemId === item.itemId);
+          const expectedItem = purchaseOrder.items.find((i: PurchaseOrderItem) => i.itemId === item.itemId);
           const expectedQty = expectedItem ? expectedItem.quantity : 0;
           if (expectedQty !== item.quantity) {
             driftReport.push({

@@ -7,7 +7,7 @@ import { resolveDNA } from '@/shared/seeds';
 import { FiscalKeyService } from '@/modules/finance';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
-import type { Floor, Zone, Table } from '@/modules/ops/workflow/engine/tables.types';
+import type { Floor, Zone, Table } from '@/modules/ops';
 
 export interface SeedInput {
   tenantId: string;

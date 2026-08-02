@@ -3,6 +3,12 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
+interface ReservationRecord {
+  id: string;
+  hasDeposit?: boolean;
+  subjectId?: string;
+}
+
 export function registerNoShowPenaltyHandler() {
   return NexusEventBus.on(
     'reservation.no_show',
@@ -11,7 +17,7 @@ export function registerNoShowPenaltyHandler() {
       
       logger.warn(`[NoShowPenalty] Le client de la réservation ${reservationId} ne s'est pas présenté.`);
 
-      const res = await Nexus.adapter.get<any>(`tenants/${tenantId}/reservations/${reservationId}`);
+      const res = await Nexus.adapter.get<ReservationRecord>(`tenants/${tenantId}/reservations/${reservationId}`);
       if (res && res.hasDeposit) {
         // Au lieu de frapper la CB immédiatement (risque de litige fort), on génère une alerte manager
         // pour validation de la pénalité.

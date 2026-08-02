@@ -55,12 +55,12 @@ export function AccountSettingsDashboard() {
 
     // Merge hardcoded roles and dynamic custom roles
     const baseRoles = Object.keys(ROLE_LABELS);
-    const allRoles = [...baseRoles, ...(customRoles || []).map((r: any) => r.id)];
+    const allRoles = [...baseRoles, ...(customRoles || []).map((r: Record<string, unknown>) => r.id as string)];
 
     const getRoleLabel = (roleId: string) => {
         if (ROLE_LABELS[roleId]) return ROLE_LABELS[roleId];
-        const custom = customRoles?.find((r: any) => r.id === roleId);
-        return custom ? custom.label : roleId;
+        const custom = customRoles?.find((r: Record<string, unknown>) => r.id === roleId);
+        return custom ? (custom.label as string) : roleId;
     };
 
     const toggleCategory = (role: UserRole | string, category: CategoryKey) => {

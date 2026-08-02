@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     logger.info(`[Stripe Billing] Device ${serialNumber} delivered to ${tenantId}. Initiating MRR subscription...`);
     
     // 1. Fetch Tenant's Stripe Customer ID from Nexus
-    const tenantDoc = await Nexus.adapter.get(`tenants/${tenantId}`) as any;
+    const tenantDoc = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}`);
     const customerId = tenantDoc?.stripeCustomerId;
 
     if (!customerId) {
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     try {
       if (customerId && process.env.STRIPE_SECRET_KEY) {
         const subscription = await stripe.subscriptions.create({
-          customer: customerId,
+          customer: customerId as string,
           items: [{ price: HARDWARE_RENTAL_PRICE_ID }],
           metadata: {
             tenantId,

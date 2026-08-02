@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   if (isDenied(caller)) return caller;
 
   const body = await req.json();
-  const { eventName, payload } = body as { eventName: NexusEventName, payload: any };
+  const { eventName, payload } = body as { eventName: NexusEventName, payload: Record<string, unknown> };
 
   if (!eventName || !payload) {
     return NextResponse.json({ error: 'Missing eventName or payload' }, { status: 400 });

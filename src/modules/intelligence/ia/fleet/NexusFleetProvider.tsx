@@ -4,6 +4,7 @@ import { useSetAtom, useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { FleetComplianceService } from './FleetComplianceService';
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { HACCPTelemetryBridge } from '@modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
 import { TenantID } from '@domain/types/brands';

@@ -6,7 +6,7 @@ import {
     toLegacyInvoice,
     type ExtractedSupplierInvoice,
 } from '@/domain/schemas/supplier-invoice.schemas';
-import { InvoiceExtractionService } from '@/modules/logistics/services/InvoiceExtractionService';
+import { InvoiceExtractionService } from '@/modules/logistics';
 
 // ─── Fixtures ───────────────────────────────────────────────────────────────────
 

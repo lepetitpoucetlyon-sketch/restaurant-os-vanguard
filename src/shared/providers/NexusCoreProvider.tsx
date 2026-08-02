@@ -63,7 +63,7 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     const fleetValue = useNexusFleetLogic();
 
     const contextValue: NexusCoreState = useMemo(() => ({
-        auth: authValue, tenant: tenantValue, ui: uiThemeContext.ui, settings: uiThemeContext.settings,
+        auth: authValue as unknown as NexusCoreState['auth'], tenant: tenantValue, ui: uiThemeContext.ui, settings: uiThemeContext.settings,
         theme: uiThemeContext.theme, lang: langValue, notif: notifContext, fleet: fleetValue,
         tenantConfig: tenantValue.activeTenantConfig
     }), [tenantValue, authValue, uiThemeContext, langValue, notifContext, fleetValue]);

@@ -23,12 +23,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const tenantId = req.nextUrl.searchParams.get('tenantId');
   
   // Fetch dynamic catalog
-  const catalogDoc = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, any> } | null;
+  const catalogDoc = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, unknown> } | null;
   const dynamicCatalog = catalogDoc?.items || {};
 
   if (!tenantId) return NextResponse.json({ catalog: dynamicCatalog });
 
-  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { plugins?: Record<string, any> } | null;
+  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { plugins?: Record<string, unknown> } | null;
   return NextResponse.json({ tenantId, activePlugins: config?.plugins || {}, catalog: dynamicCatalog });
 }
 
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const { tenantId, pluginId, config = {} } = body;
   
   // Verify plugin exists in dynamic catalog
-  const catalogDoc = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, any> } | null;
+  const catalogDoc = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, unknown> } | null;
   const pluginInfo = catalogDoc?.items?.[pluginId];
 
   if (!pluginInfo) {
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   // Retrieve current config to log the 'before' state
-  const currentConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { plugins?: Record<string, any> } | null;
+  const currentConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { plugins?: Record<string, unknown> } | null;
   const beforePlugins = currentConfig?.plugins || {};
 
   const pluginPayload = {
@@ -100,7 +100,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 
   const { tenantId, pluginId } = body;
 
-  const currentConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { plugins?: Record<string, any> } | null;
+  const currentConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { plugins?: Record<string, unknown> } | null;
   const beforePlugins = currentConfig?.plugins || {};
 
   // We set active: false rather than deleting the key to preserve history and config

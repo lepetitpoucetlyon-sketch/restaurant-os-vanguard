@@ -3,6 +3,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+interface CustomerProfile {
+  totalVisits?: number;
+  tags?: string[];
+}
+
 export function registerVipStatusEvaluationHandler() {
   return NexusEventBus.on(
     'order.paid',
@@ -11,15 +16,15 @@ export function registerVipStatusEvaluationHandler() {
       if (!customerId) return;
 
       const profilePath = `tenants/${tenantId}/crms/${customerId}`;
-      const profile = await Nexus.adapter.get(profilePath) as any;
+      const profile = await Nexus.adapter.get<CustomerProfile>(profilePath);
       if (!profile) return;
 
-      const visits = ((profile.totalVisits as number) || 0) + 1;
+      const visits = (profile.totalVisits ?? 0) + 1;
       let newTag = null;
 
-      if (visits === 5 && !(profile.tags as string[] | undefined)?.includes('regular')) {
+      if (visits === 5 && !profile.tags?.includes('regular')) {
         newTag = 'regular';
-      } else if (visits === 20 && !(profile.tags as string[] | undefined)?.includes('vip')) {
+      } else if (visits === 20 && !profile.tags?.includes('vip')) {
         newTag = 'vip';
       }
       

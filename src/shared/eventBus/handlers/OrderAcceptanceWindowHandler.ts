@@ -3,13 +3,18 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface IntegrationConfig {
+  autoAccept?: boolean;
+  notifyRoles?: string[];
+}
+
 export function registerOrderAcceptanceWindowHandler() {
   return NexusEventBus.on(
     'integration.delivery_order_received',
     async (payload) => {
       const { tenantId, integrationId, platform, rawPayload } = payload;
       
-      const config = await Nexus.adapter.get<any>(`tenants/${tenantId}/integrations/${integrationId}`);
+      const config = await Nexus.adapter.get<IntegrationConfig>(`tenants/${tenantId}/integrations/${integrationId}`);
       
       if (!config || !config.autoAccept) {
         // Multi-RBAC : L'admin peut choisir qui reçoit l'alerte (POS, KDS, Manager...)

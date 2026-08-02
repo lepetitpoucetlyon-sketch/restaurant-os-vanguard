@@ -22,3 +22,17 @@ export { ErasureService } from './reglementaire/rgpd/ErasureService';
 export type { PiiRecord } from '@/domain/schemas/pii';
 export { IoTProviderFactory } from './connectors/iot';
 export * from './services';
+
+export { useHaccpPage } from './qualite/haccp/hooks';
+export { HACCP_TOOLS } from './qualite/haccp/hooks';
+export { CleaningPlan } from './qualite/haccp/components/CleaningPlan';
+export { DLCTracker } from './qualite/haccp/components/DLCTracker';
+export { NonConformityForm } from './qualite/haccp/components/NonConformityForm';
+export { HACCPSyncService } from './qualite/haccp/haccp.sync';
+export { PlanMaitriseSanitaire } from './qualite/haccp/services/PlanMaitriseSanitaire';
+export { qualityActiveControlAtom } from './qualite/haccp/store/qualityAtoms';
+export { wasteLogsNodeAtom } from './qualite/haccp/store';
+export { HACCPLogService } from './qualite/haccp/HACCPLogService';
+export { registerWasteToFoodCostHandler } from './qualite/haccp/handlers/WasteToFoodCostHandler';
+export { policyEngine } from './services';
+export { useRegistre, RegistreProvider } from './qualite/haccp/contexts/RegistreContext';

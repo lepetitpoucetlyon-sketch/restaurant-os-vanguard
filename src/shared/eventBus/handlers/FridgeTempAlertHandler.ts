@@ -3,6 +3,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+interface ProductRecord {
+  id: string;
+  available?: boolean;
+}
+
 export function registerFridgeTempAlertHandler() {
   return NexusEventBus.on(
     'sensor.temperature_anomaly',
@@ -30,9 +35,9 @@ export function registerFridgeTempAlertHandler() {
         });
         
         // Trouver tous les produits stockés dans ce frigo (storageLocation) et les désactiver
-        const products = await Nexus.adapter.query(`tenants/${tenantId}/products`, {
+        const products = await Nexus.adapter.query<ProductRecord>(`tenants/${tenantId}/products`, {
           where: [{ field: 'storageLocationId', operator: '==', value: sensorId }],
-        }) as any[];
+        }) || [];
         
         for (const product of products) {
           await Nexus.adapter.update(`tenants/${tenantId}/products/${product.id}`, { available: false });

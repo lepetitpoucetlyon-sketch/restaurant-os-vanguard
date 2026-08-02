@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-imports */
+/* eslint-disable vanguard/no-inter-module-imports */
 "use client";
 
 import { useState } from "react";

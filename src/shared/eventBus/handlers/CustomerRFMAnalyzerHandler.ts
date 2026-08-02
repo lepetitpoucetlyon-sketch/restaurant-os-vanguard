@@ -3,6 +3,13 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface CustomerRecord {
+  visitCount?: number;
+  segment?: string;
+  lastVisitAt?: number;
+  updatedAt?: number;
+}
+
 export function registerCustomerRFMAnalyzerHandler() {
   return NexusEventBus.on(
     'crm.points_earned',
@@ -12,7 +19,7 @@ export function registerCustomerRFMAnalyzerHandler() {
       const customerPath = `tenants/${tenantId}/customers/${customerId}`;
       
       await Nexus.adapter.runTransaction(async (tx) => {
-        const customer = await Nexus.adapter.get<any>(customerPath);
+        const customer = await Nexus.adapter.get<CustomerRecord>(customerPath);
         if (!customer) return;
 
         // Recalcul du RFM simplifié (Récence, Fréquence, Montant)

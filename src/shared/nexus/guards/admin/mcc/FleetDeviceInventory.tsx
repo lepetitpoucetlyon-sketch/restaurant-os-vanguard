@@ -49,7 +49,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
     const loaded = await Promise.all(
       instances.map(async (inst) => {
         try {
-          const doc = await Nexus.adapter.get(`mcc/deviceAssignments/${inst.tenantId}`) as any;
+          const doc = await Nexus.adapter.get<DeviceAssignment & { serialNumbers?: string[] }>(`mcc/deviceAssignments/${inst.tenantId}`);
           let devices: HardwareDevice[] = [];
           if (doc) {
             if (doc.devices) {

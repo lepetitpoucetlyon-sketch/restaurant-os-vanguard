@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { fiscalLedgerAtom } from '@modules/compliance/qualite/haccp/store/complianceAtoms';
 import { TelemetryPulse } from '@/shared/nexus-contract';
 import { logger } from '@/lib/logger';

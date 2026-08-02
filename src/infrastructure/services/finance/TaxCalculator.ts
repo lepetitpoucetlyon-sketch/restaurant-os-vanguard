@@ -1,4 +1,4 @@
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops';
 
 export class TaxCalculator {
   static computeTvaBreakdown(items: CartItem[]): Record<string, number> {

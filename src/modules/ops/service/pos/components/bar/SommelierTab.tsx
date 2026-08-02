@@ -8,7 +8,7 @@ import {
   MapPin, 
   ThermometerSun 
 } from "lucide-react";
-import type { WineRegion } from "@/modules/ops/types/bar";
+import type { WineRegion } from '@/modules/ops';
 
 interface SommelierTabProps {
   regions: WineRegion[];

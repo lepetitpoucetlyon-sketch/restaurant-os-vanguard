@@ -6,7 +6,7 @@ import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import { auditService } from '@/modules/compliance/securite/audit/AuditService';
+import { auditService } from '@/modules/compliance';
 
 /**
  * 🛰️ NexusInterceptor - Grade X Middleware
@@ -19,7 +19,7 @@ export class NexusInterceptor implements INexusAdapter {
         private readonly guard: typeof SovereignGuard,
         private readonly tenantProvider: () => string | null
     ) {
-        auditService.setNexus(this.adapter as any);
+        auditService.setNexus(this.adapter as Parameters<typeof auditService.setNexus>[0]);
     }
 
     async get<T = unknown>(path: string, context?: NexusContext): Promise<T | null> {

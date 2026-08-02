@@ -7,7 +7,7 @@ import { Search, ChefHat, Book, AlertTriangle, Edit2, Trash2, Loader2 } from "lu
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
-import { RecipeCostBadge, BarRecipeCard } from "@/modules/ops/production/recipes";
+import { RecipeCostBadge, BarRecipeCard } from '@/modules/ops';
 
 interface RecipesTabProps {
     recipes: import('@nexus/contracts').Recipe[];

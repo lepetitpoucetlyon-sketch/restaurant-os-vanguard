@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { X, Camera, ReceiptEuro, Save, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@ui/button";
 import { motion } from "framer-motion";
-import { useAccounting, useNexusFiscal } from "@/modules/finance/providers/NexusFiscalProvider";
+import { useAccounting, useNexusFiscal } from '@/modules/finance';
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useUI } from "@/shared/hooks";

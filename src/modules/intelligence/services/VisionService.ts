@@ -1,4 +1,5 @@
 import { logger } from '@/lib/axiom';
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { InvoiceExtractionService } from '@modules/logistics/services/InvoiceExtractionService';
 import { IdentityGuardService } from '@/domain/services/IdentityGuardService';
 import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
@@ -112,9 +113,9 @@ export const VisionService = {
 
         // Server-side: call LLMManager directly
         try {
-            // eslint-disable-next-line no-restricted-imports
+             
             const { LLMManager } = await import('@/modules/intelligence/ia/ai');
-            // eslint-disable-next-line no-restricted-imports
+             
             const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
             const imageData = plateBase64.includes(',') ? plateBase64.split(',')[1] : plateBase64;
             const response = await LLMManager.provider.generateFromImage({

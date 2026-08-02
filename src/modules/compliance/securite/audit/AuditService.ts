@@ -129,12 +129,12 @@ export class AuditService {
         if (!this.nexus) throw new Error('[AuditService] Nexus adapter not initialized');
         const collectionPath = `tenants/${tenantId}/auditLog`;
         const events = await this.nexus.query<AuditEvent>(collectionPath, {
-            orderBy: { field: 'ts', direction: 'asc' } as any
+            orderBy: { field: 'ts', direction: 'asc' } as never
         });
 
         const header = 'id,ts,action,collection,entityId,userId,hash,previousHash\n';
         const rows = (events || []).map(e => 
-            `"${e.id}","${new Date(e.ts).toISOString()}","${e.action}","${e.collection}","${e.entityId || ''}","${(e as any).actorId || (e as any).userId || ''}","${e.hash}","${e.previousHash}"`
+            `"${e.id}","${new Date(e.ts).toISOString()}","${e.action}","${e.collection}","${e.entityId || ''}","${(e as Record<string, unknown>).actorId || (e as Record<string, unknown>).userId || ''}","${e.hash}","${e.previousHash}"`
         ).join('\n');
 
         return header + rows;

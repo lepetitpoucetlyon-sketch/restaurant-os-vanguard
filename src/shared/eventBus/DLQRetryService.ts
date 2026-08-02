@@ -34,7 +34,7 @@ async function processRetryQueue(): Promise<void> {
     try {
       const migratedPayload = PayloadMigrator.migrate(
         entry.eventName as NexusEventName,
-        entry.payload
+        entry.payload as Record<string, unknown>
       );
       // skipDLQWrite : on gère l'état DLQ ici, pas dans le bus
       await NexusEventBus.emit(

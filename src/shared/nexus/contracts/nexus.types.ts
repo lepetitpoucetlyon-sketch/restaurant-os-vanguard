@@ -23,7 +23,7 @@ export interface NexusAuthState {
     updateRolePermissions: (role: UserRole, categories: CategoryKey[]) => Promise<void>;
     getAccessibleCategories: () => CategoryKey[];
     rolePermissions: RolePermissions;
-    customRoles: any[];
+    customRoles: Record<string, unknown>[];
     createCustomRole: (label: string) => Promise<string>;
     deleteCustomRole: (roleId: string) => Promise<void>;
     assignRoleToUser: (userId: string, role: string) => Promise<void>;

@@ -9,3 +9,4 @@ export * from './brands';
 export * from './delivery';
 export * from './empire';
 export * from './quality';
+export { useRegistre } from './bar';

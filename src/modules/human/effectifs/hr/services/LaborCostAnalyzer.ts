@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { ClockEntry } from '@/modules/human/connectors/timeclock/types';
+import type { ClockEntry } from '@/modules/human';
 import { logger } from '@/lib/logger';
 
 export interface LaborMetrics {

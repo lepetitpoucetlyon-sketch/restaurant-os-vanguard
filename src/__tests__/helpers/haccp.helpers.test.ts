@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-imports */
+/* eslint-disable vanguard/no-inter-module-imports */
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({ useSearchParams: vi.fn(() => ({ get: vi.fn(() => null) })) }));

@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { staggerContainer, staggerItem } from "@/shared/utils/motion";
 import { Modal } from "@ui/Modal";
 import { Recipe, RecipeIngredient } from "@nexus/contracts";
-import { RecipeCostBadge } from "@/modules/ops/production/recipes";
+import { RecipeCostBadge } from '@/modules/ops';
 import {
     scaleIngredient,
     computeRecipeFoodCostInMu,
@@ -18,7 +18,7 @@ import {
     foodCostPct,
     marginPct,
     formatMicrounits,
-} from "@/modules/ops/production/recipes/recipeUtils";
+} from "../../recipes/recipeUtils";
 
 // ─── Print helper (cui-4) ─────────────────────────────────────────────────────
 

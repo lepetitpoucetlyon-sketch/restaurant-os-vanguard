@@ -4,7 +4,7 @@ import { toProduct, toCategory, toJournalEntry } from '@nexus/contracts/nexus-in
 import { createSovereignHook } from '../opsCore';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from '@/modules/logistics/stock/inventory/hooks';
+import { useInventory } from '@/modules/logistics';
 
 import { productsNodeAtom, categoriesNodeAtom } from '@/store/pillars/logistics';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';

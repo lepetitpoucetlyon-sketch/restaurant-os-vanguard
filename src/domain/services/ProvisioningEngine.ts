@@ -3,7 +3,7 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
 import { fleetTelemetry } from '@modules/intelligence/ia/fleet/FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
-import { sovereignCreateWorkspace } from '@/modules/intelligence/knowledge/rag';
+import { sovereignCreateWorkspace } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/infrastructure/branding/WhiteLabelBrandingInjector';
 

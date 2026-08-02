@@ -3,6 +3,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+interface CustomerProfile {
+  noShowCount?: number;
+  tags?: string[];
+}
+
 export function registerCustomerRiskTagHandler() {
   return NexusEventBus.on(
     'reservation.no_show',
@@ -11,14 +16,14 @@ export function registerCustomerRiskTagHandler() {
       if (!customerId) return;
 
       const profilePath = `tenants/${tenantId}/crms/${customerId}`;
-      const profile = await Nexus.adapter.get(profilePath) as any;
+      const profile = await Nexus.adapter.get<CustomerProfile>(profilePath);
       if (!profile) return;
 
-      const noShowCount = ((profile.noShowCount as number) || 0) + 1;
-      let tags: string[] = (profile.tags as string[]) || [];
+      const noShowCount = (profile.noShowCount ?? 0) + 1;
+      let tags: string[] = profile.tags ?? [];
       
       // Si 2 No-Shows ou plus, on applique le tag "risk"
-      if (noShowCount >= 2 && !(tags as string[]).includes('risk')) {
+      if (noShowCount >= 2 && !tags.includes('risk')) {
         tags = [...tags, 'risk'];
         logger.warn(`[CRM] Le client ${customerId} a été taggé RISK suite à ${noShowCount} No-Shows.`);
         

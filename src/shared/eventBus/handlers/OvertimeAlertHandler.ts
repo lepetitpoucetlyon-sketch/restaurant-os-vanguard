@@ -3,13 +3,17 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 
+interface ShiftRecord {
+  startedAt?: number;
+}
+
 export function registerOvertimeAlertHandler() {
   return NexusEventBus.on(
     'hr.shift_ended',
     async (payload) => {
       const { tenantId, shiftId, employeeId, endedAt } = payload;
       
-      const shift = await Nexus.adapter.get<any>(`tenants/${tenantId}/shifts/${shiftId}`);
+      const shift = await Nexus.adapter.get<ShiftRecord>(`tenants/${tenantId}/shifts/${shiftId}`);
       
       if (shift && shift.startedAt) {
         const durationHours = (endedAt - shift.startedAt) / 3600000;

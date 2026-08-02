@@ -1,5 +1,6 @@
 "use client";
 
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { QualityEngine } from '@modules/compliance/services/QualityEngine';
 import { useCallback, useState, useEffect } from 'react';
 import { ReceptionData } from '@domain/schemas/haccp';

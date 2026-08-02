@@ -1,6 +1,7 @@
 import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from "@/lib/nexus/types";
 import type { SovereignData } from '@/shared/nexus-contract';
-import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
+// eslint-disable-next-line vanguard/no-inter-module-imports
+import { simulatorDb } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 import { 

@@ -3,20 +3,39 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 
+/** Ligne de commande fournisseur */
+interface SupplierOrderItem {
+  itemId: string;
+  quantity: number;
+  unitPrice?: number;     // prix unitaire (microunits)
+}
+/** Commande fournisseur (forme Firestore) */
+interface SupplierOrder {
+  id: string;
+  status: string;
+  items: SupplierOrderItem[];
+}
+/** Article de stock avec PRMP */
+interface StockRecord {
+  quantity: number;
+  prmp?: number;          // Prix de Revient Moyen Pondéré (microunits)
+  available?: boolean;
+}
+
 export function registerSupplierDeliveryReceivedHandler() {
   return NexusEventBus.on(
     'supplier.delivery_received',
     async (payload) => {
       const { tenantId, orderId } = payload;
       
-      const order = await Nexus.adapter.get(`tenants/${tenantId}/supplierOrders/${orderId}`) as any;
+      const order = await Nexus.adapter.get<SupplierOrder>(`tenants/${tenantId}/supplierOrders/${orderId}`);
       if (!order) return;
       
       logger.info(`[Logistics] Réception de la commande fournisseur ${orderId}. Mise à jour des stocks.`);
       
       await Nexus.adapter.runTransaction(async (transaction) => {
         for (const item of order.items) {
-          const stockItem = await transaction.get(`tenants/${tenantId}/stockItems/${item.itemId}`) as any;
+          const stockItem = await transaction.get<StockRecord>(`tenants/${tenantId}/stockItems/${item.itemId}`);
           if (stockItem) {
             // Incrémentation du stock
             const newQty = stockItem.quantity + item.quantity;

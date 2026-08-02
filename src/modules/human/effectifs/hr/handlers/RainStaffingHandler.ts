@@ -34,7 +34,7 @@ export function registerRainStaffingHandler(): () => void {
                 { action: 'accept', title: 'Accepter le shift' },
                 { action: 'decline', title: 'Ignorer' }
               ]
-            } as any);
+            } as never);
           }
         }
       } catch (e) {

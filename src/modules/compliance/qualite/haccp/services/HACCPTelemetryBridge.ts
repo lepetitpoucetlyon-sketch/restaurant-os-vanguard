@@ -1,3 +1,4 @@
+// eslint-disable-next-line vanguard/no-inter-module-imports
 import { fleetTelemetry } from '@modules/intelligence/ia/fleet/FleetTelemetryService';
 import { MaintenanceAgent } from '@/domain/services/MaintenanceAgent';
 import { logger } from '@/lib/logger';

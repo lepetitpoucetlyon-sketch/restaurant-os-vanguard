@@ -17,22 +17,23 @@ export function registerCRMVipHandler(): () => void {
       
       try {
         // 1. Récupérer l'ordre pour voir s'il y a un customerId associé
-        const order = await Nexus.adapter.get<any>(`tenants/${tenantId}/orders/${orderId}`);
+        const order = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}/orders/${orderId}`);
         if (!order || !order.customerId) return;
         
-        const customerId = order.customerId;
+        const customerId = order.customerId as string;
 
         // 2. Récupérer le profil client
         const customer = await Nexus.adapter.get<Customer>(`tenants/${tenantId}/customers/${customerId}`);
         if (!customer) return;
 
         // Si déjà VIP, rien à faire (sauf si on gère des tiers, mais restons simple)
-        if ((customer as any).tags?.includes?.('VIP')) return;
+        const tags = (customer as Record<string, unknown>).tags as string[] | undefined;
+        if (tags?.includes('VIP')) return;
 
         // 3. Logique d'évaluation VIP
-        const stats = (customer as any).stats as { totalVisits?: number; totalSpentInMicrounits?: number; lastVisitAt?: string } | undefined;
+        const stats = (customer as Record<string, unknown>).stats as { totalVisits?: number; totalSpentInMicrounits?: number; lastVisitAt?: string } | undefined;
         const visits = (stats?.totalVisits ?? 0) + 1;
-        const totalSpent = (stats?.totalSpentInMicrounits ?? 0) + ((order as any).totalTTCInMicrounits ?? 0);
+        const totalSpent = (stats?.totalSpentInMicrounits ?? 0) + (order.totalTTCInMicrounits as number ?? 0);
 
         const VIP_VISITS_THRESHOLD = 5;
         const VIP_SPENT_THRESHOLD = 500_000_000; // 500€ en microunits

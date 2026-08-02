@@ -17,6 +17,12 @@ interface TenantPluginState {
   activePlugins: Record<string, { active: boolean, activatedAt?: string }>;
 }
 
+interface PluginApiResponse {
+  catalog: Record<string, CatalogItem>;
+  tenantId: string;
+  activePlugins: Record<string, { active: boolean, activatedAt?: string }>;
+}
+
 export function PluginEnginePanel() {
   const { instances } = useFleet();
   const [pluginsByTenant, setPluginsByTenant] = useState<TenantPluginState[]>([]);
@@ -36,7 +42,7 @@ export function PluginEnginePanel() {
       );
       
       const parsedResults = results
-        .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled' && r.value !== null)
+        .filter((r): r is PromiseFulfilledResult<PluginApiResponse> => r.status === 'fulfilled' && r.value !== null)
         .map(r => {
           latestCatalog = { ...latestCatalog, ...r.value.catalog };
           return { tenantId: r.value.tenantId, activePlugins: r.value.activePlugins };

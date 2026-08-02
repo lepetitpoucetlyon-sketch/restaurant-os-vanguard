@@ -12,12 +12,12 @@ import {
     NewCustomerDialog,
 } from "@modules/commerce/relation/customers/components";
 import { PromoCodeManager } from "@/modules/commerce";
-import { EmailCampaign } from "@/modules/commerce/acquisition/marketing/components/crm/EmailCampaign";
-import { BasketAnalysis } from "@/modules/commerce/acquisition/marketing/components/crm/BasketAnalysis";
-import { VisitHistory } from "@/modules/commerce/acquisition/marketing/components/crm/VisitHistory";
+import { EmailCampaign } from '@/modules/commerce';
+import { BasketAnalysis } from '@/modules/commerce';
+import { VisitHistory } from '@/modules/commerce';
 import { CustomerImportPanel } from "@/modules/commerce";
-import { RFMSegmentation } from "@/modules/commerce/acquisition/marketing/components/crm/RFMSegmentation";
-import { EmailAutomations } from "@/modules/commerce/acquisition/marketing/components/crm/EmailAutomations";
+import { RFMSegmentation } from '@/modules/commerce';
+import { EmailAutomations } from '@/modules/commerce';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";

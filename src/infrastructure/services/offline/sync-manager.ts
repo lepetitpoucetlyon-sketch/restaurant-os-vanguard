@@ -60,7 +60,7 @@ export class SyncManager {
                 navigator.serviceWorker.ready.then(registration => {
                     if ('sync' in registration) {
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        (registration as any).sync.register('restaurant-os-sync').catch(() => {});
+                        (registration as Record<string, unknown>).sync && typeof (registration as Record<string, unknown>).sync === 'object' && 'register' in ((registration as Record<string, unknown>).sync as any) ? ((registration as Record<string, unknown>).sync as any).register('restaurant-os-sync').catch(() => {}) : undefined;
                     }
                 }).catch(() => {});
             }

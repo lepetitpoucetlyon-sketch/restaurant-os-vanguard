@@ -215,9 +215,9 @@ export function KDSTicket({
     // ── kds-7: Compute full order grouped by seat ─────────────────────────
     const fullOrderGroupedBySeat = useMemo(() => {
         if (!fullOrder) return {};
-        const grouped: Record<string, any[]> = {};
+        const grouped: Record<string, import('@/domain/schemas/pos').CartItem[]> = {};
         for (const item of fullOrder.items) {
-            const seat = (item as any).seatNumber || 'Partagé';
+            const seat = (item as Record<string, unknown>).seatNumber as string || 'Partagé';
             if (!grouped[seat]) grouped[seat] = [];
             grouped[seat].push(item);
         }
@@ -530,8 +530,8 @@ export function KDSTicket({
                                             <div className="text-[10px] font-bold text-muted uppercase tracking-wider pl-1 border-b border-subtle pb-1">
                                                 {seat === 'Partagé' ? 'À Partager' : `Convive ${seat}`}
                                             </div>
-                                            {items.map((cItem: any, i: number) => {
-                                                const station = resolveStation(cItem.name);
+                                            {items.map((cItem: Record<string, unknown>, i: number) => {
+                                                const station = resolveStation(cItem.name as string);
                                                 // Highlight the item if it belongs to the current ticket
                                                 const isActiveStation = ticket.items.some(ti => (ti.id || ti.name) === (cItem.id || cItem.name));
                                                 return (
@@ -546,7 +546,7 @@ export function KDSTicket({
                                                             <div className={cn("w-1.5 h-1.5 rounded-full", isActiveStation ? "bg-accent-gold" : "bg-secondary")} />
                                                             <div className="flex flex-col">
                                                                 <span className={cn("text-xs font-bold", isActiveStation ? "text-primary" : "text-secondary")}>
-                                                                    {cItem.quantity && cItem.quantity > 1 ? `${cItem.quantity}x ` : ''}{cItem.name}
+                                                                    {cItem.quantity && (cItem.quantity as number) > 1 ? `${cItem.quantity}x ` : ''}{cItem.name as string}
                                                                 </span>
                                                                 <span className="text-[9px] text-muted uppercase tracking-wider">{station}</span>
                                                             </div>

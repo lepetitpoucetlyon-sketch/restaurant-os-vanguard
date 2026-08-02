@@ -1,7 +1,7 @@
 import type { IPayrollConnectorProvider, TimesheetEntry, Payslip, PayrollCost, PayrollSyncResult } from '../types';
-import type { PayrollPeriodSummary } from '@/modules/human/remuneration/payroll/types';
-import { SilaeClient } from '@/modules/human/remuneration/payroll';
-import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
+import type { PayrollPeriodSummary } from '@/modules/human';
+import { SilaeClient } from '@/modules/human';
+import type { PayrollProviderConfig } from '@/modules/human';
 import { logger } from '@/lib/logger';
 
 /**

@@ -34,7 +34,7 @@ export function CRMContactForm() {
                 name: formState.name,
                 phone: formState.phone,
                 notes: formState.notes,
-                tags: (formState as any).tags || [],
+                tags: (formState as unknown as Record<string, unknown>).tags as string[] || [],
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             });

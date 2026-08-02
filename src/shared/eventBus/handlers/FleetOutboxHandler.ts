@@ -17,7 +17,7 @@ export class FleetOutboxHandler {
 
   static async queueEvent<T extends NexusEventName>(eventName: T, payload: NexusEventPayload<T>) {
     try {
-      const tenantId = (payload as any).tenantId;
+      const tenantId = (payload as { tenantId?: string }).tenantId;
       if (!tenantId) {
         logger.warn(`[FleetOutboxHandler] No tenantId on ${eventName} payload, skipping outbox`);
         return;

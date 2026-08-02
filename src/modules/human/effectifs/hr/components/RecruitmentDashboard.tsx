@@ -278,7 +278,7 @@ function AddCandidateModal({ isOpen, onClose, onAdd }: {
                                     type="email"
                                     className="w-full h-14 bg-bg-secondary border border-border rounded-xl px-5 text-sm font-medium outline-none focus:border-accent-gold"
                                     value={formData.email}
-                                    onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">

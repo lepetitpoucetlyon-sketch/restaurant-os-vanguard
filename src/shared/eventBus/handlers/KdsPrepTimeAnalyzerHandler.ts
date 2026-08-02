@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
+import type { KdsTicket, KdsItem } from './_handler-types';
 
 export function registerKdsPrepTimeAnalyzerHandler() {
   return NexusEventBus.on(
@@ -10,11 +11,11 @@ export function registerKdsPrepTimeAnalyzerHandler() {
       const { tenantId, orderId, itemId } = payload;
       
       const ticketId = `kds_${orderId}`;
-      const ticket = await Nexus.adapter.get<any>(`tenants/${tenantId}/kdsTickets/${ticketId}`);
+      const ticket = await Nexus.adapter.get<KdsTicket>(`tenants/${tenantId}/kdsTickets/${ticketId}`);
       
       if (!ticket) return;
 
-      const item = ticket.items.find((i: any) => i.id === itemId);
+      const item = ticket.items.find((i: KdsItem) => i.id === itemId);
       if (!item) return;
 
       // Met à jour le statut
@@ -45,7 +46,7 @@ export function registerKdsPrepTimeAnalyzerHandler() {
       });
 
       // Vérifier si TOUT le ticket est prêt
-      const allDone = ticket.items.every((i: any) => i.status === 'done');
+      const allDone = ticket.items.every((i: KdsItem) => i.status === 'done');
       if (allDone && ticket.status !== 'done') {
         await Nexus.adapter.update(`tenants/${tenantId}/kdsTickets/${ticketId}`, {
           status: 'done',

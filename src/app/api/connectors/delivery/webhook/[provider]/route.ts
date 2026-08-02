@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DeliveryProviderFactory } from '@/modules/ops/connectors/delivery/DeliveryProviderFactory';
+import { DeliveryProviderFactory } from '@/modules/ops';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
@@ -84,8 +84,8 @@ export async function POST(
                 v: 1,
                 tenantId: order.tenantId,
                 integrationId: providerId,
-                platform: providerId as any,
-                rawPayload: payload // payload brut de l'API externe
+                platform: providerId as never,
+                rawPayload: payload as Record<string, unknown> // payload brut de l'API externe
             });
         }
 

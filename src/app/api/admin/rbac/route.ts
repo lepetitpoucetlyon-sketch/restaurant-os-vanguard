@@ -11,8 +11,8 @@ export async function GET(req: Request) {
         const path = `tenants/${caller.tenantId}/config/rbac`;
         const data = await Nexus.adapter.get(path);
         return NextResponse.json(data || {});
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (e: unknown) {
+        return NextResponse.json({ error: e instanceof Error ? e.message : 'Unknown error' }, { status: 500 });
     }
 }
 
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         const path = `tenants/${caller.tenantId}/config/rbac`;
         await Nexus.adapter.set(path, parsedConfig);
         return NextResponse.json({ success: true, config: parsedConfig });
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 400 });
+    } catch (e: unknown) {
+        return NextResponse.json({ error: e instanceof Error ? e.message : 'Unknown error' }, { status: 400 });
     }
 }

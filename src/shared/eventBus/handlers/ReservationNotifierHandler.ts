@@ -4,8 +4,18 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
 
+interface NotificationPayload {
+  isSimulation?: boolean;
+  customerId?: string;
+  customerName?: string;
+  date?: string;
+  time?: string;
+  covers?: number;
+  partySize?: number;
+}
+
 export function registerReservationNotifierHandler() {
-  const sendNotification = async (tenantId: string, reservationId: string, eventType: string, payload: any) => {
+  const sendNotification = async (tenantId: string, reservationId: string, eventType: string, payload: NotificationPayload) => {
     if (payload.isSimulation) return;
     try {
       // Récupérer le nom du restaurant depuis la config tenant

@@ -11,3 +11,5 @@
 export * from './spaces';
 export * from './maintenance';
 export * from './assets';
+
+export type { FloorPlanEditorRef } from './spaces/floor-plan/FloorPlanEditor';

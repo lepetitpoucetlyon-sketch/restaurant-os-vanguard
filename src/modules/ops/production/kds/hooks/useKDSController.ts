@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
-import { useKitchen } from '@/modules/ops/providers';
+import { useKitchen } from '@/modules/ops';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import { Order } from '@nexus/contracts';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';

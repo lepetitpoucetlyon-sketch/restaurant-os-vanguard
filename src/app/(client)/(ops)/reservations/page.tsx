@@ -14,10 +14,10 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useReservationsPage } from "@/modules/commerce/relation/reservations/hooks";
+import { useReservationsPage } from '@/modules/commerce';
 import { PinModal } from "@modules/commerce/ui/pos/PinModal";
-import { DailyListView } from "@/modules/commerce/relation/reservations/components/DailyListView";
-import { WeeklyView } from "@/modules/commerce/relation/reservations/components/WeeklyView";
+import { DailyListView } from '@/modules/commerce';
+import { WeeklyView } from '@/modules/commerce';
 import { GroupFormModal } from "@/modules/commerce";
 import dynamic from "next/dynamic";
 const EventQuoteModal = dynamic(

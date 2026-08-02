@@ -1,5 +1,4 @@
 import { NexusEventBus } from '../NexusEventBus';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 export function registerKDSReadyHandler() {

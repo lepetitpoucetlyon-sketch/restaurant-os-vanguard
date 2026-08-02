@@ -7,7 +7,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
-import { useIntelligence } from "@/modules/ops/providers";
+import { useIntelligence } from '@/modules/ops';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useNexusFleet } from "@/modules/intelligence";

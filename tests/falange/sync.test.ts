@@ -4,9 +4,9 @@ import { NexusSyncService } from '@/infrastructure/services/NexusSyncService';
 // ICM-lite : init() ne charge que les piliers demandés par la route. `operations` charge
 // orders+stocks+compliance (les 3 testés ici), finance/marketing/staff restent OFF.
 import { TASK_MAPS } from '@/lib/icm/TaskContext';
-import { OpsSyncService as SyncOrders } from '@/modules/ops/workflow/engine/ops.sync';
-import { InventorySyncService as SyncStocks } from '@/modules/logistics/stock/inventory/inventory.sync';
-import { HACCPSyncService as SyncHACCP } from '@/modules/compliance/qualite/haccp/haccp.sync';
+import { OpsSyncService as SyncOrders } from '@/modules/ops';
+import { InventorySyncService as SyncStocks } from '@/modules/logistics';
+import { HACCPSyncService as SyncHACCP } from '@/modules/compliance';
 import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 
 // Mocking dependencies

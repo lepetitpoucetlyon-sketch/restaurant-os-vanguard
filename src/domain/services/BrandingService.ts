@@ -36,7 +36,7 @@ export const BrandingService = {
 
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 
-            // eslint-disable-next-line no-restricted-imports
+             
             const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
             const response = await LLMManager.provider.generateFromImage({
                 model: AI_MODELS.fast,

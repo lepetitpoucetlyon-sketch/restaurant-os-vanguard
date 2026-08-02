@@ -1,4 +1,4 @@
-import { CollectionService } from '@/modules/finance/tresorerie/collection/CollectionService';
+import { CollectionService } from '@/modules/finance';
 import { InvoiceTarget } from '@/modules/finance';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
@@ -40,7 +40,7 @@ export const ThemisCollectorJob = {
             const invoices = await getOverdueInvoices().catch(() => []);
             for (const inv of invoices) {
                 await NotificationGateway.send({
-                    tenantId: (inv as any).tenantId || 'global',
+                    tenantId: (inv as { tenantId?: string }).tenantId || 'global',
                     to: inv.customerEmail,
                     subject: `Urgent - Retard de paiement pour la facture ${inv.id}`,
                     text: `La facture ${inv.id} est en retard de paiement. (Fallback System)`,

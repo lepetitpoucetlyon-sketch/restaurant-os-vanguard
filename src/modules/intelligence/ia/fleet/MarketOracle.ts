@@ -21,9 +21,9 @@ import type {
     PulseCategory,
     MarketInsight,
     MonetizationTier,
-} from '@/modules/intelligence/knowledge/rag/types';
+} from '../../knowledge/rag/types';
 
-import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence/knowledge/rag/types';
+import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence';
 
 // ============================================
 // MARKET ORACLE

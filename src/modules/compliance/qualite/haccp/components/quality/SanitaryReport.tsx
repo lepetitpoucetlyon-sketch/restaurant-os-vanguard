@@ -8,7 +8,7 @@ export const SanitaryReport: React.FC = () => {
     const { hygieneLabels, maintenanceLogs } = useHACCP();
 
     const totalControls = hygieneLabels.length + maintenanceLogs.length;
-    const nonConformCount = hygieneLabels.filter(l => (l as any).isNonConform).length;
+    const nonConformCount = hygieneLabels.filter(l => (l as Record<string, unknown>).isNonConform).length;
     const conformityRate = totalControls > 0 
         ? (( (totalControls - nonConformCount) / totalControls ) * 100).toFixed(1)
         : '100.0';

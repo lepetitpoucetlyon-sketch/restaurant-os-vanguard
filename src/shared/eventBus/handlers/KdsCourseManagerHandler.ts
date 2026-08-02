@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/infrastructure/services/audit';
+import type { KdsTicket, KdsItem } from './_handler-types';
 
 export function registerKdsCourseManagerHandler() {
   return NexusEventBus.on(
@@ -9,11 +10,11 @@ export function registerKdsCourseManagerHandler() {
       const { tenantId, orderId, course } = payload;
       
       const ticketId = `kds_${orderId}`;
-      const ticket = await Nexus.adapter.get<any>(`tenants/${tenantId}/kdsTickets/${ticketId}`);
+      const ticket = await Nexus.adapter.get<KdsTicket>(`tenants/${tenantId}/kdsTickets/${ticketId}`);
       
       if (ticket) {
         // Mettre à jour le statut des items de ce "course" (envoi)
-        const updatedItems = ticket.items.map((item: any) => {
+        const updatedItems = ticket.items.map((item: KdsItem) => {
           if (item.course === course) {
             return { ...item, status: 'fired', firedAt: Date.now() };
           }

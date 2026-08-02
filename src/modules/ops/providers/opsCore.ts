@@ -99,7 +99,7 @@ export const createSovereignHook = <T,>(
             type: 'MUTATION',
             action: 'CREATE',
             collection: path,
-            targetId: (payload as any).id || crypto.randomUUID(),
+            targetId: (payload as Record<string, unknown>).id as string || crypto.randomUUID(),
             payload: payload as import('@/shared/nexus-contract').SovereignField,
             priority: 0
           });

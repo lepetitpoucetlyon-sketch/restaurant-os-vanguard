@@ -7,7 +7,7 @@ import {
 import { printerService } from "@/infrastructure/hardware/printers/PrintingService";
 import type { PrinterDevice, PrinterRole, PrinterConnection } from "@/infrastructure/hardware/printers/types";
 import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "@/infrastructure/hardware/printers/types";
-import { CONN_ICON, AddPrinterWizard } from "@/modules/ops/service/printers/components/settings/AddPrinterWizard";
+import { CONN_ICON, AddPrinterWizard } from '@/modules/ops';
 
 const ROLE_COLORS: Record<PrinterRole, string> = {
   receipt: "text-status-success",

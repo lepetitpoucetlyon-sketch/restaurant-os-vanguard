@@ -75,8 +75,7 @@ export const IoTSensorService = {
   // Appelé depuis un composant React côté client (non disponible server-side).
 
   async connectBLESensor(sensor: IoTSensor): Promise<SensorReading | null> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const nav = navigator as any;
+    const nav = navigator as unknown as { bluetooth?: { requestDevice: (...args: unknown[]) => Promise<unknown> } };
     if (typeof window === 'undefined' || !nav.bluetooth) {
       logger.warn('[IoT] Web Bluetooth API non disponible (HTTPS requis, Chrome/Edge)');
       return null;

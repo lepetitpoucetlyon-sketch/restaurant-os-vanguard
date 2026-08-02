@@ -2,9 +2,9 @@
 
 import { useState, useCallback } from "react";
 import { FileText } from "lucide-react";
-import { FacturXDownloadButton } from "@/modules/finance/components/FacturXDownloadButton";
+import { FacturXDownloadButton } from '@/modules/finance';
 import type { Order } from "@/domain/schemas/orders";
-import { useBilling } from "@/modules/finance/comptabilite/billing/hooks";
+import { useBilling } from '@/modules/finance';
 
 /**
  * Onglet « Facturation » de la page Finance — extrait de page.tsx (dette-4).

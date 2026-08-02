@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
-import { useRecipes } from "@/modules/ops/providers";
+import { useRecipes } from '@/modules/ops';
 import { useKDSController } from "@modules/ops/production/kds";
 import { useNexusOps } from "../../../providers/NexusOpsProvider";
 import { AnimatePresence, motion } from "framer-motion";
@@ -324,7 +324,7 @@ export function KDSDashboard() {
                                 <KDSTicket
                                     key={ticket.id}
                                     ticket={ticket}
-                                    fullOrder={orders.find((o: any) => o.id === ticket.id) || ticket}
+                                    fullOrder={orders.find((o: Order) => o.id === ticket.id) || ticket}
                                     tenantId={tenantId ?? ''}
                                     gridColumns={gridColumns}
                                     rushMode={rushMode}

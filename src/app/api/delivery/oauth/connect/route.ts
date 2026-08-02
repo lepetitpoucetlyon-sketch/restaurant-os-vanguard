@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     };
 
     // Sauvegarde dans la base de données
-    // @ts-ignore
+    // @ts-expect-error
     await Nexus.adapter.create(`tenants/${tenantId}/integrations`, integrationData);
 
     logger.info(`[OAuth Mock] Intégration ${platform} réussie et enregistrée.`);

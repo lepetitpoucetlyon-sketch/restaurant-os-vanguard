@@ -2,11 +2,11 @@ import { CryptoService } from '@domain/services/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../services/finance/TaxCalculator';
 import { FiscalSealer } from '../services/finance/FiscalSealer';
-import { resolveVatRate, inferCategory } from '@/modules/finance/fiscalite/tax/vatResolver';
+import { resolveVatRate, inferCategory } from '@/modules/finance';
 import type { ConsumptionMode } from '@/domain/schemas/orders';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
@@ -210,10 +210,10 @@ export const FinancialNexusBridge = {
     const resolvedItems = cartItems.map(item => {
       const lineMode = (item as { consumptionMode?: ConsumptionMode }).consumptionMode ?? consumptionMode;
       const category = inferCategory(item.categoryId ?? '', item.name);
-      const taxRate = isTrainingMode ? ('0.00' as any) : resolveVatRate({ category, consumptionMode: lineMode });
+      const taxRate = isTrainingMode ? '0.00' : resolveVatRate({ category, consumptionMode: lineMode }) as "0.055" | "0.10" | "0.20";
       const analyticalAxis = (category === 'beverage_soft' || category === 'alcohol') ? 'Beverage' : 'Food';
       return { ...item, taxRate, analyticalAxis };
-    });
+    }) as (import('@/domain/schemas/pos').CartItem & { taxRate: "0.055" | "0.10" | "0.20", analyticalAxis: string })[];
 
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
     const ttcByRateAndAxis = computeTtcByRateAndAxis(resolvedItems);
@@ -382,7 +382,7 @@ export const FinancialNexusBridge = {
       referenceType: 'refund' as const,
       isSystemGenerated: true,
       isValidated: status === 'validated',
-      type: 'EXTOURNE' as any, // type: 'EXTOURNE' bypass type checking if needed
+      type: 'EXTOURNE' as never, // type: 'EXTOURNE' bypass type checking if needed
       amountInCents: refundAmountInCents,
       amountInMicrounits: refundAmountInMicrounits,
       status,

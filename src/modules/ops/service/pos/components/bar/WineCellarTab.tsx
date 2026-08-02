@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
-import type { Wine, WineRegion } from "@/modules/ops/types/bar";
+import type { Wine, WineRegion } from '@/modules/ops';
 import { formatCurrency } from "@/lib/formatters";
 
 interface WineCellarTabProps {

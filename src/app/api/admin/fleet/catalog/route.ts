@@ -23,7 +23,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
 
   try {
-    let catalog = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, any> } | null;
+    let catalog = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, unknown> } | null;
     
     // Auto-seed if empty
     if (!catalog || !catalog.items || Object.keys(catalog.items).length === 0) {
@@ -76,7 +76,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
   if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
 
   try {
-    const catalog = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, any> } | null;
+    const catalog = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, unknown> } | null;
     if (catalog && catalog.items && catalog.items[id]) {
       const updatedItems = { ...catalog.items };
       delete updatedItems[id];

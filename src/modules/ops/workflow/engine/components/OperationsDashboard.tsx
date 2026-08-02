@@ -71,7 +71,7 @@ export function OperationsDashboard() {
     const areas = floorOps?.areas ?? [];
     const updateAreaStatus = (id: string, status: string) => {
         if (floorOps?.updateAreaStatus) {
-            floorOps.updateAreaStatus(id, { status } as any);
+            floorOps.updateAreaStatus(id, { status } as never);
         } else {
             logger.debug('Update area', id, status);
         }

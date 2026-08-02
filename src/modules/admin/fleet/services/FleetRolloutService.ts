@@ -14,7 +14,7 @@ export class FleetRolloutService {
     static async rolloutMenu(
         superAdminId: string, 
         targetTenantIds: string[], 
-        menuConfig: any
+        menuConfig: Record<string, unknown>
     ): Promise<{ successful: string[]; failed: string[] }> {
         logger.info(`[Rollout] Déploiement du menu sur ${targetTenantIds.length} tenants par ${superAdminId}`);
         

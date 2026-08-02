@@ -96,7 +96,7 @@ export class ThreeWayMatchEngine {
             logger.warn(`[ThreeWayMatch] Discrepancies detected for PO ${po.id}`, discrepancies);
             
             // Émission asynchrone d'un événement d'anomalie
-            await NexusEventBus.emitDurable('procurement.mismatch_detected' as any, {
+            await NexusEventBus.emitDurable('procurement.mismatch_detected', {
                 v: 1,
                 tenantId,
                 purchaseOrderId: po.id,
