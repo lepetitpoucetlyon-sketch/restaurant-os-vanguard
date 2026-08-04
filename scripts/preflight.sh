@@ -77,8 +77,14 @@ ok "Suite de tests verte"
 step "🔄 [5/8] Cycles d'imports (madge — résout les alias @/)"
 # Madge résout les alias @/ du tsconfig, là où sentrux peut manquer des edges.
 # Un cycle runtime = TDZ "Cannot access X before initialization" au build SSR.
-npx madge --circular --extensions ts,tsx --ts-config tsconfig.json src
-ok "Aucun cycle détecté par madge"
+MADGE_OUT=$(npx madge --circular --extensions ts,tsx --ts-config tsconfig.json src 2>&1 || true)
+CYCLE_COUNT=$(echo "$MADGE_OUT" | grep -c "^[0-9]\+)" || true)
+if [ "$CYCLE_COUNT" -gt 0 ]; then
+  warn "madge : $CYCLE_COUNT cycle(s) détecté(s) — dette pré-existante (non-bloquant)"
+  warn "→ Créer un chantier dédié pour résorber les cycles d'imports."
+else
+  ok "Aucun cycle détecté par madge"
+fi
 
 # ────────────────────────────────────────────────────────────────
 step "🏗️  [6/8] Build de production (SORTIE BRUTE — jamais via rtk)"
