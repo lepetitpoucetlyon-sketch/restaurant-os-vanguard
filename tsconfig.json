@@ -55,22 +55,22 @@
         "./src/shared/nexus/engines/Intelligence/*"
       ],
       "@modules/compliance": [
-        "./src/legacy_monolith/compliance/index"
+        "./src/modules/compliance/index"
       ],
       "@modules/compliance/*": [
-        "./src/legacy_monolith/compliance/*"
+        "./src/modules/compliance/*"
       ],
       "@modules/ops": [
-        "./src/legacy_monolith/ops/index"
+        "./src/modules/ops/index"
       ],
       "@modules/ops/*": [
-        "./src/legacy_monolith/ops/*"
+        "./src/modules/ops/*"
       ],
       "@/modules/*": [
-        "./src/legacy_monolith/*"
+        "./src/modules/*"
       ],
       "@modules/*": [
-        "./src/legacy_monolith/*"
+        "./src/modules/*"
       ],
       "@infrastructure": [
         "./src/infrastructure/index"

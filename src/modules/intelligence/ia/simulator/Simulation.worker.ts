@@ -83,3 +83,5 @@ function runSimulation(config: SimulationConfig) {
 
     simulateArrival();
 }
+
+export {};

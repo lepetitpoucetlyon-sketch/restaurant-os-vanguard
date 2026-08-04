@@ -219,7 +219,7 @@ export function KDSTicket({
         for (const item of fullOrder.items) {
             const seat = (item as Record<string, unknown>).seatNumber as string || 'Partagé';
             if (!grouped[seat]) grouped[seat] = [];
-            grouped[seat].push(item);
+            grouped[seat].push(item as unknown as import('@/domain/schemas/pos').CartItem);
         }
         return grouped;
     }, [fullOrder]);
@@ -530,12 +530,13 @@ export function KDSTicket({
                                             <div className="text-[10px] font-bold text-muted uppercase tracking-wider pl-1 border-b border-subtle pb-1">
                                                 {seat === 'Partagé' ? 'À Partager' : `Convive ${seat}`}
                                             </div>
-                                            {items.map((cItem: Record<string, unknown>, i: number) => {
+                                            {items.map((cItem, i: number) => {
                                                 const station = resolveStation(cItem.name as string);
                                                 // Highlight the item if it belongs to the current ticket
-                                                const isActiveStation = ticket.items.some(ti => (ti.id || ti.name) === (cItem.id || cItem.name));
+                                                const cItemAny = cItem as unknown as Record<string, unknown>;
+                                                const isActiveStation = ticket.items.some(ti => { const tiAny = ti as unknown as Record<string, unknown>; return (tiAny.cartId || ti.name) === (cItemAny.cartId || cItemAny.name); });
                                                 return (
-                                                    <div key={`${cItem.id || cItem.name}-${i}`} 
+                                                    <div key={`${cItemAny.cartId || cItemAny.name}-${i}`}
                                                          className={cn(
                                                              "flex items-center justify-between p-2 rounded-lg border",
                                                              isActiveStation 

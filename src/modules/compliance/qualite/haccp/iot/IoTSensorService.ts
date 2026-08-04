@@ -88,12 +88,12 @@ export const IoTSensorService = {
       optionalServices: [serviceUUID],
     });
 
-    const server = await device.gatt?.connect();
+    const server = await (device as BluetoothDevice).gatt?.connect();
     if (!server) return null;
 
     const service = await server.getPrimaryService(serviceUUID);
     const tempChar = await service.getCharacteristic(BLE_TEMPERATURE_CHAR);
-    const tempValue = await tempChar.readValue();
+    const tempValue = await (tempChar as unknown as { readValue(): Promise<DataView> }).readValue();
 
     // Température GATT : sint16 / 100 → °C
     const rawTemp = tempValue.getInt16(0, true);
@@ -102,7 +102,7 @@ export const IoTSensorService = {
     let humidity: number | undefined;
     try {
       const humChar = await service.getCharacteristic(BLE_HUMIDITY_CHAR);
-      const humValue = await humChar.readValue();
+      const humValue = await (humChar as unknown as { readValue(): Promise<DataView> }).readValue();
       humidity = humValue.getUint16(0, true) / 100;
     } catch { /* capteur sans humidité */ }
 

@@ -12,6 +12,9 @@ export * from './human';
 export * from './logistics';
 export * from './ops';
 
-// Resolve cross-pilier TS2308 ambiguities (ops sovereign versions take precedence)
+// Resolve cross-pilier TS2308 ambiguities (ops/commerce sovereign versions take precedence)
 export { useMarketing, useQuotes, useRegistre } from './ops';
 export { useProducts, useCategories } from './ops';
+export { useCRM } from './commerce';
+export { useReservations } from './commerce';
+export { useInventory } from './logistics';

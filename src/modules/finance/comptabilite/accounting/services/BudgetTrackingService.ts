@@ -40,12 +40,12 @@ export class BudgetTrackingService {
 
             const actualsByAxis: Record<string, number> = { 'Food': 0, 'Beverage': 0 };
 
-            for (const entry of Object.values(entries)) {
+            for (const entry of Object.values(entries) as Record<string, unknown>[]) {
                 // Filtrer par mois (naïf pour l'exemple)
-                if (entry.type === 'revenue' && entry.date?.startsWith(yearMonth)) {
-                    for (const line of entry.lines || []) {
+                if ((entry as {type?: string}).type === 'revenue' && (entry as {date?: string}).date?.startsWith(yearMonth)) {
+                    for (const line of ((entry as {lines?: Record<string, unknown>[]}).lines || [])) {
                         if (line.side === 'credit' && line.accountId === '701000' && line.analyticalAxis) {
-                            actualsByAxis[line.analyticalAxis] = (actualsByAxis[line.analyticalAxis] || 0) + line.amountInCents;
+                            actualsByAxis[line.analyticalAxis as string] = (actualsByAxis[line.analyticalAxis as string] || 0) + (line.amountInCents as number);
                         }
                     }
                 }

@@ -42,7 +42,7 @@ export class TableHandoffService {
         empireAudit.log({
             module: 'ops',
             action: 'TABLE_HANDOFF',
-            details: { tenantId, orderId, from: previousOwner, to: toOperatorId, approver: approvingManagerId },
+            details: { tenantId, orderId, from: previousOwner, to: toOperatorId, approver: approvingManagerId } as Record<string, string>,
             severity: 'low',
             timestamp: new Date(),
         });
