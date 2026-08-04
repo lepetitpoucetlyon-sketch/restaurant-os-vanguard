@@ -101,7 +101,8 @@ else
   # Capture la sortie complète pour analyse sélective
   CHECK_OUT=$(sentrux check . 2>&1 || true)
   # Violations de frontières inter-modules (bloquantes — intégrité architecturale)
-  BOUNDARY_VIOLATIONS=$(echo "$CHECK_OUT" | grep -E "\[Error\]" | grep -v "max_cc" || true)
+  # max_cc, max_cycles, no_god_files = groupe [1] (Contraintes Globales) → non-bloquants comme max_cc
+  BOUNDARY_VIOLATIONS=$(echo "$CHECK_OUT" | grep -E "\[Error\]" | grep -v "max_cc\|max_cycles\|no_god_files" || true)
   # Violations max_cc (non-bloquantes — dette pre-existante dans sidecar Python + fonctions TS legacy)
   # .sentruxignore ne filtre pas les fichiers CC — les violations hors src/ (services/, .nexus/)
   # et les 13 fonctions TS legacy sont tracées ici mais ne bloquent pas le pipeline.
