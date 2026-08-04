@@ -78,5 +78,5 @@
 | sprint0-cycles | 55 barrel self-imports → relatifs, 375→331 cycles, kdsUtils.ts extrait | 2026-08-04 | terminée |
 | phase1-doublons | src/modules/ vs src/verticals/ — suppression doublons purs + quasi-identiques | 2026-08-04 | terminée |
 | phase2-dep-audit | Audit dépendances runtime 6 modules Phase 2 (lecture seule) : haccp, kds, kitchen, recipes, fiscalite, hr | 2026-08-04 | terminée |
-| debt-a-intel-alias | Debt A : alias @/modules/intelligence dans tsconfig pointe sur engines/Intelligence/ — fix bloqué par cycle fleet→index→fleet ; prérequis : retirer export fleet du barrel modules/intelligence/index.ts | 2026-08-05 | active |
-| goal-mode | Exécution séquentielle : Debt A → SAGA P0→P3 → legacy_monolith migration → tests coverage | 2026-08-05 | active |
+| debt-a-intel-alias | Debt A : alias @/modules/intelligence dans tsconfig pointe sur engines/Intelligence/ — fix bloqué par cycle fleet→index→fleet ; prérequis : retirer export fleet du barrel modules/intelligence/index.ts | 2026-08-05 | terminée |
+| goal-mode | Exécution séquentielle : Debt A → SAGA P0→P3 → legacy_monolith migration → tests coverage | 2026-08-05 | terminée |
