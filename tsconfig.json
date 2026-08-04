@@ -43,16 +43,16 @@
         "./src/shared/components/*"
       ],
       "@/modules/intelligence": [
-        "./src/shared/nexus/engines/Intelligence/index"
+        "./src/modules/intelligence/index"
       ],
       "@/modules/intelligence/*": [
-        "./src/shared/nexus/engines/Intelligence/*"
+        "./src/modules/intelligence/*"
       ],
       "@modules/intelligence": [
-        "./src/shared/nexus/engines/Intelligence/index"
+        "./src/modules/intelligence/index"
       ],
       "@modules/intelligence/*": [
-        "./src/shared/nexus/engines/Intelligence/*"
+        "./src/modules/intelligence/*"
       ],
       "@modules/compliance": [
         "./src/modules/compliance/index"
