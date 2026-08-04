@@ -13,7 +13,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PrepaieRow, PayrollPeriodSummary } from './types';
 import type { User } from '@nexus/contracts';
-import { TipDistributionService } from '@/modules/human';
+import { TipDistributionService } from '../../effectifs/hr/services/tipDistribution';
 
 const MU_TO_EUR = 1_000_000;
 

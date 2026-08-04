@@ -10,8 +10,8 @@ import {
     Truck
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useQuality } from '@modules/compliance';
-import { QualityControl } from '@/modules/compliance';
+import { useQuality } from '../../hooks/useQuality';
+import type { QualityControl } from '../../../../types/quality';
 
 export const VisualInspection: React.FC = () => {
     const { activeControl, setActiveControl: updateControl } = useQuality();

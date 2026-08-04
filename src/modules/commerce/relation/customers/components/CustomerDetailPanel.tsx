@@ -8,7 +8,7 @@ import { Button } from "@ui/button";
 import { ScrollArea } from "@ui/scroll-area";
 import { Phone, Mail, Star, Calendar, Clock, ShoppingBag, TrendingUp, History } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LoyaltyCard } from '@/modules/commerce';
+import { LoyaltyCard } from '../../../acquisition/marketing/components/crm/LoyaltyCard';
 
 interface CustomerDetailPanelProps {
     customer: Customer;

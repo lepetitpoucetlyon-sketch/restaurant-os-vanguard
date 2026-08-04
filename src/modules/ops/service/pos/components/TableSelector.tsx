@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTables } from '@/modules/ops';
+import { useTables } from '../../../providers/hooks/floorHooks';
 import { cn } from "@/lib/ui.foundations";
 import { Users, LayoutGrid, Layers, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";

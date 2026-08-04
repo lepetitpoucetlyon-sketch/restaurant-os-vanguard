@@ -15,7 +15,7 @@ import {
     Calendar,
     Package
 } from "lucide-react";
-import { PlaceholderView } from '@/modules/finance';
+import { PlaceholderView } from '../PlaceholderView';
 
 export function SuppliersView() { return <PlaceholderView title="Comptabilité Fournisseurs" description="Gérez les comptes auxiliaires fournisseurs, les échéances et le suivi des règlements." icon={Truck} />; }
 export function CustomersView() { return <PlaceholderView title="Comptabilité Clients" description="Gérez les comptes auxiliaires clients, les créances et le suivi des encaissements." icon={Users} />; }

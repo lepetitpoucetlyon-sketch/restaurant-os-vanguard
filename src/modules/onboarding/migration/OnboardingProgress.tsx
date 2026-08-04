@@ -11,7 +11,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Circle, Clock, ChevronRight, RefreshCw } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { ONBOARDING_SEQUENCE, type OnboardingStep } from '@/modules/onboarding';
+import { ONBOARDING_SEQUENCE, type OnboardingStep } from './onboardingSteps';
 
 type StepStatus = "done" | "pending" | "loading";
 

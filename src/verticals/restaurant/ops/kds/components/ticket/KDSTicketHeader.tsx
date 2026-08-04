@@ -2,7 +2,7 @@ import React from "react";
 import { Clock, ChefHat, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Order } from "@nexus/contracts";
-import { hasAllergens } from "../KDSTicket";
+import { hasAllergens } from "../kdsUtils";
 
 interface KDSTicketHeaderProps {
     ticket: Order;

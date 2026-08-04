@@ -8,7 +8,7 @@ import { StatCard } from "../StatCard";
 import { PageCard } from "../PageCard";
 import { GoogleProfileCard } from "../GoogleProfileCard";
 import { KeywordsCard } from "../KeywordsCard";
-import { MarketingEngine } from '@/modules/commerce';
+import { MarketingEngine } from '../../../services/marketing-engine';
 import { cn } from '@/lib/ui.foundations';
 
 export const OverviewTab = () => {

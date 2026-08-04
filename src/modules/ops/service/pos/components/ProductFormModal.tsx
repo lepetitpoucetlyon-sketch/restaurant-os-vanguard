@@ -17,7 +17,8 @@ import {
 import type { ServingMethod } from "@nexus/contracts";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
-import { useRecipes, useInventory } from '@/modules/ops';
+import { useRecipes } from '../../../providers/hooks/kitchenHooks';
+import { useInventory } from '../../../providers/hooks/catalogHooks';
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";

@@ -1,5 +1,5 @@
 import { AgentEngine } from './AgentEngine';
-import { AgentDomain } from '@/modules/intelligence';
+import { AgentDomain } from '../../domain/agency/types';
 import { 
     HermesPulseResult, 
     HermesAnomaly, 

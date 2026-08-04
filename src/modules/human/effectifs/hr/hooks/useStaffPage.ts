@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import type { User, LeaveRequest, Candidate, UserRole } from "@nexus/contracts";
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from "@nexus/contracts/permissions.types";
 
-import { useHumanResources, useStaffAudit, staffMembersAtom, shiftLogsAtom } from "@modules/human";
+import { useHumanResources } from "./useHumanResources";
+import { useStaffAudit } from "./useStaffAudit";
+import { staffMembersAtom, shiftLogsAtom } from "../store/staffAtoms";
 import { useAuth, useTenant } from "@/shared/hooks";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";

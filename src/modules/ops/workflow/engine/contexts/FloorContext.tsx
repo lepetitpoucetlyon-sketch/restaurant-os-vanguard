@@ -1,5 +1,5 @@
 "use client";
-import { useNexusOps } from '@/modules/ops';
+import { useNexusOps } from '../../../providers/NexusOpsProvider';
 export type { Table, Floor, Zone } from '@nexus/contracts';
 
 export const useFloorOps = () => useNexusOps()?.floorOps;

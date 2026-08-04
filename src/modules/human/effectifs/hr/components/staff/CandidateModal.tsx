@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Modal, PremiumSelect } from "@ui";
 import { Button } from "@ui/button";
 import { useToast } from "@ui/Toast";
-import { useRecruitment } from "@modules/human";
+import { useRecruitment } from "../../hooks/useRecruitment";
 import { Candidate, CandidateStatus, GDPRConsent } from "@nexus/contracts";
 import { 
     User, 

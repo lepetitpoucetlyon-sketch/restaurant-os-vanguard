@@ -2,7 +2,7 @@
 
 import React from "react";
 import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Lock, Download, FileText } from "lucide-react";
-import { TreasuryDashboard } from '@/modules/finance';
+import { TreasuryDashboard } from '../accounting/TreasuryDashboard';
 import { type TvaGroup, formatEur, centsToEur, muToEur } from "../financeUtils";
 
 /**

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { SimulationMetrics } from '@/modules/intelligence';
+import { SimulationMetrics } from '../TemporalSimulator';
 
 /**
  * 🌀 Simulator Atoms (Grade X)

@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { ClockEntry } from '@/modules/human';
+import type { ClockEntry } from '../../../connectors/timeclock/types';
 
 /**
  * 🧑‍🤝‍🧑 Local Liquid Staffing Engine (Human Pillar)

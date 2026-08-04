@@ -17,7 +17,8 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
-import { useKitchen, useInventory, useRecipes } from '@/modules/ops';
+import { useKitchen, useRecipes } from '../../../providers/hooks/kitchenHooks';
+import { useInventory } from '../../../providers/hooks/catalogHooks';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useHACCP } from "@modules/compliance";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
@@ -33,7 +34,7 @@ import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 import { ExpertHub } from '@/modules/commerce';
 
 import { MiseEnPlaceTab, RecipesTab, WasteTab, MarginsTab, SuppliersTab, AllergensTab, CookingTimesTab, IngredientsTab } from "./tabs";
-import { DailyPrepList } from '@/modules/ops';
+import { DailyPrepList } from '../../recipes/DailyPrepList';
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 

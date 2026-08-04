@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { MarketingEngine } from "@/modules/commerce";
+import { MarketingEngine } from "../../services/marketing-engine";
 
 export function KeywordsCard() {
     const keywords = MarketingEngine.getKeywords();

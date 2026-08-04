@@ -1,5 +1,5 @@
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import type { Wine, Cocktail, WineRegion } from '@/modules/ops';
+import type { Wine, Cocktail, WineRegion } from '../../../types/bar';
 
 const _wines = createProxyDomain<Wine>('wines');
 export const winesNodeAtom = _wines.node;

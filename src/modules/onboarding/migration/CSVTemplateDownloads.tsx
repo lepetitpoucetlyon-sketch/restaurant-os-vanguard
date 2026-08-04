@@ -1,7 +1,7 @@
 'use client';
 
 import { Download } from 'lucide-react';
-import { downloadCSVTemplate, type CSVTemplateKey } from '@/modules/onboarding';
+import { downloadCSVTemplate, type CSVTemplateKey } from './csvTemplates';
 
 interface TemplateInfo {
   key: CSVTemplateKey;

@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useReservations, useTables, useGroups } from "@/modules/ops";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
-import { useCRM } from "@/modules/commerce";
+import { useCRM } from "@/modules/ops";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
@@ -20,7 +20,7 @@ import { authedFetch } from "@/lib/client/authedFetch";
 import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/domain/schemas/ops";
 import type { Customer } from "@nexus/contracts";
-import type { GroupFormData } from "@/modules/commerce";
+import type { GroupFormData } from "../components/GroupFormModal";
 
 const TERRACE_ZONE_IDS = ["zone-terrasse", "terrace"];
 const TERRASSE_SETTINGS_PATH = "settings/terrasse";

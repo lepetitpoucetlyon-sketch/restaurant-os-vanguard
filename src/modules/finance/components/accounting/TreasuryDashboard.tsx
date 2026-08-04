@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Wallet, CreditCard, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { SovereignMath } from "@shared/services/SovereignMath";
-import { computeTreasury, type TreasuryEntryInput } from '@/modules/finance';
+import { computeTreasury, type TreasuryEntryInput } from '../../services/TreasuryCalculator';
 
 interface TreasuryDashboardProps {
     journalEntries: readonly TreasuryEntryInput[];

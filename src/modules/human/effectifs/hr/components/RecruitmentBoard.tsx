@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { Plus, GripVertical, Calendar, Briefcase, UserPlus, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useRecruitment } from "@modules/human";
+import { useRecruitment } from "../hooks/useRecruitment";
 import { CandidateModal } from "@modules/human/effectifs/hr/components";
 import { Candidate, CandidateStatus } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";

@@ -1,6 +1,6 @@
 import { TransactionCategory, JournalEntry, FiscalSeal } from '@nexus/contracts';
 import { ExpenseData } from '@nexus/contracts/domain.types';
-import { FiscalEngine } from '@/modules/finance';
+import { FiscalEngine } from '../../../services/FiscalEngine';
 
 /**
  * 🧾 AccountingService - Restaurant OS

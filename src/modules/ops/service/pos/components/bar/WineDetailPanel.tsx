@@ -8,7 +8,7 @@ import {
   Edit3 
 } from "lucide-react";
 import { Button } from "@ui/button";
-import type { Wine as WineType, WineRegion } from '@/modules/ops';
+import type { Wine as WineType, WineRegion } from '../../../../types/bar';
 
 interface WineDetailPanelProps {
   selectedWine: WineType | null;
