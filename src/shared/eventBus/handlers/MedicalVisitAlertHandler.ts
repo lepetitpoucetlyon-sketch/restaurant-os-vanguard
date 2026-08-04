@@ -7,7 +7,7 @@ export class MedicalVisitAlertHandler {
   static register() { 
     return NexusEventBus.on('hr.medical_visit_expired', async (payload) => {
       if (payload.isSimulation) return;
-      const { tenantId, userId, daysOverdue, expiryDate } = payload;
+      const { tenantId, userId, daysOverdue, expiryDate: _expiryDate } = payload;
       logger.info(`[MedicalVisitAlertHandler] Visite médicale expirée pour ${userId} (Retard: ${daysOverdue} jours)`);
 
       try {

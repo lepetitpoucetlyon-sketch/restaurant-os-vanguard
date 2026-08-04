@@ -58,10 +58,13 @@ export class SyncManager {
             // Tenter d'enregistrer le tag Background Sync pour quand le réseau reviendra
             if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
                 navigator.serviceWorker.ready.then(registration => {
-                    if ('sync' in registration) {
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        (registration as Record<string, unknown>).sync && typeof (registration as Record<string, unknown>).sync === 'object' && 'register' in ((registration as Record<string, unknown>).sync as any) ? ((registration as Record<string, unknown>).sync as any).register('restaurant-os-sync').catch(() => {}) : undefined;
-                    }
+                        interface SyncManager {
+                            register(tag: string): Promise<void>;
+                        }
+                        const swReg = registration as ServiceWorkerRegistration & { sync?: SyncManager };
+                        if (swReg.sync) {
+                            swReg.sync.register('restaurant-os-sync').catch(() => {});
+                        }
                 }).catch(() => {});
             }
         }

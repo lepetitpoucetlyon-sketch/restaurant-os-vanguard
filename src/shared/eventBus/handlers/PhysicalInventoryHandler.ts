@@ -9,7 +9,7 @@ export function registerPhysicalInventoryHandler() {
     async (payload) => {
       const { tenantId, items, operatorId, inventoryId } = payload;
       
-      const totalDiscrepancyAmount = 0;
+      const _totalDiscrepancyAmount = 0;
       
       for (const item of items) {
         const { itemId, theoreticalQty, physicalQty } = item;

@@ -1,4 +1,4 @@
-import type { CommunicationPulse } from '@/modules/finance';
+import type { CommunicationPulse } from '@/verticals/restaurant/finance/cash/collection/types';
 
 /**
  * 📡 CommunicationService

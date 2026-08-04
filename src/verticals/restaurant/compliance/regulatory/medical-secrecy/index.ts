@@ -1,0 +1,2 @@
+// Variant: medical-secrecy
+export {};

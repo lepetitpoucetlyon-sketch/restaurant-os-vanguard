@@ -18,7 +18,7 @@ import { Button } from '@ui/button';
 import { cn } from "@/lib/ui.foundations";
 
 // Tab Components
-import { OverviewTab, PagesTab, AnalyticsTab, SettingsTab } from "@modules/commerce/acquisition/marketing/components/seo/tabs";
+import { OverviewTab, PagesTab, AnalyticsTab, SettingsTab } from "@/verticals/restaurant/commerce/acquisition/marketing/components/seo/tabs";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function SEOPage() {

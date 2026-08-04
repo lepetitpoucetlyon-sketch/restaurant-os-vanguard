@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { ReactNode, useState } from "react";
 import { Filter, X, ChevronDown } from "lucide-react";
 

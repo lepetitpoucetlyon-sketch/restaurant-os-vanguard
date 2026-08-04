@@ -34,6 +34,7 @@ export const bistrolyonConfig: TenantConfig = {
     },
     ai: {
         enabled: true,
-        llmApiKey: process.env.NEXT_PUBLIC_LLM_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
+        // Les clés API sont exclusivement gérées côté serveur (Node.js) pour éviter toute fuite
+        llmApiKey: process.env.LLM_API_KEY || process.env.GEMINI_API_KEY || '',
     }
 };

@@ -17,7 +17,7 @@ import {
     LucideIcon,
     Beef,
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { useRegistre } from "@modules/ops";
 import { DUERPSection } from "@modules/ops";
 import { IncendieSection } from "@modules/ops";

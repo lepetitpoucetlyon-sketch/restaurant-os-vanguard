@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getFirestore } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
-import { LLMManager, AI_MODELS } from '@/modules/intelligence';
+import { LLMManager } from '@/shared/nexus/engines/Intelligence/ia/ai/LLMManager';
+import { AI_MODELS } from '@/modules/intelligence';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { sovereignQuery } from '@/modules/intelligence';

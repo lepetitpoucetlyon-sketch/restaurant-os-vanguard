@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Search } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { NavSection } from "@/config/navConfig";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";

@@ -14,7 +14,7 @@ export {
     availableTablesAtom,      // OPS
     pendingOrdersAtom,        // OPS
     pendingModificationsAtom, // OPS
-} from '@modules/ops/service/pos/store/orderAtoms';
+} from '@/verticals/restaurant/ops/pos/store/orderAtoms';
 
 export {
     floorsAtom,               // OPS

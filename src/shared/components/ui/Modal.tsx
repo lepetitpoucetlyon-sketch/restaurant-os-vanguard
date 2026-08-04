@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion";
 import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/shared/utils/motion";
 import { useHasMounted } from "@/shared/hooks/useHasMounted";

@@ -1,10 +1,10 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { MCCWidgetSkeleton, DeviceManagerPanel } from '@nexus/guards/admin/mcc';
+import { MCCWidgetSkeleton, DeviceManagerPanel } from '../components';
 
-const StrategyOracle = dynamic(() => import('@nexus/guards/admin/mcc/StrategyOracle').then(m => m.StrategyOracle), { loading: () => <MCCWidgetSkeleton /> });
-const AIWorkshop     = dynamic(() => import('@nexus/guards/admin/mcc/AIWorkshop').then(m => m.AIWorkshop), { loading: () => <MCCWidgetSkeleton /> });
-const SupportAIPanel = dynamic(() => import('@nexus/guards/admin/mcc/SupportAIPanel').then(m => m.SupportAIPanel), { loading: () => <MCCWidgetSkeleton /> });
+const StrategyOracle = dynamic(() => import('../components/StrategyOracle').then(m => m.StrategyOracle), { loading: () => <MCCWidgetSkeleton /> });
+const AIWorkshop     = dynamic(() => import('../components/AIWorkshop').then(m => m.AIWorkshop), { loading: () => <MCCWidgetSkeleton /> });
+const SupportAIPanel = dynamic(() => import('../components/SupportAIPanel').then(m => m.SupportAIPanel), { loading: () => <MCCWidgetSkeleton /> });
 
 export function IntelligenceTab() {
     return (

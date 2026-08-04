@@ -16,7 +16,7 @@ import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 import { useToast } from '@components/ui/Toast';
 
-import { FleetCommander } from '@modules/intelligence/ia/fleet/FleetCommander';
+import { FleetCommander } from '@/shared/nexus/engines/Intelligence/ia/fleet/FleetCommander';
 
 /**
  * 🛰️ TenantOrchestrator - Restaurant OS
@@ -78,7 +78,7 @@ export const TenantOrchestrator: React.FC = () => {
                 {displayFleet.map((instance) => {
                     const isActive = instance.id === activeTenantId;
                     const isError = instance.status === 'CRITICAL';
-                    const isMaintenance = instance.status === 'MAINTENANCE';
+                    const _isMaintenance = instance.status === 'MAINTENANCE';
 
                     return (
                         <motion.button

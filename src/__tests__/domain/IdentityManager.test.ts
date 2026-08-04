@@ -1,13 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { IdentityManager, ROOT_ADMIN } from '@/domain/services/IdentityManager';
 
-// Mock hashPin
-vi.mock('@/lib/shared-kernel', () => ({
-  hashPin: vi.fn(async (pin: string, userId: string) => `hashed_${pin}_${userId}`),
-}));
+import * as sharedKernel from '@/lib/shared-kernel';
+
+// Removed vi.mock for shared-kernel
 
 describe('IdentityManager', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(sharedKernel, 'hashPin').mockImplementation(
+      async (pin: string, userId: string) => `hashed_${pin}_${userId}`
+    );
+  });
 
   describe('isPinFormatValid', () => {
     it('accepts 4-digit PINs', () => {

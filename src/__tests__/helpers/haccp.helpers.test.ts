@@ -1,12 +1,12 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
+ 
+ 
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({ useSearchParams: vi.fn(() => ({ get: vi.fn(() => null) })) }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn(), warning: vi.fn() } }));
 vi.mock('@/lib/push/pushClient', () => ({ pushToRole: vi.fn() }));
 vi.mock('@/shared/hooks', () => ({ useTenant: vi.fn(() => ({ tenantId: 'test-tenant' })) }));
-vi.mock('@/modules/compliance/qualite/haccp/services/PlanMaitriseSanitaire', () => ({
+vi.mock('@/verticals/restaurant/compliance/haccp/services/PlanMaitriseSanitaire', () => ({
     PlanMaitriseSanitaire: { getTemperatureLogs: vi.fn() },
 }));
 vi.mock('lucide-react', () => ({
@@ -19,7 +19,7 @@ import {
     buildTempAlertFromLog,
     type HaccpTab,
     type TempAlert,
-} from '@/modules/compliance/qualite/haccp/hooks/useHaccpPage';
+} from '@/verticals/restaurant/compliance/haccp/hooks/useHaccpPage';
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 

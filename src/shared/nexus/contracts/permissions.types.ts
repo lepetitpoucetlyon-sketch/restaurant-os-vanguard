@@ -68,7 +68,9 @@ export type PageKey =
     | 'seo'
     | 'bar'
     | 'registre'
-    | 'settings';
+    | 'settings'
+    | 'vanguard'
+    | 'mcc';
 
 // ============ ACTION DEFINITIONS PER PAGE ============
 

@@ -6,7 +6,7 @@ import { RecipeTechnicalSheet } from '@/modules/ops';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUI } from '@/shared/hooks';
 import { useTutorial } from '@/shared/contexts/TutorialContext';
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { X, BookOpen, Zap } from 'lucide-react';
 import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 

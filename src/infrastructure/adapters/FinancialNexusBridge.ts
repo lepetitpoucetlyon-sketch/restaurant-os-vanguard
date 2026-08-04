@@ -6,7 +6,8 @@ import type { CartItem } from '@/modules/ops';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../services/finance/TaxCalculator';
 import { FiscalSealer } from '../services/finance/FiscalSealer';
-import { resolveVatRate, inferCategory } from '@/modules/finance';
+import { resolveVatRate } from '@/shared/nexus/engines/FiscalEngine/tax/vatResolver';
+import { inferCategory } from '@/shared/nexus/engines/FiscalEngine/tax/vatResolver';
 import type { ConsumptionMode } from '@/domain/schemas/orders';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';

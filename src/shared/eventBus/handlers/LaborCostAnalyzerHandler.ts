@@ -23,7 +23,7 @@ export function registerLaborCostAnalyzerHandler() {
   const unsubStarted = NexusEventBus.on(
     'hr.shift_started',
     async (payload) => {
-      const { tenantId, shiftId, employeeId, startedAt } = payload;
+      const { tenantId: _tenantId, shiftId, employeeId, startedAt: _startedAt } = payload;
       
       logger.info(`[LaborCostAnalyzer] Début du shift ${shiftId} pour employé ${employeeId}`);
       // L'initialisation du coût peut se faire ici ou simplement tracer le début.
@@ -58,7 +58,7 @@ export function registerLaborCostAnalyzerHandler() {
         const dateStr = new Date(endedAt).toISOString().split('T')[0];
         const budgetPath = `tenants/${tenantId}/analytics/laborCost_${dateStr}`;
         
-        await Nexus.adapter.runTransaction(async (tx) => {
+        await Nexus.adapter.runTransaction(async (_tx) => {
           const budget = await Nexus.adapter.get<LaborBudget>(budgetPath) ?? { totalCostInMicrounits: 0, totalHours: 0 };
           
           await Nexus.adapter.set(budgetPath, {

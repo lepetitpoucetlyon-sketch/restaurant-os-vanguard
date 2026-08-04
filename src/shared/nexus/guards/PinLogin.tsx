@@ -5,8 +5,7 @@ import { useAuth } from "@/shared/hooks";
 import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
 import { useUI } from "@/shared/hooks";
 import { Delete, LogIn, Fingerprint, ShieldCheck, ChevronLeft, RefreshCw } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 export function PinLogin() {
     const { login, users, isAuthLoading } = useAuth();
     const { toggleTheme } = useUI();

@@ -1,0 +1,2 @@
+// Variant: ota-sync
+export {};

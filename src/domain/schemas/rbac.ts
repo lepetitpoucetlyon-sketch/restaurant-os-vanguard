@@ -61,6 +61,8 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
   mon_espace: ["super_admin", "directeur", "manager", "comptable", "chef_rang", "serveur", "chef_cuisinier", "cuisinier", "barman", "hotesse", "plongeur"],
   welcome_staff: ["super_admin", "directeur", "manager", "comptable", "chef_rang", "serveur", "chef_cuisinier", "cuisinier", "barman", "hotesse", "plongeur"],
   migration: ["super_admin", "directeur"],
+  vanguard: ["super_admin", "directeur", "manager"],
+  mcc: ["super_admin", "directeur"],
 };
 
 export const DEFAULT_TAB_ACCESS: Record<string, Record<string, number>> = {

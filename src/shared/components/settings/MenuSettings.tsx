@@ -19,8 +19,7 @@ import {
     FileText,
     ImageIcon as FileImageIcon
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 interface MenuCategory {
     id: string;
     name: string;

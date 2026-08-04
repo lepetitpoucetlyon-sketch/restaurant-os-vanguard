@@ -1,14 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChaosMonkey } from '@modules/intelligence/ia/resilience/ChaosMonkey';
+import { ChaosMonkey } from '@/shared/nexus/engines/Intelligence/ia/resilience/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
-import { ResilienceSlayer } from '@modules/intelligence/ia/resilience/ResilienceSlayer';
+import { ResilienceSlayer } from '@/shared/nexus/engines/Intelligence/ia/resilience/ResilienceSlayer';
 
-// Mocks
-vi.mock('jotai', async () => {
-    const actual = await vi.importActual<typeof import('jotai')>('jotai');
-    return { ...actual, getDefaultStore: vi.fn() };
-});
-
+// No jotai mock, we use the real store
 vi.mock('@/store/pillars', () => ({
     ordersNodeAtom: { toString: () => 'ordersNodeAtom' },
     stockItemsNodeAtom: { toString: () => 'stockItemsNodeAtom' },
@@ -16,7 +11,7 @@ vi.mock('@/store/pillars', () => ({
     updateNexusNode: vi.fn((prev, update) => ({ ...prev, ...update }))
 }));
 
-vi.mock('@/modules/compliance/qualite/haccp/store/qualityAtoms', () => ({
+vi.mock('@/verticals/restaurant/compliance/haccp/store/qualityAtoms', () => ({
     qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
 }));
 
@@ -27,11 +22,7 @@ vi.mock('@/infrastructure/services/SelfHealingEngine', () => ({
     }
 }));
 
-vi.mock('@modules/intelligence/ia/resilience/ResilienceSlayer', () => ({
-    ResilienceSlayer: {
-        handleTransactionFailure: vi.fn()
-    }
-}));
+
 
 vi.mock('@/lib/nexus/NexusAdapter', () => ({
     Nexus: {
@@ -44,33 +35,39 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 
 describe('ChaosMonkey - Sovereign Resilience Audit', () => {
     let mockStore: any;
+    let storeSpy: any;
 
     beforeEach(() => {
         vi.clearAllMocks();
-        mockStore = {
-            get: vi.fn(),
-            set: vi.fn()
+        vi.useFakeTimers();
+        
+        // Use the real jotai store and spy on its methods
+        mockStore = getDefaultStore();
+        storeSpy = {
+            get: vi.spyOn(mockStore, 'get'),
+            set: vi.spyOn(mockStore, 'set')
         };
-        (getDefaultStore as any).mockReturnValue(mockStore);
+        
+        vi.spyOn(ResilienceSlayer, 'handleTransactionFailure').mockImplementation(() => {});
     });
 
     it('should handle ZOMBIE_RUSH concurrency without crashing the engine', async () => {
         // Mock initial stock state
-        mockStore.get.mockReturnValue({
+        storeSpy.get.mockReturnValue({
             data: [{ id: 'item_1', quantity: 100 }]
         });
 
         // Mock store.set to actually update our mock state optimistically
-        mockStore.set.mockImplementation((atom: any, updater: any) => {
-            const prevState = mockStore.get();
+        storeSpy.set.mockImplementation((atom: any, updater: any) => {
+            const prevState = storeSpy.get();
             const newState = typeof updater === 'function' ? updater(prevState) : updater;
-            mockStore.get.mockReturnValue(newState);
+            storeSpy.get.mockReturnValue(newState);
         });
 
         await ChaosMonkey.simulateZombieRush();
 
         // 50 attempts total. 10 succeed, 40 reject
-        expect(mockStore.set).toHaveBeenCalledTimes(50);
+        expect(storeSpy.set).toHaveBeenCalledTimes(50);
         
         // ResilienceSlayer should be called precisely once at the end
         expect(ResilienceSlayer.handleTransactionFailure).toHaveBeenCalledWith(
@@ -81,14 +78,14 @@ describe('ChaosMonkey - Sovereign Resilience Audit', () => {
 
     it('should inject DRIFT securely using WritableAtom constraints', () => {
         // Provide mock node data for the monkey to corrupt
-        mockStore.get.mockReturnValue({
+        storeSpy.get.mockReturnValue({
             data: [{ id: 'order_1', totalInCents: 1500 }]
         });
 
         ChaosMonkey.executeRandomDrift();
 
         // The store should have been accessed and mutated
-        expect(mockStore.get).toHaveBeenCalled();
+        expect(storeSpy.get).toHaveBeenCalled();
         
         // If it picked a node, set should have been called
         // Note: Because it's random, we might need to mock Math.random to guarantee a node is picked

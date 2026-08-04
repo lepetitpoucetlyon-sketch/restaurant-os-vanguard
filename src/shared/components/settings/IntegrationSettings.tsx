@@ -18,7 +18,7 @@ import {
     EyeOff,
     Link2
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { useExtensions } from '@/shared/providers/hooks/useExtensions';

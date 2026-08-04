@@ -73,53 +73,7 @@ vi.mock('firebase/firestore', () => ({
     CACHE_SIZE_UNLIMITED: 'unlimited',
 }));
 
-// 2b. MOCK OFFLINE STORE (Dexie)
-function createTableMock() {
-    let internalStore: any[] = [];
-    return {
-        bulkPut: vi.fn(async (items) => { 
-            if (Array.isArray(items)) internalStore.push(...items); 
-        }),
-        toArray: vi.fn(async () => internalStore),
-        clear: vi.fn(async () => { internalStore = []; }),
-        put: vi.fn(async (item) => { if (item) internalStore.push(item); }),
-        add: vi.fn(async (item) => { if (item) internalStore.push(item); }),
-        get: vi.fn(async () => undefined),
-        count: vi.fn(async () => internalStore.length),
-        where: vi.fn().mockReturnThis(),
-        equals: vi.fn().mockReturnThis(),
-        anyOf: vi.fn().mockReturnThis(),   // SyncManager.processQueue : where('status').anyOf(...)
-        sortBy: vi.fn(async () => internalStore),
-        update: vi.fn(async () => undefined),
-        first: vi.fn(async () => undefined),
-        orderBy: vi.fn().mockReturnThis(),
-        reverse: vi.fn().mockReturnThis(),
-        delete: vi.fn(async () => { internalStore.pop(); }),
-    };
-}
-
-const mockTables: Record<string, ReturnType<typeof createTableMock>> = {
-    fiscalSeals: createTableMock(),
-    orders: createTableMock(),
-    stockItems: createTableMock(),
-    inventoryMovements: createTableMock(),
-    journalEntries: createTableMock(),
-    syncQueue: createTableMock(),
-    config: createTableMock(),
-    immunityLogs: createTableMock(),
-    recipes: createTableMock(),
-};
-
-vi.mock('@/infrastructure/services/offline/offline-store', () => ({
-    db: {
-        ...mockTables,
-        clearAll: vi.fn(async () => {
-            for (const table of Object.values(mockTables)) {
-                await table.clear();
-            }
-        }),
-    }
-}));
+// Mock for offline-store removed as it is handled by setup.ts
 
 // 3. MOCK CRYPTO (Standardizes behavior across Node/Browser)
 if (typeof global.crypto === 'undefined' || (global.crypto as any)._isMock) {

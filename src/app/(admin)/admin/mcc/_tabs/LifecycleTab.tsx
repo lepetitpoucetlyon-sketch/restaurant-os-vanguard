@@ -1,6 +1,6 @@
 'use client';
 
-import { LifecycleTreePanel } from '@nexus/guards/admin/mcc/LifecycleTreePanel';
+import { LifecycleTreePanel } from '../components/LifecycleTreePanel';
 
 export function LifecycleTab() {
     return <LifecycleTreePanel />;

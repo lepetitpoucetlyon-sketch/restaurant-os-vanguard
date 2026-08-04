@@ -12,7 +12,7 @@ export function registerLoyaltyEngineHandler() {
   const handleWalletEvent = async (tenantId: string, customerId: string, diff: number, eventType: string) => {
     const walletPath = `tenants/${tenantId}/wallets/${customerId}`;
     
-    await Nexus.adapter.runTransaction(async (tx) => {
+    await Nexus.adapter.runTransaction(async (_tx) => {
       const wallet = await Nexus.adapter.get<LoyaltyWallet>(walletPath) || { pointsBalance: 0 };
       const newBalance = Math.max(0, wallet.pointsBalance + diff);
       

@@ -8,9 +8,7 @@ export function registerFoodDonationHandler() {
         'service.end',
         async (payload) => {
             const { tenantId } = payload;
-            
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const stockItems = await Nexus.adapter.query<any>(`tenants/${tenantId}/stockItems`);
+            const stockItems = await Nexus.adapter.query<{id?: string, itemId?: string, name?: string, quantity: number, category: string}>(`tenants/${tenantId}/stockItems`);
             
             // On filtre les items périssables qui ont de la quantité (pour le don associatif)
             const donatableItems = stockItems.filter(item => item.quantity > 0 && item.category === 'perishable');

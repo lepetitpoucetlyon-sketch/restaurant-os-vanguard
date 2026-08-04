@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { logger } from '@/lib/axiom';
-import { OpenBankingProviderFactory } from '@/modules/finance';
-
+import { OpenBankingProviderFactory } from '@/verticals/restaurant/finance/cash/banking/openBanking/OpenBankingProviderFactory';
 /**
  * POST /api/finance/bank/webhook
  * Reçoit les notifications de synchronisation de l'agrégateur bancaire

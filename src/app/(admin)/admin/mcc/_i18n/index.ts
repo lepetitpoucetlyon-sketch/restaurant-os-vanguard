@@ -1,4 +1,4 @@
-// Re-export depuis l'emplacement canonique (shared/nexus)
-export { MCCLocaleProvider, useMCCLocale } from '@nexus/guards/admin/mcc/_i18n/LocaleContext';
-export { LocaleToggle } from '@nexus/guards/admin/mcc/_i18n/LocaleToggle';
-export type { MCCLocale, MCCTranslations } from '@nexus/guards/admin/mcc/_i18n/translations';
+// Import local (le code a été déplacé ici)
+export { MCCLocaleProvider, useMCCLocale } from './LocaleContext';
+export { LocaleToggle } from './LocaleToggle';
+export type { MCCLocale, MCCTranslations } from './translations';

@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Check, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 interface TimePickerProps {
     value: string; // "HH:mm"
     onChange: (value: string) => void;

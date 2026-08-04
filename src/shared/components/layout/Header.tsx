@@ -16,8 +16,7 @@ import { useLanguage } from "@/shared/hooks";
 import { useContextualSettings } from "@/shared/components/settings/ContextualSettings";
 import { PageKey } from "@nexus/contracts/permissions.types";
 import { LANGUAGES } from "@/config/languages";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 export function Header() {
     const pathname = usePathname();
     const _router = useRouter();

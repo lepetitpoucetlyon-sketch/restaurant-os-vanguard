@@ -5,8 +5,8 @@ import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetrySe
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { auditService } from '@/modules/compliance';
+ 
+import { auditService } from '@/shared/nexus/vault/audits/audit';
 
 /**
  * 🛰️ NexusInterceptor - Grade X Middleware

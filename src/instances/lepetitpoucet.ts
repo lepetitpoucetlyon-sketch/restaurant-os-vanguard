@@ -1,6 +1,6 @@
 import type { TenantConfig } from '@/shared/nexus-contract';
-// eslint-disable-next-line no-restricted-imports
-import { AI_MODELS } from '@/modules/intelligence/ia/ai';
+ 
+import { AI_MODELS } from '@/shared/nexus/engines/Intelligence/ia/ai';
 
 /**
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X

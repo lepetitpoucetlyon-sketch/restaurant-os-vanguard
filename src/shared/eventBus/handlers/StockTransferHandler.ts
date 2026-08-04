@@ -6,7 +6,7 @@ export function registerStockTransferHandler() {
   return NexusEventBus.on(
     'stock.transfer',
     async (payload) => {
-      const { tenantId, fromLocationId, toLocationId, itemId, quantity, operatorId } = payload;
+      const { tenantId: _tenantId, fromLocationId, toLocationId, itemId, quantity, operatorId } = payload;
       
       // En réalité "tenantId" pourrait être the main tenant, et "from/to" seraient des sous-locations.
       // Si c'est inter-tenant, il faudrait modifier les path. On suppose ici des sous-locations d'un même tenant,

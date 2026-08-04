@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { SyncOperation } from '@/infrastructure/services/offline/offline-store';
 
 /**
@@ -106,6 +106,10 @@ describe('🔌 Résilience offline — SyncManager', () => {
             }
             return { ok: true };
         });
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     it('un ticket NF525 enfilé hors-ligne reste en file (zéro perte)', async () => {

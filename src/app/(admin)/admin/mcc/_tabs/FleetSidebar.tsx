@@ -1,16 +1,16 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { Cpu, Zap } from 'lucide-react';
-import { StatusItem, SwitchboardItem, MCCWidgetSkeleton } from '@nexus/guards/admin/mcc';
+import { StatusItem, SwitchboardItem, MCCWidgetSkeleton } from '../components';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 import type { SwitchboardState } from '@/shared/hooks/useSovereignSwitchboard';
 import { useMCCLocale } from '../_i18n';
 
-const PerformanceMonitor  = dynamic(() => import('@nexus/guards/admin/mcc/PerformanceMonitor').then(m => m.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
-const DeploymentEngine    = dynamic(() => import('@nexus/guards/admin/mcc/DeploymentEngine').then(m => m.DeploymentEngine), { loading: () => <MCCWidgetSkeleton /> });
-const MCCInsights         = dynamic(() => import('@nexus/guards/admin/mcc/MCCInsights').then(m => m.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });
-const MCCAuditStream      = dynamic(() => import('@nexus/guards/admin/mcc/MCCAuditStream').then(m => m.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });
-const FleetTelemetryPanel = dynamic(() => import('@nexus/guards/admin/mcc/FleetTelemetryPanel').then(m => m.FleetTelemetryPanel), { loading: () => <MCCWidgetSkeleton /> });
+const PerformanceMonitor  = dynamic(() => import('../components/PerformanceMonitor').then(m => m.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
+const DeploymentEngine    = dynamic(() => import('../components/DeploymentEngine').then(m => m.DeploymentEngine), { loading: () => <MCCWidgetSkeleton /> });
+const MCCInsights         = dynamic(() => import('../components/MCCInsights').then(m => m.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });
+const MCCAuditStream      = dynamic(() => import('../components/MCCAuditStream').then(m => m.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });
+const FleetTelemetryPanel = dynamic(() => import('../components/FleetTelemetryPanel').then(m => m.FleetTelemetryPanel), { loading: () => <MCCWidgetSkeleton /> });
 
 interface FleetSidebarProps {
     health: MCCHealthStatus | null;

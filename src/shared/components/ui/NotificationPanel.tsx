@@ -14,7 +14,7 @@ import {
     Zap,
     Layers
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { useNotifications } from "@/shared/contexts/NotificationsContext";
 import type { Notification, NotificationType } from "@nexus/contracts";
 import { formatDistanceToNow } from "date-fns";

@@ -20,7 +20,7 @@ function microunitsToEuros(mu: number): string {
   return (mu / 1_000_000).toFixed(2).replace('.', ',');
 }
 
-function buildFECLines(entries: JournalEntry[], month: string): string {
+function buildFECLines(entries: JournalEntry[], _month: string): string {
   const header = [
     'JournalCode', 'JournalLib', 'EcritureNum', 'EcritureDate',
     'CompteNum', 'CompteLib', 'PieceRef', 'PieceDate',

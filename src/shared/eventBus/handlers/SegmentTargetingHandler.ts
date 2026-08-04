@@ -6,7 +6,7 @@ export function registerSegmentTargetingHandler() {
   return NexusEventBus.on(
     'crm.segment_matched',
     async (payload) => {
-      const { tenantId, customerId, segmentId, segmentName } = payload;
+      const { tenantId: _tenantId, customerId, segmentId, segmentName } = payload;
       
       logger.info(`[CRM] Le client ${customerId} entre dans le segment '${segmentName}' (${segmentId})`);
       

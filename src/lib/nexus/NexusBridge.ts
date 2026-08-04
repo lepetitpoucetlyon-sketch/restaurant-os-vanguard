@@ -4,8 +4,8 @@ import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/infrastructure/services/offline/offline-store';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { FiscalKeyService } from '@/modules/finance';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import type { CommunicationPulse } from '@/modules/finance';
+ 
+import type { CommunicationPulse } from '@/verticals/restaurant/finance/cash/collection/types';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
@@ -99,8 +99,8 @@ export class NexusBridge {
     this.stopPulse();
     if (typeof window === 'undefined') return; // pulse côté instance uniquement
 
-// eslint-disable-next-line vanguard/no-inter-module-imports
-    import('@modules/intelligence/ia/fleet/FleetTelemetryService')
+ 
+    import('@/shared/nexus/engines/Intelligence/ia/fleet/FleetTelemetryService')
       .then(({ fleetTelemetry }) => {
         fleetTelemetry.registerNode(tenantId as import('@domain/types/brands').TenantID);
       })
@@ -113,8 +113,8 @@ export class NexusBridge {
 
   private static async pushPulse(tenantId: string): Promise<void> {
     try {
-// eslint-disable-next-line vanguard/no-inter-module-imports
-      const { fleetTelemetry } = await import('@modules/intelligence/ia/fleet/FleetTelemetryService');
+ 
+      const { fleetTelemetry } = await import('@/shared/nexus/engines/Intelligence/ia/fleet/FleetTelemetryService');
       const { pendingOrdersAtom } = await import('@/store/pillars/ops');
       let activeOrders = 0;
       try {

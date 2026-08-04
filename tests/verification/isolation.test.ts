@@ -16,6 +16,10 @@ describe('NexusSyncService Multi-tenant Isolation', () => {
         store.set(tenantIdAtom, 'root');
     });
 
+    afterEach(async () => {
+        await NexusSyncService.stopAll();
+    });
+
     it('should purge the local cache when switching tenants', async () => {
         // 1. Setup Tenant A data
         await db.orders.add({ 

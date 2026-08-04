@@ -9,7 +9,7 @@ import { useHaccpPage, HACCP_TOOLS } from '@/modules/compliance';
 import {
     ReleveTemperatures, GestionHuiles, PlanNettoyage, GestionAnomalies,
     ProductControlList, SanitaryReport,
-} from "@modules/compliance/qualite/haccp/components";
+} from "@/verticals/restaurant/compliance/haccp/components";
 import { CleaningPlan } from '@/modules/compliance';
 import { DLCTracker } from '@/modules/compliance';
 import { NonConformityForm } from '@/modules/compliance';

@@ -39,6 +39,8 @@ const PATH_TO_CATEGORY: Record<string, string> = {
     '/social-marketing': 'marketing',
     '/bar': 'kitchen',
     '/registre': 'operations',
+    '/admin/mcc': 'mcc',
+    '/vanguard-simulator': 'vanguard',
 };
 
 // ── rbac-5: Screen affiché quand le statut du compte est RESTRICTED ──────────

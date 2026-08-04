@@ -42,14 +42,53 @@
       "@components/*": [
         "./src/shared/components/*"
       ],
+      "@/modules/intelligence": [
+        "./src/shared/nexus/engines/Intelligence/index"
+      ],
+      "@/modules/intelligence/*": [
+        "./src/shared/nexus/engines/Intelligence/*"
+      ],
+      "@modules/intelligence": [
+        "./src/shared/nexus/engines/Intelligence/index"
+      ],
+      "@modules/intelligence/*": [
+        "./src/shared/nexus/engines/Intelligence/*"
+      ],
+      "@modules/compliance": [
+        "./src/legacy_monolith/compliance/index"
+      ],
+      "@modules/compliance/*": [
+        "./src/legacy_monolith/compliance/*"
+      ],
+      "@modules/ops": [
+        "./src/legacy_monolith/ops/index"
+      ],
+      "@modules/ops/*": [
+        "./src/legacy_monolith/ops/*"
+      ],
+      "@/modules/*": [
+        "./src/legacy_monolith/*"
+      ],
       "@modules/*": [
-        "./src/modules/*"
+        "./src/legacy_monolith/*"
       ],
       "@infrastructure": [
         "./src/infrastructure/index"
       ],
       "@infrastructure/*": [
         "./src/infrastructure/*"
+      ],
+      "@domain/schemas": [
+        "./src/domain/schemas/index"
+      ],
+      "@domain/schemas/*": [
+        "./src/domain/schemas/*"
+      ],
+      "@domain/types": [
+        "./src/domain/types/index"
+      ],
+      "@domain/types/*": [
+        "./src/domain/types/*"
       ],
       "@domain/*": [
         "./src/domain/*"
@@ -62,6 +101,12 @@
       ],
       "@store/*": [
         "./src/store/*"
+      ],
+      "@nexus/contracts": [
+        "./src/shared/nexus/contracts/index"
+      ],
+      "@nexus/contracts/*": [
+        "./src/shared/nexus/contracts/*"
       ],
       "@nexus/*": [
         "./src/shared/nexus/*"
@@ -77,6 +122,9 @@
       ],
       "@/*": [
         "./src/*"
+      ],
+      "@verticals/*": [
+        "./src/verticals/*"
       ]
     }
   },

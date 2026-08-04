@@ -3,8 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { RefreshCcw, Check, X, SwitchCamera } from "lucide-react";
 import { Button } from "@ui/button";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 interface CameraCaptureProps {
     onCapture: (imageData: string) => void;
 }

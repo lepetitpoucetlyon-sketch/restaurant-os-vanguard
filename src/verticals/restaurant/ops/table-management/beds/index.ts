@@ -1,0 +1,2 @@
+// Variant: beds
+export {};

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, HTMLMotionProps } from "framer-motion";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { ReactNode, forwardRef } from "react";
 
 interface PremiumCardProps extends Omit<HTMLMotionProps<"div">, "children"> {

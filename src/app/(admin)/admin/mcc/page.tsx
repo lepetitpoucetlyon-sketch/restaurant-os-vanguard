@@ -8,7 +8,8 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-import { MCCWidgetSkeleton, MFAGate } from '@nexus/guards/admin/mcc';
+import { MCCWidgetSkeleton } from './components/MCCWidgetSkeleton';
+import { MFAGate } from './components/MFAGate';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 import { VoiceAssistantOverlay } from '@components/layout/VoiceAssistantOverlay';
@@ -188,7 +189,7 @@ function MCCDashboardInner() {
                                             <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">{t.clone.tier}</label>
                                             <div className="grid grid-cols-3 gap-2">
                                                 {(['STANDARD', 'PREMIUM', 'ENTERPRISE'] as const).map((tier) => {
-                                                    const info = t.clone.tiers[tier];
+                                                    const info = t.clone.tiers[tier] as { tagline?: string, price: string, period?: string, features: readonly string[] };
                                                     const active = newCloneTier === tier;
                                                     return (
                                                         <button key={tier} type="button" onClick={() => setNewCloneTier(tier)}
@@ -202,7 +203,7 @@ function MCCDashboardInner() {
                                                             <span className={`text-base font-black leading-none ${active ? 'text-brand' : 'text-text-primary'}`}>{info.price}</span>
                                                             {info.period && <span className="text-[9px] text-muted mb-2">{info.period}</span>}
                                                             <ul className="mt-2 space-y-1 w-full">
-                                                                {info.features.map((f) => (
+                                                                {info.features.map((f: string) => (
                                                                     <li key={f} className="flex items-start gap-1">
                                                                         <span className={`text-[8px] mt-0.5 ${active ? 'text-brand' : 'text-status-success'}`}>✓</span>
                                                                         <span className="text-[8px] text-muted leading-tight">{f}</span>

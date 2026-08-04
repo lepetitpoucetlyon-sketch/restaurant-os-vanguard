@@ -1,11 +1,11 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
+ 
+ 
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('@/modules/ops/providers', () => ({
     useReservations: vi.fn(), useTables: vi.fn(), useGroups: vi.fn(),
 }));
-vi.mock('@/modules/commerce', () => ({ useCRM: vi.fn() }));
+vi.mock('@/shared/nexus/engines/CRM', () => ({ useCRM: vi.fn() }));
 vi.mock('@/shared/hooks/useActionPermission', () => ({ useActionPermission: vi.fn() }));
 vi.mock('@/lib/nexus/NexusAdapter', () => ({ Nexus: { adapter: {}, getTenantPath: vi.fn() } }));
 vi.mock('@/store/pillars/sovereign', () => ({ tenantIdAtom: {} }));
@@ -22,7 +22,7 @@ import {
     groupTablesByZone,
     mapTableToZoneTable,
     type ZoneTable,
-} from '@/modules/commerce/relation/reservations/hooks/useReservationsPage';
+} from '@/shared/nexus/engines/CRM/reservations/hooks/useReservationsPage';
 import type { Table } from '@nexus/contracts';
 
 const makeTable = (overrides: Partial<Table> = {}): Table => ({

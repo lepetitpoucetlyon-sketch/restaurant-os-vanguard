@@ -1,0 +1,2 @@
+// Variant: resource-booking
+export {};

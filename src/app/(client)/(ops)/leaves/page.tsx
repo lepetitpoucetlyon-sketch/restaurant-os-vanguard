@@ -22,10 +22,10 @@ import {
 
 
 // Modular Components
-import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from '@modules/human/effectifs/hr/components/leaves';
+import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from '@/verticals/restaurant/human/staffing/hr/components/leaves';
 
 import { useAuth } from '@/shared/hooks';
-import { useHumanResources } from '@modules/human/effectifs/hr';
+import { useHumanResources } from '@/verticals/restaurant/human/staffing/hr';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function LeavesPage() {

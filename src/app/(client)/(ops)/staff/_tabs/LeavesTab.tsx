@@ -2,11 +2,11 @@
 
 import { Plus } from "lucide-react";
 import type { LeaveRequest } from "@nexus/contracts";
-import type { LeaveBalance } from "@modules/human/effectifs/hr/types";
+import type { LeaveBalance } from "@/verticals/restaurant/human/staffing/hr/types";
 import {
     LeaveBalanceCard,
     LeaveRequestCard,
-} from "@modules/human/effectifs/hr/components";
+} from "@/verticals/restaurant/human/staffing/hr/components";
 
 interface LeavesTabProps {
     leaveBalances: LeaveBalance[];

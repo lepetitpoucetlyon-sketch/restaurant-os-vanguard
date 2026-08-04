@@ -15,6 +15,14 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "show_reservations_preview", label: "Aperçu réservations à venir", group: "logic", type: "toggle", roles: ["super_admin", "directeur", "manager", "hotesse"] },
         ],
     },
+    vanguard: {
+        title: "Paramètres Vanguard",
+        settings: []
+    },
+    mcc: {
+        title: "Paramètres MCC",
+        settings: []
+    },
     floor_plan: {
         title: "Paramètres du Plan de Salle",
         settings: [

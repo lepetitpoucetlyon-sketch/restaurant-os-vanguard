@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { InputHTMLAttributes, forwardRef } from "react";
 
 interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {

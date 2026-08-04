@@ -1,0 +1,89 @@
+import type { IIoTProvider, SensorReading, Sensor } from '../types';
+import { logger } from '@/lib/logger';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+
+/**
+ * MQTT générique — couvre Dragino LoRaWAN et tous les capteurs MQTT.
+ * Variables requises : MQTT_BROKER_URL, MQTT_USERNAME?, MQTT_PASSWORD?
+ *
+ * MQTT s'exécute dans un contexte long-running (Firebase Function ou sidecar).
+ * Dans Next.js, utiliser uniquement fetchHistory et listSensors.
+ * subscribe() est destiné au sidecar ou à une Cloud Function.
+ *
+ * Pour activer : npm i mqtt
+ */
+export class MqttProvider implements IIoTProvider {
+    readonly id = 'mqtt';
+
+    subscribe(tenantId: string, onReading: (r: SensorReading) => void): () => void {
+        const brokerUrl = process.env.MQTT_BROKER_URL;
+        if (!brokerUrl) {
+            logger.error('[MqttProvider] MQTT_BROKER_URL manquant');
+            return () => { /* noop */ };
+        }
+
+        let client: { subscribe: (...args: unknown[]) => void; on: (...args: unknown[]) => void; end: (...args: unknown[]) => void } | null = null;
+        import('mqtt').then((mod) => {
+            const mqtt = mod as unknown as { connect: (url: string, opts: Record<string, unknown>) => { subscribe: (...args: unknown[]) => void; on: (...args: unknown[]) => void; end: (...args: unknown[]) => void } };
+            client = mqtt.connect(brokerUrl, {
+                username: process.env.MQTT_USERNAME,
+                password: process.env.MQTT_PASSWORD,
+            });
+            client.subscribe(`sensors/${tenantId}/#`, (err: Error | null) => {
+                if (err) logger.error('[MqttProvider] subscribe error', String(err));
+            });
+            client.on('message', (_topic: string, message: { toString(): string }) => {
+                try {
+                    const payload = JSON.parse(message.toString()) as Partial<SensorReading> & { threshold?: number };
+                    if (payload.sensorId && payload.value !== undefined) {
+                        const reading: SensorReading = {
+                            sensorId:  payload.sensorId,
+                            tenantId,
+                            value:     payload.value,
+                            unit:      payload.unit ?? 'celsius',
+                            timestamp: payload.timestamp ?? new Date().toISOString(),
+                            zoneId:    payload.zoneId,
+                            zoneName:  payload.zoneName,
+                        };
+                        onReading(reading);
+
+                        // P2: Cascade Quarantaine POS — Si seuil dépassé, on déclenche haccp.alert
+                        if (payload.threshold !== undefined && payload.value > payload.threshold) {
+                            NexusEventBus.emitDurable('haccp.alert', {
+                                v: 1,
+                                tenantId,
+                                sensorId: payload.sensorId,
+                                readingId: `read_${Date.now()}`,
+                                alertType: 'TEMPERATURE_HIGH',
+                                severity: 'CRITICAL',
+                                message: `Température critique détectée : ${payload.value}°C (seuil: ${payload.threshold}°C)`
+                            }).catch(err => logger.error('[MqttProvider] failed to emit haccp.alert', err));
+                        }
+                    }
+                } catch (e) {
+                    logger.warn('[MqttProvider] message parse error', String(e));
+                }
+            });
+        }).catch(err => logger.error('[MqttProvider] mqtt import error — npm i mqtt requis', String(err)));
+
+        return () => {
+            if (client) client.end();
+        };
+    }
+
+    async fetchHistory(sensorId: string, from: Date, to: Date): Promise<SensorReading[]> {
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const raw = await Nexus.adapter.get(`iotHistory/${sensorId}`) as Record<string, SensorReading> | null;
+        if (!raw) return [];
+        return Object.values(raw).filter(r => {
+            const ts = new Date(r.timestamp);
+            return ts >= from && ts <= to;
+        });
+    }
+
+    async listSensors(tenantId: string): Promise<Sensor[]> {
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const raw = await Nexus.adapter.get(`tenants/${tenantId}/sensors`) as Record<string, Sensor> | null;
+        return raw ? Object.values(raw) : [];
+    }
+}

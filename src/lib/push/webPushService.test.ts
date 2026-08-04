@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
+import { WebPushService } from './webPushService';
 const mockSendNotification = vi.fn().mockResolvedValue({});
 const mockSetVapidDetails = vi.fn();
 
@@ -26,7 +26,6 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 
 describe('WebPushService', () => {
     beforeEach(() => {
-        vi.resetModules();
         mockSendNotification.mockClear();
         mockSetVapidDetails.mockClear();
         mockGet.mockReset();
@@ -35,7 +34,7 @@ describe('WebPushService', () => {
     });
 
     it('saveSubscription stores in multi-tenant path', async () => {
-        const { WebPushService } = await import('./webPushService');
+
         const fakeSub = { endpoint: 'https://push.example.com/sub1', keys: { p256dh: 'x', auth: 'y' } };
 
         await WebPushService.saveSubscription('resto-1', 'user-42', fakeSub as unknown as PushSubscription);
@@ -50,7 +49,7 @@ describe('WebPushService', () => {
         delete process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
         delete process.env.VAPID_PRIVATE_KEY;
 
-        const { WebPushService } = await import('./webPushService');
+
         await WebPushService.sendToUser('resto-1', 'user-42', { title: 'Test', body: 'Hello' });
 
         expect(mockSendNotification).not.toHaveBeenCalled();
@@ -67,7 +66,7 @@ describe('WebPushService', () => {
             updatedAt: Date.now(),
         });
 
-        const { WebPushService } = await import('./webPushService');
+
         await WebPushService.sendToUser('resto-1', 'user-42', { title: 'Alerte', body: 'Temp hors seuil' });
 
         expect(mockGet).toHaveBeenCalledWith('tenants/resto-1/pushSubscriptions/user-42');
@@ -95,7 +94,7 @@ describe('WebPushService', () => {
         ]);
         mockGet.mockResolvedValue(null);
 
-        const { WebPushService } = await import('./webPushService');
+
         await WebPushService.sendToRole('resto-1', 'chef_cuisinier', { title: 'Alerte', body: 'Test' });
 
         expect(mockQuery).toHaveBeenCalledWith(

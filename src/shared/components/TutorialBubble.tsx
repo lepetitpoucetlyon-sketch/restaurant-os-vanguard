@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useTutorial } from '@/shared/contexts/TutorialContext';
 import { ChevronRight, X } from 'lucide-react';
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { useHasMounted } from '@/shared/hooks';
 import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 

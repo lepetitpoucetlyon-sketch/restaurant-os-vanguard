@@ -1,42 +1,37 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-// Mock dependencies
-const mockGet = vi.fn().mockResolvedValue(null);
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { get: (...args: unknown[]) => mockGet(...args) } },
-}));
+// Removed NexusAdapter and HermesKnowledgeManager vi.mocks
 
-vi.mock('@/lib/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
-}));
-
-const mockQuery = vi.fn().mockResolvedValue({ answer: 'Risque de rupture moyen', entities: [], confidence: 0.8 });
-vi.mock('@/modules/intelligence/knowledge/rag/HermesKnowledgeManager', () => ({
-  HermesKnowledgeManager: vi.fn().mockImplementation(() => ({
-    query: mockQuery,
-  })),
-}));
-
-vi.mock('@/shared/eventBus/NexusEventBus', () => {
-  const handlers: Record<string, (...args: unknown[]) => Promise<void>> = {};
-  return {
-    NexusEventBus: {
-      on: vi.fn((event: string, handler: (...args: unknown[]) => Promise<void>) => {
-        handlers[event] = handler;
-        return vi.fn();
-      }),
-      _handlers: handlers,
-    },
-  };
-});
+// Removed vi.mock for NexusEventBus
 
 import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/IntelligenceHandler';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import * as IntelligenceModule from '@/modules/intelligence';
+
+let mockGet: ReturnType<typeof vi.fn>;
+let mockQuery: ReturnType<typeof vi.fn>;
+let mockHermes: ReturnType<typeof vi.fn>;
 
 describe('IntelligenceHandler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
+    // Intercept NexusEventBus.on on the real singleton
+    vi.spyOn(NexusEventBus, 'on').mockImplementation((event, handler) => {
+      // @ts-expect-error - vitest mock
+      NexusEventBus._test_handlers = NexusEventBus._test_handlers || {};
+      // @ts-expect-error - vitest mock
+      NexusEventBus._test_handlers[event] = handler;
+      return vi.fn();
+    });
+
+    mockGet = vi.spyOn(Nexus.adapter, 'get').mockResolvedValue(null);
+    mockQuery = vi.fn().mockResolvedValue({ answer: 'Risque de rupture moyen', entities: [], confidence: 0.8 });
+    mockHermes = vi.spyOn(IntelligenceModule, 'HermesKnowledgeManager').mockImplementation(
+      // @ts-expect-error - vitest mock
+      class { query = mockQuery }
+    );
   });
 
   afterEach(() => {
@@ -54,8 +49,8 @@ describe('IntelligenceHandler', () => {
 
   it('analyzeStockTrend calls Hermes for high-velocity items', async () => {
     registerIntelligenceHandler();
-    const onCall = vi.mocked(NexusEventBus.on).mock.calls[0];
-    const handler = onCall[1] as (payload: unknown) => Promise<void>;
+    // @ts-expect-error - vitest mock
+    const handler = NexusEventBus._test_handlers['order.paid'] as (payload: unknown) => Promise<void>;
 
     await handler({
       tenantId: 'test-resto',
@@ -72,11 +67,11 @@ describe('IntelligenceHandler', () => {
     // depending on jsdom/browser detection in readZcpoState.
     // The key contract: high-velocity items (qty >= 3) are identified
     // and the handler completes without throwing.
-    const { HermesKnowledgeManager } = await import('@/modules/intelligence/knowledge/rag/HermesKnowledgeManager');
-    expect(HermesKnowledgeManager).toHaveBeenCalledWith(
+    expect(mockHermes).toHaveBeenCalledWith(
       'test-resto',
       expect.any(Object)
     );
+    expect(mockQuery).toHaveBeenCalled();
   });
 
   it('analyzeRevenueSignal computes z-score from TicketZ history', async () => {
@@ -89,8 +84,8 @@ describe('IntelligenceHandler', () => {
     }
 
     registerIntelligenceHandler();
-    const onCall = vi.mocked(NexusEventBus.on).mock.calls[0];
-    const handler = onCall[1] as (payload: unknown) => Promise<void>;
+    // @ts-expect-error - vitest mock
+    const handler = NexusEventBus._test_handlers['order.paid'] as (payload: unknown) => Promise<void>;
 
     // Trigger with a normal-range ticket (10€ = 10M µ)
     await handler({
@@ -117,8 +112,8 @@ describe('IntelligenceHandler', () => {
     }));
 
     registerIntelligenceHandler();
-    const onCall = vi.mocked(NexusEventBus.on).mock.calls[0];
-    const handler = onCall[1] as (payload: unknown) => Promise<void>;
+    // @ts-expect-error - vitest mock
+    const handler = NexusEventBus._test_handlers['order.paid'] as (payload: unknown) => Promise<void>;
 
     await handler({
       tenantId: 'test-resto',

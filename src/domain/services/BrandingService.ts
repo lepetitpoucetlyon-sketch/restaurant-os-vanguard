@@ -1,8 +1,8 @@
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
-// eslint-disable-next-line no-restricted-imports
-import { LLMManager } from '@/modules/intelligence/ia/ai';
+ 
+import { LLMManager } from '@/shared/nexus/engines/Intelligence/ia/ai';
 
 /**
  * BRANDING SERVICE (Phase 33 - Nexus Industrialization)
@@ -37,7 +37,7 @@ export const BrandingService = {
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 
              
-            const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
+            const { AI_MODELS } = await import('@/shared/nexus/engines/Intelligence/ia/ai');
             const response = await LLMManager.provider.generateFromImage({
                 model: AI_MODELS.fast,
                 systemPrompt: 'You are a Senior Art Director.',

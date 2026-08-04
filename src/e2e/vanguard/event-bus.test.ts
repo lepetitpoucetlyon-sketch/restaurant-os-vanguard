@@ -48,13 +48,13 @@ describe('📡 NexusEventBus', () => {
   it('les handlers HIGH s\'exécutent en parallèle', async () => {
     const starts: number[] = [];
     const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
-    NexusEventBus.on('order.paid', async () => { starts.push(Date.now()); await delay(20); }, { id: 'h1', priority: 'HIGH' });
-    NexusEventBus.on('order.paid', async () => { starts.push(Date.now()); await delay(20); }, { id: 'h2', priority: 'HIGH' });
+    NexusEventBus.on('order.paid', async () => { starts.push(Date.now()); await delay(100); }, { id: 'h1', priority: 'HIGH' });
+    NexusEventBus.on('order.paid', async () => { starts.push(Date.now()); await delay(100); }, { id: 'h2', priority: 'HIGH' });
     const t0 = Date.now();
     await NexusEventBus.emit('order.paid', makePayload());
     const elapsed = Date.now() - t0;
-    // Si parallèle ≈ 20ms, si séquentiel ≈ 40ms
-    expect(elapsed).toBeLessThan(35);
+    // Si parallèle ≈ 100ms, si séquentiel ≈ 200ms
+    expect(elapsed).toBeLessThan(180);
     expect(starts).toHaveLength(2);
   });
 

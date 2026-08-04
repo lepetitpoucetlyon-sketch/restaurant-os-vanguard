@@ -16,14 +16,13 @@ export const QuoteReminderJob = {
             const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
 
             for (const tenantId of tenantIds) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const quotes = await Nexus.adapter.query<any>(`tenants/${tenantId}/quotes`, { limit: 1000 });
+                const quotes = await Nexus.adapter.query<{ id?: string, quoteId?: string, status: string, createdAt: number, reminderSent: boolean, customerId: string, customerEmail?: string }>(`tenants/${tenantId}/quotes`, { limit: 1000 });
                 
                 for (const quote of quotes) {
                     if (quote.status === 'pending' && quote.createdAt < sevenDaysAgo && !quote.reminderSent) {
                         await NotificationGateway.send({
                             tenantId,
-                            to: quote.customerEmail,
+                            to: quote.customerEmail || '',
                             subject: `Relance : Votre devis ${quote.id || ''} est en attente`,
                             text: `Bonjour, nous vous rappelons que votre devis est toujours en attente d'acceptation. N'hésitez pas à nous contacter si vous avez des questions.`,
                             channel: 'email'

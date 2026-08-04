@@ -1,0 +1,2 @@
+// Variant: warranty-claims
+export {};

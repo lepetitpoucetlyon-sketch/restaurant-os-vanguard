@@ -15,23 +15,25 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useReservationsPage } from '@/modules/commerce';
-import { PinModal } from "@modules/commerce/ui/pos/PinModal";
+ 
+// eslint-disable-next-line no-restricted-imports
+import { PinModal } from "@/modules/commerce/ui/pos/PinModal";
 import { DailyListView } from '@/modules/commerce';
 import { WeeklyView } from '@/modules/commerce';
-import { GroupFormModal } from "@/modules/commerce";
+import { GroupFormModal } from '@/modules/commerce';
 import dynamic from "next/dynamic";
 const EventQuoteModal = dynamic(
-  () => import("@/modules/commerce/relation/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
+  () => import("@/shared/nexus/engines/CRM/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
   { ssr: false, loading: () => null }
 );
 const ReservationCreateDialog = dynamic(
-  () => import("@/modules/commerce/relation/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
+  () => import("@/shared/nexus/engines/CRM/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
   { ssr: false, loading: () => null }
 );
-import { ReservationSidebar } from "@modules/commerce";
-import { TableGrid } from "@modules/commerce";
-import { CustomerCustomerView } from "@modules/commerce";
-import { CustomerDetailPanel } from "@modules/commerce";
+import { ReservationSidebar } from '@/modules/commerce';
+import { TableGrid } from '@/modules/commerce';
+import { CustomerCustomerView } from '@/modules/commerce';
+import { CustomerDetailPanel } from '@/modules/commerce';
 import { cn } from "@/lib/ui.foundations";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
@@ -40,6 +42,7 @@ function ReservationsPage() {
         activeSection, setActiveSection,
         view, setView,
         selectedDate, setSelectedDate,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
         weekOffset, setWeekOffset,
         isNewResOpen, setIsNewResOpen,
         isGroupModalOpen, setIsGroupModalOpen,

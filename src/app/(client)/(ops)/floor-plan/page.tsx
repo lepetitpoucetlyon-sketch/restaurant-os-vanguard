@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardList } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useTables } from '@/modules/ops';
@@ -17,7 +17,7 @@ import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@/modules/facility/spaces/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
+    () => import("@/verticals/restaurant/ops/table-management/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
     { 
         ssr: false,
         loading: () => <div className="absolute inset-0 bg-bg-primary flex items-center justify-center animate-pulse"><div className="w-20 h-20 bg-accent/10 rounded-full border border-accent/20" /></div>

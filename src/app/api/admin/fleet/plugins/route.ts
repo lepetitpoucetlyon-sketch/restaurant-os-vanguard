@@ -78,7 +78,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     key: `plugins.${pluginId}`,
     before: beforePlugins[pluginId] || null,
     after: pluginPayload,
-    description: `Activation du module ${pluginInfo.name} par ${caller.uid}`,
+    description: `Activation du module ${(pluginInfo as { name?: string }).name || pluginId} par ${caller.uid}`,
     appliedBy: caller.uid,
     scope: 'tenant',
   });

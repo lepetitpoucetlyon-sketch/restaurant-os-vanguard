@@ -6,7 +6,7 @@ export function registerMarketingCampaignRouterHandler() {
   return NexusEventBus.on(
     'marketing.campaign_launched',
     async (payload) => {
-      const { tenantId, campaignId, targetSegment, launchedBy } = payload;
+      const { tenantId: _tenantId, campaignId, targetSegment, launchedBy } = payload;
       
       logger.info(`[MarketingCampaign] Campagne ${campaignId} lancée par ${launchedBy} pour le segment [${targetSegment}].`);
 

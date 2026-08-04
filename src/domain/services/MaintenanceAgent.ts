@@ -1,9 +1,9 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager } from '@/modules/intelligence';
+import { LLMManager } from '@/shared/nexus/engines/Intelligence/ia/ai/LLMManager';
 import { AI_MODELS } from '@/modules/intelligence';
 import { logger } from "../../lib/axiom";
-// eslint-disable-next-line no-restricted-imports
-import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";
+ 
+import { DNAInjector } from "@/shared/nexus/engines/Intelligence/ia/ai/DNAInjector";
 import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
 
 /**

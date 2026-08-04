@@ -6,7 +6,7 @@ import { SovereignData } from "@shared/nexus-contract";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, History, X, Maximize2, Minimize2, AlertTriangle, Minus, Bot } from 'lucide-react';
 import { useGeminiAgent } from "@/shared/hooks/useGeminiAgent";
-import { useGeminiLive } from '@modules/commerce';
+import { useGeminiLive } from '@/modules/commerce';
 import { useSettings } from "@/shared/contexts/SettingsContext";
 
 import { cn } from "@/lib/ui.foundations";

@@ -3,11 +3,9 @@ import { timingSafeEqual } from 'node:crypto';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import {
-    OpenBankingProviderFactory,
-    BankConnectionStore,
-    inferPCGAccount,
-} from '@/modules/finance';
+import { OpenBankingProviderFactory } from '@/verticals/restaurant/finance/cash/banking/openBanking/OpenBankingProviderFactory';
+import { BankConnectionStore } from '@/verticals/restaurant/finance/cash/banking/openBanking/BankConnectionStore';
+import { inferPCGAccount } from '@/verticals/restaurant/finance/cash/banking/openBanking/pcgHeuristics';
 import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import type { FiscalSeal } from '@nexus/contracts';

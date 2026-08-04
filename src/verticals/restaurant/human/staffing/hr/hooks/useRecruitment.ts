@@ -1,0 +1,165 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
+import { useAuth, useTenant } from '@/shared/hooks';
+function buildGdprNote(gdpr: GDPRConsent | undefined): string {
+    return gdpr?.consented ? "RGPD: Consentement validé" : "RGPD: ATTENTION - Consentement manquant";
+}
+
+async function purgeOldCandidates(tenantId: string): Promise<void> {
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    const candidatesPath = `tenants/${tenantId}/candidates`;
+    const oldCandidates = await Nexus.adapter.query(candidatesPath, {
+        where: [{ field: 'updatedAt', operator: '<', value: sixMonthsAgo.toISOString() }]
+    }) as Candidate[];
+    const batch = Nexus.adapter.batch();
+    for (const candidate of oldCandidates) {
+        batch.delete(`${candidatesPath}/${candidate.id}`);
+        const logsPath = `tenants/${tenantId}/recruitment_logs`;
+        const relatedLogs = await Nexus.adapter.query(logsPath, {
+            where: [{ field: 'candidateId', operator: '==', value: candidate.id }]
+        }) as RecruitmentLog[];
+        relatedLogs.forEach((l: RecruitmentLog) => batch.delete(`${logsPath}/${l.id}`));
+    }
+    await batch.commit();
+}
+
+async function hiredCandidateAction(tenantId: string, candidate: Candidate): Promise<{ success: boolean; id: string }> {
+    const now = new Date().toISOString();
+    const staffPath = `tenants/${tenantId}/staff`;
+    const employeeId = Nexus.adapter.generateId(staffPath);
+
+    await Nexus.adapter.set(`${staffPath}/${employeeId}`, {
+        id: employeeId,
+        firstName:    candidate.firstName,
+        lastName:     candidate.lastName,
+        email:        candidate.email,
+        phone:        candidate.phone,
+        role:         candidate.appliedRole,
+        contractType: 'CDI',
+        startDate:    now.slice(0, 10),
+        status:       'active',
+        sourceCandidate: candidate.id,
+        createdAt:    now,
+        updatedAt:    now,
+    });
+
+    const candidatePath = `tenants/${tenantId}/candidates/${candidate.id}`;
+    await Nexus.adapter.update(candidatePath, { status: 'hired', updatedAt: now });
+
+    return { success: true, id: employeeId };
+}
+
+export function useRecruitment() {
+    const [candidates, setCandidates] = useState<Candidate[]>([]);
+    const [logs, setLogs] = useState<RecruitmentLog[]>([]);
+    const { currentUser } = useAuth();
+    const { activeTenantId } = useTenant();
+    
+    // Subscribe to Candidates
+    useEffect(() => {
+        if (!activeTenantId) return;
+        
+        const path = `tenants/${activeTenantId}/candidates`;
+        const unsubscribe = Nexus.adapter.onSnapshot(path, (data: Candidate[]) => {
+            if (Array.isArray(data)) {
+                setCandidates(data);
+            }
+        }, {
+            orderBy: { field: 'updatedAt', direction: 'desc' }
+        });
+        return () => unsubscribe();
+    }, [activeTenantId]);
+
+    // Subscribe to Logs
+    useEffect(() => {
+        if (!activeTenantId) return;
+
+        const path = `tenants/${activeTenantId}/recruitment_logs`;
+        const unsubscribe = Nexus.adapter.onSnapshot(path, (data: RecruitmentLog[]) => {
+            if (Array.isArray(data)) {
+                setLogs(data);
+            }
+        }, {
+            orderBy: { field: 'timestamp', direction: 'desc' }
+        });
+        return () => unsubscribe();
+    }, [activeTenantId]);
+
+    const logAction = useCallback(async (candidateId: string, action: string, notes?: string) => {
+        if (!currentUser || !activeTenantId) return;
+        
+        const logsPath = `tenants/${activeTenantId}/recruitment_logs`;
+        const logId = Nexus.adapter.generateId(logsPath);
+        const now = new Date().toISOString();
+        
+        await Nexus.adapter.set(`${logsPath}/${logId}`, {
+            id: logId,
+            candidateId,
+            action,
+            performedBy: currentUser.name,
+            timestamp: now,
+            notes: notes ?? "",
+            createdAt: now,
+            updatedAt: now
+        } as RecruitmentLog);
+    }, [currentUser, activeTenantId]);
+
+    const addCandidate = useCallback(async (candidate: Omit<Candidate, 'id' | 'createdAt' | 'updatedAt'>) => {
+        if (!activeTenantId) return;
+
+        const now = new Date().toISOString();
+        const candidatesPath = `tenants/${activeTenantId}/candidates`;
+        const candidateId = Nexus.adapter.generateId(candidatesPath);
+        
+        await Nexus.adapter.set(`${candidatesPath}/${candidateId}`, {
+            ...candidate,
+            id: candidateId,
+            createdAt: now,
+            updatedAt: now,
+        } as Candidate);
+
+        const gdpr = candidate.gdpr as unknown as GDPRConsent;
+        await logAction(candidateId, "Candidat ajouté au système", buildGdprNote(gdpr));
+        return candidateId;
+    }, [activeTenantId, logAction]);
+
+    const updateCandidateStatus = useCallback(async (id: string, status: CandidateStatus) => {
+        if (!activeTenantId) return;
+
+        // GRADE IX: SURGICAL SUTURE FOR HIRED STATUS
+        if (status === 'hired') {
+            const candidate = candidates.find(c => c.id === id);
+            if (candidate) {
+                const { id: employeeId } = await hiredCandidateAction(activeTenantId, candidate);
+                await logAction(id, `Candidat embauché — fiche employé créée`, `employeeId: ${employeeId}`);
+                return;
+            }
+        }
+
+        const candidatePath = `tenants/${activeTenantId}/candidates/${id}`;
+        await Nexus.adapter.update(candidatePath, { 
+            status, 
+            updatedAt: new Date().toISOString(),
+            lastContactDate: new Date().toISOString()
+        });
+        await logAction(id, `Statut mis à jour: ${status}`);
+    }, [activeTenantId, candidates, logAction]);
+
+    const deleteOldCandidates = useCallback(async () => {
+        if (!activeTenantId) return;
+        await purgeOldCandidates(activeTenantId);
+    }, [activeTenantId]);
+
+    return {
+        candidates,
+        logs,
+        addCandidate,
+        updateCandidateStatus,
+        deleteOldCandidates
+    };
+}
+

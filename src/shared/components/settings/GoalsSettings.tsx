@@ -18,8 +18,7 @@ import {
     LayoutPanelTop,
     ShieldCheck
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 interface GoalConfig {
     id: string;
     label: string;

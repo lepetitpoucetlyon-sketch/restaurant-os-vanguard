@@ -93,7 +93,7 @@ export type {
 
 // --- 🌿 HYGIENE & COMPLIANCE (HACCP) ---
 export * from './settings/haccp';
-export * from '../../../modules/compliance/qualite/haccp/types';
+export * from '@/verticals/restaurant/compliance/haccp/types';
 
 // --- ⚙️ SETTINGS REGISTRY ---
 export * from './settings/accounting';

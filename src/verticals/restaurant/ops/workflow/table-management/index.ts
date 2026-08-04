@@ -1,0 +1,2 @@
+// Variant: table-management
+export {};

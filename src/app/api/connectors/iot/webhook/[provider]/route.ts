@@ -87,7 +87,7 @@ export async function POST(
 
         if (sensor) {
             if (isOutOfRange(sensor, reading.value)) {
-                const { HACCPLogService } = await import('@/modules/compliance/qualite/haccp/HACCPLogService');
+                const { HACCPLogService } = await import('@/verticals/restaurant/compliance/haccp/HACCPLogService');
                 await HACCPLogService.recordNonConformity({
                     tenantId,
                     sensorId:    reading.sensorId,

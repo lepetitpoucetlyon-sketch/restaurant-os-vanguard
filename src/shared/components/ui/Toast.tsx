@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { CheckCircle2, AlertCircle, X, Info, Sparkles } from 'lucide-react';
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from 'framer-motion';
 import { toastVariants } from '@/shared/utils/motion';
 

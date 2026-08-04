@@ -17,8 +17,7 @@ import {
     BadgePercent,
     Activity
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
-
+import { cn } from "@/lib/ui.foundations";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { PositionSettings, StaffConfig } from "@nexus/contracts";

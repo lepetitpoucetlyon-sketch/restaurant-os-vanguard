@@ -4,18 +4,18 @@ import { useState } from "react";
 import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, TrendingUp, Zap } from "lucide-react";
 import type { Customer } from "@nexus/contracts";
 
-import { useCRM } from "@/modules/commerce";
-import { CRMSidebar, CRMList, CRMDetailView } from "@modules/commerce/acquisition/marketing/components/crm";
+import { useCRM } from '@/modules/commerce';
+import { CRMSidebar, CRMList, CRMDetailView } from "@/verticals/restaurant/commerce/acquisition/marketing/components/crm";
 import {
     CustomerCustomerView,
     CustomerDetailPanel,
     NewCustomerDialog,
-} from "@modules/commerce/relation/customers/components";
-import { PromoCodeManager } from "@/modules/commerce";
+} from "@/shared/nexus/engines/CRM/customers/components";
+import { PromoCodeManager } from '@/modules/commerce';
 import { EmailCampaign } from '@/modules/commerce';
 import { BasketAnalysis } from '@/modules/commerce';
 import { VisitHistory } from '@/modules/commerce';
-import { CustomerImportPanel } from "@/modules/commerce";
+import { CustomerImportPanel } from '@/modules/commerce';
 import { RFMSegmentation } from '@/modules/commerce';
 import { EmailAutomations } from '@/modules/commerce';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";

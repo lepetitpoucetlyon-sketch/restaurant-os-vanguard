@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { EmpireInstance, ProvisioningDNA } from '@domain/types/empire';
-import { fleetTelemetry } from '@modules/intelligence/ia/fleet/FleetTelemetryService';
+import { fleetTelemetry } from '@/shared/nexus/engines/Intelligence/ia/fleet/FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
 import { sovereignCreateWorkspace } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

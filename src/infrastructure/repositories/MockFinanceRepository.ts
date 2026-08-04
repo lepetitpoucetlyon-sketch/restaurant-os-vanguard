@@ -1,4 +1,4 @@
-import { IFinanceRepository } from '@/modules/finance';
+import { IFinanceRepository } from '@/shared/nexus/engines/Ledger/repositories/IFinanceRepository';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 

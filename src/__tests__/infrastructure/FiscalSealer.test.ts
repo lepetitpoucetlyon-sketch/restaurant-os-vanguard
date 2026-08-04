@@ -30,13 +30,7 @@ vi.mock('../../infrastructure/adapters/FiscalAdapter', () => ({
   },
 }));
 
-vi.mock('@domain/services/CryptoService', () => ({
-  CryptoService: {
-    generateHash: vi.fn().mockResolvedValue('test_hash_abc123'),
-    signFiscalData: vi.fn().mockResolvedValue('test_signature_xyz'),
-    canonicalStringify: vi.fn((d: unknown) => JSON.stringify(d)),
-  },
-}));
+import { CryptoService } from '@/domain/services/CryptoService';
 
 vi.mock('@domain/services/FiscalKeyService', () => ({
   FiscalKeyService: {
@@ -51,7 +45,12 @@ vi.mock('@/lib/utils/IdGenerator', () => ({
 }));
 
 describe('FiscalSealer', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(CryptoService, 'generateHash').mockResolvedValue('test_hash_abc123');
+    vi.spyOn(CryptoService, 'signFiscalData').mockResolvedValue('test_signature_xyz');
+    vi.spyOn(CryptoService, 'canonicalStringify').mockImplementation((d: unknown) => JSON.stringify(d));
+  });
 
   describe('generateSequentialReceiptNumber', () => {
     it('generates a sequential receipt number in format YEAR-NNNNNN', async () => {

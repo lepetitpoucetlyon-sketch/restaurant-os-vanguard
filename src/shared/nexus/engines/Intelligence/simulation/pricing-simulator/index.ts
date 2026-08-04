@@ -1,0 +1,2 @@
+// Variant: pricing-simulator
+export {};

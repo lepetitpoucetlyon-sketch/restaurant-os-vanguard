@@ -5,7 +5,7 @@ export function registerRecipeChangeKDSHandler() {
   return NexusEventBus.on(
     'recipe.updated',
     async (payload) => {
-      const { tenantId, recipeId, productId } = payload;
+      const { tenantId, recipeId: _recipeId, productId } = payload;
       
       // Invalider le cache KDS pour ce produit
       // Émettre un événement pour forcer le rafraîchissement des KDS

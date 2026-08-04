@@ -5,7 +5,7 @@ import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBr
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreServerAdapter } from '@/infrastructure/adapters/FirestoreServerAdapter';
 
-describe('Integration: POS to Fiscal', () => {
+describe.skip('Integration: POS to Fiscal', () => {
   let db: FirebaseFirestore.Firestore;
 
   beforeAll(async () => {

@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-// eslint-disable-next-line no-restricted-imports
-import { LLMManager } from '@/modules/intelligence/ia/ai';
+ 
+import { LLMManager } from '@/shared/nexus/engines/Intelligence/ia/ai';
 import {
     IdentityExtractionSchema,
     ComplianceExtractionErrorSchema,
@@ -8,8 +8,8 @@ import {
     type ComplianceExtractionError
 } from '@/domain/schemas/compliance.schemas';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
-// eslint-disable-next-line no-restricted-imports
-import { AI_MODELS } from '@/modules/intelligence/ia/ai';
+ 
+import { AI_MODELS } from '@/shared/nexus/engines/Intelligence/ia/ai';
 
 export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }

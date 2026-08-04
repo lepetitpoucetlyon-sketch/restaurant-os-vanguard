@@ -1,0 +1,17 @@
+{
+  "app": {
+    "name": "Restaurant OS Vanguard",
+    "defaultDomain": "test.local"
+  },
+  "restaurant": {
+    "name": "Test Restaurant"
+  },
+  "firebase": {
+    "projectId": "test-project",
+    "appId": "test-app-id",
+    "storageBucket": "test-bucket",
+    "apiKey": "test-api-key",
+    "authDomain": "test-auth-domain",
+    "messagingSenderId": "test-sender-id"
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { ReactNode } from "react";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 

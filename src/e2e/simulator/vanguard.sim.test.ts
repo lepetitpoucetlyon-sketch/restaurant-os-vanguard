@@ -5,9 +5,11 @@ import '../vanguard/mocks';
 // ── SimulatorDB (Dexie → in-memory Map) ────────────────────────────────────
 // SimulacraAdapter uses Dexie IndexedDB which doesn't exist in Node/jsdom.
 // We replace it with a synchronous in-memory Map exposing the same API.
-const virtualMap = new Map<string, { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }>();
+const { virtualMap } = vi.hoisted(() => ({
+  virtualMap: new Map<string, { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }>(),
+}));
 
-vi.mock('@/modules/intelligence/ia/simulator/SimulatorDB', () => {
+vi.mock('@/shared/nexus/engines/Intelligence/ia/simulator/SimulatorDB', () => {
   const makeTable = () => ({
     get: async (path: string) => virtualMap.get(path) ?? undefined,
     put: async (doc: { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }) => {
@@ -39,24 +41,15 @@ vi.mock('@/modules/intelligence/ia/simulator/SimulatorDB', () => {
   };
 });
 
-// ── NexusEventBus: fire-and-forget — silence side-effects ─────────────────
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: { 
-    emit: vi.fn().mockResolvedValue(undefined),
-    emitDurable: vi.fn().mockResolvedValue(undefined)
-  },
-}));
+// Removed vi.mock for NexusEventBus and empireAudit in favor of spyOn
 
-// ── empireAudit: silence in tests ─────────────────────────────────────────
-vi.mock('@/infrastructure/services/audit', () => ({
-  empireAudit: { log: vi.fn() },
-}));
-
-// ── Imports (after mocks) ──────────────────────────────────────────────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
 import { FiscalKeyService } from '@/modules/finance';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/infrastructure/services/audit';
+import { simulatorDb } from '@/shared/nexus/engines/Intelligence/ia/simulator/SimulatorDB';
 
 import { alicePersona } from './personas/alice';
 import { bobPersona, BOB_CART_TOTAL_MICROUNITS, BOB_CART_TOTAL_CENTS } from './personas/bob';
@@ -68,17 +61,24 @@ import { AssertionLayer } from './engine/AssertionLayer';
 const TENANT_ID = 'chez-alice';
 
 describe('🎭 Vanguard Simulator — 4 personas · Simulacra engine', () => {
+  let currentForkId = 'simulator';
+
   beforeEach(async () => {
+    currentForkId = `simulator-${Date.now()}-${Math.random()}`;
     process.env.STRICT_ISOLATION_TEST = 'true';
     virtualMap.clear();
+    await simulatorDb.clearFork?.('simulator');
     vi.clearAllMocks();
     vi.spyOn(NexusTelemetryService, 'emit').mockResolvedValue(undefined);
+    vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
+    vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
+    vi.spyOn(empireAudit, 'log').mockImplementation(() => {});
 
     Nexus.deactivateSimulacraMode();
     Nexus.tenantOverride = null;
     Nexus.adapter = new MockAdapter();
     Nexus.tenantOverride = TENANT_ID;
-    await Nexus.activateSimulacraMode('simulator');
+    await Nexus.activateSimulacraMode(currentForkId);
 
     // Provision fiscal HMAC key — required by FiscalSealer.sealData()
     FiscalKeyService.provision(TENANT_ID, FiscalKeyService.generateKey());

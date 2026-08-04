@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ReservationProviderFactory } from '@/modules/ops';
+import { ReservationProviderFactory } from '@/legacy_monolith/ops/connectors/reservations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';

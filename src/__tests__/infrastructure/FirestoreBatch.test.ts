@@ -1,17 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FirestoreBatch } from '@/infrastructure/adapters/FirestoreBatch';
 
-// Mock Firebase Firestore functions
-vi.mock('firebase/firestore', () => ({
-    writeBatch: vi.fn().mockReturnValue({
-        set: vi.fn(),
-        update: vi.fn(),
-        delete: vi.fn(),
-        commit: vi.fn().mockResolvedValue(undefined)
-    }),
-    doc: vi.fn((db, path) => ({ _type: 'documentRef', db, path })),
-    increment: vi.fn((amount) => ({ _type: 'increment', amount }))
-}));
+
 
 describe('FirestoreBatch - Grade X Strict Typing Audit', () => {
     let mockDb: any;

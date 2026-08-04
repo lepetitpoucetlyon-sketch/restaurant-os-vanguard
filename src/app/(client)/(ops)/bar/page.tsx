@@ -5,7 +5,7 @@ import { useAtomValue } from "jotai";
 import { useToast } from "@ui/Toast";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
-  () => import("@/modules/ops/service/pos/components").then(m => m.ProductFormModal),
+  () => import("@/verticals/restaurant/ops/pos/components").then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
 import { RecipeDetailDialog } from "@modules/ops";

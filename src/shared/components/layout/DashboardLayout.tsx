@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { ScrollArea } from "@ui/scroll-area";

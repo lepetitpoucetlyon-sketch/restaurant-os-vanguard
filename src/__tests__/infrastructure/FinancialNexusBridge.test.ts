@@ -3,55 +3,52 @@ import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBr
 import { TaxCalculator } from '@/infrastructure/services/finance/TaxCalculator';
 import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      batch: vi.fn(() => ({
-        set: vi.fn(),
-        commit: vi.fn().mockResolvedValue(undefined),
-      })),
-    },
-  },
-}));
+// Removed NexusAdapter mock, will use spyOn in beforeEach
 
-vi.mock('@/infrastructure/services/finance/TaxCalculator', () => ({
-  TaxCalculator: {
-    calculateTotals: vi.fn().mockReturnValue({
+import { CryptoService } from '@/domain/services/CryptoService';
+
+describe('FinancialNexusBridge', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    
+    vi.spyOn(TaxCalculator, 'calculateTotals').mockReturnValue({
       totalTTCInMicrounits: 10000000,
       tvaBreakdown: { '0.10': 909090 },
       totalHTInMicrounits: 9090910,
-    }),
-  },
-}));
+    } as any);
 
-vi.mock('@/infrastructure/services/finance/FiscalSealer', () => ({
-  FiscalSealer: {
-    generateSequentialReceiptNumber: vi.fn().mockResolvedValue('2026-000001'),
-    sealDataAtomically: vi.fn().mockResolvedValue({
+    vi.spyOn(FiscalSealer, 'generateSequentialReceiptNumber').mockResolvedValue('2026-000001');
+    vi.spyOn(FiscalSealer, 'sealDataAtomically').mockResolvedValue({
       hash: 'test_hash',
       signature: 'test_sig',
       sealId: 'seal_1',
       previousHash: 'prev_hash',
-    }),
-  },
-}));
+    } as any);
 
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: {
-    emit: vi.fn().mockResolvedValue(undefined),
-    emitDurable: vi.fn().mockResolvedValue(undefined),
-  },
-}));
+    vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
+    vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
 
-vi.mock('@domain/services/CryptoService', () => ({
-  CryptoService: {
-    canonicalStringify: vi.fn().mockReturnValue('json_data'),
-  },
-}));
-
-describe('FinancialNexusBridge', () => {
-  beforeEach(() => vi.clearAllMocks());
+    vi.spyOn(CryptoService, 'canonicalStringify').mockReturnValue('json_data');
+    // @ts-expect-error - vitest mock
+    vi.spyOn(Nexus.adapter, 'batch').mockImplementation(() => ({
+      set: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+      commit: vi.fn().mockResolvedValue(undefined),
+    }));
+    vi.spyOn(Nexus.adapter, 'serverTimestamp').mockReturnValue('SERVER_TS');
+    vi.spyOn(Nexus.adapter, 'runTransaction').mockImplementation(async (cb: any) => {
+      const tx = {
+        get: vi.fn().mockResolvedValue(null),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+      };
+      return cb(tx);
+    });
+  });
 
   it('throws on empty cart', async () => {
     await expect(FinancialNexusBridge.processOrder({

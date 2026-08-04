@@ -1,6 +1,6 @@
 'use client';
 
-import { EventBusHealthPanel } from '@nexus/guards/admin/mcc/EventBusHealthPanel';
+import { EventBusHealthPanel } from '../components/EventBusHealthPanel';
 
 export function EventBusTab() {
   return <EventBusHealthPanel />;

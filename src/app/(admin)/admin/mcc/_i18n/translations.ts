@@ -63,6 +63,11 @@ export const mccTranslations = {
       ownerEmail: 'Email Propriétaire',
       ownerEmailPlaceholder: 'proprietaire@restaurant.fr',
       tier: 'Niveau',
+      tiers: {
+        STANDARD: { name: 'Standard', tagline: 'Base', price: '0€', period: '/mois', features: ['Jusqu\'à 100 tickets/jour'] },
+        PREMIUM: { name: 'Premium', tagline: 'Populaire', price: '99€', period: '/mois', features: ['Tickets illimités', 'Support 24/7'] },
+        ENTERPRISE: { name: 'Enterprise', tagline: 'Global', price: 'Sur devis', period: '', features: ['Instances dédiées'] }
+      },
       policy: 'Politique : Toutes les instances sont provisionnées avec NF525 et 2FA activés par défaut (STANDARD_DNA_V3).',
       cancel: 'Annuler',
       launch: 'Lancer la Naissance',
@@ -194,6 +199,11 @@ export const mccTranslations = {
       ownerEmail: 'Owner Email',
       ownerEmailPlaceholder: 'owner@restaurant.fr',
       tier: 'Tier',
+      tiers: {
+        STANDARD: { name: 'Standard', tagline: 'Base', price: '$0', period: '/month', features: ['Up to 100 tickets/day'] },
+        PREMIUM: { name: 'Premium', tagline: 'Popular', price: '$99', period: '/month', features: ['Unlimited tickets', '24/7 Support'] },
+        ENTERPRISE: { name: 'Enterprise', tagline: 'Global', price: 'Custom', period: '', features: ['Dedicated instances'] }
+      },
       policy: 'Policy: All instances are provisioned with NF525 and 2FA enabled by default (STANDARD_DNA_V3).',
       cancel: 'Cancel',
       launch: 'Launch Birth',

@@ -17,7 +17,7 @@ type Step = 'identity' | 'config' | 'deploying';
 
 export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardProps) {
     const [step, setStep] = useState<Step>('identity');
-    const [isLoading, setIsLoading] = useState(false);
+    const [_isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [formData, setFormData] = useState<ProvisioningDNA>({
         name: '',

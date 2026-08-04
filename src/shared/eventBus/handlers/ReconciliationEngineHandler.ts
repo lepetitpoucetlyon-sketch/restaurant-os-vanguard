@@ -45,7 +45,7 @@ export function registerReconciliationEngineHandler() {
   const unsubSync = NexusEventBus.on(
     'finance.bank_transaction_synced',
     async (payload) => {
-      const { tenantId, transactionId, amountInMicrounits, syncedAt } = payload;
+      const { tenantId, transactionId, amountInMicrounits, syncedAt: _syncedAt } = payload;
       logger.info(`[ReconciliationEngine] Bank transaction synced: ${transactionId} for ${amountInMicrounits}µ. Running heuristics...`);
 
       // 1. Chercher un journal entry non lettré avec montant exact

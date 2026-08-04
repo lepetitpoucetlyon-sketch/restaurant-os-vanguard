@@ -7,7 +7,7 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { PayrollProviderConfig } from '@/modules/human';
+import type { PayrollProviderConfig } from '@/verticals/restaurant/human/tip-pooling/payroll/types';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const caller = await requireTenantAdmin(req);

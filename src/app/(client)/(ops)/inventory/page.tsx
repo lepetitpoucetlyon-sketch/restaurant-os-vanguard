@@ -1,5 +1,5 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
+ 
+ 
 "use client";
 
 import {
@@ -17,21 +17,21 @@ import {
     Sparkles,
 } from "lucide-react";
 
-import { useInventoryPage } from "@/modules/logistics/stock/inventory/hooks/useInventoryPage";
+import { useInventoryPage } from "@/verticals/restaurant/logistics/inventory/inventory/hooks/useInventoryPage";
 import {
     StockReceptionModal,
     StockTransferModal,
     CreatePreparationModal,
     OracleModal,
-} from "@modules/logistics/stock/inventory/components";
+} from "@/verticals/restaurant/logistics/inventory/inventory/components";
 import {
     ThresholdModal,
     PhysicalCountModal,
     AdjustStockModal,
     computeDLCStatus,
-} from "@/modules/logistics/stock/inventory/components/InventoryInlineModals";
+} from "@/verticals/restaurant/logistics/inventory/inventory/components/InventoryInlineModals";
 import { SecurityPinModal } from "@components/ui";
-import { RotatingCount } from "@/modules/logistics/stock/inventory/components/RotatingCount";
+import { RotatingCount } from "@/verticals/restaurant/logistics/inventory/inventory/components/RotatingCount";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function InventoryPage() {

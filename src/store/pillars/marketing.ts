@@ -1,5 +1,5 @@
 // 📢 MARKETING PILLAR — CRM, SEO & Social
-// Source: @modules/commerce (Marketing is currently within commerce module)
+// Source: @/shared/nexus/engines/CRM (Marketing is currently within commerce module)
 
 export {
     seoProfileAtom,           // MARKETING
@@ -17,4 +17,4 @@ export {
     selectedCRMAtom,          // MARKETING
     seoLoadingAtom,           // MARKETING
     isMarketingSyncingAtom,   // MARKETING
-} from '@modules/commerce/acquisition/marketing/store/marketingAtoms';
+} from '@/verticals/restaurant/commerce/acquisition/marketing/store/marketingAtoms';

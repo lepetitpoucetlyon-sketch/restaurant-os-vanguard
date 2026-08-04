@@ -4,7 +4,7 @@ import { toMicrounits } from '@/domain/schemas/primitives';
 
 // --- Mocks ---
 
-const { mockBatchSet, mockBatchCommit, mockBatch } = vi.hoisted(() => {
+const { mockBatchCommit, mockBatch } = vi.hoisted(() => {
   const mockBatchSet = vi.fn();
   const mockBatchCommit = vi.fn().mockResolvedValue(undefined);
   const mockBatch = vi.fn(() => ({
@@ -13,27 +13,10 @@ const { mockBatchSet, mockBatchCommit, mockBatch } = vi.hoisted(() => {
     delete: vi.fn(),
     commit: mockBatchCommit,
   }));
-  return { mockBatchSet, mockBatchCommit, mockBatch };
+  return { mockBatchCommit, mockBatch };
 });
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      query: vi.fn().mockResolvedValue([]),
-      batch: mockBatch,
-      serverTimestamp: vi.fn(() => 'SERVER_TS'),
-      runTransaction: vi.fn(async (cb: (tx: any) => Promise<any>) => {
-        const tx = {
-          get: vi.fn().mockResolvedValue(null),
-          set: vi.fn(),
-          update: vi.fn(),
-          delete: vi.fn(),
-        };
-        return cb(tx);
-      }),
-    },
-  },
-}));
+// Removed NexusAdapter mock, will use spyOn in beforeEach
 
 vi.mock('@/infrastructure/adapters/FiscalAdapter', () => ({
   FISCAL_CONSTANTS: {
@@ -43,13 +26,7 @@ vi.mock('@/infrastructure/adapters/FiscalAdapter', () => ({
   },
 }));
 
-vi.mock('@/domain/services/CryptoService', () => ({
-  CryptoService: {
-    canonicalStringify: vi.fn((data) => JSON.stringify(data)),
-    generateHash: vi.fn().mockResolvedValue('a'.repeat(64)),
-    signFiscalData: vi.fn().mockResolvedValue('mock-signature'),
-  },
-}));
+// Removed CryptoService mock, will use spyOn in beforeEach
 
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: {
@@ -65,6 +42,7 @@ vi.mock('@/infrastructure/services/audit', () => ({
 
 import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { CryptoService } from '@/domain/services/CryptoService';
 
 const makeCartItem = (overrides: Partial<CartItem> = {}): CartItem => ({
   cartId: 'cart-1',
@@ -82,7 +60,24 @@ const makeCartItem = (overrides: Partial<CartItem> = {}): CartItem => ({
 describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (Nexus.adapter.query as any).mockResolvedValue([]);
+    vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
+    // @ts-expect-error - vitest mock does not match full adapter signature
+    vi.spyOn(Nexus.adapter, 'batch').mockImplementation(() => mockBatch());
+    vi.spyOn(Nexus.adapter, 'serverTimestamp').mockReturnValue('SERVER_TS');
+    vi.spyOn(Nexus.adapter, 'runTransaction').mockImplementation(async (cb: any) => {
+      const tx = {
+        get: vi.fn().mockResolvedValue(null),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+      };
+      return cb(tx);
+    });
+
+    vi.spyOn(CryptoService, 'canonicalStringify').mockImplementation((data) => JSON.stringify(data));
+    vi.spyOn(CryptoService, 'generateHash').mockResolvedValue('a'.repeat(64));
+    vi.spyOn(CryptoService, 'signFiscalData').mockResolvedValue('mock-signature');
+
     mockBatchCommit.mockResolvedValue(undefined);
   });
 
@@ -124,7 +119,8 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
 
   it('chaîne avec le hash du dernier seal existant', async () => {
     const prevHash = 'b'.repeat(64);
-    (Nexus.adapter.runTransaction as any).mockImplementation(async (cb: (tx: any) => Promise<any>) => {
+    // override the transaction just for this test
+    vi.spyOn(Nexus.adapter, 'runTransaction').mockImplementation(async (cb: any) => {
       const tx = {
         get: vi.fn().mockResolvedValue({ hash: prevHash, sealId: 'seal-prev' }),
         set: vi.fn(),
@@ -134,7 +130,6 @@ describe('🏦 FinancialNexusBridge — NF525 Suture', () => {
       return cb(tx);
     });
 
-    const { CryptoService } = await import('@/domain/services/CryptoService');
     const item = makeCartItem();
     await FinancialNexusBridge.processOrder({
       cartItems: [item],

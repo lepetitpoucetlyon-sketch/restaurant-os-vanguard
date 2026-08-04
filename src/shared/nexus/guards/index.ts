@@ -18,7 +18,6 @@ export * from './SovereignGuard';
 export * from './CycleGuard';
 export * from './admin';
 export * from './fleet';
-export * from './admin/mcc';
 
 // Phase 5 transplants — admin components moved from src/components/{admin,fleet}
 export { HermesDashboard } from './HermesDashboard';

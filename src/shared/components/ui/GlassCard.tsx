@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { motion, HTMLMotionProps } from "framer-motion";
 import { forwardRef, ReactNode } from "react";
 

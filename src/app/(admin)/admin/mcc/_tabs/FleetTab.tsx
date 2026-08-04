@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { LayoutGrid, TrendingUp, Activity, ShieldCheck, Plus, FlaskConical, Loader2 } from 'lucide-react';
-import { StatCard, TenantUsersPanel, MCCWidgetSkeleton } from '@nexus/guards/admin/mcc';
+import { StatCard, TenantUsersPanel, MCCWidgetSkeleton } from '../components';
 import type { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { useMCCLocale } from '../_i18n';
 import { useState } from 'react';
@@ -9,8 +9,8 @@ import { authedFetch } from '@/lib/client/authedFetch';
 import { toast } from 'sonner';
 import { useFleet } from '@/shared/contexts/FleetContext';
 
-const FleetCommandTable    = dynamic(() => import('@nexus/guards/admin/mcc/FleetCommandTable').then(m => m.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
-const FleetDeviceInventory = dynamic(() => import('@nexus/guards/admin/mcc/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
+const FleetCommandTable    = dynamic(() => import('../components/FleetCommandTable').then(m => m.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
+const FleetDeviceInventory = dynamic(() => import('../components/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
 
 interface FleetTabProps {
     instances: EmpireInstance[];

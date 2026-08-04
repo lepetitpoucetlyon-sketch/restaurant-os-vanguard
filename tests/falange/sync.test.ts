@@ -9,16 +9,19 @@ import { InventorySyncService as SyncStocks } from '@/modules/logistics';
 import { HACCPSyncService as SyncHACCP } from '@/modules/compliance';
 import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
 
-// Mocking dependencies
-vi.mock('@/modules/ops/workflow/engine/ops.sync', () => ({ OpsSyncService: { init: vi.fn(), stop: vi.fn() } }));
-vi.mock('@/modules/logistics/stock/inventory/inventory.sync', () => ({ InventorySyncService: { init: vi.fn(), stop: vi.fn() } }));
-vi.mock('@/modules/compliance/qualite/haccp/haccp.sync', () => ({ HACCPSyncService: { init: vi.fn(), stop: vi.fn() } }));
-vi.mock('@/infrastructure/adapters/MasterBridge', () => ({ MasterBridge: { listenToMaster: vi.fn(() => vi.fn()) } }));
+// No vi.mock here, we'll use vi.spyOn in beforeEach
 
 describe('🛰️ FALANGE - COHORTE SYNC (10 TESTS)', () => {
     
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.spyOn(SyncOrders, 'init').mockResolvedValue(undefined as never);
+        vi.spyOn(SyncOrders, 'stop').mockReturnValue(undefined as never);
+        vi.spyOn(SyncStocks, 'init').mockResolvedValue(undefined as never);
+        vi.spyOn(SyncStocks, 'stop').mockReturnValue(undefined as never);
+        vi.spyOn(SyncHACCP, 'init').mockResolvedValue(undefined as never);
+        vi.spyOn(SyncHACCP, 'stop').mockReturnValue(undefined as never);
+        vi.spyOn(MasterBridge, 'listenToMaster').mockReturnValue(vi.fn());
     });
 
     /**
