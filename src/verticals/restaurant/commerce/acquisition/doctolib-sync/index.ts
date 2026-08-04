@@ -1,2 +1,0 @@
-// Variant: doctolib-sync
-export {};

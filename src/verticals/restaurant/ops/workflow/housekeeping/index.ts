@@ -1,2 +1,0 @@
-// Variant: housekeeping
-export {};

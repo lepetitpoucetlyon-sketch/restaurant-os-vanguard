@@ -1,2 +1,0 @@
-// Variant: split-bill
-export {};

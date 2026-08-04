@@ -1,2 +1,0 @@
-// Variant: menu-engineering
-export {};

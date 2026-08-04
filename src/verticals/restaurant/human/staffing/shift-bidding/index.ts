@@ -1,2 +1,0 @@
-// Variant: shift-bidding
-export {};

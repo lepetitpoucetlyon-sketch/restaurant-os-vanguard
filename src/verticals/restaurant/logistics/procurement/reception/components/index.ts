@@ -1,1 +1,0 @@
-export { InventoryReceptionDashboard } from './InventoryReceptionDashboard';

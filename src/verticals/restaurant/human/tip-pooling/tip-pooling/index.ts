@@ -1,2 +1,0 @@
-// Variant: tip-pooling
-export {};

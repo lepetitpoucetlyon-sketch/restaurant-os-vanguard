@@ -1,2 +1,0 @@
-// Variant: bio-hazard
-export {};

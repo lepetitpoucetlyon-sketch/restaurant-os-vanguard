@@ -75,4 +75,7 @@
 | genesis-variant | Multi-variant provisioning + restructuration 7 piliers en domaines universels (ops/commerce/finance/compliance/human/logistics/intelligence) | 2026-08-01 | terminée |
 | arch-diagram | Lecture seule — création schéma architectural réel (SVG artifact) | 2026-08-01 | terminée |
 | migration-finisher | src/modules/, src/verticals/, tsconfig, preflight | 2026-08-04 | terminée |
-| sprint0-cycles | src/lib/nexus/ (NexusAdapter, NexusInterceptor, types) — casser cycles imports | 2026-08-04 | active |
+| sprint0-cycles | 55 barrel self-imports → relatifs, 375→331 cycles, kdsUtils.ts extrait | 2026-08-04 | terminée |
+| phase1-doublons | src/modules/ vs src/verticals/ — suppression doublons purs + quasi-identiques | 2026-08-04 | terminée |
+| phase2-dep-audit | Audit dépendances runtime 6 modules Phase 2 (lecture seule) : haccp, kds, kitchen, recipes, fiscalite, hr | 2026-08-04 | terminée |
+| debt-a-intel-alias | Debt A : alias @/modules/intelligence dans tsconfig pointe sur engines/Intelligence/ — fix bloqué par cycle fleet→index→fleet ; prérequis : retirer export fleet du barrel modules/intelligence/index.ts | 2026-08-05 | active |

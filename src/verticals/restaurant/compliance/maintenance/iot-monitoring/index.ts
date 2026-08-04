@@ -1,2 +1,0 @@
-// Variant: iot-monitoring
-export {};

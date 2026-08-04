@@ -1,2 +1,0 @@
-// Variant: bays
-export {};

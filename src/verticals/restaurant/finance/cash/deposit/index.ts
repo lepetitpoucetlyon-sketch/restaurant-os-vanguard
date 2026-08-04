@@ -1,2 +1,0 @@
-// Variant: deposit
-export {};
