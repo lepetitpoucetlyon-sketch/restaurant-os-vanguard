@@ -3,9 +3,9 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/infrastructure/services/offline/offline-store';
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalKeyService } from '@/modules/finance';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
  
-import type { CommunicationPulse } from '@/verticals/restaurant/finance/cash/collection/types';
+import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';

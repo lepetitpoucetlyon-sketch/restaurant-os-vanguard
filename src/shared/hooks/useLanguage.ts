@@ -1,6 +1,6 @@
 "use client";
 
-import { useNexusCore } from '@/shared/providers/NexusCoreProvider';
+import { useNexusCore } from '@/shared/providers/NexusCoreContext';
 
 const fallbackT = (key: string) => key;
 const fallbackLang = {

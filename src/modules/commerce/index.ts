@@ -17,7 +17,7 @@ export type { GroupFormData } from './relation/reservations/components/GroupForm
 // Ré-export depuis la source (commerceHooks) et non le barrel NexusOpsProvider :
 // passer par le Provider crée un cycle SSR commerce → Provider → NexusSyncService → commerce
  
-export { useReservations, useCRM } from '@/modules/ops';
+export { useReservations, useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
 
 // Domaine : fidélité (loyalty, quotes, widgets)
 export { ReservationWidget } from './fidelite/widgets';

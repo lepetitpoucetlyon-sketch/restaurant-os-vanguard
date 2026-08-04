@@ -1,9 +1,9 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { HermesKnowledgeManager } from '@/modules/intelligence';
+import { HermesKnowledgeManager } from '@/shared/nexus/engines/Intelligence/knowledge/rag/HermesKnowledgeManager';
 
-import type { CartItem } from '@/modules/ops';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 /**
  * Analyse intelligente BACKGROUND après chaque paiement.
@@ -65,7 +65,7 @@ export function registerIntelligenceHandler(): () => void {
   );
 }
 
-async function analyzeStockTrend(tenantId: string, items: import("@/verticals/restaurant/ops/workflow/engine/types").CartItem[]): Promise<void> {
+async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops/workflow/engine/types").CartItem[]): Promise<void> {
   try {
     const zcpoState = await readZcpoState();
     if (zcpoState?.memoryPressure === 'critical') return;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useCallback } from "react";
-import { useAuth } from "@/shared/providers/NexusCoreProvider";
+import { useAuth } from "@/shared/providers/NexusCoreContext";
 import {
     PERMISSION_ROLE_LEVELS,
     type PermissionRole,

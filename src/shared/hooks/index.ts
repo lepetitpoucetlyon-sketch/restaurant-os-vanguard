@@ -25,12 +25,12 @@ export { useActionPermission } from "./useActionPermission";
 export { useTabAccess } from "./useTabAccess";
 
 // 🏛️ Sovereign Core Hooks (Grade X)
-export { 
+export {
     useNexusCore,
     useAuth,
     useUI,
-    useTenant,
     useSettings,
     useLanguage,
     useNotifications
-} from "@/shared/providers/NexusCoreProvider";
+} from "@/shared/providers/NexusCoreContext";
+export { useTenant } from "@/shared/hooks/useTenant";

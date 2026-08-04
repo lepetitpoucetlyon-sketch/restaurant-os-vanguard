@@ -23,7 +23,7 @@ import { SimulationService, SimulationMode, MonteCarloResult } from "@/shared/ne
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
          
-import { useInventory } from '@/modules/logistics';
+import { useInventory } from '@/modules/logistics/stock/inventory/hooks/useInventory';
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {

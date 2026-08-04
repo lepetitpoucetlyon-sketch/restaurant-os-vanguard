@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
-import { useRecipes } from '@/modules/ops';
-import { useKDSController } from "@verticals/restaurant/ops/kds";
+import { useRecipes } from '@/modules/ops/providers/hooks/kitchenHooks';
+import { useKDSController } from '../hooks/useKDSController';
 import { useNexusOps } from '@modules/ops/providers/NexusOpsProvider';
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";

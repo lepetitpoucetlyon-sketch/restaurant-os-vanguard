@@ -1,5 +1,6 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useContext, ReactNode } from 'react';
+import { NexusCoreContext, useNexusCore } from './NexusCoreContext';
 import { loadTranslations, Language } from '@/i18n/translations';
 import { LANGUAGES } from '@/config/languages';
 import { useAtomValue } from 'jotai';
@@ -16,7 +17,6 @@ import { useNexusTenantLogic } from './hooks/useNexusTenantLogic';
 import { useNexusAuthLogic } from './hooks/useNexusAuthLogic';
 import { useNexusFleetLogic } from './hooks/useNexusFleetLogic';
 
-const NexusCoreContext = createContext<NexusCoreState | undefined>(undefined);
 
 const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     // 1. TENANT MODULE
@@ -86,11 +86,7 @@ export const NexusCoreProvider: React.FC<{ children: ReactNode }> = ({ children 
     );
 };
 
-export const useNexusCore = () => {
-    const context = useContext(NexusCoreContext);
-    if (!context) throw new Error("useNexusCore must be used within NexusCoreProvider");
-    return context;
-};
+export { useNexusCore };
 
 export const useAuth = () => useNexusCore().auth;
 export const useTenant = () => useNexusCore().tenant;
