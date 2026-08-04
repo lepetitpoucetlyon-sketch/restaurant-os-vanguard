@@ -43,7 +43,7 @@ export { CollectionService } from './tresorerie/collection/CollectionService';
 export { useAnalyticsPage } from './comptabilite/analytics/hooks';
 export { percentChange } from './comptabilite/analytics/hooks';
 export type { MacroBrainAlert } from './comptabilite/analytics/hooks';
-export { UsageTracker } from './comptabilite/billing/UsageTracker';
+// UsageTracker est server-only — import direct depuis le chemin complet en contexte serveur uniquement.
 export { resolveVatRate } from './fiscalite/tax/vatResolver';
 export { inferCategory } from './fiscalite/tax/vatResolver';
 export { FinanceSyncService } from './finance.sync';
