@@ -6,7 +6,7 @@ import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
  
-import { auditService } from '@/shared/nexus/vault/audits/audit';
+import { auditService } from '@/shared/nexus/vault/audits/audit/AuditService';
 
 /**
  * 🛰️ NexusInterceptor - Grade X Middleware

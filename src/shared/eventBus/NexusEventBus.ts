@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import type { CartItem } from '@/modules/ops';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { db } from '@/infrastructure/services/offline/offline-store';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
