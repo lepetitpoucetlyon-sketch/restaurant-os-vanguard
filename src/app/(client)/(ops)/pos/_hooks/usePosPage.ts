@@ -11,7 +11,7 @@ import { useIsMobile } from "@/shared/hooks";
 import { useAmbiance, useTabletMode, usePrintReceipt, useRbacGate } from "../_posSlices";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useStockAlerts } from "../useStockAlerts";
-import type { CartItem } from "@/verticals/restaurant/ops/workflow/engine/types";
+import type { CartItem } from "@/modules/ops/workflow/engine/types";
 import type { PendingAction } from "./useRbacGate";
 
 export function usePosPage() {

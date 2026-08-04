@@ -5,7 +5,7 @@ import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, Tren
 import type { Customer } from "@nexus/contracts";
 
 import { useCRM } from '@/modules/commerce';
-import { CRMSidebar, CRMList, CRMDetailView } from "@/verticals/restaurant/commerce/acquisition/marketing/components/crm";
+import { CRMSidebar, CRMList, CRMDetailView } from "@/modules/commerce/acquisition/marketing/components/crm";
 import {
     CustomerCustomerView,
     CustomerDetailPanel,

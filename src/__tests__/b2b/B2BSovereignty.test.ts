@@ -95,7 +95,7 @@ describe('B2B Sovereignty — YieldEngine isolation', () => {
         });
 
         // Import dynamique pour éviter des effets de bord au module level
-        const { YieldEngine } = await import('@/verticals/restaurant/commerce/acquisition/marketing/services/YieldEngine');
+        const { YieldEngine } = await import('@/modules/commerce/acquisition/marketing/services/YieldEngine');
 
          
         const spy = vi.spyOn(YieldEngine as any, 'applyStrategyToLocalTenant');
@@ -123,7 +123,7 @@ describe('B2B Sovereignty — YieldEngine isolation', () => {
             metadata: { ownerId: 'owner_alice' }, // correspondance exacte
         });
 
-        const { YieldEngine } = await import('@/verticals/restaurant/commerce/acquisition/marketing/services/YieldEngine');
+        const { YieldEngine } = await import('@/modules/commerce/acquisition/marketing/services/YieldEngine');
 
         // Pas d'erreur lancée — la campagne passe
         await expect(

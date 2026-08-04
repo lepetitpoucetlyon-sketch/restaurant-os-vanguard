@@ -1,2 +1,0 @@
-// Variant: batch-planner
-export {};

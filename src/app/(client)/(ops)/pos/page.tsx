@@ -16,7 +16,7 @@ import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { formatCurrency } from "@/lib/formatters";
 // eslint-disable-next-line no-restricted-imports
 import { CashDrawerModal, PinModal, TipPanel, VoidModal, CourseManager } from "@/modules/commerce/ui/pos";
-import { CourseType } from "@/verticals/restaurant/ops/workflow/engine/types";
+import { CourseType } from "@/modules/ops/workflow/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";

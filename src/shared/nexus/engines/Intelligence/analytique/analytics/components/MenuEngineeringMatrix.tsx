@@ -67,10 +67,13 @@ export const MenuEngineeringMatrix: React.FC = () => {
             puzzle: [],
             dog: [],
         };
-        for (const item of analysis) map[item.category].push(item);
+        for (const item of analysis) {
+            const cat: Category = item.category as Category;
+            map[cat].push(item);
+        }
         // Chaque quadrant : plus performant en tête (popularité × marge)
         for (const key of ORDER) {
-            map[key].sort((a, b) => b.popularity * b.profitability - a.popularity * a.profitability);
+            map[key].sort((a: (typeof analysis)[number], b: (typeof analysis)[number]) => b.popularity * b.profitability - a.popularity * a.profitability);
         }
         return map;
     }, [analysis]);
@@ -126,7 +129,7 @@ export const MenuEngineeringMatrix: React.FC = () => {
                             </div>
 
                             <ul className="space-y-1.5 mt-1">
-                                {items.slice(0, 6).map(item => (
+                                {items.slice(0, 6).map((item: (typeof analysis)[number]) => (
                                     <li
                                         key={item.productId}
                                         className="flex items-center justify-between text-xs bg-surface-card/60 rounded-lg px-3 py-1.5"

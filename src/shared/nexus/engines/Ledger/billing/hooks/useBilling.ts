@@ -4,7 +4,7 @@ import { useEffect, useCallback } from 'react';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
 import { useOrders } from '@/modules/ops';
-import type { Order } from '@/verticals/restaurant/ops/workflow/engine/types';
+import type { Order } from '@/modules/ops/workflow/engine/types';
 import type { JournalEntry } from '@modules/finance/types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';

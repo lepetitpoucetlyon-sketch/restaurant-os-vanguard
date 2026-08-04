@@ -18,10 +18,10 @@ export {
     menuAnalysisSelector,     // COMMERCE
     staffPerformanceSelector, // COMMERCE
     laborCostRatioSelector,   // COMMERCE
-} from '@/verticals/restaurant/commerce/acquisition/marketing/store/analyticsAtoms';
+} from '@/modules/commerce/acquisition/marketing/store/analyticsAtoms';
 
 export {
     quotesNodeAtom,           // COMMERCE
     quotesAtom,               // COMMERCE
     quotesLoadingAtom,        // COMMERCE
-} from '@/verticals/restaurant/commerce/acquisition/marketing/store/marketingAtoms';
+} from '@/modules/commerce/acquisition/marketing/store/marketingAtoms';

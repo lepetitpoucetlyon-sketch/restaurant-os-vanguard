@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenBankingProviderFactory } from '@/verticals/restaurant/finance/cash/banking/openBanking/OpenBankingProviderFactory';
-import { BankConnectionStore } from '@/verticals/restaurant/finance/cash/banking/openBanking/BankConnectionStore';
-import { verifyBankConnectState } from '@/verticals/restaurant/finance/cash/banking/openBanking/tokenCipher';
+import { OpenBankingProviderFactory } from '@/modules/finance/tresorerie/banking/openBanking/OpenBankingProviderFactory';
+import { BankConnectionStore } from '@/modules/finance/tresorerie/banking/openBanking/BankConnectionStore';
+import { verifyBankConnectState } from '@/modules/finance/tresorerie/banking/openBanking/tokenCipher';
 import { logger } from '@/lib/logger';
 
 /**

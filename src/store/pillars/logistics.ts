@@ -27,4 +27,4 @@ export {
     prepLoadingAtom,          // LOGISTICS
     miseEnPlaceTargetSelector, // LOGISTICS
     calculateRecipeCostSelector, // LOGISTICS
-} from '@/verticals/restaurant/logistics/inventory/inventory/store/inventoryAtoms';
+} from '@/modules/logistics/stock/inventory/store/inventoryAtoms';

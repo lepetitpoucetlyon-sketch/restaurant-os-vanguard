@@ -21,4 +21,4 @@ export {
     wasteLogsAtom,            // COMPLIANCE
     guardLoadingAtom,         // COMPLIANCE
     quarantinedProductsAtom,  // COMPLIANCE
-} from '@/verticals/restaurant/compliance/haccp/store/complianceAtoms';
+} from '@/modules/compliance/qualite/haccp/store/complianceAtoms';

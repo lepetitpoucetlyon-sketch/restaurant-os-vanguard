@@ -1,2 +1,0 @@
-// Variant: repair-bay
-export {};

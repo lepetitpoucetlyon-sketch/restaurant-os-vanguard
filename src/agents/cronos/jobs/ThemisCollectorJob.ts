@@ -1,5 +1,5 @@
-import { CollectionService } from '@/verticals/restaurant/finance/cash/collection/CollectionService';
-import { InvoiceTarget } from '@/verticals/restaurant/finance/cash/collection/types';
+import { CollectionService } from '@/modules/finance/tresorerie/collection/CollectionService';
+import { InvoiceTarget } from '@/modules/finance/tresorerie/collection/types';
 import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
 import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
 

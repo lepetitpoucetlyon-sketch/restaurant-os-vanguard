@@ -6,7 +6,7 @@ vi.mock('next/navigation', () => ({ useSearchParams: vi.fn(() => ({ get: vi.fn((
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn(), warning: vi.fn() } }));
 vi.mock('@/lib/push/pushClient', () => ({ pushToRole: vi.fn() }));
 vi.mock('@/shared/hooks', () => ({ useTenant: vi.fn(() => ({ tenantId: 'test-tenant' })) }));
-vi.mock('@/verticals/restaurant/compliance/haccp/services/PlanMaitriseSanitaire', () => ({
+vi.mock('@/modules/compliance/qualite/haccp/services/PlanMaitriseSanitaire', () => ({
     PlanMaitriseSanitaire: { getTemperatureLogs: vi.fn() },
 }));
 vi.mock('lucide-react', () => ({
@@ -19,7 +19,7 @@ import {
     buildTempAlertFromLog,
     type HaccpTab,
     type TempAlert,
-} from '@/verticals/restaurant/compliance/haccp/hooks/useHaccpPage';
+} from '@/modules/compliance/qualite/haccp/hooks/useHaccpPage';
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 

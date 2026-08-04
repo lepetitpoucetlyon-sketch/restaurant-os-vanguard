@@ -1,2 +1,0 @@
-// Variant: front-desk
-export {};

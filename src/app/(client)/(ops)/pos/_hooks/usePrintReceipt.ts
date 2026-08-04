@@ -6,7 +6,7 @@ import { EpsonPrinter } from "@/infrastructure/hardware/printers/EpsonPrinter";
 import type { ReceiptTicket } from "@/infrastructure/hardware/printers/EpsonPrinter";
 import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
-import type { CartItem } from "@/verticals/restaurant/ops/workflow/engine/types";
+import type { CartItem } from "@/modules/ops/workflow/engine/types";
 
 function parsePrinterConfig(): { ip: string; port: number } {
     const defaults = { ip: "192.168.1.100", port: 8008 };

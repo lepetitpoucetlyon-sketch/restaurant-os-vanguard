@@ -17,21 +17,21 @@ import {
     Sparkles,
 } from "lucide-react";
 
-import { useInventoryPage } from "@/verticals/restaurant/logistics/inventory/inventory/hooks/useInventoryPage";
+import { useInventoryPage } from "@/modules/logistics/stock/inventory/hooks/useInventoryPage";
 import {
     StockReceptionModal,
     StockTransferModal,
     CreatePreparationModal,
     OracleModal,
-} from "@/verticals/restaurant/logistics/inventory/inventory/components";
+} from "@/modules/logistics/stock/inventory/components";
 import {
     ThresholdModal,
     PhysicalCountModal,
     AdjustStockModal,
     computeDLCStatus,
-} from "@/verticals/restaurant/logistics/inventory/inventory/components/InventoryInlineModals";
+} from "@/modules/logistics/stock/inventory/components/InventoryInlineModals";
 import { SecurityPinModal } from "@components/ui";
-import { RotatingCount } from "@/verticals/restaurant/logistics/inventory/inventory/components/RotatingCount";
+import { RotatingCount } from "@/modules/logistics/stock/inventory/components/RotatingCount";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function InventoryPage() {
@@ -165,7 +165,7 @@ function InventoryPage() {
 
                 {activeTab === "storage" && (
                     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {storageLocations.map((loc) => (
+                        {storageLocations.map((loc: { id: string; name: string; type?: string }) => (
                             <div key={loc.id} className="rounded-lg border border-border p-4 bg-surface-sidebar">
                                 <div className="flex items-center gap-2 font-medium">
                                     <Warehouse className="w-4 h-4 text-action-primary" /> {loc.name}
