@@ -1,5 +1,5 @@
 import { AgentEngine } from './AgentEngine';
-import { AgentDomain } from '@/modules/intelligence';
+import { AgentDomain } from '../../domain/agency/types';
 import { 
     HermesPulseResult, 
     HermesAnomaly, 
@@ -62,7 +62,7 @@ export class HermesEngine {
         // Here we simulate an autonomous bridge trigger if temperature rises
         try {
             const haccpPath = Nexus.getTenantPath('haccp_readings', tenantId);
-            const haccpResults = await Nexus.adapter.query<import('@/verticals/restaurant/compliance/haccp/types/domain').SensorReading>(haccpPath, {
+            const haccpResults = await Nexus.adapter.query<import('@/modules/compliance/qualite/haccp/types/domain').SensorReading>(haccpPath, {
                 where: [
                     { field: 'isAnomaly', operator: '==', value: true },
                     { field: 'processed', operator: '==', value: false }

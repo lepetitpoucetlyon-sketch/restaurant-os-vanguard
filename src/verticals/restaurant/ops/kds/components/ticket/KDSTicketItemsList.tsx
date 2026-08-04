@@ -5,7 +5,7 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/ui.foundations";
 import { Recipe, OrderItem } from "@nexus/contracts";
-import { resolveStation } from "@verticals/restaurant/ops/kds";
+import { resolveStation } from '../../contracts/kds-constants';
 
 type FlatItem = OrderItem & { _key: string };
 

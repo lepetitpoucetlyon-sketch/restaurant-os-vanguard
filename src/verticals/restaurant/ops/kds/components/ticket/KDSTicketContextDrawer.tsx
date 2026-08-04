@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Order } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
-import { resolveStation } from "@verticals/restaurant/ops/kds";
+import { resolveStation } from '../../contracts/kds-constants';
 
 interface KDSTicketContextDrawerProps {
     ticket: Order;

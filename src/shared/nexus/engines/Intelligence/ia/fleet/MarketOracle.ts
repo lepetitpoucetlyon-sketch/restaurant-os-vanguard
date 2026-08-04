@@ -23,7 +23,7 @@ import type {
     MonetizationTier,
 } from '../../knowledge/rag/types';
 
-import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence';
+import { K_ANONYMITY_THRESHOLD } from '../../knowledge/rag/types';
 
 // ============================================
 // MARKET ORACLE

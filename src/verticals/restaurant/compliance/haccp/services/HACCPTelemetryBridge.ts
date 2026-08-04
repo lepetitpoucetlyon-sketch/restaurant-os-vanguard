@@ -1,5 +1,5 @@
  
-import { fleetTelemetry } from '@/shared/providers/fleet';
+import { fleetTelemetry } from '@/shared/providers/fleet/FleetTelemetryService';
 import { MaintenanceAgent } from '@/domain/services/MaintenanceAgent';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

@@ -1,6 +1,6 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { LLMManager } from '@/shared/nexus/engines/Intelligence/ia/ai/LLMManager';
-import { AI_MODELS } from '@/modules/intelligence';
+import { AI_MODELS } from '@/shared/nexus/engines/Intelligence/ia/ai/types';
 import { logger } from "../../lib/axiom";
  
 import { DNAInjector } from "@/shared/nexus/engines/Intelligence/ia/ai/DNAInjector";
