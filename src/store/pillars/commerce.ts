@@ -1,6 +1,6 @@
 // 🤝 COMMERCE PILLAR — Reservations, Groups & Quotes
 // ⚠️ Ré-exports depuis les fichiers SOURCES des atomes, jamais depuis le
-// barrel `@/shared/nexus/engines/CRM` : la couche état ne doit pas importer les barrels
+// barrel `@/modules/commerce` : la couche état ne doit pas importer les barrels
 // de modules (cycle store → module → hooks/components → store, TDZ au build SSR).
 
 export {
@@ -12,7 +12,7 @@ export {
     groupsLoadingAtom,        // COMMERCE
     reservationStatsAtom,     // COMMERCE
     isReservationSyncingAtom, // COMMERCE
-} from '@/shared/nexus/engines/CRM/reservations/store/reservationAtoms';
+} from '@/modules/commerce/relation/reservations/store/reservationAtoms';
 
 export {
     menuAnalysisSelector,     // COMMERCE

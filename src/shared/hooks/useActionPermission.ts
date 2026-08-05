@@ -10,7 +10,7 @@ import {
 // FIXME (FIX-04): shared/hooks ne doit pas importer de module métier. Extraire policyEngine vers shared/nexus/contracts ou NexusEventBus.
  
  
-import { policyEngine } from '@/shared/nexus/engines/Compliance';
+import { policyEngine } from '@/modules/compliance/securite/PolicyEngine';
 
 type ActionConfig = {
     minLevel: number;

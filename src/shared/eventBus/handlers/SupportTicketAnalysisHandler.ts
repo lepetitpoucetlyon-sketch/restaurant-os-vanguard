@@ -3,8 +3,8 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { GeminiProvider } from '@/infrastructure/adapters/GeminiProvider';
  
-import { AI_MODELS } from '@/shared/nexus/engines/Intelligence/ia/ai';
-import { ChangelogService } from '@/shared/nexus/engines/mcc/ChangelogService';
+import { AI_MODELS } from '@/modules/intelligence/ia/ai';
+import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
 import { SupportDraftSchema } from '@/domain/schemas/supportTicket';
 

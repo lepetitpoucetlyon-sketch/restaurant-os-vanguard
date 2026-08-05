@@ -23,11 +23,11 @@ import { WeeklyView } from '@/modules/commerce';
 import { GroupFormModal } from '@/modules/commerce';
 import dynamic from "next/dynamic";
 const EventQuoteModal = dynamic(
-  () => import("@/shared/nexus/engines/CRM/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
+  () => import("@/modules/commerce/relation/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
   { ssr: false, loading: () => null }
 );
 const ReservationCreateDialog = dynamic(
-  () => import("@/shared/nexus/engines/CRM/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
+  () => import("@/modules/commerce/relation/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
   { ssr: false, loading: () => null }
 );
 import { ReservationSidebar } from '@/modules/commerce';

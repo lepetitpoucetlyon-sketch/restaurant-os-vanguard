@@ -80,3 +80,6 @@
 | phase2-dep-audit | Audit dépendances runtime 6 modules Phase 2 (lecture seule) : haccp, kds, kitchen, recipes, fiscalite, hr | 2026-08-04 | terminée |
 | debt-a-intel-alias | Debt A : alias @/modules/intelligence dans tsconfig pointe sur engines/Intelligence/ — fix bloqué par cycle fleet→index→fleet ; prérequis : retirer export fleet du barrel modules/intelligence/index.ts | 2026-08-05 | terminée |
 | goal-mode | Exécution séquentielle : Debt A → SAGA P0→P3 → legacy_monolith migration → tests coverage | 2026-08-05 | terminée |
+
+| restaurant-vertical | src/verticals/restaurant/ — NF525, menu-engineering, tip-pooling, perishables, table-service | 2026-08-05 | terminée |
+| sprint-plan-exec | Plan S1→S10 + exécution sprints : accounting test, verticals doublons, engines/Intelligence migration, CRM/Ledger/Fiscal/MCC, barrel debt, SAGA tests | 2026-08-05 | terminée |

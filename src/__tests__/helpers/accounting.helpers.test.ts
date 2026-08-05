@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 
-vi.mock('@/store/pillars/compliance', () => ({ fiscalLedgerAtom: {} }));
+vi.mock('@/store/pillars/compliance', () => ({ fiscalLedgerAtom: {}, fiscalLedgerNodeAtom: {} }));
 vi.mock('@/modules/finance/store/accountingAtoms', () => ({
     journalEntriesNodeAtom: {}, accountsAtom: {}, bankTransactionsAtom: {},
     expenseClaimsAtom: {}, accountingViewModeAtom: {},

@@ -21,7 +21,7 @@ import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { predictAttendance } from '@/shared/nexus/engines/Intelligence/analytique/attendance/AttendancePrediction';
+import { predictAttendance } from '@/modules/intelligence/analytique/attendance/AttendancePrediction';
 
 export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";
 const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];

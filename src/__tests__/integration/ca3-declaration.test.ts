@@ -1,5 +1,5 @@
-import { GenerateCA3DeclarationUseCase } from '@/shared/nexus/engines/FiscalEngine/core/application/use-cases/GenerateCA3Declaration';
-import { InMemoryLedgerRepository } from '@/shared/nexus/engines/FiscalEngine/core/infrastructure/repositories/InMemoryLedgerRepository';
+import { GenerateCA3DeclarationUseCase } from '@/modules/finance/fiscalite/core/application/use-cases/GenerateCA3Declaration';
+import { InMemoryLedgerRepository } from '@/modules/finance/fiscalite/core/infrastructure/repositories/InMemoryLedgerRepository';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('TVA CA3 (DGFiP) Auto-generation', () => {

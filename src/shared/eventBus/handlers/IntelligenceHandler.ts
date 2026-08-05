@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { HermesKnowledgeManager } from '@/shared/nexus/engines/Intelligence/knowledge/rag/HermesKnowledgeManager';
+import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
 
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 

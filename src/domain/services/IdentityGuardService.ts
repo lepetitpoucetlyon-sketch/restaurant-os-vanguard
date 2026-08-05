@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
  
-import { LLMManager } from '@/shared/nexus/engines/Intelligence/ia/ai';
+import { LLMManager } from '@/modules/intelligence/ia/ai';
 import {
     IdentityExtractionSchema,
     ComplianceExtractionErrorSchema,
@@ -9,7 +9,7 @@ import {
 } from '@/domain/schemas/compliance.schemas';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
  
-import { AI_MODELS } from '@/shared/nexus/engines/Intelligence/ia/ai';
+import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 
 export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }

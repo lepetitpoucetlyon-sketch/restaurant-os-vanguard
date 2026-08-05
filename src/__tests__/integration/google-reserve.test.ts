@@ -1,7 +1,7 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { ProcessGoogleBookingUseCase } from '@/shared/nexus/engines/CRM/reservations/application/use-cases/ProcessGoogleBooking';
-import { InMemoryReservationRepository } from '@/shared/nexus/engines/CRM/reservations/infrastructure/repositories/InMemoryReservationRepository';
-import { RwGBooking } from '@/shared/nexus/engines/CRM/reservations/domain/types/GoogleReserveTypes';
+import { ProcessGoogleBookingUseCase } from '@/modules/commerce/relation/reservations/application/use-cases/ProcessGoogleBooking';
+import { InMemoryReservationRepository } from '@/modules/commerce/relation/reservations/infrastructure/repositories/InMemoryReservationRepository';
+import { RwGBooking } from '@/modules/commerce/relation/reservations/domain/types/GoogleReserveTypes';
 
 describe('Google Reserve Integration (Level 6 Architecture)', () => {
   let repository: InMemoryReservationRepository;

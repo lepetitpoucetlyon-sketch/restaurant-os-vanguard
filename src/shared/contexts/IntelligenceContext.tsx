@@ -1,1 +1,1 @@
-export * from "@/shared/nexus/engines/Intelligence";
+export * from "@/modules/intelligence";

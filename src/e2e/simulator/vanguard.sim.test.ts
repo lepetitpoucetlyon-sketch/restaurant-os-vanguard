@@ -9,7 +9,7 @@ const { virtualMap } = vi.hoisted(() => ({
   virtualMap: new Map<string, { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }>(),
 }));
 
-vi.mock('@/shared/nexus/engines/Intelligence/ia/simulator/SimulatorDB', () => {
+vi.mock('@/modules/intelligence/ia/simulator/SimulatorDB', () => {
   const makeTable = () => ({
     get: async (path: string) => virtualMap.get(path) ?? undefined,
     put: async (doc: { path: string; data: unknown; isDeleted: boolean; forkId: string; updatedAt: string }) => {
@@ -49,7 +49,7 @@ import { FiscalKeyService } from '@/modules/finance';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
-import { simulatorDb } from '@/shared/nexus/engines/Intelligence/ia/simulator/SimulatorDB';
+import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
 
 import { alicePersona } from './personas/alice';
 import { bobPersona, BOB_CART_TOTAL_MICROUNITS, BOB_CART_TOTAL_CENTS } from './personas/bob';

@@ -17,7 +17,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { ChangelogService } from '@/shared/nexus/engines/mcc/ChangelogService';
+import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 

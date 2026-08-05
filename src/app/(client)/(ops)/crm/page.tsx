@@ -10,7 +10,7 @@ import {
     CustomerCustomerView,
     CustomerDetailPanel,
     NewCustomerDialog,
-} from "@/shared/nexus/engines/CRM/customers/components";
+} from "@/modules/commerce/relation/customers/components";
 import { PromoCodeManager } from '@/modules/commerce';
 import { EmailCampaign } from '@/modules/commerce';
 import { BasketAnalysis } from '@/modules/commerce';

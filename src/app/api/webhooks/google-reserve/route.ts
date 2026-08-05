@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ProcessGoogleBookingUseCase } from '@/shared/nexus/engines/CRM/reservations/application/use-cases/ProcessGoogleBooking';
-import { InMemoryReservationRepository } from '@/shared/nexus/engines/CRM/reservations/infrastructure/repositories/InMemoryReservationRepository';
-import { RwGCreateBookingRequest } from '@/shared/nexus/engines/CRM/reservations/domain/types/GoogleReserveTypes';
+import { ProcessGoogleBookingUseCase } from '@/modules/commerce/relation/reservations/application/use-cases/ProcessGoogleBooking';
+import { InMemoryReservationRepository } from '@/modules/commerce/relation/reservations/infrastructure/repositories/InMemoryReservationRepository';
+import { RwGCreateBookingRequest } from '@/modules/commerce/relation/reservations/domain/types/GoogleReserveTypes';
 
 // Instantiate dependencies (in a real app, this would use a DI container)
 const reservationRepository = new InMemoryReservationRepository();

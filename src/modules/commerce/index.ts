@@ -27,6 +27,9 @@ export { ReviewProviderFactory } from './connectors/reviews';
 // eslint-disable-next-line no-restricted-imports
 export { CustomerImportPanel } from '@/modules/onboarding/migration';
 
+export { menuEngineeringService } from './catalog/menu-engineering';
+export type { MenuItemCategory, IMenuEngineeringItem, IMenuEngineeringReport } from './catalog/menu-engineering';
+
 export { EmailCampaign } from './acquisition/marketing/components/crm/EmailCampaign';
 export { BasketAnalysis } from './acquisition/marketing/components/crm/BasketAnalysis';
 export { VisitHistory } from './acquisition/marketing/components/crm/VisitHistory';

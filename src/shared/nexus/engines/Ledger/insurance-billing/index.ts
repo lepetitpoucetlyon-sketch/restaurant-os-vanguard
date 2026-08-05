@@ -1,2 +1,0 @@
-// Variant: insurance-billing
-export {};

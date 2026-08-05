@@ -1,7 +1,7 @@
 import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from "@/lib/nexus/types";
 import type { SovereignData } from '@/shared/nexus-contract';
  
-import { simulatorDb } from '@/shared/nexus/engines/Intelligence/ia/simulator/SimulatorDB';
+import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 import { 

@@ -9,7 +9,7 @@ export * from '@modules/finance/services/QuoteEngine';
 export * from '@modules/finance/services/TreasuryCalculator';
 export * from '@modules/finance/services/TreasuryEngine';
 export * from '@modules/finance/services/TransactionService';
-export * from '@/shared/nexus/engines/Compliance/PolicyEngine';
+export * from '@/modules/compliance/securite/PolicyEngine';
 export * from '@/modules/compliance/qualite/haccp/services/PlanMaitriseSanitaire';
 export * from '@modules/compliance/services/QualityEngine';
 export * from '@/modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
@@ -29,18 +29,18 @@ export * from '@modules/intelligence/services/VoiceCommandService';
 export * from '@modules/intelligence/services/DataDigester';
 
 // Rapatriés — intelligence/fleet
-export * from '@/shared/nexus/engines/Intelligence/ia/fleet/FleetCommander';
-export * from '@/shared/nexus/engines/Intelligence/ia/fleet/FleetComplianceService';
-export * from '@/shared/nexus/engines/Intelligence/ia/fleet/FleetTelemetryExecutor';
-export * from '@/shared/nexus/engines/Intelligence/ia/fleet/FleetTelemetryService';
-export * from '@/shared/nexus/engines/Intelligence/ia/fleet/QuantumOrchestrator';
+export * from '@/modules/intelligence/ia/fleet/FleetCommander';
+export * from '@/modules/intelligence/ia/fleet/FleetComplianceService';
+export * from '@/modules/intelligence/ia/fleet/FleetTelemetryExecutor';
+export * from '@/modules/intelligence/ia/fleet/FleetTelemetryService';
+export * from '@/modules/intelligence/ia/fleet/QuantumOrchestrator';
 
 // Rapatriés — intelligence/simulator
-export * from '@/shared/nexus/engines/Intelligence/ia/simulator/SimulationService';
+export * from '@/modules/intelligence/ia/simulator/SimulationService';
 
 // Rapatriés — intelligence/resilience
-export * from '@/shared/nexus/engines/Intelligence/ia/resilience/ResilienceSlayer';
-export * from '@/shared/nexus/engines/Intelligence/ia/resilience/ChaosMonkey';
+export * from '@/modules/intelligence/ia/resilience/ResilienceSlayer';
+export * from '@/modules/intelligence/ia/resilience/ChaosMonkey';
 
 // Restent dans domain/services (partagés cross-piliers)
 export * from './AccessPolicyManager';

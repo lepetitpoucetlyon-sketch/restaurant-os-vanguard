@@ -3,7 +3,7 @@ import { SelfHealingEngine } from '@/infrastructure/services/SelfHealingEngine';
 import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
 import { ShieldedContext, SovereignSecurityViolation } from '@/modules/intelligence';
  
-import { DNAInjector } from '@/shared/nexus/engines/Intelligence/ia/ai/DNAInjector';
+import { DNAInjector } from '@/modules/intelligence/ia/ai/DNAInjector';
 
 describe('Sovereign Grade X++ - Deep Core Refortification Tests', () => {
 

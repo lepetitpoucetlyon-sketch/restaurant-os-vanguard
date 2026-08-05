@@ -1,2 +1,0 @@
-// Variant: diagnostic-assist
-export {};

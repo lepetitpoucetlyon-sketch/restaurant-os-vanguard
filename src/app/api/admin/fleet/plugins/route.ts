@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { ChangelogService } from '@/shared/nexus/engines/mcc/ChangelogService';
+import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { logger } from '@/lib/logger';
 
 const PluginPostSchema = z.object({

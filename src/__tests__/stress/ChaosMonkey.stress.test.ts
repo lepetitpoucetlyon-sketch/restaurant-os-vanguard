@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChaosMonkey } from '@/shared/nexus/engines/Intelligence/ia/resilience/ChaosMonkey';
+import { ChaosMonkey } from '@/modules/intelligence/ia/resilience/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
-import { ResilienceSlayer } from '@/shared/nexus/engines/Intelligence/ia/resilience/ResilienceSlayer';
+import { ResilienceSlayer } from '@/modules/intelligence/ia/resilience/ResilienceSlayer';
 
 // No jotai mock, we use the real store
 vi.mock('@/store/pillars', () => ({

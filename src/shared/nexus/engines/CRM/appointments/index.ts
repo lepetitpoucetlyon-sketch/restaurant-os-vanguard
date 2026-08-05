@@ -1,2 +1,0 @@
-// Variant: appointments
-export {};

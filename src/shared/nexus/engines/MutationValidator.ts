@@ -1,4 +1,4 @@
-import { SchemaRegistry } from './internal/SchemaRegistry';
+import { SchemaRegistry } from '@/lib/nexus/SchemaRegistry';
 
 /**
  * 🧬 MutationValidator - The Nexus Customs
