@@ -7,6 +7,7 @@ import { registerHumanHandlers } from './human';
 import { registerCommerceHandlers } from './commerce';
 import { registerIntelligenceHandlers } from './intelligence';
 import { registerCrmHandlers } from './crm';
+import { registerMccHandlers } from './mcc';
 
 let initialized = false;
 const unsubs: Array<() => void> = [];
@@ -35,7 +36,8 @@ export function registerNexusHandlers(): void {
     ...registerHumanHandlers(),
     ...registerCommerceHandlers(),
     ...registerIntelligenceHandlers(),
-    ...registerCrmHandlers()
+    ...registerCrmHandlers(),
+    ...registerMccHandlers()
   );
 }
 
