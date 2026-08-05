@@ -23,9 +23,9 @@ import {
     ExpenseClaim,
     TreasurySnapshot,
     FiscalSeal
-} from '@modules/finance/types';
+} from '../types';
 import type { TreasuryMetrics } from '@/domain/schemas/finance';
-import { useBilling } from '@modules/finance/comptabilite/billing/hooks/useBilling';
+import { useBilling } from '../comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { Sentry } from '@/lib/sentry';

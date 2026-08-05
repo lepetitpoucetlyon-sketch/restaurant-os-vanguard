@@ -6,8 +6,8 @@ import { motion } from 'framer-motion';
 import { 
     crmSearchQueryAtom, 
     crmFilterSegmentAtom
-} from '@modules/commerce/acquisition/marketing/store/crmAtoms';
-import { crmsAtom, selectedCRMAtom } from '@modules/commerce/acquisition/marketing/store/marketingAtoms';
+} from '../../store/crmAtoms';
+import { crmsAtom, selectedCRMAtom } from '../../store/marketingAtoms';
 import { useLanguage } from '@/shared/hooks';
 import { CRM } from '@nexus/contracts';
 

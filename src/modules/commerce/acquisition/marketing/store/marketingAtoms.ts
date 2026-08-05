@@ -5,7 +5,7 @@ import { Quote } from '../quotes.types';
 // MarketingSegment & ScheduledPost déplacés vers seo.types (cassage de cycle).
 // Réimportés ici (et ré-exportés pour préserver la surface publique).
 import { SEOProfile, MarketingSegment, ScheduledPost } from '../seo.types';
-import { Customer as CRM } from '@modules/commerce/relation/customers/types';
+import { Customer as CRM } from '../../../relation/customers/types';
 
 export type { MarketingSegment, ScheduledPost } from '../seo.types';
 

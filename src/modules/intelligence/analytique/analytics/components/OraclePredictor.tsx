@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, AlertTriangle, TrendingDown, TrendingUp, Target } from 'lucide-react';
-import { OraclePrediction } from '@modules/intelligence/services/OracleEngine';
+import { OraclePrediction } from '../../../services/OracleEngine';
 import { StatusBadge } from '@ui/StatusBadge';
 import { PremiumCard } from '@ui/PremiumCard';
 

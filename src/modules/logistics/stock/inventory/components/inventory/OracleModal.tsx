@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { X } from 'lucide-react';
-import type { StockItem } from '@modules/logistics/stock/inventory/types';
+import type { StockItem } from '../../types';
 import { useStockPrediction } from '../../../../hooks/useStockPrediction';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useNexusFleet as useFleet } from '@/shared/hooks/useNexusFleet';
 import { useGeminiAgent } from '@/shared/hooks/useGeminiAgent';
-import { MacroBrain, FleetInsight } from '@modules/intelligence/services/MacroBrain';
+import { MacroBrain, FleetInsight } from '../services/MacroBrain';
 import { logger } from '@/lib/axiom';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';

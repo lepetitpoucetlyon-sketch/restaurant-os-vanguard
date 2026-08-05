@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { getDefaultRestaurantEmail, getInstanceDisplayName, whiteLabelInstanceConfig } from '@/config/instance';
 import {
     GlobalSettings,

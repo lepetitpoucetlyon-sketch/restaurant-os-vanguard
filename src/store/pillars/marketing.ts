@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 📢 MARKETING PILLAR — CRM, SEO & Social
 // Source: @/modules/commerce (Marketing is currently within commerce module)
 

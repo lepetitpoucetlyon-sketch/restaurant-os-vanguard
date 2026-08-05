@@ -6,7 +6,7 @@ import { ShieldCheck, Link, Database, Search, CheckCircle2, Lock } from 'lucide-
 import { useCompliance } from '@/modules/finance';
 import { format } from 'date-fns';
 
-import { FiscalSeal } from '@modules/finance/types';
+import type { FiscalSeal } from '@/modules/finance';
 
 interface HashNode {
   index: number;

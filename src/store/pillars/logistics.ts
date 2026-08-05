@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 📦 LOGISTICS PILLAR — Stock, Inventory & Storage
 // Source: @modules/logistics
 

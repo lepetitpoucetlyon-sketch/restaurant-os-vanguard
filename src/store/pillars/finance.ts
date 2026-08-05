@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 💰 FINANCE PILLAR — Accounting, Caisse & Tax
 // Source: @modules/finance
 

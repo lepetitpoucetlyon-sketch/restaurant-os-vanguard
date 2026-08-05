@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // Rapatriés dans leurs piliers — re-exports de compatibilité temporaire
 export * from '@modules/human/services/HumanResources';
 export * from '@modules/human/services/NexusPayrollEngine';

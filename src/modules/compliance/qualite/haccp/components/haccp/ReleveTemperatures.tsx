@@ -11,11 +11,11 @@ import {
     Plus
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
-import { EQUIPMENT_CONFIG, EquipmentConfig } from '@modules/compliance/qualite/haccp/types';
+import { EQUIPMENT_CONFIG, EquipmentConfig } from '../../types';
 import { useHygieneLogs, useCreateHygieneLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { useTenant } from '@/shared/hooks';
-import { HACCPLogService } from '@modules/compliance/qualite/haccp/HACCPLogService';
+import { HACCPLogService } from '../../HACCPLogService';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 

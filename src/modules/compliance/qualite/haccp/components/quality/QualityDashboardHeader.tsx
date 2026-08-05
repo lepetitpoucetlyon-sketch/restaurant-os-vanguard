@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtomValue } from 'jotai';
-import { qualityGlobalMetricsSelector } from '@modules/compliance/qualite/haccp/store/qualityAtoms';
+import { qualityGlobalMetricsSelector } from '../../store/qualityAtoms';
 import { ShieldCheck, TrendingUp, AlertCircle, Award } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 

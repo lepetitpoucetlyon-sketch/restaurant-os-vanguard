@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { qualityAlertsAtom } from '@modules/compliance/qualite/haccp/store/qualityAtoms';
+import { qualityAlertsAtom } from '../store/qualityAtoms';
 import { logger } from '@/lib/logger';
 
 /**

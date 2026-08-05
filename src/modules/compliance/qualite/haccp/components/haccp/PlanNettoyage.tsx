@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { HACCPVisionScanner } from './HACCPVisionScanner';
 import { cn } from "@/lib/ui.foundations";;
-import { ZONES_CONFIG, CleaningTask } from '@modules/compliance/qualite/haccp/types';
+import { ZONES_CONFIG, CleaningTask } from '../../types';
 import { useHygieneLogs, useCreateHygieneLog, useDeleteHygieneLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';

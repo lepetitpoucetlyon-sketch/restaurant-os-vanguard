@@ -6,7 +6,7 @@ import { TrendingUp, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { useFleet } from '@/shared/contexts/FleetContext';
-import { FleetInsight, MacroBrain } from '@/modules/intelligence/services/MacroBrain';
+import { FleetInsight, MacroBrain } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 
 export function MCCInsights() {

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import React, { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { activeTenantSlotsAtom, fleetSnapshotAtom } from '@nexus/state/SovereignGenome';

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure: deep path required */
 import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
 
 /**

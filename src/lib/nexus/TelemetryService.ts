@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
  

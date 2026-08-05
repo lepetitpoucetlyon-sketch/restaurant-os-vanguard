@@ -17,7 +17,7 @@ import {
     Download
 } from 'lucide-react';
 ;
-import { useRecruitment } from '@modules/human/effectifs/hr';
+import { useRecruitment } from '..';
 import { Candidate, CandidateStatus } from '@nexus/contracts';
 import { PremiumSelect } from '@components/ui/PremiumSelect';
 

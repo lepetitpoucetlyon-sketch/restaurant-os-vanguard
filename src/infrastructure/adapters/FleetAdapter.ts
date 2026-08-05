@@ -1,5 +1,5 @@
 import { EmpireInstance } from '@domain/types/empire';
-import { MacroBrain, FleetInsight } from '@/modules/intelligence/services/MacroBrain';
+import { MacroBrain, FleetInsight } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import type { FiscalSeal } from '@nexus/contracts';
 

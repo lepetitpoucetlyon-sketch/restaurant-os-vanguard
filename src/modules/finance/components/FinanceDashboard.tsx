@@ -15,12 +15,12 @@ import { toast } from "sonner";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
-import { ExpenseClaimDialog } from "@modules/finance/components/accounting";
+import { ExpenseClaimDialog } from './accounting';
 import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useOrders } from '@/modules/ops/providers/hooks/kitchenHooks';
+import { useOrders } from '@/modules/ops';
 import type { Order } from "@/domain/schemas/orders";
 import type { JournalEntry } from "@nexus/contracts";
 import dynamic from "next/dynamic";

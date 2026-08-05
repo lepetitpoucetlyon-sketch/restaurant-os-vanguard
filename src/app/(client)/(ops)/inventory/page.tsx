@@ -17,21 +17,19 @@ import {
     Sparkles,
 } from "lucide-react";
 
-import { useInventoryPage } from "@/modules/logistics/stock/inventory/hooks/useInventoryPage";
 import {
+    useInventoryPage,
     StockReceptionModal,
     StockTransferModal,
     CreatePreparationModal,
     OracleModal,
-} from "@/modules/logistics/stock/inventory/components";
-import {
     ThresholdModal,
     PhysicalCountModal,
     AdjustStockModal,
     computeDLCStatus,
-} from "@/modules/logistics/stock/inventory/components/InventoryInlineModals";
+    RotatingCount,
+} from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
-import { RotatingCount } from "@/modules/logistics/stock/inventory/components/RotatingCount";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function InventoryPage() {

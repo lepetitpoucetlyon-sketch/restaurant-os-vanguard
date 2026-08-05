@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-import { useAnalyticsPage, percentChange, type MacroBrainAlert } from '@/modules/finance/comptabilite/analytics/hooks/useAnalyticsPage';
+import { useAnalyticsPage, percentChange, type MacroBrainAlert } from '@/modules/finance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";

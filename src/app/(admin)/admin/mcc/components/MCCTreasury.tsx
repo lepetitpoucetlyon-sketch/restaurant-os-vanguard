@@ -12,9 +12,9 @@ import {
     RefreshCw,
 } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
-import { TreasuryEngine } from '@modules/finance/services/TreasuryEngine';
+import { TreasuryEngine } from '@/modules/finance';
 import { authedFetch } from '@/lib/client/authedFetch';
-import type { FleetTreasuryReport } from '@modules/finance/services/BillingService';
+import type { FleetTreasuryReport } from '@/modules/finance';
 
 export function MCCTreasury() {
     const { instances } = useFleet();

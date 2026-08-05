@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';

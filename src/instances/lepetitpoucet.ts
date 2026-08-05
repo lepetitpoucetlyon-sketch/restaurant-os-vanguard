@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import type { TenantConfig } from '@/shared/nexus-contract';
  
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';

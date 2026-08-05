@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import type { StockItem } from "@modules/logistics/stock/inventory/types";
+import type { StockItem } from '../types';
 
 export interface DLCStatus {
     daysLeft: number | null;

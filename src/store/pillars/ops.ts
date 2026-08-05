@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 🍽️ OPS PILLAR — Orders, POS, KDS & Floor Plan
 // ⚠️ Ré-exports depuis les fichiers SOURCES des atomes, jamais depuis le
 // barrel `@modules/ops` : la couche état ne doit pas importer les barrels

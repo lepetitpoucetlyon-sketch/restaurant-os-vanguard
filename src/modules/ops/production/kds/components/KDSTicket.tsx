@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
-import { resolveStation } from "@modules/ops/production/kds";
+import { resolveStation } from '..';
 
 function isTicketWarning(status: string, elapsedMinutes: number): boolean {
     return status !== 'ready' && elapsedMinutes >= 8 && elapsedMinutes < 15;

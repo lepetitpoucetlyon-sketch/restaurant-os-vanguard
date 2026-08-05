@@ -18,7 +18,7 @@ import { Plus, GripVertical, Calendar, Briefcase, UserPlus, FileText } from "luc
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useRecruitment } from "../hooks/useRecruitment";
-import { CandidateModal } from "@modules/human/effectifs/hr/components";
+import { CandidateModal } from '.';
 import { Candidate, CandidateStatus } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 

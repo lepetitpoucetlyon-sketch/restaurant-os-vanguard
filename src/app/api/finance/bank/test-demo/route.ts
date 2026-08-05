@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { GoCardlessProvider } from '@/modules/finance/tresorerie/banking/openBanking/GoCardlessProvider';
-import { inferPCGAccount } from '@/modules/finance/tresorerie/banking/openBanking/pcgHeuristics';
+import { GoCardlessProvider } from '@/modules/finance';
+import { inferPCGAccount } from '@/modules/finance';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**

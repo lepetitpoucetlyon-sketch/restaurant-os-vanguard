@@ -8,11 +8,11 @@ import { toast } from "sonner";
 
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useReservations, useGroups } from '@/modules/ops/providers/hooks/commerceHooks';
-import { useTables } from '@/modules/ops/providers/hooks/floorHooks';
+import { useReservations, useGroups } from '../../../../ops/providers/hooks/commerceHooks';
+import { useTables } from '../../../../ops/providers/hooks/floorHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
-import { useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
+import { useCRM } from '../../../../ops/providers/hooks/commerceHooks';
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { tenantIdAtom } from "@/store/pillars/sovereign";

@@ -11,17 +11,17 @@ import { fr } from "date-fns/locale";
 
 // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useQuality } from '@/modules/compliance/qualite/haccp/hooks/useQuality';
+import { useQuality } from '../../../../compliance/qualite/haccp/hooks/useQuality';
 import type { ComplianceAlert } from "@/domain/schemas/compliance.schemas";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useOrders } from '@/modules/ops/providers/hooks/kitchenHooks';
-import { useTables } from '@/modules/ops/providers/hooks/floorHooks';
+import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
+import { useTables } from '../../../../ops/providers/hooks/floorHooks';
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { predictAttendance } from '@/modules/intelligence/analytique/attendance/AttendancePrediction';
+import { predictAttendance } from '@/modules/intelligence';
 
 export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";
 const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];

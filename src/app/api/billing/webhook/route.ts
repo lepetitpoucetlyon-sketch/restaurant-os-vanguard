@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 // eslint-disable-next-line no-restricted-imports
-import { BillingService } from '@/modules/finance/services/BillingService';
+import { BillingService } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 
 /**

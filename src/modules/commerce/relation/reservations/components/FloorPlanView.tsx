@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { Users } from "lucide-react";
-import { cinematicItem, TABLES_DATA } from "@modules/commerce/relation/reservations/constants";
+import { cinematicItem, TABLES_DATA } from '../constants';
 import type { FloorTable as Table } from "@/domain/schemas/ops";
 
 interface FloorPlanViewProps {

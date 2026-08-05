@@ -4,8 +4,8 @@ import { useState, useMemo } from "react";
 import { RotateCcw, CheckCircle, Package } from "lucide-react";
 import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { useInventory } from "@modules/logistics/stock/inventory";
-import type { StockItem } from "@modules/logistics/stock/inventory/types";
+import { useInventory } from '..';
+import type { StockItem } from '../types';
 
 /**
  * log-7: Rotating inventory (comptage tournant)

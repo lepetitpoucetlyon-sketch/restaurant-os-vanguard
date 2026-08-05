@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { registerCRMVipHandler } from '@/modules/commerce/acquisition/marketing/handlers/CRMVipHandler';
 import { registerCustomerRFMAnalyzerHandler } from '../handlers/CustomerRFMAnalyzerHandler';
 import { registerLoyaltyEngineHandler } from '../handlers/LoyaltyEngineHandler';

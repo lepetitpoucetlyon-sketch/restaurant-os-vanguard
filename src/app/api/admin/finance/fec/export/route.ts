@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FECGenerator } from '@/modules/finance/comptabilite/fec/FECGenerator';
+import { FECGenerator } from '@/modules/finance';
 import { DocumentVault } from '@/domain/shared/DocumentVault';
 import { FinanceErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';

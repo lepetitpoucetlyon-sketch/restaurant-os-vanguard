@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAtom } from 'jotai';
-import { crmFormAtom, crmNewCRMModalAtom } from '@modules/commerce/acquisition/marketing/store/crmAtoms';
+import { crmFormAtom, crmNewCRMModalAtom } from '../../store/crmAtoms';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/shared/hooks';
 import { Button } from '@ui/button';

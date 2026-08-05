@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Search, AlertTriangle, Clock } from "lucide-react";
 import { Product, Option } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
-import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from "@modules/ops/service/pos/store/posAtoms";
+import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from '../store/posAtoms';
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { quarantinedProductsAtom } from "@/store/pillars/compliance";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";

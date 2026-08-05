@@ -55,9 +55,11 @@ const eslintConfig = defineConfig([
   },
   {
     // Test files legitimately use `any` for mocks/fixtures/stubs — not shipped code.
+    // Deep barrel imports allowed for mocking specific sub-paths (CLAUDE.md § Barrel rule).
     files: ["**/*.test.{ts,tsx}", "tests/**", "src/e2e/**", "src/__tests__/**"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+      "no-restricted-imports": "off",
     },
   },
   // Override default ignores of eslint-config-next.

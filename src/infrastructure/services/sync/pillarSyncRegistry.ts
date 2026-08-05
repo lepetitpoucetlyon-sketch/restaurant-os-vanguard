@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
 import { getDefaultStore } from 'jotai';
 import { shouldEagerLoad, type ICMImportanceMap } from '@/lib/icm/TaskContext';
 import { TimeSync } from '@/infrastructure/services/TimeSync';

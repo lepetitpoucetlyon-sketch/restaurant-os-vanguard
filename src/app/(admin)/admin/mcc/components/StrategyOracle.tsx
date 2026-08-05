@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useStrategicOracle } from '@/shared/hooks/useStrategicOracle';
 import { useFleet } from '@/shared/contexts/FleetContext';
-import { FleetInsight } from '@/modules/intelligence/services/MacroBrain';
+import { FleetInsight } from '@/modules/intelligence';
 
 export function StrategyOracle() {
     const { instances } = useFleet();

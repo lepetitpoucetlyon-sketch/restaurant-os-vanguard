@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import { useLanguage } from "@/shared/hooks";
-import { cinematicContainer, cinematicItem } from "@modules/commerce/relation/reservations/constants";
+import { cinematicContainer, cinematicItem } from '../constants';
 import { useInfiniteScroll } from "@/shared/hooks/useVirtualization";
 
 interface CustomerListViewProps {

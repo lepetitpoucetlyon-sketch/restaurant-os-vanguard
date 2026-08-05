@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { 
     X, Phone, Mail, Users, DollarSign, TrendingUp, Calendar, Send
 } from 'lucide-react';
-import { crmSelectedCRMAtom } from '@modules/commerce/acquisition/marketing/store/crmAtoms';
+import { crmSelectedCRMAtom } from '../../store/crmAtoms';
 import { useLanguage } from '@/shared/hooks';
 import { cn } from '@/lib/ui.foundations';
 import { useIsMobile } from '@/shared/hooks';

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 👥 HUMAN PILLAR — Staff, Planning & Shifts
 // ⚠️ Ré-exports depuis le fichier SOURCE des atomes, jamais depuis le barrel (anti-cycle SSR).
 

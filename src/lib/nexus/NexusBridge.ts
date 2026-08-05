@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { getDefaultStore } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';

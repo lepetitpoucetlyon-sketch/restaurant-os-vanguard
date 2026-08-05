@@ -9,10 +9,10 @@ import {
     todayReceptionStatsAtom,
     productQualityConfigsAtom,
     supplierScoresAtom,
-} from '@modules/compliance/qualite/haccp/store/qualityAtoms';
+} from '../store/qualityAtoms';
 import { deliveriesAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
-import { QualityEngine } from '@modules/compliance/services/QualityEngine';
+import { QualityEngine } from '../../../services/QualityEngine';
 import { ActiveQualityControl, ActiveQualityControlItem } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { buildReceptionControl, buildReceptionData, buildEmptyControl } from './qualityBuilders';

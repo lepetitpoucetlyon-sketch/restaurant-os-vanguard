@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { STATION_CONFIG, KitchenStation } from "@modules/ops/production/kds";
+import { STATION_CONFIG, KitchenStation } from '..';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

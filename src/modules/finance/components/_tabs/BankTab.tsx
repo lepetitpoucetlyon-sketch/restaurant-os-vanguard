@@ -9,7 +9,7 @@ import {
     ArrowDownLeft,
     ArrowUpRight,
 } from "lucide-react";
-import type { BankTransaction } from "@modules/finance/types";
+import type { BankTransaction } from '../../types';
 import { type BankAccount, formatEur, centsToEur, muToEur } from "../financeUtils";
 
 /**

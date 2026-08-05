@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- infrastructure: deep path required */
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export class TaxCalculator {

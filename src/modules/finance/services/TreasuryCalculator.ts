@@ -15,7 +15,7 @@
  * Fonction pure : aucune I/O, la date « maintenant » est injectée pour rester déterministe/testable.
  */
 
-import type { TreasurySnapshot, TreasuryTrendPoint } from "@modules/finance/types";
+import type { TreasurySnapshot, TreasuryTrendPoint } from '../types';
 
 const DAY_MS = 86_400_000;
 // 1 centime = 0,01 € = 10 000 microunits (1 € = 1 000 000 µ).

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- internal use-cases, not in public barrel */
 import { NextRequest, NextResponse } from 'next/server';
 import { ProcessGoogleBookingUseCase } from '@/modules/commerce/relation/reservations/application/use-cases/ProcessGoogleBooking';
 import { InMemoryReservationRepository } from '@/modules/commerce/relation/reservations/infrastructure/repositories/InMemoryReservationRepository';

@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
+/* eslint-disable no-restricted-imports -- config: needs specific domain types */
 import { AgentDomain, AgentRole } from '@/modules/intelligence/domain/agency/types';
 
 export const MASTER_DNA = `

@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { FiscalEngine, FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { StockEngine } from '@/modules/logistics/services/StockEngine';
+import { StockEngine } from '@/modules/logistics';
 import { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';

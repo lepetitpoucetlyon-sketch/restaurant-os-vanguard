@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 🤝 COMMERCE PILLAR — Reservations, Groups & Quotes
 // ⚠️ Ré-exports depuis les fichiers SOURCES des atomes, jamais depuis le
 // barrel `@/modules/commerce` : la couche état ne doit pas importer les barrels

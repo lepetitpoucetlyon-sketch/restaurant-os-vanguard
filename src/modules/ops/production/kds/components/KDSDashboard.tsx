@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { useRecipes } from '../../../providers/hooks/kitchenHooks';
-import { useKDSController } from "@modules/ops/production/kds";
+import { useKDSController } from '..';
 import { useNexusOps } from "../../../providers/NexusOpsProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";

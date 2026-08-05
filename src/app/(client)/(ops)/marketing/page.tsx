@@ -4,15 +4,12 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Megaphone, Instagram, FileSpreadsheet, Sparkles, PlusCircle, Users, Globe } from "lucide-react";
 
-import { useMarketing, useQuotes } from "@/modules/commerce/acquisition/marketing/hooks";
-import { NewCampaignModal } from "@/modules/commerce/acquisition/marketing/components/marketing";
+import { useMarketing, useQuotes, NewCampaignModal, ExpertHub, SEOManager } from "@/modules/commerce";
 import dynamic from "next/dynamic";
 const NewQuoteDialog = dynamic(
-  () => import("@/modules/commerce/acquisition/marketing/components/quotes").then(m => m.NewQuoteDialog),
+  () => import("@/modules/commerce").then(m => m.NewQuoteDialog),
   { ssr: false, loading: () => null }
 );
-import { ExpertHub } from "@/modules/commerce/acquisition/marketing/components/agency";
-import { SEOManager } from "@/modules/commerce/acquisition/marketing/services/SEOManager";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 type MktTab = "campaigns" | "social" | "quotes" | "ai" | "seo";

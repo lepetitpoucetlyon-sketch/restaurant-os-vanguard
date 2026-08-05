@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { formatCurrency } from "@/lib/formatters";
 
-import { CartItem } from "@modules/ops/workflow/engine/types";
+import { CartItem } from '../../../workflow/engine/types';
 export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";

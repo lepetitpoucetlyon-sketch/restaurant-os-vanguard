@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 // eslint-disable-next-line no-restricted-imports
-import { BillingService } from '@/modules/finance/services/BillingService';
+import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

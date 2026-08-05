@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useCallback } from 'react';

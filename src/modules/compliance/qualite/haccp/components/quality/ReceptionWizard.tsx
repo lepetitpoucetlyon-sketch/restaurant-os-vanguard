@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import {
     qualitySelectedDeliveryIdAtom,
     qualityCurrentSessionStatsSelector
-} from '@modules/compliance/qualite/haccp/store/qualityAtoms';
+} from '../../store/qualityAtoms';
 import { HACCPGauge } from './HACCPGauge';
 import { DeliveryItemRow } from './DeliveryItemRow';
 import { Button } from "@ui/button";

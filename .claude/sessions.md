@@ -82,4 +82,4 @@
 | goal-mode | Exécution séquentielle : Debt A → SAGA P0→P3 → legacy_monolith migration → tests coverage | 2026-08-05 | terminée |
 
 | restaurant-vertical | src/verticals/restaurant/ — NF525, menu-engineering, tip-pooling, perishables, table-service | 2026-08-05 | terminée |
-| sprint-plan-exec | Plan S1→S10 + exécution sprints : accounting test, verticals doublons, engines/Intelligence migration, CRM/Ledger/Fiscal/MCC, barrel debt, SAGA tests | 2026-08-05 | terminée |
+| sprint-plan-exec | Plan S1→S10 + exécution sprints : accounting test, verticals doublons, engines/Intelligence migration, CRM/Ledger/Fiscal/MCC, barrel debt, SAGA tests | 2026-08-05 | active |

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Package, Check, X, Thermometer, PackageSearch } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useQuality } from '@modules/compliance/qualite/haccp';
+import { useQuality } from '../..';
 import { ActiveQualityControlItem, DecisionType } from '@nexus/contracts';
 import { FreshnessRating } from './FreshnessRating';
 import { DLCAlertBadge } from './DLCAlertBadge';

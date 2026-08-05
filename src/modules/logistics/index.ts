@@ -10,6 +10,8 @@ export * from './approvisionnement/procurement';
 
 export { useInventoryPage } from './stock/inventory/hooks/useInventoryPage';
 export { RotatingCount } from './stock/inventory/components/RotatingCount';
+export { StockReceptionModal, StockTransferModal, CreatePreparationModal, OracleModal } from './stock/inventory/components/inventory';
+export { ThresholdModal, PhysicalCountModal, AdjustStockModal, computeDLCStatus } from './stock/inventory/components/InventoryInlineModals';
 export { useProducts } from './stock/inventory/hooks/useProducts';
 export { useCategories } from './stock/inventory/hooks/useCategories';
 export { InvoiceExtractionService } from './services/InvoiceExtractionService';

@@ -5,7 +5,7 @@ import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
 import { BrandingService } from '@/domain/services/BrandingService';
 // eslint-disable-next-line no-restricted-imports
-import { BillingService } from '@/modules/finance/services/BillingService';
+import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';

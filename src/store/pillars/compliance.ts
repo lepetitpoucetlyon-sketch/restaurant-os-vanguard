@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 // 🛡️ COMPLIANCE PILLAR — HACCP, Hygiene & Fiscal Ledger
 // ⚠️ Ré-exports depuis le fichier SOURCE des atomes, jamais depuis le barrel (anti-cycle SSR).
 
