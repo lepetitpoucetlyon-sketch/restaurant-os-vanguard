@@ -42,6 +42,7 @@ export function useMccPage() {
     const [newCloneKey, setNewCloneKey] = useState('');
     const [newCloneEmail, setNewCloneEmail] = useState('');
     const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
+    const [newCloneVariant, setNewCloneVariant] = useState<'restaurant' | 'hotel' | 'garage' | 'clinic'>('restaurant');
     const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
     const [provisionStep, setProvisionStep] = useState(0);
 
@@ -78,6 +79,7 @@ export function useMccPage() {
                 ownerEmail: newCloneEmail,
                 initialPrimaryColor: '#6366f1',
                 tier: newCloneTier,
+                variant: newCloneVariant,
                 copyBaseTemplates: true,
             });
 
@@ -109,6 +111,7 @@ export function useMccPage() {
         newCloneKey, setNewCloneKey,
         newCloneEmail, setNewCloneEmail,
         newCloneTier, setNewCloneTier,
+        newCloneVariant, setNewCloneVariant,
         provisioningStatus, provisionStep,
         handleCreateClone,
     };

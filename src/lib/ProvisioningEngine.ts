@@ -6,6 +6,8 @@ import { TenantSeeder } from './TenantSeeder';
 import { sovereignCreateWorkspace } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
+import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
+import { CoreContext } from '@/shared/plugins/CoreContext';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -111,7 +113,27 @@ export const ProvisioningEngine = {
                 }
             }
 
-            // 4. mcc-deploy-adv-1 — White-Label Branding Injector
+            // 4. Activer le vertical sectoriel
+            const variant = dna.variant ?? 'restaurant';
+            try {
+                const plugin = VerticalRegistry.resolve(variant);
+                const context = new CoreContext();
+                await plugin.initialize(context);
+                await Nexus.adapter.set(`tenants/${dna.key}/vertical-config`, {
+                    variant,
+                    registeredRoutes: context.getRegisteredRoutes(),
+                    registeredAtoms: context.getRegisteredAtoms(),
+                    activatedAt: new Date().toISOString(),
+                    pluginVersion: plugin.version,
+                });
+                logger.info('ProvisioningEngine: vertical activated', { tenantId: dna.key, variant });
+            } catch (vertErr) {
+                logger.warn('ProvisioningEngine: vertical activation skipped (registry not ready)', {
+                    tenantId: dna.key, variant, error: String(vertErr),
+                });
+            }
+
+            // 5bis. mcc-deploy-adv-1 — White-Label Branding Injector
             await injectBrandingVars(dna.key, {
                 primaryColor: dna.initialPrimaryColor || '#6366f1',
                 displayName: dna.name,

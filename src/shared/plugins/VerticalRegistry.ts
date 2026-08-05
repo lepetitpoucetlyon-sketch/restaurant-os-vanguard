@@ -1,56 +1,30 @@
 import { logger } from '@/lib/logger';
-import { IVerticalPlugin, ICoreContext } from './IVerticalPlugin';
+import type { IVerticalPlugin } from './IVerticalPlugin';
+import type { PlatformVariant } from '@/domain/schemas/tenant';
 
-class VerticalRegistry {
-    private plugins: Map<string, IVerticalPlugin> = new Map();
-    private context!: ICoreContext;
-    private isInitialized = false;
+type VerticalFactory = () => IVerticalPlugin;
 
-    /**
-     * Définit le contexte d'injection du Core.
-     * Doit être appelé avant de charger des plugins.
-     */
-    public setContext(context: ICoreContext) {
-        if (this.isInitialized) {
-            logger.warn('[VerticalRegistry] Contexte déjà initialisé.');
-            return;
-        }
-        this.context = context;
-        this.isInitialized = true;
-    }
+const registry = new Map<PlatformVariant, VerticalFactory>();
 
-    /**
-     * Charge un plugin métier.
-     */
-    public async register(plugin: IVerticalPlugin): Promise<void> {
-        if (!this.isInitialized) {
-            throw new Error('[VerticalRegistry] Le contexte Core n\'est pas défini. Appel setContext() d\'abord.');
-        }
+export const VerticalRegistry = {
+  register(variant: PlatformVariant, factory: VerticalFactory): void {
+    registry.set(variant, factory);
+    logger.info(`[VerticalRegistry] registered: ${variant}`);
+  },
 
-        if (this.plugins.has(plugin.id)) {
-            logger.warn(`[VerticalRegistry] Le plugin ${plugin.id} est déjà chargé.`);
-            return;
-        }
+  resolve(variant: PlatformVariant): IVerticalPlugin {
+    const factory = registry.get(variant);
+    if (!factory) throw new Error(`[VerticalRegistry] No vertical registered for variant: ${variant}`);
+    return factory();
+  },
 
-        logger.info(`[VerticalRegistry] Chargement de la verticale : ${plugin.name} (v${plugin.version})...`);
-        
-        try {
-            await plugin.initialize(this.context);
-            this.plugins.set(plugin.id, plugin);
-            logger.info(`[VerticalRegistry] Verticale ${plugin.name} chargée avec succès.`);
-        } catch (error) {
-            logger.error(`[VerticalRegistry] Échec du chargement de la verticale ${plugin.name}:`, error);
-            throw error;
-        }
-    }
+  list(): PlatformVariant[] {
+    return Array.from(registry.keys());
+  },
+};
 
-    public getPlugin(id: string): IVerticalPlugin | undefined {
-        return this.plugins.get(id);
-    }
-
-    public getLoadedPlugins(): IVerticalPlugin[] {
-        return Array.from(this.plugins.values());
-    }
-}
-
-export const verticalRegistry = new VerticalRegistry();
+// Auto-registration — lazy imports avoid circular deps at module init
+import('@/verticals/restaurant').then(m => VerticalRegistry.register('restaurant', () => new m.RestaurantVertical()));
+import('@/verticals/hotel').then(m => VerticalRegistry.register('hotel', () => new m.HotelVertical()));
+import('@/verticals/auto').then(m => VerticalRegistry.register('garage', () => new m.AutoVertical()));
+import('@/verticals/health').then(m => VerticalRegistry.register('clinic', () => new m.HealthVertical()));

@@ -37,3 +37,4 @@ export * from './TenantChangelogPanel';
 export * from './TenantOverridePanel';
 export * from './TenantUsersPanel';
 export * from './TrustedDevicePanel';
+export * from './VerticalActivePanel';

@@ -45,6 +45,7 @@ function MCCDashboardInner() {
         newCloneKey, setNewCloneKey,
         newCloneEmail, setNewCloneEmail,
         newCloneTier, setNewCloneTier,
+        newCloneVariant, setNewCloneVariant,
         provisioningStatus, provisionStep,
         handleCreateClone,
     } = useMccPage();
@@ -184,6 +185,23 @@ function MCCDashboardInner() {
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">{t.clone.ownerEmail}</label>
                                             <input type="email" placeholder={t.clone.ownerEmailPlaceholder} className="w-full bg-surface-bg border border-subtle rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-focus/50 transition-all" value={newCloneEmail} onChange={(e) => setNewCloneEmail(e.target.value)} required />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Secteur d&apos;activité</label>
+                                            <div className="grid grid-cols-4 gap-2">
+                                                {([
+                                                    { id: 'restaurant', emoji: '🍽️', label: 'Restaurant' },
+                                                    { id: 'hotel',      emoji: '🏨', label: 'Hôtel' },
+                                                    { id: 'garage',     emoji: '🔧', label: 'Garage' },
+                                                    { id: 'clinic',     emoji: '🏥', label: 'Clinique' },
+                                                ] as const).map(v => (
+                                                    <button key={v.id} type="button" onClick={() => setNewCloneVariant(v.id)}
+                                                        className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-center transition-all ${newCloneVariant === v.id ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
+                                                        <span className="text-xl">{v.emoji}</span>
+                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${newCloneVariant === v.id ? 'text-brand' : 'text-secondary'}`}>{v.label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">{t.clone.tier}</label>

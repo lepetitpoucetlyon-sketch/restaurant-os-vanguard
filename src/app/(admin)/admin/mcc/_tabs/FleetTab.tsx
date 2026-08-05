@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { LayoutGrid, TrendingUp, Activity, ShieldCheck, Plus, FlaskConical, Loader2 } from 'lucide-react';
-import { StatCard, TenantUsersPanel, MCCWidgetSkeleton } from '../components';
+import { StatCard, TenantUsersPanel, MCCWidgetSkeleton, VerticalActivePanel } from '../components';
 import type { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { useMCCLocale } from '../_i18n';
 import { useState } from 'react';
@@ -74,6 +74,12 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
             </div>
             <FleetCommandTable />
             {activeInstance && <TenantUsersPanel instance={activeInstance} />}
+            {activeInstance && (
+                <div className="mt-2">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary mb-3">Vertical actif</p>
+                    <VerticalActivePanel tenantId={activeInstance.key} />
+                </div>
+            )}
             <FleetDeviceInventory instances={instances.map(i => ({ tenantId: i.id, name: i.name }))} />
         </div>
     );
