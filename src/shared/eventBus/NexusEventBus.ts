@@ -1042,6 +1042,77 @@ export interface NexusEvents {
     invoiceId: string;
     discrepancies: string[];
   };
+
+  // ─── Vertical: Restaurant ──────────────────────────────────────────────────
+  'finance.order_sealed': { tenantId: string; orderId: string; totalInMicrounits: number; operatorId: string };
+  'finance.z_report_requested': { tenantId: string; operatorId: string; requestedAt: string };
+  'finance.refund_issued': { tenantId: string; referenceId: string; amountInMicrounits: number; reason: string };
+  'intelligence.menu_engineering_requested': { tenantId: string; periodDays: number };
+  'facility.floor_plan_updated': { tenantId: string; floorId: string; tables: { id: string; capacity: number; x: number; y: number }[] };
+  'facility.maintenance_required': { tenantId: string; assetId: string; assetType: string; description: string };
+  'mcc.health_ping': { tenantId: string; status: 'healthy' | 'degraded'; [key: string]: unknown };
+  'mcc.fiscal_audit_required': { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' };
+  'tenant.ready': { tenantId: string };
+  // Ops
+  'ops.order_notification': { tenantId: string; orderId: string; tableId?: string; totalInMicrounits: number };
+  'kds.course_passed': { tenantId: string; orderId: string; courseId: string };
+  // Commerce
+  'crm.rfm_trigger': { tenantId: string; customerId: string };
+  // Human
+  'hr.overtime_alert': { tenantId: string; employeeId: string; extraMinutes: number };
+  'hr.tip_distributed': { tenantId: string; orderId: string; tipInMicrounits: number; staffIds: string[] };
+  // Intelligence
+  'analytics.sales_data_ready': { tenantId: string; periodStart: string; periodEnd: string; totalInMicrounits: number; covers: number };
+  'analytics.anomaly_detected': { tenantId: string; metric: string; value: number; threshold: number; detectedAt: string };
+  // Logistics
+  'inventory.deducted': { tenantId: string; orderId: string; lines: { stockItemId: string; quantity: number }[] };
+
+  // ─── Vertical: Hotel ──────────────────────────────────────────────────────
+  'hotel.guest_checked_in': { tenantId: string; reservationId: string; guestId: string; roomId: string; checkedInAt: string };
+  'hotel.guest_checked_out': { tenantId: string; reservationId: string; guestId: string; roomId: string; totalInMicrounits: number };
+  'hotel.room_status_changed': { tenantId: string; roomId: string; status: 'CLEAN' | 'DIRTY' | 'MAINTENANCE' };
+  'hotel.housekeeping_task_created': { tenantId: string; taskId: string; roomId: string; assignedTo?: string };
+  'hotel.folio_charged': { tenantId: string; guestId: string; reservationId: string; amountInMicrounits: number; description: string };
+  'hotel.city_ledger_entry': { tenantId: string; companyId: string; amountInMicrounits: number; reference: string };
+  'hotel.room_booked': { tenantId: string; reservationId: string; guestId: string; roomType: string; channel: string; arrivalDate: string; departureDate: string; rateInMicrounits: number };
+  'hotel.yield_rate_updated': { tenantId: string; roomType: string; date: string; newRateInMicrounits: number };
+  'hotel.fire_safety_check': { tenantId: string; checkId: string; result: 'ok' | 'nok'; floor: number };
+  'hotel.housekeeper_assigned': { tenantId: string; employeeId: string; taskId: string; roomId: string };
+  'hotel.amenity_consumed': { tenantId: string; roomId: string; itemId: string; quantity: number };
+  'hotel.occupancy_snapshot': { tenantId: string; date: string; occupancyRate: number; revpar: number };
+  'hotel.room_maintenance_required': { tenantId: string; roomId: string; issue: string; priority: 'low' | 'medium' | 'high' };
+
+  // ─── Vertical: Health ─────────────────────────────────────────────────────
+  'health.patient_admitted': { tenantId: string; patientId: string; wardId: string; admittedAt: string; pathology?: string };
+  'health.patient_discharged': { tenantId: string; patientId: string; wardId: string; dischargedAt: string };
+  'health.bed_status_changed': { tenantId: string; bedId: string; wardId: string; status: 'available' | 'occupied' | 'cleaning' | 'maintenance' };
+  'health.insurance_claim_submitted': { tenantId: string; patientId: string; claimId: string; amountInMicrounits: number; insurerId: string };
+  'health.act_billed': { tenantId: string; patientId: string; actCode: string; amountInMicrounits: number; practitionerId: string };
+  'health.hds_audit_log': { tenantId: string; patientId: string; action: string; performedBy: string; timestamp: string };
+  'health.consent_recorded': { tenantId: string; patientId: string; consentType: string; grantedAt: string };
+  'health.appointment_booked': { tenantId: string; appointmentId: string; patientId: string; practitionerId: string; slot: string };
+  'health.appointment_cancelled': { tenantId: string; appointmentId: string; reason: string };
+  'health.practitioner_on_call': { tenantId: string; practitionerId: string; specialty: string; onCallFrom: string; onCallUntil: string };
+  'health.medication_dispensed': { tenantId: string; patientId: string; medicationId: string; quantity: number; dispensedBy: string };
+  'health.supply_reorder_needed': { tenantId: string; supplyId: string; currentStock: number; reorderThreshold: number };
+  'health.patient_flow_snapshot': { tenantId: string; date: string; admissions: number; discharges: number; occupancyRate: number };
+  'health.equipment_maintenance_required': { tenantId: string; equipmentId: string; type: string; dueDate: string; critical: boolean };
+
+  // ─── Vertical: Auto ───────────────────────────────────────────────────────
+  'auto.vehicle_checked_in': { tenantId: string; vehicleId: string; vin: string; customerId: string; mileage: number; checkedInAt: string };
+  'auto.diagnostic_completed': { tenantId: string; vehicleId: string; workOrderId: string; faults: { code: string; severity: 'low' | 'medium' | 'critical' }[] };
+  'auto.repair_started': { tenantId: string; workOrderId: string; technicianId: string; startedAt: string };
+  'auto.vehicle_released': { tenantId: string; vehicleId: string; workOrderId: string; customerId: string; releasedAt: string };
+  'auto.invoice_issued': { tenantId: string; workOrderId: string; customerId: string; totalInMicrounits: number; laborInMicrounits: number; partsInMicrounits: number };
+  'auto.warranty_claim_submitted': { tenantId: string; vehicleId: string; claimId: string; amountInMicrounits: number; manufacturerId: string };
+  'auto.part_consumed': { tenantId: string; partId: string; workOrderId: string; quantity: number };
+  'auto.part_reorder_needed': { tenantId: string; partId: string; partNumber: string; currentStock: number; reorderQty: number };
+  'auto.certification_expiry': { tenantId: string; vehicleId: string; certType: 'ct' | 'pollution'; expiresAt: string };
+  'auto.appointment_booked': { tenantId: string; appointmentId: string; customerId: string; vehicleId: string; serviceType: string; slot: string };
+  'auto.customer_satisfaction_logged': { tenantId: string; workOrderId: string; customerId: string; score: number; comment?: string };
+  'auto.technician_assigned': { tenantId: string; technicianId: string; workOrderId: string; estimatedHours: number };
+  'auto.workshop_metrics_snapshot': { tenantId: string; date: string; workOrdersCompleted: number; avgRepairTimeMinutes: number; revenueInMicrounits: number };
+  'auto.lift_maintenance_required': { tenantId: string; liftId: string; issue: string; dueDate: string };
 }
 
 export type NexusEventName = keyof NexusEvents;

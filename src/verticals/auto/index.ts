@@ -6,3 +6,5 @@ export { AutoVertical } from './AutoVertical';
 // Export par défaut pour l'import dynamique par le VerticalRegistry
 const autoVertical = new AutoVertical();
 export default autoVertical;
+
+export * from './adapters';
