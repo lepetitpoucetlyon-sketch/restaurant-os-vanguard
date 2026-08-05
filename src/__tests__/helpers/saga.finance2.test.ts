@@ -28,7 +28,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 }));
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/infrastructure/services/audit', () => ({ empireAudit: { log: vi.fn() } }));
+vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
 }));
@@ -43,7 +43,7 @@ vi.mock('@/modules/intelligence', () => ({
     insert: vi.fn(async () => ({ status: 'ok', id: 'doc-1' })),
   })),
 }));
-vi.mock('@/infrastructure/adapters/NotificationGateway', () => ({
+vi.mock('@/lib/adapters/NotificationGateway', () => ({
   NotificationGateway: { sendEmail: vi.fn(async () => true) },
 }));
 vi.mock('@/lib/push/browserPush', () => ({

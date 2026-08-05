@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
-const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mockOn, capturedHandlers } =
+const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitDurable, mockOn, capturedHandlers } =
   vi.hoisted(() => {
     const capturedHandlers: Record<string, (payload: unknown) => Promise<void>> = {};
     const mockOn = vi.fn((event: string, cb: (p: unknown) => Promise<void>) => {
@@ -14,6 +14,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
       mockSet: vi.fn(),
       mockUpdate: vi.fn(),
       mockQuery: vi.fn(),
+      mockCreate: vi.fn(),
       mockEmit: vi.fn(),
       mockEmitDurable: vi.fn(),
       mockOn,
@@ -22,20 +23,20 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
   });
 
 vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery } },
+  Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery, create: mockCreate } },
 }));
 vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 }));
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/infrastructure/services/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/infrastructure/adapters/MasterBridge', () => ({
+vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
+vi.mock('@/lib/adapters/MasterBridge', () => ({
   MasterBridge: { pushGlobalConfig: vi.fn(async () => undefined) },
 }));
 vi.mock('@/lib/push/browserPush', () => ({
   browserPush: { sendToRole: vi.fn(async () => true) },
 }));
-vi.mock('@/infrastructure/adapters/NotificationGateway', () => ({
+vi.mock('@/lib/adapters/NotificationGateway', () => ({
   NotificationGateway: { sendEmail: vi.fn(async () => true), send: vi.fn(async () => true) },
 }));
 vi.mock('@/modules/intelligence', () => ({
@@ -197,7 +198,7 @@ describe('SovereignBreachHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerSovereignBreachHandler(); });
 
   it('déclenche le kill-switch MasterBridge en cas de brèche souveraine', async () => {
-    const { MasterBridge } = await import('@/infrastructure/adapters/MasterBridge');
+    const { MasterBridge } = await import('@/lib/adapters/MasterBridge');
 
     await capturedHandlers['sovereign.breach']({
       message: 'drift', targetTenantId: 'tenant-b', anchoredTenantId: T, path: '/bad/path',
@@ -280,7 +281,7 @@ describe('ReportRetryHandler', () => {
 
   it('crée une alerte critique si attemptCount >= 3', async () => {
     mockSet.mockResolvedValue(undefined);
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
 
     await capturedHandlers['report.send.failed']({
       tenantId: T, reportId: 'rpt-2', recipientEmail: 'b@c.com',
@@ -392,7 +393,7 @@ describe('DeliveryDriverUnlockHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerDeliveryDriverUnlockHandler(); });
 
   it('trace la libération du livreur dans l\'audit', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
 
     await capturedHandlers['delivery.delivered']({ orderId: 'ord-1', driverId: 'drv-1', tenantId: T });
 
@@ -402,7 +403,7 @@ describe('DeliveryDriverUnlockHandler', () => {
   });
 
   it('ne fait rien si driverId est absent', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
 
     await capturedHandlers['delivery.delivered']({ orderId: 'ord-2', tenantId: T });
 

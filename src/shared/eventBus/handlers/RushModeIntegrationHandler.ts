@@ -1,6 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 
 export function registerRushModeIntegrationHandler() {
   return NexusEventBus.on(

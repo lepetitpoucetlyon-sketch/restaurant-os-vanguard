@@ -37,7 +37,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
-vi.mock('@/infrastructure/services/audit', () => ({
+vi.mock('@/lib/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
 

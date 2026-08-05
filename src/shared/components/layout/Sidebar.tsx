@@ -21,7 +21,7 @@ import { AppLaunchpad } from "./AppLaunchpad";
 import { ProfileSwitcher } from "./ProfileSwitcher";
 import { ExpenseClaimDialog } from "@modules/finance";
 import { Map3DOverlay } from "./Map3DOverlay";
-import { empireAudit } from "@/infrastructure/services/audit";
+import { empireAudit } from "@/lib/audit";
 
 import { useAtomValue } from 'jotai';
 import { tenantConfigAtom } from "@nexus/state/SovereignGenome";

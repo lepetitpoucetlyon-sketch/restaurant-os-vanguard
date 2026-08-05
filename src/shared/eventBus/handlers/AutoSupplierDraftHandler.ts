@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 
 interface StockItemRecord {
   supplierId?: string;

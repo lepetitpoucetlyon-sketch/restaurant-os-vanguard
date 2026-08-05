@@ -13,7 +13,7 @@ import {
 } from '@/store/pillars/commerce';
 
 import { logger } from '@/lib/logger';
-import { db } from "@/infrastructure/services/offline/offline-store";
+import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
 import { Zone, Floor } from '@nexus/contracts';
 

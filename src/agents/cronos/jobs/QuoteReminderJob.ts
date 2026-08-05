@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
 /**
  * 💼 QuoteReminderJob - Grade X

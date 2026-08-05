@@ -10,8 +10,8 @@ import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAudit
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
-import { SyncManager } from '@/infrastructure/services/offline/sync-manager';
-import { checkOnlineStatus } from '@/infrastructure/services/offline/connectivity-hooks';
+import { SyncManager } from '@/lib/offline/sync-manager';
+import { checkOnlineStatus } from '@/lib/offline/connectivity-hooks';
 
 /**
  * 🧩 opsCore — primitives partagées des hooks Ops.

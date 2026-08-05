@@ -19,7 +19,7 @@ import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 import { StatusBadge } from '@ui/StatusBadge';
 import { CameraCapture } from './CameraCapture';
-import { StorageService } from '@domain/services/Storage';
+import { StorageService } from '@/lib/Storage';
 import { useTenant } from '@/shared/hooks';
 import { Loader2 } from 'lucide-react';
 

@@ -3,7 +3,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FirestoreServerAdapter } from '@/infrastructure/adapters/FirestoreServerAdapter';
+import { FirestoreServerAdapter } from '@/lib/adapters/FirestoreServerAdapter';
 
 describe.skip('Integration: POS to Fiscal', () => {
   let db: FirebaseFirestore.Firestore;

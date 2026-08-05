@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
+import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { logger } from '@/lib/logger';
 
 /**

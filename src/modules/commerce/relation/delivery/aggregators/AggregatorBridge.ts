@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { toMicrounits } from '@/domain/schemas/primitives';
 import type { AggregatorOrder, AggregatorPlatform, AggregatorConfig } from './types';
 

@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/lib/CryptoService';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import type { FiscalSeal } from '@nexus/contracts';
 
 export function registerCryptoIntegrityCheckHandler() {

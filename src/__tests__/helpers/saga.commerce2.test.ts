@@ -28,8 +28,8 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 }));
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
-vi.mock('@/infrastructure/services/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/infrastructure/adapters/NotificationGateway', () => ({
+vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
+vi.mock('@/lib/adapters/NotificationGateway', () => ({
   NotificationGateway: { sendEmail: vi.fn(async () => true), send: vi.fn(async () => true) },
 }));
 vi.mock('@/lib/shared-kernel', () => ({
@@ -214,7 +214,7 @@ describe('SegmentTargetingHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerSegmentTargetingHandler(); });
 
   it('trace le ciblage de segment dans l\'audit', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     await capturedHandlers['crm.segment_matched']({
       tenantId: T, segmentId: 'seg-vip', customerId: 'cust-1', segmentName: 'VIP',
     });
@@ -228,7 +228,7 @@ describe('MarketingCampaignRouterHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerMarketingCampaignRouterHandler(); });
 
   it('trace la campagne dans l\'audit', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     await capturedHandlers['marketing.campaign_launched']({
       tenantId: T, campaignId: 'camp-1', targetSegment: 'birthday', launchedBy: 'system',
     });
@@ -324,7 +324,7 @@ describe('AggregatorStockSyncHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerAggregatorStockSyncHandler(); });
 
   it('marque l\'article épuisé dans l\'audit de sync', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     await capturedHandlers['stock.zero']({
       tenantId: T, itemId: 'item-1', itemName: 'Frites',
     });

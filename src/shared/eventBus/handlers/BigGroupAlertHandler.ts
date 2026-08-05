@@ -1,9 +1,9 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
-import type { AuditSeverity } from '@/infrastructure/services/audit';
+import type { AuditSeverity } from '@/lib/audit';
 
 /**
  * BigGroupAlertHandler (P05-K)

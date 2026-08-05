@@ -13,7 +13,7 @@
  * "On ne se contente pas de rejeter l'action, on la DÉNONCE."
  */
 
-import { db } from '@/infrastructure/services/offline/offline-store';
+import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
 import type { ImmunityLogEntry, JetEntry } from '@shared/genome.types';
 

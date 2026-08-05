@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
-import { NexusSyncService } from '@/infrastructure/services/NexusSyncService';
-import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
+import { NexusSyncService } from '@/lib/NexusSyncService';
+import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { logger } from '@/lib/axiom';
 
 /**

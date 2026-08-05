@@ -7,9 +7,9 @@ import {
 } from '@/store/pillars';
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { qualityActiveControlAtom } from '@/modules/compliance';
-import { SelfHealingEngine } from '@/infrastructure/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 
 /**
  * 🐉 ResilienceSlayer - Grade X

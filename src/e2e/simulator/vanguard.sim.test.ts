@@ -44,11 +44,11 @@ vi.mock('@/modules/intelligence/ia/simulator/SimulatorDB', () => {
 // Removed vi.mock for NexusEventBus and empireAudit in favor of spyOn
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
+import { MockAdapter } from '@/lib/adapters/MockAdapter';
 import { FiscalKeyService } from '@/modules/finance';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
 
 import { alicePersona } from './personas/alice';

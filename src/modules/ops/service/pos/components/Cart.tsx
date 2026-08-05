@@ -16,7 +16,7 @@ import { useLanguage } from "@/shared/hooks";
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { formatMu } from "@/modules/finance";
 import { useIsMobile } from "@/shared/hooks";
-import { POSService } from "@/infrastructure/adapters/POSAdapter";
+import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';
 import { SovereignMath } from "@/shared/services/SovereignMath";
 

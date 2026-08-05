@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FoodDonationSchema, type FoodDonation } from '@/domain/schemas/foodDonation';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { toMicrounits } from '@/domain/schemas/primitives';
 
 export const FoodDonationService = {

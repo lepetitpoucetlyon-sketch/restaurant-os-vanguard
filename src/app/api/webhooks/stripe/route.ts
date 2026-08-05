@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MosyleClient } from '@/infrastructure/services/MosyleClient';
+import { MosyleClient } from '@/lib/MosyleClient';
 
 // ── Plan-to-features mapping (P12-D / P12-J) ────────────────────────────────
 const PLAN_FEATURES: Record<string, string[]> = {

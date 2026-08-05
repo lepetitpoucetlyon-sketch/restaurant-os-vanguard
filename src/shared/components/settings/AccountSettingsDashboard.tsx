@@ -27,7 +27,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
-import { ROLE_TEMPLATES, type RoleTemplate } from "@/domain/services/RoleTemplates";
+import { ROLE_TEMPLATES, type RoleTemplate } from "@/lib/RoleTemplates";
 
 export function AccountSettingsDashboard() {
     const { currentUser: _currentUser, users, rolePermissions, customRoles, updateRolePermissions, createCustomRole, deleteCustomRole, assignRoleToUser, hasAccess } = useAuth();

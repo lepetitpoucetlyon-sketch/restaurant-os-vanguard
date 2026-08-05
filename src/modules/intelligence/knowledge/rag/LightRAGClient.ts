@@ -16,7 +16,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 
 import {
     DEFAULT_LIGHTRAG_CONFIG,

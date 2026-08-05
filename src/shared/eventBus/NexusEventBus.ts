@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { logger } from '@/lib/logger';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
-import { db } from '@/infrastructure/services/offline/offline-store';
+import { db } from '@/lib/offline/offline-store';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 

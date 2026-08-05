@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { CryptoService } from '@/lib/CryptoService';
 import type { SovereignData } from '@shared/nexus-contract';

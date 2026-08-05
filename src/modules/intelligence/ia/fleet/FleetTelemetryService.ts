@@ -1,8 +1,8 @@
-import { TenantID, SiteTelemetry } from '@domain/types/brands';
+import { TenantID, SiteTelemetry } from '@/domain/types/brands';
 import { TelemetryStream, TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';
 import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 
 /**
  * 🛰️ FleetTelemetryService - Restaurant OS

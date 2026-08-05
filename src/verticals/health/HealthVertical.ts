@@ -1,5 +1,5 @@
 import React from 'react';
-import { IVerticalPlugin, ICoreContext } from '@/domain/plugins/IVerticalPlugin';
+import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 
 export class HealthVertical implements IVerticalPlugin {

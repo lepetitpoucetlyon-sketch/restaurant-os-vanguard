@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Zap, Cpu, ShieldCheck, Trash2 } from 'lucide-react';
 import { whiteLabelInstanceConfig } from '@/config/instance';
-import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
+import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { useStore } from 'jotai';
 
 const MAX_JS_HEAP_MB = 512;

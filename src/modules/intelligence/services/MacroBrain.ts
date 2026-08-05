@@ -1,9 +1,9 @@
 export type { FleetInsight, ConsolidatedMetrics, QuantumMetrics, StrategicActionResult } from '@nexus/contracts/fleet.types';
 import { FleetInsight, ConsolidatedMetrics, QuantumMetrics } from '@nexus/contracts/fleet.types';
 import type { StrategicActionResult } from '@nexus/contracts/fleet.types';
-import { EmpireInstance } from '@domain/types/empire';
+import { EmpireInstance } from '@/domain/types/empire';
 import { logger } from '@/lib/axiom';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
 import type { FiscalSeal } from '@/modules/finance/fiscalite/FiscalAdapter';

@@ -4,7 +4,7 @@ import { FiscalSeal } from '@nexus/contracts';
 
 
 import { logger } from '@/lib/logger';
-import { db } from "@/infrastructure/services/offline/offline-store";
+import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;

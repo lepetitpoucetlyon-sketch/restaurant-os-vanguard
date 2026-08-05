@@ -9,7 +9,7 @@ export class NativeEmailMarketingProvider implements IEmailMarketingProvider {
     readonly id = 'native';
 
     async sendCampaign(campaign: Campaign): Promise<string> {
-        const { sendEmail } = await import('@/infrastructure/services/email-service');
+        const { sendEmail } = await import('@/lib/email-service');
         const errors: string[] = [];
         for (const recipient of campaign.recipients) {
             let html = campaign.htmlContent;

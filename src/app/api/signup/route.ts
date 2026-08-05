@@ -9,7 +9,7 @@ import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
-import { sendEmail } from '@/infrastructure/services/email-service';
+import { sendEmail } from '@/lib/email-service';
 import { PlatformVariantSchema } from '@/domain/schemas/tenant';
 
 const SignupSchema = z.object({

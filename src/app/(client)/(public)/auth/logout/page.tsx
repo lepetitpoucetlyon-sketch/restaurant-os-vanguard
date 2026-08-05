@@ -19,7 +19,7 @@ export default function LogoutPage() {
     const handleHeal = async () => {
         try {
             // Attempt to force-unlock if we have access to MasterBridge
-            const { MasterBridge } = await import('@/infrastructure/adapters/MasterBridge');
+            const { MasterBridge } = await import('@/lib/adapters/MasterBridge');
             await MasterBridge.pushGlobalConfig({
                 maintenanceMode: false,
                 killSwitch: false,

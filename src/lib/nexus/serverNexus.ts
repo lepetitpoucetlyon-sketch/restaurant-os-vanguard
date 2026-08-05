@@ -1,7 +1,7 @@
 import 'server-only';
 import { Nexus } from './NexusAdapter';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { FirestoreServerAdapter } from '@/infrastructure/adapters/FirestoreServerAdapter';
+import { FirestoreServerAdapter } from '@/lib/adapters/FirestoreServerAdapter';
 import { logger } from '@/lib/logger';
 
 let registered = false;

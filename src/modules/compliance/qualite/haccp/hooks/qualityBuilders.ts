@@ -5,7 +5,7 @@ import {
     ActiveQualityControlItem,
     ReceptionData,
 } from '@nexus/contracts';
-import { IDService } from '@/infrastructure/adapters/IDAdapter';
+import { IDService } from '@/lib/adapters/IDAdapter';
 
 /** Delivery minimal contract consommé par les builders (évite un couplage large). */
 interface DeliveryLike {

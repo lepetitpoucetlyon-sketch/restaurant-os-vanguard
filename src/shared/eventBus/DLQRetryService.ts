@@ -1,4 +1,4 @@
-import { db } from '@/infrastructure/services/offline/offline-store';
+import { db } from '@/lib/offline/offline-store';
 import { NexusEventBus, NexusEventName } from './NexusEventBus';
 import { PayloadMigrator } from './PayloadMigrator';
 import { logger } from '@/lib/logger';

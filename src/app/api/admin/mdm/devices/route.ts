@@ -6,9 +6,9 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
-import { MosyleClient, type MosyleDevice } from '@/infrastructure/services/MosyleClient';
+import { MosyleClient, type MosyleDevice } from '@/lib/MosyleClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
 const MOCK_DEVICES: MosyleDevice[] = [

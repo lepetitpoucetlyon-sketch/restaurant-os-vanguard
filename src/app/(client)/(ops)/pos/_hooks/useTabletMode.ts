@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { tenantScopedKey } from "@/infrastructure/services/storage/tenantScopedKey";
+import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 
 export function useTabletMode() {
     const [isTabletMode, setIsTabletMode] = useState<boolean>(() => {

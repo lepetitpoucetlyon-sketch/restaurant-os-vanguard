@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TenantID, SiteTelemetry } from '@domain/types/brands';
+import { TenantID, SiteTelemetry } from '@/domain/types/brands';
 import { TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';
 import { logger } from '@/lib/logger';
 

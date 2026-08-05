@@ -2,7 +2,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import type { Order } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';

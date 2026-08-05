@@ -1,6 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { browserPush } from '@/lib/push/browserPush';
 import { logger } from '@/lib/logger';
 

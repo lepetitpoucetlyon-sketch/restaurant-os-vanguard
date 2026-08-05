@@ -1,5 +1,5 @@
 import { NexusEventBus } from '../NexusEventBus';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { AggregatorMappingService } from '@/modules/commerce';
 

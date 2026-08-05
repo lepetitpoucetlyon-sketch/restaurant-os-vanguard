@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CashCountSchema, type CashCount, type DenominationCount } from '@/domain/schemas/cash';
 import { toMicrounits, type Microunits } from '@/domain/schemas/primitives';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 
 function denomsToMicrounits(denoms: DenominationCount[]): Microunits {
     const totalCents = denoms.reduce((sum, d) => sum + d.valueCents * d.count, 0);

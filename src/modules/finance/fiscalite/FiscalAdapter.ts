@@ -1,6 +1,6 @@
 import { FiscalSeal } from '@nexus/contracts';
 export type { FiscalSeal };
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
 import { FiscalKeyService } from '@modules/finance/services/FiscalKeyService';
 import { SharedKernel } from '@/lib/shared-kernel';

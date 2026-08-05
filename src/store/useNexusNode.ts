@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
 import type { PrimitiveAtom } from 'jotai';
-import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
+import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import type { NexusNode } from './base';
 
 /**

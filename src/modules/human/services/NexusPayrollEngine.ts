@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
+import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
 import { ShiftEntrySchema, ShiftEntry } from "@domain/schemas/hr";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

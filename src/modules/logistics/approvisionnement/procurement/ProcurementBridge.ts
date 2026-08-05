@@ -1,10 +1,10 @@
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { SovereignLedger } from '@/modules/finance';
-import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
+import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { PurchaseOrder, DeliveryNote } from './types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { DocumentVault } from '@/domain/shared/DocumentVault';
+import { DocumentVault } from '@/lib/DocumentVault';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**

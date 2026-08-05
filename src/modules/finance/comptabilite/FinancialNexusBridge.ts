@@ -1,6 +1,6 @@
 import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
@@ -288,7 +288,7 @@ export const FinancialNexusBridge = {
       finalReceiptNumber = provisional;
       finalSnapshot = buildSnapshot(provisional);
 
-      const { SyncManager } = await import('@/infrastructure/services/offline/sync-manager');
+      const { SyncManager } = await import('@/lib/offline/sync-manager');
       await SyncManager.enqueue({
         type: 'NF525_PAYMENT',
         priority: 1,
@@ -422,7 +422,7 @@ export const FinancialNexusBridge = {
       finalReceiptNumber = provisional;
       finalSnapshot = buildSnapshot(provisional);
 
-      const { SyncManager } = await import('@/infrastructure/services/offline/sync-manager');
+      const { SyncManager } = await import('@/lib/offline/sync-manager');
       await SyncManager.enqueue({
         type: 'NF525_PAYMENT',
         priority: 1,

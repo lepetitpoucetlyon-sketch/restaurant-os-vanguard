@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useToast } from "@components/ui/Toast";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
-import { empireAudit } from "@/infrastructure/services/audit";
+import { empireAudit } from "@/lib/audit";
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from "@/shared/nexus/contracts/permissions.types";
 
 const MIN_ALERT_ROLE_LEVEL = PERMISSION_ROLE_LEVELS['hotesse']; // 30 — tout le personnel de salle

@@ -28,14 +28,14 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 }));
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
-vi.mock('@/infrastructure/services/audit', () => ({ empireAudit: { log: vi.fn() } }));
+vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
 }));
 vi.mock('@/lib/push/browserPush', () => ({
   browserPush: { sendToRole: vi.fn(async () => true), sendToUser: vi.fn(async () => true) },
 }));
-vi.mock('@/infrastructure/adapters/NotificationGateway', () => ({
+vi.mock('@/lib/adapters/NotificationGateway', () => ({
   NotificationGateway: { sendEmail: vi.fn(async () => true), send: vi.fn(async () => true) },
 }));
 
@@ -98,7 +98,7 @@ describe('KdsPassNotifierHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerKdsPassNotifierHandler(); });
 
   it('trace la notification ticket prêt au passe', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     await capturedHandlers['kds.ticket_done']({ tenantId: T, orderId: 'ord-1' });
     expect(empireAudit.log).toHaveBeenCalledWith(expect.objectContaining({ action: 'KDS_TICKET_READY_NOTIFIED' }));
   });
@@ -141,7 +141,7 @@ describe('KdsPrintFallbackHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerKdsPrintFallbackHandler(); });
 
   it('trace le fallback imprimante dans l\'audit', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     await capturedHandlers['kds.printer_failed']({ tenantId: T, orderId: 'ord-1', printerId: 'ptr-1', errorReason: 'offline' });
     expect(empireAudit.log).toHaveBeenCalledWith(expect.objectContaining({ action: 'KDS_PRINTER_FALLBACK_TRIGGERED' }));
   });
@@ -333,7 +333,7 @@ describe('ResaReminderHandler', () => {
       .mockResolvedValueOnce({ email: 'test@ex.com', time: '19:30' })
       .mockResolvedValueOnce({ name: 'Le Bistrot' });
     mockSet.mockResolvedValue(undefined);
-    const { NotificationGateway } = await import('@/infrastructure/adapters/NotificationGateway');
+    const { NotificationGateway } = await import('@/lib/adapters/NotificationGateway');
 
     await capturedHandlers['resa.j1']({
       tenantId: T, reservationId: 'res-1', customerId: 'cust-1', date: '2026-09-02', covers: 2, time: '19:30',
@@ -351,7 +351,7 @@ describe('ReservationNotifierHandler', () => {
   it('envoie une notification de confirmation au client', async () => {
     mockGet.mockResolvedValue({ name: 'Le Bistrot' });
     mockUpdate.mockResolvedValue(undefined);
-    const { NotificationGateway } = await import('@/infrastructure/adapters/NotificationGateway');
+    const { NotificationGateway } = await import('@/lib/adapters/NotificationGateway');
 
     await capturedHandlers['reservation.created']({
       tenantId: T, reservationId: 'res-1', customerId: 'cust-1',
@@ -450,7 +450,7 @@ describe('CompMealHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerCompMealHandler(); });
 
   it('trace le repas offert dans l\'audit', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     mockSet.mockResolvedValue(undefined);
 
     await capturedHandlers['order.comp']({

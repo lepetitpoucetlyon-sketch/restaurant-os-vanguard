@@ -3,11 +3,11 @@
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { SovereignNode } from '@/shared/nexus-contract';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
-import { NexusSyncService } from '@/infrastructure/services/NexusSyncService';
+import { NexusSyncService } from '@/lib/NexusSyncService';
 import { TelemetryHook } from '@/modules/intelligence/analytique/TelemetryHook';
 import { logger } from '@/lib/logger';
-import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
-import { EmpireInstance } from '@domain/types/empire';
+import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
+import { EmpireInstance } from '@/domain/types/empire';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
 import { TenantIdSchema } from '@/domain/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';

@@ -2,7 +2,7 @@
 import { getDefaultStore } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
-import { db } from '@/infrastructure/services/offline/offline-store';
+import { db } from '@/lib/offline/offline-store';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
  

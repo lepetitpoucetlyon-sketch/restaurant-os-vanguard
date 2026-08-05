@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
 type AnomalyType = 'excessive_voids' | 'excessive_comps' | 'discount_abuse' | 'cash_variance' | 'override_spike';

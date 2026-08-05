@@ -1,8 +1,8 @@
 import { NexusEventBus } from '../NexusEventBus';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
 export class BirthdayOfferHandler {
   static register() {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { SyncOperation } from '@/infrastructure/services/offline/offline-store';
+import type { SyncOperation } from '@/lib/offline/offline-store';
 
 /**
  * 🔌 Résilience offline — « coupure réseau en plein service ».
@@ -17,7 +17,7 @@ import type { SyncOperation } from '@/infrastructure/services/offline/offline-st
 let queue: (SyncOperation & { id: number })[] = [];
 let nextId = 1;
 
-vi.mock('@/infrastructure/services/offline/offline-store', () => ({
+vi.mock('@/lib/offline/offline-store', () => ({
     db: {
         syncQueue: {
             add: vi.fn(async (op: SyncOperation) => { const id = nextId++; queue.push({ ...op, id }); return id; }),
@@ -40,7 +40,7 @@ vi.mock('@/infrastructure/services/offline/offline-store', () => ({
 
 // --- Connectivité contrôlable ---
 let online = true;
-vi.mock('@/infrastructure/services/offline/connectivity-hooks', () => ({
+vi.mock('@/lib/offline/connectivity-hooks', () => ({
     checkOnlineStatus: () => online,
 }));
 
@@ -70,7 +70,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
     },
 }));
 
-import { SyncManager } from '@/infrastructure/services/offline/sync-manager';
+import { SyncManager } from '@/lib/offline/sync-manager';
 
 function fiscalOp(orderId: string): Omit<SyncOperation, 'status' | 'attempts' | 'timestamp'> {
     return {

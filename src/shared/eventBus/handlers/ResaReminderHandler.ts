@@ -1,8 +1,8 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
 /**
  * ResaReminderHandler (P05-B)

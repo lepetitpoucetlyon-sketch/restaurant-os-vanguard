@@ -7,7 +7,7 @@ import { inventoryMovementsAtom } from '../stock/inventory/store/inventoryAtoms'
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { OracleEngine } from '@/modules/intelligence';
 import type { OraclePrediction } from '@/domain/schemas/inventory';
-import type { Quantity } from '@/infrastructure/branding/brands';
+import type { Quantity } from '@/lib/branding/brands';
 
 interface UseOraclePredictionResult {
     prediction: OraclePrediction | null;

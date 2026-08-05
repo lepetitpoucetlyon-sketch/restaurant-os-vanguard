@@ -34,7 +34,7 @@ vi.mock('@/lib/shared-kernel', () => ({
   },
 }));
 
-vi.mock('@/infrastructure/services/audit', () => ({
+vi.mock('@/lib/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
 

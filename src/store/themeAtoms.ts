@@ -1,6 +1,6 @@
 import { atomWithStorage } from 'jotai/utils';
 import type { ThemeMode, AccentColor, UIDensity, BorderRadius } from '@nexus/contracts';
-import { tenantScopedJSONStorage } from '@/infrastructure/services/storage/tenantScopedKey';
+import { tenantScopedJSONStorage } from '@/lib/storage/tenantScopedKey';
 
 // Re-export the canonical theme primitives (declared in nexus-contracts) so
 // existing consumers importing them from `@/store/themeAtoms` keep working.

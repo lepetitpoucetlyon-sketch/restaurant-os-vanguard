@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { NexusEventBus } from '../NexusEventBus';
-import { empireAudit } from '@/infrastructure/services/audit';
+import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { AggregatorMappingService } from '@/modules/commerce/relation/delivery/services/AggregatorMappingService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

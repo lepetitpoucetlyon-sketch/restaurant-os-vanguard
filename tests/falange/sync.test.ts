@@ -7,7 +7,7 @@ import { TASK_MAPS } from '@/lib/icm/TaskContext';
 import { OpsSyncService as SyncOrders } from '@/modules/ops';
 import { InventorySyncService as SyncStocks } from '@/modules/logistics';
 import { HACCPSyncService as SyncHACCP } from '@/modules/compliance';
-import { MasterBridge } from '@/infrastructure/adapters/MasterBridge';
+import { MasterBridge } from '@/lib/adapters/MasterBridge';
 
 // No vi.mock here, we'll use vi.spyOn in beforeEach
 

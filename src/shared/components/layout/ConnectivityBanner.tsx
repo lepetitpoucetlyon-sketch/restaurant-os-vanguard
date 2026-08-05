@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { WifiOff, RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useConnectivity } from '@/infrastructure/services/offline/connectivity-hooks';
+import { useConnectivity } from '@/lib/offline/connectivity-hooks';
 import { useTenant } from '@/shared/hooks';
-import { OfflineMasteryEngine } from '@/domain/services/OfflineMasteryEngine';
+import { OfflineMasteryEngine } from '@/lib/OfflineMasteryEngine';
 
 type SyncState = 'online' | 'offline' | 'syncing' | 'synced' | 'error';
 

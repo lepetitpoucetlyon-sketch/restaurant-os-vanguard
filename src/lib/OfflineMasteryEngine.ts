@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { db } from "@/infrastructure/services/offline/offline-store";
+import { db } from "@/lib/offline/offline-store";
 import { Order } from '@nexus/contracts';
 import { CryptoService } from '@/lib/CryptoService';
 import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';

@@ -1,7 +1,7 @@
 import { logger } from '@/lib/axiom';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { InvoiceExtractionService } from '@modules/logistics/services/InvoiceExtractionService';
-import { IdentityGuardService } from '@/domain/services/IdentityGuardService';
+import { IdentityGuardService } from '@/lib/IdentityGuardService';
 import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
 import { authedFetch } from '@/lib/client/authedFetch';
 

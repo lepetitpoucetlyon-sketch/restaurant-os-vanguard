@@ -1,4 +1,4 @@
-import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
+import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
 import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
 import { MaintenanceAgent } from '@/lib/MaintenanceAgent';

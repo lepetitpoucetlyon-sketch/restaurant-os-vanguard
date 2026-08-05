@@ -1,6 +1,6 @@
 import { ZodSchema } from 'zod';
 import { atom, WritableAtom } from 'jotai';
-import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 
 /** Keys that identify the tenant itself — MUST stay unscoped to bootstrap. */
 const UNSCOPED_KEYS = new Set(['nexus_tenant_id']);

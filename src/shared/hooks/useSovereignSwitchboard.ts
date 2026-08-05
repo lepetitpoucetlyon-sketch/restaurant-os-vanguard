@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { logCorrectiveAction } from '@/infrastructure/services/sovereign/telemetry';
+import { logCorrectiveAction } from '@/lib/sovereign/telemetry';
 
 export interface SwitchboardState {
     telemetryActive: boolean;

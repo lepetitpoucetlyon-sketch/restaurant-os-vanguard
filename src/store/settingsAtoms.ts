@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { GlobalSettings, defaultSettings } from '@nexus/contracts';
-import { tenantScopedJSONStorage } from '@/infrastructure/services/storage/tenantScopedKey';
+import { tenantScopedJSONStorage } from '@/lib/storage/tenantScopedKey';
 
 /**
  * GLOBAL SETTINGS ATOMS (GRADE VI)

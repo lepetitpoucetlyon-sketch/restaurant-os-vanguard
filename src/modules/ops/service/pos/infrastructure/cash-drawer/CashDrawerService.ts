@@ -9,7 +9,7 @@
  *   manual        — Pas de kick physique, l'opérateur ouvre manuellement
  */
 
-import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 import { authedFetch } from '@/lib/client/authedFetch';
 
 const ESC = 0x1b;

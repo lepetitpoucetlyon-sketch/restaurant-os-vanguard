@@ -1,6 +1,6 @@
 import type { IPaymentTerminalAdapter, TerminalDevice, PaymentRequest, PaymentResult, RefundRequest, RefundResult, TerminalStatus } from './types';
 import { ManualAdapter } from './adapters/ManualAdapter';
-import { tenantScopedKey } from '@/infrastructure/services/storage/tenantScopedKey';
+import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 import { buildAdapter } from './_TerminalAdapterFactory';
 
 const STORAGE_KEY_BASE = 'ros_terminals_v1';

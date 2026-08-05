@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ArchitecturalHealthService } from '@/infrastructure/services/ArchitecturalHealthService';
+import { ArchitecturalHealthService } from '@/lib/ArchitecturalHealthService';
 import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';

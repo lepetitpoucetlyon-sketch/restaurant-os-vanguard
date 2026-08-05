@@ -1,4 +1,4 @@
-import { IVerticalPlugin, ICoreContext } from '@/domain/plugins/IVerticalPlugin';
+import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import React from 'react';
 

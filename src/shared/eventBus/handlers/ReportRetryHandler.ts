@@ -1,8 +1,8 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { empireAudit } from '@/infrastructure/services/audit';
-import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
+import { empireAudit } from '@/lib/audit';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 import { browserPush } from '@/lib/push/browserPush';
 
 const MAX_ATTEMPTS = 3;

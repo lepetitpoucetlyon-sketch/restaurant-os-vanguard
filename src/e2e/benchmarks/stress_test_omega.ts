@@ -1,4 +1,4 @@
-import { Slayer } from '@domain/services/Slayer';
+import { Slayer } from '@/lib/Slayer';
 import { logger } from '@/lib/logger';
 
 async function runStressTest() {

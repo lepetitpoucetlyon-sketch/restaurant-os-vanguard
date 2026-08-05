@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { SecurityGuard } from '@/domain/services/SecurityGuard';
+import { SecurityGuard } from '@/lib/SecurityGuard';
 
 /**
  * 📈 Local Yield Engine (Commerce Pillar)

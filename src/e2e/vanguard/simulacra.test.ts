@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
+import { MockAdapter } from '@/lib/adapters/MockAdapter';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 

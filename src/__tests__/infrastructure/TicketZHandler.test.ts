@@ -14,7 +14,7 @@ import { CryptoService } from '@/lib/CryptoService';
 // NexusEventBus : émulation in-memory
 const handlers: Record<string, ((payload: unknown) => Promise<void>)[]> = {};
 
-vi.mock('@/infrastructure/services/audit', () => ({
+vi.mock('@/lib/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
 
@@ -29,7 +29,7 @@ vi.mock('@/lib/logger', () => ({
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { NexusEventBus, type NexusEvents } from '@/shared/eventBus/NexusEventBus';
-import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
+import { MockAdapter } from '@/lib/adapters/MockAdapter';
 
 
 function paidPayload(overrides: Partial<NexusEvents['order.paid']> & Pick<NexusEvents['order.paid'], 'tenantId' | 'totalInMicrounits'>): NexusEvents['order.paid'] {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MigrationService } from '@/infrastructure/services/MigrationService';
+import { MigrationService } from '@/lib/MigrationService';
 
 export function useDataMigration() {
     const [isMigrating, setIsMigrating] = useState(false);

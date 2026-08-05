@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { SecurityGuard } from '@/domain/services/SecurityGuard';
+import { SecurityGuard } from '@/lib/SecurityGuard';
 
 // Mock Nexus.adapter
 vi.mock('@/lib/nexus/NexusAdapter', () => ({

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { FirestoreBatch } from '@/infrastructure/adapters/FirestoreBatch';
+import { FirestoreBatch } from '@/lib/adapters/FirestoreBatch';
 
 
 

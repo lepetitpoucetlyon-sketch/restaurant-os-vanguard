@@ -1,2 +1,1 @@
-export { StorageManager } from './StorageManager';
-export type { IStorageProvider } from './types';
+export * from '@/lib/storage/index';

@@ -1,7 +1,7 @@
 import { CollectionService } from '@/modules/finance';
 import type { InvoiceTarget } from '@/modules/finance';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
 /**
  * 🏛️ ThemisCollectorJob - Grade X+++

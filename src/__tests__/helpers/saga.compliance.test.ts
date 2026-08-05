@@ -30,7 +30,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
-vi.mock('@/infrastructure/services/audit', () => ({
+vi.mock('@/lib/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
 vi.mock('jotai', () => ({
@@ -167,7 +167,7 @@ describe('IotOfflineAlertHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerIotOfflineAlertHandler(); });
 
   it('trace l\'alerte capteur hors-ligne dans l\'audit', async () => {
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
 
     await capturedHandlers['iot.offline']({
       tenantId: T, sensorId: 'IOT-01', lastSeenAt: Date.now() - 120000,
@@ -280,7 +280,7 @@ describe('WasteValidatedHandler', () => {
 
     // On vérifie juste que le handler ne plante pas avec un payload valide
     // WasteValidatedHandler utilise runTransaction — le mock est insuffisant pour une assertion profonde
-    const { empireAudit } = await import('@/infrastructure/services/audit');
+    const { empireAudit } = await import('@/lib/audit');
     (empireAudit.log as ReturnType<typeof vi.fn>).mockClear();
 
     // Le handler est déjà enregistré sans runTransaction — il va throw → on vérifie que c'est gracieux

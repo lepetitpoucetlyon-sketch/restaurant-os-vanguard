@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db, DeadLetterEntry } from '@/infrastructure/services/offline/offline-store';
+import { db, DeadLetterEntry } from '@/lib/offline/offline-store';
 import { NexusEventBus, NexusEventName } from '@/shared/eventBus/NexusEventBus';
 import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
 import { Button } from '@/shared/components/ui/button';

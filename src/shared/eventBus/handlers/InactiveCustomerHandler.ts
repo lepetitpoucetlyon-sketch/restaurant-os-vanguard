@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { empireAudit } from '@/infrastructure/services/audit';
-import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
+import { empireAudit } from '@/lib/audit';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 import { logger } from '@/lib/logger';
 
 /**

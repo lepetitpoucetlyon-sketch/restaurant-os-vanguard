@@ -7,7 +7,7 @@ import {
     recipesNodeAtom
 } from './store/inventoryAtoms';
 import { logger } from '@/lib/logger';
-import { db } from "@/infrastructure/services/offline/offline-store";
+import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
 import { Auto86Service } from './services/Auto86Service';
 import { FoodCostRecompute } from './services/FoodCostRecompute';

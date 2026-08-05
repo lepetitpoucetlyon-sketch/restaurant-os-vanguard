@@ -1,8 +1,8 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine, FiscalizableRecord } from '@/modules/finance/fiscalite/FiscalAdapter';
-import { checkOnlineStatus } from '@/infrastructure/services/offline/status';
+import { checkOnlineStatus } from '@/lib/offline/status';
 import { FiscalSeal } from '@nexus/contracts';
-import { db } from '@/infrastructure/services/offline/offline-store';
+import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
 
 /**

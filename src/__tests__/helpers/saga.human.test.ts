@@ -28,7 +28,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 }));
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/infrastructure/services/audit', () => ({ empireAudit: { log: vi.fn() } }));
+vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
 vi.mock('@/lib/push/browserPush', () => ({
   browserPush: { sendToRole: vi.fn(async () => true), sendToUser: vi.fn(async () => true) },
 }));
