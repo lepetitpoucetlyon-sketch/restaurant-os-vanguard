@@ -63,10 +63,26 @@ fi
 ok "Toutes les routes /api/admin/ ont un guard auth"
 
 # ────────────────────────────────────────────────────────────────
-step "🧹 [3/8] ESLint"
-# no-unused-vars désactivé : préfixe _ déjà utilisé pour les vars ignorées.
-npx eslint src/ --max-warnings 0 --rule '{"no-unused-vars": "off"}' || true
-ok "ESLint OK (warnings tolérés en dev)"
+step "🧹 [3/8] ESLint — ratchet barrel-debt"
+# Ratchet : le nombre d'erreurs no-restricted-imports ne peut que descendre.
+# Baseline = 239 violations barrel pré-existantes.
+# Pour réduire le seuil : corriger des violations, puis baisser BARREL_DEBT_MAX.
+BARREL_DEBT_MAX=239
+# Compter uniquement les lignes "error" de no-restricted-imports (format stylish)
+ESLINT_ERRORS=$(npx eslint src/ --format stylish --rule '{"no-unused-vars": "off"}' 2>&1 \
+  | grep -c "error.*Barrel Contract\|error.*no-restricted-imports" || true)
+
+if [ "$ESLINT_ERRORS" -gt "$BARREL_DEBT_MAX" ]; then
+  fail "ESLint barrel-debt : $ESLINT_ERRORS erreurs > seuil ratchet ($BARREL_DEBT_MAX)."
+  fail "Nouvelles violations de Barrel Contract détectées — corrige avant de merger."
+  npx eslint src/ --format stylish --rule '{"no-unused-vars": "off"}' 2>&1 \
+    | grep "error.*Barrel Contract" | head -20
+  exit 1
+elif [ "$ESLINT_ERRORS" -lt "$BARREL_DEBT_MAX" ]; then
+  ok "ESLint barrel-debt : $ESLINT_ERRORS erreurs < seuil ($BARREL_DEBT_MAX) — baisse BARREL_DEBT_MAX dans preflight.sh !"
+else
+  ok "ESLint barrel-debt : $ESLINT_ERRORS / $BARREL_DEBT_MAX — stable (pas de nouvelle violation)"
+fi
 
 # ────────────────────────────────────────────────────────────────
 step "🧪 [4/8] Tests Vitest"

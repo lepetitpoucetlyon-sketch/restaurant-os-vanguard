@@ -15,13 +15,16 @@ const eslintConfig = defineConfig([
     rules: {
       "vanguard/no-cross-imports": "error",
       "vanguard/no-inter-module-imports": "error",
-      // Legacy warning debt is intentionally disabled now that the blocking
-      // correctness rules pass; CI focuses on hard failures rather than noise.
+      // Barrel Contract — bloque tout import plus profond que '@/modules/<pilier>'.
+      // 239 violations pré-existantes (barrel-debt) — non bloquantes aujourd'hui via le ratchet
+      // du preflight (voir scripts/preflight.sh § ESLint). Seuil à descendre à chaque PR.
       "no-restricted-imports": ["error", {
-        "patterns": [{
-          "group": ["@/modules/*/*"],
-          "message": "Violation de frontière architecturale (Barrel Contract). Importez uniquement la racine du module : '@/modules/<pilier>'."
-        }]
+        "patterns": [
+          {
+            "group": ["@/modules/*/*", "@modules/*/*"],
+            "message": "Barrel Contract : importez uniquement '@/modules/<pilier>' (racine). Profondeur domaine/module interdite."
+          }
+        ]
       }],
       "unused-imports/no-unused-imports": "error",
       // Unused vars: warn level, underscore prefix silences intentional non-use
