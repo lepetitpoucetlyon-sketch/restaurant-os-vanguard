@@ -232,7 +232,7 @@ describe('OrderCancelRestockHandler', () => {
 
     // Patch runTransaction on the Nexus adapter via the mock
     const nexusMod = await import('@/lib/nexus/NexusAdapter');
-    (nexusMod.Nexus.adapter as Record<string, unknown>).runTransaction = vi.fn(
+    (nexusMod.Nexus.adapter as unknown as Record<string, unknown>).runTransaction = vi.fn(
       async (fn: (t: typeof mockTransaction) => Promise<void>) => fn(mockTransaction),
     );
 

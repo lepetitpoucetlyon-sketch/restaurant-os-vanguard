@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 
 describe('CryptoService', () => {
   describe('canonicalStringify', () => {

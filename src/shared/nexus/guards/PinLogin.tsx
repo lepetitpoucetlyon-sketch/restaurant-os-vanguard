@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/shared/hooks";
-import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
+import { ROLE_LABELS } from "@/lib/AccessPolicyManager";
 import { useUI } from "@/shared/hooks";
 import { Delete, LogIn, Fingerprint, ShieldCheck, ChevronLeft, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";

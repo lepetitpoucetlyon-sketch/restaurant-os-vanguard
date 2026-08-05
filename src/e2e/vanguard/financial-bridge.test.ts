@@ -42,7 +42,7 @@ vi.mock('@/infrastructure/services/audit', () => ({
 
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 
 const makeCartItem = (overrides: Partial<CartItem> = {}): CartItem => ({
   cartId: 'cart-1',

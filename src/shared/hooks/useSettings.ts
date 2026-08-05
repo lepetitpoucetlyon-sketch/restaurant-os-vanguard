@@ -6,7 +6,7 @@ import {
     settingsSavingAtom, 
     settingsLastSavedAtom 
 } from '@/store/settingsAtoms';
-import { SettingsManager } from '@domain/services/SettingsManager';
+import { SettingsManager } from '@/lib/SettingsManager';
 import { GlobalSettings } from '@nexus/contracts';
 import { RestaurantIdentity } from '@nexus/contracts/settings/identity';
 

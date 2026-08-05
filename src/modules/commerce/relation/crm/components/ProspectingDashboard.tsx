@@ -7,10 +7,10 @@ import { Button } from '@ui/button';
 import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { BrandingUI } from '@domain/services/BrandingUI';
+import { BrandingUI } from '@/lib/BrandingUI';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
-import type { BrandInput } from '@/domain/services/BrandingService';
+import type { BrandInput } from '@/lib/BrandingService';
 
 type ExtractedTokens = Partial<BrandConfig>;
 type Phase = 'idle' | 'scanning' | 'preview_ready' | 'applying' | 'done';

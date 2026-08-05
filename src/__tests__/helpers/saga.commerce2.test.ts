@@ -134,7 +134,7 @@ describe('CustomerRFMAnalyzerHandler', () => {
     mockGet.mockResolvedValue({ visitCount: 4, segment: 'regular' });
     mockUpdate.mockResolvedValue(undefined);
     const nexusMod = await import('@/lib/nexus/NexusAdapter');
-    (nexusMod.Nexus.adapter as Record<string, unknown>).runTransaction = vi.fn(
+    (nexusMod.Nexus.adapter as unknown as Record<string, unknown>).runTransaction = vi.fn(
       async (fn: (t: unknown) => Promise<void>) => fn({}),
     );
 

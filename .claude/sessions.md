@@ -83,3 +83,4 @@
 
 | restaurant-vertical | src/verticals/restaurant/ — NF525, menu-engineering, tip-pooling, perishables, table-service | 2026-08-05 | terminée |
 | sprint-plan-exec | Plan S1→S10 + exécution sprints : accounting test, verticals doublons, engines/Intelligence migration, CRM/Ledger/Fiscal/MCC, barrel debt, SAGA tests | 2026-08-05 | terminée |
+| s8-s10-finish | S8 SAGA tests 143/143 ✓ — S10 : migration src/infrastructure/ + src/domain/ → src/modules/<pilier>/ | 2026-08-05 | active |

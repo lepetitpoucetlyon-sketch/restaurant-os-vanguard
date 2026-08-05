@@ -1,4 +1,4 @@
-import { CryptoService } from './CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import { logger } from '@/lib/logger';
 
 /**

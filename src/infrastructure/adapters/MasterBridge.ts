@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
 import { MasterConfig, globalPolicyAtom } from '@nexus/state/SovereignGenome';
-import { CryptoService } from '@domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import type { SovereignData } from '@/shared/nexus-contract';
 
 type SignedMasterConfig = MasterConfig & {

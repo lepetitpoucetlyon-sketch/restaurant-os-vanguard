@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { AccessPolicyManager, DEFAULT_ROLE_PERMISSIONS, type CategoryKey, type RolePermissions } from '@domain/services/AccessPolicyManager';
-import { ROOT_ADMIN } from '@domain/services/IdentityManager';
+import { AccessPolicyManager, DEFAULT_ROLE_PERMISSIONS, type CategoryKey, type RolePermissions } from '@/lib/AccessPolicyManager';
+import { ROOT_ADMIN } from '@/lib/IdentityManager';
 import { User, UserRole } from '@nexus/contracts';
 
 const ROLE_PERMISSIONS_COLLECTION = 'systemConfig';

@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { db } from "@/infrastructure/services/offline/offline-store";
 import { Order } from '@nexus/contracts';
-import { CryptoService } from '@domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
 
 const GENESIS_HASH = '0'.repeat(64);

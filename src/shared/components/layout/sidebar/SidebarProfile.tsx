@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
-import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
+import { ROLE_LABELS } from "@/lib/AccessPolicyManager";
 import { empireAudit } from "@/infrastructure/services/audit";
 
 interface SidebarProfileProps {

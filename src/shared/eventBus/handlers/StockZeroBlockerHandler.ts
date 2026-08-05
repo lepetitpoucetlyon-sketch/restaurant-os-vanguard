@@ -1,6 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { ProductAvailabilityService } from '@/domain/services/ProductAvailabilityService';
+import { ProductAvailabilityService } from '@/modules/logistics/stock/services/ProductAvailabilityService';
 import type { Product } from '@/domain/schemas/commerce';
 import type { Recipe } from '@shared/nexus/contracts/logistics';
 

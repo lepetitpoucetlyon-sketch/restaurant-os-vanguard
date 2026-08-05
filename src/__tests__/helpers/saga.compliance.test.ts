@@ -43,7 +43,7 @@ vi.mock('@/store/pillars/compliance', () => ({
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: { generateId: vi.fn((prefix: string) => `${prefix}-test-id`) },
 }));
-vi.mock('@/domain/services/ProductAvailabilityService', () => ({
+vi.mock('@/modules/logistics/stock/services/ProductAvailabilityService', () => ({
   ProductAvailabilityService: { flagUnavailable: vi.fn(async () => undefined) },
 }));
 
@@ -250,7 +250,7 @@ describe('RecallPOSBlockerHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerRecallPOSBlockerHandler(); });
 
   it('bloque les produits rappelés sur le POS', async () => {
-    const { ProductAvailabilityService } = await import('@/domain/services/ProductAvailabilityService');
+    const { ProductAvailabilityService } = await import('@/modules/logistics/stock/services/ProductAvailabilityService');
 
     await capturedHandlers['recall.declared']({
       tenantId: T, recallId: 'rcl-1', productIds: ['prod-a', 'prod-b'], reason: 'listeria',

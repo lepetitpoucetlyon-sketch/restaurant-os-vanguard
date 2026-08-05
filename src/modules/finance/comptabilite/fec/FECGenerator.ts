@@ -2,8 +2,8 @@
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { FECMapper } from './FECMapper';
 import { FECExportResult, FECLine } from './types';
-import { CryptoService } from '@/domain/services/CryptoService';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { CryptoService } from '@/lib/CryptoService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**
  * 🏛️ FECGenerator - Grade X+++

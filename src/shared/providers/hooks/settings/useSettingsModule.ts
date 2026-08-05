@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { SettingsManager } from '@domain/services/SettingsManager';
+import { SettingsManager } from '@/lib/SettingsManager';
 import { defaultSettings } from '@/shared/contexts/settings/defaults';
 import { GlobalSettings } from '@nexus/contracts';
 

@@ -3,7 +3,7 @@
 import { SovereignLedger } from '@/modules/finance';
 import { QuantumCrypto } from '@/infrastructure/services/QuantumCrypto';
 import { PurchaseOrder, DeliveryNote } from './types';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { DocumentVault } from '@/domain/shared/DocumentVault';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 

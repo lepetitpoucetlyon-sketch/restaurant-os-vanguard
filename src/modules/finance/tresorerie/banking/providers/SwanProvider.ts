@@ -1,6 +1,6 @@
 
 import { IBankingProvider, KYBData, BankAccount, VirtualCard } from '../types';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**
  * 🏛️ SwanProvider - Grade X+++

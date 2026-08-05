@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { logger } from '@/lib/axiom';
 import { JournalEntry } from '@nexus/contracts';
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 
 /**

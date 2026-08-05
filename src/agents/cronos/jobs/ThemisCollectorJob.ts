@@ -1,6 +1,6 @@
 import { CollectionService } from '@/modules/finance';
 import type { InvoiceTarget } from '@/modules/finance';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { NotificationGateway } from '@/infrastructure/adapters/NotificationGateway';
 
 /**

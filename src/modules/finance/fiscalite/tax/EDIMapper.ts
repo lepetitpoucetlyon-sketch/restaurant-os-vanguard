@@ -1,7 +1,7 @@
 
 import { CA3Declaration } from './types';
 import { SovereignMath } from '@/shared/services/SovereignMath';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**
  * 🏛️ EDIMapper - Grade X+++

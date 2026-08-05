@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GenomeValidator, genomeValidator } from '@/domain/services/GenomeValidator';
+import { GenomeValidator, genomeValidator } from '@/lib/GenomeValidator';
 
 describe('GenomeValidator', () => {
   describe('singleton', () => {

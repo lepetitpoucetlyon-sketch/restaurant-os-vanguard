@@ -224,7 +224,7 @@ describe('SupplierDeliveryReceivedHandler', () => {
       update: vi.fn(),
     };
     const nexusMod = await import('@/lib/nexus/NexusAdapter');
-    (nexusMod.Nexus.adapter as Record<string, unknown>).runTransaction = vi.fn(
+    (nexusMod.Nexus.adapter as unknown as Record<string, unknown>).runTransaction = vi.fn(
       async (fn: (t: typeof mockTx) => Promise<void>) => fn(mockTx),
     );
 
@@ -239,9 +239,9 @@ describe('SupplierDeliveryReceivedHandler', () => {
   it('ne fait rien si la commande fournisseur est introuvable', async () => {
     mockGet.mockResolvedValue(null);
     const nexusMod = await import('@/lib/nexus/NexusAdapter');
-    (nexusMod.Nexus.adapter as Record<string, unknown>).runTransaction = vi.fn();
+    (nexusMod.Nexus.adapter as unknown as Record<string, unknown>).runTransaction = vi.fn();
 
     await capturedHandlers['supplier.delivery_received']({ tenantId: T, orderId: 'ghost' });
-    expect((nexusMod.Nexus.adapter as Record<string, unknown>).runTransaction).not.toHaveBeenCalled();
+    expect((nexusMod.Nexus.adapter as unknown as Record<string, unknown>).runTransaction).not.toHaveBeenCalled();
   });
 });

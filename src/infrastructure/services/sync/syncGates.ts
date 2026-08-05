@@ -4,7 +4,7 @@ import { ordersNodeAtom } from '@/store/pillars/ops';
 import { stockItemsNodeAtom } from '@/store/pillars/logistics';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
 import { updateNexusNode } from '@/store/pillars/core';
-import { genomeValidator } from '@domain/services/GenomeValidator';
+import { genomeValidator } from '@/lib/GenomeValidator';
 import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
 

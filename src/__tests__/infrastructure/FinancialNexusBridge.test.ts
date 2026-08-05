@@ -7,7 +7,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // Removed NexusAdapter mock, will use spyOn in beforeEach
 
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 
 describe('FinancialNexusBridge', () => {
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import type { ParsedFile, ImportResult } from '../types';
 
 // Cross-impact (NF525 CRITIQUE):

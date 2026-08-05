@@ -8,7 +8,7 @@ import {
     CATEGORY_FEATURES,
     ROLE_LABELS,
     type CategoryKey,
-} from "@domain/services/AccessPolicyManager";
+} from "@/lib/AccessPolicyManager";
 import type { UserRole } from "@nexus/contracts";
 import {
     Shield,

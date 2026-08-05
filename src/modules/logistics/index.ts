@@ -20,3 +20,4 @@ export type { SupplierInvoice } from './approvisionnement/procurement/ThreeWayMa
 export { StockEngine } from './services/StockEngine';
 export { useStockPrediction } from './hooks/useStockPrediction';
 export { stockItemsAtom } from './stock/inventory/store/inventoryAtoms';
+export { ProductAvailabilityService } from './stock/services/ProductAvailabilityService';

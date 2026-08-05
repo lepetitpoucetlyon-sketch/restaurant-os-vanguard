@@ -9,7 +9,7 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { FiscalSealer } from "@/modules/finance/fiscalite/FiscalSealer";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
-import { CryptoService } from "@/domain/services/CryptoService";
+import { CryptoService } from "@/lib/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";
 import { toast } from "sonner";
 

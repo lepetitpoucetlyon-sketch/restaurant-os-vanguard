@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ArchitecturalHealthService } from '@/infrastructure/services/ArchitecturalHealthService';
 import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 export const runtime = 'nodejs';

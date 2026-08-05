@@ -15,7 +15,7 @@ import { empireAudit } from '@/infrastructure/services/audit';
 import { logger } from '@/lib/logger';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
-import { ROLE_LABELS } from '@/domain/services/AccessPolicyManager';
+import { ROLE_LABELS } from '@/lib/AccessPolicyManager';
 
 const VALID_ROLES = Object.keys(ROLE_LABELS) as (keyof typeof ROLE_LABELS)[];
 

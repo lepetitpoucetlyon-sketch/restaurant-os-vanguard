@@ -5,7 +5,7 @@ import { Users, Calculator, Shield, Cpu, Save } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
 import { Button } from '@ui/button';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SettingsManager } from '@domain/services/SettingsManager';
+import { SettingsManager } from '@/lib/SettingsManager';
 import { AccountingMode, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';

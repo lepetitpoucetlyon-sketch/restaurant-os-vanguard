@@ -1,5 +1,5 @@
 import { NexusEventBus } from '../NexusEventBus';
-import { ProductAvailabilityService } from '@/domain/services/ProductAvailabilityService';
+import { ProductAvailabilityService } from '@/modules/logistics/stock/services/ProductAvailabilityService';
 
 export function registerRecallPOSBlockerHandler() {
   return NexusEventBus.on(

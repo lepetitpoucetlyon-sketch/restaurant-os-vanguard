@@ -1,7 +1,7 @@
 import { NexusTransaction } from '@/infrastructure/adapters/NexusTransaction';
 import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
-import { MaintenanceAgent } from '@/domain/services/MaintenanceAgent';
+import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

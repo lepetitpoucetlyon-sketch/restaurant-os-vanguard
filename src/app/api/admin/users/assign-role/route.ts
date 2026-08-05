@@ -17,7 +17,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { ROLE_LABELS } from '@/domain/services/AccessPolicyManager';
+import { ROLE_LABELS } from '@/lib/AccessPolicyManager';
 
 const ROLE_PERMISSIONS_PATH = (tenantId: string) =>
     `tenants/${tenantId}/systemConfig/role_permissions`;

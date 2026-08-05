@@ -1,4 +1,4 @@
-import { AccessPolicyManager, CategoryKey, RolePermissions } from "@domain/services/AccessPolicyManager";
+import { AccessPolicyManager, CategoryKey, RolePermissions } from "@/lib/AccessPolicyManager";
 import { User } from '@nexus/contracts';
 import { AGENT_TOOLS } from '@/modules/intelligence';
 import { ToolDefinition } from '@/modules/intelligence';

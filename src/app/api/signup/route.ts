@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from 'firebase-admin/auth';
 import { z } from 'zod';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { ProvisioningEngine } from '@/domain/services/ProvisioningEngine';
-import { BrandingService } from '@/domain/services/BrandingService';
+import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
+import { BrandingService } from '@/lib/BrandingService';
 // eslint-disable-next-line no-restricted-imports
 import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

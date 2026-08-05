@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/shared/hooks";
-import { ROLE_LABELS } from "@domain/services/AccessPolicyManager";
+import { ROLE_LABELS } from "@/lib/AccessPolicyManager";
 import { Modal } from "@ui/Modal";
 import { cn } from "@/lib/ui.foundations";
 interface ProfileSwitcherProps {

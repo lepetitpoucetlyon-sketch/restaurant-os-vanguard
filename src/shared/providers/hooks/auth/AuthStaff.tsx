@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { httpsCallable, getFunctions } from 'firebase/functions';
 import { firebaseApp, isMock } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { IdentityManager, ROOT_ADMIN, FLEET_OPERATOR } from '@domain/services/IdentityManager';
+import { IdentityManager, ROOT_ADMIN, FLEET_OPERATOR } from '@/lib/IdentityManager';
 import { isMCCMode } from '@/config/instance';
 import { User } from '@nexus/contracts';
 import { empireAudit } from '@/infrastructure/services/audit';

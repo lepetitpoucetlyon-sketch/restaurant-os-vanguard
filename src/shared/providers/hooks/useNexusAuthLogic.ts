@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo, useCallback } from 'react';
-import { IdentityManager } from '@domain/services/IdentityManager';
+import { IdentityManager } from '@/lib/IdentityManager';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { User } from '@nexus/contracts';
 import type { SovereignData } from '@/shared/nexus-contract';

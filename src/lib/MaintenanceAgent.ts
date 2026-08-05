@@ -1,7 +1,7 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { LLMManager } from '@/modules/intelligence';
 import { AI_MODELS } from '@/modules/intelligence';
-import { logger } from "../../lib/axiom";
+import { logger } from '@/lib/axiom';
  
 import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";
 import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";

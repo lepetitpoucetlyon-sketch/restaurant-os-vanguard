@@ -19,7 +19,7 @@ vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 
-import { TenantSeeder } from '@/domain/services/TenantSeeder';
+import { TenantSeeder } from '@/lib/TenantSeeder';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 
 describe('TenantSeeder', () => {

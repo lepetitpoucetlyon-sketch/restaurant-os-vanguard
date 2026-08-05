@@ -1,4 +1,4 @@
-import type { CategoryKey } from './AccessPolicyManager';
+import type { CategoryKey } from '@/lib/AccessPolicyManager';
 
 export interface RoleTemplate {
     id: string;

@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     logger.info(`[BrandExtract] Extraction pour ${tenantId} → ${url}`);
 
-    const { BrandingService } = await import('@/domain/services/BrandingService');
+    const { BrandingService } = await import('@/lib/BrandingService');
     const brandInput = await BrandingService.extractFromUrl(url);
 
     // Mapper vers BrandConfig partiel

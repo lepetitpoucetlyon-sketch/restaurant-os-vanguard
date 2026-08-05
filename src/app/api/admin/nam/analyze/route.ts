@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { GatewayErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 const TicketSchema_v1 = z.object({

@@ -1,6 +1,6 @@
 
 import { EscalationLevel } from './types';
-import { NexusTelemetryService } from '@/domain/services/NexusTelemetryService';
+import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**
  * 🏛️ EscalationEngine - Grade X+++

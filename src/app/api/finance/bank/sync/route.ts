@@ -7,7 +7,7 @@ import { OpenBankingProviderFactory } from '@/modules/finance';
 import { BankConnectionStore } from '@/modules/finance';
 import { inferPCGAccount } from '@/modules/finance';
 import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
-import { CryptoService } from '@domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import type { FiscalSeal } from '@nexus/contracts';
 
 async function resolveTenantId(request: NextRequest): Promise<{ tenantId: string } | NextResponse> {

@@ -1,4 +1,4 @@
-import { CryptoService } from '@domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';

@@ -32,7 +32,7 @@ vi.mock('@/infrastructure/services/audit', () => ({ empireAudit: { log: vi.fn() 
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
 }));
-vi.mock('@/domain/services/CryptoService', () => ({
+vi.mock('@/lib/CryptoService', () => ({
   CryptoService: { generateHash: vi.fn(async () => 'hash-abc') },
 }));
 vi.mock('@/modules/finance/comptabilite/FinancialNexusBridge', () => ({
@@ -389,7 +389,7 @@ describe('CryptoIntegrityCheckHandler', () => {
   });
 
   it('vérifie la chaîne NF525 si des sceaux existent', async () => {
-    const { CryptoService } = await import('@/domain/services/CryptoService');
+    const { CryptoService } = await import('@/lib/CryptoService');
     mockQuery.mockResolvedValue([
       { id: 'seal-1', hash: 'abc', previousHash: '', timestamp: '2026-01-15T10:00:00Z', dataSnapshot: 'd' },
     ]);

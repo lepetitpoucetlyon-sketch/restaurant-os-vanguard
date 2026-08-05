@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { IdentityManager, ROOT_ADMIN } from '@/domain/services/IdentityManager';
+import { IdentityManager, ROOT_ADMIN } from '@/lib/IdentityManager';
 
 import * as sharedKernel from '@/lib/shared-kernel';
 

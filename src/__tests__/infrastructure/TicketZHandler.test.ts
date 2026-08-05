@@ -9,7 +9,7 @@ const nexusStore: Record<string, unknown> = {};
 
 
 
-import { CryptoService } from '@/domain/services/CryptoService';
+import { CryptoService } from '@/lib/CryptoService';
 
 // NexusEventBus : émulation in-memory
 const handlers: Record<string, ((payload: unknown) => Promise<void>)[]> = {};
