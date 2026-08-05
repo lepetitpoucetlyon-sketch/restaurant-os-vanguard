@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { TaxCalculator } from '@/infrastructure/services/finance/TaxCalculator';
+import { TaxCalculator } from '@/modules/finance/fiscalite/TaxCalculator';
 import type { CartItem } from '@/modules/ops';
 
 function cartItem(overrides: Partial<CartItem> = {}): CartItem {

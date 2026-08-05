@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
+import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 
 // Mock the Nexus adapter
 vi.mock('@/lib/nexus/NexusAdapter', () => {

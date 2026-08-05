@@ -6,9 +6,9 @@ import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/shared/hooks";
 import { formatCurrency } from "@/lib/formatters";;
-import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
-import type { PaymentResult } from "@/infrastructure/hardware/payment-terminal/types";
-import { printerService } from "@/infrastructure/hardware/printers/PrintingService";
+import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
+import type { PaymentResult } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
+import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
 
 interface PaymentDialogProps {
     isOpen: boolean;

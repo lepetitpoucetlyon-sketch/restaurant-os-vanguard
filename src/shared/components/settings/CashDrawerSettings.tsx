@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Wallet, Wifi, Cable, Printer, Hand, CheckCircle2, AlertCircle, Loader2, Save } from "lucide-react";
-import { cashDrawerService, type DrawerMode, type DrawerConfig } from "@/infrastructure/hardware/cash-drawer/CashDrawerService";
+import { cashDrawerService, type DrawerMode, type DrawerConfig } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
 

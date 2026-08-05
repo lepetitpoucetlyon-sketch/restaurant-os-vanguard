@@ -27,7 +27,7 @@ vi.mock('@/lib/logger', () => ({
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
+import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { NexusEventBus, type NexusEvents } from '@/shared/eventBus/NexusEventBus';
 import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
 

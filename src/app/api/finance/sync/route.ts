@@ -1,6 +1,6 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
+import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { logger } from '@/lib/axiom';
 import { JournalEntry } from '@nexus/contracts';
 import { CryptoService } from '@/domain/services/CryptoService';

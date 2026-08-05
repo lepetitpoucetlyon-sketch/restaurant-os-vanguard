@@ -5,8 +5,8 @@ import { EmpireInstance } from '@domain/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/infrastructure/services/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
-import type { FiscalSeal } from '@/infrastructure/adapters/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
+import type { FiscalSeal } from '@/modules/finance/fiscalite/FiscalAdapter';
 
 /**
  * 👑 MACRO BRAIN (Empire Industrial Grade)

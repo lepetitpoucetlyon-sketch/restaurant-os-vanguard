@@ -152,7 +152,7 @@ export class FinanceCore {
         logger.info(`[FinanceCore] Auditing Ledger for ${tenantId}`);
 
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-        const { FiscalEngine } = await import('@/infrastructure/adapters/FiscalAdapter');
+        const { FiscalEngine } = await import('@/modules/finance/fiscalite/FiscalAdapter');
 
         const seals = await Nexus.adapter.query<FiscalSeal>(`tenants/${tenantId}/fiscalSeals`, {
             orderBy: { field: 'timestamp', direction: 'asc' }

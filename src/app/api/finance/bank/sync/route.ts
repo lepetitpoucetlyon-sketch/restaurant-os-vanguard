@@ -6,7 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OpenBankingProviderFactory } from '@/modules/finance';
 import { BankConnectionStore } from '@/modules/finance';
 import { inferPCGAccount } from '@/modules/finance';
-import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import type { FiscalSeal } from '@nexus/contracts';
 

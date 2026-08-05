@@ -18,7 +18,7 @@ const { mockBatchCommit, mockBatch } = vi.hoisted(() => {
 
 // Removed NexusAdapter mock, will use spyOn in beforeEach
 
-vi.mock('@/infrastructure/adapters/FiscalAdapter', () => ({
+vi.mock('@/modules/finance/fiscalite/FiscalAdapter', () => ({
   FISCAL_CONSTANTS: {
     GENESIS_ROOT: 'GENESIS_ROOT_0000000000000000',
     TRAINING_MODE_HASH: 'TRAINING_MODE_UNSIGNED_HASH',
@@ -40,7 +40,7 @@ vi.mock('@/infrastructure/services/audit', () => ({
 
 // --- Tests ---
 
-import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/domain/services/CryptoService';
 

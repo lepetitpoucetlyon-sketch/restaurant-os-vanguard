@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 import { empireAudit } from '@/infrastructure/services/audit';
 import type { Order } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
-import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 
 /** Produit avec recette (forme runtime Firestore) */
 interface ProductWithRecipe {
@@ -105,7 +105,7 @@ export function registerStockRestitutionHandler(): () => void {
           operatorId,
           tableId: order.tableId ?? null,
           tenantId,
-          paymentMode: ((order as OrderWithPayment).paymentMode ?? 'card') as import('@/infrastructure/adapters/FinancialNexusBridge').PaymentMode, // Mode de paiement original
+          paymentMode: ((order as OrderWithPayment).paymentMode ?? 'card') as import('@/modules/finance/comptabilite/FinancialNexusBridge').PaymentMode, // Mode de paiement original
         });
         
         // Avoir document for traceability

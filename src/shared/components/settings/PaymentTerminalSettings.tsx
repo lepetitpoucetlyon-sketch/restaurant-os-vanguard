@@ -5,9 +5,9 @@ import {
     CreditCard, Plus, Trash2, Wifi, Bluetooth, Cloud, Usb,
     CheckCircle2, AlertCircle, Loader2, Star, Zap,
 } from "lucide-react";
-import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
+import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
-import type { TerminalDevice, TerminalAdapterType, TerminalConnectionType, TerminalStatus } from "@/infrastructure/hardware/payment-terminal/types";
+import type { TerminalDevice, TerminalAdapterType, TerminalConnectionType, TerminalStatus } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
 
 // ─── Meta ──────────────────────────────────────────────────────────────────────
 

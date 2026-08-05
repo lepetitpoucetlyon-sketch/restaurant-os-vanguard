@@ -9,7 +9,7 @@ import { logger } from '@/lib/axiom';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/infrastructure/adapters/FirestoreAdapter';
 import { LLMManager } from '@/modules/intelligence';
-import { GeminiProvider } from '@/infrastructure/adapters/GeminiProvider';
+import { GeminiProvider } from '@/modules/intelligence/ia/GeminiProvider';
 import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/infrastructure/services/storage/FirebaseStorageProvider';
 import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';

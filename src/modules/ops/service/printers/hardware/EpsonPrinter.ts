@@ -1,4 +1,4 @@
-// Backward-compat re-export. New code → import from '@/infrastructure/hardware/printers/PrintingService'.
+// Backward-compat re-export. New code → import from '@/modules/ops/service/printers/hardware/PrintingService'.
 export { EpsonPrinter, printerService } from './PrintingService';
 export type { ReceiptTicket, KitchenTicket, PrinterDevice } from './types';
 

@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { simulator, simulationMetricsAtom, isSimulationRunningAtom, type SimulationProfile } from '@/modules/intelligence';
 import { ProposalPanel } from '../ProposalPanel';
 import { NexusStaffingOracle as StaffingOracle } from '@/modules/human';
-import { SovereignLedger } from '@/infrastructure/adapters/SovereignLedgerAdapter';
+import { SovereignLedger } from '@/modules/finance/tresorerie/SovereignLedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks';
 import { SimulatorControlBar } from './components/SimulatorControlBar';

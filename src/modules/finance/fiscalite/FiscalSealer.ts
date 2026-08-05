@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FISCAL_CONSTANTS } from '../../adapters/FiscalAdapter';
+import { FISCAL_CONSTANTS } from './FiscalAdapter';
 import { CryptoService } from '@domain/services/CryptoService';
 import { FiscalKeyService } from '@modules/finance/services/FiscalKeyService';
 import type { FiscalSeal } from '@nexus/contracts';

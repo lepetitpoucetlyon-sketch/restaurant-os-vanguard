@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AuditHasher } from '@/infrastructure/adapters/LedgerAdapter';
+import { AuditHasher } from '@/modules/finance/tresorerie/LedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // Mock Nexus Adapter

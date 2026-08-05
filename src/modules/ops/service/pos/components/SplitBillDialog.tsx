@@ -11,8 +11,8 @@ import { formatCurrency } from "@/lib/formatters";
 import { CartItem } from '../../../workflow/engine/types';
 export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { terminalService } from "@/infrastructure/hardware/payment-terminal/PaymentTerminalService";
-import { printerService } from "@/infrastructure/hardware/printers/PrintingService";
+import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
+import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
 import { Loader2, AlertCircle } from "lucide-react";
 
 interface SplitBillDialogProps {

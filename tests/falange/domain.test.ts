@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { FiscalSealer } from '@/infrastructure/services/finance/FiscalSealer';
+import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { StockEngine } from '@/modules/logistics';
 import { IdentityManager } from '@/domain/services/IdentityManager';
 

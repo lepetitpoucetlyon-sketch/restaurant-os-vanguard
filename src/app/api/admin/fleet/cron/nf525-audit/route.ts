@@ -16,7 +16,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const instances = await Nexus.adapter.query<{ id: string }>('mcc/empire/instances');
     const tenantIds = instances.map(i => i.id).filter(Boolean);
 
-    const { fleetEngine } = await import('@/infrastructure/adapters/FleetAdapter');
+    const { fleetEngine } = await import('@/modules/intelligence/ia/fleet/FleetAdapter');
     const verification = await fleetEngine.verifyFleetCompliance(tenantIds);
 
     let anomalies = 0;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { GeminiLiveService } from '@/infrastructure/adapters/GeminiAdapter';
+import { GeminiLiveService } from '@/modules/intelligence/ia/GeminiAdapter';
 import { AGENT_TOOLS } from '@/modules/intelligence';
 import { User } from '@nexus/contracts';
 

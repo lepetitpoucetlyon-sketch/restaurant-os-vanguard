@@ -71,7 +71,7 @@ export class NexusFleetEngine {
         logger.info(`[NexusFleetEngine] Running cross-ledger verification for ${tenantIds.length} tenants...`);
 
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-        const { FiscalEngine } = await import('@/infrastructure/adapters/FiscalAdapter');
+        const { FiscalEngine } = await import('@/modules/finance/fiscalite/FiscalAdapter');
 
 
         const results = [];

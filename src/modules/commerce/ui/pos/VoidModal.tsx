@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { FiscalSealer } from "@/infrastructure/services/finance/FiscalSealer";
+import { FiscalSealer } from "@/modules/finance/fiscalite/FiscalSealer";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { CryptoService } from "@/domain/services/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";

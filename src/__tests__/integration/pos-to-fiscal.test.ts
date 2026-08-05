@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { getFirestore } from 'firebase-admin/firestore';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreServerAdapter } from '@/infrastructure/adapters/FirestoreServerAdapter';
 

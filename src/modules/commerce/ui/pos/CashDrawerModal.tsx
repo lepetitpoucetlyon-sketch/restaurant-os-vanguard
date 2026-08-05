@@ -10,7 +10,7 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toast } from "sonner";
-import { cashDrawerService } from "@/infrastructure/hardware/cash-drawer/CashDrawerService";
+import { cashDrawerService } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

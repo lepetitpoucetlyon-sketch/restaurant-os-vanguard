@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FinancialNexusBridge } from '@/infrastructure/adapters/FinancialNexusBridge';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { toMicrounits } from '@/domain/schemas/primitives';
 import type { CartItem } from '@/modules/ops';
 import { runAct, type PersonaFn, type PersonaResult } from '../engine/PersonaTypes';

@@ -4,9 +4,9 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Printer, Plus, Trash2, Star, CheckCircle2, AlertCircle, Loader2,
 } from "lucide-react";
-import { printerService } from "@/infrastructure/hardware/printers/PrintingService";
-import type { PrinterDevice, PrinterRole, PrinterConnection } from "@/infrastructure/hardware/printers/types";
-import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "@/infrastructure/hardware/printers/types";
+import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
+import type { PrinterDevice, PrinterRole, PrinterConnection } from "@/modules/ops/service/printers/hardware/types";
+import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "@/modules/ops/service/printers/hardware/types";
 import { CONN_ICON, AddPrinterWizard } from '@/modules/ops';
 
 const ROLE_COLORS: Record<PrinterRole, string> = {

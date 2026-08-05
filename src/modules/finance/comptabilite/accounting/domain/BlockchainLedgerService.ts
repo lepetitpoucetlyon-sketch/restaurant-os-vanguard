@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine, FiscalizableRecord } from '@/infrastructure/adapters/FiscalAdapter';
+import { FiscalEngine, FiscalizableRecord } from '@/modules/finance/fiscalite/FiscalAdapter';
 import { checkOnlineStatus } from '@/infrastructure/services/offline/status';
 import { FiscalSeal } from '@nexus/contracts';
 import { db } from '@/infrastructure/services/offline/offline-store';

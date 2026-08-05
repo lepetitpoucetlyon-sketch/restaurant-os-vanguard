@@ -9,7 +9,7 @@ import { FleetComplianceService } from './FleetComplianceService';
 import { HACCPTelemetryBridge } from '@/modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@domain/services/NexusTelemetryService';
 import { TenantID } from '@domain/types/brands';
-import { fleetEngine } from '@/infrastructure/adapters/FleetAdapter';
+import { fleetEngine } from '@/modules/intelligence/ia/fleet/FleetAdapter';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight } from '@modules/intelligence/services/MacroBrain';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';

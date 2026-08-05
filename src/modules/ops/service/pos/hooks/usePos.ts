@@ -12,7 +12,7 @@ import { Table, OrderItem } from "@nexus/contracts";
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../../workflow/engine/types";
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
-import { FinancialNexusBridge } from "@/infrastructure/adapters/FinancialNexusBridge";
+import { FinancialNexusBridge } from "@/modules/finance/comptabilite/FinancialNexusBridge";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { ConsumptionMode } from "@/domain/schemas/orders";

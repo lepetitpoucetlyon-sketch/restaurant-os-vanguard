@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { CryptoService } from '@/domain/services/CryptoService';
 import { FiscalKeyService } from '@/modules/finance';
-import { FiscalEngine } from '@/infrastructure/adapters/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
 
 /**
  * 🔐 Non-forgeabilité de la signature fiscale NF525.
