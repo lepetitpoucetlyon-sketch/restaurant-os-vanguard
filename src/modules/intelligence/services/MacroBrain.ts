@@ -287,16 +287,16 @@ export const MacroBrain = {
      */
     async getOracleAudit(prompt: string, context: Record<string, import("@/shared/nexus-contract").SovereignValue>): Promise<string> {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);
-        
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/gemini`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, context })
-            });
 
-            const data = await response.json();
-            return data.content || "Analyse indisponible.";
+        try {
+            const { LLMManager } = await import('@/modules/intelligence/ia/ai');
+            const response = await LLMManager.provider.generateText({
+                model: 'gemini-1.5-pro',
+                userPrompt: `${prompt}\n\nContext: ${JSON.stringify(context)}`,
+                temperature: 0.7,
+                maxTokens: 1024,
+            });
+            return response.text || "Analyse indisponible.";
         } catch (error: unknown) {
             logger.error('[MacroBrain] Oracle Audit Failed', { error: String(error) });
             return "Échec de la connexion à l'Oracle.";

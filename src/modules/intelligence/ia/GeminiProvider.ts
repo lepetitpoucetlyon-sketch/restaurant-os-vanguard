@@ -28,6 +28,16 @@ interface GeminiResponse {
     error?: { message?: string; code?: number };
 }
 
+export const GEMINI_MODELS = {
+    fast: 'gemini-1.5-flash',
+    reasoning: 'gemini-1.5-pro',
+    visionFast: 'gemini-2.0-flash',
+    visionPro: 'gemini-2.0-pro',
+} as const;
+
+// Alias de compatibilité — à migrer vers le model registry du provider actif
+export const AI_MODELS = GEMINI_MODELS;
+
 export class GeminiProvider implements ILLMProvider {
 
     async generateText(request: LLMTextRequest): Promise<LLMTextResponse> {

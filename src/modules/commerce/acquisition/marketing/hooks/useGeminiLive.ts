@@ -2,13 +2,10 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/shared/hooks';
-import { GeminiLiveService } from '@/modules/intelligence/ia/GeminiAdapter';
+import { RealtimeVoiceFactory } from '@/modules/intelligence/ia/realtime/RealtimeVoiceFactory';
+import type { IRealtimeVoiceService } from '@/modules/intelligence/ia/realtime/IRealtimeVoiceService';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { SovereignData } from '@/shared/nexus-contract';
-
-interface _WebkitWindow extends Window {
-    webkitAudioContext: typeof AudioContext;
-}
 
 declare global {
     interface Window {
@@ -16,17 +13,7 @@ declare global {
     }
 }
 
-interface _PerformanceMemory {
-    memory: {
-        usedJSHeapSize: number;
-    };
-}
-
-/**
- * PRODUCTION-GRADE HOOK: useGeminiLive
- * Orchestrates the real-time interaction between the UI and the central agent.
- */
-export function useGeminiLive() {
+export function useRealtimeVoice() {
     const { currentUser, rolePermissions } = useAuth();
     const { settings } = useSettings();
     const [isActive, setIsActive] = useState(false);
@@ -35,7 +22,7 @@ export function useGeminiLive() {
     const [lastToolCall, setLastToolCall] = useState<{ name: string, args: SovereignData } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const serviceRef = useRef<GeminiLiveService | null>(null);
+    const serviceRef = useRef<IRealtimeVoiceService | null>(null);
     const audioContextRef = useRef<AudioContext | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
 
@@ -91,7 +78,7 @@ export function useGeminiLive() {
             processor.connect(audioContext.destination);
 
             // 3. Connecter le service central avec l'ADN injecté
-            const service = new GeminiLiveService(currentUser, rolePermissions, {
+            const service = RealtimeVoiceFactory.create(currentUser, rolePermissions, {
                 onTranscript: (text, isUser) => {
                     setTranscripts(prev => [...prev, { text, isUser, timestamp: Date.now() }]);
                 },
@@ -153,7 +140,9 @@ export function useGeminiLive() {
         startSession,
         stopSession,
         sendText,
-        clearTranscripts
+        clearTranscripts,
     };
-
 }
+
+// Alias de compatibilité — migrer les consommateurs vers useRealtimeVoice
+export const useGeminiLive = useRealtimeVoice;

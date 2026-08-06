@@ -28,11 +28,5 @@ export interface LLMTextResponse {
     usage?: { promptTokens?: number; completionTokens?: number };
 }
 
-export const AI_MODELS = {
-    fast: 'gemini-1.5-flash',
-    reasoning: 'gemini-1.5-pro',
-    visionFast: 'gemini-2.0-flash',
-    visionPro: 'gemini-2.0-pro',
-} as const;
-
-export type AIModelId = typeof AI_MODELS[keyof typeof AI_MODELS];
+// Model aliases sémantiques — chaque provider les mappe vers ses propres identifiants
+export type LLMModelAlias = 'fast' | 'reasoning' | 'vision-fast' | 'vision-pro';

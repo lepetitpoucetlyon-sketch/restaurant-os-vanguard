@@ -13,7 +13,7 @@ import {
     type InvoiceExtractionError,
     type InvoiceLineItem,
     type InvoiceFlag,
-} from '@/domain/schemas/supplier-invoice.schemas';
+} from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';
 import {
     INVOICE_EXTRACTION_SYSTEM_PROMPT,
     PRICE_REFERENCE_TABLE,
@@ -32,15 +32,12 @@ export interface InvoiceExtractionOptions {
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-// eslint-disable-next-line no-restricted-imports
-import { AI_MODELS } from '../../intelligence/ia/ai';
+const INVOICE_MODELS = {
+    flash: 'gemini-2.0-flash',
+    pro: 'gemini-2.0-pro',
+} as const;
 
-const getModels = () => ({
-    flash: AI_MODELS.visionFast,
-    pro: AI_MODELS.visionPro,
-} as const);
+const getModels = () => INVOICE_MODELS;
 
 // Cross-validation tolerance (±2 centimes)
 const TOLERANCE_CENTS = 2;
