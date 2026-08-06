@@ -339,7 +339,7 @@ describe('PeriodLockGuardHandler', () => {
     });
 
     expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining(`tenants/${T}/fiscalLedger/locks/`),
+      expect.stringContaining(`tenants/${T}/fiscalPeriodLocks/`),
       expect.objectContaining({ isLocked: true }),
     );
   });

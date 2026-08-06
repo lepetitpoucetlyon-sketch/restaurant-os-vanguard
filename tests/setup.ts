@@ -7,7 +7,7 @@ process.env.FISCAL_SIGNING_SECRET = 'test-fiscal-signing-secret';
 // 🏛️ RESTAURANT OS - MASTER TEST SHIELD
 // Protection globale contre les initialisations Firebase/Dexie/IDB
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MockAdapter } from '@/infrastructure/adapters/MockAdapter';
+import { MockAdapter } from '@/lib/adapters/MockAdapter';
 
 // Initialisation immédiate du Mock pour les tests
 Nexus.adapter = new MockAdapter();
