@@ -14,6 +14,7 @@ import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';
 import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
 import { tenantConfigAtom } from '@/store/pillars/sovereign';
+import { fetchRbacConfigAtom } from '@/store/pillars/rbac';
 import { DemoSeeder } from '@/infrastructure/services/demo/DemoSeeder';
 import type { TenantConfig } from '@/shared/nexus-contract';
 import type { NexusTenantState } from '@nexus/contracts/nexus.types';
@@ -27,6 +28,7 @@ export function useNexusTenantLogic(): NexusTenantState {
     const searchParams = useSearchParams();
     const hasInitialized = useRef(false);
     const setGlobalTenantConfig = useSetAtom(tenantConfigAtom);
+    const fetchRbac = useSetAtom(fetchRbacConfigAtom);
 
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
@@ -59,6 +61,7 @@ export function useNexusTenantLogic(): NexusTenantState {
         setGlobalTenantConfig(config);
         Nexus.tenantOverride = tenantId;
         NexusTelemetryEngine.initSession(tenantId);
+        fetchRbac(tenantId);
         
         // Auto-provision Demo Mode if requested via URL
         if (typeof window !== 'undefined') {
@@ -71,7 +74,7 @@ export function useNexusTenantLogic(): NexusTenantState {
                 });
             }
         }
-    }, [setGlobalTenantConfig]);
+    }, [setGlobalTenantConfig, fetchRbac]);
 
     useEffect(() => {
         if (!activeTenantId && !hasInitialized.current) {

@@ -1,7 +1,10 @@
 'use client';
 
 import React from 'react';
+import { getDefaultStore } from 'jotai';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { rbacConfigAtom } from '@/store/pillars/rbac';
+import type { TenantRBACConfig } from '@/domain/schemas/rbac';
 import type { ICoreContext } from './IVerticalPlugin';
 
 export class CoreContext implements ICoreContext {
@@ -24,6 +27,10 @@ export class CoreContext implements ICoreContext {
       { id: `vertical-handler-${event}-${Date.now()}`, priority: 'BACKGROUND' }
     );
     this.unsubscribers.push(unsub);
+  }
+
+  registerRbacConfig(config: TenantRBACConfig): void {
+    getDefaultStore().set(rbacConfigAtom, config);
   }
 
   getRegisteredRoutes(): string[] {

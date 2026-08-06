@@ -8,6 +8,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
+import { TenantRBACConfigSchema } from '@/domain/schemas/rbac';
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -111,6 +112,15 @@ export const ProvisioningEngine = {
                 if (!seedResult.success) {
                     logger.warn('ProvisioningEngine: TenantSeeder partial failure', { error: seedResult.error });
                 }
+            }
+
+            // 3b. Seed RBAC defaults pour ce tenant
+            try {
+                const defaultRbac = TenantRBACConfigSchema.parse({});
+                await Nexus.adapter.set(`tenants/${dna.key}/config/rbac`, defaultRbac);
+                logger.info('ProvisioningEngine: RBAC defaults seeded', { tenantId: dna.key });
+            } catch (rbacErr) {
+                logger.warn('ProvisioningEngine: RBAC seed skipped', { tenantId: dna.key, error: String(rbacErr) });
             }
 
             // 4. Activer le vertical sectoriel

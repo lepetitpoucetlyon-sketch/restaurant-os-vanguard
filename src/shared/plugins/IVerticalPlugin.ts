@@ -1,4 +1,5 @@
 import React from 'react';
+import type { TenantRBACConfig } from '@/domain/schemas/rbac';
 
 export interface IVerticalPlugin {
     id: string;
@@ -29,6 +30,7 @@ export interface ICoreContext {
     registerRoute(path: string, component: React.ComponentType<unknown>): void;
     registerStoreAtom<T>(key: string, atom: T): void;
     registerEventHandler<T = unknown>(event: string, handler: (payload: T) => void): void;
+    registerRbacConfig(config: TenantRBACConfig): void;
     getRegisteredRoutes(): string[];
     getRegisteredAtoms(): string[];
 }
