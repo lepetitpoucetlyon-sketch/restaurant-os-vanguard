@@ -60,7 +60,7 @@ export function registerSovereignBreachHandler(): () => void {
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
                     body: JSON.stringify({
-                        tenantId: 'mcc',
+                        tenantId: process.env.MCC_SYSTEM_TENANT_ID ?? 'mcc',
                         role: 'mcc_admin',
                         title: 'SOVEREIGN BREACH DETECTED',
                         body: message,

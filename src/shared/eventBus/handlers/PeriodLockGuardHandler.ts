@@ -15,7 +15,7 @@ export class PeriodLockGuardHandler {
     const periodId = date.substring(0, 7); // YYYY-MM
     try {
       const lock = await Nexus.adapter.get<{ isLocked?: boolean }>(
-        `tenants/${tenantId}/fiscalLedger/locks/${periodId}`
+        `tenants/${tenantId}/fiscalPeriodLocks/${periodId}`
       );
       return lock?.isLocked === true;
     } catch {
@@ -31,7 +31,7 @@ export class PeriodLockGuardHandler {
       logger.info(`[PeriodLockGuard] Période fiscale ${periodId} verrouillée par ${lockedBy}.`);
 
       // On inscrit le lock en base (Souveraineté NF525)
-      await Nexus.adapter.update(`tenants/${tenantId}/fiscalLedger/locks/${periodId}`, {
+      await Nexus.adapter.update(`tenants/${tenantId}/fiscalPeriodLocks/${periodId}`, {
         isLocked: true,
         lockedBy,
         lockedAt,

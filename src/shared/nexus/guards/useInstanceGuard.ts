@@ -1,10 +1,11 @@
 'use client';
 
+import { useAtomValue } from 'jotai';
+import { AUTH_GENOME } from '@/shared/nexus/state/SovereignGenome';
 
 export interface InstanceGuardResult {
     result: import('@/shared/nexus-contract').SovereignData;
     isAuthorized: boolean;
-
     verdict: 'AUTHORIZED' | 'DENIED' | 'PENDING';
     host: string;
     tenantId: string;
@@ -14,16 +15,16 @@ export interface InstanceGuardResult {
 }
 
 export function useInstanceGuard(): InstanceGuardResult {
-    const isInitialized = true;
+    const currentUser = useAtomValue(AUTH_GENOME.currentUser);
 
     return {
         result: {},
-        isAuthorized: true,
-        verdict: 'AUTHORIZED',
+        isAuthorized: !!currentUser,
+        verdict: currentUser ? 'AUTHORIZED' : 'DENIED',
         host: typeof window !== 'undefined' ? window.location.hostname : 'localhost',
-        tenantId: 'mcc-master',
-        isDevMode: true,
-        isInitialized,
+        tenantId: currentUser?.tenantId ?? '',
+        isDevMode: process.env.NODE_ENV === 'development',
+        isInitialized: true,
         revalidate: () => {},
     };
 }

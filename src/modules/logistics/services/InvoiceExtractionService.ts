@@ -59,7 +59,7 @@ export const InvoiceExtractionService = {
         base64Image: string,
         options: InvoiceExtractionOptions = {}
     ): Promise<InvoiceExtractionResult> {
-        const { model = 'flash', tenantId = 'system' } = options;
+        const { model = 'flash', tenantId } = options;
         const modelId = getModels()[model];
         const startTime = Date.now();
 
@@ -109,7 +109,7 @@ export const InvoiceExtractionService = {
             logger.info(`[InvoiceExtraction] ✅ Extraction complete in ${duration}ms — ${invoice.line_items.length} lines, confidence: ${invoice.confidence.overall}`);
 
             // 6. Telemetry
-            this.emitTelemetry(invoice, tenantId, duration);
+            if (tenantId) this.emitTelemetry(invoice, tenantId, duration);
 
             return { success: true, data: invoice, rawResponse };
 

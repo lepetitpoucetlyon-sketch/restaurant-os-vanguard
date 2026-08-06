@@ -124,11 +124,7 @@ const _currentUserBase = SovereignStorage.atomWithSovereignStorage<User | null>(
 
 export const AUTH_GENOME = {
     currentUser: atom(
-        (get) => {
-            const user = get(_currentUserBase);
-            if (user && !user.tenantId) return { ...user, tenantId: 'evolution' };
-            return user;
-        },
+        (get) => get(_currentUserBase),
         (get, set, next: User | null) => set(_currentUserBase, next)
     ),
     isAuthenticated: atom((get) => !!get(_currentUserBase)),

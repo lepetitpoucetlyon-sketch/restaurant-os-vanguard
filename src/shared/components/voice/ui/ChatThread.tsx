@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import DOMPurify from "dompurify";
 import { cn } from "@/lib/ui.foundations";
 
 interface Message {
@@ -54,7 +55,7 @@ export function ChatThread({ messages, isProcessing, formatText, scrollRef }: Ch
                     </div>
                     <div 
                         className="text-sm font-medium leading-relaxed prose prose-invert max-w-none text-text-primary prose-a:text-accent-gold" 
-                        dangerouslySetInnerHTML={{ __html: formatText(msg.text) }} 
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(formatText(msg.text)) }}
                     />
                 </motion.div>
             ))}

@@ -11,21 +11,43 @@ export interface NotificationPayload {
 
 export class NotificationGateway {
     static async send(payload: NotificationPayload): Promise<void> {
-        const sendgridKey = process.env.SENDGRID_API_KEY;
+        const resendKey = process.env.RESEND_API_KEY;
         const twilioSid = process.env.TWILIO_SID;
         const channel = payload.channel || (payload.to.includes('@') ? 'email' : 'sms');
 
         try {
-            if (channel === 'email' && sendgridKey) {
-                // TODO: Vrai appel SendGrid avec @sendgrid/mail
-                logger.info(`[NotificationGateway] Envoi d'email à ${payload.to} via SendGrid`);
+            if (channel === 'email' && resendKey) {
+                const { Resend } = await import('resend');
+                const resend = new Resend(resendKey);
+                const from = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
+                const { error } = await resend.emails.send({
+                    from,
+                    to: [payload.to],
+                    subject: payload.subject,
+                    text: payload.text,
+                });
+                if (error) throw new Error(error.message);
+                logger.info(`[NotificationGateway] Email envoyé à ${payload.to} via Resend`);
                 return;
             }
 
             if (channel === 'sms' && twilioSid) {
-                // TODO: Vrai appel Twilio
-                logger.info(`[NotificationGateway] Envoi de SMS à ${payload.to} via Twilio`);
-                return;
+                const twilioToken = process.env.TWILIO_AUTH_TOKEN;
+                const twilioFrom = process.env.TWILIO_FROM_NUMBER;
+                if (!twilioToken || !twilioFrom) {
+                    logger.warn('[NotificationGateway] TWILIO_AUTH_TOKEN ou TWILIO_FROM_NUMBER manquant');
+                } else {
+                    const url = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`;
+                    const body = new URLSearchParams({ To: payload.to, From: twilioFrom, Body: payload.text });
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { Authorization: `Basic ${Buffer.from(`${twilioSid}:${twilioToken}`).toString('base64')}` },
+                        body,
+                    });
+                    if (!res.ok) throw new Error(`Twilio HTTP ${res.status}`);
+                    logger.info(`[NotificationGateway] SMS envoyé à ${payload.to} via Twilio`);
+                    return;
+                }
             }
 
             // MODE DÉGRADÉ : Aucune clé configurée, écriture dans la file d'attente

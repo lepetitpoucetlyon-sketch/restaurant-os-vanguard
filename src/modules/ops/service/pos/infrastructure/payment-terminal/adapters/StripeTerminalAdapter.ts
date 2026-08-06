@@ -1,5 +1,39 @@
 import type { IPaymentTerminalAdapter, TerminalDevice, PaymentRequest, PaymentResult, RefundRequest, RefundResult, TerminalStatus } from '../types';
 
+/** Minimal typing for the parts of @stripe/terminal-js we actually use. */
+interface StripeTerminalInstance {
+  create(opts: {
+    onFetchConnectionToken: () => Promise<string>;
+    onUnexpectedReaderDisconnect: () => void;
+  }): StripeTerminalReader;
+}
+
+interface StripeTerminalReader {
+  connectBluetoothReader(
+    opts: { id: string },
+    flags: { failIfInUse: boolean }
+  ): Promise<{ error?: { message: string } }>;
+  disconnectReader(): Promise<void>;
+  collectPaymentMethod(
+    clientSecret: string
+  ): Promise<{ error?: { code: string; message: string }; paymentIntent?: unknown }>;
+  confirmPaymentIntent(
+    pi: unknown
+  ): Promise<{ error?: { message: string }; paymentIntent?: StripePaymentIntent }>;
+  cancelCollectPaymentMethod(): Promise<void>;
+}
+
+interface StripePaymentIntent {
+  id: string;
+  charges?: {
+    data?: Array<{
+      payment_method_details?: {
+        card_present?: { brand?: string; last4?: string; generated_card?: string };
+      };
+    }>;
+  };
+}
+
 /**
  * StripeTerminalAdapter
  *
@@ -23,9 +57,7 @@ export class StripeTerminalAdapter implements IPaymentTerminalAdapter {
   readonly requiresConfig = true;
 
   private _status: TerminalStatus = 'disconnected';
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore - Stripe Terminal SDK types not installed
-  private _terminal: unknown = null;
+  private _reader: StripeTerminalReader | null = null;
 
   async connect(device: TerminalDevice): Promise<void> {
     if (typeof window === 'undefined') return;
@@ -36,13 +68,11 @@ export class StripeTerminalAdapter implements IPaymentTerminalAdapter {
       const { loadStripeTerminal } = await import(
         /* webpackChunkName: "stripe-terminal" */
         '@stripe/terminal-js' as string
-      );
+      ) as { loadStripeTerminal: () => Promise<StripeTerminalInstance> };
 
-      this._terminal = await loadStripeTerminal();
+      const terminal = await loadStripeTerminal();
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const instance = (this._terminal as { create: (opts: unknown) => unknown }).create({
+      const reader = terminal.create({
         onFetchConnectionToken: async () => {
           const res = await fetch('/api/terminal/connection-token', { method: 'POST' });
           const data = await res.json() as { secret: string };
@@ -53,15 +83,14 @@ export class StripeTerminalAdapter implements IPaymentTerminalAdapter {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const connectResult = await (instance as { connectBluetoothReader: (opts: unknown, flags: unknown) => Promise<{ error?: { message: string } }> }).connectBluetoothReader(
+      if (!device.address) throw new Error('Stripe Terminal : adresse du lecteur manquante');
+      const connectResult = await reader.connectBluetoothReader(
         { id: device.address },
         { failIfInUse: true }
       );
 
       if (connectResult.error) throw new Error(connectResult.error.message);
-      this._terminal = instance;
+      this._reader = reader;
       this._status = 'connected';
     } catch (err) {
       this._status = 'error';
@@ -70,18 +99,15 @@ export class StripeTerminalAdapter implements IPaymentTerminalAdapter {
   }
 
   async disconnect(): Promise<void> {
-    if (this._terminal) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      await (this._terminal as { disconnectReader?: () => Promise<void> }).disconnectReader?.();
-    }
+    await this._reader?.disconnectReader?.();
+    this._reader = null;
     this._status = 'disconnected';
   }
 
   getStatus(): TerminalStatus { return this._status; }
 
   async charge(request: PaymentRequest): Promise<PaymentResult> {
-    if (!this._terminal) return { status: 'error', error: 'Terminal non connecté' };
+    if (!this._reader) return { status: 'error', error: 'Terminal non connecté' };
 
     this._status = 'busy';
     try {
@@ -99,26 +125,20 @@ export class StripeTerminalAdapter implements IPaymentTerminalAdapter {
       const { clientSecret } = await intentRes.json() as { clientSecret: string };
 
       // 2. Collect payment method (shows on terminal screen)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const collectResult = await (this._terminal as { collectPaymentMethod: (secret: string) => Promise<{ error?: { code: string; message: string }; paymentIntent?: unknown }> }).collectPaymentMethod(clientSecret);
+      const collectResult = await this._reader.collectPaymentMethod(clientSecret);
       if (collectResult.error) {
         this._status = 'connected';
         return { status: collectResult.error.code === 'canceled' ? 'cancelled' : 'error', error: collectResult.error.message };
       }
 
       // 3. Confirm payment
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const confirmResult = await (this._terminal as { confirmPaymentIntent: (pi: unknown) => Promise<{ error?: { message: string }; paymentIntent?: unknown }> }).confirmPaymentIntent(collectResult.paymentIntent);
+      const confirmResult = await this._reader.confirmPaymentIntent(collectResult.paymentIntent);
       if (confirmResult.error) {
         this._status = 'connected';
         return { status: 'declined', error: confirmResult.error.message };
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const pi = confirmResult.paymentIntent as { id: string; charges?: { data?: { payment_method_details?: { card_present?: { brand?: string; last4?: string; generated_card?: string } } }[] } };
+      const pi = confirmResult.paymentIntent!;
       const charge = pi.charges?.data?.[0];
       this._status = 'connected';
 
@@ -159,9 +179,7 @@ export class StripeTerminalAdapter implements IPaymentTerminalAdapter {
   }
 
   async cancelCurrent(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    await (this._terminal as { cancelCollectPaymentMethod?: () => Promise<void> })?.cancelCollectPaymentMethod?.();
+    await this._reader?.cancelCollectPaymentMethod?.();
     this._status = 'connected';
   }
 }

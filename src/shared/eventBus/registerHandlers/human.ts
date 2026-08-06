@@ -11,6 +11,7 @@ import { PayrollExportHandler } from '../handlers/PayrollExportHandler';
 import { ContractRenewalAlertHandler } from '../handlers/ContractRenewalAlertHandler';
 import { MedicalVisitAlertHandler } from '../handlers/MedicalVisitAlertHandler';
 import { RecruitmentRouterHandler } from '../handlers/RecruitmentRouterHandler';
+import { SilaeExportHandler } from '../handlers/SilaeExportHandler';
 
 export function registerHumanHandlers(): Array<() => void> {
   return [
@@ -27,5 +28,6 @@ export function registerHumanHandlers(): Array<() => void> {
     ContractRenewalAlertHandler.register(),
     MedicalVisitAlertHandler.register(),
     RecruitmentRouterHandler.register(),
+    SilaeExportHandler.register(),
   ];
 }

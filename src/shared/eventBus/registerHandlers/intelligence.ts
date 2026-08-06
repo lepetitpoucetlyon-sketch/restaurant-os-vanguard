@@ -9,6 +9,7 @@ import { PinLockoutNotifierHandler } from '../handlers/PinLockoutNotifierHandler
 import { FleetOutboxHandler } from '../handlers/FleetOutboxHandler';
 import { registerReportRetryHandler } from '../handlers/ReportRetryHandler';
 import { registerLLMFallbackHandler } from '../handlers/LLMFallbackHandler';
+import { registerSupportTicketAnalysisHandler } from '../handlers/SupportTicketAnalysisHandler';
 
 export function registerIntelligenceHandlers(): Array<() => void> {
   return [
@@ -23,5 +24,6 @@ export function registerIntelligenceHandlers(): Array<() => void> {
     FleetOutboxHandler.register(),
     registerReportRetryHandler(),
     registerLLMFallbackHandler(),
+    registerSupportTicketAnalysisHandler(),
   ];
 }
