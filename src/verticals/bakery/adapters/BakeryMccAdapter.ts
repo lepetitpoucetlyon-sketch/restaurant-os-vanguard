@@ -1,0 +1,10 @@
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+
+export const BakeryMccAdapter = {
+  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; ovensOnline: number; activeBatches: number }) {
+    NexusEventBus.emit('mcc.health_ping', { ...payload });
+  },
+  emitFiscalAuditRequired(payload: { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' }) {
+    NexusEventBus.emitDurable('mcc.fiscal_audit_required', payload);
+  },
+};

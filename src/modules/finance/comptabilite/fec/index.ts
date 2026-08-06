@@ -7,3 +7,5 @@
 export * from './FECGenerator';
 export * from './FECMapper';
 export * from './types';
+import { VerticalPageStub } from '@/verticals/_shared/VerticalPageStub';
+export const FECExportPage = () => VerticalPageStub({ title: 'Export FEC' });

@@ -42,7 +42,7 @@ export function useMccPage() {
     const [newCloneKey, setNewCloneKey] = useState('');
     const [newCloneEmail, setNewCloneEmail] = useState('');
     const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
-    const [newCloneVariant, setNewCloneVariant] = useState<'restaurant' | 'hotel' | 'garage' | 'clinic'>('restaurant');
+    const [newCloneVariant, setNewCloneVariant] = useState<'restaurant' | 'hotel' | 'garage' | 'clinic' | 'bakery' | 'salon' | 'retail' | 'custom'>('restaurant');
     const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
     const [provisionStep, setProvisionStep] = useState(0);
 

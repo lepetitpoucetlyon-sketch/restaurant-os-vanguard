@@ -1113,6 +1113,37 @@ export interface NexusEvents {
   'auto.technician_assigned': { tenantId: string; technicianId: string; workOrderId: string; estimatedHours: number };
   'auto.workshop_metrics_snapshot': { tenantId: string; date: string; workOrdersCompleted: number; avgRepairTimeMinutes: number; revenueInMicrounits: number };
   'auto.lift_maintenance_required': { tenantId: string; liftId: string; issue: string; dueDate: string };
+
+  // ─── Vertical: Bakery ─────────────────────────────────────────────────────
+  'bakery.batch_started': { tenantId: string; batchId: string; recipe: string; quantity: number; ovenId: string; startedAt: string };
+  'bakery.batch_completed': { tenantId: string; batchId: string; recipe: string; yield: number; completedAt: string };
+  'bakery.oven_temp_alert': { tenantId: string; ovenId: string; currentTemp: number; targetTemp: number; severity: 'warning' | 'critical' };
+  'bakery.preorder_received': { tenantId: string; preorderId: string; customerId: string; items: { productId: string; quantity: number }[]; pickupDate: string };
+  'bakery.display_stock_low': { tenantId: string; productId: string; currentStock: number; threshold: number };
+  'bakery.allergen_declared': { tenantId: string; productId: string; allergens: string[]; updatedAt: string };
+  'bakery.ingredient_consumed': { tenantId: string; batchId: string; lines: { ingredientId: string; quantity: number }[] };
+  'bakery.waste_logged': { tenantId: string; batchId: string; productId: string; quantity: number; reason: string };
+  'bakery.metrics_snapshot': { tenantId: string; date: string; batchesProduced: number; wastePercent: number; revenueInMicrounits: number };
+
+  // ─── Vertical: Salon ──────────────────────────────────────────────────────
+  'salon.appointment_booked': { tenantId: string; appointmentId: string; customerId: string; stylistId: string; service: string; slot: string };
+  'salon.appointment_completed': { tenantId: string; appointmentId: string; customerId: string; stylistId: string; durationMinutes: number; totalInMicrounits: number };
+  'salon.appointment_cancelled': { tenantId: string; appointmentId: string; reason: string; customerId: string };
+  'salon.no_show': { tenantId: string; appointmentId: string; customerId: string; stylistId: string };
+  'salon.stylist_assigned': { tenantId: string; stylistId: string; appointmentId: string };
+  'salon.product_consumed': { tenantId: string; productId: string; quantity: number; appointmentId: string };
+  'salon.loyalty_earned': { tenantId: string; customerId: string; points: number; sourceAppointmentId: string };
+  'salon.chair_metrics_snapshot': { tenantId: string; date: string; totalAppointments: number; utilization: number; revenueInMicrounits: number };
+
+  // ─── Vertical: Retail ─────────────────────────────────────────────────────
+  'retail.sale_completed': { tenantId: string; saleId: string; customerId?: string; lines: { productId: string; quantity: number; unitPriceInMicrounits: number }[]; totalInMicrounits: number; paymentMethod: string };
+  'retail.return_processed': { tenantId: string; returnId: string; originalSaleId: string; lines: { productId: string; quantity: number }[]; refundInMicrounits: number };
+  'retail.stock_alert': { tenantId: string; productId: string; sku: string; currentStock: number; threshold: number };
+  'retail.promotion_activated': { tenantId: string; promotionId: string; discountPercent: number; productIds: string[]; validUntil: string };
+  'retail.pos_session_opened': { tenantId: string; sessionId: string; operatorId: string; openedAt: string; openingFloat: number };
+  'retail.pos_session_closed': { tenantId: string; sessionId: string; operatorId: string; closedAt: string; totalInMicrounits: number };
+  'retail.loyalty_earned': { tenantId: string; customerId: string; points: number; sourceSaleId: string };
+  'retail.metrics_snapshot': { tenantId: string; date: string; transactions: number; revenueInMicrounits: number; avgBasketInMicrounits: number };
 }
 
 export type NexusEventName = keyof NexusEvents;

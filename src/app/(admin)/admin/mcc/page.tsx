@@ -194,6 +194,10 @@ function MCCDashboardInner() {
                                                     { id: 'hotel',      emoji: '🏨', label: 'Hôtel' },
                                                     { id: 'garage',     emoji: '🔧', label: 'Garage' },
                                                     { id: 'clinic',     emoji: '🏥', label: 'Clinique' },
+                                                    { id: 'bakery',     emoji: '🥐', label: 'Boulangerie' },
+                                                    { id: 'salon',      emoji: '✂️', label: 'Salon' },
+                                                    { id: 'retail',     emoji: '🛍️', label: 'Retail' },
+                                                    { id: 'custom',     emoji: '🏢', label: 'Custom' },
                                                 ] as const).map(v => (
                                                     <button key={v.id} type="button" onClick={() => setNewCloneVariant(v.id)}
                                                         className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-center transition-all ${newCloneVariant === v.id ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>

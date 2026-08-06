@@ -9,6 +9,10 @@ const VERTICAL_META: Record<string, { emoji: string; label: string; color: strin
   hotel:      { emoji: '🏨', label: 'Hôtel',       color: 'text-blue-400' },
   garage:     { emoji: '🔧', label: 'Garage',       color: 'text-slate-400' },
   clinic:     { emoji: '🏥', label: 'Clinique',     color: 'text-emerald-400' },
+  bakery:     { emoji: '🥐', label: 'Boulangerie',  color: 'text-yellow-500' },
+  salon:      { emoji: '✂️', label: 'Salon',         color: 'text-pink-400' },
+  retail:     { emoji: '🛍️', label: 'Retail',        color: 'text-purple-400' },
+  custom:     { emoji: '🏢', label: 'Custom',        color: 'text-muted' },
 };
 
 interface VerticalConfig {

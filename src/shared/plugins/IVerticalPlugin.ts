@@ -29,6 +29,8 @@ export interface ICoreContext {
     registerRoute(path: string, component: React.ComponentType<unknown>): void;
     registerStoreAtom<T>(key: string, atom: T): void;
     registerEventHandler<T = unknown>(event: string, handler: (payload: T) => void): void;
+    getRegisteredRoutes(): string[];
+    getRegisteredAtoms(): string[];
 }
 
 export interface VerticalRoute {

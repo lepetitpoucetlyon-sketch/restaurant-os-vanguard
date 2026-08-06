@@ -28,3 +28,7 @@ import('@/verticals/restaurant').then(m => VerticalRegistry.register('restaurant
 import('@/verticals/hotel').then(m => VerticalRegistry.register('hotel', () => new m.HotelVertical()));
 import('@/verticals/auto').then(m => VerticalRegistry.register('garage', () => new m.AutoVertical()));
 import('@/verticals/health').then(m => VerticalRegistry.register('clinic', () => new m.HealthVertical()));
+import('@/verticals/bakery').then(m => VerticalRegistry.register('bakery', () => new m.BakeryVertical()));
+import('@/verticals/salon').then(m => VerticalRegistry.register('salon', () => new m.SalonVertical()));
+import('@/verticals/retail').then(m => VerticalRegistry.register('retail', () => new m.RetailVertical()));
+import('@/verticals/custom').then(m => VerticalRegistry.register('custom', () => new m.CustomVertical()));
