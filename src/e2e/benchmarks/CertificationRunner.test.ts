@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@/e2e/vanguard/mocks';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
 import { TimeSync } from '@/lib/TimeSync';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
+import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { ordersNodeAtom } from '@/store/pillars';
 import { getDefaultStore } from 'jotai';
 import { SovereignValue } from '@/shared/nexus-contract';

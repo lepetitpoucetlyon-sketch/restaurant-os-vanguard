@@ -12,7 +12,7 @@ import {
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { qualityActiveControlAtom } from '@/modules/compliance';
 import { logger } from '@/lib/logger';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
+import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 import { WritableAtom } from 'jotai';

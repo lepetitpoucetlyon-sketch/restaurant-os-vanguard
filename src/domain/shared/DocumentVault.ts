@@ -1,1 +1,1 @@
-export * from '@/lib/DocumentVault';
+export * from '@/modules/compliance/securite/DocumentVault';

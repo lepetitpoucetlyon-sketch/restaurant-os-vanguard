@@ -45,7 +45,7 @@ export * from '@/modules/intelligence/ia/resilience/ChaosMonkey';
 
 // Rapatriés dans lib/ (cross-cutting)
 export * from '@/lib/AccessPolicyManager';
-export * from '@/lib/AmbianceService';
+export * from '@/modules/facility/spaces/AmbianceService';
 export * from '@/lib/BrandingService';
 export * from '@/lib/BrandingUI';
 export { CryptoService } from '@/lib/CryptoService';

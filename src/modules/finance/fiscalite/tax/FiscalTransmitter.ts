@@ -1,6 +1,6 @@
 import { CA3Declaration, EDISubmissionResult, TaxBreakdown } from './types';
 import { EDIMapper } from './EDIMapper';
-import { DocumentVault } from '@/lib/DocumentVault';
+import { DocumentVault } from '@/modules/compliance/securite/DocumentVault';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { SovereignLedger } from '../../services/SovereignLedger';

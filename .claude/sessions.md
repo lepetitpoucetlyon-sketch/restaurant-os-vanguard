@@ -87,3 +87,4 @@
 | s10-etape2-3 | Verticals 8-pilier adapters (restaurant/hotel/health/auto) + MCC câblage (health ping + fiscal audit handlers) — src/verticals/*/adapters/, src/shared/eventBus/ | 2026-08-06 | terminée |
 | cleanup-final | RBAC 3 gaps (boot/ICoreContext/provisioning) + SAGA coverage 124 handlers — src/shared/providers/hooks/useNexusTenantLogic.ts, src/shared/plugins/, src/lib/ProvisioningEngine.ts, src/__tests__/handlers/ | 2026-08-06 | terminée |
 | audit-360-v2 | Audit 4 axes (archi/sécu/tests/dette) + plan PLAN_AUDIT_FIXES.md — lecture seule + fixes TSC/txMock | 2026-08-06 | terminée |
+| audit-fixes-exec | Exécution PLAN_AUDIT_FIXES.md : P0 (secret hardcodé, IDOR, microunits), P1 (NF525, XSS, SAGA, Resend, tenantId, @ts-ignore), P2 (dead code, eval, InCents, auth, barrels, console.log), P3 (infra doublons, lib rapatriation, barrel violations) | 2026-08-06 | active |

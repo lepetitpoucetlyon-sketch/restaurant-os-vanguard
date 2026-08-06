@@ -1,5 +1,5 @@
 import { TimeSync } from '@/lib/TimeSync';
-import { SelfHealingEngine } from '@/lib/SelfHealingEngine';
+import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
@@ -116,7 +116,7 @@ export const BlackFridaySimulation = {
     logger.info(`--- [Test 4] LEDGER STRESS & INTEGRITY (${count} TX/S) ---`);
     const { BlockchainLedgerService } = await import('@/modules/finance/comptabilite/accounting/domain/BlockchainLedgerService');
     const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-    const { MockAdapter } = await import('@/infrastructure/adapters/MockAdapter');
+    const { MockAdapter } = await import('@/lib/adapters/MockAdapter');
 
     // Setup Mock Environment
     const mockAdapter = new MockAdapter();
