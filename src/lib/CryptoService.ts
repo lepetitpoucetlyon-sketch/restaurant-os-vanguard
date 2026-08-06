@@ -43,9 +43,11 @@ export class CryptoService {
      */
     static async generateHash(data: string, previousHash: string = ''): Promise<string> {
         const message = data + previousHash;
-        const nodeHash = this.nodeCreateHash;
-        if (nodeHash) {
-            return nodeHash('sha256').update(message).digest('hex');
+        if (typeof process !== 'undefined' && process.versions?.node) {
+            try {
+                const { createHash } = await import('node:crypto');
+                return createHash('sha256').update(message).digest('hex');
+            } catch { /* fallback to WebCrypto */ }
         }
         const dataUint8 = new TextEncoder().encode(message);
         const hashBuffer = await crypto.subtle.digest('SHA-256', dataUint8);
@@ -92,9 +94,11 @@ export class CryptoService {
         }
         const message = `EMP_NF525:${hash}`;
 
-        const nodeHmac = this.nodeCreateHmac;
-        if (nodeHmac) {
-            return nodeHmac('sha256', secret).update(message).digest('hex').toUpperCase();
+        if (typeof process !== 'undefined' && process.versions?.node) {
+            try {
+                const { createHmac } = await import('node:crypto');
+                return createHmac('sha256', secret).update(message).digest('hex').toUpperCase();
+            } catch { /* fallback to WebCrypto */ }
         }
 
         const key = await this.getHmacKey(secret);
@@ -102,31 +106,6 @@ export class CryptoService {
         return this.toHexString(sigBuffer, true);
     }
 
-    /**
-     * Module node:crypto si on tourne côté serveur, sinon null (navigateur).
-     * Résolu une seule fois. Le require est gardé par typeof process pour ne
-     * jamais être atteint dans un bundle client.
-     */
-    private static _nodeCrypto: {
-        createHmac: (algo: string, key: string) => { update(d: string): { digest(enc: string): string } };
-        createHash: (algo: string) => { update(d: string): { digest(enc: string): string } };
-    } | null | undefined;
-    private static get nodeCrypto() {
-        if (this._nodeCrypto !== undefined) return this._nodeCrypto;
-        this._nodeCrypto = null;
-        if (typeof process !== 'undefined' && process.versions?.node) {
-            try {
-                this._nodeCrypto = (eval('require') as NodeRequire)('node:crypto');
-            } catch { this._nodeCrypto = null; }
-        }
-        return this._nodeCrypto;
-    }
-    private static get nodeCreateHmac(): ((algo: string, key: string) => { update(d: string): { digest(enc: string): string } }) | null {
-        return this.nodeCrypto ? (this.nodeCrypto.createHmac as never) : null;
-    }
-    private static get nodeCreateHash(): ((algo: string) => { update(d: string): { digest(enc: string): string } }) | null {
-        return this.nodeCrypto ? (this.nodeCrypto.createHash as never) : null;
-    }
 
     /**
      * Signs a canonical sovereign payload and returns the resulting hash/signature pair.
@@ -147,14 +126,16 @@ export class CryptoService {
      */
     static async verifyFiscalSignature(hash: string, signature: string, secret: string): Promise<boolean> {
         const expectedSignature = await this.signFiscalData(hash, secret);
-        const nc = this.nodeCrypto as (typeof this._nodeCrypto & { timingSafeEqual?: (a: Buffer, b: Buffer) => boolean }) | null;
-        if (nc?.timingSafeEqual) {
-            const a = Buffer.from(expectedSignature, 'utf8');
-            const b = Buffer.from(signature, 'utf8');
-            if (a.length !== b.length) return false;
-            return nc.timingSafeEqual(a, b);
+        if (typeof process !== 'undefined' && process.versions?.node) {
+            try {
+                const { timingSafeEqual } = await import('node:crypto');
+                const a = Buffer.from(expectedSignature, 'utf8');
+                const b = Buffer.from(signature, 'utf8');
+                if (a.length !== b.length) return false;
+                return timingSafeEqual(a, b);
+            } catch { /* fallback to XOR */ }
         }
-        // Browser XOR fallback
+        // Browser constant-time XOR fallback
         const enc = new TextEncoder();
         const aBytes = enc.encode(expectedSignature);
         const bBytes = enc.encode(signature);

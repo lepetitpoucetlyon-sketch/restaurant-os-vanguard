@@ -5,9 +5,9 @@ import type { CartItem } from '@/domain/schemas/pos';
 export interface MarketplaceOrderPayload {
     platform: 'ubereats' | 'deliveroo' | 'wolt';
     externalOrderId: string;
-    items: Array<{ id: string; quantity: number; priceInCents: number }>;
-    totalInCents: number;
-    commissionInCents: number;
+    items: Array<{ id: string; quantity: number; priceInMicrounits: number }>;
+    totalInMicrounits: number;
+    commissionInMicrounits: number;
 }
 
 /**
@@ -30,7 +30,7 @@ export class MarketplaceSyncService {
             categoryId: 'marketplace',
             name: item.id,
             quantity: item.quantity,
-            unitPriceInMicrounits: item.priceInCents * 10_000,
+            unitPriceInMicrounits: item.priceInMicrounits,
             discountInMicrounits: 0,
             taxRate: '0.10' as const,
             modifiers: [],
@@ -54,10 +54,10 @@ export class MarketplaceSyncService {
             tableId,
             operatorId: 'system-marketplace',
             items: mappedItems,
-            totalInMicrounits: payload.totalInCents * 10_000,
+            totalInMicrounits: payload.totalInMicrounits,
             paymentMode: `marketplace_${payload.platform}`,
         });
 
-        logger.info(`[Marketplace] Commande ${orderId} ingérée et payée via ${payload.platform} (Commission: ${payload.commissionInCents} cts).`);
+        logger.info(`[Marketplace] Commande ${orderId} ingérée et payée via ${payload.platform} (Commission: ${payload.commissionInMicrounits} µ).`);
     }
 }

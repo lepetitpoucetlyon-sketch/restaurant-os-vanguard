@@ -81,17 +81,20 @@ export async function GET(): Promise<NextResponse> {
 
   const snapshot = { overall, services, checkedAt: new Date().toISOString() };
 
-  // Store history (best-effort, non-blocking)
-  (async () => {
-    try {
-      const existing = await Nexus.adapter.get('mcc/statusHistory') as { entries?: typeof services[] } | null;
-      const prev = (existing?.entries ?? []) as typeof services[];
-      const entries = [snapshot, ...prev].slice(0, 144);
-      await Nexus.adapter.set('mcc/statusHistory', { entries, updatedAt: snapshot.checkedAt });
-    } catch (err) {
-      logger.warn('[status] Failed to persist history', String(err));
-    }
-  })();
+  // Store history uniquement si le serveur possède une clé interne (évite l'écriture non authentifiée)
+  const internalSecret = process.env.INTERNAL_API_SECRET;
+  if (internalSecret) {
+    (async () => {
+      try {
+        const existing = await Nexus.adapter.get('mcc/statusHistory') as { entries?: typeof services[] } | null;
+        const prev = (existing?.entries ?? []) as typeof services[];
+        const entries = [snapshot, ...prev].slice(0, 144);
+        await Nexus.adapter.set('mcc/statusHistory', { entries, updatedAt: snapshot.checkedAt });
+      } catch (err) {
+        logger.warn('[status] Failed to persist history', String(err));
+      }
+    })();
+  }
 
   return NextResponse.json(snapshot, {
     headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' },

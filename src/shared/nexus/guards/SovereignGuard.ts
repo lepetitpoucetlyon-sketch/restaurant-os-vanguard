@@ -89,19 +89,18 @@ export const SovereignGuard = {
     return pathParts[0] === 'tenants' ? pathParts[1] : currentTenant;
   },
 
-  getWriteSignatureSecret(path: string, tenantId: string): string {
+  async getWriteSignatureSecret(path: string, tenantId: string): Promise<string> {
     const message = `${tenantId}:${this.extractCollectionName(path)}:NF525_WRITE_V1`;
     const secret = process.env.NEXUS_TENANT_SECRET;
     if (!secret) {
       logger.error('[SovereignGuard] NEXUS_TENANT_SECRET non configuré — arrêt de sécurité P0');
       throw new NexusError(NexusErrorCode.ACCESS_DENIED, 'Signature d\'écriture impossible sans secret d\'environnement');
     }
-    // HMAC serveur uniquement — la vérification des writes se fait server-side
     if (typeof process !== 'undefined' && process.versions?.node) {
       try {
-        const { createHmac } = (eval('require') as NodeRequire)('node:crypto');
+        const { createHmac } = await import('node:crypto');
         return createHmac('sha256', secret).update(message).digest('hex');
-      } catch { /* fallback */ }
+      } catch { /* fallback to plaintext — browser context */ }
     }
     return message;
   },
@@ -125,7 +124,7 @@ export const SovereignGuard = {
 
     const { payloadHash, signature } = await CryptoService.signSovereignPayload(
       payload,
-      this.getWriteSignatureSecret(path, tenantId)
+      await this.getWriteSignatureSecret(path, tenantId)
     );
 
     return {
@@ -176,7 +175,7 @@ export const SovereignGuard = {
     return CryptoService.verifyFiscalSignature(
       expectedHash,
       writeSignature.signature,
-      this.getWriteSignatureSecret(path, tenantId)
+      await this.getWriteSignatureSecret(path, tenantId)
     );
   },
 

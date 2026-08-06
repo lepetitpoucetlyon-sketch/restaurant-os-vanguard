@@ -60,12 +60,10 @@ export const FinanceTool: ToolDefinition<RevenueReportArgs> = {
             }
         });
 
-        const totalInCents = SovereignMath.toCents(BigInt(totalRevenueInMicrounits));
-
         return {
             period: args.period,
-            totalRevenueInCents: totalInCents,
-            formattedRevenue: `${(totalInCents / 100).toFixed(2)}€`,
+            totalRevenueInMicrounits,
+            formattedRevenue: `${(totalRevenueInMicrounits / 1_000_000).toFixed(2)}€`,
             transactionCount: count,
             currency: 'EUR',
             status: 'validated_nf525',
