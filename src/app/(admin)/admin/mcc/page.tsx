@@ -14,6 +14,7 @@ import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 import { VoiceAssistantOverlay } from '@components/layout/VoiceAssistantOverlay';
 import { MCCLocaleProvider, useMCCLocale, LocaleToggle } from './_i18n';
+import { PLATFORM_VARIANTS, VERTICAL_META } from '@/domain/schemas/tenant';
 
 const FleetTab        = dynamic(() => import('./_tabs/FleetTab').then(m => m.FleetTab), { loading: () => <MCCWidgetSkeleton /> });
 const FleetSidebar    = dynamic(() => import('./_tabs/FleetSidebar').then(m => m.FleetSidebar));
@@ -189,20 +190,11 @@ function MCCDashboardInner() {
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Secteur d&apos;activité</label>
                                             <div className="grid grid-cols-4 gap-2">
-                                                {([
-                                                    { id: 'restaurant', emoji: '🍽️', label: 'Restaurant' },
-                                                    { id: 'hotel',      emoji: '🏨', label: 'Hôtel' },
-                                                    { id: 'garage',     emoji: '🔧', label: 'Garage' },
-                                                    { id: 'clinic',     emoji: '🏥', label: 'Clinique' },
-                                                    { id: 'bakery',     emoji: '🥐', label: 'Boulangerie' },
-                                                    { id: 'salon',      emoji: '✂️', label: 'Salon' },
-                                                    { id: 'retail',     emoji: '🛍️', label: 'Retail' },
-                                                    { id: 'custom',     emoji: '🏢', label: 'Custom' },
-                                                ] as const).map(v => (
-                                                    <button key={v.id} type="button" onClick={() => setNewCloneVariant(v.id)}
-                                                        className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-center transition-all ${newCloneVariant === v.id ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
-                                                        <span className="text-xl">{v.emoji}</span>
-                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${newCloneVariant === v.id ? 'text-brand' : 'text-secondary'}`}>{v.label}</span>
+                                                {PLATFORM_VARIANTS.map(v => (
+                                                    <button key={v} type="button" onClick={() => setNewCloneVariant(v)}
+                                                        className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-center transition-all ${newCloneVariant === v ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
+                                                        <span className="text-xl">{VERTICAL_META[v].emoji}</span>
+                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${newCloneVariant === v ? 'text-brand' : 'text-secondary'}`}>{VERTICAL_META[v].label}</span>
                                                     </button>
                                                 ))}
                                             </div>

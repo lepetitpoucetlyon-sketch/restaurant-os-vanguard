@@ -15,6 +15,17 @@ export const PLATFORM_VARIANTS = [
 export const PlatformVariantSchema = z.enum(PLATFORM_VARIANTS);
 export type PlatformVariant = z.infer<typeof PlatformVariantSchema>;
 
+export const VERTICAL_META: Record<PlatformVariant, { emoji: string; label: string }> = {
+  restaurant: { emoji: '🍽️', label: 'Restaurant' },
+  hotel:      { emoji: '🏨', label: 'Hôtel' },
+  bakery:     { emoji: '🥐', label: 'Boulangerie' },
+  garage:     { emoji: '🔧', label: 'Garage' },
+  salon:      { emoji: '✂️', label: 'Salon' },
+  clinic:     { emoji: '🏥', label: 'Clinique' },
+  retail:     { emoji: '🛍️', label: 'Retail' },
+  custom:     { emoji: '🏢', label: 'Custom' },
+};
+
 export const TenantThemeSchema = z.object({
   primaryColor: z.string(),
   secondaryColor: z.string(),

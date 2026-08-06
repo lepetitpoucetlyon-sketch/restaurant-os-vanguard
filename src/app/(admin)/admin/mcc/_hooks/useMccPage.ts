@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
 import { useNexusFleet } from '@/modules/intelligence';
+import type { PlatformVariant } from '@/domain/schemas/tenant';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
@@ -42,7 +43,7 @@ export function useMccPage() {
     const [newCloneKey, setNewCloneKey] = useState('');
     const [newCloneEmail, setNewCloneEmail] = useState('');
     const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
-    const [newCloneVariant, setNewCloneVariant] = useState<'restaurant' | 'hotel' | 'garage' | 'clinic' | 'bakery' | 'salon' | 'retail' | 'custom'>('restaurant');
+    const [newCloneVariant, setNewCloneVariant] = useState<PlatformVariant>('restaurant');
     const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
     const [provisionStep, setProvisionStep] = useState(0);
 

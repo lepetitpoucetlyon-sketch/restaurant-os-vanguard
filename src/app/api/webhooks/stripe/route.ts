@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MosyleClient } from '@/lib/MosyleClient';
+import { TenantProvisioningService } from '@/lib/mcc/provisioning/TenantProvisioningService';
 
 // ── Plan-to-features mapping (P12-D / P12-J) ────────────────────────────────
 const PLAN_FEATURES: Record<string, string[]> = {
@@ -64,11 +65,29 @@ interface StripeSubscription {
   };
 }
 
+interface StripeCheckoutSession {
+  id: string;
+  payment_status: 'paid' | 'unpaid' | 'no_payment_required';
+  customer: string | null;
+  customer_details: {
+    email: string | null;
+    name: string | null;
+  } | null;
+  metadata: {
+    companyName?: string;
+    siret?: string;
+    ownerName?: string;
+    planId?: 'STANDARD' | 'PREMIUM';
+    primaryColor?: string;
+    logoUrl?: string;
+  } | null;
+}
+
 interface StripeEvent {
   id: string;
   type: string;
   data: {
-    object: StripeSubscription;
+    object: StripeSubscription | StripeCheckoutSession;
   };
 }
 
@@ -159,9 +178,60 @@ export async function POST(req: NextRequest) {
 
   try {
     switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object as StripeCheckoutSession;
+
+        if (session.payment_status !== 'paid') {
+          logger.info(`[Stripe Webhook] checkout.session.completed ignoré — payment_status=${session.payment_status}`);
+          break;
+        }
+
+        const meta = session.metadata ?? {};
+        const { companyName, siret, ownerName, planId, primaryColor, logoUrl } = meta;
+        const ownerEmail = session.customer_details?.email ?? null;
+
+        if (!companyName || !siret || !ownerEmail) {
+          logger.error(
+            `[Stripe Webhook] checkout.session.completed — métadonnées manquantes (companyName, siret, ownerEmail requis). Session: ${session.id}`
+          );
+          break;
+        }
+
+        // Idempotence : si le tenant existe déjà, Stripe retry ne reprovisionnera pas
+        const existingConfig = await Nexus.adapter.get(`tenants/tenant_${siret}/tenantConfig`).catch(() => null);
+        if (existingConfig) {
+          logger.info(`[Stripe Webhook] Tenant tenant_${siret} déjà provisionné — session ${session.id} ignorée (idempotence)`);
+          break;
+        }
+
+        logger.info(`[Stripe Webhook] Lancement provisionnement B2B pour ${companyName} (${siret})`);
+
+        // Non-bloquant : on répond 200 à Stripe immédiatement, le provisionnement tourne en arrière-plan
+        void (async () => {
+          try {
+            const result = await TenantProvisioningService.provisionNewClient({
+              ownerEmail,
+              ownerName: ownerName ?? ownerEmail,
+              companyName,
+              siret,
+              planId: planId ?? 'STANDARD',
+              branding: {
+                primaryColor: primaryColor ?? '#6366f1',
+                logoUrl: logoUrl ?? undefined,
+              },
+            });
+            logger.info(`[Stripe Webhook] Provisionnement terminé: tenantId=${result.tenantId} stripe=${result.stripeCustomerId}`);
+          } catch (err) {
+            logger.error(`[Stripe Webhook] Échec provisionnement pour ${companyName} (${siret})`, err);
+          }
+        })();
+
+        break;
+      }
+
       case 'customer.subscription.deleted':
       case 'customer.subscription.updated': {
-        const subscription = event.data.object;
+        const subscription = event.data.object as StripeSubscription;
         const tenantId = extractTenantId(subscription);
 
         if (!tenantId) {
