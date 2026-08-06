@@ -108,5 +108,25 @@ describe('FiscalSealer', () => {
       const seal2 = await FiscalSealer.sealDataAtomically('data2', 'tenant_1', false);
       expect(seal2.previousHash).toBe(seal1.hash);
     });
+
+    it('appelle additionalMutations avec (tx, sealId) à l\'intérieur de la transaction', async () => {
+      const additionalMutations = vi.fn();
+      const result = await FiscalSealer.sealDataAtomically('data', 'tenant_1', false, undefined, additionalMutations);
+      expect(additionalMutations).toHaveBeenCalledOnce();
+      const [txArg, sealIdArg] = additionalMutations.mock.calls[0] as [unknown, string];
+      expect(typeof txArg).toBe('object'); // tx object
+      expect(sealIdArg).toBe(result.sealId);
+    });
+
+    it('n\'appelle PAS additionalMutations si non fourni', async () => {
+      // Doit résoudre sans erreur
+      await expect(FiscalSealer.sealDataAtomically('data', 'tenant_1', false)).resolves.not.toThrow();
+    });
+
+    it('appelle additionalMutations en mode training également', async () => {
+      const additionalMutations = vi.fn();
+      await FiscalSealer.sealDataAtomically('data', 'tenant_1', true, undefined, additionalMutations);
+      expect(additionalMutations).toHaveBeenCalledOnce();
+    });
   });
 });

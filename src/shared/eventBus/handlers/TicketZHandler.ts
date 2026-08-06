@@ -3,6 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
+import { TaxCalculator } from '@/modules/finance/utils/TaxCalculator';
 import { CryptoService } from '@/lib/CryptoService';
 import type { SovereignData } from '@shared/nexus-contract';
 
@@ -66,7 +67,7 @@ export function registerTicketZHandler(): () => void {
         for (const item of items) {
           const rate = item.taxRate ?? '0.10';
           const lineTotal = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-          const tva = Math.round(lineTotal * parseFloat(rate));
+          const tva = TaxCalculator.applyRate(lineTotal, rate);
           taxBreakdown[rate] = (taxBreakdown[rate] ?? 0) + tva;
         }
 
@@ -150,21 +151,21 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
     date,
   } as unknown as SovereignData);
 
-  // Scellement NF525 : écrit JournalEntry + FiscalSeal atomiquement dans la chaîne
+  // Scellement NF525 : écrit JournalEntry + FiscalSeal + clôture TicketZ atomiquement.
+  // Le Ticket Z est marqué closed: true dans la MÊME transaction que le sceau — si
+  // le scellement échoue, le ticket reste ouvert (aucune désynchronisation possible).
   const sealResult = await FiscalSealer.sealDataAtomically(
     dataSnapshot,
     tenantId,
     false,
     journalEntryBase,
+    (tx, sealId) => tx.update(ticketPath, {
+      closed: true,
+      closedAt,
+      fiscalSealId: sealId,
+      updatedAt: closedAt,
+    } as Partial<unknown>),
   );
-
-  // Marquer le Ticket Z clôturé (opération séparée — évite les transactions imbriquées)
-  await Nexus.adapter.update(ticketPath, {
-    closed: true,
-    closedAt,
-    fiscalSealId: sealResult.sealId,
-    updatedAt: closedAt,
-  } as unknown as SovereignData);
 
   empireAudit.log({
     module: 'accounting',

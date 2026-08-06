@@ -24,6 +24,20 @@ export class PeriodLockGuardHandler {
     }
   }
 
+  /**
+   * Lève une exception bloquante si la période fiscale contenant `date` est verrouillée.
+   * À appeler avant toute écriture comptable ciblant une date passée (NF525).
+   */
+  static async assertPeriodNotLocked(tenantId: string, date: string): Promise<void> {
+    const isLocked = await this.isPeriodLocked(tenantId, date);
+    if (isLocked) {
+      const periodId = date.substring(0, 7);
+      throw new Error(
+        `[NF525] Période fiscale ${periodId} verrouillée — modification comptable interdite`
+      );
+    }
+  }
+
   static register() {
     return NexusEventBus.on('finance.period_locked', async (payload) => {
       const { tenantId, periodId, lockedBy, lockedAt } = payload;

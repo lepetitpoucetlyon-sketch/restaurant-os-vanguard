@@ -143,7 +143,7 @@ describe('TicketZHandler — closeTicketZForDay', () => {
     expect(FiscalSealer.sealDataAtomically).not.toHaveBeenCalled();
   });
 
-  it('calls sealDataAtomically and marks ticketZ as closed', async () => {
+  it('calls sealDataAtomically and marks ticketZ as closed atomically via additionalMutations', async () => {
     await seed('tenants/t1/ticketZ/2026-01-03', {
       id: '2026-01-03', date: '2026-01-03', tenantId: 't1',
       ordersCount: 10, totalInMicrounits: 50_000_000,
@@ -155,11 +155,22 @@ describe('TicketZHandler — closeTicketZForDay', () => {
     expect(FiscalSealer.generateSequentialReceiptNumber).toHaveBeenCalledWith('t1');
     expect(FiscalSealer.sealDataAtomically).toHaveBeenCalledOnce();
 
-    const updateCall = (Nexus.adapter.update as ReturnType<typeof vi.fn>).mock.calls[0];
-    expect(updateCall[0]).toBe('tenants/t1/ticketZ/2026-01-03');
-    const updatePayload = updateCall[1] as Record<string, unknown>;
-    expect(updatePayload.closed).toBe(true);
-    expect(updatePayload.fiscalSealId).toBe('seal_test_001');
+    // La clôture du TicketZ doit passer par additionalMutations (5e arg), PAS par un
+    // update séparé — c'est le correctif de la race condition NF525.
+    const sealCall = (FiscalSealer.sealDataAtomically as ReturnType<typeof vi.fn>).mock.calls[0];
+    const additionalMutations = sealCall[4] as ((tx: { update: ReturnType<typeof vi.fn> }, sealId: string) => void) | undefined;
+    expect(typeof additionalMutations).toBe('function');
+
+    // Vérifier que le callback écrit bien closed:true avec le bon sealId dans tx.update
+    const mockTx = { update: vi.fn(), set: vi.fn(), get: vi.fn(), delete: vi.fn() };
+    additionalMutations!(mockTx, 'seal_test_001');
+    expect(mockTx.update).toHaveBeenCalledWith(
+      'tenants/t1/ticketZ/2026-01-03',
+      expect.objectContaining({ closed: true, fiscalSealId: 'seal_test_001' })
+    );
+
+    // Aucun update séparé hors transaction (race condition corrigée)
+    expect(Nexus.adapter.update).not.toHaveBeenCalled();
   });
 
   it('writes JournalEntry with correct entryId format (Z_YYYYMMDD)', async () => {

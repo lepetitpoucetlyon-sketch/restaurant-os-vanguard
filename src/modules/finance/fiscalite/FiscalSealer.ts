@@ -4,6 +4,7 @@ import { CryptoService } from '@/lib/CryptoService';
 import { FiscalKeyService } from '@modules/finance/services/FiscalKeyService';
 import type { FiscalSeal } from '@nexus/contracts';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
+import type { INexusTransaction } from '@/lib/nexus/types';
 
 export class FiscalSealer {
   /**
@@ -91,7 +92,8 @@ export class FiscalSealer {
     dataSnapshot: string,
     tenantId: string,
     isTrainingMode: boolean,
-    journalEntry?: Record<string, unknown> & { id: string }
+    journalEntry?: Record<string, unknown> & { id: string },
+    additionalMutations?: (tx: INexusTransaction, sealId: string) => void
   ): Promise<{ hash: string; signature: string; sealId: string; previousHash: string }> {
     const sealId = IdGenerator.generateWithPrefix('seal');
     const sealPath = `tenants/${tenantId}/fiscalSeals/${sealId}`;
@@ -131,6 +133,7 @@ export class FiscalSealer {
              updatedAt: timestamp
            });
         }
+        if (additionalMutations) additionalMutations(tx, sealId);
       });
     } else {
       await Nexus.adapter.runTransaction(async (tx) => {
@@ -157,6 +160,7 @@ export class FiscalSealer {
              updatedAt: timestamp
            });
         }
+        if (additionalMutations) additionalMutations(tx, sealId);
       });
     }
 
