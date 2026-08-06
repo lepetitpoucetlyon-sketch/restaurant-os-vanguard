@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { PiiFields, PiiRecord } from '@/domain/schemas/pii';
+import type { PiiFields, PiiRecord } from '@/domain/schemas';
 
 const ENCODER = new TextEncoder();
 const DECODER = new TextDecoder();

@@ -24,7 +24,7 @@ import {
     TreasurySnapshot,
     FiscalSeal
 } from '../types';
-import type { TreasuryMetrics } from '@/domain/schemas/finance';
+import type { TreasuryMetrics } from '@/modules/finance/domain/schemas/finance';
 import { useBilling } from '../comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 

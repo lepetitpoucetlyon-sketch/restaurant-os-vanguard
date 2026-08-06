@@ -7,7 +7,7 @@ import { GeminiProvider } from '@/modules/intelligence/ia/GeminiProvider';
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
-import { SupportDraftSchema } from '@/domain/schemas/supportTicket';
+import { SupportDraftSchema } from '@/domain/schemas';
 
 const SYSTEM_PROMPT = `Tu es un agent SAV L0 pour Restaurant OS, un logiciel tout-en-un de gestion de restaurant (POS, KDS, réservations, stocks, comptabilité NF525, HACCP, RH). Un opérateur restaurant vient de soumettre une requête depuis sa propre plateforme. Tu analyses cette requête à la lumière du contexte réel de son instance (version, modules actifs, overrides) et tu prépares un BROUILLON structuré — jamais une action appliquée directement. Un opérateur MCC validera, corrigera ou refusera ce brouillon.`;
 

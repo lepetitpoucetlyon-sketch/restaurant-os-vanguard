@@ -6,7 +6,7 @@ import { cn } from '@/lib/ui.foundations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks/useTenant';
 import type { EmployeeDocument } from '@/domain/schemas/employeeDocument';
-import type { License } from '@/domain/schemas/license';
+import type { License } from '@/modules/compliance/domain/schemas/license';
 
 interface ComplianceItem {
     id: string;

@@ -18,7 +18,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
 import { sanitized } from '@/domain/schemas/primitives';
-import type { SupportTicket } from '@/domain/schemas/supportTicket';
+import type { SupportTicket } from '@/domain/schemas';
 import { logger } from '@/lib/logger';
 
 registerSupportTicketAnalysisHandler();

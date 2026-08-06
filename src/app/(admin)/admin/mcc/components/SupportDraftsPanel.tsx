@@ -6,7 +6,7 @@ import { FileEdit, CheckCircle2, XCircle, RefreshCw, ChevronDown, Wand2 } from '
 import { toast } from 'sonner';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import type { SupportTicket, SupportDraft, SupportTicketStatus } from '@/domain/schemas/supportTicket';
+import type { SupportTicket, SupportDraft, SupportTicketStatus } from '@/domain/schemas';
 
 const STATUS_META: Record<SupportTicketStatus, { label: string; color: string }> = {
   new:              { label: 'Nouveau',       color: 'text-text-secondary bg-slate-500/10 border-slate-500/30' },

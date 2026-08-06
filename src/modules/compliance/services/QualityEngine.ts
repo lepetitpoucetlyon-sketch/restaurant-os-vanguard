@@ -17,7 +17,7 @@ import {
     ReceptionSchema, 
     CleaningSchema, 
     WasteSchema 
-} from '@/domain/schemas/haccp';
+} from '@/modules/compliance/domain/schemas/haccp';
 
 /**
  * 🏺 QualityEngine - Restaurant OS Guard

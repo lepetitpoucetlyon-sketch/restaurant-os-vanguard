@@ -19,7 +19,7 @@ export { AuditService, auditService } from './securite/audit/AuditService';
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
 
 // Infrastructure pilier (connectors, services, types)
-export type { PiiRecord } from '@/domain/schemas/pii';
+export type { PiiRecord } from '@/modules/compliance/domain/schemas/pii';
 export { IoTProviderFactory } from './connectors/iot';
 export * from './services';
 

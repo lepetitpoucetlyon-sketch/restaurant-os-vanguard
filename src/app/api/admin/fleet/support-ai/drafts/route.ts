@@ -20,8 +20,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
-import { SupportDraftSchema } from '@/domain/schemas/supportTicket';
-import type { SupportTicket, SupportTicketStatus } from '@/domain/schemas/supportTicket';
+import { SupportDraftSchema } from '@/domain/schemas';
+import type { SupportTicket, SupportTicketStatus } from '@/domain/schemas';
 import { logger } from '@/lib/logger';
 
 const QUEUE_STATUSES: SupportTicketStatus[] = ['new', 'analyzing', 'draft_ready', 'analysis_failed'];

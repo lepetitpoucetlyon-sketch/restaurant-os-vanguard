@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { GiftCardSchema, GiftCardTransactionSchema, type GiftCard, type GiftCardTransaction } from '@/domain/schemas/giftcard';
+import { GiftCardSchema, GiftCardTransactionSchema, type GiftCard, type GiftCardTransaction } from '@/modules/commerce/domain/schemas/giftcard';
 import { toMicrounits, type Microunits } from '@/domain/schemas/primitives';
 
 function generateCode(): string {

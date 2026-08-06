@@ -16,7 +16,7 @@ export interface SovereignProduct extends Product {
     taxRate: TaxRate;
 }
 
-import { CartLineSchema, CartLine, PosTicket, PosTicketSchema } from '@/domain/schemas/pos';
+import { CartLineSchema, CartLine, PosTicket, PosTicketSchema } from '@/modules/ops/domain/schemas/pos';
 export { CartLineSchema, PosTicketSchema };
 export type { CartLine, PosTicket };
 

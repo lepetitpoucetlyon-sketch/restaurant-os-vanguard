@@ -1,11 +1,24 @@
 /**
- * 🏛️ DOMAIN SCHEMAS BARREL - Grade X (Manual Override)
- * Re-exports with explicit disambiguation for colliding symbols.
+ * 🏛️ DOMAIN SCHEMAS BARREL — Grade X
+ * Pass-through vers les piliers. Source of truth dans modules/<pilier>/domain/schemas/.
+ * Re-exports sélectifs uniquement pour éviter les collisions de symboles.
  */
 
-export * from './commerce';
-export * from './compliance.schemas';
-// finance: TaxRate/TaxRateSchema are already exported by primitives — use selective re-export to avoid collision
+// ── Transversaux (restent ici) ───────────────────────────────────────────────
+export * from './primitives';
+export * from './tenant';
+export * from './users';
+export * from './ui';
+export * from './modules';
+
+// ── ops ──────────────────────────────────────────────────────────────────────
+export * from './pos';
+export * from './ops';
+export * from './orders';
+export * from './cash';
+
+// ── finance ──────────────────────────────────────────────────────────────────
+// TaxRate/TaxRateSchema déjà exportés par primitives — export sélectif pour éviter collision
 export {
     JournalEntrySchema, type JournalEntry,
     AccountSchema, type Account,
@@ -16,18 +29,40 @@ export {
     type FinancialMetrics, type AccountingMetrics,
     TreasuryMetricsSchema, type TreasuryMetrics,
     AccountingContextSchema, type AccountingContextData,
-    FiscalSealSchema, type FiscalSeal
+    FiscalSealSchema, type FiscalSeal,
 } from './finance';
-export * from './haccp';
-export * from './hr';
+export * from './periodClosure';
+
+// ── logistics ────────────────────────────────────────────────────────────────
 export * from './inventory';
-export * from './modules';
-export * from './ops';
-export * from './orders';
-export * from './pos';
-export * from './primitives';
-export * from './quality';
 export * from './supplier-invoice.schemas';
-export * from './tenant';
-export * from './ui';
-export * from './users';
+
+// ── compliance ───────────────────────────────────────────────────────────────
+export * from './haccp';
+export * from './quality';
+export * from './compliance.schemas';
+export * from './foodDonation';
+export * from './audit';
+export * from './pii';
+export * from './policy';
+export * from './rbac';
+export * from './license';
+
+// ── human ────────────────────────────────────────────────────────────────────
+export * from './hr';
+// DocumentType collision avec supplier-invoice → alias explicite pour le type RH
+export {
+    DocumentTypeSchema as EmployeeDocumentTypeSchema,
+    EmployeeDocumentSchema,
+    type EmployeeDocument,
+    type DocumentType as EmployeeDocumentType,
+} from './employeeDocument';
+
+// ── commerce ─────────────────────────────────────────────────────────────────
+export * from './commerce';
+export * from './loyalty';
+export * from './giftcard';
+export * from './customerAccount';
+
+// ── intelligence ─────────────────────────────────────────────────────────────
+export * from './supportTicket';

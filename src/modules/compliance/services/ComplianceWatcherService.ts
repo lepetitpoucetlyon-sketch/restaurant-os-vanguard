@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import type { EmployeeDocument } from '@/domain/schemas/employeeDocument';
-import type { License } from '@/domain/schemas/license';
+import type { License } from '@/modules/compliance/domain/schemas/license';
 
 interface RegisterDoc {
   id: string;

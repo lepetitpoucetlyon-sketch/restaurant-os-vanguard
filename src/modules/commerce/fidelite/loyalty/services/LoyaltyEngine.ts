@@ -6,7 +6,7 @@ import {
     type LoyaltyAccount,
     type LoyaltyTransaction,
     type LoyaltyTier,
-} from '@/domain/schemas/loyalty';
+} from '@/modules/commerce/domain/schemas/loyalty';
 import type { Microunits } from '@/domain/schemas/primitives';
 
 function resolveTier(lifetimePoints: number): LoyaltyTier {

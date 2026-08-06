@@ -11,7 +11,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 }));
 
 import { HACCPLogService } from './HACCPLogService';
-import type { SensorReading } from '@/domain/schemas/haccp';
+import type { SensorReading } from '@/modules/compliance/domain/schemas/haccp';
 
 const reading: SensorReading = {
   sensorId: 'frigo-1',
