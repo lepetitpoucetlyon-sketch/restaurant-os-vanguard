@@ -89,3 +89,8 @@
 | audit-360-v2 | Audit 4 axes (archi/sécu/tests/dette) + plan PLAN_AUDIT_FIXES.md — lecture seule + fixes TSC/txMock | 2026-08-06 | terminée |
 | audit-fixes-exec | Exécution PLAN_AUDIT_FIXES.md : P0 (secret hardcodé, IDOR, microunits), P1 (NF525, XSS, SAGA, Resend, tenantId, @ts-ignore), P2 (dead code, eval, InCents, auth, barrels, console.log), P3 (infra doublons, lib rapatriation, barrel violations) | 2026-08-06 | terminée |
 | nf525-remediation | Remédiation NF525 Grade X : FiscalSealer.ts (additionalMutations atomique), TicketZHandler.ts (race condition clôture Z + TVA parseFloat), PeriodLockGuardHandler.ts (assertPeriodNotLocked), TaxCalculator.ts (entiers purs BigInt) | 2026-08-06 | terminée |
+| onboarding-plan | Plan complet onboarding B2B (from-scratch + migration concurrents) — docs/PLAN_ONBOARDING_B2B.md | 2026-08-06 | terminée |
+| onboarding-impl | Implémentation complète onboarding B2B : LLM agnostique, 7 connecteurs, OCR, wizard UI, DNA seeds, rollback, APIs — src/modules/onboarding/, src/modules/intelligence/ia/, src/app/api/tenant/onboarding/, src/shared/seeds/ | 2026-08-06 | terminée |
+| onboarding-finish | S2.4→S7.5 : guides export, tests importers/connecteurs, floor-plan wizard, redirect post-login, bouton aide, E2E, catalogue Metro/Pomona, HACCP historique, archivage coffre | 2026-08-06 | terminée |
+| mcc-sprint-finish | P1 déjà ✅ (TenantSeeder câblé) — P2: AdminLayout roles, fiscal emit, health ping 7j, MCC_DEV_MODE unification, CLI — P3: tests handlers, mock routes, billing plugins, changelog tests | 2026-08-06 | terminée |
+| mcc-debug-env | Debug 404 /admin/mcc → middleware bloquait APP_MODE=tenant ; fix NEXT_PUBLIC_APP_MODE=mcc dans .env.local | 2026-08-06 | terminée |

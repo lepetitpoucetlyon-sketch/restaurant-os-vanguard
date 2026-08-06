@@ -5,6 +5,7 @@ import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import { MCC_DEV_MODE_SERVER } from '@/lib/mcc/devMode';
 
 interface StoredDevice {
     fingerprint: string;
@@ -63,10 +64,9 @@ export async function requireMccLevel(
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) return hiddenDoor();
 
-    // Dev bypass : token spécial accepté uniquement en développement local.
-    // Ne jamais définir NEXT_PUBLIC_MCC_DEV_BYPASS en production.
+    // Dev bypass : activé par MCC_DEV_MODE=true dans .env.local (voir src/lib/mcc/devMode.ts).
     if (
-        process.env.NODE_ENV === 'development' &&
+        MCC_DEV_MODE_SERVER &&
         authHeader === 'Bearer mcc-dev-bypass'
     ) {
         logger.warn('[adminAuth] DEV BYPASS actif — ne pas utiliser en production');

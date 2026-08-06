@@ -5,7 +5,9 @@ import { useAuth } from "@/shared/hooks";
 import { Shield } from "lucide-react";
 import { isMCCMode } from "@/config/instance";
 
-const MCC_ROLES = ["fleet_admin", "SUPER_ADMIN"];
+// Tous les opérateurs MCC ont accès à l'admin layout.
+// Les restrictions par onglet sont appliquées dans chaque composant via currentUser.role.
+const MCC_ROLES = ["fleet_admin", "SUPER_ADMIN", "mcc_support", "mcc_junior_dev"];
 const TENANT_ADMIN_ROLES = ["admin", "manager"];
 const ADMIN_ROLES = isMCCMode() ? MCC_ROLES : [...TENANT_ADMIN_ROLES, ...MCC_ROLES];
 

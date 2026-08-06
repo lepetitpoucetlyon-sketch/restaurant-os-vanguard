@@ -1,4 +1,3 @@
-import 'server-only';
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

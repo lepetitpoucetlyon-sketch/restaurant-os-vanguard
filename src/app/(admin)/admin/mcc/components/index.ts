@@ -10,6 +10,8 @@ export * from './DisasterRecoveryPanel';
 export * from './EventBusHealthPanel';
 export * from './FiscalChainExplorer';
 export * from './FleetCommandTable';
+export * from './HealthHistorySparkline';
+export * from './ManualTestPanel';
 export * from './FleetDeviceInventory';
 export * from './FleetTelemetryPanel';
 export * from './FleetUpgradePanel';

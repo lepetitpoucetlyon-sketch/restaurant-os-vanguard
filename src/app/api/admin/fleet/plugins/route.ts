@@ -5,6 +5,25 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { logger } from '@/lib/logger';
 
+/**
+ * Calcule le prorata en microunits pour un plugin activé/désactivé en cours de cycle.
+ * @param pricePerMonthInMicrounits  Prix mensuel du plugin (0 = gratuit)
+ * @param action                     'activate' | 'deactivate'
+ * @returns montant proratable (positif si activation, négatif si désactivation)
+ */
+function computePluginProrata(
+  pricePerMonthInMicrounits: number,
+  action: 'activate' | 'deactivate',
+): number {
+  if (pricePerMonthInMicrounits <= 0) return 0;
+  const now = new Date();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const remainingDays = daysInMonth - now.getDate() + 1; // inclut aujourd'hui
+  const dailyRate = pricePerMonthInMicrounits / daysInMonth;
+  const amount = Math.round(dailyRate * remainingDays);
+  return action === 'activate' ? amount : -amount;
+}
+
 const PluginPostSchema = z.object({
   tenantId: z.string().min(1),
   pluginId: z.string().min(1),
@@ -70,8 +89,25 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     { merge: true }
   );
 
-  // TODO: Trigger a billing recalculation/proration event here if necessary
-  
+  // Recalcul billing : prorata pour la fin du mois en cours
+  const pluginPrice = (pluginInfo as { pricePerMonthInMicrounits?: number }).pricePerMonthInMicrounits ?? 0;
+  const prorataInMicrounits = computePluginProrata(pluginPrice, 'activate');
+  if (prorataInMicrounits > 0) {
+    await Nexus.adapter.set(
+      `mcc/billingAdjustments/${tenantId}/${pluginId}_${Date.now()}`,
+      {
+        tenantId,
+        pluginId,
+        reason: 'plugin_activation_proration',
+        amountInMicrounits: prorataInMicrounits,
+        appliedAt: new Date().toISOString(),
+        appliedBy: caller.uid,
+        cycleMonth: new Date().toISOString().slice(0, 7),
+      },
+    );
+    logger.info(`[PluginBilling] Prorata activation ${pluginId} sur ${tenantId} : ${prorataInMicrounits}µ`);
+  }
+
   await ChangelogService.record({
     tenantId,
     action: 'PLUGIN_ACTIVATED',
@@ -115,6 +151,27 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     { plugins: { [pluginId]: pluginPayload } },
     { merge: true }
   );
+
+  // Recalcul billing : crédit prorata pour les jours non consommés
+  const catalogOnDel = await Nexus.adapter.get('mcc/empire/plugin-catalog') as { items?: Record<string, unknown> } | null;
+  const pluginInfoOnDel = catalogOnDel?.items?.[pluginId];
+  const priceOnDel = (pluginInfoOnDel as { pricePerMonthInMicrounits?: number } | undefined)?.pricePerMonthInMicrounits ?? 0;
+  const prorataCredit = computePluginProrata(priceOnDel, 'deactivate');
+  if (prorataCredit < 0) {
+    await Nexus.adapter.set(
+      `mcc/billingAdjustments/${tenantId}/${pluginId}_${Date.now()}`,
+      {
+        tenantId,
+        pluginId,
+        reason: 'plugin_deactivation_credit',
+        amountInMicrounits: prorataCredit,
+        appliedAt: new Date().toISOString(),
+        appliedBy: caller.uid,
+        cycleMonth: new Date().toISOString().slice(0, 7),
+      },
+    );
+    logger.info(`[PluginBilling] Crédit désactivation ${pluginId} sur ${tenantId} : ${prorataCredit}µ`);
+  }
 
   await ChangelogService.record({
     tenantId,

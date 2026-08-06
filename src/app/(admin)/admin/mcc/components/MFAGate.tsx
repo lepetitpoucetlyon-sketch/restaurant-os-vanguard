@@ -16,6 +16,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/shared/hooks';
+import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 import { ShieldAlert, ShieldCheck, Copy, Check, Loader2, AlertCircle } from 'lucide-react';
 import {
     isMFAEnrolled,
@@ -34,7 +35,7 @@ interface MFAGateProps {
 
 /** Point d'entrée public — délègue à l'implémentation complète ou au bypass dev */
 export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
-    if (process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true') {
+    if (MCC_DEV_MODE_CLIENT) {
         return <>{children}</>;
     }
     return <MFAGateImpl role={role}>{children}</MFAGateImpl>;

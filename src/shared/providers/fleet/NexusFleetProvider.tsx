@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 "use client";
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
+import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { fleetTelemetry } from './FleetTelemetryService';
@@ -64,7 +65,7 @@ function startAuthAwarePolling(
     if (cancelled) return;
     const unsub = auth.onAuthStateChanged(user => {
       if (cancelled) return;
-      const devBypass = process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true';
+      const devBypass = MCC_DEV_MODE_CLIENT;
       if (user || devBypass) {
         startPolling();
       } else if (intervalId) {

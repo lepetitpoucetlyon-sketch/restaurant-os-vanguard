@@ -1,5 +1,6 @@
 export * from './components';
 export * from './migration';
+export * from './wizard';
 
 export { isMaskedEmail } from './migration';
 export { downloadCSVTemplate } from './migration/csvTemplates';

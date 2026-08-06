@@ -18,6 +18,8 @@ export interface SeedInput {
   adminPin?: string;
   siren?: string;
   primaryColor?: string;
+  /** Nombre de jours d'essai. Si défini et > 0, licenceStatus = 'TRIAL' au lieu de 'ACTIVE'. */
+  trialDays?: number;
 }
 
 /**
@@ -61,7 +63,7 @@ interface SeedResult {
  */
 export const TenantSeeder = {
   async seed(input: SeedInput): Promise<SeedResult> {
-    const { tenantId, name, adminEmail, siren, primaryColor, variant = 'restaurant' } = input;
+    const { tenantId, name, adminEmail, siren, primaryColor, variant = 'restaurant', trialDays } = input;
     const adminPin = resolveAdminPin(input.adminPin, input.adminEmail);
     const seededPaths: string[] = [];
     const baseDNA = resolveDNA(variant);
@@ -101,6 +103,11 @@ export const TenantSeeder = {
         status: {
           ...baseDNA.status,
           updatedAt: Date.now(),
+          ...(trialDays && trialDays > 0 ? {
+            licenceStatus: 'TRIAL' as const,
+            trialEndsAt: new Date(Date.now() + trialDays * 86_400_000).toISOString(),
+            trialDays,
+          } : {}),
         },
       };
       await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, config);

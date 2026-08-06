@@ -42,13 +42,17 @@ export class HotelVertical implements IVerticalPlugin {
       },
     );
 
-    // Ops — check-out → clôture folio + libération chambre
+    // Ops — check-out → clôture folio + libération chambre + audit fiscal si montant anormal
     context.registerEventHandler<{ tenantId: string; reservationId: string; guestId: string; roomId: string; totalInMicrounits: number }>(
       'hotel.guest_checked_out',
       ({ tenantId, reservationId, guestId, roomId, totalInMicrounits }) => {
         HotelFinanceAdapter.emitFolioCharged({ tenantId, guestId, reservationId, amountInMicrounits: totalInMicrounits, description: 'Clôture folio check-out' });
         HotelOpsAdapter.emitRoomStatusChanged({ tenantId, roomId, status: 'DIRTY' });
         HotelHumanAdapter.emitHousekeeperAssigned({ tenantId, employeeId: 'auto', taskId: `clean-${roomId}-${Date.now()}`, roomId });
+        // Audit fiscal si séjour > 10 000 € (seuil anti-blanchiment simplifié)
+        if (totalInMicrounits > 10_000 * 1_000_000) {
+          HotelMccAdapter.emitFiscalAuditRequired({ tenantId, reason: `Séjour ${reservationId} : montant élevé ${(totalInMicrounits / 1_000_000).toFixed(2)} €`, urgency: 'high' });
+        }
       },
     );
 

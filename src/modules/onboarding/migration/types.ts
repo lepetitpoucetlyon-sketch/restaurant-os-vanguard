@@ -10,7 +10,8 @@ export type ImportCategory =
   | 'reservations'
   | 'statements'
   | 'fec'
-  | 'floorplan';
+  | 'floorplan'
+  | 'haccp_history';
 
 export type FileFormat = 'csv' | 'xlsx' | 'pdf' | 'image' | 'json' | 'text' | 'fec';
 
@@ -228,6 +229,21 @@ export const CATEGORY_CONFIGS: Record<ImportCategory, CategoryConfig> = {
       { key: 'capacity', label: 'Capacité (couverts)', required: true },
       { key: 'zone', label: 'Zone / Salle', required: false },
       { key: 'shape', label: 'Forme (round/rect)', required: false },
+    ],
+  },
+  haccp_history: {
+    label: 'Historique HACCP',
+    icon: '🌡️',
+    description: 'Registres températures (CSV logiciel HACCP, Excel, scan papier)',
+    acceptedFormats: ['csv', 'xlsx', 'pdf', 'image'],
+    acceptsPaste: false,
+    targetFields: [
+      { key: 'date', label: 'Date', required: true },
+      { key: 'time', label: 'Heure', required: false },
+      { key: 'zone', label: 'Zone / Équipement', required: true },
+      { key: 'temperature', label: 'Température (°C)', required: true },
+      { key: 'operator', label: 'Opérateur', required: false },
+      { key: 'notes', label: 'Notes / Commentaire', required: false },
     ],
   },
 };

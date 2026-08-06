@@ -2,6 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantID, SiteTelemetry } from '@/domain/types/brands';
 import { TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';
 import { logger } from '@/lib/logger';
+import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 
 interface PerformanceMemory extends Performance {
   memory?: {
@@ -114,7 +115,7 @@ export async function discoverRealFleet(): Promise<SiteTelemetry[]> {
         return results;
     } catch (e) {
         logger.error("[Fleet] Discovery failed", e);
-        if (process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true') {
+        if (MCC_DEV_MODE_CLIENT) {
             return [buildDemoInstance()];
         }
         return [];

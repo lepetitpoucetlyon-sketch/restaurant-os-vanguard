@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
     Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
-    Network
+    Network, BookOpen
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -25,6 +25,7 @@ const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m =>
 const PluginsTab      = dynamic(() => import('./_tabs/PluginsTab').then(m => m.PluginsTab), { loading: () => <MCCWidgetSkeleton /> });
 const EventBusTab     = dynamic(() => import('./_tabs/EventBusTab').then(m => m.EventBusTab), { loading: () => <MCCWidgetSkeleton /> });
 const LifecycleTab    = dynamic(() => import('./_tabs/LifecycleTab').then(m => m.LifecycleTab), { loading: () => <MCCWidgetSkeleton /> });
+const TutorialTab     = dynamic(() => import('./_tabs/TutorialTab').then(m => m.TutorialTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     return (
@@ -47,6 +48,7 @@ function MCCDashboardInner() {
         newCloneEmail, setNewCloneEmail,
         newCloneTier, setNewCloneTier,
         newCloneVariant, setNewCloneVariant,
+        newTrialDays, setNewTrialDays,
         provisioningStatus, provisionStep,
         handleCreateClone,
     } = useMccPage();
@@ -62,6 +64,7 @@ function MCCDashboardInner() {
         { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
         { id: 'eventbus',     label: t.tabs.eventbus,     icon: <Activity className="w-4 h-4" /> },
         { id: 'lifecycle',    label: t.tabs.lifecycle,    icon: <Network className="w-4 h-4" /> },
+        { id: 'tutorial',     label: 'CLI & Guide',        icon: <BookOpen className="w-4 h-4" /> },
     ] as const;
 
     return (
@@ -150,6 +153,11 @@ function MCCDashboardInner() {
                                         <LifecycleTab />
                                     </motion.div>
                                 )}
+                                {activeTab === 'tutorial' && (
+                                    <motion.div key="tutorial" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <TutorialTab />
+                                    </motion.div>
+                                )}
                             </AnimatePresence>
                         </div>
 
@@ -228,6 +236,35 @@ function MCCDashboardInner() {
                                                     );
                                                 })}
                                             </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Période d&apos;essai</label>
+                                            <div className="flex gap-2">
+                                                {([7, 14, 30] as const).map(days => (
+                                                    <button key={days} type="button" onClick={() => setNewTrialDays(days)}
+                                                        className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${newTrialDays === days ? 'bg-action-primary/10 border-focus/50 text-brand' : 'bg-surface-bg border-subtle text-secondary hover:border-border-subtle'}`}>
+                                                        {days}j
+                                                    </button>
+                                                ))}
+                                                <div className="flex-1 relative">
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        max={365}
+                                                        value={![7, 14, 30].includes(newTrialDays) ? newTrialDays : ''}
+                                                        placeholder="Jours"
+                                                        onChange={e => {
+                                                            const v = parseInt(e.target.value, 10);
+                                                            if (!isNaN(v) && v > 0) setNewTrialDays(v);
+                                                        }}
+                                                        onFocus={() => { if ([7, 14, 30].includes(newTrialDays)) setNewTrialDays(0); }}
+                                                        className={`w-full py-2.5 px-3 rounded-xl text-[10px] font-black text-center transition-all border bg-surface-bg focus:outline-none ${![7, 14, 30].includes(newTrialDays) && newTrialDays > 0 ? 'border-focus/50 text-brand' : 'border-subtle text-secondary'}`}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <p className="text-[9px] text-muted mt-1.5 ml-1">
+                                                {newTrialDays > 0 ? `Expire le ${new Date(Date.now() + newTrialDays * 86_400_000).toLocaleDateString('fr-FR')} — paiement requis ensuite` : 'Compte actif immédiatement'}
+                                            </p>
                                         </div>
                                         <div className="p-4 bg-action-primary/5 border border-focus/10 rounded-2xl flex items-center gap-3">
                                             <Lock className="w-5 h-5 text-brand shrink-0" />

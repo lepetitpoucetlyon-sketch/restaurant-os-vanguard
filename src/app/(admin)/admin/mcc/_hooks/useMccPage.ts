@@ -24,7 +24,7 @@ export function useMccPage() {
     const router       = useRouter();
     const pathname     = usePathname();
 
-    const VALID_TABS = ['fleet', 'compliance', 'intelligence', 'treasury', 'patchcenter', 'plugins', 'eventbus', 'lifecycle'] as const;
+    const VALID_TABS = ['fleet', 'compliance', 'intelligence', 'treasury', 'patchcenter', 'plugins', 'eventbus', 'lifecycle', 'tutorial'] as const;
     type TabId = typeof VALID_TABS[number];
     const rawTab    = searchParams.get('tab') ?? '';
     const initialTab: TabId = (VALID_TABS as readonly string[]).includes(rawTab) ? rawTab as TabId : 'fleet';
@@ -44,6 +44,7 @@ export function useMccPage() {
     const [newCloneEmail, setNewCloneEmail] = useState('');
     const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
     const [newCloneVariant, setNewCloneVariant] = useState<PlatformVariant>('restaurant');
+    const [newTrialDays, setNewTrialDays] = useState<number>(14);
     const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
     const [provisionStep, setProvisionStep] = useState(0);
 
@@ -82,6 +83,7 @@ export function useMccPage() {
                 tier: newCloneTier,
                 variant: newCloneVariant,
                 copyBaseTemplates: true,
+                trialDays: newTrialDays > 0 ? newTrialDays : undefined,
             });
 
             timers.forEach(clearTimeout);
@@ -96,6 +98,7 @@ export function useMccPage() {
                 setNewCloneKey('');
                 setNewCloneEmail('');
                 setNewCloneTier('STANDARD');
+                setNewTrialDays(14);
             }, 2500);
         } catch {
             timers.forEach(clearTimeout);
@@ -113,6 +116,7 @@ export function useMccPage() {
         newCloneEmail, setNewCloneEmail,
         newCloneTier, setNewCloneTier,
         newCloneVariant, setNewCloneVariant,
+        newTrialDays, setNewTrialDays,
         provisioningStatus, provisionStep,
         handleCreateClone,
     };

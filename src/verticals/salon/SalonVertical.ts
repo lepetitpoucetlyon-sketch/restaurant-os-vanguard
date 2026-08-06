@@ -73,10 +73,13 @@ export class SalonVertical implements IVerticalPlugin {
       },
     );
 
-    // Finance — bilan Z
+    // Finance — bilan Z + audit fiscal (caisse salon = NF525)
     context.registerEventHandler<{ tenantId: string; operatorId: string; requestedAt: string }>(
       'finance.z_report_requested',
-      (payload) => SalonFinanceAdapter.emitZReportRequested(payload),
+      (payload) => {
+        SalonFinanceAdapter.emitZReportRequested(payload);
+        SalonMccAdapter.emitFiscalAuditRequired({ tenantId: payload.tenantId, reason: `Clôture Z salon demandée par ${payload.operatorId}`, urgency: 'low' });
+      },
     );
 
     // MCC — health ping

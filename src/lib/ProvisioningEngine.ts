@@ -20,7 +20,9 @@ export const ProvisioningEngine = {
      */
     async provisionNewInstance(dna: ProvisioningDNA): Promise<EmpireInstance> {
         logger.info('ProvisioningEngine: Initializing new Registry entry', { instanceKey: dna.key });
-        
+
+        let registeredInstanceId: string | null = null;
+
         empireAudit.log({
             module: 'system',
             action: 'REGISTRATION_STARTED',
@@ -83,6 +85,8 @@ export const ProvisioningEngine = {
                 }
             };
 
+            registeredInstanceId = newInstance.id;
+
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
             await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@domain/types/brands').TenantID, {
@@ -108,6 +112,7 @@ export const ProvisioningEngine = {
                     adminEmail: dna.ownerEmail,
                     variant: dna.variant ?? 'restaurant',
                     primaryColor: dna.initialPrimaryColor,
+                    trialDays: dna.trialDays,
                 });
                 if (!seedResult.success) {
                     logger.warn('ProvisioningEngine: TenantSeeder partial failure', { error: seedResult.error });
@@ -180,6 +185,13 @@ export const ProvisioningEngine = {
             await Promise.allSettled([
                 Nexus.adapter.delete(`tenants/${dna.key}/tenantConfig`).catch(() => {}),
                 Nexus.adapter.delete(`tenants/${dna.key}/users/admin_${dna.key}`).catch(() => {}),
+                // Marquer l'entrée fleet comme FAILED (évite les ghost entries ONLINE)
+                registeredInstanceId
+                    ? fleetTelemetry.pushSiteTelemetry(
+                        registeredInstanceId as import('@domain/types/brands').TenantID,
+                        { status: 'PROVISIONING_FAILED' }
+                      ).catch(() => {})
+                    : Promise.resolve(),
             ]);
 
             empireAudit.log({

@@ -5,5 +5,8 @@ export { AIProviderRouter, aiRouter } from './AIProviderRouter';
 export { AgentEngine } from './AgentEngine';
 export { HermesEngine } from './HermesEngine';
 export * from './types';
-// AI_MODELS vit dans GeminiProvider (pas dans l'interface) — compat backward
-export { AI_MODELS, GEMINI_MODELS } from '../GeminiProvider';
+export { AnthropicProvider } from './AnthropicProvider';
+export { OpenAIProvider } from './OpenAIProvider';
+export { createLLMProvider, AI_MODELS, resolveModelId } from './LLMProviderFactory';
+// Compat backward — le code qui importe AI_MODELS depuis GeminiProvider reste fonctionnel
+export { GEMINI_MODELS } from '../GeminiProvider';

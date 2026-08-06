@@ -78,10 +78,13 @@ export class RetailVertical implements IVerticalPlugin {
       (payload) => RetailCommerceAdapter.emitPromotionActivated(payload),
     );
 
-    // Finance — bilan Z
+    // Finance — bilan Z + audit fiscal si clôture de caisse (NF525)
     context.registerEventHandler<{ tenantId: string; operatorId: string; requestedAt: string }>(
       'finance.z_report_requested',
-      (payload) => RetailFinanceAdapter.emitZReportRequested(payload),
+      (payload) => {
+        RetailFinanceAdapter.emitZReportRequested(payload);
+        RetailMccAdapter.emitFiscalAuditRequired({ tenantId: payload.tenantId, reason: `Clôture Z demandée par ${payload.operatorId} — vérification NF525`, urgency: 'low' });
+      },
     );
 
     // MCC — health ping

@@ -23,16 +23,17 @@ const IMPORT_CATEGORIES: ImportCategory[] = [
 ];
 
 const ORDER_LABELS: Record<ImportCategory, string> = {
-  floorplan:    '1. Plan de salle',
-  menu:         '2. Menu / Carte',
-  staff:        '3. Équipe',
-  suppliers:    '4. Fournisseurs',
-  inventory:    '5. Stocks',
-  recipes:      '6. Recettes',
-  crm:          '7. Clients',
-  reservations: '8. Réservations passées',
-  statements:   '9. Relevés bancaires',
-  fec:          '10. FEC historique',
+  floorplan:     '1. Plan de salle',
+  menu:          '2. Menu / Carte',
+  staff:         '3. Équipe',
+  suppliers:     '4. Fournisseurs',
+  inventory:     '5. Stocks',
+  recipes:       '6. Recettes',
+  crm:           '7. Clients',
+  reservations:  '8. Réservations passées',
+  statements:    '9. Relevés bancaires',
+  fec:           '10. FEC historique',
+  haccp_history: '11. Historique HACCP',
 };
 
 export default function MigrationSettings() {

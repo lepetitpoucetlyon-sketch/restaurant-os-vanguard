@@ -1,6 +1,7 @@
 'use client';
 
 import { auth } from '@/lib/firebase';
+import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 
 /**
  * fetch() authentifié pour les routes /api/admin.
@@ -13,8 +14,7 @@ export async function authedFetch(input: RequestInfo | URL, init: RequestInit = 
   const user = auth.currentUser;
 
   if (!user) {
-    // Bypass dev : activé uniquement si NEXT_PUBLIC_MCC_DEV_BYPASS=true en .env.local
-    if (process.env.NEXT_PUBLIC_MCC_DEV_BYPASS === 'true') {
+    if (MCC_DEV_MODE_CLIENT) {
       const headers = new Headers(init.headers);
       headers.set('Authorization', 'Bearer mcc-dev-bypass');
       return fetch(input, { ...init, headers });

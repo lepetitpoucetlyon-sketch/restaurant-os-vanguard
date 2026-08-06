@@ -65,7 +65,7 @@ export class AutoVertical implements IVerticalPlugin {
       },
     );
 
-    // Finance — facture émise → satisfaction client
+    // Finance — facture émise → satisfaction client + audit fiscal si montant élevé
     context.registerEventHandler<{ tenantId: string; workOrderId: string; customerId: string; totalInMicrounits: number; laborInMicrounits: number; partsInMicrounits: number }>(
       'auto.invoice_issued',
       ({ tenantId, workOrderId, customerId, totalInMicrounits }) => {
@@ -77,6 +77,10 @@ export class AutoVertical implements IVerticalPlugin {
           revenueInMicrounits: totalInMicrounits,
         });
         AutoCommerceAdapter.emitCustomerSatisfactionLogged({ tenantId, workOrderId, customerId, score: 0 });
+        // Audit fiscal si facture > 5 000 € (seuil garage NF525 caisse)
+        if (totalInMicrounits > 5_000 * 1_000_000) {
+          AutoMccAdapter.emitFiscalAuditRequired({ tenantId, reason: `Facture atelier ${workOrderId} : ${(totalInMicrounits / 1_000_000).toFixed(2)} € — vérification NF525`, urgency: 'high' });
+        }
       },
     );
 

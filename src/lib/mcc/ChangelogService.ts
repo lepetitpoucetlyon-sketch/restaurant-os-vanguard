@@ -1,4 +1,3 @@
-import 'server-only';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type ChangeCategory =

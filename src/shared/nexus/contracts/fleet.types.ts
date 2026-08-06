@@ -9,7 +9,7 @@ export interface EmpireInstance extends SovereignNode {
     id: string;
     key: string;
     name: string;
-    status: 'PROVISIONING' | 'ONLINE' | 'OFFLINE' | 'MAINTENANCE' | 'LOCKED' | 'CRITICAL';
+    status: 'PROVISIONING' | 'ONLINE' | 'OFFLINE' | 'MAINTENANCE' | 'LOCKED' | 'CRITICAL' | 'PROVISIONING_FAILED';
     tier: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     version: string;
     createdAt: string;
@@ -135,7 +135,7 @@ export interface SiteTelemetry {
     id: string;
     key: string;
     name: string;
-    status:  'CRITICAL' | 'PROVISIONING' | 'ONLINE' | 'OFFLINE' | 'MAINTENANCE' | 'LOCKED';
+    status:  'CRITICAL' | 'PROVISIONING' | 'ONLINE' | 'OFFLINE' | 'MAINTENANCE' | 'LOCKED' | 'PROVISIONING_FAILED';
     tier: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     version: string;
     createdAt: string;
@@ -170,4 +170,6 @@ export interface ProvisioningDNA {
     initialPrimaryColor?: string;
     tier?: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     copyBaseTemplates?: boolean;
+    /** Nombre de jours d'essai. 0 ou absent = compte ACTIVE immédiatement. */
+    trialDays?: number;
 }
