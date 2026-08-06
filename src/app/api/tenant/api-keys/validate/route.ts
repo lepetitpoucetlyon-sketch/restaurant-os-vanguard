@@ -34,7 +34,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const tokenString = body.key.startsWith('ros_') ? body.key.slice(4) : body.key;
   let tenantId: string;
   try {
-    const secret = process.env.INTERNAL_API_SECRET ?? 'fallback-secret-for-dev';
+    const secret = process.env.INTERNAL_API_SECRET;
+    if (!secret) {
+      logger.error('[api-keys/validate] INTERNAL_API_SECRET non configuré — refus de validation');
+      return NextResponse.json({ error: 'Configuration serveur manquante' }, { status: 500 });
+    }
     const decoded = jwt.verify(tokenString, secret) as { tenantId: string };
     if (!decoded.tenantId) throw new Error('No tenantId in JWT');
     tenantId = decoded.tenantId;

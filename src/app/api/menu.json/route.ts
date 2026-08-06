@@ -33,9 +33,19 @@ export async function GET(req: NextRequest) {
 
     const { Nexus } = await import('@/lib/nexus/NexusAdapter');
 
-    const context = tenantId
-      ? { vassalId: tenantId, actorId: 'menu-api' }
-      : undefined;
+    if (!tenantId) {
+      return NextResponse.json({ error: 'tenantId requis' }, { status: 400 });
+    }
+
+    const context = { vassalId: tenantId, actorId: 'menu-api' };
+
+    // Guard IDOR : seuls les tenants ayant activé le menu public sont accessibles
+    const publicConfig = await Nexus.adapter
+      .get<{ publicMenuEnabled?: boolean }>(`tenants/${tenantId}/config/public`, context)
+      .catch(() => null);
+    if (!publicConfig?.publicMenuEnabled) {
+      return NextResponse.json({ error: 'Menu non disponible' }, { status: 403 });
+    }
 
     let degraded = false;
     const [categories, products] = await Promise.all([

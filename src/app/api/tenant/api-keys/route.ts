@@ -19,7 +19,8 @@ interface StoredApiKey {
 }
 
 function generateApiKey(tenantId: string): string {
-  const secret = process.env.INTERNAL_API_SECRET ?? 'fallback-secret-for-dev';
+  const secret = process.env.INTERNAL_API_SECRET;
+  if (!secret) throw new Error('INTERNAL_API_SECRET non configuré');
   const token = jwt.sign({ tenantId }, secret);
   return `ros_${token}`;
 }

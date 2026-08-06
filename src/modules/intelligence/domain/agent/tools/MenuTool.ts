@@ -8,7 +8,7 @@ import { ToolDefinition } from './types';
 export const UpdateMenuSchema = z.object({
     tenantId: z.string().min(1),
     productName: z.string().min(1, "Le nom du produit est requis."),
-    newPriceInCents: z.number().int().nonnegative().optional(),
+    newPriceInMicrounits: z.number().int().nonnegative().optional(),
     newDescription: z.string().optional()
 });
 
@@ -26,7 +26,7 @@ export const MenuTool: ToolDefinition<UpdateMenuArgs> = {
         properties: {
             tenantId: { type: "string", description: "ID de l'établissement" },
             productName: { type: "string", description: "Le nom exact du produit à modifier." },
-            newPriceInCents: { type: "number", description: "Le nouveau prix en centimes (ex: 1550 pour 15.50€)." },
+            newPriceInMicrounits: { type: "number", description: "Le nouveau prix en microunits (ex: 15500000 pour 15.50€ ; 1 microunit = 0,000001€)." },
             newDescription: { type: "string", description: "La nouvelle description du produit." }
         },
         required: ["tenantId", "productName"]
@@ -47,10 +47,10 @@ export const MenuTool: ToolDefinition<UpdateMenuArgs> = {
 
             const productName = args.productName;
             const newDescription = args.newDescription;
-            const newPrice = args.newPriceInCents;
+            const newPrice = args.newPriceInMicrounits;
 
             const resourcePath = `tenants/${args.tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}`;
-            
+
             // 🏛️ SUTURE: Querying through Nexus Adapter
             const results = await Nexus.adapter.query<SovereignData>(resourcePath, {
                 where: [{ field: 'name', operator: '==', value: productName }]
@@ -62,7 +62,7 @@ export const MenuTool: ToolDefinition<UpdateMenuArgs> = {
 
             const product = results[0];
             const updates: SovereignData = {};
-            if (newPrice !== undefined) updates.priceInCents = newPrice;
+            if (newPrice !== undefined) updates.priceInMicrounits = newPrice;
             if (newDescription !== undefined) updates.description = newDescription;
             updates.updatedAt = new Date().toISOString();
 
