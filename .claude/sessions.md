@@ -86,3 +86,4 @@
 | s8-s10-finish | S8 SAGA tests 562/562 ✓ — S10 : cross-cutting services → src/lib/ (CryptoService, IdentityManager, AmbianceService, BrandingService, SettingsManager, AccessPolicyManager, ProvisioningEngine, MaintenanceAgent, GenomeValidator, TenantSeeder) + ProductAvailabilityService → modules/logistics/ | 2026-08-05 | terminée |
 | s10-etape2-3 | Verticals 8-pilier adapters (restaurant/hotel/health/auto) + MCC câblage (health ping + fiscal audit handlers) — src/verticals/*/adapters/, src/shared/eventBus/ | 2026-08-06 | terminée |
 | cleanup-final | RBAC 3 gaps (boot/ICoreContext/provisioning) + SAGA coverage 124 handlers — src/shared/providers/hooks/useNexusTenantLogic.ts, src/shared/plugins/, src/lib/ProvisioningEngine.ts, src/__tests__/handlers/ | 2026-08-06 | terminée |
+| audit-360-v2 | Audit 4 axes (archi/sécu/tests/dette) + plan PLAN_AUDIT_FIXES.md — lecture seule + fixes TSC/txMock | 2026-08-06 | terminée |
