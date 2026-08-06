@@ -11,6 +11,7 @@ const txMock = {
   get: vi.fn(),
   set: vi.fn(),
   update: vi.fn(),
+  delete: vi.fn(),
 };
 
 vi.mock('@/lib/nexus/NexusAdapter', () => ({
