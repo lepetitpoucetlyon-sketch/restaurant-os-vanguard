@@ -1,0 +1,1 @@
+export { SalonStatCard } from './SalonStatCard';

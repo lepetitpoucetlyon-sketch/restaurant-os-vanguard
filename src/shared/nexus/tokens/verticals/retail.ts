@@ -8,10 +8,17 @@ export const retailDefaultTokens: Partial<BrandConfig> = {
   borderRadiusBtn:  'sm',
   glassBlur:        'none',
   glassOpacity:     'low',
+  // brand = Poppins (moderne, commerce) | ui = Poppins (même police, dedup automatique) | mono = JetBrains Mono (codes-barres)
   fontBrand:        'Poppins',
   fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
-  fontUI:           'Inter',
+  fontUI:           'Poppins',
+  fontUIUrl:        'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
+  // dedup : fontUIUrl === fontBrandUrl → BrandingProvider n'injecte qu'un seul <link>
+  fontMono:         'JetBrains Mono',
+  fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };
+
+export const retailDefaultAppearance = 'light' as const;
 
 export const retailVerticalTokens: Record<string, string> = {
   '--stock-normal':            '#10b981',

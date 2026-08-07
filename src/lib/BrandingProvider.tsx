@@ -1,14 +1,16 @@
 // src/infrastructure/components/BrandingProvider.tsx
 'use client';
 
-import { useEffect } from 'react';
-import { useAtomValue } from 'jotai';
+import { useEffect, useRef } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
-import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS } from '@/shared/nexus/tokens/verticals';
+import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@/shared/nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
+import { themeModeAtom } from '@/shared/nexus/tokens/themeAtoms';
+import type { PlatformVariant } from '@/domain/schemas/tenant';
 
 function getContrastTextColor(hexColor: string): string {
   const clean = hexColor.replace('#', '');
@@ -43,25 +45,44 @@ function applyTokenToCSS(root: HTMLElement, token: string | undefined, varName: 
     if (token && map[token]) root.style.setProperty(varName, map[token]);
 }
 
+function injectGoogleFont(url: string, slot: 'brand' | 'ui' | 'mono') {
+    const attr = `data-font-${slot}`;
+    const existing = document.querySelector<HTMLLinkElement>(`link[${attr}]`);
+    if (existing) {
+        if (existing.href !== url) existing.href = url;
+    } else {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = url;
+        link.setAttribute(attr, 'true');
+        document.head.appendChild(link);
+    }
+}
+
 function applyFonts(root: HTMLElement, brandTokens: BrandTokens) {
-    if (brandTokens.fontBrand) {
-        root.style.setProperty('--font-brand', `'${brandTokens.fontBrand}', Georgia, serif`);
-        // Remplacer la précédente font de marque si le variant a changé
-        const existing = document.querySelector<HTMLLinkElement>('link[data-brand-font]');
-        if (brandTokens.fontBrandUrl) {
-            if (existing) {
-                existing.href = brandTokens.fontBrandUrl;
-            } else {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = brandTokens.fontBrandUrl;
-                link.setAttribute('data-brand-font', 'true');
-                document.head.appendChild(link);
-            }
+    const { fontBrand, fontBrandUrl, fontUI, fontUIUrl, fontMono, fontMonoUrl } = brandTokens;
+
+    // ── font-brand ──────────────────────────────────────────────────────────
+    if (fontBrand) {
+        root.style.setProperty('--font-brand', `'${fontBrand}', Georgia, serif`);
+        if (fontBrandUrl) injectGoogleFont(fontBrandUrl, 'brand');
+    }
+
+    // ── font-ui (dedup : si identique à fontBrand, pas de second <link>) ───
+    if (fontUI) {
+        root.style.setProperty('--font-ui', `'${fontUI}', Inter, system-ui, sans-serif`);
+        if (fontUIUrl && fontUIUrl !== fontBrandUrl) {
+            injectGoogleFont(fontUIUrl, 'ui');
+        } else if (!fontUIUrl) {
+            // Font système ou Inter (déjà présente) — retirer le lien précédent si inutile
+            document.querySelector('link[data-font-ui]')?.remove();
         }
     }
-    if (brandTokens.fontUI) {
-        root.style.setProperty('--font-ui', `'${brandTokens.fontUI}', Inter, sans-serif`);
+
+    // ── font-mono ───────────────────────────────────────────────────────────
+    if (fontMono) {
+        root.style.setProperty('--font-mono', `'${fontMono}', 'Courier New', monospace`);
+        if (fontMonoUrl) injectGoogleFont(fontMonoUrl, 'mono');
     }
 }
 
@@ -81,11 +102,33 @@ export function BrandingProvider() {
   const tenantId       = useAtomValue(tenantIdAtom);
   const rawBrandTokens = useAtomValue(tenantBrandTokensAtom);
   const variant        = useAtomValue(tenantVariantAtom);
+  const setThemeMode   = useSetAtom(themeModeAtom);
+  const prevVariantRef = useRef<PlatformVariant | null>(null);
 
   useFirestoreBrand(tenantId || "");
 
   useEffect(() => {
     const root = document.documentElement;
+
+    // ── Gap B : cleanup des extra tokens de l'ancien vertical ────────────────
+    const prevVariant = prevVariantRef.current;
+    if (prevVariant && prevVariant !== variant) {
+      const prevExtra = VERTICAL_EXTRA_TOKENS[prevVariant] ?? {};
+      Object.keys(prevExtra).forEach(key => root.style.removeProperty(key));
+    }
+    prevVariantRef.current = variant;
+
+    // ── Gap A : init ThemeMode si tenant vierge ───────────────────────────────
+    // tenantScopedJSONStorage utilise la clé `nexus_theme_mode` suffixée par tenantId.
+    // Si aucune préférence n'est stockée pour ce tenant, on applique l'appearance du vertical.
+    if (tenantId && typeof window !== 'undefined') {
+      const scopedKey = `nexus_theme_mode:${tenantId}`;
+      const hasUserPref = localStorage.getItem(scopedKey) !== null;
+      const verticalAppearance = VERTICAL_APPEARANCE[variant] ?? 'dark';
+      if (!hasUserPref && verticalAppearance !== 'auto') {
+        setThemeMode(verticalAppearance);
+      }
+    }
 
     // 1. Tokens du variant (base de chaque vertical)
     const verticalDefaults = VERTICAL_DEFAULT_TOKENS[variant] ?? VERTICAL_DEFAULT_TOKENS.restaurant;

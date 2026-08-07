@@ -1080,3 +1080,37 @@ div[class*="DevOverlay_"] {
 body>[data-nextjs-toast-wrapper] {
   display: none !important;
 }
+/* ── VERTICAL SCOPES — overrides visuels par [data-vertical] ────────────── */
+/* Ces règles s'appliquent sur :root (global) grâce au data-attribute injecté
+   par BrandingProvider. Elles sont des surcharges légères — les tokens Firestore
+   du tenant (via BrandingProvider) ont la priorité via style inline.
+   Pour les scopes par route, voir VerticalUIProvider (data-vertical-scope).     */
+
+/* Garage : géométrie industrielle */
+[data-vertical="garage"] {
+  --radius-card:        0.25rem;
+  --radius-btn:         0.25rem;
+}
+
+/* Salon : rondeur maximale, glow doux */
+[data-vertical="salon"] {
+  --shadow-glow-accent: 0 0 30px 8px rgba(212, 165, 199, 0.2);
+}
+
+/* Clinic : densité compacte, pas de glassmorphism */
+[data-vertical="clinic"] {
+  --glass-blur:    0px;
+  --glass-opacity: 0;
+  --radius-btn:    0.25rem;
+}
+
+/* Retail : pas de glass, lumineux */
+[data-vertical="retail"] {
+  --glass-blur:    0px;
+  --glass-opacity: 0;
+}
+
+/* Kiosk mode — fullscreen, typo large */
+[data-vertical][data-layout="kiosk"] {
+  font-size: 1.125rem;
+}

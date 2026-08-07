@@ -1,8 +1,9 @@
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
- 
 import { LLMManager } from '@/modules/intelligence';
+import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
+import type { PlatformVariant } from '@/domain/schemas/tenant';
 
 /**
  * BRANDING SERVICE (Phase 33 - Nexus Industrialization)
@@ -77,21 +78,30 @@ export const BrandingService = {
     /**
      * Nexus Theme Generator
      * Maps Brand Input into professional Theme Design Tokens.
+     * Seeds defaults from the vertical token palette — never falls back to restaurant gold for non-restaurant tenants.
      */
-    generateThemeFromBrand: (input: BrandInput): ThemeSettings => {
-        const primary = input.primaryColor || "#C5A059";
+    generateThemeFromBrand: (input: BrandInput, variant: PlatformVariant = 'restaurant'): ThemeSettings => {
+        const verticalDefaults = VERTICAL_DEFAULT_TOKENS[variant];
+        const primary = input.primaryColor ?? verticalDefaults.primaryColor ?? '#6366f1';
+        const font    = verticalDefaults.fontUI ?? 'Geist Sans';
+        const fontBrand = verticalDefaults.fontBrand;
+
+        const isSerif = !!fontBrand && /playfair|merriweather|garamond|lora|cormorant/i.test(fontBrand);
+        const headingFont = (
+            isSerif || input.atmosphere === 'luxury' || input.atmosphere === 'bistro'
+        ) ? 'serif' : font;
 
         return {
             mode: 'dark',
             primaryColor: primary,
-            secondaryColor: primary,
+            secondaryColor: verticalDefaults.accentColor ?? primary,
             backgroundColor: '#0A0A0A',
             textColor: '#FFFFFF',
-            fontPrimary: 'Geist Sans',
-            fontHeadings: input.atmosphere === 'luxury' || input.atmosphere === 'bistro' ? 'serif' : 'Geist Sans',
+            fontPrimary: font,
+            fontHeadings: headingFont,
             borderRadius: 'large',
             buttonStyle: 'flat',
-            animationsEnabled: true
+            animationsEnabled: true,
         };
     }
 };

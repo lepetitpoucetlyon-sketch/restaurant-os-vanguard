@@ -8,10 +8,16 @@ export const salonDefaultTokens: Partial<BrandConfig> = {
   borderRadiusBtn:  'lg',
   glassBlur:        'lg',
   glassOpacity:     'medium',
+  // brand = Cormorant Garamond (élégant, titres) | ui = DM Sans (clean, moderne) | mono = DM Mono (codes RDV)
   fontBrand:        'Cormorant Garamond',
-  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&display=swap',
-  fontUI:           'Inter',
+  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap',
+  fontUI:           'DM Sans',
+  fontUIUrl:        'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap',
+  fontMono:         'DM Mono',
+  fontMonoUrl:      'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap',
 };
+
+export const salonDefaultAppearance = 'light' as const;
 
 export const salonVerticalTokens: Record<string, string> = {
   '--appointment-booked':       '#D4A5C7',

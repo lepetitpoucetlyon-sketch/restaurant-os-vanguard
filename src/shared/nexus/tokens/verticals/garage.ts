@@ -8,10 +8,16 @@ export const garageDefaultTokens: Partial<BrandConfig> = {
   borderRadiusBtn:  'sm',
   glassBlur:        'none',
   glassOpacity:     'low',
+  // brand = Rajdhani (technique, impact) | ui = Barlow (industriel, lisible) | mono = Roboto Mono (codes OBD/VIN)
   fontBrand:        'Rajdhani',
   fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap',
-  fontUI:           'Inter',
+  fontUI:           'Barlow',
+  fontUIUrl:        'https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap',
+  fontMono:         'Roboto Mono',
+  fontMonoUrl:      'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap',
 };
+
+export const garageDefaultAppearance = 'dark' as const;
 
 export const garageVerticalTokens: Record<string, string> = {
   '--repair-pending':          '#f59e0b',

@@ -8,10 +8,15 @@ export const hotelDefaultTokens: Partial<BrandConfig> = {
   borderRadiusBtn:  'sm',
   glassBlur:        'sm',
   glassOpacity:     'high',
+  // brand = Cormorant Garamond (luxe, titres) | ui = Inter (système) | mono = JetBrains Mono (factures)
   fontBrand:        'Cormorant Garamond',
-  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&display=swap',
+  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap',
   fontUI:           'Inter',
+  fontMono:         'JetBrains Mono',
+  fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };
+
+export const hotelDefaultAppearance = 'dark' as const;
 
 export const hotelVerticalTokens: Record<string, string> = {
   '--room-available':        '#10b981',

@@ -8,10 +8,16 @@ export const restaurantDefaultTokens: Partial<BrandConfig> = {
   borderRadiusBtn:  'md',
   glassBlur:        'md',
   glassOpacity:     'high',
+  // brand = Playfair Display (titres, KPI) | ui = Inter (système, pas d'URL) | mono = JetBrains Mono (tickets)
   fontBrand:        'Playfair Display',
-  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap',
+  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap',
   fontUI:           'Inter',
+  // pas de fontUIUrl : Inter est une police système (chargée via next/font ou présente nativement)
+  fontMono:         'JetBrains Mono',
+  fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };
+
+export const restaurantDefaultAppearance = 'dark' as const;
 
 export const restaurantVerticalTokens: Record<string, string> = {
   '--table-available':       '#e5e7eb',

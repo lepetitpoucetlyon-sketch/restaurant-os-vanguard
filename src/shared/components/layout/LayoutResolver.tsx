@@ -15,15 +15,24 @@ import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
+import { tenantVariantAtom } from '@/store/pillars/sovereign';
+import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 
 /**
  * 🌀 LayoutResolver
  * Grade VIII Morphic Engine.
  * Decides the UI shell based on the Suzerain's signal.
+ *
+ * Priorité : tenant.status.layoutType (explicite) → IVerticalUIPlugin.preferredLayout → 'default'
  */
 export function LayoutResolver({ children }: { children: React.ReactNode }) {
-    const config = useAtomValue(tenantConfigAtom);
-    const layout = (config as { status?: { layoutType?: string } })?.status?.layoutType || 'default';
+    const config  = useAtomValue(tenantConfigAtom);
+    const variant = useAtomValue(tenantVariantAtom);
+
+    // Fallback vertical : si le tenant n'a pas de layoutType explicite, on lit le préféré du vertical
+    const plugin         = VerticalUIRegistry.resolve(variant);
+    const tenantLayout   = (config as { status?: { layoutType?: string } })?.status?.layoutType;
+    const layout         = tenantLayout ?? plugin?.preferredLayout ?? 'default';
     const capabilities = (config as { capabilities?: Record<string, boolean> })?.capabilities;
     const { isLaunchpadOpen, setIsLaunchpadOpen } = useUI();
 

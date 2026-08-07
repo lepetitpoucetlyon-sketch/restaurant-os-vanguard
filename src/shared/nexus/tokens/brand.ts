@@ -30,10 +30,16 @@ export const BrandTokensSchema = z.object({
   surfaceCard:      hexColor.optional(),
   surfaceBg:        hexColor.optional(),
 
-  // Typographie (Google Fonts compatibles)
-  fontBrand:        z.string().max(100).optional(), 
-  fontBrandUrl:     z.string().url().optional(),    
+  // Typographie — 3 rôles distincts (Google Fonts compatibles)
+  // fontBrand  → --font-brand : titres, KPI, valeurs grandes (StatCard), headers premium
+  // fontUI     → --font-ui    : corps, labels, boutons, navigation, descriptions
+  // fontMono   → --font-mono  : tickets de caisse, codes produit, JournalEntry, timestamps KDS
+  fontBrand:        z.string().max(100).optional(),
+  fontBrandUrl:     z.string().url().optional(),
   fontUI:           z.string().max(100).optional(),
+  fontUIUrl:        z.string().url().optional(),
+  fontMono:         z.string().max(100).optional(),
+  fontMonoUrl:      z.string().url().optional(),
 
   // Assets (URLs Firebase Storage / CDN)
   logoUrl:          z.string().url().nullable().optional(),

@@ -24,6 +24,7 @@ import { TrainingOverlay } from "@components/layout/TrainingOverlay";
 import { SovereignLockout } from "@components/layout/SovereignLockout";
 import { BrandingProvider } from "@/lib/BrandingProvider";
 import { SplashGate } from "@/shared/providers/SplashGate";
+import { VerticalUIProvider } from "@/shared/providers/VerticalUIProvider";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
 import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";
 
@@ -42,6 +43,8 @@ export function NexusProviderStack({ children }: { children: React.ReactNode }) 
                     <NexusGuardProvider>
                         <NexusFleetProvider>
                         <AuthGate>
+                            {/* VerticalUIProvider : après AuthGate (variant résolu), avant les composants UI */}
+                            <VerticalUIProvider>
                             <SaaSBillingGate>
                             <ComplianceGate>
                                 <AlertSync />
@@ -56,6 +59,7 @@ export function NexusProviderStack({ children }: { children: React.ReactNode }) 
                                 </ClientComponents>
                             </ComplianceGate>
                             </SaaSBillingGate>
+                            </VerticalUIProvider>
                         </AuthGate>
                         </NexusFleetProvider>
                     </NexusGuardProvider>
