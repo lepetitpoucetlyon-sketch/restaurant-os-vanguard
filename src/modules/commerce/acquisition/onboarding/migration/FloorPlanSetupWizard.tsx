@@ -11,19 +11,9 @@ import { Plus, Trash2, ChevronRight, ChevronLeft, Save, Loader2, Check } from 'l
 import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
+import { BatchTableForm, nextKey, SHAPE_LABELS, type TableShape, type WizardTable } from './floor-plan/BatchTableForm';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-type TableShape = 'rect' | 'circle';
-
-interface WizardTable {
-  /** Clé temporaire pour le rendering */
-  _key: string;
-  zone: string;
-  number: string;
-  seats: number;
-  shape: TableShape;
-}
 
 type WizardStep = 'zones' | 'tables' | 'preview';
 
@@ -32,97 +22,7 @@ type WizardStep = 'zones' | 'tables' | 'preview';
 const AVAILABLE_ZONES = ['Salle', 'Terrasse', 'Bar', 'Salon privé'] as const;
 type ZoneName = (typeof AVAILABLE_ZONES)[number];
 
-const SHAPE_LABELS: Record<TableShape, string> = {
-  rect: 'Rectangulaire',
-  circle: 'Ronde',
-};
-
-let _keyCounter = 0;
-function nextKey() {
-  return `wt-${++_keyCounter}`;
-}
-
 // ── Sub-components ────────────────────────────────────────────────────────────
-
-interface BatchFormProps {
-  zone: string;
-  onAdd: (tables: WizardTable[]) => void;
-}
-
-function BatchTableForm({ zone, onAdd }: BatchFormProps) {
-  const [from, setFrom] = useState(1);
-  const [to, setTo] = useState(10);
-  const [seats, setSeats] = useState(4);
-  const [shape, setShape] = useState<TableShape>('rect');
-
-  function handleGenerate() {
-    if (from > to) { toast.error('Le numéro de début doit être ≤ au numéro de fin.'); return; }
-    if (to - from > 99) { toast.error('Maximum 100 tables à la fois.'); return; }
-    const tables: WizardTable[] = [];
-    for (let n = from; n <= to; n++) {
-      tables.push({ _key: nextKey(), zone, number: String(n), seats, shape });
-    }
-    onAdd(tables);
-    toast.success(`${tables.length} table(s) ajoutée(s) à la zone "${zone}".`);
-  }
-
-  return (
-    <div className="rounded-lg border border-border bg-bg-tertiary p-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-widest text-text-muted">Ajout en lot — {zone}</p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <label className="space-y-1">
-          <span className="text-xs text-text-muted">De (numéro)</span>
-          <input
-            type="number"
-            min={1}
-            value={from}
-            onChange={e => setFrom(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-          />
-        </label>
-        <label className="space-y-1">
-          <span className="text-xs text-text-muted">À (numéro)</span>
-          <input
-            type="number"
-            min={1}
-            value={to}
-            onChange={e => setTo(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-          />
-        </label>
-        <label className="space-y-1">
-          <span className="text-xs text-text-muted">Capacité</span>
-          <input
-            type="number"
-            min={1}
-            max={50}
-            value={seats}
-            onChange={e => setSeats(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-          />
-        </label>
-        <label className="space-y-1">
-          <span className="text-xs text-text-muted">Forme</span>
-          <select
-            value={shape}
-            onChange={e => setShape(e.target.value as TableShape)}
-            className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-          >
-            <option value="rect">Rectangulaire</option>
-            <option value="circle">Ronde</option>
-          </select>
-        </label>
-      </div>
-      <button
-        onClick={handleGenerate}
-        className="flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-text-primary hover:opacity-90 transition-opacity"
-      >
-        <Plus className="w-4 h-4" />
-        Générer {to >= from ? to - from + 1 : 0} table(s)
-      </button>
-    </div>
-  );
-}
 
 interface SingleTableFormProps {
   zone: string;

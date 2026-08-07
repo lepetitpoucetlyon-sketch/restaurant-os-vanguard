@@ -1,6 +1,6 @@
 export type StorageQueryOperator = 
   | '==' | '!=' | '<' | '<=' | '>' | '>=' 
-  | 'array-contains' | 'array-contains-unknown' 
+  | 'array-contains' | 'array-contains-unknown' | 'contains'
   | 'in' | 'not-in';
 
 export interface QueryFilter {
@@ -15,6 +15,8 @@ export interface IQueryOptions {
   where?: QueryFilter[];
   startAfter?: unknown;
   endBefore?: unknown;
+  cursorAfter?: string;
+  cursorBefore?: string;
 }
 
 export interface IBatchProcessor {

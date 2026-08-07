@@ -12,16 +12,15 @@ let totalReplacements = 0;
 
 for (const sourceFile of project.getSourceFiles()) {
     const filePath = sourceFile.getFilePath();
-    if (filePath.includes('.test.') || filePath.includes('__tests__') || filePath.includes('.spec.')) continue;
+    if (filePath.includes('.test.') || filePath.includes('__tests__') || filePath.includes('.spec.') || filePath.includes('toError')) continue;
 
     let text = sourceFile.getFullText();
-
-    // Match String(err), String(error), String(e), String(_err), String(_error), String(_e)
     const pattern = /\bString\(\s*(_?err|_?error|_?e)\s*\)/g;
 
-    if (pattern.test(text)) {
-        text = text.replace(pattern, 'toError($1).message');
-        sourceFile.replaceWithText(text);
+    const newText = text.replace(pattern, 'toError($1).message');
+
+    if (newText !== text) {
+        sourceFile.replaceWithText(newText);
 
         const existingImport = sourceFile.getImportDeclaration(i => i.getModuleSpecifierValue() === '@/lib/toError');
         if (!existingImport) {
@@ -33,9 +32,8 @@ for (const sourceFile of project.getSourceFiles()) {
 
         sourceFile.saveSync();
         modifiedCount++;
-        const matches = text.match(pattern);
-        totalReplacements += matches ? matches.length : 1;
+        totalReplacements++;
     }
 }
 
-console.log(`String(err) Refactoring Complete: ${totalReplacements} replacements across ${modifiedCount} files.`);
+console.log(`String(err) Refactoring Complete: ${totalReplacements} files updated with toError.`);

@@ -54,36 +54,15 @@ const FORMULE_LABELS: Record<PrivatisationFormule, string> = {
   buffet: 'Buffet libre (self-service)',
 };
 
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
-function formatEuros(amount: number): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-  }).format(amount);
-}
-
-function padZero(n: number): string {
-  return n < 10 ? `0${n}` : String(n);
-}
-
-function todayISO(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${padZero(d.getMonth() + 1)}-${padZero(d.getDate())}`;
-}
-
-function generateRef(): string {
-  return `PRIV-${new Date().getFullYear()}-${crypto.randomUUID().split('-')[0].toUpperCase()}`;
-}
+import {
+  formatDate,
+  formatEuros,
+  padZero,
+  todayISO,
+  generateRef,
+  drawHeaderBanner,
+  drawBox,
+} from './pdf/pdfLayoutHelpers';
 
 // ---------------------------------------------------------------------------
 // Génération du PDF

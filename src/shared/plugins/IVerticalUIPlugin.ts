@@ -12,7 +12,8 @@ export type OverrideableComponent =
   | 'ContentSection'
   | 'SectionHeader'
   | 'LoadingState'
-  | 'StatusBadge';
+  | 'StatusBadge'
+  | 'SupportHelpWidget';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ComponentOverrides = Partial<Record<OverrideableComponent, React.ComponentType<any>>>;

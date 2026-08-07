@@ -1,22 +1,16 @@
 import { logger } from '@/lib/logger';
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { getAuth } from 'firebase-admin/auth';
-import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import Stripe from 'stripe';
-import { Resend } from 'resend';
 import { TenantSeeder } from '@/lib/TenantSeeder';
-import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/domain/schemas/rbac';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import type { PlatformVariant } from '@/domain/schemas/tenant';
-import type { TenantID } from '@domain/types/brands';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { toError } from "@/lib/toError";
+import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';
 
 export interface ProvisioningRequest {
     ownerEmail: string;
@@ -137,87 +131,10 @@ export class TenantProvisioningService {
                 splashEnabled: false,
             }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', toError(err).message));
 
-            // ── 6. Stripe customer ────────────────────────────────────────────────
-            const stripeKey = process.env.STRIPE_SECRET_KEY;
-            let stripeCustomerId: string;
-            if (stripeKey) {
-                const stripe   = new Stripe(stripeKey, { apiVersion: '2026-06-24.dahlia' });
-                const customer = await stripe.customers.create({
-                    email:    request.ownerEmail,
-                    name:     request.companyName,
-                    metadata: { tenantId },
-                });
-                stripeCustomerId = customer.id;
-                await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
-                    stripeCustomerId,
-                }, { merge: true });
-                logger.info(`[MCC/prov] Stripe customer créé: ${stripeCustomerId}`);
-            } else {
-                stripeCustomerId = `cus_mock_${Date.now()}`;
-                logger.warn('[MCC/prov] STRIPE_SECRET_KEY absent — customer mocké');
-            }
-
-            // ── 7. Fleet telemetry ────────────────────────────────────────────────
-            // Permet au MCC de voir ce tenant dans le dashboard Fleet.
-            try {
-                await fleetTelemetry.pushSiteTelemetry(tenantId as TenantID, {
-                    id:            tenantId,
-                    key:           tenantId,
-                    name:          request.companyName.toUpperCase(),
-                    status:        'ONLINE',
-                    tier:          request.planId,
-                    version:       '4.5.0-b2b',
-                    createdAt:     new Date().toISOString(),
-                    updatedAt:     new Date().toISOString(),
-                    lastHeartbeat: new Date().toISOString(),
-                    activeUsers:   0,
-                    healthScore:   100,
-                    complianceScore: 100,
-                    lowStockAlerts:  0,
-                    dailyRevenue:    0,
-                });
-                logger.info('[MCC/prov] Fleet telemetry enregistrée', { tenantId });
-            } catch (fleetErr) {
-                logger.warn('[MCC/prov] Fleet telemetry ignorée', { tenantId, error: String(fleetErr) });
-            }
-
-            // ── 8. RAG workspace sovereign ────────────────────────────────────────
-            try {
-                await sovereignCreateWorkspace(tenantId, request.companyName);
-                logger.info(`[MCC/prov] RAG workspace initialisé: ${ragWorkspaceId}`);
-            } catch {
-                logger.warn(`[MCC/prov] LightRAG indisponible — workspace ${ragWorkspaceId} en attente`);
-            }
-
-            // ── 9. DNS sous-domaine ───────────────────────────────────────────────
-            const slug = request.companyName
-                .toLowerCase()
-                .replace(/[^a-z0-9]/g, '-')
-                .replace(/-+/g, '-')
-                .slice(0, 40);
-            try {
-                const dnsRes = await fetch(
-                    `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/api/admin/fleet/dns`,
-                    {
-                        method:  'POST',
-                        headers: {
-                            'Content-Type':   'application/json',
-                            'x-mcc-internal': process.env.INTERNAL_API_SECRET ?? '',
-                        },
-                        body: JSON.stringify({ tenantId, slug }),
-                    }
-                );
-                if (dnsRes.ok) {
-                    const dns = await dnsRes.json() as { domain: string; provider: string };
-                    logger.info(`[MCC/prov] DNS provisionné: ${dns.domain} via ${dns.provider}`);
-                }
-            } catch {
-                logger.warn('[MCC/prov] DNS provisioning ignoré (non bloquant)');
-            }
-
-            // ── 10. Firebase Auth owner + PIN email ───────────────────────────────
-            const tempPin = await this.createRootAdmin(tenantId, ownerId, request.ownerEmail);
-            await this.sendAdminPinEmail(request.ownerEmail, request.companyName, tempPin);
+            const stripeCustomerId = await setupStripeCustomer(tenantId, request);
+            await setupFleetTelemetry(tenantId, request);
+            await setupRAGWorkspace(tenantId, ragWorkspaceId, request.companyName);
+            await setupOwnerAccount(tenantId, ownerId, request);
 
             logger.info(`[MCC/prov] ✅ Provisioning B2B terminé: ${tenantId}`);
 
@@ -338,93 +255,13 @@ export class TenantProvisioningService {
         const variant = request.variant ?? 'restaurant';
         const ragWorkspaceId = `rag_workspace_${tenantId}`;
 
-        // Stripe customer
-        let stripeCustomerId = '';
-        const stripeKey = process.env.STRIPE_SECRET_KEY;
-        if (stripeKey) {
-            const stripe = new Stripe(stripeKey);
-            const customer = await stripe.customers.create({
-                email: request.ownerEmail,
-                name:  request.companyName,
-                metadata: { tenantId, siret: request.siret },
-            });
-            stripeCustomerId = customer.id;
-            await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
-                billing: { stripeCustomerId, plan: request.planId, status: 'ACTIVE' },
-            }, { merge: true });
-        }
-
-        // Fleet telemetry
-        await fleetTelemetry.registerNode(tenantId as import('@domain/types/brands').TenantID);
-
-        // RAG workspace
-        await sovereignCreateWorkspace(ragWorkspaceId, tenantId).catch(
-            e => logger.warn('[MCC/prov] RAG workspace:', toError(e).message)
-        );
-
-        // Firebase Auth + PIN email
-        const pin = await TenantProvisioningService.createRootAdmin(tenantId, ownerId, request.ownerEmail);
-        await TenantProvisioningService.sendAdminPinEmail(request.ownerEmail, request.companyName, pin);
+        // Steps from sub-module
+        const stripeCustomerId = await setupStripeCustomer(tenantId, request);
+        await setupFleetTelemetry(tenantId, request);
+        await setupRAGWorkspace(tenantId, ragWorkspaceId, request.companyName);
+        await setupOwnerAccount(tenantId, ownerId, request);
 
         return { tenantId, ownerId, stripeCustomerId, ragWorkspaceId, status: 'SUCCESS' };
-    }
-
-    private static async createRootAdmin(tenantId: string, ownerId: string, email: string): Promise<string> {
-        logger.info(`[MCC/prov] Création accès owner Firebase pour ${email}`);
-        initFirebaseAdmin();
-        const firebaseAuth = getAuth();
-
-        let uid: string;
-        try {
-            const existing = await firebaseAuth.getUserByEmail(email);
-            uid = existing.uid;
-        } catch {
-            const created = await firebaseAuth.createUser({
-                email,
-                displayName: ownerId,
-                emailVerified: false,
-            });
-            uid = created.uid;
-        }
-
-        await firebaseAuth.setCustomUserClaims(uid, { tenantId, role: 'OWNER' });
-
-        const rawDigits = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join('');
-        const salt      = crypto.randomUUID();
-        const hashed    = await hashPin(rawDigits, salt);
-
-        await Nexus.adapter.set(`tenants/${tenantId}/users/${ownerId}`, {
-            id:            ownerId,
-            uid,
-            email,
-            role:          'OWNER',
-            pin:           hashed,
-            pinSalt:       salt,
-            status:        'active',
-            schemaVersion: 2,
-        });
-
-        logger.info(`[MCC/prov] Owner créé — uid=${uid} tenantId=${tenantId}`);
-        return rawDigits;
-    }
-
-    private static async sendAdminPinEmail(email: string, companyName: string, pin: string): Promise<void> {
-        const resendKey = process.env.RESEND_API_KEY;
-        const from      = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
-        if (!resendKey) {
-            logger.warn(`[MCC/prov] RESEND_API_KEY absent — PIN ${pin} non envoyé à ${email}`);
-            return;
-        }
-        const resend = new Resend(resendKey);
-        await resend.emails.send({
-            from, to: email,
-            subject: `[Restaurant OS] Votre accès — ${companyName}`,
-            html: `<p>Bienvenue sur Restaurant OS !</p>
-<p>Votre instance <strong>${companyName}</strong> est prête. Votre PIN administrateur temporaire :</p>
-<h2 style="font-family:monospace;letter-spacing:0.4em;font-size:32px;">${pin}</h2>
-<p>Connectez-vous et modifiez ce PIN dès votre première connexion.</p>
-<p style="color:#888;font-size:11px;">Restaurant OS — ne partagez pas ce PIN.</p>`,
-        }).catch(e => logger.warn('[MCC/prov] email error:', toError(e).message));
     }
 }
 

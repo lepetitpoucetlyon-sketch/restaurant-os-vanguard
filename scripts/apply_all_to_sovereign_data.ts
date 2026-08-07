@@ -12,34 +12,33 @@ let totalReplacements = 0;
 
 for (const sourceFile of project.getSourceFiles()) {
     const filePath = sourceFile.getFilePath();
-    if (filePath.includes('.test.') || filePath.includes('__tests__') || filePath.includes('.spec.') || filePath.includes('toSovereignData')) continue;
+    if (filePath.includes('.test.') || filePath.includes('__tests__') || filePath.includes('.spec.') || filePath.endsWith('toSovereignData.ts')) continue;
 
     let text = sourceFile.getFullText();
 
-    // Patterns for SovereignData double cast:
-    // `as unknown as SovereignData`
-    // `as unknown as import('@/shared/nexus-contract').SovereignData`
-    const pattern = /as\s+unknown\s+as\s+(?:import\(['"]@\/shared\/nexus-contract['"]\)\.)?SovereignData\b/g;
+    // Matching patterns like: `expr as unknown as import('@/shared/nexus-contract').SovereignData`
+    // or `expr as unknown as SovereignData`
+    const regex = /([a-zA-Z0-9_.\{\}\(\)\$\s]+?)\s+as\s+unknown\s+as\s+(?:import\(['"]@\/shared\/nexus-contract['"]\)\.)?SovereignData\b/g;
 
-    if (pattern.test(text)) {
-        // We replace `(expr) as unknown as SovereignData` with `toSovereignData(expr)` or `expr as SovereignData` if it's already an object
-        // To be 100% type safe and avoid syntax errors with expressions, `toSovereignData(expr as any)` or `toSovereignData(expr)` works.
-        // Actually, replacing `as unknown as SovereignData` with `as SovereignData` or using `toSovereignData`
-        text = text.replace(/as\s+unknown\s+as\s+(?:import\(['"]@\/shared\/nexus-contract['"]\)\.)?SovereignData\b/g, 'as SovereignData');
+    if (regex.test(text)) {
+        text = text.replace(regex, (match, expr) => {
+            totalReplacements++;
+            return `toSovereignData(${expr.trim()})`;
+        });
+
         sourceFile.replaceWithText(text);
 
-        const existingImport = sourceFile.getImportDeclaration(i => i.getModuleSpecifierValue() === '@/shared/nexus-contract');
-        if (!existingImport && !text.includes('SovereignData')) {
+        const existingImport = sourceFile.getImportDeclaration(i => i.getModuleSpecifierValue() === '@/lib/toSovereignData');
+        if (!existingImport) {
             sourceFile.addImportDeclaration({
-                namedImports: [{ name: 'SovereignData' }],
-                moduleSpecifier: '@/shared/nexus-contract'
+                namedImports: [{ name: 'toSovereignData' }],
+                moduleSpecifier: '@/lib/toSovereignData'
             });
         }
 
         sourceFile.saveSync();
         modifiedCount++;
-        totalReplacements++;
     }
 }
 
-console.log(`SovereignData Double-Cast Cleanup Complete: ${modifiedCount} files updated (intermediate 'unknown' eliminated).`);
+console.log(`SovereignData Helper Generalization: ${modifiedCount} files updated, ${totalReplacements} double casts eliminated.`);

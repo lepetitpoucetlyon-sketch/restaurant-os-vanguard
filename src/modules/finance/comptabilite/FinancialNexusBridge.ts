@@ -29,107 +29,13 @@ export interface BridgeResult {
   seal: FiscalSeal;
 }
 
-const PCG_PAYMENT_ACCOUNTS: Record<PaymentMode, { code: string; name: string }> = {
-  cash:         { code: '531000', name: 'Caisse' },
-  card:         { code: '512000', name: 'Banque (CB)' },
-  check:        { code: '511200', name: 'Chèques à encaisser' },
-  ticket_resto: { code: '511500', name: 'Titres-restaurant à encaisser' },
-  transfer:     { code: '512000', name: 'Banque (virement)' },
-  comp:         { code: '658000', name: 'Charges diverses (Offerts)' },
-};
-
-const microToCents = (mu: number): number => Math.round(mu / 10_000);
-
-function computeTtcByRateAndAxis(
-  items: (CartItem & { taxRate: string; analyticalAxis: string })[]
-): Record<string, { ttcMu: number; tvaMu: number }> {
-  const result: Record<string, { ttcMu: number; tvaMu: number }> = {};
-  for (const item of items) {
-    const key = `${item.taxRate}_${item.analyticalAxis}`;
-    const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-    const rateNum = parseFloat(String(item.taxRate ?? '0.10'));
-    const lineTVA = lineTTC - Math.round(lineTTC / (1 + rateNum));
-
-    if (!result[key]) {
-      result[key] = { ttcMu: 0, tvaMu: 0 };
-    }
-    result[key].ttcMu += lineTTC;
-    result[key].tvaMu += lineTVA;
-  }
-  return result;
-}
-
-function makeLine(
-  accountCode: string,
-  accountName: string,
-  side: 'debit' | 'credit',
-  cents: number,
-  description: string,
-  pieceNumber: string,
-  now: string,
-  analyticalAxis?: string,
-): JournalLine {
-  return {
-    accountId: accountCode,
-    accountCode,
-    accountName,
-    description,
-    side,
-    amountInCents: cents,
-    amountInMicrounits: cents * 10_000,
-    date: now,
-    pieceNumber,
-    debitInCents: side === 'debit' ? cents : 0,
-    debitInMicrounits: side === 'debit' ? cents * 10_000 : 0,
-    creditInCents: side === 'credit' ? cents : 0,
-    creditInMicrounits: side === 'credit' ? cents * 10_000 : 0,
-    runningBalanceInCents: 0,
-    runningBalanceInMicrounits: 0,
-    ...(analyticalAxis ? { analyticalAxis } : {}),
-  };
-}
-
-function buildJournalLines(
-  ttcByRateAndAxis: Record<string, { ttcMu: number; tvaMu: number }>,
-  payload: BridgePayload,
-  pieceNumber: string,
-  now: string
-): JournalLine[] {
-  const credits: JournalLine[] = [];
-  let totalCreditCents = 0;
-
-  for (const [key, totals] of Object.entries(ttcByRateAndAxis)) {
-    const [rate, axis] = key.split('_');
-    const htCents = microToCents(totals.ttcMu - totals.tvaMu);
-    const tvaCents = microToCents(totals.tvaMu);
-    const ratePct = (parseFloat(rate) * 100).toFixed(1);
-
-    if (htCents > 0) {
-      credits.push(makeLine('701000', 'Ventes de marchandises', 'credit', htCents, `Ventes HT (TVA ${ratePct}%)`, pieceNumber, now, axis));
-      totalCreditCents += htCents;
-    }
-    if (tvaCents > 0) {
-      credits.push(makeLine('445710', 'TVA collectée', 'credit', tvaCents, `TVA collectée ${ratePct}%`, pieceNumber, now));
-      totalCreditCents += tvaCents;
-    }
-  }
-
-  const debits: JournalLine[] = [];
-  const paymentMode = payload.paymentMode ?? 'card';
-  const payAcct = PCG_PAYMENT_ACCOUNTS[paymentMode] ?? PCG_PAYMENT_ACCOUNTS.card;
-
-  if (payload.partialPayments && payload.partialPayments.length > 0) {
-    for (const p of payload.partialPayments) {
-      const pm = (p.method as PaymentMode) || 'card';
-      const acct = PCG_PAYMENT_ACCOUNTS[pm] ?? PCG_PAYMENT_ACCOUNTS.card;
-      const amtCents = microToCents(p.amount);
-      debits.push(makeLine(acct.code, acct.name, 'debit', amtCents, `Encaissement split ${acct.name} (Guest ${p.guest})`, pieceNumber, now));
-    }
-  } else {
-    debits.push(makeLine(payAcct.code, payAcct.name, 'debit', totalCreditCents, paymentMode === 'comp' ? 'Repas offert (Comp)' : `Encaissement ${payAcct.name}`, pieceNumber, now));
-  }
-  return [...debits, ...credits];
-}
+import {
+  PCG_PAYMENT_ACCOUNTS,
+  microToCents,
+  computeTtcByRateAndAxis,
+  makeLine,
+  buildJournalLines,
+} from './FinancialJournalBuilder';
 
 function emitPaymentEvents(
   entryId: string,
