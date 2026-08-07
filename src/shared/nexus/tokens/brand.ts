@@ -59,6 +59,13 @@ export const BrandTokensSchema = z.object({
   glassBlur:        z.enum(['none', 'sm', 'md', 'lg']).optional(),
   glassOpacity:     z.enum(['low', 'medium', 'high']).optional(),
 
+  // Mode de branding & Splash
+  // 'default' = Restaurant OS branding (gold/dark) — aucun override visuel
+  // 'custom'  = charte graphique propre au tenant (logo + couleurs)
+  brandingMode:     z.enum(['default', 'custom']).default('default'),
+  // Afficher un écran de démarrage branded (logo + fond couleur charte) à chaque ouverture d'app
+  splashEnabled:    z.boolean().default(false),
+
   // Timestamps
   createdAt:        z.string().optional(),
   updatedAt:        z.string().optional(),
@@ -69,9 +76,11 @@ export type BrandConfig = z.infer<typeof BrandTokensSchema>;
 
 // Tokens par défaut — Restaurant OS Vanguard Branding
 export const defaultBrandTokens: BrandConfig = {
-  tenantId:     'nexus_core',
-  brandName:    'Restaurant OS',
-  primaryColor: '#C5A059', // Vanguard Gold
-  logoUrl:      null,
-  faviconUrl:   null,
+  tenantId:      'nexus_core',
+  brandName:     'Restaurant OS',
+  primaryColor:  '#C5A059', // Vanguard Gold
+  logoUrl:       null,
+  faviconUrl:    null,
+  brandingMode:  'default',
+  splashEnabled: false,
 };

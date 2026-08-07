@@ -1,19 +1,26 @@
 /**
- * mcc-deploy-adv-1 — White-Label Branding Injector
+ * White-Label Branding Injector
  *
- * Injecte les variables CSS d'un tenant (primaryColor, logo, displayName)
- * dans tenantConfig.branding lors du provisioning.
- * Lues côté client par BrandingProvider pour personnaliser l'UI.
+ * Persiste la charte graphique d'un tenant via Nexus (DB-agnostique).
+ * Lue côté client par BrandingProvider → CSS custom properties.
+ *
+ * Deux modes :
+ *  - 'default'  : branding Restaurant OS (gold/dark) — aucune surcharge visuelle
+ *  - 'custom'   : charte propre (logo, couleurs, splash)
  */
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export interface TenantBranding {
+    /** 'default' = Restaurant OS branding. 'custom' = charte propre. */
+    mode: 'default' | 'custom';
     primaryColor: string;
     accentColor?: string;
-    logoUrl?: string;
+    logoUrl?: string | null;
     displayName?: string;
+    /** Activer le splash screen branded à l'ouverture de l'app. */
+    splashEnabled?: boolean;
 }
 
 function colorToRgb(hex: string): string {
@@ -24,26 +31,34 @@ function colorToRgb(hex: string): string {
     return `${r} ${g} ${b}`;
 }
 
+/**
+ * Écrit la charte graphique dans tenantConfig via Nexus.
+ * Appelé une fois au provisioning, puis à chaque mise à jour depuis les settings.
+ */
 export async function injectBrandingVars(tenantId: string, branding: TenantBranding): Promise<void> {
-    const { primaryColor, accentColor, logoUrl, displayName } = branding;
+    const { mode, primaryColor, accentColor, logoUrl, displayName, splashEnabled } = branding;
 
-    const cssVars: Record<string, string> = {
-        '--tenant-primary':       primaryColor,
-        '--tenant-primary-rgb':   colorToRgb(primaryColor),
-        '--tenant-accent':        accentColor ?? primaryColor,
-        '--tenant-accent-rgb':    colorToRgb(accentColor ?? primaryColor),
-    };
+    // En mode 'default', on persiste quand même le mode pour que le client le lise.
+    // Les CSS vars ne sont pas surchargées (BrandingProvider ignore si mode=default).
+    const cssVars: Record<string, string> = mode === 'custom' ? {
+        '--tenant-primary':     primaryColor,
+        '--tenant-primary-rgb': colorToRgb(primaryColor),
+        '--tenant-accent':      accentColor ?? primaryColor,
+        '--tenant-accent-rgb':  colorToRgb(accentColor ?? primaryColor),
+    } : {};
 
     await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
         branding: {
+            mode,
             primaryColor,
-            accentColor: accentColor ?? primaryColor,
-            logoUrl: logoUrl ?? null,
-            displayName: displayName ?? null,
+            accentColor:    accentColor ?? primaryColor,
+            logoUrl:        logoUrl ?? null,
+            displayName:    displayName ?? null,
+            splashEnabled:  splashEnabled ?? false,
             cssVars,
-            injectedAt: new Date().toISOString(),
+            injectedAt:     new Date().toISOString(),
         },
     }, { merge: true });
 
-    logger.info(`[BrandingInjector] CSS vars injectés pour tenant ${tenantId}`, { primaryColor });
+    logger.info(`[BrandingInjector] Charte persistée pour tenant ${tenantId}`, { mode, primaryColor, splashEnabled });
 }

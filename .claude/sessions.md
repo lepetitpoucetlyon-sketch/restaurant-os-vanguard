@@ -91,6 +91,7 @@
 | connector-auto-activate | src/lib/TenantSeeder.ts, src/shared/eventBus/NexusEventBus.ts | 2026-08-06 | terminée |
 | connector-api-routes | src/lib/server/credentialCipher.ts, src/app/api/connectors/[id]/* | 2026-08-06 | terminée |
 | connector-ui | src/app/(client)/(ops)/integrations/, src/modules/intelligence/connectors/hub/components/, navConfig.ts | 2026-08-06 | terminée |
+| branding-splash | BrandTokensSchema (splashEnabled/brandingMode), ProvisioningDNA, MCC modal branding, SplashScreen, SplashGate, lastPath tracking | 2026-08-07 | active |
 | audit-fixes-exec | Exécution PLAN_AUDIT_FIXES.md : P0 (secret hardcodé, IDOR, microunits), P1 (NF525, XSS, SAGA, Resend, tenantId, @ts-ignore), P2 (dead code, eval, InCents, auth, barrels, console.log), P3 (infra doublons, lib rapatriation, barrel violations) | 2026-08-06 | terminée |
 | nf525-remediation | Remédiation NF525 Grade X : FiscalSealer.ts (additionalMutations atomique), TicketZHandler.ts (race condition clôture Z + TVA parseFloat), PeriodLockGuardHandler.ts (assertPeriodNotLocked), TaxCalculator.ts (entiers purs BigInt) | 2026-08-06 | terminée |
 | onboarding-plan | Plan complet onboarding B2B (from-scratch + migration concurrents) — docs/PLAN_ONBOARDING_B2B.md | 2026-08-06 | terminée |

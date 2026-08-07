@@ -172,4 +172,15 @@ export interface ProvisioningDNA {
     copyBaseTemplates?: boolean;
     /** Nombre de jours d'essai. 0 ou absent = compte ACTIVE immédiatement. */
     trialDays?: number;
+    /** Charte graphique personnalisée du tenant */
+    branding?: {
+        /** 'default' = branding Restaurant OS (gold/dark). 'custom' = charte propre. */
+        mode: 'default' | 'custom';
+        /** URL du logo hébergé (Firebase Storage ou CDN). Null = icône générée. */
+        logoUrl?: string | null;
+        /** Couleur principale (hex). Écrase initialPrimaryColor si custom. */
+        accentColor?: string;
+        /** Afficher un splash screen branded à chaque ouverture. */
+        splashEnabled?: boolean;
+    };
 }

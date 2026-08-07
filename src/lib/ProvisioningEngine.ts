@@ -148,10 +148,16 @@ export const ProvisioningEngine = {
                 });
             }
 
-            // 5bis. mcc-deploy-adv-1 — White-Label Branding Injector
+            // 5bis. White-Label Branding Injector
+            // Si le MCC a fourni une charte custom, on l'injecte ; sinon, mode default.
+            const brandingDna = dna.branding;
             await injectBrandingVars(dna.key, {
-                primaryColor: dna.initialPrimaryColor || '#6366f1',
-                displayName: dna.name,
+                mode:          brandingDna?.mode ?? 'default',
+                primaryColor:  brandingDna?.accentColor ?? dna.initialPrimaryColor ?? '#C5A059',
+                accentColor:   brandingDna?.accentColor,
+                logoUrl:       brandingDna?.logoUrl ?? null,
+                displayName:   dna.name,
+                splashEnabled: brandingDna?.splashEnabled ?? false,
             }).catch(err => logger.warn('ProvisioningEngine: Branding injection skipped', String(err)));
 
             // 5. Initialiser le workspace Sovereign RAG pour ce nouveau tenant.

@@ -116,8 +116,10 @@ export class TenantProvisioningService {
 
             // ── 5. White-label branding ───────────────────────────────────────────
             await injectBrandingVars(tenantId, {
+                mode:         'custom',
                 primaryColor: request.branding.primaryColor,
                 displayName:  request.companyName,
+                splashEnabled: false,
             }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', String(err)));
 
             // ── 6. Stripe customer ────────────────────────────────────────────────

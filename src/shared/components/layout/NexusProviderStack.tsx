@@ -23,6 +23,7 @@ import { ClientComponents } from "@components/layout/ClientComponents";
 import { TrainingOverlay } from "@components/layout/TrainingOverlay";
 import { SovereignLockout } from "@components/layout/SovereignLockout";
 import { BrandingProvider } from "@/lib/BrandingProvider";
+import { SplashGate } from "@/shared/providers/SplashGate";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
 import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";
 
@@ -47,7 +48,10 @@ export function NexusProviderStack({ children }: { children: React.ReactNode }) 
                                 <TrainingOverlay />
                                 <ClientComponents>
                                 <RoleGate>
-                                    {children}
+                                    {/* SplashGate : après auth, avant le contenu — affiche le splash branded si activé */}
+                                    <SplashGate>
+                                        {children}
+                                    </SplashGate>
                                 </RoleGate>
                                 </ClientComponents>
                             </ComplianceGate>

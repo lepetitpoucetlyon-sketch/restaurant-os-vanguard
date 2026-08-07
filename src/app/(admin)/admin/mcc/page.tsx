@@ -49,6 +49,10 @@ function MCCDashboardInner() {
         newCloneTier, setNewCloneTier,
         newCloneVariant, setNewCloneVariant,
         newTrialDays, setNewTrialDays,
+        newCloneBrandingMode, setNewCloneBrandingMode,
+        newCloneAccentColor, setNewCloneAccentColor,
+        newCloneLogoUrl, setNewCloneLogoUrl,
+        newCloneSplashEnabled, setNewCloneSplashEnabled,
         provisioningStatus, provisionStep,
         handleCreateClone,
     } = useMccPage();
@@ -266,6 +270,66 @@ function MCCDashboardInner() {
                                                 {newTrialDays > 0 ? `Expire le ${new Date(Date.now() + newTrialDays * 86_400_000).toLocaleDateString('fr-FR')} — paiement requis ensuite` : 'Compte actif immédiatement'}
                                             </p>
                                         </div>
+                                        {/* ── Charte Graphique ── */}
+                                        <div>
+                                            <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">Charte Graphique</label>
+                                            <div className="grid grid-cols-2 gap-2 mb-4">
+                                                {(['default', 'custom'] as const).map(m => (
+                                                    <button key={m} type="button" onClick={() => setNewCloneBrandingMode(m)}
+                                                        className={`flex items-center gap-2 p-3 rounded-2xl border text-left transition-all ${newCloneBrandingMode === m ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
+                                                        <span className="text-base">{m === 'default' ? '🏢' : '🎨'}</span>
+                                                        <div>
+                                                            <p className={`text-[10px] font-black uppercase tracking-widest ${newCloneBrandingMode === m ? 'text-brand' : 'text-secondary'}`}>
+                                                                {m === 'default' ? 'Restaurant OS' : 'Personnalisé'}
+                                                            </p>
+                                                            <p className="text-[8px] text-muted leading-tight mt-0.5">
+                                                                {m === 'default' ? 'Branding standard (gold/dark)' : 'Logo + couleurs du client'}
+                                                            </p>
+                                                        </div>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            {newCloneBrandingMode === 'custom' && (
+                                                <div className="space-y-3 p-4 bg-surface-card/50 border border-subtle rounded-2xl">
+                                                    <div className="flex items-center gap-3">
+                                                        <div>
+                                                            <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">Couleur principale</label>
+                                                            <div className="flex items-center gap-2">
+                                                                <input type="color" value={newCloneAccentColor} onChange={e => setNewCloneAccentColor(e.target.value)}
+                                                                    className="w-9 h-9 rounded-xl border border-subtle cursor-pointer bg-transparent p-0.5" />
+                                                                <input type="text" value={newCloneAccentColor} onChange={e => setNewCloneAccentColor(e.target.value)}
+                                                                    className="w-24 bg-surface-bg border border-subtle rounded-xl py-2 px-3 text-xs font-mono focus:outline-none focus:border-focus/50" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">Aperçu</label>
+                                                            <div className="h-9 rounded-xl border border-subtle flex items-center justify-center"
+                                                                style={{ background: `linear-gradient(135deg, ${newCloneAccentColor}22 0%, ${newCloneAccentColor}08 100%)`, borderColor: `${newCloneAccentColor}40` }}>
+                                                                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: newCloneAccentColor }}>Aperçu</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">URL Logo (optionnel)</label>
+                                                        <input type="url" placeholder="https://cdn.exemple.com/logo.svg"
+                                                            value={newCloneLogoUrl} onChange={e => setNewCloneLogoUrl(e.target.value)}
+                                                            className="w-full bg-surface-bg border border-subtle rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-focus/50 font-mono" />
+                                                        <p className="text-[8px] text-muted mt-1">PNG / SVG recommandé · fond transparent</p>
+                                                    </div>
+                                                    <label className="flex items-center gap-3 cursor-pointer select-none">
+                                                        <div className={`w-9 h-5 rounded-full transition-colors relative ${newCloneSplashEnabled ? 'bg-action-primary' : 'bg-border-subtle'}`}
+                                                            onClick={() => setNewCloneSplashEnabled(v => !v)}>
+                                                            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${newCloneSplashEnabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-text-primary">Splash screen</p>
+                                                            <p className="text-[8px] text-muted">Écran de démarrage branded à l&apos;ouverture de l&apos;app</p>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </div>
+
                                         <div className="p-4 bg-action-primary/5 border border-focus/10 rounded-2xl flex items-center gap-3">
                                             <Lock className="w-5 h-5 text-brand shrink-0" />
                                             <p className="text-[10px] text-muted leading-relaxed uppercase tracking-tighter">{t.clone.policy}</p>

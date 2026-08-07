@@ -45,6 +45,11 @@ export function useMccPage() {
     const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
     const [newCloneVariant, setNewCloneVariant] = useState<PlatformVariant>('restaurant');
     const [newTrialDays, setNewTrialDays] = useState<number>(14);
+    // Charte graphique du nouveau tenant
+    const [newCloneBrandingMode, setNewCloneBrandingMode] = useState<'default' | 'custom'>('default');
+    const [newCloneAccentColor, setNewCloneAccentColor] = useState<string>('#C5A059');
+    const [newCloneLogoUrl, setNewCloneLogoUrl] = useState<string>('');
+    const [newCloneSplashEnabled, setNewCloneSplashEnabled] = useState<boolean>(false);
     const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
     const [provisionStep, setProvisionStep] = useState(0);
 
@@ -79,11 +84,17 @@ export function useMccPage() {
                 name: newCloneName,
                 key: newCloneKey,
                 ownerEmail: newCloneEmail,
-                initialPrimaryColor: '#6366f1',
+                initialPrimaryColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : '#C5A059',
                 tier: newCloneTier,
                 variant: newCloneVariant,
                 copyBaseTemplates: true,
                 trialDays: newTrialDays > 0 ? newTrialDays : undefined,
+                branding: {
+                    mode: newCloneBrandingMode,
+                    accentColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : undefined,
+                    logoUrl: newCloneBrandingMode === 'custom' && newCloneLogoUrl ? newCloneLogoUrl : null,
+                    splashEnabled: newCloneBrandingMode === 'custom' ? newCloneSplashEnabled : false,
+                },
             });
 
             timers.forEach(clearTimeout);
@@ -99,6 +110,10 @@ export function useMccPage() {
                 setNewCloneEmail('');
                 setNewCloneTier('STANDARD');
                 setNewTrialDays(14);
+                setNewCloneBrandingMode('default');
+                setNewCloneAccentColor('#C5A059');
+                setNewCloneLogoUrl('');
+                setNewCloneSplashEnabled(false);
             }, 2500);
         } catch {
             timers.forEach(clearTimeout);
@@ -117,6 +132,10 @@ export function useMccPage() {
         newCloneTier, setNewCloneTier,
         newCloneVariant, setNewCloneVariant,
         newTrialDays, setNewTrialDays,
+        newCloneBrandingMode, setNewCloneBrandingMode,
+        newCloneAccentColor, setNewCloneAccentColor,
+        newCloneLogoUrl, setNewCloneLogoUrl,
+        newCloneSplashEnabled, setNewCloneSplashEnabled,
         provisioningStatus, provisionStep,
         handleCreateClone,
     };
