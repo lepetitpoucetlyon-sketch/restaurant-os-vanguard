@@ -1,7 +1,11 @@
 /* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import type { TenantConfig } from '@/shared/nexus-contract';
- 
-import { AI_MODELS } from '@/modules/intelligence/ia/ai';
+
+// NOTE: on n'importe PAS AI_MODELS ici — les configs d'instances sont des données statiques.
+// AI_MODELS crée un cycle circulaire (@/instances → @/modules/intelligence → @/instances)
+// qui provoque AI_MODELS = undefined à l'évaluation du module en tests.
+// L'ID modèle est la chaîne résolue directement (gemini-1.5-flash = alias 'fast' de Gemini).
+const EXPERT_MODEL_ID = 'gemini-1.5-flash'; // alias: AI_MODELS.fast
 
 /**
  * 🏰 LE PETIT POUCET (LYON) - CONFIGURATION GRADE X
@@ -43,7 +47,7 @@ export const lepetitpoucetConfig: TenantConfig = {
         },
         expert: {
             role: 'butcher',
-            modelId: AI_MODELS.fast,
+            modelId: EXPERT_MODEL_ID,
             isConfigured: true,
             isAuthorized: true
         }
