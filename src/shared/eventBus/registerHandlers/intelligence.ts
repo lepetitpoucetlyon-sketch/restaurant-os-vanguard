@@ -10,9 +10,13 @@ import { FleetOutboxHandler } from '../handlers/FleetOutboxHandler';
 import { registerReportRetryHandler } from '../handlers/ReportRetryHandler';
 import { registerLLMFallbackHandler } from '../handlers/LLMFallbackHandler';
 import { registerSupportTicketAnalysisHandler } from '../handlers/SupportTicketAnalysisHandler';
+import { registerSalesDataReadyHandler } from '../handlers/SalesDataReadyHandler';
+import { registerAnomalyDetectedHandler } from '../handlers/AnomalyDetectedHandler';
 
 export function registerIntelligenceHandlers(): Array<() => void> {
   return [
+    registerSalesDataReadyHandler(),
+    registerAnomalyDetectedHandler(),
     registerIntelligenceHandler(),
     OracleQueryAuditHandler.register(),
     AutoIndexationHandler.register(),

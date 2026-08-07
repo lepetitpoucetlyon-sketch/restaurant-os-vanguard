@@ -1,12 +1,13 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import React from 'react';
 import { logger } from '@/lib/logger';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { menuEngineeringService } from '@/modules/commerce/catalog/menu-engineering/application/services/MenuEngineeringService';
+import { TenantRBACConfigSchema } from '@/domain/schemas/rbac';
 import {
-  RestaurantOpsAdapter,
-  RestaurantCommerceAdapter,
   RestaurantComplianceAdapter,
   RestaurantFinanceAdapter,
-  RestaurantHumanAdapter,
+  RestaurantFacilityAdapter,
   RestaurantIntelligenceAdapter,
   RestaurantLogisticsAdapter,
   RestaurantMccAdapter,
@@ -19,8 +20,38 @@ export class RestaurantVertical implements IVerticalPlugin {
   public readonly description = 'NF525, Menu Engineering, Tip Pooling, Perishables, Table Service';
   public readonly dependencies = ['finance', 'compliance', 'logistics'];
 
+  public readonly routes = [
+    {
+      path: '/menu-engineering',
+      label: 'Ingénierie Menus',
+      icon: 'ChartPie',
+      roles: ['super_admin', 'directeur', 'manager'],
+      componentLoader: () =>
+        import('./presentation/MenuEngineeringDashboard').then(m => ({ default: m.MenuEngineeringDashboard })),
+    },
+    {
+      path: '/floor-plan',
+      label: 'Plan de Salle',
+      icon: 'Layout',
+      roles: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
+      componentLoader: () =>
+        import('@/modules/facility/spaces/floor-plan').then(m => ({ default: m.FloorPlanPage })),
+    },
+    {
+      path: '/nf525',
+      label: 'Export FEC / NF525',
+      icon: 'FileText',
+      roles: ['super_admin', 'directeur', 'comptable'],
+      componentLoader: () =>
+        import('@/modules/finance/comptabilite/fec').then(m => ({ default: m.FECExportPage })),
+    },
+  ];
+
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale restaurant…`);
+
+    // RBAC — config par défaut (overrides vides, les valeurs réelles sont chargées depuis Nexus par fetchRbacConfigAtom)
+    context.registerRbacConfig(TenantRBACConfigSchema.parse({}));
 
     // Routes
     context.registerRoute('/menu-engineering', React.lazy(() =>
@@ -45,19 +76,33 @@ export class RestaurantVertical implements IVerticalPlugin {
       },
     );
 
-    // Table libérée → mise à jour plan de salle
+    // Table libérée → notifier plan de salle via facility (event différent — évite la boucle table.released → table.released)
     context.registerEventHandler<{ tenantId: string; tableId: string }>(
       'table.released',
       ({ tenantId, tableId }) => {
-        RestaurantOpsAdapter.emitTableReleased({ tenantId, tableId });
+        RestaurantFacilityAdapter.emitTableLayoutChanged({
+          tenantId,
+          floorId: 'main',
+          tables: [{ id: tableId, capacity: 0, x: 0, y: 0 }],
+        });
       },
     );
 
-    // Commerce — réservation confirmée → tâche cuisine
+    // Commerce — réservation confirmée → notif cuisine (event différent — évite la boucle reservation.confirmed → reservation.confirmed)
     context.registerEventHandler<{ tenantId: string; reservationId: string; customerName: string; covers: number; date: string; time: string }>(
       'reservation.confirmed',
       ({ tenantId, reservationId, customerName, covers, date, time }) => {
-        RestaurantCommerceAdapter.emitReservationConfirmed({ tenantId, reservationId, customerName, covers, date, time });
+        NexusEventBus.emit('notification.created', {
+          v: 1,
+          tenantId,
+          id: crypto.randomUUID(),
+          type: 'info',
+          title: 'Réservation confirmée',
+          message: `${customerName} — ${covers} couverts le ${date} à ${time} (résa #${reservationId})`,
+          priority: 'medium',
+          read: false,
+          timestamp: new Date().toISOString(),
+        });
       },
     );
 
@@ -65,50 +110,88 @@ export class RestaurantVertical implements IVerticalPlugin {
     context.registerEventHandler<{ tenantId: string; reservationId: string; customerId?: string }>(
       'reservation.no_show',
       ({ tenantId, customerId }) => {
-        if (customerId) RestaurantCommerceAdapter.emitCustomerRFMTrigger({ tenantId, customerId });
+        if (customerId) {
+          NexusEventBus.emit('crm.rfm_trigger', { tenantId, customerId });
+        }
       },
     );
 
-    // Finance — clôture Z
-    context.registerEventHandler<{ tenantId: string; operatorId: string; requestedAt: string }>(
-      'finance.z_report_requested',
-      ({ tenantId, operatorId, requestedAt }) => {
-        RestaurantFinanceAdapter.emitZReportRequested({ tenantId, operatorId, requestedAt });
-      },
-    );
+    // Finance — clôture Z : TicketZHandler (registerFinanceNf525Handlers) gère déjà finance.z_report_requested
+    // Ne pas ré-émettre le même event depuis la vertical (boucle supprimée)
 
-    // Compliance — anomalie température → alerte MCC
+    // Compliance — anomalie température → alerte HACCP (event différent)
     context.registerEventHandler<{ v: 1; tenantId: string; sensorId: string; temperature: number; durationInMinutes: number }>(
       'sensor.temperature_anomaly',
       ({ tenantId, sensorId, temperature, durationInMinutes }) => {
-        RestaurantComplianceAdapter.emitTemperatureAnomaly({ tenantId, sensorId, temperature, durationInMinutes });
+        NexusEventBus.emit('haccp.alert', {
+          v: 1,
+          tenantId,
+          sensorId,
+          readingId: crypto.randomUUID(),
+          alertType: 'temperature',
+          severity: durationInMinutes > 30 ? 'CRITICAL' : 'HIGH',
+          message: `Température anormale ${temperature}°C sur capteur ${sensorId} depuis ${durationInMinutes} min`,
+        });
         if (durationInMinutes > 30) {
           RestaurantMccAdapter.emitFiscalAuditRequired({ tenantId, reason: `Anomalie température capteur ${sensorId}`, urgency: 'high' });
         }
       },
     );
 
-    // Human — shift démarré
-    context.registerEventHandler<{ v: 1; tenantId: string; shiftId: string; employeeId: string; role: string; startedAt: number }>(
-      'hr.shift_started',
-      ({ tenantId, shiftId, employeeId, role, startedAt }) => {
-        RestaurantHumanAdapter.emitShiftStarted({ tenantId, shiftId, employeeId, role, startedAt });
-      },
-    );
+    // Human — shift démarré : pas de coordination cross-domaine nécessaire (boucle supprimée)
 
-    // Logistics — DLC proche → alerte
+    // Logistics — DLC expiré → notif cuisine (event différent)
     context.registerEventHandler<{ v: 1; tenantId: string; itemId: string; quantity: number; batchNumber: string }>(
       'dlc.expired',
-      ({ tenantId, itemId, quantity, batchNumber }) => {
-        RestaurantLogisticsAdapter.emitDlcExpiry({ tenantId, itemId, quantity, batchNumber });
+      ({ tenantId, itemId, quantity }) => {
+        NexusEventBus.emit('notification.created', {
+          v: 1,
+          tenantId,
+          id: crypto.randomUUID(),
+          type: 'alert',
+          title: 'DLC expiré',
+          message: `Lot ${itemId} — ${quantity} unités à retirer immédiatement`,
+          priority: 'high',
+          read: false,
+          timestamp: new Date().toISOString(),
+        });
       },
     );
 
-    // Intelligence — demande menu engineering
+    // Intelligence — menu engineering : appel direct au service (évite la boucle intelligence.menu_engineering_requested → intelligence.menu_engineering_requested)
     context.registerEventHandler<{ tenantId: string; periodDays: number }>(
       'intelligence.menu_engineering_requested',
       ({ tenantId, periodDays }) => {
-        RestaurantIntelligenceAdapter.emitMenuEngineeringRequest({ tenantId, periodDays });
+        const periodEnd = new Date().toISOString();
+        const periodStart = new Date(Date.now() - periodDays * 86_400_000).toISOString();
+        menuEngineeringService.computeReport({ tenantId, periodStart, periodEnd }).then(report => {
+          RestaurantIntelligenceAdapter.emitSalesDataReady({
+            tenantId,
+            periodStart: report.periodStart,
+            periodEnd:   report.periodEnd,
+            totalInMicrounits: report.avgContributionMarginInMicrounits,
+            covers: report.items.length,
+          });
+        }).catch((err: unknown) => logger.warn(`[RestaurantVertical] menu engineering failed: ${String(err)}`));
+      },
+    );
+
+    // Facility — plan de salle et maintenance
+    context.registerEventHandler<{ tenantId: string; tableId: string; x: number; y: number }>(
+      'floor_plan.table_moved' as never,
+      ({ tenantId, tableId, x, y }: { tenantId: string; tableId: string; x: number; y: number }) => {
+        RestaurantFacilityAdapter.emitTableLayoutChanged({
+          tenantId,
+          floorId: 'main',
+          tables: [{ id: tableId, capacity: 0, x, y }],
+        });
+      },
+    );
+
+    context.registerEventHandler<{ tenantId: string; assetId: string; description: string }>(
+      'maintenance.issue_reported' as never,
+      ({ tenantId, assetId, description }: { tenantId: string; assetId: string; description: string }) => {
+        RestaurantFacilityAdapter.emitMaintenanceRequired({ tenantId, assetId, assetType: 'equipment', description });
       },
     );
 

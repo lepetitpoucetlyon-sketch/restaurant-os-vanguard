@@ -12,9 +12,10 @@ interface CustomerRecord {
 
 export function registerCustomerRFMAnalyzerHandler() {
   return NexusEventBus.on(
-    'crm.points_earned',
+    'crm.rfm_trigger',
     async (payload) => {
-      const { tenantId, customerId, points } = payload;
+      const { tenantId, customerId } = payload;
+      const points = 0; // crm.rfm_trigger n'a pas de points — analyse pure RFM
       
       const customerPath = `tenants/${tenantId}/customers/${customerId}`;
       

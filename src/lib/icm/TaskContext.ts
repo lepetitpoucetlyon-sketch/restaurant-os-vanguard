@@ -226,6 +226,26 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: { ...OFF_ALL, finance: 'MEDIUM', intelligence: 'MEDIUM', compliance: 'LAZY', marketing: 'LAZY', orders: 'LAZY' },
   },
 
+  intelligence: {
+    taskId: 'intelligence',
+    importance: { ...OFF_ALL, intelligence: 'HIGH', analytics: 'MEDIUM', orders: 'LAZY' } as ICMImportanceMap,
+  },
+
+  'menu-builder': {
+    taskId: 'menu-builder',
+    importance: { ...OFF_ALL, products: 'HIGH', categories: 'HIGH', stocks: 'LAZY' },
+  },
+
+  leaves: {
+    taskId: 'leaves',
+    importance: { ...OFF_ALL, staff: 'HIGH' },
+  },
+
+  'welcome-staff': {
+    taskId: 'welcome-staff',
+    importance: { ...OFF_ALL, staff: 'HIGH', orders: 'LAZY' },
+  },
+
   admin: {
     taskId: 'admin',
     importance: {
@@ -270,8 +290,12 @@ const ROUTE_SEGMENTS: [string, keyof typeof TASK_MAPS][] = [
   ['/crm',         'crm'],
   ['/mon-espace',  'mon-espace'],
   ['/marketing',   'marketing'],
-  ['/analytics',   'analytics'],
-  ['/admin',       'admin'],
+  ['/analytics',      'analytics'],
+  ['/intelligence',   'intelligence'],
+  ['/menu-builder',   'menu-builder'],
+  ['/leaves',         'leaves'],
+  ['/welcome-staff',  'welcome-staff'],
+  ['/admin',          'admin'],
 ];
 
 /** Résout le TaskContext depuis un pathname Next.js */

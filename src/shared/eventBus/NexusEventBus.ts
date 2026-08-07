@@ -1172,6 +1172,8 @@ interface RegisteredHandler<E extends NexusEventName> {
 
 class NexusEventBusClass {
   private handlers = new Map<NexusEventName, RegisteredHandler<NexusEventName>[]>();
+  /** Events currently being dispatched in the current call stack — circuit-breaker anti-loop */
+  private readonly inFlight = new Set<string>();
 
   /**
    * Souscrit à un événement.
@@ -1261,8 +1263,15 @@ class NexusEventBusClass {
     payload: NexusEventPayload<E>,
     options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
+    if (this.inFlight.has(event)) {
+      logger.warn(`[NexusEventBus] Boucle détectée sur "${event}" — émission bloquée`);
+      return;
+    }
+
     const all = this.handlers.get(event) ?? [];
     if (all.length === 0) return;
+
+    this.inFlight.add(event);
 
     const critical    = all.filter(h => h.priority === 'CRITICAL');
     const high        = all.filter(h => h.priority === 'HIGH');
@@ -1270,64 +1279,68 @@ class NexusEventBusClass {
 
     const start = performance.now();
 
-    // 1 — CRITICAL : séquentiel, bloquant
-    for (const h of critical) {
-      try {
-        await h.handler(payload);
-      } catch (err) {
-        logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
-        if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-          await db.deadLetterEvents.put({
-            id: crypto.randomUUID(),
-            eventName: event,
-            payload,
-            handlerId: h.id,
-            error: String(err),
-            failedAt: Date.now(),
-            attempts: 1,
-            nextRetryAt: Date.now() + 2000,
-            status: 'retry'
-          }).catch(e => logger.error('[EventBus] DLQ write failed', e));
-        }
-        throw err; // remonte — critique = non négociable
-      }
-    }
-
-    // 2 — HIGH : parallèle, on attend la résolution
-    if (high.length > 0) {
-      const results = await Promise.allSettled(
-        high.map(h => h.handler(payload))
-      );
-      await Promise.all(results.map(async (r, i) => {
-        if (r.status === 'rejected') {
-          const h = high[i];
-          logger.error(`[EventBus][HIGH] ${event}#${h.id} failed`, r.reason);
+    try {
+      // 1 — CRITICAL : séquentiel, bloquant
+      for (const h of critical) {
+        try {
+          await h.handler(payload);
+        } catch (err) {
+          logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
           if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
             await db.deadLetterEvents.put({
               id: crypto.randomUUID(),
               eventName: event,
               payload,
               handlerId: h.id,
-              error: String(r.reason),
+              error: String(err),
               failedAt: Date.now(),
               attempts: 1,
               nextRetryAt: Date.now() + 2000,
               status: 'retry'
             }).catch(e => logger.error('[EventBus] DLQ write failed', e));
           }
+          throw err; // remonte — critique = non négociable
         }
-      }));
-    }
+      }
 
-    // 3 — BACKGROUND : fire-and-forget
-    background.forEach(h => {
-      Promise.resolve().then(() => h.handler(payload)).catch(err => {
-        logger.warn(`[EventBus][BACKGROUND] ${event}#${h.id} failed`, err);
+      // 2 — HIGH : parallèle, on attend la résolution
+      if (high.length > 0) {
+        const results = await Promise.allSettled(
+          high.map(h => h.handler(payload))
+        );
+        await Promise.all(results.map(async (r, i) => {
+          if (r.status === 'rejected') {
+            const h = high[i];
+            logger.error(`[EventBus][HIGH] ${event}#${h.id} failed`, r.reason);
+            if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
+              await db.deadLetterEvents.put({
+                id: crypto.randomUUID(),
+                eventName: event,
+                payload,
+                handlerId: h.id,
+                error: String(r.reason),
+                failedAt: Date.now(),
+                attempts: 1,
+                nextRetryAt: Date.now() + 2000,
+                status: 'retry'
+              }).catch(e => logger.error('[EventBus] DLQ write failed', e));
+            }
+          }
+        }));
+      }
+
+      // 3 — BACKGROUND : fire-and-forget
+      background.forEach(h => {
+        Promise.resolve().then(() => h.handler(payload)).catch(err => {
+          logger.warn(`[EventBus][BACKGROUND] ${event}#${h.id} failed`, err);
+        });
       });
-    });
 
-    const ms = (performance.now() - start).toFixed(1);
-    logger.info(`[EventBus] ${event} → ${all.length} handlers (${ms}ms sync)`);
+      const ms = (performance.now() - start).toFixed(1);
+      logger.info(`[EventBus] ${event} → ${all.length} handlers (${ms}ms sync)`);
+    } finally {
+      this.inFlight.delete(event);
+    }
   }
 }
 

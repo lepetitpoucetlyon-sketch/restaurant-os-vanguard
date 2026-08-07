@@ -194,6 +194,30 @@ export const TenantSeeder = {
       );
       seededPaths.push(`tenants/${tenantId}/tables (10)`);
 
+      // 5b. Menu démo — catégories + produits de base pour les verticals food
+      if (['restaurant', 'bakery', 'hotel'].includes(variant)) {
+        const demoCategories = [
+          { id: 'cat-entrees',  name: 'Entrées',   displayOrder: 1, color: '#F5A623' },
+          { id: 'cat-plats',    name: 'Plats',     displayOrder: 2, color: '#D0021B' },
+          { id: 'cat-desserts', name: 'Desserts',  displayOrder: 3, color: '#9B59B6' },
+          { id: 'cat-boissons', name: 'Boissons',  displayOrder: 4, color: '#2980B9' },
+        ];
+        const demoProducts = [
+          { id: 'prod-oeuf-mayo',    name: 'Œuf Mayonnaise',    categoryId: 'cat-entrees',  priceInMicrounits: 5_000_000,  taxRate: '0.10', available: true },
+          { id: 'prod-soupe',        name: 'Soupe du jour',      categoryId: 'cat-entrees',  priceInMicrounits: 6_500_000,  taxRate: '0.10', available: true },
+          { id: 'prod-entrecote',    name: 'Entrecôte Frites',   categoryId: 'cat-plats',    priceInMicrounits: 24_000_000, taxRate: '0.10', available: true },
+          { id: 'prod-poulet',       name: 'Poulet Rôti',        categoryId: 'cat-plats',    priceInMicrounits: 18_000_000, taxRate: '0.10', available: true },
+          { id: 'prod-mousse-choco', name: 'Mousse au Chocolat', categoryId: 'cat-desserts', priceInMicrounits: 7_000_000,  taxRate: '0.10', available: true },
+          { id: 'prod-cafe',         name: 'Café Expresso',      categoryId: 'cat-boissons', priceInMicrounits: 2_500_000,  taxRate: '0.10', available: true },
+          { id: 'prod-eau',          name: 'Eau Minérale 50cl',  categoryId: 'cat-boissons', priceInMicrounits: 3_000_000,  taxRate: '0.10', available: true },
+        ];
+        await Promise.all([
+          ...demoCategories.map(c => Nexus.adapter.set(`tenants/${tenantId}/categories/${c.id}`, c)),
+          ...demoProducts.map(p => Nexus.adapter.set(`tenants/${tenantId}/products/${p.id}`, p)),
+        ]);
+        seededPaths.push(`tenants/${tenantId}/categories+products (${demoCategories.length} cats, ${demoProducts.length} produits)`);
+      }
+
       // 6. Auto-activation des connecteurs selon le vertical
       const autoIds = ConnectorHub.getAutoActivated(variant);
       const activatedConnectors: { id: string; status: 'active' | 'pending_config' }[] = [];

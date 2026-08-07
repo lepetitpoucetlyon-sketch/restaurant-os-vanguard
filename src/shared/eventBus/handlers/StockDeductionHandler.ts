@@ -21,6 +21,39 @@ type StockItem = {
  *  1. Si product.recipeId → explosion BOM "au gramme" via recipe.ingredients
  *  2. Sinon si product.linkedStockItemId → déduction 1:1 (fallback simple)
  */
+async function deductStockForLines(
+  tenantId: string,
+  orderId: string,
+  lines: { stockItemId: string; quantity: number }[],
+): Promise<void> {
+  const deductedItems: string[] = [];
+  await Promise.allSettled(
+    lines.map(async (line) => {
+      await _deductStock(tenantId, line.stockItemId, line.quantity, line.stockItemId);
+      deductedItems.push(`${line.stockItemId} ×${line.quantity}`);
+    })
+  );
+  if (deductedItems.length === 0) return;
+  empireAudit.log({
+    module: 'inventory',
+    action: 'STOCK_DEDUCTED',
+    details: { orderId, deductions: deductedItems },
+    severity: 'low',
+    timestamp: new Date(),
+  });
+}
+
+/** Consomme inventory.deducted émis par les verticals (retail, restaurant) */
+export function registerInventoryDeductedHandler(): () => void {
+  return NexusEventBus.on(
+    'inventory.deducted',
+    async ({ tenantId, orderId, lines }) => {
+      await deductStockForLines(tenantId, orderId, lines);
+    },
+    { id: 'inventory-deducted', priority: 'HIGH' }
+  );
+}
+
 export function registerStockDeductionHandler(): () => void {
   return NexusEventBus.on(
     'order.paid',

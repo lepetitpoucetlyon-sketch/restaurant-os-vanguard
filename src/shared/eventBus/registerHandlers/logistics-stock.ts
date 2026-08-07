@@ -1,4 +1,4 @@
-import { registerStockDeductionHandler } from '../handlers/StockDeductionHandler';
+import { registerStockDeductionHandler, registerInventoryDeductedHandler } from '../handlers/StockDeductionHandler';
 import { registerStockAlertHandler } from '../handlers/StockAlertHandler';
 import { registerWasteStockReconciliationHandler } from '../handlers/WasteStockReconciliationHandler';
 import { registerStockRestitutionHandler } from '../handlers/StockRestitutionHandler';
@@ -10,6 +10,7 @@ import { registerStockZeroBlockerHandler } from '../handlers/StockZeroBlockerHan
 export function registerStockHandlers(): Array<() => void> {
   return [
     registerStockDeductionHandler(),
+    registerInventoryDeductedHandler(),
     registerStockAlertHandler(),
     registerWasteStockReconciliationHandler(),
     registerStockRestitutionHandler(),

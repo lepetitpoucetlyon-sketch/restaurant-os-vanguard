@@ -12,9 +12,11 @@ import { ContractRenewalAlertHandler } from '../handlers/ContractRenewalAlertHan
 import { MedicalVisitAlertHandler } from '../handlers/MedicalVisitAlertHandler';
 import { RecruitmentRouterHandler } from '../handlers/RecruitmentRouterHandler';
 import { SilaeExportHandler } from '../handlers/SilaeExportHandler';
+import { registerTipDistributedHandler } from '../handlers/TipDistributedHandler';
 
 export function registerHumanHandlers(): Array<() => void> {
   return [
+    registerTipDistributedHandler(),
     registerPayrollTimeclockHandler(),
     registerRainStaffingHandler(),
     registerLaborCostAnalyzerHandler(),

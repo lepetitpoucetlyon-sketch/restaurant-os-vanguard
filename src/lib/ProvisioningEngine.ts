@@ -73,7 +73,7 @@ export const ProvisioningEngine = {
                     pos: true,
                     inventory: true,
                     analytics: dna.tier !== 'STANDARD',
-                    bar: false, // Optional
+                    bar: ['restaurant', 'hotel'].includes(dna.variant ?? 'restaurant'),
                     kitchen: true
                 },
 

@@ -138,8 +138,8 @@ describe('CustomerRFMAnalyzerHandler', () => {
       async (fn: (t: unknown) => Promise<void>) => fn({}),
     );
 
-    await capturedHandlers['crm.points_earned']({
-      tenantId: T, customerId: 'cust-1', points: 50,
+    await capturedHandlers['crm.rfm_trigger']({
+      tenantId: T, customerId: 'cust-1',
     });
 
     expect(mockUpdate).toHaveBeenCalledWith(

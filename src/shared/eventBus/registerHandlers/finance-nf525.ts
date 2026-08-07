@@ -1,3 +1,4 @@
+import { registerOrderSealedNF525Handler } from '../handlers/OrderSealedNF525Handler';
 import { registerTicketZHandler } from '../handlers/TicketZHandler';
 import { registerPaymentLedgerHandler } from '../handlers/PaymentLedgerHandler';
 import { registerSplitPaymentHandler } from '../handlers/SplitPaymentHandler';
@@ -14,6 +15,7 @@ import { registerTicketZArchiveHandler } from '../handlers/TicketZArchiveHandler
 
 export function registerFinanceNf525Handlers(): Array<() => void> {
   return [
+    registerOrderSealedNF525Handler(),
     registerTicketZHandler(),
     registerPaymentLedgerHandler(),
     registerSplitPaymentHandler(),

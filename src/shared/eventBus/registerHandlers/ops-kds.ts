@@ -8,9 +8,11 @@ import { registerKDSReadyHandler } from '../handlers/KDSReadyHandler';
 import { registerGroupPrepTasksHandler } from '../handlers/GroupPrepTasksHandler';
 import { registerRecipeChangeKDSHandler } from '../handlers/RecipeChangeKDSHandler';
 import { registerKdsPrepDelayAlertHandler } from '../handlers/KdsPrepDelayAlertHandler';
+import { registerKdsCoursePassedHandler } from '../handlers/KdsCoursePassedHandler';
 
 export function registerOpsKdsHandlers(): Array<() => void> {
   return [
+    registerKdsCoursePassedHandler(),
     registerKdsRoutingHandler(),
     registerKdsCourseManagerHandler(),
     registerKdsPrepTimeAnalyzerHandler(),
