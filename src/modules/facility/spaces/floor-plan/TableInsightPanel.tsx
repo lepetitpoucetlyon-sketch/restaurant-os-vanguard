@@ -71,7 +71,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: "100%", opacity: 0 }}
                 transition={{ type: "spring", damping: 30, stiffness: 200 }}
-                className="fixed top-24 right-8 w-[420px] bg-bg-secondary/95 backdrop-blur-3xl rounded-[40px] shadow-[20px_40px_100px_rgba(0,0,0,0.1)] dark:shadow-[20px_40px_100px_rgba(0,0,0,0.5)] border border-black/5 dark:border-subtle z-[100] overflow-hidden flex flex-col h-[calc(100vh-140px)]"
+                className="fixed top-24 right-2 sm:right-8 w-[calc(100vw-1rem)] sm:w-[380px] lg:w-[420px] bg-bg-secondary/95 backdrop-blur-3xl rounded-[24px] sm:rounded-[40px] shadow-[20px_40px_100px_rgba(0,0,0,0.1)] dark:shadow-[20px_40px_100px_rgba(0,0,0,0.5)] border border-black/5 dark:border-subtle z-[100] overflow-hidden flex flex-col h-[calc(100vh-140px)] max-h-[85dvh] sm:max-h-none"
             >
                 {/* Header with Close Button */}
                 <div className="p-8 pb-4 flex items-start justify-between relative z-10">
@@ -212,7 +212,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         <p className="text-[11px] font-black uppercase tracking-widest text-text-muted dark:text-text-primary/30">Intelligence Financière</p>
                                     </div>
                                     <div className="text-right">
-                                        <span className="block text-4xl font-mono font-light text-status-success dark:text-[#00D9A6] tracking-tighter shadow-glow-accent">{formatCurrency(SovereignMath.orderTotalMicrounits(activeOrder) / 1000000)}</span>
+                                        <span className="block text-4xl font-mono font-light text-status-success dark:text-teal tracking-tighter shadow-glow-accent">{formatCurrency(SovereignMath.orderTotalMicrounits(activeOrder) / 1000000)}</span>
                                         <span className="text-[9px] font-black text-text-muted dark:text-text-primary/20 uppercase tracking-widest mt-1">Total TTC Direct</span>
                                     </div>
                                 </div>

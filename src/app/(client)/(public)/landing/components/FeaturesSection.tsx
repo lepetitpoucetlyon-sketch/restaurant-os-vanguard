@@ -8,7 +8,7 @@ import { FEATURES } from "@/app/(client)/(public)/landing/constants";
 
 export function FeaturesSection() {
     return (
-        <section id="features" className="relative py-32 px-6 bg-[#0a0a0a]">
+        <section id="features" className="relative py-32 px-6 bg-surface-sidebar">
             <div className="max-w-7xl mx-auto">
                 {/* Section Header */}
                 <motion.div
@@ -18,7 +18,7 @@ export function FeaturesSection() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-20"
                 >
-                    <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Fonctionnalités</span>
+                    <span className="text-brand text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Fonctionnalités</span>
                     <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                         Tout ce dont vous avez besoin
                     </h2>
@@ -65,7 +65,7 @@ export function FeaturesSection() {
                                 <h3 className="text-2xl font-brand font-semibold text-text-primary mb-3">{feature.title}</h3>
                                 <p className="text-text-primary/50 leading-relaxed">{feature.description}</p>
 
-                                <div className="mt-6 flex items-center gap-2 text-[#C9A227] opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="mt-6 flex items-center gap-2 text-brand opacity-0 group-hover:opacity-100 transition-opacity">
                                     <span className="text-sm font-bold uppercase tracking-widest">En savoir plus</span>
                                     <ChevronRight className="w-4 h-4" />
                                 </div>

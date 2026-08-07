@@ -8,6 +8,7 @@ import { ErrorBoundary } from "@/shared/components/ErrorBoundary";
 import { NexusProviderStack } from "@components/layout/NexusProviderStack";
 import { ImpersonationBanner } from "@components/layout/ImpersonationBanner";
 import { ServiceWorkerRegistration } from "@components/ServiceWorkerRegistration";
+import { ThemeApplicator } from "@/shared/components/ThemeApplicator";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -64,6 +65,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-text-primary font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
             <NexusProviderStack>
+                <ThemeApplicator />
                 <ImpersonationBanner />
                 {children}
             </NexusProviderStack>

@@ -157,7 +157,7 @@ export function TutorialBubble() {
             <AnimatePresence>
                 {hasTarget && (
                     <motion.div
-                        className="absolute pointer-events-none border-2 border-[#00D9A6] shadow-[0_0_30px_rgba(0,217,166,0.3)] rounded-xl"
+                        className="absolute pointer-events-none border-2 border-teal shadow-[0_0_30px_rgba(0,217,166,0.3)] rounded-xl"
                         initial={{ opacity: 0 }}
                         animate={{
                             opacity: 1,
@@ -188,7 +188,7 @@ export function TutorialBubble() {
             >
                 {/* Status Indicator Bar */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-surface-bg dark:bg-surface-sidebar rounded-b-xl flex items-center justify-center overflow-hidden">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#00D9A6] shadow-[0_0_8px_rgba(0,217,166,0.6)] animate-pulse" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-teal shadow-[0_0_8px_rgba(0,217,166,0.6)] animate-pulse" />
                 </div>
 
                 {/* Arrow Pointer - only if has target */}
@@ -204,7 +204,7 @@ export function TutorialBubble() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6 relative z-10">
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#00D9A6] flex items-center justify-center text-text-primary text-sm font-black shadow-lg shadow-[#00D9A6]/20">
+                        <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center text-text-primary text-sm font-black shadow-lg shadow-[#00D9A6]/20">
                             {currentPointIndex + 1}
                         </div>
                         <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">

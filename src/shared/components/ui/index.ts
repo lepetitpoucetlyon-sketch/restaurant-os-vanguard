@@ -37,3 +37,12 @@ export * from './GlassCard';
 export * from './PageHeaderWithDocs';
 export * from './TimePicker';
 export * from './TutorialOverlay';
+
+// Phase 5 - Atomic Layer
+export * from './badge';
+export * from './input';
+export * from './select';
+export { Spinner } from './spinner';
+export type { SpinnerProps } from './spinner';
+export * from './avatar';
+export * from './chip';

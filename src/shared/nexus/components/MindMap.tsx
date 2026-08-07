@@ -338,8 +338,8 @@ export function MindMap() {
 
                             {!selectedNode.metrics && (
                                 <div className="p-8 border-2 border-dashed border-subtle rounded-[2.5rem] flex flex-col items-center justify-center text-center">
-                                    <Database className="w-8 h-8 text-[#CED4DA] mb-4" />
-                                    <p className="text-sm font-bold text-[#ADB5BD]">Aucun KPI en temps réel disponible pour ce module.</p>
+                                    <Database className="w-8 h-8 text-text-muted mb-4" />
+                                    <p className="text-sm font-bold text-text-muted">Aucun KPI en temps réel disponible pour ce module.</p>
                                 </div>
                             )}
                         </div>

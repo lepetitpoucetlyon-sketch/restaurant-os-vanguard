@@ -24,7 +24,7 @@ export const SovereignLock: React.FC = () => {
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 z-[10000] bg-surface-sidebar/95 backdrop-blur-3xl flex items-center justify-center p-6"
                 >
-                    <div className="max-w-md w-full bg-[#0A0A0A] border border-red-500/20 rounded-3xl p-10 text-center shadow-[0_0_100px_rgba(239,68,68,0.1)] relative overflow-hidden">
+                    <div className="max-w-md w-full bg-surface-sidebar border border-red-500/20 rounded-3xl p-10 text-center shadow-[0_0_100px_rgba(239,68,68,0.1)] relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-status-danger/10 rounded-full blur-[50px] -mr-16 -mt-16 pointer-events-none" />
                         
                         <div className="mx-auto w-24 h-24 bg-status-danger/10 rounded-full flex items-center justify-center mb-8 border border-red-500/20">

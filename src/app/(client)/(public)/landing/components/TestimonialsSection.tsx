@@ -7,7 +7,7 @@ import { TESTIMONIALS } from "@/app/(client)/(public)/landing/constants";
 
 export function TestimonialsSection() {
     return (
-        <section id="testimonials" className="relative py-32 px-6 bg-[#0a0a0a]">
+        <section id="testimonials" className="relative py-32 px-6 bg-surface-sidebar">
             <div className="max-w-6xl mx-auto">
                 {/* Section Header */}
                 <motion.div
@@ -17,7 +17,7 @@ export function TestimonialsSection() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-20"
                 >
-                    <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Témoignages</span>
+                    <span className="text-brand text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Témoignages</span>
                     <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                         Ils nous font confiance
                     </h2>
@@ -37,7 +37,7 @@ export function TestimonialsSection() {
                             {/* Stars */}
                             <div className="flex gap-1 mb-6">
                                 {Array.from({ length: testimonial.rating }).map((_, i) => (
-                                    <Star key={i} className="w-5 h-5 fill-[#C9A227] text-[#C9A227]" />
+                                    <Star key={i} className="w-5 h-5 fill-brand text-brand" />
                                 ))}
                             </div>
 

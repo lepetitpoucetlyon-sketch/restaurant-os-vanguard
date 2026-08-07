@@ -362,8 +362,8 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                         <div className="space-y-6">
                             <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest">
                                 <span className="text-text-muted">Disponibilité Salon</span>
-                                <span className="text-[#00D9A6] flex items-center gap-2 animate-pulse">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-[#00D9A6]" />
+                                <span className="text-teal flex items-center gap-2 animate-pulse">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-teal" />
                                     Optimale
                                 </span>
                             </div>

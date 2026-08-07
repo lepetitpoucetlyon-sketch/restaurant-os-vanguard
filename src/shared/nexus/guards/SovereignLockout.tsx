@@ -16,7 +16,7 @@ export function SovereignLockout() {
     const tenantConfig = useAtomValue(tenantConfigAtom);
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505] text-text-primary overflow-hidden">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface-sidebar text-text-primary overflow-hidden">
             {/* Background Cybernetic Decor */}
             <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-status-error/30 blur-[120px] rounded-full" />

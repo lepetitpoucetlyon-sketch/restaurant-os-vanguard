@@ -6,7 +6,7 @@ import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 import type { SwitchboardState } from '@/shared/hooks/useSovereignSwitchboard';
 import { useMCCLocale } from '../_i18n';
 
-const PerformanceMonitor  = dynamic(() => import('../components/PerformanceMonitor').then(m => m.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
+const PerformanceMonitor  = dynamic(() => import('@/shared/components/dev/PerformanceMonitor').then(m => m.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });
 const DeploymentEngine    = dynamic(() => import('../components/DeploymentEngine').then(m => m.DeploymentEngine), { loading: () => <MCCWidgetSkeleton /> });
 const MCCInsights         = dynamic(() => import('../components/MCCInsights').then(m => m.MCCInsights), { loading: () => <MCCWidgetSkeleton /> });
 const MCCAuditStream      = dynamic(() => import('../components/MCCAuditStream').then(m => m.MCCAuditStream), { loading: () => <MCCWidgetSkeleton /> });

@@ -7,7 +7,7 @@ import { PRICING } from "@/app/(client)/(public)/landing/constants";
 
 export function PricingSection() {
     return (
-        <section id="pricing" className="relative py-32 px-6 bg-[#0a0a0a]">
+        <section id="pricing" className="relative py-32 px-6 bg-surface-sidebar">
             {/* Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-action-primary/5 rounded-full blur-[150px]" />
 
@@ -20,7 +20,7 @@ export function PricingSection() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-20"
                 >
-                    <span className="text-[#C9A227] text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Tarifs</span>
+                    <span className="text-brand text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Tarifs</span>
                     <h2 className="text-4xl md:text-6xl font-brand font-semibold text-text-primary mb-6">
                         Investissez dans l'excellence
                     </h2>
@@ -47,7 +47,7 @@ export function PricingSection() {
                             )}
                         >
                             {plan.highlighted && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-[#C9A227] text-primary text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-accent text-primary text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
                                     Populaire
                                 </div>
                             )}
@@ -65,7 +65,7 @@ export function PricingSection() {
                             <ul className="space-y-4 mb-8">
                                 {plan.features.map((feature, fIdx) => (
                                     <li key={fIdx} className="flex items-start gap-3">
-                                        <Check className={cn("w-5 h-5 mt-0.5 flex-shrink-0", plan.highlighted ? "text-[#C9A227]" : "text-text-primary/40")} />
+                                        <Check className={cn("w-5 h-5 mt-0.5 flex-shrink-0", plan.highlighted ? "text-brand" : "text-text-primary/40")} />
                                         <span className="text-text-primary/80 text-sm">{feature}</span>
                                     </li>
                                 ))}
@@ -77,7 +77,7 @@ export function PricingSection() {
                                 className={cn(
                                     "w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all",
                                     plan.highlighted
-                                        ? "bg-[#C9A227] text-primary shadow-lg shadow-[#C9A227]/30"
+                                        ? "bg-accent text-primary shadow-lg shadow-[#C9A227]/30"
                                         : "bg-surface-card text-text-primary hover:bg-surface-card"
                                 )}
                             >

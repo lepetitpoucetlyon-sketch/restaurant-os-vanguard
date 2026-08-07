@@ -51,7 +51,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-lg bg-[#0B0B0C] border border-subtle rounded-[3rem] p-10 text-center relative overflow-hidden shadow-2xl"
+                className="w-full max-w-lg bg-surface-sidebar border border-subtle rounded-[3rem] p-10 text-center relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
                 <button onClick={onClose} className="absolute top-6 right-6 p-2 text-secondary hover:text-text-primary transition-colors">

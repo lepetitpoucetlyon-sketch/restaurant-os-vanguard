@@ -54,7 +54,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
             <motion.div 
                 initial={{ opacity: 0, y: 50, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                className="w-full max-w-6xl bg-[#080808]/80 border border-subtle rounded-[4rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row h-full max-h-[85vh] relative"
+                className="w-full max-w-6xl bg-surface-sidebar/80 border border-subtle rounded-[4rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row h-full max-h-[85vh] relative"
             >
                 {/* Header Section (Mobile/Top) */}
                 <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50 text-center">

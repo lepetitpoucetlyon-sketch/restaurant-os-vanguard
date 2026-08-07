@@ -4,11 +4,16 @@ import { useRef, useState, useEffect } from "react";
 import { RefreshCcw, Check, X, SwitchCamera } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
+
 interface CameraCaptureProps {
     onCapture: (imageData: string) => void;
+    /** Callback déclenché quand l'utilisateur ferme sans valider */
+    onClose?: () => void;
+    /** Titre affiché en en-tête du composant */
+    title?: string;
 }
 
-export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
+export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
@@ -91,7 +96,18 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
     };
 
     return (
-        <div className="relative w-full aspect-[3/4] md:aspect-video bg-surface-sidebar flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative w-full bg-surface-sidebar flex flex-col overflow-hidden">
+            {(title || onClose) && (
+                <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
+                    {title && <p className="text-[11px] font-black uppercase tracking-[0.2em] text-text-secondary">{title}</p>}
+                    {onClose && (
+                        <button onClick={onClose} className="ml-auto w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-tertiary text-text-muted transition-colors">
+                            <X className="w-4 h-4" />
+                        </button>
+                    )}
+                </div>
+            )}
+        <div className="relative aspect-[3/4] md:aspect-video flex flex-col items-center justify-center overflow-hidden">
             {!capturedImage ? (
                 <>
                     <video
@@ -169,6 +185,7 @@ export const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
                 </>
             )}
             <canvas ref={canvasRef} className="hidden" />
+        </div>
         </div>
     );
 };

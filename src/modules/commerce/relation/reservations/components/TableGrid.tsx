@@ -33,7 +33,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                 <div className="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
                             )}
                             {zone === "TERRACE" && (
-                                <div className="w-2.5 h-2.5 rounded-full bg-[#00D9A6] shadow-[0_0_15px_rgba(0,217,166,0.3)]" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-teal shadow-[0_0_15px_rgba(0,217,166,0.3)]" />
                             )}
                             {zone === "STANDARD" && (
                                 <div className="w-2.5 h-2.5 rounded-full bg-text-muted/20" />
@@ -88,7 +88,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                                             ? table.type === "vip"
                                                                 ? "bg-accent"
                                                                 : table.type === "terrace"
-                                                                    ? "bg-[#00D9A6]"
+                                                                    ? "bg-teal"
                                                                     : "bg-text-muted/40"
                                                             : "bg-surface-card/5"
                                                     )}
@@ -105,7 +105,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                             <div className="w-1.5 h-1.5 rounded-full bg-action-primary shadow-[0_0_10px_rgba(59,130,246,0.5)] animate-pulse" />
                                         )}
                                         {table.type === "terrace" && table.status === "available" && (
-                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00D9A6] shadow-[0_0_10px_rgba(0,217,166,0.5)]" />
+                                            <div className="w-1.5 h-1.5 rounded-full bg-teal shadow-[0_0_10px_rgba(0,217,166,0.5)]" />
                                         )}
                                     </div>
 

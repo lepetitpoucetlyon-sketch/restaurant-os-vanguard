@@ -2,9 +2,16 @@
 
 import { motion } from "framer-motion";
 import { Users, Calendar, Clock, Euro, ArrowUpRight } from "lucide-react";
-import { StatusBadge } from "./StatusBadge";
+import { StatusBadge, BadgeStatus } from "@/shared/components/ui/StatusBadge";
 
 import { Group } from "@nexus/contracts";
+
+const GROUP_STATUS_MAP: Record<string, { status: BadgeStatus; label: string }> = {
+    Confirmed: { status: "success", label: "Confirmé" },
+    Pending:   { status: "warning", label: "En attente" },
+    Inquiry:   { status: "info",    label: "Demande" },
+    Cancelled: { status: "error",   label: "Annulé" },
+};
 
 export function EventCard({ group }: { group: Group }) {
     return (
@@ -18,7 +25,10 @@ export function EventCard({ group }: { group: Group }) {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                 <div className="flex-1">
                     <div className="flex items-center gap-4 mb-4">
-                        <StatusBadge status={group.status} />
+                        <StatusBadge
+                            status={(GROUP_STATUS_MAP[group.status] ?? GROUP_STATUS_MAP.Inquiry).status}
+                            label={(GROUP_STATUS_MAP[group.status] ?? GROUP_STATUS_MAP.Inquiry).label}
+                        />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted px-4 py-1.5 rounded-full bg-bg-tertiary border border-border">
                             {group.type}
                         </span>

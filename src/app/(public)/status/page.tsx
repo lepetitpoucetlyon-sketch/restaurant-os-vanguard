@@ -92,7 +92,7 @@ export default async function StatusPage() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-[#1A2350] flex items-center justify-center">
-            <Activity className="w-6 h-6 text-[#C5A059]" />
+            <Activity className="w-6 h-6 text-brand" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">Restaurant OS — Statut</h1>

@@ -106,7 +106,7 @@ export function LaunchpadStatusHub({ isScrolled: _isScrolled = false, onClose }:
                     >
                         <Bell strokeWidth={1.5} className="w-6 h-6 group-hover:rotate-12 transition-transform" />
                         {unreadCount > 0 && (
-                            <div className="absolute top-2 right-1.5 px-1.5 py-0.5 min-w-[22px] bg-[#D32F2F] text-text-primary flex items-center justify-center text-[10px] font-bold rounded-full border-2 border-white dark:border-black shadow-sm z-20">
+                            <div className="absolute top-2 right-1.5 px-1.5 py-0.5 min-w-[22px] bg-status-danger text-text-primary flex items-center justify-center text-[10px] font-bold rounded-full border-2 border-white dark:border-black shadow-sm z-20">
                                 <span className="leading-none">{unreadCount > 99 ? '99+' : unreadCount}</span>
                             </div>
                         )}

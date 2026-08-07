@@ -147,7 +147,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                 {/* Form Content */}
                 <form onSubmit={handleSubmit} className={cn(
                     "flex-1 overflow-y-auto elegant-scrollbar p-12 space-y-12 transition-colors duration-500",
-                    isDark ? "bg-bg-primary" : "bg-[#fdfdfc]"
+                    isDark ? "bg-bg-primary" : "bg-bg-primary"
                 )}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                         <div className="space-y-4">

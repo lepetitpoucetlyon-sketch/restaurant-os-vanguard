@@ -8,8 +8,8 @@ import dynamic from 'next/dynamic';
 const MigrationSettings = dynamic(() => import('./MigrationSettings'), { ssr: false });
 const MigrationGuide = dynamic(() => import('./MigrationGuide'), { ssr: false });
 const MigrationEmailTemplate = dynamic(() => import('./MigrationEmailTemplate'), { ssr: false });
-const FloorPlanSetupWizard = dynamic(() => import('@/modules/onboarding/migration/FloorPlanSetupWizard'), { ssr: false });
-const CSVTemplateDownloads = dynamic(() => import('@/modules/onboarding/migration/CSVTemplateDownloads'), { ssr: false });
+const FloorPlanSetupWizard = dynamic(() => import('@/modules/commerce/acquisition/onboarding/migration/FloorPlanSetupWizard'), { ssr: false });
+const CSVTemplateDownloads = dynamic(() => import('@/modules/commerce/acquisition/onboarding/migration/CSVTemplateDownloads'), { ssr: false });
 
 type MigrationTab = 'import' | 'guide' | 'email' | 'floorplan' | 'templates';
 

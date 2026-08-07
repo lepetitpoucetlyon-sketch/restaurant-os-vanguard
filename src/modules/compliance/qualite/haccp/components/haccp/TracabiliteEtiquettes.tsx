@@ -15,7 +15,7 @@ import { useHygieneLabels, useCreateHygieneLabel, useDeleteHygieneLabel } from '
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
-import { CameraCapture } from './CameraCapture';
+import { CameraCapture } from '@/shared/components/ui/CameraCapture';
 import { StorageService } from '@/lib/Storage';
 import { useTenant } from '@/shared/hooks';
 import { Loader2 } from 'lucide-react';

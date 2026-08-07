@@ -108,7 +108,7 @@ export function NeuralShield() {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-2xl bg-[#0A0A0A] border border-red-900/50 rounded-[2.5rem] shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-2xl bg-surface-sidebar border border-red-900/50 rounded-[2.5rem] shadow-2xl overflow-hidden"
                         >
                             {/* Emergency Header */}
                             <div className="bg-status-danger p-8 flex justify-between items-center">

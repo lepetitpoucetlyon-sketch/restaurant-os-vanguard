@@ -59,7 +59,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
             ) : (
                 <>
                     {/* Linear Header */}
-                    <div className="p-8 border-b border-subtle dark:border-border flex items-center justify-between bg-[#fdfdfc] dark:bg-bg-tertiary/40">
+                    <div className="p-8 border-b border-subtle dark:border-border flex items-center justify-between bg-bg-primary dark:bg-bg-tertiary/40">
                         <div className="flex items-center gap-5">
                             <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg bg-accent/20">
                                 <BookOpen strokeWidth={1.5} className="w-6 h-6 text-accent dark:text-accent-gold" />
@@ -189,7 +189,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                             </div>
                         ) : (
                             <>
-                                <div className="p-8 bg-[#f5f5f0] dark:bg-bg-tertiary/20 rounded-3xl border border-[#ebebe0] dark:border-border/50">
+                                <div className="p-8 bg-bg-primary dark:bg-bg-tertiary/20 rounded-3xl border border-border-default dark:border-border/50">
                                     <p className="text-base text-primary dark:text-text-primary font-serif italic leading-relaxed">
                                         "{doc.description}"
                                     </p>
@@ -215,7 +215,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                     </div>
 
                     {/* Footer */}
-                    <div className="p-8 bg-[#fdfdfc] dark:bg-bg-tertiary/40 border-t border-subtle dark:border-border flex justify-between items-center">
+                    <div className="p-8 bg-bg-primary dark:bg-bg-tertiary/40 border-t border-subtle dark:border-border flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
                             <span className="text-[8px] font-black text-secondary dark:text-text-muted uppercase tracking-widest italic">Aide Contextuelle Active</span>

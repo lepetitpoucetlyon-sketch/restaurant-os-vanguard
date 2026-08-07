@@ -22,7 +22,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                     <div key={zone}>
                         <div className="flex items-center gap-4 mb-6">
                             {zone === 'VIP' && <div className="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_15px_rgba(197,160,89,0.4)]" />}
-                            {zone === 'TERRACE' && <div className="w-2.5 h-2.5 rounded-full bg-[#00D9A6] shadow-[0_0_15px_rgba(0,217,166,0.3)]" />}
+                            {zone === 'TERRACE' && <div className="w-2.5 h-2.5 rounded-full bg-teal shadow-[0_0_15px_rgba(0,217,166,0.3)]" />}
                             {zone === 'STANDARD' && <div className="w-2.5 h-2.5 rounded-full bg-text-muted/20" />}
                             <span className={cn(
                                 "text-[10px] font-black uppercase tracking-[0.3em]",

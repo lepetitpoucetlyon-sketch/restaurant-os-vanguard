@@ -32,13 +32,13 @@ export const StocksTab: React.FC<StocksTabProps> = ({
 
         {/* Stock Alerts */}
         {lowStockWines > 0 && (
-            <div className="p-4 mb-6 bg-status-danger/10 rounded-2xl border border-[#FF4D4D]/30 flex items-center gap-4">
-                <AlertCircle className="w-6 h-6 text-[#FF4D4D]" />
+            <div className="p-4 mb-6 bg-status-danger/10 rounded-2xl border border-status-danger/30 flex items-center gap-4">
+                <AlertCircle className="w-6 h-6 text-status-danger" />
                 <div>
-                    <p className="font-bold text-[#FF4D4D]">{lowStockWines} références en stock critique</p>
+                    <p className="font-bold text-status-danger">{lowStockWines} références en stock critique</p>
                     <p className="text-sm text-text-muted">Passez commande auprès de vos fournisseurs</p>
                 </div>
-                <Button variant="outline" className="ml-auto rounded-xl border-[#FF4D4D] text-[#FF4D4D] hover:bg-[#FF4D4D]/10 transition-colors">
+                <Button variant="outline" className="ml-auto rounded-xl border-status-danger text-status-danger hover:bg-status-danger/10 transition-colors">
                     Voir les alertes
                 </Button>
             </div>

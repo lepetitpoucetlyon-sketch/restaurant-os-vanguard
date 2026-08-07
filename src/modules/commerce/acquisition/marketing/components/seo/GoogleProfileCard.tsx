@@ -47,7 +47,7 @@ export function GoogleProfileCard() {
                 <span className={cn(
                     "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border",
                     profile.isVerified 
-                        ? "bg-[#00D9A6]/10 text-[#00D9A6] border-[#00D9A6]/20"
+                        ? "bg-teal/10 text-teal border-teal/20"
                         : "bg-warning/10 text-warning border-warning/20"
                 )}>
                     {profile.isVerified ? 'Vérifié' : 'En attente'}
@@ -76,7 +76,7 @@ export function GoogleProfileCard() {
                 </div>
             </div>
 
-            <button className="w-full mt-6 h-12 rounded-xl bg-[#00D9A6] text-text-primary hover:bg-[#00C090] transition-colors text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,217,166,0.25)]">
+            <button className="w-full mt-6 h-12 rounded-xl bg-teal text-text-primary hover:bg-teal transition-colors text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,217,166,0.25)]">
                 <RefreshCw className="w-4 h-4" />
                 Synchroniser maintenant
             </button>

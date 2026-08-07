@@ -99,7 +99,7 @@ export function OperationsDashboard() {
     };
 
     return (
-        <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-[#FDFCF0] font-serif relative overflow-hidden">
+        <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary font-serif relative overflow-hidden">
             <div className="flex-1 h-full overflow-auto p-4 md:p-10 pb-24 md:pb-10 elegant-scrollbar">
                 {/* Paper Texture Overlay */}
                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/notebook.png')]" />
@@ -287,7 +287,7 @@ export function OperationsDashboard() {
                                     <HandDrawnLegend label="Zones Statiques" color="text-status-warning" />
                                 </div>
 
-                                <div className="absolute bottom-10 left-10 max-w-sm bg-[#FDFCF0]/90 backdrop-blur-md p-8 rounded-[2rem] border-2 border-dashed border-subtle shadow-xl">
+                                <div className="absolute bottom-10 left-10 max-w-sm bg-bg-primary/90 backdrop-blur-md p-8 rounded-[2rem] border-2 border-dashed border-subtle shadow-xl">
                                     <div className="flex items-center gap-2 mb-4 text-muted font-bold text-[10px] uppercase tracking-widest">
                                         <PenTool className="w-4 h-4 text-brand" /> Note de Conception
                                     </div>
@@ -347,7 +347,7 @@ export function OperationsDashboard() {
                                 initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
                                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, rotate: 2 }}
-                                className="w-full max-w-4xl bg-[#FDFCF0] rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.15)] border border-subtle overflow-hidden flex"
+                                className="w-full max-w-4xl bg-bg-primary rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.15)] border border-subtle overflow-hidden flex"
                             >
                                 {/* Left Side: Hand-drawn Illustration Placeholder */}
                                 <div className="w-2/5 p-12 border-r border-subtle bg-surface-card/30 relative">

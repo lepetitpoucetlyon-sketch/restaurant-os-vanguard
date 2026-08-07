@@ -54,7 +54,7 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-5xl bg-[#0B0B0C] border border-subtle rounded-[3rem] flex flex-col max-h-[90vh] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+                className="w-full max-w-5xl bg-surface-sidebar border border-subtle rounded-[3rem] flex flex-col max-h-[90vh] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
             >
                 {/* Header */}
                 <div className="p-10 border-b border-white/5 flex items-center justify-between bg-surface-card/[0.02]">

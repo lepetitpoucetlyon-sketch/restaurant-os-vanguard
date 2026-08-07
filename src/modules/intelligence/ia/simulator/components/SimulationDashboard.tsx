@@ -82,7 +82,7 @@ export function SimulationDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-text-primary p-12 font-sans selection:bg-status-danger/30">
+        <div className="min-h-screen bg-surface-sidebar text-text-primary p-12 font-sans selection:bg-status-danger/30">
             {/* BACKGROUND EFFECTS */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-status-danger/10 rounded-full blur-[120px]" />
@@ -212,7 +212,7 @@ export function SimulationDashboard() {
                     </div>
 
                     {/* COMPARATIVE ANALYSIS */}
-                    <div className="col-span-2 bg-[#080808] border border-default rounded-[2.5rem] p-10 flex flex-col">
+                    <div className="col-span-2 bg-surface-sidebar border border-default rounded-[2.5rem] p-10 flex flex-col">
                         <div className="flex items-center justify-between mb-10">
                             <div>
                                 <h3 className="text-2xl font-serif italic text-text-primary mb-1">Analyse Comparative</h3>

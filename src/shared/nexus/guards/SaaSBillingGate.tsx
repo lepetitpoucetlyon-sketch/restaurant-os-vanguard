@@ -28,12 +28,12 @@ export function SaaSBillingGate({ children }: SaaSBillingGateProps) {
 
     if (isSuspended && !isSettingsArea && !isMccArea) {
         return (
-            <div className="fixed inset-0 z-[200] bg-[#050505] flex items-center justify-center p-6 overflow-hidden">
+            <div className="fixed inset-0 z-[200] bg-surface-sidebar flex items-center justify-center p-6 overflow-hidden">
                 <div className="absolute inset-0 bg-status-danger/5 blur-[120px] rounded-full -mt-40 -ml-40" />
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="w-full max-w-xl bg-[#0B0B0C] border border-red-500/20 rounded-[3rem] p-12 text-center relative overflow-hidden shadow-2xl"
+                    className="w-full max-w-xl bg-surface-sidebar border border-red-500/20 rounded-[3rem] p-12 text-center relative overflow-hidden shadow-2xl"
                 >
                     <div className="w-20 h-20 bg-status-danger text-text-primary rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-red-500/20">
                         <Lock size={36} />

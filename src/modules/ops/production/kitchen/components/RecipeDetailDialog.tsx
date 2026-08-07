@@ -381,7 +381,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                 </div>
 
                 {/* ── Main content — recipe steps ─────────────────────────────────── */}
-                <div className="flex-1 overflow-auto elegant-scrollbar relative transition-colors duration-500 bg-[#F8F7F2]">
+                <div className="flex-1 overflow-auto elegant-scrollbar relative transition-colors duration-500 bg-bg-primary">
                     <div className="max-w-4xl mx-auto px-12 py-24 md:px-24">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}

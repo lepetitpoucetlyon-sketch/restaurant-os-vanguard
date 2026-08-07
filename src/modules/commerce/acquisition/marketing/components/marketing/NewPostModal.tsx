@@ -64,7 +64,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-3xl bg-surface-card dark:bg-[#111] rounded-[3rem] shadow-2xl overflow-hidden border border-subtle"
+                        className="relative w-full max-w-3xl bg-surface-card dark:bg-surface-sidebar rounded-[3rem] shadow-2xl overflow-hidden border border-subtle"
                     >
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -166,7 +166,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                             </div>
                         </div>
 
-                        <div className="p-8 bg-surface-card dark:bg-[#111] border-t border-border flex gap-4">
+                        <div className="p-8 bg-surface-card dark:bg-surface-sidebar border-t border-border flex gap-4">
                             <Button variant="ghost" className="flex-1 h-16 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs" onClick={onClose}>Annuler</Button>
                             <Button
                                 className="flex-[2] h-16 bg-text-primary text-bg-primary hover:bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-[1.5rem] transition-all font-black uppercase tracking-widest text-xs shadow-xl disabled:opacity-40 disabled:cursor-not-allowed"

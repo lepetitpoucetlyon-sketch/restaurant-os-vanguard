@@ -75,7 +75,7 @@ export const AnalyticsTab = () => {
                                     <td className="py-4 px-4 text-right text-sm text-text-muted">{kw.clicks}</td>
                                     <td className={cn(
                                         "py-4 px-4 text-right text-sm font-bold",
-                                        kw.avgPosition <= 3 ? 'text-[#00D9A6]' :
+                                        kw.avgPosition <= 3 ? 'text-teal' :
                                             kw.avgPosition <= 10 ? 'text-action-primary' :
                                                 'text-status-danger'
                                     )}>

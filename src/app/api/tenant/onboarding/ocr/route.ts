@@ -6,9 +6,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
-import { parseImageWithOCR } from '@/modules/onboarding/migration/parsers/imageParser';
-import { parsePDFWithOCR } from '@/modules/onboarding/migration/parsers/pdfParser';
-import type { ImportCategory } from '@/modules/onboarding/migration/types';
+import { parseImageWithOCR } from '@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser';
+import { parsePDFWithOCR } from '@/modules/commerce/acquisition/onboarding/migration/parsers/pdfParser';
+import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
 import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
 import { createLLMProvider } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
 

@@ -101,7 +101,7 @@ export function CookingTimesTab() {
                                 <motion.div
                                     key={iIdx}
                                     whileHover={{ x: 5 }}
-                                    className="flex items-center justify-between py-3 border-b border-[#F1F3F5] dark:border-border last:border-0"
+                                    className="flex items-center justify-between py-3 border-b border-border-default dark:border-border last:border-0"
                                 >
                                     <span className="font-bold text-sm text-text-primary">{item.name}</span>
                                     <div className="flex items-center gap-3">

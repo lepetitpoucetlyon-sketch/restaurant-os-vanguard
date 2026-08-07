@@ -41,7 +41,7 @@ export function AllergensTab() {
                             <span className="text-2xl">{allergen.icon}</span>
                             <span className="font-bold text-sm text-text-primary">{allergen.name}</span>
                         </div>
-                        <p className="text-[11px] text-[#ADB5BD]">{allergen.count} plats concernés</p>
+                        <p className="text-[11px] text-text-muted">{allergen.count} plats concernés</p>
                     </motion.div>
                 ))}
             </div>

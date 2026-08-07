@@ -39,7 +39,7 @@ export function QuantitySelector({
                 "relative flex items-center justify-between p-1 rounded-full",
                 "w-36 h-12 select-none",
                 // Background - MC: Light Green | MS: Dark Forest Green
-                "bg-[#E6F9EF] dark:bg-[#062D1F]/80 dark:backdrop-blur-md",
+                "bg-status-success/10 dark:bg-[#062D1F]/80 dark:backdrop-blur-md",
                 // Contour/Border
                 "border border-accent/20 dark:border-accent/30",
                 // Liquid Glass Highlight (Top edge)

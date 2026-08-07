@@ -145,7 +145,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                                 className={cn(
                                     "h-1",
                                     toast.type === 'success' ? "bg-accent" :
-                                        toast.type === 'error' ? "bg-[#FF4D4D]" :
+                                        toast.type === 'error' ? "bg-status-danger" :
                                             toast.type === 'premium' ? "bg-accent" :
                                                 toast.type === 'warning' ? "bg-status-warning" :
                                                     "bg-action-primary"

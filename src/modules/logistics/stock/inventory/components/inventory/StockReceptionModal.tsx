@@ -175,7 +175,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
             showClose={false}
             className="p-0 border-none bg-transparent"
         >
-            <div className="relative bg-[#F8F7F2] border border-white/40 rounded-[3rem] shadow-premium w-full max-h-[90vh] flex flex-col overflow-hidden group/modal">
+            <div className="relative bg-bg-primary border border-white/40 rounded-[3rem] shadow-premium w-full max-h-[90vh] flex flex-col overflow-hidden group/modal">
                 {/* Cinematic Background Elements */}
                 <div className="absolute top-0 right-0 w-80 h-80 bg-accent-gold/10 blur-[100px] pointer-events-none rounded-full" />
                 <div className="absolute bottom-0 left-0 w-60 h-60 bg-accent/5 blur-[80px] pointer-events-none rounded-full" />

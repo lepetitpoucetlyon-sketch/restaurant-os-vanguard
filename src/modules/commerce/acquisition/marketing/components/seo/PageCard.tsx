@@ -7,13 +7,13 @@ import { PageSEO } from "@nexus/contracts";
 
 export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => void; id?: string }) {
     const getScoreColor = (score: number) => {
-        if (score >= 80) return 'text-[#00D9A6]';
+        if (score >= 80) return 'text-teal';
         if (score >= 60) return 'text-action-primary';
         return 'text-status-danger';
     };
 
     const getScoreBg = (score: number) => {
-        if (score >= 80) return 'bg-[#00D9A6]/10 border-[#00D9A6]/30';
+        if (score >= 80) return 'bg-teal/10 border-teal/30';
         if (score >= 60) return 'bg-action-primary/10 border-action-primary/30';
         return 'bg-status-danger/10 border-rose-500/30';
     };
@@ -41,7 +41,7 @@ export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => vo
                         <span className="text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg bg-bg-tertiary text-text-muted border border-border">
                             {pageTypeLabels[page.pageType]}
                         </span>
-                        <code className="text-[11px] font-mono text-[#00D9A6] bg-[#00D9A6]/5 px-2 py-1 rounded-lg">{page.pagePath}</code>
+                        <code className="text-[11px] font-mono text-teal bg-teal/5 px-2 py-1 rounded-lg">{page.pagePath}</code>
                     </div>
                     <h3 className="text-lg font-serif italic font-black text-text-primary mb-2">{page.meta.title}</h3>
                     <p className="text-sm text-text-muted leading-relaxed line-clamp-2">{page.meta.description}</p>
@@ -66,7 +66,7 @@ export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => vo
                     </div>
                     <button
                         onClick={onEdit}
-                        className="p-3 rounded-xl bg-bg-tertiary text-text-muted hover:bg-[#00D9A6]/10 hover:text-[#00D9A6] transition-all opacity-0 group-hover:opacity-100"
+                        className="p-3 rounded-xl bg-bg-tertiary text-text-muted hover:bg-teal/10 hover:text-teal transition-all opacity-0 group-hover:opacity-100"
                     >
                         <Edit2 className="w-4 h-4" />
                     </button>

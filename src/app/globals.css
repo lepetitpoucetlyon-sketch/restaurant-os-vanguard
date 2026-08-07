@@ -45,6 +45,12 @@
   --color-border-focus: var(--border-focus, #C5A059);
   --color-border-subtle: var(--border-subtle, rgba(0, 0, 0, 0.04));
 
+  /* ── SECONDARY ACCENTS ── */
+  /* Teal — utilisé dans SEO, réservations, plan de salle, tutoriels (37×) */
+  --color-teal: #00D9A6;
+  /* Wine/Burgundy — utilisé dans cartes vins et réservations VIP */
+  --color-wine: #722F37;
+
   /* ── LEGACY FALLBACKS (for migration safety) ── */
   --color-bg-primary: var(--surface-bg, #F8F7F2);
   --color-bg-secondary: var(--surface-card, #FFFFFF);
@@ -90,6 +96,53 @@
 
 .shadow-glow-accent {
   box-shadow: var(--shadow-glow-accent);
+}
+
+/* ============================================
+   DARK MODE — tokens redéfinis
+   Appliqués via prefers-color-scheme ET via [data-theme="dark"]
+   ============================================ */
+
+:root[data-theme="light"] {
+  /* Rien à surcharger — les valeurs @theme sont déjà light */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-bg:      #111827;
+    --surface-card:    #1f2937;
+    --surface-modal:   #1f2937;
+    --surface-sidebar: #0f172a;
+    --text-primary:    #f9fafb;
+    --text-secondary:  #d1d5db;
+    --text-muted:      #9ca3af;
+    --text-brand:      #C5A059;
+    --border-default:  #374151;
+    --border-focus:    #C5A059;
+    --border-subtle:   rgba(255, 255, 255, 0.05);
+    --status-success:  #10b981;
+    --status-warning:  #f59e0b;
+    --status-danger:   #ef4444;
+    --status-info:     #818cf8;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface-bg:      #111827;
+  --surface-card:    #1f2937;
+  --surface-modal:   #1f2937;
+  --surface-sidebar: #0f172a;
+  --text-primary:    #f9fafb;
+  --text-secondary:  #d1d5db;
+  --text-muted:      #9ca3af;
+  --text-brand:      #C5A059;
+  --border-default:  #374151;
+  --border-focus:    #C5A059;
+  --border-subtle:   rgba(255, 255, 255, 0.05);
+  --status-success:  #10b981;
+  --status-warning:  #f59e0b;
+  --status-danger:   #ef4444;
+  --status-info:     #818cf8;
 }
 
 /* ============================================

@@ -23,7 +23,7 @@ export function KeywordsCard() {
                         </div>
                         <div className={cn(
                             "text-sm font-black px-3 py-1 rounded-lg border",
-                            (kw.avgPosition || 11) <= 3 ? 'text-[#00D9A6] bg-[#00D9A6]/5 border-[#00D9A6]/20' :
+                            (kw.avgPosition || 11) <= 3 ? 'text-teal bg-teal/5 border-teal/20' :
                                 (kw.avgPosition || 11) <= 10 ? 'text-action-primary bg-action-primary/5 border-action-primary/20' :
                                     'text-status-danger bg-status-danger/5 border-rose-500/20'
                         )}>

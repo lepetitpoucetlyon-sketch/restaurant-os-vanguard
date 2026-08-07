@@ -239,6 +239,43 @@ Réduit à un seul fichier : `PerformanceEngine.tsx`.
 
 ---
 
+### PHASE 0 — Prérequis structurels (avant tout travail UI)
+
+> Ces points viennent de `docs/audit-structure.md`. Ils bloquent ou compliquent les phases UI si non résolus d'abord.
+
+#### 0A — Rapatrier `modules/onboarding/` → `modules/commerce/acquisition/`
+
+**Impact UI direct** : `modules/onboarding/` contient **18 fichiers .tsx** qui font partie de l'inventaire UI (wizard, step components, floor-plan editor). Si on refait ces composants avant le rapatriement, ils sont au mauvais endroit et les imports seront à refaire.
+
+Action : déplacer `src/modules/onboarding/` → `src/modules/commerce/acquisition/onboarding/` **avant** de toucher les composants UI de l'onboarding.
+
+#### 0B — Rapatrier les 4 autres modules hors piliers
+
+| Module hors pilier | Fichiers .tsx | Destination |
+|--------------------|--------------|-------------|
+| `modules/admin/` | ~2 UI | `app/(admin)/` ou `lib/mcc/` |
+| `modules/dashboard/` | ~2 UI | `modules/intelligence/analytique/` |
+| `modules/inventory/` | 0 UI | `modules/logistics/stock/` |
+| `modules/settings/` | 2 UI | `modules/facility/spaces/settings/` |
+
+**Impact UI** : si on migre des tokens ou des styles vers ces composants avant le rapatriement, double travail garanti.
+
+#### 0C — Supprimer `app/(public)/demo/page.tsx`
+
+Ce fichier crée un tenant éphémère `demo-pouce-${Date.now()}` à chaque visite — conflit direct avec le plan `landingpage.md` (Phase 2 landing page publique).
+
+Action : rediriger vers `/landing`, puis supprimer. **À faire avant d'implémenter la nouvelle landing page.**
+
+#### 0D — Trancher naming `auto/garage` et `health/clinic`
+
+Pas un problème UI direct, mais `SystemTenantRegistry` crée `_demo_garage` et charge le plugin `AutoVertical` (dossier `verticals/auto/`) → confusion au provisioning. Trancher avant tout test de démo multi-vertical.
+
+Options :
+- Renommer `verticals/auto/` → `verticals/garage/` + `verticals/health/` → `verticals/clinic/`
+- Ou mettre à jour `PLATFORM_VARIANTS` : `'auto'` et `'health'` à la place de `'garage'` et `'clinic'`
+
+---
+
 ### PHASE 1 — Élimination des doublons (Jour 1)
 
 > Prérequis : aucun. C'est le premier chantier car toute modification UI faite avant supprime des bugs dans une seule copie.
@@ -546,17 +583,33 @@ La Phase 7 n'est réalisable qu'**après la Phase 4** (tokens hardcodés migrés
 
 | Phase | Contenu | Durée | Prérequis |
 |-------|---------|-------|-----------|
-| 1 — Doublons | Supprimer 25 fichiers, rediriger imports | 4-5h | Aucun |
-| 2 — Orphelins | Supprimer 5 fichiers | 30min | Aucun |
-| 3 — Barrel ui/index.ts | Ajouter 6 exports, migrer imports directs | 1h | Phase 1 |
-| 4 — Tokens CSS | Migrer ~80 fichiers hex→variables | 2-3 jours | Phase 1 |
-| 5 — Couche atomique | Créer 7 composants canoniques | 1-2 jours | Phase 4 |
-| 6 — Floor plan responsive | ResizeObserver canvas, panel responsive | 1 jour | Aucun |
-| 7 — Dark/light toggle | Variante light dans globals.css | 1 jour | Phase 4 |
+| **0 — Prérequis structurels** | Rapatrier onboarding, supprimer demo, trancher naming | 1 jour | Aucun — bloquant |
+| **1 — Doublons** | Supprimer 25 fichiers, rediriger imports | 4-5h | Phase 0 |
+| **2 — Orphelins** | Supprimer 5 fichiers | 30min | Aucun |
+| **3 — Barrel ui/index.ts** | Ajouter 6 exports, migrer imports directs | 1h | Phase 1 |
+| **4 — Tokens CSS** | Migrer ~80 fichiers hex→variables | 2-3 jours | Phase 1 |
+| **5 — Couche atomique** | Créer 7 composants canoniques | 1-2 jours | Phase 4 |
+| **6 — Floor plan responsive** | ResizeObserver canvas, panel responsive | 1 jour | Aucun |
+| **7 — Dark/light toggle** | Variante light dans globals.css | 1 jour | Phase 4 |
 
-**Total estimé** : 6-8 jours de travail ciblé.
+**Total estimé** : 7-9 jours de travail ciblé.
 
 **Bénéfice** : après ces phases, toute modification d'une couleur dans `globals.css` se propage à **100% des composants** sans exception. La refonte UI devient alors un changement de 10 lignes dans `globals.css`.
+
+---
+
+### Croisement avec `docs/audit-structure.md`
+
+Points de l'audit structure qui affectent directement le travail UI :
+
+| Point audit-structure | Impact sur plan UI | Action |
+|----------------------|-------------------|--------|
+| `modules/onboarding/` hors pilier (61 fichiers, 18 tsx) | Phase 1 refonte ces composants au mauvais endroit | Rapatrier en Phase 0 avant tout |
+| `app/(public)/demo/page.tsx` conflit demo | Conflit avec `landingpage.md` Phase 2 | Supprimer avant la landing |
+| `modules/admin/`, `dashboard/`, `settings/` hors piliers | Composants UI à 3 endroits différents du plan | Rapatrier en Phase 0 |
+| `store/pillars/marketing.ts` fantôme | Les atoms marketing seront migrés vers `commerce.ts` — les composants UI marketing liés devront suivre | Coordonner avec Phase 4 |
+| `lib/nexus/` vs `shared/nexus/` split | Pas d'impact UI direct | Documentation CLAUDE.md |
+| Naming `auto/garage` + `health/clinic` | Pas d'impact UI direct mais bloque les démos multi-vertical | Phase 0 obligatoire |
 
 ---
 

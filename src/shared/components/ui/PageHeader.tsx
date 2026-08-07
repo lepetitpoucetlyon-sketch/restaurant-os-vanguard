@@ -96,7 +96,7 @@ export function PageHeader({
                     {(Icon || emoji) && (
                         <div
                             className={cn(
-                                "flex items-center justify-center bg-accent text-[#0A0A0A] shadow-lg shadow-accent/20",
+                                "flex items-center justify-center bg-accent text-text-primary shadow-lg shadow-accent/20",
                                 styles.iconSize
                             )}
                         >

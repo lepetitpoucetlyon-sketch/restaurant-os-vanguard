@@ -4,9 +4,9 @@ import React from 'react';
 import { Globe, ShieldCheck, Zap, Database, TrendingUp, Users, Cpu, ChevronRight } from 'lucide-react';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-  <div className="p-8 bg-surface-sidebar/40 border border-default rounded-3xl backdrop-blur-md hover:border-[#c5a358]/40 transition-all group">
+  <div className="p-8 bg-surface-sidebar/40 border border-default rounded-3xl backdrop-blur-md hover:border-accent/40 transition-all group">
     <div className="w-14 h-14 bg-surface-bg border border-default rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-      <div className="text-[#c5a358]">{icon}</div>
+      <div className="text-brand">{icon}</div>
     </div>
     <h3 className="text-xl font-bold text-text-primary mb-3">{title}</h3>
     <p className="text-muted leading-relaxed">{description}</p>
@@ -15,14 +15,14 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
 
 export default function ShowcasePage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-text-primary font-sans selection:bg-[#c5a358] selection:text-primary">
+    <div className="min-h-screen bg-surface-sidebar text-text-primary font-sans selection:bg-accent selection:text-primary">
       {/* GLOW OVERLAYS */}
-      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-[#c5a358]/10 rounded-full blur-[120px] -z-10" />
+      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-10" />
       <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-action-primary/5 rounded-full blur-[120px] -z-10" />
 
       {/* HERO SECTION */}
       <section className="pt-32 pb-20 px-6 text-center max-w-5xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-sidebar/50 border border-default rounded-full text-sm text-[#c5a358] mb-8 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-sidebar/50 border border-default rounded-full text-sm text-brand mb-8 animate-fade-in">
           <Zap size={14} />
           <span>Restaurant OS v3.1 - Fleet Ready</span>
         </div>
@@ -37,7 +37,7 @@ export default function ShowcasePage() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-6">
-          <button className="px-10 py-5 bg-[#c5a358] text-primary font-bold rounded-2xl hover:bg-[#d4b570] transition-all flex items-center gap-3 text-lg shadow-[0_10px_30px_rgba(197,163,88,0.2)]">
+          <button className="px-10 py-5 bg-accent text-primary font-bold rounded-2xl hover:bg-accent transition-all flex items-center gap-3 text-lg shadow-[0_10px_30px_rgba(197,163,88,0.2)]">
             Déployer la Flotte <ChevronRight size={20} />
           </button>
           <button className="px-10 py-5 bg-surface-sidebar border border-default text-text-primary font-bold rounded-2xl hover:bg-surface-sidebar transition-all text-lg">

@@ -63,7 +63,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
             showClose={false}
             className="p-0 border-none bg-transparent"
         >
-            <div className="relative bg-[#F8F7F2] border border-border shadow-premium rounded-[3rem] w-full overflow-hidden group/modal">
+            <div className="relative bg-bg-primary border border-border shadow-premium rounded-[3rem] w-full overflow-hidden group/modal">
                 {/* Visual Accent Glow */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 blur-[100px] pointer-events-none opacity-50" />
@@ -148,7 +148,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 <motion.div
                                     animate={{ y: [0, 5, 0] }}
                                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    className="w-16 h-16 rounded-full bg-surface-card text-accent-gold shadow-premium flex items-center justify-center border-4 border-[#F8F7F2] relative group-hover/modal:scale-110 transition-transform duration-700"
+                                    className="w-16 h-16 rounded-full bg-surface-card text-accent-gold shadow-premium flex items-center justify-center border-4 border-border-default relative group-hover/modal:scale-110 transition-transform duration-700"
                                 >
                                     <ArrowRight className="w-8 h-8 rotate-90" strokeWidth={2.5} />
                                     <div className="absolute inset-0 rounded-full bg-accent-gold/10 animate-pulse" />

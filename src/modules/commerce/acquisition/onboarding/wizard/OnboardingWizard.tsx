@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/onboarding/migration/connectors/types';
-import type { ImportCategory } from '@/modules/onboarding/migration/types';
+import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
 import type { OnboardingMode } from '@/shared/nexus/contracts/onboarding.types';
 import { ProgressStepper, type WizardStep } from './ProgressStepper';
 import { SourceSystemSelector } from './SourceSystemSelector';

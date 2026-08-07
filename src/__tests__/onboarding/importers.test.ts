@@ -51,7 +51,7 @@ vi.mock('@/modules/finance', () => ({
 }));
 
 // ─── Helpers ──────────────────────────────────────────────────
-import type { ParsedFile } from '@/modules/onboarding/migration/types';
+import type { ParsedFile } from '@/modules/commerce/acquisition/onboarding/migration/types';
 
 function parsedFile(overrides: Partial<ParsedFile> = {}): ParsedFile {
   return {
@@ -69,7 +69,7 @@ describe('menuImporter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('importe des produits CSV au format euros', async () => {
-    const { importMenuFromRows } = await import('@/modules/onboarding/migration/importers/menuImporter');
+    const { importMenuFromRows } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/menuImporter');
     const file = parsedFile({
       source: 'generic',
       headers: ['nom', 'categorie', 'prix'],
@@ -90,7 +90,7 @@ describe('menuImporter', () => {
   });
 
   it('importe des produits Zelty (prix en centimes)', async () => {
-    const { importMenuFromRows } = await import('@/modules/onboarding/migration/importers/menuImporter');
+    const { importMenuFromRows } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/menuImporter');
     const file = parsedFile({
       source: 'zelty',
       headers: ['name', 'category', 'price_cents'],
@@ -108,7 +108,7 @@ describe('menuImporter', () => {
   });
 
   it('ignore les lignes sans nom', async () => {
-    const { importMenuFromRows } = await import('@/modules/onboarding/migration/importers/menuImporter');
+    const { importMenuFromRows } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/menuImporter');
     const file = parsedFile({
       rows: [
         { nom: '', categorie: 'Entrées', prix: '5.00' },
@@ -126,7 +126,7 @@ describe('staffImporter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('importe des employés CSV', async () => {
-    const { importStaff } = await import('@/modules/onboarding/migration/importers/staffImporter');
+    const { importStaff } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/staffImporter');
     const file = parsedFile({
       headers: ['prenom', 'nom', 'role', 'email'],
       rows: [
@@ -146,7 +146,7 @@ describe('crmImporter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('importe des clients CRM', async () => {
-    const { importCRM } = await import('@/modules/onboarding/migration/importers/crmImporter');
+    const { importCRM } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/crmImporter');
     const file = parsedFile({
       headers: ['email', 'prenom', 'nom'],
       rows: [
@@ -164,7 +164,7 @@ describe('crmImporter', () => {
     mockAdapter.query.mockResolvedValueOnce([
       { email: 'client1@test.com', id: 'existing_id' },
     ]);
-    const { importCRM } = await import('@/modules/onboarding/migration/importers/crmImporter');
+    const { importCRM } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/crmImporter');
     const file = parsedFile({
       rows: [
         { email: 'client1@test.com', prenom: 'Jean', nom: 'Valjean' },
@@ -182,7 +182,7 @@ describe('suppliersImporter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('importe des fournisseurs CSV', async () => {
-    const { importSuppliers } = await import('@/modules/onboarding/migration/importers/suppliersImporter');
+    const { importSuppliers } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/suppliersImporter');
     const file = parsedFile({
       headers: ['nom', 'email', 'telephone'],
       rows: [
@@ -201,7 +201,7 @@ describe('inventoryImporter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('importe un inventaire CSV', async () => {
-    const { importInventory } = await import('@/modules/onboarding/migration/importers/inventoryImporter');
+    const { importInventory } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/inventoryImporter');
     const file = parsedFile({
       headers: ['produit', 'quantite', 'unite'],
       rows: [
@@ -226,7 +226,7 @@ describe('runImporter', () => {
     mockAdapter.generateId.mockImplementation((col: string) => `${col}_test_id`);
     mockBatch.commit.mockResolvedValue(undefined);
 
-    const { runImporter } = await import('@/modules/onboarding/migration/importers');
+    const { runImporter } = await import('@/modules/commerce/acquisition/onboarding/migration/importers');
     const file = parsedFile({ rows: [{ nom: 'Test', categorie: 'A', prix: '5' }] });
     const rawFile = new File([''], 'test.csv', { type: 'text/csv' });
 
@@ -235,7 +235,7 @@ describe('runImporter', () => {
   });
 
   it('lance une erreur pour une catégorie inconnue', async () => {
-    const { runImporter } = await import('@/modules/onboarding/migration/importers');
+    const { runImporter } = await import('@/modules/commerce/acquisition/onboarding/migration/importers');
     const file = parsedFile();
     const rawFile = new File([''], 'test.csv');
 

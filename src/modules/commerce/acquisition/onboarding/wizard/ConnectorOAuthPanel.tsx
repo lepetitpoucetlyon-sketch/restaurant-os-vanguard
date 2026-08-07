@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/onboarding/migration/connectors/types';
-import { ConnectorRegistry } from '@/modules/onboarding/migration/connectors';
-import { ExportGuidePanel } from '@/modules/onboarding/guides';
+import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors';
+import { ExportGuidePanel } from '@/modules/commerce/acquisition/onboarding/guides';
 
 interface ConnectorOAuthPanelProps {
   connectorId: ConnectorId;

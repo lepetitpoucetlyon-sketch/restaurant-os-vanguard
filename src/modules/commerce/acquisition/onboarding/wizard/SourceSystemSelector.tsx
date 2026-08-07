@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import type { ConnectorId } from '@/modules/onboarding/migration/connectors/types';
-import { ConnectorRegistry } from '@/modules/onboarding/migration/connectors';
+import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors';
 
 interface SourceSystemSelectorProps {
   selected: ConnectorId | null;

@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useRef, useState } from 'react';
-import type { ImportCategory } from '@/modules/onboarding/migration/types';
+import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
 
 interface OcrResult {
   rows: Record<string, string>[];

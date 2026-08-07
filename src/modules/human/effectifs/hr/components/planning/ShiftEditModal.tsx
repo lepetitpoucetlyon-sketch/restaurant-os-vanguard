@@ -199,7 +199,7 @@ export function ShiftEditModal({
                 className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-subtle"
             >
                 {/* Modal Header */}
-                <div className="bg-[#111] p-10 text-text-primary relative overflow-hidden">
+                <div className="bg-surface-sidebar p-10 text-text-primary relative overflow-hidden">
                     <div className="flex items-center justify-between relative z-10">
                         <div className="flex items-center gap-6">
                             <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary]/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
@@ -234,7 +234,7 @@ export function ShiftEditModal({
                 </div>
 
                 {/* Modal Body */}
-                <div className="p-10 space-y-10 bg-[#050505]">
+                <div className="p-10 space-y-10 bg-surface-sidebar">
                     {/* Legal Scheduling Warnings */}
                     {legalWarnings.length > 0 && (
                         <div className="space-y-2">
@@ -325,7 +325,7 @@ export function ShiftEditModal({
                         </div>
                     </div>
 
-                    <div className="bg-[#0A0A0A] p-6 rounded-[2rem] border border-white/5">
+                    <div className="bg-surface-sidebar p-6 rounded-[2rem] border border-white/5">
                         <PremiumSelect
                             label="Juridiction de Service"
                             value={formData.zoneId || ''}

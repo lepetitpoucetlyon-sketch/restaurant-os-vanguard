@@ -119,7 +119,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
 
             {/* 📊 PULSE RESULTS & ANOMALY FEED */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-[#0B0B0C] border border-white/5 rounded-[3rem] p-8 space-y-6">
+                <div className="bg-surface-sidebar border border-white/5 rounded-[3rem] p-8 space-y-6">
                     <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
                         <Activity className="w-3.5 h-3.5 text-accent" />
                         Anomaly Detection Feed
@@ -162,7 +162,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                     )}
                 </div>
 
-                <div className="bg-[#0B0B0C] border border-white/5 rounded-[3rem] p-8 space-y-6">
+                <div className="bg-surface-sidebar border border-white/5 rounded-[3rem] p-8 space-y-6">
                     <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
                         <Cpu className="w-3.5 h-3.5 text-accent" />
                         Autonomous Corrective Chain

@@ -60,7 +60,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
             <motion.div 
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                className="w-full max-w-2xl bg-[#0B0B0C] border border-white/10 rounded-[3rem] p-12 relative overflow-hidden shadow-2xl"
+                className="w-full max-w-2xl bg-surface-sidebar border border-white/10 rounded-[3rem] p-12 relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
                 <button onClick={onClose} className="absolute top-8 right-8 text-text-muted hover:text-text-primary transition-colors">

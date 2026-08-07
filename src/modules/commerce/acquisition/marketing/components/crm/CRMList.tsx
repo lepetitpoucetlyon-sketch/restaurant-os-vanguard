@@ -76,7 +76,7 @@ export function CRMList() {
                                     {getInitial(getFirstName(crm))}{getInitial(getLastName(crm))}
                                 </span>
                             </div>
-                            <div className="absolute top-0 right-0 w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#3B82F6] border-[2px] md:border-[3px] border-white dark:border-bg-secondary" />
+                            <div className="absolute top-0 right-0 w-3 h-3 md:w-4 md:h-4 rounded-full bg-status-info border-[2px] md:border-[3px] border-white dark:border-bg-secondary" />
                         </div>
                         <div className="space-y-1 md:space-y-3">
                             <h3 className="text-xl md:text-4xl font-serif text-text-primary italic tracking-tight leading-none group-hover:text-accent-gold transition-colors">

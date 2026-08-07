@@ -273,9 +273,9 @@ export function InventoryReceptionDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-text-primary p-6 md:p-10 font-ui">
+    <div className="min-h-screen bg-surface-sidebar text-text-primary p-6 md:p-10 font-ui">
       {/* ── log-5: Barcode scan strip ───────────────────────────────────────── */}
-      <div className="mb-8 bg-[#161618] border border-border-subtle rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div className="mb-8 bg-surface-sidebar border border-border-subtle rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-text-secondary shrink-0">
           <Barcode className="w-4 h-4 text-status-success" />
           Scan code-barres
@@ -288,7 +288,7 @@ export function InventoryReceptionDashboard() {
             onChange={(e) => setBarcodeValue(e.target.value)}
             onKeyDown={handleBarcodeKeyDown}
             placeholder="Scannez ou saisissez un code-barres / SKU, puis Entrée…"
-            className="w-full bg-[#0a0a0b] border border-border-default rounded-xl px-4 py-3 text-sm font-medium text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-status-success transition-all"
+            className="w-full bg-surface-sidebar border border-border-default rounded-xl px-4 py-3 text-sm font-medium text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-status-success transition-all"
             autoComplete="off"
           />
           {barcodeSearching && (
@@ -339,7 +339,7 @@ export function InventoryReceptionDashboard() {
           </div>
         </div>
 
-        <div className="flex bg-[#161618] p-1 rounded-xl border border-border-subtle">
+        <div className="flex bg-surface-sidebar p-1 rounded-xl border border-border-subtle">
             <StepIndicator step="scan" active={activeStep === 'scan'} label="Scan" />
             <StepIndicator step="verify" active={activeStep === 'verify'} label="Vérif" />
             <StepIndicator step="advice" active={activeStep === 'advice'} label="Conseils" />
@@ -356,7 +356,7 @@ export function InventoryReceptionDashboard() {
               exit={{ opacity: 0, scale: 1.05 }}
               className="flex flex-col items-center"
             >
-              <div className="w-full aspect-video md:aspect-[21/9] bg-[#161618] rounded-[2.5rem] border-2 border-dashed border-border-default flex flex-col items-center justify-center relative overflow-hidden group">
+              <div className="w-full aspect-video md:aspect-[21/9] bg-surface-sidebar rounded-[2.5rem] border-2 border-dashed border-border-default flex flex-col items-center justify-center relative overflow-hidden group">
                 <ScanContent isScanning={isScanning} onScan={handleScan} />
               </div>
             </motion.div>
@@ -369,7 +369,7 @@ export function InventoryReceptionDashboard() {
               animate={{ opacity: 1, x: 0 }}
               className="space-y-6"
             >
-              <div className="bg-[#161618] border border-border-subtle rounded-3xl p-8">
+              <div className="bg-surface-sidebar border border-border-subtle rounded-3xl p-8">
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-xl font-bold flex items-center gap-2">
                         <FileText className="text-action-primary" />
@@ -380,7 +380,7 @@ export function InventoryReceptionDashboard() {
 
                 <div className="space-y-4">
                   {scanResult.map((item, idx) => (
-                    <div key={item.id} className="flex items-center justify-between p-4 bg-[#0a0a0b] rounded-2xl border border-border-subtle group hover:border-emerald-500/30 transition-all">
+                    <div key={item.id} className="flex items-center justify-between p-4 bg-surface-sidebar rounded-2xl border border-border-subtle group hover:border-emerald-500/30 transition-all">
                       <div className="flex items-center gap-4">
                         <div className="w-10 h-10 bg-surface-card rounded-xl flex items-center justify-center font-bold text-xs">0{idx+1}</div>
                         <div>
@@ -425,7 +425,7 @@ export function InventoryReceptionDashboard() {
                className="grid grid-cols-1 md:grid-cols-3 gap-8"
             >
                 <div className="md:col-span-2 space-y-6">
-                    <div className="bg-[#161618] border border-border-default rounded-3xl p-8">
+                    <div className="bg-surface-sidebar border border-border-default rounded-3xl p-8">
                         <div className="flex items-center justify-between mb-8">
                             <h2 className="text-xl font-bold italic underline decoration-indigo-500/50">L'Intelligence du Chef</h2>
                             <Thermometer className="text-status-warning w-6 h-6 animate-pulse" />
@@ -438,7 +438,7 @@ export function InventoryReceptionDashboard() {
                                     Conseil de Conservation (ANETH)
                                 </h3>
                                 <textarea 
-                                    className="w-full bg-[#0a0a0b]/50 border-none focus:ring-0 text-text-secondary placeholder:text-text-secondary resize-none h-24 font-medium"
+                                    className="w-full bg-surface-sidebar/50 border-none focus:ring-0 text-text-secondary placeholder:text-text-secondary resize-none h-24 font-medium"
                                     placeholder="Ex: Dans un torchon humide au frais, changer l'eau tous les 2 jours..."
                                     defaultValue={"Dans un torchon humide au frais, à l'abri de la lumière directe."}
                                 />
@@ -466,7 +466,7 @@ export function InventoryReceptionDashboard() {
                         <AdviceSaveButton isSaving={isSaving} onSave={handleSaveToStock} />
                     </div>
 
-                    <div className="bg-[#161618] border border-border-subtle p-6 rounded-3xl">
+                    <div className="bg-surface-sidebar border border-border-subtle p-6 rounded-3xl">
                         <h4 className="text-[10px] font-black text-text-secondary uppercase mb-4 tracking-widest">Impact sur l'Empire</h4>
                         <div className="space-y-3">
                             <LogItem label="Marge Calculée" value="+1.4%" trend="up" />

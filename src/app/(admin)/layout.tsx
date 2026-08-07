@@ -39,5 +39,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         );
     }
 
-    return <div data-theme="light">{children}</div>;
+    // Le thème est géré par ThemeApplicator (root layout) via themeModeAtom.
+    // L'admin MCC suit le thème global — pas de forçage light ici.
+    return <>{children}</>;
 }

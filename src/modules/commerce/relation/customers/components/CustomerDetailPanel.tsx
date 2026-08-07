@@ -216,7 +216,7 @@ export function CustomerDetailPanel({
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="bg-[#121212] p-6 md:p-10 relative overflow-hidden text-text-primary border-b border-white/5">
+                <div className="bg-surface-sidebar p-6 md:p-10 relative overflow-hidden text-text-primary border-b border-white/5">
                     <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 relative z-10">
                         <div className="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] bg-surface-card/5 backdrop-blur-md border border-subtle flex items-center justify-center text-2xl md:text-4xl font-serif font-light italic shadow-2xl text-accent">
                             {(customer.firstName || "").charAt(0)}
@@ -245,7 +245,7 @@ export function CustomerDetailPanel({
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-white/5 bg-[#121212]">
+                <div className="flex border-b border-white/5 bg-surface-sidebar">
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
                         const active = activeTab === tab.id;

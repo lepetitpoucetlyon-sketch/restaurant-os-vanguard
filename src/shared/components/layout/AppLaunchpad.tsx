@@ -63,7 +63,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.6, ease: "circOut" }}
                     className={cn(
-                        "fixed inset-0 z-[100] backdrop-blur-3xl flex items-center justify-center overflow-hidden bg-[#F8F7F2]/95"
+                        "fixed inset-0 z-[100] backdrop-blur-3xl flex items-center justify-center overflow-hidden bg-bg-primary/95"
                     )}
                     onClick={() => {
                         if (isSearchActive) setIsSearchActive(false);

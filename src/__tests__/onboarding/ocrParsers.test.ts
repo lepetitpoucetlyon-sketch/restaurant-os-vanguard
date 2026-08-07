@@ -25,7 +25,7 @@ vi.mock('@/lib/logger', () => ({
 // ─── ocrPrompts ──────────────────────────────────────────────────────────────
 describe('ocrPrompts', () => {
   it('retourne un prompt pour chaque catégorie', async () => {
-    const { getOcrPrompt, OCR_PROMPTS } = await import('@/modules/onboarding/migration/parsers/ocrPrompts');
+    const { getOcrPrompt, OCR_PROMPTS } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/ocrPrompts');
     const categories = Object.keys(OCR_PROMPTS);
     expect(categories.length).toBeGreaterThanOrEqual(10);
     for (const cat of categories) {
@@ -36,7 +36,7 @@ describe('ocrPrompts', () => {
   });
 
   it('inclut le contexte dans le prompt si fourni', async () => {
-    const { getOcrPrompt } = await import('@/modules/onboarding/migration/parsers/ocrPrompts');
+    const { getOcrPrompt } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/ocrPrompts');
     const prompt = getOcrPrompt('menu', 'restaurant gastronomique');
     expect(prompt).toContain('restaurant gastronomique');
   });
@@ -50,7 +50,7 @@ describe('imageParser', () => {
     const payload = { products: [{ name: 'Salade', category: 'Entrées', price: '9.50' }] };
     mockGenerateFromImage.mockResolvedValueOnce({ text: JSON.stringify(payload) });
 
-    const { parseImageWithOCR } = await import('@/modules/onboarding/migration/parsers/imageParser');
+    const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['fake-image-bytes'], 'menu.jpg', { type: 'image/jpeg' });
     const result = await parseImageWithOCR(file, 'menu');
 
@@ -65,7 +65,7 @@ describe('imageParser', () => {
       text: '```json\n' + JSON.stringify(payload) + '\n```',
     });
 
-    const { parseImageWithOCR } = await import('@/modules/onboarding/migration/parsers/imageParser');
+    const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['bytes'], 'menu.png', { type: 'image/png' });
     const result = await parseImageWithOCR(file, 'menu');
     expect(result.confidence).toBe('high');
@@ -75,7 +75,7 @@ describe('imageParser', () => {
   it('retourne confidence=low si le JSON est invalide', async () => {
     mockGenerateFromImage.mockResolvedValueOnce({ text: 'pas du JSON du tout' });
 
-    const { parseImageWithOCR } = await import('@/modules/onboarding/migration/parsers/imageParser');
+    const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['bytes'], 'brouillon.jpg', { type: 'image/jpeg' });
     const result = await parseImageWithOCR(file, 'menu');
     expect(result.confidence).toBe('low');
@@ -94,7 +94,7 @@ describe('pdfParser', () => {
     const pdfWithText = new TextEncoder().encode(
       '%PDF-1.4\nBT\n/F1 12 Tf\n(Steak Frites 18.50) Tj\nET\n%%EOF'
     );
-    const { parsePDFWithOCR } = await import('@/modules/onboarding/migration/parsers/pdfParser');
+    const { parsePDFWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/pdfParser');
     const file = new File([pdfWithText], 'menu.pdf', { type: 'application/pdf' });
     const result = await parsePDFWithOCR(file, 'menu');
 
@@ -108,7 +108,7 @@ describe('pdfParser', () => {
     mockGenerateFromImage.mockResolvedValueOnce({ text: JSON.stringify(ocr) });
 
     const pdfScan = new TextEncoder().encode('%PDF-1.4\n%%EOF');
-    const { parsePDFWithOCR } = await import('@/modules/onboarding/migration/parsers/pdfParser');
+    const { parsePDFWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/pdfParser');
     const file = new File([pdfScan], 'scan.pdf', { type: 'application/pdf' });
     const result = await parsePDFWithOCR(file, 'menu');
 
@@ -136,7 +136,7 @@ describe('ImportSnapshotService', () => {
 
   it('take() sauvegarde un snapshot et retourne son id', async () => {
     mockAdapter.query.mockResolvedValue([{ id: 'prod1', name: 'Steak', priceInMicrounits: 18000000 }]);
-    const { ImportSnapshotService } = await import('@/modules/onboarding/migration/ImportSnapshotService');
+    const { ImportSnapshotService } = await import('@/modules/commerce/acquisition/onboarding/migration/ImportSnapshotService');
     const snap = await ImportSnapshotService.take('tenant_test', 'menu');
     expect(snap.id).toMatch(/^snap_menu_/);
     expect(snap.category).toBe('menu');
@@ -149,7 +149,7 @@ describe('ImportSnapshotService', () => {
       { id: 'snap_staff_1', category: 'staff', tenantId: 't1', createdAt: 2, collections: [], docs: {} },
     ];
     mockAdapter.query.mockResolvedValue(snaps);
-    const { ImportSnapshotService } = await import('@/modules/onboarding/migration/ImportSnapshotService');
+    const { ImportSnapshotService } = await import('@/modules/commerce/acquisition/onboarding/migration/ImportSnapshotService');
     const result = await ImportSnapshotService.list('menu');
     expect(result.every(s => s.category === 'menu')).toBe(true);
   });

@@ -50,7 +50,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
                     <span className="text-2xl font-black">{selectedWine.rating}/100</span>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-black text-[#722F37] dark:text-text-primary">{((selectedWine.priceInMicrounits / 1_000_000)).toLocaleString('fr-FR')} €</p>
+                    <p className="text-2xl font-black text-wine dark:text-text-primary">{((selectedWine.priceInMicrounits / 1_000_000)).toLocaleString('fr-FR')} €</p>
                     <p className="text-[11px] text-text-muted">Coût: {(selectedWine.costPriceInMicrounits / 1_000_000).toLocaleString('fr-FR')} €</p>
                 </div>
             </div>
@@ -76,7 +76,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
                 <p className="text-[10px] font-black text-text-muted uppercase mb-3">Accords suggérés</p>
                 <div className="flex flex-wrap gap-2">
                     {selectedWine.pairings.map((pairing, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-[#722F37]/10 text-[#722F37] rounded-lg text-sm font-bold">
+                        <span key={i} className="px-3 py-1.5 bg-wine/10 text-wine rounded-lg text-sm font-bold">
                             {pairing}
                         </span>
                     ))}
@@ -94,7 +94,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
                     <Edit3 className="w-4 h-4 mr-2" />
                     Modifier
                 </Button>
-                <Button className="flex-1 h-11 bg-[#722F37] hover:bg-[#5A252C] rounded-xl text-text-primary">
+                <Button className="flex-1 h-11 bg-wine hover:bg-[#5A252C] rounded-xl text-text-primary">
                     <Plus className="w-4 h-4 mr-2" />
                     Commander
                 </Button>

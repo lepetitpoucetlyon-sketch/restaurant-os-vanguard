@@ -38,7 +38,7 @@ export const SettingsTab = () => {
                             <span className={cn(
                                 "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border",
                                 integration.connected
-                                    ? "bg-[#00D9A6]/10 text-[#00D9A6] border-[#00D9A6]/20"
+                                    ? "bg-teal/10 text-teal border-teal/20"
                                     : "bg-bg-tertiary text-text-muted border-border"
                             )}>
                                 {integration.connected ? 'Connecté' : 'Non configuré'}

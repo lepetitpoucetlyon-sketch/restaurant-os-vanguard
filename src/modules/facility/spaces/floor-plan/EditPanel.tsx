@@ -43,7 +43,7 @@ export const EditPanel = ({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="absolute top-4 left-4 w-80 bg-bg-primary/95 dark:bg-bg-secondary/95 backdrop-blur-xl rounded-[24px] shadow-2xl border border-border z-50 overflow-hidden flex flex-col max-h-[calc(100vh-40px)]"
+            className="absolute top-4 left-2 sm:left-4 w-[calc(100vw-1rem)] sm:w-80 bg-bg-primary/95 dark:bg-bg-secondary/95 backdrop-blur-xl rounded-[24px] shadow-2xl border border-border z-50 overflow-hidden flex flex-col max-h-[70dvh] sm:max-h-[calc(100vh-40px)]"
         >
             <div className="flex items-center justify-between p-6 border-b border-border bg-bg-tertiary/20">
                 <div className="space-y-1">

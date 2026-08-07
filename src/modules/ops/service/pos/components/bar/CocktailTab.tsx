@@ -74,7 +74,7 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
 
                     <div className="flex items-center justify-between pt-4 border-t border-border/30">
                         <div>
-                            <p className="text-2xl font-black text-[#722F37] dark:text-text-primary">{formatCurrency(cocktail.priceInMicrounits / 1_000_000)}</p>
+                            <p className="text-2xl font-black text-wine dark:text-text-primary">{formatCurrency(cocktail.priceInMicrounits / 1_000_000)}</p>
                             <p className="text-[10px] text-success font-bold">
                                 Marge: {(((cocktail.priceInMicrounits - (cocktail.costPriceInMicrounits ?? 0)) / cocktail.priceInMicrounits) * 100).toFixed(0)}%
                             </p>

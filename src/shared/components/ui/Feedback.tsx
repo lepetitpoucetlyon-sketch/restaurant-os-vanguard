@@ -177,7 +177,7 @@ export function ConfirmationDialog({
     const variantClasses = {
         danger: "bg-status-danger hover:bg-status-danger text-text-primary",
         warning: "bg-status-warning hover:bg-status-warning text-text-primary",
-        default: "bg-accent hover:bg-accent/90 text-[#0A0A0A]",
+        default: "bg-accent hover:bg-accent/90 text-text-primary",
     };
 
     return (

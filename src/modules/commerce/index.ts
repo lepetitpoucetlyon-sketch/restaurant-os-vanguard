@@ -25,7 +25,7 @@ export { ReservationWidget } from './fidelite/widgets';
 // Infrastructure pilier (connectors, ui)
 export { ReviewProviderFactory } from './connectors/reviews';
 // eslint-disable-next-line no-restricted-imports
-export { CustomerImportPanel } from '@/modules/onboarding/migration';
+export { CustomerImportPanel } from '@/modules/commerce/acquisition/onboarding/migration';
 
 export { menuEngineeringService } from './catalog/menu-engineering';
 export type { MenuItemCategory, IMenuEngineeringItem, IMenuEngineeringReport } from './catalog/menu-engineering';
