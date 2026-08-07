@@ -12,9 +12,25 @@ export const VerticalRegistry = {
     logger.info(`[VerticalRegistry] registered: ${variant}`);
   },
 
+  /**
+   * Résout le plugin d'une verticale.
+   *
+   * Fallback universel : si la verticale n'est pas encore enregistrée
+   * (nouvelle verticale en cours de développement), on utilise `custom`
+   * au lieu de planter le provisioning — le branding et toute
+   * l'infrastructure tenant fonctionnent normalement grâce au fallback.
+   *
+   * Règle pour ajouter une nouvelle verticale :
+   *  1. Ajouter dans PLATFORM_VARIANTS + VERTICAL_META (tenant.ts)
+   *  2. Créer src/verticals/<nom>/<Nom>Vertical.ts + index.ts
+   *  3. register() ici — en attendant, le fallback 'custom' prend le relai.
+   */
   resolve(variant: PlatformVariant): IVerticalPlugin {
-    const factory = registry.get(variant);
+    const factory = registry.get(variant) ?? registry.get('custom');
     if (!factory) throw new Error(`[VerticalRegistry] No vertical registered for variant: ${variant}`);
+    if (!registry.has(variant)) {
+      logger.warn(`[VerticalRegistry] Variant "${variant}" non enregistré — fallback sur "custom". Branding OK.`);
+    }
     return factory();
   },
 
